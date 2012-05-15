@@ -139,9 +139,8 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void VerifyPersonsInHierarchy()
         {
             ICollection<IPerson> candidates = new List<IPerson>();
-            var dateTime = new DateTimePeriod(2000, 1, 1, 2002, 1, 1);
+            var dateTime = new DateOnlyPeriod(2000, 1, 1, 2002, 1, 1);
             _target.PersonsInHierarchy(candidates, dateTime);
-            // Todo: finish test
         }
 
 		[Test]

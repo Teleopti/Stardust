@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             _view.SetStartTime(_meetingViewModel.StartTime);
             _view.SetEndTime(_meetingViewModel.EndTime);
-            _view.SetMeetingDuration(_meetingViewModel.MeetingDuration);
             _view.SetStartDate(_meetingViewModel.StartDate);
             _view.SetRecurringEndDate(_meetingViewModel.RecurringEndDate);
             _view.SetRecurringOption(_meetingViewModel.RecurringOption.RecurrentMeetingType);
@@ -146,8 +145,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void VerifyCanSetStartTime()
         {
             CreateInitializationExpectation();
-            _view.SetMeetingDuration(TimeSpan.FromHours(1));
-            _view.SetMeetingDuration(TimeSpan.FromHours(23));
             _view.SetStartTime(TimeSpan.FromHours(20));
             _view.SetStartTime(TimeSpan.FromHours(22));
 
@@ -162,8 +159,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void VerifyCanSetEndTime()
         {
             CreateInitializationExpectation();
-            _view.SetMeetingDuration(TimeSpan.FromHours(1));
-            _view.SetMeetingDuration(TimeSpan.FromHours(23));
             _view.SetEndTime(TimeSpan.FromHours(20));
             _view.SetEndTime(TimeSpan.FromHours(18));
 
@@ -245,7 +240,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Record())
 			{
 				Expect.Call(()=>_view.SetStartTime(TimeSpan.FromHours(7)));
-				Expect.Call(() => _view.SetMeetingDuration(TimeSpan.FromHours(1))).IgnoreArguments();
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 			}
 
@@ -275,7 +269,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _view.SetEndTime(TimeSpan.FromHours(17)));
-				Expect.Call(() => _view.SetMeetingDuration(TimeSpan.FromHours(1))).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())
@@ -304,7 +297,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _view.SetStartTime(TimeSpan.FromHours(7)));
-				Expect.Call(() => _view.SetMeetingDuration(TimeSpan.FromHours(1))).IgnoreArguments();
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 			}
 
@@ -334,7 +326,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _view.SetEndTime(TimeSpan.FromHours(17)));
-				Expect.Call(() => _view.SetMeetingDuration(TimeSpan.FromHours(1))).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())
@@ -363,7 +354,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _view.SetStartTime(TimeSpan.FromHours(7)));
-				Expect.Call(() => _view.SetMeetingDuration(TimeSpan.FromHours(1))).IgnoreArguments();
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 			}
 
@@ -379,7 +369,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _view.SetEndTime(TimeSpan.FromHours(17)));
-				Expect.Call(() => _view.SetMeetingDuration(TimeSpan.FromHours(1))).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())
@@ -388,74 +377,5 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			}
 		}
 
-		[Test]
-		public void ShouldUpdateDurationTimeOnLeave()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(() => _view.SetEndTime(TimeSpan.FromHours(2)));
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.OnTimeDurationPickerViewLengthLeave("02:00");
-			}
-		}
-
-		[Test]
-		public void ShouldUpdateDurationTimeOnLeaveWhenInputIsNotOk()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(() => _view.SetMeetingDuration(TimeSpan.FromHours(2)));
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.OnTimeDurationPickerViewLengthLeave("hjaggaa");
-			}
-		}
-
-		[Test]
-		public void ShouldUpdateDurationTimeOnKeyDownEnter()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(() => _view.SetEndTime(TimeSpan.FromHours(2)));
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.OnTimeDurationPickerViewLengthKeyDown(Keys.Enter, "02:00");
-			}
-		}
-
-		[Test]
-		public void ShouldUpdateDurationTimeOnWrongKeyDown()
-		{
-			using (_mocks.Record())
-			{
-				//Not expecting anything
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.OnTimeDurationPickerViewLengthKeyDown(Keys.A, "02:00");
-			}
-		}
-
-		[Test]
-		public void ShouldUpdateDurationTimeOnSelectedIndexChanged()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(() => _view.SetEndTime(TimeSpan.FromHours(2)));
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.OnTimeDurationPickerViewLengthSelectedIndexChanged("02:00");
-			}
-		}
     }
 }

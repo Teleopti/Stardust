@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
@@ -11,9 +12,10 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
         ActivityDto[] _arrActivityDto;
         private const int MAX_NUMBER_OF_CHARACTERS = 20;
 
-        public PdfScheduleDayOffOvertime(float columnWidth, SchedulePartDto schedulePartDto, bool rightToLeft)
+        public PdfScheduleDayOffOvertime(float columnWidth, SchedulePartDto schedulePartDto, bool rightToLeft, CultureInfo culture):base(culture)
         {
-            Brush = new PdfSolidBrush(Color.DimGray);
+        	if (schedulePartDto == null) throw new ArgumentNullException("schedulePartDto");
+        	Brush = new PdfSolidBrush(Color.DimGray);
 
             Template = new PdfTemplate(columnWidth, Height);
             Graphics = Template.Graphics;
@@ -94,8 +96,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
         {
             Format.Alignment = PdfTextAlignment.Center;
             const float fontSize = 7f;
-
-            PdfFont font = new PdfTrueTypeFont(new Font("Helvetica", fontSize, FontStyle.Regular), true);
+			PdfFont font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Regular, Culture);
             var timeRect = new RectangleF(0, top + RowSpace, ColumnWidth, fontSize + 2);
 
             string timeString = ShortTimeString(visualLayer.Period.LocalStartDateTime.TimeOfDay) + " - " +

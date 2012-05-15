@@ -38,6 +38,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private IScheduleMatrixPro _matrix;
         private IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
         private string _daysOffTolerance;
+        private Percent _preferenceFulfillment;
+        private Percent _mustHavesFulfillment;
+        private Percent _rotationFulfillment;
+        private Percent _availabilityFulfillment;
+        private Percent _studentAvailabilityFulfillment;
 
         public AgentInfoHelper(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder, ISchedulingOptions schedulingOptions, IRuleSetProjectionService ruleSetProjectionService)
         {
@@ -204,16 +209,39 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return _daysOffTolerance; }
         }
 
+        public Percent PreferenceFulfillment
+        {
+            get { return new Percent(1 - _preferenceFulfillment.Value); }
+        }
+
+        public Percent RotationFulfillment
+        {
+            get { return new Percent(1 - _rotationFulfillment.Value); }
+        }
+
+        public Percent AvailabilityFulfillment
+        {
+            get { return new Percent(1 - _availabilityFulfillment.Value); }
+        }
+
+        public Percent StudentAvailabilityFulfillment
+        {
+            get { return new Percent(1 - _studentAvailabilityFulfillment.Value); }
+        }
+
+        public Percent MustHavesFulfillment
+        {
+            get { return new Percent(1 -  _mustHavesFulfillment.Value); }
+        }
+
         //public TimeSpan CurrentShiftAllowanceTime
         //{
         //    get { return _currentShiftAllowanceTime; }
         //}
 
-        public void SchedulePeriodData(ISchedulingOptions schedulingOptions)
+        public void SchedulePeriodData()
         {
             if (SchedulePeriod == null)
-                return;
-            if (schedulingOptions == null)
                 return;
 
             if (!SchedulePeriod.IsValid)
@@ -233,10 +261,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(new RestrictionExtractor(_stateHolder),
                                                                             _matrix, IncludeScheduling(), false, false);
             setCurrentScheduled();
-            setMinMaxData(schedulingOptions);
+            setMinMaxData();
+            setRestrictionFullfillment();
         }
 
-        private void setMinMaxData(ISchedulingOptions schedulingOptions)
+        private void setMinMaxData()
         {
             ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
                        new SchedulePeriodTargetTimeTimeCalculator(); //Out
@@ -244,18 +273,28 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder);
 
             IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
-                new PossibleMinMaxWorkShiftLengthExtractor( restrictionExtractor, _ruleSetProjectionService, schedulingOptions);
+                new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _ruleSetProjectionService);
 
             IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
             IWorkShiftMinMaxCalculator workShiftMinMaxCalculator =
-                new WorkShiftMinMaxCalculator( possibleMinMaxWorkShiftLengthExtractor,
+                new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor,
                                               schedulePeriodTargetTimeCalculator, workShiftWeekMinMaxCalculator);
             //TODO kan plockas från AutoFac istället
-            _periodInLegalState = workShiftMinMaxCalculator.IsPeriodInLegalState(_matrix);
-            _weekInLegalState = workShiftMinMaxCalculator.IsWeekInLegalState(_selectedDate, _matrix);
+            _periodInLegalState = workShiftMinMaxCalculator.IsPeriodInLegalState(_matrix, _schedulingOptions);
+            _weekInLegalState = workShiftMinMaxCalculator.IsWeekInLegalState(_selectedDate, _matrix, _schedulingOptions);
 
 
-            _possiblePeriodTime = workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix);
+            _possiblePeriodTime = workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix, _schedulingOptions);
+        }
+
+        private void setRestrictionFullfillment()
+        {
+            RestrictionOverLimitDecider restrictionOverLimitDecider = new RestrictionOverLimitDecider(_matrix, new RestrictionChecker());
+            _preferenceFulfillment = restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1)).BrokenPercentage;
+            _mustHavesFulfillment = restrictionOverLimitDecider.MustHavesOverLimit(new Percent(1)).BrokenPercentage;
+            _rotationFulfillment = restrictionOverLimitDecider.RotationOverLimit(new Percent(1)).BrokenPercentage;
+            _availabilityFulfillment = restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(1)).BrokenPercentage;
+            _studentAvailabilityFulfillment = restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(1)).BrokenPercentage;
         }
 
         private void setCurrentScheduled()

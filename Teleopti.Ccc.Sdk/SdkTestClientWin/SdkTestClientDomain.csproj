@@ -16,10 +16,14 @@
     </StartupObject>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>SdkTestClientDomainKey.snk</AssemblyOriginatorKeyFile>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -149,13 +153,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SdkTestClientDomainKey.snk" />
+    <None Include="Web References\Sdk\AgentPortalSettingsDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Sdk\AuthenticationResultDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -166,6 +170,18 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Sdk\ExtendedPreferenceTemplateDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Sdk\GroupPageDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Sdk\GroupPageGroupDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Sdk\PayrollExportDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Sdk\PayrollResultDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Sdk\PersonPeriodDetailDto.datasource">
@@ -180,7 +196,11 @@
     <None Include="Web References\Sdk\PublicNoteDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Sdk\ScenarioDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Sdk\TeleoptiCccSdkService.xsd" />
+    <None Include="Web References\Sdk\TeleoptiCccSdkService0.wsdl" />
     <None Include="Web References\Sdk\TeleoptiCccSdkService0.xsd" />
     <None Include="Web References\Sdk\TeleoptiCccSdkService1.xsd" />
   </ItemGroup>
@@ -298,6 +318,15 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Web References\Sdk\TeleoptiCccSdkService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Sdk\TeleoptiCccSdkService12.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Sdk\TeleoptiCccSdkService13.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Sdk\TeleoptiCccSdkService14.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Web References\Sdk\TeleoptiCccSdkService2.xsd" />

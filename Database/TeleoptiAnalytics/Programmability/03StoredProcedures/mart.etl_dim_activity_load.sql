@@ -20,7 +20,7 @@ GO
 
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_activity_load] 
-	
+@business_unit_code uniqueidentifier		
 AS
 --------------------------------------------------------------------------
 -- Not Defined Activity

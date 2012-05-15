@@ -95,6 +95,7 @@
     <Content Include="PmContainer.aspx" />
     <Content Include="ReportViewer.aspx" />
     <Content Include="Selection.aspx" />
+    <Content Include="Timeout.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -220,12 +221,20 @@
     <Compile Include="Reports\Ccc\report_agent_schedule_adherence.aspx.designer.cs">
       <DependentUpon>report_agent_schedule_adherence.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Timeout.aspx.cs">
+      <DependentUpon>Timeout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Timeout.aspx.designer.cs">
+      <DependentUpon>Timeout.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\AppKeyReader.cs" />
     <Compile Include="CultureCompare.cs" />
     <Compile Include="Utils\CccReports.cs" />
     <Compile Include="Utils\HelpLinkBuilder.cs" />
     <Compile Include="Utils\ImpersonatedUser.cs" />
     <Compile Include="Utils\Login.cs" />
+    <Compile Include="Utils\StateHolder.cs" />
     <Compile Include="Utils\TextLoader.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

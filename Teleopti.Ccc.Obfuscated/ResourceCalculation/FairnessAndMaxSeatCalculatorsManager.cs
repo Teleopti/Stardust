@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     public class FairnessAndMaxSeatCalculatorsManager : IFairnessAndMaxSeatCalculatorsManager
     {
         private readonly ISchedulingResultStateHolder _resultStateHolder;
-        private readonly IAverageShiftLengthValueCalculator _averageShiftLengthValueCalculator;
         private readonly IShiftCategoryFairnessManager _shiftCategoryFairnessManager;
         private readonly IShiftCategoryFairnessShiftValueCalculator _categoryFairnessShiftValueCalculator;
         private readonly IFairnessValueCalculator _fairnessValueCalculator;
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly ISchedulingOptions _options;
 
         public FairnessAndMaxSeatCalculatorsManager(ISchedulingResultStateHolder resultStateHolder,
-                                    IAverageShiftLengthValueCalculator averageShiftLengthValueCalculator,
                                     IShiftCategoryFairnessManager shiftCategoryFairnessManager,
                                     IShiftCategoryFairnessShiftValueCalculator categoryFairnessShiftValueCalculator,
                                     IFairnessValueCalculator fairnessValueCalculator,
@@ -32,7 +30,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                                     ISchedulingOptions options)
         {
             _resultStateHolder = resultStateHolder;
-            _averageShiftLengthValueCalculator = averageShiftLengthValueCalculator;
             _shiftCategoryFairnessManager = shiftCategoryFairnessManager;
             _categoryFairnessShiftValueCalculator = categoryFairnessShiftValueCalculator;
             _fairnessValueCalculator = fairnessValueCalculator;
@@ -40,7 +37,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _options = options;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues,
                                                     double maxValue, bool useShiftCategoryFairness, IPerson person, DateOnly dateOnly,
                                                     IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods,
@@ -93,14 +90,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         continue;
 
                     shiftValue += seatVal.Value;
-                }
-
-                if (_options.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff &&
-                    _options.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
-                {
-                    shiftValue = _averageShiftLengthValueCalculator.CalculateShiftValue(shiftValue,
-                                                                                       shiftProjection.MainShiftProjection.ContractTime(),
-                                                                                       averageWorkTimePerDay);
                 }
 
                 if (shiftValue > highestShiftValue)

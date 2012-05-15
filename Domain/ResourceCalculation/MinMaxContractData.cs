@@ -53,19 +53,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 if (period.RuleSetBag != null && !((IDeleteTag)period.RuleSetBag).IsDeleted)
                 {
-                    //if (_person.Name.FirstName.Length > 5)
-                    //{
-                    //    if (_person.Name.FirstName[5].ToString() == "s")
-                    //    {
-                    //        if (workShiftDate == new DateOnly(2010, 7, 27))
-                    //        {
-                    //            string foo = string.Empty;
-                    //        }
-                    //    }
-                    //}
-
-
-
                     var extractor = new RestrictionExtractor(resultStateHolder);
                     extractor.Extract(_person, workShiftDate);
 

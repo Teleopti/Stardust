@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             foreach (var projectionCache in shiftList)
             {
                 if (restriction.VisualLayerCollectionSatisfiesActivityRestriction(scheduleDayDateOnly, agentTimeZone,
-                                                                                  projectionCache.MainShiftProjection))
+                                                                                  projectionCache.MainShiftProjection.OfType<IActivityRestrictableVisualLayer>()))
                 {
                     workShiftsWithActivity.Add(projectionCache); 
                 }
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
 			finderResult.AddFilterResults(
                 new WorkShiftFilterResult(
-                    string.Format(CultureInfo.InvariantCulture,
+                    string.Format(CultureInfo.CurrentCulture,
                                   UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
                                   validPeriod.LocalStartDateTime, validPeriod.LocalEndDateTime), cntBefore,
                     workShiftsWithinPeriod.Count));
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     workShiftsWithinMinMax.Add(proj);
             }
 			finderResult.AddFilterResults(
-                new WorkShiftFilterResult(string.Format(CultureInfo.InvariantCulture, UserTexts.Resources.FilterOnContractTimeLimitationsWithParams, validMinMax.Minimum, validMinMax.Maximum),
+				new WorkShiftFilterResult(string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.FilterOnContractTimeLimitationsWithParams, validMinMax.Minimum, validMinMax.Maximum),
                                           cntBefore, workShiftsWithinMinMax.Count));
 
             return workShiftsWithinMinMax;
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                         workShiftsWithinMinMax.Add(proj);
                 }
 				finderResult.AddFilterResults(
-                new WorkShiftFilterResult(string.Format(CultureInfo.InvariantCulture, UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
+				new WorkShiftFilterResult(string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
                                           shiftList.Count, workShiftsWithinMinMax.Count));
             }
             else
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 }
 				finderResult.AddFilterResults(
                     new WorkShiftFilterResult(
-                        string.Format(CultureInfo.InvariantCulture,
+						string.Format(CultureInfo.CurrentCulture,
                                       UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
                                       period.Value.LocalStartDateTime, period.Value.LocalEndDateTime), cntBefore,
                         workShiftsWithinPeriod.Count));

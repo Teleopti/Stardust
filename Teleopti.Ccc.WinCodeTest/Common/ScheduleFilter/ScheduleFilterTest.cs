@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.ScheduleFilter
         private ISchedulerStateHolder _stateHolder;
         private IList<IPerson> _persons = new List<IPerson>();
         private IList<IPerson> _selectedPersons = new List<IPerson>();
-        private DateTimePeriod _period = new DateTimePeriod(2000, 1, 1, 2001, 12, 31);
+        private DateOnlyPeriod _period = new DateOnlyPeriod(2000, 1, 1, 2001, 12, 31);
         private ISite _site;
         private ISite _site2;
         private ITeam _team1;
@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common.ScheduleFilter
         private IGroupPage _groupPage = new GroupPage("A page");
         private IList<IGroupPage> _groupPages;
         private IContractSchedule _contractSchedule;
-        private DateTime _filterDateTime =  new DateTime(2009, 11, 3, 23, 0, 0, DateTimeKind.Utc);
+        private DateOnly _filterDateTime =  new DateOnly(2009, 11, 4);
         private DateTime _dateTimeFromDatePicker;
         private IBusinessUnitRepository _businessUnitRepository;
         private IBusinessUnit _businessUnit;
         private readonly Guid _businessUnitId = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
 
-        [SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
             IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.ScheduleFilter
             createRepositories();
             instantiatePersons();
             
-            _stateHolder = new SchedulerStateHolder(scenario, _period, _persons);
+            _stateHolder = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), _persons);
             _businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
             _model = new ScheduleFilterModel(_selectedPersons, _stateHolder,
                 _contractRepository, _contractScheduleRepository, _partTimePercentageRepository, 

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -14,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             var rep = new PersonRepository(unitOfWork);
                 ICollection<IPerson> coll =
-                    rep.FindPeopleInOrganizationLight(new DateOnlyPeriod(queryDateTime, queryDateTime).ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone));
+                    rep.FindPeopleInOrganizationLight(new DateOnlyPeriod(queryDateTime, queryDateTime));
                 IPersonCollection ret = new PersonCollection(functionPath, coll, queryDateTime);
             
             return ret;

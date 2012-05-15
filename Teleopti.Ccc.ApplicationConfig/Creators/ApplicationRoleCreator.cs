@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         private readonly IPerson _person;
         private readonly IBusinessUnit _businessUnit;
         private readonly ISessionFactory _sessionFactory;
+		private readonly SetChangeInfoCommand _setChangeInfoCommand = new SetChangeInfoCommand();
 
         public ApplicationRoleCreator(IPerson person, IBusinessUnit businessUnit, ISessionFactory sessionFactory)
         {
@@ -42,20 +43,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         {
             IApplicationRole applicationRole = new ApplicationRole { Name = applicationRoleName, BuiltIn = builtIn, DescriptionText = description };
 
-
-            DateTime nu = DateTime.Now;
-            typeof(AggregateRoot)
-                .GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(applicationRole, _person);
-            typeof(AggregateRoot)
-                .GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(applicationRole, nu);
-            typeof(AggregateRoot)
-                .GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(applicationRole, _person);
-            typeof(AggregateRoot)
-                .GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(applicationRole, nu);
+			_setChangeInfoCommand.Execute((AggregateRoot)applicationRole,_person);
             typeof(ApplicationRole)
                 .GetField("_businessUnit", BindingFlags.NonPublic | BindingFlags.Instance)
                 .SetValue(applicationRole, _businessUnit);

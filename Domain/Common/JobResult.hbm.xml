@@ -6,6 +6,7 @@
   <class name="JobResult">
     <!--IEntity-->
     <id name="Id"
+		  				access="nosetter.camelcase-underscore"
 				type="guid"
 				unsaved-value="null">
       <generator class="guid.comb" />

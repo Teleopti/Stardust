@@ -4,14 +4,12 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
-    public class SchedulePartAssembler : Assembler<IScheduleDay, SchedulePartDto>
+    public class SchedulePartAssembler : Assembler<IScheduleDay, SchedulePartDto>, ISchedulePartAssembler
     {
         private readonly IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto> _personAssignmentAssembler;
         private readonly IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto> _personAbsenceAssembler;
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         public IScheduleRepository ScheduleRepository { get; set; }
 
     	public string SpecialProjection { get; set; }
-    	public CccTimeZoneInfo TimeZone { get; set; }
+    	public ICccTimeZoneInfo TimeZone { get; set; }
 
     	public SchedulePartAssembler(IScenarioProvider scenarioProvider,
                                     IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto> personAssignmentAssembler,

@@ -1,14 +1,15 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
-    public class DateTimePeriodAssembler : Assembler<DateTimePeriod,DateTimePeriodDto>
-    {
+	public class DateTimePeriodAssembler : Assembler<DateTimePeriod,DateTimePeriodDto>, IDateTimePeriodAssembler
+	{
         public DateTimePeriodAssembler()
         {
-            TimeZone = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+            TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
         }
 
         public ICccTimeZoneInfo TimeZone { get; set; }

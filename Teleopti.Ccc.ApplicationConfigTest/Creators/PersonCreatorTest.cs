@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             
             IPerson person = _target.Create(databaseConverterClient,
                                             databaseConverter,
-                                            databaseConverter,
+											databaseConverterClient,
                                             password, cultureInfo, _timeZone);
 
             Assert.AreEqual(databaseConverterClient, person.Name.FirstName);
@@ -56,15 +56,19 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
         public void VerifyCanSavePerson()
         {
             IPerson person = _target.Create("Joe1", "Blogs1", "o1", "g1", CultureInfo.GetCultureInfo(1053), _timeZone);
-            Assert.IsTrue(_target.Save(person),"Person Saved");
+            _target.Save(person);
         }
 
         [Test]
         public void VerifyCannotSavePersonWithSameName()
         {
             IPerson person = _target.Create("Joe2", "Blogs2", "o2", "g2", CultureInfo.GetCultureInfo(1053), _timeZone);
-            Assert.IsTrue(_target.Save(person),"Person saved");
-            Assert.IsFalse(_target.Save(person),"Person not saved");
+            _target.Save(person);
+			
+
+			person = _target.Create("Joe2", "Blogs2", "o2", "g2", CultureInfo.GetCultureInfo(1053), _timeZone);
+			Assert.IsNotNull(person.Id);
+            _target.Save(person);
         }
 
         [Test]
@@ -73,9 +77,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             IPerson person = _target.Create("Joe3", "Blogs3", "o3", "g3", CultureInfo.GetCultureInfo(1053), _timeZone);
             _target.Save(person);
 
-            IPerson fetchedPerson =
-                _target.FetchPerson(person.ApplicationAuthenticationInfo.ApplicationLogOnName);
-            Assert.IsNotNull(fetchedPerson);
+            Assert.IsNotNull(person.Id);
         }
     }
 }

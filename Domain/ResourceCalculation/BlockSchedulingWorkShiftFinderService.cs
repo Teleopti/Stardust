@@ -17,18 +17,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
         private readonly IWorkShiftCalculator _calculator;
         private readonly IFairnessValueCalculator _fairnessValueCalculator;
-        private readonly IAverageShiftLengthValueCalculator _averageShiftLengthValueCalculator;
     	private readonly IShiftCategoryFairnessShiftValueCalculator _shiftCategoryFairnessShiftValueCalculator;
 
     	public BlockSchedulingWorkShiftFinderService(
             IWorkShiftCalculator calculator, 
             IFairnessValueCalculator fairnessValueCalculator, 
-            IAverageShiftLengthValueCalculator averageShiftLengthValueCalculator,
 			IShiftCategoryFairnessShiftValueCalculator shiftCategoryFairnessShiftValueCalculator)
         {
             _calculator = calculator;
             _fairnessValueCalculator = fairnessValueCalculator;
-            _averageShiftLengthValueCalculator = averageShiftLengthValueCalculator;
         	_shiftCategoryFairnessShiftValueCalculator = shiftCategoryFairnessShiftValueCalculator;
         }
 
@@ -80,14 +77,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                         totalFairness.FairnessPoints, agentFairness, maxValue);
 				}
                 
-                if (_averageShiftLengthValueCalculator != null)
-                {
-                    shiftValue = _averageShiftLengthValueCalculator.CalculateShiftValue(shiftValue,
-                                                                                       shiftProjection.
-                                                                                           MainShiftProjection.
-                                                                                           ContractTime(), averageWorkTime);
-                }
-
                 if (shiftValue > highestShiftValue)
                 {
                     foundShifts = new List<IShiftProjectionCache> { shiftProjection };

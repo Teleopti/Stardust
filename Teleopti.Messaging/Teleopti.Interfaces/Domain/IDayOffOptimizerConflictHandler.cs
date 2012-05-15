@@ -9,8 +9,9 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Handle conflict
         /// </summary>
-        /// <param name="dateOnly"></param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
+        /// <param name="dateOnly">The date only.</param>
         /// <returns></returns>
-        bool HandleConflict(DateOnly dateOnly);
+        bool HandleConflict(ISchedulingOptions schedulingOptions, DateOnly dateOnly);
     }
 }

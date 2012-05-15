@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
     {
         private readonly IRestrictionExtractor _restrictionExtractor;
         private readonly IRuleSetProjectionService _ruleSetProjectionService;
-        private readonly ISchedulingOptions _schedulingOptions;
         private readonly IDictionary<DateOnly, IWorkTimeMinMax> _extractedLengths = new Dictionary<DateOnly, IWorkTimeMinMax>();
 
-        public PossibleMinMaxWorkShiftLengthExtractor(IRestrictionExtractor restrictionExtractor, IRuleSetProjectionService ruleSetProjectionService, ISchedulingOptions schedulingOptions)
+        public PossibleMinMaxWorkShiftLengthExtractor(
+            IRestrictionExtractor restrictionExtractor, 
+            IRuleSetProjectionService ruleSetProjectionService)
         {
             _restrictionExtractor = restrictionExtractor;
             _ruleSetProjectionService = ruleSetProjectionService;
-            _schedulingOptions = schedulingOptions;
         }
 
         public void ResetCache()
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
             _extractedLengths.Clear();
         }
 
-        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix)
+        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
 			if (_extractedLengths.Count ==0)
 			{
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 			if (_extractedLengths[dateOnly] == null)
 			{
 				_restrictionExtractor.Extract(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart());
-				IEffectiveRestriction restriction = _restrictionExtractor.CombinedRestriction(_schedulingOptions);
+				IEffectiveRestriction restriction = _restrictionExtractor.CombinedRestriction(schedulingOptions);
 
 				IWorkTimeMinMax ret = null;
 			    var personPeriod = schedulePeriod.Person.Period(dateOnly);
@@ -78,6 +78,5 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 										_extractedLengths[dateOnly].WorkTimeLimitation.EndTime.Value);
 
 		}
-
     }
 }

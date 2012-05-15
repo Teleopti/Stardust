@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -8,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class ScheduleDayService :IScheduleDayService
     {
     	private readonly IScheduleService _scheduleService;
-        private readonly ISchedulingOptions _schedulingOptions;
         private readonly IDeleteSchedulePartService _deleteSchedulePartService;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
@@ -16,48 +16,51 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     	private ScheduleDayService() { }
 
-        public ScheduleDayService(IScheduleService scheduleService,
-                                  ISchedulingOptions schedulingOptions,
-                                  IDeleteSchedulePartService deleteSchedulePartService,
-                                  IResourceOptimizationHelper resourceOptimizationHelper,
-                                  IEffectiveRestrictionCreator effectiveRestrictionCreator,
+		public ScheduleDayService(IScheduleService scheduleService,
+								  IDeleteSchedulePartService deleteSchedulePartService,
+								  IResourceOptimizationHelper resourceOptimizationHelper,
+								  IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService
 			)
-            : this()
-        {
-        	_scheduleService = scheduleService;
-            _schedulingOptions = schedulingOptions;
-            _deleteSchedulePartService = deleteSchedulePartService;
-            _resourceOptimizationHelper = resourceOptimizationHelper;
-            _effectiveRestrictionCreator = effectiveRestrictionCreator;
-        	_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
-        }
+			: this()
+		{
+			_scheduleService = scheduleService;
+			_deleteSchedulePartService = deleteSchedulePartService;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_effectiveRestrictionCreator = effectiveRestrictionCreator;
+			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
+		}
 
-        public bool RescheduleDay(IScheduleDay schedulePart)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool RescheduleDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions)
         {
             var originalDay = (IScheduleDay) schedulePart.Clone();
             var partList = new List<IScheduleDay> { schedulePart };
 
-            IList<IScheduleDay> retList = DeleteMainShift(partList);
-            
-            bool result = ScheduleDay(retList[0]);
+			IList<IScheduleDay> retList = DeleteMainShift(partList, schedulingOptions);
+
+			bool result = ScheduleDay(retList[0], schedulingOptions);
             if(!result)
             {
 				_schedulePartModifyAndRollbackService.Modify(originalDay);
-                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(originalDay.Period.LocalStartDateTime), true, _schedulingOptions.ConsiderShortBreaks);
+				_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(originalDay.Period.LocalStartDateTime), true, schedulingOptions.ConsiderShortBreaks);
             }
 
             return result;
         }
 
-        public bool ScheduleDay(IScheduleDay schedulePart)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public bool ScheduleDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions)
         {
-            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, _schedulingOptions);
+			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 
-            return _scheduleService.SchedulePersonOnDay(schedulePart, true, effectiveRestriction);
+        	var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+																		schedulingOptions.ConsiderShortBreaks);
+			return _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer);
         }
 
-        public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions)
         {
             //Delete old current shift
             //TODO use a new Delete method with a rollbackservice
@@ -73,14 +76,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             ICollection<DateOnly> daysToRecalculate = new HashSet<DateOnly>();
             foreach (var part in schedulePartList)
             {
-                DateOnly date = new DateOnly(part.Period.LocalStartDateTime);
+                var date = new DateOnly(part.Period.LocalStartDateTime);
                 daysToRecalculate.Add(date);
                 daysToRecalculate.Add(date.AddDays(1));
             }
 
             foreach (var date in daysToRecalculate)
             {
-                _resourceOptimizationHelper.ResourceCalculateDate(date, true, _schedulingOptions.ConsiderShortBreaks);
+				_resourceOptimizationHelper.ResourceCalculateDate(date, true, schedulingOptions.ConsiderShortBreaks);
             }
 
             return retList;

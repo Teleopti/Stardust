@@ -419,34 +419,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyMinMaxWorkTimeAddingCorrect()
         {
-            IEffectiveRestriction restriction = _mocks.StrictMock<IEffectiveRestriction>();
-            IRuleSetProjectionService projectionService = _mocks.StrictMock<IRuleSetProjectionService>();
-            IWorkShiftVisualLayerInfo info1 = _mocks.StrictMock<IWorkShiftVisualLayerInfo>();
-            IWorkShiftVisualLayerInfo info2 = _mocks.StrictMock<IWorkShiftVisualLayerInfo>();
-            IWorkShift shift1 = _mocks.StrictMock<IWorkShift>();
-            IWorkShift shift2 = _mocks.StrictMock<IWorkShift>();
-            IVisualLayerCollection layercoll1 = _mocks.StrictMock<IVisualLayerCollection>();
-            IVisualLayerCollection layercoll2 = _mocks.StrictMock<IVisualLayerCollection>();
+            var restriction = _mocks.StrictMock<IEffectiveRestriction>();
+            var projectionService = _mocks.StrictMock<IRuleSetProjectionService>();
+			var info1 = new WorkShiftProjection
+			            	{
+								ContractTime = TimeSpan.FromHours(7),
+			            		TimePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17))
+			            	};
+        	var info2 = new WorkShiftProjection
+        	            	{
+        	            		ContractTime = TimeSpan.FromHours(9),
+        	            		TimePeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(16))
+        	            	};
 
             using (_mocks.Record())
             {
-                Expect.Call(projectionService.ProjectionCollection(null)).IgnoreArguments().Return(
-                    new List<IWorkShiftVisualLayerInfo> { info1, info2 }).Repeat.AtLeastOnce();
+                Expect.Call(projectionService.ProjectionCollection(null))
+					.IgnoreArguments()
+					.Return(new List<IWorkShiftProjection> { info1, info2 }).Repeat.AtLeastOnce();
                 //Expect.Call(restriction.IsLimitedWorkday).Return(true).Repeat.AtLeastOnce();
                 //first shift
                 Expect.Call(restriction.ValidateWorkShiftInfo(info1)).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(info1.WorkShift).Return(shift1).Repeat.AtLeastOnce();
-                Expect.Call(shift1.ToTimePeriod()).Return(new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17)))
-                    .Repeat.AtLeastOnce();
-                Expect.Call(info1.VisualLayerCollection).Return(layercoll1).Repeat.AtLeastOnce();
-                Expect.Call(layercoll1.ContractTime()).Return(TimeSpan.FromHours(7)).Repeat.AtLeastOnce();
                 //second shift
                 Expect.Call(restriction.ValidateWorkShiftInfo(info2)).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(info2.WorkShift).Return(shift2).Repeat.AtLeastOnce();
-                Expect.Call(shift2.ToTimePeriod()).Return(new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(16)))
-                    .Repeat.AtLeastOnce();
-                Expect.Call(info2.VisualLayerCollection).Return(layercoll2).Repeat.AtLeastOnce();
-                Expect.Call(layercoll2.ContractTime()).Return(TimeSpan.FromHours(9)).Repeat.AtLeastOnce();
             }
 
             IWorkTimeMinMax result; 
@@ -466,25 +461,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyMinMaxWorkTimeDisregardsShiftOutsideRestrictions()
         {
-            IEffectiveRestriction restriction = _mocks.StrictMock<IEffectiveRestriction>();
-            IRuleSetProjectionService projectionService = _mocks.StrictMock<IRuleSetProjectionService>();
-            IWorkShiftVisualLayerInfo info1 = _mocks.StrictMock<IWorkShiftVisualLayerInfo>();
-            IWorkShiftVisualLayerInfo info2 = _mocks.StrictMock<IWorkShiftVisualLayerInfo>();
-            IWorkShift shift1 = _mocks.StrictMock<IWorkShift>();
-            IVisualLayerCollection layercoll1 = _mocks.StrictMock<IVisualLayerCollection>();
+            var restriction = _mocks.StrictMock<IEffectiveRestriction>();
+            var projectionService = _mocks.StrictMock<IRuleSetProjectionService>();
+        	var info1 = new WorkShiftProjection
+        	            	{
+        	            		ContractTime = TimeSpan.FromHours(7),
+        	            		TimePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17))
+        	            	};
+			var info2 = new WorkShiftProjection();
 
             using (_mocks.Record())
             {
                 Expect.Call(projectionService.ProjectionCollection(null)).IgnoreArguments().Return(
-                    new List<IWorkShiftVisualLayerInfo> { info1, info2 }).Repeat.AtLeastOnce();
+					new List<IWorkShiftProjection> { info1, info2 }).Repeat.AtLeastOnce();
                 //Expect.Call(restriction.IsLimitedWorkday).Return(true).Repeat.AtLeastOnce();
                 //first shift validates OK
                 Expect.Call(restriction.ValidateWorkShiftInfo(info1)).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(info1.WorkShift).Return(shift1).Repeat.AtLeastOnce();
-                Expect.Call(shift1.ToTimePeriod()).Return(new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17)))
-                    .Repeat.AtLeastOnce();
-                Expect.Call(info1.VisualLayerCollection).Return(layercoll1).Repeat.AtLeastOnce();
-                Expect.Call(layercoll1.ContractTime()).Return(TimeSpan.FromHours(7)).Repeat.AtLeastOnce();
                 //second shift validates Not OK
                 Expect.Call(restriction.ValidateWorkShiftInfo(info2)).Return(false).Repeat.AtLeastOnce();
             }

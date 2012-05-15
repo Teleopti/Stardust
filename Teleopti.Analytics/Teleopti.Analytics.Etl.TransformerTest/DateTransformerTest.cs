@@ -6,6 +6,7 @@ using System.Threading;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -184,14 +185,78 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.IsNotNull(_target);
         }
 
-		 [Test]
-		 public void ShouldSetCorrectYearForYearWeekWhenWeekFromPreviousYearGoesIntoNextYear()
-		 {
-			var theDate = new DateTime(2012, 1, 1);
-		 	var theDayDate = new DayDate(theDate, _swedishCulture);
+        [Test]
+        public void ShouldSetCorrectYearForYearWeekForSwedishCulture()
+        {
+            var theDayDate1 = new DayDate(new DateTime(2012, 1, 1), _swedishCulture);
+            var theDayDate2 = new DayDate(new DateTime(2011, 12, 31), _swedishCulture);
+            var theDayDate3 = new DayDate(new DateTime(2012, 1, 2), _swedishCulture);
+            var theDayDate4 = new DayDate(new DateTime(2011, 1, 1), _swedishCulture);
+            var theDayDate5 = new DayDate(new DateTime(2010, 12, 31), _swedishCulture);
+            var theDayDate6 = new DayDate(new DateTime(2010, 1, 1), _swedishCulture);
+            var theDayDate7 = new DayDate(new DateTime(2009, 12, 31), _swedishCulture);
+            var theDayDate8 = new DayDate(new DateTime(2014, 1, 1), _swedishCulture);
+            var theDayDate9 = new DayDate(new DateTime(2013, 12, 31), _swedishCulture);
+            
+            Assert.AreEqual("201152", theDayDate1.YearWeek);
+            Assert.AreEqual("201152", theDayDate2.YearWeek);
+            Assert.AreEqual("201201", theDayDate3.YearWeek);
+            Assert.AreEqual("201052", theDayDate4.YearWeek);
+            Assert.AreEqual("201052", theDayDate5.YearWeek);
+            Assert.AreEqual("200953", theDayDate6.YearWeek);
+            Assert.AreEqual("200953", theDayDate7.YearWeek);
+            Assert.AreEqual("201401", theDayDate8.YearWeek);
+            Assert.AreEqual("201401", theDayDate9.YearWeek);
+        } 
 
-			Assert.AreEqual(2012, theDayDate.Year);
-			Assert.AreEqual("201152", theDayDate.YearWeek);
-		 }
+        [Test]
+        public void ShouldSetCorrectYearForYearWeekForUsCultureAndFirstFullWeekRule()
+        {
+            var culture = new CultureInfo("en-Us"){DateTimeFormat ={CalendarWeekRule = CalendarWeekRule.FirstFullWeek}};
+            var theDayDate1 = new DayDate(new DateTime(2012, 1, 1), culture);
+            var theDayDate2 = new DayDate(new DateTime(2011, 12, 31), culture);
+            var theDayDate3 = new DayDate(new DateTime(2012, 1, 2), culture);
+            var theDayDate4 = new DayDate(new DateTime(2011, 1, 1), culture);
+            var theDayDate5 = new DayDate(new DateTime(2010, 12, 31), culture);
+            var theDayDate6 = new DayDate(new DateTime(2010, 1, 1), culture);
+            var theDayDate7 = new DayDate(new DateTime(2009, 12, 31), culture);
+            var theDayDate8 = new DayDate(new DateTime(2014, 1, 1), culture);
+            var theDayDate9 = new DayDate(new DateTime(2013, 12, 31), culture);
+
+            Assert.AreEqual("201201", theDayDate1.YearWeek);
+            Assert.AreEqual("201152", theDayDate2.YearWeek);
+            Assert.AreEqual("201201", theDayDate3.YearWeek);
+            Assert.AreEqual("201052", theDayDate4.YearWeek);
+            Assert.AreEqual("201052", theDayDate5.YearWeek);
+            Assert.AreEqual("200952", theDayDate6.YearWeek);
+            Assert.AreEqual("200952", theDayDate7.YearWeek);
+            Assert.AreEqual("201352", theDayDate8.YearWeek);
+            Assert.AreEqual("201352", theDayDate9.YearWeek);
+        }
+
+        [Test]
+        public void ShouldSetCorrectYearForYearWeekForUsCultureAndFirstFourDayWeekRule()
+        {
+            var culture = new CultureInfo("en-Us") { DateTimeFormat = { CalendarWeekRule = CalendarWeekRule.FirstFourDayWeek} };
+            var theDayDate1 = new DayDate(new DateTime(2012, 1, 1), culture);
+            var theDayDate2 = new DayDate(new DateTime(2011, 12, 31), culture);
+            var theDayDate3 = new DayDate(new DateTime(2012, 1, 2), culture);
+            var theDayDate4 = new DayDate(new DateTime(2011, 1, 1), culture);
+            var theDayDate5 = new DayDate(new DateTime(2010, 12, 31), culture);
+            var theDayDate6 = new DayDate(new DateTime(2010, 1, 1), culture);
+            var theDayDate7 = new DayDate(new DateTime(2009, 12, 31), culture);
+            var theDayDate8 = new DayDate(new DateTime(2014, 1, 1), culture);
+            var theDayDate9 = new DayDate(new DateTime(2013, 12, 31), culture);
+
+            Assert.AreEqual("201201", theDayDate1.YearWeek);
+            Assert.AreEqual("201152", theDayDate2.YearWeek);
+            Assert.AreEqual("201201", theDayDate3.YearWeek);
+            Assert.AreEqual("201052", theDayDate4.YearWeek);
+            Assert.AreEqual("201052", theDayDate5.YearWeek);
+            Assert.AreEqual("200952", theDayDate6.YearWeek);
+            Assert.AreEqual("200952", theDayDate7.YearWeek);
+            Assert.AreEqual("201401", theDayDate8.YearWeek);
+            Assert.AreEqual("201401", theDayDate9.YearWeek);
+        }
     }
 }

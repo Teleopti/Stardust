@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         {
             ICollection<IPerson> candidates = new List<IPerson>();
 
-            DateTimePeriod dateTime = new DateTimePeriod(2000, 1, 1, 2002, 1, 1);
+            var dateTime = new DateOnlyPeriod(2000, 1, 1, 2002, 1, 1);
             IPerson person = PersonFactory.CreatePerson("Ola", "Håkansson");
             IPerson person2 = PersonFactory.CreatePerson("Roger", "Kratz");
             IPerson person3 = PersonFactory.CreatePerson("Ann", "Andersson");

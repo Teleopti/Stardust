@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -35,12 +36,13 @@ namespace Teleopti.Ccc.WinCode.Common
         private IDictionary<Guid, IPerson> _filteredPersons;
         private const int _NUMBER_OF_PERSONREQUEST_DAYS = -14;
 
-       
-        public SchedulerStateHolder(IScenario loadScenario, DateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons)
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		public SchedulerStateHolder(IScenario loadScenario, IDateOnlyPeriodAsDateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons)
             :this(loadScenario,loadPeriod,allPermittedPersons, new SchedulingResultStateHolder())
         {}
 
-        public SchedulerStateHolder(IScenario loadScenario, DateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public SchedulerStateHolder(IScenario loadScenario, IDateOnlyPeriodAsDateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons, ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             _requestedScenario = loadScenario;
             RequestedPeriod = loadPeriod;
@@ -125,7 +127,7 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return _loadedPeriod; }
         }
 
-        public DateTimePeriod RequestedPeriod { get; set; }
+		public IDateOnlyPeriodAsDateTimePeriod RequestedPeriod { get; set; }
 
         
         public IScenario RequestedScenario
@@ -263,7 +265,7 @@ namespace Teleopti.Ccc.WinCode.Common
         public void FilterPersons(IList<ITeam> selectedTeams)
         {
             List<IPerson> list = new List<IPerson>(AllPermittedPersons).FindAll(
-                new PersonBelongsToTeamSpecification(RequestedPeriod, selectedTeams).IsSatisfiedBy);
+                new PersonBelongsToTeamSpecification(RequestedPeriod.DateOnly, selectedTeams).IsSatisfiedBy);
             _filteredPersons =
                 (from p in list orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 

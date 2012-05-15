@@ -11,16 +11,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IShiftFromMasterActivityService _shiftFromMasterActivityService;
         private readonly IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
-        private readonly IRuleSetProjectionService _ruleSetProjectionService;
+        private readonly IRuleSetProjectionEntityService _ruleSetProjectionEntityService;
 
         public ShiftProjectionCacheManager(IShiftFromMasterActivityService shiftFromMasterActivityService, 
             IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker,
-            IRuleSetProjectionService ruleSetProjectionService)
+            IRuleSetProjectionEntityService ruleSetProjectionEntityService)
         {
             _shiftFromMasterActivityService = shiftFromMasterActivityService;
             _ruleSetDeletedActivityChecker = ruleSetDeletedActivityChecker;
 			_rulesSetDeletedShiftCategoryChecker = rulesSetDeletedShiftCategoryChecker;
-		    _ruleSetProjectionService = ruleSetProjectionService;
+		    _ruleSetProjectionEntityService = ruleSetProjectionEntityService;
         }
 
         public IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSetBag(DateOnly scheduleDateOnly, ICccTimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly)//, IPerson person)
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (!_ruleSetListDictionary.TryGetValue(ruleSet, out retList))
             {
 
-                IEnumerable<IWorkShiftVisualLayerInfo> infoList = _ruleSetProjectionService.ProjectionCollection(ruleSet);
+                IEnumerable<IWorkShiftVisualLayerInfo> infoList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet);
                 IList<IWorkShift> tmpList = new List<IWorkShift>();
                 foreach (var workShiftVisualLayerInfo in infoList)
                 {

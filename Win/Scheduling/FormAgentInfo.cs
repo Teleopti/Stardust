@@ -202,14 +202,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 UseRotations = true
             };
             var helper = new AgentInfoHelper(person, date, _stateHolder, schedulingOptions, _ruleSetProjectionService);
-            var anotherSchedulingOptions = new SchedulingOptions
-            {
-                UseAvailability = false,
-                UsePreferences = false,
-                UseStudentAvailability = false,
-                UseRotations = false
-            };
-            helper.SchedulePeriodData(anotherSchedulingOptions);
+
+            helper.SchedulePeriodData();
 
             var perPeriod = from l in helper.SchedulePeriod.ShiftCategoryLimitationCollection()
                             where !l.Weekly
@@ -380,14 +374,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                            UseRotations = true
                                                        };
             var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _ruleSetProjectionService);
-            var anotherSchedulingOptions = new SchedulingOptions
-                                               {
-                                                   UseAvailability = false,
-                                                   UsePreferences = false,
-                                                   UseStudentAvailability = false,
-                                                   UseRotations = false
-                                               };
-            helper.SchedulePeriodData(anotherSchedulingOptions);
+            
+            helper.SchedulePeriodData();
             if (!helper.Period.HasValue)
                 return;
 
@@ -510,6 +498,20 @@ namespace Teleopti.Ccc.Win.Scheduling
                 createAndAddItem(listViewSchedulePeriod, Resources.WeekInLegalState,
                                  helper.WeekInLegalState.ToString(CultureInfo.CurrentCulture), 2);
             }
+
+            listViewSchedulePeriod.Items.Add("");
+            if (employmentType != EmploymentType.HourlyStaff)
+            {
+                createAndAddItem(listViewSchedulePeriod, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, Resources.MustHaveFulfillment, helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, Resources.RotationFulfillment, helper.RotationFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, Resources.AvailabilityFulfillment, helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+            }
+            else
+            {
+                createAndAddItem(listViewSchedulePeriod, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+            }
+            
         }
 
         private static ListViewItem createAndAddItem(ListView listView, string itemText, string subItemText, int indent)

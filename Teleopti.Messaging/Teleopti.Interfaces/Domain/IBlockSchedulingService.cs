@@ -12,17 +12,23 @@ namespace Teleopti.Interfaces.Domain
         /// Occurs when [block scheduled].
         /// </summary>
         event EventHandler<BlockSchedulingServiceEventArgs> BlockScheduled;
-        /// <summary>
-        /// Executes the block scheduling process
-        /// </summary>
-        bool Execute(IList<IScheduleMatrixPro> matrixList, BlockFinderType blockFinderType,
+		/// <summary>
+		/// Executes the block scheduling process
+		/// </summary>
+		/// <param name="matrixList">The matrix list.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <param name="workShiftFinderResultList">The work shift finder result list.</param>
+		/// <returns></returns>
+        bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
             IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList);
 
-        ///<summary>
-        ///</summary>
-        ///<param name="matrixList"></param>
-        ///<returns></returns>
-        bool Execute(IList<IScheduleMatrixPro> matrixList);
+		/// <summary>
+		/// Executes the specified matrix list.
+		/// </summary>
+		/// <param name="matrixList">The matrix list.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <returns></returns>
+		bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions);
 
     }
 }

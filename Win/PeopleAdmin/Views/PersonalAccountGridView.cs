@@ -1623,7 +1623,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
         public ReadOnlyCollection<IPersonAccountModel> GetSelectedPersonAccounts
         {
-            get { return new ReadOnlyCollection<IPersonAccountModel>(_currentSelectedPersonAccounts); }
+			get
+			{
+				if (_currentSelectedPersonAccounts == null) return new ReadOnlyCollection<IPersonAccountModel>(new List<IPersonAccountModel>());
+				return new ReadOnlyCollection<IPersonAccountModel>(_currentSelectedPersonAccounts);
+			}
         }
 
         internal override IList<IPerson> GetSelectedPersons()

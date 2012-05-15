@@ -38,8 +38,9 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         private readonly string _teamAll = Guid.NewGuid().ToString();
     	private bool _isAscending;
     	private IList<GroupPageDto> _allGroupPages;
+        private bool _filterPeopleForShiftTrade;
 
-		internal const string PageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
+        internal const string PageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
         
     	public ScheduleTeamView()
         {
@@ -60,6 +61,17 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         public PersonDto LastRightClickedPerson
         {
             get { return _lastRightClickedPerson; }
+        }
+
+        public bool FilterPeopleForShiftTrade
+        {
+            get { return _filterPeopleForShiftTrade; }
+            set
+            {
+                if (_filterPeopleForShiftTrade == value) return;
+                _filterPeopleForShiftTrade = value;
+                Reload(_filterPeopleForShiftTrade);
+            }
         }
 
         /// <summary>
@@ -85,11 +97,27 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             }
         }
 
-		private static IEnumerable<SchedulePartDto> LoadScheduleDataWithLoadOption(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto dateOnlyDto)
-        {
-			return SdkServiceHelper.SchedulingService.GetSchedules(scheduleLoadOptionDto, dateOnlyDto, dateOnlyDto, StateHolder.Instance.State.
-																					  SessionScopeData.LoggedOnPerson.
-																					  TimeZoneId);	
+		private static IEnumerable<SchedulePartDto> LoadScheduleDataWithLoadOption(GroupForPeople groupForPeople, DateOnlyDto dateOnlyDto)
+		{
+			var query = new GetSchedulesByGroupPageGroupQueryHandlerDto
+			            	{
+			            		GroupPageGroupId = groupForPeople.GroupId,
+			            		QueryDate = dateOnlyDto,
+			            		TimeZoneId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId
+			            	};
+			return SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
+		}
+
+		private static IEnumerable<SchedulePartDto> LoadScheduleDataWithLoadOption(PersonDto person, DateOnlyDto dateOnlyDto)
+		{
+			var query = new GetSchedulesByPersonQueryHandlerDto
+			{
+				PersonId = person.Id,
+				StartDate = dateOnlyDto,
+				EndDate = dateOnlyDto,
+				TimeZoneId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId
+			};
+			return SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
         }
 
 		private void LoadTeamMembersScheduleData(ITeamAndPeopleSelection agentTeamMemberCollection)
@@ -113,7 +141,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     		{
     			foreach (var personDto in agentTeamMemberCollection.SelectedPeople)
     			{
-    				schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption(new ScheduleLoadOptionDto { LoadPerson = personDto }, dateOnlyDto));
+    				schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption(personDto, dateOnlyDto));
     			}
     		}
     		else
@@ -123,7 +151,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     				//try to load on team
     				foreach (var teamDto in agentTeamMemberCollection.SelectedTeams)
     				{
-    					schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption(new ScheduleLoadOptionDto { LoadTeam = teamDto }, dateOnlyDto));
+    					schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption( teamDto , dateOnlyDto));
     				}
     			}
     			catch (WebException)
@@ -132,7 +160,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     				schedulePartDtos.Clear();
     				foreach (var personDto in agentTeamMemberCollection.SelectedPeople)
     				{
-    					schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption(new ScheduleLoadOptionDto { LoadPerson = personDto }, dateOnlyDto));
+    					schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption(personDto, dateOnlyDto));
     				}
     			}
     		}
@@ -233,7 +261,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             try
             {
             	LoadTeams();
-                Reload();
+                Reload(FilterPeopleForShiftTrade);
             }
             finally
             {
@@ -345,13 +373,12 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.AgentPortal.Reports.Grid.ScheduleGridColumnGridHelper`1<Teleopti.Ccc.AgentPortalCode.Common.VisualProjection>"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.AgentPortal.Reports.Grid.ScheduleGridColumnGridHelper`1<Teleopti.Ccc.AgentPortal.Schedules.VisualProjection>")]
-        private void Reload()
+        private void Reload(bool filterEnabled)
         {
             InitializeTeamViewGrid();
 
         	var selectedTeam = (GroupDetailModel)comboSiteAndTeam.SelectedItem;
-        	var selectedPage = (GroupPageDto) comboBoxAdvGroup.SelectedItem;
-
+        	
         	ITeamAndPeopleSelection selection;
 			if (selectedTeam.Id==_teamAll)
 			{
@@ -359,10 +386,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			}
 			else
 			{
-				selection = new BasicSelection(_startDateForTeamView, selectedTeam, selectedPage);
+				selection = new BasicSelection(_startDateForTeamView, selectedTeam);
 			}
 
-        	selection.Initialize();
+            selection.Initialize(filterEnabled);
         	LoadTeamMembersScheduleData(selection);
 
 			_presenter = new VisualProjectionGridPresenter(gridControlTeamSchedules, _schedules);
@@ -515,7 +542,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             if (comboSiteAndTeam == null || comboSiteAndTeam.SelectedItem==null)
                 return;
             Cursor = Cursors.WaitCursor;
-            Reload();
+            Reload(FilterPeopleForShiftTrade);
             Cursor = Cursors.Default;
         }
         private void populateSiteTeamCombo(IList<GroupDetailModel> teams)
@@ -563,7 +590,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			                                                                         					DateTimeSpecified = true
 			                                                                         				}
 			                                                                         	});
-			foreach (var groupPageGroupDto in groups)
+            foreach (var groupPageGroupDto in groups)
 			{
 				dataSourceItems.Add(new GroupDetailModel
 				                    	{

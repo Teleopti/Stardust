@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -122,7 +120,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             ICollection<ISkill> skills = _repositoryFactory
                 .CreateSkillRepository(uow)
-                .FindAllWithSkillDays(SchedulerState.RequestedPeriod.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc)));
+                .FindAllWithSkillDays(SchedulerState.RequestedPeriod.DateOnly);
 
             SchedulerState.SchedulingResultState.Skills.Clear();
 
@@ -137,7 +135,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private void initializeSkillDays()
         {
             SchedulerState.SchedulingResultState.SkillDays =
-                _skillDayLoadHelper.LoadSchedulerSkillDays(SchedulerState.RequestedPeriod.ToDateOnlyPeriod(SchedulerState.TimeZoneInfo),
+                _skillDayLoadHelper.LoadSchedulerSkillDays(SchedulerState.RequestedPeriod.DateOnly,
                                                            SchedulerState.SchedulingResultState.Skills,
                                                            SchedulerState.RequestedScenario);
         }
@@ -145,7 +143,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private void initializeDecider()
         {
             _peopleLoader.Initialize();
-            _peopleAndSkillLoaderDecider.Execute(SchedulerState.RequestedScenario, SchedulerState.RequestedPeriod,
+            _peopleAndSkillLoaderDecider.Execute(SchedulerState.RequestedScenario, SchedulerState.RequestedPeriod.Period(),
                                                  SchedulerState.AllPermittedPersons);
         }
 
@@ -165,7 +163,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             IScheduleRepository scheduleRepository = _repositoryFactory.CreateScheduleRepository(uow);
 
-            var requestedPeriod = SchedulerState.RequestedPeriod.ChangeEndTime(TimeSpan.FromHours(24));
+            var requestedPeriod = SchedulerState.RequestedPeriod.Period().ChangeEndTime(TimeSpan.FromHours(24));
 
             IPersonProvider personsInOrganizationProvider =
                 new PersonsInOrganizationProvider(SchedulerState.SchedulingResultState.PersonsInOrganization);
@@ -180,9 +178,8 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public void InitializeScheduleData()
         {
-            var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
             var dateOnlyPeriod =
-                SchedulerState.RequestedPeriod.ToDateOnlyPeriod(timeZone);
+                SchedulerState.RequestedPeriod.DateOnly;
             foreach (var dateOnly in dateOnlyPeriod.DayCollection())
             {
                 _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, false, true);

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			enversConfiguration = MockRepository.GenerateMock<IEnversConfiguration>();
-			target = new DataSourcesFactory(enversConfiguration, new List<IDenormalizer>());
+			target = new DataSourcesFactory(enversConfiguration, new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTest());
 			string currDirectory = Directory.GetCurrentDirectory();
 			testFile = currDirectory + "test.hbm.xml";
 		}
@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void VerifyXmlBasedWithDistributedTransaction()
 		{
+			target = new DataSourcesFactory(enversConfiguration, new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTest());
 			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
 
 			string xmlString = xmlText("test", correctMatrix);
@@ -92,7 +93,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			XElement nhibernateXmlConfiguration = XElement.Load(xmlReader);
 
-			target.UseDistributedTransactionFactory = true;
 			IDataSource res = target.Create(nhibernateXmlConfiguration, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 
 			Assert.IsNotNull(res.Application, "Application is null, shouldn't be!");
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var sessionFactory = (ISessionFactoryImplementor)factoryField.GetValue(res.Application, BindingFlags.NonPublic |
 																								  BindingFlags.Instance, null, null, CultureInfo.InvariantCulture);
 			Assert.IsNotNull(sessionFactory, "Session factory is null, shouldn't be!");
-			Assert.IsInstanceOf<AdoNetWithDistributedTransactionFactory>(sessionFactory.TransactionFactory);
+			Assert.IsInstanceOf<AdoNetTransactionFactory>(sessionFactory.TransactionFactory);
 		}
 
 		[Test]

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         public override bool IsValidAtStart(IWorkShift shift, IList<IWorkShiftExtender> extenders)
         {
             //Check what kind of time shoud be used UTC or local
-            if (_startTimeLimitation.ContainsPart(shift.LayerCollection.Period().Value.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone).StartTime))
+            if (_startTimeLimitation.ContainsPart(shift.LayerCollection.Period().Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime))
             {
                 return true;
             }

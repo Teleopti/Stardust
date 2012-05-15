@@ -41,10 +41,15 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 
 		options.statusCode401 = options.statusCode401 || function () { window.location.href = _settings.baseUrl; };
 		options.statusCode403 = options.statusCode403 || function () { window.location.href = _settings.baseUrl; };
-
+		options.abort = options.abort || function () { };
+		
 		var errorCallback = options.error;
 
 		options.error = function (jqXHR, textStatus, errorThrown) {
+			if (options.abort && jqXHR && textStatus == "abort") {
+				options.abort(jqXHR, textStatus, errorThrown);
+				return;
+			}
 			if (options.statusCode400 && jqXHR && jqXHR.status == 400) {
 				options.statusCode400(jqXHR, textStatus, errorThrown);
 				return;

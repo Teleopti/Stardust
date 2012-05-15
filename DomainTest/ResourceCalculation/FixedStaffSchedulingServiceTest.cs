@@ -23,9 +23,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IEffectiveRestriction _effectiveRestriction;
 		private IScheduleService _scheduleService;
-        private ISchedulingOptions _options;
+        private ISchedulingOptions _schedulingOptions;
 		private IAbsencePreferenceScheduler _absencePreferenseScheduler;
 		private IDayOffScheduler _dayOffScheduler;
+		private IResourceOptimizationHelper _resourceOptimizationHelper;
+		private IResourceCalculateDelayer _resourceCalculateDelayer;
 
 		[SetUp]
 		public void Setup()
@@ -43,17 +45,22 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																				  new WorkTimeLimitation()
 																				  , null, null, null,
 																				  new List<IActivityRestriction>());
-            _options = new SchedulingOptions();
+            _schedulingOptions = new SchedulingOptions();
 			_scheduleService = _mocks.StrictMock<IScheduleService>();
 			_absencePreferenseScheduler = _mocks.StrictMock<IAbsencePreferenceScheduler>();
 			_dayOffScheduler = _mocks.StrictMock<IDayOffScheduler>();
+			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
+			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 
 			Expect.Call(() => _absencePreferenseScheduler.DayScheduled += null).IgnoreArguments();
 			Expect.Call(() => _dayOffScheduler.DayScheduled += null).IgnoreArguments();
 			_mocks.ReplayAll();
 			_schedulingService = new FixedStaffSchedulingService( _schedulingResultStateHolder,
 																 _dayOffsInPeriodCalculator,
-																 _effectiveRestrictionCreator, _scheduleService, _options, _absencePreferenseScheduler,_dayOffScheduler);
+																 _effectiveRestrictionCreator, 
+                                                                 _scheduleService,
+                                                                 _absencePreferenseScheduler,
+																 _dayOffScheduler, _resourceOptimizationHelper);
 			_mocks.VerifyAll();
 			_mocks.BackToRecordAll();
 		}
@@ -69,7 +76,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_schedulingService = new FixedStaffSchedulingService( _schedulingResultStateHolder,
 																 _dayOffsInPeriodCalculator,
-																 _effectiveRestrictionCreator, _scheduleService, _options, _absencePreferenseScheduler,null);
+																 _effectiveRestrictionCreator, 
+                                                                 _scheduleService,
+                                                                 _absencePreferenseScheduler,
+																 null, _resourceOptimizationHelper);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
@@ -77,7 +87,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_schedulingService = new FixedStaffSchedulingService(_schedulingResultStateHolder,
 																 _dayOffsInPeriodCalculator,
-																 _effectiveRestrictionCreator, _scheduleService, _options, null, _dayOffScheduler);	
+																 _effectiveRestrictionCreator, 
+                                                                 _scheduleService,
+                                                                 null,
+																 _dayOffScheduler, _resourceOptimizationHelper);	
 		}
 
 		[Test]
@@ -117,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(part4.DateOnlyAsPeriod).Return(period1).Repeat.AtLeastOnce();
 			Expect.Call(part1.PersonDayOffCollection()).Return(dayOffCollection).Repeat.Any();
 
-            Expect.Call(_scheduleService.SchedulePersonOnDay(null, true, _effectiveRestriction)).IgnoreArguments().Repeat.AtLeastOnce()
+			Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments().Repeat.AtLeastOnce()
                 .Return(true);
 
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
@@ -128,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(part1.IsScheduled()).Return(false).Repeat.Any();
 			Expect.Call(_schedulingResultStateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
 
-            Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, _options)).Return(
+            Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, _schedulingOptions)).Return(
 					_effectiveRestriction).Repeat.Any();
             Expect.Call(_scheduleService.FinderResults).Return(
                 new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
@@ -137,13 +150,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
 			_mocks.ReplayAll();
 
-            _options.UseShiftCategoryLimitations = false;
-            _options.UseRotations = true;
-            _options.UsePreferences = true;
-            _options.UseAvailability = true;
-            _options.AddContractScheduleDaysOff = false;
+            _schedulingOptions.UseShiftCategoryLimitations = false;
+            _schedulingOptions.UseRotations = true;
+            _schedulingOptions.UsePreferences = true;
+            _schedulingOptions.UseAvailability = true;
+            _schedulingOptions.AddContractScheduleDaysOff = false;
 
-		    _schedulingService.DoTheScheduling(new List<IScheduleDay> {part4, part3, part2, part1}, true, false);
+		    _schedulingService.DoTheScheduling(new List<IScheduleDay> {part4, part3, part2, part1}, _schedulingOptions, true, false);
 			Assert.IsNotNull(_schedulingService.FinderResults);
 
 			_mocks.VerifyAll();
@@ -170,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(part2.Person).Return(person).Repeat.AtLeastOnce();
 			Expect.Call(part1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZoneInfo)).Repeat.AtLeastOnce();
 			Expect.Call(part2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 3), _timeZoneInfo)).Repeat.AtLeastOnce();
-		    Expect.Call(_scheduleService.SchedulePersonOnDay(null, true, _effectiveRestriction))
+			Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer))
                 .Return(true).IgnoreArguments();
 
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
@@ -179,20 +192,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(part1.IsScheduled()).Return(false).Repeat.Any();
 			Expect.Call(_schedulingResultStateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
 
-			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, _options)).Return(_effectiveRestriction);
+			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, _schedulingOptions)).Return(_effectiveRestriction);
             Expect.Call(_scheduleService.FinderResults).Return(
                 new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
 		    Expect.Call(person.Equals(person)).Return(true).Repeat.AtLeastOnce();
 			_mocks.ReplayAll();
 
-            _options.UseShiftCategoryLimitations = false;
-            _options.UseRotations = true;
-            _options.UseAvailability = true;
-            _options.UsePreferences = true;
-            _options.AddContractScheduleDaysOff = false;
+            _schedulingOptions.UseShiftCategoryLimitations = false;
+            _schedulingOptions.UseRotations = true;
+            _schedulingOptions.UseAvailability = true;
+            _schedulingOptions.UsePreferences = true;
+            _schedulingOptions.AddContractScheduleDaysOff = false;
 
 			_schedulingService.DayScheduled += (sender, e) => { e.Cancel = true; };
-            _schedulingService.DoTheScheduling(new List<IScheduleDay> { part2, part1 }, true, false);
+            _schedulingService.DoTheScheduling(new List<IScheduleDay> { part2, part1 }, _schedulingOptions, true, false);
 			Assert.IsNotNull(_schedulingService.FinderResults);
 			_mocks.VerifyAll();
 		}

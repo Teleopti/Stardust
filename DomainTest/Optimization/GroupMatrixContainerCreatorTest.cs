@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private DateOnly _dateToRemove2;
         private DateOnly _dateToAdd1;
         private DateOnly _dateToAdd2;
-        private DayOffPlannerSessionRuleSet _ruleSet;
+        private DaysOffPreferences _daysOffPreferences;
 
         #region Variables
 
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 simplePeriod();
             }
 
-            _ruleSet = new DayOffPlannerSessionRuleSet();
+            _daysOffPreferences = new DaysOffPreferences();
 
             _target = new GroupMatrixContainerCreator();
         }
@@ -130,10 +130,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _datesToRemove = new List<DateOnly> { _dateToRemove1, _dateToRemove2 };
             _datesToAdd = new List<DateOnly> { _dateToAdd1, _dateToAdd2 };
 
-            _ruleSet.ConsiderWeekAfter = false;
-            _ruleSet.ConsiderWeekBefore = false;
+            _daysOffPreferences.ConsiderWeekAfter = false;
+            _daysOffPreferences.ConsiderWeekBefore = false;
 
-            GroupMatrixContainer result = _target.CreateGroupMatrixContainer(_datesToRemove, _datesToAdd, _scheduleMatrix, _ruleSet);
+            GroupMatrixContainer result = _target.CreateGroupMatrixContainer(_datesToRemove, _datesToAdd, _scheduleMatrix, _daysOffPreferences);
 
             Assert.IsFalse(result.WorkingArray.Get(7));
             Assert.IsFalse(result.WorkingArray.Get(8));
@@ -141,10 +141,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(result.WorkingArray.Get(12));
             Assert.IsTrue(result.WorkingArray.Get(13));
 
-            _ruleSet.ConsiderWeekAfter = true;
-            _ruleSet.ConsiderWeekBefore = true;
+            _daysOffPreferences.ConsiderWeekAfter = true;
+            _daysOffPreferences.ConsiderWeekBefore = true;
 
-            result = _target.CreateGroupMatrixContainer(_datesToRemove, _datesToAdd, _scheduleMatrix, _ruleSet);
+            result = _target.CreateGroupMatrixContainer(_datesToRemove, _datesToAdd, _scheduleMatrix, _daysOffPreferences);
 
             Assert.IsFalse(result.WorkingArray.Get(14));
             Assert.IsFalse(result.WorkingArray.Get(15));
@@ -163,10 +163,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _datesToRemove = new List<DateOnly> { _dateToRemove1, _dateToRemove2 };
             _datesToAdd = new List<DateOnly> { _dateToAdd1, _dateToAdd2 };
 
-            _ruleSet.ConsiderWeekAfter = false;
-            _ruleSet.ConsiderWeekBefore = false;
+            _daysOffPreferences.ConsiderWeekAfter = false;
+            _daysOffPreferences.ConsiderWeekBefore = false;
 
-            GroupMatrixContainer result = _target.CreateGroupMatrixContainer(_datesToRemove, _datesToAdd, _scheduleMatrix, _ruleSet);
+            GroupMatrixContainer result = _target.CreateGroupMatrixContainer(_datesToRemove, _datesToAdd, _scheduleMatrix, _daysOffPreferences);
 
             Assert.IsNull(result);
 

@@ -116,7 +116,11 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			                                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile,
                                             "xxImportForecastFromFile",
                                             DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile, null);
-
+			// Budget
+			CreateAndAddApplicationFunction(applicationFunctionList,
+			                                DefinedRaptorApplicationFunctionPaths.RequestAllowances,
+                                            "xxRequestAllowances",
+                                            DefinedRaptorApplicationFunctionForeignIds.RequestAllowances, null);
 			// Agent Portal
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenAsm, "xxASM", DefinedRaptorApplicationFunctionForeignIds.OpenAsm, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyShiftCategoryPreferences, "xxModifyShiftCategoryPreferences", DefinedRaptorApplicationFunctionForeignIds.ModifyShiftCategoryPreferences, null);

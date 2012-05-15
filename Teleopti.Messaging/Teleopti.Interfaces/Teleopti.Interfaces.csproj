@@ -142,7 +142,9 @@
     <Compile Include="Domain\IJobResultDetail.cs" />
     <Compile Include="Domain\IProjectionProvider.cs" />
     <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
+    <Compile Include="Domain\IResourceCalculateDelayer.cs" />
     <Compile Include="Domain\IRevision.cs" />
+    <Compile Include="Domain\IRuleSetProjectionService.cs" />
     <Compile Include="Domain\IScheduleDayAvailabilityRestrictionExtractor.cs" />
     <Compile Include="Domain\IScheduleDayChangeCallback.cs" />
     <Compile Include="Domain\IScheduleDayPreferenceRestrictionExtractor.cs" />
@@ -237,7 +239,6 @@
     <Compile Include="Domain\ISchedulePeriodDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\ISchedulePeriodDayOffBackToLegalStateByBrutalForceService.cs" />
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
-    <Compile Include="Domain\IAverageShiftLengthValueCalculator.cs" />
     <Compile Include="Domain\IBestBlockShiftCategoryFinder.cs" />
     <Compile Include="Domain\IBlockSchedulingService.cs" />
     <Compile Include="Domain\IFairnessValueCalculator.cs" />
@@ -254,7 +255,7 @@
     <Compile Include="Domain\IBlockFinderResult.cs" />
     <Compile Include="Domain\IDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\IRestrictionExtractor.cs" />
-    <Compile Include="Domain\IRuleSetProjectionService.cs" />
+    <Compile Include="Domain\IRuleSetProjectionEntityService.cs" />
     <Compile Include="Domain\ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Domain\IScheduleMatrixSchedulePeriodContainer.cs" />
     <Compile Include="Domain\ISchedulePartExtractor.cs" />
@@ -289,6 +290,7 @@
     <Compile Include="Domain\IShiftCategoryLimitationChecker.cs" />
     <Compile Include="Domain\IShiftCreatorService.cs" />
     <Compile Include="Domain\IShiftFromMasterActivityService.cs" />
+    <Compile Include="Domain\IShiftLengthDecider.cs" />
     <Compile Include="Domain\IShiftProjectionCache.cs" />
     <Compile Include="Domain\IShiftProjectionCacheManager.cs" />
     <Compile Include="Domain\IShiftProjectionCasheFilter.cs" />

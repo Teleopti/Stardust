@@ -28,4 +28,37 @@ namespace Teleopti.Ccc.Domain.Common
             return _period.Value;
         }
     }
+
+	public interface IDateOnlyPeriodAsDateTimePeriod
+	{
+		DateOnlyPeriod DateOnly { get; }
+		DateTimePeriod Period();
+	}
+
+	public class DateOnlyPeriodAsDateTimePeriod : IDateOnlyPeriodAsDateTimePeriod
+	{
+		private readonly DateOnlyPeriod _dateOnlyPeriod;
+		private readonly ICccTimeZoneInfo _sourceTimeZone;
+		private DateTimePeriod? _period;
+
+		public DateOnlyPeriodAsDateTimePeriod(DateOnlyPeriod dateOnlyPeriod, ICccTimeZoneInfo sourceTimeZone)
+		{
+			_dateOnlyPeriod = dateOnlyPeriod;
+			_sourceTimeZone = sourceTimeZone;
+		}
+
+		public DateOnlyPeriod DateOnly
+		{
+			get { return _dateOnlyPeriod; }
+		}
+
+		public DateTimePeriod Period()
+		{
+			if (!_period.HasValue)
+			{
+				_period = _dateOnlyPeriod.ToDateTimePeriod(_sourceTimeZone);
+			}
+			return _period.Value;
+		}
+	}
 }

@@ -2,7 +2,6 @@
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     {
         private SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder _target;
         private MockRepository _mockRepository;
-        private IOptimizerOriginalPreferences _optimizerPreferences;
+		//private IOptimizerOriginalPreferences _optimizerPreferences;
         private IScheduleMatrixValueCalculatorPro _scheduleMatrixValueCalculator;
         private IDeleteSchedulePartService _deleteSchedulePartService;
         private IResourceOptimizationHelper _resourceOptimizationHelper;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void Setup()
         {
             _mockRepository = new MockRepository();
-            _optimizerPreferences = OptimizerPreferencesFactory.Create();
+			//_optimizerPreferences = OptimizerPreferencesFactory.Create();
             _deleteSchedulePartService = _mockRepository.StrictMock<IDeleteSchedulePartService>();
             _resourceOptimizationHelper = _mockRepository.StrictMock<IResourceOptimizationHelper>();
             _scheduleMatrixValueCalculator = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorPro>();
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyBuild()
         {
             //redefine a member
-            _optimizerPreferences = _mockRepository.StrictMock<IOptimizerOriginalPreferences>();
+			//_optimizerPreferences = _mockRepository.StrictMock<IOptimizerOriginalPreferences>();
 
             var schedulingOptions = _mockRepository.StrictMock<ISchedulingOptions>();
             var scheduleMatrixPro = _mockRepository.StrictMock<IScheduleMatrixPro>();
@@ -53,9 +52,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using(_mockRepository.Record())
             {
-                Expect.Call(_optimizerPreferences.SchedulingOptions)
-                    .Return(schedulingOptions).Repeat.Once();
-                Expect.Call(schedulingOptions.Fairness).Return(new Percent(0.5));
+				//Expect.Call(_optimizerPreferences.SchedulingOptions)
+				//    .Return(schedulingOptions).Repeat.Once();
+				Expect.Call(schedulingOptions.Fairness).Return(new Percent(0.5));
 
             }
 			ISchedulePeriodShiftCategoryBackToLegalStateService result = _target.Build(scheduleMatrixPro, schedulePartModifyAndRollbackService);
@@ -112,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var schedulePartModifyAndRollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
             
             IScheduleDayService result =
-				_target.CreateScheduleService(serviceBase, _optimizerPreferences.SchedulingOptions, _deleteSchedulePartService, _resourceOptimizationHelper, _effectiveRestrictionCreator, schedulePartModifyAndRollbackService);
+				_target.CreateScheduleService(serviceBase, _deleteSchedulePartService, _resourceOptimizationHelper, _effectiveRestrictionCreator, schedulePartModifyAndRollbackService);
 
             Assert.IsNotNull(result);
         }

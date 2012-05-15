@@ -11,19 +11,19 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class SchedulePeriodDayOffBackToLegalStateByBrutalForceService : ISchedulePeriodDayOffBackToLegalStateByBrutalForceService
     {
         private readonly IScheduleMatrixBitArrayConverter _scheduleMatrixConverter;
-        private readonly IDayOffPlannerRules _dayOffPlannerRules;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly CultureInfo _agentsCulture;
         private bool? _result;
         private BitArray _resultArray;
 
         public SchedulePeriodDayOffBackToLegalStateByBrutalForceService(
             IScheduleMatrixBitArrayConverter scheduleMatrixConverter,
-            IDayOffPlannerRules dayOffPlannerRules,
+            IDaysOffPreferences daysOffPreferences,
             CultureInfo agentsCulture
             )
         {
             _scheduleMatrixConverter = scheduleMatrixConverter;
-            _dayOffPlannerRules = dayOffPlannerRules;
+            _daysOffPreferences = daysOffPreferences;
             _agentsCulture = agentsCulture;
         }
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             BitArray periodDays = _scheduleMatrixConverter.OuterWeekPeriodDayOffsBitArray(matrix);
             MinMax<int> indexRange = _scheduleMatrixConverter.PeriodIndexRange(matrix);
 
-            IEnumerable<IBinaryValidator> validators = createValidators(_scheduleMatrixConverter, _dayOffPlannerRules, _agentsCulture, matrix);
+            IEnumerable<IBinaryValidator> validators = createValidators(_scheduleMatrixConverter, _daysOffPreferences, _agentsCulture, matrix);
             var binaryPermutation = new BinaryPermutation(periodDays, validators, indexRange.Minimum, indexRange.Maximum);
             _resultArray = binaryPermutation.FindFirstValid();
             _result = (_resultArray != null);
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             get { return _resultArray; }
         }
 
-        private static IEnumerable<IBinaryValidator> createValidators(IScheduleMatrixBitArrayConverter scheduleMatrixConverter, IDayOffPlannerRules dayOffPlannerRules,
+        private static IEnumerable<IBinaryValidator> createValidators(IScheduleMatrixBitArrayConverter scheduleMatrixConverter, IDaysOffPreferences daysOffPreferences,
             CultureInfo agentsCulture, IScheduleMatrixPro matrix)
         {
             BitArray lockedDays = scheduleMatrixConverter.OuterWeekPeriodLockedDaysBitArray(matrix);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             MinMax<int> periodRange = scheduleMatrixConverter.PeriodIndexRange(matrix);
             IOfficialWeekendDays officialWeekendDays = new OfficialWeekendDays(agentsCulture);
 
-            IDayOffLegalStateValidatorListCreator validatorListCreator = new DayOffBackToLegalStateValidatorListCreator(dayOffPlannerRules, officialWeekendDays, periodRange);
+            IDayOffLegalStateValidatorListCreator validatorListCreator = new DayOffBackToLegalStateValidatorListCreator(daysOffPreferences, officialWeekendDays, periodRange);
             IList<IDayOffLegalStateValidator> validatorList = validatorListCreator.BuildActiveValidatorList();
 
             IBinaryValidator schedulePeriodDayOffLegalStateValidator = new SchedulePeriodDayOffLegalStateValidator(validatorList, periodRange);

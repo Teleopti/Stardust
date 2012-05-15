@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
@@ -210,4 +211,5 @@ namespace Teleopti.Interfaces.Domain
        
         #endregion
     }
+
 }

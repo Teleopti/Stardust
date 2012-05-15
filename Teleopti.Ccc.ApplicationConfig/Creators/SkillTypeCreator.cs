@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using NHibernate;
+﻿using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -11,7 +9,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
     public class SkillTypeCreator
     {
         private readonly IPerson _person;
-        private readonly ISessionFactory _sessionFactory;
+		private readonly ISessionFactory _sessionFactory;
+		private readonly SetChangeInfoCommand _setChangeInfoCommand = new SetChangeInfoCommand();
 
         public SkillTypeCreator(IPerson person, ISessionFactory sessionFactory)
         {
@@ -32,19 +31,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
                 skillType = new SkillTypeEmail(description, forecastSource);
             }
 
-            DateTime nu = DateTime.Now;
-            typeof(AggregateRoot)
-                .GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(skillType, _person);
-            typeof(AggregateRoot)
-                .GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(skillType, nu);
-            typeof(AggregateRoot)
-                .GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(skillType, _person);
-            typeof(AggregateRoot)
-                .GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(skillType, nu);
+            _setChangeInfoCommand.Execute((AggregateRoot)skillType,_person);
 
             return skillType;
         }
@@ -54,10 +41,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             bool skillTypeSaved = false;
             ISession session = _sessionFactory.OpenSession();
 
-            ISkillType foundSkillType = (ISkillType)session.CreateCriteria(typeof (ISkillType))
-                .Add(Expression.Eq("Description.Name", skillType.Description.Name))
-                .UniqueResult();
-
+        	var foundSkillType = fetchByName(skillType.Description.Name, session);
             if (foundSkillType == null)
             {
                 session.Save(skillType);
@@ -68,13 +52,19 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             return skillTypeSaved;
         }
 
+		private static ISkillType fetchByName(string name, ISession session)
+		{
+			return session.CreateCriteria<SkillType>()
+				.Add(Restrictions.Eq("Description.Name", name))
+				.UniqueResult<ISkillType>();
+		}
+
         public ISkillType Fetch(string name)
         {
             ISession session = _sessionFactory.OpenSession();
+
+        	var skillType = fetchByName(name, session);
             
-            ISkillType skillType = session.CreateCriteria(typeof(ISkillType))
-                        .Add(Expression.Eq("Description.Name", name))
-                        .UniqueResult<ISkillType>();
             session.Close();
             return skillType;
         }

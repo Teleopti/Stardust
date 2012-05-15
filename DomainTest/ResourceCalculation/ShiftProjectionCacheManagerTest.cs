@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IWorkShift _workShift3;
         private IShiftCategory _category;
         private IActivity _activity;
-        private IRuleSetProjectionService _ruleSetProjectionService;
+        private IRuleSetProjectionEntityService _ruleSetProjectionEntityService;
         private IShiftFromMasterActivityService _shiftFromMasterActivityService;
         private IRuleSetDeletedActivityChecker _activityChecker;
     	private IRuleSetDeletedShiftCategoryChecker _shiftCategoryChecker;
@@ -32,11 +32,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void Setup()
         {
             _mocks = new MockRepository();
-            _ruleSetProjectionService = _mocks.StrictMock<IRuleSetProjectionService>();
+            _ruleSetProjectionEntityService = _mocks.StrictMock<IRuleSetProjectionEntityService>();
             _shiftFromMasterActivityService = _mocks.StrictMock<IShiftFromMasterActivityService>();
             _activityChecker = _mocks.StrictMock<IRuleSetDeletedActivityChecker>();
         	_shiftCategoryChecker = _mocks.StrictMock<IRuleSetDeletedShiftCategoryChecker>();
-            _target = new ShiftProjectionCacheManager(_shiftFromMasterActivityService, _activityChecker, _shiftCategoryChecker, _ruleSetProjectionService);
+            _target = new ShiftProjectionCacheManager(_shiftFromMasterActivityService, _activityChecker, _shiftCategoryChecker, _ruleSetProjectionEntityService);
             _ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
             _ruleSet = _mocks.StrictMock<IWorkShiftRuleSet>();
             
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_ruleSet.IsValidDate(dateOnly)).Return(true);
                 Expect.Call(_activityChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
 				Expect.Call(_shiftCategoryChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
-                Expect.Call(_ruleSetProjectionService.ProjectionCollection(_ruleSet)).Return(GetWorkShiftsInfo());
+                Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(_ruleSet)).Return(GetWorkShiftsInfo());
                 Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
                 Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(GetWorkShifts());
                 Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());    
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(ruleSet2.OnlyForRestrictions).Return(false);
                 Expect.Call(_activityChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
                 Expect.Call(_shiftCategoryChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
-                Expect.Call(_ruleSetProjectionService.ProjectionCollection(_ruleSet)).Return(infos);
+                Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(_ruleSet)).Return(infos);
                 Expect.Call(_shiftFromMasterActivityService.Generate(workShift)).Return(new List<IWorkShift>());
             }
 

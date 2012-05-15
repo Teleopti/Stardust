@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyPersonsInHierarchy()
         {
-            DateTimePeriod dateTime = new DateTimePeriod(2000, 1, 1, 2002, 1, 1);
+            var dateTime = new DateOnlyPeriod(2000, 1, 1, 2002, 1, 1);
             BusinessUnit bu = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
             Person person = new Person();
             Contract contract = new Contract("dummy");

@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.Win.Meetings
         private SFGridColumnBase<ContactPersonViewModel> _skillColumn;
         private SFGridColumnBase<ContactPersonViewModel> _emailColumn;
 
+        private Boolean _IsRequired = true;
+
         private readonly List<SFGridColumnBase<ContactPersonViewModel>> _gridColumns =
             new List<SFGridColumnBase<ContactPersonViewModel>>();
 
@@ -367,7 +369,15 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void gridControlPeople_CellDoubleClick(object sender, GridCellClickEventArgs e)
         {
-            _presenter.AddRequiredParticipants(_gridHelper.FindSelectedItems());
+            if (_IsRequired )
+            {
+                _presenter.AddRequiredParticipants(_gridHelper.FindSelectedItems());
+    
+            }else
+            {
+                _presenter.AddOptionalParticipants(  _gridHelper.FindSelectedItems());
+            }
+            
         }
 
         private void textBoxExtRequiredParticipant_KeyDown(object sender, KeyEventArgs e)
@@ -395,6 +405,16 @@ namespace Teleopti.Ccc.Win.Meetings
         {
             if (!IsValidKey(e.KeyCode, e.Modifiers))
                 e.SuppressKeyPress = true;
+        }
+
+        private void textBoxExtRequiredParticipant_Click(object sender, EventArgs e)
+        {
+            _IsRequired = true;
+        }
+
+        private void textBoxExtOptionalParticipant_Click(object sender, EventArgs e)
+        {
+            _IsRequired = false ;
         }
     }
 }

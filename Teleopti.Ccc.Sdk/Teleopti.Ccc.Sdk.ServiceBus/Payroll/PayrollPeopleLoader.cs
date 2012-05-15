@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
             return personRepository.Get(message.OwnerPersonId);
         }
 
-        public IEnumerable<IPerson> GetPeopleForExport(RunPayrollExport message, DateTimePeriod payrollExportPeriod, IUnitOfWork unitOfWork)
+        public IEnumerable<IPerson> GetPeopleForExport(RunPayrollExport message, DateOnlyPeriod payrollExportPeriod, IUnitOfWork unitOfWork)
         {
             var personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
             var allPeople = personRepository.FindPeopleInOrganizationLight(payrollExportPeriod);

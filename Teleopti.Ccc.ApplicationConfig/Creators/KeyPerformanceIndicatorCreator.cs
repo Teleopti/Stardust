@@ -1,6 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Reflection;
+﻿using System.Drawing;
 using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -19,7 +17,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
    public class KeyPerformanceIndicatorCreator
     {
         private readonly ISessionFactory _sessionFactory;
-        private IPerson _person;
+		private readonly IPerson _person;
+		private readonly SetChangeInfoCommand _setChangeInfoCommand = new SetChangeInfoCommand();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KeyPerformanceIndicatorCreator"/> class.
@@ -55,21 +54,9 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         /// </remarks>
         public KeyPerformanceIndicator Create(string name, string resourceKey, EnumTargetValueType targetValueType, int defaultTargetValue, int defaultMinValue, int defaultMaxValue, Color defaultBetweenColor, Color defaultLowerThanMinColor, Color defaultHigherThanMaxColor)
         {
-            KeyPerformanceIndicator keyPerformanceIndicator = new KeyPerformanceIndicator(name, resourceKey, targetValueType, defaultTargetValue, defaultMinValue, defaultMaxValue, defaultBetweenColor, defaultLowerThanMinColor, defaultHigherThanMaxColor) ;
+            var keyPerformanceIndicator = new KeyPerformanceIndicator(name, resourceKey, targetValueType, defaultTargetValue, defaultMinValue, defaultMaxValue, defaultBetweenColor, defaultLowerThanMinColor, defaultHigherThanMaxColor) ;
 
-            DateTime nu = DateTime.Now;
-            typeof(AggregateRoot)
-                .GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(keyPerformanceIndicator, _person);
-            typeof(AggregateRoot)
-                .GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(keyPerformanceIndicator, nu);
-            typeof(AggregateRoot)
-                .GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(keyPerformanceIndicator, _person);
-            typeof(AggregateRoot)
-                .GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(keyPerformanceIndicator, nu);
+            _setChangeInfoCommand.Execute((AggregateRoot)keyPerformanceIndicator,_person);
 
             return keyPerformanceIndicator;
         }
@@ -88,9 +75,9 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             bool keyPerformanceIndicatorSaved = false;
             ISession session = _sessionFactory.OpenSession();
 
-            KeyPerformanceIndicator foundKeyPerformanceIndicator = (KeyPerformanceIndicator)session.CreateCriteria(typeof(KeyPerformanceIndicator))
-                .Add(Expression.Eq("ResourceKey", keyPerformanceIndicator.ResourceKey))
-                .UniqueResult();
+			var foundKeyPerformanceIndicator = session.CreateCriteria<KeyPerformanceIndicator>()
+                .Add(Restrictions.Eq("ResourceKey", keyPerformanceIndicator.ResourceKey))
+				.UniqueResult<KeyPerformanceIndicator>();
 
             if (foundKeyPerformanceIndicator == null)
             {
@@ -115,9 +102,10 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         {
             ISession session = _sessionFactory.OpenSession();
 
-            KeyPerformanceIndicator keyPerformanceIndicator = session.CreateCriteria(typeof(KeyPerformanceIndicator))
-                        .Add(Expression.Eq("ResourceKey", name))
+            var keyPerformanceIndicator = session.CreateCriteria<KeyPerformanceIndicator>()
+                        .Add(Restrictions.Eq("ResourceKey", name))
                         .UniqueResult<KeyPerformanceIndicator>();
+
             session.Close();
             return keyPerformanceIndicator;
         }

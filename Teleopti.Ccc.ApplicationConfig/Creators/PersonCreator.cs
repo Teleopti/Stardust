@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Reflection;
 using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
@@ -20,7 +19,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
     /// </remarks>
     public class PersonCreator
     {
-        private readonly ISessionFactory _sessionFactory;
+		private readonly ISessionFactory _sessionFactory;
+		private readonly SetChangeInfoCommand _setChangeInfoCommand = new SetChangeInfoCommand();
 
         public PersonCreator(ISessionFactory sessionFactory)
         {
@@ -43,44 +43,38 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         /// </remarks>
         public IPerson Create(string firstName, string lastName, string logOnName, string password, CultureInfo cultureInfo, ICccTimeZoneInfo timeZone)
         {
-            IPerson person = new Person {Name = new Name(firstName, lastName)};
+			ISession session = _sessionFactory.OpenSession();
 
-            person.PermissionInformation.SetDefaultTimeZone(timeZone);
-            person.PermissionInformation.SetCulture(cultureInfo);
-            person.PermissionInformation.SetUICulture(cultureInfo);
-            person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
-                                                                             {
-                                                                                 ApplicationLogOnName = logOnName,
-                                                                                 Password = password
-                                                                             };
+			var person = session.CreateCriteria<IPerson>()
+						.Add(Restrictions.Eq("ApplicationAuthenticationInfo.ApplicationLogOnName", logOnName))
+						.SetFetchMode("PermissionInformation.PersonInApplicationRole", FetchMode.Join)
+						.UniqueResult<IPerson>();
+			if (person == null)
+			{
+				person = new Person {Name = new Name(firstName, lastName)};
 
-            DateTime nu = DateTime.Now;
-            typeof(AggregateRoot)
-                .GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(person, person);
-            typeof(AggregateRoot)
-                .GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(person, nu);
-            typeof(AggregateRoot)
-                .GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(person, person);
-            typeof(AggregateRoot)
-                .GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(person, nu);
+				person.PermissionInformation.SetDefaultTimeZone(timeZone);
+				person.PermissionInformation.SetCulture(cultureInfo);
+				person.PermissionInformation.SetUICulture(cultureInfo);
+				person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+				                                       	{
+				                                       		ApplicationLogOnName = logOnName,
+				                                       		Password = password
+				                                       	};
 
-            typeof(PersonWriteProtectionInfo)
-                .GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(person.PersonWriteProtection, person);
-            typeof(PersonWriteProtectionInfo)
-                .GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(person.PersonWriteProtection, nu);
-            typeof(PersonWriteProtectionInfo)
-                .GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(person.PersonWriteProtection, person);
-            typeof(PersonWriteProtectionInfo)
-                .GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(person.PersonWriteProtection, nu);
-            return person;
+
+				_setChangeInfoCommand.Execute((AggregateRoot) person, person);
+				_setChangeInfoCommand.Execute((PersonWriteProtectionInfo)person.PersonWriteProtection, person);
+			}
+			
+			foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
+			{
+				Debug.Write(applicationRole.Name);
+			}
+
+        	session.Close();
+
+        	return person;
         }
 
         /// <summary>
@@ -91,41 +85,35 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         /// Created by: peterwe
         /// Created date: 2008-10-24
         /// </remarks>
-        public bool Save(IPerson person)
+        public void Save(IPerson person)
         {
-            bool personSaved = false;
-            ISession session = _sessionFactory.OpenSession();
-
-            IPerson foundPerson = (IPerson)session.CreateCriteria(typeof (IPerson))
-                .Add(Restrictions.Eq("ApplicationAuthenticationInfo.ApplicationLogOnName",
-                                   person.ApplicationAuthenticationInfo.ApplicationLogOnName))
-                .UniqueResult();
-
-            if (foundPerson == null)
+            if (personNotSavedBefore(person))
             {
+				ISession session = _sessionFactory.OpenSession();
                 session.Save(person);
-                session.Flush();
-                personSaved = true;
+				session.Flush();
+				session.Close();
             }
-
-            session.Close();
-            return personSaved;
         }
 
-        public IPerson FetchPerson(string applicationLogOnName)
-        {
-            ISession session = _sessionFactory.OpenSession();
-            
-            IPerson person = session.CreateCriteria(typeof(IPerson))
-                        .Add(Restrictions.Eq("ApplicationAuthenticationInfo.ApplicationLogOnName", applicationLogOnName))
-                        .SetFetchMode("PermissionInformation.PersonInApplicationRole", FetchMode.Join)
-                        .UniqueResult<IPerson>();
-            foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
-            {
-                Debug.Write(applicationRole.Name);
-            }
-            session.Close();
-            return person;
-        }
+    	private static bool personNotSavedBefore(IPerson person)
+    	{
+    		return !person.Id.HasValue;
+    	}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool WindowsUserExists(IWindowsAuthenticationInfo windowsAuthInfo)
+    	{
+			ISession session = _sessionFactory.OpenSession();
+
+			var person = session.CreateCriteria<IPerson>()
+						.Add(Restrictions.Eq("WindowsAuthenticationInfo.WindowsLogOnName", windowsAuthInfo.WindowsLogOnName))
+						.Add(Restrictions.Eq("WindowsAuthenticationInfo.DomainName", windowsAuthInfo.DomainName))
+						.UniqueResult<IPerson>();
+
+    		session.Close();
+
+    		return person != null;
+    	}
     }
 }

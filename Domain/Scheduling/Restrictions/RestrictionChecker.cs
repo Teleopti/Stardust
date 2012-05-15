@@ -7,15 +7,12 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
-    //public enum PermissionState
-    //{
-    //    Satisfied, Broken, Unspecified,
-    //    None
-    //}
-
     public class RestrictionChecker : ICheckerRestriction
     {
         private IScheduleDay _schedulePart;
+
+        public RestrictionChecker()
+        { }
 
         public RestrictionChecker(IScheduleDay schedulePart)
         {
@@ -24,88 +21,88 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public IScheduleDay ScheduleDay
         {
-            get { return _schedulePart;}
+            get { return _schedulePart; }
             set { _schedulePart = value; }
         }
 
         public PermissionState CheckAvailability()
         {
+            if (_schedulePart == null)
+                return PermissionState.None;
+
             var restriction = (IAvailabilityRestriction)_schedulePart.RestrictionCollection()
                                         .FilterBySpecification(RestrictionMustBe.Availability).FirstOrDefault();
-            
+
+            if (restriction == null)
+                return PermissionState.None;
+
+            //If there is a day off and availability is set to false the restriction is considered Satisfied
+            if (_schedulePart.PersonDayOffCollection().Count != 0 && restriction.NotAvailable)
+            {
+                return PermissionState.Satisfied;
+            }
+
             PermissionState permissionState = PermissionState.Unspecified;
+            IVisualLayerCollection visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
 
-            if (restriction!=null)
+            if (visualLayerCollection.HasLayers)
             {
-                //If there is a day off and availability is set to false the restriction is considered Satisfied
-                if (_schedulePart.PersonDayOffCollection().Count != 0 && restriction.NotAvailable)
+                if (restriction.NotAvailable)
+                    return PermissionState.Broken;
+                permissionState = PermissionState.Satisfied;
+                DateTimePeriod schedulePeriod = (DateTimePeriod)visualLayerCollection.Period();
+                ICccTimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+
+                bool withinStartTimeSpan = isWithinTimeSpan(restriction.StartTimeLimitation.StartTime, restriction.StartTimeLimitation.EndTime, schedulePeriod.StartDateTime, timeZoneInfo);
+                bool withinEndTimeSpan = isWithinTimeSpan(restriction.EndTimeLimitation.StartTime, restriction.EndTimeLimitation.EndTime, schedulePeriod.EndDateTime, timeZoneInfo);
+
+                if (!withinStartTimeSpan || !withinEndTimeSpan)
                 {
-                    return PermissionState.Satisfied;
+                    permissionState = PermissionState.Broken;
                 }
 
-                IVisualLayerCollection visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
-                
-                if (visualLayerCollection.HasLayers)
+                if (!isWorkTimeLengthOk(restriction.WorkTimeLimitation, visualLayerCollection.ContractTime()))
                 {
-                    if (restriction.NotAvailable)
-                        return PermissionState.Broken;
-                    permissionState = PermissionState.Satisfied;
-                    DateTimePeriod schedulePeriod = (DateTimePeriod)visualLayerCollection.Period();
-                    ICccTimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
-
-                    bool withinStartTimeSpan = isWithinTimeSpan(restriction.StartTimeLimitation.StartTime, restriction.StartTimeLimitation.EndTime, schedulePeriod.StartDateTime, timeZoneInfo);
-                    bool withinEndTimeSpan = isWithinTimeSpan(restriction.EndTimeLimitation.StartTime, restriction.EndTimeLimitation.EndTime, schedulePeriod.EndDateTime, timeZoneInfo);
-
-                    if (!withinStartTimeSpan || !withinEndTimeSpan)
-                    {
-                        permissionState = PermissionState.Broken;
-                    }
-
-                    if (!isWorkTimeLengthOk(restriction.WorkTimeLimitation, visualLayerCollection.ContractTime()))
-                    {
-                        permissionState = PermissionState.Broken;
-                    }
+                    permissionState = PermissionState.Broken;
                 }
             }
-            else
-            {
-                permissionState = PermissionState.None;
-            }
+
             return permissionState;
         }
 
         public PermissionState CheckRotationDayOff()
         {
-            PermissionState permissionState = PermissionState.Unspecified;
+            if (_schedulePart == null)
+                return PermissionState.None;
 
             var rotation = (IRotationRestriction)_schedulePart.RestrictionCollection()
                            .FilterBySpecification(RestrictionMustBe.Rotation).FirstOrDefault();
 
-            if (rotation != null)
+            if (rotation == null)
+                return PermissionState.None;
+
+            PermissionState permissionState = PermissionState.Unspecified;
+
+            var personDayOffCollaction = _schedulePart.PersonDayOffCollection();
+
+            if (personDayOffCollaction.Count == 0 && rotation.DayOffTemplate != null)
             {
-                if (_schedulePart.PersonDayOffCollection().Count == 0 && rotation.DayOffTemplate != null)
-                {
-                    return PermissionState.Broken;
-                }
+                return PermissionState.Broken;
+            }
 
-                //todo: How does the dayoff work?
-                foreach (IPersonDayOff dayOff in _schedulePart.PersonDayOffCollection())
+            //todo: How does the dayoff work?
+            foreach (IPersonDayOff dayOff in personDayOffCollaction)
+            {
+                if (rotation.DayOffTemplate != null)
                 {
-                    if (rotation.DayOffTemplate != null)
+                    permissionState = PermissionState.Satisfied;
+
+                    if (!dayOff.CompareToTemplate(rotation.DayOffTemplate))
                     {
-                        permissionState = PermissionState.Satisfied;
-
-                        if (!dayOff.CompareToTemplate(rotation.DayOffTemplate))
-                        {
-                            //Need to do a return here because the visualLayerCollection can be empty 
-                            return PermissionState.Broken;
-                        }
+                        //Need to do a return here because the visualLayerCollection can be empty 
+                        return PermissionState.Broken;
                     }
                 }
-            }
-            else
-            {
-                permissionState = PermissionState.None;
             }
 
             return permissionState;
@@ -113,41 +110,47 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public PermissionState CheckRotationShift()
         {
-            PermissionState permissionState = PermissionState.Unspecified;
+            if (_schedulePart == null)
+                return PermissionState.None;
 
             var rotation = (IRotationRestriction)_schedulePart.RestrictionCollection()
                            .FilterBySpecification(RestrictionMustBe.Rotation).FirstOrDefault();
 
-            if (rotation != null)
+            if (rotation == null)
+                return PermissionState.None;
+
+
+            PermissionState permissionState = PermissionState.Unspecified;
+            
+            if(_schedulePart.PersonDayOffCollection().Count > 0)
             {
-                var visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
-
-                if (visualLayerCollection.HasLayers && rotation.DayOffTemplate == null)
-                {
-                    permissionState = PermissionState.Satisfied;
-
-                    var schedulePeriod = (DateTimePeriod)visualLayerCollection.Period();
-                    ICccTimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
-
-                    bool withinStartTimeSpan = isWithinTimeSpan(rotation.StartTimeLimitation.StartTime, rotation.StartTimeLimitation.EndTime, schedulePeriod.StartDateTime, timeZoneInfo);
-                    bool withinEndTimeSpan = isWithinTimeSpan(rotation.EndTimeLimitation.StartTime, rotation.EndTimeLimitation.EndTime, schedulePeriod.EndDateTime, timeZoneInfo);
-
-                    if (!withinStartTimeSpan || !withinEndTimeSpan)
-                    {
-                        permissionState = PermissionState.Broken;
-                    }
-
-                    if (!isWorkTimeLengthOk(rotation.WorkTimeLimitation, visualLayerCollection.ContractTime()))
-                    {
-                        permissionState = PermissionState.Broken;
-                    }
-
-                    permissionState = checkRotationShiftCategory(rotation, permissionState);
-                }
+                if(rotation.DayOffTemplate == null)
+                    return PermissionState.Broken;
             }
-            else
+
+            var visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
+
+            if (visualLayerCollection.HasLayers && rotation.DayOffTemplate == null)
             {
-                permissionState = PermissionState.None;
+                permissionState = PermissionState.Satisfied;
+
+                var schedulePeriod = (DateTimePeriod)visualLayerCollection.Period();
+                ICccTimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+
+                bool withinStartTimeSpan = isWithinTimeSpan(rotation.StartTimeLimitation.StartTime, rotation.StartTimeLimitation.EndTime, schedulePeriod.StartDateTime, timeZoneInfo);
+                bool withinEndTimeSpan = isWithinTimeSpan(rotation.EndTimeLimitation.StartTime, rotation.EndTimeLimitation.EndTime, schedulePeriod.EndDateTime, timeZoneInfo);
+
+                if (!withinStartTimeSpan || !withinEndTimeSpan)
+                {
+                    permissionState = PermissionState.Broken;
+                }
+
+                if (!isWorkTimeLengthOk(rotation.WorkTimeLimitation, visualLayerCollection.ContractTime()))
+                {
+                    permissionState = PermissionState.Broken;
+                }
+
+                permissionState = checkRotationShiftCategory(rotation, permissionState);
             }
 
             return permissionState;
@@ -155,42 +158,45 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public PermissionState CheckRotations()
         {
+
+            if (_schedulePart == null)
+                return PermissionState.None;
+
             var rotation = (IRotationRestriction)_schedulePart.RestrictionCollection()
-                            .FilterBySpecification(RestrictionMustBe.Rotation).FirstOrDefault();
+                           .FilterBySpecification(RestrictionMustBe.Rotation).FirstOrDefault();
 
-            PermissionState permissionState;
+            if (rotation == null || !rotation.IsRestriction())
+                return PermissionState.None;
 
-            if (rotation != null)
+            PermissionState permissionState = CheckRotationDayOff();
+
+            if (permissionState == PermissionState.Unspecified
+                || permissionState == PermissionState.Satisfied)
             {
+                var permissionStateShift = CheckRotationShift(); ;
 
-                permissionState = CheckRotationDayOff();
-
-                if (permissionState == PermissionState.Unspecified || permissionState == PermissionState.Satisfied)
-                {
-                    var permissionStateShift = CheckRotationShift(); ;
-
-                    if (permissionStateShift == PermissionState.Broken || permissionStateShift == PermissionState.Satisfied)
-                        permissionState = permissionStateShift;
-                }
-                    
+                if (permissionStateShift == PermissionState.Broken || permissionStateShift == PermissionState.Satisfied)
+                    permissionState = permissionStateShift;
             }
-            else
-            {
-                permissionState = PermissionState.None;
-            }
+
 
             return permissionState;
         }
 
         public PermissionState CheckStudentAvailability()
         {
+            if (_schedulePart == null)
+                return PermissionState.None;
+
             PermissionState permissionState = PermissionState.None;
+
             IEnumerable<IStudentAvailabilityDay> dataRestrictions =
                 (from r in _schedulePart.PersistableScheduleDataCollection() where r is IStudentAvailabilityDay select (IStudentAvailabilityDay)r);
 
             IStudentAvailabilityDay studentAvailabilityDay = dataRestrictions.FirstOrDefault();
 
-            if (studentAvailabilityDay != null && studentAvailabilityDay.RestrictionCollection.Count > 0)
+            if (studentAvailabilityDay != null
+                && studentAvailabilityDay.RestrictionCollection.Count > 0)
             {
                 IStudentAvailabilityRestriction restriction = studentAvailabilityDay.RestrictionCollection[0];
                 //If there is a day off and availability is set to false the restriction is considered Satisfied
@@ -224,7 +230,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 }
                 else
                     return PermissionState.Unspecified;
-                
+
             }
 
             return permissionState;
@@ -232,40 +238,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public PermissionState CheckPreferenceDayOff()
         {
+            if (_schedulePart == null)
+                return PermissionState.None;
+
             var permissionState = PermissionState.Unspecified;
-            var dataRestrictions = (from r in _schedulePart.PersistableScheduleDataCollection() 
-                                    where r is IPreferenceDay select (IPreferenceDay)r);
+            var dataRestrictions = (from r in _schedulePart.PersistableScheduleDataCollection()
+                                    where r is IPreferenceDay
+                                    select (IPreferenceDay)r);
 
             var preference = (from r in dataRestrictions
                               where r.Restriction is IPreferenceRestriction
                               select r.Restriction).FirstOrDefault();
 
-            if (preference != null)
-            {
-                if (_schedulePart.PersonDayOffCollection().Count == 0 && preference.DayOffTemplate != null)
-                {
-                    return PermissionState.Broken;
-                }
-                //todo: How does the dayoff work? 
-                foreach (var dayOff in _schedulePart.PersonDayOffCollection())
-                {
-                    permissionState = PermissionState.Satisfied;
+            if (preference == null)
+                return PermissionState.None;
 
-                    if (preference.DayOffTemplate != null)
-                    {
-                        if (!dayOff.CompareToTemplate(preference.DayOffTemplate))
-                        {
-                            //Need to do a return here because the visualLayerCollection can be empty 
-                            return PermissionState.Broken;
-                        }
-                    }
-                    else
-                        return PermissionState.Broken;
-                }
-            }
-            else
+            if (_schedulePart.PersonDayOffCollection().Count == 0 && preference.DayOffTemplate != null)
             {
-                permissionState = PermissionState.None;
+                return PermissionState.Broken;
+            }
+            //todo: How does the dayoff work? 
+            foreach (var dayOff in _schedulePart.PersonDayOffCollection())
+            {
+                permissionState = PermissionState.Satisfied;
+
+                if (preference.DayOffTemplate != null)
+                {
+                    if (!dayOff.CompareToTemplate(preference.DayOffTemplate))
+                    {
+                        //Need to do a return here because the visualLayerCollection can be empty 
+                        return PermissionState.Broken;
+                    }
+                }
+                else
+                    return PermissionState.Broken;
             }
 
             return permissionState;
@@ -286,64 +292,61 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public PermissionState CheckPreferenceShift()
         {
+            if (_schedulePart == null)
+                return PermissionState.None;
+
             var permissionState = PermissionState.Unspecified;
 
             var preference = RestrictionPreference();
 
-            if (preference != null)
+            if (preference == null)
+                return PermissionState.None;
+
+            IVisualLayerCollection visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
+
+            if (visualLayerCollection.HasLayers)
             {
-                IVisualLayerCollection visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
+                permissionState = PermissionState.Satisfied;
 
-                if (visualLayerCollection.HasLayers)
+                var schedulePeriod = (DateTimePeriod)visualLayerCollection.Period();
+                var timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+
+                var withinStartTimeSpan = isWithinTimeSpan(preference.StartTimeLimitation.StartTime,
+                                                            preference.StartTimeLimitation.EndTime,
+                                                            schedulePeriod.StartDateTime, timeZoneInfo);
+
+                var withinEndTimeSpan = isWithinTimeSpan(preference.EndTimeLimitation.StartTime,
+                                                          preference.EndTimeLimitation.EndTime,
+                                                          schedulePeriod.EndDateTime, timeZoneInfo);
+
+                if (!withinStartTimeSpan || !withinEndTimeSpan)
                 {
-                    permissionState = PermissionState.Satisfied;
+                    permissionState = PermissionState.Broken;
+                }
 
-                    var schedulePeriod = (DateTimePeriod)visualLayerCollection.Period();
-                    var timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+                if (!isWorkTimeLengthOk(preference.WorkTimeLimitation, visualLayerCollection.ContractTime()))
+                {
+                    permissionState = PermissionState.Broken;
+                }
 
-                    var withinStartTimeSpan = isWithinTimeSpan(preference.StartTimeLimitation.StartTime,
-                                                                preference.StartTimeLimitation.EndTime,
-                                                                schedulePeriod.StartDateTime, timeZoneInfo);
+                permissionState = checkPreferenceShiftCategory(preference, permissionState);
+                IActivity activity = null;
+                if (preference.ActivityRestrictionCollection.Count > 0)
+                {
+                    activity = preference.ActivityRestrictionCollection[0].Activity;
+                }
 
-                    var withinEndTimeSpan = isWithinTimeSpan(preference.EndTimeLimitation.StartTime,
-                                                              preference.EndTimeLimitation.EndTime,
-                                                              schedulePeriod.EndDateTime, timeZoneInfo);
-
-                    if (!withinStartTimeSpan || !withinEndTimeSpan)
+                var activities = visualLayerCollection.FilterLayers(activity);
+                foreach (var layer in activities)
+                {
+                    if (activity != null)
                     {
-                        permissionState = PermissionState.Broken;
-                    }
-
-                    if (!isWorkTimeLengthOk(preference.WorkTimeLimitation, visualLayerCollection.ContractTime()))
-                    {
-                        permissionState = PermissionState.Broken;
-                    }
-
-                    permissionState = checkPreferenceShiftCategory(preference, permissionState);
-                    IActivity activity = null;
-                    if (preference.ActivityRestrictionCollection.Count > 0)
-                    {
-                        activity = preference.ActivityRestrictionCollection[0].Activity;
-                    }
-
-                    var activities = visualLayerCollection.FilterLayers(activity);
-                    foreach (var layer in activities)
-                    {
-                        if (activity != null)
+                        if (!layer.Payload.Equals(preference.ActivityRestrictionCollection[0].Activity))
                         {
-                            if (!layer.Payload.Equals(preference.ActivityRestrictionCollection[0].Activity))
-                            {
-                                permissionState = PermissionState.Broken;
-                            }
+                            permissionState = PermissionState.Broken;
                         }
                     }
-
-
                 }
-            }
-            else
-            {
-                permissionState = PermissionState.None;
             }
 
             return permissionState;
@@ -351,31 +354,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public PermissionState CheckPreference()
         {
-            PermissionState permissionState;
+            if (_schedulePart == null)
+                return PermissionState.None;
 
             var preference = RestrictionPreference();
 
-            if (preference != null)
+            if (preference == null)
+                return PermissionState.None;
+
+            PermissionState permissionState = CheckPreferenceDayOff();
+
+            if (permissionState != PermissionState.Broken)
             {
-                permissionState = CheckPreferenceDayOff();
-
-                if(permissionState != PermissionState.Broken)
-                {
-                    permissionState = CheckPreferenceAbsence(permissionState);
-                }
-
-                if (permissionState == PermissionState.Unspecified || permissionState == PermissionState.Satisfied)
-                {
-                    var permissionStateShift = CheckPreferenceShift();
-
-                    if (permissionStateShift == PermissionState.Broken || permissionStateShift == PermissionState.Satisfied)
-                        permissionState = permissionStateShift;
-     
-                }
+                permissionState = CheckPreferenceAbsence(permissionState);
             }
-            else
+
+            if (permissionState == PermissionState.Unspecified || permissionState == PermissionState.Satisfied)
             {
-                permissionState = PermissionState.None;
+                var permissionStateShift = CheckPreferenceShift();
+
+                if (permissionStateShift == PermissionState.Broken || permissionStateShift == PermissionState.Satisfied)
+                    permissionState = permissionStateShift;
+
             }
 
             return permissionState;
@@ -383,6 +383,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public PermissionState CheckPreferenceMustHave()
         {
+            if (_schedulePart == null)
+                return PermissionState.None;
+
             PermissionState permissionState;
 
             var preference = RestrictionPreference();
@@ -402,7 +405,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
                     if (permissionStateShift == PermissionState.Broken || permissionStateShift == PermissionState.Satisfied)
                         permissionState = permissionStateShift;
-
                 }
             }
             else
@@ -417,7 +419,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         {
             var preferenceAbsenceChecker = new PreferenceAbsenceChecker(_schedulePart);
             return preferenceAbsenceChecker.CheckPreferenceAbsence(RestrictionPreference(), permissionState);
-        }   
+        }
 
         private PermissionState checkPreferenceShiftCategory(IPreferenceRestriction preference, PermissionState permissionState)
         {
@@ -428,9 +430,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     permissionState = PermissionState.Broken;
                 }
 
-                if (assignment.MainShift == null) 
+                if (assignment.MainShift == null)
                     continue;
-                        
+
                 IShiftCategory shiftCategory = assignment.MainShift.ShiftCategory;
                 if (preference.ShiftCategory != null)
                 {

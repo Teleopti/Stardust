@@ -265,6 +265,7 @@
     <Compile Include="ScheduleControlDataProvider\ICustomScheduleAppointment.cs" />
     <Compile Include="ScheduleReporting\IPdfScheduleTemplate.cs" />
     <Compile Include="ScheduleReporting\PdfDayOfWeekHeader.cs" />
+    <Compile Include="ScheduleReporting\PdfFontManager.cs" />
     <Compile Include="ScheduleReporting\PdfScheduleAssignment.cs" />
     <Compile Include="ScheduleReporting\PdfScheduleDayOff.cs" />
     <Compile Include="ScheduleReporting\PdfScheduleDayOffOvertime.cs" />

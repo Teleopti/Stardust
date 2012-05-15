@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
                 RuleSetBagCollection = new ReadOnlyCollection<IRuleSetBag>(new List<IRuleSetBag>())
             };
 
-            _target = new ExplorerPresenter(_view, _helper, new RuleSetProjectionService(new ShiftCreatorService()),
+            _target = new ExplorerPresenter(_view, _helper, new RuleSetProjectionEntityService(new ShiftCreatorService()),
                 _unitOfWorkFactory, _eventAggregator, _mbCacheFactory, model);
             
             
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         {
             var ruleSet = _mock.StrictMock<IWorkShiftRuleSet>();
 
-            Expect.Call(() => _mbCacheFactory.Invalidate<IRuleSetProjectionService>());
+            Expect.Call(() => _mbCacheFactory.Invalidate<IRuleSetProjectionEntityService>());
             _mock.ReplayAll();
             _eventAggregator.GetEvent<RuleSetChanged>().Publish(new List<IWorkShiftRuleSet>{ruleSet});
             _mock.VerifyAll();

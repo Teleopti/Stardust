@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         private IList<IPerson> _persons;
         private MockRepository _mockRepository;
         private IPersonRepository _personRepository;
-        private DateTimePeriod _dateTimePeriod;
+        private DateOnlyPeriod _dateTimePeriod;
 
         [SetUp]
         public void Setup()
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             _persons = new List<IPerson> {PersonFactory.CreatePerson("Alan"), PersonFactory.CreatePerson("Bill")};
             _mockRepository = new MockRepository();
             _personRepository = _mockRepository.StrictMock<IPersonRepository>();
-            _dateTimePeriod = new DateTimePeriod();
+            _dateTimePeriod = new DateOnlyPeriod();
         }
 
         [Test]

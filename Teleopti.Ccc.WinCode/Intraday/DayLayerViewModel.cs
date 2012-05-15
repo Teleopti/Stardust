@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -37,22 +38,21 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _models; }
         }
 
-        public void CreateModels(IEnumerable<IPerson> people, DateTimePeriod period)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public void CreateModels(IEnumerable<IPerson> people, IDateOnlyPeriodAsDateTimePeriod period)
         {
             Models.Clear();
 
             var commonNameDescription = getCommonNameDescriptionSetting();
             foreach (var person in people)
             {
-                var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
-
                 ITeam team = null;
-                IPersonPeriod currentPersonPeriod = person.PersonPeriods(dateOnlyPeriod).FirstOrDefault();
+                IPersonPeriod currentPersonPeriod = person.PersonPeriods(period.DateOnly).FirstOrDefault();
                 if (currentPersonPeriod != null)
                     team = currentPersonPeriod.Team;
 
                 var layerViewModelCollection = new LayerViewModelCollection(_eventAggregator,new CreateLayerViewModelService());
-                var model = new DayLayerModel(person, period, team, layerViewModelCollection, commonNameDescription);
+                var model = new DayLayerModel(person, period.Period(), team, layerViewModelCollection, commonNameDescription);
 
                 rebuildLayerViewModelCollection(model);
 

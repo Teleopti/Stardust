@@ -1,6 +1,5 @@
-﻿using System;
-using System.Reflection;
-using NHibernate;
+﻿using NHibernate;
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +9,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
     public class GroupingAbsenceCreator
     {
         private readonly IPerson _person;
-        private readonly ISessionFactory _sessionFactory;
+		private readonly ISessionFactory _sessionFactory;
+		private readonly SetChangeInfoCommand _setChangeInfoCommand = new SetChangeInfoCommand();
 
         public GroupingAbsenceCreator(IPerson person, ISessionFactory sessionFactory)
         {
@@ -20,30 +20,43 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
         public IGroupingAbsence Create(string name)
         {
-            IGroupingAbsence groupingAbsence = new GroupingAbsence(name);
+            IGroupingAbsence groupingAbsence = fetchByName(name);
+			if (groupingAbsence == null)
+			{
+				groupingAbsence = new GroupingAbsence(name);
+				_setChangeInfoCommand.Execute((AggregateRoot) groupingAbsence, _person);
+			}
 
-            DateTime nu = DateTime.Now;
-            typeof(AggregateRoot)
-                .GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(groupingAbsence, _person);
-            typeof(AggregateRoot)
-                .GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(groupingAbsence, nu);
-            typeof(AggregateRoot)
-                .GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(groupingAbsence, _person);
-            typeof(AggregateRoot)
-                .GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(groupingAbsence, nu);
-            return groupingAbsence;
+        	return groupingAbsence;
         }
+
+		private IGroupingAbsence fetchByName(string name)
+		{
+			ISession session = _sessionFactory.OpenSession();
+
+			var result = session.CreateCriteria<GroupingAbsence>()
+				.Add(Restrictions.Eq("Description.Name", name))
+				.List<IGroupingAbsence>();
+
+			session.Close();
+
+			return result.Count == 0 ? null : result[0];
+		}
 
         public void Save(IGroupingAbsence groupingAbsence)
         {
-            ISession sess = _sessionFactory.OpenSession();
-            sess.Save(groupingAbsence);
-            sess.Flush();
-            sess.Close();
+			if (notSavedBefore(groupingAbsence))
+			{
+				ISession sess = _sessionFactory.OpenSession();
+				sess.Save(groupingAbsence);
+				sess.Flush();
+				sess.Close();
+			}
         }
+
+    	private static bool notSavedBefore(IGroupingAbsence groupingAbsence)
+    	{
+    		return !groupingAbsence.Id.HasValue;
+    	}
     }
 }

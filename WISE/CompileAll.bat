@@ -251,7 +251,7 @@ DEL /F /Q "%WISESOURCEFILE%\Web\web.config"
 COPY "%ARTIFACTDIR%\Web.Root.Web.config" "%DYNAMICCONTENT%\Web\web.config"
 
 DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\TeleoptiCCC7.nhib.xml"
-COPY "%ARTIFACTDIR%\TeleoptiCCC7Web.nhib.xml" "%DYNAMICCONTENT%\Web\TeleoptiCCC7.nhib.xml"
+COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\Web\TeleoptiCCC7.nhib.xml"
 
 DEL /F /Q "%WISESOURCEFILE%\Broker\web.config"
 COPY "%ARTIFACTDIR%\BrokerWeb.config" "%DYNAMICCONTENT%\Broker\web.config"
@@ -263,6 +263,7 @@ COPY "%ARTIFACTDIR%\licensecontext.slf" "%WISESOURCEFILE%\Client\Forecasts\licen
 COPY "%ARTIFACTDIR%\licensecontext.slf" "%WISESOURCEFILE%\Client\StandAlone\licensecontext.slf"
 COPY "%ARTIFACTDIR%\Web.MyTime.Web.config" "%WISESOURCEFILE%\Web\Areas\MyTime\Views\web.config"
 COPY "%ARTIFACTDIR%\Web.Start.Web.config" "%WISESOURCEFILE%\Web\Areas\Start\Views\web.config"
+COPY "%ARTIFACTDIR%\Web.Mobile.Web.config" "%WISESOURCEFILE%\Web\Areas\MobileReports\Views\web.config"
 
 ::Create msi output folder
 IF NOT EXIST %OUTDIR% MKDIR %OUTDIR%

@@ -217,10 +217,6 @@
     <value>Add Personal Activity</value>
     <comment>Add personal activity menu item</comment>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Add queues...</value>
-    <comment>Add queues...</comment>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Add to Quick Access Toolbar</value>
     <comment>&amp;Add to Quick Access ToolBar</comment>
@@ -4538,7 +4534,7 @@ deny</value>
     <comment>Group  name given to Approval actions in ribbon bar in   Request screen</comment>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>New Shift Trade Request</value>
+    <value>New shift trade request</value>
     <comment>text of context menu item "New Shift trade request"  in Agent portal Schedule</comment>
   </data>
   <data name="EarlyStart" xml:space="preserve">
@@ -4823,9 +4819,6 @@ Standard</value>
     <value>New Shift Category</value>
     <comment>New Shift Category text to be placed in the Shift Category settings page</comment>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Add new shift category</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Choose shift category to change</value>
     <comment>ChooseSShiftCategoryToChange text in shift categories setting page</comment>
@@ -4893,10 +4886,6 @@ Standard</value>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Add Activity...</value>
     <comment>Add Activity...</comment>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Add Overtime...</value>
-    <comment>Add Overtime...</comment>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Add Personal Activity...</value>
@@ -7448,10 +7437,6 @@ Updated on: {1}</value>
     <value>Default segment length</value>
     <comment>Default segment length</comment>
   </data>
-  <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Ready Time vs. Contracted Schedule Time</value>
-    <comment>Ready Time vs. Contracted Schedule Time</comment>
-  </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledReadyTime" xml:space="preserve">
     <value>Ready Time vs. Scheduled Ready Time</value>
     <comment>Ready time V.S. Scheduled Ready time</comment>
@@ -9128,10 +9113,6 @@ Longterm</value>
     <value>Open Budget...</value>
     <comment>Opens a budget</comment>
   </data>
-  <data name="AddedSkillsColon" xml:space="preserve">
-    <value>Added Skills:</value>
-    <comment>Added Skills</comment>
-  </data>
   <data name="AttritionRate" xml:space="preserve">
     <value>Attrition rate</value>
     <comment>Attrition rate</comment>
@@ -10539,7 +10520,7 @@ These options are activated:
     <value>Contract time descending</value>
   </data>
   <data name="RemoveWriteProtection" xml:space="preserve">
-    <value>Remove write protection</value>
+    <value>Remove Write Protection</value>
     <comment>Remove write protection</comment>
   </data>
   <data name="IncludeTroubleshootingInformation" xml:space="preserve">
@@ -10590,21 +10571,49 @@ These options are activated:
     <value>Show public note</value>
     <comment>ShowPublicNote</comment>
   </data>
+  <data name="AvailabilityFulfillment" xml:space="preserve">
+    <value>Availability Fulfillment</value>
+    <comment>Availability Fulfillment</comment>
+  </data>
   <data name="NoAvailableShifts" xml:space="preserve">
     <value>No available shifts</value>
     <comment>No available shifts</comment>
+  </data>
+  <data name="MustHaveFulfillment" xml:space="preserve">
+    <value>Must Have Fulfillment</value>
+    <comment>Must Have Fulfillment</comment>
+  </data>
+  <data name="ActualAfterCallWorkTime" xml:space="preserve">
+    <value>Actual after call work time</value>
+    <comment>Actual after call work time</comment>
+  </data>
+  <data name="PreferenceFulfillment" xml:space="preserve">
+    <value>Preference Fulfillment</value>
+    <comment>Preference Fulfillment</comment>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
     <value>The absence request {0} was approved.</value>
     <comment>Approve absence request for one day.</comment>
   </data>
+  <data name="RotationFulfillment" xml:space="preserve">
+    <value>Rotation Fulfillment</value>
+    <comment>Rotation Fulfillment</comment>
+  </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>The absence request {0} was denied.</value>
     <comment>Denied absence request for one day.</comment>
   </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Student Availability Fulfillment</value>
+    <comment>Student Availability Fulfillment</comment>
+  </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>New shift trade request {0}, approve or deny in your request list.</value>
     <comment>New shift trade request for one day.</comment>
+  </data>
+  <data name="ResourceCalculateEveryColon" xml:space="preserve">
+    <value>Resource calculate every:</value>
+    <comment>Resource Calculate Every:</comment>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
     <value>A shift trade request {0} was accepted by other person.</value>
@@ -10633,5 +10642,34 @@ These options are activated:
   <data name="AbsenceType" xml:space="preserve">
     <value>Absence Type:</value>
     <comment>Absence Type label</comment>
+  <data name="ImportForecastFromFile" xml:space="preserve">
+    <value>Import forecast from file</value>
+    <comment>Import forecast from file</comment>
   </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>Request allowances</value>
+    <comment>Request allowances</comment>
+  </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>Show only available for shift trade</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>Start time {0} should be earlier than end time {1}.</value>
+    <comment>Start time 19:00 should be earlier than end time 18:00.</comment>
+  </data>
+  <data name="DuplicateDaysOffValidationError" xml:space="preserve">
+    <value>Duplicate day offs on {0}</value>
+    <comment>This error message is to show duplicate day offs on same day</comment>
+  </data>
+  <data name="NoAbsenceDefined" xml:space="preserve">
+    <value>You must create at least one absence do be able to do this.</value>
+    <comment>MessageBox message  in Add Absence in Scheduler when no absence</comment>
+  </data>
+  <data name="NoAbsenceDefinedCaption" xml:space="preserve">
+    <value>No absence is defined</value>
+    <comment>MessageBox caption on message  in Add Absence in Scheduler when no absence</comment>
+  </data>
+  <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
+    <value>The interval length of this subskill should be the same as its parent skill, which is {0} minutes.</value>
+    <comment>The interval length of this subskill should be the same as its parent skill, which is 15 minutes.</comment>
 </root>

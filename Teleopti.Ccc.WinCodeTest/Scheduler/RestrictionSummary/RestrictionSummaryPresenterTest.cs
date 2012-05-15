@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         private IScheduleDayChangeCallback _scheduleDayChangeCallback;
     	private IPreferenceNightRestChecker _preferenceNightRestChecker;
 
-    	[SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
             _schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(_date));
             _person.AddSchedulePeriod(_schedulePeriod);
-            _schedulerState = new SchedulerStateHolder(_scenario, new DateTimePeriod(), new List<IPerson>());
+            _schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>());
         	_preferenceNightRestChecker = _mocks.StrictMock<IPreferenceNightRestChecker>();
 			_model = new RestrictionSummaryModel(_schedulingResultStateHolder, new RuleSetProjectionService(new ShiftCreatorService()), _schedulerState, _preferenceNightRestChecker);
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
@@ -116,7 +118,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
 			Expect.Call(() => _preferenceNightRestChecker.CheckNightlyRest(null)).IgnoreArguments();
             _mocks.ReplayAll();
             var helper = new AgentInfoHelper(_person, new DateOnly(_date), _schedulingResultStateHolder, _schedulingOptions, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_schedulingOptions);
+            helper.SchedulePeriodData();
             _target.GetNextPeriod(helper);
             _mocks.VerifyAll();
         }

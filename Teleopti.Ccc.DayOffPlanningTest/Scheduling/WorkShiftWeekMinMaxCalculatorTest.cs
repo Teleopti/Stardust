@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
         private DateOnly _startDate;
         private IPersonContract _personContract;
         private ReadOnlyCollection<IScheduleDayPro> _periodList;
+        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -60,6 +62,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             _layerCollectionForAbsence = _mocks.StrictMock<IVisualLayerCollection>();
             _layerCollectionForShift = _mocks.StrictMock<IVisualLayerCollection>();
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+            _schedulingOptions = new SchedulingOptions();
             //_personPeriod = _mocks.StrictMock<IPersonPeriod>();
             _target = new WorkShiftWeekMinMaxCalculator();
             IList<IScheduleDayPro> tmpList = new List<IScheduleDayPro> { _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5, _scheduleDayPro6 };
@@ -203,7 +206,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             IPossibleMinMaxWorkShiftLengthExtractor extractor = new PossibleMinMaxWorkShiftLengthExtractorForThisTest();
             for (int i = 0; i < 7; i++)
             {
-                ret.Add(_startDate.AddDays(i), extractor.PossibleLengthsForDate(_startDate.AddDays(i), _matrix));
+                ret.Add(_startDate.AddDays(i), extractor.PossibleLengthsForDate(_startDate.AddDays(i), _matrix, _schedulingOptions));
             }
 
             return ret;
@@ -339,7 +342,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
     public class PossibleMinMaxWorkShiftLengthExtractorForThisTest : IPossibleMinMaxWorkShiftLengthExtractor
     {
-        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix)
+        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
                 return new MinMax<TimeSpan>(TimeSpan.FromHours(9), TimeSpan.FromHours(9));

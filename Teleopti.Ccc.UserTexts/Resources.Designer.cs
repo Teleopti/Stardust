@@ -529,6 +529,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actual after call work time.
+        /// </summary>
+        public static string ActualAfterCallWorkTime {
+            get {
+                return ResourceManager.GetString("ActualAfterCallWorkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual agents.
         /// </summary>
         public static string ActualAgents {
@@ -709,15 +718,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Added Skills:.
-        /// </summary>
-        public static string AddedSkillsColon {
-            get {
-                return ResourceManager.GetString("AddedSkillsColon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add efficiency shrinkage.
         /// </summary>
         public static string AddEfficiencyShrinkageRow {
@@ -862,15 +862,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add new shift category.
-        /// </summary>
-        public static string AddNewShiftCategory {
-            get {
-                return ResourceManager.GetString("AddNewShiftCategory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add new site.
         /// </summary>
         public static string AddNewSite {
@@ -943,15 +934,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Overtime....
-        /// </summary>
-        public static string AddOverTimeThreeDots {
-            get {
-                return ResourceManager.GetString("AddOverTimeThreeDots", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add Part-time percentage definition.
         /// </summary>
         public static string AddPartTimePercentage {
@@ -1020,15 +1002,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AddPreferenceRestriction {
             get {
                 return ResourceManager.GetString("AddPreferenceRestriction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add queues....
-        /// </summary>
-        public static string AddQueuesThreeDots {
-            get {
-                return ResourceManager.GetString("AddQueuesThreeDots", resourceCulture);
             }
         }
         
@@ -1138,15 +1111,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AdherenceReportCalculation {
             get {
                 return ResourceManager.GetString("AdherenceReportCalculation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ready Time vs. Contracted Schedule Time.
-        /// </summary>
-        public static string AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime {
-            get {
-                return ResourceManager.GetString("AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime", resourceCulture);
             }
         }
         
@@ -2464,6 +2428,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AvailabilityDate {
             get {
                 return ResourceManager.GetString("AvailabilityDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Availability Fulfillment.
+        /// </summary>
+        public static string AvailabilityFulfillment {
+            get {
+                return ResourceManager.GetString("AvailabilityFulfillment", resourceCulture);
             }
         }
         
@@ -6493,6 +6466,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicate day offs on {0}.
+        /// </summary>
+        public static string DuplicateDaysOffValidationError {
+            get {
+                return ResourceManager.GetString("DuplicateDaysOffValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No duplicate dates are allowed in Person Rotations For.
         /// </summary>
         public static string DuplicatePersonAccountMessage {
@@ -9208,6 +9190,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ImportForecast {
             get {
                 return ResourceManager.GetString("ImportForecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import forecast from file.
+        /// </summary>
+        public static string ImportForecastFromFile {
+            get {
+                return ResourceManager.GetString("ImportForecastFromFile", resourceCulture);
             }
         }
         
@@ -12436,6 +12427,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Must Have Fulfillment.
+        /// </summary>
+        public static string MustHaveFulfillment {
+            get {
+                return ResourceManager.GetString("MustHaveFulfillment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Must haves.
         /// </summary>
         public static string MustHaves {
@@ -13077,7 +13077,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Shift Trade Request.
+        ///   Looks up a localized string similar to New shift trade request.
         /// </summary>
         public static string NewShiftTradeRequest {
             get {
@@ -13272,6 +13272,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must create at least one absence do be able to do this..
+        /// </summary>
+        public static string NoAbsenceDefined {
+            get {
+                return ResourceManager.GetString("NoAbsenceDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No absence is defined.
+        /// </summary>
+        public static string NoAbsenceDefinedCaption {
+            get {
+                return ResourceManager.GetString("NoAbsenceDefinedCaption", resourceCulture);
             }
         }
         
@@ -15936,6 +15954,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preference Fulfillment.
+        /// </summary>
+        public static string PreferenceFulfillment {
+            get {
+                return ResourceManager.GetString("PreferenceFulfillment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preference period.
         /// </summary>
         public static string PreferencePeriod {
@@ -16624,7 +16651,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove write protection.
+        ///   Looks up a localized string similar to Remove Write Protection.
         /// </summary>
         public static string RemoveWriteProtection {
             get {
@@ -16802,6 +16829,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Request {
             get {
                 return ResourceManager.GetString("Request", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request allowances.
+        /// </summary>
+        public static string RequestAllowances {
+            get {
+                return ResourceManager.GetString("RequestAllowances", resourceCulture);
             }
         }
         
@@ -17180,6 +17216,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResolveBusinessRulesConflict {
             get {
                 return ResourceManager.GetString("ResolveBusinessRulesConflict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resource calculate every:.
+        /// </summary>
+        public static string ResourceCalculateEveryColon {
+            get {
+                return ResourceManager.GetString("ResourceCalculateEveryColon", resourceCulture);
             }
         }
         
@@ -17612,6 +17657,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Rotation {
             get {
                 return ResourceManager.GetString("Rotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotation Fulfillment.
+        /// </summary>
+        public static string RotationFulfillment {
+            get {
+                return ResourceManager.GetString("RotationFulfillment", resourceCulture);
             }
         }
         
@@ -19604,6 +19658,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show only available for shift trade.
+        /// </summary>
+        public static string ShowOnlyAvailableForShiftTrade {
+            get {
+                return ResourceManager.GetString("ShowOnlyAvailableForShiftTrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options &gt;&gt;.
         /// </summary>
         public static string ShowOptions {
@@ -20423,6 +20486,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start time {0} should be earlier than end time {1}..
+        /// </summary>
+        public static string StartTimeShouldBeEarlierThanEndTimeDot {
+            get {
+                return ResourceManager.GetString("StartTimeShouldBeEarlierThanEndTimeDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Week.
         /// </summary>
         public static string StartWeek {
@@ -20527,6 +20599,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string StudentAvailability {
             get {
                 return ResourceManager.GetString("StudentAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Student Availability Fulfillment.
+        /// </summary>
+        public static string StudentAvailabilityFulfillment {
+            get {
+                return ResourceManager.GetString("StudentAvailabilityFulfillment", resourceCulture);
             }
         }
         
@@ -21347,6 +21428,16 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TheInputTextCanNotBeEmptyDot {
             get {
                 return ResourceManager.GetString("TheInputTextCanNotBeEmptyDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The interval length of this subskill should be the same as its parent skill, which is {0} minutes..
+        /// </summary>
+        public static string TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot {
+            get {
+                return ResourceManager.GetString("TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParamet" +
+                        "erMinutesDot", resourceCulture);
             }
         }
         

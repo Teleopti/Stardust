@@ -529,11 +529,11 @@ namespace Teleopti.Ccc.DomainTest.Common
             candidates.Add(PersonFactory.CreatePerson("PersonB"));
             candidates.Add(PersonFactory.CreatePerson("PersonC"));
 
-            ReadOnlyCollection<IPerson> persons = _target.PersonsInHierarchy(candidates, new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
+            ReadOnlyCollection<IPerson> persons = _target.PersonsInHierarchy(candidates, new DateOnlyPeriod(2000, 1, 1, 2002, 1, 1));
             Assert.AreEqual(0, persons.Count);
 
             candidates.Add(_target);
-            persons = _target.PersonsInHierarchy(candidates, new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
+            persons = _target.PersonsInHierarchy(candidates, new DateOnlyPeriod(2000, 1, 1, 2002, 1, 1));
             Assert.AreEqual(1, persons.Count);
             Assert.AreEqual(_target, persons[0]);
         }

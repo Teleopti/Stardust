@@ -110,7 +110,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         {
             IList<ITeam> returnList = new List<ITeam>();
 
-
             foreach (IBusinessUnit businessUnit in AvailableBusinessUnits)
             {
                 foreach (ISite site in businessUnit.SiteCollection)
@@ -166,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <param name="candidates">The candidates.</param>
         /// <param name="period">The period.</param>
         /// <returns></returns>
-        public virtual IList<IPerson> ConvertToPermittedPersonCollection(IList<IPerson> candidates, DateTimePeriod period)
+        public virtual IList<IPerson> ConvertToPermittedPersonCollection(IList<IPerson> candidates, DateOnlyPeriod period)
         {
             IList<IPerson> returnList = new List<IPerson>();
 

@@ -50,21 +50,16 @@ namespace Teleopti.Analytics.Portal
                 BusinessUnitCode = new Guid(Request.QueryString["BUID"]);
             }
 
-            if (string.IsNullOrEmpty(Request.QueryString["FORCEFORMSLOGIN"]) == false)
-            {
-				Context.Session["FORCEFORMSLOGIN"] = false;
-				if (Request.QueryString["FORCEFORMSLOGIN"] == "true")
+        	if (StateHolder.DoForceFormsLogOn)
+        	{
+				if (StateHolder.UserName == null)
 				{
-					Context.Session["FORCEFORMSLOGIN"] = true;
-					if (Context.Session["USERNAME"] == null)
-					{
-						var sec = (AuthenticationSection)HttpContext.Current.GetSection("system.web/authentication");
-						if (sec.Mode == AuthenticationMode.Windows)
-							Response.Redirect(LoginUrl());
-					}
+					var sec = (AuthenticationSection)HttpContext.Current.GetSection("system.web/authentication");
+					if (sec.Mode == AuthenticationMode.Windows && !Page.IsPostBack)
+						Response.Redirect(LoginUrl());
 				}
-            }
-
+        	}
+			
             setCulture();
         }
 
@@ -97,16 +92,16 @@ namespace Teleopti.Analytics.Portal
         {
             get
             {
-                if (Context.Session["USER"] == null)
+				if (StateHolder.UserObject == null)
                 {
-                	if (HttpContext.Current.User == null && Context.Session["USERNAME"] == null)
+					if (HttpContext.Current.User == null && StateHolder.UserName == null)
                 		Response.Redirect(LoginUrl());
-                	
-					if (HttpContext.Current.User != null && Context.Session["USERNAME"] == null)
-                		Context.Session["USERNAME"] = HttpContext.Current.User.Identity.Name;
+
+					if (HttpContext.Current.User != null && StateHolder.UserName == null)
+                		StateHolder.UserName = HttpContext.Current.User.Identity.Name;
                 	
 					var loginUtil = new LogOnUtilities(ConnectionString);
-                    DataTable t = loginUtil.GetUserInfo((string)Context.Session["USERNAME"]);
+					DataTable t = loginUtil.GetUserInfo(StateHolder.UserName);
                     if (t.Rows.Count > 0)
                     {
                         DataRow row = t.Rows[0];
@@ -114,29 +109,29 @@ namespace Teleopti.Analytics.Portal
                         var inf = new UserInfo(row.Field<string>("UserName"), row.Field<int>("LangID"),
                                                     row.Field<int>("CultureID"), row.Field<Guid>("UserID"),
                                                     row.Field<string>("PersonName"));
-                        Context.Session["USER"] = inf;
+						StateHolder.UserObject = inf;
                     }
                     else
                     {
                         Response.Redirect(LoginUrl());
                     }
                 }
-                return (UserInfo)Context.Session["USER"];
+				return StateHolder.UserObject;
 
             }
         }
 
         private string LoginUrl()
         {
-            return string.Format("Login.aspx{0}", GetQueryString());
+            return string.Format("Login.aspx{0}", QueryStringWithPrefix);
         }
 
-        private string GetQueryString()
-        {
-            return string.Concat("?", Request.QueryString.ToString());
-        }
+    	protected string QueryStringWithPrefix
+    	{
+    		get { return string.Concat("?", Request.QueryString.ToString()); }
+    	}
 
-        protected string LoggedOnUserInformation
+    	protected string LoggedOnUserInformation
         { get { return TheUser.PersonName + " (" + TheUser.UserName + ")"; } }
 
         protected static string ConnectionString
@@ -177,6 +172,9 @@ namespace Teleopti.Analytics.Portal
 
 		protected bool IsBrowseTargetPerformanceManager { get; private set; }
 
-		protected static string PerformanceManagerUrl { get { return "~/PmContainer.aspx"; } }
+    	protected string PerformanceManagerUrl
+    	{
+			get { return string.Format(CultureInfo.InvariantCulture, "~/PmContainer.aspx{0}", QueryStringWithPrefix); }
+    	}
     }
 }

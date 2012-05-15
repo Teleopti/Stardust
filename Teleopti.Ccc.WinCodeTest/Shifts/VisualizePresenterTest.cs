@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             _model.SetFilteredRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(_ruleSetCollection));
 
         	_target = new VisualizePresenter(_explorerPresenter, _dataHelper,
-        	                                 new RuleSetProjectionService(_shiftCreatorService));
+        	                                 new RuleSetProjectionEntityService(_shiftCreatorService));
         }
 
         [Test]

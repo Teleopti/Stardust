@@ -9218,4 +9218,19 @@ Periods</comment>
   <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
     <value>活动设置不能为空</value>
   </data>
+  <data name="ImportForecast" xml:space="preserve">
+    <value>导入预测数据</value>
+    <comment>import forecast</comment>
+  </data>
+  <data name="ImportForecastFromFile" xml:space="preserve">
+    <value>从文件导入预测数据</value>
+    <comment>import forecast from file</comment>
+  </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>只显示可替换班的人</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>起始时间{0}必须早于结束时间{1}.</value>
+    <comment>Start time 19:00 should be earlier than end time 18:00.</comment>
+  </data>
 </root>

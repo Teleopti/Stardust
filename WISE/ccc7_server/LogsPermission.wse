@@ -1,0 +1,119 @@
+Document Type: WSE
+item: Global
+  Version=9.02
+  Flags=00000100
+  Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  Copy Default=1
+  Japanese Font Name=MS Gothic
+  Japanese Font Size=9
+  Start Gradient=0 0 255
+  End Gradient=0 0 0
+  Windows Flags=00000100000000000010110000001010
+  Message Font=MS Sans Serif
+  Font Size=8
+  Pages Modified=00001000011000000000000000000000
+  Extra Pages=00000000000000000000000000010000
+  Disk Label=Default
+  Disk Filename=SETUP
+  Patch Flags=0000000000000001
+  Patch Threshold=85
+  Patch Memory=4000
+  MIF PDF Version=1.0
+  MIF SMS Version=2.0
+  FTP Cluster Size=20
+  Per-User Version ID=1
+  Dialogs Version=7
+  Crystal Format=10111100101100000010001001001001
+  Variable Name1=_INIT_WINDOW_
+  Variable Default1=HIDE
+  Variable Flags1=00001000
+  Variable Name2=_SYS_
+  Variable Default2=C:\Windows\system32
+  Variable Flags2=00001000
+  Variable Name3=_WIN_
+  Variable Default3=C:\Windows
+  Variable Flags3=00001000
+  Variable Name4=_WISE_
+  Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
+  Variable Flags4=00001000
+  Requested Execution Level=asInvoker
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=VersionNT
+  Variable Name2=_PROP_VAR_
+  Variable Value2=ONE
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=ServicePackLevel
+  Variable Name2=_PROP_VAR_
+  Variable Value2=TWO
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=IISVERSION
+  Variable Name2=_PROP_VAR_
+  Variable Value2=THREE
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=MYUSERNAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=FOUR
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=ETLUSERNAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=FIVE
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=LOGS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=LOG4NET
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Check if File/Dir Exists
+  Pathname=%LOG4NET%
+  Flags=00000100
+end
+item: Custom Script Item
+  Filename=Pause.wse
+  Variable Name1=_PAUSE_TIME_
+  Variable Value1=10
+  Variable Name2=HELPFILE
+  Variable Value2=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%LOG4NET%SetPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%" "%FIVE%""
+  Flags=00000010
+end
+item: Else Statement
+end
+item: Display Message
+  Title=Folder missing!
+  Text=The LOG4NET folder should be installed but is missing! Cannot set permissions on: "%LOG4NET%"
+  Flags=00001000
+end
+item: End Block
+end

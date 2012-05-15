@@ -11,9 +11,10 @@ namespace Teleopti.Interfaces.Domain
         /// Possibles lentghs for date.
         /// </summary>
         /// <param name="dateOnly">The date only.</param>
-        /// <param name="matrix"></param>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
         /// <returns></returns>
-        MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix);
+        MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
 
         ///<summary>
         ///</summary>

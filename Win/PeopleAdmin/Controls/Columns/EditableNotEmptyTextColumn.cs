@@ -9,16 +9,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
     {
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
-        private int _maxLength;
-        private string _headerText;
-        private string _bindingProperty;
+        private readonly int _maxLength;
+        private readonly string _headerText;
+    	private readonly bool _stripTooLongText;
+    	private readonly string _bindingProperty;
         
         public EditableNotEmptyTextColumn(string bindingProperty, int maxLength, string headerText)
-        {
-            _maxLength = maxLength;
-            _headerText = headerText;
-            _bindingProperty = bindingProperty;
-        }
+			: this(bindingProperty, maxLength, headerText,false)
+		{}
+
+		public EditableNotEmptyTextColumn(string bindingProperty, int maxLength, string headerText, bool stripTooLongText)
+		{
+			_maxLength = maxLength;
+			_headerText = headerText;
+			_stripTooLongText = stripTooLongText;
+			_bindingProperty = bindingProperty;
+		}
 
         public override int PreferredWidth
         {
@@ -66,6 +72,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
         {
             if (e.ColIndex > 0 && e.RowIndex > 0)
             {
+				if(_stripTooLongText && ((string) e.Style.CellValue).Length > _maxLength)
+					e.Style.CellValue = ((string) e.Style.CellValue).Substring(0, _maxLength);
+
                 if (((string) e.Style.CellValue).Length > _maxLength || ((string) e.Style.CellValue).Length == 0)
                     return;
 

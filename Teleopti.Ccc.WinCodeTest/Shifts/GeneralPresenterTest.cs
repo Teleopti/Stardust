@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             var model = new ExplorerViewModel { DefaultSegment = 15 };
             model.SetRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(_ruleSetCollection));
             model.SetFilteredRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(_ruleSetCollection));
-            _explorerPresenter = new ExplorerPresenter(_explorerView, _dataHelper, new RuleSetProjectionService(new ShiftCreatorService()),
+            _explorerPresenter = new ExplorerPresenter(_explorerView, _dataHelper, new RuleSetProjectionEntityService(new ShiftCreatorService()),
                 _unitOfWorkFactory, _eventAggregator, _mbCacheFactory, model);
             
             _target = new GeneralPresenter(_explorerPresenter,_dataHelper);

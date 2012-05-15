@@ -1,51 +1,61 @@
-﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using System.Xml.Serialization;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Scheduling;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 {
-    public class RuleSetProjectionServiceTest
-    {
-        private MockRepository mocks;
-        private IShiftCreatorService shiftCreatorService;
+	[TestFixture]
+	public class RuleSetProjectionServiceTest
+	{
+		public void ShouldReturnRequiredData()
+		{
+			var shiftCreatorService = MockRepository.GenerateMock<IShiftCreatorService>();
+			var target = new RuleSetProjectionService(shiftCreatorService);
+			var workShift = WorkShiftFactory.CreateWithLunch(new TimePeriod(9, 0, 16, 0), new TimePeriod(11, 0, 12, 0));
+			shiftCreatorService.Stub(x => x.Generate(null)).Return(new List<IWorkShift>(new[] { workShift }));
 
-        [SetUp]
-        public void Setup()
-        {
-            mocks=new MockRepository();
-            shiftCreatorService = mocks.StrictMock<IShiftCreatorService>();
-        }
+			var result = target.ProjectionCollection(null);
 
-        //copied from old test in workshiftrulesettest
-        [Test]
-        public void VerifyProjectionCollection()
-        {
-            IActivity testActivity = ActivityFactory.CreateActivity("test");
-            IActivity breakActivity = ActivityFactory.CreateActivity("lunch");
-            DateTimePeriod breakPeriod = new DateTimePeriod(new DateTime(1800, 1, 1, 4, 0, 0, DateTimeKind.Utc), new DateTime(1800, 1, 1, 5, 0, 0, DateTimeKind.Utc));
+			result.Single().ContractTime.Should().Be(workShift.Projection.ContractTime());
+			result.Single().TimePeriod.Should().Be(workShift.ToTimePeriod().Value);
+			result.Single().ShiftCategoryId.Should().Be(workShift.ShiftCategory.Id.Value);
+			result.Single().Layers.Select(l => l.ActivityId).Should().Have.SameSequenceAs(
+				workShift.Projection.Select(p => p.Payload.Id.Value));
+			result.Single().Layers.Select(l => l.Period).Should().Have.SameSequenceAs(
+				workShift.Projection.Select(p => p.Period));
+		}
 
-            IWorkShift ws1 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(1), TimeSpan.FromHours(8), testActivity);
-            ws1.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod));
-            IWorkShift ws2 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(1), TimeSpan.FromHours(9), testActivity);
-            ws2.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod));
-            IList<IWorkShift> listOfWorkShifts = new List<IWorkShift>();
-            listOfWorkShifts.Add(ws1);
-            listOfWorkShifts.Add(ws2);
+		[Test]
+		public void ShouldReturnSerializableData()
+		{
+			var shiftCreatorService = MockRepository.GenerateMock<IShiftCreatorService>();
+			var target = new RuleSetProjectionService(shiftCreatorService);
+			var workShift = WorkShiftFactory.CreateWithLunch(new TimePeriod(9, 0, 16, 0), new TimePeriod(11, 0, 12, 0));
+			shiftCreatorService.Stub(x => x.Generate(null)).Return(new List<IWorkShift>(new[] {workShift}));
 
-            var target = new RuleSetProjectionService(shiftCreatorService);
-            WorkShiftRuleSet workShiftRuleSet = new WorkShiftRuleSet(mocks.StrictMock<IWorkShiftTemplateGenerator>());
+			var result = target.ProjectionCollection(null);
 
-            Expect.Call(shiftCreatorService.Generate(workShiftRuleSet)).Return(listOfWorkShifts);
-            mocks.ReplayAll();
-            var retList = target.ProjectionCollection(workShiftRuleSet);
-            Assert.AreEqual(2, retList.Count());
-            Assert.AreEqual(3, retList.First().VisualLayerCollection.Count());
-        }
-    }
+			var serializer = new BinaryFormatter();
+			IWorkShiftProjection[] deserialized;
+			using(var stream = new MemoryStream())
+			{
+				serializer.Serialize(stream, result);
+				stream.Position = 0;
+				deserialized = (IWorkShiftProjection[])serializer.Deserialize(stream);
+			}
+
+			deserialized.Single().ContractTime.Should().Be(result.Single().ContractTime);
+			deserialized.Single().Layers.Count().Should().Be(result.Single().Layers.Count());
+		}
+	}
 }

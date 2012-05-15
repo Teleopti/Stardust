@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private IScenario _scenario;
 		private IEnumerable<IPerson> _persons;
 		private ISchedulerStateHolder _schedulerStateHolder;
-		private readonly DateTimePeriod _period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 10, 20, 0, 0, 0, DateTimeKind.Utc), 1);
+		private readonly DateOnlyPeriod _period = new DateOnlyPeriod(2008, 10, 20,2008,10,21);
 		private IUnitOfWork _unitOfWork;
 		private IScheduleDictionary _scheduleDictionary;
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			_scenario = mocks.StrictMock<IScenario>();
 			_persons = new List<IPerson> { mocks.StrictMock<IPerson>() };
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, _period, _persons);
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), _persons);
 
 			_scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
 			_unitOfWork = mocks.DynamicMock<IUnitOfWork>();

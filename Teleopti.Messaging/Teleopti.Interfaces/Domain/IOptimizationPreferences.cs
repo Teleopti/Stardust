@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace Teleopti.Interfaces.Domain
@@ -32,6 +33,12 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The advanced.</value>
         IAdvancedPreferences Advanced { get; set; }
+
+        /// <summary>
+        /// Gets or sets the local scheduling options.
+        /// </summary>
+        /// <value>The local scheduling options.</value>
+        IReschedulingPreferences Rescheduling { get; set; }
     }
 
     /// <summary>
@@ -51,15 +58,15 @@ namespace Teleopti.Interfaces.Domain
         /// <value>
         /// 	<c>true</c> if use step; otherwise, <c>false</c>.
         /// </value>
-        bool OptimizationForDaysOff { get; set; }
+        bool OptimizationStepDaysOff { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether  to use time between days optimization step.
+        /// Gets or sets a value indicating whether to move time between days step.
         /// </summary>
         /// <value>
         /// 	<c>true</c> if use step; otherwise, <c>false</c>.
         /// </value>
-        bool OptimizationForShiftsWithinDay { get; set; }
+        bool OptimizationStepTimeBetweenDays { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use shifts for flexible work time step.
@@ -67,7 +74,7 @@ namespace Teleopti.Interfaces.Domain
         /// <value>
         /// 	<c>true</c> if use step; otherwise, <c>false</c>.
         /// </value>
-        bool ShiftsForFlexibleWorkTime { get; set; }
+        bool OptimizationStepShiftsForFlexibleWorkTime { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use days off for flexible work time step.
@@ -75,15 +82,15 @@ namespace Teleopti.Interfaces.Domain
         /// <value>
         /// 	<c>true</c> if use step; otherwise, <c>false</c>.
         /// </value>
-        bool DaysOffForFlexibleWorkTime { get; set; }
+        bool OptimizationStepDaysOffForFlexibleWorkTime { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to use shifts within day step.
+        /// Gets or sets a value indicating whether  to use time between days optimization step.
         /// </summary>
         /// <value>
         /// 	<c>true</c> if use step; otherwise, <c>false</c>.
         /// </value>
-        bool AllowMoveShiftsWithinDay { get; set; }
+        bool OptimizationStepShiftsWithinDay { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use preferences.
@@ -281,7 +288,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the block finder type.
         /// </summary>
         /// <value>The block finder type.</value>
-        BlockFinderType BlockFinderOptionsValue { get; set; }
+        BlockFinderType BlockFinderTypeValue { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use team scheduling.
@@ -332,6 +339,8 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The keep shifts value.</value>
         double KeepShiftsValue { get; set; }
+
+
     }
 
     /// <summary>
@@ -343,7 +352,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the target value.
         /// </summary>
         /// <value>The target value.</value>
-        TargetValueOptions TargetValue { get; set; }
+        TargetValueOptions TargetValueCalculation { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use intra interval deviation.
@@ -421,5 +430,25 @@ namespace Teleopti.Interfaces.Domain
         Teleopti
     }
 
+    /// <summary>
+    /// Contains local information to the scheduling phase in optimization
+    /// </summary>
+    public interface IReschedulingPreferences
+    {
+                /// <summary>
+        /// Gets or sets a value indicating whether to consider short breaks.
+        /// </summary>
+        /// <value><c>true</c> if consider short breaks; otherwise, <c>false</c>.</value>
+        [DefaultValue(true)]
+        bool ConsiderShortBreaks { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use only shifts when understaffed.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if use only shifts when understaffed; otherwise, <c>false</c>.
+        /// </value>
+        bool OnlyShiftsWhenUnderstaffed { get; set; }
+    }
 
 }

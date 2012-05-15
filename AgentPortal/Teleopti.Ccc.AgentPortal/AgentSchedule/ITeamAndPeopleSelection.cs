@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 	internal interface ITeamAndPeopleSelection
 	{
 		IEnumerable<PersonDto> SelectedPeople { get; }
-		ICollection<TeamDto> SelectedTeams { get; }
-		void Initialize();
+		ICollection<GroupForPeople> SelectedTeams { get; }
+		void Initialize(bool filterEnabled);
 	}
 }

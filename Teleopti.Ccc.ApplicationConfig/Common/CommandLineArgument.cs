@@ -26,8 +26,10 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         private int _defaultResolution;
         private bool _useIntegratedSecurity;
         private bool _onlyRunMergeDefaultResolution;
+    	private string _newUserName;
+    	private string _newUserPassword;
 
-        public CommandLineArgument(string[] argumentCollection)
+    	public CommandLineArgument(string[] argumentCollection)
         {
             _argumentCollection = argumentCollection;
             readArguments();
@@ -94,6 +96,16 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         {
             get { return _businessUnit; }
         }
+
+    	public string NewUserName
+    	{
+			get { return _newUserName; }
+    	}
+
+		public string NewUserPassword
+		{
+			get { return _newUserPassword; }
+		}
 
         public string SourceConnectionString
         {
@@ -223,6 +235,12 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
                     case "-OM": // Only run merge of default resolution.
                         _onlyRunMergeDefaultResolution = true;
                         break;
+					case "-NA":
+                		_newUserName = switchValue;
+						break;
+					case "-NP":
+                		_newUserPassword = switchValue;
+						break;
                 }
             }
         }

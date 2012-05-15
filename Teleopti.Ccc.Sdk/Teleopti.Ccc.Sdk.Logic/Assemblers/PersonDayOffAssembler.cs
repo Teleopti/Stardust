@@ -2,6 +2,7 @@
 using System.Reflection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             retDto.Id = entity.Id;
             retDto.Person = _personAssembler.DomainEntityToDto(entity.Person);
             retDto.Anchor = entity.DayOff.Anchor;
-            retDto.AnchorTime = entity.DayOff.AnchorLocal(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).TimeOfDay;
+            retDto.AnchorTime = entity.DayOff.AnchorLocal(TeleoptiPrincipal.Current.Regional.TimeZone).TimeOfDay;
             retDto.Color = new ColorDto(entity.DayOff.DisplayColor);
             retDto.Length = entity.DayOff.TargetLength;
             retDto.Flexibility = entity.DayOff.Flexibility;

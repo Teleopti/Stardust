@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
@@ -37,13 +38,13 @@ namespace Teleopti.Interfaces.Domain
         /// Counts the changed day off days in a schedule matrix.
         /// </summary>
         /// <returns></returns>
-        int CountChangedDayOffs();
+        double ChangedDayOffsPercent();
 
         /// <summary>
         /// Counts the changed workshifts in a schedule matrix.
         /// </summary>
         /// <returns></returns>
-        int CountChangedWorkShifts();
+        double ChangedWorkShiftsPercent();
 
         /// <summary>
         /// Is the workshift changed.
@@ -51,5 +52,11 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="dateOnly">The date only.</param>
         /// <returns></returns>
         bool WorkShiftChanged(DateOnly dateOnly);
+
+		/// <summary>
+		/// The original work time before any changes.
+		/// </summary>
+		/// <returns></returns>
+    	TimeSpan OriginalWorkTime();
     }
 }

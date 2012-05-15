@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			{
                 IJobStepResult jobStepResult = factRequest.Run(new List<IJobStep>(), null, null, false);
                 Assert.IsNotNull(jobStepResult);
-                _raptorRepository.AssertWasCalled(x => x.FillFactRequestMart(new DateTimePeriod()), options => options.IgnoreArguments());			    
+                _raptorRepository.AssertWasCalled(x => x.FillFactRequestMart(new DateTimePeriod(), BusinessUnitFactory.CreateSimpleBusinessUnit("Test BU")), options => options.IgnoreArguments());			    
 			}
 		}
 

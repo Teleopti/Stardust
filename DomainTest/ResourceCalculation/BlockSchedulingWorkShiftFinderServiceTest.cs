@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private MockRepository _mocks;
         private IWorkShiftCalculator _calculator;
         private IFairnessValueCalculator _fairnessValueCalculator;
-        private IAverageShiftLengthValueCalculator _averageShiftLengthCalculator;
         private IActivity _activity;
         private IWorkShift _workShift1;
         private IWorkShift _workShift2;
@@ -29,9 +28,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks = new MockRepository();
             _calculator = _mocks.StrictMock<IWorkShiftCalculator>();
             _fairnessValueCalculator = _mocks.StrictMock<IFairnessValueCalculator>();
-            _averageShiftLengthCalculator = _mocks.StrictMock<IAverageShiftLengthValueCalculator>();
 
-            _target = new BlockSchedulingWorkShiftFinderService(_calculator,_fairnessValueCalculator,_averageShiftLengthCalculator, null);
+            _target = new BlockSchedulingWorkShiftFinderService(_calculator,_fairnessValueCalculator, null);
         }
 
         [Test]
@@ -59,8 +57,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
                 Expect.Call(_fairnessValueCalculator.CalculateFairnessValue(15, 0, 5, fairnessValueResult.FairnessPoints,
                                                                             fairnessValueResult, 15)).Return(15);
-
-                Expect.Call(_averageShiftLengthCalculator.CalculateShiftValue(0, new TimeSpan(), TimeSpan.FromHours(48))).Repeat.Any().Return(15).IgnoreArguments();
             }
 
             using (_mocks.Playback())

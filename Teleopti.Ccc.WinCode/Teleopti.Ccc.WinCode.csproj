@@ -101,13 +101,13 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=1.1.0.26406, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.1.1-beta\lib\Net35\MbCache.dll</HintPath>
+      <HintPath>..\packages\MbCache.1.2\lib\Net35\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.1.0.26406, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.1.1-beta\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\packages\MbCache.1.2\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -402,6 +402,7 @@
     <Compile Include="Grouping\PersonSelectorPresenter.cs" />
     <Compile Include="Intraday\DayLayerModel.cs" />
     <Compile Include="Intraday\DispatcherWrapper.cs" />
+    <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommand.cs" />
     <Compile Include="Intraday\OpenIntradayTodayCommand.cs" />
     <Compile Include="Meetings\Commands\AddMeetingFromPanelCommand.cs" />
     <Compile Include="Meetings\Commands\FetchMeetingForCurrentUserChangeCommand.cs" />
@@ -511,6 +512,10 @@
     <Compile Include="Presentation\IReportSettingsScheduleTimeVersusTargetTimeView.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenter.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayDataExtractor.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRow.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsModel.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPresenter.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryDirection.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryModel.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryPresenter.cs" />

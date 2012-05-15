@@ -9,6 +9,7 @@ using MbCache.Configuration;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
-			builder.RegisterModule<InitializeModule>();
+			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
@@ -64,24 +65,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerMbCachedComponents(ContainerBuilder builder)
 		{
-			var mbCacheModule = new MbCacheModule(new AspNetCache(20, new FixedNumberOfLockObjects(100)));
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20), new FixedNumberOfLockObjects(100));
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule<RuleSetModule>();
-
-			builder.Register(c =>
-			                 	{
-			                 		var inner = new RuleSetProjectionService(c.Resolve<IShiftCreatorService>());
-			                 		var lazyLoadingManager = c.Resolve<ILazyLoadingManager>();
-			                 		var cacheProxyFactory = c.Resolve<IMbCacheFactory>();
-			                 		var instance = cacheProxyFactory.Create<IRuleSetProjectionService>(inner, lazyLoadingManager);
-			                 		return instance;
-			                 	})
-				.As<IRuleSetProjectionService>();
-
-			mbCacheModule.Builder
-				.For<RuleSetProjectionServiceForMultiSessionCaching>()
-				.CacheMethod(m => m.ProjectionCollection(null))
-				.As<IRuleSetProjectionService>();
+			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule, false));
 		}
 	}
 }

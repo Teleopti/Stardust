@@ -66,9 +66,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             			                       	{
             			                       		new ScheduleDenormalizer(notify, saveToDenormalizationQueue),
             			                       		new MeetingDenormalizer(notify, saveToDenormalizationQueue)
-            			                       	}),
+            			                       	},
+															DataSourceConfigurationSetter.ForServiceBus()),
             			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
-                application.DataSourcesFactory.UseDistributedTransactionFactory = true; //Always used from the bus!
                 application.Start(new BasicState(), encryptedAppSettings,
                                   encryptedNHibConfigs.DecryptList(EncryptionConstants.Image1,
                                                                    EncryptionConstants.Image2), null);

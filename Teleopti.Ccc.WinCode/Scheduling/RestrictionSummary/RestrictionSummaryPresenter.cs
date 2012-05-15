@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             _model = model;
             _view = view;
             _cellDataClipHandler = clipHandler;
-            _model.SchedulerLoadedPeriod = schedulerState.RequestedPeriod;
+            _model.SchedulerLoadedPeriod = schedulerState.RequestedPeriod.Period();
         }
         public Dictionary<int, IPreferenceCellData> CellDataCollection
         {

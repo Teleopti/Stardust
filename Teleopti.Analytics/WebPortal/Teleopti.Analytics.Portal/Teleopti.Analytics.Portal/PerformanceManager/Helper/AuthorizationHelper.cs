@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Web;
 using System.Web.Configuration;
 using Teleopti.Analytics.Portal.AnalyzerProxy;
+using Teleopti.Analytics.Portal.Utils;
 
 namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 {
@@ -15,7 +16,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 			IList<SqlParameter> parameters = new List<SqlParameter>
 												 {
 													 new SqlParameter("user_name", currentuser),
-													 new SqlParameter("is_windows_logon", IsWebAuthenticationWindows)
+													 new SqlParameter("is_windows_logon", CheckWindowsAuthentication())
 												 };
 
 			return
@@ -29,10 +30,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 			AuthenticationMode webAuthenticationMode = GetWebAuthenticationMode();
 
 			if (webAuthenticationMode == AuthenticationMode.Forms & PermissionInformation.IsPmAuthenticationWindows)
-			{
-				// Invalid configuration with Forms web auth and PM auth set to windows
-				return false;
-			}
+				return false; // Invalid configuration with Forms web auth and PM auth set to windows
 
 			return true;
 		}
@@ -48,23 +46,17 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 		{
 			get
 			{
-				var userName = (string)HttpContext.Current.Session["USERNAME"];
+				var userName = StateHolder.UserName;
 				return HttpContext.Current.User.Identity.Name == userName ? HttpContext.Current.User.Identity.Name : userName;
 			}
 		}
 
-		public static bool IsWebAuthenticationWindows
+		public static bool CheckWindowsAuthentication()
 		{
-			get
-			{
-				if (GetWebAuthenticationMode() == AuthenticationMode.Windows)
-				{
-					if (!(bool)HttpContext.Current.Session["FORCEFORMSLOGIN"])
-						return true;
-				}
+			if (GetWebAuthenticationMode() == AuthenticationMode.Windows)
+				return !StateHolder.DoForceFormsLogOn;
 
-				return false;
-			}
+			return false;
 		}
 
 		private static string ConnectionString

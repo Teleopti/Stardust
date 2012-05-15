@@ -1,6 +1,5 @@
-﻿using System;
-using System.Reflection;
-using NHibernate;
+﻿using NHibernate;
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +9,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
     public class GroupingActivityCreator
     {
         private readonly IPerson _person;
-        private readonly ISessionFactory _sessionFactory;
+		private readonly ISessionFactory _sessionFactory;
+		private readonly SetChangeInfoCommand _setChangeInfoCommand = new SetChangeInfoCommand();
 
         public GroupingActivityCreator(IPerson person, ISessionFactory sessionFactory)
         {
@@ -18,32 +18,45 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             _sessionFactory = sessionFactory;
         }
 
-        public IGroupingActivity Create(string name)
-        {
-            IGroupingActivity groupingActivity = new GroupingActivity(name);
+		public IGroupingActivity Create(string name)
+		{
+			IGroupingActivity groupingActivity = fetchByName(name);
+			if (groupingActivity == null)
+			{
+				groupingActivity = new GroupingActivity(name);
+				_setChangeInfoCommand.Execute((AggregateRoot)groupingActivity, _person);
+			}
 
-            DateTime nu = DateTime.Now;
-            typeof(AggregateRoot)
-                .GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(groupingActivity, _person);
-            typeof(AggregateRoot)
-                .GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(groupingActivity, nu);
-            typeof(AggregateRoot)
-                .GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(groupingActivity, _person);
-            typeof(AggregateRoot)
-                .GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(groupingActivity, nu);
-            return groupingActivity;
-        }
+			return groupingActivity;
+		}
 
-        public void Save(IGroupingActivity groupingActivity)
-        {
-            ISession sess = _sessionFactory.OpenSession();
-            sess.Save(groupingActivity);
-            sess.Flush();
-            sess.Close();
-        }
+		private IGroupingActivity fetchByName(string name)
+		{
+			ISession session = _sessionFactory.OpenSession();
+
+			var result = session.CreateCriteria<GroupingActivity>()
+				.Add(Restrictions.Eq("Description.Name", name))
+				.List<IGroupingActivity>();
+
+			session.Close();
+
+			return result.Count == 0 ? null : result[0];
+		}
+
+		public void Save(IGroupingActivity groupingActivity)
+		{
+			if (notSavedBefore(groupingActivity))
+			{
+				ISession sess = _sessionFactory.OpenSession();
+				sess.Save(groupingActivity);
+				sess.Flush();
+				sess.Close();
+			}
+		}
+
+		private static bool notSavedBefore(IGroupingActivity groupingActivity)
+		{
+			return !groupingActivity.Id.HasValue;
+		}
     }
 }

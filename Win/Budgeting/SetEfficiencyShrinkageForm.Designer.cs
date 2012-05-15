@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             // ribbonControlAdv1
             // 
             this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlAdv1.MenuButtonText = "";
             this.ribbonControlAdv1.MenuButtonVisible = false;
             this.ribbonControlAdv1.Name = "ribbonControlAdv1";
             // 
@@ -64,6 +65,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
             this.ribbonControlAdv1.QuickPanelVisible = false;
             this.ribbonControlAdv1.SelectedTab = null;
+            this.ribbonControlAdv1.ShowMinimizeButton = false;
             this.ribbonControlAdv1.Size = new System.Drawing.Size(379, 33);
             this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Startmenu";
             this.ribbonControlAdv1.TabIndex = 0;
@@ -173,6 +175,8 @@ namespace Teleopti.Ccc.Win.Budgeting
             // checkBoxInclude
             // 
             this.checkBoxInclude.AutoSize = true;
+            this.checkBoxInclude.Checked = true;
+            this.checkBoxInclude.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tableLayoutPanelFields.SetColumnSpan(this.checkBoxInclude, 2);
             this.checkBoxInclude.Location = new System.Drawing.Point(93, 41);
             this.checkBoxInclude.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
@@ -181,6 +185,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             this.checkBoxInclude.TabIndex = 1;
             this.checkBoxInclude.Text = "xxIncludedInRequestAllowance";
             this.checkBoxInclude.UseVisualStyleBackColor = true;
+            this.checkBoxInclude.Visible = false;
             // 
             // errorProvider
             // 

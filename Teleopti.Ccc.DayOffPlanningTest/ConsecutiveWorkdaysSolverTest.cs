@@ -1,6 +1,7 @@
 using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         private CultureInfo _culture;
         private IDayOffBackToLegalStateFunctions _functions;
         private LockableBitArray _bitArray;
-        private DayOffPlannerSessionRuleSet _sessionRuleSet;
+        private IDaysOffPreferences _datDaysOffPreferences;
 
         [SetUp]
         public void Setup()
@@ -20,8 +21,8 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             _bitArray = array1();
             _culture = CultureInfo.CreateSpecificCulture("en-GB");
             _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
-            _sessionRuleSet = new DayOffPlannerSessionRuleSet();
-            _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _sessionRuleSet, 20);
+            _datDaysOffPreferences = new DaysOffPreferences();
+            _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
         }
 
         [Test]
@@ -33,11 +34,11 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [Test]
         public void VerifyIsInLegalState()
         {
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(1, 16);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 16);
             Assert.AreEqual(MinMaxNumberOfResult.Ok, _target.ResolvableState());
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(2, 16);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 16);
             Assert.AreEqual(MinMaxNumberOfResult.ToFew, _target.ResolvableState());
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(1, 6);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
             Assert.AreEqual(MinMaxNumberOfResult.ToMany, _target.ResolvableState());
         }
 
@@ -46,14 +47,14 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         {
             _bitArray.Set(27, false);
             _bitArray.Set(11, true);
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(1, 6);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
             Assert.AreEqual(MinMaxNumberOfResult.ToMany, _target.ResolvableState());
         }
 
         [Test]
         public void VerifySetToManyBackToLegalState()
         {
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(1, 6);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
             Assert.IsTrue(_target.SetToManyBackToLegalState());
             Assert.IsFalse(_target.SetToManyBackToLegalState());
         }
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void VerifySetToManyBackToLegalStateWhenMiddleBitOfLongestBlockIsLocked()
         {
             _bitArray.Lock(18, true);
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(1, 6);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
             Assert.IsTrue(_target.SetToManyBackToLegalState());
         }
 
@@ -70,22 +71,22 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void VerifySetToManyBackToLegalStateWhenNoDaysOff()
         {
             _bitArray.SetAll(false);
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(1, 6);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
             Assert.IsFalse(_target.SetToManyBackToLegalState());
         }
 
         [Test]
         public void VerifySetToManyBackToLegalStateOutOfIterations()
         {
-            _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _sessionRuleSet, 0);
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(1, 6);
+            _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 0);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
             Assert.IsTrue(_target.SetToManyBackToLegalState());
         }
 
         [Test]
         public void VerifySetToFewBackToLegalState()
         {
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(2, 16);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 16);
             Assert.IsTrue(_target.SetToFewBackToLegalState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());
         }
@@ -95,8 +96,8 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         {
             _bitArray.Set(0, false);
             _bitArray.Set(17, true);
-            _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _sessionRuleSet, 0);
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(2, 16);
+            _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 0);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 16);
             Assert.IsTrue(_target.SetToFewBackToLegalState());
         }
 
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         {
             _bitArray.Set(6, false);
             _bitArray.Set(17, true);
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(2, 16);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 16);
             Assert.IsTrue(_target.SetToFewBackToLegalState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());
         }
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void VerifySetToFewBackToLegalStateWhenShortestIsTheFirstBlock()
         {   _bitArray.Set(0, false);
             _bitArray.Set(17, true);
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(2, 16);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 16);
             Assert.IsTrue(_target.SetToFewBackToLegalState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());
         }
@@ -124,7 +125,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         {
             _bitArray = array2();
             _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
-            _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _sessionRuleSet, 20);
+            _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
             _bitArray.PeriodArea = new MinMax<int>(0, 6);
             _bitArray.Lock(7, true);
             _bitArray.Lock(8, true);
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             _bitArray.Lock(11, true);
             _bitArray.Lock(12, true);
             _bitArray.Lock(13, true);
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(2, 6);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 6);
             Assert.IsTrue(_target.SetToFewBackToLegalState());
             Assert.IsFalse(_bitArray[6]);
         }
@@ -141,10 +142,10 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [Test]
         public void MinConsecutiveWorkdaysShouldNotConsiderLastBlockInArray()
         {
-            _sessionRuleSet.ConsecutiveWorkdays = new MinMax<int>(2, 6);
+            _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 6);
             _bitArray = array3();
             _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
-            _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _sessionRuleSet, 20);
+            _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
             Assert.AreEqual(MinMaxNumberOfResult.Ok, _target.ResolvableState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());

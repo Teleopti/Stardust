@@ -501,30 +501,28 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void CanReturnDictionaryWithFirstDatesOfEverySelectedWeek()
         {
-            var startDate = new DateTime(2007, 12, 02);
-            var endDate = new DateTime(2008, 01, 01);
-            var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(startDate), TimeZoneHelper.ConvertToUtc(endDate));
-            Dictionary<int, DateTime> returnDic = ViewBaseHelper.AddWeekDates(period);
-            Assert.AreEqual(new DateTime(2007, 12, 2), returnDic[48]);
-            Assert.AreEqual(new DateTime(2007, 12, 3), returnDic[49]);
-            Assert.AreEqual(new DateTime(2007, 12, 10), returnDic[50]);
-            Assert.AreEqual(new DateTime(2007, 12, 17), returnDic[51]);
-            Assert.AreEqual(new DateTime(2007, 12, 24), returnDic[52]);
+            var startDate = new DateOnly(2007, 12, 02);
+            var endDate = new DateOnly(2008, 01, 01);
+            var period = new DateOnlyPeriod(startDate, endDate);
+            Dictionary<int, DateOnly> returnDic = ViewBaseHelper.AddWeekDates(period);
+            Assert.AreEqual(new DateOnly(2007, 12, 2), returnDic[48]);
+            Assert.AreEqual(new DateOnly(2007, 12, 3), returnDic[49]);
+            Assert.AreEqual(new DateOnly(2007, 12, 10), returnDic[50]);
+            Assert.AreEqual(new DateOnly(2007, 12, 17), returnDic[51]);
+            Assert.AreEqual(new DateOnly(2007, 12, 24), returnDic[52]);
         }
 
         [Test]
         public void CanReturnWeekHeaderString()
         {
-            var startDate = new DateTime(2007, 12, 02, 23, 59, 59);
-            var endDate = new DateTime(2007, 12, 19, 23, 59, 59);
-            DateTimePeriod expectedPeriod =
-                TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2007, 12, 10), new DateTime(2007, 12, 16));
-            DateTimePeriod expectedPeriod2 =
-               TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2007, 12, 17), new DateTime(2007, 12, 19));
+            var startDate = new DateOnly(2007, 12, 02);
+            var endDate = new DateOnly(2007, 12, 19);
+            var expectedPeriod = new DateOnlyPeriod(2007, 12, 10, 2007, 12, 16);
+            var expectedPeriod2 =new DateOnlyPeriod(2007, 12, 17, 2007, 12, 19);
             
-            DateTimePeriod period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDate, endDate);
-            Assert.AreEqual(expectedPeriod.LocalStartDateTime.Date, ViewBaseHelper.WeekHeaderDates(50, period).LocalStartDateTime.Date);
-            Assert.AreEqual(expectedPeriod2.LocalStartDateTime.Date, ViewBaseHelper.WeekHeaderDates(51, period).LocalStartDateTime.Date);
+            var period = new DateOnlyPeriod(startDate, endDate);
+            Assert.AreEqual(expectedPeriod.StartDate, ViewBaseHelper.WeekHeaderDates(50, period).StartDate);
+            Assert.AreEqual(expectedPeriod2.StartDate, ViewBaseHelper.WeekHeaderDates(51, period).StartDate);
         }
 
         private IPersonAssignment CreateNoRestAss()

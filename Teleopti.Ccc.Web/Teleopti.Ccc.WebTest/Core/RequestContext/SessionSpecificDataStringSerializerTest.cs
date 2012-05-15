@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
+using log4net;
 
 namespace Teleopti.Ccc.WebTest.Core.RequestContext
 {
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[SetUp]
 		public void Setup()
 		{
-			target = new SessionSpecificDataStringSerializer();
+			target = new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>());
 		}
 
 		[Test]
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void FailingDeserializationShouldReturnNull()
 		{
-			target.Deserialize(Convert.ToBase64String(Convert.FromBase64String("Totally wrong")))
+			target.Deserialize("Totally wrong")
 				.Should().Be.Null();
 		}
 
@@ -50,10 +51,14 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		}
 
 		[Test]
-		public void DeserializeShouldReturnNullIfNotBuildOnCorrectByteArray()
+		public void ShouldNotSerializeTooBig()
 		{
-			target.Deserialize("wrong")
-				.Should().Be.Null();
+			//just to make sure we don't make serialization bigger in the future
+			//however - if we need to add stuff to the cookie for some reason, this limit needs to be increased.
+			const int bytesLimit = 192;
+			var testData = new SessionSpecificData(Guid.NewGuid(), "data sourceasdfasdfa", Guid.NewGuid(), AuthenticationTypeOption.Application);
+			(target.Serialize(testData).ToCharArray().Length * 2)
+				.Should().Be.LessThanOrEqualTo(bytesLimit);
 		}
 	}
 }

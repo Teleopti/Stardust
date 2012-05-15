@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -14,10 +16,8 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Determines whether the moved days are over the limit.
         /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if [is moved days under limit]; otherwise, <c>false</c>.
-        /// </returns>
-        bool MovedDaysOverMaxDaysLimit();
+        /// <returns></returns>
+        IList<DateOnly> RestrictionsOverMax();
 
         /// <summary>
         /// Gets the container owner.

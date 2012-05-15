@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls
 {
@@ -27,6 +29,34 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             get { return checkBoxAdvWholeDay; }
             set { checkBoxAdvWholeDay = value; }
+        }
+
+        public MinMax<TimeSpan> MinMaxStartTime
+        {
+            get
+            {
+                return new MinMax<TimeSpan>(office2007OutlookTimePickerStartTime.MinValue,
+                                            office2007OutlookTimePickerStartTime.MaxValue);
+            }
+            set
+            {
+                office2007OutlookTimePickerStartTime.MinValue = value.Minimum;
+                office2007OutlookTimePickerStartTime.MaxValue = value.Maximum;
+            }
+        }
+
+        public MinMax<TimeSpan> MinMaxEndTime
+        {
+            get
+            {
+                return new MinMax<TimeSpan>(office2007OutlookTimePickerEndTime.MinValue,
+                                            office2007OutlookTimePickerEndTime.MaxValue);
+            }
+            set
+            {
+                office2007OutlookTimePickerEndTime.MinValue = value.Minimum;
+                office2007OutlookTimePickerEndTime.MaxValue = value.Maximum;
+            }
         }
 
         [Localizable(true)]

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingResultStateHolder _stateHolder;
         private ISkillStaffPeriodHolder _skillStaffPeriodHolder;
         private IList<ISkillStaffPeriod> _skillStaffPeriods;
-        private ISchedulingOptions _schedulingOptions;
+        private IAdvancedPreferences _advancedPreferences;
 
         [SetUp]
         public void Setup()
@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
-            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
-            _target = new RelativeDailyStandardDeviationsByPersonalSkillsExtractor(_matrix, _schedulingOptions);
+            _advancedPreferences = _mocks.StrictMock<IAdvancedPreferences>();
+            _target = new RelativeDailyStandardDeviationsByPersonalSkillsExtractor(_matrix, _advancedPreferences);
         }
 
         [Test]
@@ -73,9 +73,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
 
-                Expect.Call(_schedulingOptions.UseMinimumPersons)
+                Expect.Call(_advancedPreferences.UseMinimumStaffing)
                     .Return(false).Repeat.AtLeastOnce();
-                Expect.Call(_schedulingOptions.UseMaximumPersons)
+                Expect.Call(_advancedPreferences.UseMaximumStaffing)
                     .Return(false).Repeat.AtLeastOnce();
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
@@ -125,9 +125,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
 
-                Expect.Call(_schedulingOptions.UseMinimumPersons)
+                Expect.Call(_advancedPreferences.UseMinimumStaffing)
                     .Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_schedulingOptions.UseMaximumPersons)
+                Expect.Call(_advancedPreferences.UseMaximumStaffing)
                     .Return(false).Repeat.AtLeastOnce();
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
@@ -177,9 +177,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
 
-                Expect.Call(_schedulingOptions.UseMinimumPersons)
+                Expect.Call(_advancedPreferences.UseMinimumStaffing)
                     .Return(false).Repeat.AtLeastOnce();
-                Expect.Call(_schedulingOptions.UseMaximumPersons)
+                Expect.Call(_advancedPreferences.UseMaximumStaffing)
                     .Return(true).Repeat.AtLeastOnce();
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
@@ -229,9 +229,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
 
-                Expect.Call(_schedulingOptions.UseMinimumPersons)
+                Expect.Call(_advancedPreferences.UseMinimumStaffing)
                     .Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_schedulingOptions.UseMaximumPersons)
+                Expect.Call(_advancedPreferences.UseMaximumStaffing)
                     .Return(true).Repeat.AtLeastOnce();
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
@@ -281,9 +281,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
 
-                Expect.Call(_schedulingOptions.UseMinimumPersons)
+                Expect.Call(_advancedPreferences.UseMinimumStaffing)
                     .Return(false).Repeat.AtLeastOnce();
-                Expect.Call(_schedulingOptions.UseMaximumPersons)
+                Expect.Call(_advancedPreferences.UseMaximumStaffing)
                     .Return(false).Repeat.AtLeastOnce();
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);

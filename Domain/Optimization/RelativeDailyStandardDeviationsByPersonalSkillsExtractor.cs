@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </summary>
     public class RelativeDailyStandardDeviationsByPersonalSkillsExtractor : IScheduleResultDailyValueCalculator
     {
-        private readonly ISchedulingOptions _schedulingOptions;
-        private readonly IScheduleMatrixPro _scheduleMatrix; 
+        private readonly IAdvancedPreferences _advancedPreferences;
+        private readonly IScheduleMatrixPro _scheduleMatrix;
 
-        public RelativeDailyStandardDeviationsByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions)
+        public RelativeDailyStandardDeviationsByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences advancedPreferences)
         {
             _scheduleMatrix = scheduleMatrix;
-            _schedulingOptions = schedulingOptions;
+            _advancedPreferences = advancedPreferences;
         }
 
         public IList<double?> Values()
@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<ISkillStaffPeriod> personsSkillStaffPeriods =
                 _scheduleMatrix.SchedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(personsActiveSkills, dateTimePeriod);
            
-            bool useMinPersonnel = _schedulingOptions.UseMinimumPersons;
-            bool useMaxPersonnel = _schedulingOptions.UseMaximumPersons;
+            bool useMinPersonnel = _advancedPreferences.UseMinimumStaffing;
+            bool useMaxPersonnel = _advancedPreferences.UseMaximumStaffing;
 
             return SkillStaffPeriodsRelativeDifferenceHours(personsSkillStaffPeriods, useMinPersonnel, useMaxPersonnel);
         }

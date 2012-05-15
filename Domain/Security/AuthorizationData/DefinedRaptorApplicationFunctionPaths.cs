@@ -68,6 +68,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 		// Forecaster
     	public const string ExportForecastToOtherBusinessUnit = "Raptor/Forecaster/ExportForecastToOtherBusinessUnit";
         public const string ImportForecastFromFile = "Raptor/Forecaster/ImportForecastFromFile";
+        // Budget
+        public const string RequestAllowances = "Raptor/Budgets/RequestAllowances";
         
         // Agent Portal
         public const string OpenAsm = "Raptor/AgentPortal/ASM";

@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "If we want to really work with this we should use Autofac to supply the stuff we need!")]
         public void LogOn(ICommandLineArgument argument, DatabaseHandler databaseHandler, IBusinessUnit businessUnit, IPerson convertPerson)
         {
-			InitializeApplication initializeApplication = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>()),
+			InitializeApplication initializeApplication = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForApplicationConfig()),
 				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
             initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "");
 
@@ -167,6 +167,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
             DefaultDataCreator defaultDataCreator = new DefaultDataCreator(argument.BusinessUnit,
                                                                            argument.CultureInfo,
                                                                            argument.TimeZone,
+																		   argument.NewUserName,
+																		   argument.NewUserPassword,
                                                                            databaseHandler.SessionFactory);
  
             DefaultAggregateRoot defaultAggregateRoot = defaultDataCreator.Create();

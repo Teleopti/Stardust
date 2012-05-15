@@ -43,11 +43,9 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created by: Sumedah
         /// Created date: 2008-03-13
         /// </remarks>
-        ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateTimePeriod period);
+        ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateOnlyPeriod period);
 
-		ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateTimePeriod period);
-
-		IEnumerable<IPerson> FindPeopleBelongTeamPeriodInUtc(ITeam team, DateTimePeriod period);
+		ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period);
 
 		/// <summary>
         /// Finds all persons with name sorted.
@@ -83,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created by: rogerkr
         /// Created date: 2008-05-22
         /// </remarks>
-        ICollection<IPerson> FindPeopleInOrganization(DateTimePeriod period, bool includeRuleSetData);
+        ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData);
 
         /// <summary>
         /// Finds the persons with given user credentials.
@@ -127,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
     	IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period);
 
-    	ICollection<IPerson> FindPeopleInOrganizationLight(DateTimePeriod period);
+    	ICollection<IPerson> FindPeopleInOrganizationLight(DateOnlyPeriod period);
         ICollection<IPerson> FindPeople(IEnumerable<Guid> peopleId);
         ICollection<IPerson> FindPeople(IEnumerable<IPerson> people);
     	bool DoesWindowsUserExists(string domainName, string userName);

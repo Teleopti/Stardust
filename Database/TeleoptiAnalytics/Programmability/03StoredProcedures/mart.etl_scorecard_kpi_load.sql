@@ -12,10 +12,18 @@ GO
 -- Description:	Loads scorecard_kpi connections from stg_scorecard_kpi to scorecard_kpi.
 -- =============================================
 CREATE PROCEDURE [mart].[etl_scorecard_kpi_load] 
-	
+@business_unit_code uniqueidentifier
+
 AS
 ---------------------------------------------------------------------------
 --Delete current connections scorecard<->kpi
+DECLARE @business_unit_id int
+SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
+
+DELETE FROM mart.scorecard_kpi
+WHERE business_unit_id = @business_unit_id
+
+/*
 DELETE FROM mart.scorecard_kpi
 WHERE business_unit_id = 
 	(
@@ -28,7 +36,7 @@ WHERE business_unit_id =
 		ON
 			sk.business_unit_code = bu.business_unit_code
 	)
-
+*/
 ----------------------------------------------------------------------------
 -- Insert new kpis
 INSERT INTO mart.scorecard_kpi

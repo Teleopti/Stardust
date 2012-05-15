@@ -7,14 +7,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IBlockDayOffOptimizer
     {
-        bool Execute(IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer, IDayOffDecisionMaker decisionMaker);
+		bool Execute(IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer, IDayOffDecisionMaker decisionMaker, ISchedulingOptions schedulingOptions);
     }
 
     public class BlockDayOffOptimizer : IBlockDayOffOptimizer
     {
         private readonly IScheduleMatrixLockableBitArrayConverter _converter;
         private readonly IScheduleResultDataExtractor _scheduleResultDataExtractor;
-        private readonly DayOffPlannerSessionRuleSet _ruleSet;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private readonly IBlockSchedulingService _blockSchedulingService;
         private readonly IBlockOptimizerBlockCleaner _blockOptimizerBlockCleaner;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public BlockDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
             IScheduleResultDataExtractor scheduleResultDataExtractor,
-            DayOffPlannerSessionRuleSet ruleSet,
+            IDaysOffPreferences daysOffPreferences,
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
             IBlockSchedulingService blockSchedulingService,
             IBlockOptimizerBlockCleaner blockOptimizerBlockCleaner,
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             _converter = converter;
             _scheduleResultDataExtractor = scheduleResultDataExtractor;
-            _ruleSet = ruleSet;
+            _daysOffPreferences = daysOffPreferences;
             _dayOffDecisionMakerExecuter = dayOffDecisionMakerExecuter;
             _blockSchedulingService = blockSchedulingService;
             _blockOptimizerBlockCleaner = blockOptimizerBlockCleaner;
@@ -43,13 +43,13 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
-        public bool Execute(IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer, IDayOffDecisionMaker decisionMaker)
+		public bool Execute(IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer, IDayOffDecisionMaker decisionMaker, ISchedulingOptions schedulingOptions)
         {
             writeToLogDayOffOptimizationInProgressOnCurrentAgent(matrix);
 
-            ILockableBitArray originalArray = _converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter);
+            ILockableBitArray originalArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
-            _workingBitArray = _converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter);
+            _workingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
             if (!decisionMaker.Execute(_workingBitArray, _scheduleResultDataExtractor.Values()))
                 return false;
@@ -59,18 +59,18 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
 
             
-            if (!_blockSchedulingService.Execute(new List<IScheduleMatrixPro> {matrix}))
+            if (!_blockSchedulingService.Execute(new List<IScheduleMatrixPro> {matrix}, schedulingOptions))
             {
                 //rensa block med hål i
                 IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(_workingBitArray, originalArray, matrix,
-                                                                             _ruleSet.ConsiderWeekBefore);
+                                                                             _daysOffPreferences.ConsiderWeekBefore);
                 var datesRemoved = _blockOptimizerBlockCleaner.ClearSchedules(matrix, daysOffToRemove);
                 foreach (var dateOnly in datesRemoved)
                 {
                     _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
                 }
 
-                if (!_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { matrix }))
+                if (!_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { matrix }, schedulingOptions))
                     return false;
             }
             

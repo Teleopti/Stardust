@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
@@ -277,9 +278,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			// ouch! better way to modify updated on?
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest1);
-			Thread.Sleep(1010);
+			SetUpdatedOnForRequest(personRequestWithAbsenceRequest1,-2);
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest2);
-			Thread.Sleep(1010);
+			SetUpdatedOnForRequest(personRequestWithAbsenceRequest2, -1);
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest3);
 
 			var results = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging { Take = 1, Skip = 1 });
@@ -288,7 +289,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			results.Single().Should().Be.EqualTo(personRequestWithAbsenceRequest2);
 		}
 
-		[Test]
+    	private void SetUpdatedOnForRequest(IPersonRequest personRequest,int minutes)
+    	{
+    		Session.CreateSQLQuery("UPDATE dbo.PersonRequest SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;").SetGuid(
+    			"Id", personRequest.Id.GetValueOrDefault()).SetInt32("Minutes",minutes).ExecuteUpdate();
+    	}
+
+    	[Test]
 		public void ShouldFindAllRequestsForAgentAndPeriod()
 		{
 			var personRequestInPeriod =
@@ -317,9 +324,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var paging = new Paging {Skip = 0, Take = 2};
 
 			PersistAndRemoveFromUnitOfWork(textRequest);
-			Thread.Sleep(1010);
+			SetUpdatedOnForRequest(textRequest, -2);
 			PersistAndRemoveFromUnitOfWork(absenceRequest);
-			Thread.Sleep(1010);
+			SetUpdatedOnForRequest(absenceRequest, -1);
 			PersistAndRemoveFromUnitOfWork(textRequest2);
 
 			var result = new PersonRequestRepository(UnitOfWork).FindTextRequestsForAgent(_person, paging);
@@ -338,8 +345,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPerson personTo = PersonFactory.CreatePerson("vjiosd");
             personTo.Name = new Name("mala", "mala");
             PersistAndRemoveFromUnitOfWork(personTo);
-
-           
 
             IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
                 new List<IShiftTradeSwapDetail>

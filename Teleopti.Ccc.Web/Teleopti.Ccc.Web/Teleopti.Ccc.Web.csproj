@@ -82,11 +82,13 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=1.1.0.26406, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MbCache.1.1-beta\lib\Net35\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MbCache.1.2\lib\Net35\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu">
-      <HintPath>..\..\packages\MbCache.1.1-beta\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MbCache.1.2\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -220,7 +222,6 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceFeedbackProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\RuleSetProjectionServiceForMultiSessionCaching.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculator.cs" />
@@ -646,12 +647,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Content\Scripts\MicrosoftAjax.js" />
     <Content Include="Content\Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Content\Scripts\MicrosoftMvcAjax.js" />
@@ -818,5 +813,11 @@
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusClient.config" "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config"</PreBuildEvent>
+  </PropertyGroup>
+    <PreBuildEvent>if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Root.Web.config" "$(ProjectDir)web.config"
+if not exist "$(ProjectDir)Areas\MyTime\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.MyTime.Web.config" "$(ProjectDir)Areas\MyTime\Views\web.config"
+if not exist "$(ProjectDir)Areas\Start\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Start.Web.config" "$(ProjectDir)Areas\Start\Views\web.config"
+if not exist "$(ProjectDir)Areas\MobileReports\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Mobile.Web.config" "$(ProjectDir)Areas\MobileReports\Views\web.config"
+</PreBuildEvent>
   </PropertyGroup>
 </Project>

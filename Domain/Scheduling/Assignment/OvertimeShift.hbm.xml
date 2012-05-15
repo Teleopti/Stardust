@@ -5,6 +5,7 @@
                    default-access="field.camelcase-underscore">
   <class name="OvertimeShift">
     <id name="Id"
+		  access="nosetter.camelcase-underscore"
             type="guid"
             unsaved-value="null">
       <generator class="guid.comb" />
