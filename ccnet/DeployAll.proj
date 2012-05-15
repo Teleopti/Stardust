@@ -3,7 +3,6 @@
 <Project DefaultTargets="DeployAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
 	<PropertyGroup>
-		<CCCMajorMinor>7.2</CCCMajorMinor>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildExtensionPackPath>$(MSBuildPath)\MSBuild.ExtensionPack</MSBuildExtensionPackPath>
@@ -60,6 +59,7 @@
 
 	<ItemGroup>
 		<VersionFile Include="$(CCNetWorkingDirectory)\ActiveBranchVersion.txt"/>
+		<MajorVersionFile Include="$(CCNetWorkingDirectory)\ActiveMajorVersion.txt"/>
 		<PreReqTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj" />
 	</ItemGroup>
 
@@ -427,6 +427,12 @@
 			  PropertyName="BranchVersion" />
 		</ReadLinesFromFile>
 		<Message Text="BranchVersion: $(BranchVersion)" Importance="high"/>
+		
+		<ReadLinesFromFile File="@(MajorVersionFile)" >
+			<Output TaskParameter="Lines"
+			  PropertyName="CCCMajorMinor" />
+		</ReadLinesFromFile>
+		<Message Text="MajorVersion: $(CCCMajorMinor)" Importance="high"/>
 
 		<HgVersion LocalPath="$(MSBuildProjectDirectory)" Timeout="5000">
 			<Output TaskParameter="Revision" PropertyName="Revision" />
