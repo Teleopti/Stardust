@@ -1715,6 +1715,52 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
         }
 
+		[Test]
+		public void ShouldGetUnspecifiedIfPreferenceIsDayOffAndNotScheduled()
+		{
+			IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("DayOffTemplate"));
+			dayOffTemplate.Anchor = TimeSpan.FromHours(10);
+			dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
+
+			IActivity activity = new Activity("Activity");
+			IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
+			layerCollection.Add(_layerFactory.CreateShiftSetupLayer(activity, _dateTimePeriod));
+
+			PreferenceRestriction dayRestriction = new PreferenceRestriction
+			{
+				DayOffTemplate = dayOffTemplate
+			};
+
+			IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
+			IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
+			ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
+			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+
+			using (_mockRepository.Record())
+			{
+				Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(
+					new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));;
+				Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
+				Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.FilterLayers(new Activity("T"))).Return(filteredVisualLayers).IgnoreArguments();
+				Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
+					new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(
+					_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
+				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+			}
+
+			using (_mockRepository.Playback())
+			{
+				_target = new RestrictionChecker(_schedulePartMock);
+				Assert.AreEqual(PermissionState.Unspecified, _target.CheckPreference());
+			}
+		}
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyCanReturnBrokenWhenPreferenceIsShiftCategoryAndScheduledIsDayOff()
         {
@@ -1870,8 +1916,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             {
                 Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment })).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
-                //Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
-                //Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
 
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
