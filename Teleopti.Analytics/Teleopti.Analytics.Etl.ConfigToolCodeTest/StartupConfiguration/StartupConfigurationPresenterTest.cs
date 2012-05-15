@@ -151,5 +151,17 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.StartupConfiguration
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.DisableIntervalLength());
 		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Analytics.Etl.ConfigToolCode.StartupConfiguration.IStartupConfigurationView.ShowErrorMessage(System.String)"), Test]
+		public void ShouldDisableOkButtonAndShowErrorMessageWhenInvalidIntervalIsInUse()
+		{
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, 5, null));
+			_configurationHandler.Stub(x => x.IntervalLengthInUse).Return(5);
+			
+			_target.Initialize();
+			_view.AssertWasCalled(x => x.SelectedIntervalLengthValue);
+			_view.AssertWasCalled(x => x.DisableOkButton());
+			_view.AssertWasCalled(x => x.ShowErrorMessage("Interval Length already in use is 5 minutes. Supported Interval Length are 10, 15, 30 and 60 minutes."));
+		}
 	}
 }

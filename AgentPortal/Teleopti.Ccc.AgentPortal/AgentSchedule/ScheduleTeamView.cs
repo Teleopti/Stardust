@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             gridControlTeamSchedules.RightToLeft = RightToLeft;
 
             _startDateForTeamView = DateTime.SpecifyKind(DateTime.Today,DateTimeKind.Unspecified);
-            navigationMonthCalendarTeamView.DateValue = DateTime.Now;
+            navigationMonthCalendarTeamView.DateValue = _startDateForTeamView;
 
 			LoadTeams();
             if (isPermittedToViewCustomTeamSchedule())

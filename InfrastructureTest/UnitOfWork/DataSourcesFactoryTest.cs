@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using NHibernate.Engine;
-using NHibernate.Transaction;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var sessionFactory = (ISessionFactoryImplementor)factoryField.GetValue(res.Application, BindingFlags.NonPublic |
 																								  BindingFlags.Instance, null, null, CultureInfo.InvariantCulture);
 			Assert.IsNotNull(sessionFactory, "Session factory is null, shouldn't be!");
-			Assert.IsInstanceOf<AdoNetWithDistributedTransactionFactory>(sessionFactory.TransactionFactory);
+			Assert.IsInstanceOf<TeleoptiDistributedTransactionFactory>(sessionFactory.TransactionFactory);
 		}
 
 		[Test]

@@ -34,7 +34,7 @@ item: Global
   Variable Default3=C:\WINDOWS
   Variable Flags3=00001000
   Variable Name4=_WISE_
-  Variable Default4=C:\Program Files\Altiris\Wise\WiseScript Package Editor
+  Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
   Variable Flags4=00001000
   Requested Execution Level=asInvoker
 end
@@ -101,7 +101,7 @@ remarked item: Display Message
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C "%SDKDIR%EsentPermissions.bat" %ONE% %TWO% %THREE% %FOUR%
+  Command Line=/C ""%SDKDIR%EsentPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%""
   Flags=00000010
 end
 remarked item: Check if File/Dir Exists

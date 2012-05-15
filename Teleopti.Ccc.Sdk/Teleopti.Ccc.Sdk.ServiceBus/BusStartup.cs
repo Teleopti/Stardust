@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     		}
     		catch (PolicyException policyException)
     		{
-    			Logger.Warn("Failed to set thread principal for app domain.",policyException);
+    			Logger.Info("Failed to set thread principal for app domain, because it was already set.",policyException);
     		}
     	}
 
