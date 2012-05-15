@@ -70,7 +70,7 @@ item: Custom Script Item
   Variable Name1=_PROPERTYNAME_
   Variable Value1=LOGS
   Variable Name2=_PROP_VAR_
-  Variable Value2=DIR
+  Variable Value2=LOG4NET
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
@@ -81,7 +81,7 @@ end
 item: Execute Program
   Pathname=.\ntrights.exe
   Command Line=+r SeServiceLogonRight -u %ONE%
-  Default Directory=%DIR%
+  Default Directory=%LOG4NET%
   Flags=00000010
 end
 item: End Block
@@ -97,7 +97,7 @@ end
 item: Execute Program
   Pathname=.\ntrights.exe
   Command Line=+r SeServiceLogonRight -u %TWO%
-  Default Directory=%DIR%
+  Default Directory=%LOG4NET%
   Flags=00000010
 end
 item: End Block
