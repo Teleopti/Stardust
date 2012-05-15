@@ -35,22 +35,10 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
                 var requests = SdkServiceHelper.SchedulingService.GetPersonRequests(ScheduleStateHolder.Person,
                                                                                     period.LocalStartDateTime, true,
                                                                                     period.LocalEndDateTime, true);
-                var validRequestsForPeriod = getValidRequestsForPeriod(requests);
-                IList<ICustomScheduleAppointment> scheduleAppointments = ScheduleAppointmentFactory.Create(validRequestsForPeriod);
+                IList<ICustomScheduleAppointment> scheduleAppointments = ScheduleAppointmentFactory.Create(requests);
                 ScheduleStateHolder.FillScheduleDictionary(scheduleAppointments);
             }
             ScheduleStateHolder.FillScheduleDictionary(PublicNoteHelper.LoadPublicNotes(ScheduleStateHolder.Person, period));
-        }
-
-        private IList<PersonRequestDto> getValidRequestsForPeriod(IList<PersonRequestDto> requests)
-        {
-            var result = new List<PersonRequestDto>();
-            foreach (var personRequestDto in requests)
-            {
-                //if (personRequestDto.RequestedDateLocal>=period.LocalStartDateTime && personRequestDto.RequestedDateLocal<=period.LocalEndDateTime)
-                    result.Add(personRequestDto);
-            }
-            return result;
         }
 
         /// <summary>
