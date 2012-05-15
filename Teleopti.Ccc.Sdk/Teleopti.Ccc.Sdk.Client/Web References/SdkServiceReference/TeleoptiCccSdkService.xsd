@@ -8,7 +8,7 @@
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" />
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd14" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" />
   <xs:element name="ConvertToUtc">
     <xs:complexType>
@@ -1088,50 +1088,50 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element xmlns:q170="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="LayerDto" nillable="true" type="q170:LayerDto" />
-  <xs:complexType name="PersonalShiftActivityDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q171="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q171:LayerDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Activity" nillable="true" type="q171:ActivityDto" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element xmlns:q172="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonalShiftActivityDto" nillable="true" type="q172:PersonalShiftActivityDto" />
   <xs:complexType name="OvertimeLayerDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q173="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q173:ActivityLayerDto">
+      <xs:extension xmlns:q171="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q171:ActivityLayerDto">
         <xs:sequence>
           <xs:element minOccurs="0" name="OvertimeDefinitionSetId" type="ser:guid" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q174="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="OvertimeLayerDto" nillable="true" type="q174:OvertimeLayerDto" />
+  <xs:element xmlns:q172="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="OvertimeLayerDto" nillable="true" type="q172:OvertimeLayerDto" />
   <xs:complexType name="ActivityLayerDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q175="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q175:LayerDto">
+      <xs:extension xmlns:q173="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q173:LayerDto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Activity" nillable="true" type="q175:ActivityDto" />
+          <xs:element minOccurs="0" name="Activity" nillable="true" type="q173:ActivityDto" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q176="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ActivityLayerDto" nillable="true" type="q176:ActivityLayerDto" />
+  <xs:element xmlns:q174="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ActivityLayerDto" nillable="true" type="q174:ActivityLayerDto" />
   <xs:complexType name="PersonMeetingDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q177="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q177:LayerDto">
+      <xs:extension xmlns:q175="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q175:LayerDto">
         <xs:sequence>
           <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Location" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="MeetingId" type="ser:guid" />
-          <xs:element minOccurs="0" name="Person" nillable="true" type="q177:PersonDto" />
+          <xs:element minOccurs="0" name="Person" nillable="true" type="q175:PersonDto" />
           <xs:element minOccurs="0" name="Subject" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q178="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonMeetingDto" nillable="true" type="q178:PersonMeetingDto" />
+  <xs:element xmlns:q176="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonMeetingDto" nillable="true" type="q176:PersonMeetingDto" />
+  <xs:complexType name="PersonalShiftActivityDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q177="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q177:LayerDto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Activity" nillable="true" type="q177:ActivityDto" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:q178="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonalShiftActivityDto" nillable="true" type="q178:PersonalShiftActivityDto" />
   <xs:complexType name="ArrayOfPersonAssignmentDto">
     <xs:sequence>
       <xs:element xmlns:q179="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonAssignmentDto" nillable="true" type="q179:PersonAssignmentDto" />
@@ -1407,24 +1407,24 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element xmlns:q232="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="RequestDto" nillable="true" type="q232:RequestDto" />
-  <xs:complexType name="AbsenceRequestDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q233="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q233:RequestDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Absence" nillable="true" type="q233:AbsenceDto" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element xmlns:q234="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AbsenceRequestDto" nillable="true" type="q234:AbsenceRequestDto" />
   <xs:complexType name="TextRequestDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q235="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q235:RequestDto">
+      <xs:extension xmlns:q233="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q233:RequestDto">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q236="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="TextRequestDto" nillable="true" type="q236:TextRequestDto" />
+  <xs:element xmlns:q234="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="TextRequestDto" nillable="true" type="q234:TextRequestDto" />
+  <xs:complexType name="AbsenceRequestDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q235="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q235:RequestDto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Absence" nillable="true" type="q235:AbsenceDto" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:q236="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AbsenceRequestDto" nillable="true" type="q236:AbsenceRequestDto" />
   <xs:complexType name="ShiftTradeRequestDto">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q237="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q237:RequestDto">

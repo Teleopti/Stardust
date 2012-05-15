@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Playback())
 			{
 				var result =
-					target.Handle(new GetSchedulesByPersonQueryHandlerDto
+					target.Handle(new GetSchedulesByPersonQueryDto
 					              	{
 					              		StartDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
 					              		EndDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<FaultException>(()=>target.Handle(new GetSchedulesByPersonQueryHandlerDto
+				Assert.Throws<FaultException>(()=>target.Handle(new GetSchedulesByPersonQueryDto
 					{
 						StartDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
 						EndDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Playback())
 			{
 				var result =
-					target.Handle(new GetSchedulesByPersonQueryHandlerDto
+					target.Handle(new GetSchedulesByPersonQueryDto
 					{
 						StartDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
 						EndDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },

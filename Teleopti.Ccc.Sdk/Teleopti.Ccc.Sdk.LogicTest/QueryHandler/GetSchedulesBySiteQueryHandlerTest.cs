@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Playback())
 			{
 				var result =
-					target.Handle(new GetSchedulesBySiteQueryHandlerDto
+					target.Handle(new GetSchedulesBySiteQueryDto
 					              	{
 					              		StartDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
 					              		EndDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<FaultException>(()=>target.Handle(new GetSchedulesBySiteQueryHandlerDto
+				Assert.Throws<FaultException>(()=>target.Handle(new GetSchedulesBySiteQueryDto
 					{
 						StartDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
 						EndDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Playback())
 			{
 				var result =
-					target.Handle(new GetSchedulesBySiteQueryHandlerDto
+					target.Handle(new GetSchedulesBySiteQueryDto
 					{
 						StartDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
 						EndDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
