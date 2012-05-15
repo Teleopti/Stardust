@@ -13,12 +13,11 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private AgentRestrictionsPresenter _presenter;
 		private IAgentRestrictionsModel _model;
 		private IAgentRestrictionsWarningDrawer _warningDrawer;
-		private IAgentRestrictionsLoadingDrawer _loadingDrawer;
-		private IAgentRestrictionsNotAvailableDrawer _notAvailableDrawer;
+		private IAgentRestrictionsDrawer _loadingDrawer;
+		private IAgentRestrictionsDrawer _notAvailableDrawer;
+		private IAgentRestrictionsDrawer _availableDrawer;
 		private IList<int> _merged;
 
-		public bool FinishedTest{get; set;}
-		
 		public AgentRestrictionGrid()
 		{
 			InitializeComponent();
@@ -40,8 +39,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_warningDrawer = new AgentRestrictionsWarningDrawer();
 			_loadingDrawer = new AgentRestrictionsLoadingDrawer();
 			_notAvailableDrawer = new AgentRestrictionsNotAvailableDrawer();
+			_availableDrawer = new AgentRestrictionsAvailableDrawer();
 			_model = new AgentRestrictionsModel();
-			_presenter = new AgentRestrictionsPresenter(this, _model, _warningDrawer, _loadingDrawer, _notAvailableDrawer);
+			_presenter = new AgentRestrictionsPresenter(this, _model, _warningDrawer, _loadingDrawer, _notAvailableDrawer, _availableDrawer);
 			
 
 			ResetVolatileData();

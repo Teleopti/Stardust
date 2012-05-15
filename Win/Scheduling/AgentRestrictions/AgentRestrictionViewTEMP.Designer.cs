@@ -83,7 +83,6 @@
             Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(0, 9, 0, 12)});
 			this.agentRestrictionGrid.ExcelLikeCurrentCell = true;
 			this.agentRestrictionGrid.ExcelLikeSelectionFrame = true;
-			this.agentRestrictionGrid.FinishedTest = false;
 			this.agentRestrictionGrid.GridLineColor = System.Drawing.SystemColors.GrayText;
 			this.agentRestrictionGrid.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.agentRestrictionGrid.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;

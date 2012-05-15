@@ -9,43 +9,39 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		void MergeHeaders();
 		void MergeCells(int rowIndex, bool unmerge);
 		void LoadData();
-		bool FinishedTest { get; set; }
 	}
 
 	public interface IAgentRestrictionsWarningDrawer
 	{
-		void Draw(GridDrawCellEventArgs e, IAgentRestrictionsDisplayRow agentRestrictionsDisplayRow);
+		void Draw(GridDrawCellEventArgs e,  IAgentRestrictionsModel model);
 	}
 
-	public interface IAgentRestrictionsLoadingDrawer
+	public interface IAgentRestrictionsDrawer
 	{
-		bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e);
-	}
-
-	public interface IAgentRestrictionsNotAvailableDrawer
-	{
-		bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e);
+		bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e, IAgentRestrictionsDisplayRow agentRestrictionsDisplayRow);
 	}
 
 	public class AgentRestrictionsPresenter
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-		private IAgentRestrictionsView _view;
+		private readonly IAgentRestrictionsView _view;
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly IAgentRestrictionsModel _model;
-		private IAgentRestrictionsWarningDrawer _warningDrawer;
-		private IAgentRestrictionsLoadingDrawer _loadingDrawer;
-		private IAgentRestrictionsNotAvailableDrawer _notAvailableDrawer;
+		private readonly IAgentRestrictionsWarningDrawer _warningDrawer;
+		private readonly IAgentRestrictionsDrawer _loadingDrawer;
+		private readonly IAgentRestrictionsDrawer _notAvailableDrawer;
+		private readonly IAgentRestrictionsDrawer _availableDrawer;
 		private const int ColCount = 12;
 		private const int HeaderCount = 1;
 
-		public AgentRestrictionsPresenter(IAgentRestrictionsView view, IAgentRestrictionsModel model, IAgentRestrictionsWarningDrawer warningDrawer, IAgentRestrictionsLoadingDrawer loadingDrawer, IAgentRestrictionsNotAvailableDrawer notAvailableDrawer)
+		public AgentRestrictionsPresenter(IAgentRestrictionsView view, IAgentRestrictionsModel model, IAgentRestrictionsWarningDrawer warningDrawer, IAgentRestrictionsDrawer loadingDrawer, IAgentRestrictionsDrawer notAvailableDrawer, IAgentRestrictionsDrawer availableDrawer)
 		{
 			_view = view;
 			_model = model;
 			_warningDrawer = warningDrawer;
 			_loadingDrawer = loadingDrawer;
 			_notAvailableDrawer = notAvailableDrawer;
+			_availableDrawer = availableDrawer;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
@@ -70,8 +66,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public void GridCellDrawn(GridDrawCellEventArgs e)
 		{
-			//if warnings
-			_warningDrawer.Draw(e, null);
+			_warningDrawer.Draw(e, _model);	
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
@@ -107,99 +102,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		{
 			if(e.RowIndex > 1)
 			{
-				if (_loadingDrawer.Draw(_view, e)) return;
-				if (_notAvailableDrawer.Draw(_view, e)) return;
+				var displayRow = _model.DisplayRowFromRowIndex(e.RowIndex);
+
+				if (_loadingDrawer.Draw(_view, e, displayRow) && e.ColIndex > 0) return;
+				if (_notAvailableDrawer.Draw(_view, e, displayRow) && e.ColIndex > 0) return;
+
+				_availableDrawer.Draw(_view, e, displayRow);
 				
-				//Name
-				if (e.ColIndex == 0)
-				{
-					e.Style.CellType = "Header";
-					//e.Style.CellValue = Model.
-				}
-
-				//Warnings
-				if (e.ColIndex == 1)
-				{
-					e.Style.CellType = "NumericReadOnlyCellModel";
-					//e.Style.CellValue = Model.
-				}
-
-				//Type
-				if (e.ColIndex == 2)
-				{
-					e.Style.CellType = "Static";
-					//e.Style.CellValue = Model.
-				}
-
-				//From
-				if (e.ColIndex == 3)
-				{
-					e.Style.CellType = "Static";
-					//e.Style.CellValue = Model.
-				}
-
-				//To
-				if (e.ColIndex == 4)
-				{
-					e.Style.CellType = "Static";
-					//e.Style.CellValue = Model.
-				}
-
-				//Contract Target Time
-				if (e.ColIndex == 5)
-				{
-					e.Style.CellType = "TimeSpan";
-					//e.Style.CellValue = Model.
-				}
-
-				//Days Off (Schedule Period)
-				if (e.ColIndex == 6)
-				{
-					e.Style.CellType = "NumericReadOnlyCellModel";
-					//e.Style.CellValue = Model.
-				}
-
-				//Contract time
-				if (e.ColIndex == 7)
-				{
-					e.Style.CellType = "TimeSpan";
-					//e.Style.CellValue = Model.
-				}
-
-				//Days off (Schedule)
-				if (e.ColIndex == 8)
-				{
-					e.Style.CellType = "NumericReadOnlyCellModel";
-					//e.Style.CellValue = Model.
-				}
-
-				//Min
-				if (e.ColIndex == 9)
-				{
-					e.Style.CellType = "TimeSpan";
-					//e.Style.CellValue = Model.
-				}
-
-				//Max
-				if (e.ColIndex == 10)
-				{
-					e.Style.CellType = "TimeSpan";
-					//e.Style.CellValue = Model.
-				}
-
-				//Days Off (Schedule + Restrictions)
-				if (e.ColIndex == 11)
-				{
-					e.Style.CellType = "NumericReadOnlyCellModel";
-					//e.Style.CellValue = Model.
-				}
-
-				//Ok
-				if (e.ColIndex == 12)
-				{
-					e.Style.CellType = "Static";
-					//e.Style.CellValue = Model.
-				}
 			}
 		}
 	}
