@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.RequestPermission, c => c.MapFrom(s => new RequestPermission
 				{
 					TextRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests),
-					AbsenceRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequests),
+					AbsenceRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb),
 				}))
 				.ForMember(d => d.AbsenceTypes, c => c.MapFrom(s => _absenceTypesProvider.Invoke().GetRequestableAbsences()));
 			;
