@@ -10671,7 +10671,7 @@ These options are activated:
     <comment>The interval length of this subskill should be the same as its parent skill, which is 15 minutes.</comment>
   </data>
   <data name="AbsenceType" xml:space="preserve">
-    <value>Absence type</value>
+    <value>Absence type:</value>
     <comment>The type of absence to use in absence requests</comment>
   </data>
   <data name="AbsenceRequestsWeb" xml:space="preserve">

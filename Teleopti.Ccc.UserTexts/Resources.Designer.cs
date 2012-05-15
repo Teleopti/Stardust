@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Absence type.
+        ///   Looks up a localized string similar to Absence type:.
         /// </summary>
         public static string AbsenceType {
             get {
