@@ -157,10 +157,8 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		$('#Schedule-addRequest-section .date-input')
 			.datepicker()
 			;
-		$("#Schedule-addRequest-section .combobox.time-input")
-			.combobox({ comboboxDropDownItemClass: 'ui-tooltip-menu-item' });
-		$("#Schedule-addRequest-section .combobox.absence-input")
-			.combobox({ comboboxDropDownItemClass: 'ui-tooltip-menu-item' });
+		$("#Schedule-addRequest-section .combobox.time-input").combobox();
+		$("#Schedule-addRequest-section .combobox.absence-input").combobox();
 		;
 		$("#Absence-type-input").attr('readonly', 'true');
 	}

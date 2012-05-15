@@ -8,6 +8,12 @@
 	text-align: left;
 }
 
+.tooltip-dropdown-menu.ui-autocomplete li a {
+	font-size: 10px; 
+	text-align: left;
+	line-height: 12px;
+}
+
 /*jquery.ui.button.css*/
 
 .buttonset-nav .ui-button-text-only .ui-button-text { padding: .2em 0.6em; }

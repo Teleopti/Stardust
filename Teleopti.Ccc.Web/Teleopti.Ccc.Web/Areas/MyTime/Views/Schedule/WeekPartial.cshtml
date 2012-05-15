@@ -92,7 +92,7 @@
 	</div>
 	<div id="Absence-type-element" class="edit-module-element floatleft displaynone">
 		<div class="floatleft absence-input-label">@Resources.AbsenceType</div>
-		<select id="Absence-type" class="floatleft absence-input combobox">
+		<select id="Absence-type" class="floatleft absence-input combobox tooltip-dropdown-menu">
 			@foreach (var absenceType in Model.AbsenceTypes)
 			{
 				<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
@@ -105,7 +105,7 @@
 	</div>
 	<div id="Schedule-addRequest-fromTime" class="edit-module-element floatleft">
 		<label class="displayblock" for="Schedule-addRequest-fromTime-input-input">@Resources.Time</label>
-		<select id="Schedule-addRequest-fromTime-input" class="time-input combobox">
+		<select id="Schedule-addRequest-fromTime-input" class="time-input combobox tooltip-dropdown-menu">
 			@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
 			{
 				<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
@@ -117,7 +117,7 @@
 	</div>
 	<div id="Schedule-addRequest-toTime" class="edit-module-element floatleft">
 		<label class="displayblock" for="Schedule-addRequest-toTime-input-input">@Resources.Time</label>
-		<select id="Schedule-addRequest-toTime-input" class="time-input combobox">
+		<select id="Schedule-addRequest-toTime-input" class="time-input combobox tooltip-dropdown-menu">
 			@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
 			{
 				<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>

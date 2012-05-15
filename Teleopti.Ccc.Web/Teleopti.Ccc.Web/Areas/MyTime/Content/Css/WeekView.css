@@ -161,11 +161,6 @@
 	float: left;
 }
 
-.ui-tooltip-menu-item {
-	font-family: Verdana,Arial,sans-serif;
-	font-size: 1.0em !important;
-}
-
 .selectable-tab {
 	cursor: pointer;
 	font-weight: normal;
@@ -182,5 +177,4 @@
 .absence-input 
 {
 	width: 8.5em;
-	height: 10px;
 }
