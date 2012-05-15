@@ -51,6 +51,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCode.StartupConfiguration
 				{
 					var list = new List<LookupIntegerItem>
 					           	{
+					           		new LookupIntegerItem(10, "10 minutes"),
 					           		new LookupIntegerItem(15, "15 minutes"),
 									new LookupIntegerItem(30, "30 minutes"),
 									new LookupIntegerItem(60, "60 minutes")

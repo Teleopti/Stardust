@@ -58,6 +58,21 @@ namespace Teleopti.Analytics.Etl.ConfigTool.StartupConfiguration
 			comboBoxIntervalLength.Enabled = false;
 		}
 
+		public void DisableOkButton()
+		{
+			buttonOk.Enabled = false;
+		}
+
+		public void ShowErrorMessage(string message)
+		{
+			labelMessage.Text = message;
+		}
+
+		public object SelectedIntervalLengthValue
+		{
+			get { return comboBoxIntervalLength.SelectedValue; }
+		}
+
 		private void StartupConfigurationView_Load(object sender, EventArgs e)
 		{
 			Font = SystemFonts.DefaultFont;
