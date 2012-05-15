@@ -1179,6 +1179,7 @@
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.Designer.cs">
       <DependentUpon>AgentRestrictionGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsAvailableDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsLoadingDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsNotAvailableDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsWarningDrawer.cs" />

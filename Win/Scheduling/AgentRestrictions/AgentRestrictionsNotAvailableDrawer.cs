@@ -4,15 +4,15 @@ using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {
-	public class AgentRestrictionsNotAvailableDrawer : IAgentRestrictionsNotAvailableDrawer
+	public class AgentRestrictionsNotAvailableDrawer : IAgentRestrictionsDrawer
 	{
-		public bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e)
+		public bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e, IAgentRestrictionsDisplayRow agentRestrictionsDisplayRow)
 		{
-			//TEST TEST TEST
 			if (view == null) throw new ArgumentNullException("view");
 			if (e == null) throw new ArgumentNullException("e");
+			if (agentRestrictionsDisplayRow == null) throw new ArgumentNullException("agentRestrictionsDisplayRow");
 
-			if (e.RowIndex == 3 && e.ColIndex > 0 && !view.FinishedTest)
+			if (agentRestrictionsDisplayRow.State.Equals(AgentRestrictionDisplayRowState.NotAvailable))
 			{
 				view.MergeCells(e.RowIndex, false);
 				e.Style.Text = UserTexts.Resources.NA;
