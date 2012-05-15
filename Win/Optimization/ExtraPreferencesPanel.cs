@@ -104,7 +104,8 @@ namespace Teleopti.Ccc.Win.Optimization
                     break;
             }
 
-            checkBoxTeams.Checked = Preferences.UseTeams;
+			if (checkBoxBlock.Checked) Preferences.UseTeams = false;
+			checkBoxTeams.Checked = Preferences.UseTeams;
 
             if (Preferences.GroupPageOnTeam != null)
                 comboBoxGroupPageOnTeams.SelectedValue = Preferences.GroupPageOnTeam.Key;
@@ -129,6 +130,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
         {
+        	checkBoxTeams.Enabled = !checkBoxBlock.Checked;
             setRadioButtonsStatus();
         }
 
@@ -140,10 +142,11 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void checkBoxTeams_CheckedChanged(object sender, System.EventArgs e)
         {
-            setComboGroupPageOnTeamsStatus();
+        	checkBoxBlock.Enabled = !checkBoxTeams.Checked;
+        	setComboGroupPageOnTeamsStatus();
         }
 
-        private void setComboGroupPageOnTeamsStatus()
+    	private void setComboGroupPageOnTeamsStatus()
         {
             comboBoxGroupPageOnTeams.Enabled = checkBoxTeams.Checked;
         }
