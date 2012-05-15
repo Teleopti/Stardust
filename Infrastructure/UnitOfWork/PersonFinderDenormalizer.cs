@@ -34,9 +34,18 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				var persons = (from p in modifiedRoots where p.Root is Person select p.Root).ToList();
 				foreach (var personList in persons.Batch(400))
 				{
-					var idsAsString = (from p in personList select ((Person) p).Id.ToString()).ToArray();
+					var idsAsString = (from p in personList select ((IAggregateRoot)p).Id.ToString()).ToArray();
 					var ids = string.Join(",", idsAsString);
 					runSql.Create(string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'",ids))
+						.Execute();
+				}
+
+				var notPerson = (from p in modifiedRoots where !(p.Root is Person) select p.Root).ToList();
+				foreach (var notpersonList in notPerson.Batch(400))
+				{
+					var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.ToString()).ToArray();
+					var ids = string.Join(",", idsAsString);
+					runSql.Create(string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", ids))
 						.Execute();
 				}
             }
