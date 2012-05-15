@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Factory
             {
 				foreach (var detail in shiftTradeRequestDto.ShiftTradeSwapDetails)
 				{
-                        ICustomScheduleAppointment scheduleItem = new CustomScheduleAppointment
+                    ICustomScheduleAppointment scheduleItem = new CustomScheduleAppointment
                                                                       {
                                                                           AllDay = true,
                                                                           LabelValue = 0,
