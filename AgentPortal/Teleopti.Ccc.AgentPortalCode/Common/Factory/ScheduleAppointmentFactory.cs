@@ -235,8 +235,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Factory
             {
 				foreach (var detail in shiftTradeRequestDto.ShiftTradeSwapDetails)
 				{
-                    //if (period.LocalStartDateTime > detail.DateFrom.DateTime || period.LocalEndDateTime < detail.DateTo.DateTime)continue;
-                        ICustomScheduleAppointment scheduleItem = new CustomScheduleAppointment
+                    ICustomScheduleAppointment scheduleItem = new CustomScheduleAppointment
                                                                       {
                                                                           AllDay = true,
                                                                           LabelValue = 0,
