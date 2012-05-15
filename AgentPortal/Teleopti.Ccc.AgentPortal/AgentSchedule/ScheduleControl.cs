@@ -565,7 +565,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                 if (scheduleControlMain.SelectedDates.Count > 0)
                 {
                     DateTime selectedDate = scheduleControlMain.SelectedDates[0] == DateTime.MinValue ?
-                           DateTime.Now : scheduleControlMain.ClickedDate;
+                           DateTime.Today : scheduleControlMain.ClickedDate.Date;
                     startDateTime = selectedDate.Date;
                     endDateTime = selectedDate.Date;
                 }
