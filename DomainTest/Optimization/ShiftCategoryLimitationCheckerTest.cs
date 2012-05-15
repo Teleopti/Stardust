@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _shiftCategoryLimitation.Weekly = true;
             _shiftCategoryLimitation.MaxNumberOf = 1;
-            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(null, null,
+            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(null,
                                                                                       new SchedulingOptions())
                                                      	{
                                                      		SchedulingOptions = {UseShiftCategoryLimitations = false}
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _shiftCategoryLimitation.Weekly = true;
             _shiftCategoryLimitation.MaxNumberOf = 1;
-            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(null, null,
+            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(null, 
                                                                                       new SchedulingOptions())
                                                      	{
                                                      		SchedulingOptions = {UseShiftCategoryLimitations = true}
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _shiftCategoryLimitation.Weekly = false;
             _shiftCategoryLimitation.MaxNumberOf = 1;
-            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(null, null,
+            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(null, 
                                                                                       new SchedulingOptions())
                                                      	{
                                                      		SchedulingOptions = {UseShiftCategoryLimitations = true}

@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public BlockFinderType BlockFinderTypeValue { get; set; }
 
 		public bool UseTeams { get; set; }
+		public bool KeepSameDaysOffInTeam { get; set; }
 		public IGroupPage GroupPageOnTeam { get; set; }
 
 		public double FairnessValue { get; set; }

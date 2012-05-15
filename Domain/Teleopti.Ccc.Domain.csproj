@@ -581,7 +581,6 @@
     <Compile Include="ResourceCalculation\PopulationStatisticsCalculator.cs" />
     <Compile Include="ResourceCalculation\PopulationStatisticsData.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusChecker.cs" />
-    <Compile Include="ResourceCalculation\OptimizerAdvancedPreferences.cs" />
     <Compile Include="RealTimeAdherence\AgentState.cs" />
     <Compile Include="RealTimeAdherence\AlarmSituation.cs" />
     <Compile Include="RealTimeAdherence\AlarmType.cs" />

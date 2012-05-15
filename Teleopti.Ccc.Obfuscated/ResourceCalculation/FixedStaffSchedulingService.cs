@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         IList<IWorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
-        void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService);
+		void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions);
         bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule);
     }
 
@@ -81,10 +81,10 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _scheduleService.ClearFinderResults();
         }
 
-        public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService)
+        public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
         {
             _absencePreferenceScheduler.AddPreferredAbsence(matrixList);
-            _dayOffScheduler.DayOffScheduling(matrixList, matrixListAll, rollbackService);
+            _dayOffScheduler.DayOffScheduling(matrixList, matrixListAll, rollbackService, schedulingOptions);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
