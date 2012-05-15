@@ -82,7 +82,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 				return false;
 			}
 
-			if (intervalLength != 15 & intervalLength != 30 & intervalLength != 60)
+			if (intervalLength != 10 & intervalLength != 15 & intervalLength != 30 & intervalLength != 60)
 			{
 				_logger.WarnFormat(CultureInfo.InvariantCulture, "Configuration for IntervalLength in db is invalid: '{0}'.", intervalLength);
 				return false;
