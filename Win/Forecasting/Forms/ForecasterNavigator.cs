@@ -126,6 +126,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				if (typeof (IWorkload).IsAssignableFrom(e.EntityType))
 				{
+					var repository = _repositoryFactory.CreateWorkloadRepository(uow);
 					foreach (Guid guid in e.UpdatedIds)
 					{
 						TreeNode[] foundNodes = treeViewSkills.Nodes.Find(guid.ToString(), true);
@@ -136,21 +137,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							foundNodes[0].Remove();
 						}
 
-						IWorkload workload = _repositoryFactory.CreateWorkloadRepository(uow).Get(guid);
-						var dTag = workload as IDeleteTag;
+						IWorkload workload = repository.Get(guid);
 						if (workload == null) continue;
-						if(dTag != null && dTag.IsDeleted)
+
+						var model = CreateWorkloadModel(workload);
+						if(model.IsDeleted)
 						{
 							foundNodes = treeViewSkills.Nodes.Find(workload.Skill.Id.ToString(), true);
-							if(foundNodes.Length>0) foundNodes[0].Tag = workload.Skill;
-							//Hmm, these need to be initialized, here
-							LazyLoadingManager.Initialize(workload.Skill.WorkloadCollection);
-							LazyLoadingManager.Initialize(workload.Skill.SkillType.ForecastSource);
+							if(foundNodes.Length>0) foundNodes[0].Tag = CreateSkillModel(workload.Skill);
+
 							continue;
 						}
 
-						TreeNode workloadNode = getWorkLoadNode(workload);
-						LazyLoadingManager.Initialize(workload.Skill.WorkloadCollection);
+						TreeNode workloadNode = getWorkLoadNode(model);
 						foundNodes = treeViewSkills.Nodes.Find(workload.Skill.Id.ToString(), true);
 						if (foundNodes.Length > 0)
 						{
@@ -172,6 +171,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					}
 					else
 					{
+						var repository = _repositoryFactory.CreateSkillRepository(uow);
 						foreach (Guid guid in e.UpdatedIds)
 						{
 							TreeNode[] foundNodes = treeViewSkills.Nodes.Find(guid.ToString(), true);
@@ -182,11 +182,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 								foundNodes[0].Remove();
 							}
 
-							ISkill skill = _repositoryFactory.CreateSkillRepository(uow).Get(guid);
-							var dTag = skill as IDeleteTag;
-							if (skill == null || (dTag != null && dTag.IsDeleted) || skill is IChildSkill) continue;
+							ISkill skill = repository.Get(guid);
+							if (skill==null) continue;
 
-							TreeNode skillNode = GetSkillNode(skill);
+							var model = CreateSkillModel(skill);
+							if (model.IsDeleted || model.IsChild) continue;
+
+							TreeNode skillNode = GetSkillNode(CreateSkillModel(skill));
 							foundNodes = treeViewSkills.Nodes.Find(skill.SkillType.Id.ToString(), false);
 							if (foundNodes.Length > 0)
 							{
@@ -202,15 +204,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private static void reloadSkillFromNode(TreeNode node,IUnitOfWork uow, bool force)
+		private void reloadSkillFromNode(TreeNode node,IUnitOfWork uow, bool force)
 		{
-			var skill = node.Tag as ISkill;
+			var skill = node.Tag as SkillModel;
 			if (skill == null) return;
-			if (force || !LazyLoadingManager.IsInitialized(skill.WorkloadCollection))
+			if (force || !skill.WorkloadModels.Any())
 			{
-				uow.Reassociate(skill);
-				uow.Refresh(skill);
-				LazyLoadingManager.Initialize(skill.WorkloadCollection);
+				var repository = _repositoryFactory.CreateSkillRepository(uow);
+				var updatedSkill = repository.Get(skill.Id);
+				node.Tag = CreateSkillModel(updatedSkill);
 			}
 		}
 
@@ -220,30 +222,58 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		//But it works for now, we need to go on with the Sprint
 		#region uow_Stuff 
 
-		private ICollection<ISkillType> loadSkillTypeCollection(IUnitOfWork uow)
+		private ICollection<SkillTypeModel> loadSkillTypeCollection(IUnitOfWork uow)
 		{
 			ISkillTypeRepository skillTypeRep = _repositoryFactory.CreateSkillTypeRepository(uow);
 			ICollection<ISkillType> skillTypes = skillTypeRep.FindAll();
-			return skillTypes;
+			return skillTypes.Select(s => new SkillTypeModel{Id = s.Id.GetValueOrDefault(),Name = s.Description.Name,ForecastSource = s.ForecastSource.ToString(),IsSkillTypePhone = s is ISkillTypePhone}).ToList();
 		}
 
-		private ICollection<ISkill> loadSkillCollection(IUnitOfWork uow)
+		private ICollection<SkillModel> loadSkillCollection(IUnitOfWork uow)
 		{
 			ISkillRepository skillRep = _repositoryFactory.CreateSkillRepository(uow);
 			ICollection<ISkill> skills = skillRep.FindAllWithWorkloadAndQueues();
 			skills = skills.Except(skills.OfType<IChildSkill>().Cast<ISkill>()).ToList();
-			return skills;
+			return skills.Select(CreateSkillModel).ToList();
+		}
+
+		private static SkillModel CreateSkillModel(ISkill skill)
+		{
+			return new SkillModel
+			       	{
+			       		Id = skill.Id.GetValueOrDefault(),
+			       		HasWorkloads = skill.WorkloadCollection.Any(),
+			       		Name = skill.Name,
+			       		SkillTypeId = skill.SkillType.Id.GetValueOrDefault(),
+			       		IsMultisite = skill is IMultisiteSkill,
+			       		IsChild = skill is IChildSkill,
+			       		IsDeleted = ((IDeleteTag)skill).IsDeleted,
+			       		WorkloadModels = skill.WorkloadCollection.Select(CreateWorkloadModel).ToList()
+			       	};
+		}
+
+		private static WorkloadModel CreateWorkloadModel(IWorkload workload)
+		{
+			return new WorkloadModel
+			       	{
+			       		Id = workload.Id.GetValueOrDefault(),
+			       		Name = workload.Name,
+			       		Queues =
+			       			workload.QueueSourceCollection.Select(q => new QueueModel {Id = q.Id.GetValueOrDefault(), Name = q.Name}).
+			       			ToList(),
+			       		IsDeleted = ((IDeleteTag) workload).IsDeleted
+			       	};
 		}
 
 		private void toolStripMenuItemActionSkillDelete_Click(object sender, EventArgs e)
 		{
-			var skill = (ISkill) _lastActionNode.Tag;
+			var skill = (SkillModel) _lastActionNode.Tag;
 			removeSkill(skill);
 		}
 
-		private void removeSkill(ISkill skill)
+		private void removeSkill(SkillModel skillModel)
 		{
-			string questionString = string.Format(CultureInfo.CurrentCulture, Resources.QuestionDeleteTheSkillTwoParameters, "\"", skill.Name);
+			string questionString = string.Format(CultureInfo.CurrentCulture, Resources.QuestionDeleteTheSkillTwoParameters, "\"", skillModel.Name);
 			if (ViewBase.ShowYesNoMessage(questionString, Resources.Delete) == DialogResult.Yes)
 			{
 				IEnumerable<IRootChangeInfo> changes;
@@ -251,7 +281,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				{
 					ISkillRepository skillRep = _repositoryFactory.CreateSkillRepository(uow);
 					IWorkloadRepository workloadRep = _repositoryFactory.CreateWorkloadRepository(uow);
-					skill = skillRep.Get(skill.Id.Value); //To solve Bug when removing MultisiteSkill, Get instead of Load as Load didn't enable the inheritance --> IMultisiteSkill
+					var skill = skillRep.Get(skillModel.Id); //To solve Bug when removing MultisiteSkill, Get instead of Load as Load didn't enable the inheritance --> IMultisiteSkill
 					
 					IMultisiteSkill multisiteSkill = skill as IMultisiteSkill;
 					if (multisiteSkill != null)
@@ -277,9 +307,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.ViewBase.ShowInformationMessage(System.Windows.Forms.IWin32Window,System.String,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.ViewBase.ShowInformationMessage(System.String,System.String)")]
-        private void removeWorkload(IWorkload workload)
+        private void removeWorkload(WorkloadModel workloadModel)
 		{
-			string questionString = string.Format(CultureInfo.CurrentCulture, Resources.QuestionDeleteTheWorkloadTwoParameters, "\"", workload.Name);
+			string questionString = string.Format(CultureInfo.CurrentCulture, Resources.QuestionDeleteTheWorkloadTwoParameters, "\"", workloadModel.Name);
 
 			if (ViewBase.ShowYesNoMessage(questionString, Resources.Delete) == DialogResult.Yes)
 			{
@@ -289,9 +319,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     IEnumerable<IRootChangeInfo> changes;
                     using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                     {
-                        uow.Reassociate(workload);
-                        uow.Reassociate(workload.Skill);
-                        _repositoryFactory.CreateWorkloadRepository(uow).Remove(workload);
+						var repository = _repositoryFactory.CreateWorkloadRepository(uow);
+						var workload = repository.Get(workloadModel.Id);
+						repository.Remove(workload);
                         changes = uow.PersistAll();
                     }
                     EntityEventAggregator.TriggerEntitiesNeedRefresh(ParentForm, changes);
@@ -299,10 +329,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 catch (OptimisticLockException)
                 {
                     string templateMessage = string.Concat(UserTexts.Resources.SomeoneElseHaveChanged, " {0}{1}{0} ", UserTexts.Resources.YourChangesWillBeDiscardedReloading);
-                    string message = string.Format(CultureInfo.CurrentCulture, templateMessage, "\"", workload.Name);
+                    string message = string.Format(CultureInfo.CurrentCulture, templateMessage, "\"", workloadModel.Name);
                     
                     ViewBase.ShowInformationMessage(this, message, UserTexts.Resources.SaveError);
-                    EntityEventAggregator.TriggerEntitiesNeedRefresh(ParentForm, new List<IAggregateRoot> {workload});
                 }
 			}
 		}
@@ -315,26 +344,25 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 			TreeNode skillNode;
 
-			foreach (ISkillType type in loadSkillTypeCollection(uow))// Program.CommonState.SkillTypes)
+			foreach (SkillTypeModel type in loadSkillTypeCollection(uow))// Program.CommonState.SkillTypes)
 			{
 				skillNode = new TreeNode
 								{
 									Name = type.Id.ToString(),
-									Text = Resources.ResourceManager.GetString(type.Description.Name),
-									ImageKey = type.ForecastSource.ToString()
+									Text = Resources.ResourceManager.GetString(type.Name),
+									ImageKey = type.ForecastSource
 								};
 				skillNode.SelectedImageKey = skillNode.ImageKey;
 				skillNode.Tag = type;
 				skillNodes.Add(skillNode);
 			}
 
-			ICollection<ISkill> skills = loadSkillCollection(uow);
-			foreach (ISkill aSkill in skills) //Program.CommonState.Skills)
+			ICollection<SkillModel> skills = loadSkillCollection(uow);
+			foreach (SkillModel aSkill in skills) //Program.CommonState.Skills)
 			{
-				var dTag = aSkill as IDeleteTag;
-				if (dTag != null && dTag.IsDeleted) continue;
+				if (aSkill.IsDeleted) continue;
 				skillNode = GetSkillNode(aSkill);
-				skillNodes[aSkill.SkillType.Id.ToString()].Nodes.Add(skillNode);
+				skillNodes[aSkill.SkillTypeId.ToString()].Nodes.Add(skillNode);
 				reloadWorkloadNodes(skillNode);
 			}
 		}
@@ -342,21 +370,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private static void reloadWorkloadNodes(TreeNode skillNode)
 		{
 			skillNode.Nodes.Clear();
-			var aSkill = (ISkill) skillNode.Tag;
+			var aSkill = (SkillModel) skillNode.Tag;
 			
-			foreach (IWorkload workload in aSkill.WorkloadCollection)
+			foreach (WorkloadModel workload in aSkill.WorkloadModels)
 			{
-				if (((IDeleteTag)workload).IsDeleted) continue;
+				if (workload.IsDeleted) continue;
 
 				TreeNode workLoadNode = getWorkLoadNode(workload);
 				skillNode.Nodes.Add(workLoadNode);
 				reloadQueueSourceNodes(workLoadNode);
-				if (!LazyLoadingManager.IsInitialized(workload.QueueSourceCollection))
-				LazyLoadingManager.Initialize(workload.QueueSourceCollection);
 			}
 		}
 
-		private static TreeNode getWorkLoadNode(IWorkload workload)
+		private static TreeNode getWorkLoadNode(WorkloadModel workload)
 		{
 			var workLoadNode = new TreeNode(workload.Name)
 								{
@@ -371,9 +397,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private static void reloadQueueSourceNodes(TreeNode workLoadNode)
 		{
 			workLoadNode.Nodes.Clear();
-			var source = (IWorkload)workLoadNode.Tag;
+			var source = (WorkloadModel)workLoadNode.Tag;
 			TreeNode ctiQueueSourceNode;
-			foreach (IQueueSource queueSource in source.QueueSourceCollection)
+			foreach (QueueModel queueSource in source.Queues)
 			{
 				ctiQueueSourceNode = new TreeNode(queueSource.Name) {Name = queueSource.Id.ToString()};
 				workLoadNode.Nodes.Add(ctiQueueSourceNode);
@@ -381,10 +407,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private static TreeNode GetSkillNode(ISkill aSkill)
+		private static TreeNode GetSkillNode(SkillModel aSkill)
         {
 
-            if (aSkill.GetType().Name == "Skill")
+            if (!aSkill.IsMultisite)
             {
                 var skillNode = new TreeNode(aSkill.Name)
                 {
@@ -447,10 +473,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void queryPersonForNewSkill(TreeNode node)
 		{
-			ISkillType st = getSkillType(node);
-			using(var swp = new SkillWizardPages(st,_repositoryFactory,_unitOfWorkFactory))
+			SkillTypeModel st = getSkillType(node);
+			var skillType = GetInitializedSkillType(st);
+			using(var swp = new SkillWizardPages(skillType,_repositoryFactory,_unitOfWorkFactory))
 			{
-				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, st), new LazyLoadingManagerWrapper());
+				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))
 				{
 					swp.Saved += swp_AfterSave;
@@ -459,15 +486,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
         
-		private ISkillType getSkillType(TreeNode node)
+		private SkillTypeModel getSkillType(TreeNode node)
 		{
 			if (node == null)
 			{
 				node = treeViewSkills.SelectedNode ?? treeViewSkills.Nodes[0];
 			}
 
-			node = findAncestorNodeOfType(node, typeof(ISkillType));
-			return (ISkillType)node.Tag;
+			node = findAncestorNodeOfType(node, typeof(SkillTypeModel));
+			return (SkillTypeModel)node.Tag;
 		}
 
 		private void swp_AfterSave(object sender, AfterSavedEventArgs e)
@@ -481,7 +508,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
 		private void InitializeWorkloadCollectionForSkill(ISkill skill, IAbstractPropertyPages skillPropertyPages)
 		{
-			if (skill.WorkloadCollection.Count() == 0)
+			if (!skill.WorkloadCollection.Any())
 			{
 				if (MessageBox.Show(string.Concat(Resources.QuestionWouldYouLikeToCreateWorkloadQuestionMark, "  "),
 					Resources.Skill,
@@ -513,8 +540,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						(RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0)
 						== DialogResult.Yes);
 				}
-				TreeNode[] foundNodes = treeViewSkills.Nodes.Find(skill.Id.Value.ToString(), true);
-				if (foundNodes.Length > 0) foundNodes[0].Tag = skill; //Just to make sure you can open forecast afterwards
+				TreeNode[] foundNodes = treeViewSkills.Nodes.Find(skill.Id.GetValueOrDefault().ToString(), true);
+				if (foundNodes.Length > 0) foundNodes[0].Tag = CreateSkillModel(skill); //Just to make sure you can open forecast afterwards
 			}
 		}
 
@@ -568,19 +595,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_lastActionNode = e.Node;
 			
 			//to display smartpart
-			if (typeof(ISkill).IsInstanceOfType(e.Node.Tag))
+			if (e.Node.Tag is SkillModel)
 			{
-				var skill = _lastActionNode.Tag as ISkill;
+				var skill = _lastActionNode.Tag as SkillModel;
 				if (skill != null)
 				{
 					SmartPartEnvironment.SmartPartWorkspace.GridSize = GridSizeType.TwoByTwo;
-					loadSmartPart(skill.Id.Value, 1, Resources.SkillValidationSmartPart, classPrefix + validation, 0, 0);
-					loadSmartPart(skill.Id.Value, 2, Resources.DetailedForecastSmartPart, classPrefix + detailed, 0, 1);
-					loadSmartPart(skill.Id.Value, 3, Resources.BudgetForecasting, classPrefix + budget, 1, 0);
-					loadSmartPart(skill.Id.Value, 4, Resources.TemplatesSmartpart, classPrefix + template, 1, 1);
+					loadSmartPart(skill.Id, 1, Resources.SkillValidationSmartPart, classPrefix + validation, 0, 0);
+					loadSmartPart(skill.Id, 2, Resources.DetailedForecastSmartPart, classPrefix + detailed, 0, 1);
+					loadSmartPart(skill.Id, 3, Resources.BudgetForecasting, classPrefix + budget, 1, 0);
+					loadSmartPart(skill.Id, 4, Resources.TemplatesSmartpart, classPrefix + template, 1, 1);
 				}
 			}
-			setMenu(_lastActionNode.Tag as IEntity);
+			setMenu(_lastActionNode.Tag);
 		}
 
 		private void treeViewSkills_MouseDown(object sender, MouseEventArgs e)
@@ -591,7 +618,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				_lastContextMenuNode = getNodeFromPosition(e);
 				if (_lastContextMenuNode == null) return;
 
-				setContextMenu(_lastContextMenuNode.Tag as IEntity);
+				setContextMenu(_lastContextMenuNode.Tag);
 			}
 			//note i undo the fake paint
 			if (treeViewSkills.Nodes[0].BackColor != ColorHelper.StandardTreeBackgroundColor()) unFakeClickColor();
@@ -599,23 +626,23 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				treeViewSkills.SelectedNode = getNodeFromPosition(e);
 		}
 
-		private void setMenu(IEntity nodeEntity)
+		private void setMenu(object nodeEntity)
 		{
-			if (nodeEntity is ISkillType)
+			if (nodeEntity is SkillTypeModel)
 			{
 				toggleToolstrips(toolStripSkillTypes);
 			}
-			else if (nodeEntity is ISkill)
+			else if (nodeEntity is SkillModel)
 			{
 				workloadOnSkillCheck();
 				multisiteSkillOnSkillCheck();
 				toggleToolstrips(toolStripSkills);
 			}
-			else if (nodeEntity is IWorkload)
+			else if (nodeEntity is WorkloadModel)
 			{
 				toggleToolstrips(toolStripWorkload);
 			}
-			else if (nodeEntity is IQueueSource)
+			else if (nodeEntity is QueueModel)
 			{
 				toggleToolstrips(toolStripQueues);
 			}
@@ -625,27 +652,28 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void setContextMenu(IEntity nodeEntity)
+		private void setContextMenu(object nodeEntity)
 		{
-			if (nodeEntity is ISkillType)
+			var skillTypeModel = nodeEntity as SkillTypeModel;
+			if (skillTypeModel!=null)
 			{
 				treeViewSkills.ContextMenuStrip = contextMenuStripSkillTypes;
-				if (nodeEntity is ISkillTypePhone)
+				if (skillTypeModel.IsSkillTypePhone)
 				{
 					toggleExportMenu();
 				}
 			}
-			else if (nodeEntity is ISkill)
+			else if (nodeEntity is SkillModel)
 			{
 				workloadOnSkillCheck();
 				multisiteSkillOnSkillCheck();
 				treeViewSkills.ContextMenuStrip = contextMenuStripSkills;
 			}
-			else if (nodeEntity is IWorkload)
+			else if (nodeEntity is WorkloadModel)
 			{
 				treeViewSkills.ContextMenuStrip = contextMenuStripWorkloads;
 			}
-			else if (nodeEntity is IQueueSource)
+			else if (nodeEntity is QueueModel)
 			{
 				treeViewSkills.ContextMenuStrip = contextMenuStripQueues;
 			}
@@ -679,9 +707,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void multisiteSkillOnSkillCheck()
 		{
-			var multisiteSkill = _lastActionNode.Tag as IMultisiteSkill;
-			toolStripButtonManageMultisiteDistributions.Visible = (multisiteSkill != null);
-			toolStripMenuItemManageMultisiteDistributions.Visible = (multisiteSkill != null);
+			var multisiteSkill = _lastActionNode.Tag as SkillModel;
+			toolStripButtonManageMultisiteDistributions.Visible = (multisiteSkill != null && multisiteSkill.IsMultisite);
+			toolStripMenuItemManageMultisiteDistributions.Visible = (multisiteSkill != null && multisiteSkill.IsMultisite);
 		}
 
 		private void workloadOnSkillCheck()
@@ -726,26 +754,48 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void queryPersonForNewWorkload(TreeNode node)
 		{
-			node = findAncestorNodeOfType(node, typeof(ISkill));
+			node = findAncestorNodeOfType(node, typeof(SkillModel));
 
-			var s = (ISkill)node.Tag;
+			var s = (SkillModel)node.Tag;
 
-			using(var wwp = new WorkloadWizardPages(s,_repositoryFactory,_unitOfWorkFactory))
+			var skill = GetInitializedSkill(s);
+
+			using(var wwp = new WorkloadWizardPages(skill,_repositoryFactory,_unitOfWorkFactory))
 			{
 				wwp.Initialize(PropertyPagesHelper.GetWorkloadPages(), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(wwp))
 				{
 					if (wizard.ShowDialog(this) == DialogResult.Cancel)
-					{
-						if (s.WorkloadCollection.Contains(wwp.AggregateRootObject))
-						{
-							s.RemoveWorkload(wwp.AggregateRootObject);
-						}
-					}
+					{}
 				}
 			}     
 		}
 
+		private ISkill GetInitializedSkill(SkillModel skillModel)
+		{
+			using(var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				var repository = _repositoryFactory.CreateSkillRepository(unitOfWork);
+				var skill = repository.Get(skillModel.Id);
+				LazyLoadingManager.Initialize(skill.WorkloadCollection);
+				LazyLoadingManager.Initialize(skill.SkillType);
+				LazyLoadingManager.Initialize(skill.TemplateWeekCollection);
+				return skill;
+			}
+		}
+
+		private IWorkload GetInitializedWorkload(WorkloadModel workloadModel)
+		{
+			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				var repository = _repositoryFactory.CreateWorkloadRepository(unitOfWork);
+				var workload = repository.Get(workloadModel.Id);
+				LazyLoadingManager.Initialize(workload.Skill);
+				LazyLoadingManager.Initialize(workload.Skill.SkillType);
+				LazyLoadingManager.Initialize(workload.TemplateWeekCollection);
+				return workload;
+			}
+		}
 
 		private void toolStripMenuItemNewWorkload_Click(object sender, EventArgs e)
 		{
@@ -759,44 +809,52 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripMenuItemSkillsDelete_Click(object sender, EventArgs e)
 		{
-			var skill = (ISkill)_lastContextMenuNode.Tag;
+			var skill = (SkillModel)_lastContextMenuNode.Tag;
 			removeSkill(skill);
 		}
 
 		void toolStripMenuItemActionWorkloadDelete_Click(object sender, EventArgs e)
 		{
-			var workload = (IWorkload) _lastActionNode.Tag;
+			var workload = (WorkloadModel) _lastActionNode.Tag;
 			removeWorkload(workload);
 		}
 
 		private void toolStripMenuItemDeleteWorkload_Click(object sender, EventArgs e)
 		{
-			var workload = (IWorkload)_lastContextMenuNode.Tag;
+			var workload = (WorkloadModel)_lastContextMenuNode.Tag;
 			removeWorkload(workload);
 		}
 
 		private void toolStripMenuItemRemoveQueue_Click(object sender, EventArgs e)
 		{
-			var workload = (IWorkload)_lastContextMenuNode.Parent.Tag;
-			var queueSource = (IQueueSource)_lastContextMenuNode.Tag;
+			var workload = (WorkloadModel)_lastContextMenuNode.Parent.Tag;
+			var queueSource = (QueueModel)_lastContextMenuNode.Tag;
 			removeQueueSource(workload, queueSource);
 		}
 
 		private void toolStripMenuItemActionQueueSourceDelete_Click(object sender, EventArgs e)
 		{
-			var workload = (IWorkload) _lastActionNode.Parent.Tag;
-			var queueSource = (IQueueSource) _lastActionNode.Tag;
+			var workload = (WorkloadModel) _lastActionNode.Parent.Tag;
+			var queueSource = (QueueModel) _lastActionNode.Tag;
 			removeQueueSource(workload, queueSource);
 		}
 
-		private void removeQueueSource(IWorkload workload, IQueueSource queueSource)
+		private void removeQueueSource(WorkloadModel workloadModel, QueueModel queueSourceModel)
 		{
-			IEnumerable<IRootChangeInfo> changes;
+			IEnumerable<IRootChangeInfo> changes = new List<IRootChangeInfo>();
 			using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				uow.Reassociate(workload);
-				workload.RemoveQueueSource(queueSource);
-				changes = uow.PersistAll();
+				var repository = _repositoryFactory.CreateWorkloadRepository(uow);
+				var workload = repository.Get(workloadModel.Id);
+				if (workload != null)
+				{
+					var queueSource = workload.QueueSourceCollection.FirstOrDefault(q => q.Id == queueSourceModel.Id);
+					if (queueSource != null)
+					{
+						workload.RemoveQueueSource(queueSource);
+						changes = uow.PersistAll();
+					}
+				}
 			}
 			EntityEventAggregator.TriggerEntitiesNeedRefresh(ParentForm, changes);
 		}
@@ -804,18 +862,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripMenuItemWorkloadProperties_Click(object sender, EventArgs e)
 		{
-			var w = (IWorkload)_lastContextMenuNode.Tag;
+			var w = (WorkloadModel)_lastContextMenuNode.Tag;
 			showWorkloadProperties(w);
 		}
 
 		void toolStripMenuItemActionWorkloadProperties_Click(object sender, EventArgs e)
 		{
-			var w = (IWorkload) _lastActionNode.Tag;
+			var w = (WorkloadModel) _lastActionNode.Tag;
 			showWorkloadProperties(w);
 		}
 
-		private void showWorkloadProperties(IWorkload workload)
+		private void showWorkloadProperties(WorkloadModel workloadModel)
 		{
+			var workload = GetInitializedWorkload(workloadModel);
 			using (var wpp = new WorkloadPropertiesPages(workload,_repositoryFactory,_unitOfWorkFactory))
 			{
 				wpp.Initialize(PropertyPagesHelper.GetWorkloadPages(), new LazyLoadingManagerWrapper());
@@ -825,7 +884,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				}
 			}
 		}
-
 
 		private void toolStripMenuItemActionSkillProperties_Click(object sender, EventArgs e)
 		{
@@ -839,16 +897,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void showSkillProperties()
 		{
-			var skill = _lastActionNode.Tag as Skill ?? _lastActionNode.Tag as MultisiteSkill;
-		   
-			if (skill == null) return;
+			var skillModel = (SkillModel)_lastActionNode.Tag;
+			if (skillModel == null) return;
 
             try
             {
+            	var skill = GetInitializedSkill(skillModel);
                 using (var spp = new SkillPropertiesPages(skill, _repositoryFactory, _unitOfWorkFactory))
                 {
                     var pages = PropertyPagesHelper.GetSkillPages(false, spp);
-                    if (skill is IMultisiteSkill) PropertyPagesHelper.AddMultisiteSkillPages(pages);
+                    if (skillModel.IsMultisite) PropertyPagesHelper.AddMultisiteSkillPages(pages);
                     spp.Initialize(pages, new LazyLoadingManagerWrapper());
                     using (var propertiesPages = new PropertiesPages(spp))
                     {
@@ -871,37 +929,45 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripMenuCreateForecast_Click(object sender, EventArgs e)
 		{
-			ISkill skill = null;
+			SkillModel skillModel = null;
 			if (_lastActionNode != null)
 			{
-				skill = _lastActionNode.Tag as ISkill;
+				skillModel = _lastActionNode.Tag as SkillModel;
 			}
-			if (skill == null && _lastContextMenuNode != null)
+			if (skillModel == null && _lastContextMenuNode != null)
 			{
-				skill = _lastContextMenuNode.Tag as ISkill;
+				skillModel = _lastContextMenuNode.Tag as SkillModel;
 			}
-			if (skill == null)
+			if (skillModel == null)
 			{
-				IWorkload workload = null;
+				WorkloadModel workloadModel = null;
 				if (_lastActionNode != null)
 				{
-					workload = _lastActionNode.Tag as IWorkload;
+					workloadModel = _lastActionNode.Tag as WorkloadModel;
+					if (workloadModel!=null)
+					{
+						skillModel = _lastActionNode.Parent.Tag as SkillModel;
+					}
 				}
-				if (workload == null && _lastContextMenuNode != null)
+				if (workloadModel == null && _lastContextMenuNode != null)
 				{
-					workload = _lastContextMenuNode.Tag as IWorkload;
+					workloadModel = _lastContextMenuNode.Tag as WorkloadModel;
+					if (workloadModel!=null)
+					{
+						skillModel = _lastContextMenuNode.Parent.Tag as SkillModel;
+					}
 				}
-				if (workload == null)
+				if (skillModel == null)
 					return;
-				skill = workload.Skill;
 			}
-			if (skill.WorkloadCollection.Count() == 0) return;
+			if (!skillModel.HasWorkloads) return;
 
-			OpenWizard(skill);
+			OpenWizard(skillModel);
 		}
 
-		private void OpenWizard(ISkill skill)
+		private void OpenWizard(SkillModel skillModel)
 		{
+			var skill = GetInitializedSkill(skillModel);
 			using (var openForecast = new OpenScenarioForPeriod(new OpenPeriodForecasterMode()))
 			{
 				if (openForecast.ShowDialog() != DialogResult.Cancel)
@@ -922,11 +988,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private void showPrepareWorkload(IWorkload workload)
+		private void showPrepareWorkload(WorkloadModel workloadModel)
 		{
 			Cursor = Cursors.WaitCursor;
-			if (workload != null)
+			if (workloadModel != null)
 			{
+				var workload = GetInitializedWorkload(workloadModel);
 				var forecastWorkflow = new ForecastWorkflow(workload);
 				forecastWorkflow.Show();
 			}
@@ -935,21 +1002,22 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		void toolStripMenuItemActionWorkloadPrepareForecast_Click(object sender, EventArgs e)
 		{
-			var w = _lastActionNode.Tag as IWorkload;
+			var w = _lastActionNode.Tag as WorkloadModel;
 			showPrepareWorkload(w);
 		}
 
 		private void toolStripMenuItemWorkloadPrepareWorkload_Click(object sender, EventArgs e)
 		{
-			var w = _lastContextMenuNode.Tag as IWorkload;
+			var w = _lastContextMenuNode.Tag as WorkloadModel;
 			showPrepareWorkload(w);
 		}
 
 		private void toolStripMenuItemManageDayTemplates_Click(object sender, EventArgs e)
 		{
-			var skill = _lastActionNode.Tag as ISkill;
-			if (skill != null)
+			var skillModel = _lastActionNode.Tag as SkillModel;
+			if (skillModel != null)
 			{
+				var skill = GetInitializedSkill(skillModel);
 				var templateTool = new SkillDayTemplates(skill);
 				templateTool.Show(this);
 			}
@@ -957,31 +1025,42 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripMenuItemActionSkillNewMultisiteSkill_Click(object sender, EventArgs e)
 		{
-			ISkillType skillType = getSkillType(_lastActionNode);
+			var skillType = getSkillType(_lastActionNode);
 			createMultisiteSkill(skillType);
 		}
 
 		private void toolStripMenuItemMultisiteSkillNew_Click(object sender, EventArgs e)
 		{
-			ISkillType skillType = getSkillType(_lastContextMenuNode);
+			var skillType = getSkillType(_lastContextMenuNode);
 			createMultisiteSkill(skillType);
 		}
 
 		private void toolStripMenuItemActionSkillTypeNewMultisiteSkill_Click(object sender, EventArgs e)
 		{
-			ISkillType skillType = getSkillType(_lastActionNode);
+			var skillType = getSkillType(_lastActionNode);
 			createMultisiteSkill(skillType);
 		}
 
 		private void toolStripMenuItemSkillTypesMultisiteSkillNew_Click(object sender, EventArgs e)
 		{
-			ISkillType skillType = getSkillType(_lastContextMenuNode);
+			var skillType = getSkillType(_lastContextMenuNode);
 			createMultisiteSkill(skillType);
 		}
 
-		private void createMultisiteSkill(ISkillType skillType)
+		private ISkillType GetInitializedSkillType(SkillTypeModel skillTypeModel)
+		{
+			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				var repsoitory = _repositoryFactory.CreateSkillTypeRepository(uow);
+				return repsoitory.Get(skillTypeModel.Id);
+			}
+		}
+
+		private void createMultisiteSkill(SkillTypeModel skillTypeModel)
 		{
             var culture = TeleoptiPrincipal.Current.Regional.Culture;
+			var skillType = GetInitializedSkillType(skillTypeModel);
+
 			IMultisiteSkill skill = new MultisiteSkill(
 				Resources.LessThanSkillNameGreaterThan,
                 string.Format(culture, Resources.SkillCreatedDotParameter0, DateTime.Now),
@@ -1090,10 +1169,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		
 		private void toolStripMenuItemManageDistribution_Click(object sender, EventArgs e)
 		{
-			var skill = _lastActionNode.Tag as IMultisiteSkill;
-			if (skill != null)
+			var skillModel = _lastActionNode.Tag as SkillModel;
+			if (skillModel != null && skillModel.IsMultisite)
 			{
-				var templateTool = new MultisiteDayTemplates(skill);
+				var skill = GetInitializedSkill(skillModel);
+				var templateTool = new MultisiteDayTemplates((IMultisiteSkill)skill);
 				templateTool.Show(this);
 			}
 		}
@@ -1106,8 +1186,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripMenuItemCopyTo_Click(object sender, EventArgs e)
 		{
-			var workload = _lastActionNode.Tag as IWorkload;
-
+			var workloadModel = _lastActionNode.Tag as WorkloadModel;
+			var workload = GetInitializedWorkload(workloadModel);
 			var model = new CopyToSkillModel(workload);
 			using(var view = new CopyToSkillView(model))
 			{
@@ -1206,13 +1286,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void importForecast(TreeNode node)
         {
-            node = findAncestorNodeOfType(node, typeof(ISkill));
-            var skill = (ISkill)node.Tag;
-            if (skill.WorkloadCollection.Count() == 0)
+            node = findAncestorNodeOfType(node, typeof(SkillModel));
+            var skillModel = (SkillModel)node.Tag;
+            if (!skillModel.HasWorkloads)
             {
                 ViewBase.ShowWarningMessage("No workload available.", Resources.ImportError);
                 return;
             }
+        	var skill = GetInitializedSkill(skillModel);
             _importForecastViewFactory.Create(skill);
         }
 
@@ -1225,5 +1306,40 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             importForecast(_lastActionNode);
         }
+
+		private class SkillModel
+		{
+			public Guid Id { get; set; }
+			public string Name { get; set; }
+			public bool HasWorkloads { get; set; }
+			public bool IsMultisite { get; set; }
+			public IList<WorkloadModel> WorkloadModels { get; set; }
+			public Guid SkillTypeId { get; set; }
+			public bool IsDeleted { get; set; }
+
+			public bool IsChild { get; set; }
+		}
+
+		private class SkillTypeModel
+		{
+			public Guid Id { get; set; }
+			public string Name { get; set; }
+			public string ForecastSource { get; set; }
+			public bool IsSkillTypePhone { get; set; }
+		}
+
+		private class WorkloadModel
+		{
+			public Guid Id { get; set; }
+			public string Name { get; set; }
+			public IList<QueueModel> Queues { get; set; }
+			public bool IsDeleted { get; set; }
+		}
+
+		private class QueueModel
+		{
+			public Guid Id { get; set; }
+			public string Name { get; set; }
+		}
 	}
 }
