@@ -101,6 +101,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager
 			NameValueCollection newQs = HttpUtility.ParseQueryString(queryString.ToString());
 			newQs.Remove("reportid");
 			newQs.Remove("reportname");
+			newQs.Remove("new");
 			
 			return newQs.ToString();
 		}
