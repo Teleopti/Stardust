@@ -322,12 +322,5 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <returns></returns>
 		[OperationContract]
 		    	ICollection<ScenarioDto> GetScenariosByQuery(QueryDto queryDto);
-		
-		/// <summary>
-        /// Find people available for shift trade request.
-        /// </summary>
-        /// <param name="queryDto">The query.</param>
-        [OperationContract]
-        ICollection<PersonDto> GetPeopleForShiftTradeByQuery(QueryDto queryDto);    	
     }
 }

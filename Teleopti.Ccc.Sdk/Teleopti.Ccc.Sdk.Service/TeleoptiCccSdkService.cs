@@ -555,12 +555,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}
 		}
 
-        public ICollection<PersonDto> GetPeopleForShiftTradeByQuery(QueryDto queryDto)
-        {
-            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PersonDto>>>();
-            return invoker.Invoke(queryDto);
-        }
-
         private void CreateServerScheduleDistribution(IList<PersonDto> personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{
             using (var inner = _lifetimeScope.BeginLifetimeScope())
