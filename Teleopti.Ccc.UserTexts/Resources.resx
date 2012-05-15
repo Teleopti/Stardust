@@ -10639,9 +10639,6 @@ These options are activated:
     <value>External resource is using by another program, please try again later.</value>
     <comment>External resource is using by another program, please try again later.</comment>
   </data>
-  <data name="AbsenceType" xml:space="preserve">
-    <value>Absence Type:</value>
-    <comment>Absence Type label</comment>
   <data name="ImportForecastFromFile" xml:space="preserve">
     <value>Import forecast from file</value>
     <comment>Import forecast from file</comment>
@@ -10672,4 +10669,13 @@ These options are activated:
   <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
     <value>The interval length of this subskill should be the same as its parent skill, which is {0} minutes.</value>
     <comment>The interval length of this subskill should be the same as its parent skill, which is 15 minutes.</comment>
+  </data>
+  <data name="AbsenceType" xml:space="preserve">
+    <value>Absence type</value>
+    <comment>The type of absence to use in absence requests</comment>
+  </data>
+  <data name="AbsenceRequestsWeb" xml:space="preserve">
+    <value>Absence requests</value>
+    <comment>Application function Absence requests for the web</comment>
+  </data>
 </root>
