@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
         {
             try
             {
-            	var query = new GetSchedulesByPersonQueryHandlerDto
+            	var query = new GetSchedulesByPersonQueryDto
             	            	{
             	            		StartDate = dateOnlyDto,
             	            		EndDate = dateOnlyDto,
