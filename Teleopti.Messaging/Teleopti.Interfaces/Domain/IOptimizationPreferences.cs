@@ -296,6 +296,14 @@ namespace Teleopti.Interfaces.Domain
         /// <value><c>true</c> if use team scheduling; otherwise, <c>false</c>.</value>
         bool UseTeams { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [keep same days off in team].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [keep same days off in team]; otherwise, <c>false</c>.
+		/// </value>
+		bool KeepSameDaysOffInTeam { get; set; }
+
         /// <summary>
         /// Gets or sets the group page on team.
         /// </summary>

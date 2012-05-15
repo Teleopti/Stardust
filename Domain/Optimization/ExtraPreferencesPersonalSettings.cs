@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private bool _useBlockScheduling;
 		private bool _useTeams;
+		private bool _useSameDaysOffForTeams;
 		private bool _keepShiftCategories;
 		private bool _keepStartAndEndTimes;
 		private bool _keepShifts;
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			target.BlockFinderTypeValue = _blockFinderTypeValue;
 			target.UseBlockScheduling = _useBlockScheduling;
 			target.UseTeams = _useTeams;
+			target.KeepSameDaysOffInTeam = _useSameDaysOffForTeams;
 
 			target.KeepShiftCategories = _keepShiftCategories;
 			target.KeepStartAndEndTimes = _keepStartAndEndTimes;
@@ -61,6 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_blockFinderTypeValue = source.BlockFinderTypeValue;
 			_useBlockScheduling = source.UseBlockScheduling;
 			_useTeams = source.UseTeams;
+			_useSameDaysOffForTeams = source.KeepSameDaysOffInTeam;
 
 			_keepShiftCategories = source.KeepShiftCategories;
 			_keepStartAndEndTimes = source.KeepStartAndEndTimes;

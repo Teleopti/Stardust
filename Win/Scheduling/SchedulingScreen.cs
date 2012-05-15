@@ -134,11 +134,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private ClipboardControl _clipboardControl;
         private EditControl _editControl;
         private bool _uIEnabled = true;
-
-        private SchedulePartFilter SchedulePartFilter = SchedulePartFilter.None;
-
-        private IOptimizerAdvancedPreferences _optimizerAdvancedPreferences;
-
+    	private SchedulePartFilter SchedulePartFilter = SchedulePartFilter.None;
         private bool _chartInIntradayMode;
 
         private IHandleBusinessRuleResponse _handleBusinessRuleResponse;
@@ -427,7 +423,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             setUpZomMenu();
             var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
             _container = lifetimeScope.BeginLifetimeScope();
-            _optimizerOriginalPreferences = _container.Resolve<IOptimizerOriginalPreferences>();
+            _optimizerOriginalPreferences = new OptimizerOriginalPreferences(new DayOffPlannerRules(), new SchedulingOptions());
             _optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
             _overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
             _ruleSetProjectionService = _container.Resolve<IRuleSetProjectionService>();
@@ -3275,8 +3271,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             setThreadCulture();
             _optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator,
-                                                               _optimizerOriginalPreferences.SchedulingOptions.
-                                                                   ConsiderShortBreaks, true);
+                                                               true, true);
         }
 
         private void validateAllPersons()
@@ -7287,15 +7282,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         #endregion
-
-        private IOptimizerAdvancedPreferences getReOptimizerCriteriaPreferences()
-        {
-            if (_optimizerAdvancedPreferences == null)
-                _optimizerAdvancedPreferences = new OptimizerAdvancedPreferences();
-
-            return _optimizerAdvancedPreferences;
-        }
-
 
         // becaused called on another thread sometimes
         private delegate void ToggleQuickButtonEnabledState(ToolStripItem button, bool enable);

@@ -268,11 +268,9 @@
     <Compile Include="Domain\IFairnessValueResult.cs" />
     <Compile Include="Domain\IMultiplicatorDefinitionAdapter.cs" />
     <Compile Include="Domain\IntervalDefinition.cs" />
-    <Compile Include="Domain\IOptimizerAdvancedPreferences.cs" />
     <Compile Include="Domain\IOptimizerOriginalPreferences.cs" />
     <Compile Include="Domain\IRemoveShiftCategoryBackToLegalService.cs" />
     <Compile Include="Domain\IScheduleDayService.cs" />
-    <Compile Include="Domain\IResourceOptimizationFactory.cs" />
     <Compile Include="Domain\IScheduleMatrixPro.cs" />
     <Compile Include="Domain\IScheduleMatrixValueCalculatorPro.cs" />
     <Compile Include="Domain\IPermissionCheck.cs" />

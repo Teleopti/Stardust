@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             if (direction == ExchangeDataOption.DataSourceToControls)
             {
-                BindGroupPages();
+                bindGroupPages();
                 setDataToControls();
             }
             else
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         #endregion
 
-        private void BindGroupPages()
+        private void bindGroupPages()
         {
             comboBoxGroupPageOnTeams.DataSource = _groupPageOnTeams;
             comboBoxGroupPageOnTeams.DisplayMember = "Description";
@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
 
             Preferences.UseTeams = checkBoxTeams.Checked;
+        	Preferences.KeepSameDaysOffInTeam = checkBoxKeepWeekEndsTogether.Checked;
 
             Preferences.GroupPageOnTeam = (IGroupPage)comboBoxGroupPageOnTeams.SelectedItem;
 
@@ -105,6 +106,7 @@ namespace Teleopti.Ccc.Win.Optimization
             }
 
             checkBoxTeams.Checked = Preferences.UseTeams;
+        	checkBoxKeepWeekEndsTogether.Checked = Preferences.KeepSameDaysOffInTeam;
 
             if (Preferences.GroupPageOnTeam != null)
                 comboBoxGroupPageOnTeams.SelectedValue = Preferences.GroupPageOnTeam.Key;
@@ -140,12 +142,13 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void checkBoxTeams_CheckedChanged(object sender, System.EventArgs e)
         {
-            setComboGroupPageOnTeamsStatus();
+            setSubItemsOnTeamOptimizationStatus();
         }
 
-        private void setComboGroupPageOnTeamsStatus()
+        private void setSubItemsOnTeamOptimizationStatus()
         {
             comboBoxGroupPageOnTeams.Enabled = checkBoxTeams.Checked;
+			checkBoxKeepWeekEndsTogether.Enabled = checkBoxTeams.Checked;
         }
 
         private void checkBoxKeepShifts_CheckedChanged(object sender, System.EventArgs e)
@@ -161,7 +164,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private void setInitialControlStatus()
         {
             setRadioButtonsStatus();
-            setComboGroupPageOnTeamsStatus();
+            setSubItemsOnTeamOptimizationStatus();
             setNumericUpDownKeepShiftsStatus();
         }
     }
