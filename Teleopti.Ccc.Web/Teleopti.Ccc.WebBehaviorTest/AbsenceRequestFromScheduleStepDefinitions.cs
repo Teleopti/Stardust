@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see the absence request tab")]
 		public void ThenIShouldNotSeeTheAbsenceRequestTab()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.AbsenceRequestTab, Is.Null);
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.AbsenceRequestTab.Exists, Is.False);
 		}
 
 		[Given(@"I am an agent without access to absence requests")]

@@ -47,9 +47,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			CreateMap<WeekScheduleDomainData, WeekScheduleViewModel>()
 				.ForMember(d => d.PeriodSelection, c => c.MapFrom(s => _periodSelectionViewModelFactory.Invoke().CreateModel(s.Date)))
 				.ForMember(d => d.Styles, o => o.MapFrom(s => s.Days == null ? null : _scheduleColorProvider.Invoke().GetColors(s.ColorSource)))
-				.ForMember(d => d.TextRequestPermission, c => c.MapFrom(s => _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)))
+				.ForMember(d => d.RequestPermission, c => c.MapFrom(s => new RequestPermission
+				{
+					TextRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests),
+					AbsenceRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequests),
+				}))
 				.ForMember(d => d.AbsenceTypes, c => c.MapFrom(s => _absenceTypesProvider.Invoke().GetRequestableAbsences()));
-				;
+			;
 
 			CreateMap<WeekScheduleDayDomainData, DayViewModel>()
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date.ToShortDateString()))

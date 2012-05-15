@@ -90,8 +90,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
-	var defaultDate;
-
 	function _initEditSection() {
 		_initButtons();
 		_initControls();
@@ -249,7 +247,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		};
 	}
 
-	function _clearFormData() {
+	function _clearFormData(date) {
 		$('#Schedule-addRequest-section input, #Schedule-addRequest-section textarea, #Schedule-addRequest-section select')
 			.not(':button, :submit, :reset')
 			.reset()
@@ -257,8 +255,8 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		$('#Absence-type').prop('selectedIndex', 0);
 		$('#Fullday-check').removeAttr("checked");
 		_enableTimeinput();
-		$('#Schedule-addRequest-fromDate-input').val(defaultDate);
-		$('#Schedule-addRequest-toDate-input').val(defaultDate);
+		$('#Schedule-addRequest-fromDate-input').val(date);
+		$('#Schedule-addRequest-toDate-input').val(date);
 	}
 
 	function _displayRequest(inputDate) {
@@ -287,8 +285,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		},
 
 		ClearFormData: function (date) {
-			defaultDate = date;
-			_clearFormData();
+			_clearFormData(date);
 		}
 	};
 

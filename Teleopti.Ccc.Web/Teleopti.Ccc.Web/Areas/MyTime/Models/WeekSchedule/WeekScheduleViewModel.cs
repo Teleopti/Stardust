@@ -10,8 +10,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public PeriodSelectionViewModel PeriodSelection { get; set; }
 		public IEnumerable<StyleClassViewModel> Styles { get; set; }
 		public IEnumerable<DayViewModel> Days { get; set; }
-		public bool TextRequestPermission { get; set; }
+		public RequestPermission RequestPermission { get; set; }
 		public IEnumerable<AbsenceTypeViewModel> AbsenceTypes { get; set; }
+	}
+
+	public class RequestPermission
+	{
+		public bool TextRequestPermission { get; set; }
+		public bool AbsenceRequestPermission { get; set; }
 	}
 
 	public class AbsenceTypeViewModel
