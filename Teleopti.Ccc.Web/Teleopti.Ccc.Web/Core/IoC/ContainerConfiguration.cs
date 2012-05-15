@@ -50,29 +50,21 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
-			registerAuthenticationModule(builder);
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
 			builder.RegisterModule<RuleSetModule>();
 
+			builder.RegisterModule<AuthenticationModule>();
+			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
+
 			registerAopComponents(builder);
 
-			registerMbCachedComponents(builder);
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20), new FixedNumberOfLockObjects(100));
+			builder.RegisterModule(mbCacheModule);
+			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule, false));
+			builder.RegisterModule(new AuthenticationCachedModule(mbCacheModule));
 
 			return builder.Build();
-		}
-
-		private static void registerAuthenticationModule(ContainerBuilder builder)
-		{
-			builder.RegisterModule<AuthenticationModule>();
-
-			builder.RegisterType<TeleoptiPrincipalCacheableFactory>().As<IPrincipalFactory>().SingleInstance();
-			builder.RegisterType<TeleoptiPrincipalInternalsFactory>()
-				.As<IMakeRegionalFromPerson>()
-				.As<IMakeOrganisationMembershipFromPerson>()
-				.As<IRetrievePersonNameForPerson>()
-				.SingleInstance();
-			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 		}
 
 		private static void registerAopComponents(ContainerBuilder builder)
@@ -81,32 +73,5 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<UnitOfWorkAspect>();
 		}
 
-		private static void registerMbCachedComponents(ContainerBuilder builder)
-		{
-			var mbCacheModule = new MbCacheModule(new AspNetCache(20), new FixedNumberOfLockObjects(100));
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule, false));
-
-
-			builder.Register(c =>
-			                 	{
-			                 		var cacheProxyFactory = c.Resolve<IMbCacheFactory>();
-									var instance = cacheProxyFactory.Create<TeleoptiPrincipalInternalsFactory>();
-			                 		return instance;
-			                 	})
-				.As<IMakeRegionalFromPerson>()
-				.As<IMakeOrganisationMembershipFromPerson>()
-				.As<IRetrievePersonNameForPerson>()
-				.SingleInstance();
-
-			mbCacheModule.Builder
-				.For<TeleoptiPrincipalInternalsFactory>()
-				.CacheMethod(m => m.MakeOrganisationMembership(null))
-				.CacheMethod(m => m.MakeRegionalFromPerson(null))
-				.CacheMethod(m => m.NameForPerson(null))
-				.AsImplemented()
-				;
-
-		}
 	}
 }

@@ -125,6 +125,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\AuthenticationCachedModule.cs" />
     <Compile Include="Configuration\AuthenticationModule.cs" />
     <Compile Include="Configuration\RuleSetCacheModule.cs" />
     <Compile Include="Configuration\DateAndTimeModule.cs" />
