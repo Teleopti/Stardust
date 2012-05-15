@@ -1,10 +1,12 @@
 ﻿using System.Threading;
 using AutoMapper;
+using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
@@ -29,21 +31,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void IndexShouldReturnViewModel()
 		{
-			using (var target = new SettingsController(mappingEngine, loggedOnUser, null))
+			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
 			{
 				var viewModel = new SettingsViewModel();
 				var person = new Person();
 				loggedOnUser.Expect(obj => obj.CurrentUser()).Return(person);
 				mappingEngine.Expect(obj => obj.Map<IPerson, SettingsViewModel>(person)).Return(viewModel);
 				var res = target.Index();
-				res.Model.Should().Be.SameInstanceAs(viewModel);				
+				res.Model.Should().Be.SameInstanceAs(viewModel);
 			}
 		}
 
 		[Test]
 		public void PassWordShouldReturnCorrectView()
 		{
-			using (var target = new SettingsController(mappingEngine, loggedOnUser, null))
+			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
 			{
 				var res = target.Password();
 				res.ViewName.Should().Be.EqualTo("PasswordPartial");
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser, null))
+			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
 			{
 				target.UpdateCulture(1034);
 			}
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser, null))
+			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
 			{
 				target.UpdateCulture(-1);
 			}
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser, null))
+			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
 			{
 				target.UpdateUiCulture(1034);
 			}
@@ -91,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser, null))
+			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
 			{
 				target.UpdateUiCulture(-1);
 			}
@@ -105,9 +107,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			modifyPassword.Expect(x => x.Change(person, "old", "new")).Return(true);
-			using (var target = new SettingsController(null, loggedOnUser, modifyPassword))
+			using (var target = new SettingsController(null, loggedOnUser, modifyPassword, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
 			{
-				target.ChangePassword(new ChangePasswordViewModel{NewPassword = "new", OldPassword = "old"});
+				target.ChangePassword(new ChangePasswordViewModel {NewPassword = "new", OldPassword = "old"});
 			}
 		}
 	}

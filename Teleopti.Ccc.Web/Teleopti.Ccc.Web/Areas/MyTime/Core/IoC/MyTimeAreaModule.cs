@@ -19,6 +19,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
@@ -48,6 +49,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			registerPreferenceTypes(builder);
 			registerAutoMapperTypes(builder);
 			registerRequestsType(builder);
+			registerSettingsTypes(builder);
+		}
+
+		private void registerSettingsTypes(ContainerBuilder builder)
+		{
+			builder.RegisterType<PersonPersister>().As<IPersonPersister>().SingleInstance();
 		}
 
 		private void registerRequestsType(ContainerBuilder builder)

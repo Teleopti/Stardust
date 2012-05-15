@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
 using AutoMapper;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Filters;
@@ -13,12 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IMappingEngine _mapper;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IModifyPassword _modifyPassword;
+		private readonly IPersonPersister _personPersister;
 
-		public SettingsController(IMappingEngine mapper, ILoggedOnUser loggedOnUser, IModifyPassword modifyPassword)
+		public SettingsController(IMappingEngine mapper, ILoggedOnUser loggedOnUser, IModifyPassword modifyPassword, IPersonPersister personPersister)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
 			_modifyPassword = modifyPassword;
+			_personPersister = personPersister;
 		}
 
 		[EnsureInPortal]
@@ -42,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public void UpdateCulture(int lcid)
 		{
 			var culture = lcid > 0 ? CultureInfo.GetCultureInfo(lcid) : null;
-			_loggedOnUser.CurrentUser().PermissionInformation.SetCulture(culture);
+			_personPersister.UpdateCulture(_loggedOnUser.CurrentUser(), culture);
 		}
 
 		[UnitOfWorkAction]
@@ -50,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public void UpdateUiCulture(int lcid)
 		{
 			var culture = lcid > 0 ? CultureInfo.GetCultureInfo(lcid) : null;
-			_loggedOnUser.CurrentUser().PermissionInformation.SetUICulture(culture);
+			_personPersister.UpdateUICulture(_loggedOnUser.CurrentUser(), culture);
 		}
 
 		[UnitOfWorkAction]
