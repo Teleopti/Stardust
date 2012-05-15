@@ -235,24 +235,28 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Factory
             {
 				foreach (var detail in shiftTradeRequestDto.ShiftTradeSwapDetails)
 				{
-					ICustomScheduleAppointment scheduleItem = new CustomScheduleAppointment
-					                                          	{
-					                                          		AllDay = true,
-					                                          		LabelValue = 0,
-					                                          		StartTime = detail.DateFrom.DateTime,
-					                                          		EndTime = detail.DateTo.DateTime,
-					                                          		AllowDrag = true,
-					                                          		AllowResize = true,
-					                                          		AllowClickable = true,
-					                                          		AllowCopy = false,
-					                                          		AllowOpen = true,
-					                                          		AllowDelete = false,
-					                                          		AllowMultipleDaySplit = false,
-					                                          		DisplayColor = Color.DarkBlue,
-					                                          		Status = ScheduleAppointmentStatusTypes.Unchanged,
-					                                          		AppointmentType = ScheduleAppointmentTypes.Request
-					                                          	};
-					ret.Add(scheduleItem);
+                    //if (period.LocalStartDateTime > detail.DateFrom.DateTime || period.LocalEndDateTime < detail.DateTo.DateTime)continue;
+                        ICustomScheduleAppointment scheduleItem = new CustomScheduleAppointment
+                                                                      {
+                                                                          AllDay = true,
+                                                                          LabelValue = 0,
+                                                                          StartTime = detail.DateFrom.DateTime,
+                                                                          EndTime = detail.DateTo.DateTime.AddDays(1).AddSeconds(-1),
+                                                                          AllowDrag = true,
+                                                                          AllowResize = true,
+                                                                          AllowClickable = true,
+                                                                          AllowCopy = false,
+                                                                          AllowOpen = true,
+                                                                          AllowDelete = false,
+                                                                          AllowMultipleDaySplit = false,
+                                                                          DisplayColor = Color.DarkBlue,
+                                                                          Status =
+                                                                              ScheduleAppointmentStatusTypes.Unchanged,
+                                                                          AppointmentType =
+                                                                              ScheduleAppointmentTypes.Request
+                                                                      };
+                        ret.Add(scheduleItem);
+                    
 				}
             }
 
@@ -309,7 +313,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Factory
                                		AllowMultipleDaySplit = false,
                                		DisplayColor = Color.DarkBlue,
                                		Status = ScheduleAppointmentStatusTypes.Unchanged,
-                               		AppointmentType = ScheduleAppointmentTypes.PublicNote
+                               		AppointmentType = ScheduleAppointmentTypes.PublicNote   
                                	};
             }
 
