@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			mocks.Verify(_schedulingResultLoader);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyHandlesDateIfTodayIsIncludedInSelection()
 		{
 			mocks.BackToRecord(_schedulingResultLoader);

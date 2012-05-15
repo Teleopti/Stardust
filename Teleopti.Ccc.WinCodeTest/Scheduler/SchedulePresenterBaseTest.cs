@@ -425,7 +425,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyQueryCellInfoHeaders()
         {
             IScheduleDictionary scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
