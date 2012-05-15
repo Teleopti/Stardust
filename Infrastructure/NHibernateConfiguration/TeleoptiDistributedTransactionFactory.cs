@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Security.Principal;
 using System.Threading;
 using System.Transactions;
+using NHibernate.Engine.Transaction;
 using log4net;
 using NHibernate;
 using NHibernate.Engine;
@@ -10,9 +12,10 @@ using NHibernate.Transaction;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-	public class TeleoptiDistributedTransactionFactory : AdoNetWithDistributedTransactionFactory
+	public class TeleoptiDistributedTransactionFactory : ITransactionFactory
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TeleoptiDistributedTransactionFactory));
+		private readonly AdoNetTransactionFactory adoNetTransactionFactory = new AdoNetTransactionFactory();
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
 		public class TeleoptiDistributedTransactionContext : ITransactionContext, IEnlistmentNotification
@@ -107,8 +110,17 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 		}
 
+		public void Configure(IDictionary props)
+		{
+		}
+
+		public ITransaction CreateTransaction(ISessionImplementor session)
+		{
+			return new AdoTransaction(session);
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "log4net.ILog.DebugFormat(System.String,System.Object[])"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public new void EnlistInDistributedTransactionIfNeeded(ISessionImplementor session)
+		public void EnlistInDistributedTransactionIfNeeded(ISessionImplementor session)
 		{
 			if (session.TransactionContext != null)
 			{
@@ -152,10 +164,19 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public new bool IsInDistributedActiveTransaction(ISessionImplementor session)
+		public bool IsInDistributedActiveTransaction(ISessionImplementor session)
 		{
 			var distributedTransactionContext = (TeleoptiDistributedTransactionContext)session.TransactionContext;
 			return distributedTransactionContext != null && distributedTransactionContext.IsInActiveTransaction;
+		}
+
+		public void ExecuteWorkInIsolation(ISessionImplementor session, IIsolatedWork work, bool transacted)
+		{
+			using (var transactionScope = new TransactionScope(TransactionScopeOption.Suppress))
+			{
+				adoNetTransactionFactory.ExecuteWorkInIsolation(session, work, transacted);
+				transactionScope.Complete();
+			}
 		}
 	}
 }

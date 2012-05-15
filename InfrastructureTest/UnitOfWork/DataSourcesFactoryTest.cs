@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using NHibernate.Engine;
-using NHibernate.Transaction;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
