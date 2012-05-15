@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			usedMessage.Datasource.Should().Be.EqualTo(datasource.DataSourceName);
 			usedMessage.PersonRequestId.Should().Be.EqualTo(personRequestId);
 			usedMessage.Timestamp.Should().Be.EqualTo(time);
-			personRequest.AssertWasCalled(x => x.SetNew());
 		}
 
 		[Test]

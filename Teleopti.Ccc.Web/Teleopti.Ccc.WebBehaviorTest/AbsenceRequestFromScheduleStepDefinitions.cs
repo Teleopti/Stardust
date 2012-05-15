@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click full day checkbox")]
 		public void WhenIClickFullDayCheckbox()
 		{
+			Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.WaitUntilDisplayed();
 			Pages.Pages.CurrentEditTextRequestPage.FulldayCheck.Checked = true;
 		}
 
