@@ -10675,7 +10675,7 @@ These options are activated:
     <comment>The type of absence to use in absence requests</comment>
   </data>
   <data name="AbsenceRequestsWeb" xml:space="preserve">
-    <value>Absence requests</value>
+    <value>Absence Requests</value>
     <comment>Application function Absence requests for the web</comment>
   </data>
 </root>

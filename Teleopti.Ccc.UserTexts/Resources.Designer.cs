@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Absence requests.
+        ///   Looks up a localized string similar to Absence Requests.
         /// </summary>
         public static string AbsenceRequestsWeb {
             get {
