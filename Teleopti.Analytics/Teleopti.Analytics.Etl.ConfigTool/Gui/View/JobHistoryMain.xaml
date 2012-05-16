@@ -5,7 +5,7 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 
 	<DockPanel LastChildFill="True">
 		<View:JobHistorySelection x:Name="historySelection" DockPanel.Dock="Top"></View:JobHistorySelection>
-		<View:JobHistoryView x:Name="historyTree" DockPanel.Dock="Top"></View:JobHistoryView>
+		<View:JobHistoryTreeView x:Name="historyTree" DockPanel.Dock="Top"></View:JobHistoryTreeView>
 	</DockPanel>
 </UserControl>
 

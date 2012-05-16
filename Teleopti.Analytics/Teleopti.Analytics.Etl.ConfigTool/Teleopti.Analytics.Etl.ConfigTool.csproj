@@ -128,10 +128,12 @@
     </Compile>
     <Compile Include="Gui\SpinningProgress\ToolStripSpinningProgressControl.cs" />
     <Compile Include="Gui\ViewModel\BusinessUnitItemMapper.cs" />
+    <Compile Include="Gui\ViewModel\CopyErrorCommand.cs" />
     <Compile Include="Gui\ViewModel\IJobHistory.cs" />
     <Compile Include="Gui\ViewModel\JobHistoryMapper.cs" />
     <Compile Include="Gui\ViewModel\JobHistorySelectionEventArgs.cs" />
     <Compile Include="Gui\ViewModel\JobHistorySelectionViewModel.cs" />
+    <Compile Include="Gui\ViewModel\JobHistoryTreeViewModel.cs" />
     <Compile Include="Gui\ViewModel\JobHistoryViewModel.cs" />
     <Compile Include="Gui\ViewModel\JobStepHistoryViewModel.cs" />
     <Compile Include="Gui\View\JobHistoryMain.xaml.cs">
@@ -140,8 +142,8 @@
     <Compile Include="Gui\View\JobHistorySelection.xaml.cs">
       <DependentUpon>JobHistorySelection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Gui\View\JobHistoryView.xaml.cs">
-      <DependentUpon>JobHistoryView.xaml</DependentUpon>
+    <Compile Include="Gui\View\JobHistoryTreeView.xaml.cs">
+      <DependentUpon>JobHistoryTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Gui\StartupConfiguration\StartupConfigurationView.cs">
       <SubType>Form</SubType>
@@ -303,7 +305,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Gui\View\JobHistoryView.xaml">
+    <Page Include="Gui\View\JobHistoryTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

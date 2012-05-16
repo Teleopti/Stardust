@@ -8,7 +8,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 {
 	public static class JobHistoryMapper
 	{
-		public static IList<JobHistoryViewModel> Map(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
+		public static JobHistoryTreeViewModel Map(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
 		{
 			var repository = new Repository(ConfigurationManager.AppSettings["datamartConnectionString"]);
 
@@ -19,7 +19,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 
 			int previousJobExecutionId = -99;
 			JobHistoryViewModel jobModel = null;
-			var returnList = new List<JobHistoryViewModel>();
+			var returnList = new JobHistoryTreeViewModel();
 
 			foreach (DataRow row in table.Rows)
 			{
