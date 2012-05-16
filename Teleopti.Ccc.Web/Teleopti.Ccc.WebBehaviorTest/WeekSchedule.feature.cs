@@ -276,7 +276,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 81
  testRunner.Then("I should see a symbol at the top of the schedule");
 #line 82
- testRunner.And("I should see a number with the text request count");
+ testRunner.And("I should see a number with the request count");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -296,6 +296,27 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("I view my week schedule");
 #line 88
  testRunner.Then("I should see a symbol at the top of the schedule for the first day");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show both text and absence requests")]
+        public virtual void ShowBothTextAndAbsenceRequests()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show both text and absence requests", ((string[])(null)));
+#line 90
+this.ScenarioSetup(scenarioInfo);
+#line 91
+ testRunner.Given("I am an agent");
+#line 92
+ testRunner.And("I have an existing text request");
+#line 93
+ testRunner.And("I have an existing absence request");
+#line 94
+ testRunner.When("I view my week schedule");
+#line 95
+ testRunner.Then("I should see 2 with the request count");
 #line hidden
             this.ScenarioCleanup();
         }

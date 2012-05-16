@@ -6,8 +6,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 	{
 		Button AddTextRequestButton { get; }
 		Div RequestDetailSection { get; }
+		Span AbsenceRequestTab { get; }
+		TextField AbsenceTypesTextField { get; }
+		SelectList AbsenceTypesSelectList { get; }
+		CheckBox FulldayCheck { get; }
 		TextField TextRequestDetailSubjectInput { get; }
-		TextField TextRequestDetailFromDateInput { get; }
+		TextField TextRequestDetailFromDateTextField { get; }
 		TextField TextRequestDetailFromTimeTextField { get; }
 		TextField TextRequestDetailToDateTextField { get; }
 		TextField TextRequestDetailToTimeTextField { get; }
@@ -16,6 +20,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		Div ValidationErrorText { get; }
 
 		Button OkButton { get; set; }
-		Button CancelButton { get; set; }
+		Element CancelButton { get; }
 	}
 }

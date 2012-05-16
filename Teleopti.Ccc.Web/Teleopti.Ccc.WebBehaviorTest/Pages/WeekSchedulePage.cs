@@ -49,36 +49,48 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			DatePicker.ClickDay(new DateOnly(TestDataSetup.ThirdDayOfOtherThanCurrentWeekInCurrentMonth(culture)));
 		}
 
-		public Div TextRequestForDate(DateTime date)
+		public Div RequestForDate(DateTime date)
 		{
 			return DayElementForDate(date).Div(Find.ByClass("text-request", false));
 		}
 
-		[FindBy(Id = "Schedule-addTextRequest-button")]
+		[FindBy(Id = "Schedule-addRequest-button")]
 		public Button AddTextRequestButton { get; set; }
 
-		[FindBy(Id = "Schedule-addTextRequest-section")]
+		[FindBy(Id = "Schedule-addRequest-section")]
 		public Div RequestDetailSection { get; set; }
 
-		[FindBy(Id = "Schedule-addTextRequest-subject-input")]
+		[FindBy(Id = "Absence-request-tab")]
+		public Span AbsenceRequestTab { get; set; }
+
+		[FindBy(Id = "Absence-type-input")]
+		public TextField AbsenceTypesTextField { get; set; }
+		[FindBy(Id = "Absence-type")]
+		public SelectList AbsenceTypesSelectList { get; set; }
+		[FindBy(Id = "Fullday-check")]
+		public CheckBox FulldayCheck { get; set; }
+
+		[FindBy(Id = "Schedule-addRequest-subject-input")]
 		public TextField TextRequestDetailSubjectInput { get; set; }
-		[FindBy(Id = "Schedule-addTextRequest-fromDate-input")]
-		public TextField TextRequestDetailFromDateInput { get; set; }
-		[FindBy(Id = "Schedule-addTextRequest-fromTime-input-input")]
+		[FindBy(Id = "Schedule-addRequest-fromDate-input")]
+		public TextField TextRequestDetailFromDateTextField { get; set; }
+		[FindBy(Id = "Schedule-addRequest-fromTime-input-input")]
 		public TextField TextRequestDetailFromTimeTextField { get; set; }
-		[FindBy(Id = "Schedule-addTextRequest-toDate-input")]
+		[FindBy(Id = "Schedule-addRequest-toDate-input")]
 		public TextField TextRequestDetailToDateTextField { get; set; }
-		[FindBy(Id = "Schedule-addTextRequest-toTime-input-input")]
+		[FindBy(Id = "Schedule-addRequest-toTime-input-input")]
 		public TextField TextRequestDetailToTimeTextField { get; set; }
-		[FindBy(Id = "Schedule-addTextRequest-message-input")]
+		[FindBy(Id = "Schedule-addRequest-message-input")]
 		public TextField TextRequestDetailMessageTextField { get; set; }
-		[FindBy(Id = "Schedule-addTextRequest-error")]
+		[FindBy(Id = "Schedule-addRequest-error")]
 		public Div ValidationErrorText { get; set; }
 
-		[FindBy(Id = "Schedule-addTextRequest-ok-button")]
+		[FindBy(Id = "Schedule-addRequest-ok-button")]
 		public Button OkButton { get; set; }
-		[FindBy(Id = "Schedule-addTextRequest-cancel-button")]
-		public Button CancelButton { get; set; }
+
+		public Element CancelButton {
+			get { return Document.Element(Find.ByClass("ui-tooltip-close", false)); }
+		}
 
 		//not yet used
 		public TextField TextRequestDetailEntityId { get; private set; }

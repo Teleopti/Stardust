@@ -136,10 +136,12 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		var deleteButton = listItem.find('.request-delete-button');
 
 		connector.connector();
-
+		var count = 0;
 		if (request.Link.Methods.indexOf("DELETE") != -1) {
 			deleteButton
 				.click(function (event) {
+					count++;
+					if (count > 1) { return false; }
 					event.stopPropagation();
 					_disconnectAll();
 					Teleopti.MyTimeWeb.Request.TextRequest.HideEditSection();

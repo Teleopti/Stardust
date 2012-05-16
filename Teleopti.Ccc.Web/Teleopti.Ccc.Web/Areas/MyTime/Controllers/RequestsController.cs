@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly ITextRequestPersister _textRequestPersister;
+		private readonly IAbsenceRequestPersister _absenceRequestPersister;
 
-		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, ITextRequestPersister textRequestPersister)
+		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, ITextRequestPersister textRequestPersister, IAbsenceRequestPersister absenceRequestPersister)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
+			_absenceRequestPersister = absenceRequestPersister;
 		}
 
 		[EnsureInPortal]
@@ -55,6 +57,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				return ModelState.ToJson();
 			}
 			return Json(_textRequestPersister.Persist(form));
+		}
+
+		[UnitOfWorkAction]
+		[HttpPostOrPut]
+		public JsonResult AbsenceRequest(AbsenceRequestForm form)
+		{
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
+			return Json(_absenceRequestPersister.Persist(form));
 		}
 
 		[UnitOfWorkAction]

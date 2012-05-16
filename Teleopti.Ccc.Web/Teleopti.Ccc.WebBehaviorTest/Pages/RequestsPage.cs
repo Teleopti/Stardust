@@ -36,10 +36,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-section")]
 		public Div RequestDetailSection { get; set; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		public Span AbsenceRequestTab
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		public TextField AbsenceTypesTextField
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		public SelectList AbsenceTypesSelectList
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		public CheckBox FulldayCheck
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 		[FindBy(Id = "Request-detail-subject-input")]
 		public TextField TextRequestDetailSubjectInput { get; set; }
 		[FindBy(Id = "Request-detail-fromDate-input")]
-		public TextField TextRequestDetailFromDateInput { get; set; }
+		public TextField TextRequestDetailFromDateTextField { get; set; }
 		[FindBy(Id = "Request-detail-fromTime-input-input")]
 		public TextField TextRequestDetailFromTimeTextField { get; set; }
 		[FindBy(Id = "Request-detail-toDate-input")]
@@ -54,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-ok-button")]
 		public Button OkButton { get; set; }
 		[FindBy(Id = "Request-detail-cancel-button")]
-		public Button CancelButton { get; set; }
+		public Element CancelButton { get; set; }
 
 		[FindBy(Id = "Request-detail-entityid")]
 		public TextField TextRequestDetailEntityId { get; set; }

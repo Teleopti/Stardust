@@ -56,13 +56,15 @@
 					.addClass("ui-widget ui-widget-content ui-corner-left")
 				;
 			input[0].defaultValue = value;
-			
+
 			input.data("autocomplete")._renderItem = function (ul, item) {
 				return $("<li></li>")
 						.data("item.autocomplete", item)
 						.append("<a>" + item.label + "</a>")
 						.appendTo(ul);
 			};
+
+			input.data("autocomplete").menu.element.addClass(select.attr('class'));
 
 			this.button = $("<button type='button'>&nbsp;</button>")
 					.attr("tabIndex", -1)

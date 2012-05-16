@@ -11,5 +11,10 @@ namespace Teleopti.Interfaces.Domain
 		/// Returns curent datetime
 		/// </summary>
 		DateTime Time { get; }
+
+		/// <summary>
+		/// Returns curent datetime in UTC
+		/// </summary>
+		DateTime UtcTime { get; }
 	}
 }

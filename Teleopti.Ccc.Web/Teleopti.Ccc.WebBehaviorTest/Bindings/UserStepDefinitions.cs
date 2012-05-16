@@ -543,6 +543,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new ExistingTextRequestOver2Days());
 		}
 
+		[Given(@"I have an existing absence request")]
+		public void GivenIHaveAnExistingAbsenceRequest()
+		{
+			UserFactory.User().Setup(new ExistingAbsenceRequest());
+		}
+
+
 		[Given(@"the site has another team")]
 		public void GivenTheSiteHasAnotherTeam()
 		{

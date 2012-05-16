@@ -4,6 +4,7 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/jquery.qtip.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js"/>
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -160,7 +161,9 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 			$('[title]').each(function () {
 				$(this).qtip({
 					content: {
-						text: $(this).attr('title')
+						text: function (api) {
+							return $(this).attr('title');
+						}
 					},
 					title: "test",
 					style: {
@@ -174,8 +177,8 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 					}
 				});
 			});
-		}
 
+		}
 	};
 })(jQuery);
 

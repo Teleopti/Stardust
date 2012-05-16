@@ -222,15 +222,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			                   				PrevTitle = Resources.PreviousPeriod
 			                   			}
 			                   	};
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests))
-			{
-				toolBarItems.Add(new ToolBarSeparatorItem());
-				toolBarItems.Add(new ToolBarButtonItem
-				                 	{
-				                 		Title = Resources.NewTextRequest,
-				                 		ButtonType = "addTextRequest"
-				                 	});
-			}
 			return new SectionNavigationItem
 					{
 						Action = "Week",

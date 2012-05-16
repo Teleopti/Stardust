@@ -21,8 +21,10 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -32,6 +34,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -136,6 +139,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
+		public void ShouldRegisterCurrentBusinessUnitProvider()
+		{
+			requestContainer.Resolve<ICurrentBusinessUnitProvider>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldRegisterDatePickerGlobalizationViewModelFactory()
 		{
 			requestContainer.Resolve<IDatePickerGlobalizationViewModelFactory>()
@@ -189,6 +199,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldRegisterSessionSpecificDataProvider()
 		{
 			requestContainer.Resolve<ISessionSpecificDataProvider>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldRegisterAbsenceTypesProvider()
+		{
+			requestContainer.Resolve<IAbsenceTypesProvider>()
 				.Should().Not.Be.Null();
 		}
 
@@ -385,11 +402,26 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
+		public void ShouldRegisterAbsenceRequestPersister()
+		{
+			requestContainer.Resolve<IAbsenceRequestPersister>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldCacheRuleSetProjectionServiceResult()
 		{
 			var mbCacheFactory = requestContainer.Resolve<IMbCacheFactory>();
 			mbCacheFactory.ImplementationTypeFor(typeof (IRuleSetProjectionService))
 				.Should().Be.EqualTo<RuleSetProjectionService>();
+		}
+
+		
+		[Test]
+		public void ShouldRegisterServiceBusSender()
+		{
+			requestContainer.Resolve<IServiceBusSender>()
+				.Should().Not.Be.Null();
 		}
 
 		[Test]

@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IApplicationRole AgentRoleWithoutPreferences;
 		public static IApplicationRole AgentRoleWithoutRequests;
 		public static IApplicationRole AgentRoleWithoutTextRequests;
+		public static IApplicationRole AgentRoleWithoutAbsenceRequests;
 		public static IApplicationRole AgentRoleWithoutTeamSchedule;
 		public static IApplicationRole AgentRoleWithoutMobileReports;
 		public static IApplicationRole AgentRoleWithoutMyTimeWeb;

@@ -24,5 +24,13 @@ namespace Teleopti.Ccc.DomainTest.Common
 			target.Time.Should().Be.GreaterThan(nu.AddSeconds(-1));
 			target.Time.Should().Be.LessThan(nu.AddSeconds(1));
 		}
+
+		[Test]
+		public void ShouldBeCurrentUtcTime()
+		{
+			var nu = DateTime.UtcNow;
+			target.UtcTime.Should().Be.GreaterThan(nu.AddSeconds(-1));
+			target.UtcTime.Should().Be.LessThan(nu.AddSeconds(1));
+		}
 	}
 }

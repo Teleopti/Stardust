@@ -1,10 +1,9 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.6.4.js" />
-/// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
-/// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
-/// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
+/// <reference path="~/Content/Scripts/jquery-1.6.4-vsdoc.js" />
+/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -16,6 +15,52 @@ if (typeof (Teleopti) === 'undefined') {
 
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
+
+	function _initTooltip() {
+		var addTextRequest = $('.add-text-request');
+		$('<div/>').qtip({
+
+			content: {
+				text: $('#Schedule-addRequest-section'),
+				title: {
+					text: $('#Schedule-addRequest-title'),
+					button: $('#Schedule-addRequest-cancel-button').text()
+				}
+			},
+			position: {
+				target: 'event',
+				my: 'middle left',
+				at: 'middle right',
+				viewport: $(window),
+				adjust: {
+					x: 15
+				}
+			},
+			events: {
+				show: function (event, api) {
+					var date = $(event.originalEvent.target).closest('ul').attr('data-request-default-date');
+					Teleopti.MyTimeWeb.Schedule.TextRequest.ClearFormData(date);
+					
+				}
+			},
+			show: {
+				target: addTextRequest,
+				event: 'click'
+			},
+			hide: {
+				target: $(document.body).children().not('#ui-datepicker-div').not($(self)),
+				event: 'mousedown'
+
+			},
+			style: {
+				classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow',
+				tip: true,
+				border: {
+					radius: 2
+				}
+			}
+		});
+	}
 
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#ScheduleDateRangeSelector';
@@ -32,6 +77,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
+			_initTooltip();
 			Teleopti.MyTimeWeb.Schedule.Layout.SetSchemaItemsHeights();
 			_initPeriodSelection();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
@@ -44,38 +90,75 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
-	function _initToolbarButtons() {
-		$('#Schedule-addTextRequest-button')
-			.click(function () {
-				Teleopti.MyTimeWeb.Common.OpenEditSection('#Schedule-addTextRequest-section');
-			})
-			.removeAttr('disabled')
-			;
-	}
-
 	function _initEditSection() {
-		$('#Schedule-addTextRequest-ok-button')
-			.click(function () {
-				_addTextRequest();
-			});
+		_initButtons();
 		_initControls();
 		_initLabels();
-		_clearFormData();
 	}
 
+
+
 	function _initLabels() {
-		$('#Schedule-addTextRequest-section input[type=text], #Schedule-addTextRequest-section textarea')
+		$('#Schedule-addRequest-section input[type=text], #Schedule-addRequest-section textarea')
 			.labeledinput()
 			;
 	}
 
+	function _initButtons() {
+		$('#Schedule-addRequest-ok-button')
+			.click(function () {
+				if ($('#Text-request-tab.selected-tab').length > 0) {
+					_addTextRequest();
+				} else {
+					_addAbsenceRequest();
+				}
+
+			});
+
+		$('#Text-request-tab')
+			.click(function () {
+				_hideAbsenceTypes();
+			});
+		$('#Absence-request-tab')
+			.click(function () {
+				_showAbsenceTypes();
+			});
+		$('#Fullday-check')
+			.click(function () {
+				if ($(this).is(':checked')) {
+					$('#Schedule-addRequest-fromTime-input-input').val($('#Schedule-addRequest-default-start-time').text());
+					$('#Schedule-addRequest-toTime-input-input').val($('#Schedule-addRequest-default-end-time').text());
+					_disableTimeinput();
+				} else {
+					$('#Schedule-addRequest-fromTime-input-input').reset();
+					$('#Schedule-addRequest-toTime-input-input').reset();
+					_enableTimeinput();
+				}
+			});
+	}
+
+	function _enableTimeinput() {
+		$('#Schedule-addRequest-fromTime button, #Schedule-addRequest-fromTime-input-input, #Schedule-addRequest-toTime button, #Schedule-addRequest-toTime-input-input')
+			.removeAttr("disabled");
+		$('#Schedule-addRequest-fromTime-input-input').css("color", "black");
+		$('#Schedule-addRequest-toTime-input-input').css("color", "black");
+	}
+
+	function _disableTimeinput() {
+		$('#Schedule-addRequest-fromTime button, #Schedule-addRequest-fromTime-input-input, #Schedule-addRequest-toTime button, #Schedule-addRequest-toTime-input-input')
+			.attr("disabled", "disabled");
+		$('#Schedule-addRequest-fromTime-input-input').css("color", "grey");
+		$('#Schedule-addRequest-toTime-input-input').css("color", "grey");
+	}
+
 	function _initControls() {
-		$('#Schedule-addTextRequest-section .date-input')
+		$('#Schedule-addRequest-section .date-input')
 			.datepicker()
 			;
-		$("#Schedule-addTextRequest-section .combobox.time-input")
-			.combobox()
-			;
+		$("#Schedule-addRequest-section .combobox.time-input").combobox();
+		$("#Schedule-addRequest-section .combobox.absence-input").combobox();
+		;
+		$("#Absence-type-input").attr('readonly', 'true');
 	}
 
 	function _addTextRequest() {
@@ -88,9 +171,8 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			cache: false,
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
-				_displayTextRequest(formData.Period.StartDate);
-				Teleopti.MyTimeWeb.Common.CloseEditSection('#Schedule-addTextRequest-section');
-				_clearFormData();
+				_displayRequest(formData.Period.StartDate);
+				$('#Schedule-addRequest-section').parents(".qtip").hide();
 				_clearValidationError();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -104,44 +186,87 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		});
 	}
 
+	function _addAbsenceRequest() {
+		var formData = _getFormData();
+		$.myTimeAjax({
+			url: "Requests/AbsenceRequest",
+			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
+			type: "POST",
+			cache: false,
+			data: JSON.stringify(formData),
+			success: function (data, textStatus, jqXHR) {
+				_displayRequest(formData.Period.StartDate);
+				$('#Schedule-addRequest-section').parents(".qtip").hide();
+				_clearValidationError();
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					_displayValidationError(data);
+					return;
+				}
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	}
+
+
+	function _showAbsenceTypes() {
+		$('#Absence-type-element').show();
+		$('#Absence-request-tab').addClass("selected-tab");
+		$('#Text-request-tab').removeClass("selected-tab");
+	}
+
+	function _hideAbsenceTypes() {
+		$('#Absence-type-element').hide();
+		$('#Text-request-tab').addClass("selected-tab");
+		$('#Absence-request-tab').removeClass("selected-tab");
+	}
+
 	function _displayValidationError(data) {
 		var message = data.Errors.join(' ');
-		$('#Schedule-addTextRequest-error').html(message || '');
+		$('#Schedule-addRequest-error').html(message || '');
 	}
 
 	function _clearValidationError() {
-		$('#Schedule-addTextRequest-error').html('');
+		$('#Schedule-addRequest-error').html('');
 	}
 
 	function _getFormData() {
 		return {
-			Subject: $('#Schedule-addTextRequest-subject-input').val(),
+			Subject: $('#Schedule-addRequest-subject-input').val(),
+			AbsenceId: $('#Absence-type').children(":selected").val(),
 			Period: {
-				StartDate: $('#Schedule-addTextRequest-fromDate-input').val(),
-				StartTime: $('#Schedule-addTextRequest-fromTime-input-input').val(),
-				EndDate: $('#Schedule-addTextRequest-toDate-input').val(),
-				EndTime: $('#Schedule-addTextRequest-toTime-input-input').val()
+				StartDate: $('#Schedule-addRequest-fromDate-input').val(),
+				StartTime: $('#Schedule-addRequest-fromTime-input-input').val(),
+				EndDate: $('#Schedule-addRequest-toDate-input').val(),
+				EndTime: $('#Schedule-addRequest-toTime-input-input').val()
 			},
-			Message: $('#Schedule-addTextRequest-message-input').val()
+			Message: $('#Schedule-addRequest-message-input').val()
 		};
 	}
 
-	function _clearFormData() {
-		$('#Schedule-addTextRequest-section input, #Schedule-addTextRequest-section textarea, #Schedule-addTextRequest-section select')
+	function _clearFormData(date) {
+		$('#Schedule-addRequest-section input, #Schedule-addRequest-section textarea, #Schedule-addRequest-section select')
 			.not(':button, :submit, :reset')
 			.reset()
 			;
+		$('#Absence-type').prop('selectedIndex', 0);
+		$('#Fullday-check').removeAttr("checked");
+		_enableTimeinput();
+		$('#Schedule-addRequest-fromDate-input').val(date);
+		$('#Schedule-addRequest-toDate-input').val(date);
 	}
 
-	function _displayTextRequest(inputDate) {
-		var date = Date.parse(inputDate);
+	function _displayRequest(inputDate) {
+		var date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, inputDate);
 		var formattedDate = $.datepicker.formatDate('yy-mm-dd', date);
 		var textRequestCount = $('ul[data-mytime-date="' + formattedDate + '"] .text-request');
-//		var newTitle = textRequestCount.attr('title').replace(new RegExp('[0-9]|[1-9][0-9]'), parseInt(textRequestCount.text()) + 1);
 		var title = textRequestCount.attr('title');
 		if (title == undefined)
 			return;
-		var newTitle = title.replace(new RegExp('[0-9]|[1-9][0-9]'), parseInt(textRequestCount.text()) + 1);
+		var newTitle = title.replace(/[\d\.]+/g, parseInt(textRequestCount.text()) + 1);
 		textRequestCount.attr('title', newTitle);
 		textRequestCount
 			.show()
@@ -153,10 +278,14 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
 	return {
 		Init: function () {
-			_initToolbarButtons();
+
 		},
 		PartialInit: function () {
 			_initEditSection();
+		},
+
+		ClearFormData: function (date) {
+			_clearFormData(date);
 		}
 	};
 

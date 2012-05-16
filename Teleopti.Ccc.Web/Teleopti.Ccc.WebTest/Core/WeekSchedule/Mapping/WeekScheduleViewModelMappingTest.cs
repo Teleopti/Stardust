@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -9,10 +10,14 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
@@ -30,6 +35,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IHeaderViewModelFactory headerViewModelFactory;
 		private IScheduleColorProvider scheduleColorProvider;
 		private IHasDayOffUnderFullDayAbsence hasDayOffUnderFullDayAbsence;
+		private IPermissionProvider permissionProvider;
+		private IAbsenceTypesProvider absenceTypesProvider;
 
 		[SetUp]
 		public void Setup()
@@ -39,6 +46,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			headerViewModelFactory = MockRepository.GenerateMock<IHeaderViewModelFactory>();
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
 			hasDayOffUnderFullDayAbsence = MockRepository.GenerateMock<IHasDayOffUnderFullDayAbsence>();
+			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
@@ -49,7 +58,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                  		             	() => periodViewModelFactory,
 			                  		             	() => headerViewModelFactory,
 			                  		             	() => scheduleColorProvider,
-													() => hasDayOffUnderFullDayAbsence
+													() => hasDayOffUnderFullDayAbsence,
+													() => permissionProvider,
+													() => absenceTypesProvider
 			                  		             	));
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
@@ -263,5 +274,53 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
 
+		[Test]
+		public void ShouldMapTextRequestPermission()
+		{
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).
+				Return(true);
+			var domainData = new WeekScheduleDomainData()
+			{
+				Days = new WeekScheduleDayDomainData[] { }
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+
+			result.RequestPermission.TextRequestPermission.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapAbsenceRequestPermission()
+		{
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).
+				Return(true);
+			var domainData = new WeekScheduleDomainData()
+			{
+				Days = new WeekScheduleDayDomainData[] { }
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+
+			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapAbsenceTypes()
+		{
+			var absence = new Absence() { Description = new Description("Vacation")};
+			absence.SetId(Guid.NewGuid());
+
+			var absences = new List<IAbsence> { absence };
+			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(absences);
+			var domainData = new WeekScheduleDomainData()
+			{
+				Days = new WeekScheduleDayDomainData[] { }
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+
+			result.AbsenceTypes.FirstOrDefault().Name.Should().Be.EqualTo(absence.Description.Name);
+			result.AbsenceTypes.FirstOrDefault().Id.Should().Be.EqualTo(absence.Id);
+		}
 	}
 }
