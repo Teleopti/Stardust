@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 	public class TeleoptiPrincipalCacheableFactoryTest
 	{
 		[Test]
-		public void ShouldMakeCachablePrincipal()
+		public void ShouldMakeCacheablePrincipal()
 		{
 			var person = PersonFactory.CreatePerson();
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		}
 
 		[Test]
-		public void ShouldMakeUsingCachableDependecies()
+		public void ShouldMakeUsingCacheableDependencies()
 		{
 			var person = PersonFactory.CreatePerson();
 			var makeRegionalFromPerson = MockRepository.GenerateMock<IMakeRegionalFromPerson>();
