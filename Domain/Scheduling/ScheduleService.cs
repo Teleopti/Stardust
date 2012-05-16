@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                         return false;
                     IScheduleMatrixPro matrix = matrixList[0];
 
-                    cache = _finderService.FindBestShift(schedulePart, schedulingOptions, matrix);
+                    cache = _finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);
                 }
 
                 if (cache == null)

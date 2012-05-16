@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
     		_schCategoryFairnessFactors = new ShiftCategoryFairnessFactors(new Dictionary<IShiftCategory, double>(), 0);
 
-            _target = new BestBlockShiftCategoryFinder(_options,_shiftProjectionCacheManager,_shiftProjectionCacheFilter,_personSkillPeriodsDataHolderManager,
+            _target = new BestBlockShiftCategoryFinder(_shiftProjectionCacheManager,_shiftProjectionCacheFilter,_personSkillPeriodsDataHolderManager,
                 _stateHolder,_finderService, _effectiveRestrictionCreator, _groupShiftCategoryFairnessCreator);
 
         }
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var personPeriod = _mocks.StrictMock<IPersonPeriod>();
             var ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
             IFairnessValueResult fairnessValue = new FairnessValueResult {FairnessPoints = 5, TotalNumberOfShifts = 3};
-        	var cashes = GetCashes();
+        	var cashes = getCashes();
             IBlockFinderResult result = new BlockFinderResult(null, _dates,
                                                               new Dictionary<string, IWorkShiftFinderResult>());
             IScheduleDateTimePeriod scheduleDateTimePeriod = _mocks.StrictMock<IScheduleDateTimePeriod>();
@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(scheduleDateTimePeriod.VisiblePeriod).Return(dateTimePeriod).Repeat.Times(1);
 
                 Expect.Call(_stateHolder.ShiftCategories).Return(_shiftCategories);
-                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly1, _permissionInformation.DefaultTimeZone(), ruleSetBag, false)).Return(GetCashes()).Repeat.Twice();
-                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly2, _permissionInformation.DefaultTimeZone(), ruleSetBag, false)).Return(GetCashes()).Repeat.Twice();
+                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly1, _permissionInformation.DefaultTimeZone(), ruleSetBag, false)).Return(getCashes()).Repeat.Twice();
+                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly2, _permissionInformation.DefaultTimeZone(), ruleSetBag, false)).Return(getCashes()).Repeat.Twice();
 
                 Expect.Call(_personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(_dateOnly1,
 																										   _schedulePeriod)).
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             using (_mocks.Playback())
             {
-				var ret = _target.BestShiftCategoryForDays(result, _person, fairnessValue, fairnessValue);
+				var ret = _target.BestShiftCategoryForDays(result, _person, fairnessValue, fairnessValue, _options);
                 Assert.AreEqual(_shiftCategory2, ret.BestShiftCategory);
             }
         }
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod dateTimePeriod = new DateTimePeriod(startDateTime.AddDays(-1), startDateTime.AddDays(1));
 
             IFairnessValueResult fairnessValue = new FairnessValueResult {FairnessPoints = 5, TotalNumberOfShifts = 3};
-        	var cashes = GetCashes();
+        	var cashes = getCashes();
             IBlockFinderResult result = new BlockFinderResult(null, _dates,
                                                               new Dictionary<string, IWorkShiftFinderResult>());
         	var persons = new List<IPerson> {_person};
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             using (_mocks.Playback())
             {
-                var ret = _target.BestShiftCategoryForDays(result, _person, fairnessValue, fairnessValue);
+                var ret = _target.BestShiftCategoryForDays(result, _person, fairnessValue, fairnessValue, _options);
                 Assert.IsNull( ret.BestShiftCategory);
             }
         }
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly1, _permissionInformation.DefaultTimeZone(), ruleSetBag, false)).Return(null).Repeat.Twice();
 
 			_mocks.ReplayAll();
-			var ret = _target.BestShiftCategoryForDays(result, _person, fairnessValue, fairnessValue);
+			var ret = _target.BestShiftCategoryForDays(result, _person, fairnessValue, fairnessValue, _options);
 			Assert.IsNull(ret.BestShiftCategory);
 			_mocks.VerifyAll();
 		}
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(scheduleDay.IsScheduled()).Return(true);
 
 			_mocks.ReplayAll();
-			var ret = _target.BestShiftCategoryForDays(result, groupPerson, fairnessValue, fairnessValue);
+			var ret = _target.BestShiftCategoryForDays(result, groupPerson, fairnessValue, fairnessValue, _options);
 			Assert.IsNull(ret.BestShiftCategory);
 			Assert.That(ret.FailureCause, Is.EqualTo(FailureCause.AlreadyAssigned));
 			_mocks.VerifyAll();
@@ -348,16 +348,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             using (_mocks.Playback())
             {
-                _target.BestShiftCategoryForDays(blockFinderResult, _person, fairnessValueResult, fairnessValueResult);
+                _target.BestShiftCategoryForDays(blockFinderResult, _person, fairnessValueResult, fairnessValueResult, _options);
             }
         }
 
-        private IList<IShiftProjectionCache> GetCashes()
+        private IList<IShiftProjectionCache> getCashes()
         {
-            var tmpList = GetWorkShifts();
+            var tmpList = getWorkShifts();
         	return tmpList.Select(shift => new ShiftProjectionCache(shift)).Cast<IShiftProjectionCache>().ToList();
         }
-        private IEnumerable<IWorkShift> GetWorkShifts()
+        private IEnumerable<IWorkShift> getWorkShifts()
         {
             _activity = ActivityFactory.CreateActivity("sd");
             _category = ShiftCategoryFactory.CreateShiftCategory("dv");

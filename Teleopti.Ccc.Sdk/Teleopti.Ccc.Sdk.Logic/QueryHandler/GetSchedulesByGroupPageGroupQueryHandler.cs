@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
-	public class GetSchedulesByGroupPageGroupQueryHandler : IHandleQuery<GetSchedulesByGroupPageGroupQueryHandlerDto, ICollection<SchedulePartDto>>
+	public class GetSchedulesByGroupPageGroupQueryHandler : IHandleQuery<GetSchedulesByGroupPageGroupQueryDto, ICollection<SchedulePartDto>>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScheduleRepository _scheduleRepository;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public ICollection<SchedulePartDto> Handle(GetSchedulesByGroupPageGroupQueryHandlerDto query)
+		public ICollection<SchedulePartDto> Handle(GetSchedulesByGroupPageGroupQueryDto query)
 		{
 			IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			return returnList;
 		}
 
-		private IScenario GetGivenScenarioOrDefault(GetSchedulesByGroupPageGroupQueryHandlerDto query)
+		private IScenario GetGivenScenarioOrDefault(GetSchedulesByGroupPageGroupQueryDto query)
 		{
 			IScenario scenario;
 			if (query.ScenarioId.HasValue)

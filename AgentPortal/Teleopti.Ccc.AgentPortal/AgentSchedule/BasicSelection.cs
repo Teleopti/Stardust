@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			                                                                        				}
 			                                                                        	}));
             else
-                persons.AddRange(SdkServiceHelper.OrganizationService.GetPeopleForShiftTradeByQuery(
+				persons.AddRange(SdkServiceHelper.OrganizationService.GetPersonsByQuery(
                        new GetPeopleForShiftTradeByGroupPageGroupQueryDto
                        {
                            GroupPageGroupId = _selectedTeam.Id,

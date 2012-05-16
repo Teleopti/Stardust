@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDaysOffPreferences daysOffPreferences = _optimizationPreferences.DaysOff;
 
             var dayOffOptimizer =
-                _groupDayOffOptimizerCreator.CreateDayOffOptimizer(_converter, decisionMaker, _dayOffDecisionMakerExecuter , daysOffPreferences,_validatorList,_allSelectedPersons);
+                _groupDayOffOptimizerCreator.CreateDayOffOptimizer(_converter, decisionMaker, _dayOffDecisionMakerExecuter , daysOffPreferences,_validatorList,_allSelectedPersons, _optimizationPreferences.Extra.KeepSameDaysOffInTeam);
 
             bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes, schedulingOptions);
             return dayOffOptimizerResult;

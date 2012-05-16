@@ -13,13 +13,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         IDayOffPlannerRules DayOffPlannerRules { get;}
 
-
-        /// <summary>
-        /// Gets the advanced preferences.
-        /// </summary>
-        IOptimizerAdvancedPreferences AdvancedPreferences { get;}
-
-
         /// <summary>
         /// Gets the scheduling options.
         /// </summary>

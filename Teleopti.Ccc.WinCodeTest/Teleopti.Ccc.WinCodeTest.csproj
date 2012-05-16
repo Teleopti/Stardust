@@ -499,6 +499,7 @@
     <Compile Include="Scheduler\AddPersonalActivityViewModelTest.cs" />
     <Compile Include="Scheduler\AgentInfoHelperTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayDataExtractorTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowColumnMapperTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsModelTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPresenterTest.cs" />

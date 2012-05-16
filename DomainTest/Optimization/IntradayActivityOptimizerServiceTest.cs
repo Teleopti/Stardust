@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using(_mocks.Playback())
             {
-                Assert.IsFalse(_target.Optimize(_scheduleDay));
+                Assert.IsFalse(_target.Optimize(_scheduleDay, new SchedulingOptions()));
             }
            
         }

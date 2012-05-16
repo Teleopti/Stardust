@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IBlockDayOffOptimizationService
     {
         event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-        void Execute(IEnumerable<IBlockDayOffOptimizerContainer> optimizers);
+		void Execute(IEnumerable<IBlockDayOffOptimizerContainer> optimizers, ISchedulingOptions schedulingOptions);
         void OnReportProgress(string message);
     }
 
@@ -32,14 +32,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-        public void Execute(IEnumerable<IBlockDayOffOptimizerContainer> optimizers)
+		public void Execute(IEnumerable<IBlockDayOffOptimizerContainer> optimizers, ISchedulingOptions schedulingOptions)
         {
             using (PerformanceOutput.ForOperation("Optimizing days off for " + optimizers.Count() + " agents"))
             {
-                executeOptimizersWhileActiveFound(optimizers);
+                executeOptimizersWhileActiveFound(optimizers, schedulingOptions);
                 if (_cancelMe)
                     return;
-                executeOptimizersWhileActiveFound(optimizers);
+                executeOptimizersWhileActiveFound(optimizers, schedulingOptions);
             }
         }
 
@@ -54,12 +54,13 @@ namespace Teleopti.Ccc.Domain.Optimization
                     _cancelMe = true;
             }
         }
-  
-        /// <summary>
-        /// Runs the active optimizers while at least one is active and can do more optimization.
-        /// </summary>
-        /// <param name="optimizers">All optimizer containers.</param>
-        private void executeOptimizersWhileActiveFound(IEnumerable<IBlockDayOffOptimizerContainer> optimizers)
+
+		/// <summary>
+		/// Runs the active optimizers while at least one is active and can do more optimization.
+		/// </summary>
+		/// <param name="optimizers">All optimizer containers.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		private void executeOptimizersWhileActiveFound(IEnumerable<IBlockDayOffOptimizerContainer> optimizers, ISchedulingOptions schedulingOptions)
         {
             IList<IBlockDayOffOptimizerContainer> successfulContainers =
                 new List<IBlockDayOffOptimizerContainer>(optimizers);
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             while (successfulContainers.Count > 0)
             {
                 IEnumerable<IBlockDayOffOptimizerContainer> unSuccessfulContainers =
-                    shuffleAndExecuteOptimizersInList(successfulContainers);
+                    shuffleAndExecuteOptimizersInList(successfulContainers, schedulingOptions);
 
                 if (_cancelMe)
                     break;
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.BlockDayOffOptimizationService.OnReportProgress(System.String)")]
-        private IEnumerable<IBlockDayOffOptimizerContainer> shuffleAndExecuteOptimizersInList(ICollection<IBlockDayOffOptimizerContainer> activeOptimizers)
+		private IEnumerable<IBlockDayOffOptimizerContainer> shuffleAndExecuteOptimizersInList(ICollection<IBlockDayOffOptimizerContainer> activeOptimizers, ISchedulingOptions schedulingOptions)
         {
             IList<IBlockDayOffOptimizerContainer> retList = new List<IBlockDayOffOptimizerContainer>();
             int executes = 0;
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             foreach (IBlockDayOffOptimizerContainer optimizer in activeOptimizers.GetRandom(activeOptimizers.Count, true))
             {
                 _rollbackService.ClearModificationCollection();
-                bool result = optimizer.Execute();
+                bool result = optimizer.Execute(schedulingOptions);
                 executes++;
                 if (!result)
                 {

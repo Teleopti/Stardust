@@ -510,7 +510,6 @@
     <Compile Include="ResourceCalculation\ResourceOptimizerPreferencesTest.cs" />
     <Compile Include="ResourceCalculation\MinMaxLengthTestDataCalculator.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceTest.cs" />
-    <Compile Include="ResourceCalculation\OptimizerAdvancedPreferencesTest.cs" />
     <Compile Include="RealTimeAdherence\StateGroupActivityAlarmTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\FixedStaffSchedulingServiceTest.cs" />

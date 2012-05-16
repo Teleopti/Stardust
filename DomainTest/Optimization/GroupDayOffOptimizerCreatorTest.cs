@@ -48,32 +48,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var validators = new List<IDayOffLegalStateValidator>();
             var allPersons = new List<IPerson>();
 
-			//Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions);
-			//Expect.Call(schedulingOptions.UseSameDayOffs).Return(false);
             Expect.Call(_groupPersonPreOptimizationChecker.GroupPersonBuilder).Return(null);
             _mock.ReplayAll();
-            var ret = _target.CreateDayOffOptimizer(converter, decisionMaker,_dayOffDecisionMakerExecuter, _daysOffPreferences, validators, allPersons);
+            var ret = _target.CreateDayOffOptimizer(converter, decisionMaker,_dayOffDecisionMakerExecuter, _daysOffPreferences, validators, allPersons, false);
             Assert.That(ret.GetType(), Is.EqualTo(typeof(GroupDayOffSingleOptimizer)));
             _mock.VerifyAll();
         }
 
-		//[Test]
-		//public void ShouldReturnOrdinaryVersionIfNotSameDaysOff()
-		//{
-		//    var converter = _mock.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
-		//    var decisionMaker = _mock.StrictMock<IDayOffDecisionMaker>();
-		//    var validators = new List<IDayOffLegalStateValidator>();
-		//    var allPersons = new List<IPerson>();
-		//    var schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
+		[Test]
+		public void ShouldReturnOrdinaryVersionIfNotSameDaysOff()
+		{
+			var converter = _mock.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
+			var decisionMaker = _mock.StrictMock<IDayOffDecisionMaker>();
+			var validators = new List<IDayOffLegalStateValidator>();
+			var allPersons = new List<IPerson>();
 
-		//    Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions);
-		//    Expect.Call(schedulingOptions.UseSameDayOffs).Return(true);
-		//    Expect.Call(_groupPersonPreOptimizationChecker.GroupPersonBuilder).Return(_groupPersonsBuilder);
-		//    _mock.ReplayAll();
-		//    var ret = _target.CreateDayOffOptimizer(converter, decisionMaker,_dayOffDecisionMakerExecuter, _daysOffPreferences, validators, allPersons);
-		//    Assert.That(ret.GetType(), Is.EqualTo(typeof(GroupDayOffOptimizer)));
-		//    _mock.VerifyAll();
-		//}
+			//Expect.Call(_groupPersonPreOptimizationChecker.GroupPersonBuilder).Return(_groupPersonsBuilder);
+			_mock.ReplayAll();
+			var ret = _target.CreateDayOffOptimizer(converter, decisionMaker, _dayOffDecisionMakerExecuter, _daysOffPreferences, validators, allPersons, true);
+			Assert.That(ret.GetType(), Is.EqualTo(typeof(GroupDayOffOptimizer)));
+			_mock.VerifyAll();
+		}
     }
 
 }

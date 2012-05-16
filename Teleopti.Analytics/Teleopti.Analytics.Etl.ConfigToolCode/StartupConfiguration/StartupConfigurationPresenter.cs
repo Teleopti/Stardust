@@ -68,6 +68,17 @@ namespace Teleopti.Analytics.Etl.ConfigToolCode.StartupConfiguration
 				defaultIntervalLength = _model.OriginalConfiguration.IntervalLength.Value;
 
 			_view.SetDefaultIntervalLength(defaultIntervalLength);
+			ValidateIntervalLength(defaultIntervalLength);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Analytics.Etl.ConfigToolCode.StartupConfiguration.IStartupConfigurationView.ShowErrorMessage(System.String)")]
+		private void ValidateIntervalLength(int intervalLength)
+		{
+			if (_view.SelectedIntervalLengthValue != null)
+				return;
+
+			_view.DisableOkButton();
+			_view.ShowErrorMessage(string.Format(CultureInfo.InvariantCulture, "Interval Length already in use is {0} minutes. Supported Interval Length are 10, 15, 30 and 60 minutes.", intervalLength));
 		}
 
 		private void SetDefaultCulture()

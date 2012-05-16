@@ -44,11 +44,20 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldReportConfigurationIsInvalidWhenIntervalLengthSettingIsInvalid()
 		{
-			var baseConfiguration = new BaseConfiguration(1053, 10, "UTC");
+			var baseConfiguration = new BaseConfiguration(1053, 5, "UTC");
 			
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(baseConfiguration);
 
 			_target.IsConfigurationValid.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReportConfigurationIsValidWhenIntervalLength10IsUsed()
+		{
+			var baseConfiguration = new BaseConfiguration(1053, 10, "UTC");
+			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(baseConfiguration);
+			_target.BaseConfiguration.IntervalLength.Should().Be.EqualTo(10);
+			_target.IsConfigurationValid.Should().Be.True();
 		}
 
 		[Test]

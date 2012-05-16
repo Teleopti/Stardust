@@ -3,8 +3,8 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private SchedulePeriodListShiftCategoryBackToLegalStateService _target;
         private MockRepository _mockRepository;
         private IList<IScheduleMatrixPro> _scheduleMatrixList;
-        private IOptimizerOriginalPreferences _optimizerPreferences;
+        private IOptimizationPreferences _optimizerPreferences;
         private IScheduleFairnessCalculator _scheduleFairnessCalculator;
         private IScheduleMatrixValueCalculatorProFactory _scheduleMatrixValueCalculatorFactory;
         private ISchedulingResultStateHolder _stateHolder;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _mockRepository = new MockRepository();
             _scheduleMatrixList = new List<IScheduleMatrixPro>();
-            _optimizerPreferences = OptimizerPreferencesFactory.Create();
+            _optimizerPreferences = new OptimizationPreferences();
             _scheduleFairnessCalculator = _mockRepository.StrictMock<IScheduleFairnessCalculator>();
             _stateHolder = _mockRepository.StrictMock<ISchedulingResultStateHolder>();
             _scheduleDayChangeCallback = _mockRepository.DynamicMock<IScheduleDayChangeCallback>();
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _scheduleMatrixValueCalculatorFactory,
 				_scheduleFairnessCalculator,
 				_scheduleService,
-                _scheduleDayChangeCallback, _optimizerPreferences);
+                _scheduleDayChangeCallback);
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _stateHolder,
                 _scheduleMatrixValueCalculatorFactory,
                 _scheduleFairnessCalculator,
-                scheduleService, _scheduleDayChangeCallback, _optimizerPreferences);
+                scheduleService, _scheduleDayChangeCallback);
 
             int iteration = _scheduleMatrixList.Count;
 
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using(_mockRepository.Playback())
             {
-                target.Execute(_scheduleMatrixList);
+                target.Execute(_scheduleMatrixList, new SchedulingOptions(), _optimizerPreferences);
             }
 
             
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _stateHolder,
                 _scheduleMatrixValueCalculatorFactory,
                 _scheduleFairnessCalculator,
-                _scheduleService, _scheduleDayChangeCallback, _optimizerPreferences);
+                _scheduleService, _scheduleDayChangeCallback);
 
             using (_mockRepository.Record())
             {

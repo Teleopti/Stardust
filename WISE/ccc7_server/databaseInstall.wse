@@ -274,18 +274,6 @@ end
 item: End Block
 end
 item: If/While Statement
-  Variable=AUTH
-  Value=NT
-end
-item: Execute Program
-  Pathname=.\ntrights.exe
-  Command Line=+r SeServiceLogonRight -u %MYUSER%
-  Default Directory=%DIR%
-  Flags=00000010
-end
-item: End Block
-end
-item: If/While Statement
   Variable=SAUTH
   Value=NT
 end

@@ -12,5 +12,8 @@ namespace Teleopti.Analytics.Etl.ConfigToolCode.StartupConfiguration
 		void SetDefaultTimeZone(LookupStringItem timeZone);
 		void LoadTimeZoneList(ReadOnlyCollection<LookupStringItem> timeZoneList);
 		void DisableIntervalLength();
+		void DisableOkButton();
+		void ShowErrorMessage(string message);
+		object SelectedIntervalLengthValue { get; }
 	}
 }

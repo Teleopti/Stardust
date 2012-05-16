@@ -287,8 +287,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             using (PerformanceOutput.ForOperation(string.Concat("Scheduling ", unlockedSchedules.Count, " days")))
             {
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(options.TagToUseOnScheduling));
-                fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff);
-
+                fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, options);
                 IList<IScheduleMatrixOriginalStateContainer> originalStateContainers =
                     CreateScheduleMatrixOriginalStateContainers(allSelectedSchedules);
 
@@ -461,7 +460,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                                 IScheduleMatrixPro matrix = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(
                                         new List<IScheduleDay> { schedulePart })[0];
 
-                                cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix);
+                            	var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
+                            	var effectiveRestriction = effectiveRestrictionCreator.GetEffectiveRestriction(
+                            		schedulePart, schedulingOptions);
+                                cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);
                             }
                             var result = finderService.FinderResult;
                             _allResults.AddResults(new List<IWorkShiftFinderResult> { result }, schedulingTime);
@@ -509,7 +511,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (optimizerPreferences.General.UseShiftCategoryLimitations)
             {
-                RemoveShiftCategoryBackToLegalState(matrixList, backgroundWorker);
+                RemoveShiftCategoryBackToLegalState(matrixList, backgroundWorker, optimizerPreferences);
             }
 
         }
@@ -686,7 +688,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (optimizerPreferences.General.UseShiftCategoryLimitations)
             {
-                RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker);
+                RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker, optimizerPreferences);
             }
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
@@ -882,7 +884,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public void RemoveShiftCategoryBackToLegalState(
             IList<IScheduleMatrixPro> matrixList,
-            BackgroundWorker backgroundWorker)
+            BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -894,7 +896,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (backgroundWorker.CancellationPending)
                     return;
 
-                backToLegalStateServicePro.Execute(matrixList);
+				var schedulingOptionsCreator = new SchedulingOptionsCreator();
+				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+                backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
             }
         }
 
@@ -1063,7 +1067,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             fixedStaffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceforContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
             //fixedStaffSchedulingService.DayOffScheduling(scheduleDays, schedulePartModifyAndRollbackServiceforContractDaysOff);
-            fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceforContractDaysOff);
+            fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceforContractDaysOff, schedulingOptions);
 
 
             fixedStaffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
@@ -1097,7 +1101,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
             //fixedStaffSchedulingService.DayOffScheduling(allScheduleDays, schedulePartModifyAndRollbackServiceForContractDaysOff);
-            fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff);
+            fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
 
             IScheduleTagSetter tagSetter = _container.Resolve<IScheduleTagSetter>();
             tagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
@@ -1118,7 +1122,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             blockSchedulingService.BlockScheduled += blockSchedulingServiceBlockScheduled;
 
             using (PerformanceOutput.ForOperation("Scheduling x blocks"))
-                blockSchedulingService.Execute(matrixes, schedulingOptions.UseBlockScheduling, schedulingResults);
+                blockSchedulingService.Execute(matrixes, schedulingOptions, schedulingResults);
 
             if (schedulingOptions.RotationDaysOnly)
                 schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
@@ -1156,7 +1160,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         public void ReOptimizeIntradayActivity(
             BackgroundWorker backgroundWorker,
             IOptimizerActivitiesPreferences preferences,
-            IList<IScheduleDay> scheduleDays)
+            IList<IScheduleDay> scheduleDays, ISchedulingOptions schedulingOptions)
         {
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
             if (preferences == null) throw new ArgumentNullException("preferences");
@@ -1172,7 +1176,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (locks != null && locks.Count != 0)
                     continue;
                 reOptimizeIntradayActivityOnScheduleDay(
-                     scheduleDay, preferences);
+                     scheduleDay, preferences, schedulingOptions);
             }
             //reset
             var shiftProjectionCacheFilter = _container.Resolve<IShiftProjectionCacheFilter>();
@@ -1268,7 +1272,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ResourceOptimizerProgressEventArgs.#ctor(Teleopti.Interfaces.Domain.IPerson,System.Double,System.Double,System.String)")]
         private void reOptimizeIntradayActivityOnScheduleDay(
             IScheduleDay scheduleDay,
-            IOptimizerActivitiesPreferences preferences)
+            IOptimizerActivitiesPreferences preferences, ISchedulingOptions schedulingOptions)
         {
             if (scheduleDay.SignificantPart() != SchedulePartView.MainShift)
                 return;
@@ -1290,7 +1294,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             shiftProjectionCacheFilter.SetMainShiftOptimizeActivitiesSpecification(mainShiftOptimizeActivitiesSpecification);
 
             var intradayActivityOptimizerService = _container.Resolve<IIntradayActivityOptimizerService>();
-            bool result = intradayActivityOptimizerService.Optimize(scheduleDay);
+            bool result = intradayActivityOptimizerService.Optimize(scheduleDay, schedulingOptions);
             string msg = Resources.Success;
             if (!result)
                 msg = Resources.Unsuccessful;

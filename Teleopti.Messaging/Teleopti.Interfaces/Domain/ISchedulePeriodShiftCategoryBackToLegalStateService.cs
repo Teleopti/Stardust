@@ -6,11 +6,12 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface ISchedulePeriodShiftCategoryBackToLegalStateService
     {
-        /// <summary>
-        /// Executes the main task.
-        /// </summary>
-        /// <param name="schedulePeriod">The schedule period.</param>
-        /// <returns></returns>
-        bool Execute(IVirtualSchedulePeriod schedulePeriod);
+		/// <summary>
+		/// Executes the main task.
+		/// </summary>
+		/// <param name="schedulePeriod">The schedule period.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <returns></returns>
+		bool Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions);
     }
 }

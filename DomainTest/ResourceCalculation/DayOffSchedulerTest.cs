@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_scheduleAvailableForDayOffSpecification = _mocks.StrictMock<IScheduleDayAvailableForDayOffSpecification>();
 			_target = new DayOffScheduler(_dayOffsInPeriodCalculator, _effectiveRestrictionCreator,
-                                          _schedulingOptions, _schedulePartModifyAndRollbackService, _scheduleAvailableForDayOffSpecification);
+										  _schedulePartModifyAndRollbackService, _scheduleAvailableForDayOffSpecification);
 
            
 		    _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
@@ -80,12 +80,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
 
-                MocksForNotAddingContractDaysoff();
+                mocksForNotAddingContractDaysoff();
             }
 
             using(_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);   
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);   
             }
         }
 
@@ -107,12 +107,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay)).Throw(new DayOffOutsideScheduleException());
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
 
-                MocksForNotAddingContractDaysoff();
+                mocksForNotAddingContractDaysoff();
             }
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }   
         }
 
@@ -132,12 +132,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false).Repeat.Any();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
                
-                MocksForNotAddingContractDaysoff();
+                mocksForNotAddingContractDaysoff();
             }
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }    
         }
 
@@ -158,13 +158,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
 
-                MocksForNotAddingContractDaysoff();
+                mocksForNotAddingContractDaysoff();
             }
 
             using (_mocks.Playback())
             {
                 _target.DayScheduled += _target_DayScheduled;
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
                 _target.DayScheduled += _target_DayScheduled;
             }        
         }
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }       
         }
 
@@ -212,12 +212,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
 
-                MocksForNotAddingContractDaysoff();
+                mocksForNotAddingContractDaysoff();
             }
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, null);
+				_target.DayOffScheduling(matrixProList, matrixProList, null, _schedulingOptions);
             }    
         }
 
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }           
         }
 
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }       
         }
 
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
                 _target.DayScheduled += _target_DayScheduled;
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
                 _target.DayScheduled -= _target_DayScheduled;
             }
         }
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }        
         }
 
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }       
         }
 
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }       
         }
 
@@ -427,7 +427,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }       
         }
 
@@ -460,7 +460,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }
         }
 
@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService);
+				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
             }
         }
        
@@ -509,7 +509,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             e.Cancel = true;
         }
 
-        private void MocksForNotAddingContractDaysoff()
+        private void mocksForNotAddingContractDaysoff()
         {
             Expect.Call(_schedulePeriod.IsValid).Return(false);
         }

@@ -30,7 +30,7 @@ namespace SdkTestClientWin.Domain
             foreach (var agent in _agentsToLoad)
             {
             	SchedulePartDto schedulePartDto =
-            		_service.SchedulingService.GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+            		_service.SchedulingService.GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
             		                                               	{
             		                                               		StartDate = dateOnly,
             		                                               		EndDate = dateOnly,

@@ -4,28 +4,16 @@ using System.Runtime.Serialization;
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 {
 	/// <summary>
-	/// Query to get schedules for a team.
+	/// Query to get schedules for one person.
 	/// </summary>
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/04/")]
-	public class GetSchedulesByTeamQueryHandlerDto : QueryDto
+	public class GetSchedulesByPersonQueryDto : QueryDto
 	{
 		/// <summary>
-		/// Gets or sets the time zone id.
+		/// Gets or sets the person id.
 		/// </summary>
 		[DataMember]
-		public string TimeZoneId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the start date.
-		/// </summary>
-		[DataMember]
-		public DateOnlyDto StartDate { get; set; }
-
-		/// <summary>
-		/// Gets or sets the end date.
-		/// </summary>
-		[DataMember]
-		public DateOnlyDto EndDate { get; set; }
+		public Guid PersonId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the scenario id. Setting the scenario id to null will use default scenario.
@@ -34,10 +22,22 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 		public Guid? ScenarioId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the team id.
+		/// Gets or sets the end date.
 		/// </summary>
 		[DataMember]
-		public Guid TeamId { get; set; }
+		public DateOnlyDto EndDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the start date.
+		/// </summary>
+		[DataMember]
+		public DateOnlyDto StartDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the time zone id.
+		/// </summary>
+		[DataMember]
+		public string TimeZoneId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the optional special projection.
