@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        public string LastestChangeDateTime
+        public string LatestChangeDateTime
         {
             get
             {
