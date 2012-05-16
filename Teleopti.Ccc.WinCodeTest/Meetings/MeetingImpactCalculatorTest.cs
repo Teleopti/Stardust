@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(meetingPerson1.Person).Return(_person);
             Expect.Call(meetingPerson2.Person).Return(_person);
             Expect.Call(_meeting.GetPersonMeetings(_person)).Return(new List<IPersonMeeting> { personMeeting }).Repeat.Twice();
-			Expect.Call(_scheduleDic.Period).Return(schedulePeriod).Repeat.Twice();
+			Expect.Call(_scheduleDic.Period).Return(schedulePeriod);
         	Expect.Call(personMeeting.Period).Return(_period);
         	Expect.Call(personMeeting.Period).Return(_period.MovePeriod(TimeSpan.FromDays(2)));
 			Expect.Call(schedulePeriod.LoadedPeriod()).Return(_period);
