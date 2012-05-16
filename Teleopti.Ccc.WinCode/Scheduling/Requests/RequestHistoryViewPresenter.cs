@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             details = details + obj.Dates + Environment.NewLine + Environment.NewLine;
 
             details = details + obj.RequestStatusText + Environment.NewLine;
-            details = details + obj.LastUpdatedDateTime + ' ' + obj.SavedByFirstName + ' ' + obj.SavedByLastName + Environment.NewLine + Environment.NewLine;
+            details = details + obj.LastestChangeDateTime + ' ' + obj.SavedByFirstName + ' ' + obj.SavedByLastName + Environment.NewLine + Environment.NewLine;
             
             details = details + obj.Message + Environment.NewLine;
             
