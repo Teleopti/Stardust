@@ -116,6 +116,7 @@
     <Compile Include="Areas\MobileReports\TestData\CurrentThreadCultureProvider.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportProviderForTest.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportsApplicationFunctionsFactory.cs" />
+    <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
     <Compile Include="Core\Settings\PersonPersisterTest.cs" />
     <Compile Include="FakeCurrentHttpContext.cs" />
     <Compile Include="FakeCurrentTeleoptiPrincipal.cs" />
