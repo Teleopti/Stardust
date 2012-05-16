@@ -29,7 +29,6 @@
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI30000'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI18357'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17774'">true</RunWebBehaviorTests>
-		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI19044'">true</RunWebBehaviorTests>
 		<AzureDeploy>false</AzureDeploy>
 		<AzureDeploy Condition="'$(CCNetProject)' == 'RaptorMain' or '$(CCNetProject)' == 'NightlyBuild'">true</AzureDeploy>
 		<AzureAnalyticsReportTest>false</AzureAnalyticsReportTest>
