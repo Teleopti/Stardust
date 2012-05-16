@@ -253,10 +253,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (preference == null)
                 return PermissionState.None;
 
-            if (_schedulePart.PersonDayOffCollection().Count == 0 && preference.DayOffTemplate != null)
-            {
-                return PermissionState.Broken;
-            }
+			if (_schedulePart.SignificantPart() == SchedulePartView.MainShift && preference.DayOffTemplate != null)
+				return PermissionState.Broken;
+
+			if (!_schedulePart.IsScheduled() && preference.DayOffTemplate != null)
+				return PermissionState.Unspecified;
+
             //todo: How does the dayoff work? 
             foreach (var dayOff in _schedulePart.PersonDayOffCollection())
             {
