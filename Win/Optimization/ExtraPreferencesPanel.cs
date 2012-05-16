@@ -105,7 +105,8 @@ namespace Teleopti.Ccc.Win.Optimization
                     break;
             }
 
-            checkBoxTeams.Checked = Preferences.UseTeams;
+			if (checkBoxBlock.Checked) Preferences.UseTeams = false;
+			checkBoxTeams.Checked = Preferences.UseTeams;
         	checkBoxKeepWeekEndsTogether.Checked = Preferences.KeepSameDaysOffInTeam;
 
             if (Preferences.GroupPageOnTeam != null)
@@ -131,6 +132,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
         {
+        	checkBoxTeams.Enabled = !checkBoxBlock.Checked;
             setRadioButtonsStatus();
         }
 
@@ -142,6 +144,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void checkBoxTeams_CheckedChanged(object sender, System.EventArgs e)
         {
+        	checkBoxBlock.Enabled = !checkBoxTeams.Checked;
             setSubItemsOnTeamOptimizationStatus();
         }
 
