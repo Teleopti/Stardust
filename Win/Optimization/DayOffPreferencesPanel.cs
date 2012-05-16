@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.Win.Optimization
             DaysOffPreferences.DaysOffPerWeekValue = new MinMax<int>((int)numericUpDownDaysOffPerWeekMin.Value, (int)numericUpDownDaysOffPerWeekMax.Value);
             DaysOffPreferences.ConsecutiveDaysOffValue = new MinMax<int>((int)numericUpDownConsDayOffMin.Value, (int)numericUpDownConsDayOffMax.Value);
             DaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>((int)numericUpDownConsWorkDaysMin.Value, (int)numericUpDownConsWorkDaysMax.Value);
-            DaysOffPreferences.FullWeekendsOffValue = new MinMax<int>((int)numericUpDownWeekEndDaysOffMin.Value, (int)numericUpDownWeekEndDaysOffMax.Value);
-            DaysOffPreferences.WeekEndDaysOffValue = new MinMax<int>((int)numericUpDownFullWeekendsOffMin.Value, (int)numericUpDownFullWeekendsOffMax.Value);
-
+            DaysOffPreferences.WeekEndDaysOffValue = new MinMax<int>((int)numericUpDownWeekEndDaysOffMin.Value, (int)numericUpDownWeekEndDaysOffMax.Value);
+            DaysOffPreferences.FullWeekendsOffValue = new MinMax<int>((int)numericUpDownFullWeekendsOffMin.Value, (int)numericUpDownFullWeekendsOffMax.Value);
+			
             DaysOffPreferences.ConsiderWeekBefore = checkBoxConsiderWeekBefore.Checked;
             DaysOffPreferences.ConsiderWeekAfter = checkBoxConsiderWeekAfter.Checked;
         }
