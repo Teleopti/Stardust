@@ -5,17 +5,17 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 {
 	public class CurrentBusinessUnitProvider : ICurrentBusinessUnitProvider
 	{
-		private readonly ICurrentPrincipalProvider _currentPrincipalProvider;
+		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 
-		public CurrentBusinessUnitProvider(ICurrentPrincipalProvider currentPrincipalProvider)
+		public CurrentBusinessUnitProvider(ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
 		{
-			_currentPrincipalProvider = currentPrincipalProvider;
+			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
 		public IBusinessUnit CurrentBusinessUnit()
 		{
-			var currentPrincipal = _currentPrincipalProvider.Current();
-			return currentPrincipal == null ? null : ((TeleoptiIdentity) _currentPrincipalProvider.Current().Identity).BusinessUnit;
+			var currentPrincipal = _currentTeleoptiPrincipal.Current();
+			return currentPrincipal == null ? null : ((TeleoptiIdentity)currentPrincipal.Identity).BusinessUnit;
 		}
 	}
 }

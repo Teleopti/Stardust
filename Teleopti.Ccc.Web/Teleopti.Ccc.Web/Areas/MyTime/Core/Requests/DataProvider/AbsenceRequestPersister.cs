@@ -15,10 +15,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IMappingEngine _mapper;
 		private readonly IServiceBusSender _serviceBusSender;
 		private readonly ICurrentBusinessUnitProvider _businessUnitProvider;
-		private readonly ICurrentDataSourceProvider _dataSourceProvider;
+		private readonly IDataSourceProvider _dataSourceProvider;
 		private readonly INow _now;
 
-		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository, IMappingEngine mapper, IServiceBusSender serviceBusSender, ICurrentBusinessUnitProvider businessUnitProvider, ICurrentDataSourceProvider dataSourceProvider, INow now)
+		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository, IMappingEngine mapper, IServiceBusSender serviceBusSender, ICurrentBusinessUnitProvider businessUnitProvider, IDataSourceProvider dataSourceProvider, INow now)
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;

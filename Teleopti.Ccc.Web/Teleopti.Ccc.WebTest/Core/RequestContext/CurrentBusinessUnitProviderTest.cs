@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[SetUp]
 		public void Setup()
 		{
-			currentPrincipalProvider = MockRepository.GenerateMock<ICurrentPrincipalProvider>();
-			target = new CurrentBusinessUnitProvider(currentPrincipalProvider);
+			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
+			target = new CurrentBusinessUnitProvider(currentTeleoptiPrincipal);
 		}
 
 		#endregion
 
 		private ICurrentBusinessUnitProvider target;
-		private ICurrentPrincipalProvider currentPrincipalProvider;
+		private ICurrentTeleoptiPrincipal currentTeleoptiPrincipal;
 
 		[Test]
 		public void ShouldReturnCurrentBusinessUnit()
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var businessUnit = MockRepository.GenerateMock<IBusinessUnit>();
 			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", null, businessUnit, null, AuthenticationTypeOption.Unknown), new Person());
 
-			currentPrincipalProvider.Expect(x => x.Current()).Return(teleoptiPrincipal);
+			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(teleoptiPrincipal);
 
 			target.CurrentBusinessUnit()
 				.Should().Be.SameInstanceAs(businessUnit);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void ShouldReturnNullWhenCurrentPrincipalNotDefined()
 		{
-			currentPrincipalProvider.Expect(x => x.Current()).Return(null);
+			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(null);
 
 			target.CurrentBusinessUnit()
 				.Should().Be.Null();
