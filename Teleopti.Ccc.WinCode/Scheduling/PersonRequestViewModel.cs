@@ -140,6 +140,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
            return _personRequest.GetSubject(formatter);
         }
 
+        public string Subject
+        {
+            get { return _personRequest.GetSubject(new NoFormatting()); }
+        }
+
         public string Message
 		{
 			get { return _personRequest.GetMessage(new NoFormatting()); }
