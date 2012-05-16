@@ -288,7 +288,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(options.TagToUseOnScheduling));
                 fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, options);
-
                 IList<IScheduleMatrixOriginalStateContainer> originalStateContainers =
                     CreateScheduleMatrixOriginalStateContainers(allSelectedSchedules);
 

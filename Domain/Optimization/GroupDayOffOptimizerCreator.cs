@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
             IDaysOffPreferences daysOffPreferences, 
             IList<IDayOffLegalStateValidator> validatorList, 
-            IList<IPerson> allSelectedPersons);
+            IList<IPerson> allSelectedPersons,
+			bool useSameDaysOff);
     }
 
     public class GroupDayOffOptimizerCreator : IGroupDayOffOptimizerCreator
@@ -50,21 +51,22 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter, 
             IDaysOffPreferences daysOffPreferences, 
             IList<IDayOffLegalStateValidator> validatorList, 
-            IList<IPerson> allSelectedPersons)
+            IList<IPerson> allSelectedPersons,
+			bool useSameDaysOff)
         {
-			//if (_optimizerPreferences.SchedulingOptions.UseSameDayOffs)
-			//    return new GroupDayOffOptimizer(converter,
-			//                        decisionMaker,
-			//                        _scheduleResultDataExtractorProvider,
-			//                        daysOffPreferences,
-			//                        dayOffDecisionMakerExecuter,
-			//                        _changesTracker,
-			//                        _schedulePartModifyAndRollbackService,
-			//                        _groupSchedulingService,
-			//                        validatorList,
-			//                        allSelectedPersons,
-			//                        _groupPersonPreOptimizationChecker,
-			//                        _groupMatrixHelper);
+			if (useSameDaysOff)
+				return new GroupDayOffOptimizer(converter,
+									decisionMaker,
+									_scheduleResultDataExtractorProvider,
+									daysOffPreferences,
+									dayOffDecisionMakerExecuter,
+									_changesTracker,
+									_schedulePartModifyAndRollbackService,
+									_groupSchedulingService,
+									validatorList,
+									allSelectedPersons,
+									_groupPersonPreOptimizationChecker,
+									_groupMatrixHelper);
 
             return new GroupDayOffSingleOptimizer(converter,
                                     decisionMaker,
