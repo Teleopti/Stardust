@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -80,7 +82,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
-                return StartDateTime.ToLocalTime() + Delimiter + EndDateTime.ToLocalTime();
+                var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+                return TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone) + Delimiter +
+                       TimeZoneHelper.ConvertFromUtc(EndDateTime, timeZone);
             }
         }
 
@@ -88,7 +92,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
-                return StartDateTime.ToLocalTime().ToShortDateString() + Delimiter + EndDateTime.ToLocalTime().ToShortDateString();
+                var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+                return TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone).ToShortDateString() + Delimiter +
+                       TimeZoneHelper.ConvertFromUtc(EndDateTime, timeZone).ToShortDateString();
+            }
+        }
+
+        public string LatestChangeDateTime
+        {
+            get
+            {
+                var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+                var culture = TeleoptiPrincipal.Current.Regional.Culture;
+                return TimeZoneHelper.ConvertFromUtc(LastUpdatedDateTime, timeZone).ToString(culture);
             }
         }
 
