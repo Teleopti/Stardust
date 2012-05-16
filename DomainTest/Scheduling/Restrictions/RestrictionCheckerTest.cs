@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
     public class RestrictionCheckerTest
     {
         private RestrictionChecker _target;
-        private readonly MockRepository _mockRepository = new MockRepository();
+        private MockRepository _mockRepository;
         private IScheduleDay _schedulePartMock;
         private IPerson _person;
         private DateTime _dateTime;// = new DateTime(2006, 12, 23, 7, 30, 0);
@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [SetUp]
         public void Setup()
         {
+			_mockRepository = new MockRepository();
             _layerFactory = new VisualLayerFactory();
             _dateTime = new DateTime(2006, 12, 23, 7, 30, 0);
             _dateTime = TimeZoneHelper.ConvertToUtc(_dateTime);
