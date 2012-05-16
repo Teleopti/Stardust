@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
-	public class GetSchedulesByTeamQueryHandler : IHandleQuery<GetSchedulesByTeamQueryHandlerDto, ICollection<SchedulePartDto>>
+	public class GetSchedulesByTeamQueryHandler : IHandleQuery<GetSchedulesByTeamQueryDto, ICollection<SchedulePartDto>>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScheduleRepository _scheduleRepository;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public ICollection<SchedulePartDto> Handle(GetSchedulesByTeamQueryHandlerDto query)
+		public ICollection<SchedulePartDto> Handle(GetSchedulesByTeamQueryDto query)
 		{
 			IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			return returnList;
 		}
 
-		private IScenario GetGivenScenarioOrDefault(GetSchedulesByTeamQueryHandlerDto query)
+		private IScenario GetGivenScenarioOrDefault(GetSchedulesByTeamQueryDto query)
 		{
 			IScenario scenario;
 			if (query.ScenarioId.HasValue)

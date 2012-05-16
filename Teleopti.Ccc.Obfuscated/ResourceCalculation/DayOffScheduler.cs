@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -12,14 +11,13 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	public interface IDayOffScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService);
+        void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions);
 	}
 
 	public class DayOffScheduler : IDayOffScheduler
 	{
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly ISchedulingOptions _schedulingOptions;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
 
@@ -28,27 +26,26 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		public DayOffScheduler(
             IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator, 
-            ISchedulingOptions schedulingOptions,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
             IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification)
 		{
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_schedulingOptions = schedulingOptions;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_scheduleDayAvailableForDayOffSpecification = scheduleDayAvailableForDayOffSpecification;
 		}
 
-        public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
+		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
         {
             using (PerformanceOutput.ForOperation("Inital assignment of days off"))
             {
-                addDaysOff(matrixList);
-                if (_schedulingOptions.AddContractScheduleDaysOff) addContractDaysOff(matrixListAll, rollbackService);
+                addDaysOff(matrixList, schedulingOptions);
+                if (schedulingOptions.AddContractScheduleDaysOff) addContractDaysOff(matrixListAll, rollbackService, schedulingOptions);
             }
         }
 
-        private void addDaysOff(IEnumerable<IScheduleMatrixPro> matrixList)//, IEnumerable<DateOnly> dates, IEnumerable<IPerson> persons)
+		private void addDaysOff(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)//, IEnumerable<DateOnly> dates, IEnumerable<IPerson> persons)
         {
            
             foreach (var scheduleMatrixPro in matrixList)
@@ -58,11 +55,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     var part = scheduleDayPro.DaySchedulePart();
                     if (part.IsScheduled()) continue;
 
-                    var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, _schedulingOptions);
+                    var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
 
                     if (effectiveRestriction == null || effectiveRestriction.DayOffTemplate == null) continue;
                     // borde inte detta hanteras när effective restriction skapas och då returnera null??
-                    if (EffectiveRestrictionCreator.OptionsConflictWithRestrictions(_schedulingOptions, effectiveRestriction)) continue;
+                    if (EffectiveRestrictionCreator.OptionsConflictWithRestrictions(schedulingOptions, effectiveRestriction)) continue;
                     try
                     {
                         part.CreateAndAddDayOff(effectiveRestriction.DayOffTemplate);
@@ -80,7 +77,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             }          
         }
 
-        private void addContractDaysOff(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService)
+		private void addContractDaysOff(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
         {
             if (rollbackService == null)
                 throw new ArgumentNullException("rollbackService");
@@ -114,14 +111,14 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
                     if (schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, scheduleDayPro.Day))
                         continue;
-                    IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, _schedulingOptions);
+                    IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
 
                     if (effectiveRestriction != null && effectiveRestriction.IsLimitedWorkday)
                         continue;
                     
                     try
                     {
-                        part.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate);
+                        part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
                         rollbackService.Modify(part);
                         currentDaysOff++;
                     }

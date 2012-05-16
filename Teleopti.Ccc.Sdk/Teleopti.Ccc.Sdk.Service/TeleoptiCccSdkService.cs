@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public SchedulePartDto GetSchedulePart(PersonDto person, DateOnlyDto startDate, string timeZoneId)
 		{
 			return
-				GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+				GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
 				                    	{
 				                    		StartDate = startDate,
 				                    		EndDate = startDate,
@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
         public ICollection<SchedulePartDto> GetScheduleParts(PersonDto person, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
         {
         	return
-        		GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+        		GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
         		                    	{StartDate = startDate, EndDate = endDate, TimeZoneId = timeZoneId});
         }
 
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			QueryDto query = null;
 			if (scheduleLoadOptionDto.LoadAll)
 			{
-				query = new GetSchedulesForAllPeopleQueryHandlerDto
+				query = new GetSchedulesForAllPeopleQueryDto
 				        	{
 				        		StartDate = startDate,
 				        		EndDate = endDate,
@@ -452,7 +452,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}
 			if (scheduleLoadOptionDto.LoadSite != null)
 			{
-				query = new GetSchedulesBySiteQueryHandlerDto
+				query = new GetSchedulesBySiteQueryDto
 					{
 						StartDate = startDate,
 						EndDate = endDate,
@@ -463,7 +463,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}
 			if (scheduleLoadOptionDto.LoadTeam != null)
 			{
-				query = new GetSchedulesByTeamQueryHandlerDto
+				query = new GetSchedulesByTeamQueryDto
 					                    	{
 					                    		StartDate = startDate,
 					                    		EndDate = endDate,
@@ -474,7 +474,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}
 			if (scheduleLoadOptionDto.LoadPerson != null)
 			{
-				GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+				GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
 				{
 					StartDate = startDate,
 					EndDate = endDate,
@@ -585,12 +585,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					asyncResult.AsyncWaitHandle.WaitOne();
 			}
 		}
-
-        public ICollection<PersonDto> GetPeopleForShiftTradeByQuery(QueryDto queryDto)
-        {
-            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PersonDto>>>();
-            return invoker.Invoke(queryDto);
-        }
 
         private void CreateServerScheduleDistribution(IList<PersonDto> personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{

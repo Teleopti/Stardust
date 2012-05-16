@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Rhino.Mocks;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 {
@@ -13,10 +14,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IAgentRestrictionsView _view;
 		private IAgentRestrictionsModel _model;
 		private IAgentRestrictionsWarningDrawer _warningDrawer;
-		private IAgentRestrictionsLoadingDrawer _loadingDrawer;
-		private IAgentRestrictionsNotAvailableDrawer _notAvailableDrawer;
+		private IAgentRestrictionsDrawer _loadingDrawer;
+		private IAgentRestrictionsDrawer _notAvailableDrawer;
+		private IAgentRestrictionsDrawer _availableDrawer;
 		private MockRepository _mocks;
-
+		private IScheduleMatrixPro _scheduleMatrixPro;
+		private AgentRestrictionsDisplayRow _agentRestrictionsDisplayRow;
+			
 		[SetUp]
 		public void Setup()
 		{
@@ -24,9 +28,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_model = _mocks.StrictMock<IAgentRestrictionsModel>();
 			_view = _mocks.StrictMock<IAgentRestrictionsView>();
 			_warningDrawer = _mocks.StrictMock<IAgentRestrictionsWarningDrawer>();
-			_loadingDrawer = _mocks.StrictMock<IAgentRestrictionsLoadingDrawer>();
-			_notAvailableDrawer = _mocks.StrictMock<IAgentRestrictionsNotAvailableDrawer>();
-			_presenter = new AgentRestrictionsPresenter(_view, _model, _warningDrawer, _loadingDrawer, _notAvailableDrawer);
+			_loadingDrawer = _mocks.StrictMock<IAgentRestrictionsDrawer>();
+			_notAvailableDrawer = _mocks.StrictMock<IAgentRestrictionsDrawer>();
+			_availableDrawer = _mocks.StrictMock<IAgentRestrictionsDrawer>();
+			_presenter = new AgentRestrictionsPresenter(_view, _model, _warningDrawer, _loadingDrawer, _notAvailableDrawer, _availableDrawer);
+			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			_agentRestrictionsDisplayRow = new AgentRestrictionsDisplayRow(_scheduleMatrixPro);
 		}
 
 		[Test]
@@ -119,8 +126,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				using(_mocks.Record())
 				{
-					Expect.Call(_notAvailableDrawer.Draw(_view, null)).Return(false).IgnoreArguments().Repeat.AtLeastOnce();
-					Expect.Call(_loadingDrawer.Draw(_view, null)).Return(false).IgnoreArguments().Repeat.AtLeastOnce();
+					Expect.Call(_model.DisplayRowFromRowIndex(0)).Return(_agentRestrictionsDisplayRow).IgnoreArguments().Repeat.AtLeastOnce();
+					Expect.Call(_notAvailableDrawer.Draw(_view, null, null)).Return(false).IgnoreArguments().Repeat.AtLeastOnce();
+					Expect.Call(_loadingDrawer.Draw(_view, null, null)).Return(false).IgnoreArguments().Repeat.AtLeastOnce();
+					Expect.Call(_availableDrawer.Draw(_view, null, null)).Return(true).IgnoreArguments().Repeat.AtLeastOnce();
 				}
 
 				using(_mocks.Playback()) 
@@ -129,21 +138,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 					{
 						var args = new GridQueryCellInfoEventArgs(2, i, gridStyleInfo);
 						_presenter.GridQueryCellInfo(null, args);
-
-						if (i == 0) Assert.AreEqual("Header", args.Style.CellType);
-						if (i == 1) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
-						if (i == 2) Assert.AreEqual("Static", args.Style.CellType);
-						if (i == 3) Assert.AreEqual("Static", args.Style.CellType);
-						if (i == 4) Assert.AreEqual("Static", args.Style.CellType);
-						if (i == 5) Assert.AreEqual("TimeSpan", args.Style.CellType);
-						if (i == 6) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
-						if (i == 7) Assert.AreEqual("TimeSpan", args.Style.CellType);
-						if (i == 8) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
-						if (i == 9) Assert.AreEqual("TimeSpan", args.Style.CellType);
-						if (i == 10) Assert.AreEqual("TimeSpan", args.Style.CellType);
-						if (i == 11) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
-						if (i == 12) Assert.AreEqual("Static", args.Style.CellType);
-
 						Setup();
 					}
 				}
@@ -155,7 +149,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			using(_mocks.Record())
 			{
-				Expect.Call(() => _warningDrawer.Draw(null, null));
+				Expect.Call(() => _warningDrawer.Draw(null, _model));
 			}
 
 			using(_mocks.Playback())

@@ -287,8 +287,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             using (PerformanceOutput.ForOperation(string.Concat("Scheduling ", unlockedSchedules.Count, " days")))
             {
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(options.TagToUseOnScheduling));
-                fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff);
-
+                fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, options);
                 IList<IScheduleMatrixOriginalStateContainer> originalStateContainers =
                     CreateScheduleMatrixOriginalStateContainers(allSelectedSchedules);
 
@@ -1068,7 +1067,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             fixedStaffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceforContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
             //fixedStaffSchedulingService.DayOffScheduling(scheduleDays, schedulePartModifyAndRollbackServiceforContractDaysOff);
-            fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceforContractDaysOff);
+            fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceforContractDaysOff, schedulingOptions);
 
 
             fixedStaffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
@@ -1102,7 +1101,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
             //fixedStaffSchedulingService.DayOffScheduling(allScheduleDays, schedulePartModifyAndRollbackServiceForContractDaysOff);
-            fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff);
+            fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
 
             IScheduleTagSetter tagSetter = _container.Resolve<IScheduleTagSetter>();
             tagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);

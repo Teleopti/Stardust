@@ -134,11 +134,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private ClipboardControl _clipboardControl;
         private EditControl _editControl;
         private bool _uIEnabled = true;
-
-        private SchedulePartFilter SchedulePartFilter = SchedulePartFilter.None;
-
-        private IOptimizerAdvancedPreferences _optimizerAdvancedPreferences;
-
+    	private SchedulePartFilter SchedulePartFilter = SchedulePartFilter.None;
         private bool _chartInIntradayMode;
 
         private IHandleBusinessRuleResponse _handleBusinessRuleResponse;
@@ -175,6 +171,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly BackgroundWorker _backgroundWorkerScheduling = new BackgroundWorker();
         private readonly BackgroundWorker _backgroundWorkerOptimization = new BackgroundWorker();
         private readonly IUndoRedoContainer _undoRedo = new UndoRedoContainer(500);
+    	private IDayOffTemplate _dayOffTemplate;
 
         private readonly ICollection<IPersonWriteProtectionInfo> _modifiedWriteProtections =
             new HashSet<IPersonWriteProtectionInfo>();
@@ -427,7 +424,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             setUpZomMenu();
             var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
             _container = lifetimeScope.BeginLifetimeScope();
-            _optimizerOriginalPreferences = _container.Resolve<IOptimizerOriginalPreferences>();
+            _optimizerOriginalPreferences = new OptimizerOriginalPreferences(new DayOffPlannerRules(), new SchedulingOptions());
             _optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
             _overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
             _ruleSetProjectionService = _container.Resolve<IRuleSetProjectionService>();
@@ -3280,8 +3277,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             setThreadCulture();
             _optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator,
-                                                               _optimizerOriginalPreferences.SchedulingOptions.
-                                                                   ConsiderShortBreaks, true);
+                                                               true, true);
         }
 
         private void validateAllPersons()
@@ -3551,7 +3547,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   select item).ToList();
 
             ((List<IDayOffTemplate>) displayList).Sort(new DayOffTemplateSorter());
-            _optimizerOriginalPreferences.SchedulingOptions.DayOffTemplate = displayList[0];
+            _dayOffTemplate = displayList[0];
             wpfShiftEditor1.Interval = _currentSchedulingScreenSettings.EditorSnapToResolution;
 
 
@@ -4434,6 +4430,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IList<IGroupPage> groupPages = _cachedGroupPages;
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
 							ScheduleEmploymentType.FixedStaff;
+            	_schedulingOptions.DayOffTemplate = _dayOffTemplate;
 				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules,
                                                                             _schedulerState.CommonStateHolder.ShiftCategories,
 																			 false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
@@ -4571,6 +4568,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void _backgroundWorkerScheduling_DoWork(object sender, DoWorkEventArgs e)
         {
             setThreadCulture();
+			var schedulingOptions = _container.Resolve<ISchedulingOptions>();
+			schedulingOptions.DayOffTemplate = _dayOffTemplate;
             bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
             _schedulerState.SchedulingResultState.SkipResourceCalculation = false;
             if (lastCalculationState)
@@ -4600,7 +4599,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var matrixListAll = OptimizerHelperHelper.CreateMatrixList(allScheduleDays, _schedulerState.SchedulingResultState, _container);
 
             _undoRedo.CreateBatch(Resources.UndoRedoScheduling);
-		    var schedulingOptions = _container.Resolve<ISchedulingOptions>();
+		    
 
             //Extend period with 10 days to handle block scheduling
             DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnly;
@@ -7277,15 +7276,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         #endregion
-
-        private IOptimizerAdvancedPreferences getReOptimizerCriteriaPreferences()
-        {
-            if (_optimizerAdvancedPreferences == null)
-                _optimizerAdvancedPreferences = new OptimizerAdvancedPreferences();
-
-            return _optimizerAdvancedPreferences;
-        }
-
 
         // becaused called on another thread sometimes
         private delegate void ToggleQuickButtonEnabledState(ToolStripItem button, bool enable);

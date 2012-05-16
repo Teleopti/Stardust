@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
 		private static IEnumerable<SchedulePartDto> LoadScheduleDataWithLoadOption(GroupForPeople groupForPeople, DateOnlyDto dateOnlyDto)
 		{
-			var query = new GetSchedulesByGroupPageGroupQueryHandlerDto
+			var query = new GetSchedulesByGroupPageGroupQueryDto
 			            	{
 			            		GroupPageGroupId = groupForPeople.GroupId,
 			            		QueryDate = dateOnlyDto,
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
 		private static IEnumerable<SchedulePartDto> LoadScheduleDataWithLoadOption(PersonDto person, DateOnlyDto dateOnlyDto)
 		{
-			var query = new GetSchedulesByPersonQueryHandlerDto
+			var query = new GetSchedulesByPersonQueryDto
 			{
 				PersonId = person.Id,
 				StartDate = dateOnlyDto,
@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             gridControlTeamSchedules.RightToLeft = RightToLeft;
 
             _startDateForTeamView = DateTime.SpecifyKind(DateTime.Today,DateTimeKind.Unspecified);
-            navigationMonthCalendarTeamView.DateValue = DateTime.Now;
+            navigationMonthCalendarTeamView.DateValue = _startDateForTeamView;
 
 			LoadTeams();
             if (isPermittedToViewCustomTeamSchedule())

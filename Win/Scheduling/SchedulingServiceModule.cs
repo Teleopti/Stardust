@@ -47,13 +47,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
             builder.RegisterType<ResourceCalculateDaysDecider>().As<IResourceCalculateDaysDecider>().InstancePerLifetimeScope();
             builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().InstancePerLifetimeScope();
-            
             builder.RegisterType<SchedulingOptions>().As<ISchedulingOptions>().InstancePerLifetimeScope();
-            builder.RegisterType<OptimizerOriginalPreferences>().As<IOptimizerOriginalPreferences>().InstancePerLifetimeScope();
             builder.RegisterType<OptimizationPreferences>().As<IOptimizationPreferences>().InstancePerLifetimeScope();
             builder.RegisterType<DayOffPlannerRules>().As<IDayOffPlannerRules>().InstancePerLifetimeScope();
-            builder.RegisterType<OptimizerAdvancedPreferences>().As<IOptimizerAdvancedPreferences>().InstancePerLifetimeScope();
-            
             builder.RegisterType<NonBlendWorkShiftCalculator>().As<INonBlendWorkShiftCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>().As<INonBlendSkillImpactOnPeriodForProjection>().InstancePerLifetimeScope();
             builder.RegisterType<ShiftCategoryFairnessManager>().As<IShiftCategoryFairnessManager>().InstancePerLifetimeScope();

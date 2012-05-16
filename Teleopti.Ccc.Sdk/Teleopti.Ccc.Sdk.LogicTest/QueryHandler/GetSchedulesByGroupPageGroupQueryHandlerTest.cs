@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Playback())
 			{
 				var result =
-					target.Handle(new GetSchedulesByGroupPageGroupQueryHandlerDto
+					target.Handle(new GetSchedulesByGroupPageGroupQueryDto
 					              	{
 					              		QueryDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
 					              		ScenarioId = scenarioId,
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<FaultException>(() => target.Handle(new GetSchedulesByGroupPageGroupQueryHandlerDto
+				Assert.Throws<FaultException>(() => target.Handle(new GetSchedulesByGroupPageGroupQueryDto
 					{
 						QueryDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
 						ScenarioId = scenarioId,
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Playback())
 			{
 				var result =
-					target.Handle(new GetSchedulesByGroupPageGroupQueryHandlerDto
+					target.Handle(new GetSchedulesByGroupPageGroupQueryDto
 					{
 						QueryDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
 						ScenarioId = null,

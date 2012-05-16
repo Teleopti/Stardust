@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.AgentPortal.Reports
                 DateOnlyDto endDateOnly = new DateOnlyDto{DateTime = _selectedDateTimePeriodDto.LocalEndDateTime.Date,DateTimeSpecified = true};
                 PersonDto person = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
 
-				var query = new GetSchedulesByPersonQueryHandlerDto { StartDate = startDateOnly,EndDate = endDateOnly,PersonId = person.Id,TimeZoneId = person.TimeZoneId};
+				var query = new GetSchedulesByPersonQueryDto { StartDate = startDateOnly,EndDate = endDateOnly,PersonId = person.Id,TimeZoneId = person.TimeZoneId};
                 IList<SchedulePartDto> schedulePartDtos = SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
                 _myScheduleGridAdapterCollection.Clear();
                 List<ProjectedLayerDto> allProjectedLayers = new List<ProjectedLayerDto>();

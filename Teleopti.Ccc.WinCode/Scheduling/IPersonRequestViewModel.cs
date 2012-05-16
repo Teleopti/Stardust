@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         bool IsDenied { get; }
         bool IsNew { get; }
         string Details { get; }
+        string Subject { get; }
     	string GetSubject(ITextFormatter formatter);
     	string Message { get; }
     	string GetMessage(ITextFormatter formatter);

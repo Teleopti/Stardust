@@ -250,10 +250,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var matrixProList = new List<IScheduleMatrixPro>();
 
             Expect.Call(() => _absencePreferenseScheduler.AddPreferredAbsence(matrixProList));
-            Expect.Call(() => _dayOffScheduler.DayOffScheduling(matrixProList, matrixProList, rollbackService));
+            Expect.Call(() => _dayOffScheduler.DayOffScheduling(matrixProList, matrixProList, rollbackService ,_schedulingOptions));
             _mocks.ReplayAll();
             
-            _schedulingService.DayOffScheduling(matrixProList, matrixProList, rollbackService);
+            _schedulingService.DayOffScheduling(matrixProList, matrixProList, rollbackService, _schedulingOptions);
             _mocks.VerifyAll();
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -52,17 +53,16 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         private void AddPersonMeetingsToDictionary(IMeeting meeting)
         {
+        	var loadedPeriod = _schedulerStateHolder.Schedules.Period.LoadedPeriod();
             foreach (var meetingPerson in meeting.MeetingPersons)
             {
                 var person = meetingPerson.Person;
-                var personMeetings = meeting.GetPersonMeetings(person);
-                if (personMeetings.Count > 0)
-                    ((ScheduleRange)_schedulerStateHolder.Schedules[person]).Add(personMeetings[0]);
-                // we can only look at the first if recurrent, otherwise we might come outside the loaded period
-                //foreach (var personMeeting in personMeetings)
-                //{
-                //    ((ScheduleRange)_schedulerStateHolder.Schedules[person]).Add(personMeeting);
-                //}
+				var personMeetings = meeting.GetPersonMeetings(person).Where(m => loadedPeriod.Contains(m.Period.StartDateTime));
+            	foreach (var personMeeting in personMeetings)
+            	{
+					((ScheduleRange)_schedulerStateHolder.Schedules[person]).Add(personMeeting);
+					break;
+            	}
             }
         }
 

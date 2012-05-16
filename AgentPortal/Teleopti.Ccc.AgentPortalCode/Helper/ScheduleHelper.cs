@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
 
             var endDate = new DateOnlyDto {DateTime = period.LocalEndDateTime, DateTimeSpecified = true};
 
-        	var query = new GetSchedulesByPersonQueryHandlerDto
+        	var query = new GetSchedulesByPersonQueryDto
         	            	{
         	            		StartDate = startDate,
         	            		EndDate = endDate,
