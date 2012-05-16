@@ -188,14 +188,12 @@ namespace SdkTestWinGui
         private void backgroundWorkerLoadSchedules_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (rethrowBackgroundException((BackgroundWorker)sender, e))
-                return; // Application.Exit();
+                return;
 
             _schedules = (IList<AgentDay>)e.Result;
             drawDayView();
 
-            //_presenter.SetDataSource(schedules);
             tryEnable();
-
         }
 
         private List<VisualProjection> createViewSchedules()
@@ -237,12 +235,13 @@ namespace SdkTestWinGui
             TimeSpan max = TimeSpan.MinValue;
             foreach (VisualProjection projection in projections)
             {
-                if(projection.Period().HasValue)
+            	var period = projection.Period();
+                if(period.HasValue)
                 {
-                    if (projection.Period().Value.StartTime < min)
-                        min = projection.Period().Value.StartTime;
-                    if (projection.Period().Value.EndTime > max)
-                        max = projection.Period().Value.EndTime;
+                    if (period.Value.StartTime < min)
+                        min = period.Value.StartTime;
+                    if (period.Value.EndTime > max)
+                        max = period.Value.EndTime;
                 }
             }
 
@@ -324,66 +323,11 @@ namespace SdkTestWinGui
                     }
                     agentDay.MainShift.Dto.LayerCollection = layers.ToArray();
 
-                    // save
                     Service.SchedulingService.SaveSchedulePart(agentDay.Dto);
-                    
                 }
             }
             loadSchedules(treeView1.SelectedNode);
-            
         }
-
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-        //    foreach (AgentDay agentDay in _schedules)
-        //    {
-        //        if (agentDay.MainShift != null)
-        //        {
-        //            // pick an activity
-        //            ActivityDto activity = agentDay.MainShift.LayerCollection[agentDay.MainShift.LayerCollection.Count - 1].Dto.Activity;
-        //            DateTime current = agentDay.MainShift.LayerCollection[0].Dto.Period.UtcStartTime.AddHours(1);
-
-        //            // add a 5 minute layer once every 60 minutes
-        //            while (current < agentDay.MainShift.LayerCollection[0].Dto.Period.UtcEndTime)
-        //            {
-        //                // create a new period of 5 minutes
-        //                DateTimePeriodDto period = new DateTimePeriodDto();
-        //                period.UtcStartTime = current;
-        //                period.UtcEndTime = current.AddMinutes(5);
-        //                // if not set then null values will be returned to server
-        //                period.UtcStartTimeSpecified = true;
-        //                period.UtcEndTimeSpecified = true;
-
-        //                // create a new ActivityLayerDto
-        //                ActivityLayerDto activityLayerDto = new ActivityLayerDto();
-        //                activityLayerDto.Activity = activity;
-        //                // assign the period to the new ActivityLayerDto
-        //                activityLayerDto.Period = period;
-
-        //                // add to mainshift layercollection
-        //                ActivityLayer activityLayer = new ActivityLayer(activityLayerDto);
-        //                agentDay.MainShift.LayerCollection.Add(activityLayer);
-
-        //                // increase current
-        //                current = current.AddHours(1);
-        //            }
-
-        //            // convert the mainshifts layercollection to the MainShiftDto's layerarray.
-        //            List<ActivityLayerDto> layers = new List<ActivityLayerDto>();
-        //            foreach (ActivityLayer layer in agentDay.MainShift.LayerCollection)
-        //            {
-        //                layers.Add(layer.Dto);
-        //            }
-        //            agentDay.MainShift.Dto.LayerCollection = layers.ToArray();
-
-        //            // save
-        //            Service.SchedulingService.SaveSchedulePart(agentDay.Dto);
-
-        //        }
-        //    }
-        //    loadSchedules(treeView1.SelectedNode);
-
-        //}
 
         private bool rethrowBackgroundException(BackgroundWorker sender, RunWorkerCompletedEventArgs e)
         {
@@ -511,34 +455,16 @@ namespace SdkTestWinGui
 
 		private void AddDayOffToSelectedAgents()
 		{
+			var daysOff = Service.SchedulingService.GetDaysOffs(new LoadOptionDto {LoadDeleted = false, LoadDeletedSpecified = true});
 			foreach (var agentDay in _schedules)
 			{
-				var dateTime = agentDay.Dto.Date.DateTime;
-				var anchorDateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 12, 0, 0, DateTimeKind.Unspecified);
-
-				DateTime utcAnchorDateTime;
-				bool res;
-				Service.SdkService.ConvertToUtc(anchorDateTime, true, "W. Europe Standard Time", out utcAnchorDateTime, out res);
-
-				if (agentDay.Dto.PersonAbsenceCollection.Length > 0)
-					agentDay.Dto.PersonAbsenceCollection = new PersonAbsenceDto[0];
-
-				if (agentDay.Dto.PersonAssignmentCollection.Length > 0)
-					agentDay.Dto.PersonAssignmentCollection = new PersonAssignmentDto[0];
-				
-				agentDay.Dto.PersonDayOff = new PersonDayOffDto
-											{
-												Anchor = utcAnchorDateTime,
-												AnchorSpecified = true,
-												Length = "P1D",
-												Flexibility = "PT0H",
-												Name = "DayOff",
-												ShortName = "DO",
-												Color = new ColorDto()
-											};
-
-				 
-				Service.SchedulingService.SaveSchedulePart(agentDay.Dto);
+				Service.InternalService.ExecuteCommand(new AddDayOffCommandDto
+				                                       	{
+				                                       		Date = agentDay.Dto.Date,
+				                                       		PersonId = agentDay.Agent.Dto.Id,
+				                                       		DayOffInfoId = daysOff[0].Id,
+				                                       		ScenarioId = null
+				                                       	});
 			}
 
 			loadSchedules(treeView1.SelectedNode);
@@ -552,9 +478,13 @@ namespace SdkTestWinGui
             {
                 foreach (AgentDay agentDay in _schedules)
                 {
-                    if (agentDay.MainShift==null || agentDay.OvertimeShift==null || agentDay.OvertimeShift.LayerCollection.Count==0) continue;
-                    agentDay.MainShift.PersonAssignmentDto.OvertimeShiftCollection = new ShiftDto[0];
-                    Service.SchedulingService.SaveSchedulePart(agentDay.Dto);
+                	Service.InternalService.ExecuteCommand(new CancelOvertimeCommandDto
+                	                                       	{
+                	                                       		Date = agentDay.Dto.Date,
+                	                                       		Period = agentDay.Dto.LocalPeriod,
+                	                                       		PersonId = agentDay.Dto.PersonId,
+                	                                       		ScenarioId = null
+                	                                       	});
                 }
                 loadSchedules(treeView1.SelectedNode);
                 return;
@@ -591,53 +521,30 @@ namespace SdkTestWinGui
                 ActivityDto activityToUse = agentDay.MainShift.LayerCollection[0].Dto.Activity;
                 string overtimeDefinitionToUse = currentContract.AvailableOvertimeDefinitionSets[0];
 
-                DateTime lastEndTime = agentDay.MainShift.LayerCollection[0].Dto.Period.UtcEndTime;
-                foreach (ActivityLayer layer in agentDay.MainShift.LayerCollection)
+                DateTime lastEndTime = agentDay.Dto.ProjectedLayerCollection[0].Period.UtcEndTime;
+                foreach (ProjectedLayerDto layer in agentDay.Dto.ProjectedLayerCollection)
                 {
-                    if (layer.Dto.Period.UtcEndTime>lastEndTime)
+                    if (layer.Period.UtcEndTime>lastEndTime)
                     {
-                        lastEndTime = layer.Dto.Period.UtcEndTime;
-                    }
-                }
-                if (agentDay.OvertimeShift==null)
-                {
-                    agentDay.OvertimeShift = new OvertimeShift(new ShiftDto());
-                }
-                foreach (OvertimeLayer layer in agentDay.OvertimeShift.LayerCollection)
-                {
-                    if (layer.Dto.Period.UtcEndTime > lastEndTime)
-                    {
-                        lastEndTime = layer.Dto.Period.UtcEndTime;
+                        lastEndTime = layer.Period.UtcEndTime;
                     }
                 }
 
-                ShiftDto overtimeShift;
-                if (agentDay.MainShift.PersonAssignmentDto.OvertimeShiftCollection.Length>0)
-                {
-                    overtimeShift = agentDay.MainShift.PersonAssignmentDto.OvertimeShiftCollection[0];
-                }
-                else
-                {
-                    overtimeShift = new ShiftDto{LayerCollection = new ActivityLayerDto[0]};
-                    agentDay.MainShift.PersonAssignmentDto.OvertimeShiftCollection = new[] {overtimeShift};
-                }
-                List<ActivityLayerDto> activityLayerDtos = new List<ActivityLayerDto>(overtimeShift.LayerCollection);
-                activityLayerDtos.Add(new OvertimeLayerDto
-                                          {
-                                              Activity = activityToUse,
-                                              OvertimeDefinitionSetId = overtimeDefinitionToUse,
-                                              Period =
-                                                  new DateTimePeriodDto
-                                                      {
-                                                          UtcStartTime = lastEndTime,
-                                                          UtcEndTime = lastEndTime.AddMinutes(30),
-                                                          UtcStartTimeSpecified = true,
-                                                          UtcEndTimeSpecified = true
-                                                      }
-                                          });
-                overtimeShift.LayerCollection = activityLayerDtos.ToArray();
-
-                Service.SchedulingService.SaveSchedulePart(agentDay.Dto);
+            	Service.InternalService.ExecuteCommand(new AddOvertimeCommandDto
+            	                                       	{
+            	                                       		ActivityId = activityToUse.Id,
+            	                                       		Date = agentDay.Dto.Date,
+            	                                       		OvertimeDefinitionSetId = overtimeDefinitionToUse,
+            	                                       		Period = new DateTimePeriodDto
+            	                                       		         	{
+            	                                       		         		UtcStartTime = lastEndTime,
+            	                                       		         		UtcEndTime = lastEndTime.AddMinutes(30),
+            	                                       		         		UtcStartTimeSpecified = true,
+            	                                       		         		UtcEndTimeSpecified = true
+            	                                       		         	},
+            	                                       		PersonId = agentDay.Dto.PersonId,
+            	                                       		ScenarioId = null
+            	                                       	});
             }
             loadSchedules(treeView1.SelectedNode);
         }

@@ -94,9 +94,6 @@ ECHO.>> "%BUILDFILE%"
 ECHO GO>> "%BUILDFILE%"
 ECHO.>> "%BUILDFILE%"
 
-::If TeleoptiAnalytics; Add EXEC sys_crossdatabaseview_load
-IF "%1"=="TeleoptiAnalytics" ECHO. >> "%BUILDFILE%" & ECHO EXEC mart.sys_crossdatabaseview_load >> "%BUILDFILE%" & ECHO GO >> "%BUILDFILE%" & ECHO. >> "%BUILDFILE%"
-
 ::Add Version control in database
 ECHO.
 ECHO PRINT 'Adding build number to database' >> "%BUILDFILE%"
