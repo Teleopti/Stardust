@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, BackgroundWorker backgroundWorker)
+        public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
             if (allSelectedSchedules == null) throw new ArgumentNullException("allSelectedSchedules");
             var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
@@ -222,10 +222,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             studentSchedulingService.DayScheduled += schedulingServiceDayScheduled;
             DateTime schedulingTime = DateTime.Now;
 
-            //var schedulingOptionsCreator = new SchedulingOptionsCreator();
-            //var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-            var schedulingOptions = _container.Resolve<ISchedulingOptions>();
-
             using (PerformanceOutput.ForOperation("Scheduling " + unlockedSchedules.Count))
             {
                 studentSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, false, false);
@@ -235,13 +231,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             studentSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, bool useOccupancyAdjustment, BackgroundWorker backgroundWorker)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        public void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, bool useOccupancyAdjustment, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
             
-            var options = _container.Resolve<ISchedulingOptions>();
-            options.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
+            schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
 
             var unlockedSchedules = (from scheduleMatrixPro in matrixList
                                      from scheduleDayPro in scheduleMatrixPro.UnlockedDays
@@ -251,24 +246,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var selectedPersons = matrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
 
-            //var selectedPersons = ScheduleViewBase.AllSelectedPersons(unlockedSchedules);
             var selectedPeriod = ScheduleViewBase.AllSelectedDates(unlockedSchedules);
             var sorted = new List<DateOnly>(selectedPeriod);
             sorted.Sort();
             var period = new DateOnlyPeriod(sorted.First(), sorted.Last());
 
-            OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, period, options, _container);
+            OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, period, schedulingOptions, _container);
 
             var stateHolder = _container.Resolve<ISchedulingResultStateHolder>();
 
             var scheduleTagSetter = _container.Resolve<IScheduleTagSetter>();
-            scheduleTagSetter.ChangeTagToSet(options.TagToUseOnScheduling);
+            scheduleTagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
             
 
             fixedStaffSchedulingService.ClearFinderResults();
             _backgroundWorker = backgroundWorker;
-            _sendEventEvery = options.RefreshRate;
+            _sendEventEvery = schedulingOptions.RefreshRate;
             _scheduledCount = 0;
             fixedStaffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
             DateTime schedulingTime = DateTime.Now;
@@ -279,15 +273,15 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                             new SchedulePartModifyAndRollbackService(_stateHolder,
                                                                                                      _scheduleDayChangeCallback,
                                                                                                      new ScheduleTagSetter
-                                                                                                         (options.
+                                                                                                         (schedulingOptions.
                                                                                                               TagToUseOnScheduling)),
                                                             _container.Resolve<IScheduleService>(), WorkShiftFinderResultHolder,
-															new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, options.ConsiderShortBreaks));
+															new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks));
 
             using (PerformanceOutput.ForOperation(string.Concat("Scheduling ", unlockedSchedules.Count, " days")))
             {
-                ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(options.TagToUseOnScheduling));
-                fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, options);
+                ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+                fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
                 IList<IScheduleMatrixOriginalStateContainer> originalStateContainers =
                     CreateScheduleMatrixOriginalStateContainers(allSelectedSchedules);
 
@@ -300,120 +294,26 @@ namespace Teleopti.Ccc.Win.Scheduling
                     }
                 }
 
-                fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, options, useOccupancyAdjustment, false);
+                fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, useOccupancyAdjustment, false);
                 _allResults.AddResults(fixedStaffSchedulingService.FinderResults, schedulingTime);
                 fixedStaffSchedulingService.FinderResults.Clear();
 
                 foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
                 {
                     int iterations = 0;
-                    while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, options) && iterations < 10)
+                    while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions) && iterations < 10)
                     {
                         iterations++;
                     }
 
                 }
 
-                if (options.RotationDaysOnly || options.PreferencesDaysOnly || options.UsePreferencesMustHaveOnly || options.AvailabilityDaysOnly)
+                if (schedulingOptions.RotationDaysOnly || schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly || schedulingOptions.AvailabilityDaysOnly)
                     schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
             }
 
             fixedStaffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
         }
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        //public void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules,
-        //                                        bool useOccupancyAdjustment,
-        //                                        ISchedulingOptions schedulingOptions,
-        //                                        BackgroundWorker backgroundWorker)
-        //{
-        //    if (allSelectedSchedules == null) throw new ArgumentNullException("allSelectedSchedules");
-        //    if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
-
-        //    schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
-
-        //    IList<IScheduleDay> unlockedSchedules = new List<IScheduleDay>();
-        //    foreach (var scheduleDay in allSelectedSchedules)
-        //    {
-        //        GridlockDictionary locks = _gridlockManager.Gridlocks(scheduleDay);
-        //        if (locks == null || locks.Count == 0)
-        //            unlockedSchedules.Add(scheduleDay);
-        //    }
-
-        //    if (unlockedSchedules.Count == 0)
-        //    {
-        //        return;
-        //    }
-
-        //    var selectedPersons = ScheduleViewBase.AllSelectedPersons(unlockedSchedules);
-        //    var selectedPeriod = ScheduleViewBase.AllSelectedDates(unlockedSchedules);
-        //    var sorted = new List<DateOnly>(selectedPeriod);
-        //    sorted.Sort();
-        //    var period = new DateOnlyPeriod(sorted.First(), sorted.Last());
-
-        //    OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, period, schedulingOptions, _container);
-
-        //    var stateHolder = _container.Resolve<ISchedulingResultStateHolder>();
-
-        //    var scheduleTagSetter = _container.Resolve<IScheduleTagSetter>();
-        //    scheduleTagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
-        //    var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
-        //    var options = _container.Resolve<ISchedulingOptions>();
-
-        //    fixedStaffSchedulingService.ClearFinderResults();
-        //    _backgroundWorker = backgroundWorker;
-        //    _sendEventEvery = options.RefreshRate;
-        //    _scheduledCount = 0;
-        //    fixedStaffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-        //    DateTime schedulingTime = DateTime.Now;
-
-        //    INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
-        //                new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-        //                                                    new DeleteSchedulePartService(_stateHolder),
-        //                                                    new SchedulePartModifyAndRollbackService(_stateHolder,
-        //                                                                                             _scheduleDayChangeCallback,
-        //                                                                                             new ScheduleTagSetter
-        //                                                                                                 (options.
-        //                                                                                                      TagToUseOnScheduling)),
-        //                                                    _container.Resolve<IScheduleService>(), WorkShiftFinderResultHolder);
-
-        //    using (PerformanceOutput.ForOperation(string.Concat("Scheduling ", unlockedSchedules.Count, " days")))
-        //    {
-        //        ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-        //        fixedStaffSchedulingService.DayOffScheduling(unlockedSchedules, schedulePartModifyAndRollbackServiceForContractDaysOff);
-
-        //        IList<IScheduleMatrixOriginalStateContainer> originalStateContainers =
-        //            CreateScheduleMatrixOriginalStateContainers(allSelectedSchedules);
-
-        //        foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
-        //        {
-        //            foreach (var day in scheduleMatrixOriginalStateContainer.ScheduleMatrix.EffectivePeriodDays)
-        //            {
-        //                if (day.DaySchedulePart().IsScheduled())
-        //                    scheduleMatrixOriginalStateContainer.ScheduleMatrix.LockPeriod(new DateOnlyPeriod(day.Day, day.Day));
-        //            }
-        //        }
-
-        //        fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, useOccupancyAdjustment, false);
-        //        _allResults.AddResults(fixedStaffSchedulingService.FinderResults, schedulingTime);
-        //        fixedStaffSchedulingService.FinderResults.Clear();
-                
-        //        foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
-        //        {
-        //            int iterations = 0;
-        //            while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix) && iterations < 10)
-        //            {
-        //                iterations++;
-        //            }
-                    
-        //        }
-
-        //        if (options.RotationDaysOnly || options.PreferencesDaysOnly || options.UsePreferencesMustHaveOnly || options.AvailabilityDaysOnly)
-        //            schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
-        //    }
-            
-        //    fixedStaffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
-        //}
 
         private void schedulingServiceDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
         {
@@ -1029,8 +929,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             return groupPage;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public void GroupSchedule(BackgroundWorker backgroundWorker, IList<IScheduleDay> scheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        public void GroupSchedule(BackgroundWorker backgroundWorker, IList<IScheduleDay> scheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions)
         {
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
 
@@ -1040,7 +940,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (unlockedSchedules.Count() == 0) return;
 
-            var schedulingOptions = _container.Resolve<ISchedulingOptions>();
             _sendEventEvery = schedulingOptions.RefreshRate;
             _backgroundWorker = backgroundWorker;
 
@@ -1081,8 +980,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 schedulePartModifyAndRollbackServiceforContractDaysOff.Rollback();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public void BlockSchedule(IList<IScheduleDay> allScheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, BackgroundWorker backgroundWorker)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        public void BlockSchedule(IList<IScheduleDay> allScheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
             if (allScheduleDays == null) throw new ArgumentNullException("allScheduleDays");
 
@@ -1096,8 +995,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
             fixedStaffSchedulingService.ClearFinderResults();
-
-            var schedulingOptions = _container.Resolve<ISchedulingOptions>();
 
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
             //fixedStaffSchedulingService.DayOffScheduling(allScheduleDays, schedulePartModifyAndRollbackServiceForContractDaysOff);

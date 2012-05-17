@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IWorkShift _workShift2;
         private IWorkShift _workShift3;
         private IShiftCategory _category;
+    	private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks = new MockRepository();
             _calculator = _mocks.StrictMock<IWorkShiftCalculator>();
             _fairnessValueCalculator = _mocks.StrictMock<IFairnessValueCalculator>();
-
+			_schedulingOptions = new SchedulingOptions();
             _target = new BlockSchedulingWorkShiftFinderService(_calculator,_fairnessValueCalculator, null);
         }
 
@@ -50,18 +51,18 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_calculator.CalculateShiftValue(shifts[2].MainShiftProjection, null, 1, true, true)).Return(15);
                 
                 Expect.Call(_fairnessValueCalculator.CalculateFairnessValue(10, 0, 5, fairnessValueResult.FairnessPoints,
-                                                                            fairnessValueResult, 15)).Return(10);
+																			fairnessValueResult, 15, _schedulingOptions)).Return(10);
 
                 Expect.Call(_fairnessValueCalculator.CalculateFairnessValue(5, 0, 5, fairnessValueResult.FairnessPoints,
-                                                                            fairnessValueResult, 15)).Return(5);
+																			fairnessValueResult, 15, _schedulingOptions)).Return(5);
 
                 Expect.Call(_fairnessValueCalculator.CalculateFairnessValue(15, 0, 5, fairnessValueResult.FairnessPoints,
-                                                                            fairnessValueResult, 15)).Return(15);
+																			fairnessValueResult, 15, _schedulingOptions)).Return(15);
             }
 
             using (_mocks.Playback())
             {
-                var ret = _target.BestShiftValue(dateOnly, shifts, null, fairnessValueResult, fairnessValueResult, 5, TimeSpan.FromHours(48), false, null, 1, true, true);
+				var ret = _target.BestShiftValue(dateOnly, shifts, null, fairnessValueResult, fairnessValueResult, 5, TimeSpan.FromHours(48), false, null, 1, true, true, _schedulingOptions);
                 Assert.AreEqual(15,ret);
             }
             

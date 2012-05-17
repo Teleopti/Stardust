@@ -6,27 +6,21 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 
     public class ShiftCategoryFairnessShiftValueCalculator : IShiftCategoryFairnessShiftValueCalculator
     {
-        private readonly ISchedulingOptions _options;
         
-        public ShiftCategoryFairnessShiftValueCalculator(ISchedulingOptions options)
+        private static Percent percentFairness(ISchedulingOptions schedulingOptions)
         {
-            _options = options;
-       }
-
-        private Percent PercentFairness
-        {
-            get { return _options.Fairness; }
+        	return schedulingOptions.Fairness;
         }
 
-        public double ModifiedShiftValue(double shiftValue, double factorForShiftEvaluation, double maxShiftValue)
+        public double ModifiedShiftValue(double shiftValue, double factorForShiftEvaluation, double maxShiftValue, ISchedulingOptions schedulingOptions)
         {
-            return BusinessPercent() * shiftValue +
-                   PercentFairness.Value * factorForShiftEvaluation * Math.Abs(maxShiftValue);
+			return businessPercent(schedulingOptions) * shiftValue +
+				   percentFairness(schedulingOptions).Value * factorForShiftEvaluation * Math.Abs(maxShiftValue);
         }
 
-        private double BusinessPercent()
+		private static double businessPercent(ISchedulingOptions schedulingOptions)
         {
-            return 1 - PercentFairness.Value;
+			return 1 - percentFairness(schedulingOptions).Value;
         }
     }
 }

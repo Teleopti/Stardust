@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
             _person = schedulePart.Person;
             _finderResult = null;
-            var status = _preSchedulingStatusChecker.CheckStatus(schedulePart, FinderResult);
+            var status = _preSchedulingStatusChecker.CheckStatus(schedulePart, FinderResult, schedulingOptions);
                         
             
             if (!status)
@@ -102,7 +102,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             ISchedulingOptions schedulingOptions)
         {
 			var person = currentSchedulePeriod.Person;
-            IList<IWorkShiftCalculationResultHolder> allValues = _workShiftCalculatorsManager.RunCalculators(person, shiftProjectionCaches, dataHolders, nonBlendSkillPeriods);
+        	IList<IWorkShiftCalculationResultHolder> allValues = _workShiftCalculatorsManager.RunCalculators(person,
+        	                                                                                                 shiftProjectionCaches,
+        	                                                                                                 dataHolders,
+        	                                                                                                 nonBlendSkillPeriods,
+        	                                                                                                 schedulingOptions);
             if (allValues.Count == 0)
                 return null;
 
@@ -120,8 +124,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             if (person.WorkflowControlSet != null)
                 useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
 
-           IList<IWorkShiftCalculationResultHolder> foundValues =
-               _fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(allValues, maxValue, useShiftCategoryFairness, person, dateOnly,  maxSeatSkillPeriods, currentSchedulePeriod.AverageWorkTimePerDay);
+        	IList<IWorkShiftCalculationResultHolder> foundValues =
+        		_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(allValues, maxValue, useShiftCategoryFairness,
+        		                                                             person, dateOnly, maxSeatSkillPeriods,
+        		                                                             currentSchedulePeriod.AverageWorkTimePerDay,
+        		                                                             schedulingOptions);
            
             double highestShiftValue = double.MinValue;
             foreach (var workShiftCalculationResultHolder in foundValues)

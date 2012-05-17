@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             var matrixProList = new List<IScheduleMatrixPro>();
 
-            Expect.Call(() => _absencePreferenseScheduler.AddPreferredAbsence(matrixProList));
+            Expect.Call(() => _absencePreferenseScheduler.AddPreferredAbsence(matrixProList, _schedulingOptions));
             Expect.Call(() => _dayOffScheduler.DayOffScheduling(matrixProList, matrixProList, rollbackService ,_schedulingOptions));
             _mocks.ReplayAll();
             

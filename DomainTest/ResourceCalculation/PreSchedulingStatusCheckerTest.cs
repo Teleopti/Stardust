@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void Setup()
         {
             _schedulingOptions = new SchedulingOptions();
-            _target = new PreSchedulingStatusChecker(_schedulingOptions);
+            _target = new PreSchedulingStatusChecker();
             _mocks = new MockRepository();
             _part = _mocks.StrictMock<IScheduleDay>();
             
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_person.Period(_scheduleDateOnly)).Return(personPeriod);
             }
             
-            var ret =_target.CheckStatus(_part, _finderResult);
+            var ret =_target.CheckStatus(_part, _finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_person.Period(_scheduleDateOnly)).Return(null);
             }
 
-            var ret = _target.CheckStatus(_part, _finderResult);
+			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 
             }
 
-            var ret = _target.CheckStatus(_part, _finderResult);
+			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
             Assert.AreEqual(_person, _target.Person);
             Assert.AreEqual(_scheduleDateOnly, _target.ScheduleDateOnly);
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 
             }
 
-            var ret = _target.CheckStatus(_part, _finderResult);
+			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(personAssignment.PersonalShiftCollection).Return(readOnlyPersonalShifts);
             }
 
-            var ret = _target.CheckStatus(_part, _finderResult);
+			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_part.PersonDayOffCollection()).Return(readOnlyPersonDayOffs);
             }
 
-            var ret = _target.CheckStatus(_part, _finderResult);
+			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_personPeriod.RuleSetBag).Return(null);
             }
 
-            var ret = _target.CheckStatus(_part, _finderResult);
+			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_personPeriod.RuleSetBag).Return(ruleSetBag);
             }
 
-            var ret = _target.CheckStatus(_part, _finderResult);
+			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
             Assert.IsTrue(ret);
         }
     }

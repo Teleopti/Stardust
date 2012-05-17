@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     {
         IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues,
                                                double maxValue, bool useShiftCategoryFairness, IPerson person, DateOnly dateOnly,
-                                               IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, TimeSpan averageWorkTimePerDay);
+                                               IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, TimeSpan averageWorkTimePerDay, ISchedulingOptions schedulingOptions);
     }
 
     public class FairnessAndMaxSeatCalculatorsManager : IFairnessAndMaxSeatCalculatorsManager
@@ -20,28 +20,25 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly IShiftCategoryFairnessShiftValueCalculator _categoryFairnessShiftValueCalculator;
         private readonly IFairnessValueCalculator _fairnessValueCalculator;
         private readonly ISeatLimitationWorkShiftCalculator2 _seatLimitationWorkShiftCalculator;
-        private readonly ISchedulingOptions _options;
 
         public FairnessAndMaxSeatCalculatorsManager(ISchedulingResultStateHolder resultStateHolder,
                                     IShiftCategoryFairnessManager shiftCategoryFairnessManager,
                                     IShiftCategoryFairnessShiftValueCalculator categoryFairnessShiftValueCalculator,
                                     IFairnessValueCalculator fairnessValueCalculator,
-                                    ISeatLimitationWorkShiftCalculator2 seatLimitationWorkShiftCalculator,
-                                    ISchedulingOptions options)
+                                    ISeatLimitationWorkShiftCalculator2 seatLimitationWorkShiftCalculator)
         {
             _resultStateHolder = resultStateHolder;
             _shiftCategoryFairnessManager = shiftCategoryFairnessManager;
             _categoryFairnessShiftValueCalculator = categoryFairnessShiftValueCalculator;
             _fairnessValueCalculator = fairnessValueCalculator;
             _seatLimitationWorkShiftCalculator = seatLimitationWorkShiftCalculator;
-            _options = options;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "7"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues,
                                                     double maxValue, bool useShiftCategoryFairness, IPerson person, DateOnly dateOnly,
                                                     IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods,
-                                                    TimeSpan averageWorkTimePerDay)
+                                                    TimeSpan averageWorkTimePerDay, ISchedulingOptions schedulingOptions)
         {
             double highestShiftValue = double.MinValue;
             var shiftCategoryFairnessFactors = _shiftCategoryFairnessManager.GetFactorsForPersonOnDate(person, dateOnly);
@@ -60,7 +57,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     fairnessValue =
                         _categoryFairnessShiftValueCalculator.ModifiedShiftValue(thisShiftValue.Value,
                                                                                  factorForShiftCategory,
-                                                                                 maxValue);
+                                                                                 maxValue, schedulingOptions);
                 }
                 else
                 {
@@ -72,20 +69,21 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                                                                                    dayOfWeekJusticeValue,
                                                                                    maxFairnessOnShiftCat,
                                                                                    totalFairness,
-                                                                                   agentFairness, maxValue);
+                                                                                   agentFairness, maxValue, 
+																				   schedulingOptions);
                 }
 
                 double shiftValue = fairnessValue;
 
-                
 
-                if (shiftValue > highestShiftValue && _options.UseMaxSeats)
+
+				if (shiftValue > highestShiftValue && schedulingOptions.UseMaxSeats)
                 {
                     var seatVal =
                         _seatLimitationWorkShiftCalculator.CalculateShiftValue(person,
                                                                                shiftProjection.MainShiftProjection,
                                                                                maxSeatSkillPeriods,
-                                                                               _options.DoNotBreakMaxSeats);
+																			   schedulingOptions.DoNotBreakMaxSeats);
                     if (!seatVal.HasValue)
                         continue;
 

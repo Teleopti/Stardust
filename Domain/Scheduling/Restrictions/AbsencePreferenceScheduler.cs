@@ -7,26 +7,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	public interface IAbsencePreferenceScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList);
+        void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions);
 	}
 
 	public class AbsencePreferenceScheduler : IAbsencePreferenceScheduler
 	{
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly ISchedulingOptions _schedulingOptions;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public AbsencePreferenceScheduler(IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_schedulingOptions = schedulingOptions;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 		}
 
-        public void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList)
+        public void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
         {
             if(matrixList == null) throw new ArgumentNullException("matrixList");
 
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
                 {
                     var part = scheduleDayPro.DaySchedulePart();
-                    var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, _schedulingOptions);
+                    var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
 
                     // there should not be an absence if it is no preferenceday or if we dont't use preference when scheduling but...
                     if (effectiveRestriction != null && !effectiveRestriction.IsPreferenceDay)

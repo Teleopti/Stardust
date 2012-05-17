@@ -5,43 +5,35 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 {
     public class FairnessValueCalculator : IFairnessValueCalculator
     {
-        private readonly ISchedulingOptions _options;
         private double _maxFairnessPoint;
         private double _averageFairnessPointTotal;
         private double _averageFairnessPointAgent;
         private double _maxShiftValue;
 
-        public FairnessValueCalculator(ISchedulingOptions options)
-        {
-            _options = options;
-        }
-
-        private Percent PercentFairness
-        {
-            get { return _options.Fairness; }
-        }
-        public double CalculateFairnessValue(
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
+		public double CalculateFairnessValue(
             double shiftValue, 
             double shiftCategoryFairnessPoint, 
             double maxFairnessPoint, 
             double totalFairness, 
             IFairnessValueResult agentFairness, 
-            double maxShiftValue)
+            double maxShiftValue,
+			ISchedulingOptions schedulingOptions)
         {
             _maxFairnessPoint = maxFairnessPoint > 0 ? maxFairnessPoint : 1;
             _averageFairnessPointTotal = totalFairness;
             _averageFairnessPointAgent = agentFairness.FairnessPointsPerShift;
             _maxShiftValue = maxShiftValue;
-            return this.totalFairness(shiftValue, shiftCategoryFairnessPoint);
+            return this.totalFairness(shiftValue, shiftCategoryFairnessPoint, schedulingOptions);
         }
 
-        private double totalFairness(double shiftValue, double shiftCategoryFairnessPoint)
+        private double totalFairness(double shiftValue, double shiftCategoryFairnessPoint, ISchedulingOptions schedulingOptions)
         {
-            double percentFairnessPart = (1 - PercentFairness.Value) * shiftValue;
+			double percentFairnessPart = (1 - schedulingOptions.Fairness.Value) * shiftValue;
             double shiftCategoryFairnessPart = shiftCategoryFairness(shiftCategoryFairnessPoint);
 
             return percentFairnessPart +
-                   PercentFairness.Value * Math.Abs(_maxShiftValue) * shiftCategoryFairnessPart;
+				   schedulingOptions.Fairness.Value * Math.Abs(_maxShiftValue) * shiftCategoryFairnessPart;
         }
 
         private double shiftCategoryFairness(double shiftCategoryFairnessPoint)
