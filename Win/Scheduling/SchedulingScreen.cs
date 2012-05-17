@@ -6561,7 +6561,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                         personDic.Add(scheduleDay.Person, _schedulerState.Schedules[scheduleDay.Person]);
 
 
-                    if (!selectedTags.Contains(scheduleDay.ScheduleTag())) selectedTags.Add(scheduleDay.ScheduleTag());
+                    if (!selectedTags.Contains(scheduleDay.ScheduleTag())) 
+						selectedTags.Add(scheduleDay.ScheduleTag());
                 }
 
                 if (_agentInfo != null)
