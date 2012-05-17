@@ -34,14 +34,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		    _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 		    _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 		    _scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			_target = new AbsencePreferenceScheduler(_effectiveRestrictionCreator, _options,_rollBackService);
+			_target = new AbsencePreferenceScheduler(_effectiveRestrictionCreator,_rollBackService);
 		}
 
        [Test]
         public void ShouldDoNothingIfMatrixProIsEmpty()
         {
             var matrixProList = new List<IScheduleMatrixPro>();
-            _target.AddPreferredAbsence(matrixProList);
+            _target.AddPreferredAbsence(matrixProList, _options);
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using(_mocks.Playback())
             {
-                _target.AddPreferredAbsence(matrixProList);
+				_target.AddPreferredAbsence(matrixProList, _options);
             }
         }
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using(_mocks.Playback())
             {
-                _target.AddPreferredAbsence(matrixProList);    
+				_target.AddPreferredAbsence(matrixProList, _options);    
             }
         }
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target.AddPreferredAbsence(matrixProList);
+				_target.AddPreferredAbsence(matrixProList, _options);
             }
         }
 
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using(_mocks.Playback())
             {
-                _target.AddPreferredAbsence(matrixProList);   
+				_target.AddPreferredAbsence(matrixProList, _options);   
             }
         }
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using(_mocks.Playback())
             {
-                _target.AddPreferredAbsence(matrixProList);    
+				_target.AddPreferredAbsence(matrixProList, _options);    
             }
 
         }

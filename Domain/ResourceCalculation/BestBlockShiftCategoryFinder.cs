@@ -247,7 +247,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	                                                      shiftCategoryFairnessFactors, 
 	                                                      (double)schedulingOptions.WorkShiftLengthHintOption,
 	                                                      schedulingOptions.UseMinimumPersons,
-	                                                      schedulingOptions.UseMaximumPersons);
+	                                                      schedulingOptions.UseMaximumPersons, 
+														  schedulingOptions);
 	    }
 
 	    public IScheduleDictionary ScheduleDictionary

@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
         {
-            _absencePreferenceScheduler.AddPreferredAbsence(matrixList);
+            _absencePreferenceScheduler.AddPreferredAbsence(matrixList, schedulingOptions);
             _dayOffScheduler.DayOffScheduling(matrixList, matrixListAll, rollbackService, schedulingOptions);
         }
 

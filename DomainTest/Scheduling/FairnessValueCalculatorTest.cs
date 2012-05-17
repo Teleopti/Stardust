@@ -25,17 +25,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _agentData.FairnessPoints = 50;
             _agentData.TotalNumberOfShifts = 10;
 
-            _target = new FairnessValueCalculator(new SchedulingOptions{Fairness = _percentFairness});
+            _target = new FairnessValueCalculator();
         }
 
         [Test]
         public void CanCalculateFairness()
         {
-            var result = _target.CalculateFairnessValue(-100, 1, _maxFairnessPoint, _totalData, _agentData, 250);
+			var result = _target.CalculateFairnessValue(-100, 1, _maxFairnessPoint, _totalData, _agentData, 250, new SchedulingOptions { Fairness = _percentFairness });
             Assert.AreEqual(145, Math.Round(result,1));
-            result = _target.CalculateFairnessValue(-10, 2, _maxFairnessPoint, _totalData, _agentData, 250);
+			result = _target.CalculateFairnessValue(-10, 2, _maxFairnessPoint, _totalData, _agentData, 250, new SchedulingOptions { Fairness = _percentFairness });
             Assert.AreEqual(163.2, Math.Round(result,1));
-            result = _target.CalculateFairnessValue(90, 5, _maxFairnessPoint, _totalData, _agentData, 250);
+			result = _target.CalculateFairnessValue(90, 5, _maxFairnessPoint, _totalData, _agentData, 250, new SchedulingOptions { Fairness = _percentFairness });
             Assert.AreEqual(167, Math.Round(result, 0));
 
         }
@@ -43,24 +43,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void CalculateWithNoFairness()
         {
-            _target = new FairnessValueCalculator(new SchedulingOptions { Fairness = new Percent(0)});
-            var result = _target.CalculateFairnessValue(-34000, 1, _maxFairnessPoint, _totalData, _agentData, 250);
+            _target = new FairnessValueCalculator();
+			var result = _target.CalculateFairnessValue(-34000, 1, _maxFairnessPoint, _totalData, _agentData, 250, new SchedulingOptions { Fairness = new Percent(0) });
             Assert.AreEqual(-34000, Math.Round(result, 0));
-            result = _target.CalculateFairnessValue(-5, 2, _maxFairnessPoint, _totalData, _agentData, 250);
+			result = _target.CalculateFairnessValue(-5, 2, _maxFairnessPoint, _totalData, _agentData, 250, new SchedulingOptions { Fairness = new Percent(0) });
             Assert.AreEqual(-5, Math.Round(result, 0));
-            result = _target.CalculateFairnessValue(90, 5, _maxFairnessPoint, _totalData, _agentData, 250);
+			result = _target.CalculateFairnessValue(90, 5, _maxFairnessPoint, _totalData, _agentData, 250, new SchedulingOptions { Fairness = new Percent(0) });
             Assert.AreEqual(90, Math.Round(result, 0));
         }
 
         [Test]
         public void CalculateWithOnlyFairness()
         {
-            _target = new FairnessValueCalculator(new SchedulingOptions { Fairness = new Percent(1) });
-            var result = _target.CalculateFairnessValue(-100, 1, _maxFairnessPoint, _totalData, _agentData, 250);
+            _target = new FairnessValueCalculator();
+			var result = _target.CalculateFairnessValue(-100, 1, _maxFairnessPoint, _totalData, _agentData, 250, new SchedulingOptions { Fairness = new Percent(1) });
             Assert.AreEqual(250, Math.Round(result, 1));
-            result = _target.CalculateFairnessValue(-10, 2, _maxFairnessPoint, _totalData, _agentData, 250);
+			result = _target.CalculateFairnessValue(-10, 2, _maxFairnessPoint, _totalData, _agentData, 250, new SchedulingOptions { Fairness = new Percent(1) });
             Assert.AreEqual(237.5, Math.Round(result, 1));
-            result = _target.CalculateFairnessValue(90, 5, _maxFairnessPoint, _totalData, _agentData, 250);
+			result = _target.CalculateFairnessValue(90, 5, _maxFairnessPoint, _totalData, _agentData, 250, new SchedulingOptions { Fairness = new Percent(1) });
             Assert.AreEqual(200, Math.Round(result, 0));
         }
     }

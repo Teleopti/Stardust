@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
     	private ShiftCategoryFairnessFactors _schCategoryFairnessFactors;
         private List<IShiftCategory> _shiftCategories;
+    	private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -83,6 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                null, null, null, new List<IActivityRestriction>());
 
     		_schCategoryFairnessFactors = new ShiftCategoryFairnessFactors(new Dictionary<IShiftCategory, double>(), 0);
+			_schedulingOptions = new SchedulingOptions();
 
             _target = new BestBlockShiftCategoryFinder(_shiftProjectionCacheManager,_shiftProjectionCacheFilter,_personSkillPeriodsDataHolderManager,
                 _stateHolder,_finderService, _effectiveRestrictionCreator, _groupShiftCategoryFairnessCreator);
@@ -132,11 +134,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
                 Expect.Call(_stateHolder.Schedules).Return(scheduleDictionary).Repeat.Any();
 
-				Expect.Call(_finderService.BestShiftValue(_dateOnly1, cashes, null, fairnessValue, fairnessValue, 5, TimeSpan.FromHours(48), false, _schCategoryFairnessFactors,4, true, true)).Return(10).IgnoreArguments();
-                Expect.Call(_finderService.BestShiftValue(_dateOnly2, cashes, null, fairnessValue, fairnessValue, 5, TimeSpan.FromHours(48), false, _schCategoryFairnessFactors, 4, true, true)).Return(10).IgnoreArguments();
+				Expect.Call(_finderService.BestShiftValue(_dateOnly1, cashes, null, fairnessValue, fairnessValue, 5, TimeSpan.FromHours(48), false, _schCategoryFairnessFactors, 4, true, true, _schedulingOptions)).Return(10).IgnoreArguments();
+				Expect.Call(_finderService.BestShiftValue(_dateOnly2, cashes, null, fairnessValue, fairnessValue, 5, TimeSpan.FromHours(48), false, _schCategoryFairnessFactors, 4, true, true, _schedulingOptions)).Return(10).IgnoreArguments();
 
-                Expect.Call(_finderService.BestShiftValue(_dateOnly1, cashes, null, fairnessValue, fairnessValue, 5, TimeSpan.FromHours(48), false, _schCategoryFairnessFactors, 4, true, true)).Return(15).IgnoreArguments();
-                Expect.Call(_finderService.BestShiftValue(_dateOnly2, cashes, null, fairnessValue, fairnessValue, 5, TimeSpan.FromHours(48), false, _schCategoryFairnessFactors, 4, true, true)).Return(10).IgnoreArguments();
+				Expect.Call(_finderService.BestShiftValue(_dateOnly1, cashes, null, fairnessValue, fairnessValue, 5, TimeSpan.FromHours(48), false, _schCategoryFairnessFactors, 4, true, true, _schedulingOptions)).Return(15).IgnoreArguments();
+				Expect.Call(_finderService.BestShiftValue(_dateOnly2, cashes, null, fairnessValue, fairnessValue, 5, TimeSpan.FromHours(48), false, _schCategoryFairnessFactors, 4, true, true, _schedulingOptions)).Return(10).IgnoreArguments();
 
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
@@ -210,16 +212,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
                 Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(new TimeSpan(8, 0, 0)).Repeat.Any();
 			    Expect.Call(_finderService.BestShiftValue(_dateOnly1, cashes, null, fairnessValue, fairnessValue, 5,
-			                                              TimeSpan.FromHours(8), false, null, 4, true, true)).IgnoreArguments().
+														  TimeSpan.FromHours(8), false, null, 4, true, true, _schedulingOptions)).IgnoreArguments().
 			        Return(10);
 			    Expect.Call(_finderService.BestShiftValue(_dateOnly2, cashes, null, fairnessValue, fairnessValue, 5,
-			                                              TimeSpan.FromHours(8), false, null, 4, true, true)).IgnoreArguments().
+														  TimeSpan.FromHours(8), false, null, 4, true, true, _schedulingOptions)).IgnoreArguments().
 			        Return(double.MinValue);
                 Expect.Call(_finderService.BestShiftValue(_dateOnly1, cashes, null, fairnessValue, fairnessValue, 5,
-                                                          TimeSpan.FromHours(8), false, null, 4, true, true)).IgnoreArguments().
+														  TimeSpan.FromHours(8), false, null, 4, true, true, _schedulingOptions)).IgnoreArguments().
                     Return(10);
                 Expect.Call(_finderService.BestShiftValue(_dateOnly2, cashes, null, fairnessValue, fairnessValue, 5,
-                                                          TimeSpan.FromHours(8), false, null, 4, true, true)).IgnoreArguments().
+														  TimeSpan.FromHours(8), false, null, 4, true, true, _schedulingOptions)).IgnoreArguments().
                     Return(double.MinValue);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -9,32 +8,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IBlockOptimizerBlockCleaner
     {
-        IList<DateOnly> ClearSchedules(IScheduleMatrixPro matrix, IList<DateOnly> dates);
+        IList<DateOnly> ClearSchedules(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions);
     }
 
     public class BlockOptimizerBlockCleaner : IBlockOptimizerBlockCleaner
     {
         private readonly ISchedulePartModifyAndRollbackService _modifyAndRollbackService;
-        private readonly ISchedulingOptions _schedulingOptions;
         private readonly IBlockFinderFactory _blockFinderFactory;
         private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 
-        public BlockOptimizerBlockCleaner(ISchedulePartModifyAndRollbackService modifyAndRollbackService, ISchedulingOptions schedulingOptions,
+        public BlockOptimizerBlockCleaner(ISchedulePartModifyAndRollbackService modifyAndRollbackService, 
             IBlockFinderFactory blockFinderFactory, IDeleteSchedulePartService deleteSchedulePartService)
         {
             _modifyAndRollbackService = modifyAndRollbackService;
-            _schedulingOptions = schedulingOptions;
             _blockFinderFactory = blockFinderFactory;
             _deleteSchedulePartService = deleteSchedulePartService;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public IList<DateOnly> ClearSchedules(IScheduleMatrixPro matrix, IList<DateOnly> dates)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+        public IList<DateOnly> ClearSchedules(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions)
         {
-            List<DateOnly> retList = new List<DateOnly>();
+            var retList = new List<DateOnly>();
             foreach (var dateOnly in dates)
             {
-                if (_schedulingOptions.UseBlockOptimizing == BlockFinderType.BetweenDayOff)
+                if (schedulingOptions.UseBlockOptimizing == BlockFinderType.BetweenDayOff)
                     retList.AddRange(clearBetweenDayOffs(matrix, dateOnly));
                 else
                     retList.AddRange(clearInSchedulePeriod(matrix));

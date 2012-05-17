@@ -11,27 +11,27 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         IList<IWorkShiftCalculationResultHolder> RunCalculators(IPerson person,
                                                                                 IList<IShiftProjectionCache> shiftProjectionCaches,
                                                                                 IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders,
-                                                                                IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods);
+                                                                                IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
+																				ISchedulingOptions schedulingOptions);
     }
 
     public class WorkShiftCalculatorsManager : IWorkShiftCalculatorsManager
     {
         private readonly IWorkShiftCalculator _workShiftCalculator;
         private readonly INonBlendWorkShiftCalculator _nonBlendWorkShiftCalculator;
-        private readonly ISchedulingOptions _options;
 
-        public WorkShiftCalculatorsManager(IWorkShiftCalculator workShiftCalculator, INonBlendWorkShiftCalculator nonBlendWorkShiftCalculator, ISchedulingOptions options)
+        public WorkShiftCalculatorsManager(IWorkShiftCalculator workShiftCalculator, INonBlendWorkShiftCalculator nonBlendWorkShiftCalculator)
         {
             _workShiftCalculator = workShiftCalculator;
             _nonBlendWorkShiftCalculator = nonBlendWorkShiftCalculator;
-            _options = options;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public IList<IWorkShiftCalculationResultHolder> RunCalculators(IPerson person,
                 IList<IShiftProjectionCache> shiftProjectionCaches,
                 IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders,
-                IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods)
+                IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
+				ISchedulingOptions schedulingOptions)
         {
             IList<IWorkShiftCalculationResultHolder> allValues =
                 new List<IWorkShiftCalculationResultHolder>(shiftProjectionCaches.Count);
@@ -39,17 +39,17 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             {
                 double? nonBlendValue = null;
                 double thisValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.MainShiftProjection,
-                                                                            dataHolders, (double)_options.WorkShiftLengthHintOption,
-                                                                            _options.UseMinimumPersons, _options.UseMaximumPersons);
+																			dataHolders, (double)schedulingOptions.WorkShiftLengthHintOption,
+																			schedulingOptions.UseMinimumPersons, schedulingOptions.UseMaximumPersons);
 
                 if (nonBlendSkillPeriods.Count > 0)
                     nonBlendValue = _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
                                                                                      shiftProjection.
                                                                                          MainShiftProjection,
                                                                                      nonBlendSkillPeriods,
-                                                                                     (double)_options.WorkShiftLengthHintOption,
-                                                                                     _options.UseMinimumPersons,
-                                                                                     _options.UseMaximumPersons);
+																					 (double)schedulingOptions.WorkShiftLengthHintOption,
+																					 schedulingOptions.UseMinimumPersons,
+																					 schedulingOptions.UseMaximumPersons);
                 if (nonBlendValue.HasValue)
                 {
                     if (thisValue.Equals(double.MinValue))

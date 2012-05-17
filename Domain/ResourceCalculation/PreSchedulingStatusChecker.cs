@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class PreSchedulingStatusChecker : IPreSchedulingStatusChecker
     {
-        private readonly ISchedulingOptions _schedulingOptions;
         private DateTime _scheduleDayUtc;
         private DateOnly _scheduleDateOnly;
         private DateTimePeriod _validPeriod;
@@ -14,13 +13,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private IScheduleDay _schedulePart;
         private IWorkShiftFinderResult _finderResult;
 
-        public PreSchedulingStatusChecker(ISchedulingOptions schedulingOptions)
-        {
-            _schedulingOptions = schedulingOptions;
-        }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public bool CheckStatus(IScheduleDay schedulePart, IWorkShiftFinderResult finderResult)
+        public bool CheckStatus(IScheduleDay schedulePart, IWorkShiftFinderResult finderResult, ISchedulingOptions schedulingOptions)
         {
             _schedulePart = schedulePart;
             _finderResult = finderResult;
@@ -34,26 +28,26 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (_currentSchedulePeriod != null && _currentSchedulePeriod.IsValid)
                 _currentPersonPeriod = schedulePart.Person.Period(_scheduleDateOnly);
 
-            return CheckTheStatus();
+            return checkTheStatus(schedulingOptions);
         }
 
-        private bool CheckTheStatus()
+        private bool checkTheStatus(ISchedulingOptions schedulingOptions)
         {
             if (SchedulePeriod.IsValid == false)
             {
-                LoggFilterResult(UserTexts.Resources.NoSchedulePeriodIsDefinedForTheDate, 0, 0);
+                loggFilterResult(UserTexts.Resources.NoSchedulePeriodIsDefinedForTheDate, 0, 0);
                 return false;
             }
 
-            if (_schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff && PersonPeriod.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)
+            if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff && PersonPeriod.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)
             {
-                LoggFilterResult(UserTexts.Resources.TheEmploymentTypeIsNotFixedStaff, 0, 0);
+                loggFilterResult(UserTexts.Resources.TheEmploymentTypeIsNotFixedStaff, 0, 0);
                 return false;
             }
             //only fixed staff will be scheduled this way
-            if (_schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff && PersonPeriod.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)
+            if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff && PersonPeriod.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)
             {
-                LoggFilterResult(UserTexts.Resources.TheEmploymentTypeIsNotHourlyStaff, 0, 0);
+                loggFilterResult(UserTexts.Resources.TheEmploymentTypeIsNotHourlyStaff, 0, 0);
                 return false;
             }
             //no person assignment
@@ -65,12 +59,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             //no day off
             if (_schedulePart.PersonDayOffCollection().Count != 0)
             {
-                LoggFilterResult(UserTexts.Resources.ThereIsAlreadyADayOff, 0, 0);
+                loggFilterResult(UserTexts.Resources.ThereIsAlreadyADayOff, 0, 0);
                 return false;
             }
             if (PersonPeriod.RuleSetBag == null)
             {
-                LoggFilterResult(UserTexts.Resources.NoRuleSetBagDefined, 0, 0);
+                loggFilterResult(UserTexts.Resources.NoRuleSetBagDefined, 0, 0);
                 return false;
             }
             return true;
@@ -122,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return false;
         }
 
-        private void LoggFilterResult(string message, int countWorkShiftsBefore, int countWorkShiftsAfter)
+        private void loggFilterResult(string message, int countWorkShiftsBefore, int countWorkShiftsAfter)
         {
 			_finderResult.AddFilterResults(new WorkShiftFilterResult(message, countWorkShiftsBefore, countWorkShiftsAfter));
             //Console.WriteLine(message);

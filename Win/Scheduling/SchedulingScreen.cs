@@ -4430,7 +4430,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IList<IGroupPage> groupPages = _cachedGroupPages;
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
 							ScheduleEmploymentType.FixedStaff;
-            	_schedulingOptions.DayOffTemplate = _dayOffTemplate;
 				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules,
                                                                             _schedulerState.CommonStateHolder.ShiftCategories,
 																			 false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
@@ -4568,7 +4567,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void _backgroundWorkerScheduling_DoWork(object sender, DoWorkEventArgs e)
         {
             setThreadCulture();
-			var schedulingOptions = _container.Resolve<ISchedulingOptions>();
+        	var schedulingOptions = _optimizerOriginalPreferences.SchedulingOptions;
 			schedulingOptions.DayOffTemplate = _dayOffTemplate;
             bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
             _schedulerState.SchedulingResultState.SkipResourceCalculation = false;
@@ -4623,9 +4622,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                         {
 
                             if (schedulingOptions.UseGroupScheduling)
-								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll);
+								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll, schedulingOptions);
                             else
-								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, _backgroundWorkerScheduling);
+								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, _backgroundWorkerScheduling, schedulingOptions);
                                                                                   
 
                             break;
@@ -4640,7 +4639,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                             if (period.StartDate == DateOnly.MinValue) break;
 
 
-							_scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixList, matrixListAll, _backgroundWorkerScheduling);
+							_scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixList, matrixListAll, _backgroundWorkerScheduling, schedulingOptions);
                             break;
                         }
                 }
@@ -4649,7 +4648,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             else
             {
-                _scheduleOptimizerHelper.ScheduleSelectedStudents(scheduleDays, _backgroundWorkerScheduling);
+                _scheduleOptimizerHelper.ScheduleSelectedStudents(scheduleDays, _backgroundWorkerScheduling, schedulingOptions);
             }
 
             //shiftcategorylimitations

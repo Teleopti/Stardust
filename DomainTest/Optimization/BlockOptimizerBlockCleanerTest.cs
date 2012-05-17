@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                      };
             _blockFinderFactory = _mock.StrictMock<IBlockFinderFactory>();
             _deleteSchedulePartService = _mock.StrictMock<IDeleteSchedulePartService>();
-            _target = new BlockOptimizerBlockCleaner(_modifyAndRollbackService, _schedulingOptions, _blockFinderFactory, _deleteSchedulePartService);
+            _target = new BlockOptimizerBlockCleaner(_modifyAndRollbackService, _blockFinderFactory, _deleteSchedulePartService);
             _matrix = _mock.StrictMock<IScheduleMatrixPro>();
             _betweenDayOffBlockFinder = _mock.StrictMock<IBetweenDayOffBlockFinder>();
             _blockFinderResult = _mock.StrictMock<IBlockFinderResult>();
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _mock.ReplayAll();
 
-            _target.ClearSchedules(_matrix, new List<DateOnly> {date3});
+            _target.ClearSchedules(_matrix, new List<DateOnly> {date3}, _schedulingOptions);
 
             _mock.VerifyAll();
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _mock.ReplayAll();
 
-            _target.ClearSchedules(_matrix, new List<DateOnly> { date3 });
+            _target.ClearSchedules(_matrix, new List<DateOnly> { date3 }, _schedulingOptions);
 
             _mock.VerifyAll();
         }

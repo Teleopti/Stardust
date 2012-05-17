@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { _matrix }, _schedulingOptions)).Return(false);
                 Expect.Call(_changesTracker.DaysOffRemoved(_workingArray, _originalArray, _matrix,
                                                            _daysOffPreferences.ConsiderWeekBefore)).Return(dates);
-                Expect.Call(_blockCleaner.ClearSchedules(_matrix, dates)).Return(dates);
+                Expect.Call(_blockCleaner.ClearSchedules(_matrix, dates, _schedulingOptions)).Return(dates);
                 Expect.Call(() =>_resourceOptimizationHelper.ResourceCalculateDate(dates[0], true, true));
 				Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { _matrix }, _schedulingOptions)).Return(false);
             }

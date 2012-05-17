@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 //rensa block med hål i
                 IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(_workingBitArray, originalArray, matrix,
                                                                              _daysOffPreferences.ConsiderWeekBefore);
-                var datesRemoved = _blockOptimizerBlockCleaner.ClearSchedules(matrix, daysOffToRemove);
+                var datesRemoved = _blockOptimizerBlockCleaner.ClearSchedules(matrix, daysOffToRemove, schedulingOptions);
                 foreach (var dateOnly in datesRemoved)
                 {
                     _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);

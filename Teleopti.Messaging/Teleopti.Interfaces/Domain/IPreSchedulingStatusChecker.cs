@@ -7,13 +7,14 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IPreSchedulingStatusChecker
     {
-        /// <summary>
-        /// Checks the status.
-        /// </summary>
-        /// <param name="schedulePart">The schedule part.</param>
-        /// <param name="finderResult">The finder result.</param>
-        /// <returns></returns>
-        bool CheckStatus(IScheduleDay schedulePart, IWorkShiftFinderResult finderResult);
+		/// <summary>
+		/// Checks the status.
+		/// </summary>
+		/// <param name="schedulePart">The schedule part.</param>
+		/// <param name="finderResult">The finder result.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <returns></returns>
+		bool CheckStatus(IScheduleDay schedulePart, IWorkShiftFinderResult finderResult, ISchedulingOptions schedulingOptions);
         /// <summary>
         /// Gets the person period.
         /// </summary>

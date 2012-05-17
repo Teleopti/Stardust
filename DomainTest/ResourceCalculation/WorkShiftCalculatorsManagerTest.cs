@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _workShiftCalculator = _mocks.StrictMock<IWorkShiftCalculator>();
             _nonBlendWorkShiftCalculator = _mocks.StrictMock<INonBlendWorkShiftCalculator>();
             _options = new SchedulingOptions();
-            _target = new WorkShiftCalculatorsManager(_workShiftCalculator,_nonBlendWorkShiftCalculator,_options);
+            _target = new WorkShiftCalculatorsManager(_workShiftCalculator,_nonBlendWorkShiftCalculator);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_nonBlendWorkShiftCalculator.CalculateShiftValue(person, proj1, nonBlendSkillPeriods, 4, true, true)).Return(5);
             Expect.Call(_nonBlendWorkShiftCalculator.CalculateShiftValue(person, proj2, nonBlendSkillPeriods, 4, true, true)).Return(5);
             _mocks.ReplayAll();
-            _target.RunCalculators(person, caches, dataHolders, nonBlendSkillPeriods);
+            _target.RunCalculators(person, caches, dataHolders, nonBlendSkillPeriods, _options);
             _mocks.VerifyAll();
         }
     }

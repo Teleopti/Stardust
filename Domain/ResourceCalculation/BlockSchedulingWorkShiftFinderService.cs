@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         double BestShiftValue(DateOnly dateOnly, IList<IShiftProjectionCache> filteredListOfShifts, IDictionary<IActivity, IDictionary<DateTime,
             ISkillStaffPeriodDataHolder>> dataHolders, IFairnessValueResult totalFairness, IFairnessValueResult agentFairness,
 			int maxFairnessOnShiftCategories, TimeSpan averageWorkTime, bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors,
-            double lengthFactor, bool useMinimumPersons, bool useMaximumPersons);
+            double lengthFactor, bool useMinimumPersons, bool useMaximumPersons, ISchedulingOptions schedulingOptions);
     }
 
     public class BlockSchedulingWorkShiftFinderService : IBlockSchedulingWorkShiftFinderService
@@ -29,24 +29,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         	_shiftCategoryFairnessShiftValueCalculator = shiftCategoryFairnessShiftValueCalculator;
         }
 
-        private class ShiftValue
+        private class shiftValue
         {
             public double Value { get; set; }
             public IShiftProjectionCache ShiftProjection { get; set; }
         }
 
-        public double BestShiftValue(DateOnly dateOnly, IList<IShiftProjectionCache> filteredListOfShifts, IDictionary<IActivity,
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "8"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public double BestShiftValue(DateOnly dateOnly, IList<IShiftProjectionCache> filteredListOfShifts, IDictionary<IActivity,
             IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders, IFairnessValueResult totalFairness,IFairnessValueResult agentFairness,
 			int maxFairnessOnShiftCategories, TimeSpan averageWorkTime, bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors,
-            double lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
+            double lengthFactor, bool useMinimumPersons, bool useMaximumPersons, ISchedulingOptions schedulingOptions)
         {
-            IList<ShiftValue> allValues = new List<ShiftValue>(filteredListOfShifts.Count);
+            IList<shiftValue> allValues = new List<shiftValue>(filteredListOfShifts.Count);
             double minValue = double.MaxValue;
             double maxValue = double.MinValue;
             foreach (IShiftProjectionCache shiftProjection in filteredListOfShifts)
             {
                 double thisValue = _calculator.CalculateShiftValue(shiftProjection.MainShiftProjection, dataHolders,lengthFactor, useMinimumPersons, useMaximumPersons);
-                ShiftValue shiftValue = new ShiftValue { ShiftProjection = shiftProjection, Value = thisValue };
+                var shiftValue = new shiftValue { ShiftProjection = shiftProjection, Value = thisValue };
                 allValues.Add(shiftValue);
                 if (thisValue > maxValue)
                     maxValue = thisValue;
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             double highestShiftValue = double.MinValue;
             IList<IShiftProjectionCache> foundShifts = new List<IShiftProjectionCache>();
 
-            foreach (ShiftValue thisShiftValue in allValues)
+            foreach (shiftValue thisShiftValue in allValues)
             {
                 IShiftProjectionCache shiftProjection = thisShiftValue.ShiftProjection;
             	double shiftValue;
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					IShiftCategory shiftCategory = shiftProjection.TheMainShift.ShiftCategory;
 					double factorForShiftCategory = shiftCategoryFairnessFactors.FairnessFactor(shiftCategory);
-					shiftValue = _shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(thisShiftValue.Value, factorForShiftCategory, maxValue);
+					shiftValue = _shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(thisShiftValue.Value, factorForShiftCategory, maxValue, schedulingOptions);
 				}
 				else
 				{
@@ -74,14 +75,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 					shiftValue = _fairnessValueCalculator.CalculateFairnessValue(
                         thisShiftValue.Value, dayOfWeekJusticeValue, maxFairnessOnShiftCategories,
-                        totalFairness.FairnessPoints, agentFairness, maxValue);
+                        totalFairness.FairnessPoints, agentFairness, maxValue, schedulingOptions);
 				}
                 
                 if (shiftValue > highestShiftValue)
                 {
                     foundShifts = new List<IShiftProjectionCache> { shiftProjection };
                     highestShiftValue = shiftValue;
-                    continue;
                 }
 
             }
