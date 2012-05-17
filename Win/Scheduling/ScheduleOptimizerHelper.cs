@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var studentSchedulingService = _container.Resolve<IStudentSchedulingService>();
             IScheduleTagSetter tagSetter = _container.Resolve<IScheduleTagSetter>();
-            tagSetter.ChangeTagToSet(optimizationPreferences.General.ScheduleTag);
+            tagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
             studentSchedulingService.ClearFinderResults();
             _backgroundWorker = backgroundWorker;
             studentSchedulingService.DayScheduled += schedulingServiceDayScheduled;
