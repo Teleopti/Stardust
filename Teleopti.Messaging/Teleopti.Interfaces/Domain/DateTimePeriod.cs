@@ -14,16 +14,6 @@ namespace Teleopti.Interfaces.Domain
         private MinMax<DateTime> period;
         private const string DATETIME_SEPARATOR = " - ";
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public DateTimePeriod(SerializationInfo info, StreamingContext context)
-        {
-            period = new MinMax<DateTime>((DateTime)info.GetValue("StartDateTime", typeof(DateTime)), (DateTime)info.GetValue("EndDateTime", typeof(DateTime)));
-        }
-
         #region Properties
 
 
