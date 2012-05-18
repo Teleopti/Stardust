@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public IWorkTimeMinMax WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay, out PreferenceType? preferenceType)
 		{
+			if (person == null) throw new ArgumentNullException("person");
 			preferenceType = null;
 			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(date, date)).SingleOrDefault();
 			if (personPeriod == null)

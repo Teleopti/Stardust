@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			result.Should().Be.EqualTo(workTimeMineMax);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSetPreferenceTypeCorrect()
 		{
 			var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
