@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Markup;
-using Teleopti.Analytics.Etl.ConfigTool.StartupConfiguration;
+using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using Teleopti.Analytics.Etl.Transformer;
 using log4net.Config;
 using Application = System.Windows.Application;

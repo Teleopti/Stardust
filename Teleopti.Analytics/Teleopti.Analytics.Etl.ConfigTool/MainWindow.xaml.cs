@@ -2,9 +2,9 @@
 using System.Configuration;
 using System.Windows;
 using System.Windows.Forms;
-using Teleopti.Analytics.Etl.ConfigTool.DataSourceConfiguration;
+using Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
-using Teleopti.Analytics.Etl.ConfigToolCode.DataSourceConfiguration;
+using Teleopti.Analytics.Etl.ConfigToolCode.Gui.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
@@ -36,6 +36,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 
         	scheduleControl.SetBaseConfiguration(baseConfiguration);
         	manualEtl.SetBaseConfiguration(baseConfiguration);
+			jobHistory.SetBaseConfiguration(baseConfiguration);
 
             DataContext = this;
             CanRun = true;

@@ -81,19 +81,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSourceConfiguration\DataSourceConfigurationModel.cs" />
-    <Compile Include="DataSourceConfiguration\DataSourceConfigurationPresenter.cs" />
-    <Compile Include="DataSourceConfiguration\DataSourceRow.cs" />
-    <Compile Include="DataSourceConfiguration\DataSourceState.cs" />
-    <Compile Include="DataSourceConfiguration\IDataSourceConfigurationView.cs" />
-    <Compile Include="DataSourceConfiguration\MessageBoxProperties.cs" />
+    <Compile Include="Gui\DataSourceConfiguration\DataSourceConfigurationModel.cs" />
+    <Compile Include="Gui\DataSourceConfiguration\DataSourceConfigurationPresenter.cs" />
+    <Compile Include="Gui\DataSourceConfiguration\DataSourceRow.cs" />
+    <Compile Include="Gui\DataSourceConfiguration\DataSourceState.cs" />
+    <Compile Include="Gui\DataSourceConfiguration\IDataSourceConfigurationView.cs" />
+    <Compile Include="Gui\DataSourceConfiguration\MessageBoxProperties.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartupConfiguration\LookupStringItem.cs" />
-    <Compile Include="StartupConfiguration\LookupIntegerItem.cs" />
-    <Compile Include="StartupConfiguration\IStartupConfigurationView.cs" />
-    <Compile Include="StartupConfiguration\StartupConfigurationModel.cs" />
-    <Compile Include="StartupConfiguration\StartupConfigurationPresenter.cs" />
+    <Compile Include="Gui\StartupConfiguration\LookupStringItem.cs" />
+    <Compile Include="Gui\StartupConfiguration\LookupIntegerItem.cs" />
+    <Compile Include="Gui\StartupConfiguration\IStartupConfigurationView.cs" />
+    <Compile Include="Gui\StartupConfiguration\StartupConfigurationModel.cs" />
+    <Compile Include="Gui\StartupConfiguration\StartupConfigurationPresenter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

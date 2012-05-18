@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Timers;
 using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.Common.JobLog;
+using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
@@ -10,8 +13,6 @@ using Teleopti.Interfaces.Domain;
 using log4net;
 using log4net.Config;
 using Teleopti.Analytics.Etl.Common.Database;
-using Teleopti.Analytics.Etl.Common.Database.EtlLogs;
-using Teleopti.Analytics.Etl.Common.Database.EtlSchedules;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
@@ -72,10 +73,10 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				}
 
 				var rep = new Repository(_connectionString);
-				IEtlLogCollection etlLogCollection = new EtlLogCollection(rep);
-				IEtlScheduleCollection etlScheduleCollection = new EtlScheduleCollection(rep, etlLogCollection, _serviceStartTime);
+				IEtlJobLogCollection etlJobLogCollection = new EtlJobLogCollection(rep);
+				IEtlJobScheduleCollection etlJobScheduleCollection = new EtlJobScheduleCollection(rep, etlJobLogCollection, _serviceStartTime);
 				var schedulePriority = new SchedulePriority();
-				var scheduleToRun = schedulePriority.GetTopPriority(etlScheduleCollection, DateTime.Now, _serviceStartTime);
+				var scheduleToRun = schedulePriority.GetTopPriority(etlJobScheduleCollection, DateTime.Now, _serviceStartTime);
 				if (scheduleToRun != null)
 				{
 					IJob jobToRun = JobExtractor.ExtractJobFromSchedule(scheduleToRun, _jobHelper,
@@ -95,7 +96,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			}
 		}
 
-		private void RunJob(IJob jobToRun, int scheduleId, ILogRepository repository, IList<IBusinessUnit> businessUnitCollection)
+		private void RunJob(IJob jobToRun, int scheduleId, IJobLogRepository repository, IList<IBusinessUnit> businessUnitCollection)
 		{
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();

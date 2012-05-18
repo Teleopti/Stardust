@@ -87,10 +87,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSourceConfiguration\DataSourceConfigurationPresenterTest.cs" />
+    <Compile Include="Gui\DataSourceConfiguration\DataSourceConfigurationPresenterTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartupConfiguration\StartupConfigurationPresenterTest.cs" />
+    <Compile Include="Gui\StartupConfiguration\StartupConfigurationPresenterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
