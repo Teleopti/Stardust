@@ -54,6 +54,9 @@ COPY "%ROOTDIR%\WebTest.nhib.xml.template" "%Sitepath%\bin\WebTest.nhib.xml"
 cscript "%ROOTDIR%\replace.vbs" $(CCC7DB) %CCC7DB% "%Sitepath%\bin\WebTest.nhib.xml"
 cscript "%ROOTDIR%\replace.vbs" $(AnalyticsDB) %AnalyticsDB% "%Sitepath%\bin\WebTest.nhib.xml"
 
+::Set esent permissions
+"%Sitepath%\EsentPermissions.bat" "601" "1" "705" "IIS APPPOOL\%AppPoolName%"
+
 ::Done
 CLS
 ECHO Deployed %SiteName% - Done!
