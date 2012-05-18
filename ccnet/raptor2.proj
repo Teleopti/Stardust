@@ -98,7 +98,7 @@
 		<Message Importance="high" Text="Compile finished." />
 	</Target>
 
-	<Target Name="PreCompile">
+	<Target Name="PreCompile" Condition="Exists('$(CCNetWorkingDirectory)\.nuget\packages.config')">
 		<Message Importance="high" Text="Installing solution wide nuget packages (packages.config)"/>
 		<Exec Command=".nuget\nuget.exe install .nuget\packages.config -o packages"
 				WorkingDirectory="$(CCNetWorkingDirectory)"/>
