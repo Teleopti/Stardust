@@ -1,5 +1,3 @@
-
-
 ::@ECHO off
 :: =============================================
 :: Author:		MattiasE
@@ -138,36 +136,6 @@ FOR /D %%I IN (*.esent) DO DEL "%%I" /Q /S
 GOTO EOF 
 ::---------------
 
-:desc
-CLS
-ECHO Need input parameters [VersionNt] [SPLevel] [IISVersion] [SVCLOGIN:optional]
-ECHO Example for Win2008 Server:
-ECHO EsentPermissions.bat 600 0 7
-PAUSE
-CLS
-ECHO - VersionNT:
-ECHO 501 for Windows XP and all its service packs
-ECHO 502 for Windows Server 2003 and all its service packs
-ECHO 600 for Windows Server 2008 and Windows Vista
-ECHO 601 for Windows 7
-ECHO.
-ECHO - SPLevel:
-ECHO The current Service Pack level of the OS
-ECHO.
-ECHO - IISVersion:
-ECHO 5 Windows XP Professional
-ECHO 6 Windows Server 2003
-ECHO 7 Windows Server 2008 (and Windows Vista)
-ECHO 7 Windows Server 2008 R2 (and Windows 7)
-ECHO.
-ECHO - SVCLOGIN:
-ECHO Optional
-ECHO when Teleopti is installed with Integrated Security
-ECHO use this parameter to set account to be used by App Pool service.
-ECHO This paramter could also be used if you need to run this
-ECHO script _after_ patch/installation (scenario: customer use custom account)
-PAUSE
-GOTO EOF
 ::---------------
 :EOF
 ::---------------
