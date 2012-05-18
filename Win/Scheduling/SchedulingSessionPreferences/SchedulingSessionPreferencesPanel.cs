@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private bool _dataLoaded;
     	private IList<IGroupPage> _groupPages;
 		private IList<IGroupPage> _groupPagesFairness;
-        private bool _optimize;
         private IList<IScheduleTag> _scheduleTags;
 
         public SchedulingSessionPreferencesPanel()
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Initialize(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
 			bool reschedule, bool backToLegal, IList<IGroupPage> groupPages, 
-            bool optimize, IList<IScheduleTag> scheduleTags)
+            IList<IScheduleTag> scheduleTags)
         {
             if(!reschedule)
             {
@@ -45,13 +44,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 groupBox3.Visible = false;
             }
 
-            _optimize = optimize;
-
-            if (optimize)
-            {
-                checkBoxUseGroupScheduling.Text = Resources.UseTeam;
-                groupBox3.Text = Resources.Team;
-            }
 
 			labelResourceCalculateEveryColon.Visible = true;
 			numericUpDownResourceCalculateEvery.Visible = true;
@@ -134,23 +126,23 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             if (direction == ExchangeDataOption.DataSourceToControls)
             {
-                DataOffline();
-                InitShiftCategories();
-                InitGroupPages();
-				InitGroupPagesFairness();
+                dataOffline();
+                initShiftCategories();
+                initGroupPages();
+				initGroupPagesFairness();
                 initTags();
-                SetDataInControls();
+                setDataInControls();
             }
             else
             {
-                GetDataFromControls();
-                DataOnline();
+                getDataFromControls();
+                dataOnline();
             }
         }
 
         #endregion
 
-        private void InitShiftCategories()
+        private void initShiftCategories()
         {
             if (_shiftCategories != null)
             {
@@ -166,7 +158,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             }
         }
 
-		private void InitGroupPages()
+		private void initGroupPages()
 		{
 			comboBoxGrouping.DataSource = _groupPages;
 			comboBoxGrouping.DisplayMember = "Description";
@@ -181,15 +173,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             comboBoxAdvTag.DataSource = _scheduleTags;
             comboBoxAdvTag.DisplayMember = "Description";
-
-            if (!_optimize)
-                comboBoxAdvTag.SelectedItem = _localSchedulingOptions.TagToUseOnScheduling;
-            else
-                comboBoxAdvTag.SelectedItem = _localSchedulingOptions.TagToUseOnOptimize;
-            
+			comboBoxAdvTag.SelectedItem = _localSchedulingOptions.TagToUseOnScheduling; 
         }
 
-		private void InitGroupPagesFairness()
+		private void initGroupPagesFairness()
 		{
 			comboBoxGroupingFairness.DataSource = _groupPagesFairness;
 			comboBoxGroupingFairness.DisplayMember = "Description";
@@ -200,12 +187,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			}
 		}
 
-        private void DataOffline()
+        private void dataOffline()
         {
             _localSchedulingOptions = (ISchedulingOptions)_schedulingOptions.Clone();
         }
 
-        private void DataOnline()
+        private void dataOnline()
         {
             _schedulingOptions.UseRotations = _localSchedulingOptions.UseRotations;
             _schedulingOptions.RotationDaysOnly = _localSchedulingOptions.RotationDaysOnly;
@@ -238,7 +225,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_schedulingOptions.ShowTroubleshot = _localSchedulingOptions.ShowTroubleshot;
         }
 
-        private void GetDataFromControls()
+        private void getDataFromControls()
         {
             _localSchedulingOptions.RefreshRate = (int)numericUpDownRefreshRate.Value;
             _localSchedulingOptions.UseRotations = checkBoxUseRotations.Checked;
@@ -271,30 +258,20 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             }
             _localSchedulingOptions.Fairness = new Percent(trackBar1.Value / 100d);
             _localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
-            if(!_optimize)
-			    _localSchedulingOptions.UseGroupScheduling = checkBoxUseGroupScheduling.Checked;
+			_localSchedulingOptions.UseGroupScheduling = checkBoxUseGroupScheduling.Checked;
         	_localSchedulingOptions.GroupOnGroupPage = (IGroupPage)comboBoxGrouping.SelectedItem;
 			_localSchedulingOptions.GroupPageForShiftCategoryFairness = (IGroupPage)comboBoxGroupingFairness.SelectedItem;
 			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
         	_localSchedulingOptions.UseMaxSeats = checkBoxUseMaxSeats.Checked;
         	_localSchedulingOptions.DoNotBreakMaxSeats = checkBoxDoNotBreakMaxSeats.Checked;
-            
-            if (_optimize)
-            {
-                _localSchedulingOptions.UseGroupOptimizing = checkBoxUseGroupScheduling.Checked;
-                _localSchedulingOptions.TagToUseOnOptimize = (IScheduleTag)comboBoxAdvTag.SelectedItem;
-            }
-            else
-            {
-                _localSchedulingOptions.TagToUseOnScheduling = (IScheduleTag)comboBoxAdvTag.SelectedItem;
-            }
+            _localSchedulingOptions.TagToUseOnScheduling = (IScheduleTag)comboBoxAdvTag.SelectedItem;
             _localSchedulingOptions.UseSameDayOffs = !checkBoxUseGroupScheduling.Checked ? checkBoxUseGroupScheduling.Checked : checkBoxUseSameDayOffs.Checked;
         	_localSchedulingOptions.ResourceCalculateFrequency = (int)numericUpDownResourceCalculateEvery.Value;
 			_localSchedulingOptions.ShowTroubleshot = checkBoxShowTroubleShot.Checked;
 
         }
 
-        private void SetDataInControls()
+        private void setDataInControls()
         {
             numericUpDownRefreshRate.Value = _localSchedulingOptions.RefreshRate;
 
@@ -318,7 +295,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             checkBoxMustHaves.Checked = _localSchedulingOptions.UsePreferencesMustHaveOnly;
             checkBoxMustHaves.Enabled = _localSchedulingOptions.UsePreferences;
 
-            if (MustHaveSetAndOnlyPreferenceDaysVisible())
+            if (mustHaveSetAndOnlyPreferenceDaysVisible())
             {
                 checkBoxOnlyPreferenceDays.Checked = true;
                 checkBoxOnlyPreferenceDays.Enabled = false;
@@ -364,81 +341,77 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
             }
 
-            if(!_optimize)
-        	    checkBoxUseGroupScheduling.Checked = _localSchedulingOptions.UseGroupScheduling;
+        	checkBoxUseGroupScheduling.Checked = _localSchedulingOptions.UseGroupScheduling;
         	comboBoxGrouping.Enabled = checkBoxUseGroupScheduling.Checked;
 			checkBoxDoNotBreakMaxSeats.Checked = _localSchedulingOptions.DoNotBreakMaxStaffing;
         	checkBoxUseMaxSeats.Checked = _localSchedulingOptions.UseMaxSeats;
         	checkBoxDoNotBreakMaxSeats.Enabled = checkBoxUseMaxSeats.Checked;
         	checkBoxDoNotBreakMaxSeats.Checked = _localSchedulingOptions.DoNotBreakMaxSeats;
             checkBoxUseSameDayOffs.Enabled = checkBoxUseGroupScheduling.Checked;
-
-            if (_optimize)
-                checkBoxUseGroupScheduling.Checked = _localSchedulingOptions.UseGroupOptimizing;
             checkBoxUseSameDayOffs.Checked = _localSchedulingOptions.UseSameDayOffs;
         	numericUpDownResourceCalculateEvery.Value = _localSchedulingOptions.ResourceCalculateFrequency;
 			checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleshot;
         }
 
-        private bool MustHaveSetAndOnlyPreferenceDaysVisible()
+        private bool mustHaveSetAndOnlyPreferenceDaysVisible()
         {
             return checkBoxMustHaves.Checked && checkBoxOnlyPreferenceDays.Visible && checkBoxOnlyRotationDays.Enabled;
         }
 
-        private void CheckBoxUseRotationsCheckedChanged(object sender, EventArgs e)
+        private void checkBoxUseRotationsCheckedChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
-                SetDataInControls();
+                getDataFromControls();
+                setDataInControls();
             }
         }
 
-        private void CheckBoxOnlyRotationDaysCheckedChanged(object sender, EventArgs e)
+        private void checkBoxOnlyRotationDaysCheckedChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
-                SetDataInControls();
+                getDataFromControls();
+                setDataInControls();
             }
         }
 
-        private void CheckBoxUseAvailabilityCheckedChanged(object sender, EventArgs e)
+        private void checkBoxUseAvailabilityCheckedChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
-                SetDataInControls();
+                getDataFromControls();
+                setDataInControls();
             }
         }
-        private void CheckBoxUseStudentAvailabilityCheckedChanged(object sender, EventArgs e)
+        private void checkBoxUseStudentAvailabilityCheckedChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
-                SetDataInControls();
-            }
-        }
-
-        private void CheckBoxUsePreferencesCheckedChanged(object sender, EventArgs e)
-        {
-            if (_dataLoaded)
-            {
-                GetDataFromControls();
-                SetDataInControls();
+                getDataFromControls();
+                setDataInControls();
             }
         }
 
-        private void ComboBoxAdvShiftCategorySelectedIndexChanged(object sender, EventArgs e)
+        private void checkBoxUsePreferencesCheckedChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
-                SetDataInControls();
+                getDataFromControls();
+                setDataInControls();
             }
         }
 
-        private void CheckBoxUseShiftCategoryCheckedChanged(object sender, EventArgs e)
+        private void comboBoxAdvShiftCategorySelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_dataLoaded)
+            {
+                getDataFromControls();
+                setDataInControls();
+            }
+        }
+
+        private void checkBoxUseShiftCategoryCheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxUseShiftCategory.Checked)
                 checkBoxUseBlockScheduling.Checked = false;
@@ -446,53 +419,53 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             comboBoxAdvShiftCategory.Enabled = checkBoxUseShiftCategory.Checked;
         }
 
-        private void TrackBar1ValueChanged(object sender, EventArgs e)
+        private void trackBar1ValueChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
+                getDataFromControls();
             }
         }
 
        
 
-        private void CheckBoxOnlyAvailabilityDaysCheckedChanged(object sender, EventArgs e)
+        private void checkBoxOnlyAvailabilityDaysCheckedChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
-                SetDataInControls();
+                getDataFromControls();
+                setDataInControls();
             }
         }
 
-        private void CheckBoxOnlyPreferenceDaysCheckedChanged(object sender, EventArgs e)
+        private void checkBoxOnlyPreferenceDaysCheckedChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
-                SetDataInControls();
+                getDataFromControls();
+                setDataInControls();
             }
         }
 
-        private void CheckBoxUseShiftCategoryRestrictionsCheckedChanged(object sender, EventArgs e)
+        private void checkBoxUseShiftCategoryRestrictionsCheckedChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
-                SetDataInControls();
+                getDataFromControls();
+                setDataInControls();
             }
         }
 
-        private void CheckBoxMustHavesCheckedChanged(object sender, EventArgs e)
+        private void checkBoxMustHavesCheckedChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
-                SetDataInControls();
+                getDataFromControls();
+                setDataInControls();
             }
         }
 
-        private void CheckBoxUseBlockSchedulingCheckedChanged(object sender, EventArgs e)
+        private void checkBoxUseBlockSchedulingCheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxUseBlockScheduling.Checked)
             {
@@ -509,74 +482,58 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				checkBoxUseGroupScheduling.Checked = false;
         }
 
-        private void RadioButtonBetweenDayOffCheckedChanged(object sender, EventArgs e)
+        private void radioButtonBetweenDayOffCheckedChanged(object sender, EventArgs e)
         {
             if(radioButtonBetweenDayOff.Checked)
                 radioButtonSchedulePeriod.Checked = false;
         }
 
-        private void RadioButtonSchedulePeriodCheckedChanged(object sender, EventArgs e)
+        private void radioButtonSchedulePeriodCheckedChanged(object sender, EventArgs e)
         {
             if(radioButtonSchedulePeriod.Checked)
                 radioButtonBetweenDayOff.Checked = false;
         }
 
-		private void CheckBoxUseGroupSchedulingCheckedChanged(object sender, EventArgs e)
+		private void checkBoxUseGroupSchedulingCheckedChanged(object sender, EventArgs e)
 		{
 			comboBoxGrouping.Enabled = checkBoxUseGroupScheduling.Checked;
 
-            if (_optimize)
-            {
-                checkBoxUseSameDayOffs.Enabled = checkBoxUseGroupScheduling.Checked;
 
-                if (!checkBoxUseGroupScheduling.Checked)
-                {
-                    checkBoxUseSameDayOffs.Checked = false;
-                    checkBoxUseSameDayOffs.Enabled = false;
-                }
-                else
-                {
-                    checkBoxUseSameDayOffs.Checked = true;
-                    checkBoxUseSameDayOffs.Enabled = true;
-                }
-            }
-            else
-            {
-                checkBoxUseBlockScheduling.Enabled = !checkBoxUseGroupScheduling.Checked;
-                if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
-                    checkBoxUseBlockScheduling.Checked = false;   
-            }
+			checkBoxUseBlockScheduling.Enabled = !checkBoxUseGroupScheduling.Checked;
+			if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
+				checkBoxUseBlockScheduling.Checked = false;
+
 		}
 
-        private void CheckBoxUseSameDayOffsCheckedChanged(object sender, EventArgs e)
+    	private void checkBoxUseSameDayOffsCheckedChanged(object sender, EventArgs e)
         {
             if (_dataLoaded)
             {
-                GetDataFromControls();
-                SetDataInControls();
+                getDataFromControls();
+                setDataInControls();
             }
         }
 
-		private void ComboBoxGroupingSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxGroupingSelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (_dataLoaded)
 			{
-				GetDataFromControls();
-				SetDataInControls();
+				getDataFromControls();
+				setDataInControls();
 			}
 		}
 
 
-		private void ComboBoxGroupingFairnessSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxGroupingFairnessSelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (_dataLoaded)
 			{
-				GetDataFromControls();
-				SetDataInControls();
+				getDataFromControls();
+				setDataInControls();
 			}
 		}
 
-		private void CheckBoxUseMaxSeatsCheckedChanged(object sender, EventArgs e)
+		private void checkBoxUseMaxSeatsCheckedChanged(object sender, EventArgs e)
 		{
 			if (!checkBoxUseMaxSeats.Checked)
 				checkBoxDoNotBreakMaxSeats.Checked = false;

@@ -206,7 +206,7 @@
 			this.checkBoxUseShiftCategoryRestrictions.TabIndex = 12;
 			this.checkBoxUseShiftCategoryRestrictions.Text = "xxUseShiftCategoryRestrictions";
 			this.checkBoxUseShiftCategoryRestrictions.UseVisualStyleBackColor = true;
-			this.checkBoxUseShiftCategoryRestrictions.CheckedChanged += new System.EventHandler(this.CheckBoxUseShiftCategoryRestrictionsCheckedChanged);
+			this.checkBoxUseShiftCategoryRestrictions.CheckedChanged += new System.EventHandler(this.checkBoxUseShiftCategoryRestrictionsCheckedChanged);
 			// 
 			// checkBoxOnlyPreferenceDays
 			// 
@@ -218,7 +218,7 @@
 			this.checkBoxOnlyPreferenceDays.TabIndex = 10;
 			this.checkBoxOnlyPreferenceDays.Text = "xxScheduleOnlyPreferenceDays";
 			this.checkBoxOnlyPreferenceDays.UseVisualStyleBackColor = true;
-			this.checkBoxOnlyPreferenceDays.CheckedChanged += new System.EventHandler(this.CheckBoxOnlyPreferenceDaysCheckedChanged);
+			this.checkBoxOnlyPreferenceDays.CheckedChanged += new System.EventHandler(this.checkBoxOnlyPreferenceDaysCheckedChanged);
 			// 
 			// checkBoxUsePreferences
 			// 
@@ -231,7 +231,7 @@
 			this.checkBoxUsePreferences.TabIndex = 9;
 			this.checkBoxUsePreferences.Text = "xxUsePreferences";
 			this.checkBoxUsePreferences.UseVisualStyleBackColor = true;
-			this.checkBoxUsePreferences.CheckedChanged += new System.EventHandler(this.CheckBoxUsePreferencesCheckedChanged);
+			this.checkBoxUsePreferences.CheckedChanged += new System.EventHandler(this.checkBoxUsePreferencesCheckedChanged);
 			// 
 			// checkBoxUseStudentAvailability
 			// 
@@ -244,7 +244,7 @@
 			this.checkBoxUseStudentAvailability.TabIndex = 8;
 			this.checkBoxUseStudentAvailability.Text = "xxUseStudentAvailability";
 			this.checkBoxUseStudentAvailability.UseVisualStyleBackColor = true;
-			this.checkBoxUseStudentAvailability.CheckedChanged += new System.EventHandler(this.CheckBoxUseStudentAvailabilityCheckedChanged);
+			this.checkBoxUseStudentAvailability.CheckedChanged += new System.EventHandler(this.checkBoxUseStudentAvailabilityCheckedChanged);
 			// 
 			// checkBoxOnlyAvailabilityDays
 			// 
@@ -256,7 +256,7 @@
 			this.checkBoxOnlyAvailabilityDays.TabIndex = 7;
 			this.checkBoxOnlyAvailabilityDays.Text = "xxScheduleOnlyAvailabilityDays";
 			this.checkBoxOnlyAvailabilityDays.UseVisualStyleBackColor = true;
-			this.checkBoxOnlyAvailabilityDays.CheckedChanged += new System.EventHandler(this.CheckBoxOnlyAvailabilityDaysCheckedChanged);
+			this.checkBoxOnlyAvailabilityDays.CheckedChanged += new System.EventHandler(this.checkBoxOnlyAvailabilityDaysCheckedChanged);
 			// 
 			// checkBoxUseAvailability
 			// 
@@ -269,7 +269,7 @@
 			this.checkBoxUseAvailability.TabIndex = 6;
 			this.checkBoxUseAvailability.Text = "xxUseAvailability";
 			this.checkBoxUseAvailability.UseVisualStyleBackColor = true;
-			this.checkBoxUseAvailability.CheckedChanged += new System.EventHandler(this.CheckBoxUseAvailabilityCheckedChanged);
+			this.checkBoxUseAvailability.CheckedChanged += new System.EventHandler(this.checkBoxUseAvailabilityCheckedChanged);
 			// 
 			// checkBoxUseRotations
 			// 
@@ -282,7 +282,7 @@
 			this.checkBoxUseRotations.TabIndex = 4;
 			this.checkBoxUseRotations.Text = "xxUseRotations";
 			this.checkBoxUseRotations.UseVisualStyleBackColor = true;
-			this.checkBoxUseRotations.CheckedChanged += new System.EventHandler(this.CheckBoxUseRotationsCheckedChanged);
+			this.checkBoxUseRotations.CheckedChanged += new System.EventHandler(this.checkBoxUseRotationsCheckedChanged);
 			// 
 			// checkBoxOnlyRotationDays
 			// 
@@ -294,7 +294,7 @@
 			this.checkBoxOnlyRotationDays.TabIndex = 5;
 			this.checkBoxOnlyRotationDays.Text = "xxScheduleOnlyRotationDays";
 			this.checkBoxOnlyRotationDays.UseVisualStyleBackColor = true;
-			this.checkBoxOnlyRotationDays.CheckedChanged += new System.EventHandler(this.CheckBoxOnlyRotationDaysCheckedChanged);
+			this.checkBoxOnlyRotationDays.CheckedChanged += new System.EventHandler(this.checkBoxOnlyRotationDaysCheckedChanged);
 			// 
 			// checkBoxMustHaves
 			// 
@@ -307,7 +307,7 @@
 			this.checkBoxMustHaves.TabIndex = 11;
 			this.checkBoxMustHaves.Text = "xxUsePreferencesMustHavesOnly";
 			this.checkBoxMustHaves.UseVisualStyleBackColor = true;
-			this.checkBoxMustHaves.CheckedChanged += new System.EventHandler(this.CheckBoxMustHavesCheckedChanged);
+			this.checkBoxMustHaves.CheckedChanged += new System.EventHandler(this.checkBoxMustHavesCheckedChanged);
 			// 
 			// groupBox3
 			// 
@@ -359,7 +359,7 @@
 			this.checkBoxUseSameDayOffs.TabIndex = 6;
 			this.checkBoxUseSameDayOffs.Text = "xxUseSameDayOffs";
 			this.checkBoxUseSameDayOffs.UseVisualStyleBackColor = true;
-			this.checkBoxUseSameDayOffs.CheckedChanged += new System.EventHandler(this.CheckBoxUseSameDayOffsCheckedChanged);
+			this.checkBoxUseSameDayOffs.CheckedChanged += new System.EventHandler(this.checkBoxUseSameDayOffsCheckedChanged);
 			// 
 			// checkBoxUseGroupScheduling
 			// 
@@ -373,7 +373,7 @@
 			this.checkBoxUseGroupScheduling.TabIndex = 4;
 			this.checkBoxUseGroupScheduling.Text = "xxUseTeamScheduling";
 			this.checkBoxUseGroupScheduling.UseVisualStyleBackColor = true;
-			this.checkBoxUseGroupScheduling.CheckedChanged += new System.EventHandler(this.CheckBoxUseGroupSchedulingCheckedChanged);
+			this.checkBoxUseGroupScheduling.CheckedChanged += new System.EventHandler(this.checkBoxUseGroupSchedulingCheckedChanged);
 			// 
 			// checkBoxUseBlockScheduling
 			// 
@@ -387,7 +387,7 @@
 			this.checkBoxUseBlockScheduling.TabIndex = 0;
 			this.checkBoxUseBlockScheduling.Text = "xxUseBlockScheduling";
 			this.checkBoxUseBlockScheduling.UseVisualStyleBackColor = true;
-			this.checkBoxUseBlockScheduling.CheckedChanged += new System.EventHandler(this.CheckBoxUseBlockSchedulingCheckedChanged);
+			this.checkBoxUseBlockScheduling.CheckedChanged += new System.EventHandler(this.checkBoxUseBlockSchedulingCheckedChanged);
 			// 
 			// radioButtonSchedulePeriod
 			// 
@@ -401,7 +401,7 @@
 			this.radioButtonSchedulePeriod.TabStop = true;
 			this.radioButtonSchedulePeriod.Text = "xxSchedulePeriod";
 			this.radioButtonSchedulePeriod.UseVisualStyleBackColor = true;
-			this.radioButtonSchedulePeriod.CheckedChanged += new System.EventHandler(this.RadioButtonSchedulePeriodCheckedChanged);
+			this.radioButtonSchedulePeriod.CheckedChanged += new System.EventHandler(this.radioButtonSchedulePeriodCheckedChanged);
 			// 
 			// radioButtonBetweenDayOff
 			// 
@@ -415,7 +415,7 @@
 			this.radioButtonBetweenDayOff.TabStop = true;
 			this.radioButtonBetweenDayOff.Text = "xxBetweenDayOff";
 			this.radioButtonBetweenDayOff.UseVisualStyleBackColor = true;
-			this.radioButtonBetweenDayOff.CheckedChanged += new System.EventHandler(this.RadioButtonBetweenDayOffCheckedChanged);
+			this.radioButtonBetweenDayOff.CheckedChanged += new System.EventHandler(this.radioButtonBetweenDayOffCheckedChanged);
 			// 
 			// comboBoxGrouping
 			// 
@@ -427,7 +427,7 @@
 			this.comboBoxGrouping.Size = new System.Drawing.Size(266, 24);
 			this.comboBoxGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxGrouping.TabIndex = 5;
-			this.comboBoxGrouping.SelectedIndexChanged += new System.EventHandler(this.ComboBoxGroupingSelectedIndexChanged);
+			this.comboBoxGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);
 			// 
 			// tableLayoutPanelTagWith
 			// 
@@ -466,7 +466,7 @@
 			this.comboBoxAdvTag.Size = new System.Drawing.Size(266, 24);
 			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvTag.TabIndex = 5;
-			this.comboBoxAdvTag.SelectedIndexChanged += new System.EventHandler(this.ComboBoxGroupingSelectedIndexChanged);
+			this.comboBoxAdvTag.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);
 			// 
 			// groupBox2
 			// 
@@ -514,7 +514,7 @@
 			this.checkBoxUseMaxSeats.TabIndex = 12;
 			this.checkBoxUseMaxSeats.Text = "xxUseMaxSeats";
 			this.checkBoxUseMaxSeats.UseVisualStyleBackColor = true;
-			this.checkBoxUseMaxSeats.CheckedChanged += new System.EventHandler(this.CheckBoxUseMaxSeatsCheckedChanged);
+			this.checkBoxUseMaxSeats.CheckedChanged += new System.EventHandler(this.checkBoxUseMaxSeatsCheckedChanged);
 			// 
 			// checkBoxUseMaximumPersons
 			// 
@@ -592,7 +592,7 @@
 			this.checkBoxUseShiftCategory.TabIndex = 11;
 			this.checkBoxUseShiftCategory.Text = "xxUseShiftCategory";
 			this.checkBoxUseShiftCategory.UseVisualStyleBackColor = true;
-			this.checkBoxUseShiftCategory.CheckedChanged += new System.EventHandler(this.CheckBoxUseShiftCategoryCheckedChanged);
+			this.checkBoxUseShiftCategory.CheckedChanged += new System.EventHandler(this.checkBoxUseShiftCategoryCheckedChanged);
 			// 
 			// comboBoxAdvShiftCategory
 			// 
@@ -607,7 +607,7 @@
 			this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
 			this.comboBoxAdvShiftCategory.TabIndex = 1;
-			this.comboBoxAdvShiftCategory.SelectedIndexChanged += new System.EventHandler(this.ComboBoxAdvShiftCategorySelectedIndexChanged);
+			this.comboBoxAdvShiftCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvShiftCategorySelectedIndexChanged);
 			// 
 			// groupBox7
 			// 
@@ -701,7 +701,7 @@
 			this.trackBar1.Size = new System.Drawing.Size(515, 56);
 			this.trackBar1.TabIndex = 0;
 			this.trackBar1.TickFrequency = 5;
-			this.trackBar1.ValueChanged += new System.EventHandler(this.TrackBar1ValueChanged);
+			this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1ValueChanged);
 			// 
 			// comboBoxGroupingFairness
 			// 
@@ -714,7 +714,7 @@
 			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(230, 24);
 			this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxGroupingFairness.TabIndex = 22;
-			this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.ComboBoxGroupingFairnessSelectedIndexChanged);
+			this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingFairnessSelectedIndexChanged);
 			// 
 			// groupBox5
 			// 

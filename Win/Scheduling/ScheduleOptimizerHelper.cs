@@ -467,7 +467,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         public void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
                                     BackgroundWorker backgroundWorker,
                                     IDayOffTemplate dayOffTemplate,
-                                    bool reschedule)
+                                    bool reschedule, 
+									ISchedulingOptions schedulingOptions)
         {
             _allResults = new WorkShiftFinderResultHolder();
             _backgroundWorker = backgroundWorker;
@@ -508,8 +509,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                             backToLegalStateSolverContainer, 
                             dayOffTemplate, 
                             optimizerPreferences.DaysOff, 
-                            _scheduleDayChangeCallback, 
-                            new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+                            _scheduleDayChangeCallback,
+							new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
                 }
             }
 
@@ -707,8 +708,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   where ((IDeleteTag)item).IsDeleted == false
                                                   select item).ToList();
             ((List<IDayOffTemplate>)displayList).Sort(new DayOffTemplateSorter());
+			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
             DaysOffBackToLegalState(matrixContainerList, _backgroundWorker,
-                                    displayList[0], false);
+                                    displayList[0], false, schedulingOptions);
 
             e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.Rescheduling + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
@@ -718,8 +720,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             // schedule those are the white spots after back to legal state
             OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container);
-            ISchedulePartModifyAndRollbackService rollbackService = 
-                new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+            ISchedulePartModifyAndRollbackService rollbackService =
+				new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
             bool notFullyScheduledMatrixFound = false;
             IList<IScheduleMatrixOriginalStateContainer> validMatrixContainerList = new List<IScheduleMatrixOriginalStateContainer>();

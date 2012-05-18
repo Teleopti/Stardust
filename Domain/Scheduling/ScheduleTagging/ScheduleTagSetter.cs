@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
@@ -9,10 +10,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 
         public ScheduleTagSetter(IScheduleTag tag)
         {
-            _tag = tag;
+        	if (tag == null) 
+				throw new ArgumentNullException("tag");
+        	_tag = tag;
         }
 
-        public void SetTagOnScheduleDays(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts)
+    	public void SetTagOnScheduleDays(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts)
         {
             switch(modifier)
             {
@@ -26,10 +29,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 
         public void ChangeTagToSet(IScheduleTag tag)
         {
-            _tag = tag;
+        	if (tag == null) 
+				throw new ArgumentNullException("tag");
+        	_tag = tag;
         }
 
-        private void addToAll(IEnumerable<IScheduleDay> scheduleParts)
+    	private void addToAll(IEnumerable<IScheduleDay> scheduleParts)
         {
             if (_tag is KeepOriginalScheduleTag) 
                 return;
