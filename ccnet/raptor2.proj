@@ -101,8 +101,7 @@
 
 	<Target Name="PreCompile">
 		<Message Importance="high" Text="Installing solution wide nuget packages (packages.config)"/>
-		<Exec Command="nuget.exe install"
-				WorkingDirectory="$(NugetFolder)"/>
+		<Exec Command="&quot;$(NugetFolder)\nuget.exe&quot; install &quot;$(NugetFolder)\packages.config&quot;"/>
 	</Target>
 
 	<Target Name="AzurePreDropDatabase">
