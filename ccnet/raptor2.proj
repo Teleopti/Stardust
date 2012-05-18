@@ -50,7 +50,7 @@
 	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 
 	<PropertyGroup>
-		<NUnitExe>"$(NugetPackages)\NUnit.2.5.10.11092\tools\nunit-console.exe"</NUnitExe>
+		<NUnitExe>"$(NugetPackages)\NUnit.Runners.2.6.0.12051\tools\nunit-console.exe"</NUnitExe>
 		<NUnitArgs>/nologo /noshadow /config=$(Configuration) /domain=Multiple</NUnitArgs>
 		<TrunkDbCreator>"$(CCNetWorkingDirectory)\Database\Tools\VersionTry.bat"</TrunkDbCreator>
 
