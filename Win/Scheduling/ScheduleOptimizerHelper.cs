@@ -192,6 +192,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
             if (allSelectedSchedules == null) throw new ArgumentNullException("allSelectedSchedules");
+			if(schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
+
             var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
             IList<IScheduleDay> unlockedSchedules = new List<IScheduleDay>();
             foreach (var scheduleDay in allSelectedSchedules)
@@ -470,6 +472,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                     bool reschedule, 
 									ISchedulingOptions schedulingOptions)
         {
+			if(schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
+
             _allResults = new WorkShiftFinderResultHolder();
             _backgroundWorker = backgroundWorker;
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
