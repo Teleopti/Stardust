@@ -33,20 +33,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var options = new EffectiveRestrictionOptions(true, true);
 
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForDisplay(scheduleDay, options);
-
-			if (effectiveRestriction.DayOffTemplate != null)
+			if (effectiveRestriction != null)
 			{
-				preferenceType=PreferenceType.DayOff;
+				if (effectiveRestriction.DayOffTemplate != null)
+				{
+					preferenceType = PreferenceType.DayOff;
+				}
+				else if (effectiveRestriction.Absence != null)
+				{
+					preferenceType = PreferenceType.Absence;
+				}
+				else if (effectiveRestriction.ShiftCategory != null)
+				{
+					preferenceType = PreferenceType.ShiftCategory;
+				}
 			}
-			else if (effectiveRestriction.Absence != null)
-			{
-				preferenceType = PreferenceType.Absence;
-			}
-			else if (effectiveRestriction.ShiftCategory != null)
-			{
-				preferenceType = PreferenceType.ShiftCategory;
-			}
-			
 
 			return ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, date, effectiveRestriction);
 		}
