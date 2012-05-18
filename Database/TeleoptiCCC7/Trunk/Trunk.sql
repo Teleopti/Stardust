@@ -1,3 +1,5 @@
+ALTER TABLE ReadModel.FindPerson
+ADD  SearchValueId uniqueidentifier NULL
 ----------------  
 --Name: Mattias Engblom
 --Date: 2012-05-15  

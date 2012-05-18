@@ -10,12 +10,19 @@ GO
 --				AF 2011-11-22 Had to format the sql to read it :-)
 --				DJ 2011-12-08 adding view for PersonPeriod including EndDate instead on row based dateadd()
 --				AF 2012-01-18 Display agents on deleted sites, teams, contracts, part time percentages, contract schedules, shift bags, BUT not skills. Do not want to see deleted skills at all.
+--				Ola 2012-05-16 Added parameter to just update changed persons 
 -- =============================================
-
+-- exec ReadModel.UpdateGroupingReadModel 'B0C67CB1-1C4F-4047-8DC1-9EF500DC79A6, 2AE730A0-5AF7-49B7-9498-9EF500DC79A6'
 CREATE PROCEDURE ReadModel.UpdateGroupingReadModel
+@persons nvarchar(max)
 AS
 BEGIN
-	SET NOCOUNT ON;
+	 SET NOCOUNT ON;
+
+CREATE TABLE #ids(person uniqueidentifier)
+INSERT INTO #ids SELECT * FROM SplitStringString(@persons) 
+
+DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 
     declare @mainId uniqueidentifier
 	set @mainId='6CE00B41-0722-4B36-91DD-0A3B63C545CF'
@@ -37,8 +44,6 @@ BEGIN
 
 	--declare @noteId uniqueidentifier
 	--set @noteId='5CE00B41-0722-4B36-91DD-0A3B63C545CF'
-
-	TRUNCATE TABLE ReadModel.groupingreadonly
 	
 	--Insert people from business hierarchy
 	--elapsed time = 242 ms.
@@ -60,8 +65,9 @@ BEGIN
 	inner join team t on t.site=s.id
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
 	inner join person p on p.id=pp.parent 
-	where p.isdeleted=0 
-
+	and p.isdeleted=0 
+	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @mainId)
+	
 	--Insert people from contract
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate)
 	select p.id,isnull(pp.startdate,'1900-01-01') as startdate,
@@ -81,7 +87,8 @@ BEGIN
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
 	inner join contract c on pp.contract=c.id 
 	inner join person p on p.id=pp.parent 
-	where p.isdeleted=0 
+	and p.isdeleted=0 
+	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @contractId)
 
 	--Insert people from part time percentage
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -102,7 +109,8 @@ BEGIN
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
 	inner join parttimepercentage c on pp.parttimepercentage=c.id 
 	inner join person p on p.id=pp.parent 
-	where p.isdeleted=0 
+	and p.isdeleted=0 
+	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @partTimePercentageId)
 	
 	--Insert people from contract schedule
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -122,7 +130,8 @@ BEGIN
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
 	inner join contractschedule c on pp.contractschedule=c.id 
 	inner join person p on p.id=pp.parent 
-	where p.isdeleted=0 
+	and p.isdeleted=0 
+	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @contractScheduleId)
 	
 	--Insert people from rule set bag
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -143,7 +152,8 @@ BEGIN
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
 	inner join rulesetbag c on pp.rulesetbag=c.id 
 	inner join person p on p.id=pp.parent 
-	where p.isdeleted=0 
+	and p.isdeleted=0 
+	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @ruleSetBagId)
 	
 	--Insert people from skill
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -171,8 +181,9 @@ BEGIN
 		on	skill.id=c.skill and skill.isdeleted=0
 	inner join person p
 		on	p.id=pp.parent and p.isdeleted=0 
-	
+	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @skillId)
 
+return
 	CREATE TABLE #groupsForSecondCTE
 	(
 		groupid uniqueidentifier not null,
