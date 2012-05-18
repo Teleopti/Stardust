@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
             if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
             {
-				var persons = (from p in modifiedRoots where p.Root is Person select p.Root).ToList();
+				var persons = modifiedRoots.Select(r => r.Root).OfType<IPerson>();
 				foreach (var personList in persons.Batch(400))
 				{
-					var idsAsString = (from p in personList select ((IAggregateRoot)p).Id.ToString()).ToArray();
+					var idsAsString = (from p in personList select p.Id.ToString()).ToArray();
 					var ids = string.Join(",", idsAsString);
 					runSql.Create(string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'",ids))
 						.Execute();

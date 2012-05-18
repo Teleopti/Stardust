@@ -33,20 +33,20 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
 			{
                 //get the person ids
-                var persons = (from p in modifiedRoots where p.Root is Person select p.Root).ToList();
+				var persons = modifiedRoots.Select(r => r.Root).OfType<IPerson>();
                 foreach (var personList in persons.Batch(400))
                 {
-                    var idsAsString = (from p in personList select ((IAggregateRoot)p).Id.ToString()).ToArray();
+                    var idsAsString = (from p in personList select p.Id.ToString()).ToArray();
                     var ids = string.Join(",", idsAsString);
                     runSql.Create(string.Format("exec [ReadModel].[UpdateGroupingReadModel] '{0}'", ids))
                         .Execute();
                 }
 				
                 //get the group page ids
-                var groupPage = (from gp in modifiedRoots where gp.Root is GroupPage  select gp.Root).ToList();
+				var groupPage = modifiedRoots.Select(r => r.Root).OfType<IGroupPage>();
                 foreach (var groupPageList in groupPage.Batch(400))
                 {
-                    var idsAsString = (from p in groupPageList select ((IAggregateRoot)p).Id.ToString()).ToArray();
+                    var idsAsString = (from p in groupPageList select p.Id.ToString()).ToArray();
                     var ids = string.Join(",", idsAsString);
                     runSql.Create(string.Format("exec [ReadModel].[UpdateGroupingReadModelGroupPage] '{0}'", ids))
                         .Execute();
