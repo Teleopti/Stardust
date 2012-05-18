@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Win.Grouping
 
         void treeViewAdvPreviewTree_NodeEditorValidated(object sender, TreeNodeAdvEditEventArgs e)
         {
-            var group = (IRootPersonGroup)e.Node.TagObject;
+            var group = (PersonGroupBase)e.Node.TagObject;
 			var len = e.Node.Text.Length;
 			if (len > 50) len = 50;
         	e.Node.Text = e.Node.Text.Substring(0, len);
