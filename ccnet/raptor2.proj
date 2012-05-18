@@ -100,7 +100,7 @@
 
 	<Target Name="PreCompile">
 		<Message Importance="high" Text="Installing solution wide nuget packages (packages.config)"/>
-		<Exec Command=".nuget\nuget.exe install .nuget\packages.config"
+		<Exec Command=".nuget\nuget.exe install .nuget\packages.config -o packages"
 				WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 
