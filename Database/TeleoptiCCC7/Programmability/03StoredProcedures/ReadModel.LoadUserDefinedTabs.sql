@@ -17,6 +17,8 @@ GO
 -- Description:	Loads (fast) the people in the user defined groups
 -- exec ReadModel.LoadUserDefinedTab '056F325C-7234-46C7-BB72-9FDE00B36D0A', 'D93A93B5-E729-48FC-933E-9F74012D955D', '2011-01-01', 1053
 -- exec ReadModel.LoadUserDefinedTab '41586380-a574-4220-81f6-9fe300b06055','D93A93B5-E729-48FC-933E-9F74012D955D', '2012-01-01', 1053
+-- sp_executesql N'exec ReadModel.LoadUserDefinedTab @tabid=@p0, @bu=@p1,  @ondate=@p2, @culture=@p3',N'@p0 uniqueidentifier,@p1 uniqueidentifier,@p2 datetime,@p3 int',@p0='4BB56B89-5174-4FE2-AF8E-9B5E015BCEE4',@p1='928DD0BC-BF40-412E-B970-9B5E015AADEA',@p2='2012-05-18 00:00:00',@p3=2057
+-- exec sp_executesql N'exec ReadModel.LoadUserDefinedTab @tabid=@p0, @bu=@p1,  @ondate=@p2, @culture=@p3',N'@p0 uniqueidentifier,@p1 uniqueidentifier,@p2 datetime,@p3 int',@p0='E0D0EEE9-AB80-4313-9014-9FA900C2F4BD',@p1='FC8E2ED7-F39C-4ADB-8108-9EE800B7FFB8',@p2='2012-05-18 00:00:00',@p3=1033
 -- =============================================
 
 CREATE PROCEDURE [ReadModel].[LoadUserDefinedTab]
@@ -64,18 +66,24 @@ SELECT @dynamicSQL=''
   )
   INSERT INTO #result 
   select * from t1 ORDER BY Name, Id
+ 
+ CREATE TABLE #endResult(NodeId uniqueidentifier NOT NULL, PersonId uniqueidentifier NULL, 
+  TeamId uniqueidentifier NULL, SiteId uniqueidentifier NULL,  BusinessUnitId uniqueidentifier NULL,
+  Node nvarchar(100) NULL, ParentId uniqueidentifier NULL, FirstName nvarchar(200), LastName nvarchar(200),
+  EmploymentNumber nvarchar(200), Level int, Show bit)
   
+  INSERT INTO #endResult
   SELECT NodeId, Person PersonId, null TeamId, Null SiteId, BusinessUnitId,
-  Node, ParentId, FirstName, LastName, EmploymentNumber, Level INTO #endResult FROM #result
+  Node, ParentId, FirstName, LastName, EmploymentNumber, Level,
+  case when ISNULL(TerminalDate, '2100-01-01') > @ondate then 1 else 0 end Show
+  FROM #result
   left join PersonGroup on NodeId = PersonGroup
   left JOIN Person ON Person = Person.Id
-  WHERE ISNULL(TerminalDate, '2100-01-01') > @ondate 
   ORDER BY level
-  
 	
   --SELECT * FROM #endResult ORDER BY Level, Node, LastName, FirstName
 SELECT @dynamicSQL =	'SELECT * FROM #endResult ORDER BY Level, Node collate ' + @collation +
-							', LastName collate ' + @collation +
+							', NodeId, LastName collate ' + @collation +
 							', FirstName collate ' + @collation 
 		
 		EXEC sp_executesql @dynamicSQL
