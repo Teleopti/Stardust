@@ -4840,7 +4840,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		            groupPagePeriod.DayCollection(),
 		            _container.Resolve<GroupScheduleGroupPageDataProvider>(),
                     selectedGroupPage);
-
+			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
             switch (options.OptimizationMethod)
             {
                 case OptimizationMethod.BackToLegalState:
@@ -4850,7 +4850,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                           select item).ToList();
                     _scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
                                                                      _backgroundWorkerOptimization,
-                                                                     displayList[0], false);
+																	 displayList[0], false, schedulingOptions);
 
                     _optimizationHelperWin.ResourceCalculateMarkedDays(e, null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
 					//_optimizationHelperWin.ResourceCalculateMarkedDays(e, null, optimizerPreferences.Rescheduling.ConsiderShortBreaks, true);
@@ -4864,7 +4864,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                     break;
                 case OptimizationMethod.ReOptimize:
-					var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
+					
 					if (optimizerPreferences.Extra.UseTeams)
                     {
                         _groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions);
