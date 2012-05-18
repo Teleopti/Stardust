@@ -48,15 +48,6 @@ IF "%WindowsNT%"=="" GOTO desc
 SET SDKPath=%SDKPath:~0,-1%
 SET ServiceBusPath=%SDKPath%\..\ServiceBus
 
-::::Net stop TeleoptiServicebus
-::SC query "TeleoptiServicebus" | FIND "RUNNING" > NUL
-::IF errorlevel 0 (
-::ECHO TeleoptiServicebus is running. Will stop:
-::NET STOP TeleoptiServicebus
-::) ELSE (
-::ECHO continue
-::)
-
 ::restart IIS
 IISRESET /RESTART
 
@@ -104,23 +95,7 @@ for %%a in (%SystemDrive%) do set mySystemDrive=%%~da
 CALL :MAIN "%SDKPath%"
 CALL :MAIN "%ServiceBusPath%"
 
-::Set read on root, but only if %Driveletter% <> %SystemDrive%
-if "%DRIVELETTER%"=="%mySystemDrive%" (
-Echo No need to apply read permissions on %DRIVELETTER%
-)
-if not "%DRIVELETTER%"=="%mySystemDrive%" (
-echo We are istalling on a drive different from the systemdrive: %mySystemDrive%
-if "%PermissionStyle%"=="cacls" (
-Echo CACLS %DRIVELETTER%\ /E /G "%IISPoolUser%":R
-CACLS %DRIVELETTER%\ /E /G "%IISPoolUser%":R
-)
-if "%PermissionStyle%"=="icacls" (
-echo icacls %DRIVELETTER%\ /grant "%IISPoolUser%":R
-icacls %DRIVELETTER%\ /grant "%IISPoolUser%":R
-)
-)
 GOTO EOF
-
 
 :MAIN
 ::Make sure we are in the folder in question (need for the FOR loop)

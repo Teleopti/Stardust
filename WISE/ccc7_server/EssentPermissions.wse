@@ -28,10 +28,10 @@ item: Global
   Variable Default1=HIDE
   Variable Flags1=00001000
   Variable Name2=_SYS_
-  Variable Default2=C:\WINDOWS\system32
+  Variable Default2=C:\Windows\system32
   Variable Flags2=00001000
   Variable Name3=_WIN_
-  Variable Default3=C:\WINDOWS
+  Variable Default3=C:\Windows
   Variable Flags3=00001000
   Variable Name4=_WISE_
   Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
@@ -77,6 +77,15 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=AgentPortalWeb
+  Variable Name2=_PROP_VAR_
+  Variable Value2=MyAgentPortalWeb
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=SDK
   Variable Name2=_PROP_VAR_
   Variable Value2=SDKDIR
@@ -94,39 +103,41 @@ item: Custom Script Item
   Variable Name2=HELPFILE
   Variable Value2=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
-remarked item: Display Message
-  Title=Execute
-  Text=CMD /C "%SDKDIR%EsentPermissions.bat" %ONE% %TWO% %THREE%
-  Flags=00000100
-end
 item: Execute Program
   Pathname=CMD
   Command Line=/C ""%SDKDIR%EsentPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%""
   Flags=00000010
-end
-remarked item: Check if File/Dir Exists
-  Pathname=%ESSENTDIR%
-  Flags=00000100
-end
-remarked item: Custom Script Item
-  Filename=Pause.wse
-  Variable Name1=_PAUSE_TIME_
-  Variable Value1=10
-  Variable Name2=HELPFILE
-  Variable Value2=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-remarked item: Else Statement
-end
-remarked item: Create Directory
-  Pathname=%ESSENTDIR%
-end
-remarked item: End Block
 end
 item: Else Statement
 end
 item: Display Message
   Title=Folder missing!
   Text=The SDK folder should be installed but is missing! Cannot set permissions on Esent folders: %SDKDIR%\*.esent
+  Flags=00001000
+end
+item: End Block
+end
+item: Check if File/Dir Exists
+  Pathname=%MyAgentPortalWeb%
+  Flags=00000100
+end
+item: Custom Script Item
+  Filename=Pause.wse
+  Variable Name1=_PAUSE_TIME_
+  Variable Value1=10
+  Variable Name2=HELPFILE
+  Variable Value2=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%MyAgentPortalWeb%EsentPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%""
+  Flags=00000010
+end
+item: Else Statement
+end
+item: Display Message
+  Title=Folder missing!
+  Text=The MyTime web folder should be installed but is missing! Cannot set permissions on Esent folders: %MyAgentPortalWeb%\*.esent
   Flags=00001000
 end
 item: End Block

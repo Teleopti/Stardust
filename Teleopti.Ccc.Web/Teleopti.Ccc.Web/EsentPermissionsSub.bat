@@ -12,10 +12,10 @@
 :: =============================================
 :: 2012-05-14		MattiasE	Copied from SDK and modified	
 :: =============================================
-SET WindowsNT=%1
-SET SPLevel=%2
-SET IISVersion=%3
-SET SVCLOGIN=%4
+SET WindowsNT=%~1
+SET SPLevel=%~2
+SET IISVersion=%~3
+SET SVCLOGIN=%~4
 
 ECHO WindowsNT is: %WindowsNT%
 ECHO SPLevel is: %SPLevel%
@@ -24,7 +24,7 @@ ECHO SVCLOGIN is: %SVCLOGIN%
 
 ECHO.
 ECHO Call was:
-ECHO EsentPermissions.bat %WindowsNT% %SPLevel% %IISVersion% %SVCLOGIN%
+ECHO EsentPermissions.bat "%WindowsNT%" "%SPLevel%" "%IISVersion%" "%SVCLOGIN%"
 
 ::Get path to this batchfile
 SET WebPath=%~dp0
@@ -40,15 +40,6 @@ IF "%WindowsNT%"=="" GOTO desc
 
 ::Remove trailer slash
 SET WebPath=%WebPath:~0,-1%
-
-::::Net stop TeleoptiServicebus
-::SC query "TeleoptiServicebus" | FIND "RUNNING" > NUL
-::IF errorlevel 0 (
-::ECHO TeleoptiServicebus is running. Will stop:
-::NET STOP TeleoptiServicebus
-::) ELSE (
-::ECHO continue
-::)
 
 ::restart IIS
 IISRESET /RESTART
@@ -92,21 +83,6 @@ SET DRIVELETTER=%WebPath:~0,2%
 ::Fix read and write on different essent folders, clean out all essent files
 CALL :MAIN "%WebPath%"
 
-::Set read on root, but only if %Driveletter% <> %SystemDrive%
-if "%DRIVELETTER%"=="%systemdrive%" (
-Echo No need to apply read permissions on %systemdrive%
-)
-if not "%DRIVELETTER%"=="%systemdrive%" (
-echo We are istalling on a drive different from the systemdrive: %systemdrive%
-if "%PermissionStyle%"=="cacls" (
-Echo CACLS %DRIVELETTER%\ /E /G "%IISPoolUser%":R
-CACLS %DRIVELETTER%\ /E /G "%IISPoolUser%":R
-)
-if "%PermissionStyle%"=="icacls" (
-echo icacls %DRIVELETTER%\ /grant "%IISPoolUser%":R
-icacls %DRIVELETTER%\ /grant "%IISPoolUser%":R
-)
-)
 GOTO EOF
 
 
@@ -171,6 +147,30 @@ PAUSE
 CLS
 ECHO - VersionNT:
 ECHO 501 for Windows XP and all its service packs
+ECHO 502 for Windows Server 2003 and all its service packs
+ECHO 600 for Windows Server 2008 and Windows Vista
+ECHO 601 for Windows 7
+ECHO.
+ECHO - SPLevel:
+ECHO The current Service Pack level of the OS
+ECHO.
+ECHO - IISVersion:
+ECHO 5 Windows XP Professional
+ECHO 6 Windows Server 2003
+ECHO 7 Windows Server 2008 (and Windows Vista)
+ECHO 7 Windows Server 2008 R2 (and Windows 7)
+ECHO.
+ECHO - SVCLOGIN:
+ECHO Optional
+ECHO when Teleopti is installed with Integrated Security
+ECHO use this parameter to set account to be used by App Pool service.
+ECHO This paramter could also be used if you need to run this
+ECHO script _after_ patch/installation (scenario: customer use custom account)
+PAUSE
+GOTO EOF
+::---------------
+:EOF
+::---------------
 ECHO 502 for Windows Server 2003 and all its service packs
 ECHO 600 for Windows Server 2008 and Windows Vista
 ECHO 601 for Windows 7
