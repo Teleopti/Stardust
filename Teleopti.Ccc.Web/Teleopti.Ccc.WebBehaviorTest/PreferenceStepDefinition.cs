@@ -261,10 +261,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var cell = _page.CalendarCellForDate(date);
+			var errorDiv = cell.Div(Find.ByClass("feedback-error", false));
 			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times", false));
 			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times", false));
 			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times", false));
 
+			errorDiv.InnerHtml.Should().Be.Null();
 			startTimeDiv.InnerHtml.Should().Be.Null();
 			endTimeDiv.InnerHtml.Should().Be.Null();
 			contractTimeDiv.InnerHtml.Should().Be.Null();
