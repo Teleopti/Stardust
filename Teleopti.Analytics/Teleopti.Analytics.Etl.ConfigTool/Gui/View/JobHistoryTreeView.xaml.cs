@@ -34,6 +34,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
 		private static TreeViewItem VisualUpwardSearch(DependencyObject source)
 		{
 			while (source != null && !(source is TreeViewItem))

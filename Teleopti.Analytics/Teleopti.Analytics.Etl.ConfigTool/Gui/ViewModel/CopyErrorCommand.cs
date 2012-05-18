@@ -17,6 +17,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			_model = model;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
 		public void Execute(object parameter)
 		{
 			if (_model == null || _model.SelectedItem == null)

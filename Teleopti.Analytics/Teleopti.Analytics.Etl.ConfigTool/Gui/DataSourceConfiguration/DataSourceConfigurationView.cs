@@ -242,7 +242,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration
 
         public bool IsEtlToolLoading { get; set; }
 
-        public void SetInitialJob(IJob job)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void SetInitialJob(IJob job)
         {
             _initialJob = job;
             _initialJob.JobExecutionReady += new EventHandler<AlarmEventArgs>(initialJob_JobExecutionReady);
