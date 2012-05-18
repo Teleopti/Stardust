@@ -124,6 +124,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public string EmploymentNumber { get; set; }
 
         public int Level { get; set; }
+		public bool Show { get; set; }
     }
 
     public class UserDefinedTabLight : IUserDefinedTabLight

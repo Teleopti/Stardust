@@ -59,11 +59,11 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
             Expect.Call(rep.GetUserDefinedTab(date, _guid)).Return(new List<IPersonSelectorUserDefined>
                                                                     {
                                                                         new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "", LastName = "", Node = "Root", ParentId = null, NodeId = _guid},
-                                                                        new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Node = "STO", ParentId = _guid,NodeId = stoGuid, PersonId = onePersonId},
-                                                                        new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Node = "STO",ParentId = _guid,NodeId = stoGuid, PersonId = Guid.NewGuid()},
-                                                                        new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Claes", LastName = "H", Node = "STO",ParentId = _guid,NodeId = stoGuid, PersonId = Guid.NewGuid()},
-                                                                        new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Robin", LastName = "K", Node = "Str",ParentId = _guid,NodeId = strId, PersonId = Guid.NewGuid()},
-                                                                        new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Jonas", LastName = "N", Node = "Str",ParentId = _guid,NodeId = strId, PersonId = Guid.NewGuid()}
+                                                                        new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Node = "STO", ParentId = _guid,NodeId = stoGuid, PersonId = onePersonId, Show = true},
+                                                                        new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Node = "STO",ParentId = _guid,NodeId = stoGuid, PersonId = Guid.NewGuid(), Show = true},
+                                                                        new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Claes", LastName = "H", Node = "STO",ParentId = _guid,NodeId = stoGuid, PersonId = Guid.NewGuid(), Show = true},
+                                                                        new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Robin", LastName = "K", Node = "Str",ParentId = _guid,NodeId = strId, PersonId = Guid.NewGuid(), Show = true},
+                                                                        new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Jonas", LastName = "N", Node = "Str",ParentId = _guid,NodeId = strId, PersonId = Guid.NewGuid(), Show = true}
                                                                     });
             Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> { onePersonId }).Repeat.Times(5);
             Expect.Call(() => _unitOfWork.Dispose());

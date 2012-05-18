@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         string Node { get; set; }
         Guid? ParentId { get; set; }
         int Level { get; set; }
+    	bool Show { get; set; }
     }
 
     public interface IUserDefinedTabLight
