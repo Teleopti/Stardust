@@ -1,22 +1,16 @@
+
+
 ::@ECHO off
 :: =============================================
-:: Author:		DJ
-:: Create date: 2010-05-17
+:: Author:		MattiasE
+:: Create date: 2012-05-14
 :: Description:	Used for setting "Modify" permission on the folders where the esent database is located.
-::				The esent database is used and accessed by by the Teleopti SDK => DefaultAppPool user.
-::				For figures of WindowsNT versions see: http://msdn.microsoft.com/en-us/library/aa370556(VS.85).aspx
 :: 
 :: =============================================
 :: Change Log:
 :: Date			By		Description
 :: =============================================
-:: 2010-10-27	DJ		Added another parameter SVCLOGIN used for Windows Authetication from WISE
-:: 2010-10-28	DJ		Adding file permission for ServiceBus on local esent folders
-:: 2011-02-19	DJ		Adding some documentation
-:: 2011-11-23	DJ		#16802 - Permission problem when running payroll because read permissions on the root (driveletter) is required
-:: 2012-01-10	AF		#17583 - Need to give disk perm to IIS APPPOOL\Teleopti ASP.NET v3.5
-:: 2012-02-16	DJ		#18290 - Adding some EHCO fro output from batch file
-:: 2012-05-14	DJ		possible bug where we now use quotes as input from Wise
+:: 2012-05-14		MattiasE	Copied from SDK and modified	
 :: =============================================
 SET WindowsNT=%~1
 SET SPLevel=%~2
@@ -33,10 +27,10 @@ ECHO Call was:
 ECHO EsentPermissions.bat "%WindowsNT%" "%SPLevel%" "%IISVersion%" "%SVCLOGIN%"
 
 ::Get path to this batchfile
-SET SDKPath=%~dp0
+SET WebPath=%~dp0
 
 ::Development
-::SET SDKPath=C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\
+::SET WebPath=C:\Program Files (x86)\Teleopti\TeleoptiCCC\Web\
 ::SET WindowsNT=501
 ::SET SPLevel=1
 ::SET IISVersion=5
@@ -45,8 +39,7 @@ SET SDKPath=%~dp0
 IF "%WindowsNT%"=="" GOTO desc
 
 ::Remove trailer slash
-SET SDKPath=%SDKPath:~0,-1%
-SET ServiceBusPath=%SDKPath%\..\ServiceBus
+SET WebPath=%WebPath:~0,-1%
 
 ::restart IIS
 IISRESET /RESTART
@@ -57,7 +50,7 @@ SET WinXP=501
 SET Win2003=502
 SET IIS6=6
 SET IIS7=7
-SET IIS7PoolUser=IIS APPPOOL\Teleopti ASP.NET v3.5
+SET IIS7PoolUser=IIS APPPOOL\Teleopti ASP.NET v4.0
 SET IIS6PoolUser=NT AUTHORITY\Network Service
 SET IIS5PoolUser=IUSR_%COMPUTERNAME%
 
@@ -82,28 +75,25 @@ if %SPLevel% LSS 2 SET PermissionStyle=cacls
 if %WindowsNT% EQU %WinXP% (SET PermissionStyle=cacls) else (SET PermissionStyle=icacls)
 
 ::Get Install drive letter
-SET DRIVELETTER=%SDKPath:~0,2%
-
-::make uppercase
-for %%a in (%DRIVELETTER%) do set DRIVELETTER=%%~da
-for %%a in (%SystemDrive%) do set mySystemDrive=%%~da
+SET DRIVELETTER=%WebPath:~0,2%
 
 ::Switch to drive letter
 %DRIVELETTER%
 
 ::Fix read and write on different essent folders, clean out all essent files
-CALL :MAIN "%SDKPath%"
-CALL :MAIN "%ServiceBusPath%"
+CALL :MAIN "%WebPath%"
 
 GOTO EOF
 
+
 :MAIN
 ::Make sure we are in the folder in question (need for the FOR loop)
-SET FolderPath=%~1
+SET FolderPath=%1
 ECHO FolderPath is %FolderPath%
 CD %FolderPath%
 
 ::some output
+CLS
 ECHO Adding file essent file permissions for %IISPoolUser%
 ECHO.
 
