@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
 			{
+                //get the person ids
                 var persons = (from p in modifiedRoots where p.Root is Person select p.Root).ToList();
                 foreach (var personList in persons.Batch(400))
                 {
@@ -41,10 +42,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                         .Execute();
                 }
 				
-                var notPerson = (from gp in modifiedRoots where gp.Root is GroupPage  select gp.Root).ToList();
-                foreach (var notPersonList in notPerson.Batch(400))
+                //get the group page ids
+                var groupPage = (from gp in modifiedRoots where gp.Root is GroupPage  select gp.Root).ToList();
+                foreach (var groupPageList in groupPage.Batch(400))
                 {
-                    var idsAsString = (from p in notPersonList select ((IAggregateRoot)p).Id.ToString()).ToArray();
+                    var idsAsString = (from p in groupPageList select ((IAggregateRoot)p).Id.ToString()).ToArray();
+                    var ids = string.Join(",", idsAsString);
+                    runSql.Create(string.Format("exec [ReadModel].[UpdateGroupingReadModelGroupPage] '{0}'", ids))
+                        .Execute();
+                }
+
+                //get the ids which are not in person or in grouppage
+                var notPerson = (from p in modifiedRoots where !((p.Root is Person)||(p.Root is GroupPage ) ) select p.Root).ToList();
+                foreach (var notpersonList in notPerson.Batch(400))
+                {
+                    var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.ToString()).ToArray();
                     var ids = string.Join(",", idsAsString);
                     runSql.Create(string.Format("exec [ReadModel].[UpdateGroupingReadModelData] '{0}'", ids))
                         .Execute();
