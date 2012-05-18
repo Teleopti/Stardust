@@ -8,7 +8,7 @@ using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 {
-	internal class RepositoryStub : Interfaces.Common.IJobScheduleRepository, IJobLogRepository, IJobHistoryRepository
+	internal class RepositoryStub : IJobScheduleRepository, IJobLogRepository, IJobHistoryRepository
 	{
 		private readonly DataTable _logTable;
 		private readonly DataTable _scheduleTable;
@@ -80,11 +80,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 		}
 
 		public void AddJobStep(IEtlJobLog etlJobLogItem, IJobStepResult jobStepResult)
-		{
-			throw new NotImplementedException();
-		}
-
-		public DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId)
 		{
 			throw new NotImplementedException();
 		}
