@@ -13,6 +13,7 @@
 		<AgentPortalWebCreator>"$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\AgentPortalWeb.bat"</AgentPortalWebCreator>
 		<DbManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DbManagerExe>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
+		<NugetFolder>$(CCNetWorkingDirectory)\.nuget</NugetFolder>
 		<DBServer>$(Computername)</DBServer>
 		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
 		<DoCodeAnalysis>true</DoCodeAnalysis>
@@ -86,7 +87,7 @@
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 
-	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;CreateTrunkDb;CreateNHibDb">
+	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;CreateTrunkDb;CreateNHibDb;PreCompile">
 		<Message Importance="high" Text="Compile starting..." />
 
 		<MSBuild Projects="@(SolutionFile)"
@@ -96,6 +97,12 @@
 		</MSBuild>
 
 		<Message Importance="high" Text="Compile finished." />
+	</Target>
+
+	<Target Name="PreCompile">
+		<Message Importance="high" Text="Installing solution wide nuget packages (packages.config)"/>
+		<Exec Command="nuget.exe install"
+				WorkingDirectory="&quot;$(NugetFolder)&quot;"/>
 	</Target>
 
 	<Target Name="AzurePreDropDatabase">
