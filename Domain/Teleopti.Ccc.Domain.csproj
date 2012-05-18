@@ -1166,9 +1166,6 @@
     <None Include="Forecasting\SkillStaffStuff.cd" />
     <None Include="Forecasting\TemplateOwners.cd" />
     <None Include="Forecasting\WorkloadDayTemplates.cd" />
-    <None Include="ResourceCalculation\FurnessEvaluatorDiagram.cd" />
-    <None Include="Scheduling\Assignment\ScheduleStuff.cd" />
-    <None Include="Scheduling\TimeLayer\ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Assignment\PersonAssignment.hbm.xml" />
@@ -1459,7 +1456,6 @@
   <ItemGroup>
     <None Include="Common\General.hbm.xml" />
     <None Include="Common\Groupings.cd" />
-    <None Include="Scheduling\Restriction\RestrictionsNew.cd" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Payroll\PayrollExport.hbm.xml" />
