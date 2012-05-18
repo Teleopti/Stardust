@@ -32,15 +32,23 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
 			{
-				var persons = (from p in modifiedRoots where p.Root is Person select p.Root).ToList();
-				foreach (var personList in persons.Batch(400))
-				{
-					var idsAsString = (from p in personList select ((IAggregateRoot)p).Id.ToString()).ToArray();
-					var ids = string.Join(",", idsAsString);
-					runSql.Create(string.Format("exec [ReadModel].[UpdateGroupingReadModel] '{0}'", ids))
-						.Execute();
-				}
-				//runSql.Create("exec ReadModel.UpdateGroupingReadModel").Execute();
+                var persons = (from p in modifiedRoots where p.Root is Person select p.Root).ToList();
+                foreach (var personList in persons.Batch(400))
+                {
+                    var idsAsString = (from p in personList select ((IAggregateRoot)p).Id.ToString()).ToArray();
+                    var ids = string.Join(",", idsAsString);
+                    runSql.Create(string.Format("exec [ReadModel].[UpdateGroupingReadModel] '{0}'", ids))
+                        .Execute();
+                }
+				
+                var notPerson = (from gp in modifiedRoots where gp.Root is GroupPage  select gp.Root).ToList();
+                foreach (var notPersonList in notPerson.Batch(400))
+                {
+                    var idsAsString = (from p in notPersonList select ((IAggregateRoot)p).Id.ToString()).ToArray();
+                    var ids = string.Join(",", idsAsString);
+                    runSql.Create(string.Format("exec [ReadModel].[UpdateGroupingReadModelData] '{0}'", ids))
+                        .Execute();
+                }
 			}
 		}
 	}
