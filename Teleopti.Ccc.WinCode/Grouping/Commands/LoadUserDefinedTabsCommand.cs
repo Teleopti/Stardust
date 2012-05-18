@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                 }
                 
                 // and here have a list with one guid
-                if (!personSelectorUserDefined.PersonId.Equals(new Guid()))
+                if (personSelectorUserDefined.Show && !personSelectorUserDefined.PersonId.Equals(new Guid()))
                 {
                     //always show persons in these grouping
                     //if (_showPersons)
