@@ -25,9 +25,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.PossibleContractTimes, o => o.Ignore())
 				.AfterMap((s, d) =>
 				          	{
-				          		var minMaxWorkTime = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(s);
+				          		PreferenceType? preferenceType;
+								var minMaxWorkTime = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(s, out preferenceType);
 				          		if (minMaxWorkTime == null)
 				          		{
+									if (preferenceType == PreferenceType.DayOff || preferenceType == PreferenceType.Absence)
+									{
+										return;
+									}
 				          			d.FeedbackError = Resources.NoAvailableShifts;
 				          			return;
 				          		}

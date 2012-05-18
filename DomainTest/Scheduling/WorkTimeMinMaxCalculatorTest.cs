@@ -42,9 +42,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				.Return(workTimeMineMax);
 
 			var target = new WorkTimeMinMaxCalculator(ruleSetProjectionService, effectiveRestrictionForDisplayCreator);
+			PreferenceType? preferenceType;
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
 
-			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+			result.Should().Be.EqualTo(workTimeMineMax);
+		}
 
+		[Test]
+		public void ShouldSetPreferenceTypeCorrect()
+		{
+			var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
+			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
+			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
+			effectiveRestriction.Stub(x => x.Absence).Return(new Absence());
+			var person = MockRepository.GenerateMock<IPerson>();
+			var ruleSetProjectionService = MockRepository.GenerateMock<IRuleSetProjectionService>();
+			var workTimeMineMax = new WorkTimeMinMax();
+
+			scheduleDay.Stub(x => x.Person).Return(person);
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] { personPeriod });
+			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
+			effectiveRestrictionForDisplayCreator.Stub(x => x.GetEffectiveRestrictionForDisplay(scheduleDay, new EffectiveRestrictionOptions(true, true)))
+				.Return(effectiveRestriction);
+			ruleSetBag.Stub(x => x.MinMaxWorkTime(ruleSetProjectionService, DateOnly.Today, effectiveRestriction))
+				.Return(workTimeMineMax);
+
+			var target = new WorkTimeMinMaxCalculator(ruleSetProjectionService, effectiveRestrictionForDisplayCreator);
+			PreferenceType? preferenceType;
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
+			preferenceType.Should().Be.EqualTo(PreferenceType.Absence);
 			result.Should().Be.EqualTo(workTimeMineMax);
 		}
 
@@ -59,8 +88,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new List<IPersonPeriod>());
 
 			var target = new WorkTimeMinMaxCalculator(null, null);
-
-			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+			PreferenceType? preferenceType;
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
 
 			result.Should().Be.Null();
 		}
@@ -78,8 +107,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personPeriod.Stub(x => x.RuleSetBag).Return(null);
 
 			var target = new WorkTimeMinMaxCalculator(null, null);
-
-			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+			PreferenceType? preferenceType;
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
 
 			result.Should().Be.Null();
 		}
