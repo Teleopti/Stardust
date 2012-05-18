@@ -31,6 +31,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration
 			SetDefaultTimeZone();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void SetDefaultTimeZone()
 		{
 			if (string.IsNullOrEmpty(_model.OriginalConfiguration.TimeZoneCode))
@@ -81,6 +82,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration
 			_view.ShowErrorMessage(string.Format(CultureInfo.InvariantCulture, "Interval Length already in use is {0} minutes. Supported Interval Length are 10, 15, 30 and 60 minutes.", intervalLength));
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void SetDefaultCulture()
 		{
 			var defaultCultureInfo = CultureInfo.CurrentCulture;

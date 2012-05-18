@@ -89,6 +89,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			throw new NotImplementedException();
 		}
 
+		public DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
+		{
+			throw new NotImplementedException();
+		}
+
 		public DataTable BusinessUnitsIncludingAllItem
 		{
 			get { throw new NotImplementedException(); }

@@ -12,7 +12,6 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Interfaces.Domain;
 using log4net;
 using log4net.Config;
-using Teleopti.Analytics.Etl.Common.Database;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
