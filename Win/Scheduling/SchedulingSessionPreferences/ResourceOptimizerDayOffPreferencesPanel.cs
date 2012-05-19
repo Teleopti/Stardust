@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         #region Variables
 
-        private IDayOffPlannerRules _ruleSet;
+		private IDaysOffPreferences _ruleSet;
 
         #endregion
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         /// Initializes the specified rule set. Note: As a rule you call this method it before you start using the component.
         /// </summary>
         /// <param name="ruleSet">The rule set.</param>
-        public void Initialize(IDayOffPlannerRules ruleSet)
+        public void Initialize(IDaysOffPreferences ruleSet)
         {
             _ruleSet = ruleSet;
             ExchangeData(ExchangeDataOption.ServerToClient);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         #region Interface
 
-        public IDayOffPlannerRules RuleSet
+        public IDaysOffPreferences RuleSet
         {
             get { return _ruleSet; }
         }
@@ -150,70 +150,70 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _ruleSet.UseDaysOffPerWeek = checkBoxUseDaysOffPerWeek.Checked;
             if(_ruleSet.UseDaysOffPerWeek)
             {
-                _ruleSet.DaysOffPerWeek = new MinMax<int>((int)numericUpDownDaysOffPerWeekMin.Value, (int)numericUpDownDaysOffPerWeekMax.Value);
+                _ruleSet.DaysOffPerWeekValue = new MinMax<int>((int)numericUpDownDaysOffPerWeekMin.Value, (int)numericUpDownDaysOffPerWeekMax.Value);
             }
             _ruleSet.UseConsecutiveDaysOff = checkBoxUseConsecutiveDaysOff.Checked;
             if (_ruleSet.UseConsecutiveDaysOff)
             {
-                _ruleSet.ConsecutiveDaysOff = new MinMax<int>((int)numericUpDownConsDayOffMin.Value, (int)numericUpDownConsDayOffMax.Value);
+                _ruleSet.ConsecutiveDaysOffValue = new MinMax<int>((int)numericUpDownConsDayOffMin.Value, (int)numericUpDownConsDayOffMax.Value);
             }
             _ruleSet.UseConsecutiveWorkdays = checkBoxUseConsecutiveWorkDays.Checked;
             if (_ruleSet.UseConsecutiveWorkdays)
             {
-                _ruleSet.ConsecutiveWorkdays = new MinMax<int>((int)numericUpDownConsWorkDaysMin.Value, (int)numericUpDownConsWorkDaysMax.Value);
+                _ruleSet.ConsecutiveWorkdaysValue = new MinMax<int>((int)numericUpDownConsWorkDaysMin.Value, (int)numericUpDownConsWorkDaysMax.Value);
             }
 
-            _ruleSet.UseFreeWeekends = checkBoxUseFreeWeekends.Checked;
-            if (_ruleSet.UseFreeWeekends)
+            _ruleSet.UseFullWeekendsOff = checkBoxUseFreeWeekends.Checked;
+            if (_ruleSet.UseFullWeekendsOff)
             {
-                _ruleSet.FreeWeekends = new MinMax<int>((int)numericUpDownFreeWeekEndsMin.Value, (int)numericUpDownFreeWeekEndsMax.Value);
+                _ruleSet.FullWeekendsOffValue = new MinMax<int>((int)numericUpDownFreeWeekEndsMin.Value, (int)numericUpDownFreeWeekEndsMax.Value);
             }
 
-            _ruleSet.UseFreeWeekendDays = checkBoxUseFreeWeekEndDays.Checked;
-            if (_ruleSet.UseFreeWeekendDays)
+            _ruleSet.UseWeekEndDaysOff = checkBoxUseFreeWeekEndDays.Checked;
+            if (_ruleSet.UseWeekEndDaysOff)
             {
-                _ruleSet.FreeWeekendDays = new MinMax<int>((int)numericUpDownFreeWeekEndDaysMin.Value, (int)numericUpDownFreeWeekEndDaysMax.Value);
+                _ruleSet.WeekEndDaysOffValue = new MinMax<int>((int)numericUpDownFreeWeekEndDaysMin.Value, (int)numericUpDownFreeWeekEndDaysMax.Value);
             }
 
 
             _ruleSet.KeepFreeWeekendDays = checkBoxKeepFreeWeekEndDays.Checked;
             _ruleSet.KeepFreeWeekends = checkBoxKeepFreeWeekEnds.Checked;
 
-            _ruleSet.UsePreWeek = checkBoxConsiderWeekBefore.Checked;
-            _ruleSet.UsePostWeek = checkBoxConsiderWeekAfter.Checked;
+            _ruleSet.ConsiderWeekBefore = checkBoxConsiderWeekBefore.Checked;
+            _ruleSet.ConsiderWeekAfter = checkBoxConsiderWeekAfter.Checked;
         }
 
         private void setFormData()
         {
             checkBoxUseDaysOffPerWeek.Checked =_ruleSet.UseDaysOffPerWeek;
             
-            numericUpDownDaysOffPerWeekMin.Value = _ruleSet.DaysOffPerWeek.Minimum;
-            numericUpDownDaysOffPerWeekMax.Value = _ruleSet.DaysOffPerWeek.Maximum;
+            numericUpDownDaysOffPerWeekMin.Value = _ruleSet.DaysOffPerWeekValue.Minimum;
+			numericUpDownDaysOffPerWeekMax.Value = _ruleSet.DaysOffPerWeekValue.Maximum;
             
             checkBoxUseConsecutiveDaysOff.Checked = _ruleSet.UseConsecutiveDaysOff;
-            numericUpDownConsDayOffMin.Value = _ruleSet.ConsecutiveDaysOff.Minimum;
-            numericUpDownConsDayOffMax.Value = _ruleSet.ConsecutiveDaysOff.Maximum;
+            numericUpDownConsDayOffMin.Value = _ruleSet.ConsecutiveDaysOffValue.Minimum;
+			numericUpDownConsDayOffMax.Value = _ruleSet.ConsecutiveDaysOffValue.Maximum;
 
             checkBoxUseConsecutiveWorkDays.Checked = _ruleSet.UseConsecutiveWorkdays;
-            numericUpDownConsWorkDaysMin.Value = _ruleSet.ConsecutiveWorkdays.Minimum;
-            numericUpDownConsWorkDaysMax.Value = _ruleSet.ConsecutiveWorkdays.Maximum;
+            numericUpDownConsWorkDaysMin.Value = _ruleSet.ConsecutiveWorkdaysValue.Minimum;
+			numericUpDownConsWorkDaysMax.Value = _ruleSet.ConsecutiveWorkdaysValue.Maximum;
 
             //default to unchecked for now, need to keep one state for scheduling and one for optimization
             checkBoxKeepFreeWeekEndDays.Checked = _ruleSet.KeepFreeWeekendDays;
             //default to unchecked for now, need to keep one state for scheduling and one for optimization
             checkBoxKeepFreeWeekEnds.Checked = _ruleSet.KeepFreeWeekends;
-            checkBoxConsiderWeekBefore.Checked = _ruleSet.UsePreWeek;
-            checkBoxConsiderWeekAfter.Checked = _ruleSet.UsePostWeek;
+            checkBoxConsiderWeekBefore.Checked = _ruleSet.ConsiderWeekBefore;
+            checkBoxConsiderWeekAfter.Checked = _ruleSet.ConsiderWeekAfter;
 
             //default to unchecked for now, need to keep one state for scheduling and one for optimization
-            checkBoxUseFreeWeekends.Checked = _ruleSet.UseFreeWeekends;
-            numericUpDownFreeWeekEndsMin.Value = _ruleSet.FreeWeekends.Minimum;
-            numericUpDownFreeWeekEndsMax.Value = _ruleSet.FreeWeekends.Maximum;
+            checkBoxUseFreeWeekends.Checked = _ruleSet.UseFullWeekendsOff;
+            numericUpDownFreeWeekEndsMin.Value = _ruleSet.FullWeekendsOffValue.Minimum;
+			numericUpDownFreeWeekEndsMax.Value = _ruleSet.FullWeekendsOffValue.Maximum;
 
             //default to unchecked for now, need to keep one state for scheduling and one for optimization
-            checkBoxUseFreeWeekEndDays.Checked = _ruleSet.UseFreeWeekendDays;
-            numericUpDownFreeWeekEndDaysMin.Value = _ruleSet.FreeWeekendDays.Minimum;
-            numericUpDownFreeWeekEndDaysMax.Value = _ruleSet.FreeWeekendDays.Maximum;
+            checkBoxUseFreeWeekEndDays.Checked = _ruleSet.UseWeekEndDaysOff;
+            numericUpDownFreeWeekEndDaysMin.Value = _ruleSet.WeekEndDaysOffValue.Minimum;
+			numericUpDownFreeWeekEndDaysMax.Value = _ruleSet.WeekEndDaysOffValue.Maximum;
 
             //default to unchecked for now, need to keep one state for scheduling and one for optimization
             toggleFreeWeekEnds(!_ruleSet.KeepFreeWeekends);

@@ -504,9 +504,9 @@
 			this.checkBoxKeepWeekEndsTogether.AutoSize = true;
 			this.checkBoxKeepWeekEndsTogether.Location = new System.Drawing.Point(23, 96);
 			this.checkBoxKeepWeekEndsTogether.Name = "checkBoxKeepWeekEndsTogether";
-			this.checkBoxKeepWeekEndsTogether.Size = new System.Drawing.Size(157, 17);
+			this.checkBoxKeepWeekEndsTogether.Size = new System.Drawing.Size(120, 17);
 			this.checkBoxKeepWeekEndsTogether.TabIndex = 6;
-			this.checkBoxKeepWeekEndsTogether.Text = "xxKeepWeekEndsTogether";
+			this.checkBoxKeepWeekEndsTogether.Text = "xxUseSameDayOffs";
 			this.checkBoxKeepWeekEndsTogether.UseVisualStyleBackColor = true;
 			// 
 			// ExtraPreferencesPanel
