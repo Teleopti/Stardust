@@ -391,20 +391,20 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 
-        public void GetBackToLegalState(IList<IScheduleMatrixPro> matrixList,
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
+		public void GetBackToLegalState(IList<IScheduleMatrixPro> matrixList,
             ISchedulerStateHolder schedulerStateHolder,
-            BackgroundWorker backgroundWorker)
+            BackgroundWorker backgroundWorker,
+			ISchedulingOptions schedulingOptions)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
             if (schedulerStateHolder == null) throw new ArgumentNullException("schedulerStateHolder");
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
-            var schedulingOptionsCreator = new SchedulingOptionsCreator();
-            var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
             foreach (IScheduleMatrixPro scheduleMatrix in matrixList)
             {
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
-                    new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+					new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
                 IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro = OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(scheduleMatrix, schedulePartModifyAndRollbackService, _container);
                 workShiftBackToLegalStateServicePro.Execute(scheduleMatrix, schedulingOptions);
 
@@ -418,7 +418,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         }
 
-        // verkar inte användas
+        // verkar inte användas. Vet inte om den någonsin kommer att användas, den löser alltid problemet men det kan ta 14 dagar
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "dayOffTemplate"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         //public IList<IScheduleMatrixPro> DayOffBackToLegalStateBrutal(
         //                            IList<IScheduleMatrixPro> matrixes,
@@ -466,11 +466,13 @@ namespace Teleopti.Ccc.Win.Scheduling
         //    return failedBruteForce;
         //}
 
-        public void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
                                     BackgroundWorker backgroundWorker,
                                     IDayOffTemplate dayOffTemplate,
                                     bool reschedule, 
-									ISchedulingOptions schedulingOptions)
+									ISchedulingOptions schedulingOptions,
+									IDaysOffPreferences daysOffPreferences)
         {
 			if(schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
 
@@ -479,7 +481,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 
             IList<ISmartDayOffBackToLegalStateSolverContainer> solverContainers =
-                OptimizerHelperHelper.CreateSmartDayOffSolverContainers(matrixOriginalStateContainers, optimizerPreferences.DaysOff);
+				OptimizerHelperHelper.CreateSmartDayOffSolverContainers(matrixOriginalStateContainers, daysOffPreferences);
 
             using (PerformanceOutput.ForOperation("SmartSolver for " + solverContainers.Count + " containers"))
             {
@@ -714,7 +716,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             ((List<IDayOffTemplate>)displayList).Sort(new DayOffTemplateSorter());
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
             DaysOffBackToLegalState(matrixContainerList, _backgroundWorker,
-                                    displayList[0], false, schedulingOptions);
+                                    displayList[0], false, schedulingOptions, optimizerPreferences.DaysOff);
 
             e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.Rescheduling + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);

@@ -220,7 +220,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.UseSameDayOffs = _localSchedulingOptions.UseSameDayOffs;
             _schedulingOptions.UseBlockOptimizing = _localSchedulingOptions.UseBlockScheduling;
             _schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
-            _schedulingOptions.TagToUseOnOptimize = _localSchedulingOptions.TagToUseOnOptimize;
         	_schedulingOptions.ResourceCalculateFrequency = _localSchedulingOptions.ResourceCalculateFrequency;
 			_schedulingOptions.ShowTroubleshot = _localSchedulingOptions.ShowTroubleshot;
         }

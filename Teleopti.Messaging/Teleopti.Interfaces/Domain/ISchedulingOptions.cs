@@ -313,11 +313,6 @@ namespace Teleopti.Interfaces.Domain
 
         ///<summary>
         ///</summary>
-        IScheduleTag TagToUseOnOptimize { get; set; }
-
-		
-        ///<summary>
-        ///</summary>
         bool ShowTroubleshot { get; set; }
         
         /// <summary>

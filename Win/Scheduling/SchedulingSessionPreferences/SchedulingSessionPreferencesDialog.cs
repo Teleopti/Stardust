@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
     {
 
         private readonly ISchedulingOptions _schedulingOptions;
-        private readonly IList<IShiftCategory> _shiftCategories;
-        private readonly IDayOffPlannerRules _dayOffPlannerRules;
+    	private readonly IDaysOffPreferences _daysOffPreferences;
+    	private readonly IList<IShiftCategory> _shiftCategories;
         private readonly bool _backToLegal;
     	private readonly IList<IGroupPage> _groupPages;
         private readonly IList<IScheduleTag> _scheduleTags;
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private readonly bool _reschedule;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDayOffPlannerRules dayOffPlannerRules, IList<IShiftCategory> shiftCategories,
+        public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDaysOffPreferences daysOffPreferences, IList<IShiftCategory> shiftCategories,
             bool reschedule, bool backToLegal, IList<IGroupPage> groupPages,
             IList<IScheduleTag> scheduleTags)
             : this()
         {
             _schedulingOptions = schedulingOptions;
-            _dayOffPlannerRules = dayOffPlannerRules;
-            _shiftCategories = shiftCategories;
+        	_daysOffPreferences = daysOffPreferences;
+        	_shiftCategories = shiftCategories;
             _reschedule = reschedule;
             
             _backToLegal = backToLegal;
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				_backToLegal,_groupPages,_scheduleTags);
             dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
             dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
-            dayOffPreferencesPanel1.Initialize(_dayOffPlannerRules);
+			dayOffPreferencesPanel1.Initialize(_daysOffPreferences);
             AddToHelpContext();
             SetColor();
             SetOnOff(dayOffPreferencesPanel1);

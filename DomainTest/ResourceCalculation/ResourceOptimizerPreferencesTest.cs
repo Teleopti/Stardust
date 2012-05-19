@@ -10,18 +10,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	{
         private IOptimizerOriginalPreferences _target;
 		private MockRepository _mocks;
-		private IDayOffPlannerRules _userDefinedDayOffPlannerRules;
 		private ISchedulingOptions _userDefinedSchedulingOptions;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_userDefinedDayOffPlannerRules = _mocks.StrictMock<IDayOffPlannerRules>();
 			_userDefinedSchedulingOptions = _mocks.PartialMock<SchedulingOptions>();
 		
 
-			_target = new OptimizerOriginalPreferences(_userDefinedDayOffPlannerRules, _userDefinedSchedulingOptions);
+			_target = new OptimizerOriginalPreferences(_userDefinedSchedulingOptions);
 
 		}
 
@@ -34,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void VerifyConstructorOverload()
 		{
-			Assert.AreEqual(_target.DayOffPlannerRules, _userDefinedDayOffPlannerRules);
 			Assert.AreEqual(_target.SchedulingOptions, _userDefinedSchedulingOptions);
 
 		}
@@ -42,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void VerifyProperties()
 		{
-			Assert.AreEqual(_target.DayOffPlannerRules, _userDefinedDayOffPlannerRules);
 			Assert.AreEqual(_target.SchedulingOptions, _userDefinedSchedulingOptions);
 		}
 	}

@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             setUpZomMenu();
             var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
             _container = lifetimeScope.BeginLifetimeScope();
-            _optimizerOriginalPreferences = new OptimizerOriginalPreferences(new DayOffPlannerRules(), new SchedulingOptions());
+            _optimizerOriginalPreferences = new OptimizerOriginalPreferences(new SchedulingOptions());
             _optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
             _overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
             _ruleSetProjectionService = _container.Resolve<IRuleSetProjectionService>();
@@ -1303,9 +1303,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (_scheduleView.AllSelectedDates().Count == 0)
                 return;
 
+			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
+        	daysOffPreferences.UseDaysOffPerWeek = true;
+			daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(1, 3);
+        	daysOffPreferences.UseConsecutiveDaysOff = true;
+			daysOffPreferences.ConsecutiveDaysOffValue = new MinMax<int>(1, 3);
+        	daysOffPreferences.UseConsecutiveWorkdays = true;
+			daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
             using (
                 var options =
-					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules,
+					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, 
                                                            _schedulerState.CommonStateHolder.ShiftCategories, false,
 														   true, _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState), 
 														   _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
@@ -1320,7 +1327,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _backgroundWorkerOptimization.RunWorkerAsync
 						(new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
                              {
-                                 OptimizationMethod = OptimizationMethod.BackToLegalState
+                                 OptimizationMethod = OptimizationMethod.BackToLegalState,
+								 DaysOffPreferences = daysOffPreferences
                              });
                 }
             }
@@ -4430,7 +4438,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IList<IGroupPage> groupPages = _cachedGroupPages;
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
 							ScheduleEmploymentType.FixedStaff;
-				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules,
+				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
+				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences,
                                                                             _schedulerState.CommonStateHolder.ShiftCategories,
 																			 false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
                 {
@@ -4475,8 +4484,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
 							ScheduleEmploymentType.HourlyStaff;
 
+				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
                 using (var options =
-					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules, _schedulerState.CommonStateHolder.ShiftCategories,
+					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ShiftCategories,
 						false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
                 {
                     if (options.ShowDialog(this) == DialogResult.OK)
@@ -4555,6 +4565,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             public IList<IScheduleDay> ScheduleDays { get; private set; }
             public IOptimizerActivitiesPreferences OptimizerActivitiesPreferences;
             public OptimizationMethod OptimizationMethod { get; set; }
+			public IDaysOffPreferences DaysOffPreferences { get; set; }
 
 			public SchedulingAndOptimizeArgument(IList<IScheduleDay> scheduleDays)
             {
@@ -4851,7 +4862,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                           select item).ToList();
                     _scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
                                                                      _backgroundWorkerOptimization,
-																	 displayList[0], false, schedulingOptions);
+																	 displayList[0], false, _optimizerOriginalPreferences.SchedulingOptions, options.DaysOffPreferences);
 
                     _optimizationHelperWin.ResourceCalculateMarkedDays(e, null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
 					//_optimizationHelperWin.ResourceCalculateMarkedDays(e, null, optimizerPreferences.Rescheduling.ConsiderShortBreaks, true);
@@ -4861,7 +4872,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                     _scheduleOptimizerHelper.GetBackToLegalState(matrixList,
                                                                  _schedulerState,
-                                                                 _backgroundWorkerOptimization);
+                                                                 _backgroundWorkerOptimization,
+																 _optimizerOriginalPreferences.SchedulingOptions);
 
                     break;
                 case OptimizationMethod.ReOptimize:
