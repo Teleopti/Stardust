@@ -503,6 +503,7 @@
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsModelTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPresenterTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsTaskManagerTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsTaskTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryModelTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryPresenterTest.cs" />

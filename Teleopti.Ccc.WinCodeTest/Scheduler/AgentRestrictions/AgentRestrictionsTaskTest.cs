@@ -35,6 +35,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(1, _task.Priority);
 		}
 
+		[Test]
+		public void ShouldCancel()
+		{
+			_task.Cancel();
+		}
+
 		public void Dispose()
 		{
 			Dispose(true);

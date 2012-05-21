@@ -3,7 +3,15 @@ using System.ComponentModel;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
-	public class AgentRestrictionsTask
+	public interface IAgentRestrictionsTask
+	{
+		IAgentDisplayData AgentDisplayData { get; }
+		BackgroundWorker Worker { get; }
+		int Priority { get; set; }
+		void Cancel();
+	}
+
+	public class AgentRestrictionsTask : IAgentRestrictionsTask
 	{
 		public IAgentDisplayData AgentDisplayData { get; private set; }
 		public BackgroundWorker Worker { get; private set; }
@@ -19,6 +27,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			worker.WorkerReportsProgress = true;
 			worker.WorkerSupportsCancellation = true;
 			Priority = 1;
+		}
+
+		public void Cancel()
+		{
+			Worker.CancelAsync();
 		}
 	}
 }
