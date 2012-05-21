@@ -35,5 +35,29 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 				break;
 			}
 		}
+
+		public void Cancel()	
+		{
+			foreach (var agentRestrictionsTask in _tasks)
+			{
+				agentRestrictionsTask.Cancel();
+			}		
+		}
+
+		public void CancelLowPriority(int priority)
+		{
+			foreach (var agentRestrictionsTask in _tasks)
+			{
+				if(agentRestrictionsTask.Priority > priority) agentRestrictionsTask.Cancel();
+			}
+		}
+
+		public void CancelAllExcept(IAgentDisplayData displayData)
+		{
+			foreach (var agentRestrictionsTask in _tasks)
+			{
+				if (!agentRestrictionsTask.AgentDisplayData.Equals(displayData)) agentRestrictionsTask.Cancel();
+			}
+		}
 	}
 }

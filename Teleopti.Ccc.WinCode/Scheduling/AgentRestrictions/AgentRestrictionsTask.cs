@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			Worker = worker;
 			worker.WorkerReportsProgress = true;
 			worker.WorkerSupportsCancellation = true;
-			Priority = 1;
+			Priority = 3;
 		}
 
 		public void Cancel()

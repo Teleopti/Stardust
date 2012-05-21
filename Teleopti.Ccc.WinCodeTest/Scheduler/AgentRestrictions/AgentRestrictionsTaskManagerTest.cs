@@ -9,16 +9,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 	{
 		private AgentRestrictionsTaskManager _taskManager;
 		private IAgentRestrictionsTask _task;
+		private IAgentRestrictionsTask _anotherTask;
 		private MockRepository _mocks;
 		private IAgentDisplayData _displayData;
+		private IAgentDisplayData _anotherDisplayData;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_task = _mocks.StrictMock<IAgentRestrictionsTask>();
+			_anotherTask = _mocks.StrictMock<IAgentRestrictionsTask>();
 			_taskManager = new AgentRestrictionsTaskManager();
 			_displayData = _mocks.StrictMock<IAgentDisplayData>();
+			_anotherDisplayData = _mocks.StrictMock<IAgentDisplayData>();
 		}
 
 		[Test]
@@ -43,6 +47,59 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				_taskManager.Add(_task);
 				_taskManager.Cancel(_displayData);	
+			}
+		}
+
+		[Test]
+		public void ShouldCancelAll()
+		{
+			using(_mocks.Record())
+			{
+				Expect.Call(() => _task.Cancel());
+				Expect.Call(() => _anotherTask.Cancel());
+			}
+
+			using(_mocks.Playback())
+			{
+				_taskManager.Add(_task);
+				_taskManager.Add(_anotherTask);
+				_taskManager.Cancel();
+			}
+		}
+
+		[Test]
+		public void ShouldCancelOnPriority()
+		{
+			using(_mocks.Record())
+			{
+				Expect.Call(_task.Priority).Return(1);
+				Expect.Call(_anotherTask.Priority).Return(3);
+				Expect.Call(() => _anotherTask.Cancel());
+			}
+
+			using(_mocks.Playback())
+			{
+				_taskManager.Add(_task);
+				_taskManager.Add(_anotherTask);
+				_taskManager.CancelLowPriority(2);
+			}
+		}
+
+		[Test]
+		public void ShouldCancelAllExcept()
+		{
+			using(_mocks.Record())
+			{
+				Expect.Call(_task.AgentDisplayData).Return(_displayData);
+				Expect.Call(_anotherTask.AgentDisplayData).Return(_anotherDisplayData);
+				Expect.Call(() => _anotherTask.Cancel());
+			}
+
+			using(_mocks.Playback())
+			{
+				_taskManager.Add(_task);
+				_taskManager.Add(_anotherTask);
+				_taskManager.CancelAllExcept(_displayData);
 			}
 		}
 	}

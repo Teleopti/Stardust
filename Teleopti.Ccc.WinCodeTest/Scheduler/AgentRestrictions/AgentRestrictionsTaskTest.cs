@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.IsNotNull(worker);
 			Assert.IsTrue(worker.WorkerReportsProgress);
 			Assert.IsNotNull(worker.WorkerSupportsCancellation);
-			Assert.AreEqual(1, _task.Priority);
+			Assert.AreEqual(3, _task.Priority);
 		}
 
 		[Test]
