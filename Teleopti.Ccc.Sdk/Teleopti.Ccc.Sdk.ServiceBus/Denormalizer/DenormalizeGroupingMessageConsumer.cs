@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				{
 					_updateScheduleProjectionReadModel.SetSkipDelete(true);
 				}
-				_updateScheduleProjectionReadModel.Execute(scenario,period,person);
+                //_updateScheduleProjectionReadModel.Execute(scenario,period,person);
 			}
 		}
 	}
