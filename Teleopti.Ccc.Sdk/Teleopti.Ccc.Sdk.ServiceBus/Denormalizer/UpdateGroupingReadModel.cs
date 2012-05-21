@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class UpdateGroupingReadModelMessage : IUpdateGroupingReadModelMessage 
+	public class UpdateGroupingReadModel : IUpdateGroupingReadModel 
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		
@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		
         private bool _skipDelete;
 
-        public UpdateGroupingReadModelMessage(IGroupingReadOnlyRepository groupingReadOnlyRepository,IScheduleChangedNotification scheduleChangedNotification)
+        public UpdateGroupingReadModel(IGroupingReadOnlyRepository groupingReadOnlyRepository,IScheduleChangedNotification scheduleChangedNotification)
 		{
             _groupingReadOnlyRepository = groupingReadOnlyRepository;
 

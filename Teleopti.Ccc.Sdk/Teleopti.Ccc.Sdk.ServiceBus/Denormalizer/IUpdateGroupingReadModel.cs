@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public interface IUpdateGroupingReadModelMessage
+	public interface IUpdateGroupingReadModel
 	{
 		void Execute(IScenario scenario,DateTimePeriod period,IPerson person);
 		void SetSkipDelete(bool skipDelete);
