@@ -1,43 +1,21 @@
-﻿using System;
-using Rhino.ServiceBus;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+﻿using Rhino.ServiceBus;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
     public class DenormalizeGroupingMessageConsumer : ConsumerOf<DenormalizeGroupingMessage>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
-		
-		private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
+    	private readonly UpdateGroupingReadModel _updateGroupingReadModel;
 
-        public DenormalizeGroupingMessageConsumer(IUnitOfWorkFactory unitOfWorkFactory, IGroupingReadOnlyRepository groupingReadOnlyRepository,IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel)
+		public DenormalizeGroupingMessageConsumer( UpdateGroupingReadModel updateGroupingReadModel)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
-            _groupingReadOnlyRepository = groupingReadOnlyRepository;
-			_updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
+			_updateGroupingReadModel = updateGroupingReadModel;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(DenormalizeGroupingMessage message)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
-			{
-				//var scenario = _scenarioRepository.Get(message.ScenarioId);
-				//if (!scenario.DefaultScenario) return;
-
-				var period = new DateTimePeriod(message.StartDateTime, message.EndDateTime);
-				
-				if (message.SkipDelete)
-				{
-					_updateScheduleProjectionReadModel.SetSkipDelete(true);
-				}
-                //_updateScheduleProjectionReadModel.Execute(scenario,period,person);
-			}
+			_updateGroupingReadModel.Execute(message.Type, message.Ids);
 		}
 	}
 }

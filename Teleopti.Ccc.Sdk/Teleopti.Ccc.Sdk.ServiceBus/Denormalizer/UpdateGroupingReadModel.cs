@@ -1,59 +1,38 @@
 ﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public class UpdateGroupingReadModel : IUpdateGroupingReadModel 
 	{
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
-		
+		// Ola if we need to motify it should be another notification
         private readonly IScheduleChangedNotification _scheduleChangedNotification;
-		
-        private bool _skipDelete;
 
-        public UpdateGroupingReadModel(IGroupingReadOnlyRepository groupingReadOnlyRepository,IScheduleChangedNotification scheduleChangedNotification)
+        public UpdateGroupingReadModel(IUnitOfWorkFactory unitOfWorkFactory, IGroupingReadOnlyRepository groupingReadOnlyRepository,IScheduleChangedNotification scheduleChangedNotification)
 		{
-            _groupingReadOnlyRepository = groupingReadOnlyRepository;
+        	_unitOfWorkFactory = unitOfWorkFactory;
+        	_groupingReadOnlyRepository = groupingReadOnlyRepository;
 
 			_scheduleChangedNotification = scheduleChangedNotification;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public void Execute(IScenario scenario,DateTimePeriod period,IPerson person)
+		public void Execute(int type,string ids)
 		{
-            var timeZone = person.PermissionInformation.DefaultTimeZone();
-            //var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
-			var schedule =
-                _groupingReadOnlyRepository.AvailableGroupPages();
-
+			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				//move the calls to repository and then
+				//depending of type
+				//_groupingReadOnlyRepository.UpdateGroupingReadModel(ids)
+				//_groupingReadOnlyRepository.UpdateGroupingReadModelGroupPage(ids)
+				//_groupingReadOnlyRepository.UpdateGroupingReadModelData(ids)
+			}
 			
-            //if (!_skipDelete)
-            //{
-            //    _scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(dateOnlyPeriod, scenario, personId);
-            //}
-
-            //var range = schedule[person];
-            //var actualPeriod = range.TotalPeriod();
-            //if (!actualPeriod.HasValue) return;
-
-            //dateOnlyPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
-            //foreach (var scheduleDay in schedule[person].ScheduledDayCollection(dateOnlyPeriod))
-            //{
-            //    var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
-
-                _scheduleChangedNotification.Notify(scenario,person,new DateOnly( ) );
-				
-            //    foreach (var layer in scheduleDay.ProjectionService().CreateProjection())
-            //    {
-                    //_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, scenario, personId, layer);
-            //    }
-            //}
 		}
 
-		public void SetSkipDelete(bool skipDelete)
-		{
-			_skipDelete = skipDelete;
-		}
 	}
 }

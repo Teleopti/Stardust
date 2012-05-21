@@ -19,28 +19,13 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		}
 
 		/// <summary>
-		/// Gets or sets the start date time.
+		/// 
 		/// </summary>
-		public DateTime StartDateTime { get; set; }
-
+		public string Ids { get; set; }
 		/// <summary>
-		/// Gets or sets the end date time.
+		/// 
 		/// </summary>
-		public DateTime EndDateTime { get; set; }
+		public int Type { get; set; }
 
-		/// <summary>
-		/// Gets or sets the scenario id.
-		/// </summary>
-		public Guid ScenarioId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the person id.
-		/// </summary>
-		public Guid PersonId { get; set; }
-
-		///<summary>
-		/// Gets or sets the skip delete option to be used in the initial load.
-		///</summary>
-		public bool SkipDelete { get; set; }
 	}
 }
