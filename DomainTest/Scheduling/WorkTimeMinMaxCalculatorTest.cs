@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 			var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
 			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
-			effectiveRestriction.Stub(x => x.Absence).Return(new Absence());
+			effectiveRestriction.Stub(x => x.ShiftCategory).Return(new ShiftCategory("Kategori"));
 			var person = MockRepository.GenerateMock<IPerson>();
 			var ruleSetProjectionService = MockRepository.GenerateMock<IRuleSetProjectionService>();
 			var workTimeMineMax = new WorkTimeMinMax();
@@ -73,9 +73,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			var target = new WorkTimeMinMaxCalculator(ruleSetProjectionService, effectiveRestrictionForDisplayCreator);
 			PreferenceType? preferenceType;
-			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
-			preferenceType.Should().Be.EqualTo(PreferenceType.Absence);
-			result.Should().Be.EqualTo(workTimeMineMax);
+			target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
+			preferenceType.Should().Be.EqualTo(PreferenceType.ShiftCategory);
 		}
 
 		[Test]
