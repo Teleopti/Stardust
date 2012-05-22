@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Time
         public static string ToShortTimeStringWithDays(this DateTime dateTime)
         {
             var days = dateTime.Subtract(DateTime.MinValue).Days;
-            return dateTime.ToShortTimeString() + (days == 0 ? string.Empty : "+" + days);
+            return dateTime.ToShortTimeString() + (days == 0 ? string.Empty : " +" + days);
         }
     }
 }
