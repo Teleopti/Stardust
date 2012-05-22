@@ -24,9 +24,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			var target = new PreferenceFeedbackProvider(workTimeMinMaxCalculator, MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider);
 
-			target.WorkTimeMinMaxForDate(DateOnly.Today);
+			PreferenceType? preferenceType; 
+			target.WorkTimeMinMaxForDate(DateOnly.Today, out preferenceType);
 
-			workTimeMinMaxCalculator.AssertWasCalled(x => x.WorkTimeMinMax(DateOnly.Today, null, scheduleDay));
+			workTimeMinMaxCalculator.AssertWasCalled(x => x.WorkTimeMinMax(DateOnly.Today, null, scheduleDay, out preferenceType));
 		}
 
 		[Test]
@@ -39,11 +40,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var person = new Person();
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			workTimeMinMaxCalculator.Stub(x => x.WorkTimeMinMax(DateOnly.Today, person, scheduleDay)).Return(workTimeMinMax);
+
+			PreferenceType? preferenceType;
+			workTimeMinMaxCalculator.Stub(x => x.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType)).Return(workTimeMinMax);
 
 			var target = new PreferenceFeedbackProvider(workTimeMinMaxCalculator, loggedOnUser, null);
 
-			var result = target.WorkTimeMinMaxForDate(DateOnly.Today, scheduleDay);
+			var result = target.WorkTimeMinMaxForDate(DateOnly.Today, scheduleDay, out preferenceType);
 
 			result.Should().Be(workTimeMinMax);
 		}

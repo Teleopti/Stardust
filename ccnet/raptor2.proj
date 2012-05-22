@@ -49,7 +49,7 @@
 	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 
 	<PropertyGroup>
-		<NUnitExe>"$(NugetPackages)\NUnit.2.5.10.11092\tools\nunit-console.exe"</NUnitExe>
+		<NUnitExe>"$(NugetPackages)\NUnit.Runners.2.6.0.12051\tools\nunit-console.exe"</NUnitExe>
 		<NUnitArgs>/nologo /noshadow /config=$(Configuration) /domain=Multiple</NUnitArgs>
 		<TrunkDbCreator>"$(CCNetWorkingDirectory)\Database\Tools\VersionTry.bat"</TrunkDbCreator>
 
@@ -86,7 +86,7 @@
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 
-	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;CreateTrunkDb;CreateNHibDb">
+	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;CreateTrunkDb;CreateNHibDb;PreCompile">
 		<Message Importance="high" Text="Compile starting..." />
 
 		<MSBuild Projects="@(SolutionFile)"
@@ -96,6 +96,12 @@
 		</MSBuild>
 
 		<Message Importance="high" Text="Compile finished." />
+	</Target>
+
+	<Target Name="PreCompile" Condition="Exists('$(CCNetWorkingDirectory)\.nuget\packages.config')">
+		<Message Importance="high" Text="Installing solution wide nuget packages (packages.config)"/>
+		<Exec Command=".nuget\nuget.exe install .nuget\packages.config -o packages"
+				WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 
 	<Target Name="AzurePreDropDatabase">

@@ -120,7 +120,7 @@
       <HintPath>..\Microsoft.Practices.Composite.Presentation.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -503,6 +503,8 @@
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsModelTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPresenterTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsTaskManagerTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsTaskTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryModelTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryPresenterTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryScheduleDayCreatorTest.cs" />

@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseGroupOptimizing { get; set; }
         public BlockFinderType UseBlockOptimizing { get; set; }
         public IScheduleTag TagToUseOnScheduling { get; set; }
-        public IScheduleTag TagToUseOnOptimize { get; set; }
     	public int ResourceCalculateFrequency { get; set; }
     	public TimeSpan? UseCustomTargetTime { get; set; }
     	public bool ShowTroubleshot { get; set; }

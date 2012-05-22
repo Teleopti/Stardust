@@ -19,8 +19,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
-		public IWorkTimeMinMax WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay)
+		public IWorkTimeMinMax WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay, out PreferenceType? preferenceType)
 		{
+			if (person == null) throw new ArgumentNullException("person");
+			preferenceType = null;
 			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(date, date)).SingleOrDefault();
 			if (personPeriod == null)
 				return null;
@@ -32,6 +34,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var options = new EffectiveRestrictionOptions(true, true);
 
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForDisplay(scheduleDay, options);
+			if (effectiveRestriction != null)
+			{
+				if (effectiveRestriction.DayOffTemplate != null)
+				{
+					preferenceType = PreferenceType.DayOff;
+				}
+				else if (effectiveRestriction.Absence != null)
+				{
+					preferenceType = PreferenceType.Absence;
+				}
+				else if (effectiveRestriction.ShiftCategory != null)
+				{
+					preferenceType = PreferenceType.ShiftCategory;
+				}
+			}
 
 			if (effectiveRestriction != null && effectiveRestriction.Absence != null)
 			{
@@ -58,4 +75,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return new WorkTimeMinMax {WorkTimeLimitation = new WorkTimeLimitation(avgWorkTime, avgWorkTime)};
 		}
 	}
+
+	
 }

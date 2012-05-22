@@ -34,10 +34,5 @@ namespace Teleopti.Interfaces.MessageBroker.Core
         /// Max Date for SQL Server.
         /// </summary>
         public static readonly DateTime MaxDate = new DateTime(9999, 12, 31, 11, 59, 59);
-        /// <summary>
-        /// Send signal
-        /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static byte[] SendSignal = Encoding.GetEncoding(DefaultCharEncoding).GetBytes("Send");
     }
 }
