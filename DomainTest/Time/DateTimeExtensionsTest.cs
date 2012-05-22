@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void ShouldShowShortDateTimeStringWithDays()
         {
             var dateString = DateTime.MinValue.Add(TimeSpan.FromHours(25)).ToShortTimeStringWithDays();
-            Assert.AreEqual("01:00+1", dateString);
+            Assert.AreEqual("01:00 +1", dateString);
         }
     }
 }
