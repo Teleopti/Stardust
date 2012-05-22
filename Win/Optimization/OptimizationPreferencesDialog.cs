@@ -157,5 +157,10 @@ namespace Teleopti.Ccc.Win.Optimization
                 Close();
             }
         }
+
+		private void tabControlTopLevel_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			this.SelectNextControl(this.ActiveControl, true, true, true, true);
+		}
     }
 }
