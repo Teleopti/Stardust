@@ -135,7 +135,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var expected = new WorkTimeMinMax() {WorkTimeLimitation = new WorkTimeLimitation(averageWorkTime, averageWorkTime)};
 			
 			var target = new WorkTimeMinMaxCalculator(null, effectiveRestrictionForDisplayCreator);
-			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+			PreferenceType? preferenceType;
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
 
 			result.Should().Be.EqualTo(expected);
 		}
@@ -158,7 +159,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			effectiveRestriction.Stub(x => x.Absence).Return(new Absence() { InContractTime = true });
 
 			var target = new WorkTimeMinMaxCalculator(null, effectiveRestrictionForDisplayCreator);
-			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+			PreferenceType? preferenceType;
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
 
 			result.Should().Be.Null();
 		}
@@ -181,7 +183,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			effectiveRestriction.Stub(x => x.Absence).Return(new Absence() { InContractTime = false });
 
 			var target = new WorkTimeMinMaxCalculator(null, effectiveRestrictionForDisplayCreator);
-			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+			PreferenceType? preferenceType;
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
 
 			result.Should().Be.Null();
 		}
