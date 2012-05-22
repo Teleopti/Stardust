@@ -61,5 +61,40 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return TimeSpan.MinValue;
         }
 
+    	public bool Equals(WorkTimeMinMax other)
+    	{
+    		if (ReferenceEquals(null, other)) return false;
+    		if (ReferenceEquals(this, other)) return true;
+    		return other.StartTimeLimitation.Equals(StartTimeLimitation) && other.EndTimeLimitation.Equals(EndTimeLimitation) && other.WorkTimeLimitation.Equals(WorkTimeLimitation);
+    	}
+
+    	public override bool Equals(object obj)
+    	{
+    		if (ReferenceEquals(null, obj)) return false;
+    		if (ReferenceEquals(this, obj)) return true;
+    		if (obj.GetType() != typeof (WorkTimeMinMax)) return false;
+    		return Equals((WorkTimeMinMax) obj);
+    	}
+
+    	public override int GetHashCode()
+    	{
+    		unchecked
+    		{
+    			int result = StartTimeLimitation.GetHashCode();
+    			result = (result*397) ^ EndTimeLimitation.GetHashCode();
+    			result = (result*397) ^ WorkTimeLimitation.GetHashCode();
+    			return result;
+    		}
+    	}
+
+    	public static bool operator ==(WorkTimeMinMax left, WorkTimeMinMax right)
+    	{
+    		return Equals(left, right);
+    	}
+
+    	public static bool operator !=(WorkTimeMinMax left, WorkTimeMinMax right)
+    	{
+    		return !Equals(left, right);
+    	}
     }
 }

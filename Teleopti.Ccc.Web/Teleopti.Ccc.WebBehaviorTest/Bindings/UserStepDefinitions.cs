@@ -2,11 +2,15 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
 using Teleopti.Interfaces.Domain;
+using PersonPeriod = Teleopti.Ccc.WebBehaviorTest.Data.User.PersonPeriod;
+using Team = Teleopti.Ccc.WebBehaviorTest.Data.User.Team;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -230,6 +234,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIHaveExistingAbsencePreference(string aOrExisting)
 		{
 			UserFactory.User().Setup(new AbsencePreference());
+		}
+
+		[Given(@"I have a absence preference today")]
+		public void GivenIHaveAAbsencePreferenceToday()
+		{
+			UserFactory.User().Setup(new AbsencePreferenceToday());
 		}
 
 		[Given(@"I have (existing|a) preference")]
@@ -619,6 +629,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new SchedulePeriod());
 			UserFactory.User().Setup(new PersonPeriod(team.TheTeam));
 			UserFactory.User().Setup(new ScheduleIsPublished());
+		}
+
+		[Given(@"I should work (.*) hours per day according to my contract")]
+		public void GivenIShouldWorkHoursPerDayAccordingToMyContract(int hoursPerDay)
+		{
+			var contract = new Contract("Kontraktet") { WorkTime = new WorkTime(new TimeSpan(hoursPerDay, 0, 0)) };
+			var partTimePercentage = new PartTimePercentage("Procent") { Percentage = new Percent(1) };
+
+			UserFactory.User().Setup(new PersonPeriod() { PersonContract = new PersonContract(contract, partTimePercentage, TestData.WorkingWeekContractSchedule) });
 		}
 
 	}

@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -83,6 +84,77 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			result.Should().Be.Null();
 		}
+		
+		[Test]
+		public void ShouldReturnWorkTimeFromContractForAbsencePreferenceOnWorkDay()
+		{
+			var person = PersonFactory.CreatePerson();
+			var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			var personContract = PersonContractFactory.CreateFulltimePersonContractWithWorkingWeekContractSchedule();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2012, 01, 01), personContract, new Team());
+			var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
+			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
+			personPeriod.RuleSetBag = ruleSetBag;
+			person.AddPersonPeriod(personPeriod);
+			scheduleDay.Stub(x => x.Person).Return(person);
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012,01,02), CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			effectiveRestrictionForDisplayCreator.Stub(x => x.GetEffectiveRestrictionForDisplay(scheduleDay, new EffectiveRestrictionOptions(true, true))).Return(effectiveRestriction);
+			effectiveRestriction.Stub(x => x.Absence).Return(new Absence(){InContractTime = true});
 
+			var averageWorkTime = new TimeSpan((long) (personContract.Contract.WorkTime.AvgWorkTimePerDay.Ticks*personContract.PartTimePercentage.Percentage.Value));
+			var expected = new WorkTimeMinMax() {WorkTimeLimitation = new WorkTimeLimitation(averageWorkTime, averageWorkTime)};
+			
+			var target = new WorkTimeMinMaxCalculator(null, effectiveRestrictionForDisplayCreator);
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+
+			result.Should().Be.EqualTo(expected);
+		}
+
+		[Test]
+		public void ShouldReturnNullWorkTimeForAbsencePreferenceOnDayOff()
+		{
+			var person = PersonFactory.CreatePerson();
+			var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			var personContract = PersonContractFactory.CreateFulltimePersonContractWithWorkingWeekContractSchedule();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2012, 01, 01), personContract, new Team());
+			var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
+			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
+			personPeriod.RuleSetBag = ruleSetBag;
+			person.AddPersonPeriod(personPeriod);
+			scheduleDay.Stub(x => x.Person).Return(person);
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 07), CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			effectiveRestrictionForDisplayCreator.Stub(x => x.GetEffectiveRestrictionForDisplay(scheduleDay, new EffectiveRestrictionOptions(true, true))).Return(effectiveRestriction);
+			effectiveRestriction.Stub(x => x.Absence).Return(new Absence() { InContractTime = true });
+
+			var target = new WorkTimeMinMaxCalculator(null, effectiveRestrictionForDisplayCreator);
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnNullWorkTimeForAbsencePreferenceNotInContractTime()
+		{
+			var person = PersonFactory.CreatePerson();
+			var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			var personContract = PersonContractFactory.CreateFulltimePersonContractWithWorkingWeekContractSchedule();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2012, 01, 01), personContract, new Team());
+			var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
+			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
+			personPeriod.RuleSetBag = ruleSetBag;
+			person.AddPersonPeriod(personPeriod);
+			scheduleDay.Stub(x => x.Person).Return(person);
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 02), CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			effectiveRestrictionForDisplayCreator.Stub(x => x.GetEffectiveRestrictionForDisplay(scheduleDay, new EffectiveRestrictionOptions(true, true))).Return(effectiveRestriction);
+			effectiveRestriction.Stub(x => x.Absence).Return(new Absence() { InContractTime = false });
+
+			var target = new WorkTimeMinMaxCalculator(null, effectiveRestrictionForDisplayCreator);
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+
+			result.Should().Be.Null();
+		}
 	}
 }
