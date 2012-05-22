@@ -10360,4 +10360,22 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
     <value>Starttiden {0} måste vara tidigare än sluttiden {1}.</value>
   </data>
+  <data name="DuplicateDaysOffValidationError" xml:space="preserve">
+    <value>Dubbla fridagar på {0}</value>
+  </data>
+  <data name="NoAbsenceDefined" xml:space="preserve">
+    <value>Du måste skapa minst en frånvaro för att kunna utföra detta.</value>
+  </data>
+  <data name="NoAbsenceDefinedCaption" xml:space="preserve">
+    <value>Ingen frånvaro är definierad.</value>
+  </data>
+  <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
+    <value>Intervallängden på den underliggande kompetensen måste vara samma som på den överliggande kompetensen, vilket är {0} minuter.</value>
+  </data>
+  <data name="AbsenceType" xml:space="preserve">
+    <value>Frånvarotyp:</value>
+  </data>
+  <data name="AbsenceRequestsWeb" xml:space="preserve">
+    <value>Frånvaroförfrågan</value>
+  </data>
 </root>
