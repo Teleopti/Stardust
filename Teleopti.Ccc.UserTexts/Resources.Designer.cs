@@ -13285,7 +13285,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must create at least one absence do be able to do this..
+        ///   Looks up a localized string similar to You must create at least one absence to be able to do this..
         /// </summary>
         public static string NoAbsenceDefined {
             get {

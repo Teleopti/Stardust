@@ -10659,7 +10659,7 @@ These options are activated:
     <comment>This error message is to show duplicate day offs on same day</comment>
   </data>
   <data name="NoAbsenceDefined" xml:space="preserve">
-    <value>You must create at least one absence do be able to do this.</value>
+    <value>You must create at least one absence to be able to do this.</value>
     <comment>MessageBox message  in Add Absence in Scheduler when no absence</comment>
   </data>
   <data name="NoAbsenceDefinedCaption" xml:space="preserve">
