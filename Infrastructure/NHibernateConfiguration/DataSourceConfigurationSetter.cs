@@ -86,18 +86,17 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SessionFactoryName, noDataSourceName);
 
-			fixApplicationNameOnConnectionString(nhConfiguration);
+			AddApplicationNameToConnectionString(nhConfiguration);
 		}
 
-		private void fixApplicationNameOnConnectionString(Configuration nhConfiguration)
+		public void AddApplicationNameToConnectionString(Configuration nhConfiguration)
 		{
 			var connString = nhConfiguration.GetProperty(Environment.ConnectionString);
 			var connStringObj = new SqlConnectionStringBuilder(connString);
-			if (!connStringObj.ToString().Contains("Application Name"))
-			{
-				connStringObj.ApplicationName = ApplicationName;
-				nhConfiguration.SetProperty(Environment.ConnectionString, connStringObj.ToString());
-			}
+			if (connStringObj.ToString().Contains("Application Name")) 
+				return;
+			connStringObj.ApplicationName = ApplicationName;
+			nhConfiguration.SetProperty(Environment.ConnectionString, connStringObj.ToString());
 		}
 	}
 }

@@ -160,11 +160,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private void createApplicationConfiguration(IDictionary<string, string> settings)
 		{
 			var appCfg = new Configuration();
-			setDefaultValuesOnApplicationConf(appCfg);
 			foreach (var item in settings)
 			{
 				appCfg.SetProperty(item.Key, item.Value);
 			}
+			setDefaultValuesOnApplicationConf(appCfg);
 			appCfg.AddAuxiliaryDatabaseObject(new SqlServerProgrammabilityAuxiliary());
 			_applicationConfiguration = appCfg;
 		}
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			appSchema.Create(false, true);
 		}
 
-		private static Configuration createStatisticConfiguration(string file, XElement rootElement)
+		private Configuration createStatisticConfiguration(string file, XElement rootElement)
 		{
 			Configuration statCfg = null;
 
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return statCfg;
 		}
 
-		private static Configuration createStatisticConfiguration(XElement rootElement)
+		private Configuration createStatisticConfiguration(XElement rootElement)
 		{
 			return createStatisticConfiguration(String.Empty, rootElement);
 		}
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		    return authenticationSettings;
 		}
 
-		private static Configuration createStatisticConfigurationInner(string connectionString, string matrixname)
+		private Configuration createStatisticConfigurationInner(string connectionString, string matrixname)
 		{
 			using (PerformanceOutput.ForOperation("Configuring statistic db"))
 			{
@@ -281,6 +281,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 						 .SetProperty(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect")
 						 .SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName)
 						 .SetProperty(Environment.SessionFactoryName, matrixname);
+				_dataSourceConfigurationSetter.AddApplicationNameToConnectionString(statCfg);
 				return statCfg;
 			}
 		}

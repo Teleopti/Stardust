@@ -177,6 +177,20 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 		[Test]
+		public void ShouldAddApplicationNameToConnectionString()
+		{
+			var res = target.Create(nHibSettings(), ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			using (var appSession = ((NHibernateUnitOfWorkFactory)res.Application).SessionFactory.OpenSession())
+			{
+				appSession.Connection.ConnectionString.Should().Contain("unit tests");
+			}
+			using (var appSession = ((NHibernateUnitOfWorkFactory)res.Statistic).SessionFactory.OpenSession())
+			{
+				appSession.Connection.ConnectionString.Should().Contain("unit tests");
+			}
+		}
+
+		[Test]
 		public void VerifyCreateDropSchemaWorks()
 		{
 			//hard to test
