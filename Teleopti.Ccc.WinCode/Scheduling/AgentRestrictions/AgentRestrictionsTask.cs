@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		BackgroundWorker Worker { get; }
 		int Priority { get; set; }
 		void Cancel();
+		void Run();
 	}
 
 	public class AgentRestrictionsTask : IAgentRestrictionsTask
@@ -32,6 +33,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		public void Cancel()
 		{
 			Worker.CancelAsync();
+		}
+
+		public void Run()
+		{
+			Worker.RunWorkerAsync(AgentDisplayData);
 		}
 	}
 }

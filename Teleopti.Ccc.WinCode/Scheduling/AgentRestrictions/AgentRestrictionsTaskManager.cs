@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
@@ -18,6 +19,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public void Remove(IAgentRestrictionsTask task)
 		{
+			if(task == null) throw new ArgumentNullException("task");
+
+			task.Cancel();
 			_tasks.Remove(task);
 		}
 
@@ -57,6 +61,31 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			foreach (var agentRestrictionsTask in _tasks)
 			{
 				if (!agentRestrictionsTask.AgentDisplayData.Equals(displayData)) agentRestrictionsTask.Cancel();
+			}
+		}
+
+		public void Run(IAgentDisplayData displayData)
+		{
+			foreach (var agentRestrictionsTask in _tasks)
+			{
+				if (agentRestrictionsTask.AgentDisplayData.Equals(displayData)) agentRestrictionsTask.Run();
+				break;
+			}
+		}
+
+		public void Run()
+		{
+			foreach (var agentRestrictionsTask in _tasks)
+			{
+				agentRestrictionsTask.Run();
+			}
+		}
+
+		public void RunHighPriority(int priority)
+		{
+			foreach (var agentRestrictionsTask in _tasks)
+			{
+				if (agentRestrictionsTask.Priority < priority) agentRestrictionsTask.Run();
 			}
 		}
 	}

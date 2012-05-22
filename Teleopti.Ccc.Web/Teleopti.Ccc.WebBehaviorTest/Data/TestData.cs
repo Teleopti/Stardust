@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IDayOffTemplate DayOffTemplate;
 		public static IAbsence Absence;
 		public static IAbsence ConfidentialAbsence;
+		public static IAbsence AbsenceInContractTime;
 
 
 		public static ITeam CommonTeam;

@@ -391,10 +391,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.ConfidentialAbsence = AbsenceFactory.CreateAbsence("Confidential");
 			TestData.ConfidentialAbsence.Confidential = true;
 			TestData.ConfidentialAbsence.DisplayColor = Color.GreenYellow;
+			TestData.AbsenceInContractTime = AbsenceFactory.CreateAbsence("Vacation", "VA", new Color());
+			TestData.AbsenceInContractTime.InContractTime = true;
 
 			var absenceRepository = new AbsenceRepository(unitOfWork);
 			absenceRepository.Add(TestData.Absence);
 			absenceRepository.Add(TestData.ConfidentialAbsence);
+			absenceRepository.Add(TestData.AbsenceInContractTime);
 		}
 
 		private static void CreateWorkflowControlSet(IUnitOfWork unitOfWork)

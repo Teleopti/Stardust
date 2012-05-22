@@ -50,7 +50,29 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				}
 			}
 
+			if (effectiveRestriction != null && effectiveRestriction.Absence != null)
+			{
+				return WorkTimeMinMaxForAbsence(scheduleDay, effectiveRestriction);
+			}
+
 			return ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, date, effectiveRestriction);
+		}
+
+		private IWorkTimeMinMax WorkTimeMinMaxForAbsence(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
+		{
+			var person = scheduleDay.Person;
+			var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var personPeriod = person.Period(scheduleDate);
+			var personContract = personPeriod.PersonContract;
+			var avgWorkTime = new TimeSpan((long)(personContract.Contract.WorkTime.AvgWorkTimePerDay.Ticks * personContract.PartTimePercentage.Percentage.Value));
+
+			if (!personContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate))
+				return null;
+
+			if (!effectiveRestriction.Absence.InContractTime)
+				return null;
+
+			return new WorkTimeMinMax {WorkTimeLimitation = new WorkTimeLimitation(avgWorkTime, avgWorkTime)};
 		}
 	}
 
