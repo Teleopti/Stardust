@@ -135,6 +135,7 @@ namespace SdkTestWinGui
             }
             if (tabControl1.SelectedTab == tabPageSchedule)
             {
+                loadScenarios();
                 loadSchedules(e.Node);
                 return;
             }
@@ -150,6 +151,13 @@ namespace SdkTestWinGui
                 return;
             }
             
+        }
+
+        private void loadScenarios()
+        {
+            var scenarios = _service.OrganizationService.GetScenariosByQuery(new GetAllScenariosQueryDto());
+            comboBoxScenarios.DataSource = scenarios;
+            comboBoxScenarios.DisplayMember = "Name";
         }
 
         private void loadSkillData()
@@ -173,7 +181,8 @@ namespace SdkTestWinGui
             toolStripStatusLabel1.Text = "Drawing schedules...";
             //listView1.Items.Clear();
             IList<Agent> selectedAgents = _organization.SelectedAgents(selectedNode);
-            ScheduleLoader loader = new ScheduleLoader(Service, selectedAgents, _currentDate, _timeZoneInfo);
+            var selectedScenario = ((ScenarioDto) comboBoxScenarios.SelectedValue);
+            ScheduleLoader loader = new ScheduleLoader(Service, selectedAgents, _currentDate, _timeZoneInfo, selectedScenario == null?null:selectedScenario.Id);
             backgroundWorkerLoadSchedules.RunWorkerAsync(loader);
         }
 
@@ -344,8 +353,11 @@ namespace SdkTestWinGui
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(tabControl1.SelectedTab == tabPageSchedule)
+            if (tabControl1.SelectedTab == tabPageSchedule)
+            {
+                loadScenarios();
                 loadSchedules(treeView1.SelectedNode);
+            }
             if(tabControl1.SelectedTab == tabPageSkillData)
                 loadSkillData();
 			if(tabControl1.SelectedTab == tabPagePersonPeriod)
@@ -638,6 +650,11 @@ namespace SdkTestWinGui
                 MessageBox.Show(ex.Message);
             }
             
+        }
+
+        private void comboBoxScenarios_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            loadSchedules(treeView1.SelectedNode);
         }
     }
 }
