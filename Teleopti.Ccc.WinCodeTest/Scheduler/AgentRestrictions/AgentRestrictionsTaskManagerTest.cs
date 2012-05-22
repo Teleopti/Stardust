@@ -28,10 +28,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		[Test]
 		public void ShouldAddRemoveTask()
 		{
-			_taskManager.Add(_task);
-			Assert.AreEqual(1, _taskManager.Count);
-			_taskManager.Remove(_task);
-			Assert.AreEqual(0, _taskManager.Count);
+			using(_mocks.Record())
+			{
+				Expect.Call(() => _task.Cancel());
+			}
+
+			using(_mocks.Playback())
+			{
+				_taskManager.Add(_task);
+				Assert.AreEqual(1, _taskManager.Count);
+				_taskManager.Remove(_task);
+				Assert.AreEqual(0, _taskManager.Count);	
+			}	
 		}
 
 		[Test]
@@ -100,6 +108,57 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				_taskManager.Add(_task);
 				_taskManager.Add(_anotherTask);
 				_taskManager.CancelAllExcept(_displayData);
+			}
+		}
+
+		[Test]
+		public void ShouldRunDisplayData()
+		{
+			using(_mocks.Record())
+			{
+				Expect.Call(_task.AgentDisplayData).Return(_displayData);
+				Expect.Call(() => _task.Run());
+			}
+
+			using(_mocks.Playback())
+			{
+				_taskManager.Add(_task);
+				_taskManager.Run(_displayData);
+			}
+		}
+
+		[Test]
+		public void ShouldRunAll()
+		{
+			using(_mocks.Record())
+			{
+				Expect.Call(() => _task.Run());
+				Expect.Call(() => _anotherTask.Run());
+			}
+
+			using(_mocks.Playback())
+			{
+				_taskManager.Add(_task);
+				_taskManager.Add(_anotherTask);
+				_taskManager.Run();
+			}	
+		}
+
+		[Test]
+		public void ShouldRunOnPriority()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_task.Priority).Return(1);
+				Expect.Call(_anotherTask.Priority).Return(3);
+				Expect.Call(() => _task.Run());
+			}
+
+			using (_mocks.Playback())
+			{
+				_taskManager.Add(_task);
+				_taskManager.Add(_anotherTask);
+				_taskManager.RunHighPriority(2);
 			}
 		}
 	}

@@ -13,6 +13,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IAgentDisplayData _agentDisplayData;
 		private MockRepository _mocks;
 		private BackgroundWorker _worker;
+		//private bool _doWork;
+		//private bool _completed;
+		//private bool _cancel;
 
 		[SetUp]
 		public void Setup()
@@ -21,7 +24,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_agentDisplayData = _mocks.StrictMock<IAgentDisplayData>();
 			_worker = new BackgroundWorker();
 			_task = new AgentRestrictionsTask(_agentDisplayData, _worker);
+			//_worker.DoWork += WorkerDoWork;
+			//_worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
+			//_doWork = false;
+			//_completed = false;
+			//_cancel = false;
 		}
+
+		//void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		//{
+		//    if (e.Cancelled) _cancel = true;
+		//    _completed = true;
+		//}
+
+		//void WorkerDoWork(object sender, DoWorkEventArgs e)
+		//{
+		//    if (((BackgroundWorker)sender).CancellationPending) e.Cancel = true;
+		//    _doWork = true;
+		//}
 
 
 		[Test]
@@ -35,11 +55,32 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(3, _task.Priority);
 		}
 
-		[Test]
-		public void ShouldCancel()
-		{
-			_task.Cancel();
-		}
+		//[Test]
+		//public void ShouldCancel()
+		//{
+		//    _task.Run();
+		//    _task.Cancel();
+
+		//    while(_completed == false)
+		//    {
+		//        //do nothing
+		//    }
+
+		//    Assert.IsTrue(_cancel);
+		//}
+
+		//[Test]
+		//public void ShouldRun()
+		//{
+		//    _task.Run();
+
+		//    while(_completed == false)
+		//    {
+		//        //do nothing	
+		//    }
+
+		//    Assert.IsTrue(_doWork);
+		//}
 
 		public void Dispose()
 		{
