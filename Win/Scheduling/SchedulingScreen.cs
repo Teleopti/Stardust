@@ -3837,7 +3837,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _skillIntradayGridControl.RefreshGrid();
 
                     _skillDayGridControl.RefreshGrid(new List<DateOnly>(e.ChangedDays));
-                    _gridChartManager.ReloadChart();
+                	refreshChart();
                 }
 
 
@@ -4730,7 +4730,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _grid.Invalidate();
             _skillIntradayGridControl.RefreshGrid();
             _skillDayGridControl.RefreshGrid();
-            _gridChartManager.ReloadChart();
+			refreshChart();
             statusStrip1.Refresh();
 
             Application.DoEvents();
@@ -4749,7 +4749,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _grid.Invalidate();
                     _skillIntradayGridControl.RefreshGrid();
                     _skillDayGridControl.RefreshGrid();
-                    _gridChartManager.ReloadChart();
+					refreshChart();
                     _scheduleCounter = 0;
                 }
                 if (!string.IsNullOrEmpty(progress.Message))
@@ -4783,7 +4783,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 //_grid.Refresh();
                 _skillIntradayGridControl.RefreshGrid();
                 _skillDayGridControl.RefreshGrid();
-                _gridChartManager.ReloadChart();
+				refreshChart();
 
                 if (_scheduleView != null)
                     updateSelectionInfo(_scheduleView.SelectedSchedules());
@@ -4815,7 +4815,19 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
+		private void refreshChart()
+		{
+			try
+			{
+				_gridChartManager.ReloadChart();
+			}
+			catch (NullReferenceException ex)
+			{
+				LogManager.GetLogger(typeof(SchedulingScreen)).Error(ex.ToString());
+			}
+		}
+
+    	private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
         {
             setThreadCulture();
 			var options = (SchedulingAndOptimizeArgument)e.Argument;
