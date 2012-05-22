@@ -11,13 +11,15 @@ namespace SdkTestClientWin.Domain
         private readonly DateTime _dateFrom;
         private readonly ServiceApplication _service;
         private readonly TimeZoneInfo _timeZoneInfo;
+        private readonly string _scenarioId;
 
-        public ScheduleLoader(ServiceApplication service, IList<Agent> agentsToLoad, DateTime dateFrom, TimeZoneInfo timeZoneInfo)
+        public ScheduleLoader(ServiceApplication service, IList<Agent> agentsToLoad, DateTime dateFrom, TimeZoneInfo timeZoneInfo, string scenarioId)
         {
             _service = service;
             _agentsToLoad = agentsToLoad;
             _dateFrom = dateFrom;
             _timeZoneInfo = timeZoneInfo;
+            _scenarioId = scenarioId;
         }
 
         public IList<AgentDay> Load()
@@ -26,17 +28,18 @@ namespace SdkTestClientWin.Domain
             DateOnlyDto dateOnly = new DateOnlyDto();
             dateOnly.DateTime = _dateFrom;
             dateOnly.DateTimeSpecified = true;
-
+            
             foreach (var agent in _agentsToLoad)
             {
-            	SchedulePartDto schedulePartDto =
+                SchedulePartDto schedulePartDto =
             		_service.SchedulingService.GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
-            		                                               	{
-            		                                               		StartDate = dateOnly,
-            		                                               		EndDate = dateOnly,
-            		                                               		PersonId = agent.Dto.Id,
-            		                                               		TimeZoneId = _timeZoneInfo.Id
-            		                                               	})[0];
+                                   {
+                                       StartDate = dateOnly,
+                                       EndDate = dateOnly,
+                                       ScenarioId = _scenarioId,
+                                       PersonId = agent.Dto.Id,
+                                       TimeZoneId = _timeZoneInfo.Id
+                                   })[0];
                 AgentDay agentDay = new AgentDay(agent,schedulePartDto);
                 IList<PersonAssignmentDto> personAssignmentDtos = new List<PersonAssignmentDto>(schedulePartDto.PersonAssignmentCollection);
 
