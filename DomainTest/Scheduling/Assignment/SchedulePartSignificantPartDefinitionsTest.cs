@@ -333,6 +333,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(visualLayer.Payload).Return(absence).Repeat.AtLeastOnce();
 				Expect.Call(visualLayerCollection.HasLayers).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_hasDayOffDefinition.IsDayOff()).Return(true);
+				Expect.Call(_mockedPart.PersonDayOffCollection()).Return(
+					new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
 			}
 
 			using (_mocker.Playback())

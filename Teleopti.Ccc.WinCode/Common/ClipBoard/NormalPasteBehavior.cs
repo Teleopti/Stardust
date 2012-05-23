@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         //check if we have a full day absence
         protected static bool IsFullDayAbsence(IScheduleDay part)
         {
-            return (part != null && part.SignificantPart() == SchedulePartView.FullDayAbsence);
+            return (part != null && (part.SignificantPart() == SchedulePartView.FullDayAbsence || part.SignificantPart() == SchedulePartView.ContractDayOff));
         }
 
         //reduce absence period to one day

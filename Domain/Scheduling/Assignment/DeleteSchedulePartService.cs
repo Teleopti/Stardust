@@ -132,18 +132,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             if (options.Default)
             {
-                SchedulePartView view = clonePart.SignificantPart();
+                SchedulePartView view = clonePart.SignificantPartForDisplay();
 
                 if (view == SchedulePartView.MainShift)
-                    clonePart.DeleteMainShift(clonePart);
+                {
+					clonePart.DeleteMainShift(clonePart);
+                	return clonePart;
+                }
+                    
                 if (view == SchedulePartView.PersonalShift)
-                    clonePart.DeletePersonalStuff();
-                if (view == SchedulePartView.DayOff || view == SchedulePartView.ContractDayOff  && clonePart.SignificantPartForDisplay() != SchedulePartView.FullDayAbsence)
-                    clonePart.DeleteDayOff();
-                if (view == SchedulePartView.FullDayAbsence || view == SchedulePartView.ContractDayOff)
-                    clonePart.DeleteFullDayAbsence(clonePart);
+                {
+					clonePart.DeletePersonalStuff();
+					return clonePart;
+                }
+
+				if (view == SchedulePartView.FullDayAbsence || view == SchedulePartView.ContractDayOff)
+				{
+					clonePart.DeleteFullDayAbsence(clonePart);
+					return clonePart;
+				}
+
+                if (view == SchedulePartView.DayOff || view == SchedulePartView.ContractDayOff  && view != SchedulePartView.FullDayAbsence)
+                {
+					clonePart.DeleteDayOff();
+					return clonePart;
+                }
+                    
                 if (view == SchedulePartView.Absence)
-                    clonePart.DeleteAbsence(false);
+                {
+					clonePart.DeleteAbsence(false);
+					return clonePart;
+                }
+                    
                 if (view == SchedulePartView.Overtime)
                     clonePart.DeleteOvertime();
             }

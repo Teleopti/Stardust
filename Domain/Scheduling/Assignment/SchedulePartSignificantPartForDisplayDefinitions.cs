@@ -10,7 +10,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public override bool HasContractDayOff()
         {
-            return false;
+			if (HasFullAbsence() && HasDayOff())
+				return true;
+        	return base.HasContractDayOff();
         }
     }
 }
