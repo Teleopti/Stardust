@@ -54,6 +54,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                         DrawAssignmentFromSchedule(e, scheduleRange);
                     if(significantPart == SchedulePartView.FullDayAbsence)
                         DrawAbsenceFromSchedule(e, scheduleRange);
+					if (significantPart == SchedulePartView.ContractDayOff)
+						DrawAbsenceAndDayOff(e, scheduleRange);
                     if(significantPart == SchedulePartView.DayOff)
                         DrawDayOffFromSchedule(e, scheduleRange);
                     AddMarkersToCell(e, scheduleRange, significantPart);
@@ -61,7 +63,20 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        //draw assignments
+    	private void DrawAbsenceAndDayOff(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
+    	{
+			IAbsence absence = SignificantAbsence(scheduleRange);
+			String shortName = absence.ConfidentialDescription(scheduleRange.Person).ShortName;
+			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
+			Point point = new Point(e.Bounds.X - (int)stringWidth.Width / 2 + e.Bounds.Width / 2, e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
+			using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleRange.Person)))
+			{
+				GridHelper.FillRoundedRectangle(e.Graphics, e.Bounds, 1, brush, -4);
+				e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, point);
+			}
+    	}
+
+    	//draw assignments
         private void DrawAssignmentFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
             IPersonAssignment pa = scheduleRange.AssignmentHighZOrder();
@@ -92,34 +107,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         
         //draw absences
-        private void DrawAbsenceFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
-        {
-            IAbsence absence = SignificantAbsence(scheduleRange);
-            String shortName = absence.ConfidentialDescription(scheduleRange.Person).ShortName;
-            SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
-            Point point = new Point(e.Bounds.X - (int)stringWidth.Width / 2 + e.Bounds.Width / 2, e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
-        	var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence();
+		private void DrawAbsenceFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
+		{
+			IAbsence absence = SignificantAbsence(scheduleRange);
+			String shortName = absence.ConfidentialDescription(scheduleRange.Person).ShortName;
+			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
+			Point point = new Point(e.Bounds.X - (int) stringWidth.Width/2 + e.Bounds.Width/2,
+			                        e.Bounds.Y - (int) stringWidth.Height/2 + e.Bounds.Height/2);
 
-			if (hasDayOffUnderFullDayAbsence.HasDayOff(scheduleRange))
-            {
-                using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleRange.Person)))
-                {
-                    GridHelper.FillRoundedRectangle(e.Graphics, e.Bounds, 1, brush, -4);
-                    e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, point);
-                }
-            }
-            else
-            {
-                using (SolidBrush brush = new SolidBrush(absence.ConfidentialDisplayColor(scheduleRange.Person)))
-                {
-                    GridHelper.FillRoundedRectangle(e.Graphics, e.Bounds, 1, brush, -4);
-                    e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, point);
-                }
-            }
-            
-        }
+			using (SolidBrush brush = new SolidBrush(absence.ConfidentialDisplayColor(scheduleRange.Person)))
+			{
+				GridHelper.FillRoundedRectangle(e.Graphics, e.Bounds, 1, brush, -4);
+				e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, point);
+			}
 
-        //draw day off
+
+		}
+
+    	//draw day off
         private void DrawDayOffFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
             var personDayOffs = scheduleRange.PersonDayOffCollection();

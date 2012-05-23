@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges)
         {
-            SchedulePartView view = source.SignificantPart();
+            SchedulePartView view = source.SignificantPartForDisplay();
 
             switch (view)
             {
@@ -272,10 +272,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     if (isDelete) DeleteDayOff(); else MergeDayOff(source); break;
 
                 case SchedulePartView.ContractDayOff:
-                    if (source.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
-                    {
-                        if (isDelete) DeleteFullDayAbsence(source); else MergeFullDayAbsence(source);
-                    }
+                    if (isDelete) DeleteFullDayAbsence(source); else MergeFullDayAbsence(source);
                     break;
 
                 case SchedulePartView.FullDayAbsence:

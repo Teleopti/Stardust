@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             _source.hasDayOff = true;
             _source.hasFullAbsence = true;
-            Assert.AreEqual(SchedulePartView.FullDayAbsence, SignificantPartService.CreateService(_source).SignificantPart());
+            Assert.AreEqual(SchedulePartView.DayOff, SignificantPartService.CreateService(_source).SignificantPart());
         }
 
         [Test]
