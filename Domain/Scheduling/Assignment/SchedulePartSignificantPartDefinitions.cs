@@ -42,6 +42,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (HasMainShift())
 				return false;
 
+			if (HasDayOff())
+				return false;
+
         	return _hasDayOffDefinition.IsDayOff();
         }
 

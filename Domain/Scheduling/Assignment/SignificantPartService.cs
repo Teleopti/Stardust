@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 if (_source.HasContractDayOff()) return SchedulePartView.ContractDayOff;
                 if (_source.HasDayOff() && _source.HasFullAbsence())
-                    return SchedulePartView.FullDayAbsence;
+                    return SchedulePartView.DayOff;
                 if (_source.HasFullAbsence()) return SchedulePartView.FullDayAbsence;
                 if (_source.HasAssignment())
                 {

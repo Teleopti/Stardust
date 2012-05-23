@@ -977,37 +977,44 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			SetupForMergeTests();
 
-			ISignificantPartService absenceService = _mocks.StrictMock<ISignificantPartService>(); //Service for easier testing with Significantpart
+			//ISignificantPartService absenceService = _mocks.StrictMock<ISignificantPartService>(); //Service for easier testing with Significantpart
 			using (_mocks.Record())
 			{
-				Expect.Call(absenceService.SignificantPart()).Return(SchedulePartView.Absence).Repeat.Any();
+				//Expect.Call(absenceService.SignificantPart()).Return(SchedulePartView.Absence).Repeat.Any();
 			}
 
-			//add absences, assignment to source
-			source.Add(personAbsenceSource);
-			source.Add(personAbsenceSource2);
-			source.Add(personAssignmentSource);
+			using (_mocks.Playback())
+			{
+				//add absences, assignment to source
+				source.Add(personAbsenceSource);
+				source.Add(personAbsenceSource2);
+				source.Add(personAssignmentSource);
 
-			//add dayoff, absence, assignment to destination
-			destination.Add(personDayOffDest);
-			destination.Add(personAbsenceDest);
-			destination.Add(personAssignmentDest);
+				//add dayoff, absence, assignment to destination
+				destination.Add(personDayOffDest);
+				destination.Add(personAbsenceDest);
+				destination.Add(personAssignmentDest);
 
 
-			//merge
-			((ExtractedSchedule)destination).MergeAbsences(source, true);
+				//merge
+				((ExtractedSchedule)destination).MergeAbsences(source, true);
 
-			//assert that absences is pasted and nothing else changes
-			Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
-			Assert.AreEqual(3, destination.PersonAbsenceCollection().Count);
-			Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+				//assert that absences is pasted and nothing else changes
+				Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
+				Assert.AreEqual(3, destination.PersonAbsenceCollection().Count);
+				Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
 
-			//clear source
+			}
+		}
+
+		[Test, Ignore("Exposes bug 19500")]
+		public void FullDayAbsenceOverPersonalShiftShouldBeInTheProjection()
+		{
+			SetupForMergeTests();
 			source.Clear<IPersonAbsence>();
 			source.Clear<IPersonDayOff>();
 			source.Clear<IPersonAssignment>();
 
-			//create absence
 			IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person1, scenario, source.Period);
 			//create assignment with no mainshift
 			IPersonAssignment newPersonAssignment = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario);
@@ -1020,12 +1027,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			source.Add(newPersonAssignment);
 			source.Add(personAbsence);
 
-			//merge
-			((ExtractedSchedule)source).ServiceForSignificantPart = absenceService; //Setup for returning Absence;
-			destination.Merge(source, false);
+			using (_mocks.Record())
+			{
+				
+			}
 
-			//assert that absence is pasted
-			Assert.AreEqual(4, destination.PersonAbsenceCollection().Count);
+			IVisualLayerCollection visualLayerCollection;
+			using (_mocks.Playback())
+			{
+				visualLayerCollection = source.ProjectionService().CreateProjection();
+			}
+
+			Assert.AreEqual(1, visualLayerCollection.Count());
 		}
 
         [Test]
@@ -1037,18 +1050,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocks.Record())
             {
-                Expect.Call(absenceService.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Any();
+                Expect.Call(absenceService.SignificantPart()).Return(SchedulePartView.Absence).Repeat.Any();
             }
 
             //add absences, assignment to source
             source.Add(personAbsenceSource);
             source.Add(personAbsenceSource2);
-            source.Add(personAssignmentSource);
+            //source.Add(personAssignmentSource);
 
             //add dayoff, absence, assignment to destination
-            destination.Add(personDayOffDest);
+            //destination.Add(personDayOffDest);
             destination.Add(personAbsenceDest);
-            destination.Add(personAssignmentDest);
+            //destination.Add(personAssignmentDest);
 
             //merge
             ((ExtractedSchedule)source).ServiceForSignificantPart = absenceService; //Setup for returning Absence;
@@ -1268,7 +1281,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			ISignificantPartService absenceService = _mocks.StrictMock<ISignificantPartService>(); //Service for easier testing with Significantpart
 			using (_mocks.Record())
 			{
-				Expect.Call(absenceService.SignificantPart()).Return(SchedulePartView.Absence).Repeat.Any();
+				Expect.Call(absenceService.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Any();
 			}
 
 			//add dayoff, absence, assignment to source
@@ -1543,7 +1556,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		#region Tests for SignificantPart
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void SignificantPartWithMainShift()
+		public void SignificantPartWithMainShiftAndDayOff()
 		{
 			IPerson person = PersonFactory.CreatePerson();
 			DateTimePeriod period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
@@ -1570,7 +1583,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(SchedulePartView.MainShift, part.SignificantPart());
 
 			part.Add(PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period));
-			Assert.AreEqual(SchedulePartView.FullDayAbsence, part.SignificantPart());
+			Assert.AreEqual(SchedulePartView.DayOff, part.SignificantPart());
 
 			part.Clear<IPersonAbsence>();
 			Assert.AreEqual(SchedulePartView.MainShift, part.SignificantPart());
