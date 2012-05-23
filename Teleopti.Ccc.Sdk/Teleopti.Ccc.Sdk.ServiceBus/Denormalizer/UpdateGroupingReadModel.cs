@@ -27,9 +27,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			{
 				//move the calls to repository and then
 				//depending of type
-				//_groupingReadOnlyRepository.UpdateGroupingReadModel(ids)
-				//_groupingReadOnlyRepository.UpdateGroupingReadModelGroupPage(ids)
-				//_groupingReadOnlyRepository.UpdateGroupingReadModelData(ids)
+				if (type == 1)
+				{
+				    _groupingReadOnlyRepository.UpdateGroupingReadModel(ids);
+				}
+                if (type == 2)
+                {
+                    _groupingReadOnlyRepository.UpdateGroupingReadModelGroupPage(ids);
+                }
+                if (type == 3)
+                {
+                    _groupingReadOnlyRepository.UpdateGroupingReadModelData(ids);
+                }
+				
+				
 			}
 			
 		}

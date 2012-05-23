@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -22,15 +23,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IRuleSetBag),
 		                                                        		typeof (ISkill)
 		                                                        	};
+        
+        private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public GroupPageDenormalizer( ISaveToDenormalizationQueue saveToDenormalizationQueue)
+		{
+	        _saveToDenormalizationQueue = saveToDenormalizationQueue;
+		}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var affectedInterfaces = from r in modifiedRoots
 			                         from i in r.Root.GetType().GetInterfaces()
 			                         select i;
-
-			if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
+	if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
 			{
                 //get the person ids
 				var persons = modifiedRoots.Select(r => r.Root).OfType<IPerson>();
@@ -38,9 +45,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                 {
                     var idsAsString = (from p in personList select p.Id.ToString()).ToArray();
                     var ids = string.Join(",", idsAsString);
-                    runSql.Create(string.Format("exec [ReadModel].[UpdateGroupingReadModel] '{0}'", ids))
-                        .Execute();
-                }
+                    var message = new DenormalizeGroupingMessage
+                    {
+                        Ids = ids,
+                        GroupingType = 1,
+                    };
+                    _saveToDenormalizationQueue.Execute(message, runSql);    
+                   }
 				
                 //get the group page ids
 				var groupPage = modifiedRoots.Select(r => r.Root).OfType<IGroupPage>();
@@ -48,9 +59,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                 {
                     var idsAsString = (from p in groupPageList select p.Id.ToString()).ToArray();
                     var ids = string.Join(",", idsAsString);
-                    runSql.Create(string.Format("exec [ReadModel].[UpdateGroupingReadModelGroupPage] '{0}'", ids))
-                        .Execute();
-                }
+                    var message = new DenormalizeGroupingMessage
+                    {
+                        Ids = ids,
+                        GroupingType = 2,
+                    };
+                    _saveToDenormalizationQueue.Execute(message, runSql);
+                  }
 
                 //get the ids which are not in person or in grouppage
                 var notPerson = (from p in modifiedRoots where !((p.Root is Person)||(p.Root is GroupPage ) ) select p.Root).ToList();
@@ -58,9 +73,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                 {
                     var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.ToString()).ToArray();
                     var ids = string.Join(",", idsAsString);
-                    runSql.Create(string.Format("exec [ReadModel].[UpdateGroupingReadModelData] '{0}'", ids))
-                        .Execute();
-                }
+                    var message = new DenormalizeGroupingMessage
+                    {
+                        Ids = ids,
+                        GroupingType = 3,
+                    };
+                    _saveToDenormalizationQueue.Execute(message, runSql);
+                 }
+               
+                
+               
 			}
 		}
 	}

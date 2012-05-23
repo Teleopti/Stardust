@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             			                       new List<IDenormalizer>
             			                       	{
             			                       		new ScheduleDenormalizer(notify, saveToDenormalizationQueue),
-            			                       		new MeetingDenormalizer(notify, saveToDenormalizationQueue)
+            			                       		new MeetingDenormalizer(notify, saveToDenormalizationQueue),
+                                                    new GroupPageDenormalizer(saveToDenormalizationQueue )
             			                       	},
 															DataSourceConfigurationSetter.ForServiceBus()),
             			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));

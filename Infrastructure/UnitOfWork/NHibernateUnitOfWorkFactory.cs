@@ -27,8 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private readonly IEnumerable<IDenormalizer> _activeDenormalizers = new List<IDenormalizer>
 		                                                                   	{
-		                                                                   		//new AuditDenormalizer(),
-		                                                                   		new GroupPageDenormalizer(), 
                                                                                 new PersonFinderDenormalizer()
 		                                                                   	};
 
@@ -43,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			var denormalizerList = new List<IDenormalizer>
 			                       	{
-			                       		new GroupPageDenormalizer(), 
+			                       		//new GroupPageDenormalizer(), 
                                         new PersonFinderDenormalizer()
 			                       	};
 			denormalizerList.AddRange(externalDenormalizers);

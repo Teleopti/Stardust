@@ -68,7 +68,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
         			                       new List<IDenormalizer>
-        			                       	{new ScheduleDenormalizer(busSender,saveToDenormalizationQueue), new MeetingDenormalizer(busSender,saveToDenormalizationQueue)},
+        			                       	{
+                                                new ScheduleDenormalizer(busSender,saveToDenormalizationQueue),
+                                                new MeetingDenormalizer(busSender,saveToDenormalizationQueue),
+                                                new GroupPageDenormalizer(saveToDenormalizationQueue  )
+                                            },
 													DataSourceConfigurationSetter.ForSdk()),
         			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
         			{MessageBrokerDisabled = messageBrokerDisabled()};
