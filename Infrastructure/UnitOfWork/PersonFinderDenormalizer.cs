@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IRuleSetBag),
 		                                                        		typeof (ISkill)
 		                                                        	};
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
         {
             var affectedInterfaces = from r in modifiedRoots

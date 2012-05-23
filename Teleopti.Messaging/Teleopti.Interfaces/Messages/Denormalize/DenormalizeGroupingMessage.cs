@@ -25,7 +25,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		/// <summary>
 		/// 
 		/// </summary>
-		public int Type { get; set; }
+		public int GroupingType { get; set; }
 
 	}
 }
