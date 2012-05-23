@@ -1007,7 +1007,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 		}
 
-		[Test, Ignore("Exposes bug ")]
+		[Test, Ignore("Exposes bug 19500")]
 		public void FullDayAbsenceOverPersonalShiftShouldBeInTheProjection()
 		{
 			SetupForMergeTests();
