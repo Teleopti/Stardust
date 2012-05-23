@@ -13,12 +13,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private IDenormalizer target;
 		private MockRepository mocks;
+        private ISaveToDenormalizationQueue saveToDenormalizationQueue;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			target = new GroupPageDenormalizer();
+            saveToDenormalizationQueue = mocks.DynamicMock<ISaveToDenormalizationQueue>();
+            target = new GroupPageDenormalizer(saveToDenormalizationQueue);
 		}
 
 		[Test]

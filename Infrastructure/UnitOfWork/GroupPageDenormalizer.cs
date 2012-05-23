@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var affectedInterfaces = from r in modifiedRoots
 			                         from i in r.Root.GetType().GetInterfaces()
 			                         select i;
-	if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
+	        if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
 			{
                 //get the person ids
 				var persons = modifiedRoots.Select(r => r.Root).OfType<IPerson>();

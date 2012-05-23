@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private readonly IEnumerable<IDenormalizer> _activeDenormalizers = new List<IDenormalizer>
 		                                                                   	{
-                                                                                new PersonFinderDenormalizer()
+                                                                               //that should be remove (asad)
 		                                                                   	};
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			var denormalizerList = new List<IDenormalizer>
 			                       	{
-			                       		//new GroupPageDenormalizer(), 
-                                        new PersonFinderDenormalizer()
+			                       		//that should be remove (asad)
+                                        //new PersonFinderDenormalizer()
 			                       	};
 			denormalizerList.AddRange(externalDenormalizers);
 

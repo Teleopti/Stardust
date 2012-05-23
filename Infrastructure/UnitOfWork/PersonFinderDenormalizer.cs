@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -22,6 +23,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IRuleSetBag),
 		                                                        		typeof (ISkill)
 		                                                        	};
+        private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
+
+        public PersonFinderDenormalizer(ISaveToDenormalizationQueue saveToDenormalizationQueue)
+		{
+	        _saveToDenormalizationQueue = saveToDenormalizationQueue;
+		}
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
         {
@@ -36,8 +44,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				{
 					var idsAsString = (from p in personList select p.Id.ToString()).ToArray();
 					var ids = string.Join(",", idsAsString);
-					runSql.Create(string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'",ids))
-						.Execute();
+                    var message = new DenormalizePersonFinder
+                    {
+                        Ids = ids,
+                       IsPerson  = true,
+                    };
+                    _saveToDenormalizationQueue.Execute(message, runSql);    
+					//runSql.Create(string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'",ids))
+					//	.Execute();
 				}
 
 				var notPerson = (from p in modifiedRoots where !(p.Root is Person) select p.Root).ToList();
@@ -45,8 +59,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				{
 					var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.ToString()).ToArray();
 					var ids = string.Join(",", idsAsString);
-					runSql.Create(string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", ids))
-						.Execute();
+                    var message = new DenormalizePersonFinder
+                    {
+                        Ids = ids,
+                        IsPerson  = false,
+                    };
+                    _saveToDenormalizationQueue.Execute(message, runSql);    
+					//runSql.Create(string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", ids))
+					//	.Execute();
 				}
             }
         }

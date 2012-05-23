@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		// Ola if we need to motify it should be another notification
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         private readonly IScheduleChangedNotification _scheduleChangedNotification;
 
         public UpdateGroupingReadModel(IUnitOfWorkFactory unitOfWorkFactory, IGroupingReadOnlyRepository groupingReadOnlyRepository,IScheduleChangedNotification scheduleChangedNotification)

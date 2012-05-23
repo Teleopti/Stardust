@@ -134,7 +134,8 @@ namespace Teleopti.Ccc.Win.Main
 												      {
 												          new ScheduleDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue), 
                                                           new MeetingDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue),
-                                                          new GroupPageDenormalizer(saveToDenormalizationQueue )
+                                                          new GroupPageDenormalizer(saveToDenormalizationQueue ),
+                                                          new PersonFinderDenormalizer(saveToDenormalizationQueue )
 												      }, DataSourceConfigurationSetter.ForDesktop()),
         			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
         			{
