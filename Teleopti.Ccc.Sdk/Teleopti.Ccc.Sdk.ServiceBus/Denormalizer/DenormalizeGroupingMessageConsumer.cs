@@ -5,9 +5,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
     public class DenormalizeGroupingMessageConsumer : ConsumerOf<DenormalizeGroupingMessage>
 	{
-    	private readonly UpdateGroupingReadModel _updateGroupingReadModel;
+    	private readonly IUpdateGroupingReadModel  _updateGroupingReadModel;
 
-		public DenormalizeGroupingMessageConsumer( UpdateGroupingReadModel updateGroupingReadModel)
+		public DenormalizeGroupingMessageConsumer( IUpdateGroupingReadModel updateGroupingReadModel)
 		{
 			_updateGroupingReadModel = updateGroupingReadModel;
 		}

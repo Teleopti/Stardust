@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
     public class DenormalizePersonFinderConsumer : ConsumerOf<DenormalizePersonFinder >
 	{
-    	private readonly UpdatePersonFinderReadModel  _updatePersonFinderReadModel;
+    	private readonly IUpdatePersonFinderReadModel  _updatePersonFinderReadModel;
 
-        public DenormalizePersonFinderConsumer(UpdatePersonFinderReadModel updatePersonFinderReadModel)
+        public DenormalizePersonFinderConsumer(IUpdatePersonFinderReadModel updatePersonFinderReadModel)
 		{
             _updatePersonFinderReadModel = updatePersonFinderReadModel;
 		}
