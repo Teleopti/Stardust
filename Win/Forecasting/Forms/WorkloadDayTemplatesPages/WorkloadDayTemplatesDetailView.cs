@@ -171,8 +171,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             splitContainerMain.Panel1.Controls.Add(gridToChart);
 
             snapshotTemplateTaskList(TaskPeriodType.All);
-            _templateGridControl.Refresh();
-
+            reApplySmoothing();
             if(_filterDataView !=null)
                 ReloadFilterDataView();
         }
@@ -247,6 +246,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             _templateGridControl.Refresh();
             _templateGridControl.UpdateGridRowToChart(taskPeriodType);
             Refresh();
+        }
+
+        private void reApplySmoothing()
+        { 
+            ApplySmoothing(cmbTaskRunningSmoothning, TaskPeriodType.Tasks);
+            ApplySmoothing(cmbAverageTimeRunningSmoothning, TaskPeriodType.AverageTaskTime);
+            ApplySmoothing(cmbAverageAfterCallWorkRunningSmoothning, TaskPeriodType.AverageAfterTaskTime);
         }
 
         private void dateSelectionComposite1_DateRangeChanged(object sender, DateRangeChangedEventArgs e)
