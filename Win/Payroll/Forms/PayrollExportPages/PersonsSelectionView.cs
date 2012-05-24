@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
             _presenter.PopulateModel(payrollExport);
             //_presenter.BuildTreeStructure();
             _selectorView.PreselectedPersonIds = _model.SelectedPersons.Select(selectedPerson => selectedPerson.Id.Value).ToList();
+            _selectorView.SetDate(_model.SelectedPeriod.StartDate);
             _personSelectorPresenter.LoadTabs();
         }
 
