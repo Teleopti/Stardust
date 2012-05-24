@@ -174,7 +174,15 @@
 	height: 16px;
 	width: 10em;
 }
+.rtl .absence-input-label 
+{
+	text-align: right;
+}
 select.absence-input 
 {
 	width: 8.5em;
+}
+.rtl input.absence-input
+{
+    padding-right: 20px;
 }
