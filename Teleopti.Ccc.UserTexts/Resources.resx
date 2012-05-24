@@ -10678,4 +10678,8 @@ These options are activated:
     <value>Absence Requests</value>
     <comment>Application function Absence requests for the web</comment>
   </data>
+  <data name="FullDay" xml:space="preserve">
+    <value> Full Day</value>
+    <comment>Full day for request</comment>
+  </data>
 </root>

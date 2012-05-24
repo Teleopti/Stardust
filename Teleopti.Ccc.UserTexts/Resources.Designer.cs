@@ -8492,6 +8492,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Full Day.
+        /// </summary>
+        public static string FullDay {
+            get {
+                return ResourceManager.GetString("FullDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Full name.
         /// </summary>
         public static string FullName {
