@@ -10682,4 +10682,8 @@ These options are activated:
     <value> Full Day</value>
     <comment>Full day for request</comment>
   </data>
+  <data name="AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime" xml:space="preserve">
+    <value>Ready Time vs. Contracted Schedule Time</value>
+    <comment>Ready Time vs. Contracted Schedule Time</comment>
+  </data>
 </root>
