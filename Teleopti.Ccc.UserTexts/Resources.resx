@@ -10678,4 +10678,8 @@ These options are activated:
     <value>Absence Requests</value>
     <comment>Application function Absence requests for the web</comment>
   </data>
+  <data name="AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime" xml:space="preserve">
+    <value>Ready Time vs. Contracted Schedule Time</value>
+    <comment>Ready Time vs. Contracted Schedule Time</comment>
+  </data>
 </root>

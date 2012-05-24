@@ -1124,6 +1124,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ready Time vs. Contracted Schedule Time.
+        /// </summary>
+        public static string AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime {
+            get {
+                return ResourceManager.GetString("AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready Time vs. Scheduled Ready Time.
         /// </summary>
         public static string AdherenceReportSettingCalculationMethodReadyTimeVsScheduledReadyTime {
