@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                        IsPerson  = true,
                     };
                     _saveToDenormalizationQueue.Execute(message, runSql);    
-					//runSql.Create(string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'",ids))
-					//	.Execute();
+					
 				}
 
 				var notPerson = (from p in modifiedRoots where !(p.Root is Person) select p.Root).ToList();
@@ -65,8 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                         IsPerson  = false,
                     };
                     _saveToDenormalizationQueue.Execute(message, runSql);    
-					//runSql.Create(string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", ids))
-					//	.Execute();
+					
 				}
             }
         }

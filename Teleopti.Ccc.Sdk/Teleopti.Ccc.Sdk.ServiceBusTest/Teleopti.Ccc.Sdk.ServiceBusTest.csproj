@@ -124,6 +124,8 @@
   <ItemGroup>
     <Compile Include="AbsenceRequestResolveTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
+    <Compile Include="Denormalizer\DenormalizeGroupingMessageConsumerTest.cs" />
+    <Compile Include="Denormalizer\DenormalizePersonFinderConsumerTest.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumerTest.cs" />
     <Compile Include="Denormalizer\ProcessDenormalizeQueueResolveTest.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionResolveTest.cs" />
