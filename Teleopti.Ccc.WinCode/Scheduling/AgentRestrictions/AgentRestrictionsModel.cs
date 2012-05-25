@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	{
 		IList<AgentRestrictionsDisplayRow> DisplayRows { get; }
 		AgentRestrictionsDisplayRow DisplayRowFromRowIndex(int rowIndex);
-		void LoadData();
+		void LoadData(IAgentRestrictionsDisplayRowCreator agentRestrictionsDisplayRowCreator);
 	}
 
 	public class AgentRestrictionsModel : IAgentRestrictionsModel
 	{
-		private readonly IList<AgentRestrictionsDisplayRow> _displayRows;
+		private IList<AgentRestrictionsDisplayRow> _displayRows;
 
 
 		public AgentRestrictionsModel()
@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public IList<AgentRestrictionsDisplayRow> DisplayRows { get { return _displayRows; } }
 
-		public void LoadData()
+		public void LoadData(IAgentRestrictionsDisplayRowCreator agentRestrictionsDisplayRowCreator)
 		{
-			_displayRows.Add(new AgentRestrictionsDisplayRow(null));
-			_displayRows.Add(new AgentRestrictionsDisplayRow(null));
-			_displayRows.Add(new AgentRestrictionsDisplayRow(null));
+			if(agentRestrictionsDisplayRowCreator == null) throw new ArgumentNullException("agentRestrictionsDisplayRowCreator");
+
+			_displayRows = agentRestrictionsDisplayRowCreator.Create();
 		}
 
 		public AgentRestrictionsDisplayRow DisplayRowFromRowIndex(int rowIndex)

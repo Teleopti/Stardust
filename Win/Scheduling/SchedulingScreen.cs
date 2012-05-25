@@ -8489,7 +8489,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private void ToolStripMenuItemRestrictionViewTemp_MouseUp(object sender, MouseEventArgs e)
 		{
-			var agentRestrictionView = new AgentRestrictionViewTemp();
+			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, _selectedPersons);
 			agentRestrictionView.ShowDialog(this);
 		}
 
