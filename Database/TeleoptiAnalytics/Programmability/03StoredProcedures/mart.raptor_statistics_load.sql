@@ -84,7 +84,8 @@ BEGIN
 		ISNULL(ql.longest_delay_in_queue_abandoned_s, 0) AS StatTimeLongestInQueueAbandonedSeconds
 	FROM		mart.fact_queue ql WITH (NOLOCK)
 	INNER JOIN	mart.dim_date d
-		ON ql.date_id = d.date_id 
+		ON ql.date_id = d.date_id
+		AND d.date_date BETWEEN dateadd(day,-1,@DateFrom) and dateadd(day,1,@DateTo) --limit the join but include +/- 1 day in order to cover time zone stuff
 	INNER JOIN	mart.dim_interval i WITH (NOLOCK)
 		ON ql.interval_id = i.interval_id 
 	INNER JOIN	@TempList q
