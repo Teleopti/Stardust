@@ -49,12 +49,13 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
             var teamId = Guid.NewGuid();
             var onePersonId = Guid.NewGuid();
             var date = new DateOnly(2012, 1, 19);
+            var dateOnlyPeriod = new DateOnlyPeriod(date, date);
             var lightPerson = _mocks.StrictMock<ILightPerson>();
             var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
             Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
-            Expect.Call(_personSelectorView.SelectedDate).Return(date);
-            Expect.Call(rep.GetOrganization(date, true)).Return(new List<IPersonSelectorOrganization>
+            Expect.Call(_personSelectorView.SelectedPeriod).Return(dateOnlyPeriod);
+            Expect.Call(rep.GetOrganization(dateOnlyPeriod, true)).Return(new List<IPersonSelectorOrganization>
                                                                     {
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Site = "STO",Team = "Blue", TeamId = teamId, PersonId = onePersonId},
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Site = "STO",Team = "Blue", TeamId = teamId, PersonId = Guid.NewGuid()},
@@ -78,11 +79,12 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
             {
                 var buId = Guid.NewGuid();
                 var date = new DateOnly(2012, 1, 19);
+                var dateOnlyPeriod = new DateOnlyPeriod(date, date);
                 var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
-                Expect.Call(_personSelectorView.SelectedDate).Return(date);
-                Expect.Call(rep.GetOrganization(date, false)).Return(new List<IPersonSelectorOrganization>
+                Expect.Call(_personSelectorView.SelectedPeriod).Return(dateOnlyPeriod);
+                Expect.Call(rep.GetOrganization(dateOnlyPeriod, false)).Return(new List<IPersonSelectorOrganization>
                                                                     {
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Site = "STO",Team = "Blue", PersonId = Guid.NewGuid()},
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Site = "STO",Team = "Blue", PersonId = Guid.NewGuid()},

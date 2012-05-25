@@ -32,8 +32,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new PersonSelectorReadOnlyRepository(uow);
-                var nodes = _target.GetOrganization(new DateOnly(2012,1,27),true );
-                Assert.That(nodes, Is.Not.Null);
+                var date = new DateOnly(2012, 1, 27);
+                var nodes = _target.GetOrganization(new DateOnlyPeriod(date,date), true );
+                Assert.That(nodes.Count, Is.EqualTo(0));
             }
         }
 
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new PersonSelectorReadOnlyRepository(uow);
-                var nodes = _target.GetBuiltIn(new DateOnly(2012, 1, 27), PersonSelectorField.Contract);
+                var date = new DateOnly(2012, 1, 27);
+                var nodes = _target.GetBuiltIn(new DateOnlyPeriod(date,date), PersonSelectorField.Contract);
                 Assert.That(nodes.Count, Is.EqualTo(0));
             }
         }

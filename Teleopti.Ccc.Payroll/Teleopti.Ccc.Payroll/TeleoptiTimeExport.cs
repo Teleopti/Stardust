@@ -76,6 +76,12 @@ namespace Teleopti.Ccc.Payroll
                     foreach (SchedulePartDto schedulePart in scheduleParts)
                     {
                         var person = personDic[schedulePart.PersonId];
+                        var firstPeriod = person.PersonPeriodCollection.OrderBy(p => p.Period.StartDate.DateTime).FirstOrDefault();
+                        if (firstPeriod != null && schedulePart.Date.DateTime < firstPeriod.Period.StartDate.DateTime)
+                            continue;
+                        var teminateDate = person.TerminationDate;
+                        if (teminateDate != null && schedulePart.Date.DateTime > teminateDate.DateTime)
+                            continue;
                         if (person.TimeZoneId != personTimeZone.Id)
                             personTimeZone = TimeZoneInfo.FindSystemTimeZoneById(person.TimeZoneId);
                         payrollDt.LoadDataRow(

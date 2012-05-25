@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Win.Grouping
         private readonly IEventAggregator _eventAggregator;
         private readonly IGroupPageHelper _groupPageHelper;
         private readonly IEventAggregator _globalEventAggregator;
+        private DateOnlyPeriod? _selectedPeriod;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public PersonSelectorView(IEventAggregatorLocator eventAggregatorLocator,IGroupPageHelper groupPageHelper)
@@ -69,6 +70,15 @@ namespace Teleopti.Ccc.Win.Grouping
             get { return new DateOnly(xdtpDate.Value);}
         }
 
+        public DateOnlyPeriod SelectedPeriod
+        {
+            get
+            {
+                return !_selectedPeriod.HasValue ? new DateOnlyPeriod(SelectedDate, SelectedDate) : _selectedPeriod.Value;
+            }
+            set { _selectedPeriod = value; }
+        }
+        
         public IList<TreeNodeAdv> SelectedNodes
         {
             get
