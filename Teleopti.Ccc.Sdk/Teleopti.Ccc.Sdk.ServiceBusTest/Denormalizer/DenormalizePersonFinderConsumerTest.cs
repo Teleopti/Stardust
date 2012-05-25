@@ -17,19 +17,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
         private DenormalizePersonFinderConsumer target;
         private MockRepository mocks;
         private IUpdatePersonFinderReadModel updatePersonFinderReadModel;
-        private IScenarioRepository scenarioRepository;
-        private IUnitOfWorkFactory unitOfWorkFactory;
-        private IPersonRepository personRepository;
-
+        
         [SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
             updatePersonFinderReadModel = mocks.DynamicMock<IUpdatePersonFinderReadModel>();
-            scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
-            unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-            personRepository = mocks.DynamicMock<IPersonRepository>();
-            target = new DenormalizePersonFinderConsumer(updatePersonFinderReadModel);
+             target = new DenormalizePersonFinderConsumer(updatePersonFinderReadModel);
         }
 
         [Test]
