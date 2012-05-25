@@ -43,12 +43,12 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 
         public void Execute()
         {
-            var date = _personSelectorView.SelectedDate;
+            var selectedPeriod = _personSelectorView.SelectedPeriod;
             IList<IPersonSelectorBuiltIn> toNodes;
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 IPersonSelectorReadOnlyRepository rep = _repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow);
-                toNodes = rep.GetBuiltIn(date, _loadType);    
+                toNodes = rep.GetBuiltIn(selectedPeriod, _loadType);    
             }
             
             // rättigheter
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             {
                 if (toNode.PersonId != new Guid())
                 {
-                    if (!auth.IsPermitted(_applicationFunction.FunctionPath, date, toNode))
+                    if (!auth.IsPermitted(_applicationFunction.FunctionPath, selectedPeriod.StartDate, toNode))
                         toRemove.Add(toNode);
                 }
             }

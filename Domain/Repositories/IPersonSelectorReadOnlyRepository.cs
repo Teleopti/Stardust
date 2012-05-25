@@ -6,8 +6,8 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
     public interface IPersonSelectorReadOnlyRepository
     {
-        IList<IPersonSelectorOrganization> GetOrganization(DateOnly onDate, bool loadUsers);
-        IList<IPersonSelectorBuiltIn> GetBuiltIn(DateOnly onDate, PersonSelectorField loadType);
+        IList<IPersonSelectorOrganization> GetOrganization(DateOnlyPeriod dateOnlyPeriod, bool loadUsers);
+        IList<IPersonSelectorBuiltIn> GetBuiltIn(DateOnlyPeriod dateOnlyPeriodonDate, PersonSelectorField loadType);
         IList<IPersonSelectorUserDefined> GetUserDefinedTab(DateOnly onDate, Guid value);
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         IList<IUserDefinedTabLight> GetUserDefinedTabs();

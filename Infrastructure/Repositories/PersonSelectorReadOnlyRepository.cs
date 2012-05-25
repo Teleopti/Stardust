@@ -19,13 +19,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             _unitOfWork = unitOfWork;
         }
 
-        public IList<IPersonSelectorOrganization> GetOrganization(DateOnly onDate, bool loadUsers)
+        public IList<IPersonSelectorOrganization> GetOrganization(DateOnlyPeriod dateOnlyPeriod, bool loadUsers)
         {
             int cultureId = TeleoptiPrincipal.Current.Regional.UICulture.LCID;
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(
-                    "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate, @bu=:bu, @users=:users, @culture=:culture")
+                    "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate,@enddate=:enddate, @bu=:bu, @users=:users, @culture=:culture")
                     .SetString("type", "Organization")
-                    .SetDateTime("ondate", onDate)
+                    .SetDateTime("ondate", dateOnlyPeriod.StartDate)
+                    .SetDateTime("enddate",dateOnlyPeriod.EndDate )
                     .SetGuid("bu",
                             ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetBoolean("users", loadUsers)
@@ -35,13 +36,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .List<IPersonSelectorOrganization>();   
         }
 
-        public IList<IPersonSelectorBuiltIn> GetBuiltIn(DateOnly onDate, PersonSelectorField loadType)
+        public IList<IPersonSelectorBuiltIn> GetBuiltIn(DateOnlyPeriod dateOnlyPeriod, PersonSelectorField loadType)
         {
             int cultureId = TeleoptiPrincipal.Current.Regional.UICulture.LCID;
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(
-                    "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate, @bu=:bu, @users=:users, @culture=:culture")
+                    "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate,@enddate=:enddate, @bu=:bu, @users=:users, @culture=:culture")
                     .SetString("type", loadType.ToString())
-                    .SetDateTime("ondate", onDate)
+                    .SetDateTime("ondate", dateOnlyPeriod.StartDate)
+                    .SetDateTime("enddate", dateOnlyPeriod.EndDate)
                     .SetGuid("bu",
                             ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetBoolean("users", false)

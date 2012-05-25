@@ -47,12 +47,13 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
             var buId = Guid.NewGuid();
             var onePersonId = Guid.NewGuid();
             var date = new DateOnly(2012, 1, 19);
+            var datePeriod = new DateOnlyPeriod(date, date);
             var lightPerson = _mocks.StrictMock<ILightPerson>();
             var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
             Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
-            Expect.Call(_personSelectorView.SelectedDate).Return(date);
-            Expect.Call(rep.GetBuiltIn(date, PersonSelectorField.Contract)).Return(new List<IPersonSelectorBuiltIn>
+            Expect.Call(_personSelectorView.SelectedPeriod).Return(datePeriod);
+            Expect.Call(rep.GetBuiltIn(datePeriod, PersonSelectorField.Contract)).Return(new List<IPersonSelectorBuiltIn>
                                                                     {
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Node = "STO", PersonId = onePersonId},
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Node = "STO" , PersonId = Guid.NewGuid()},
@@ -76,11 +77,12 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
             {
                 var buId = Guid.NewGuid();
                 var date = new DateOnly(2012, 1, 19);
+                var datePeriod = new DateOnlyPeriod(date, date);
                 var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
-                Expect.Call(_personSelectorView.SelectedDate).Return(date);
-                Expect.Call(rep.GetBuiltIn(date, PersonSelectorField.Contract)).Return(new List<IPersonSelectorBuiltIn>
+                Expect.Call(_personSelectorView.SelectedPeriod).Return(datePeriod);
+                Expect.Call(rep.GetBuiltIn(datePeriod, PersonSelectorField.Contract)).Return(new List<IPersonSelectorBuiltIn>
                                                                     {
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Node = "STO", PersonId = Guid.NewGuid()},
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Node = "STO", PersonId = Guid.NewGuid()},
