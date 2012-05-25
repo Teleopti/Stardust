@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {
@@ -55,7 +58,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			SelectionChanged += GridSelectionChanged;
 
 			if (!CellModels.ContainsKey("NumericReadOnlyCellModel")) CellModels.Add("NumericReadOnlyCellModel",new NumericReadOnlyCellModel(Model) {NumberOfDecimals = 0});
-			if (!CellModels.ContainsKey("TimeSpan")) CellModels.Add("TimeSpan", new TimeSpanLongHourMinutesStaticCellModel(Model));	
+			if (!CellModels.ContainsKey("TimeSpan")) CellModels.Add("TimeSpan", new TimeSpanLongHourMinutesStaticCellModel(Model));
 		}
 
 		void GridSelectionChanged(object sender, GridSelectionChangedEventArgs e)
@@ -109,9 +112,13 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			}
 		}
 
-		public void LoadData()
+		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons)
 		{
-			_model.LoadData();
+			if(stateHolder == null) throw new ArgumentNullException("stateHolder");
+
+			var scheduleMatrixListCreator = new ScheduleMatrixListCreator(stateHolder.SchedulingResultState);
+			var agentDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, persons, scheduleMatrixListCreator);
+			_model.LoadData(agentDisplayRowCreator);
 		}
 
 		void GridQueryColCount(object sender, GridRowColCountEventArgs e)

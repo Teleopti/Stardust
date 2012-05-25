@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
@@ -8,7 +11,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	{
 		void MergeHeaders();
 		void MergeCells(int rowIndex, bool unmerge);
-		void LoadData();
+		void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons);
 	}
 
 	public interface IAgentRestrictionsWarningDrawer
@@ -81,7 +84,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			if (e.RowIndex == 1)
 			{
-				if (e.ColIndex == 0) e.Style.Text = UserTexts.Resources.Name;
 				if (e.ColIndex == 1) e.Style.Text = UserTexts.Resources.Warnings;
 				if (e.ColIndex == 2) e.Style.Text = UserTexts.Resources.Type;
 				if (e.ColIndex == 3) e.Style.Text = UserTexts.Resources.From;

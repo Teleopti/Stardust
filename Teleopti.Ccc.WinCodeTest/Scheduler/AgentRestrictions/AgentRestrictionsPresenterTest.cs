@@ -102,7 +102,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 					var args = new GridQueryCellInfoEventArgs(1, i, gridStyleInfo);
 
 					_presenter.GridQueryCellInfo(null, args);
-					if (i == 0) Assert.AreEqual(UserTexts.Resources.Name, args.Style.Text);
 					if (i == 1) Assert.AreEqual(UserTexts.Resources.Warnings, args.Style.Text);
 					if (i == 2) Assert.AreEqual(UserTexts.Resources.Type, args.Style.Text);
 					if (i == 3) Assert.AreEqual(UserTexts.Resources.From, args.Style.Text);

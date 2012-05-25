@@ -12,6 +12,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private AgentRestrictionsDisplayRow _agentRestrictionsDisplayRow;
 		private MockRepository _mocks;
 		private IScheduleMatrixPro _scheduleMatrixPro;
+		//private IList<IPerson> _persons;
+		//private IPerson _person;
+		//private IPerson _anotherPerson;
+		//private ISchedulerStateHolder _stateHolder;
+		private IAgentRestrictionsDisplayRowCreator _agentRestrictionsDisplayRowCreator;
 
 		[SetUp]
 		public void Setup()
@@ -20,6 +25,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_mocks = new MockRepository();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			_agentRestrictionsDisplayRow = new AgentRestrictionsDisplayRow(_scheduleMatrixPro);
+			//_person = _mocks.StrictMock<IPerson>();
+			//_anotherPerson = _mocks.StrictMock<IPerson>();
+			//_persons = new List<IPerson>{_person, _anotherPerson};
+			//_stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
+			_agentRestrictionsDisplayRowCreator = _mocks.StrictMock<IAgentRestrictionsDisplayRowCreator>();
 		}
 
 		[Test]
@@ -31,7 +41,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		[Test]
 		public void ShouldLoadData()
 		{
-			_model.LoadData();
+			using(_mocks.Record())
+			{
+				Expect.Call(() => _agentRestrictionsDisplayRowCreator.Create());
+			}
+
+			using(_mocks.Playback())
+			{
+				_model.LoadData(_agentRestrictionsDisplayRowCreator);	
+			}	 
 		}
 
 		[Test]
