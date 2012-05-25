@@ -46,12 +46,12 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             var loadUser = TeleoptiPrincipal.Current.PrincipalAuthorization.EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(_applicationFunction.FunctionPath));
             if (!_loadUsers)
                 loadUser = false;
-            var date = _view.SelectedDate;
+            var dateOnlyPeriod = _view.SelectedPeriod;
             IList<IPersonSelectorOrganization> toNodes;
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 IPersonSelectorReadOnlyRepository rep = _repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow);
-                toNodes = rep.GetOrganization(date, loadUser);    
+                toNodes = rep.GetOrganization(dateOnlyPeriod, loadUser);    
             }
             
             // rättigheter
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             {
                 if (toNode.PersonId != new Guid())
                 {
-                    if (!auth.IsPermitted(_applicationFunction.FunctionPath, date, toNode))
+                    if (!auth.IsPermitted(_applicationFunction.FunctionPath, dateOnlyPeriod.StartDate, toNode))
                         toRemove.Add(toNode);
                 }
             }

@@ -107,6 +107,9 @@ namespace Teleopti.Ccc.Payroll
             foreach (var multiplicatorDataDto in multiplicatorData)
             {
                 var person = _personDic[multiplicatorDataDto.PersonId.GetValueOrDefault(Guid.Empty)];
+                var teminateDate = person.TerminationDate;
+                if (teminateDate != null && multiplicatorDataDto.Date > teminateDate.DateTime)
+                    continue;
                 _payrollDt.LoadDataRow(
                     new object[]
                         {
@@ -130,11 +133,17 @@ namespace Teleopti.Ccc.Payroll
             var personTimeZone = timeZoneInfo;
             foreach (SchedulePartDto schedulePart in scheduleParts)
             {
+                var person = _personDic[schedulePart.PersonId];
+                var firstPeriod = person.PersonPeriodCollection.OrderBy(p => p.Period.StartDate.DateTime).FirstOrDefault();
+                if (firstPeriod != null && schedulePart.Date.DateTime < firstPeriod.Period.StartDate.DateTime)
+                    continue;
+                var teminateDate = person.TerminationDate;
+                if (teminateDate != null && schedulePart.Date.DateTime > teminateDate.DateTime)
+                    continue;
                 foreach (ProjectedLayerDto layerDto in schedulePart.ProjectedLayerCollection)
                 {
                     if (layerDto.IsAbsence && layerDto.ContractTime != TimeSpan.Zero)
                     {
-                        var person = _personDic[schedulePart.PersonId];
                         if (person.TimeZoneId != personTimeZone.Id)
                             personTimeZone = TimeZoneInfo.FindSystemTimeZoneById(person.TimeZoneId);
                         _payrollDt.LoadDataRow(
