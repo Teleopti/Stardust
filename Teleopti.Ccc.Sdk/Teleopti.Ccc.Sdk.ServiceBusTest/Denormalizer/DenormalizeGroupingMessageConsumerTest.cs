@@ -18,9 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
         private DenormalizeGroupingMessageConsumer  target;
         private MockRepository mocks;
         private IUpdateGroupingReadModel _updateGroupingReadModel;
-        private IScenarioRepository scenarioRepository;
-        private IUnitOfWorkFactory unitOfWorkFactory;
-        private IPersonRepository personRepository;
+       
 
         [SetUp]
         public void Setup()
