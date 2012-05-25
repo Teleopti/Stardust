@@ -37,6 +37,13 @@
 	vertical-align: top;
 	width: 133px;
 }
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+.weekview-day /* Safari inline-block fix */
+{
+	display: block; 
+	float: left;
+}
+}
 .ie7 .weekview-day /* IE7 inline-block fix */
 {
 	display: block; 
