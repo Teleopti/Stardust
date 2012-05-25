@@ -64,7 +64,6 @@
 			<StrongNameSigning KeyFileName="..\..\Teleopti.Ccc.snk" Sign="1" />
 			<OtherProtections AddIncorrectMetadata="1" AddMetadataStream="1" SuppressIldasm="1" />
 			<StringsEncoding Compress="1" Encode="1" UseImprovedEncoding="1" />
-			<OtherOptimizations SealClasses="1" />
 			<Debugging CreatePDB="1" ObfuscateDocumentsURL="1" />
 		</Options>
 	</Configuration>
