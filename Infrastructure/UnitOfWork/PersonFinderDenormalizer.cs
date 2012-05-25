@@ -22,16 +22,20 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IRuleSetBag),
 		                                                        		typeof (ISkill)
 		                                                        	};
-        private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
 
-        public PersonFinderDenormalizer(ISaveToDenormalizationQueue saveToDenormalizationQueue)
+    	private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
+    	private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
+
+		public PersonFinderDenormalizer(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
 		{
-	        _saveToDenormalizationQueue = saveToDenormalizationQueue;
+			_sendDenormalizeNotification = sendDenormalizeNotification;
+			_saveToDenormalizationQueue = saveToDenormalizationQueue;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
         {
+			var atLeastOneMessage = false;
             var affectedInterfaces = from r in modifiedRoots
                                      from i in r.Root.GetType().GetInterfaces()
                                      select i;
@@ -48,8 +52,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                         Ids = ids,
                        IsPerson  = true,
                     };
-                    _saveToDenormalizationQueue.Execute(message, runSql);    
-					
+                    _saveToDenormalizationQueue.Execute(message, runSql);
+					atLeastOneMessage = true;
 				}
 
 				var notPerson = (from p in modifiedRoots where !(p.Root is Person) select p.Root).ToList();
@@ -62,8 +66,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                         Ids = ids,
                         IsPerson  = false,
                     };
-                    _saveToDenormalizationQueue.Execute(message, runSql);    
-					
+                    _saveToDenormalizationQueue.Execute(message, runSql);
+					atLeastOneMessage = true;
+				}
+				if (atLeastOneMessage)
+				{
+					_sendDenormalizeNotification.Notify();
 				}
             }
         }

@@ -23,17 +23,20 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IRuleSetBag),
 		                                                        		typeof (ISkill)
 		                                                        	};
-        
-        private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
 
-        public GroupPageDenormalizer( ISaveToDenormalizationQueue saveToDenormalizationQueue)
+		private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
+		private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
+
+		public GroupPageDenormalizer(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
 		{
-	        _saveToDenormalizationQueue = saveToDenormalizationQueue;
+			_sendDenormalizeNotification = sendDenormalizeNotification;
+			_saveToDenormalizationQueue = saveToDenormalizationQueue;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
+			var atLeastOneMessage = false;
 			var affectedInterfaces = from r in modifiedRoots
 			                         from i in r.Root.GetType().GetInterfaces()
 			                         select i;
@@ -50,8 +53,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                         Ids = ids,
                         GroupingType = 1,
                     };
-                    _saveToDenormalizationQueue.Execute(message, runSql);    
-                   }
+                    _saveToDenormalizationQueue.Execute(message, runSql);
+                	atLeastOneMessage = true;
+                }
 				
                 //get the group page ids
 				var groupPage = modifiedRoots.Select(r => r.Root).OfType<IGroupPage>();
@@ -65,6 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                         GroupingType = 2,
                     };
                     _saveToDenormalizationQueue.Execute(message, runSql);
+					atLeastOneMessage = true;
                   }
 
                 //get the ids which are not in person or in grouppage
@@ -79,10 +84,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                         GroupingType = 3,
                     };
                     _saveToDenormalizationQueue.Execute(message, runSql);
+					atLeastOneMessage = true;
                  }
-               
-                
-               
+				if (atLeastOneMessage)
+				{
+					_sendDenormalizeNotification.Notify();
+				}
 			}
 		}
 	}

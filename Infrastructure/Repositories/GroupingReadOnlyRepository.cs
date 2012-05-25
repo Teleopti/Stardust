@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             using(var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
-                ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateGroupingReadModel] '{0}'", ids));
+               ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+                    string.Format("exec [ReadModel].[UpdateGroupingReadModel] '{0}'", ids)).ExecuteUpdate();
             }
         }
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateGroupingReadModelGroupPage] '{0}'", ids));
+                    string.Format("exec [ReadModel].[UpdateGroupingReadModelGroupPage] '{0}'", ids)).ExecuteUpdate();
             }
         }
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateGroupingReadModelData] '{0}'", ids));
+                    string.Format("exec [ReadModel].[UpdateGroupingReadModelData] '{0}'", ids)).ExecuteUpdate();
             }
         }
 	}

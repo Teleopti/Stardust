@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", ids));
+                    string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", ids)).ExecuteUpdate();
             }
         }
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", ids));
+                    string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", ids)).ExecuteUpdate();
             }
         }
 

@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         			                       	{
                                                 new ScheduleDenormalizer(busSender,saveToDenormalizationQueue),
                                                 new MeetingDenormalizer(busSender,saveToDenormalizationQueue),
-                                                new GroupPageDenormalizer(saveToDenormalizationQueue  ),
-                                                new PersonFinderDenormalizer(saveToDenormalizationQueue )
+                                                new GroupPageDenormalizer(busSender,saveToDenormalizationQueue  ),
+                                                new PersonFinderDenormalizer(busSender,saveToDenormalizationQueue )
                                             },
 													DataSourceConfigurationSetter.ForSdk()),
         			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
