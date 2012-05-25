@@ -44,7 +44,7 @@ DECLARE ViewCursor CURSOR FOR
 	FROM mart.sys_crossDatabaseView cv
 	INNER JOIN mart.sys_crossDatabaseView_target ct
 		ON cv.target_id = ct.target_id
---	WHERE ct.confirmed = 1  --deploy the views only to target databases that exists = confirmed (see: EXEC sys_crossdatabaseview_target_update)
+	WHERE ct.confirmed = 1
 	
 OPEN ViewCursor 
 FETCH NEXT FROM ViewCursor INTO @target,@view,@definition

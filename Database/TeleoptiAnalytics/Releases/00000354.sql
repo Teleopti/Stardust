@@ -37,9 +37,5 @@ IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE config
 
 GO
 
-  
-EXEC mart.sys_crossdatabaseview_load  
-GO  
- 
 PRINT 'Adding build number to database' 
 INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (354,'7.1.354') 
