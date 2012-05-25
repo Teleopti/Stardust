@@ -257,23 +257,10 @@ SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Bran
 findstr /I /C:"%Branch%_%Customer%_TeleoptiAnalytics" "%temp%\FindDB.txt"
 if %errorlevel% NEQ 0 SET CreateAnalytics=-C -L%SQLLogin%:%SQLPwd%
 
-::Create views for all Cross DBs, could fail, don't bother about it
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE mart.sys_crossdatabaseview SET View_Definition = REPLACE(View_Definition,'FROM $$$target$$$.dbo','FROM [$$$target$$$].dbo')"
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'"
-
 ::create or patch Analytics
 ECHO "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics%
 "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics%
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
-
-::Create views for all Cross DBs
-ECHO Adding views for Crossdatabases
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossDatabaseView_load"
-if %errorlevel% NEQ 0 SET /A ERRORLEV=5 & GOTO :Error
-
-::Update MsgBroker settings
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Address] SET [Address] = '%COMPUTERNAME%',[Port]=9090 WHERE [AddressId] = 1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = 8090 WHERE [ConfigurationId]=1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = '%COMPUTERNAME%' WHERE [ConfigurationId]=2"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=17 & GOTO :Error
 
 ::check if we need to create Agg (no stat)
 SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Branch%_%Customer%_TeleoptiCCCAgg'" -h-1 > "%temp%\FindDB.txt"
@@ -285,11 +272,17 @@ ECHO "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleop
 "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg%
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :Error
 
-::Add Cross DB-view targets
-ECHO Adding Crossdatabases, a second time
-
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE mart.sys_crossdatabaseview SET View_Definition = REPLACE(View_Definition,'FROM $$$target$$$.dbo','FROM [$$$target$$$].dbo')"
+::Create views for all Cross DBs
+ECHO Adding views for Crossdatabases
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'"
+if %errorlevel% NEQ 0 SET /A ERRORLEV=5 & GOTO :Error
+
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossDatabaseView_load"
+if %errorlevel% NEQ 0 SET /A ERRORLEV=5 & GOTO :Error
+
+::Update MsgBroker settings
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Address] SET [Address] = '%COMPUTERNAME%',[Port]=9090 WHERE [AddressId] = 1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = 8090 WHERE [ConfigurationId]=1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = '%COMPUTERNAME%' WHERE [ConfigurationId]=2"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=17 & GOTO :Error
 
 ::Upgrade Raptor DB to latest version
 CD "%DBMANAGERPATH%"

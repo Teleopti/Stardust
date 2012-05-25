@@ -12,9 +12,6 @@ WHERE control_collection_id = 379
 
 GO
 
-  
-EXEC mart.sys_crossdatabaseview_load  
-GO  
- 
+
 PRINT 'Adding build number to database' 
 INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (356,'7.1.356') 
