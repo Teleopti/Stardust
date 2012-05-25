@@ -1,10 +1,9 @@
-﻿
-using Rhino.ServiceBus;
+﻿using Rhino.ServiceBus;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-    public class DenormalizePersonFinderConsumer : ConsumerOf<DenormalizePersonFinder >
+    public class DenormalizePersonFinderConsumer : ConsumerOf<DenormalizePersonFinderMessage>
 	{
     	private readonly IUpdatePersonFinderReadModel  _updatePersonFinderReadModel;
 
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void Consume(DenormalizePersonFinder  message)
+        public void Consume(DenormalizePersonFinderMessage  message)
 		{
             _updatePersonFinderReadModel.Execute(message.IsPerson , message.Ids);
 

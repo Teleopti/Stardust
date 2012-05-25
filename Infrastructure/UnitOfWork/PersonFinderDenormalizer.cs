@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				{
 					var idsAsString = (from p in personList select p.Id.ToString()).ToArray();
 					var ids = string.Join(",", idsAsString);
-                    var message = new DenormalizePersonFinder
+                    var message = new DenormalizePersonFinderMessage
                     {
                         Ids = ids,
                        IsPerson  = true,
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				{
 					var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.ToString()).ToArray();
 					var ids = string.Join(",", idsAsString);
-                    var message = new DenormalizePersonFinder
+                    var message = new DenormalizePersonFinderMessage
                     {
                         Ids = ids,
                         IsPerson  = false,

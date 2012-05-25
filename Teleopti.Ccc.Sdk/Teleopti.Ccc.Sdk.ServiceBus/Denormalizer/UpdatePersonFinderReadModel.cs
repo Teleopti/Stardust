@@ -29,16 +29,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			{
 				//move the calls to repository and then
 				//depending of type
-                if (isPerson == true)
+                if (isPerson)
 				{
                     _personFinderReadOnlyRepository.UpdateFindPerson( ids);
+					return;
 				}
-                if (isPerson == false)
-                {
-                    _personFinderReadOnlyRepository.UpdateFindPersonData( ids);
-                }
                 
-				
+                _personFinderReadOnlyRepository.UpdateFindPersonData( ids);
 			}
 			
 		}

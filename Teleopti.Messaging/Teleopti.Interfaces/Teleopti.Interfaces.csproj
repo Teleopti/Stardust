@@ -836,7 +836,7 @@
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="Messages\Denormalize\DenormalizeGroupingMessage.cs" />
-    <Compile Include="Messages\Denormalize\DenormalizePersonFinder.cs" />
+    <Compile Include="Messages\Denormalize\DenormalizePersonFinderMessage.cs" />
     <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
