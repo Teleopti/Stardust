@@ -16,6 +16,7 @@ GO
 CREATE PROCEDURE [ReadModel].[LoadOrganizationForSelector]
 @type nvarchar(200), -- Organization or for example Contract, ContractSchedule
 @ondate datetime,
+@enddate datetime,
 @bu uniqueidentifier,
 @users bit,
 @culture int
@@ -78,7 +79,7 @@ BEGIN
 		INSERT #result
 		SELECT Person.Id, Team.Id, Site.Id, BusinessUnit, Team.Name, Site.Name, FirstName, LastName, EmploymentNumber
 		FROM PersonPeriodWithEndDate pp
-		INNER JOIN Person ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+		INNER JOIN Person ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 		INNER JOIN Team ON Team.Id = pp.Team AND Team.IsDeleted = 0  
 		INNER JOIN Site ON Site.id = Site AND Site.IsDeleted = 0 AND BusinessUnit = @bu
@@ -117,7 +118,7 @@ BEGIN
 		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
 		FirstName, LastName, EmploymentNumber  
 		FROM Person p
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
@@ -131,7 +132,7 @@ BEGIN
 		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
 		FirstName, LastName, EmploymentNumber  
 		FROM Person p
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
@@ -145,7 +146,7 @@ BEGIN
 		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,
 		FirstName, LastName, EmploymentNumber   
 		FROM Person p
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
@@ -176,7 +177,7 @@ BEGIN
 		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,  
 		FirstName, LastName, EmploymentNumber  
 		FROM Person p 
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
@@ -190,7 +191,7 @@ BEGIN
 		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,s.Name,  
 		FirstName, LastName, EmploymentNumber  
 		FROM Person p
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
