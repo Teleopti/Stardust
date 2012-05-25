@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
             }
             using (mocks.Playback())
             {
-                target.Consume(new DenormalizePersonFinder() 
+                target.Consume(new DenormalizePersonFinderMessage() 
                 {
                     Ids  = ids,
                     IsPerson  = true
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
             }
             using (mocks.Playback())
             {
-                target.Consume(new DenormalizePersonFinder()
+                target.Consume(new DenormalizePersonFinderMessage()
                 {
                     Ids = ids,
                     IsPerson = false
