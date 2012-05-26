@@ -4591,7 +4591,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             _totalScheduled = 0;
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 
-
+			//set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState
+        	var useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
+        	schedulingOptions.UseShiftCategoryLimitations = false;
             var scheduleDays = argument.ScheduleDays;
 
             IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(scheduleDays,
@@ -4668,10 +4670,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             //shiftcategorylimitations
             if (!_backgroundWorkerScheduling.CancellationPending)
             {
+            	schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
                 if (schedulingOptions.UseShiftCategoryLimitations)
                 {
                     _scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList,
-                                                                                 _backgroundWorkerScheduling, _optimizationPreferences);
+                                                                                 _backgroundWorkerScheduling, _optimizationPreferences, schedulingOptions);
                 }
             }
             _schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
