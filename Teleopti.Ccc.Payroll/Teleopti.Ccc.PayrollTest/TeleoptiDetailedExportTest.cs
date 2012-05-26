@@ -45,12 +45,23 @@ namespace Teleopti.Ccc.PayrollTest
 
             PersonDto person1 = new PersonDtoForPayrollTest(Guid.NewGuid());
             PersonDto person2 = new PersonDtoForPayrollTest(Guid.NewGuid());
+            PersonDto person3 = new PersonDtoForPayrollTest(Guid.NewGuid());
+            PersonDto person4 = new PersonDtoForPayrollTest(Guid.NewGuid());
             IList<PersonDto> personDtos = new List<PersonDto>
                                               {
                                                   person1,
-                                                  person2
+                                                  person2,
+                                                  person3,
+                                                  person4
                                               };
 
+            person3.PersonPeriodCollection.Add(new PersonPeriodDto
+                                                   {
+                                                       Period =
+                                                           new DateOnlyPeriodDto
+                                                               {StartDate = new DateOnlyDto(2009, 2, 2)}
+                                                   });
+            person4.TerminationDate = new DateOnlyDto(2009, 2, 15);
             AbsenceDto absence = new AbsenceDto {PayrollCode = "801", Id = Guid.Empty};
             ProjectedLayerDto projectedLayerDto = new ProjectedLayerDto();
             projectedLayerDto.IsAbsence = true;
@@ -61,21 +72,26 @@ namespace Teleopti.Ccc.PayrollTest
             MultiplicatorDto multiplicator = new MultiplicatorDto(null) { PayrollCode = "371" };
             SchedulePartDto schedulePartDto1 = new SchedulePartDto();
             SchedulePartDto schedulePartDto2 = new SchedulePartDto();
+            SchedulePartDto schedulePartDto3 = new SchedulePartDto{Date = new DateOnlyDto(2009, 2, 1)};
+            SchedulePartDto schedulePartDto4 = new SchedulePartDto{Date = new DateOnlyDto(2009, 2, 16)};
             //schedulePartDto1.ProjectedLayerCollection.Clear();
             schedulePartDto1.ProjectedLayerCollection.Add(projectedLayerDto);
             //schedulePartDto2.ProjectedLayerCollection.Clear();
-            DateOnlyDto dateOnlyDto = TargetDateOnlyPeriodDto.StartDate;
+            DateOnlyDto startDate = TargetDateOnlyPeriodDto.StartDate;
+            DateOnlyDto endDate = TargetDateOnlyPeriodDto.EndDate;
             schedulePartDto1.PersonId = person1.Id.Value;
             schedulePartDto2.PersonId = person2.Id.Value;
+            schedulePartDto3.PersonId = person3.Id.Value;
+            schedulePartDto4.PersonId = person4.Id.Value;
 
             Expect.Call(schedulingService.GetAbsences(new AbsenceLoadOptionDto {LoadDeleted = true})).Return(
                 new List<AbsenceDto> {absence}).IgnoreArguments();
 #pragma warning disable 612,618
-            Expect.Call(schedulingService.GetSchedulePartsForPersons(new[] { person1 , person2}, dateOnlyDto, dateOnlyDto, "Utc")).Return(
+            Expect.Call(schedulingService.GetSchedulePartsForPersons(new[] { person1 , person2, person3, person4}, startDate, endDate, "Utc")).Return(
 #pragma warning restore 612,618
-                new List<SchedulePartDto> { schedulePartDto1, schedulePartDto2 }).IgnoreArguments();
+                new List<SchedulePartDto> { schedulePartDto1, schedulePartDto2, schedulePartDto3, schedulePartDto4 }).IgnoreArguments();
 
-            Expect.Call(schedulingService.GetPersonMultiplicatorDataForPersons(new[] { person1, person2 }, dateOnlyDto, dateOnlyDto, "Utc")).Return(new List<MultiplicatorDataDto>
+            Expect.Call(schedulingService.GetPersonMultiplicatorDataForPersons(new[] { person1, person2, person3, person4 }, startDate, endDate, "Utc")).Return(new List<MultiplicatorDataDto>
                     {
                         new MultiplicatorDataDto
                             {
@@ -104,6 +120,12 @@ namespace Teleopti.Ccc.PayrollTest
             Assert.IsNotNull(xmlNodeList);
             Assert.AreEqual(person2.Id.Value.ToString(), xmlNodeList.Value);
 
+            xmlNodeList = navigator.SelectSingleNode(string.Format(System.Globalization.CultureInfo.InvariantCulture, "//Person[.='{0}']", person3.Id.Value));
+            Assert.IsNull(xmlNodeList);
+            
+            xmlNodeList = navigator.SelectSingleNode(string.Format(System.Globalization.CultureInfo.InvariantCulture, "//Person[.='{0}']", person4.Id.Value));
+            Assert.IsNull(xmlNodeList);
+           
             mocks.VerifyAll();
         }
     }
