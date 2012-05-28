@@ -12,14 +12,14 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 	internal static class JobExtractor
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
-		public static IJob ExtractJobFromSchedule(IEtlSchedule etlScheduleToRun, JobHelper jobHelper, string timeZoneId, int intervalLengthMinutes, string cube, string pmInstallation)
+		public static IJob ExtractJobFromSchedule(IEtlJobSchedule etlJobScheduleToRun, JobHelper jobHelper, string timeZoneId, int intervalLengthMinutes, string cube, string pmInstallation)
 		{
 			var log = LogManager.GetLogger(typeof(JobExtractor));
-			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", etlScheduleToRun.ScheduleName);
+			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", etlJobScheduleToRun.ScheduleName);
 
 			var jobParameters =
-				new JobParameters(GetJobCategoryDatePeriods(etlScheduleToRun, timeZoneId),
-								  etlScheduleToRun.DataSourceId, timeZoneId,
+				new JobParameters(GetJobCategoryDatePeriods(etlJobScheduleToRun, timeZoneId),
+								  etlJobScheduleToRun.DataSourceId, timeZoneId,
 								  intervalLengthMinutes,
 								  cube,
 								  pmInstallation,
@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 
 			foreach (var job in jobCollection)
 			{
-				if (String.Compare(job.Name, etlScheduleToRun.JobName, StringComparison.Ordinal) == 0)
+				if (String.Compare(job.Name, etlJobScheduleToRun.JobName, StringComparison.Ordinal) == 0)
 					jobToRun = job;
 			}
 
@@ -44,12 +44,12 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			return jobToRun;
 		}
 
-		private static IJobMultipleDate GetJobCategoryDatePeriods(IEtlSchedule etlSchedule, string timeZoneId)
+		private static IJobMultipleDate GetJobCategoryDatePeriods(IEtlJobSchedule etlJobSchedule, string timeZoneId)
 		{
 			IJobMultipleDate jobMultipleDate = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
 			var today = DateTime.Today;
 
-			foreach (IEtlJobRelativePeriod jobRelativePeriod in etlSchedule.RelativePeriodCollection)
+			foreach (IEtlJobRelativePeriod jobRelativePeriod in etlJobSchedule.RelativePeriodCollection)
 			{
 				jobMultipleDate.Add(today.AddDays(jobRelativePeriod.RelativePeriod.Minimum),
 									today.AddDays(jobRelativePeriod.RelativePeriod.Maximum),
