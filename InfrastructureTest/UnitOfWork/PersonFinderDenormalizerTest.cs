@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -11,21 +12,21 @@ using Teleopti.Interfaces.Messages.Denormalize;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
-	public class GroupPageDenormalizerTest
+	public class PersonFinderDenormalizerTest
 	{
 		private IDenormalizer _target;
 		private MockRepository _mocks;
-        private ISaveToDenormalizationQueue _saveToDenormalizationQueue;
+		private ISaveToDenormalizationQueue _saveToDenormalizationQueue;
 		private ISendDenormalizeNotification _sendDenormalizeNotification;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-            _saveToDenormalizationQueue = _mocks.DynamicMock<ISaveToDenormalizationQueue>();
+			_saveToDenormalizationQueue = _mocks.DynamicMock<ISaveToDenormalizationQueue>();
 
 			_sendDenormalizeNotification = _mocks.DynamicMock<ISendDenormalizeNotification>();
-			_target = new GroupPageDenormalizer(_sendDenormalizeNotification, _saveToDenormalizationQueue);
+			_target = new PersonFinderDenormalizer(_sendDenormalizeNotification, _saveToDenormalizationQueue);
 		}
 
 		[Test]
@@ -33,36 +34,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			var session = _mocks.DynamicMock<IRunSql>();
 			var person = new Person();
-			var message = new DenormalizeGroupingMessage
-                    {
-                        Ids = "",
-                        GroupingType = 1,
-                    };
-			var roots = new IRootChangeInfo[1];
-			roots[0] = new RootChangeInfo(person, DomainUpdateType.Update);
-
-			using (_mocks.Record())
+			var message = new DenormalizePersonFinderMessage
 			{
-				Expect.Call(() => _saveToDenormalizationQueue.Execute(message, session)).IgnoreArguments();
-			}
-			using (_mocks.Playback())
-			{
-				_target.Execute(session,roots);
-			}
-		}
-
-		[Test]
-		public void ShouldSaveRebuildReadModelForGroupPageToQueue()
-		{
-			var session = _mocks.DynamicMock<IRunSql>();
-			var page = new GroupPage("Page");
-			var message = new DenormalizeGroupingMessage
-			{
-				Ids = "",
-				GroupingType = 2,
+				Ids = "", 
+				IsPerson = true
 			};
 			var roots = new IRootChangeInfo[1];
-			roots[0] = new RootChangeInfo(page, DomainUpdateType.Update);
+			roots[0] = new RootChangeInfo(person, DomainUpdateType.Update);
 
 			using (_mocks.Record())
 			{
@@ -78,11 +56,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldSaveRebuildReadModelForOthersToQueue()
 		{
 			var session = _mocks.DynamicMock<IRunSql>();
-			var contract = new Contract("Page");
-			var message = new DenormalizeGroupingMessage
+			var contract = new Contract("c");
+			var message = new DenormalizePersonFinderMessage
 			{
 				Ids = "",
-				GroupingType = 3,
+				IsPerson = false
 			};
 			var roots = new IRootChangeInfo[1];
 			roots[0] = new RootChangeInfo(contract, DomainUpdateType.Update);
@@ -96,7 +74,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				_target.Execute(session, roots);
 			}
 		}
-
 
 		[Test]
 		public void ShouldNotRebuildReadModelForScenario()
@@ -113,4 +90,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 		}
 	}
+
+	
 }
