@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
@@ -14,36 +10,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
     [TestFixture]
     public class DenormalizePersonFinderConsumerTest
     {
-        private DenormalizePersonFinderConsumer target;
-        private MockRepository mocks;
-        private IUpdatePersonFinderReadModel updatePersonFinderReadModel;
+        private DenormalizePersonFinderConsumer _target;
+        private MockRepository _mocks;
+        private IUpdatePersonFinderReadModel _updatePersonFinderReadModel;
         
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
-            updatePersonFinderReadModel = mocks.DynamicMock<IUpdatePersonFinderReadModel>();
-             target = new DenormalizePersonFinderConsumer(updatePersonFinderReadModel);
+            _mocks = new MockRepository();
+            _updatePersonFinderReadModel = _mocks.DynamicMock<IUpdatePersonFinderReadModel>();
+             _target = new DenormalizePersonFinderConsumer(_updatePersonFinderReadModel);
         }
 
         [Test]
         public void ShouldDenormalizePersons()
-        {
-            
+        {        
             var person = PersonFactory.CreatePerson();
             person.SetId(Guid.NewGuid());
 
-            var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
-            
-            var ids = person.Id.ToString();
+			var ids = person.Id.ToString();
 
-            using (mocks.Record())
+            using (_mocks.Record())
             {
-                 Expect.Call(() => updatePersonFinderReadModel.Execute(true,ids));
+                 Expect.Call(() => _updatePersonFinderReadModel.Execute(true,ids));
             }
-            using (mocks.Playback())
+            using (_mocks.Playback())
             {
-                target.Consume(new DenormalizePersonFinderMessage() 
+                _target.Consume(new DenormalizePersonFinderMessage
                 {
                     Ids  = ids,
                     IsPerson  = true
@@ -55,28 +48,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
         [Test]
         public void ShouldDenormalizeNotPersons()
         {
-
             var skill = SkillFactory.CreateSkill("TestID");
             skill.SetId(Guid.NewGuid());
 
-
             var ids = skill.Id.ToString();
 
-            using (mocks.Record())
+            using (_mocks.Record())
             {
-                Expect.Call(() => updatePersonFinderReadModel.Execute(false, ids));
+                Expect.Call(() => _updatePersonFinderReadModel.Execute(false, ids));
             }
-            using (mocks.Playback())
+            using (_mocks.Playback())
             {
-                target.Consume(new DenormalizePersonFinderMessage()
+                _target.Consume(new DenormalizePersonFinderMessage
                 {
                     Ids = ids,
                     IsPerson = false
-
                 });
             }
         }
-
-       
     }
 }

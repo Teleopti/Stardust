@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_saveToDenormalizationQueue = saveToDenormalizationQueue;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var atLeastOneMessage = false;

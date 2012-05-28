@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
@@ -9,25 +7,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
-		// Ola if we need to motify it should be another notification
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private readonly IScheduleChangedNotification _scheduleChangedNotification;
 
-        public UpdateGroupingReadModel(IUnitOfWorkFactory unitOfWorkFactory, IGroupingReadOnlyRepository groupingReadOnlyRepository,IScheduleChangedNotification scheduleChangedNotification)
+        public UpdateGroupingReadModel(IUnitOfWorkFactory unitOfWorkFactory, IGroupingReadOnlyRepository groupingReadOnlyRepository)
 		{
         	_unitOfWorkFactory = unitOfWorkFactory;
         	_groupingReadOnlyRepository = groupingReadOnlyRepository;
-
-			_scheduleChangedNotification = scheduleChangedNotification;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void Execute(int type,string ids)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
 			{
-				//move the calls to repository and then
-				//depending of type
 				if (type == 1)
 				{
 				    _groupingReadOnlyRepository.UpdateGroupingReadModel(ids);
@@ -40,11 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
                 {
                     _groupingReadOnlyRepository.UpdateGroupingReadModelData(ids);
                 }
-				
-				
 			}
-			
 		}
-
 	}
 }
