@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly Func<IPermissionProvider> _permissionProvider;
 		private readonly Func<IAbsenceTypesProvider> _absenceTypesProvider;
 
-		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider)
+		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider, Func<IPermissionProvider> permissionProvider, Func<IAbsenceTypesProvider> absenceTypesProvider)
 		{
 			_mapper = mapper;
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;

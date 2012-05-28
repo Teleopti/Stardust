@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                  		             	() => periodSelectionViewModelFactory,
 			                  		             	() => periodViewModelFactory,
 			                  		             	() => headerViewModelFactory,
-			                  		             	() => scheduleColorProvider
+			                  		             	() => scheduleColorProvider,
 													() => permissionProvider,
 													() => absenceTypesProvider
 			                  		             	));
