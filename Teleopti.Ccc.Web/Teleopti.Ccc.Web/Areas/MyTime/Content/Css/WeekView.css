@@ -43,6 +43,10 @@
 	display: block; 
 	float: left;
 }
+.rtl .weekview-day
+{
+	float: right;
+}
 }
 .ie7 .weekview-day /* IE7 inline-block fix */
 {
