@@ -50,10 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
         [Test]
         public void GroupingReadModelGroupPageTest()
         {
-            var groupPage = _mocks.DynamicMock<IGroupPage>();
-            groupPage.SetId(Guid.NewGuid());
- 
-            var ids = groupPage.Id.ToString();
+           const string ids = "IDS";
 
             using (_mocks.Record())
             {
