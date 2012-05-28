@@ -29,20 +29,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
             person.SetId(Guid.NewGuid());
 
 			var ids = person.Id.ToString();
+        	var mess = new DenormalizePersonFinderMessage
+        	           	{
+        	           		Ids = ids,
+        	           		IsPerson = true
 
+        	           	};
             using (_mocks.Record())
             {
                  Expect.Call(() => _updatePersonFinderReadModel.Execute(true,ids));
             }
             using (_mocks.Playback())
             {
-                _target.Consume(new DenormalizePersonFinderMessage
-                {
-                    Ids  = ids,
-                    IsPerson  = true
-                    
-                });
+                _target.Consume(mess);
             }
+			Assert.That(mess.Identity, Is.Not.Null);
         }
 
         [Test]

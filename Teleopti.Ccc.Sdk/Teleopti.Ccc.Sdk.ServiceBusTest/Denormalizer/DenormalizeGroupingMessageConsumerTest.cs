@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
@@ -31,6 +30,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
             person.SetId(Guid.NewGuid());
 
             var ids = person.Id.ToString();
+        	var mess = new DenormalizeGroupingMessage
+        	           	{
+        	           		Ids = ids,
+        	           		GroupingType = 1
+        	           	};
 
             using (_mocks.Record())
             {
@@ -38,13 +42,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
             }
             using (_mocks.Playback())
             {
-                _target.Consume(new DenormalizeGroupingMessage  
-                {
-                    Ids  = ids,
-                    GroupingType   = 1
-                    
-                });
+                _target.Consume(mess);
             }
+
+			Assert.That(mess.Identity, Is.Not.Null);
         }
 
         [Test]
