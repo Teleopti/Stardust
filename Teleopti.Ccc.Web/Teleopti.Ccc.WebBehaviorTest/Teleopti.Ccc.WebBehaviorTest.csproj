@@ -158,6 +158,11 @@
       <DependentUpon>PreferencesSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Data\User\RequestableAbsenceType.cs" />
+    <Compile Include="PreferencesValidation1.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesValidation.feature</DependentUpon>
+    </Compile>
     <Compile Include="Routing.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -356,6 +361,10 @@
     <None Include="PreferencesSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="PreferencesValidation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesValidation1.feature.cs</LastGenOutput>
     </None>
     <None Include="Routing.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
