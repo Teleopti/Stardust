@@ -81,17 +81,13 @@ namespace Teleopti.Ccc.Win
             if (e.RowIndex > 1 && e.ColIndex > ColHeaders)
             {
                 var scheduleDay = e.Style.CellValue as IScheduleDay;
-            	var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence();
                 if (scheduleDay != null)
                 {
-                    var significantPart = scheduleDay.SignificantPart();
+                    var significantPart = scheduleDay.SignificantPartForDisplay();
 
                     if (significantPart == SchedulePartView.MainShift || significantPart == SchedulePartView.FullDayAbsence)
                     {
-						if (hasDayOffUnderFullDayAbsence.HasDayOff(scheduleDay))
-							drawCoveredDayOffFromSchedule(e, scheduleDay);
-						else
-							drawAssignmentFromSchedule(e, scheduleDay);	
+						drawAssignmentFromSchedule(e, scheduleDay);	
                     }
                     else
                     {
@@ -258,7 +254,13 @@ namespace Teleopti.Ccc.Win
                             e.Bounds.X;
 
             IAbsence absence = SignificantAbsence(scheduleDay);
-            drawContractDayOffRect(e, absence.ConfidentialDisplayColor(scheduleDay.Person), startPixel1, endPixel1);
+			var personDayOffs = scheduleDay.PersonDayOffCollection();
+			if (personDayOffs.Count == 0) return;
+			IPersonDayOff personDayOff = personDayOffs[0];
+			string shortName = personDayOff.DayOff.Description.ShortName;
+			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
+			var point = new Point(startPixel1 + ((endPixel1 - startPixel1) / 2), e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
+            drawContractDayOffRect(e, absence.ConfidentialDisplayColor(scheduleDay.Person), startPixel1, endPixel1, shortName, point);
 
 
             drawTomorrow(e, person, pixelConverter, tomorrow);
@@ -336,7 +338,7 @@ namespace Teleopti.Ccc.Win
             }
         }
 
-        private static void drawContractDayOffRect(GridDrawCellEventArgs e, Color color, int startPixel, int endPixel)
+        private void drawContractDayOffRect(GridDrawCellEventArgs e, Color color, int startPixel, int endPixel, string shortName, Point startPoint)
         {
             var rect = new Rectangle(startPixel, e.Bounds.Y + 2, endPixel - startPixel, e.Bounds.Height - 4);
             if (rect.Width < 1)
@@ -345,6 +347,7 @@ namespace Teleopti.Ccc.Win
             using (var brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, color))
             {
                 e.Graphics.FillRectangle(brush, rect);
+				e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, startPoint);
             }
 
             //using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleRange.Person)))

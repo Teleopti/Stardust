@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IPeriodViewModelFactory periodViewModelFactory;
 		private IHeaderViewModelFactory headerViewModelFactory;
 		private IScheduleColorProvider scheduleColorProvider;
-		private IHasDayOffUnderFullDayAbsence hasDayOffUnderFullDayAbsence;
 
 		[SetUp]
 		public void Setup()
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			periodViewModelFactory = MockRepository.GenerateMock<IPeriodViewModelFactory>();
 			headerViewModelFactory = MockRepository.GenerateMock<IHeaderViewModelFactory>();
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
-			hasDayOffUnderFullDayAbsence = MockRepository.GenerateMock<IHasDayOffUnderFullDayAbsence>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
@@ -48,8 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                  		             	() => periodSelectionViewModelFactory,
 			                  		             	() => periodViewModelFactory,
 			                  		             	() => headerViewModelFactory,
-			                  		             	() => scheduleColorProvider,
-													() => hasDayOffUnderFullDayAbsence
+			                  		             	() => scheduleColorProvider
 			                  		             	));
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
@@ -254,9 +251,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public void ShouldMapStyleClassForAbsenceOnPersonDayOff()
 		{
 			var stubs = new StubFactory();
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.FullDayAbsence, stubs.PersonAbsenceStub());
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.ContractDayOff, stubs.PersonAbsenceStub());
 			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today, ScheduleDay = scheduleDay };
-			hasDayOffUnderFullDayAbsence.Stub(x => x.HasDayOff(scheduleDay)).Return(true);
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 

@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						{
 							var mappingEngine = _mapper();
 							var significantPart = s.ScheduleDay.SignificantPartForDisplay();
-							if (_hasDayOffUnderFullDayAbsence.Invoke().HasDayOff(s.ScheduleDay))
+							if (significantPart == SchedulePartView.ContractDayOff)
 							{
 								var periodViewModel = mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
 								periodViewModel.StyleClassName += " " + StyleClasses.Striped;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 								return mappingEngine.Map<WeekScheduleDayDomainData, PersonDayOffPeriodViewModel>(s);
 							if (significantPart == SchedulePartView.MainShift)
 								return mappingEngine.Map<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>(s);
-							if (significantPart == SchedulePartView.FullDayAbsence)
+							if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
 								return mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
 							return mappingEngine.Map<WeekScheduleDayDomainData, PeriodViewModel>(s);
 						}))
