@@ -62,6 +62,36 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<ReadOnlyGroupDetail>();
 			}
 		}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        public void UpdateGroupingReadModel(string ids)
+        {
+            using(var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            {
+               ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+                    string.Format("exec [ReadModel].[UpdateGroupingReadModel] '{0}'", ids)).ExecuteUpdate();
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        public void UpdateGroupingReadModelGroupPage(string ids)
+        {
+            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            {
+                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                    string.Format("exec [ReadModel].[UpdateGroupingReadModelGroupPage] '{0}'", ids)).ExecuteUpdate();
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        public void UpdateGroupingReadModelData(string ids)
+        {
+            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            {
+                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                    string.Format("exec [ReadModel].[UpdateGroupingReadModelData] '{0}'", ids)).ExecuteUpdate();
+            }
+        }
 	}
 
 	public class ReadOnlyGroupDetail : IAuthorizeOrganisationDetail

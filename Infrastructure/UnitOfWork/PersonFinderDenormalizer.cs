@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -20,17 +22,57 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IRuleSetBag),
 		                                                        		typeof (ISkill)
 		                                                        	};
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+
+    	private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
+    	private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
+
+		public PersonFinderDenormalizer(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
+		{
+			_sendDenormalizeNotification = sendDenormalizeNotification;
+			_saveToDenormalizationQueue = saveToDenormalizationQueue;
+		}
+
+    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
         {
+			var atLeastOneMessage = false;
             var affectedInterfaces = from r in modifiedRoots
                                      from i in r.Root.GetType().GetInterfaces()
                                      select i;
 
             if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
             {
-                runSql.Create("exec [ReadModel].[UpdateFindPerson]")
-                    .Execute();
+				var persons = modifiedRoots.Select(r => r.Root).OfType<IPerson>();
+				foreach (var personList in persons.Batch(400))
+				{
+					var idsAsString = (from p in personList select p.Id.ToString()).ToArray();
+					var ids = string.Join(",", idsAsString);
+                    var message = new DenormalizePersonFinderMessage
+                    {
+                        Ids = ids,
+                       IsPerson  = true,
+                    };
+                    _saveToDenormalizationQueue.Execute(message, runSql);
+					atLeastOneMessage = true;
+				}
+
+				var notPerson = (from p in modifiedRoots where !(p.Root is Person) select p.Root).ToList();
+				foreach (var notpersonList in notPerson.Batch(400))
+				{
+					var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.ToString()).ToArray();
+					var ids = string.Join(",", idsAsString);
+                    var message = new DenormalizePersonFinderMessage
+                    {
+                        Ids = ids,
+                        IsPerson  = false,
+                    };
+                    _saveToDenormalizationQueue.Execute(message, runSql);
+					atLeastOneMessage = true;
+				}
+				if (atLeastOneMessage)
+				{
+					_sendDenormalizeNotification.Notify();
+				}
             }
         }
     }

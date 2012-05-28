@@ -130,7 +130,13 @@ namespace Teleopti.Ccc.Win.Main
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
-												  new List<IDenormalizer> { new ScheduleDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue), new MeetingDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue) }, DataSourceConfigurationSetter.ForDesktop()),
+												  new List<IDenormalizer>
+												      {
+												          new ScheduleDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue), 
+                                                          new MeetingDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue),
+                                                          new GroupPageDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue ),
+                                                          new PersonFinderDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue )
+												      }, DataSourceConfigurationSetter.ForDesktop()),
         			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
         			{
         				MessageBrokerDisabled = messageBrokerDisabled

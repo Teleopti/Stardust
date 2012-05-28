@@ -351,6 +351,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UnitOfWork\DataSourcesFactoryTest.cs" />
+    <Compile Include="UnitOfWork\PersonFinderDenormalizerTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
     <Compile Include="UnitOfWork\SaveToDenormalizationQueueTest.cs" />
     <Compile Include="UnitOfWork\ScheduleProjectionDenormalizerTest.cs" />

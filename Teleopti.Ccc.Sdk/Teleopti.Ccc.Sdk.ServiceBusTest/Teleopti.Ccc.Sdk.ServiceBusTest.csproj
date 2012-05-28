@@ -124,9 +124,13 @@
   <ItemGroup>
     <Compile Include="AbsenceRequestResolveTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
+    <Compile Include="Denormalizer\DenormalizeGroupingMessageConsumerTest.cs" />
+    <Compile Include="Denormalizer\DenormalizePersonFinderConsumerTest.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumerTest.cs" />
     <Compile Include="Denormalizer\ProcessDenormalizeQueueResolveTest.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionResolveTest.cs" />
+    <Compile Include="Denormalizer\UpdateGroupingReadModelTest.cs" />
+    <Compile Include="Denormalizer\UpdatePersonFinderReadModelTest.cs" />
     <Compile Include="Denormalizer\UpdateScheduleProjectionReadModelTest.cs" />
     <Compile Include="Forecast\ImportForecastsFileToSkillTest.cs" />
     <Compile Include="Forecast\ImportForecastsToSkillConsumerResolveTest.cs" />

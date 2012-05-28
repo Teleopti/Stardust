@@ -47,6 +47,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                  }
              }  
          }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        public  void UpdateFindPerson(string ids )
+        {
+            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            {
+                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                    string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", ids)).ExecuteUpdate();
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        public void UpdateFindPersonData(string ids)
+        {
+            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            {
+                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                    string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", ids)).ExecuteUpdate();
+            }
+        }
+
     }
 
     public class PersonFinderDisplayRow : IPersonFinderDisplayRow
