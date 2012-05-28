@@ -21,16 +21,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly Func<IPeriodViewModelFactory> _periodViewModelFactory;
 		private readonly Func<IHeaderViewModelFactory> _headerViewModelFactory;
 		private readonly Func<IScheduleColorProvider> _scheduleColorProvider;
-		private readonly Func<IHasDayOffUnderFullDayAbsence> _hasDayOffUnderFullDayAbsence;
 
-		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider, Func<IHasDayOffUnderFullDayAbsence> hasDayOffUnderFullDayAbsence)
+		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider)
 		{
 			_mapper = mapper;
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
 			_periodViewModelFactory = periodViewModelFactory;
 			_headerViewModelFactory = headerViewModelFactory;
 			_scheduleColorProvider = scheduleColorProvider;
-			_hasDayOffUnderFullDayAbsence = hasDayOffUnderFullDayAbsence;
 		}
 
 		protected override void Configure()
