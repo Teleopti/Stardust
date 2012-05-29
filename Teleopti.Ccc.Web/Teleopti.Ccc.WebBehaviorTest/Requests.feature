@@ -55,17 +55,3 @@ Scenario: Paging
 	When I view requests
 	And I scroll down to the bottom of the page
 	Then I should see the page fill with the next page of requests
-
-
-
-
-
-#Scenario: Open text request
-#Scenario: Edit text request
-#Scenario: Cancel text request
-#Scenario: Can not cancel approved text request
-#Scenario: Can not cancel denied text request
-#Scenario: Can not edit approved text request
-#Scenario: Can not edit cancel text request
-#Scenario: Cancel edit text request
-
