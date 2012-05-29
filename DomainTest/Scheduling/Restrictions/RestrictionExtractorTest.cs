@@ -108,13 +108,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             StudentAvailabilityRestriction sr = new StudentAvailabilityRestriction();
             
             StudentAvailabilityDay pr = new StudentAvailabilityDay(_person, new DateOnly(2009, 1, 1), new List<IStudentAvailabilityRestriction>{sr});
-            pr.NotAvailable = true;
+            pr.NotAvailable = false;
             ReadOnlyCollection<IScheduleData> personRestrictionCollection = new ReadOnlyCollection<IScheduleData>(new List<IScheduleData> { pr });
             Extract(new List<IRestrictionBase>(), personRestrictionCollection);
             IEffectiveRestriction combined = _target.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
             Assert.IsNotNull(combined);
-            Assert.IsTrue(combined.NotAvailable);
+            Assert.IsFalse(combined.NotAvailable);
         }
+
+		[Test]
+		public void VerifyCombinedRestrictionStudentAvailabilityNotDefined()
+		{
+			ReadOnlyCollection<IScheduleData> personRestrictionCollection = new ReadOnlyCollection<IScheduleData>(new List<IScheduleData> ());
+			Extract(new List<IRestrictionBase>(), personRestrictionCollection);
+			IEffectiveRestriction combined = _target.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
+			Assert.IsNotNull(combined);
+			Assert.IsTrue(combined.NotAvailable);
+		}
 
         [Test]
         public void VerifyCombinedRestrictionAvailability()
