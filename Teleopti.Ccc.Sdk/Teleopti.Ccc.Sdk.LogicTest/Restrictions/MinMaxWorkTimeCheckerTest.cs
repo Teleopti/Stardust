@@ -123,6 +123,24 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             _mocks.VerifyAll();
         }
 
+		[Test]
+		public void ShouldGetMinMaxWorkTimeFromAverageWorkTimeOnNotAvailableDay()
+		{
+			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+			
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+				Expect.Call(effectiveRestriction.NotAvailable).Return(true);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction);
+				Assert.That(result.WorkTimeLimitation.StartTime, Is.Null);
+			}
+		}
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldGetMinMaxWorkTimeFromAverageWorkTimeOnAbsencePreferenceOnWorkdays()
         {
@@ -140,7 +158,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             using (_mocks.Record())
             {
                 Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
-                Expect.Call(effectiveRestriction.Absence).Return(absence).Repeat.Twice();
+				Expect.Call(effectiveRestriction.Absence).Return(absence).Repeat.Twice();
+				Expect.Call(effectiveRestriction.NotAvailable).Return(false);
                 Expect.Call(_scheduleDay.Person).Return(person);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
                 Expect.Call(dateOnlyAsPeriod.DateOnly).Return(dateOnly);
@@ -178,7 +197,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             using (_mocks.Record())
             {
                 Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
-                Expect.Call(effectiveRestriction.Absence).Return(absence).Repeat.Twice();
+				Expect.Call(effectiveRestriction.Absence).Return(absence).Repeat.Twice();
+				Expect.Call(effectiveRestriction.NotAvailable).Return(false);
                 Expect.Call(_scheduleDay.Person).Return(person);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
                 Expect.Call(dateOnlyAsPeriod.DateOnly).Return(dateOnly);
@@ -217,6 +237,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             {
                 Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
                 Expect.Call(effectiveRestriction.Absence).Return(absence);
+                Expect.Call(effectiveRestriction.NotAvailable).Return(false);
                 Expect.Call(_scheduleDay.Person).Return(person);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
                 Expect.Call(dateOnlyAsPeriod.DateOnly).Return(dateOnly);
