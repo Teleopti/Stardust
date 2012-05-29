@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlTypes;
 using System.Globalization;
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using log4net;
 using log4net.Config;
@@ -19,7 +22,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
         static void Main(string[] args)
         {
             XmlConfigurator.Configure();
-
+			ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ignoreInvalidCertificate);
             string serviceUrl = ConfigurationManager.AppSettings["serviceUrl"];
 
             var connectionProperties = new Hashtable();
@@ -76,5 +79,10 @@ namespace Teleopti.Ccc.Rta.TestApplication
                 keepRunning = (info.Key == ConsoleKey.Y);
             }
         }
+
+    	private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+    	{
+    		return true;
+    	}
     }
 }
