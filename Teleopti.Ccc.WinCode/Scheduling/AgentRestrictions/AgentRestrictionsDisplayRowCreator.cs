@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -27,6 +29,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		{
 			var displayRows = new List<AgentRestrictionsDisplayRow>();
 			var period = _stateHolder.RequestedPeriod.DateOnly;
+			var schedulePeriodTargetTimeCalculator = new SchedulePeriodTargetTimeTimeCalculator();
+			var periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
+			var restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
 			
 			foreach (var person in _persons)
 			{
@@ -44,10 +49,34 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 				if (scheduleDays.Count <= 0) continue;
 				var matrixLists = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(scheduleDays);
+				
 
 				foreach (var scheduleMatrixPro in matrixLists)
 				{
-					var displayRow = new AgentRestrictionsDisplayRow(scheduleMatrixPro) {AgentName = _stateHolder.CommonAgentName(scheduleMatrixPro.Person)};
+					var currentContractTime = TimeSpan.Zero;
+					var targetTime = schedulePeriodTargetTimeCalculator.TargetTime(scheduleMatrixPro);
+					var minMax = schedulePeriodTargetTimeCalculator.TargetWithTolerance(scheduleMatrixPro);
+					//TODO INCLUDESCHEDULING
+					var currentDayOffs = periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(restrictionExtractor, scheduleMatrixPro, true, false, false);
+
+					foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays)
+					{
+						IProjectionService projSvc = scheduleDayPro.DaySchedulePart().ProjectionService();
+						IVisualLayerCollection res = projSvc.CreateProjection();
+
+						//if (IncludeScheduling())
+						currentContractTime = currentContractTime.Add(res.ContractTime());	
+					}
+
+					var displayRow = new AgentRestrictionsDisplayRow(scheduleMatrixPro) 
+					{
+						AgentName = _stateHolder.CommonAgentName(scheduleMatrixPro.Person),
+						ContractCurrentTime = currentContractTime,
+						ContractTargetTime = targetTime,
+						CurrentDaysOff = currentDayOffs,
+						MinMaxTime = minMax,
+					};
+
 					displayRows.Add(displayRow);
 				}
 			}

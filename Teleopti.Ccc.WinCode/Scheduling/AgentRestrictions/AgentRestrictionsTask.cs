@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
 	public interface IAgentRestrictionsTask
 	{
-		IAgentDisplayData AgentDisplayData { get; }
+		AgentRestrictionsDisplayRow AgentRestrictionsDisplayRow { get; }
 		BackgroundWorker Worker { get; }
 		int Priority { get; set; }
 		void Cancel();
@@ -14,16 +14,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 	public class AgentRestrictionsTask : IAgentRestrictionsTask
 	{
-		public IAgentDisplayData AgentDisplayData { get; private set; }
+		public AgentRestrictionsDisplayRow AgentRestrictionsDisplayRow { get; private set; }
 		public BackgroundWorker Worker { get; private set; }
 		public int Priority { get; set; }
 		
 
-		public AgentRestrictionsTask(IAgentDisplayData agentDisplayData, BackgroundWorker worker)
+		public AgentRestrictionsTask(AgentRestrictionsDisplayRow agentDisplayData, BackgroundWorker worker)
 		{
 			if(worker == null) throw new ArgumentNullException("worker");
 
-			AgentDisplayData = agentDisplayData;
+			AgentRestrictionsDisplayRow = agentDisplayData;
 			Worker = worker;
 			worker.WorkerReportsProgress = true;
 			worker.WorkerSupportsCancellation = true;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public void Run()
 		{
-			Worker.RunWorkerAsync(AgentDisplayData);
+			Worker.RunWorkerAsync(AgentRestrictionsDisplayRow);
 		}
 	}
 }

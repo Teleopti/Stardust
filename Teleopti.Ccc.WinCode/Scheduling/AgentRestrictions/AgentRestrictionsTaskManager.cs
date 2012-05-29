@@ -1,9 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
-	public class AgentRestrictionsTaskManager
+	public interface IAgentRestrictionsTaskManager
+	{
+		void Add(IAgentRestrictionsTask task);
+		void Remove(IAgentRestrictionsTask task);
+		int Count { get; }
+		void Cancel(AgentRestrictionsDisplayRow displayData);
+		void Cancel();
+		void CancelLowPriority(int priority);
+		void CancelAllExcept(AgentRestrictionsDisplayRow displayData);
+		void Run(AgentRestrictionsDisplayRow displayData);
+		void Run();
+		void RunHighPriority(int priority);
+		AgentRestrictionsDisplayRow GetDisplayRow(BackgroundWorker worker);
+		IAgentRestrictionsTask GetTask(BackgroundWorker worker);
+	}
+
+	public class AgentRestrictionsTaskManager : IAgentRestrictionsTaskManager
 	{
 		private readonly IList<IAgentRestrictionsTask> _tasks;
 		
@@ -30,11 +48,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			get { return _tasks.Count; }
 		}
 
-		public void Cancel(IAgentDisplayData displayData)
+		public void Cancel(AgentRestrictionsDisplayRow displayData)
 		{
 			foreach (var agentRestrictionsTask in _tasks)
 			{
-				if (!agentRestrictionsTask.AgentDisplayData.Equals(displayData)) continue;
+				if (!agentRestrictionsTask.AgentRestrictionsDisplayRow.Equals(displayData)) continue;
 				agentRestrictionsTask.Cancel();
 				break;
 			}
@@ -56,19 +74,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			}
 		}
 
-		public void CancelAllExcept(IAgentDisplayData displayData)
+		public void CancelAllExcept(AgentRestrictionsDisplayRow displayData)
 		{
 			foreach (var agentRestrictionsTask in _tasks)
 			{
-				if (!agentRestrictionsTask.AgentDisplayData.Equals(displayData)) agentRestrictionsTask.Cancel();
+				if (!agentRestrictionsTask.AgentRestrictionsDisplayRow.Equals(displayData)) agentRestrictionsTask.Cancel();
 			}
 		}
 
-		public void Run(IAgentDisplayData displayData)
+		public void Run(AgentRestrictionsDisplayRow displayData)
 		{
 			foreach (var agentRestrictionsTask in _tasks)
 			{
-				if (agentRestrictionsTask.AgentDisplayData.Equals(displayData)) agentRestrictionsTask.Run();
+				if (agentRestrictionsTask.AgentRestrictionsDisplayRow.Equals(displayData)) agentRestrictionsTask.Run();
 				break;
 			}
 		}
@@ -87,6 +105,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			{
 				if (agentRestrictionsTask.Priority < priority) agentRestrictionsTask.Run();
 			}
+		}
+
+		public AgentRestrictionsDisplayRow GetDisplayRow(BackgroundWorker worker)
+		{
+			return (from task in _tasks where task.Worker.Equals(worker) select task.AgentRestrictionsDisplayRow).FirstOrDefault();	
+		}
+
+		public IAgentRestrictionsTask GetTask(BackgroundWorker worker)
+		{
+			return (from task in _tasks where task.Worker.Equals(worker) select task).FirstOrDefault();	
 		}
 	}
 }

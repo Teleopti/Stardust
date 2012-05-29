@@ -30,7 +30,6 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.agentRestrictionGrid = new Teleopti.Ccc.Win.Scheduling.AgentRestrictions.AgentRestrictionGrid(this.components);
@@ -40,7 +39,7 @@
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(689, 386);
+			this.button1.Location = new System.Drawing.Point(1047, 623);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 5;
@@ -50,7 +49,7 @@
 			// 
 			// button2
 			// 
-			this.button2.Location = new System.Drawing.Point(12, 386);
+			this.button2.Location = new System.Drawing.Point(12, 623);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 23);
 			this.button2.TabIndex = 7;
@@ -61,7 +60,6 @@
 			// agentRestrictionGrid
 			// 
 			this.agentRestrictionGrid.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.DblClickOnCell;
-			
 			this.agentRestrictionGrid.ColCount = 12;
 			this.agentRestrictionGrid.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 45),
@@ -101,7 +99,7 @@
 			this.agentRestrictionGrid.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
 			this.agentRestrictionGrid.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
 			this.agentRestrictionGrid.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.AlwaysVisible;
-			this.agentRestrictionGrid.Size = new System.Drawing.Size(752, 212);
+			this.agentRestrictionGrid.Size = new System.Drawing.Size(1110, 593);
 			this.agentRestrictionGrid.SmartSizeBox = false;
 			this.agentRestrictionGrid.TabIndex = 6;
 			this.agentRestrictionGrid.Text = "agentRestrictionGrid";
@@ -111,7 +109,7 @@
 			// 
 			// button3
 			// 
-			this.button3.Location = new System.Drawing.Point(93, 386);
+			this.button3.Location = new System.Drawing.Point(93, 623);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(75, 23);
 			this.button3.TabIndex = 8;
@@ -123,7 +121,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(776, 421);
+			this.ClientSize = new System.Drawing.Size(1152, 658);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.agentRestrictionGrid);

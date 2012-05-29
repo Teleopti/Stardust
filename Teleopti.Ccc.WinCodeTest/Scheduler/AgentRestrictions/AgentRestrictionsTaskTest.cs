@@ -3,6 +3,7 @@ using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 {
@@ -10,9 +11,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 	public class AgentRestrictionsTaskTest : IDisposable
 	{
 		private AgentRestrictionsTask _task;
-		private IAgentDisplayData _agentDisplayData;
+		private AgentRestrictionsDisplayRow _agentRestrictionsDisplayRow;
 		private MockRepository _mocks;
 		private BackgroundWorker _worker;
+		private IScheduleMatrixPro _scheduleMatrixPro;
 		//private bool _doWork;
 		//private bool _completed;
 		//private bool _cancel;
@@ -21,9 +23,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_agentDisplayData = _mocks.StrictMock<IAgentDisplayData>();
+			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			//_agentDisplayData = _mocks.StrictMock<IAgentDisplayData>();
+			_agentRestrictionsDisplayRow = new AgentRestrictionsDisplayRow(_scheduleMatrixPro);
 			_worker = new BackgroundWorker();
-			_task = new AgentRestrictionsTask(_agentDisplayData, _worker);
+			_task = new AgentRestrictionsTask(_agentRestrictionsDisplayRow, _worker);
 			//_worker.DoWork += WorkerDoWork;
 			//_worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
 			//_doWork = false;
@@ -47,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		[Test]
 		public void ShouldInit()
 		{
-			Assert.AreEqual(_agentDisplayData, _task.AgentDisplayData);
+			Assert.AreEqual(_agentRestrictionsDisplayRow, _task.AgentRestrictionsDisplayRow);
 			var worker = _task.Worker;
 			Assert.IsNotNull(worker);
 			Assert.IsTrue(worker.WorkerReportsProgress);
