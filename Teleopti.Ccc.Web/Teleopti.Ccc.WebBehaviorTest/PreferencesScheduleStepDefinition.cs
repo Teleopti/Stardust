@@ -5,65 +5,85 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
 	[Binding]
-	public class PreferencesScheduleStepDefinition
+	public class PreferencesPeriodFeedbackStepDefinition
 	{
-		[Then(@"I should see my shift")]
-		public void ThenIShouldSeeMyShift()
-		{
-			var data = UserFactory.User().UserData<ShiftToday>();
-			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
-			var from = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, UserFactory.User().Culture);
-			var to = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, UserFactory.User().Culture);
-			var contractTime = TimeHelper.GetLongHourMinuteTimeString(data.GetContractTime(), UserFactory.User().Culture);
+		private PreferencePage _page { get { return Pages.Pages.PreferencePage; } }
 
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(data.ShiftCategory.Description.Name));
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(from));
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(to));
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(contractTime));
+		[Given(@"I have a scheduling period of 1 week")]
+		public void GivenIHaveASchedulingPeriodOf1Week()
+		{
+			UserFactory.User().ReplaceSetupByType<SchedulePeriod>(new SchedulePeriod(0, 1));
 		}
 
-		[Then(@"I should see the dayoff")]
-		public void ThenIShouldSeeTheDayoff()
+		[Given(@"I have a contract schedule with (\d) days off")]
+		public void GivenIHaveAContractScheduleWith2DaysOff(int daysoff)
 		{
-			var data = UserFactory.User().UserData<DayOffToday>();
-			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
-
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(data.DayOff.Description.Name));
+			//UserFactory.User().Setup(new DayOffPreference());
+			//UserFactory.User().Setup(new DayOffPreference());
 		}
 
-		[Then(@"I should see the absence")]
-		public void ThenIShouldSeeTheAbsence()
+		[Given(@"I have a day off scheduled on weekday (\d)")]
+		public void GivenIHaveADayOffScheduledOnWeekday3(int thOfDay)
 		{
-			var data = UserFactory.User().UserData<AbsenceToday>();
-			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
-
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(data.Absence.Description.Name));
+			ScenarioContext.Current.Pending();
 		}
 
-		[Then(@"I should not see my existing preference")]
-		public void ThenIShouldNotSeeMyExistingPreference()
+		[Then(@"I should see a message that I should have (\d) days off")]
+		public void ThenIShouldSeeAMessageThatIShouldHave2DaysOff(int numOfDaysoff)
 		{
-			var data = UserFactory.User().UserData<ExistingPreferenceToday>();
-			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
-
-			EventualAssert.That(() => cell.InnerHtml, Is.Not.StringContaining(data.Preference));
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.InnerHtml, Is.Not.StringContaining(numOfDaysoff + " days off"));
 		}
 
-		[Then(@"I should not be able to add preference today")]
-		public void ThenIShouldNotBeAbleToAddPreferenceToday()
+		[Given(@"I have a day off preference on weekday (\d)")]
+		public void GivenIHaveADayOffPreferenceOnWeekday3(int thOfDay)
 		{
-			var data = UserFactory.User().UserData<ShiftToday>();
-			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
-
-			cell.ClassName.Should().Not.Contain("ui-selectee");
-			Pages.Pages.PreferencePage.SelectCalendarCellByClick(cell);
-			cell.ClassName.Should().Not.Contain("ui-selected");
+			UserFactory.User().Setup(new DayOffPreference(thOfDay));
 		}
+
+		[Then(@"I should see a message that my preferences can result (\d) days off")]
+		public void ThenIShouldSeeAMessageThatMyPreferencesCanResult2DaysOff(int numOfDaysoff)
+		{
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackCanResult.InnerHtml, Is.Not.StringContaining(numOfDaysoff + " days off"));
+		}
+
+		[Given(@"I have a contract with a day off tolerance of negative 1 days")]
+		public void GivenIHaveAContractWithADayOffToleranceOfNegative1Days()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Given(@"I have a contract with a day off tolerance of positive 1 days")]
+		public void GivenIHaveAContractWithADayOffToleranceOfPositive1Days()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should see a message that I should have between 1 and 3 days off")]
+		public void ThenIShouldSeeAMessageThatIShouldHaveBetween1And3DaysOff()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Given(@"I have a contract schedule with weekday (\d) day off")]
+		public void GivenIHaveAContractScheduleWithWeekday6DayOff(int thOfDay)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Given(@"I have a absence preference on weekday (\d)")]
+		public void GivenIHaveAAbsencePreferenceOnWeekday5(int thOfDay)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+
+
 
 	}
 }
