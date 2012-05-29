@@ -181,6 +181,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
                 if (restriction.NotAvailable) effectiveRestriction.NotAvailable = true;
             }
+			
+			if (_restrictionExtractor.StudentAvailabilityList.IsEmpty())
+				effectiveRestriction.NotAvailable = true;
+
             return effectiveRestriction;
         }
 
