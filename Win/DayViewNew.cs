@@ -255,13 +255,19 @@ namespace Teleopti.Ccc.Win
 
             IAbsence absence = SignificantAbsence(scheduleDay);
 			var personDayOffs = scheduleDay.PersonDayOffCollection();
-			if (personDayOffs.Count == 0) return;
-			IPersonDayOff personDayOff = personDayOffs[0];
-			string shortName = personDayOff.DayOff.Description.ShortName;
+        	string shortName;
+			if (personDayOffs.Count == 0)
+			{
+				shortName = "";
+			}
+			else
+			{
+				IPersonDayOff personDayOff = personDayOffs[0];
+				shortName = personDayOff.DayOff.Description.ShortName;
+			}
 			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
 			var point = new Point(startPixel1 + ((endPixel1 - startPixel1) / 2), e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
             drawContractDayOffRect(e, absence.ConfidentialDisplayColor(scheduleDay.Person), startPixel1, endPixel1, shortName, point);
-
 
             drawTomorrow(e, person, pixelConverter, tomorrow);
         }
