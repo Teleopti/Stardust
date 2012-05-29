@@ -146,6 +146,11 @@
     <Compile Include="MobileReportsStepDefinitions.cs" />
     <Compile Include="Pages\Common\IEditTextRequestPage.cs" />
     <Compile Include="Pages\MobileReportsPage.cs" />
+    <Compile Include="PreferencesPeriodFeedback.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesPeriodFeedback.feature</DependentUpon>
+    </Compile>
     <Compile Include="PreferencesScheduleStepDefinition.cs" />
     <Compile Include="PreferencesFeedback2.feature.cs">
       <AutoGen>True</AutoGen>
@@ -158,11 +163,6 @@
       <DependentUpon>PreferencesSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Data\User\RequestableAbsenceType.cs" />
-    <Compile Include="PreferencesValidation1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PreferencesValidation.feature</DependentUpon>
-    </Compile>
     <Compile Include="Routing.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -358,13 +358,13 @@
       <LastGenOutput>MyProfile.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="PreferencesPeriodFeedback.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesPeriodFeedback.feature.cs</LastGenOutput>
+    </None>
     <None Include="PreferencesSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="PreferencesValidation.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PreferencesValidation1.feature.cs</LastGenOutput>
     </None>
     <None Include="Routing.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
