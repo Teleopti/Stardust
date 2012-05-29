@@ -1145,7 +1145,7 @@
     <comment>Change your organisation structure</comment>
   </data>
   <data name="ChangeYourPassword" xml:space="preserve">
-    <value>Ändern Sie Ihr Passwort.</value>
+    <value>Ändern Sie Ihr Passwort</value>
     <comment>Change your password</comment>
   </data>
   <data name="ChangeYourRotations" xml:space="preserve">
@@ -9240,7 +9240,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>MyTimeWeb</value>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>abmelden</value>
+    <value>Abmelden</value>
   </data>
   <data name="LicenseAgreement" xml:space="preserve">
     <value>Lizenzvereinbarung</value>

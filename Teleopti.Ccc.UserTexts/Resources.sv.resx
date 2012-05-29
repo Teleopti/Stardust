@@ -10378,4 +10378,10 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="AbsenceRequestsWeb" xml:space="preserve">
     <value>Frånvaroförfrågan</value>
   </data>
+  <data name="FullDay" xml:space="preserve">
+    <value>Hel dag</value>
+  </data>
+  <data name="AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime" xml:space="preserve">
+    <value>Redotid vs. Schemalagd kontraktstid</value>
+  </data>
 </root>
