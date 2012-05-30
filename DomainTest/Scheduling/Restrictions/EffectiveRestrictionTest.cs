@@ -657,6 +657,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
+		public void ShouldCombineNotAvailable()
+		{
+			_target = new EffectiveRestriction(
+				_startTimeLimitation,
+				_endTimeLimitation,
+				_workTimeLimitation,
+				null,
+				null, null, new List<IActivityRestriction>());
+
+			var other = new EffectiveRestriction(
+				_startTimeLimitation,
+				_endTimeLimitation,
+				_workTimeLimitation,
+				null,
+				null, null, new List<IActivityRestriction>());
+			other.NotAvailable = true;
+			_target = _target.Combine(other);
+			Assert.IsTrue(_target.NotAvailable);
+
+			other = new EffectiveRestriction(
+				_startTimeLimitation,
+				_endTimeLimitation,
+				_workTimeLimitation,
+				null,
+				null, null, new List<IActivityRestriction>());
+
+			_target = _target.Combine(other);
+			Assert.IsTrue(_target.NotAvailable);
+		}
+
+		[Test]
 		public void ShouldReturnFalseIfSpecificStartAndLunchStartsToEarly()
 		{
 			TimePeriod fullPeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17));
@@ -867,6 +898,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
            var  other = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                               new WorkTimeLimitation(), cat, null, null,
                                               new List<IActivityRestriction>());
+        	other.NotAvailable = true;
+			Assert.AreNotEqual(_target.GetHashCode(), other.GetHashCode());
+        	other.NotAvailable = false;
+			Assert.AreEqual(_target.GetHashCode(), other.GetHashCode());
+        	other.IsAvailabilityDay = true;
+			Assert.AreNotEqual(_target.GetHashCode(), other.GetHashCode());
+			other.IsAvailabilityDay = false;
+
 
             Assert.AreEqual(_target.GetHashCode(), other.GetHashCode());
 

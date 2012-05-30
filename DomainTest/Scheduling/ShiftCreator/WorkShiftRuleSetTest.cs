@@ -447,6 +447,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                     .Repeat.AtLeastOnce();
                 Expect.Call(info2.VisualLayerCollection).Return(layercoll2).Repeat.AtLeastOnce();
                 Expect.Call(layercoll2.ContractTime()).Return(TimeSpan.FromHours(9)).Repeat.AtLeastOnce();
+            	Expect.Call(restriction.NotAvailable).Return(false);
             }
 
             IWorkTimeMinMax result; 
@@ -487,6 +488,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                 Expect.Call(layercoll1.ContractTime()).Return(TimeSpan.FromHours(7)).Repeat.AtLeastOnce();
                 //second shift validates Not OK
                 Expect.Call(restriction.ValidateWorkShiftInfo(info2)).Return(false).Repeat.AtLeastOnce();
+            	Expect.Call(restriction.NotAvailable).Return(false);
             }
 
             IWorkTimeMinMax result;
