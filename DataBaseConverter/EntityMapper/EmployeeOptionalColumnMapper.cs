@@ -66,10 +66,9 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         public override IOptionalColumn Map(EmployeeOptionalColumn oldEntity)
         {
             string columnName = ConversionHelper.MapString(oldEntity.Name, MaxLengthName);
-            OptionalColumn optionalColumn = new OptionalColumn(columnName);
-            optionalColumn.TableName = PersonTable;
+        	var optionalColumn = new OptionalColumn(columnName) {TableName = PersonTable};
 
-            ICollection<Agent> agents = AgentCollection;
+        	ICollection<Agent> agents = AgentCollection;
             foreach (Agent agent in agents)
             {
                 foreach (AgentProperty agentProperty in agent.PropertyCollection)
@@ -77,12 +76,11 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                     EmployeeOptionalColumn agentOptionalColumn = agentProperty.OptionalCol;
                     if (agentOptionalColumn.Id == oldEntity.Id)
                     {
-                        OptionalColumnValue columnValue = new OptionalColumnValue(agentProperty.Value);
+                        var columnValue = new OptionalColumnValue(agentProperty.Value);
                         IPerson person = MappedObjectPair.Agent.GetPaired(agent);
                         if (person != null)
                         {
-                            columnValue.ReferenceId = person.Id;
-                            optionalColumn.AddOptionalColumnValue(columnValue);
+                            person.AddOptionalColumnValue(columnValue, optionalColumn);
                         }                        
                     }
                 }               
