@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 {
                     IPerson agent = _schedulerState.FilteredPersonDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
 
-					var localDate = _schedulerState.RequestedPeriod.DateOnly.StartDate;
+					var localDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
                     localDate = localDate.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
 
                     IScheduleRange totalScheduleRange = _schedulerState.Schedules[agent];
@@ -615,7 +615,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     if (ColWeekMap.TryGetValue(e.ColIndex, out week))
                     {
                         e.Style.WrapText = false;
-                        var period = ViewBaseHelper.WeekHeaderDates(week, SelectedPeriod.DateOnly);
+                        var period = ViewBaseHelper.WeekHeaderDates(week, SelectedPeriod.DateOnlyPeriod);
                         e.Style.Tag = new DateOnly(SelectedPeriod.Period().StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns).Date);
                         e.Style.Text = string.Concat(Resources.WeekAbbreviationDot, " ", week.ToString(CultureInfo.CurrentCulture),
                                                      " ", period.StartDate.ToShortDateString(CultureInfo.CurrentCulture));
@@ -635,7 +635,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (_view.IsOverviewColumnsHidden)
 				return;
 
-            var period = _schedulerState.RequestedPeriod.DateOnly;
+            var period = _schedulerState.RequestedPeriod.DateOnlyPeriod;
             
             switch (columnType)
             {
@@ -675,7 +675,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (!View.TheGrid.Enabled)
                 return;
 
-            if (SelectedPeriod.DateOnly.StartDate != DateTime.MinValue)
+            if (SelectedPeriod.DateOnlyPeriod.StartDate != DateTime.MinValue)
             {
                 if (e.ColIndex > (int)ColumnType.RowHeaderColumn &&
                     e.ColIndex < (int)ColumnType.StartScheduleColumns &&

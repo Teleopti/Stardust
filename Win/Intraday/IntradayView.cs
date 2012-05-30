@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void SetupIntradayDate()
         {
-            _timeNavigationControl.SetAvailableTimeSpan(Presenter.SchedulerStateHolder.RequestedPeriod.DateOnly);
+            _timeNavigationControl.SetAvailableTimeSpan(Presenter.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
         }
 
         private void InitializeGallery()

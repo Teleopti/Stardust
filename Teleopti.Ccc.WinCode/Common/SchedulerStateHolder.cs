@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.WinCode.Common
         public void FilterPersons(IList<ITeam> selectedTeams)
         {
             List<IPerson> list = new List<IPerson>(AllPermittedPersons).FindAll(
-                new PersonBelongsToTeamSpecification(RequestedPeriod.DateOnly, selectedTeams).IsSatisfiedBy);
+                new PersonBelongsToTeamSpecification(RequestedPeriod.DateOnlyPeriod, selectedTeams).IsSatisfiedBy);
             _filteredPersons =
                 (from p in list orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 
