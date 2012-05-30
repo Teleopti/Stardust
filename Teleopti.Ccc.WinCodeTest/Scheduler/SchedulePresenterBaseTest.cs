@@ -1139,7 +1139,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var scheduleRange = _mocks.StrictMock<IScheduleRange>();
             var selectedItem = _mocks.StrictMock<IAbsence>();
             var dialog = _mocks.StrictMock<IAddLayerViewModel<IAbsence>>();
-            var person = PersonFactory.CreatePerson();
             var period = new DateTimePeriod(_date, _date.AddDays(1));
             Expect.Call(schedulePart.Period).Return(period).Repeat.Any();
             Expect.Call(_viewBase.CurrentColumnSelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
