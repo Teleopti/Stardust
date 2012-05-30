@@ -10686,4 +10686,8 @@ These options are activated:
     <value>Ready Time vs. Contracted Schedule Time</value>
     <comment>Ready Time vs. Contracted Schedule Time</comment>
   </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Anywhere</value>
+    <comment>The name of the mobile reports module used in permission</comment>
+  </data>
 </root>

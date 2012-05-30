@@ -158,8 +158,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 
 			// Anywhere 
 			IApplicationFunction anywhere = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);
-			// TODO: remove (and adjust TeleoptiCccDeveloperLicenseOptionTest) PW
-			anywhere.IsPreliminary = true;
 
 			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);
 		}
