@@ -135,7 +135,14 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		var connector = listItem.find('.request-connector');
 		var deleteButton = listItem.find('.request-delete-button');
 
-		connector.connector();
+		if (request.Payload != '') {
+			listItem.find('.request-data-payload').text(request.Payload);
+		} else {
+			listItem.find('#absenceInfo').hide();
+			//just temporary until it possible to modify a absence request a well.
+			connector.connector();
+		}
+
 		var count = 0;
 		if (request.Link.Methods.indexOf("DELETE") != -1) {
 			deleteButton
