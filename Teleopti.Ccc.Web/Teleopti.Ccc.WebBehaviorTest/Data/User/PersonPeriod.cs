@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		public ITeam Team;
 		public PersonContract PersonContract;
 		public Domain.AgentInfo.PersonPeriod ThePersonPeriod;
-		public IContractSchedule ContractSchedule = TestData.WorkingWeekContractSchedule;
+		public IContractSchedule ContractSchedule = DataContext.Data().Data<ContractScheduleWith2DaysOff>().ContractSchedule;
 		private DateTime StartDate;
 
 		public PersonPeriod() : this(TestData.CommonTeam) { }

@@ -637,7 +637,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var contract = new Contract("Kontraktet") { WorkTime = new WorkTime(new TimeSpan(hoursPerDay, 0, 0)) };
 			var partTimePercentage = new PartTimePercentage("Procent") { Percentage = new Percent(1) };
 
-			UserFactory.User().Setup(new PersonPeriod() { PersonContract = new PersonContract(contract, partTimePercentage, TestData.WorkingWeekContractSchedule) });
+			UserFactory.User().Setup(
+				new PersonPeriod()
+					{
+						PersonContract = new PersonContract(contract, partTimePercentage, DataContext.Data().Data<ContractScheduleWith2DaysOff>().ContractSchedule)
+					});
 		}
 
 	}

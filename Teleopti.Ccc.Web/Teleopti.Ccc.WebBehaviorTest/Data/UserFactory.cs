@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -18,13 +19,20 @@ using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
+	public class DataContext
+	{
+		private static readonly DataFactory _dataFactory = new DataFactory();
+
+		public static DataFactory Data() { return _dataFactory; }
+	}
+
 	public class UserFactory
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(UserFactory));
 
 		private IUserSetup _cultureSetup = new SwedishCulture();
 
-		private readonly IList<IDataSetup> _dataSetups = new List<IDataSetup>();
+		private readonly DataFactory _dataFactory = new DataFactory();
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
 		private readonly IList<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
 		private readonly IList<IPostSetup> _postSetups = new List<IPostSetup>();
@@ -90,7 +98,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public void Setup(IDataSetup setup)
 		{
-			_dataSetups.Add(setup);
+			_dataFactory.Setup(setup);
 		}
 
 		public void Setup(IUserDataSetup setup)
@@ -152,7 +160,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private void MakePerson(IPerson person)
 		{
-			TestDataSetup.UnitOfWorkAction(uow => _dataSetups.ForEach(s => s.Apply(uow)));
+			_dataFactory.Persist();
 
 			_cultureSetup.Apply(person, null);
 			var culture = person.PermissionInformation.Culture();
@@ -175,7 +183,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					.Union(_analyticsDataFactory.Setups)
 					.Union(_userDataSetups)
 					.Union(_postSetups)
-					.Union(_dataSetups)
+					.Union(_dataFactory.Setups)
 					;
 			}
 		}
