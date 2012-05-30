@@ -140,6 +140,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		} else {
 			listItem.find('#absenceInfo').hide();
 			//just temporary until it possible to modify a absence request a well.
+			//move this outside the if later...
 			connector.connector();
 		}
 
