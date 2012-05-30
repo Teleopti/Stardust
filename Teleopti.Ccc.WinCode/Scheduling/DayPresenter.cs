@@ -34,12 +34,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public DateOnly GetLocalDateFromColumn(int column)
         {
             if (column<-1) throw new ArgumentOutOfRangeException("column");
-            return SelectedPeriod.DateOnly.StartDate.AddDays(column - (int)ColumnType.StartScheduleColumns);
+            return SelectedPeriod.DateOnlyPeriod.StartDate.AddDays(column - (int)ColumnType.StartScheduleColumns);
         }
 
         public int GetColumnFromLocalDate(DateTime now)
         {
-            return (int)(now.Date - SelectedPeriod.DateOnly.StartDate).TotalDays + (int)ColumnType.StartScheduleColumns ;       
+            return (int)(now.Date - SelectedPeriod.DateOnlyPeriod.StartDate).TotalDays + (int)ColumnType.StartScheduleColumns ;       
         }
 
         /// <summary>
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             Dictionary<DateTime, DateTime> start = new Dictionary<DateTime, DateTime>();
             Dictionary<DateTime, DateTime> end = new Dictionary<DateTime, DateTime>();
 
-            DateOnly periodLocalStart = SelectedPeriod.DateOnly.StartDate;
-            DateOnly periodLocalEnd = SelectedPeriod.DateOnly.EndDate;
+            DateOnly periodLocalStart = SelectedPeriod.DateOnlyPeriod.StartDate;
+            DateOnly periodLocalEnd = SelectedPeriod.DateOnlyPeriod.EndDate;
 
             foreach (KeyValuePair<Guid, IPerson> kvp in SchedulerState.FilteredPersonDictionary)
             {

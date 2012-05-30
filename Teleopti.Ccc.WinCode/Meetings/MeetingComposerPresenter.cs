@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
             if (_schedulerStateHolder != null && model != null)
             {
-                DateOnlyPeriod validPeriod = _schedulerStateHolder.RequestedPeriod.DateOnly;
+                DateOnlyPeriod validPeriod = _schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
                 _minDate = validPeriod.StartDate;
                 _maxDate = validPeriod.EndDate;
             }

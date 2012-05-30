@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		public IList<AgentRestrictionsDisplayRow> Create()	
 		{
 			var displayRows = new List<AgentRestrictionsDisplayRow>();
-			var period = _stateHolder.RequestedPeriod.DateOnly;
+			var period = _stateHolder.RequestedPeriod.DateOnlyPeriod;
 			
 			foreach (var person in _persons)
 			{

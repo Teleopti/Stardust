@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(1, _target.RowCount);
             Assert.AreEqual(20, SchedulePresenterBase.ProjectionHeight);
             Assert.AreEqual(SchedulePartFilter.None, _target.SchedulePartFilter);
-            Assert.AreEqual(_period, _target.SelectedPeriod.DateOnly);
+            Assert.AreEqual(_period, _target.SelectedPeriod.DateOnlyPeriod);
             Assert.AreEqual(4, _target.VisibleWeeks);
             Assert.AreEqual(0, _target.ColWeekMap.Count);
             Assert.AreEqual(0, _target.TimelineHourPositions.Count);
@@ -457,7 +457,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             eventArgs = new GridQueryCellInfoEventArgs(0, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
             _target.QueryCellInfo(null, eventArgs);
-            Assert.AreEqual(_target.SelectedPeriod.DateOnly.StartDate, eventArgs.Style.Tag);
+            Assert.AreEqual(_target.SelectedPeriod.DateOnlyPeriod.StartDate, eventArgs.Style.Tag);
             Assert.AreEqual(GridMergeCellDirection.ColumnsInRow, eventArgs.Style.MergeCell);
 
             eventArgs = new GridQueryCellInfoEventArgs(1, 1, new GridStyleInfo());
@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             eventArgs = new GridQueryCellInfoEventArgs(1, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
             _target.QueryCellInfo(null, eventArgs);
-            Assert.AreEqual(_target.SelectedPeriod.DateOnly.StartDate, eventArgs.Style.Tag);
+            Assert.AreEqual(_target.SelectedPeriod.DateOnlyPeriod.StartDate, eventArgs.Style.Tag);
             Assert.AreEqual("test", eventArgs.Style.CellTipText);
             Assert.AreEqual(GridMergeCellDirection.None, eventArgs.Style.MergeCell);
 

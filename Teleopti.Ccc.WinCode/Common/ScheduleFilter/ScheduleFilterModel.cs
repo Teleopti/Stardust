@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Common.ScheduleFilter
             _selectedPersons = selectedPersons;
             CopyPersonsToOrgList(selectedPersons);
             _persons = stateHolder.AllPermittedPersons;
-            _filterPeriod = stateHolder.RequestedPeriod.DateOnly;
+            _filterPeriod = stateHolder.RequestedPeriod.DateOnlyPeriod;
             _commonNameDescriptionSetting = stateHolder.CommonNameDescription;
             _contractRepository = contractRepository;
             _contractScheduleRepository = contractScheduleRepository;

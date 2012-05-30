@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public void ResourceCalculateAllDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool useOccupancyAdjustment)
         {
-            resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, true, _stateHolder.RequestedPeriod.DateOnly.DayCollection());
+            resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, true, _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
         }
 
         private void prepareAndCalculateDate(DateOnly date, bool useOccupancyAdjustment, bool considerShortBreaks, ToolStripProgressBar progressBar)

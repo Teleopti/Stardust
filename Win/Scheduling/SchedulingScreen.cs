@@ -436,7 +436,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _schedulerState.SetRequestedScenario(loadScenario);
             _schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod,TeleoptiPrincipal.Current.Regional.TimeZone);
 
-            _defaultFilterDate = _schedulerState.RequestedPeriod.DateOnly.StartDate;
+            _defaultFilterDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
             _schedulerState.UndoRedoContainer = _undoRedo;
             _schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
             _schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState);
@@ -843,7 +843,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 foreach (
                     var date in
-                        _schedulerState.RequestedPeriod.DateOnly.DayCollection())
+                        _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
                 {
                     _schedulerState.MarkDateToBeRecalculated(date);
                 }
@@ -1107,7 +1107,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             backgroundWorkerLoadData.RunWorkerCompleted += backgroundWorkerLoadData_RunWorkerCompleted;
             backgroundWorkerLoadData.ProgressChanged += backgroundWorkerLoadData_ProgressChanged;
             toolStripProgressBar1.Value = 0;
-            toolStripProgressBar1.Maximum = _schedulerState.RequestedPeriod.DateOnly.DayCollection().Count + 19;
+            toolStripProgressBar1.Maximum = _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection().Count + 19;
 
             var authorization = PrincipalAuthorization.Instance();
             toolStripMenuItemMeetingOrganizer.Enabled =
@@ -3538,7 +3538,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             setupContextMenuAvailTimeZones();
 
             zoom(ZoomLevel.Level4);
-            DateOnly dateOnly = SchedulerState.RequestedPeriod.DateOnly.StartDate;
+            DateOnly dateOnly = SchedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
             _scheduleView.SetSelectedDateLocal(dateOnly);
 
             _scheduleView.ViewPasteCompleted += _currentView_viewPasteCompleted;
@@ -4617,7 +4617,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    
 
             //Extend period with 10 days to handle block scheduling
-            DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnly;
+            DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
             if (schedulingOptions.UseBlockScheduling != BlockFinderType.None)
                 groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10),
                                                      groupPagePeriod.EndDate.AddDays(10));
@@ -4849,7 +4849,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules);
 
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
-            DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnly;
+            DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
 			if (optimizerPreferences.Extra.UseBlockScheduling)
                 groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10),
                                                      groupPagePeriod.EndDate.AddDays(10));
@@ -5097,7 +5097,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void createMaxSeatSkills(ISkillDayRepository skillDayRepository)
         {
-            var extendedPeriod = new DateOnlyPeriod(SchedulerState.RequestedPeriod.DateOnly.StartDate.AddDays(-8), SchedulerState.RequestedPeriod.DateOnly.EndDate.AddDays(8));
+            var extendedPeriod = new DateOnlyPeriod(SchedulerState.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-8), SchedulerState.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8));
 
             var maxSeatSitesExtractor = new MaxSeatSitesExtractor(SchedulerState.AllPermittedPersons);
             var createSkillsFromMaxSeatSites = new CreateSkillsFromMaxSeatSites(SchedulerState.SchedulingResultState);
@@ -5111,7 +5111,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                               createPersonalSkillsFromMaxSeatSites,
                                                               schedulerSkillDayHelper,
                                                               SchedulerState.SchedulingResultState.PersonsInOrganization);
-            maxSeatSkillCreator.CreateMaxSeatSkills(SchedulerState.RequestedPeriod.DateOnly);
+            maxSeatSkillCreator.CreateMaxSeatSkills(SchedulerState.RequestedPeriod.DateOnlyPeriod);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability",
@@ -5136,7 +5136,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 demand = options.Demand();
             }
             ISkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWorkFactory.Current);
-            var extendedPeriod = new DateOnlyPeriod(SchedulerState.RequestedPeriod.DateOnly.StartDate.AddDays(-8),SchedulerState.RequestedPeriod.DateOnly.EndDate.AddDays(8));
+            var extendedPeriod = new DateOnlyPeriod(SchedulerState.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-8),SchedulerState.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8));
             var schedulerSkillDayHelper = new SchedulerSkillDayHelper(SchedulerState.SchedulingResultState,
                                                                       extendedPeriod,
                                                                       skillDayRepository,
@@ -5190,7 +5190,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 exposedBusinessRuleResponseCollection.Remove(businessRuleResponse);
             }
 
-            DateOnlyPeriod reqPeriod = SchedulerState.RequestedPeriod.DateOnly;
+            DateOnlyPeriod reqPeriod = SchedulerState.RequestedPeriod.DateOnlyPeriod;
             IEnumerable<IScheduleDay> allScheduleDays = range.ScheduledDayCollection(reqPeriod);
             IDictionary<IPerson, IScheduleRange> dic = new Dictionary<IPerson, IScheduleRange>();
             dic.Add(person, range);
@@ -5274,7 +5274,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private static void loadSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
                                        IPeopleAndSkillLoaderDecider decider)
         {
-            ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.RequestedPeriod.DateOnly);
+            ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.RequestedPeriod.DateOnlyPeriod);
 
             foreach (ISkill skill in skills)
             {
@@ -5424,14 +5424,14 @@ namespace Teleopti.Ccc.Win.Scheduling
                     loader = new PeopleLoaderForTeamLeaderMode(uow, SchedulerState,
                                                                new SelectedEntitiesForPeriod(
                                                                    _temporarySelectedEntitiesFromTreeView,
-                                                                   _schedulerState.RequestedPeriod.DateOnly),
+                                                                   _schedulerState.RequestedPeriod.DateOnlyPeriod),
                                                                new RepositoryFactory());
                 }
                 else
                 {
                     loader = new PeopleLoader(personRep, new ContractRepository(uow), SchedulerState,
                                               new SelectedEntitiesForPeriod(_temporarySelectedEntitiesFromTreeView,
-                                                                            _schedulerState.RequestedPeriod.DateOnly),
+                                                                            _schedulerState.RequestedPeriod.DateOnlyPeriod),
                                               new SkillRepository(uow));
                 }
 
@@ -5840,7 +5840,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void setupSkillTabs()
         {
-            _currentIntraDayDate = _schedulerState.RequestedPeriod.DateOnly.StartDate;
+            _currentIntraDayDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
             _tabSkillData.TabPages.Clear();
             _tabSkillData.ImageList = imageListSkillTypeIcons;
             foreach (
@@ -6713,8 +6713,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             	stateHolder.SchedulingResultState.SkillDays = new SkillDayLoadHelper(skillDayRepository,
             	                                                                     multisiteDayRepository).
             		LoadSchedulerSkillDays(
-            			new DateOnlyPeriod(stateHolder.RequestedPeriod.DateOnly.StartDate.AddDays(-8),
-            			                   stateHolder.RequestedPeriod.DateOnly.EndDate.AddDays(8)),
+            			new DateOnlyPeriod(stateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-8),
+            			                   stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8)),
             			stateHolder.SchedulingResultState.Skills,
             			stateHolder.RequestedScenario);
 

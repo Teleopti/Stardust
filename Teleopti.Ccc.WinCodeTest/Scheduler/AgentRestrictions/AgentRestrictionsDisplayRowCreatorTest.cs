@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			using(_mocks.Record())
 			{
 				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
-				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.DateOnly).Return(dateOnlyPeriod);
+				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(_person.VirtualSchedulePeriod(startDate)).Return(_virtualSchedulePeriod);
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.IsValid).Return(true);
