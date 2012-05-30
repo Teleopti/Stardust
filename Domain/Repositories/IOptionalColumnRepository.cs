@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -18,5 +20,12 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </typeparam>
         /// <returns></returns>
         IList<IOptionalColumn> GetOptionalColumnValues<T>();
+
+		IList<IColumnUniqueValues> UniqueValuesOnColumn(Guid column);
     }
+
+	public interface IColumnUniqueValues
+	{
+		string Description { get; set; }
+	}
 }

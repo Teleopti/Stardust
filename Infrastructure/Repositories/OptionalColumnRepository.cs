@@ -1,13 +1,13 @@
-#region Imports
-
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using NHibernate.Criterion;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-
-#endregion
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -39,6 +39,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                         .List<IOptionalColumn>();
             return new List<IOptionalColumn>(retList);
         }
+
+		public IList<IColumnUniqueValues> UniqueValuesOnColumn(Guid column)
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+			{
+				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+					"select distinct Description FROM OptionalColumnValue WHERE Parent =:columnId AND ltrim(description) <> '' ORDER BY description")
+					.SetGuid("columnId", column)
+					.SetResultTransformer(Transformers.AliasToBean<ColumnUniqueValues>())
+					.SetReadOnly(true).List<IColumnUniqueValues>();
+			}
+		}
+
+		public class ColumnUniqueValues : IColumnUniqueValues 
+		{
+			public string Description { get; set; }
+		}
     }
 
 }
