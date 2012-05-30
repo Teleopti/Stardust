@@ -258,7 +258,8 @@
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv1;
         private System.Windows.Forms.ToolStrip toolStripPeople;
         private System.Windows.Forms.ToolStripButton toolStripButtonOpen;
-        protected System.Windows.Forms.ToolStripLabel toolStripLabel1;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		protected System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         protected System.Windows.Forms.ToolStripButton tsAddGroupPage;
