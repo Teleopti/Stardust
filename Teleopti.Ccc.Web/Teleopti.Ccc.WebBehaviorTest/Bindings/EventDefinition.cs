@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Browser.MakeSureBrowserIsNotRunning();
 			EventualTimeouts.Set(TimeSpan.FromSeconds(5));
 
+			DataContext.Data().Setup(new CommonContract());
 			DataContext.Data().Setup(new ContractScheduleWith2DaysOff());
 			DataContext.Data().Persist();
 		}

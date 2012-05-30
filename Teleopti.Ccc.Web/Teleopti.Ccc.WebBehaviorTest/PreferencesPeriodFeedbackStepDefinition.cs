@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -36,38 +37,38 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			ScenarioContext.Current.Pending();
 		}
 
-		[Then(@"I should see a message that I should have (\d) days off")]
-		public void ThenIShouldSeeAMessageThatIShouldHave2DaysOff(int numOfDaysoff)
-		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff)));
-		}
-
 		[Given(@"I have a day off preference on weekday (\d)")]
 		public void GivenIHaveADayOffPreferenceOnWeekday3(int thOfDay)
 		{
 			UserFactory.User().Setup(new DayOffPreference(thOfDay));
 		}
 
+		[Given(@"I have a contract with:")]
+		public void GivenIHaveAContractWith(Table table)
+		{
+			var contract = table.CreateInstance<ContractFromTable>();
+			UserFactory.User().Setup(contract);
+			UserFactory.User().UserData<PersonPeriod>().Contract = contract;
+		}
+
+
+
+
+		[Then(@"I should see a message that I should have (\d) days off")]
+		public void ThenIShouldSeeAMessageThatIShouldHave2DaysOff(int numOfDaysoff)
+		{
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff)));
+		}
+
+		[Then(@"I should see a message that I should have between (\d) and (\d) days off")]
+		public void ThenIShouldSeeAMessageThatIShouldHaveBetweenXAndYDaysOff(int lower, int upper)
+		{
+			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveBetweenXAndYDaysOff, lower, upper)));
+		}
+
 		[Then(@"I should see a message that my preferences can result (\d) days off")]
 		public void ThenIShouldSeeAMessageThatMyPreferencesCanResult2DaysOff(int numOfDaysoff)
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-		[Given(@"I have a contract with a day off tolerance of negative 1 days")]
-		public void GivenIHaveAContractWithADayOffToleranceOfNegative1Days()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-		[Given(@"I have a contract with a day off tolerance of positive 1 days")]
-		public void GivenIHaveAContractWithADayOffToleranceOfPositive1Days()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-		[Then(@"I should see a message that I should have between 1 and 3 days off")]
-		public void ThenIShouldSeeAMessageThatIShouldHaveBetween1And3DaysOff()
 		{
 			ScenarioContext.Current.Pending();
 		}

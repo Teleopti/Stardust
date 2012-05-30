@@ -44,8 +44,11 @@ Scenario: Period feedback of contract day off tolerance
 	Given I am an agent
 	And I have a scheduling period of 1 week
 	And I have a contract schedule with 2 days off
-	And I have a contract with a day off tolerance of negative 1 days
-	And I have a contract with a day off tolerance of positive 1 days
+	And I have a contract with:
+		| Field						 | Value |
+		| Positive day off tolerance | 1     |
+		| Negative day off tolerance | 1     |
+
 	When I view preferences
 	Then I should see a message that I should have between 1 and 3 days off
 

@@ -24163,6 +24163,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You should have between {0} and {1} days off..
+        /// </summary>
+        public static string YouShouldHaveBetweenXAndYDaysOff {
+            get {
+                return ResourceManager.GetString("YouShouldHaveBetweenXAndYDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You should have {0} Days Off. Currently you have {1}..
         /// </summary>
         public static string YouShouldHaveDaysOffParameterDotYouHaveParameterDot {

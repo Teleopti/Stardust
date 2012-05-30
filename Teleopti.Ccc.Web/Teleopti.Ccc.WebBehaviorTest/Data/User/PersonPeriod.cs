@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		public PersonContract PersonContract;
 		public Domain.AgentInfo.PersonPeriod ThePersonPeriod;
 		public IContractSchedule ContractSchedule = DataContext.Data().Data<ContractScheduleWith2DaysOff>().ContractSchedule;
+		public IContractSetup Contract = DataContext.Data().Data<CommonContract>();
 		private DateTime StartDate;
 
 		public PersonPeriod() : this(TestData.CommonTeam) { }
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 
 		public void Apply(IPerson user, CultureInfo cultureInfo)
 		{
-			PersonContract = new PersonContract(TestData.CommonContract,
+			PersonContract = new PersonContract(Contract.Contract,
 												TestData.PartTimePercentageOne,
 												ContractSchedule);
 			ThePersonPeriod = new Domain.AgentInfo.PersonPeriod(new DateOnly(StartDate), 
