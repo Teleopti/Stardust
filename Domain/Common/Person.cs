@@ -801,6 +801,7 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
 		{
 			InParameter.NotNull("value", value);

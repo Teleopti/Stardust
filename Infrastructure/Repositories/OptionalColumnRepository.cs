@@ -51,11 +51,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true).List<IColumnUniqueValues>();
 			}
 		}
-
-		public class ColumnUniqueValues : IColumnUniqueValues 
-		{
-			public string Description { get; set; }
-		}
     }
-
+	public class ColumnUniqueValues : IColumnUniqueValues
+	{
+		public string Description { get; set; }
+	}
 }

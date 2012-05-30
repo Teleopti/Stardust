@@ -57,7 +57,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             _ruleSetProjectionService = ruleSetProjectionService;
         }
 
-        public void UpdateData(IDictionary<IPerson, IScheduleRange> personDictionary, 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public void UpdateData(IDictionary<IPerson, IScheduleRange> personDictionary, 
             ICollection<DateOnly> dateOnlyList, ISchedulingResultStateHolder stateHolder,
             IDictionary<IPerson, IPersonAccountCollection> allAccounts)
         {

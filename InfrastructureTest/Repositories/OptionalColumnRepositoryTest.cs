@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnUniqueValues()
 		{
-			var rep = new OptionalColumnRepository(UnitOfWork);
+			
 			var col = CreateAggregateWithCorrectBusinessUnit();
 			IPerson person1 = PersonFactory.CreatePerson("sdgf");
 			person1.AddOptionalColumnValue(new OptionalColumnValue("VAL1"),col );
@@ -78,9 +78,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.PersistAll();
 			SkipRollback();
 
-			
-			var ret = rep.UniqueValuesOnColumn(col.Id.Value);
+			var ret = repository.UniqueValuesOnColumn(col.Id.Value);
 			Assert.That(ret.Count,Is.EqualTo(3));
+			var personRep = new PersonRepository(UnitOfWork);
+			personRep.Remove(person1);
+			personRep.Remove(person2);
+			personRep.Remove(person3);
+			personRep.Remove(person4);
+			repository.Remove(col);
+			UnitOfWork.PersistAll();
 		}
 
 		//[Test]
