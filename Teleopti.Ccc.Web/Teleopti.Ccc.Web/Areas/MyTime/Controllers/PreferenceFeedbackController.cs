@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
@@ -38,10 +39,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			AsyncManager.Parameters["model"] = _viewModelFactory.CreateDayFeedbackViewModel(date);
 		}
 
-		public JsonResult FeedbackCompleted(PreferenceDayFeedbackViewModel model, Exception exception)
+		public JsonResult FeedbackCompleted(PreferenceDayFeedbackViewModel model, Task task)
 		{
-			if (exception != null)
-				throw exception;
+			task.Wait();
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
@@ -58,10 +58,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			AsyncManager.Parameters["daysOff"] = _preferencePeriodFeedbackProvider.ShouldHaveDaysOff(date);
 		}
 
-		public JsonResult ShouldHaveDaysOffCompleted(int daysOff, Exception exception)
+		public JsonResult ShouldHaveDaysOffCompleted(int daysOff, Task task)
 		{
-			if (exception != null)
-				throw exception;
+			task.Wait();
 			return Json(daysOff, JsonRequestBehavior.AllowGet);
 		}
 

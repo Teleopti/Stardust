@@ -21,23 +21,24 @@ namespace Teleopti.Ccc.Web.Filters
 			var UIculture = Thread.CurrentThread.CurrentUICulture;
 
 			asyncManager.OutstandingOperations.Increment();
-			Task.Factory.StartNew(() =>
-			                      	{
-										Thread.CurrentThread.CurrentCulture = culture;
-										Thread.CurrentThread.CurrentUICulture = UIculture;
-										try
-			                      		{
-			                      			var actionName = filterContext.ActionDescriptor.ActionName + "Task";
-			                      			var method = filterContext.Controller.GetType().GetMethod(actionName);
-			                      			var parameters = filterContext.ActionParameters.Values.ToArray();
-			                      			method.Invoke(filterContext.Controller, parameters);
-			                      		}
-			                      		catch (Exception e)
-			                      		{
-			                      			asyncManager.Parameters["exception"] = e;
-			                      		}
-			                      		asyncManager.OutstandingOperations.Decrement();
-			                      	});
+			asyncManager.Parameters["task"] =
+				Task.Factory.StartNew(() =>
+				                      	{
+				                      		try
+				                      		{
+				                      			Thread.CurrentThread.CurrentCulture = culture;
+				                      			Thread.CurrentThread.CurrentUICulture = UIculture;
+
+				                      			var actionName = filterContext.ActionDescriptor.ActionName + "Task";
+				                      			var method = filterContext.Controller.GetType().GetMethod(actionName);
+				                      			var parameters = filterContext.ActionParameters.Values.ToArray();
+				                      			method.Invoke(filterContext.Controller, parameters);
+				                      		}
+				                      		finally
+				                      		{
+				                      			asyncManager.OutstandingOperations.Decrement();
+				                      		}
+				                      	});
 
 		}
 	}
