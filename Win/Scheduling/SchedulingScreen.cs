@@ -1416,6 +1416,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
                 _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness =
                     _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
+				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
                 //<
 
                 startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
@@ -4438,6 +4439,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IList<IGroupPage> groupPages = _cachedGroupPages;
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
 							ScheduleEmploymentType.FixedStaff;
+				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
 				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences,
                                                                             _schedulerState.CommonStateHolder.ShiftCategories,
@@ -4483,6 +4485,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IList<IGroupPage> groupPages = _cachedGroupPages;
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
 							ScheduleEmploymentType.HourlyStaff;
+				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
 
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
                 using (var options =
@@ -4588,7 +4591,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             _totalScheduled = 0;
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 
-
+			//set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState
+        	var useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
+        	schedulingOptions.UseShiftCategoryLimitations = false;
             var scheduleDays = argument.ScheduleDays;
 
             IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(scheduleDays,
@@ -4665,10 +4670,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             //shiftcategorylimitations
             if (!_backgroundWorkerScheduling.CancellationPending)
             {
+            	schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
                 if (schedulingOptions.UseShiftCategoryLimitations)
                 {
                     _scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList,
-                                                                                 _backgroundWorkerScheduling, _optimizationPreferences);
+                                                                                 _backgroundWorkerScheduling, _optimizationPreferences, schedulingOptions);
                 }
             }
             _schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;

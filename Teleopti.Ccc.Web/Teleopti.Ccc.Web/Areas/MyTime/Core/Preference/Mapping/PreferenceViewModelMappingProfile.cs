@@ -16,12 +16,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceViewModelMappingProfile : Profile
 	{
 		private readonly IResolve<IScheduleColorProvider> _scheduleColorProvider;
-		private readonly IResolve<IHasDayOffUnderFullDayAbsence> _hasDayOffUnderFullDayAbsence;
 
-		public PreferenceViewModelMappingProfile(IResolve<IScheduleColorProvider> scheduleColorProvider, IResolve<IHasDayOffUnderFullDayAbsence> hasDayOffUnderFullDayAbsence)
+		public PreferenceViewModelMappingProfile(IResolve<IScheduleColorProvider> scheduleColorProvider)
 		{
 			_scheduleColorProvider = scheduleColorProvider;
-			_hasDayOffUnderFullDayAbsence = hasDayOffUnderFullDayAbsence;
 		}
 
 		private class PreferenceWeekMappingData
@@ -121,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                       		       	let projection = day == null ? null : day.Projection
 				                                       		       	let scheduleDay = day == null ? null : day.ScheduleDay
 				                                       		       	let significantPart = scheduleDay == null ? SchedulePartView.None : scheduleDay.SignificantPartForDisplay()
-																	let hasDayOffUnderAbsence = scheduleDay != null && _hasDayOffUnderFullDayAbsence.Invoke().HasDayOff(scheduleDay)
+																	let hasDayOffUnderAbsence = scheduleDay != null && (scheduleDay.SignificantPartForDisplay() == SchedulePartView.ContractDayOff)
 				                                       		       	select
 				                                       		       		new DayMappingData
 				                                       		       			{
@@ -162,7 +160,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                                 	{
 																		if (s.ScheduleDay != null)
 																		{
-																			if (s.HasDayOffUnderAbsence)
+																			if (s.SignificantPart == SchedulePartView.ContractDayOff)
 																				return StyleClasses.Striped;
 																			if (s.SignificantPart == SchedulePartView.DayOff)
 																				return StyleClasses.DayOff + " " + StyleClasses.Striped;
@@ -193,7 +191,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.Preference, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.None ? s : null))
 				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
 				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))
-				.ForMember(d => d.Absence, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.FullDayAbsence ? s : null))
+				.ForMember(d => d.Absence, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.FullDayAbsence || s.SignificantPart == SchedulePartView.ContractDayOff ? s : null))
 				.ForMember(d => d.Feedback, o => o.MapFrom(s =>
 				                                           	{
 				                                           		var isScheduled = s.ScheduleDay != null && s.ScheduleDay.IsScheduled();

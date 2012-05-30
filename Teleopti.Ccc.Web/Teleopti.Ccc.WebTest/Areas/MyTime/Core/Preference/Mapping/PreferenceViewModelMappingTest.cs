@@ -29,13 +29,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	{
 		private PreferenceDomainData data;
 		private IScheduleColorProvider scheduleColorProvider;
-		private IHasDayOffUnderFullDayAbsence hasDayOffUnderFullDayAbsence;
 
 		[SetUp]
 		public void Setup()
 		{
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
-			hasDayOffUnderFullDayAbsence = MockRepository.GenerateMock<IHasDayOffUnderFullDayAbsence>();
 
 			data = new PreferenceDomainData
 			       	{
@@ -54,9 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			Mapper.Initialize(c =>
 			                  	{
 			                  		c.AddProfile(new PreferenceViewModelMappingProfile(
-			                  		             	Depend.On(scheduleColorProvider),
-													Depend.On(hasDayOffUnderFullDayAbsence)
-			                  		             	));
+			                  		             	Depend.On(scheduleColorProvider)));
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
 		}
@@ -621,9 +617,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapAbsenceStyleClassNameStripedWhenOverDayOff()
 		{
 			var stubs = new StubFactory();
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.FullDayAbsence, stubs.PersonAbsenceStub());
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.ContractDayOff, stubs.PersonAbsenceStub());
 			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-			hasDayOffUnderFullDayAbsence.Stub(x => x.HasDayOff(scheduleDay)).Return(true);
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 

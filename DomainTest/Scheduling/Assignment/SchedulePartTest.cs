@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Helper;
@@ -1005,40 +1004,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
 
 			}
-		}
-
-		[Test, Ignore("Exposes bug 19500")]
-		public void FullDayAbsenceOverPersonalShiftShouldBeInTheProjection()
-		{
-			SetupForMergeTests();
-			source.Clear<IPersonAbsence>();
-			source.Clear<IPersonDayOff>();
-			source.Clear<IPersonAssignment>();
-
-			IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person1, scenario, source.Period);
-			//create assignment with no mainshift
-			IPersonAssignment newPersonAssignment = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario);
-			//create personal shift
-			IPersonalShift personalShift = PersonalShiftFactory.CreatePersonalShift(ActivityFactory.CreateActivity("activity"), period1);
-			//add personal shift to assignment
-			newPersonAssignment.AddPersonalShift(personalShift);
-
-			//add assignment, absence to source
-			source.Add(newPersonAssignment);
-			source.Add(personAbsence);
-
-			using (_mocks.Record())
-			{
-				
-			}
-
-			IVisualLayerCollection visualLayerCollection;
-			using (_mocks.Playback())
-			{
-				visualLayerCollection = source.ProjectionService().CreateProjection();
-			}
-
-			Assert.AreEqual(1, visualLayerCollection.Count());
 		}
 
         [Test]

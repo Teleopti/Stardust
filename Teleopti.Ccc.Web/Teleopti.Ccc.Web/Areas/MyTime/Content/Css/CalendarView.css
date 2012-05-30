@@ -25,6 +25,11 @@
 		display: block;
 		float: left;
 	}
+	.rtl .weekdays li, 
+	.rtl .calendarview-week li
+	{
+		float: right;
+	}
 }
 
 .calendarview-week li:first-child{border-left-color: transparent; color: #fff; font-size: 11px; text-align: center; width: 38px;}

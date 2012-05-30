@@ -734,7 +734,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripLabel4.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.toolStripLabel4.Name = "toolStripLabel4";
             this.toolStripLabel4.Size = new System.Drawing.Size(209, 19);
-            this.toolStripLabel4.Text = "Actions";
+            this.toolStripLabel4.Text = "xxActions";
             // 
             // toolStripMenuItemActionQueueSourceNewWorkload
             // 
@@ -783,7 +783,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripLabel5.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.toolStripLabel5.Name = "toolStripLabel5";
             this.toolStripLabel5.Size = new System.Drawing.Size(209, 19);
-            this.toolStripLabel5.Text = "Actions";
+            this.toolStripLabel5.Text = "xxActions";
             // 
             // toolStripMenuItemActionSkillTypeNewMultisiteSkill
             // 
@@ -838,7 +838,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripLabel1.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(192, 19);
-            this.toolStripLabel1.Text = "Actions";
+            this.toolStripLabel1.Text = "xxActions";
             // 
             // toolStripMenuItem2
             // 

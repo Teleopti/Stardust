@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
             var significant = scheduleDay.SignificantPart();
 
-            if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
+            if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff || (effectiveRestriction!=null && effectiveRestriction.NotAvailable))
                 return new WorkTimeMinMax();
 
             if (significant == SchedulePartView.MainShift || significant == SchedulePartView.FullDayAbsence)

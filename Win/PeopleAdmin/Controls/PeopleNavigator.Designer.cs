@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             this.toolStripLabel1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(243, 16);
-            this.toolStripLabel1.Text = "Actions";
+            this.toolStripLabel1.Text = "xxActions";
             // 
             // toolStripButtonOpen
             // 

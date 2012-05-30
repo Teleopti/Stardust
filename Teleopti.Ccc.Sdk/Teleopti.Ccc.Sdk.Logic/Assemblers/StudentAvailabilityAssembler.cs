@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             var dto = new StudentAvailabilityDayDto();
             dto.RestrictionDate = new DateOnlyDto(entity.RestrictionDate);
             dto.Person = PersonAssembler.DomainEntityToDto(entity.Person);
+			if (entity.NotAvailable) return dto;
+
             foreach (var availabilityRestriction in entity.RestrictionCollection)
             {
                 var restrictionDto = new StudentAvailabilityRestrictionDto();

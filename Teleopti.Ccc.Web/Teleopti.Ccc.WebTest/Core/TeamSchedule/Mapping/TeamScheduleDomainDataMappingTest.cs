@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		private ISchedulePersonProvider personProvider;
 		private IUserTimeZone userTimeZone;
 		private CccTimeZoneInfo timeZone;
-		private IHasDayOffUnderFullDayAbsence hasDayOffUnderFullDayAbsence;
 
 		[SetUp]
 		public void Setup()
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			personProvider = MockRepository.GenerateMock<ISchedulePersonProvider>();
 			projectionProvider = MockRepository.GenerateStub<ITeamScheduleProjectionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			hasDayOffUnderFullDayAbsence = MockRepository.GenerateMock<IHasDayOffUnderFullDayAbsence>();
 
 			timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
@@ -44,8 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			                                    	() => personProvider,
 			                                    	() => scheduleProvider,
 			                                    	() => projectionProvider,
-			                                    	() => userTimeZone,
-													() => hasDayOffUnderFullDayAbsence
+			                                    	() => userTimeZone
 			                                    	)));
 		}
 
@@ -243,11 +240,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		public void ShouldMapHasDayOffUnderAbsence()
 		{
 			var persons = new[] { new Person() };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single(),SchedulePartView.FullDayAbsence, PersonDayOffFactory.CreatePersonDayOff(), null, null, null);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single(),SchedulePartView.ContractDayOff, PersonDayOffFactory.CreatePersonDayOff(), null, null, null);
 
 			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, Guid.Empty)).Return(persons);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
-			hasDayOffUnderFullDayAbsence.Stub(x => x.HasDayOff(scheduleDay)).Return(true);
 
 			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
 
