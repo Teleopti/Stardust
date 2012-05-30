@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			IApplicationFunction underConstruction = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.UnderConstruction, "xxUnderConstruction", DefinedRaptorApplicationFunctionForeignIds.UnderConstruction, null);
 				underConstruction.IsPreliminary = true;
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenAgentPortal, "xxAgentPortal", DefinedRaptorApplicationFunctionForeignIds.OpenAgentPortal, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);
 
 			// Global
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule, null);
@@ -155,9 +156,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.TextRequests, "xxCreateTextRequest", DefinedRaptorApplicationFunctionForeignIds.TextRequests, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.TeamSchedule, "xxTeamSchedule", DefinedRaptorApplicationFunctionForeignIds.TeamSchedule, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb, "xxAbsenceRequestsWeb", DefinedRaptorApplicationFunctionForeignIds.AbsenceRequestsWeb, null);
-
-			// Anywhere 
-			IApplicationFunction anywhere = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);
 
 			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);
 		}
