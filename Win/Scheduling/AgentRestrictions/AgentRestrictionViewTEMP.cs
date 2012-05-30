@@ -13,14 +13,16 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private readonly IList<IPerson> _persons;
 		private ISchedulingOptions _schedulingOptions;
 		private IRuleSetProjectionService _projectionService;
+		private IList<IPerson> _selectedPersons; 
 
-		public AgentRestrictionViewTemp(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IRuleSetProjectionService projectionService)
+		public AgentRestrictionViewTemp(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IRuleSetProjectionService projectionService, IList<IPerson> selectedPersons )
 		{
 			InitializeComponent();
 			_stateHolder = stateHolder;
 			_persons = persons;
 			_schedulingOptions = schedulingOptions;
 			_projectionService = projectionService;
+			_selectedPersons = selectedPersons;
 		}
 
 		private void Button1Click(object sender, System.EventArgs e)
@@ -32,9 +34,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private void AgentRestrictionViewTempLoad(object sender, System.EventArgs e)
 		{
 			agentRestrictionGrid.MergeHeaders();
-			agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _projectionService);
+			agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _projectionService, _selectedPersons);
 			agentRestrictionGrid.Refresh();
-			agentRestrictionGrid.Model.ColWidths.ResizeToFit(GridRangeInfo.Col(0), GridResizeToFitOptions.IncludeCellsWithinCoveredRange);	
+			//agentRestrictionGrid.Model.ColWidths.ResizeToFit(GridRangeInfo.Col(0), GridResizeToFitOptions.IncludeCellsWithinCoveredRange);	
 		}
 
 		private void button2_Click(object sender, System.EventArgs e)

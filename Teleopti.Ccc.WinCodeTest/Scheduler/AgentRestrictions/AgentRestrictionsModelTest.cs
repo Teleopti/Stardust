@@ -30,19 +30,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.IsNotNull(_model.DisplayRows);	
 		}
 
-		[Test]
-		public void ShouldLoadDisplayRows()
-		{
-			using(_mocks.Record())
-			{
-				Expect.Call(_agentRestrictionsDisplayRowCreator.Create());
-			}
+		//[Test]
+		//public void ShouldLoadDisplayRows()
+		//{
+		//    using(_mocks.Record())
+		//    {
+		//        Expect.Call(_agentRestrictionsDisplayRowCreator.Create());
+		//    }
 
-			using(_mocks.Playback())
-			{
-				_model.LoadDisplayRows(_agentRestrictionsDisplayRowCreator);		
-			}	
-		}
+		//    using(_mocks.Playback())
+		//    {
+		//        _model.LoadDisplayRows(_agentRestrictionsDisplayRowCreator);		
+		//    }	
+		//}
 
 		[Test]
 		public void ShouldGetDisplayRowFromIndex()

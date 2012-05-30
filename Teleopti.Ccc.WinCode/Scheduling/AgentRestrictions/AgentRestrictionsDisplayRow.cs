@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		private readonly Dictionary<AgentRestrictionDisplayRowColumn, string> _warnings;
 		private readonly AgentRestrictionsDisplayRowColumnMapper _columnMapper;
 		public TimePeriod MinMaxTime { get; set; }
+		public bool Loaded { get; set; }
 
 		public AgentRestrictionsDisplayRow(IScheduleMatrixPro matrix)
 		{

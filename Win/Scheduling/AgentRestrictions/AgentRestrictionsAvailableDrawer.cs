@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			}
 
 
-			view.MergeCells(e.RowIndex, true);
+			//view.MergeCells(e.RowIndex, true);
 
 			return true;
 		}

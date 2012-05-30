@@ -3,11 +3,9 @@ using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
 	public interface IAgentRestrictionsView
 	{
 		void MergeHeaders();
-		void MergeCells(int rowIndex, bool unmerge);
 	}
 
 	public interface IAgentRestrictionsWarningDrawer

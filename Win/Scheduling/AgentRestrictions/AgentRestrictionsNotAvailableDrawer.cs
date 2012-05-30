@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (agentRestrictionsDisplayRow.State.Equals(AgentRestrictionDisplayRowState.NotAvailable) && e.ColIndex > (int)AgentRestrictionDisplayRowColumn.DaysOffSchedule)
 			{
 				e.Style.Text = UserTexts.Resources.NA;
-				view.MergeCells(e.RowIndex, false);
+				//view.MergeCells(e.RowIndex, false);
 				return true;
 			}
 
