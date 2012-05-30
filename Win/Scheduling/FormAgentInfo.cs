@@ -587,8 +587,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 foreach (var column in OptionalColumns)
                 {
                     createAndAddItem(listViewPerson, column.Name,
-                                     column.GetColumnValueById(person.Id) != null
-                                         ? column.GetColumnValueById(person.Id).Description
+									 person.GetColumnValue(column) != null
+                                         ? person.GetColumnValue(column).Description
                                          : "", 2);
                 }
             }
@@ -615,11 +615,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     {
                         var rep = new OptionalColumnRepository(uow);
                         _optionalColumns = rep.GetOptionalColumnValues<Person>();
-                        foreach (var optionalColumn in _optionalColumns)
-                        {
-                            //to load the values
-                            optionalColumn.GetColumnValueById(_selectedPerson.Id);
-                        }
                     }
                 }
                 return _optionalColumns;

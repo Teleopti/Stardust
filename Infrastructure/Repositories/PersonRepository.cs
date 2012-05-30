@@ -438,7 +438,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 DetachedCriteria person = DetachedCriteria.For<Person>("person")
                     .Add(Restrictions.InG("Id", currentBatchIds))
                     //.SetFetchMode("PermissionInformation", FetchMode.Join)
-                    .SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join);
+                    .SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join)
+					.SetFetchMode("OptionalColumnValueCollection",FetchMode.Join);
 
                 DetachedCriteria personPeriod = DetachedCriteria.For<Person>("personPeriod")
                     .Add(Restrictions.InG("Id", currentBatchIds))
