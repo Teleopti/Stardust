@@ -100,7 +100,6 @@
     <Compile Include="DataTableDefinition\AcdLogOnPersonInfrastructure.cs" />
     <Compile Include="DataTableDefinition\BusinessUnitInfrastructure.cs" />
     <Compile Include="EtlJobLock.cs" />
-    <Compile Include="IEtlJobLock.cs" />
     <Compile Include="ILogOnHelper.cs" />
     <Compile Include="IThreadPool.cs" />
     <Compile Include="LicenseActivator.cs" />
