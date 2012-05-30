@@ -78,6 +78,7 @@
 			this.labelRatio = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.chkFreemium = new System.Windows.Forms.CheckBox();
+			this.chkAnywhere = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).BeginInit();
@@ -235,7 +236,7 @@
 			// 
 			// btnCreateAndSave
 			// 
-			this.btnCreateAndSave.Location = new System.Drawing.Point(414, 592);
+			this.btnCreateAndSave.Location = new System.Drawing.Point(453, 602);
 			this.btnCreateAndSave.Name = "btnCreateAndSave";
 			this.btnCreateAndSave.Size = new System.Drawing.Size(99, 27);
 			this.btnCreateAndSave.TabIndex = 17;
@@ -326,6 +327,7 @@
 			// 
 			// grpBoxModules
 			// 
+			this.grpBoxModules.Controls.Add(this.chkAnywhere);
 			this.grpBoxModules.Controls.Add(this.chkMyTimeWeb);
 			this.grpBoxModules.Controls.Add(this.chkPayrollIntegration);
 			this.grpBoxModules.Controls.Add(this.chkPerformanceManager);
@@ -337,7 +339,7 @@
 			this.grpBoxModules.Controls.Add(this.chkBase);
 			this.grpBoxModules.Location = new System.Drawing.Point(70, 338);
 			this.grpBoxModules.Name = "grpBoxModules";
-			this.grpBoxModules.Size = new System.Drawing.Size(211, 239);
+			this.grpBoxModules.Size = new System.Drawing.Size(211, 258);
 			this.grpBoxModules.TabIndex = 26;
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "TeleoptiCCC options";
@@ -584,7 +586,7 @@
 			this.groupBox1.Controls.Add(this.chkFreemium);
 			this.groupBox1.Location = new System.Drawing.Point(352, 338);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(200, 239);
+			this.groupBox1.Size = new System.Drawing.Size(200, 258);
 			this.groupBox1.TabIndex = 41;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Freemium";
@@ -600,11 +602,22 @@
 			this.chkFreemium.UseVisualStyleBackColor = true;
 			this.chkFreemium.CheckedChanged += new System.EventHandler(this.chkFreemium_CheckedChanged);
 			// 
+			// chkAnywhere
+			// 
+			this.chkAnywhere.AutoSize = true;
+			this.chkAnywhere.Location = new System.Drawing.Point(6, 235);
+			this.chkAnywhere.Name = "chkAnywhere";
+			this.chkAnywhere.Size = new System.Drawing.Size(142, 17);
+			this.chkAnywhere.TabIndex = 16;
+			this.chkAnywhere.Text = "Anywhere Mobile reports";
+			this.chkAnywhere.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.chkAnywhere.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(639, 644);
+			this.ClientSize = new System.Drawing.Size(639, 665);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.labelRatio);
 			this.Controls.Add(this.numericUpDownCountRatio);
@@ -706,6 +719,7 @@
 		private System.Windows.Forms.Label labelRatio;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.CheckBox chkFreemium;
+		private System.Windows.Forms.CheckBox chkAnywhere;
 	}
 }
 

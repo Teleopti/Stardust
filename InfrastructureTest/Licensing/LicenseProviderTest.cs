@@ -206,8 +206,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
             public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
+			public bool TeleoptiCccAnywhereEnabled { get; private set; }
 
-            public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
+        	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
         	public int MaxSeats
         	{
@@ -309,7 +310,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccRealTimeAdherenceEnabled { get; private set; }
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
-            public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
+			public bool TeleoptiCccAnywhereEnabled { get; private set; }
+
+        	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
         	public int MaxSeats
         	{
@@ -413,7 +416,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccRealTimeAdherenceEnabled { get; private set; }
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
-            public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
+			public bool TeleoptiCccAnywhereEnabled { get; private set; }
+
+        	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
         	public int MaxSeats
         	{

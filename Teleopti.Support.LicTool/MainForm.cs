@@ -130,6 +130,7 @@ namespace Teleopti.Support.LicTool
 			chkShiftTrades.Checked = false;
 			//chkShiftTrades.Enabled = true;
 			chkMyTimeWeb.Checked = false;
+			chkAnywhere.Checked = false;
 
 			chkDeveloper.Checked = false;
 		   
@@ -156,6 +157,7 @@ namespace Teleopti.Support.LicTool
 			chkRealtimeAdherence.Checked = true;
 			chkShiftTrades.Checked = true;
 			chkMyTimeWeb.Checked = true;
+			chkAnywhere.Checked = true;
 
 		}
 
@@ -250,6 +252,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("ShiftTrades")) chkShiftTrades.Checked = true;
 						if (options.Contains("Developer")) chkDeveloper.Checked = true;
 						if (options.Contains("MyTimeWeb")) chkMyTimeWeb.Checked = true;
+						if (options.Contains("Anywhere")) chkAnywhere.Checked = true;
 
 						//Freemium
 						if (options.Contains("Forecasts")) chkFreemium.Checked = true;
@@ -315,6 +318,7 @@ namespace Teleopti.Support.LicTool
 				if (chkRealtimeAdherence.Checked) elmOptions.AppendChild(xdoc.CreateElement("RealtimeAdherence")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkShiftTrades.Checked) elmOptions.AppendChild(xdoc.CreateElement("ShiftTrades")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkMyTimeWeb.Checked) elmOptions.AppendChild(xdoc.CreateElement("MyTimeWeb")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkAnywhere.Checked) elmOptions.AppendChild(xdoc.CreateElement("Anywhere")).AppendChild(xdoc.CreateTextNode("true"));
 
 				rootNode.AppendChild(elmOptions);
 			}
