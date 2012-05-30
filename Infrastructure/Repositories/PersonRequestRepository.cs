@@ -152,20 +152,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<IPersonRequest> FindTextAndAbsenceRequestsForAgent(IPerson person, Paging paging)
 		{
-			const string hql = @"select pr from PersonRequest pr
-										inner join pr.requests r
-											where pr.Person = :person and 
-											(r.class=TextRequest or r.class=AbsenceRequest)
-									order by pr.UpdatedOn desc";
-
-			var personRequests = Session.CreateQuery(hql)
+			var personRequests = Session.GetNamedQuery("findTextAndAbsenceRequestsForAgent")
 				.SetEntity("person", person);
 			if (paging != null)
 			{
 				personRequests.SetMaxResults(paging.Take);
 				personRequests.SetFirstResult(paging.Skip);
 			}
-
 			return personRequests.List<IPersonRequest>();
 		}
 

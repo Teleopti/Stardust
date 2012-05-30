@@ -85,4 +85,14 @@
           or (r.class = ShiftTradeRequest and pr.requestStatus = 0 and r.shiftTradeStatus = :ShiftTradeStatus)
     ]]>
   </query>
+
+	<query name="findTextAndAbsenceRequestsForAgent">
+		<![CDATA[
+select pr from PersonRequest pr
+inner join pr.requests r
+where pr.Person = :person and 
+(r.class=TextRequest or r.class=AbsenceRequest)
+order by pr.UpdatedOn desc		
+		]]>
+	</query>
 </hibernate-mapping>
