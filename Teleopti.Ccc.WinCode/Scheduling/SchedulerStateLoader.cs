@@ -209,7 +209,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_schedulerState.SchedulingResultState.SkillDays = new SkillDayLoadHelper(
 					_repositoryFactory.CreateSkillDayRepository(uow),
 					_repositoryFactory.CreateMultisiteDayRepository(uow)).LoadSchedulerSkillDays(
-                    _schedulerState.RequestedPeriod.ToDateOnlyPeriod(_schedulerState.TimeZoneInfo),
+					_schedulerState.RequestedPeriod.ChangeStartTime(new TimeSpan(-8, -1, 0, 0)).ChangeEndTime(
+							new TimeSpan(8, 1, 0, 0)).ToDateOnlyPeriod(_schedulerState.TimeZoneInfo),
                     skills,
                     _schedulerState.RequestedScenario);
             }
