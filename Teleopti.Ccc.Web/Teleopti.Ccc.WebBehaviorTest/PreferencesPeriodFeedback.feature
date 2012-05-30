@@ -109,14 +109,14 @@ Scenario: Period feedback of contract time with target tolerance
 Scenario: Period feedback of nothing
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a shift bag with start times 7:00 to 9:00 and end times 15:00 to 17:00
+	And I have a shift bag with start times 7 to 9 and end times 15 to 17
 	When I view preferences
 	Then I should see a message that my preferences can result in 42 to 70 hours
 
 Scenario: Period feedback of preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a shift bag with start times 7:00 to 9:00 and end times 15:00 to 17:00
+	And I have a shift bag with start times 7 to 9 and end times 15 to 17
 	And I have a shift category preference on weekday 1
 	And I have a shift category preference on weekday 2
 	And I have a shift category preference on weekday 3
@@ -143,7 +143,7 @@ Scenario: Period feedback of schedules
 Scenario: Period feedback of schedules and preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a shift bag with start times 7:00 to 9:00 and end times 15:00 to 17:00
+	And I have a shift bag with start times 7 to 9 and end times 15 to 17
 	And I have a scheduled shift of 8 hours on weekday 1
 	And I have a scheduled shift of 8 hours on weekday 2
 	And I have a shift category preference on weekday 3
