@@ -27,11 +27,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var personRequests = new IPersonRequest[] { };
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			repository.Stub(x => x.FindTextRequestsForAgent(person, paging)).Return(personRequests);
+			repository.Stub(x => x.FindTextAndAbsenceRequestsForAgent(person, paging)).Return(personRequests);
 
 			target.RetrieveTextRequests(paging);
 
-			repository.AssertWasCalled(x => x.FindTextRequestsForAgent(person, paging));
+			repository.AssertWasCalled(x => x.FindTextAndAbsenceRequestsForAgent(person, paging));
 		}
 
 		[Test]
