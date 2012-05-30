@@ -104,17 +104,36 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Requests tab")]
-        public virtual void RequestsTab()
+        [NUnit.Framework.DescriptionAttribute("See absence request")]
+        public virtual void SeeAbsenceRequest()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Requests tab", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See absence request", ((string[])(null)));
 #line 18
 this.ScenarioSetup(scenarioInfo);
 #line 19
  testRunner.Given("I am an agent");
 #line 20
- testRunner.When("I sign in");
+ testRunner.And("I have an existing absence request");
 #line 21
+ testRunner.When("I view requests");
+#line 22
+ testRunner.Then("I should see my existing absence request");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Requests tab")]
+        public virtual void RequestsTab()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Requests tab", ((string[])(null)));
+#line 24
+this.ScenarioSetup(scenarioInfo);
+#line 25
+ testRunner.Given("I am an agent");
+#line 26
+ testRunner.When("I sign in");
+#line 27
  testRunner.Then("I should be able to see requests link");
 #line hidden
             this.ScenarioCleanup();
@@ -125,13 +144,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NoAccessToRequestsTab()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No access to requests tab", ((string[])(null)));
-#line 23
+#line 29
 this.ScenarioSetup(scenarioInfo);
-#line 24
+#line 30
  testRunner.Given("I am an agent without access to any requests");
-#line 25
+#line 31
  testRunner.When("I sign in");
-#line 26
+#line 32
  testRunner.Then("I should not be able to see requests link");
 #line hidden
             this.ScenarioCleanup();
@@ -142,15 +161,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NoAccessToRequestsPage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No access to requests page", ((string[])(null)));
-#line 28
+#line 34
 this.ScenarioSetup(scenarioInfo);
-#line 29
+#line 35
  testRunner.Given("I am an agent without access to any requests");
-#line 30
+#line 36
  testRunner.When("I sign in");
-#line 31
+#line 37
  testRunner.And("I navigate to the requests page");
-#line 32
+#line 38
  testRunner.Then("I should see an error message");
 #line hidden
             this.ScenarioCleanup();
@@ -161,15 +180,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NoRequests()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No requests", ((string[])(null)));
-#line 34
+#line 40
 this.ScenarioSetup(scenarioInfo);
-#line 35
+#line 41
  testRunner.Given("I am an agent");
-#line 36
+#line 42
  testRunner.And("I have no existing requests");
-#line 37
+#line 43
  testRunner.When("I view requests");
-#line 38
+#line 44
  testRunner.Then("I should see a user-friendly message explaining I dont have anything to view");
 #line hidden
             this.ScenarioCleanup();
@@ -180,15 +199,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void DefaultSorting()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default sorting", ((string[])(null)));
-#line 40
+#line 46
 this.ScenarioSetup(scenarioInfo);
-#line 41
+#line 47
  testRunner.Given("I am an agent");
-#line 42
+#line 48
  testRunner.And("I have 2 existing request changed on different times");
-#line 43
+#line 49
  testRunner.When("I view requests");
-#line 44
+#line 50
  testRunner.Then("I should see that the list is sorted on changed date and time");
 #line hidden
             this.ScenarioCleanup();
@@ -199,15 +218,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ShowSinglePage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show single page", ((string[])(null)));
-#line 46
+#line 52
 this.ScenarioSetup(scenarioInfo);
-#line 47
+#line 53
  testRunner.Given("I am an agent");
-#line 48
+#line 54
  testRunner.And("I have more than one page of requests");
-#line 49
+#line 55
  testRunner.When("I view requests");
-#line 50
+#line 56
  testRunner.Then("I should only see one page of requests");
 #line hidden
             this.ScenarioCleanup();
@@ -218,17 +237,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void Paging()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Paging", ((string[])(null)));
-#line 52
+#line 58
 this.ScenarioSetup(scenarioInfo);
-#line 53
+#line 59
  testRunner.Given("I am an agent");
-#line 54
+#line 60
  testRunner.And("I have more than one page of requests");
-#line 55
+#line 61
  testRunner.When("I view requests");
-#line 56
+#line 62
  testRunner.And("I scroll down to the bottom of the page");
-#line 57
+#line 63
  testRunner.Then("I should see the page fill with the next page of requests");
 #line hidden
             this.ScenarioCleanup();
