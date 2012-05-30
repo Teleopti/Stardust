@@ -442,6 +442,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                 Expect.Call(restriction.ValidateWorkShiftInfo(info1)).Return(true).Repeat.AtLeastOnce();
                 //second shift
                 Expect.Call(restriction.ValidateWorkShiftInfo(info2)).Return(true).Repeat.AtLeastOnce();
+            	Expect.Call(restriction.NotAvailable).Return(false);
             }
 
             IWorkTimeMinMax result; 
@@ -479,6 +480,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                 Expect.Call(restriction.ValidateWorkShiftInfo(info1)).Return(true).Repeat.AtLeastOnce();
                 //second shift validates Not OK
                 Expect.Call(restriction.ValidateWorkShiftInfo(info2)).Return(false).Repeat.AtLeastOnce();
+            	Expect.Call(restriction.NotAvailable).Return(false);
             }
 
             IWorkTimeMinMax result;
