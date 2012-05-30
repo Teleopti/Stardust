@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IList<IOptionalColumn> GetOptionalColumnValues<T>()
+        public IList<IOptionalColumn> GetOptionalColumns<T>()
         {
             ICollection<IOptionalColumn> retList = Session.CreateCriteria(typeof(OptionalColumn))
                         .Add(Restrictions.Eq("TableName", typeof(T).Name))

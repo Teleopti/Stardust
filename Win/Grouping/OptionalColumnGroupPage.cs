@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Win.Grouping
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var optionalColumnRepository = new OptionalColumnRepository(uow);
-                IList<IOptionalColumn> optionalColumnCollection = optionalColumnRepository.GetOptionalColumnValues<Person>();
+                IList<IOptionalColumn> optionalColumnCollection = optionalColumnRepository.GetOptionalColumns<Person>();
 
                 if (optionalColumnCollection != null)
                 {
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Grouping
 								foreach (var person in groupPageOptions.Persons)
 								{
 									var val = person.GetColumnValue(column);
-									if (val != null && val.Equals(optionalColumnGroup.Description))
+									if (val != null && val.Description.Equals(optionalColumnGroup.Description))
 										rootGroup.AddPerson(person);
                                 }
                                 

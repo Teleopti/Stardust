@@ -282,6 +282,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period)
 		{
 			ICollection<IPerson> tempList = Session.CreateCriteria(typeof(Person), "per")
+					  .SetFetchMode("OptionalColumnValueCollection",FetchMode.Join)
 					  .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
 					  .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
 					  .Add(Subqueries.Exists(findActivePeriod(team, period)))
@@ -544,6 +545,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                          Restrictions.Ge("TerminalDate", period.StartDate)
                          ))
                 .Add(Subqueries.Exists(findPeriodMatch(period)))
+				.SetFetchMode("OptionalColumnValueCollection",FetchMode.Join)
                 .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
                 .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
                 .SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)

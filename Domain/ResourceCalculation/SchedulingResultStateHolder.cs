@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         
         public IList<IShiftCategory> ShiftCategories { get; set; }
 
+		public IList<IOptionalColumn> OptionalColumns { get; set; } 
+
         public ISkillStaffPeriodHolder SkillStaffPeriodHolder
         {
             get

@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		//    PersistAndRemoveFromUnitOfWork(columnA);
  
-		//    IList<IOptionalColumn> returnList = repository.GetOptionalColumnValues<Person>();
+		//    IList<IOptionalColumn> returnList = repository.GetOptionalColumns<Person>();
             
 		//    Assert.AreEqual(1, returnList.Count);
 		//    Assert.AreEqual(columnName, returnList[0].Name);

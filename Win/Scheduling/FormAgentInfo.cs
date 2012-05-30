@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _dateOnlyList = dateOnlyList;
             _stateHolder = stateHolder;
             _allAccounts = allAccounts;
-
+        	_optionalColumns = _stateHolder.OptionalColumns;
             update();
         }
 
@@ -584,7 +584,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             try
             {
-                foreach (var column in OptionalColumns)
+                foreach (var column in _optionalColumns)
                 {
                     createAndAddItem(listViewPerson, column.Name,
 									 person.GetColumnValue(column) != null
@@ -602,23 +602,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
             
-        }
-
-        private IEnumerable<IOptionalColumn> OptionalColumns
-        {
-            get
-            {
-                
-                if (_optionalColumns == null)
-                {
-                    using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                    {
-                        var rep = new OptionalColumnRepository(uow);
-                        _optionalColumns = rep.GetOptionalColumnValues<Person>();
-                    }
-                }
-                return _optionalColumns;
-            }
         }
 
         private void FormAgentInfoResizeEnd(object sender, EventArgs e)

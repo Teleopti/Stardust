@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// are available.
         /// </typeparam>
         /// <returns></returns>
-        IList<IOptionalColumn> GetOptionalColumnValues<T>();
+        IList<IOptionalColumn> GetOptionalColumns<T>();
 
 		IList<IColumnUniqueValues> UniqueValuesOnColumn(Guid column);
     }

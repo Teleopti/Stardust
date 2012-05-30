@@ -5417,6 +5417,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             using (PerformanceOutput.ForOperation("Loading people"))
             {
+            	SchedulerState.SchedulingResultState.OptionalColumns = new OptionalColumnRepository(uow).GetOptionalColumns<Person>();
                 var personRep = new PersonRepository(uow);
                 IPeopleLoader loader;
                 if (_teamLeaderMode)
