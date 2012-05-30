@@ -197,14 +197,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 {
                     effectiveRestriction.IsAvailabilityDay = true;
 
-                    effectiveRestriction = effectiveRestriction.Combine(new EffectiveRestriction(restriction.StartTimeLimitation,
-                                                           restriction.EndTimeLimitation,
-                                                           restriction.WorkTimeLimitation,
-                                                           null, null, null, new List<IActivityRestriction>()));
+                	var newEffectiverestriction = new EffectiveRestriction(restriction.StartTimeLimitation,
+                	                                                       restriction.EndTimeLimitation,
+                	                                                       restriction.WorkTimeLimitation,
+                	                                                       null, null, null,
+                	                                                       new List<IActivityRestriction>());
+                	newEffectiverestriction.NotAvailable = restriction.NotAvailable;
+					effectiveRestriction = effectiveRestriction.Combine(newEffectiverestriction);
                     if (effectiveRestriction == null) return effectiveRestriction;
                 }
-                if (restriction.NotAvailable)
-                    effectiveRestriction.NotAvailable = true;
+				//if (restriction.NotAvailable)
+				//    effectiveRestriction.NotAvailable = true;
             }
             return effectiveRestriction;
         }
