@@ -18,142 +18,70 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public override void Execute()
-        {
-            var selectedSchedulesFromView = ScheduleViewBase.SelectedSchedules();
-            IList<IScheduleDay> selectedSchedules = !selectedSchedulesFromView.IsEmpty()
-                                                        ? selectedSchedulesFromView
-                                                        : ScheduleParts;
-            IList<IScheduleDay> originalSchedules = selectedSchedules;
-            if (!VerifySelectedSchedule(selectedSchedules)) return;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public override void Execute()
+		{
 
-            IList<IScheduleDay> returnAbsenceParts = new List<IScheduleDay>();
-            var n = from a in SchedulerStateHolder.CommonStateHolder.Absences
-                    where !((IDeleteTag)a).IsDeleted
-                    select a;
+			var selectedSchedulesFromView = ScheduleViewBase.SelectedSchedules();
+			IList<IScheduleDay> selectedSchedules = !selectedSchedulesFromView.IsEmpty()
+														? selectedSchedulesFromView
+														: ScheduleParts;
+			IList<IScheduleDay> originalSchedules = selectedSchedules;
+			if (!VerifySelectedSchedule(selectedSchedules)) return;
 
-            var fallbackDefaultHours =
-                new SetupDateTimePeriodDefaultLocalHoursForAbsence(selectedSchedules[0]);
-            var periodFromSchedules = new SetupDateTimePeriodToSchedulesIfTheyExist(selectedSchedules, fallbackDefaultHours);
-            ISetupDateTimePeriod periodSetup = new SetupDateTimePeriodToDefaultPeriod(DefaultPeriod, periodFromSchedules);
+			var n = from a in SchedulerStateHolder.CommonStateHolder.Absences
+					where !((IDeleteTag)a).IsDeleted
+					select a;
 
-            IAddLayerViewModel<IAbsence> addAbsenceDialog = ScheduleViewBase.CreateAddAbsenceViewModel(n.ToList(), periodSetup);
-            bool dialogResult = addAbsenceDialog.Result;
-            if (!dialogResult) return;
+			var fallbackDefaultHours =
+				new SetupDateTimePeriodDefaultLocalHoursForAbsence(selectedSchedules[0]);
+			var periodFromSchedules = new SetupDateTimePeriodToSchedulesIfTheyExist(selectedSchedules, fallbackDefaultHours);
+			ISetupDateTimePeriod periodSetup = new SetupDateTimePeriodToDefaultPeriod(DefaultPeriod, periodFromSchedules);
 
-            IAbsence absence = addAbsenceDialog.SelectedItem;
-            DateTimePeriod absencePeriod = addAbsenceDialog.SelectedPeriod;
+			IAddLayerViewModel<IAbsence> addAbsenceDialog = ScheduleViewBase.CreateAddAbsenceViewModel(n.ToList(), periodSetup);
+			bool dialogResult = addAbsenceDialog.Result;
+			if (!dialogResult) return;
 
-            List<IScheduleDay> changedParts = new List<IScheduleDay>();
-            IList<IPerson> handledPersons = new List<IPerson>();
+			IAbsence absence = addAbsenceDialog.SelectedItem;
+			DateTimePeriod absencePeriod = addAbsenceDialog.SelectedPeriod;
 
-            if (selectedSchedules.Count > 1)
-            {
-                foreach (IScheduleDay part in ScheduleParts)
-                {
-                    selectedSchedules = removeLockedSchedules(originalSchedules);
-                    bool containLockedDates = selectedSchedules.Count != originalSchedules.Count;
+			IList<IPerson> selectedPersons = new List<IPerson>();
+			foreach (IScheduleDay scheduleDay in originalSchedules)
+			{
+				IPerson currentPerson = scheduleDay.Person;
+				if (currentPerson != null)
+				{
+					if (!selectedPersons.Contains(currentPerson))
+						selectedPersons.Add(currentPerson);
+				}
+			}
 
-                    IScheduleDay day = part;
-                    IScheduleDay tempPart = selectedSchedules.FirstOrDefault(s => s.Person.Equals(day.Person));
-                    if (tempPart == null)
-                        continue;
+			IList<IScheduleDay> selectedAbsenceDays = new List<IScheduleDay>();
+			foreach (var dateTime in absencePeriod.DateCollection())
+			{
+				foreach (IPerson selectedPerson in selectedPersons)
+				{
+					var dateOnly = new DateOnly(dateTime);
+					var scheduleday = SchedulerStateHolder.Schedules[selectedPerson].ScheduledDay(dateOnly);
+					if (scheduleday != null)
+						selectedAbsenceDays.Add(scheduleday);
+				}
+			}
 
-                    if (handledPersons.Contains(tempPart.Person))
-                        continue;
-
-                    handledPersons.Add(tempPart.Person);
-
-                    IList<IList<IScheduleDay>> combinedAbsenceParts = getCombinedParts(selectedSchedules, part, tempPart);
-                    CreateAbsenceLayers(absencePeriod, combinedAbsenceParts, absence, returnAbsenceParts, containLockedDates);
-
-                    foreach (var dateTime in absencePeriod.DateCollection())
-                    {
-                        var dateOnly = new DateOnly(dateTime);
-                        var scheduleday = SchedulerStateHolder.Schedules[tempPart.Person].ScheduledDay(dateOnly);
-                        if (scheduleday != null)
-                            changedParts.Add(scheduleday);
-                    }
-
-                    changedParts.AddRange(returnAbsenceParts);
-                }
-            }
-            else
-            {
-                var selectedSchedule = selectedSchedules.First();
-                if (absencePeriod.StartDateTime < selectedSchedule.DateOnlyAsPeriod.Period().StartDateTime)
-                {
-                    absencePeriod = new DateTimePeriod(selectedSchedule.Period.StartDateTime, absencePeriod.EndDateTime);
-                }
-                IAbsenceLayer absLayer = new AbsenceLayer(absence, absencePeriod);
-                selectedSchedule.CreateAndAddAbsence(absLayer);
-                returnAbsenceParts.Add(selectedSchedule);
-                changedParts.AddRange(returnAbsenceParts);
-            }
-            Presenter.ModifySchedulePart(changedParts);
-            foreach (IScheduleDay part in changedParts)
-                ScheduleViewBase.RefreshRangeForAgentPeriod(part.Person, absencePeriod);
-
-        }
-
-        private static void CreateAbsenceLayers(DateTimePeriod selectedPeriod, IEnumerable<IList<IScheduleDay>> combinedParts, IAbsence absence, ICollection<IScheduleDay> returnParts, bool containLockedDates)
-        {
-            returnParts.Clear();
-            foreach (var list in combinedParts)
-            {
-                foreach (var part in list)
-                {
-                    var start = selectedPeriod.StartDateTime;
-                    var end = selectedPeriod.EndDateTime;
-
-                    if (start < part.Period.StartDateTime && containLockedDates)
-                        start = part.Period.StartDateTime;
-
-                    if (end > part.Period.EndDateTime && containLockedDates)
-                        end = part.Period.EndDateTime;
-
-                    var period = new DateTimePeriod(start, end);
-
-                    IAbsenceLayer absLayer = new AbsenceLayer(absence, period);
-
-                    part.CreateAndAddAbsence(absLayer);
-                    returnParts.Add(part);
-
-                    if (!containLockedDates)
-                        break;
-                }
-            }
-        }
-
-        private static IList<IList<IScheduleDay>> getCombinedParts(IEnumerable<IScheduleDay> selectedSchedules, IScheduleDay party, IScheduleDay tempPart)
-        {
-            IList<IList<IScheduleDay>> combinedParts = new List<IList<IScheduleDay>>();
-            IList<IScheduleDay> parts = new List<IScheduleDay>();
-            parts.Add(tempPart);
-            combinedParts.Add(parts);
-
-            foreach (IScheduleDay schedulePart in selectedSchedules)
-            {
-                if (!party.Person.Equals(schedulePart.Person))
-                    continue;
-                if (schedulePart.DateOnlyAsPeriod.Period().StartDateTime.Subtract(tempPart.DateOnlyAsPeriod.Period().StartDateTime) > TimeSpan.FromDays(1))
-                {
-                    parts = new List<IScheduleDay>();
-                    parts.Add(schedulePart);
-                    combinedParts.Add(parts);
-                    tempPart = schedulePart;
-                }
-                else
-                {
-                    if (!tempPart.Equals(schedulePart))
-                        parts.Add(schedulePart);
-                    tempPart = schedulePart;
-                }
-            }
-            return combinedParts;
-        }
-
+			IList<IScheduleDay> selectedUnlockedAbsenceDays = removeLockedSchedules(selectedAbsenceDays);
+			foreach (IScheduleDay selectedUnlockedAbsenceDay in selectedUnlockedAbsenceDays)
+			{
+				DateTimePeriod? currentAbsencePeriod = selectedUnlockedAbsenceDay.Period.Intersection(absencePeriod);
+				if (!currentAbsencePeriod.HasValue)
+					continue;
+				IAbsenceLayer absLayer = new AbsenceLayer(absence, currentAbsencePeriod.Value);
+				selectedUnlockedAbsenceDay.CreateAndAddAbsence(absLayer);
+			}
+			Presenter.ModifySchedulePart(selectedUnlockedAbsenceDays);
+			foreach (IScheduleDay part in selectedUnlockedAbsenceDays)
+				ScheduleViewBase.RefreshRangeForAgentPeriod(part.Person, absencePeriod);
+		}
+       
         private IList<IScheduleDay> removeLockedSchedules(IEnumerable<IScheduleDay> selectedSchedules)
         {
             IList<IScheduleDay> schedulesToKeep = new List<IScheduleDay>();
