@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var skill = _mocks.StrictMock<ISkill>();
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 
-            createSkillInitializeExpectation(skill);
-            
+			createSkillInitializeExpectation(skill);
+			
             _mocks.ReplayAll();
 
             target.SchedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -109,7 +109,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Expect.Call(_permittedPeople[0].Name).Return(new Name("first", "last")).Repeat.Any();
             Expect.Call(_permittedPeople[0].Id).Return(Guid.NewGuid()).Repeat.Any();
             Expect.Call(_permittedPeople[0].PermissionInformation).Return(new PermissionInformation(_permittedPeople[0]));
-            
+        	Expect.Call(skill.DefaultResolution).Return(15);
+
             _mocks.ReplayAll();
 
             target.ReloadScheduleData(_uow);
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Expect.Call(_permittedPeople[0].Id).Return(Guid.NewGuid()).Repeat.Any();
             Expect.Call(_permittedPeople[0].EmploymentNumber).Return("hej");
             Expect.Call(_permittedPeople[0].PermissionInformation).Return(new PermissionInformation(_permittedPeople[0]));
-            
+        	
             _mocks.ReplayAll();
             target.LoadWithIntradayData(_uow);
             Assert.IsTrue(_schedulerState.FilteredPersonDictionary.Values.Contains(_permittedPeople[0]));

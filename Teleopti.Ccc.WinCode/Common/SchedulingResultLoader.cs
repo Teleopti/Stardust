@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -137,7 +138,8 @@ namespace Teleopti.Ccc.WinCode.Common
         private void initializeSkillDays()
         {
             SchedulerState.SchedulingResultState.SkillDays =
-                _skillDayLoadHelper.LoadSchedulerSkillDays(SchedulerState.RequestedPeriod.ToDateOnlyPeriod(SchedulerState.TimeZoneInfo),
+				_skillDayLoadHelper.LoadSchedulerSkillDays(SchedulerState.RequestedPeriod.ChangeStartTime(new TimeSpan(-8, -1, 0, 0)).ChangeEndTime(
+							new TimeSpan(8, 1, 0, 0)).ToDateOnlyPeriod(SchedulerState.TimeZoneInfo),
                                                            SchedulerState.SchedulingResultState.Skills,
                                                            SchedulerState.RequestedScenario);
         }
@@ -180,6 +182,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public void InitializeScheduleData()
         {
+        	splitAllWorkloadDaysWithMergedIntervals();
             var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
             var dateOnlyPeriod =
                 SchedulerState.RequestedPeriod.ToDateOnlyPeriod(timeZone);
@@ -189,7 +192,26 @@ namespace Teleopti.Ccc.WinCode.Common
             }
         }
 
-        private void reassociatePeople(IUnitOfWork uow)
+    	private void splitAllWorkloadDaysWithMergedIntervals()
+    	{
+			if (SchedulerState==null || SchedulerState.SchedulingResultState == null || SchedulerState.SchedulingResultState.SkillDays==null)
+			{
+				return;
+			}
+
+			foreach (var skillDayItem in SchedulerState.SchedulingResultState.SkillDays)
+			{
+				var resolution = TimeSpan.FromMinutes(skillDayItem.Key.DefaultResolution);
+				var workloadDays = skillDayItem.Value.SelectMany(s => s.WorkloadDayCollection);
+				foreach (var workloadDay in workloadDays)
+				{
+					var mergedIntervals = workloadDay.TaskPeriodList.Where(t => t.Period.ElapsedTime() > resolution).ToList();
+					workloadDay.SplitTemplateTaskPeriods(mergedIntervals);
+				}
+			}
+    	}
+
+    	private void reassociatePeople(IUnitOfWork uow)
         {
             uow.Reassociate(Contracts);
             uow.Reassociate(ContractSchedules);
