@@ -61,7 +61,6 @@ CREATE TABLE mart.fact_quality_percentage
 	date_id int NOT NULL,
 	qm_login_id int NOT NULL,
 	quality_quest_id int NOT NULL,
-	quality_quest_type_id int NOT NULL,
 	percentage decimal(18, 0) NULL
 	)
 
@@ -70,16 +69,17 @@ ADD CONSTRAINT PK_fact_quality_percentage PRIMARY KEY CLUSTERED
 	(
 	date_id,
 	qm_login_id,
-	quality_quest_id,
-	quality_quest_type_id
+	quality_quest_id
 	)
 	
-ALTER TABLE [mart].[fact_quality_percentage]  WITH CHECK ADD  CONSTRAINT [FK_dim_quality_quest_type] FOREIGN KEY([quality_quest_type_id])
-REFERENCES [mart].[dim_quality_quest_type] ([quality_quest_type_id])
-GO
-
-ALTER TABLE [mart].[fact_quality_percentage]  WITH CHECK ADD  CONSTRAINT [FK_dim_quality_quest] FOREIGN KEY([quality_quest_id])
+ALTER TABLE [mart].[fact_quality_percentage]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_percentage_dim_quality_quest] FOREIGN KEY([quality_quest_id])
 REFERENCES [mart].[dim_quality_quest] ([quality_quest_id])
+
+ALTER TABLE [mart].[fact_quality_percentage]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_percentage_dim_date] FOREIGN KEY([date_id])
+REFERENCES [mart].[dim_date] ([date_id])
+
+ALTER TABLE [mart].[fact_quality_percentage]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_percentage_dim_acd_login] FOREIGN KEY([qm_login_id])
+REFERENCES [mart].[dim_acd_login] ([acd_login_id])
 GO
 
 ------------------
@@ -103,10 +103,16 @@ ADD CONSTRAINT PK_fact_quality_grades PRIMARY KEY CLUSTERED
 ALTER TABLE [mart].[fact_quality_grades]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_grades_dim_agent] FOREIGN KEY([qm_login_id])
 REFERENCES [mart].[dim_acd_login] ([acd_login_id])
 
+ALTER TABLE [mart].[fact_quality_grades]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_grades_dim_date] FOREIGN KEY([date_id])
+REFERENCES [mart].[dim_date] ([date_id])
+
 ALTER TABLE [mart].[fact_quality_grades]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_grades_dim_quality_quest] FOREIGN KEY([quality_quest_id])
 REFERENCES [mart].[dim_quality_quest] ([quality_quest_id])
 GO
 
+------------------
+--fact_quality_points
+------------------
 CREATE TABLE [mart].[fact_quality_points](
 	 [date_id] [int] NOT NULL,
 	 [qm_login_id] [int] NOT NULL,
@@ -124,6 +130,9 @@ ALTER TABLE mart.fact_quality_points ADD CONSTRAINT
 	
 ALTER TABLE [mart].[fact_quality_points]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_points_dim_agent] FOREIGN KEY([qm_login_id])
 REFERENCES [mart].[dim_acd_login] ([acd_login_id])
+
+ALTER TABLE [mart].[fact_quality_points]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_points_dim_date] FOREIGN KEY([date_id])
+REFERENCES [mart].[dim_date] ([date_id])
 
 ALTER TABLE [mart].[fact_quality_points]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_points_dim_quality_quest] FOREIGN KEY([quality_quest_id])
 REFERENCES [mart].[dim_quality_quest] ([quality_quest_id])
