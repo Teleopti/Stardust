@@ -10686,4 +10686,8 @@ These options are activated:
     <value>Ready Time vs. Contracted Schedule Time</value>
     <comment>Ready Time vs. Contracted Schedule Time</comment>
   </data>
+  <data name="YouShouldHaveXDaysOff" xml:space="preserve">
+    <value>You should have {0} days off.</value>
+    <comment>You should have X days off.</comment>
+  </data>
 </root>

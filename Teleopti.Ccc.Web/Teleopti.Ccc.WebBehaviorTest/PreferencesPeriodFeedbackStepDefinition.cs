@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeAMessageThatIShouldHave2DaysOff(int numOfDaysoff)
 		{
 			ScenarioContext.Current.Pending();
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.InnerHtml, Is.Not.StringContaining(numOfDaysoff + " days off"));
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.InnerHtml, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff)));
 		}
 
 		[Given(@"I have a day off preference on weekday (\d)")]
@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeAMessageThatMyPreferencesCanResult2DaysOff(int numOfDaysoff)
 		{
 			ScenarioContext.Current.Pending();
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackCanResult.InnerHtml, Is.Not.StringContaining(numOfDaysoff + " days off"));
 		}
 
 		[Given(@"I have a contract with a day off tolerance of negative 1 days")]
