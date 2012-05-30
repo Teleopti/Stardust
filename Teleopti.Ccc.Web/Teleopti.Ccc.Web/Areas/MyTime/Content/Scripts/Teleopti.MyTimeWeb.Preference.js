@@ -31,7 +31,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 					$('#Preference-body-inner .ui-selected')
 						.each(function (index, cell) {
 							var date = $(cell).data('mytime-date');
-							_ajax({
+							_ajaxForDate({
 								type: 'POST',
 								data: {
 									Date: date,
@@ -54,7 +54,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 				$('#Preference-body-inner .ui-selected')
 					.each(function (index, cell) {
 						var date = $(cell).data('mytime-date');
-						_ajax({
+						_ajaxForDate({
 							type: 'DELETE',
 							data: { Date: date },
 							date: date,
@@ -84,13 +84,29 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 	}
 
 	function _loadFeedbackForDate(date) {
-		_ajax({
+		_ajaxForDate({
 			url: "PreferenceFeedback/Feedback",
 			type: 'GET',
 			data: { Date: date },
 			date: date,
 			fillData: _fillFeedback
 		});
+	}
+
+	function _loadPeriodFeedback() {
+		$.myTimeAjax({
+			url: "PreferenceFeedback/ShouldHaveDaysOff",
+			dataType: "json",
+			data: { Date: _currentFixedDate() },
+			type: 'GET',
+			success: function (data, textStatus, jqXHR) {
+				$('#Preference-period-feedback-shouldhave .number').text(data);
+			}
+		});
+	}
+
+	function _currentFixedDate() {
+		return $('#Preference-body').data('mytime-periodselection').Date;
 	}
 
 	function _fillPreference(cell, data) {
@@ -112,7 +128,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 		possibleContractTimes.text(data.PossibleContractTimes || "");
 	}
 
-	function _ajax(options) {
+	function _ajaxForDate(options) {
 
 		var type = options.type || 'GET',
 		    date = options.date || null, // required
@@ -163,7 +179,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			},
 			statusCode404: statusCode404,
 			error: function (jqXHR, textStatus, errorThrown) {
-				
+
 				var cellHtml = $('<h2></h2>')
 					.addClass('error');
 
@@ -216,6 +232,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			_initPeriodSelection();
 			_activateSelectable();
 			_loadFeedbackSoon();
+			_loadPeriodFeedback();
 		},
 		FeedbackIsLoaded: function () {
 			return _feedbackLoadingStarted && !Teleopti.MyTimeWeb.Ajax.IsRequesting();

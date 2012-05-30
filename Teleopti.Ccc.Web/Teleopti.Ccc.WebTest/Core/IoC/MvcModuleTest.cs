@@ -453,5 +453,14 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Be.EqualTo<TeleoptiPrincipalInternalsFactory>();
 		}
 
+		[Test]
+		public void ShouldResolvePreferenceFeedbackControllerWithDependenciesBecauseOfBugInEnableClassInterceptors()
+		{
+			requestContainer.Resolve<PreferenceFeedbackController>()
+				.Should().Not.Be.Null();
+			requestContainer.Resolve<IPreferencePeriodFeedbackProvider>()
+				.Should().Not.Be.Null();
+		}
+
 	}
 }

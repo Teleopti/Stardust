@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
@@ -18,11 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class PreferenceFeedbackController : AsyncController
 	{
 		private readonly IPreferenceViewModelFactory _viewModelFactory;
+		private readonly IPreferencePeriodFeedbackProvider _preferencePeriodFeedbackProvider;
 
-		public PreferenceFeedbackController(IPreferenceViewModelFactory viewModelFactory)
+		public PreferenceFeedbackController(IPreferenceViewModelFactory viewModelFactory, IPreferencePeriodFeedbackProvider preferencePeriodFeedbackProvider)
 		{
 			_viewModelFactory = viewModelFactory;
+			_preferencePeriodFeedbackProvider = preferencePeriodFeedbackProvider;
 		}
+
 
 		[HttpGet]
 		[AsyncTask]
@@ -40,5 +44,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				throw exception;
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
+
+
+
+
+		[HttpGet]
+		[AsyncTask]
+		public void ShouldHaveDaysOffAsync(DateOnly date) { }
+
+		[UnitOfWork]
+		public virtual void ShouldHaveDaysOffTask(DateOnly date)
+		{
+			AsyncManager.Parameters["daysOff"] = _preferencePeriodFeedbackProvider.ShouldHaveDaysOff(date);
+		}
+
+		public JsonResult ShouldHaveDaysOffCompleted(int daysOff, Exception exception)
+		{
+			if (exception != null)
+				throw exception;
+			return Json(daysOff, JsonRequestBehavior.AllowGet);
+		}
+
+
 	}
 }

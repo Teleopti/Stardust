@@ -18,6 +18,9 @@
 		@string.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
 	}
 </div>
+<div id="Preference-period-feedback-shouldhave" class="pd5 info-pnl">
+	@Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span class='number'>-</span>"))
+</div>
 <div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 
 

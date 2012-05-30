@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a message that I should have (\d) days off")]
 		public void ThenIShouldSeeAMessageThatIShouldHave2DaysOff(int numOfDaysoff)
 		{
-			ScenarioContext.Current.Pending();
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.InnerHtml, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff)));
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff)));
 		}
 
 		[Given(@"I have a day off preference on weekday (\d)")]
