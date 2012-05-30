@@ -11,7 +11,6 @@
 				<Label>Week Period</Label>
 			</GroupBox.Header>
 			<StackPanel Orientation="Horizontal" Margin="10">
-				<!--<Button Content="prev" Height="23" Name="buttonPrevious" Width="75" Click="buttonPrevious_Click" />-->
 				<Button Name="buttonPrevious" Click="buttonPrevious_Click" Height="25" Width="29" >
 					<StackPanel>
 						<Image Source="..\..\Resources\ccc_Left.png" Width="16" Height="16" Margin="0,0,0,0"></Image>
@@ -27,14 +26,19 @@
 				</Button>
 			</StackPanel>
 		</GroupBox>
-		<!--</StackPanel>-->
 		<GroupBox Name="groupBoxBusinessUnit" Margin="5">
 			<GroupBox.Header>
 				<Label>Business Unit</Label>
 			</GroupBox.Header>
 			<StackPanel Name="stackPanelBusinessUnit" Width="200" Margin="10" HorizontalAlignment="Left">
-				<ComboBox Name="comboBoxBusinessUnit" ItemsSource="{Binding}"  DisplayMemberPath="Name" SelectedValuePath="Id" SelectedIndex="0" SelectionChanged="comboBoxBusinessUnit_SelectionChanged">
-				</ComboBox>
+				<ComboBox Name="comboBoxBusinessUnit" 
+						  SelectedItem="{Binding Path=SelectedBusinessUnit, Mode=TwoWay}"
+						  ItemsSource="{Binding Path=BusinessUnitCollection}"  
+						  DisplayMemberPath="Name" 
+						  SelectedValuePath="Id" 
+						  SelectionChanged="comboBoxBusinessUnit_SelectionChanged"
+						  IsSynchronizedWithCurrentItem="True"
+						  />
 			</StackPanel>
 		</GroupBox>
 		<GroupBox Name="groupBoxJobResultType" Margin="5">

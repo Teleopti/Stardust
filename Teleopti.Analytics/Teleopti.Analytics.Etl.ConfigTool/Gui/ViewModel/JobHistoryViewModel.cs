@@ -11,7 +11,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 		public DateTime EndTime { get; set; }
 		public TimeSpan Duration { get; set; }
 		public int RowsAffected { get; set; }
-		public bool RunByService { get; set; }
+		public string ScheduleName { get; set; }
 		public IList<JobStepHistoryViewModel> JobStepsHistory { get; private set; }
 		public bool Success { get; set; }
 		public string ErrorMessage { get; set; }

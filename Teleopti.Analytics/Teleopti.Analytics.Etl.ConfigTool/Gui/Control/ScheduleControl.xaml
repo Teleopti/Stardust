@@ -12,8 +12,8 @@
                 </ListView.ContextMenu>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Width="120" Header="ScheduleName"  DisplayMemberBinding="{Binding ScheduleName}" />
-                        <GridViewColumn Width="120" Header="JobName" DisplayMemberBinding="{Binding JobName}" />
+                        <GridViewColumn Width="120" Header="Schedule Name"  DisplayMemberBinding="{Binding ScheduleName}" />
+                        <GridViewColumn Width="120" Header="Job Name" DisplayMemberBinding="{Binding JobName}" />
                         <GridViewColumn Width="120" Header="Enabled" DisplayMemberBinding="{Binding Enabled}" />
                         <GridViewColumn Width="250" Header="Description" DisplayMemberBinding="{Binding Description}" />
                     </GridView>

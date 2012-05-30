@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
@@ -17,10 +18,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 			InitializeComponent();
 		}
 
-		public void LoadData(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
+		public void LoadData(DateTime startDate, DateTime endDate, BusinessUnitItem businessUnit, bool showOnlyErrors)
 		{
 			DataContext = null;
-			DataContext = JobHistoryMapper.Map(startDate, endDate, businessUnitId, showOnlyErrors);
+			DataContext = JobHistoryMapper.Map(startDate, endDate, businessUnit.Id, showOnlyErrors);
 		}
 
 		private void treeListView_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)

@@ -19,13 +19,13 @@
 				</ContextMenu>
 			</Controls:TreeListView.ContextMenu>
 			<Controls:TreeListView.Columns>
-				<GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}" Width="250" />
+				<GridViewColumn Header="Job Name" DisplayMemberBinding="{Binding Path=Name}" Width="250" />
 				<GridViewColumn Header="Business Unit Name" DisplayMemberBinding="{Binding Path=BusinessUnitName}" Width="120" />
 				<GridViewColumn Header="Start" DisplayMemberBinding="{Binding Path=StartTime}" Width="130" />
 				<GridViewColumn Header="End" DisplayMemberBinding="{Binding Path=EndTime}" Width="130" />
 				<GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Path=Duration}" Width="65" />
 				<GridViewColumn Header="Affected Rows" DisplayMemberBinding="{Binding Path=RowsAffected}" Width="85" />
-				<GridViewColumn Header="Run by service" DisplayMemberBinding="{Binding Path=RunByService}" Width="100" />
+				<GridViewColumn Header="Job Schedule name" DisplayMemberBinding="{Binding Path=ScheduleName}" Width="150" />
 				<GridViewColumn Header="Error Message" DisplayMemberBinding="{Binding Path=ErrorMessage}" Width="350" />
 			</Controls:TreeListView.Columns>
 			<Controls:TreeListView.ItemContainerStyle>

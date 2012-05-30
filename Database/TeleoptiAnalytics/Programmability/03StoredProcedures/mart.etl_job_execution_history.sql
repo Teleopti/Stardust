@@ -29,6 +29,8 @@ BEGIN
 						job_end_time datetime,
 						job_duration_s int,
 						job_affected_rows int,
+						schedule_id int,
+						schedule_name nvarchar(150),
 						jobstep_execution_id int,
 						jobstep_name nvarchar(200),
 						jobstep_duration_s int,
@@ -78,6 +80,8 @@ BEGIN
 			je.job_end_time,
 			je.duration_s AS job_duration_s,
 			je.affected_rows AS job_affected_rows,
+			je.schedule_id,
+			sch.schedule_name,
 			jse.jobstep_execution_id,
 			js.jobstep_name,
 			jse.duration_s AS jobstep_duration_s,
@@ -88,6 +92,10 @@ BEGIN
 			er.inner_error_exception_stacktrace AS inner_exception_trace
 		FROM 
 			mart.etl_job_execution je
+		INNER JOIN
+			mart.etl_job_schedule sch
+		ON
+			je.schedule_id = sch.schedule_id
 		INNER JOIN
 			mart.etl_jobstep_execution jse
 		ON
@@ -119,6 +127,8 @@ BEGIN
 			je.job_end_time,
 			je.duration_s AS job_duration_s,
 			je.affected_rows AS job_affected_rows,
+			je.schedule_id,
+			sch.schedule_name,
 			jse.jobstep_execution_id,
 			js.jobstep_name,
 			jse.duration_s AS jobstep_duration_s,
@@ -129,6 +139,10 @@ BEGIN
 			er.inner_error_exception_stacktrace AS inner_exception_trace
 		FROM 
 			mart.etl_job_execution je
+		INNER JOIN
+			mart.etl_job_schedule sch
+		ON
+			je.schedule_id = sch.schedule_id
 		INNER JOIN
 			mart.etl_jobstep_execution jse
 		ON

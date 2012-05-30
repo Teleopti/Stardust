@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Interfaces.Domain;
 
@@ -12,6 +13,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 		private readonly CultureInfo _culture;
 		private DateTime _startDate;
 		private DateTime _endDate;
+		private BusinessUnitItem _selectedBusinessUnit;
 		private IList<BusinessUnitItem> _businessUnitCollection;
 		private bool _showOnlyErrors;
 
@@ -22,7 +24,22 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 									: CultureInfo.GetCultureInfo("sv-SE");
 
 			SetWeekPeriod();
+
+			UpdateBusinessUnitCollection();
+			SetFirstBusinessUnitAsSelected();
 			ShowOnlyErrors = true;
+		}
+
+		public void UpdateBusinessUnitCollection()
+		{
+			var previousSelectedItem = SelectedBusinessUnit;
+			BusinessUnitCollection = BusinessUnitItemMapper.Map();
+			SelectedBusinessUnit = BusinessUnitCollection.FirstOrDefault(bu => previousSelectedItem != null && bu.Id == previousSelectedItem.Id);
+		}
+
+		private void SetFirstBusinessUnitAsSelected()
+		{
+			SelectedBusinessUnit = BusinessUnitCollection[0];
 		}
 
 		private void SetWeekPeriod()
@@ -30,7 +47,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			StartDate = GetFirstDayOfWeek(DateTime.Now.Date, _culture);
 			EndDate = StartDate.AddDays(6);
 		}
-		
+
 		private static DateTime GetFirstDayOfWeek(DateTime dayInWeek, CultureInfo cultureInfo)
 		{
 			DayOfWeek firstDay = cultureInfo.DateTimeFormat.FirstDayOfWeek;
@@ -41,7 +58,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			return firstDayInWeek;
 		}
 
-		
+
 		public DateTime StartDate
 		{
 			get { return _startDate; }
@@ -52,7 +69,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			}
 		}
 
-		
+
 		public DateTime EndDate
 		{
 			get { return _endDate; }
@@ -65,20 +82,25 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 
 		public IList<BusinessUnitItem> BusinessUnitCollection
 		{
-			get
+			get { return _businessUnitCollection; }
+			private set
 			{
-				if (_businessUnitCollection == null)
-				{
-					_businessUnitCollection = BusinessUnitItemMapper.Map();
-					SelectedBusinessUnitId = _businessUnitCollection[0].Id;
-				}
-				return _businessUnitCollection;
+				_businessUnitCollection = value;
+				RaisePropertyChanged("BusinessUnitCollection");
 			}
 		}
 
-		public Guid SelectedBusinessUnitId { get; set; }
+		public BusinessUnitItem SelectedBusinessUnit
+		{
+			get { return _selectedBusinessUnit; }
+			set
+			{
+				_selectedBusinessUnit = value;
+				RaisePropertyChanged("SelectedBusinessUnit");
+			}
+		}
 
-		
+
 		public bool ShowOnlyErrors
 		{
 			get { return _showOnlyErrors; }

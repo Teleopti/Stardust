@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -34,14 +33,20 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 					           		BusinessUnitName = (string) row["business_unit_name"],
 					           		StartTime = (DateTime) row["job_start_time"],
 					           		EndTime = (DateTime) row["job_end_time"],
-									Duration = new TimeSpan(0, 0, (int)row["job_duration_s"]),
-									RowsAffected = (int)row["job_affected_rows"],
-									Success = true
+					           		Duration = new TimeSpan(0, 0, (int) row["job_duration_s"]),
+					           		RowsAffected = (int) row["job_affected_rows"],
+					           		ScheduleName =
+					           			(int) row["schedule_id"] == -1
+					           				? "Manual Etl"
+					           				: row["schedule_name"] == DBNull.Value 
+												? string.Empty 
+												: (string) row["schedule_name"],
+					           		Success = true
 					           	};
 				}
 
 				var jobStepModel = new JobStepHistoryViewModel
-				                   	{
+									{
 										Name = (string)row["jobstep_name"],
 										Duration = new TimeSpan(0, 0, (int)row["jobstep_duration_s"]),
 										RowsAffected = row["jobstep_affected_rows"] == DBNull.Value ? 0 : (int)row["jobstep_affected_rows"],
@@ -50,7 +55,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 										ErrorStackTrace = row["exception_trace"] == DBNull.Value ? string.Empty : (string)row["exception_trace"],
 										InnerErrorMessage = row["inner_exception_msg"] == DBNull.Value ? string.Empty : (string)row["inner_exception_msg"],
 										InnerErrorStackTrace = row["inner_exception_trace"] == DBNull.Value ? string.Empty : (string)row["inner_exception_trace"]
-				                   	};
+									};
 				if (!string.IsNullOrEmpty(jobStepModel.ErrorMessage))
 				{
 					jobModel.ErrorMessage = jobStepModel.ErrorMessage;
@@ -62,7 +67,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 				}
 				jobModel.AddJobStepHistory(jobStepModel);
 
-				previousJobExecutionId = (int) row["job_execution_id"];
+				previousJobExecutionId = (int)row["job_execution_id"];
 			}
 
 			if (jobModel != null)

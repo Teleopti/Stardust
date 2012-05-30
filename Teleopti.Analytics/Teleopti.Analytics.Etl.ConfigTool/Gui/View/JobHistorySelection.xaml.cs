@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Controls;
+using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel;
 using Teleopti.Interfaces.Domain;
 
@@ -22,9 +24,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 		{
 			_model = new JobHistorySelectionViewModel(baseConfiguration);
 			DataContext = _model;
-			comboBoxBusinessUnit.DataContext = _model.BusinessUnitCollection;
 		}
-
+		
 		private void buttonPrevious_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
 			_model.PreviousPeriod();
@@ -39,12 +40,13 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 
 		private void buttonRefresh_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
+			_model.UpdateBusinessUnitCollection();
 			SelectionChanged();
 		}
 
 		private void SelectionChanged()
 		{
-			JobHistorySelectionChanged(this, new JobHistorySelectionEventArgs(StartDate, EndDate, BusinessUnitId, ShowOnlyErrors));
+			JobHistorySelectionChanged(this, new JobHistorySelectionEventArgs(StartDate, EndDate, BusinessUnit, ShowOnlyErrors));
 		}
 
 		public DateTime StartDate
@@ -57,9 +59,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 			get { return _model.EndDate; }
 		}
 
-		public Guid BusinessUnitId
+		public BusinessUnitItem BusinessUnit
 		{
-			get { return _model.SelectedBusinessUnitId; }
+			get { return _model.SelectedBusinessUnit; }
 		}
 
 		public bool ShowOnlyErrors
@@ -69,7 +71,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 
 		private void comboBoxBusinessUnit_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			_model.SelectedBusinessUnitId = (Guid)comboBoxBusinessUnit.SelectedValue;
+			if (comboBoxBusinessUnit.SelectedValue == null)
+				return;
+
+			//_model.SelectedBusinessUnit = (Guid)comboBoxBusinessUnit.SelectedValue;
 			SelectionChanged();
 		}
 

@@ -45,9 +45,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			{
 				Clipboard.SetDataObject(msg.ToString(), true, 10, 10);
 			}
-			catch (ExternalException ex)
+			catch (ExternalException)
 			{
-				MessageBox.Show(ex.Message);
+				const string errorMessage = "The Clipboard is being used by another program, please try again later.";
+				MessageBox.Show(errorMessage, "Copy Error Failure");
 			}
 		}
 
