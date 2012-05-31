@@ -7,11 +7,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	{
 		private readonly IVirtualSchedulePeriodProvider _virtualSchedulePeriodProvider;
 		private readonly ISchedulePeriodTargetDayOffCalculator _schedulePeriodTargetDayOffCalculator;
+		private readonly ISchedulePeriodPossibleResultDayOffCalculator _schedulePeriodPossibleResultDayOffCalculator;
 
-		public PreferencePeriodFeedbackProvider(IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider, ISchedulePeriodTargetDayOffCalculator schedulePeriodTargetDayOffCalculator)
+		public PreferencePeriodFeedbackProvider(IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider, ISchedulePeriodTargetDayOffCalculator schedulePeriodTargetDayOffCalculator, ISchedulePeriodPossibleResultDayOffCalculator schedulePeriodPossibleResultDayOffCalculator)
 		{
 			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
 			_schedulePeriodTargetDayOffCalculator = schedulePeriodTargetDayOffCalculator;
+			_schedulePeriodPossibleResultDayOffCalculator = schedulePeriodPossibleResultDayOffCalculator;
 		}
 
 		public MinMax<int> TargetDaysOff(DateOnly date)
@@ -22,7 +24,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public int PossibleResultDaysOff(DateOnly date)
 		{
-			return 0;
+			return _schedulePeriodPossibleResultDayOffCalculator.PossibleResultDayOff();
 		}
+	}
+
+	public interface ISchedulePeriodPossibleResultDayOffCalculator
+	{
+		int PossibleResultDayOff();
 	}
 }
