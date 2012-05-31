@@ -46,15 +46,13 @@ BEGIN
 		insert_date,
 		update_date
 	)
-	SELECT DISTINCT
+	SELECT
 		quality_quest_type_id		= -1,
 		quality_quest_type_name		= 'Not Defined',
 		datasource_id				= -1,
 		insert_date					= getdate(),
 		update_date					= getdate()
-	FROM [mart].[dim_quality_quest_type]
-	WHERE
-		NOT EXISTS (SELECT d.quality_quest_type_id FROM mart.dim_quality_quest_type d WHERE d.quality_quest_type_id=-1)
+	WHERE NOT EXISTS (SELECT * FROM mart.dim_quality_quest_type WHERE quality_quest_type_id=-1)
 
 	SET IDENTITY_INSERT mart.dim_quality_quest_type OFF
 

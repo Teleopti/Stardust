@@ -29,7 +29,6 @@ CREATE TABLE [mart].[dim_quality_quest](
 	[quality_quest_original_id] [int] NULL,
 	[quality_quest_score_weight] [real] NULL,
 	[quality_quest_name] [nvarchar](200) NOT NULL,
-	[quality_quest_code] [int] NULL,
 	[quality_quest_type_id] [int] NOT NULL,
 	[log_object_name] [nvarchar](100) NOT NULL,
 	[datasource_id] [smallint] NOT NULL,

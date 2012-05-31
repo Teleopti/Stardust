@@ -16,7 +16,7 @@ set @acd_type_id=25
 set @acd_type_desc='Zoom QM'
 
 declare @log_object_id int
-select @log_object_id =  ISNULL(MAX(log_object_id)+1,1) from [dbo].[log_object]
+select @log_object_id =  ISNULL(MAX(log_object_id)+10,10) from [dbo].[log_object]
 
 INSERT INTO [dbo].[log_object]
            ([log_object_id]
@@ -76,9 +76,22 @@ inner join  [dbo].[quality_info] qi on qi.original_id = q.qformid
 where e.evalstatus = 'FINISHED'
 and u.status <> 'DELETED'
 
+EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', 'PBI9112_Demoreg_TeleoptiCCCAgg'
+EXEC mart.sys_crossDatabaseView_load
+
 --Run initial load from ETL, then run
 /*
+--Make it a internal log_object:
 update mart.sys_datasource
 set internal=1
-where datasource_id=2
+where log_object_name='My Zoom Log'
+
+--The stuff:
+exec mart.etl_dim_quality_quest_type_load -2
+exec mart.etl_dim_quality_quest_load -2
+
+--check the result:
+select * from mart.dim_quality_quest_type
+select * from mart.dim_quality_quest
+
 */
