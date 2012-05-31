@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     {
         private IUnitOfWork _uow;
         private AlarmTypeRepository _alarmTypeRepository;
-        private IList<IAlarmType> _alarmTypes;
+        private readonly List<IAlarmType> _alarmTypes = new List<IAlarmType>();
         private AlarmControlView _view;
         private int _selectedItem =-1;
 
@@ -42,8 +42,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void ShowGrid()
         {
-            _alarmTypes = _alarmTypeRepository.LoadAll();
-
             var backgroundWorkerLoadData = new BackgroundWorker();
             backgroundWorkerLoadData.RunWorkerCompleted += SetupAlarmGrid;
             backgroundWorkerLoadData.RunWorkerAsync();
@@ -73,7 +71,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             var atype = new AlarmType(new Description() , Color.Empty   , new TimeSpan(0, 0, 0), AlarmTypeMode.UserDefined,0.0);
             _alarmTypes.Add(atype);
-          //  _alarmTypeRepository.Add(atype);
             teleoptiGridControl1.Refresh();
         }
 
@@ -84,9 +81,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 if (ViewBase.ShowYesNoMessage(Resources.DeleteSelectedRowsQuestionmark, Resources.Alarm) ==
                     DialogResult.Yes)
                 {
-					if(_alarmTypes[_selectedItem].Id.HasValue)
-						_alarmTypeRepository.Remove(_alarmTypes[_selectedItem]);
-                    _alarmTypes.RemoveAt(_selectedItem);
+                	var item = _alarmTypes[_selectedItem];
+					if(item.Id.HasValue)
+						_alarmTypeRepository.Remove(item);
+                    _alarmTypes.Remove(item);
                     _selectedItem = -1;
                 }
             }
@@ -116,7 +114,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 Warn(Resources.SelectSuitableColor);
                 return false;
             }   
-            if (type.ThresholdTime.TotalSeconds  < 0)//is not used ( i think...)
+            if (type.ThresholdTime < TimeSpan.Zero)
             {
                 Warn(Resources.SetTresholdTime);
                 return false;
@@ -126,7 +124,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public void Unload()
         {
-            _alarmTypes = null;
+            _alarmTypes.Clear();
         }
 
         public void SetUnitOfWork(IUnitOfWork value)
@@ -151,7 +149,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private void LoadAlarmTypes()
         {
             _alarmTypeRepository = new AlarmTypeRepository(_uow);
-            _alarmTypes = _alarmTypeRepository.LoadAll();
+            _alarmTypes.Clear();
+			_alarmTypes.AddRange(_alarmTypeRepository.LoadAll());
 
             ShowGrid();
         }

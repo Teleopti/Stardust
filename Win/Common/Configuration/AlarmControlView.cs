@@ -114,13 +114,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         }
         #endregion
 
-
-
-
-
-        #region IAlarmControlView Members
-
-        public void ShowThisItem(int alarmid)
+    	public void ShowThisItem(int alarmid)
         {
         	var handler = PresentThisItem;
             if(handler!= null)
@@ -131,11 +125,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public event EventHandler<CustomEventArgs<int>> PresentThisItem;
 
-        #endregion
-
-        #region IAlarmControlView Members
-
-        public event EventHandler<CustomEventArgs<string>> WarnOfThis;
+    	public event EventHandler<CustomEventArgs<string>> WarnOfThis;
 		public void Warning(string message)
 		{
 			var handler = WarnOfThis;
@@ -144,7 +134,5 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				handler.Invoke(this, new CustomEventArgs<string>(message));
 			}
 		}
-
-    	#endregion
     }
 }
