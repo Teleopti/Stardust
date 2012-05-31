@@ -2,11 +2,11 @@
 --dim_quality_quest_type
 ------------------
 CREATE TABLE [mart].[dim_quality_quest_type](
-	[quality_quest_type_id] [int] identity(1,1) NOT NULL,
-	[quality_quest_type_name] [nvarchar](200) NULL,
-	[insert_date] [smalldatetime] NOT NULL,
-	[update_date] [smalldatetime] NOT NULL,
-	[datasource_id] [smallint] NOT NULL
+	[quality_quest_type_id] int identity(1,1) NOT NULL,
+	[quality_quest_type_name] nvarchar(200) NULL,
+	[insert_date] smalldatetime NOT NULL,
+	[update_date] smalldatetime NOT NULL,
+	[datasource_id] smallint NOT NULL
 )
 
 ALTER TABLE [mart].[dim_quality_quest_type]
@@ -24,16 +24,16 @@ GO
 --dim_quality_quest
 ------------------
 CREATE TABLE [mart].[dim_quality_quest](
-	[quality_quest_id] [int] IDENTITY(1,1) NOT NULL,
-	[quality_quest_agg_id] [int] NULL,
-	[quality_quest_original_id] [int] NULL,
-	[quality_quest_score_weight] [real] NULL,
-	[quality_quest_name] [nvarchar](200) NOT NULL,
-	[quality_quest_type_id] [int] NOT NULL,
-	[log_object_name] [nvarchar](100) NOT NULL,
-	[datasource_id] [smallint] NOT NULL,
-	[insert_date] [smalldatetime] NOT NULL,
-	[update_date] [smalldatetime] NOT NULL
+	[quality_quest_id] int IDENTITY(1,1) NOT NULL,
+	[quality_quest_agg_id] int NULL,
+	[quality_quest_original_id] int NULL,
+	[quality_quest_score_weight] real NULL,
+	[quality_quest_name] nvarchar(200) NOT NULL,
+	[quality_quest_type_id] int NOT NULL,
+	[log_object_name] nvarchar(100) NOT NULL,
+	[datasource_id] smallint NOT NULL,
+	[insert_date] smalldatetime NOT NULL,
+	[update_date] smalldatetime NOT NULL
 )
 
 ALTER TABLE [mart].[dim_quality_quest]
@@ -57,23 +57,27 @@ GO
 --fact_quality
 ------------------
 CREATE TABLE [mart].[fact_quality](
-	[date_id] [int] NOT NULL,
-	[acd_login_id] [int] NOT NULL,
-	[evaluation_id] [int] NOT NULL,
-	[quality_quest_id] [int] NOT NULL,
+	[date_id] int NOT NULL,
+	[acd_login_id] int NOT NULL,
+	[evaluation_id] int NOT NULL,
+	[quality_quest_id] int NOT NULL,
 	[quality_quest_type_id] [int] NOT NULL,
-	[score] decimal(20,6) NULL
+	[score] decimal(20,6) NULL,
+	[datasource_id] int NOT NULL
 )
 
 ALTER TABLE mart.fact_quality
-ADD CONSTRAINT PK_fact_quality PRIMARY KEY CLUSTERED 
+ADD CONSTRAINT PK_fact_quality PRIMARY KEY NONCLUSTERED 
 	(
-	date_id,
-	acd_login_id,
 	evaluation_id,
-	quality_quest_id,
-	quality_quest_type_id
-	) 
+	datasource_id
+	)
+
+CREATE CLUSTERED INDEX [CIX_fact_quality_date_id] ON [mart].[fact_quality] 
+(
+	[date_id] ASC,
+	[acd_login_id] ASC
+)
 
 ALTER TABLE [mart].[fact_quality]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_dim_agent] FOREIGN KEY([acd_login_id])
 REFERENCES [mart].[dim_acd_login] ([acd_login_id])
@@ -84,17 +88,12 @@ REFERENCES [mart].[dim_date] ([date_id])
 ALTER TABLE [mart].[fact_quality]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_dim_quality_quest] FOREIGN KEY([quality_quest_id])
 REFERENCES [mart].[dim_quality_quest] ([quality_quest_id])
 
-ALTER TABLE [mart].[fact_quality]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_dim_quality_quest_type] FOREIGN KEY([quality_quest_type_id])
-REFERENCES [mart].[dim_quality_quest_type] ([quality_quest_type_id])
-GO
-
-
 --Agg Tables used as agent_info + agent_logg
 CREATE TABLE dbo.quality_info(
-	[quality_id] [int] IDENTITY(1,1) NOT NULL,
+	[quality_id] int IDENTITY(1,1) NOT NULL,
 	[quality_name] nvarchar(200) NOT NULL,
 	[quality_type] nvarchar(200) NOT NULL,
-	[score_weight] [real] NULL,
+	[score_weight] real NULL,
 	[log_object_id] int NOT NULL,
 	[original_id] int NOT NULL,
 	
@@ -112,11 +111,11 @@ REFERENCES [dbo].[log_object] ([log_object_id])
 GO
 
 CREATE TABLE dbo.quality_logg(
-	[quality_id] [int] NOT NULL,
-	[date_from] [smalldatetime] NOT NULL,
-	[agent_id] [int] NOT NULL,
-	[evaluation_id] [int] NOT NULL,
-	[score] [real] NULL
+	[quality_id] int NOT NULL,
+	[date_from] smalldatetime NOT NULL,
+	[agent_id] int NOT NULL,
+	[evaluation_id] int NOT NULL,
+	[score] real NULL
 )
 
 ALTER TABLE dbo.quality_logg ADD CONSTRAINT

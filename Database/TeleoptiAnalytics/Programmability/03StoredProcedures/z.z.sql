@@ -89,9 +89,10 @@ where log_object_name='My Zoom Log'
 --The stuff:
 exec mart.etl_dim_quality_quest_type_load -2
 exec mart.etl_dim_quality_quest_load -2
+exec [mart].[etl_fact_quality_load] '2009-01-01' ,'2012-03-01',4
 
 --check the result:
 select * from mart.dim_quality_quest_type
 select * from mart.dim_quality_quest
-
+select * from mart.fact_quality
 */
