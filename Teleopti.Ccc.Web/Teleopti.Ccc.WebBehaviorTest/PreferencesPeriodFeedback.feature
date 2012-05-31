@@ -48,7 +48,6 @@ Scenario: Period feedback of contract day off tolerance
 		| Field						 | Value |
 		| Positive day off tolerance | 1     |
 		| Negative day off tolerance | 1     |
-
 	When I view preferences
 	Then I should see a message that I should have between 1 and 3 days off
 

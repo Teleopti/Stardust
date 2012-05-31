@@ -19,7 +19,12 @@
 	}
 </div>
 <div id="Preference-period-feedback-shouldhave" class="pd5 info-pnl">
-	@Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span class='number'>-</span>"))
+	@{
+		var range = Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span class='lower'>-</span>", "<span class='upper'>-</span>"));
+		var single = Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span class='days'>-</span>"));
+	}
+	<div class="range">@range</div>
+	<div class="single">@single</div>
 </div>
 <div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 

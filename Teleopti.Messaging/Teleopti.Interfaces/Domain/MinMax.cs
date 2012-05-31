@@ -169,5 +169,10 @@ namespace Teleopti.Interfaces.Domain
         }
 
         #endregion
+
+		public override string ToString()
+		{
+			return Minimum.ToString() + "-" + Maximum.ToString();
+		}
     }
 }

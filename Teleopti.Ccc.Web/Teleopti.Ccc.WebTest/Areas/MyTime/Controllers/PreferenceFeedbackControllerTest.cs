@@ -32,19 +32,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Data.Should().Be(model);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnDaysOff()
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			var target = new PreferenceFeedbackController(null, preferencePeriodFeedbackProvider);
-			var daysOff = new Random().Next(0, 10000000);
+			var daysOff = new DaysOffViewModel();
 			var date = DateOnly.Today.AddDays(new Random().Next(0, 1000));
 
 			preferencePeriodFeedbackProvider.Stub(x => x.ShouldHaveDaysOff(date)).Return(daysOff);
 
 			target.ShouldHaveDaysOffTask(date);
 			var result = target.ShouldHaveDaysOffCompleted(
-				(int) target.AsyncManager.Parameters["daysOff"],
+				target.AsyncManager.Parameters["daysOff"] as DaysOffViewModel,
 				Task.Factory.StartNew(() => { })
 				);
 

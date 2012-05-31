@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a message that I should have between (\d) and (\d) days off")]
 		public void ThenIShouldSeeAMessageThatIShouldHaveBetweenXAndYDaysOff(int lower, int upper)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveBetweenXAndYDaysOff, lower, upper)));
 		}
 

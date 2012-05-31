@@ -58,12 +58,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			AsyncManager.Parameters["daysOff"] = _preferencePeriodFeedbackProvider.ShouldHaveDaysOff(date);
 		}
 
-		public JsonResult ShouldHaveDaysOffCompleted(int daysOff, Task task)
+		public JsonResult ShouldHaveDaysOffCompleted(DaysOffViewModel daysOff, Task task)
 		{
 			task.Wait();
 			return Json(daysOff, JsonRequestBehavior.AllowGet);
 		}
 
-
 	}
+	
 }

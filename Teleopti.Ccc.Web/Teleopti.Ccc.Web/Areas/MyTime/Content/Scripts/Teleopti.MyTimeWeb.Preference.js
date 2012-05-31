@@ -100,7 +100,17 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			data: { Date: _currentFixedDate() },
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
-				$('#Preference-period-feedback-shouldhave .number').text(data);
+				var area = $("#Preference-period-feedback-shouldhave");
+				if (data.Lower == data.Upper) {
+					$('.range', area).hide();
+					$('.single', area).show();
+					$('.days', area).text(data.Lower);
+				} else {
+					$('.range', area).show();
+					$('.single', area).hide();
+					$('.lower', area).text(data.Lower);
+					$('.upper', area).text(data.Upper);
+				}
 			}
 		});
 	}
