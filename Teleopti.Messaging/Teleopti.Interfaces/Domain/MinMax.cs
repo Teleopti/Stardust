@@ -170,6 +170,12 @@ namespace Teleopti.Interfaces.Domain
 
         #endregion
 
+		/// <summary>
+		/// The to string string
+		/// </summary>
+		/// <returns></returns>
+		/// <remarks>
+		/// </remarks>
 		public override string ToString()
 		{
 			return Minimum.ToString() + "-" + Maximum.ToString();
