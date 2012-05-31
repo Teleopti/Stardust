@@ -25,10 +25,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			var target = new PreferencePeriodFeedbackProvider(virtualSchedulePeriodProvider, schedulePeriodTargetDayOffCalculator);
 
-			var result = target.ShouldHaveDaysOff(DateOnly.Today);
+			var result = target.TargetDaysOff(DateOnly.Today);
 
-			result.Lower.Should().Be(daysOff.Minimum);
-			result.Upper.Should().Be(daysOff.Maximum);
+			result.Should().Be(daysOff);
 		}
 	}
 

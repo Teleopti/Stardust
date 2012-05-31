@@ -33,22 +33,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldReturnDaysOff()
+		public void ShouldReturnPeriodFeedback()
 		{
-			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
-			var target = new PreferenceFeedbackController(null, preferencePeriodFeedbackProvider);
-			var daysOff = new DaysOffViewModel();
-			var date = DateOnly.Today.AddDays(new Random().Next(0, 1000));
+			var preferencePeriodViewModelFactory = MockRepository.GenerateMock<IPreferencePeriodViewModelFactory>();
+			var target = new PreferenceFeedbackController(null, preferencePeriodViewModelFactory);
+			var model = new PreferencePeriodFeedbackViewModel();
 
-			preferencePeriodFeedbackProvider.Stub(x => x.ShouldHaveDaysOff(date)).Return(daysOff);
+			preferencePeriodViewModelFactory.Stub(x => x.CreatePeriodFeedbackViewModel(DateOnly.Today)).Return(model);
 
-			target.ShouldHaveDaysOffTask(date);
-			var result = target.ShouldHaveDaysOffCompleted(
-				target.AsyncManager.Parameters["daysOff"] as DaysOffViewModel,
+			target.PeriodFeedbackTask(DateOnly.Today);
+			var result = target.PeriodFeedbackCompleted(
+				target.AsyncManager.Parameters["model"] as PreferencePeriodFeedbackViewModel,
 				Task.Factory.StartNew(() => { })
 				);
 
-			result.Data.Should().Be(daysOff);
+			result.Data.Should().Be(model);
 		}
+
 	}
 }

@@ -14,21 +14,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			_schedulePeriodTargetDayOffCalculator = schedulePeriodTargetDayOffCalculator;
 		}
 
-		public DaysOffViewModel ShouldHaveDaysOff(DateOnly date)
+		public MinMax<int> TargetDaysOff(DateOnly date)
 		{
 			var virtualSchedulePeriod = _virtualSchedulePeriodProvider.VirtualSchedulePeriodForDate(date);
-			var result = _schedulePeriodTargetDayOffCalculator.TargetDaysOff(virtualSchedulePeriod);
-			return new DaysOffViewModel
-			{
-				Lower = result.Minimum,
-				Upper = result.Maximum
-			};
+			return _schedulePeriodTargetDayOffCalculator.TargetDaysOff(virtualSchedulePeriod);
 		}
-	}
 
-	public class DaysOffViewModel
-	{
-		public int Lower { get; set; }
-		public int Upper { get; set; }
+		public int PossibleResultDaysOff(DateOnly date)
+		{
+			return 0;
+		}
 	}
 }

@@ -92,26 +92,29 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			fillData: _fillFeedback
 		});
 	}
-
 	function _loadPeriodFeedback() {
 		$.myTimeAjax({
-			url: "PreferenceFeedback/ShouldHaveDaysOff",
+			url: "PreferenceFeedback/PeriodFeedback",
 			dataType: "json",
 			data: { Date: _currentFixedDate() },
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				var area = $("#Preference-period-feedback-shouldhave");
-				if (data.Lower == data.Upper) {
+				if (data.TargetDaysOff.Lower == data.TargetDaysOff.Upper) {
 					$('.range', area).hide();
 					$('.single', area).show();
-					$('.days', area).text(data.Lower);
+					$('.days', area).text(data.TargetDaysOff.Lower);
 				} else {
 					$('.range', area).show();
 					$('.single', area).hide();
-					$('.lower', area).text(data.Lower);
-					$('.upper', area).text(data.Upper);
+					$('.lower', area).text(data.TargetDaysOff.Lower);
+					$('.upper', area).text(data.TargetDaysOff.Upper);
 				}
-			}
+				$("#Preference-period-feedback-canresult .days").text(data.PossibleResultDaysOff);
+			},
+			error: function (a, b, c) {
+				
+				}
 		});
 	}
 

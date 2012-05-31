@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class PreferenceFeedbackController : AsyncController
 	{
 		private readonly IPreferenceViewModelFactory _viewModelFactory;
-		private readonly IPreferencePeriodFeedbackProvider _preferencePeriodFeedbackProvider;
+		private readonly IPreferencePeriodViewModelFactory _preferencePeriodViewModelFactory;
 
-		public PreferenceFeedbackController(IPreferenceViewModelFactory viewModelFactory, IPreferencePeriodFeedbackProvider preferencePeriodFeedbackProvider)
+		public PreferenceFeedbackController(IPreferenceViewModelFactory viewModelFactory, IPreferencePeriodViewModelFactory preferencePeriodViewModelFactory)
 		{
 			_viewModelFactory = viewModelFactory;
-			_preferencePeriodFeedbackProvider = preferencePeriodFeedbackProvider;
+			_preferencePeriodViewModelFactory = preferencePeriodViewModelFactory;
 		}
 
 
@@ -50,20 +50,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[HttpGet]
 		[AsyncTask]
-		public void ShouldHaveDaysOffAsync(DateOnly date) { }
+		public void PeriodFeedbackAsync(DateOnly date) { }
 
 		[UnitOfWork]
-		public virtual void ShouldHaveDaysOffTask(DateOnly date)
+		public virtual void PeriodFeedbackTask(DateOnly date)
 		{
-			AsyncManager.Parameters["daysOff"] = _preferencePeriodFeedbackProvider.ShouldHaveDaysOff(date);
+			AsyncManager.Parameters["model"] = _preferencePeriodViewModelFactory.CreatePeriodFeedbackViewModel(date);
 		}
 
-		public JsonResult ShouldHaveDaysOffCompleted(DaysOffViewModel daysOff, Task task)
+		public JsonResult PeriodFeedbackCompleted(PreferencePeriodFeedbackViewModel model, Task task)
 		{
 			task.Wait();
-			return Json(daysOff, JsonRequestBehavior.AllowGet);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
+
 	}
-	
+
 }

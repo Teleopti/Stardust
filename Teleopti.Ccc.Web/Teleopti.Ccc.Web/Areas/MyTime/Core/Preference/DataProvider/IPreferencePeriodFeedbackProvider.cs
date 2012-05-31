@@ -4,6 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
 	public interface IPreferencePeriodFeedbackProvider
 	{
-		DaysOffViewModel ShouldHaveDaysOff(DateOnly date);
+		MinMax<int> TargetDaysOff(DateOnly date);
+		int PossibleResultDaysOff(DateOnly date);
 	}
 }
