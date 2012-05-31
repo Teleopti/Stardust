@@ -85,8 +85,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AlarmEventArgs.cs" />
+    <Compile Include="Common\IJobHistoryRepository.cs" />
     <Compile Include="Common\IConfigurationHandler.cs" />
+    <Compile Include="Common\IEtlJobLock.cs" />
     <Compile Include="Common\IEtlRunningInformation.cs" />
+    <Compile Include="Common\IJobRunner.cs" />
+    <Compile Include="Common\IRunController.cs" />
     <Compile Include="Common\IRunControllerRepository.cs" />
     <Compile Include="Common\PmPermissionType.cs" />
     <Compile Include="PerformanceManager\IPmPermissionExtractor.cs" />
@@ -96,12 +100,12 @@
     <Compile Include="PerformanceManager\ResultDto.cs" />
     <Compile Include="PerformanceManager\UserDto.cs" />
     <Compile Include="Common\IEtlJobRelativePeriod.cs" />
-    <Compile Include="Common\IEtlLog.cs" />
-    <Compile Include="Common\IEtlLogCollection.cs" />
-    <Compile Include="Common\IEtlSchedule.cs" />
-    <Compile Include="Common\IEtlScheduleCollection.cs" />
-    <Compile Include="Common\ILogRepository.cs" />
-    <Compile Include="Common\IScheduleRepository.cs" />
+    <Compile Include="Common\IEtlJobLog.cs" />
+    <Compile Include="Common\IEtlJobLogCollection.cs" />
+    <Compile Include="Common\IEtlJobSchedule.cs" />
+    <Compile Include="Common\IEtlJobScheduleCollection.cs" />
+    <Compile Include="Common\IJobLogRepository.cs" />
+    <Compile Include="Common\IJobScheduleRepository.cs" />
     <Compile Include="Common\JobScheduleType.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Transformer\EtlToolStateType.cs" />
