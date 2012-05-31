@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
-	<CustomerName>Teleopti RD NOT for production use!</CustomerName>
-	<ExpirationDate>2012-09-30T12:00:00</ExpirationDate>
-	<ExpirationGracePeriod>P30D</ExpirationGracePeriod>
-	<MaxActiveAgents>10000</MaxActiveAgents>
-	<MaxActiveAgentsGrace>10</MaxActiveAgentsGrace>
+	<CustomerName>BehaivorTests</CustomerName>
+	<ExpirationDate>2013-12-31T10:48:04</ExpirationDate>
+	<ExpirationGracePeriod>P0D</ExpirationGracePeriod>
+	<MaxActiveAgents>200</MaxActiveAgents>
+	<MaxActiveAgentsGrace>0</MaxActiveAgentsGrace>
 	<AgentsOrSeats>0</AgentsOrSeats>
-	<MaxSeats>10000</MaxSeats>
+	<MaxSeats>200</MaxSeats>
 	<SeatRatio>1.5</SeatRatio>
 	<TeleoptiCCC>
 		<Base>true</Base>
 		<AgentScheduleMessenger>true</AgentScheduleMessenger>
 		<AgentSelfService>true</AgentSelfService>
-		<Developer>true</Developer>
 		<HolidayPlanner>true</HolidayPlanner>
 		<PayrollIntegration>true</PayrollIntegration>
 		<PerformanceManager>true</PerformanceManager>
 		<RealtimeAdherence>true</RealtimeAdherence>
 		<ShiftTrades>true</ShiftTrades>
 		<MyTimeWeb>true</MyTimeWeb>
+		<Anywhere>true</Anywhere>
 	</TeleoptiCCC>
 	<Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
 	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
@@ -30,9 +30,9 @@
 					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
 				</Transforms>
 				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-				<DigestValue>qh8qjVJW2/B0mV4G4kALta1Ovj0=</DigestValue>
+				<DigestValue>hDNTSDF/Dey0pFiPFxHpDRPb2Io=</DigestValue>
 			</Reference>
 		</SignedInfo>
-		<SignatureValue>Xlr/+hpHugErjCsrvicGUeK8lK27xTC8s2S5IMaOzgH2198OjvsE9T/9WIWjHyTKyflBvvqDhE9GRkMETFtOh53ObtSaDhMpKp1q10mwG14DIB55smssoPUNqGq/hDROxFsHp7hvseh+CLhdEalFv3WK7I/phtWwkfJdOmCGAyw=</SignatureValue>
+		<SignatureValue>2f0hR4i4QBSFMO9h+s2aBFWpdLUcl4JZ404tFz16DJTgu7ZUy9nhljoZg8oI85BrJkRNLNicWZusyfy51p02Y72N+JFa93YKce8FlN6SpBgKziRKVp4P2wM3NYIH1W00WILydydoDeq9mLMWroDpRl5QIUuBaTUvjbIf1SqVm+Y=</SignatureValue>
 	</Signature>
 </License>
