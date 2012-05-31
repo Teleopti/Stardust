@@ -111,10 +111,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 					$('.upper', area).text(data.TargetDaysOff.Upper);
 				}
 				$("#Preference-period-feedback-canresult .days").text(data.PossibleResultDaysOff);
-			},
-			error: function (a, b, c) {
-				
-				}
+			}
 		});
 	}
 
