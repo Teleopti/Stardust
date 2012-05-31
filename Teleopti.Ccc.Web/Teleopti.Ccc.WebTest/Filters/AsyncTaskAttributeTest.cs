@@ -39,17 +39,17 @@ namespace Teleopti.Ccc.WebTest.Filters
 		}
 
 		[Test]
-		public void ShouldPutExceptionInAsyncManagersParameters()
+		public void ShouldPutTaskInAsyncManagersParameters()
 		{
 			SetupDependencyResolver();
 			var target = new AsyncTaskAttribute();
 			var filterTester = new FilterTester();
-			var controller = new TestTaskController(c => { throw new Exception(); });
+			var controller = new TestTaskController(c => { });
 			filterTester.UseController(controller);
 
 			filterTester.InvokeFilter(target);
 
-			Assert.That(() => controller.AsyncManager.Parameters.ContainsKey("exception"), Is.True.After(1000, 10));
+			Assert.That(() => controller.AsyncManager.Parameters.ContainsKey("task"), Is.True.After(1000, 10));
 		}
 
 		[Test]
