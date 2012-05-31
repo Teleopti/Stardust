@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class DataSourcesFactory : IDataSourcesFactory
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
-		private readonly IEnumerable<IDenormalizer> _externalDenormalizers;
+		private readonly IEnumerable<IMessageSender> _externalDenormalizers;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
 		private Configuration _applicationConfiguration;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private const string _connectionStringKeyName = "connection.connection_string";
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers")]
-		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IDenormalizer> externalDenormalizers, IDataSourceConfigurationSetter dataSourceConfigurationSetter)
+		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> externalDenormalizers, IDataSourceConfigurationSetter dataSourceConfigurationSetter)
 		{
 			_enversConfiguration = enversConfiguration;
 			_externalDenormalizers = externalDenormalizers;

@@ -62,12 +62,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             	var application =
             		new InitializeApplication(
             			new DataSourcesFactory(new EnversConfiguration(),
-            			                       new List<IDenormalizer>
+            			                       new List<IMessageSender>
             			                       	{
-            			                       		new ScheduleDenormalizer(notify, saveToDenormalizationQueue),
-            			                       		new MeetingDenormalizer(notify, saveToDenormalizationQueue),
-                                                    new GroupPageDenormalizer(notify, saveToDenormalizationQueue ),
-                                                    new PersonFinderDenormalizer(notify,saveToDenormalizationQueue)
+            			                       		new ScheduleMessageSender(notify, saveToDenormalizationQueue),
+            			                       		new MeetingMessageSender(notify, saveToDenormalizationQueue),
+                                                    new GroupPageChangedMessageSender(notify, saveToDenormalizationQueue ),
+                                                    new PersonChangedMessageSender(notify,saveToDenormalizationQueue),
+                                                    new PersonPeriodChangedMessageSender(notify,saveToDenormalizationQueue)
             			                       	},
 															DataSourceConfigurationSetter.ForServiceBus()),
             			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));

@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Main
                 messageBrokerDisabled = true;
             }
 
-				new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForDesktop()),
+				new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForDesktop()),
 				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
 				{
 					MessageBrokerDisabled = messageBrokerDisabled
@@ -130,12 +130,13 @@ namespace Teleopti.Ccc.Win.Main
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
-												  new List<IDenormalizer>
+												  new List<IMessageSender>
 												      {
-												          new ScheduleDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue), 
-                                                          new MeetingDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue),
-                                                          new GroupPageDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue ),
-                                                          new PersonFinderDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue )
+												          new ScheduleMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue), 
+                                                          new MeetingMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue),
+                                                          new GroupPageChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue ),
+                                                          new PersonChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue ),
+                                                          new PersonPeriodChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue )
 												      }, DataSourceConfigurationSetter.ForDesktop()),
         			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
         			{

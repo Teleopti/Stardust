@@ -25,13 +25,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IAuditSetter _auditSettingProvider;
 		private bool disposed;
 
-		private readonly IEnumerable<IDenormalizer> _activeDenormalizers = new List<IDenormalizer>
+		private readonly IEnumerable<IMessageSender> _activeDenormalizers = new List<IMessageSender>
 		                                                                   	{
                                                                                //that should be remove (asad)
 		                                                                   	};
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, IAuditSetter auditSettingProvider, IEnumerable<IDenormalizer> externalDenormalizers)
+		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, IAuditSetter auditSettingProvider, IEnumerable<IMessageSender> externalDenormalizers)
 		{
 			SessionContextBinder = new StaticSessionContextBinder();
 			InParameter.NotNull("sessionFactory", sessionFactory);
@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
 
-			var denormalizerList = new List<IDenormalizer>
+			var denormalizerList = new List<IMessageSender>
 			                       	{
 			                       		//that should be remove (asad)
-                                        //new PersonFinderDenormalizer()
+                                        //new PersonChangedMessageSender()
 			                       	};
 			denormalizerList.AddRange(externalDenormalizers);
 

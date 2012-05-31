@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -49,8 +50,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
          }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public  void UpdateFindPerson(string ids )
+        public  void UpdateFindPerson(Guid[] inputIds )
         {
+            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
@@ -59,8 +61,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateFindPersonData(string ids)
+        public void UpdateFindPersonData(Guid[] inputIds)
         {
+            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(

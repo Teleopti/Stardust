@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.PersistAll();
 			SkipRollback();
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
-			_target.UpdateFindPerson(Guid.NewGuid().ToString());
+			_target.UpdateFindPerson(new Guid[ ] {Guid.NewGuid()});
 		}
 
 		[Test]
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.PersistAll();
 			SkipRollback();
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
-			_target.UpdateFindPersonData(Guid.NewGuid().ToString());
+            _target.UpdateFindPersonData(new Guid[] { Guid.NewGuid() });
 		}
     }
 
