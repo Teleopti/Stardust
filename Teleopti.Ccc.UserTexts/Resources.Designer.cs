@@ -24154,6 +24154,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your preferences can result in {0} days off..
+        /// </summary>
+        public static string YourPreferencesCanResultXDaysOff {
+            get {
+                return ResourceManager.GetString("YourPreferencesCanResultXDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your schedule for {0} to {1}.
         /// </summary>
         public static string YourScheduleForDateParameters {

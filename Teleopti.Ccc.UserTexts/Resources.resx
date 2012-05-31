@@ -10694,4 +10694,8 @@ These options are activated:
     <value>You should have between {0} and {1} days off.</value>
     <comment>You should have between X and Y days off.</comment>
   </data>
+  <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
+    <value>Your preferences can result in {0} days off.</value>
+    <comment>Your preferences can result in X days off.</comment>
+  </data>
 </root>

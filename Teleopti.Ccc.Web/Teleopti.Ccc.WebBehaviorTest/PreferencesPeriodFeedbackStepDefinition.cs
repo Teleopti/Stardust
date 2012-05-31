@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Given(@"I have a day off preference on weekday (\d)")]
-		public void GivenIHaveADayOffPreferenceOnWeekday3(int thOfDay)
+		public void GivenIHaveADayOffPreferenceOnWeekday3(int weekday)
 		{
-			UserFactory.User().Setup(new DayOffPreference(thOfDay));
+			UserFactory.User().Setup(new DayOffPreference(weekday));
 		}
 
 		[Given(@"I have a contract with:")]
@@ -67,9 +67,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"I should see a message that my preferences can result (\d) days off")]
-		public void ThenIShouldSeeAMessageThatMyPreferencesCanResult2DaysOff(int numOfDaysoff)
+		public void ThenIShouldSeeAMessageThatMyPreferencesCanResult2DaysOff(int daysoff)
 		{
 			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackCanResult.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXDaysOff, daysoff)));
 		}
 
 		[Given(@"I have a contract schedule with weekday (\d) day off")]
