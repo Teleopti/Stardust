@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         {
             Color t = (Color)e.Style.CellValue;
             if(t == Color.Empty ) return;
-            _alarm.DisplayColor  =(Color) e.Style.CellValue;
+        	_alarm.DisplayColor = t;
         }
 
         private void NewTimeSpan(GridSaveCellInfoEventArgs e)
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             double d = (double) e.Style.CellValue;
             if(d< 0) return;
 
-            _alarm.ThresholdTime = TimeSpan.FromSeconds((double)e.Style.CellValue);
+            _alarm.ThresholdTime = TimeSpan.FromSeconds(d);
         }
 
         private void NewName(GridSaveCellInfoEventArgs e)
@@ -257,14 +257,15 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             {
                 return;
             }
-             IAlarmType alarmType = _alarmTypes.SingleOrDefault(a => a.Description.Name == s);
+
+        	IAlarmType alarmType = _alarmTypes.SingleOrDefault(a => a.Description.Name == s);
             if (alarmType != null)
             {
                 _view.Warning(Resources.NameAlreadyExists );
                 return;
             }
 
-            _alarm.Description = new Description((string)e.Style.CellValue );
+            _alarm.Description = new Description(s);
         }
     }
 }
