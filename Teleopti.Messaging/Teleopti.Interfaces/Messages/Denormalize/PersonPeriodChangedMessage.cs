@@ -1,12 +1,13 @@
-﻿using System;
+﻿
+using System;
 
 namespace Teleopti.Interfaces.Messages.Denormalize
 {
 	/// <summary>
-	/// Denormalize the grouping message.
+	/// Denormalize the person period message.
 	/// </summary>
 	[Serializable]
-	public class DenormalizeGroupingMessage : RaptorDomainMessage
+	public class PersonPeriodChangedMessage : RaptorDomainMessage
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 
@@ -22,10 +23,6 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		/// 
 		/// </summary>
 		public Guid[] Ids { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public int  GroupingType { get; set; }
 
 	}
 }

@@ -1,3 +1,4 @@
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,10 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-    public class PersonFinderDenormalizer :IDenormalizer
+    public class PersonPeriodChangedMessageSender :IMessageSender
     {
         private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
-		                                                        		typeof (IPerson),
 		                                                        		typeof (ITeam),
 		                                                        		typeof (ISite),
 		                                                        		typeof (IContract),
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
     	private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
     	private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
 
-		public PersonFinderDenormalizer(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
+        public PersonPeriodChangedMessageSender(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
 		{
 			_sendDenormalizeNotification = sendDenormalizeNotification;
 			_saveToDenormalizationQueue = saveToDenormalizationQueue;
@@ -42,29 +42,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
             if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
             {
-				var persons = modifiedRoots.Select(r => r.Root).OfType<IPerson>();
-				foreach (var personList in persons.Batch(400))
-				{
-					var idsAsString = (from p in personList select p.Id.ToString()).ToArray();
-					var ids = string.Join(",", idsAsString);
-                    var message = new DenormalizePersonFinderMessage
-                    {
-                        Ids = ids,
-                       IsPerson  = true,
-                    };
-                    _saveToDenormalizationQueue.Execute(message, runSql);
-					atLeastOneMessage = true;
-				}
-
 				var notPerson = (from p in modifiedRoots where !(p.Root is Person) select p.Root).ToList();
 				foreach (var notpersonList in notPerson.Batch(400))
 				{
-					var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.ToString()).ToArray();
-					var ids = string.Join(",", idsAsString);
-                    var message = new DenormalizePersonFinderMessage
+					var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id).ToArray();
+                    Guid[] ids = idsAsString.Select(g => g ?? Guid.Empty).ToArray();
+                    
+                    var message = new PersonPeriodChangedMessage
                     {
                         Ids = ids,
-                        IsPerson  = false,
                     };
                     _saveToDenormalizationQueue.Execute(message, runSql);
 					atLeastOneMessage = true;
