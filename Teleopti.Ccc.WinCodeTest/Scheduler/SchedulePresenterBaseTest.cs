@@ -1135,14 +1135,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         }
 
         [Test]
-        public void VerifyAddAbsenceWhenOneDaySelected()
+        public void VerifyAddAbsenceAccordingToDialogPeriodEvenIfOnlyOneDaySelected()
         {
             var ass = _mocks.StrictMock<IPersonAssignment>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
 			var scheduleRange = _mocks.StrictMock<IScheduleRange>();
             var selectedItem = _mocks.StrictMock<IAbsence>();
             var dialog = _mocks.StrictMock<IAddLayerViewModel<IAbsence>>();
-            var period = _schedulerState.RequestedPeriod.Period();
+			var period = new DateTimePeriod(2009, 2, 1, 2009, 2, 2);
             Expect.Call(schedulePart.Period).Return(period).Repeat.Any();
             Expect.Call(_viewBase.CurrentColumnSelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
@@ -1158,10 +1158,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			Expect.Call(scheduleDictionary[_person])
 				.Return(scheduleRange).Repeat.AtLeastOnce();
-			Expect.Call(scheduleRange.ScheduledDay(new DateOnly(2008, 11, 04)))
-				.Return(schedulePart);
-			Expect.Call(scheduleRange.ScheduledDay(new DateOnly(2008, 11, 05)))
-				.Return(schedulePart);
+			Expect.Call(scheduleRange.ScheduledDay(new DateOnly())).IgnoreArguments()
+				.Return(schedulePart).Repeat.AtLeastOnce();
         	const int numberOfAbsences = 2;
 			Expect.Call(() => schedulePart.CreateAndAddAbsence(null)).IgnoreArguments().Repeat.Times(numberOfAbsences);
 			Expect.Call(ass.CheckRestrictions).Repeat.Times(numberOfAbsences);
