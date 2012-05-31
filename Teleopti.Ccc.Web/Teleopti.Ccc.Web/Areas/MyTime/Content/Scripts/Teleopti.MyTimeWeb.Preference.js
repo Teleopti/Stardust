@@ -229,6 +229,8 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			_initDeleteButton();
 		},
 		PreferencePartialInit: function () {
+			if (!$('#Preference-body').length)
+				return;
 			_initPeriodSelection();
 			_activateSelectable();
 			_loadFeedbackSoon();
