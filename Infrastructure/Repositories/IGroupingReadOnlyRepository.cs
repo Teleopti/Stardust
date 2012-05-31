@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		IEnumerable<ReadOnlyGroupPage> AvailableGroupPages();
 		IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage,DateOnly queryDate);
 		IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate);
-	    void UpdateGroupingReadModel(string ids);
-        void UpdateGroupingReadModelGroupPage(string ids);
-        void UpdateGroupingReadModelData(string ids);
+	    void UpdateGroupingReadModel(Guid[] inputIds);
+        void UpdateGroupingReadModelGroupPage(Guid[] inputIds);
+        void UpdateGroupingReadModelData(Guid[] inputIds);
 	}
 }

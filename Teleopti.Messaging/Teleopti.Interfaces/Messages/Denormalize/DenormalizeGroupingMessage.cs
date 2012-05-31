@@ -21,7 +21,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		/// <summary>
 		/// 
 		/// </summary>
-		public string Ids { get; set; }
+		public Guid[] Ids { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>

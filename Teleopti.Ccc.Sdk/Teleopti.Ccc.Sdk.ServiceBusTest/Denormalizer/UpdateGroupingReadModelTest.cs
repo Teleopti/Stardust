@@ -26,37 +26,37 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_target = new UpdateGroupingReadModel(_unitOfWorkFactory,_groupingReadOnlyRep);
 		}
 
-		[Test]
-		public void ShouldCallRepToUpdatePersons()
-		{
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_uow);
-			Expect.Call(() =>_groupingReadOnlyRep.UpdateGroupingReadModel("IDS"));
-			Expect.Call(_uow.Dispose);
-			_mocks.ReplayAll();
-			_target.Execute(1, "IDS");
-			_mocks.VerifyAll();
-		}
+        [Test]
+        public void ShouldCallRepToUpdatePersons()
+        {
+            Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_uow);
+            Expect.Call(() => _groupingReadOnlyRep.UpdateGroupingReadModel(new Guid[0]));
+            Expect.Call(_uow.Dispose);
+            _mocks.ReplayAll();
+            _target.Execute(1, new Guid[0]);
+            _mocks.VerifyAll();
+        }
 
-		[Test]
-		public void ShouldCallRepToUpdatePage()
-		{
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_uow);
-			Expect.Call(() => _groupingReadOnlyRep.UpdateGroupingReadModelGroupPage("IDS"));
-			Expect.Call(_uow.Dispose);
-			_mocks.ReplayAll();
-			_target.Execute(2, "IDS");
-			_mocks.VerifyAll();
-		}
+        [Test]
+        public void ShouldCallRepToUpdatePage()
+        {
+            Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_uow);
+            Expect.Call(() => _groupingReadOnlyRep.UpdateGroupingReadModelGroupPage(new Guid[0]));
+            Expect.Call(_uow.Dispose);
+            _mocks.ReplayAll();
+            _target.Execute(2, new Guid[0]);
+            _mocks.VerifyAll();
+        }
 
-		[Test]
-		public void ShouldCallRepToUpdateData()
-		{
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_uow);
-			Expect.Call(() => _groupingReadOnlyRep.UpdateGroupingReadModelData("IDS"));
-			Expect.Call(_uow.Dispose);
-			_mocks.ReplayAll();
-			_target.Execute(3, "IDS");
-			_mocks.VerifyAll();
-		}
+        [Test]
+        public void ShouldCallRepToUpdateData()
+        {
+            Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_uow);
+            Expect.Call(() => _groupingReadOnlyRep.UpdateGroupingReadModelData(new Guid[0]));
+            Expect.Call(_uow.Dispose);
+            _mocks.ReplayAll();
+            _target.Execute(3, new Guid[0]);
+            _mocks.VerifyAll();
+        }
 	}
 }

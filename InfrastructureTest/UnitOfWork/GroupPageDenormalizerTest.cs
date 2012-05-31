@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var person = new Person();
 			var message = new DenormalizeGroupingMessage
                     {
-                        Ids = "",
+                        Ids = new Guid[1],
                         GroupingType = 1,
                     };
 			var roots = new IRootChangeInfo[1];
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var page = new GroupPage("Page");
 			var message = new DenormalizeGroupingMessage
 			{
-				Ids = "",
+				Ids = new Guid[1],
 				GroupingType = 2,
 			};
 			var roots = new IRootChangeInfo[1];
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var contract = new Contract("Page");
 			var message = new DenormalizeGroupingMessage
 			{
-				Ids = "",
+				Ids = new Guid[1],
 				GroupingType = 3,
 			};
 			var roots = new IRootChangeInfo[1];

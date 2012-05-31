@@ -27,9 +27,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
         public void GroupingReadModelTest()
         {
             var person = PersonFactory.CreatePerson();
-            person.SetId(Guid.NewGuid());
+            Guid TempGuid = Guid.NewGuid();
+            person.SetId(TempGuid);
 
-            var ids = person.Id.ToString();
+            Guid[] ids = new Guid[] { TempGuid };
         	var mess = new DenormalizeGroupingMessage
         	           	{
         	           		Ids = ids,
@@ -51,8 +52,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
         [Test]
         public void GroupingReadModelGroupPageTest()
         {
-           const string ids = "IDS";
-
+           //const string ids = "IDS";
+           Guid TempGuid = Guid.NewGuid();
+       
+           Guid[] ids = new Guid[] { TempGuid };
             using (_mocks.Record())
             {
                 Expect.Call(() => _updateGroupingReadModel.Execute(2, ids));
@@ -72,9 +75,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
         public void GroupingReadModelDataTest()
         {
             var skillTest = SkillFactory.CreateSkill("Test3");
-            skillTest.SetId(Guid.NewGuid());
+            Guid TempGuid = Guid.NewGuid();
+            skillTest.SetId(TempGuid);
 
-            var ids = skillTest.Id.ToString();
+            Guid[] ids = new Guid[] {TempGuid};
 
             using (_mocks.Record())
             {

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Infrastructure.Repositories;
+﻿using System;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public void Execute(int type,string ids)
+		public void Execute(int type,Guid[] ids)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
 			{

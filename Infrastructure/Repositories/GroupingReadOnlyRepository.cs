@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -64,8 +65,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateGroupingReadModel(string ids)
+        public void UpdateGroupingReadModel(Guid[] inputIds)
         {
+            //change the array to comma seperated string
+            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
             using(var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
@@ -74,8 +77,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateGroupingReadModelGroupPage(string ids)
+        public void UpdateGroupingReadModelGroupPage(Guid[] inputIds)
         {
+            //change the array to comma seperated string
+            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
@@ -84,8 +89,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateGroupingReadModelData(string ids)
+        public void UpdateGroupingReadModelData(Guid[] inputIds)
         {
+            //change the array to comma seperated string
+            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(

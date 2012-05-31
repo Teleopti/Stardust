@@ -46,8 +46,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				var persons = modifiedRoots.Select(r => r.Root).OfType<IPerson>();
                 foreach (var personList in persons.Batch(400))
                 {
-                    var idsAsString = (from p in personList select p.Id.ToString()).ToArray();
-                    var ids = string.Join(",", idsAsString);
+                    var idsAsString = (from p in personList select p.Id).ToArray();
+                    Guid[] ids = idsAsString.Select(g => g ?? Guid.Empty).ToArray() ;
+     
                     var message = new DenormalizeGroupingMessage
                     {
                         Ids = ids,
@@ -61,8 +62,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				var groupPage = modifiedRoots.Select(r => r.Root).OfType<IGroupPage>();
                 foreach (var groupPageList in groupPage.Batch(400))
                 {
-                    var idsAsString = (from p in groupPageList select p.Id.ToString()).ToArray();
-                    var ids = string.Join(",", idsAsString);
+                    var idsAsString = (from p in groupPageList select p.Id).ToArray();
+                    Guid[] ids = idsAsString.Select(g => g ?? Guid.Empty).ToArray();
                     var message = new DenormalizeGroupingMessage
                     {
                         Ids = ids,
@@ -76,8 +77,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                 var notPerson = (from p in modifiedRoots where !((p.Root is Person)||(p.Root is GroupPage ) ) select p.Root).ToList();
                 foreach (var notpersonList in notPerson.Batch(400))
                 {
-                    var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.ToString()).ToArray();
-                    var ids = string.Join(",", idsAsString);
+                    var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id).ToArray();
+                    Guid[] ids = idsAsString.Select(g => g ?? Guid.Empty).ToArray();
                     var message = new DenormalizeGroupingMessage
                     {
                         Ids = ids,
