@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
+using Teleopti.Ccc.WinCode.Grouping;
 using log4net;
 using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
@@ -184,7 +185,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private DateOnly _defaultFilterDate;
 
         private ScheduleFilterModel _scheduleFilterModelCached = null;
-        private IList<IGroupPage> _cachedGroupPages = null;
         private bool _inUpdate;
         private int _totalScheduled;
         private readonly IPersonRequestCheckAuthorization _personRequestAuthorizationChecker;
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _isAuditingSchedules;
         private IScheduleTag _defaultScheduleTag = NullScheduleTag.Instance;
         private System.Windows.Forms.Timer _tmpTimer = new System.Windows.Forms.Timer();
-
+    	private ISchedulerGroupPagesProvider _groupPagesProvider;
         public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
 
         #region enums
@@ -433,6 +433,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _budgetPermissionService = _container.Resolve<IBudgetPermissionService>();
             _groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
             _schedulerState = _container.Resolve<ISchedulerStateHolder>();
+        	_groupPagesProvider = _container.Resolve<ISchedulerGroupPagesProvider>();
             _schedulerState.SetRequestedScenario(loadScenario);
             _schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod,TeleoptiPrincipal.Current.Regional.TimeZone);
 
@@ -1314,7 +1315,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var options =
 					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, 
                                                            _schedulerState.CommonStateHolder.ShiftCategories, false,
-														   true, _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState), 
+														   true, _groupPagesProvider, 
 														   _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
             {
                 if (options.ShowDialog(this) == DialogResult.OK)
@@ -1412,10 +1413,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   };
 
                 //> added by tamasb 2011-10-19 as fix for #16598: Error on optimize activities
-                _optimizerOriginalPreferences.SchedulingOptions.GroupOnGroupPage =
-                    _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
-                _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness =
-                    _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
+				_optimizerOriginalPreferences.SchedulingOptions.GroupOnGroupPage = _groupPagesProvider.GetGroups(false)[0];
+                    //_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
+				_optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness = _groupPagesProvider.GetGroups(false)[0];
+                    //_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
 				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
                 //<
 
@@ -1434,14 +1435,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_scheduleView.AllSelectedDates().Count == 0)
                     return;
 
-                if (!tryLoadGroupPages())
-                    return;
-
-                IList<IGroupPage> groupPages = _cachedGroupPages;
-
 
                 using (var optimizationPreferencesDialog =
-                    new OptimizationPreferencesDialog(_optimizationPreferences, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+                    new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
                 {
                     if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
                     {
@@ -1465,28 +1461,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 //    }
                 //}
             }
-        }
-
-        private bool tryLoadGroupPages()
-        {
-            if (_cachedGroupPages == null)
-            {
-                try
-                {
-                    _cachedGroupPages = _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState);
-                }
-                catch (DataSourceException ex)
-                {
-                    using (
-                        var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC,
-                                                                  Resources.ServerUnavailable))
-                    {
-                        view.ShowDialog();
-                    }
-                    return false;
-                }
-            }
-            return true;
         }
 
         private void toolStripRadioButtonDayOrIntraday_Click(object sender, EventArgs e) //todo osten : to tab
@@ -1550,8 +1524,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 ISchedulingOptions schedulingOptions = new SchedulingOptions
                                                            {
                                                                GroupPageForShiftCategoryFairness =
-                                                                   _scheduleOptimizerHelper.CreateGroupPages(
-                                                                       _scheduleView, _schedulerState)[0],
+																   _groupPagesProvider.GetGroups(false)[0],
                                                                UseRotations = false
                                                            };
 
@@ -4417,33 +4390,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_scheduleView.AllSelectedDates().Count == 0)
                     return;
 
-                if (_cachedGroupPages == null)
-                {
-                    try
-                    {
-                        _cachedGroupPages = _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState);
-                    }
-                    catch (DataSourceException ex)
-                    {
-                        using (
-                            var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC,
-                                                                      Resources.ServerUnavailable))
-                        {
-                            view.ShowDialog();
-                        }
-                        return;
-                    }
-                }
-
-
-                IList<IGroupPage> groupPages = _cachedGroupPages;
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
 							ScheduleEmploymentType.FixedStaff;
 				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
 				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences,
                                                                             _schedulerState.CommonStateHolder.ShiftCategories,
-																			 false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+																			 false, false,_groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
                 {
                     if (options.ShowDialog(this) == DialogResult.OK)
                     {
@@ -4464,25 +4417,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_scheduleView.AllSelectedDates().Count == 0)
                     return;
 
-                if (_cachedGroupPages == null)
-                {
-                    try
-                    {
-                        _cachedGroupPages = _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState);
-                    }
-                    catch (DataSourceException ex)
-                    {
-                        using (
-                            var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC,
-                                                                      Resources.ServerUnavailable))
-                        {
-                            view.ShowDialog();
-                        }
-                        return;
-                    }
-                }
-
-                IList<IGroupPage> groupPages = _cachedGroupPages;
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
 							ScheduleEmploymentType.HourlyStaff;
 				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
@@ -4490,7 +4424,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
                 using (var options =
 					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ShiftCategories,
-						false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+						false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
                 {
                     if (options.ShowDialog(this) == DialogResult.OK)
                     {
@@ -4854,7 +4788,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10),
                                                      groupPagePeriod.EndDate.AddDays(10));
 
-		    IGroupPage selectedGroupPage = null;
+		    IGroupPageLight selectedGroupPage = null;
             // ***** temporary cope
             if(options.OptimizationMethod == OptimizationMethod.BackToLegalState || options.OptimizationMethod == OptimizationMethod.IntradayActivityOptimization)
             {
@@ -5127,8 +5061,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             int demand;
             using (
                 var options = new TempNonBlendSchedulingPreferences(_optimizerOriginalPreferences.SchedulingOptions,
-                                                                    _scheduleOptimizerHelper.CreateGroupPages(
-                                                                        _scheduleView, _schedulerState),
+                                                                    _groupPagesProvider,
                                                                     SchedulerState.CommonStateHolder.Activities))
             {
                 options.ShowDialog();

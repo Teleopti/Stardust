@@ -367,6 +367,7 @@
     <Compile Include="Grouping\Commands\OpenModuleCommandTest.cs" />
     <Compile Include="Grouping\PeopleNavigatoPresenterTest.cs" />
     <Compile Include="Grouping\PersonSelectorPresenterTest.cs" />
+    <Compile Include="Grouping\SchedulerGroupPagesProviderTest.cs" />
     <Compile Include="Helpers\CollectionListener.cs" />
     <Compile Include="Helpers\CollectionViewComparer.cs" />
     <Compile Include="Helpers\PropertyChangedListener.cs" />

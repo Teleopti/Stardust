@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-        public void CreateNonBlendSkillsFromGrouping(IGroupPageDataProvider groupPageDataProvider, IGroupPage selectedGrouping, DateOnly dateOnly,
+        public void CreateNonBlendSkillsFromGrouping(IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping, DateOnly dateOnly,
             INonBlendSkillFromGroupingCreator nonBlendSkillFromGroupingCreator, int demand)
         {
             IGroupPage groupPage = CreateGroupPageForDate(groupPageDataProvider, selectedGrouping, dateOnly);
@@ -24,17 +24,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public static IGroupPage CreateGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, IGroupPage selectedGrouping, DateOnly dateOnly)
+        public static IGroupPage CreateGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping, DateOnly dateOnly)
         {
             IGroupPage groupPage;
             IGroupPageOptions options = new GroupPageOptions(groupPageDataProvider.PersonCollection)
             {
                 SelectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly),
-                CurrentGroupPageName = selectedGrouping.Description.Name,
-                CurrentGroupPageNameKey = selectedGrouping.DescriptionKey
+                CurrentGroupPageName = selectedGrouping.Name,
+                CurrentGroupPageNameKey = selectedGrouping.Key
             };
 
-            switch (selectedGrouping.DescriptionKey)
+            switch (selectedGrouping.Key)
             {
                 case "Main":
                     {
@@ -74,7 +74,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     }
                 default:
                     {
-                        groupPage = selectedGrouping;
+						//TODO
+                    	groupPage = null; // selectedGrouping;
                         break;
                     }
             }

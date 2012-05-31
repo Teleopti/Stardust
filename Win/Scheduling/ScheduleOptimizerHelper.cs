@@ -16,11 +16,10 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -811,7 +810,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        public static IGroupPagePerDate CreateGroupPagePerDate(IScheduleViewBase currentView, IGroupPageDataProvider groupPageDataProvider, IGroupPage selectedGrouping)
+		public static IGroupPagePerDate CreateGroupPagePerDate(IScheduleViewBase currentView, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping)
         {
             IDictionary<DateOnly, IGroupPage> dic = new Dictionary<DateOnly, IGroupPage>();
             DateOnlyPeriod selectedPeriod = GetSelectedPeriod(currentView);
@@ -823,7 +822,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new GroupPagePerDate(dic);
         }
 
-        public static IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, IGroupPage selectedGrouping)
+		public static IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping)
         {
             if (dates == null) throw new ArgumentNullException("dates");
             if (groupPageDataProvider == null) throw new ArgumentNullException("groupPageDataProvider");
@@ -838,31 +837,31 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new GroupPagePerDate(dic);
         }
 
-        /// <summary>
-        /// Used to display a combo of groupings when starting groupScheduling
-        /// </summary>
-        /// <param name="currentView">The current view.</param>
-        /// <param name="stateHolder">The state holder.</param>
-        /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public IList<IGroupPage> CreateGroupPages(IScheduleViewBase currentView, ISchedulerStateHolder stateHolder)
-        {
-            DateOnlyPeriod selectedPeriod = GetSelectedPeriod(currentView);
+		///// <summary>
+		///// Used to display a combo of groupings when starting groupScheduling
+		///// </summary>
+		///// <param name="currentView">The current view.</param>
+		///// <param name="stateHolder">The state holder.</param>
+		///// <returns></returns>
+		//[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		//public IList<IGroupPage> CreateGroupPages(IScheduleViewBase currentView, ISchedulerStateHolder stateHolder)
+		//{
+		//    DateOnlyPeriod selectedPeriod = GetSelectedPeriod(currentView);
 
 
-            IGroupPageDataProvider dataProvider = new GroupScheduleGroupPageDataProvider(stateHolder, new RepositoryFactory(),
-                                                                                         UnitOfWorkFactory.Current);
-            ((GroupScheduleGroupPageDataProvider)dataProvider).SetSelectedPeriod(selectedPeriod);
-            IGroupingsCreator groupingsCreator = new GroupingsCreator(dataProvider);
-            IList<IGroupPage> pages = groupingsCreator.CreateBuiltInGroupPages(true);
-            foreach (var userDefinedGrouping in dataProvider.UserDefinedGroupings)
-            {
-                pages.Add(userDefinedGrouping);
-            }
+		//    IGroupPageDataProvider dataProvider = new GroupScheduleGroupPageDataProvider(stateHolder, new RepositoryFactory(),
+		//                                                                                 UnitOfWorkFactory.Current);
+		//    ((GroupScheduleGroupPageDataProvider)dataProvider).SetSelectedPeriod(selectedPeriod);
+		//    IGroupingsCreator groupingsCreator = new GroupingsCreator(dataProvider);
+		//    IList<IGroupPage> pages = groupingsCreator.CreateBuiltInGroupPages(true);
+		//    foreach (var userDefinedGrouping in dataProvider.UserDefinedGroupings)
+		//    {
+		//        pages.Add(userDefinedGrouping);
+		//    }
 
-            return pages;
+		//    return pages;
 
-        }
+		//}
 
         public static DateOnlyPeriod GetSelectedPeriod(IScheduleViewBase currentView)
         {
@@ -881,17 +880,17 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new DateOnlyPeriod(minDate, maxDate);
         }
 
-        private static IGroupPage createGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, IGroupPage selectedGrouping, DateOnly dateOnly)
+		private static IGroupPage createGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping, DateOnly dateOnly)
         {
             IGroupPage groupPage;
             IGroupPageOptions options = new GroupPageOptions(groupPageDataProvider.PersonCollection)
                                             {
                                                 SelectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly),
-                                                CurrentGroupPageName = selectedGrouping.Description.Name,
-                                                CurrentGroupPageNameKey = selectedGrouping.DescriptionKey
+                                                CurrentGroupPageName = selectedGrouping.Name,
+                                                CurrentGroupPageNameKey = selectedGrouping.Key
                                             };
 
-            switch (selectedGrouping.DescriptionKey)
+            switch (selectedGrouping.Key)
             {
                 case "Main":
                     {
@@ -931,7 +930,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     }
                 default:
                     {
-                        groupPage = selectedGrouping;
+						// TODO fix for builtin
+                    	groupPage = null;// selectedGrouping;
                         break;
                     }
             }

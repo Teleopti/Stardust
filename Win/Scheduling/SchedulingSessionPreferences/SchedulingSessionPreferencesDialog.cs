@@ -6,6 +6,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -18,7 +19,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
     	private readonly IDaysOffPreferences _daysOffPreferences;
     	private readonly IList<IShiftCategory> _shiftCategories;
         private readonly bool _backToLegal;
-    	private readonly IList<IGroupPage> _groupPages;
+    	private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
+    	private readonly IList<IGroupPageLight> _groupPages;
         private readonly IList<IScheduleTag> _scheduleTags;
     	private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDaysOffPreferences daysOffPreferences, IList<IShiftCategory> shiftCategories,
-            bool reschedule, bool backToLegal, IList<IGroupPage> groupPages,
+            bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
             IList<IScheduleTag> scheduleTags)
             : this()
         {
@@ -38,7 +40,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _reschedule = reschedule;
             
             _backToLegal = backToLegal;
-        	_groupPages = groupPages;
+        	_groupPagesProvider = groupPagesProvider;
+        	_groupPages = groupPagesProvider.GetGroups(true);
             _scheduleTags = scheduleTags;
         }
 
@@ -96,8 +99,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
         	loadPersonalSettings();
 
-            schedulingSessionPreferencesPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule, 
-				_backToLegal,_groupPages,_scheduleTags);
+            schedulingSessionPreferencesPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule,
+				_backToLegal, _groupPagesProvider, _scheduleTags);
             dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
             dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
 			dayOffPreferencesPanel1.Initialize(_daysOffPreferences);
