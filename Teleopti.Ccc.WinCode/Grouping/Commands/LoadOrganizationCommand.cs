@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             var toRemove = new List<IPersonSelectorOrganization>();
             foreach (var toNode in toNodes)
             {
-                if (toNode.PersonId != new Guid())
+                if (toNode.PersonId != Guid.Empty)
                 {
                     if (!auth.IsPermitted(_applicationFunction.FunctionPath, dateOnlyPeriod.StartDate, toNode))
                         toRemove.Add(toNode);
