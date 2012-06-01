@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -33,193 +37,123 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             _target = new PeriodScheduledAndRestrictionDaysOff();
             _mocks = new MockRepository();
-            _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _extractor = _mocks.StrictMock<IRestrictionExtractor>();
-            _day1 = _mocks.StrictMock<IScheduleDayPro>();
-            _day2 = _mocks.StrictMock<IScheduleDayPro>();
-            _day3 = _mocks.StrictMock<IScheduleDayPro>();
-            _day4 = _mocks.StrictMock<IScheduleDayPro>();
-            _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-            _scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-            _scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
-            _scheduleDay4 = _mocks.StrictMock<IScheduleDay>();
-            _preferenceRestriction = _mocks.StrictMock<IPreferenceRestriction>();
-            _rotationRestriction = _mocks.StrictMock<IRotationRestriction>();
+			_matrix = MockRepository.GenerateMock<IScheduleMatrixPro>();
+			_extractor = MockRepository.GenerateMock<IRestrictionExtractor>();
+			_day1 = MockRepository.GenerateMock<IScheduleDayPro>();
+			_day2 = MockRepository.GenerateMock<IScheduleDayPro>();
+			_day3 = MockRepository.GenerateMock<IScheduleDayPro>();
+			_day4 = MockRepository.GenerateMock<IScheduleDayPro>();
+			_scheduleDay1 = MockRepository.GenerateMock<IScheduleDay>();
+			_scheduleDay2 = MockRepository.GenerateMock<IScheduleDay>();
+			_scheduleDay3 = MockRepository.GenerateMock<IScheduleDay>();
+			_scheduleDay4 = MockRepository.GenerateMock<IScheduleDay>();
+			_preferenceRestriction = MockRepository.GenerateMock<IPreferenceRestriction>();
+			_rotationRestriction = MockRepository.GenerateMock<IRotationRestriction>();
         }
 
         [Test]
         public void NotUsingSchedulesAndRestrictionsShouldReturnZero()
         {
-            using (_mocks.Record())
-            {
-                commonMocks();
-            }
-
-            int result;
-
-            using (_mocks.Playback())
-            {
-                result = _target.CalculatedDaysOff(_extractor, _matrix, false, false, false);
-            }
+            stubAll();
+            var result = _target.CalculatedDaysOff(_extractor, _matrix, false, false, false);
             Assert.AreEqual(0, result);
-
         }
 
         [Test]
         public void OnlyCalculateScheduledIfUseSchedulingOnly()
         {
-            using(_mocks.Record())
-            {
-                commonMocks();
-            }
-
-            int result;
-
-            using(_mocks.Playback())
-            {
-                result = _target.CalculatedDaysOff(_extractor, _matrix, true, false, false);
-            }
+            stubAll();
+            var result = _target.CalculatedDaysOff(_extractor, _matrix, true, false, false);
             Assert.AreEqual(2, result);
         }
 
         [Test]
         public void HandleSchedulesAndPreferences()
         {
-            using (_mocks.Record())
-            {
-                commonMocks();
-            }
-
-            int result;
-
-            using (_mocks.Playback())
-            {
-                result = _target.CalculatedDaysOff(_extractor, _matrix, true, true, false);
-            }
+            stubAll();
+            var result = _target.CalculatedDaysOff(_extractor, _matrix, true, true, false);
             Assert.AreEqual(3, result);
         }
 
         [Test]
         public void HandleSchedulesAndPreferencesAndRotations()
         {
-            using (_mocks.Record())
-            {
-                commonMocks();
-            }
-
-            int result;
-
-            using (_mocks.Playback())
-            {
-                result = _target.CalculatedDaysOff(_extractor, _matrix, true, true, true);
-            }
+            stubAll();
+            var result = _target.CalculatedDaysOff(_extractor, _matrix, true, true, true);
             Assert.AreEqual(3, result);
         }
 
         [Test]
         public void HandleSchedulesAndRotations()
         {
-            using (_mocks.Record())
-            {
-                commonMocks();
-            }
-
-            int result;
-
-            using (_mocks.Playback())
-            {
-                result = _target.CalculatedDaysOff(_extractor, _matrix, true, false, true);
-            }
+            stubAll();
+            var result = _target.CalculatedDaysOff(_extractor, _matrix, true, false, true);
             Assert.AreEqual(3, result);
         }
 
         [Test]
         public void HandlePreferencesAndRotationsWithoutSchedules()
         {
-            using (_mocks.Record())
-            {
-                commonMocks();
-            }
-
-            int result;
-
-            using (_mocks.Playback())
-            {
-                result = _target.CalculatedDaysOff(_extractor, _matrix, false, true, true);
-            }
+            stubAll();
+            var result = _target.CalculatedDaysOff(_extractor, _matrix, false, true, true);
             Assert.AreEqual(4, result);
         }
 
         [Test]
         public void ShouldCountPreferenceAbsenceOnContractNoWorkdayAsDayOff()
         {
-            var person = _mocks.StrictMock<IPerson>();
-            var personPeriod = _mocks.StrictMock<IPersonPeriod>();
-            var personContract = _mocks.StrictMock<IPersonContract>();
-            var contractSchedule = _mocks.StrictMock<IContractSchedule>();
-            var dateOnlyAsPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-
-            var dateOnly = new DateOnly();
+			var person = PersonFactory.CreatePerson();
+			var contractSchedule = ContractScheduleFactory.CreateContractScheduleWithoutWorkDays(" ");
+        	var personContract = new PersonContract(new Contract(" "), new PartTimePercentage(" "), contractSchedule);
+			var personPeriod = new PersonPeriod(DateOnly.Today, personContract, new Team());
+			person.AddPersonPeriod(personPeriod);
+			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(DateOnly.Today, CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
             IList<IScheduleDayPro> days = new List<IScheduleDayPro> {_day4};
 
+            _matrix.Stub(x => x.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(days));
+            _day4.Stub(x => x.DaySchedulePart()).Return(_scheduleDay4);
+            _scheduleDay4.Stub(x => x.SignificantPart()).Return(SchedulePartView.None);
+            _scheduleDay4.Stub(x => x.IsScheduled()).Return(false).Repeat.Any();
+            _matrix.Stub(x => x.Person).Return(person).Repeat.Any();
+            _day4.Stub(x => x.Day).Return(DateOnly.Today).Repeat.Any();
+            _extractor.Stub(x => x.PreferenceList).Return(new List<IPreferenceRestriction> {_preferenceRestriction}).Repeat.Any();
+            _preferenceRestriction.Stub(x => x.DayOffTemplate).Return(null).Repeat.Any();
+            _preferenceRestriction.Stub(x => x.Absence).Return(new Absence()).Repeat.Any();
+            _scheduleDay4.Stub(x => x.Person).Return(person);
+            _scheduleDay4.Stub(x => x.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(days));
-                Expect.Call(_day4.DaySchedulePart()).Return(_scheduleDay4);
-                Expect.Call(_scheduleDay4.SignificantPart()).Return(SchedulePartView.None);
-                Expect.Call(_scheduleDay4.IsScheduled()).Return(false).Repeat.Any();
-                Expect.Call(_matrix.Person).Return(person).Repeat.Any();
-                Expect.Call(_day4.Day).Return(dateOnly).Repeat.Any();
-                Expect.Call(() => _extractor.Extract(person, dateOnly)).Repeat.Any();
-                Expect.Call(_extractor.PreferenceList).Return(new List<IPreferenceRestriction> {_preferenceRestriction}).Repeat.Any();
-                Expect.Call(_preferenceRestriction.DayOffTemplate).Return(null).Repeat.Any();
-                Expect.Call(_preferenceRestriction.Absence).Return(new Absence()).Repeat.Any();
-                Expect.Call(_scheduleDay4.Person).Return(person);
-                Expect.Call(_scheduleDay4.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
-                Expect.Call(dateOnlyAsPeriod.DateOnly).Return(dateOnly);
-                Expect.Call(person.Period(dateOnly)).IgnoreArguments().Return(personPeriod);
-                Expect.Call(personPeriod.PersonContract).Return(personContract);
-                Expect.Call(personContract.ContractSchedule).Return(contractSchedule);
-                Expect.Call(contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(false);
-                Expect.Call(personPeriod.StartDate).Return(dateOnly);
-            }
-
-            using(_mocks.Playback())
-            {
-                var result = _target.CalculatedDaysOff(_extractor, _matrix, false, true, false);
-                Assert.AreEqual(1, result);
-            }
+            var result = _target.CalculatedDaysOff(_extractor, _matrix, false, true, false);
+            Assert.AreEqual(1, result);
         }
 
-        private void commonMocks()
+        private void stubAll()
         {
-            IPerson person = PersonFactory.CreatePerson();
-            DateOnly dateOnly = new DateOnly();
+            var person = PersonFactory.CreatePerson();
+        	var date = DateOnly.Today;
             IList<IScheduleDayPro> days = new List<IScheduleDayPro>{ _day1, _day2, _day3, _day4};
-            Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(days));
-            Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay1);
-            Expect.Call(_day2.DaySchedulePart()).Return(_scheduleDay2);
-            Expect.Call(_day3.DaySchedulePart()).Return(_scheduleDay3);
-            Expect.Call(_day4.DaySchedulePart()).Return(_scheduleDay4);
-            Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
-            Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.ContractDayOff);
-            Expect.Call(_scheduleDay3.SignificantPart()).Return(SchedulePartView.MainShift);
-            Expect.Call(_scheduleDay4.SignificantPart()).Return(SchedulePartView.None);
-            Expect.Call(_scheduleDay1.IsScheduled()).Return(true).Repeat.Any();
-            Expect.Call(_scheduleDay2.IsScheduled()).Return(true).Repeat.Any();
-            Expect.Call(_scheduleDay3.IsScheduled()).Return(true).Repeat.Any();
-            Expect.Call(_scheduleDay4.IsScheduled()).Return(false).Repeat.Any();
-            Expect.Call(_matrix.Person).Return(person).Repeat.Any();
-            Expect.Call(_day1.Day).Return(dateOnly).Repeat.Any();
-            Expect.Call(_day2.Day).Return(dateOnly).Repeat.Any();
-            Expect.Call(_day3.Day).Return(dateOnly).Repeat.Any();
-            Expect.Call(_day4.Day).Return(dateOnly).Repeat.Any();
-            Expect.Call(() => _extractor.Extract(person, dateOnly)).Repeat.Any();
-            Expect.Call(_extractor.PreferenceList).Return(new List<IPreferenceRestriction> {_preferenceRestriction}).Repeat.Any();
-            Expect.Call(_extractor.RotationList).Return(new List<IRotationRestriction> { _rotationRestriction }).Repeat.Any();
-            Expect.Call(_preferenceRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description())).Repeat.Any();
-            Expect.Call(_rotationRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description())).Repeat.Any();
+			_matrix.Stub(x => x.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(days));
+            _matrix.Stub(x => x.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(days));
+            _day1.Stub(x => x.DaySchedulePart()).Return(_scheduleDay1);
+            _day2.Stub(x => x.DaySchedulePart()).Return(_scheduleDay2);
+            _day3.Stub(x => x.DaySchedulePart()).Return(_scheduleDay3);
+            _day4.Stub(x => x.DaySchedulePart()).Return(_scheduleDay4);
+            _scheduleDay1.Stub(x => x.SignificantPart()).Return(SchedulePartView.DayOff);
+            _scheduleDay2.Stub(x => x.SignificantPart()).Return(SchedulePartView.ContractDayOff);
+            _scheduleDay3.Stub(x => x.SignificantPart()).Return(SchedulePartView.MainShift);
+            _scheduleDay4.Stub(x => x.SignificantPart()).Return(SchedulePartView.None);
+            _scheduleDay1.Stub(x => x.IsScheduled()).Return(true).Repeat.Any();
+            _scheduleDay2.Stub(x => x.IsScheduled()).Return(true).Repeat.Any();
+            _scheduleDay3.Stub(x => x.IsScheduled()).Return(true).Repeat.Any();
+            _scheduleDay4.Stub(x => x.IsScheduled()).Return(false).Repeat.Any();
+            _matrix.Stub(x => x.Person).Return(person).Repeat.Any();
+            _day1.Stub(x => x.Day).Return(date).Repeat.Any();
+            _day2.Stub(x => x.Day).Return(date).Repeat.Any();
+            _day3.Stub(x => x.Day).Return(date).Repeat.Any();
+            _day4.Stub(x => x.Day).Return(date).Repeat.Any();
+            _extractor.Stub(x => x.PreferenceList).Return(new List<IPreferenceRestriction> {_preferenceRestriction}).Repeat.Any();
+            _extractor.Stub(x => x.RotationList).Return(new List<IRotationRestriction> { _rotationRestriction }).Repeat.Any();
+            _preferenceRestriction.Stub(x => x.DayOffTemplate).Return(new DayOffTemplate(new Description())).Repeat.Any();
+            _rotationRestriction.Stub(x => x.DayOffTemplate).Return(new DayOffTemplate(new Description())).Repeat.Any();
         }
     }
 }
