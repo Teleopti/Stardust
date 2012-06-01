@@ -20,16 +20,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public IWorkload InitializeWorkload(IWorkload workload)
-        {
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-            {
-                var initializedWorkload = _repositoryFactory.CreateWorkloadRepository(uow).LoadWorkload(workload);
-
-                return initializedWorkload;
-            }
-        }
-
         public IList<IOutlier> InitializeOutliers(IWorkload workload)
         {
             IList<IOutlier> outliers;
