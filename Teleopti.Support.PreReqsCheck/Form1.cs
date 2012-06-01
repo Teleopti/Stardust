@@ -326,41 +326,50 @@ namespace CheckPreRequisites
         private void InsertProcedure(string connString)
         {
             string procedureCommand = string.Empty;
-
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^\\s*GO\\s*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Multiline);          
             // create a writer and open the file
             string filePath = @"p_raptor_run_before_conversion.sql";
-            string line;
-            int res = 0;
-
             using (var conn = new SqlConnection(connString))
             {
                 using (SqlCommand cmd = new SqlCommand())
                 {
                     conn.Open();
                     cmd.Connection = conn;
-
                     if (File.Exists(filePath))
                     {
                         StreamReader file = null;
                         try
                         {
                             file = new StreamReader(filePath);
-                            while ((line = file.ReadLine()) != null)
+                            string[] lines = regex.Split(file.ReadToEnd());
+                           
+                            foreach (string line in lines)
                             {
-                                if (line.ToString() == "GO")
+                              if (line.Length > 0)
                                 {
-                                    cmd.CommandText = procedureCommand;
-                                    res = cmd.ExecuteNonQuery();
-                                    cmd.CommandText = "";
-                                    procedureCommand = "";
-                                }
-                                else
-                                {
-                                    procedureCommand = procedureCommand + @line.ToString() + " ";
+                                    cmd.CommandText = line;
+                                    cmd.CommandType = CommandType.Text;
+                                    cmd.NotificationAutoEnlist = true;
+                                    cmd.ExecuteNonQuery();
                                 }
                             }
-                            cmd.CommandText = procedureCommand.Replace("GO","");
-                            res = cmd.ExecuteNonQuery();
+                            
+                            //while ((line = file.ReadLine()) != null)
+                            //{
+                            //    if (line.ToString() == "GO")
+                            //    {
+                            //        cmd.CommandText = procedureCommand;
+                            //        res = cmd.ExecuteNonQuery();
+                            //        cmd.CommandText = "";
+                            //        procedureCommand = "";
+                            //    }
+                            //    else
+                            //    {
+                            //        procedureCommand = procedureCommand + @line.ToString() + " ";
+                            //    }
+                            //}
+                            //cmd.CommandText = procedureCommand.Replace("GO","");
+                            //res = cmd.ExecuteNonQuery();
                         }
                         finally
                         {
