@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -41,13 +40,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             target.AlarmType = alarmType;
 
             Assert.AreEqual(alarmType,target.AlarmType);
-        }
-
-        [Test]
-        public void VerifySetDeleted()
-        {
-            target.SetDeleted();
-            Assert.IsTrue(target.IsDeleted);
         }
     }
 }
