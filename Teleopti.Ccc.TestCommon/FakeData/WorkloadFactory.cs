@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Forecasting;
+﻿using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -28,5 +29,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return workload;
         }
 
+        public static IWorkload CreateWorkloadWithFullOpenHours(ISkill skill)
+        {
+            IWorkload workload = new Workload(skill);
+            workload.Description = "desc from factory";
+            workload.Name = "name from factory";
+            workload.TemplateWeekCollection.ForEach(x=>x.Value.MakeOpen24Hours());
+            return workload;
+        }
     }
 }
