@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         {
             _resultStateHolder = resultStateHolder;
         }
+
         private IScheduleDictionary ScheduleDictionary {get { return _resultStateHolder.Schedules; }}
 
         public IEnumerable<IAvailabilityRestriction> AvailabilityList

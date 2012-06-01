@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -19,14 +20,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public int CalculatedDaysOff(IRestrictionExtractor extractor, IScheduleMatrixPro matrix, bool useSchedules, bool usePreferences, bool useRotations)
         {
+        	var extractOperation = new RestrictionExtractOperation();
+        	var scheduleDayWithRestrictions = from d in matrix.EffectivePeriodDays
+        	                                  let scheduleDay = d.DaySchedulePart()
+        	                                  let restrictions = scheduleDay.RestrictionCollection()
+        	                                  let rotationRestrictions = extractOperation.GetRotationRestrictions(restrictions)
+        	                                  let preferenceRestrictions = extractOperation.GetPreferenceRestrictions(restrictions)
+        	                                  select new
+        	                                         	{
+        	                                         		scheduleDay,
+        	                                         		rotationRestrictions,
+        	                                         		preferenceRestrictions
+        	                                         	};
         	return (
-        	       	from d in matrix.EffectivePeriodDays
-					let preferences = extractor
-        	       	select isDayOff(extractor, matrix.Person, d.DaySchedulePart(), useSchedules, usePreferences, useRotations)
-        	       ).Sum();
+        	       	from d in scheduleDayWithRestrictions
+        	       	select isDayOff(matrix.Person, d.scheduleDay, d.preferenceRestrictions, d.rotationRestrictions, useSchedules, usePreferences, useRotations)
+        	       )
+        		.Sum();
         }
 
-		private static int isDayOff(IRestrictionExtractor extractor, IPerson person, IScheduleDay scheduleDay, bool useSchedules, bool usePreferences, bool useRotations)
+		private static int isDayOff(IPerson person, IScheduleDay scheduleDay, IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEnumerable<IRotationRestriction> rotationRestrictions,  bool useSchedules, bool usePreferences, bool useRotations)
         {
             var significant = scheduleDay.SignificantPart();
 
@@ -37,8 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (useSchedules && scheduleDay.IsScheduled())
                 return 0;
 
-			extractor.Extract(person, scheduleDay.DateOnlyAsPeriod.DateOnly);
-            foreach (var restriction in extractor.PreferenceList)
+			foreach (var restriction in preferenceRestrictions)
             {
                 if (usePreferences && restriction.DayOffTemplate != null)
                 {
@@ -55,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 }
             }
 
-            foreach (var restriction in extractor.RotationList)
+            foreach (var restriction in rotationRestrictions)
             {
                 if (restriction.DayOffTemplate != null && useRotations)
                 {

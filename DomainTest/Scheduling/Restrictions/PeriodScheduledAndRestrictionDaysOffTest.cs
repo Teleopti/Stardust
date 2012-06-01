@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
     public class PeriodScheduledAndRestrictionDaysOffTest
     {
         private IScheduleMatrixPro _matrix;
-        private IRestrictionExtractor _extractor;
         private IScheduleDayPro _day1;
         private IScheduleDayPro _day2;
         private IScheduleDayPro _day3;
@@ -39,28 +38,32 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			_person = PersonFactory.CreatePerson();
 
 			_matrix = MockRepository.GenerateMock<IScheduleMatrixPro>();
-			_extractor = MockRepository.GenerateMock<IRestrictionExtractor>();
 			_day1 = MockRepository.GenerateMock<IScheduleDayPro>();
 			_day2 = MockRepository.GenerateMock<IScheduleDayPro>();
 			_day3 = MockRepository.GenerateMock<IScheduleDayPro>();
 			_day4 = MockRepository.GenerateMock<IScheduleDayPro>();
-        	var stubs = new StubFactory();
+			_preferenceRestriction = MockRepository.GenerateMock<IPreferenceRestriction>();
+			_rotationRestriction = MockRepository.GenerateMock<IRotationRestriction>();
+    		var restrictions = new IRestrictionBase[] {_preferenceRestriction, _rotationRestriction};
+			var stubs = new StubFactory();
 			var personAssignment = new PersonAssignment(_person, new Scenario(" "));
 			personAssignment.SetMainShift(new MainShift(new ShiftCategory(" ")));
         	_scheduleDay1 = stubs.ScheduleDayStub(DateOnly.Today, _person, SchedulePartView.DayOff, stubs.PersonDayOffStub());
+			_scheduleDay1.Stub(x => x.RestrictionCollection()).Return(restrictions);
 			_scheduleDay2 = stubs.ScheduleDayStub(DateOnly.Today, _person, SchedulePartView.ContractDayOff, personAssignment);
+			_scheduleDay2.Stub(x => x.RestrictionCollection()).Return(restrictions);
 			_scheduleDay3 = stubs.ScheduleDayStub(DateOnly.Today, _person, SchedulePartView.MainShift, personAssignment);
+			_scheduleDay3.Stub(x => x.RestrictionCollection()).Return(restrictions);
 			_scheduleDay4 = stubs.ScheduleDayStub(DateOnly.Today, _person);
-			_preferenceRestriction = MockRepository.GenerateMock<IPreferenceRestriction>();
-			_rotationRestriction = MockRepository.GenerateMock<IRotationRestriction>();
-        }
+			_scheduleDay4.Stub(x => x.RestrictionCollection()).Return(restrictions);
+		}
 
         [Test]
         public void NotUsingSchedulesAndRestrictionsShouldReturnZero()
         {
 			var target = new PeriodScheduledAndRestrictionDaysOff();
 			stubCommonData();
-            var result = target.CalculatedDaysOff(_extractor, _matrix, false, false, false);
+            var result = target.CalculatedDaysOff(null, _matrix, false, false, false);
             Assert.AreEqual(0, result);
         }
 
@@ -69,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
 			var target = new PeriodScheduledAndRestrictionDaysOff();
 			stubCommonData();
-            var result = target.CalculatedDaysOff(_extractor, _matrix, true, false, false);
+			var result = target.CalculatedDaysOff(null, _matrix, true, false, false);
             Assert.AreEqual(2, result);
         }
 
@@ -78,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
 			var target = new PeriodScheduledAndRestrictionDaysOff();
 			stubCommonData();
-            var result = target.CalculatedDaysOff(_extractor, _matrix, true, true, false);
+			var result = target.CalculatedDaysOff(null, _matrix, true, true, false);
             Assert.AreEqual(3, result);
         }
 
@@ -87,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
 			var target = new PeriodScheduledAndRestrictionDaysOff();
 			stubCommonData();
-            var result = target.CalculatedDaysOff(_extractor, _matrix, true, true, true);
+			var result = target.CalculatedDaysOff(null, _matrix, true, true, true);
             Assert.AreEqual(3, result);
         }
 
@@ -96,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
 			var target = new PeriodScheduledAndRestrictionDaysOff();
 			stubCommonData();
-            var result = target.CalculatedDaysOff(_extractor, _matrix, true, false, true);
+			var result = target.CalculatedDaysOff(null, _matrix, true, false, true);
             Assert.AreEqual(3, result);
         }
 
@@ -105,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
 			var target = new PeriodScheduledAndRestrictionDaysOff();
 			stubCommonData();
-			var result = target.CalculatedDaysOff(_extractor, _matrix, false, true, true);
+			var result = target.CalculatedDaysOff(null, _matrix, false, true, true);
             Assert.AreEqual(4, result);
         }
 
@@ -125,7 +128,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             _scheduleDay4.Stub(x => x.IsScheduled()).Return(false).Repeat.Any();
             _matrix.Stub(x => x.Person).Return(_person).Repeat.Any();
             _day4.Stub(x => x.Day).Return(DateOnly.Today).Repeat.Any();
-            _extractor.Stub(x => x.PreferenceList).Return(new List<IPreferenceRestriction> {_preferenceRestriction}).Repeat.Any();
             _preferenceRestriction.Stub(x => x.DayOffTemplate).Return(null).Repeat.Any();
             _preferenceRestriction.Stub(x => x.Absence).Return(new Absence()).Repeat.Any();
             _scheduleDay4.Stub(x => x.Person).Return(_person);
@@ -133,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			var target = new PeriodScheduledAndRestrictionDaysOff();
 
-			var result = target.CalculatedDaysOff(_extractor, _matrix, false, true, false);
+			var result = target.CalculatedDaysOff(null, _matrix, false, true, false);
 
             Assert.AreEqual(1, result);
         }
@@ -153,8 +155,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             _day2.Stub(x => x.Day).Return(date).Repeat.Any();
             _day3.Stub(x => x.Day).Return(date).Repeat.Any();
             _day4.Stub(x => x.Day).Return(date).Repeat.Any();
-            _extractor.Stub(x => x.PreferenceList).Return(new List<IPreferenceRestriction> {_preferenceRestriction}).Repeat.Any();
-            _extractor.Stub(x => x.RotationList).Return(new List<IRotationRestriction> { _rotationRestriction }).Repeat.Any();
             _preferenceRestriction.Stub(x => x.DayOffTemplate).Return(new DayOffTemplate(new Description())).Repeat.Any();
             _rotationRestriction.Stub(x => x.DayOffTemplate).Return(new DayOffTemplate(new Description())).Repeat.Any();
         }
