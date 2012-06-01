@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
