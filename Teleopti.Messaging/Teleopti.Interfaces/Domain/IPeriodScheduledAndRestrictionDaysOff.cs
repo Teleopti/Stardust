@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
     	/// <summary>
     	/// Calculateds the days off.
     	/// </summary>
-    	/// <param name="scheduleDays"> </param>
+		/// <param name="matrix"> </param>
     	/// <param name="useSchedules">if set to <c>true</c> [use schedules].</param>
     	/// <param name="usePreferences">if set to <c>true</c> [use preferences].</param>
     	/// <param name="useRotations">if set to <c>true</c> [use rotations].</param>

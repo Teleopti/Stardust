@@ -17,14 +17,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 	public class PeriodScheduledAndRestrictionDaysOff : IPeriodScheduledAndRestrictionDaysOff
     {
-
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public int CalculatedDaysOff(IScheduleMatrixPro matrix, bool useSchedules, bool usePreferences, bool useRotations)
 		{
 			var scheduleDays = from d in matrix.EffectivePeriodDays select d.DaySchedulePart();
 			return CalculatedDaysOff(scheduleDays, useSchedules, usePreferences, useRotations);
 		}
-		
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), 
+		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public int CalculatedDaysOff(IEnumerable<IScheduleDay> scheduleDays, bool useSchedules, bool usePreferences, bool useRotations)
         {
         	return (
