@@ -8,7 +8,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		int PossibleResultDayOff();
 	}
 
-    public class PeriodScheduledAndRestrictionDaysOff : IPeriodScheduledAndRestrictionDaysOff
+	public class SchedulePeriodPossibleResultDayOffCalculator : ISchedulePeriodPossibleResultDayOffCalculator
+	{
+		public int PossibleResultDayOff() { return 0; }
+	}
+
+	public class PeriodScheduledAndRestrictionDaysOff : IPeriodScheduledAndRestrictionDaysOff
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public int CalculatedDaysOff(IRestrictionExtractor extractor, IScheduleMatrixPro matrix, bool useSchedules, bool usePreferences, bool useRotations)
