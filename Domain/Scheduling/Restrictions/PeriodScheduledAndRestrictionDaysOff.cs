@@ -34,14 +34,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         	                                         	};
         	return (
         	       	from d in scheduleDayWithRestrictions
-        	       	select isDayOff(matrix.Person, d.scheduleDay, d.preferenceRestrictions, d.rotationRestrictions, useSchedules, usePreferences, useRotations)
+        	       	select isDayOff(d.scheduleDay, d.preferenceRestrictions, d.rotationRestrictions, useSchedules, usePreferences, useRotations)
         	       )
         		.Sum();
         }
 
-		private static int isDayOff(IPerson person, IScheduleDay scheduleDay, IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEnumerable<IRotationRestriction> rotationRestrictions,  bool useSchedules, bool usePreferences, bool useRotations)
+		private static int isDayOff(IScheduleDay scheduleDay, IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEnumerable<IRotationRestriction> rotationRestrictions,  bool useSchedules, bool usePreferences, bool useRotations)
         {
             var significant = scheduleDay.SignificantPart();
+			var person = scheduleDay.Person;
 
             if (useSchedules &&
                 (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff))
