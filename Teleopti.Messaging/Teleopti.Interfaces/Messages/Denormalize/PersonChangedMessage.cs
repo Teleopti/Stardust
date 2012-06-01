@@ -58,6 +58,21 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 			}
 			_serializedPeople = string.Join(",", stringCollection);
 		}
+        
+        /// <summary>
+        /// Return the serialized people
+        /// </summary>
+        public string SerializedPeople 
+        { 
+            get
+            {
+                return _serializedPeople;
+            } 
+            set
+            {
+                _serializedPeople = value;
+            } 
+        }
 	}
 }
 

@@ -55,5 +55,20 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 			}
 			_serializedGroupPageId = string.Join(",", stringCollection);
 		}
+
+        /// <summary>
+        /// Return the serialized group page
+        /// </summary>
+        public string SerializedGroupPage
+        {
+            get
+            {
+                return _serializedGroupPageId;
+            }
+            set
+            {
+                _serializedGroupPageId = value;
+            }
+        }
 	}
 }

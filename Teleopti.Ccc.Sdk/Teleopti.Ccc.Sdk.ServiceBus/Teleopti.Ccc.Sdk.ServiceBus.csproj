@@ -160,7 +160,6 @@
     <Compile Include="DenormalizeBusBootStrapper.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
-    <Compile Include="Denormalizer\PersonChangedMessageConsumer.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumer.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
     <Compile Include="Denormalizer\IScheduleChangedNotification.cs" />

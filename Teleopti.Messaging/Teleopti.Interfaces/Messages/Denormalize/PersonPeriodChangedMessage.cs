@@ -12,7 +12,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 	public class PersonPeriodChangedMessage : RaptorDomainMessage
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
-		private string _serializedPeople;
+		private string _serializedPersonPeriod;
 
 		[NonSerialized]
 		private ICollection<Guid> _personIdCollection;
@@ -32,9 +32,9 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 				if (_personIdCollection == null)
 				{
 					_personIdCollection = new Collection<Guid>();
-					if (!string.IsNullOrEmpty(_serializedPeople))
+					if (!string.IsNullOrEmpty(_serializedPersonPeriod))
 					{
-						var items = _serializedPeople.Split(',');
+						var items = _serializedPersonPeriod.Split(',');
 						foreach (var item in items)
 						{
 							_personIdCollection.Add(new Guid(item));
@@ -54,7 +54,22 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 				stringCollection[index] = guid.ToString();
 				index++;
 			}
-			_serializedPeople = string.Join(",", stringCollection);
+			_serializedPersonPeriod = string.Join(",", stringCollection);
 		}
+
+        /// <summary>
+        /// Return the serialized person period
+        /// </summary>
+        public string SerializedPersonPeriod
+        {
+            get
+            {
+                return _serializedPersonPeriod;
+            }
+            set
+            {
+                _serializedPersonPeriod = value;
+            }
+        }
 	}
 }

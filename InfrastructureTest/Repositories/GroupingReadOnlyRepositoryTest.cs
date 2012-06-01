@@ -41,22 +41,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			items.Count().Should().Be.EqualTo(0);
 		}
 
-		[Test]
-		public void ShouldCallUpdateReadModelWithoutCrash()
-		{
-			_target.UpdateGroupingReadModel(new Guid[ ]{ Guid.NewGuid()});
-		}
+        [Test]
+        public void ShouldCallUpdateReadModelWithoutCrash()
+        {
+            _target.UpdateGroupingReadModel(new Guid[] { Guid.NewGuid() });
+        }
 
-		[Test]
-		public void ShouldCallUpdateGroupingReadModelGroupPageWithoutCrash()
-		{
+        [Test]
+        public void ShouldCallUpdateGroupingReadModelGroupPageWithoutCrash()
+        {
             _target.UpdateGroupingReadModelGroupPage(new Guid[] { Guid.NewGuid() });
-		}
+        }
 
-		[Test]
-		public void ShouldCallUpdateGroupingReadModelDataWithoutCrash()
-		{
+        [Test]
+        public void ShouldCallUpdateGroupingReadModelDataWithoutCrash()
+        {
             _target.UpdateGroupingReadModelData(new Guid[] { Guid.NewGuid() });
-		}
+        }
 	}
 }
