@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<EffectiveRestrictionForDisplayCreator>().As<IEffectiveRestrictionForDisplayCreator>();
 			builder.RegisterType<WorkTimeMinMaxCalculator>().As<IWorkTimeMinMaxCalculator>();
 			builder.RegisterType<SchedulePeriodTargetDayOffCalculator>().As<ISchedulePeriodTargetDayOffCalculator>().InstancePerLifetimeScope();
-			builder.RegisterType<SchedulePeriodPossibleResultDayOffCalculator>().As<ISchedulePeriodPossibleResultDayOffCalculator>().InstancePerLifetimeScope();
+			builder.RegisterType<PeriodScheduledAndRestrictionDaysOff>().As<IPeriodScheduledAndRestrictionDaysOff>().InstancePerLifetimeScope();
 		}
 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)

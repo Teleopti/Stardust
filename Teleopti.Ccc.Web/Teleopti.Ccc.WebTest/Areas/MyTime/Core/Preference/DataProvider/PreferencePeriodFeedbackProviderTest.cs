@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			virtualSchedulePeriodProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
 			schedulePeriodTargetDayOffCalculator.Stub(x => x.TargetDaysOff(virtualSchedulePeriod)).Return(daysOff);
 
-			var target = new PreferencePeriodFeedbackProvider(virtualSchedulePeriodProvider, schedulePeriodTargetDayOffCalculator, null);
+			var target = new PreferencePeriodFeedbackProvider(virtualSchedulePeriodProvider, schedulePeriodTargetDayOffCalculator, null, null);
 
 			var result = target.TargetDaysOff(DateOnly.Today);
 
@@ -37,13 +39,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			virtualSchedulePeriodProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
-			var schedulePeriodPossibleResultDayOffCalculator = MockRepository.GenerateMock<ISchedulePeriodPossibleResultDayOffCalculator>();
-			schedulePeriodPossibleResultDayOffCalculator.Stub(x => x.PossibleResultDayOff()).Return(3);
-			var target = new PreferencePeriodFeedbackProvider(virtualSchedulePeriodProvider, null, schedulePeriodPossibleResultDayOffCalculator);
+			var periodScheduledAndRestrictionDaysOff = MockRepository.GenerateMock<IPeriodScheduledAndRestrictionDaysOff>();
+			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
+			var dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDays = new[] {MockRepository.GenerateMock<IScheduleDay>()};
 
-			int possibleResultDaysOff = target.PossibleResultDaysOff(DateOnly.Today);
+			virtualSchedulePeriodProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(dateOnlyPeriod);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(dateOnlyPeriod)).Return(scheduleDays);
+			periodScheduledAndRestrictionDaysOff.Stub(x => x.CalculatedDaysOff(scheduleDays, true, true, false)).Return(3);
 
-			possibleResultDaysOff.Should().Be(3);
+			var target = new PreferencePeriodFeedbackProvider(virtualSchedulePeriodProvider, null, periodScheduledAndRestrictionDaysOff, scheduleProvider);
+
+			var result = target.PossibleResultDaysOff(DateOnly.Today);
+
+			result.Should().Be(3);
 		}
 	}
 

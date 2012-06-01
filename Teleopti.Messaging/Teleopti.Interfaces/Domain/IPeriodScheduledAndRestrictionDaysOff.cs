@@ -17,5 +17,14 @@ namespace Teleopti.Interfaces.Domain
     	/// <returns></returns>
 		int CalculatedDaysOff(IScheduleMatrixPro matrix, bool useSchedules, bool usePreferences, bool useRotations);
 
-    }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="scheduleDays"></param>
+		/// <param name="useSchedules"></param>
+		/// <param name="usePreferences"></param>
+		/// <param name="useRotations"></param>
+		/// <returns></returns>
+		int CalculatedDaysOff(IEnumerable<IScheduleDay> scheduleDays, bool useSchedules, bool usePreferences, bool useRotations);
+	}
 }
