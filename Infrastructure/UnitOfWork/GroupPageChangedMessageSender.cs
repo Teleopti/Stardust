@@ -13,15 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
-		                                                        		//typeof (IPerson),
 		                                                        		typeof (IGroupPage)
-                                                                        //typeof (ITeam),
-                                                                        //typeof (ISite),
-                                                                        //typeof (IContract),
-                                                                        //typeof (IContractSchedule),
-                                                                        //typeof (IPartTimePercentage),
-                                                                        //typeof (IRuleSetBag),
-                                                                        //typeof (ISkill)
 		                                                        	};
 
 		private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
@@ -42,22 +34,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			                         select i;
 	        if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
 			{
-                ////get the person ids
-                //var persons = modifiedRoots.Select(r => r.Root).OfType<IPerson>();
-                //foreach (var personList in persons.Batch(400))
-                //{
-                //    var idsAsString = (from p in personList select p.Id).ToArray();
-                //    Guid[] ids = idsAsString.Select(g => g ?? Guid.Empty).ToArray() ;
-     
-                //    var message = new GroupPageChangedMessage
-                //    {
-                //        Ids = ids,
-                //        GroupingType = 1,
-                //    };
-                //    _saveToDenormalizationQueue.Execute(message, runSql);
-                //    atLeastOneMessage = true;
-                //}
-				
                 //get the group page ids
 				var groupPage = modifiedRoots.Select(r => r.Root).OfType<IGroupPage>();
                 foreach (var groupPageList in groupPage.Batch(400))
@@ -72,20 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					atLeastOneMessage = true;
                   }
 
-                ////get the ids which are not in person or in grouppage
-                //var notPerson = (from p in modifiedRoots where !((p.Root is Person)||(p.Root is GroupPage ) ) select p.Root).ToList();
-                //foreach (var notpersonList in notPerson.Batch(400))
-                //{
-                //    var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id).ToArray();
-                //    Guid[] ids = idsAsString.Select(g => g ?? Guid.Empty).ToArray();
-                //    var message = new GroupPageChangedMessage
-                //    {
-                //        Ids = ids,
-                //        GroupingType = 3,
-                //    };
-                //    _saveToDenormalizationQueue.Execute(message, runSql);
-                //    atLeastOneMessage = true;
-                // }
+                
 				if (atLeastOneMessage)
 				{
 					_sendDenormalizeNotification.Notify();

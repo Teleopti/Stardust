@@ -7,13 +7,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
     public class PersonChangedMessageConsumer : ConsumerOf<PersonChangedMessage>
 	{
-        //private readonly IUpdatePersonFinderReadModel  _updatePersonFinderReadModel;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IPersonFinderReadOnlyRepository _personFinderReadOnlyRepository;
+        private readonly IPersonFinderReadOnlyRepository _personFinderReadOnlyRepository;
 
-        public PersonChangedMessageConsumer(IUnitOfWorkFactory unitOfWorkFactory, IPersonFinderReadOnlyRepository personFinderReadOnlyRepository)
+        public PersonChangedMessageConsumer(IPersonFinderReadOnlyRepository personFinderReadOnlyRepository)
 		{
-            _unitOfWorkFactory = unitOfWorkFactory;
             _personFinderReadOnlyRepository = personFinderReadOnlyRepository;
 		}
 
