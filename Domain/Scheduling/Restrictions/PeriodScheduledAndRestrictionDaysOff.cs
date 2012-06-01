@@ -1,3 +1,4 @@
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -18,13 +19,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public int CalculatedDaysOff(IRestrictionExtractor extractor, IScheduleMatrixPro matrix, bool useSchedules, bool usePreferences, bool useRotations)
         {
-            int result = 0;
-            foreach (IScheduleDayPro day in matrix.EffectivePeriodDays)
-            {
-                result += isDayOff(extractor, matrix.Person, day.DaySchedulePart(), useSchedules, usePreferences, useRotations);
-            }
-
-            return result;
+        	return (
+        	       	from d in matrix.EffectivePeriodDays
+					let preferences = extractor
+        	       	select isDayOff(extractor, matrix.Person, d.DaySchedulePart(), useSchedules, usePreferences, useRotations)
+        	       ).Sum();
         }
 
 		private static int isDayOff(IRestrictionExtractor extractor, IPerson person, IScheduleDay scheduleDay, bool useSchedules, bool usePreferences, bool useRotations)
