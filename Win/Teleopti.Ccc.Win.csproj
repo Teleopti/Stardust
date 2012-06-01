@@ -1196,6 +1196,12 @@
     <Compile Include="Scheduling\AuditHistoryView.Designer.cs">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\PersonsFilterView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PersonsFilterView.Designer.cs">
+      <DependentUpon>PersonsFilterView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\RequestHistoryModule.cs" />
     <Compile Include="Scheduling\RequestHistoryView.cs">
       <SubType>Form</SubType>
@@ -2672,6 +2678,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
+      <DependentUpon>PersonsFilterView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\RequestHistoryView.resx">
       <DependentUpon>RequestHistoryView.cs</DependentUpon>

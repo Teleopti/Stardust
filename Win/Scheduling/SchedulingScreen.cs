@@ -14,6 +14,7 @@ using System.Windows.Forms.Integration;
 using Autofac;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
@@ -5829,90 +5830,44 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability",
-            "CA1506:AvoidExcessiveClassCoupling")]
-        private void showFilterDialog()
-        {
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                IRepository<IContract> contractRepository = new ContractRepository(uow);
-                IContractScheduleRepository contractScheduleRepository = new ContractScheduleRepository(uow);
-                IGroupPageRepository groupPageRepository = new GroupPageRepository(uow);
-                IRepository<IPartTimePercentage> partTimePercentageRepository = new PartTimePercentageRepository(uow);
-                IRepository<IRuleSetBag> ruleSetBagRepository = new RuleSetBagRepository(uow);
-                ISkillRepository skillRepository = new SkillRepository(uow);
-                IBusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
-                if (_scheduleFilterModelCached == null)
-                {
-                    var scheduleFilterModel = new ScheduleFilterModel(_selectedPersons,
-                                                                      SchedulerState,
-                                                                      contractRepository,
-                                                                      contractScheduleRepository,
-                                                                      partTimePercentageRepository,
-                                                                      ruleSetBagRepository,
-                                                                      groupPageRepository,
-                                                                      skillRepository,
-                                                                      businessUnitRepository,
-                                                                      _defaultFilterDate);
-                    _scheduleFilterModelCached = scheduleFilterModel;
-                }
-                using (var scheduleFilterView = new ScheduleFilterView(_scheduleFilterModelCached))
-                {
-                    scheduleFilterView.StartPosition = FormStartPosition.Manual;
-                    //TODO: Please come up with a better solution!
-                    Point pointToScreen =
-                        toolStripExScheduleViews.PointToScreen(new Point(toolStripButtonFilterAgents.Bounds.X + 63,
-                                                                         toolStripButtonFilterAgents.Bounds.Y +
-                                                                         toolStripButtonFilterAgents.Height));
-                    scheduleFilterView.Location = pointToScreen;
-                    scheduleFilterView.AutoLocate();
-                    if (scheduleFilterView.ShowDialog() == DialogResult.OK)
-                    {
+		private void showFilterDialog()
+		{
+			var all = SchedulerState.AllPermittedPersons.Select(p => p.Id.Value).ToList();
 
-                        IEnumerable<IPerson> uniquePersons;
-                        IGroupPage page = scheduleFilterView.SelectedTabTag() as IGroupPage;
-                        if (page == null)
-                            uniquePersons =
-                                new HashSet<IPerson>(_scheduleFilterModelCached.SelectedPersonDictionary.Values);
-                        else
-                            uniquePersons = new HashSet<IPerson>(_scheduleFilterModelCached.SelectedPersons);
+        	using (var scheduleFilterView = new PersonsFilterView(SchedulerState.RequestedPeriod.DateOnly,SchedulerState.FilteredPersonDictionary.Keys,
+				_container,  ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+			DefinedRaptorApplicationFunctionPaths.OpenSchedulePage), "Main", all))
+			{
+				scheduleFilterView.StartPosition = FormStartPosition.Manual;
+				//TODO: Please come up with a better solution!
+				Point pointToScreen =
+					toolStripExScheduleViews.PointToScreen(new Point(toolStripButtonFilterAgents.Bounds.X + 63,
+																		toolStripButtonFilterAgents.Bounds.Y +
+																		toolStripButtonFilterAgents.Height));
+				scheduleFilterView.Location = pointToScreen;
+				scheduleFilterView.AutoLocate();
+				if (scheduleFilterView.ShowDialog() == DialogResult.OK)
+				{
+					_schedulerState.FilterPersons(scheduleFilterView.SelectedAgentGuids());
 
-                        _selectedPersons.Clear();
-                        foreach (var uniquePerson in uniquePersons)
-                        {
-                            _selectedPersons.Add(uniquePerson);
-                        }
-                        _schedulerState.FilterPersons(_selectedPersons);
-                        _defaultFilterDate = scheduleFilterView.CurrentFilterDate;
-                        if (_selectedPersons.Count != SchedulerState.AllPermittedPersons.Count)
-                            toolStripButtonFilterAgents.Checked = true;
-                        else
-                            toolStripButtonFilterAgents.Checked = false;
-                        if (_scheduleView != null && _scheduleView.HelpId == "RestrictionSummaryView")
-                        {
-                            prepareRestrictionSummaryView();
-                        }
+					if (scheduleFilterView.SelectedAgentGuids().Count != SchedulerState.AllPermittedPersons.Count)
+						toolStripButtonFilterAgents.Checked = true;
+					else
+						toolStripButtonFilterAgents.Checked = false;
+					if (_scheduleView != null && _scheduleView.HelpId == "RestrictionSummaryView")
+					{
+						prepareRestrictionSummaryView();
+					}
 
-                        if (_scheduleView != null)
-                        {
-                            _grid.Refresh();
-                            GridHelper.GridlockWriteProtected(_grid, LockManager);
-                            _grid.Refresh();
-                        }
-                        drawSkillGrid();
-                    }
-                }
-            }
-
-
-
-            //if (_scheduleView != null)
-            //{
-            //    _grid.Refresh();
-            //    GridHelper.GridlockWriteProtected(_grid, LockManager);
-            //    _grid.Refresh();
-            //}
-            //drawSkillGrid();
+					if (_scheduleView != null)
+					{
+						_grid.Refresh();
+						GridHelper.GridlockWriteProtected(_grid, LockManager);
+						_grid.Refresh();
+					}
+					drawSkillGrid();
+				}			
+			}
         }
 
         private void prepareRestrictionSummaryView()

@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Robin", LastName = "K", Site = "Str",Team = "Red", TeamId = Guid.NewGuid(), PersonId = Guid.NewGuid()},
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Jonas", LastName = "N", Site = "Str",Team = "Yellow", TeamId = Guid.NewGuid(), PersonId = Guid.NewGuid()}
                                                                     });
+            Expect.Call(_personSelectorView.VisiblePersonIds).Return(null);
             Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> { onePersonId }).Repeat.Times(5);
             Expect.Call(() => _unitOfWork.Dispose());
             Expect.Call(_commonNameSetting.BuildCommonNameDescription(lightPerson)).Repeat.Times(5).IgnoreArguments().Return("");
@@ -83,6 +84,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
                 var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
+				Expect.Call(_personSelectorView.VisiblePersonIds).Return(null);
                 Expect.Call(_personSelectorView.SelectedPeriod).Return(dateOnlyPeriod);
                 Expect.Call(rep.GetOrganization(dateOnlyPeriod, false)).Return(new List<IPersonSelectorOrganization>
                                                                     {
