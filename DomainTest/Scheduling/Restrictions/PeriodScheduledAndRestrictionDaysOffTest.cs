@@ -45,17 +45,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			_preferenceRestriction = MockRepository.GenerateMock<IPreferenceRestriction>();
 			_rotationRestriction = MockRepository.GenerateMock<IRotationRestriction>();
     		var restrictions = new IRestrictionBase[] {_preferenceRestriction, _rotationRestriction};
+
 			var stubs = new StubFactory();
+
 			var personAssignment = new PersonAssignment(_person, new Scenario(" "));
 			personAssignment.SetMainShift(new MainShift(new ShiftCategory(" ")));
         	_scheduleDay1 = stubs.ScheduleDayStub(DateOnly.Today, _person, SchedulePartView.DayOff, stubs.PersonDayOffStub());
 			_scheduleDay1.Stub(x => x.RestrictionCollection()).Return(restrictions);
+			_scheduleDay1.Stub(x => x.IsScheduled()).Return(true);
 			_scheduleDay2 = stubs.ScheduleDayStub(DateOnly.Today, _person, SchedulePartView.ContractDayOff, personAssignment);
 			_scheduleDay2.Stub(x => x.RestrictionCollection()).Return(restrictions);
+			_scheduleDay2.Stub(x => x.IsScheduled()).Return(true);
 			_scheduleDay3 = stubs.ScheduleDayStub(DateOnly.Today, _person, SchedulePartView.MainShift, personAssignment);
 			_scheduleDay3.Stub(x => x.RestrictionCollection()).Return(restrictions);
+			_scheduleDay3.Stub(x => x.IsScheduled()).Return(true);
 			_scheduleDay4 = stubs.ScheduleDayStub(DateOnly.Today, _person);
 			_scheduleDay4.Stub(x => x.RestrictionCollection()).Return(restrictions);
+			_scheduleDay4.Stub(x => x.IsScheduled()).Return(false);
 		}
 
         [Test]
