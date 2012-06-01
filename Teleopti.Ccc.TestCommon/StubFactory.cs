@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core
+namespace Teleopti.Ccc.TestCommon
 {
 	public class StubFactory
 	{
@@ -52,14 +52,29 @@ namespace Teleopti.Ccc.WebTest.Core
 			return ScheduleDayStub(date, significantPartToDisplay, personDayOff, null, null, null);
 		}
 
+		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff)
+		{
+			return ScheduleDayStub(date, person, significantPartToDisplay, personDayOff, null, null, null);
+		}
+
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment)
 		{
 			return ScheduleDayStub(date, significantPartToDisplay, null, personAssignment, null, null);
 		}
 
+		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment)
+		{
+			return ScheduleDayStub(date, person, significantPartToDisplay, null, personAssignment, null, null);
+		}
+
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonAbsence personAbsence)
 		{
 			return ScheduleDayStub(date, significantPartToDisplay, new[] {personAbsence});
+		}
+
+		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAbsence personAbsence)
+		{
+			return ScheduleDayStub(date, person, significantPartToDisplay, null, null, new[] { personAbsence }, null);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IEnumerable<IPersonAbsence> personAbsences)
@@ -84,7 +99,9 @@ namespace Teleopti.Ccc.WebTest.Core
 			var scheduleDay = MockRepository.GenerateStub<IScheduleDay>();
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
 			scheduleDay.Stub(x => x.SignificantPartForDisplay()).Return(significantPartToDisplay);
+			scheduleDay.Stub(x => x.SignificantPart()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.TimeZone).Return(timeZone);
+			var isScheduled = false;
 			if (person != null)
 				scheduleDay.Stub(x => x.Person).Return(person);
 			if (publicNote != null)
@@ -101,16 +118,20 @@ namespace Teleopti.Ccc.WebTest.Core
 			{
 				var personDayOffs = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> {personDayOff});
 				scheduleDay.Stub(x => x.PersonDayOffCollection()).Return(personDayOffs);
+				isScheduled = true;
 			}
 			if (personAssignment != null)
 			{
 				scheduleDay.Stub(x => scheduleDay.AssignmentHighZOrder()).Return(personAssignment);
+				isScheduled = true;
 			}
 			if (personAbsences != null)
 			{
 				var personAbsencesCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>(personAbsences));
 				scheduleDay.Stub(x => x.PersonAbsenceCollection()).Return(personAbsencesCollection);
+				isScheduled = true;
 			}
+			scheduleDay.Stub(x => x.IsScheduled()).Return(isScheduled);
 			return scheduleDay;
 		}
 

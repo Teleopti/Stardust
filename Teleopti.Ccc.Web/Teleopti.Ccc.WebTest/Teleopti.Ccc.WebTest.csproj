@@ -238,7 +238,6 @@
     <Compile Include="Core\WeekSchedule\Mapping\WeekScheduleViewModelMappingTest.cs" />
     <Compile Include="Core\Startup\ApplicationStartModuleTest.cs" />
     <Compile Include="Core\Startup\RegisterModelBindersTaskTest.cs" />
-    <Compile Include="Core\StubFactory.cs" />
     <Compile Include="Core\Authentication\Services\WebLogOnTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\WindowsAccountProviderTest.cs" />
     <Compile Include="Core\IoC\BootstrapperModuleTest.cs" />

@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             int result = 0;
             foreach (IScheduleDayPro day in matrix.EffectivePeriodDays)
             {
-                result += isDayOff(extractor, matrix.Person, day.DaySchedulePart(), day.Day, useSchedules, usePreferences, useRotations);
+                result += isDayOff(extractor, matrix.Person, day.DaySchedulePart(), useSchedules, usePreferences, useRotations);
             }
 
             return result;
         }
 
-		private static int isDayOff(IRestrictionExtractor extractor, IPerson person, IScheduleDay scheduleDay, DateOnly date, bool useSchedules, bool usePreferences, bool useRotations)
+		private static int isDayOff(IRestrictionExtractor extractor, IPerson person, IScheduleDay scheduleDay, bool useSchedules, bool usePreferences, bool useRotations)
         {
             var significant = scheduleDay.SignificantPart();
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (useSchedules && scheduleDay.IsScheduled())
                 return 0;
 
-			extractor.Extract(person, date);
+			extractor.Extract(person, scheduleDay.DateOnlyAsPeriod.DateOnly);
             foreach (var restriction in extractor.PreferenceList)
             {
                 if (usePreferences && restriction.DayOffTemplate != null)
@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
                 if(usePreferences && restriction.Absence != null)
                 {
-                	var person2 = scheduleDay.Person;
                     var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
                     var personPeriod = person.Period(scheduleDate);
 
