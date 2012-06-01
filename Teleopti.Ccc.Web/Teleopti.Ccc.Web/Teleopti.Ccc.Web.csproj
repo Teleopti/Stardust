@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -660,6 +660,7 @@
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Areas\Start\Views\Menu\MobileMenu.cshtml" />
     <Content Include="Areas\Start\Views\Menu\Index.cshtml" />
+    <Content Include="Areas\Start\Views\Menu\Menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

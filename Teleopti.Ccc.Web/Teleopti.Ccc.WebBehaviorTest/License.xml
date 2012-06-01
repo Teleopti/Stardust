@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
-	<CustomerName>BehaivorTests</CustomerName>
-	<ExpirationDate>2013-12-31T10:48:04</ExpirationDate>
+	<CustomerName>Teleopti RD NOT for production use!</CustomerName>
+	<ExpirationDate>2013-12-31T11:17:02</ExpirationDate>
 	<ExpirationGracePeriod>P0D</ExpirationGracePeriod>
-	<MaxActiveAgents>200</MaxActiveAgents>
-	<MaxActiveAgentsGrace>0</MaxActiveAgentsGrace>
+	<MaxActiveAgents>0</MaxActiveAgents>
+	<MaxActiveAgentsGrace>100</MaxActiveAgentsGrace>
 	<AgentsOrSeats>0</AgentsOrSeats>
-	<MaxSeats>200</MaxSeats>
+	<MaxSeats>0</MaxSeats>
 	<SeatRatio>1.5</SeatRatio>
 	<TeleoptiCCC>
 		<Base>true</Base>
@@ -30,9 +30,9 @@
 					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
 				</Transforms>
 				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-				<DigestValue>hDNTSDF/Dey0pFiPFxHpDRPb2Io=</DigestValue>
+				<DigestValue>EDRKXu1IIHOzAhIL3+BdmXznBhU=</DigestValue>
 			</Reference>
 		</SignedInfo>
-		<SignatureValue>2f0hR4i4QBSFMO9h+s2aBFWpdLUcl4JZ404tFz16DJTgu7ZUy9nhljoZg8oI85BrJkRNLNicWZusyfy51p02Y72N+JFa93YKce8FlN6SpBgKziRKVp4P2wM3NYIH1W00WILydydoDeq9mLMWroDpRl5QIUuBaTUvjbIf1SqVm+Y=</SignatureValue>
+		<SignatureValue>5/V/Tv8Vp5988naAzXI/ISIf4qb3pgA9LqumTGqVYmnMs//IDKHa0Cpf2GzkczD45CN5Mj9CAkxKIEOd5pgxDxyqeC98bB+AXuWBm1A1xh3uv9YPNJEgpCd5Hn5fxA6w9Yaz4XH8o7OCjdNJuEWK540D+XZIs5pGbsLQWqaqFbk=</SignatureValue>
 	</Signature>
 </License>

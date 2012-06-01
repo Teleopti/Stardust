@@ -1,13 +1,13 @@
 ﻿@using Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 @model SignInApplicationViewModel
 <div id="ApplicationPartialTarget">
-    @using (Ajax.BeginForm("Application", new AjaxOptions
+    @using (Ajax.BeginForm(new AjaxOptions
     {
         UpdateTargetId = "ApplicationPartialTarget",
         InsertionMode = InsertionMode.Replace,
         OnComplete = "Teleopti.Start.Authentication.SignInPartialInit",
         OnFailure = "Teleopti.Start.Common.AjaxFailed",
-        
+        Url = "Application"
     }))
     {
         
