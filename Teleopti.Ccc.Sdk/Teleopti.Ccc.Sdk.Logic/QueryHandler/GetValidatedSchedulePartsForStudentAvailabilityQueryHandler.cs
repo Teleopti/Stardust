@@ -137,7 +137,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 					IPeriodScheduledAndRestrictionDaysOff periodScheduledAndRestrictionDaysOff =
 						new PeriodScheduledAndRestrictionDaysOff();
-					IRestrictionExtractor extractor = new RestrictionExtractor(stateHolder);
 					int numberOfDaysOff = periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(scheduleMatrix, true,
 																								 true, false);
 
