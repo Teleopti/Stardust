@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
@@ -12,24 +13,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private AgentRestrictionsDisplayRow _agentRestrictionsDisplayRow;
 		private MockRepository _mocks;
 		private IScheduleMatrixPro _scheduleMatrixPro;
-		//private IList<IPerson> _persons;
-		//private IPerson _person;
-		//private IPerson _anotherPerson;
-		//private ISchedulerStateHolder _stateHolder;
 		private IAgentRestrictionsDisplayRowCreator _agentRestrictionsDisplayRowCreator;
+		private IPerson _person;
+		private IList<IPerson> _persons;
 
 		[SetUp]
 		public void Setup()
 		{
-			_model = new AgentRestrictionsModel();
 			_mocks = new MockRepository();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			_agentRestrictionsDisplayRow = new AgentRestrictionsDisplayRow(_scheduleMatrixPro);
-			//_person = _mocks.StrictMock<IPerson>();
-			//_anotherPerson = _mocks.StrictMock<IPerson>();
-			//_persons = new List<IPerson>{_person, _anotherPerson};
-			//_stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
 			_agentRestrictionsDisplayRowCreator = _mocks.StrictMock<IAgentRestrictionsDisplayRowCreator>();
+			_model = new AgentRestrictionsModel();
+			_person = _mocks.StrictMock<IPerson>();
+			_persons = new List<IPerson>{_person};
 		}
 
 		[Test]
@@ -39,17 +36,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		}
 
 		[Test]
-		public void ShouldLoadData()
+		public void ShouldLoadDisplayRows()
 		{
-			using(_mocks.Record())
+			using (_mocks.Record())
 			{
-				Expect.Call(() => _agentRestrictionsDisplayRowCreator.Create());
+				Expect.Call(_agentRestrictionsDisplayRowCreator.Create(_persons)).Return(new List<AgentRestrictionsDisplayRow>{_agentRestrictionsDisplayRow});
 			}
 
-			using(_mocks.Playback())
+			using (_mocks.Playback())
 			{
-				_model.LoadData(_agentRestrictionsDisplayRowCreator);	
-			}	 
+				_model.LoadDisplayRows(_agentRestrictionsDisplayRowCreator, _persons);
+				Assert.AreEqual(1, _model.DisplayRows.Count);
+			}
 		}
 
 		[Test]

@@ -1,15 +1,13 @@
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
-    public class StateGroupActivityAlarm : AggregateRootWithBusinessUnit, IStateGroupActivityAlarm, IDeleteTag
+    public class StateGroupActivityAlarm : AggregateRootWithBusinessUnit, IStateGroupActivityAlarm
     {
         private readonly IRtaStateGroup _stateGroup;
         private readonly IActivity _activity;
         private IAlarmType _alarmType;
-        private bool _isDeleted;
 
         public StateGroupActivityAlarm(IRtaStateGroup stateGroup, IActivity activity)
         {
@@ -34,16 +32,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             get { return _alarmType; }
             set { _alarmType = value; }
-        }
-
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
-
-        public virtual void SetDeleted()
-        {
-            _isDeleted = true;
         }
     }
 }

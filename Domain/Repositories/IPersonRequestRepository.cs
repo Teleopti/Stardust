@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// </remarks>
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period);
 
-		IEnumerable<IPersonRequest> FindTextRequestsForAgent(IPerson person, Paging paging);
+		IEnumerable<IPersonRequest> FindTextAndAbsenceRequestsForAgent(IPerson person, Paging paging);
 
 		/// <summary>
 		/// Finds all requests modified within or pending.

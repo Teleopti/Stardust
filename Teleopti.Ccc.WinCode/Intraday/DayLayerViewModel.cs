@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             foreach (var person in people)
             {
                 ITeam team = null;
-                IPersonPeriod currentPersonPeriod = person.PersonPeriods(period.DateOnly).FirstOrDefault();
+                IPersonPeriod currentPersonPeriod = person.PersonPeriods(period.DateOnlyPeriod).FirstOrDefault();
                 if (currentPersonPeriod != null)
                     team = currentPersonPeriod.Team;
 

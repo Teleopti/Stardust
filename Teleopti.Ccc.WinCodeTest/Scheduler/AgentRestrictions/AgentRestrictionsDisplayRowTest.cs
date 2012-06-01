@@ -54,13 +54,31 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		}
 
 		[Test]
-		public void ShouldGetSetWarnings()
+		public void ShouldSetWarnings()
 		{
-			Assert.AreEqual(0, _displayRow.Warnings);
-			_displayRow.SetWarning(AgentRestrictionDisplayRowColumn.ContractTargetTime, "warning");
-			Assert.AreEqual(1, _displayRow.Warnings);
-			Assert.AreEqual("warning", _displayRow.Warning(5));
-			Assert.AreEqual(null, _displayRow.Warning(1));	
+			using(_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DaysOff()).Return(11);
+			}
+
+			using(_mocks.Playback())
+			{
+				Assert.AreEqual(0, _displayRow.Warnings);
+
+				_displayRow.ContractTargetTime = TimeSpan.FromMinutes(10);
+				_displayRow.ContractCurrentTime = TimeSpan.FromMinutes(11);
+				_displayRow.CurrentDaysOff = 12;
+
+				((IAgentDisplayData) _displayRow).MinimumPossibleTime = TimeSpan.FromMinutes(17);
+				((IAgentDisplayData)_displayRow).MaximumPossibleTime = TimeSpan.FromMinutes(14);
+				_displayRow.MinMaxTime = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromMinutes(16));
+
+				_displayRow.SetWarnings();
+
+				Assert.AreEqual(UserTexts.Resources.No, _displayRow.Ok);
+				Assert.AreEqual(4, _displayRow.Warnings);
+			}	
 		}
 
 		[Test]
@@ -172,14 +190,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			_displayRow.CurrentDaysOff = _daysOff;
 			Assert.AreEqual(_daysOff, _displayRow.CurrentDaysOff);
-		}
-
-		[Test]
-		public void ShouldGetOk()
-		{
-			Assert.AreEqual(UserTexts.Resources.Yes, _displayRow.Ok);
-			_displayRow.SetWarning(AgentRestrictionDisplayRowColumn.Min, "warning");
-			Assert.AreEqual(UserTexts.Resources.No, _displayRow.Ok);	
 		}
 	}
 }

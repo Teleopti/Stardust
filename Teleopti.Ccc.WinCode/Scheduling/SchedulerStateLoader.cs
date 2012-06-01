@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
                     ISkillRepository service = _repositoryFactory.CreateSkillRepository(uow);
-                    ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnly);
+                    ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnlyPeriod);
 
                     foreach (ISkill skill in skills)
                     {
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IPersonRepository service = _repositoryFactory.CreatePersonRepository(uow);
 				
                 _schedulerState.SchedulingResultState.PersonsInOrganization =
-                    service.FindPeopleInOrganization(_schedulerState.RequestedPeriod.DateOnly, true);
+                    service.FindPeopleInOrganization(_schedulerState.RequestedPeriod.DateOnlyPeriod, true);
 
                 foreach (IPerson person in _schedulerState.SchedulingResultState.PersonsInOrganization)
                 {
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             using (PerformanceOutput.ForOperation("Loading skills"))
             {
                 ISkillRepository service = _repositoryFactory.CreateSkillRepository(uow);
-                ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnly);
+                ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnlyPeriod);
 
                 _schedulerState.SchedulingResultState.Skills.Clear();
                 foreach (ISkill skill in skills)
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_schedulerState.SchedulingResultState.SkillDays = new SkillDayLoadHelper(
 					_repositoryFactory.CreateSkillDayRepository(uow),
 					_repositoryFactory.CreateMultisiteDayRepository(uow)).LoadSchedulerSkillDays(
-                    _schedulerState.RequestedPeriod.DateOnly,
+                    _schedulerState.RequestedPeriod.DateOnlyPeriod,
                     skills,
                     _schedulerState.RequestedScenario);
             }

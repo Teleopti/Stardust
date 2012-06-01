@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -19,7 +24,13 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private IAgentRestrictionsDrawer _loadingDrawer;
 		private IAgentRestrictionsDrawer _notAvailableDrawer;
 		private IAgentRestrictionsDrawer _availableDrawer;
-		private IList<int> _merged;
+		private ISchedulingOptions _schedulingOptions;
+		private ISchedulerStateHolder _stateHolder;
+		private IRuleSetProjectionService _projectionService;
+		private int _loadedCounter;
+		private IList<IPerson> _persons; 
+
+		private delegate void GridDelegate();
 
 		public AgentRestrictionGrid()
 		{
@@ -38,15 +49,14 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private void InitializeGrid()
 		{
-			_merged = new List<int>();
 			_warningDrawer = new AgentRestrictionsWarningDrawer();
 			_loadingDrawer = new AgentRestrictionsLoadingDrawer();
 			_notAvailableDrawer = new AgentRestrictionsNotAvailableDrawer();
 			_availableDrawer = new AgentRestrictionsAvailableDrawer();
+		
 			_model = new AgentRestrictionsModel();
 			_presenter = new AgentRestrictionsPresenter(this, _model, _warningDrawer, _loadingDrawer, _notAvailableDrawer, _availableDrawer);
 			
-
 			ResetVolatileData();
 			GridHelper.GridStyle(this);
 			InitializeHeaders();
@@ -77,7 +87,6 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (e.Reason == GridSelectionReason.MouseMove)
 				e.Cancel = true;
 
-
 			if (!e.Cancel && e.Range.Top <= 1 && e.Range.RangeType != GridRangeInfoType.Empty) 
 				e.Cancel = true; 
 		}
@@ -86,6 +95,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		{
 			Rows.HeaderCount = 1; // = 2 headers
 			Cols.HeaderCount = 0; // = 1 header
+			Rows.FrozenCount = 1;
 		}
 
 		public void MergeHeaders()
@@ -95,30 +105,89 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 9, 0, 12));	
 		}
 
-		public void MergeCells(int rowIndex, bool unmerge)
+		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IRuleSetProjectionService ruleSetProjectionService)
 		{
-			if (unmerge)
-			{
-				Model.CoveredRanges.Remove(GridRangeInfo.Cells(rowIndex, 1, rowIndex, 12));
-				_merged.Remove(rowIndex);
-			}
-			else
-			{
-				if (!_merged.Contains(rowIndex))
-				{
-					Model.CoveredRanges.Add(GridRangeInfo.Cells(rowIndex, 1, rowIndex, 12));
-					_merged.Add(rowIndex);
-				}
-			}
-		}
+			if (stateHolder == null) throw new ArgumentNullException("stateHolder");
 
-		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons)
-		{
-			if(stateHolder == null) throw new ArgumentNullException("stateHolder");
+			_stateHolder = stateHolder;
+			_projectionService = ruleSetProjectionService;
+			_schedulingOptions = schedulingOptions;
+			_persons = persons;
+			_loadedCounter = 0;
 
 			var scheduleMatrixListCreator = new ScheduleMatrixListCreator(stateHolder.SchedulingResultState);
-			var agentDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, persons, scheduleMatrixListCreator);
-			_model.LoadData(agentDisplayRowCreator);
+			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, scheduleMatrixListCreator);
+
+			ThreadPool.QueueUserWorkItem(Load, agentRestrictionsDisplayRowCreator);	
+		}
+
+		void Load(object workObject)
+		{
+			var agentRestrictionsDisplayRowCreator = workObject as AgentRestrictionsDisplayRowCreator;
+			_model.LoadDisplayRows(agentRestrictionsDisplayRowCreator, _persons);
+
+			Invoke(new GridDelegate(RefreshGrid));
+			Invoke(new GridDelegate(InvalidateGrid));
+
+			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
+			{
+				ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+			}	
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		void DoWork(object workObject)
+		{
+			var displayRow = workObject as AgentRestrictionsDisplayRow;
+			if (displayRow == null) return;
+			displayRow.State = AgentRestrictionDisplayRowState.Loading;
+
+			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
+			IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor = new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _projectionService);
+			ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator = new SchedulePeriodTargetTimeTimeCalculator();
+			IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
+			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor, schedulePeriodTargetTimeCalculator,workShiftWeekMinMaxCalculator);
+			var periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
+			var dataExtractor = new AgentRestrictionsDisplayDataExtractor(workShiftMinMaxCalculator,periodScheduledAndRestrictionDaysOff,restrictionExtractor);
+
+			//TODO put this in dataExtractor?
+			var currentContractTime = TimeSpan.Zero;
+			var targetTime = schedulePeriodTargetTimeCalculator.TargetTime(displayRow.Matrix);
+			var minMax = schedulePeriodTargetTimeCalculator.TargetWithTolerance(displayRow.Matrix);
+			var includeScheduling = (_schedulingOptions.GetType() != typeof (RestrictionSchedulingOptions) || ((RestrictionSchedulingOptions) _schedulingOptions).UseScheduling);
+
+			var currentDayOffs = periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(restrictionExtractor, displayRow.Matrix, includeScheduling, _schedulingOptions.UsePreferences, _schedulingOptions.UseRotations);
+
+			foreach (var scheduleDayPro in displayRow.Matrix.EffectivePeriodDays)
+			{
+			    var projSvc = scheduleDayPro.DaySchedulePart().ProjectionService();
+			    var res = projSvc.CreateProjection();
+
+				if (includeScheduling) currentContractTime = currentContractTime.Add(res.ContractTime());
+			}
+
+			displayRow.ContractCurrentTime = currentContractTime;
+			displayRow.ContractTargetTime = targetTime;
+			displayRow.CurrentDaysOff = currentDayOffs;
+			displayRow.MinMaxTime = minMax;
+
+			dataExtractor.ExtractTo(displayRow, _schedulingOptions, true); //<- TODO use scheduling
+			displayRow.SetWarnings();
+			displayRow.State = AgentRestrictionDisplayRowState.Available;
+
+			_loadedCounter++;
+			if (_loadedCounter % 25 == 0 || _loadedCounter >= _model.DisplayRows.Count - 1) Invoke(new GridDelegate(InvalidateGrid));
+		}
+
+		private void InvalidateGrid()
+		{
+			Invalidate();
+			Model.ColWidths.ResizeToFit(GridRangeInfo.Col(0), GridResizeToFitOptions.IncludeCellsWithinCoveredRange);
+		}
+
+		private void RefreshGrid()
+		{
+			Refresh();
 		}
 
 		void GridQueryColCount(object sender, GridRowColCountEventArgs e)

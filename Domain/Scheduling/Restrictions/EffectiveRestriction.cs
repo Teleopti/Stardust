@@ -192,6 +192,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             var ret = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation,
                                            cat, dayOff, absence, _activityRestrictionCollection);
+        	ret.NotAvailable = NotAvailable;
             if (IsRotationDay)
                 ret.IsRotationDay = IsRotationDay;
             if (IsAvailabilityDay)
@@ -200,6 +201,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 ret.IsPreferenceDay = IsPreferenceDay;
             if (IsStudentAvailabilityDay)
                 ret.IsStudentAvailabilityDay = IsStudentAvailabilityDay;
+			if (effectiveRestriction.NotAvailable)
+				ret.NotAvailable = true;
             return ret;
 
         }
@@ -401,6 +404,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 {
                     result = (result * 398) ^ activityRestriction.GetHashCode();
                 }
+            	result = (result * 398) ^ NotAvailable.GetHashCode();
+				result = (result * 398) ^ IsAvailabilityDay.GetHashCode();
                 return result;
             }
         }

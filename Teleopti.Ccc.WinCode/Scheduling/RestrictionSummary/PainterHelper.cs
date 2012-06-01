@@ -39,15 +39,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
 
         public bool CanPaintEffectiveRestriction(bool rightToLeft)
         {
-            return ((_cellValue.SchedulingOption.UsePreferences || _cellValue.SchedulingOption.UseRotations ||
-                   _cellValue.SchedulingOption.UseAvailability || _cellValue.SchedulingOption.UseStudentAvailability) && (_cellValue.EffectiveRestriction != null) && !(_cellValue.HasShift || _cellValue.HasDayOff || _cellValue.HasFullDayAbsence) && !rightToLeft);
+            return ((_cellValue.EffectiveRestriction != null) && !(_cellValue.HasShift || _cellValue.HasDayOff || _cellValue.HasFullDayAbsence) && !rightToLeft);
 
         }
 
         public bool CanPaintEffectiveRestrictionRightToLeft(bool rightToLeft)
         {
-            return ((_cellValue.SchedulingOption.UsePreferences || _cellValue.SchedulingOption.UseRotations ||
-                    _cellValue.SchedulingOption.UseAvailability || _cellValue.SchedulingOption.UseStudentAvailability) && (_cellValue.EffectiveRestriction != null) && !(_cellValue.HasShift || _cellValue.HasDayOff || _cellValue.HasFullDayAbsence) && rightToLeft);
+            return ((_cellValue.EffectiveRestriction != null) && !(_cellValue.HasShift || _cellValue.HasDayOff || _cellValue.HasFullDayAbsence) && rightToLeft);
 
         }
 

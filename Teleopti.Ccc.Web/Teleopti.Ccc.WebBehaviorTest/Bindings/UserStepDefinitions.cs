@@ -518,8 +518,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new ExistingTextRequest());
 		}
 
-		[Given(@"I have no existing text requests")]
-		public void GivenIHaveNoExistingTextRequests()
+		[Given(@"I have no existing requests")]
+		public void GivenIHaveNoExistingRequests()
 		{
 
 		}
