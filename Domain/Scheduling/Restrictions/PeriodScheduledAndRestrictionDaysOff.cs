@@ -2,6 +2,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
+
+	public interface ISchedulePeriodPossibleResultDayOffCalculator
+	{
+		int PossibleResultDayOff();
+	}
+
     public class PeriodScheduledAndRestrictionDaysOff : IPeriodScheduledAndRestrictionDaysOff
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -10,13 +16,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             int result = 0;
             foreach (IScheduleDayPro day in matrix.EffectivePeriodDays)
             {
-                result += isDayOff(extractor, matrix, day, useSchedules, usePreferences, useRotations);
+                result += isDayOff(extractor, matrix.Person, day, useSchedules, usePreferences, useRotations);
             }
 
             return result;
         }
 
-        private static int isDayOff(IRestrictionExtractor extractor, IScheduleMatrixPro matrix, IScheduleDayPro day, bool useSchedules, bool usePreferences, bool useRotations)
+        private static int isDayOff(IRestrictionExtractor extractor, IPerson person, IScheduleDayPro day, bool useSchedules, bool usePreferences, bool useRotations)
         {
             IScheduleDay scheduleDay = day.DaySchedulePart();
             SchedulePartView significant = scheduleDay.SignificantPart();
@@ -28,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (useSchedules && scheduleDay.IsScheduled())
                 return 0;
 
-            extractor.Extract(matrix.Person, day.Day);
+            extractor.Extract(person, day.Day);
             foreach (IPreferenceRestriction restriction in extractor.PreferenceList)
             {
                 if (usePreferences && restriction.DayOffTemplate != null)
@@ -38,7 +44,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
                 if(usePreferences && restriction.Absence != null)
                 {
-                    var person = scheduleDay.Person;
                     var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
                     var personPeriod = person.Period(scheduleDate);
 

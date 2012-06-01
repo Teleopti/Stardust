@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -26,10 +27,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		{
 			return _schedulePeriodPossibleResultDayOffCalculator.PossibleResultDayOff();
 		}
-	}
-
-	public interface ISchedulePeriodPossibleResultDayOffCalculator
-	{
-		int PossibleResultDayOff();
 	}
 }
