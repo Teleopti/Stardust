@@ -56,11 +56,11 @@ namespace Teleopti.Ccc.Win.Optimization
         private void bindGroupPages()
         {
             comboBoxGroupPageOnTeams.DataSource = _groupPageOnTeams;
-            comboBoxGroupPageOnTeams.DisplayMember = "Description";
+            comboBoxGroupPageOnTeams.DisplayMember = "Name";
             comboBoxGroupPageOnTeams.ValueMember = "Key";
 
             comboBoxGroupPageOnCompareWith.DataSource = _groupPageOnCompareWith;
-            comboBoxGroupPageOnCompareWith.DisplayMember = "Description";
+            comboBoxGroupPageOnCompareWith.DisplayMember = "Name";
             comboBoxGroupPageOnCompareWith.ValueMember = "Key";
         }
     

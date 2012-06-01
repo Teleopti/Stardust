@@ -38,6 +38,8 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get
             {
+				if (_descriptionKey == null && Id.HasValue)
+					_descriptionKey = Id.Value.ToString();
                 return _descriptionKey;
             }
             set { _descriptionKey = value; }

@@ -164,11 +164,18 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private void initGroupPages()
 		{
 			comboBoxGrouping.DataSource = _groupPages;
-			comboBoxGrouping.DisplayMember = "Description";
+			comboBoxGrouping.DisplayMember = "Name";
 
 			if(_localSchedulingOptions.GroupOnGroupPage != null)
 			{
-				comboBoxGrouping.SelectedItem = _localSchedulingOptions.GroupOnGroupPage;
+				foreach (var item in comboBoxGrouping.Items)
+				{
+					if (((IGroupPageLight)item).Key.Equals(_localSchedulingOptions.GroupOnGroupPage.Key))
+					{
+						comboBoxGrouping.SelectedItem = item;
+						break;
+					}
+				}
 			}
 		}
 
@@ -182,11 +189,18 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private void initGroupPagesFairness()
 		{
 			comboBoxGroupingFairness.DataSource = _groupPagesFairness;
-			comboBoxGroupingFairness.DisplayMember = "Description";
+			comboBoxGroupingFairness.DisplayMember = "Name";
 
 			if (_localSchedulingOptions.GroupPageForShiftCategoryFairness != null)
 			{
-				comboBoxGroupingFairness.SelectedItem = _localSchedulingOptions.GroupPageForShiftCategoryFairness;
+				foreach (var item in comboBoxGroupingFairness.Items)
+				{
+					if (((IGroupPageLight)item).Key.Equals(_localSchedulingOptions.GroupPageForShiftCategoryFairness.Key))
+					{
+						comboBoxGroupingFairness.SelectedItem = item;
+						break;
+					}
+				}
 			}
 		}
 

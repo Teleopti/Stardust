@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
+		private IList<IUserDefinedTabLight> _userDefined;
 
 		public SchedulerGroupPagesProvider(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
 		{
@@ -32,11 +34,17 @@ namespace Teleopti.Ccc.WinCode.Grouping
 			if (includeSkills)
 				lst.Add(new GroupPageLight { Key = "Skill", Name = Resources.Skill });
 
-			using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+			if (_userDefined == null)
 			{
-				var rep = _repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow);
-				var userTabs = rep.GetUserDefinedTabs();
-				foreach (var userDefinedTabLight in userTabs)
+				using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+				{
+					var rep = _repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow);
+					_userDefined = rep.GetUserDefinedTabs();
+				}
+			}
+			if(_userDefined != null)
+			{
+				foreach (var userDefinedTabLight in _userDefined)
 				{
 					lst.Add(new GroupPageLight { Key = userDefinedTabLight.Id.ToString(), Name = userDefinedTabLight.Name });
 				}
@@ -45,9 +53,5 @@ namespace Teleopti.Ccc.WinCode.Grouping
 		}
 	}
 
-	public class GroupPageLight : IGroupPageLight
-	{
-		public string Name { get; set; }
-		public string Key { get; set; }
-	}
+	
 }
