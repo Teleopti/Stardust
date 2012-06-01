@@ -1,0 +1,25 @@
+﻿@using Teleopti.Ccc.UserTexts
+@model System.Collections.Generic.IEnumerable<Teleopti.Ccc.Web.Areas.Start.Models.Menu.MenuViewModel>
+@{ Layout = "~/Areas/Start/Views/Shared/MobileLayoutBase.cshtml"; }
+@section csshead {
+	<link rel="stylesheet" href="@Url.Content("~/Areas/Start/Content/Css/mobile.custom.css")" />
+}
+<div data-role="page">
+	<div data-role="header">
+		<h1>
+			Global Menu (loc)
+		</h1>
+		@Html.ActionLink(Resources.LogOut, "SignOut", "Authentication", new 
+																			{
+																				area = "Start"
+																			}, new { id = "signout-button", data_icon = "delete", data_iconpos = "left", @class = "ui-btn-right", data_theme = "b", rel = "external" })
+	</div>
+	<div data-role="content">
+		<ul data-role="listview" data-inset="true" data-theme="b" id="global-menu-list">
+			@foreach(var m in Model)
+			{
+				<li>@Html.ActionLink(m.Name, string.Empty, string.Empty, new{ area = m.Area}, new { id = "global-menu-"+ @Html.AttributeEncode(m.Area), @class = "ui-btn-right", data_theme = "b", rel = "external" })</li>
+			}
+		</ul>
+	</div>
+</div>
