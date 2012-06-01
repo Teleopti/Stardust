@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a message that my preferences can result (\d) days off")]
 		public void ThenIShouldSeeAMessageThatMyPreferencesCanResult2DaysOff(int daysoff)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackCanResult.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXDaysOff, daysoff)));
 		}
 
