@@ -69,7 +69,6 @@ BEGIN
 	acd_login_id			= ISNULL(a.acd_login_id,-1),
 	evaluation_id			= agg.evaluation_id,
 	quality_quest_id		= q.quality_quest_id,
-	quality_quest_type_id	= qt.quality_quest_type_id,
 	score					= agg.score,
 	datasource_id			= @datasource_id
 	FROM dbo.quality_logg agg
@@ -81,8 +80,6 @@ BEGIN
 		AND a.datasource_id = @datasource_id
 	INNER JOIN mart.dim_quality_quest q
 		ON q.quality_quest_agg_id = agg.quality_id
-	INNER JOIN mart.dim_quality_quest_type qt
-		ON q.quality_quest_type_id = qt.quality_quest_type_id
 END
 
 GO

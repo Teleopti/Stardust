@@ -61,7 +61,6 @@ CREATE TABLE [mart].[fact_quality](
 	[acd_login_id] int NOT NULL,
 	[evaluation_id] int NOT NULL,
 	[quality_quest_id] int NOT NULL,
-	[quality_quest_type_id] [int] NOT NULL,
 	[score] decimal(20,6) NULL,
 	[datasource_id] int NOT NULL
 )
