@@ -8501,17 +8501,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private void ToolStripMenuItemRestrictionViewTemp_MouseUp(object sender, MouseEventArgs e)
 		{
-			var selectedSchedules = _scheduleView.SelectedSchedules();
-			var selectedPersons = new List<IPerson>();
-
-			foreach (var scheduleDay in selectedSchedules)
-			{
-				if(!selectedPersons.Contains(scheduleDay.Person)) selectedPersons.Add(scheduleDay.Person);	
-			}
-			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, _selectedPersons, _schedulingOptions, _ruleSetProjectionService, selectedPersons );
+			var persons = _schedulerState.FilteredPersonDictionary.Values.ToList();
+			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, _schedulingOptions, _ruleSetProjectionService);
 			agentRestrictionView.ShowDialog(this);
 		}
-
     }
 }
 

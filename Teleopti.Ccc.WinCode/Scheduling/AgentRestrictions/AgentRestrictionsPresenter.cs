@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			get { return ColCount; }
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public int GridQueryRowCount
 		{
 			get { return _model.DisplayRows.Count + HeaderCount; }
@@ -91,7 +90,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			}	
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		private void HandleDisplayRowQuerys(GridQueryCellInfoEventArgs e)
 		{
 			if(e.RowIndex > 1)

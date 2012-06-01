@@ -60,6 +60,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				e.Style.CellType = "NumericReadOnlyCellModel";
 				e.Style.CellValue = agentRestrictionsDisplayRow.TargetDaysOff;
+				var warning = agentRestrictionsDisplayRow.Warning(6);
+				e.Style.CellTipText = warning ?? string.Empty;
 			}
 
 			//Contract time
@@ -67,6 +69,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				e.Style.CellType = "TimeSpan";
 				e.Style.CellValue = agentRestrictionsDisplayRow.ContractCurrentTime;
+				var warning = agentRestrictionsDisplayRow.Warning(7);
+				e.Style.CellTipText = warning ?? string.Empty;
 			}
 
 			//Days off (Schedule)
@@ -74,6 +78,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				e.Style.CellType = "NumericReadOnlyCellModel";
 				e.Style.CellValue = agentRestrictionsDisplayRow.CurrentDaysOff;
+				var warning = agentRestrictionsDisplayRow.Warning(8);
+				e.Style.CellTipText = warning ?? string.Empty;
 			}
 
 			//Min
@@ -81,6 +87,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				e.Style.CellType = "TimeSpan";
 				e.Style.CellValue = ((IAgentDisplayData) agentRestrictionsDisplayRow).MinimumPossibleTime;
+				var warning = agentRestrictionsDisplayRow.Warning(9);
+				e.Style.CellTipText = warning ?? string.Empty;
 			}
 
 			//Max
@@ -88,6 +96,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				e.Style.CellType = "TimeSpan";
 				e.Style.CellValue = ((IAgentDisplayData) agentRestrictionsDisplayRow).MaximumPossibleTime;
+				var warning = agentRestrictionsDisplayRow.Warning(10);
+				e.Style.CellTipText = warning ?? string.Empty;
 			}
 
 			//Days Off (Schedule + Restrictions)
@@ -101,12 +111,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (e.ColIndex == 12)
 			{
 				e.Style.CellType = "Static";
-				if (agentRestrictionsDisplayRow.Warnings == 0) e.Style.CellValue = UserTexts.Resources.Yes;
-				else e.Style.CellValue = UserTexts.Resources.No;
+				e.Style.CellValue = agentRestrictionsDisplayRow.Warnings == 0 ? UserTexts.Resources.Yes : UserTexts.Resources.No;
 			}
-
-
-			//view.MergeCells(e.RowIndex, true);
 
 			return true;
 		}

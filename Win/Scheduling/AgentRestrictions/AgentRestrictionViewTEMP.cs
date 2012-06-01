@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using Autofac;
-using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -11,18 +9,16 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	{
 		private readonly ISchedulerStateHolder _stateHolder;
 		private readonly IList<IPerson> _persons;
-		private ISchedulingOptions _schedulingOptions;
-		private IRuleSetProjectionService _projectionService;
-		private IList<IPerson> _selectedPersons; 
+		private readonly ISchedulingOptions _schedulingOptions;
+		private readonly IRuleSetProjectionService _projectionService;
 
-		public AgentRestrictionViewTemp(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IRuleSetProjectionService projectionService, IList<IPerson> selectedPersons )
+		public AgentRestrictionViewTemp(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IRuleSetProjectionService projectionService)
 		{
 			InitializeComponent();
 			_stateHolder = stateHolder;
 			_persons = persons;
 			_schedulingOptions = schedulingOptions;
 			_projectionService = projectionService;
-			_selectedPersons = selectedPersons;
 		}
 
 		private void Button1Click(object sender, System.EventArgs e)
@@ -34,23 +30,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private void AgentRestrictionViewTempLoad(object sender, System.EventArgs e)
 		{
 			agentRestrictionGrid.MergeHeaders();
-			agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _projectionService, _selectedPersons);
-			agentRestrictionGrid.Refresh();
-			//agentRestrictionGrid.Model.ColWidths.ResizeToFit(GridRangeInfo.Col(0), GridResizeToFitOptions.IncludeCellsWithinCoveredRange);	
-		}
-
-		private void button2_Click(object sender, System.EventArgs e)
-		{
-			agentRestrictionGrid.BeginUpdate();
-			//agentRestrictionGrid.MergeCells(2, true);
-			//agentRestrictionGrid.MergeCells(3, true);
-			agentRestrictionGrid.EndUpdate();
-			agentRestrictionGrid.Refresh();
-		}
-
-		private void button3_Click(object sender, System.EventArgs e)
-		{
-			Refresh();
+			agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _projectionService);
+			agentRestrictionGrid.Refresh();	
 		}
 	}
 }

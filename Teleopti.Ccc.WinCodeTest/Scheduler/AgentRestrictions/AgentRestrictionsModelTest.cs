@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
@@ -13,6 +14,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private MockRepository _mocks;
 		private IScheduleMatrixPro _scheduleMatrixPro;
 		private IAgentRestrictionsDisplayRowCreator _agentRestrictionsDisplayRowCreator;
+		private IPerson _person;
+		private IList<IPerson> _persons;
 
 		[SetUp]
 		public void Setup()
@@ -22,6 +25,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_agentRestrictionsDisplayRow = new AgentRestrictionsDisplayRow(_scheduleMatrixPro);
 			_agentRestrictionsDisplayRowCreator = _mocks.StrictMock<IAgentRestrictionsDisplayRowCreator>();
 			_model = new AgentRestrictionsModel();
+			_person = _mocks.StrictMock<IPerson>();
+			_persons = new List<IPerson>{_person};
 		}
 
 		[Test]
@@ -30,19 +35,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.IsNotNull(_model.DisplayRows);	
 		}
 
-		//[Test]
-		//public void ShouldLoadDisplayRows()
-		//{
-		//    using(_mocks.Record())
-		//    {
-		//        Expect.Call(_agentRestrictionsDisplayRowCreator.Create());
-		//    }
+		[Test]
+		public void ShouldLoadDisplayRows()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_agentRestrictionsDisplayRowCreator.Create(_persons)).Return(new List<AgentRestrictionsDisplayRow>{_agentRestrictionsDisplayRow});
+			}
 
-		//    using(_mocks.Playback())
-		//    {
-		//        _model.LoadDisplayRows(_agentRestrictionsDisplayRowCreator);		
-		//    }	
-		//}
+			using (_mocks.Playback())
+			{
+				_model.LoadDisplayRows(_agentRestrictionsDisplayRowCreator, _persons);
+				Assert.AreEqual(1, _model.DisplayRows.Count);
+			}
+		}
 
 		[Test]
 		public void ShouldGetDisplayRowFromIndex()
