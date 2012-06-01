@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
         internal static readonly Color ColorOutsideGridBackground = ColorHelper.GridControlGridExteriorColor();
         internal static readonly FontStyle FontClosedCell = GuiSettings.ClosedCellFontStyle();
         internal static readonly Color ColorFontClosedCell = GuiSettings.ClosedCellFontColor();
-
+        private static readonly object Lock = new object();
+        private static ForecasterSettings _currentSettings;
         private readonly IList<INumericCellModelWithDecimals> _numericCellModelWithDecimalses = new List<INumericCellModelWithDecimals>();
         private int _numberOfDecimals;
 
@@ -105,12 +106,19 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
         public static ForecasterSettings CurrentForecasterSettings()
         {
-            ForecasterSettings currentSettings;
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            lock (Lock)
             {
-                currentSettings = new PersonalSettingDataRepository(uow).FindValueByKey("Forecaster", new ForecasterSettings());
+                if (_currentSettings == null)
+                {
+                    using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                    {
+                        _currentSettings = new PersonalSettingDataRepository(uow).FindValueByKey("Forecaster",
+                                                                                                 new ForecasterSettings());
+                        return _currentSettings;
+                    }
+                }
+                return _currentSettings;
             }
-            return currentSettings;
         }
 
         /// <summary>
