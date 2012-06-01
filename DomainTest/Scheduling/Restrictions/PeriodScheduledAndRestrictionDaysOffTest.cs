@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Assert.AreEqual(4, result);
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldCountPreferenceAbsenceOnContractNoWorkdayAsDayOff()
         {
 			var contractSchedule = ContractScheduleFactory.CreateContractScheduleWithoutWorkDays(" ");
@@ -146,7 +146,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Assert.AreEqual(1, result);
         }
 
-        private void stubCommonData()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		private void stubCommonData()
         {
         	var date = DateOnly.Today;
             IList<IScheduleDayPro> days = new List<IScheduleDayPro>{ _day1, _day2, _day3, _day4};
