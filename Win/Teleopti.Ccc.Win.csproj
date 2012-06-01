@@ -2297,12 +2297,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\DateChangedEventArgs.cs" />
-    <Compile Include="Scheduling\FilterDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\FilterDialog.Designer.cs">
-      <DependentUpon>FilterDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forecasting\Forms\ModifyCellEventArgs.cs" />
     <Compile Include="Forecasting\Forms\ModifyCellOption.cs" />
     <Compile Include="Scheduling\FormClipboardSpecial.cs">
@@ -2688,10 +2682,6 @@
     <EmbeddedResource Include="Scheduling\SchedulerNavigator.resx">
       <DependentUpon>SchedulerNavigator.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\FilterDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FilterDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FindMatching.resx">
       <DependentUpon>FindMatching.cs</DependentUpon>

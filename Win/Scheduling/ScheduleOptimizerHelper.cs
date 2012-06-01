@@ -946,14 +946,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return groupPage;
         }
 
-		private static IGroupPage getUserDefined(string key, IGroupPageHelper groupPageHelper, DateOnly dateOnly)
-		{
-			groupPageHelper.SetSelectedPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
-			groupPageHelper.LoadAll();
-			groupPageHelper.SetCurrentGroupPageById(new Guid(key));
-			return groupPageHelper.CurrentGroupPage;
-		}
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "groupPageHelper"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void GroupSchedule(BackgroundWorker backgroundWorker, IList<IScheduleDay> scheduleDays, IList<IScheduleMatrixPro> matrixList, 
 			IList<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions, IGroupPageHelper groupPageHelper)
         {

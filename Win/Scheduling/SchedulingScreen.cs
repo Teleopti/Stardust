@@ -185,7 +185,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IRuleSetProjectionService _ruleSetProjectionService;
         private DateOnly _defaultFilterDate;
 
-        private ScheduleFilterModel _scheduleFilterModelCached = null;
         private bool _inUpdate;
         private int _totalScheduled;
         private readonly IPersonRequestCheckAuthorization _personRequestAuthorizationChecker;

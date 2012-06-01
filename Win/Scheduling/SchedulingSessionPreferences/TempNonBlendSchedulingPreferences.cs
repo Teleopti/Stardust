@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private readonly IList<IActivity> _activities;
         //
 
-        public TempNonBlendSchedulingPreferences(ISchedulingOptions defaultOptions, ISchedulerGroupPagesProvider groupPagesProvider, IList<IActivity> activities):this()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public TempNonBlendSchedulingPreferences(ISchedulingOptions defaultOptions, ISchedulerGroupPagesProvider groupPagesProvider, IList<IActivity> activities):this()
         {
             _defaultOptions = defaultOptions;
         	_groupPagesProvider = groupPagesProvider;

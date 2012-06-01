@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Optimization
     	private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
     	private readonly IList<IScheduleTag> _scheduleTags;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public OptimizationPreferencesDialog(
             IOptimizationPreferences preferences, 
             ISchedulerGroupPagesProvider  groupPagesProvider, 

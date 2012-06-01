@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Win.Optimization
             if (!DesignMode) SetTexts();
         }
 
-        public void Initialize(
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public void Initialize(
             IExtraPreferences extraPreferences,
 			ISchedulerGroupPagesProvider groupPagesProvider)
         {

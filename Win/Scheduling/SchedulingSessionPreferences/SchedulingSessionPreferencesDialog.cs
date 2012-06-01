@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private readonly bool _reschedule;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDaysOffPreferences daysOffPreferences, IList<IShiftCategory> shiftCategories,
             bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
             IList<IScheduleTag> scheduleTags)
