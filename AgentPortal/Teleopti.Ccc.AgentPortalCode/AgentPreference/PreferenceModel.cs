@@ -341,7 +341,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             {
                 foreach (PreferenceCellData preferenceCellData in _cellDataCollection.Values)
                 {
-                    return preferenceCellData.PeriodTarget;
+					if (preferenceCellData.IsInsidePeriod)
+						return preferenceCellData.PeriodTarget;
                 }
             }
             return TimeSpan.Zero;
@@ -353,7 +354,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             {
                 foreach (PreferenceCellData preferenceCellData in _cellDataCollection.Values)
                 {
-                    return preferenceCellData.BalancedPeriodTarget;
+					if (preferenceCellData.IsInsidePeriod)
+						return preferenceCellData.BalancedPeriodTarget;
                 }
             }
             return TimeSpan.Zero;
@@ -365,7 +367,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             {
                 foreach (PreferenceCellData preferenceCellData in _cellDataCollection.Values)
                 {
-                    return preferenceCellData.BalancedPeriodTargetWithTolerance;
+					if (preferenceCellData.IsInsidePeriod)
+						return preferenceCellData.BalancedPeriodTargetWithTolerance;
                 }
             }
             return new TimePeriod(TimeSpan.Zero, TimeSpan.Zero);
@@ -378,7 +381,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             {
                 foreach (PreferenceCellData preferenceCellData in _cellDataCollection.Values)
                 {
-                    return preferenceCellData.PeriodDayOffsTarget;
+					if (preferenceCellData.IsInsidePeriod)
+						return preferenceCellData.PeriodDayOffsTarget;
                 }
             }
             return 0;
@@ -390,7 +394,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             {
                 foreach (PreferenceCellData preferenceCellData in _cellDataCollection.Values)
                 {
-                    return preferenceCellData.PeriodDayOffs;
+					if (preferenceCellData.IsInsidePeriod)
+						return preferenceCellData.PeriodDayOffs;
                 }
             }
             return 0;
@@ -402,7 +407,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             {
                 foreach (PreferenceCellData preferenceCellData in _cellDataCollection.Values)
                 {
-                    if (preferenceCellData.Enabled)
+                    if (preferenceCellData.Enabled && preferenceCellData.IsInsidePeriod)
                     {
                         if (preferenceCellData.EffectiveRestriction.Invalid)
                             return false;
