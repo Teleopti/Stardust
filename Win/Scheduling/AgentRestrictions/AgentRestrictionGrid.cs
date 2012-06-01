@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			var minMax = schedulePeriodTargetTimeCalculator.TargetWithTolerance(displayRow.Matrix);
 			var includeScheduling = (_schedulingOptions.GetType() != typeof (RestrictionSchedulingOptions) || ((RestrictionSchedulingOptions) _schedulingOptions).UseScheduling);
 
-			var currentDayOffs = periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(restrictionExtractor, displayRow.Matrix, includeScheduling, _schedulingOptions.UsePreferences, _schedulingOptions.UseRotations);
+			var currentDayOffs = periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(displayRow.Matrix, includeScheduling, _schedulingOptions.UsePreferences, _schedulingOptions.UseRotations);
 
 			foreach (var scheduleDayPro in displayRow.Matrix.EffectivePeriodDays)
 			{
