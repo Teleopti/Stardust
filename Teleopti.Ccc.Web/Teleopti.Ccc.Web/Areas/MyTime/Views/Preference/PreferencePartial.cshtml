@@ -18,16 +18,18 @@
 		@string.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
 	}
 </div>
-<div id="Preference-period-feedback-shouldhave" class="pd5 info-pnl">
-	@{
-		var range = Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span class='lower'>-</span>", "<span class='upper'>-</span>"));
-		var single = Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span class='days'>-</span>"));
-	}
-	<div class="range">@range</div>
-	<div class="single">@single</div>
-</div>
-<div id="Preference-period-feedback-canresult" class="pd5 info-pnl">
-	<div>@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span class='days'>-</span>"))</div>
+<div class="displaynone">
+	<div id="Preference-period-feedback-shouldhave" class="pd5 info-pnl">
+		@{
+			var range = Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span class='lower'>-</span>", "<span class='upper'>-</span>"));
+			var single = Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span class='days'>-</span>"));
+		}
+		<div class="range">@range</div>
+		<div class="single">@single</div>
+	</div>
+	<div id="Preference-period-feedback-canresult" class="pd5 info-pnl">
+		<div>@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span class='days'>-</span>"))</div>
+	</div>
 </div>
 <div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 
