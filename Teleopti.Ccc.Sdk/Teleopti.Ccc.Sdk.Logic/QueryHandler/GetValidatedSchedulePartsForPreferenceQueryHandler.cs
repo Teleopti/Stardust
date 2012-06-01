@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
@@ -137,9 +138,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 					IPeriodScheduledAndRestrictionDaysOff periodScheduledAndRestrictionDaysOff =
 						new PeriodScheduledAndRestrictionDaysOff();
-					IRestrictionExtractor extractor = new RestrictionExtractor(stateHolder);
-					int numberOfDaysOff = periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(extractor,
-																								 scheduleMatrix, true,
+					int numberOfDaysOff = periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(scheduleMatrix, true,
 																								 true, false);
 
 					var restrictionValidator = new RestrictionsValidator(new IsEditablePredicate(),

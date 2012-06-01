@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			agentDisplayData.MinimumPossibleTime = minMaxTime.Minimum;
 			agentDisplayData.MaximumPossibleTime = minMaxTime.Maximum;
 			agentDisplayData.ScheduledAndRestrictionDaysOff =
-				_periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_restrictionExtractor, agentDisplayData.Matrix, useSchedules,
+				_periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(agentDisplayData.Matrix, useSchedules,
 				                                                        schedulingOptions.UsePreferences,
 				                                                        schedulingOptions.UseRotations);
 		}

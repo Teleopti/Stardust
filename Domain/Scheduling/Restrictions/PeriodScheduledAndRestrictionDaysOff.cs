@@ -17,32 +17,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 	public class PeriodScheduledAndRestrictionDaysOff : IPeriodScheduledAndRestrictionDaysOff
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public int CalculatedDaysOff(IRestrictionExtractor extractor, IScheduleMatrixPro matrix, bool useSchedules, bool usePreferences, bool useRotations)
+
+		public int CalculatedDaysOff(IScheduleMatrixPro matrix, bool useSchedules, bool usePreferences, bool useRotations)
+		{
+			var scheduleDays = from d in matrix.EffectivePeriodDays select d.DaySchedulePart();
+			return CalculatedDaysOff(scheduleDays, useSchedules, usePreferences, useRotations);
+		}
+		
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+        public int CalculatedDaysOff(IEnumerable<IScheduleDay> scheduleDays, bool useSchedules, bool usePreferences, bool useRotations)
         {
-        	var extractOperation = new RestrictionExtractOperation();
-        	var scheduleDayWithRestrictions = from d in matrix.EffectivePeriodDays
-        	                                  let scheduleDay = d.DaySchedulePart()
-        	                                  let restrictions = scheduleDay.RestrictionCollection()
-        	                                  let rotationRestrictions = extractOperation.GetRotationRestrictions(restrictions)
-        	                                  let preferenceRestrictions = extractOperation.GetPreferenceRestrictions(restrictions)
-        	                                  select new
-        	                                         	{
-        	                                         		scheduleDay,
-        	                                         		rotationRestrictions,
-        	                                         		preferenceRestrictions
-        	                                         	};
         	return (
-        	       	from d in scheduleDayWithRestrictions
-        	       	select isDayOff(d.scheduleDay, d.preferenceRestrictions, d.rotationRestrictions, useSchedules, usePreferences, useRotations)
+					from d in scheduleDays
+        	       	select isDayOff(d, useSchedules, usePreferences, useRotations)
         	       )
         		.Sum();
         }
 
-		private static int isDayOff(IScheduleDay scheduleDay, IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEnumerable<IRotationRestriction> rotationRestrictions,  bool useSchedules, bool usePreferences, bool useRotations)
+		private static int isDayOff(IScheduleDay scheduleDay, bool useSchedules, bool usePreferences, bool useRotations)
         {
+        	var extractOperation = new RestrictionExtractOperation();
             var significant = scheduleDay.SignificantPart();
 			var person = scheduleDay.Person;
+			var restrictions = scheduleDay.RestrictionCollection();
+			var preferenceRestrictions = extractOperation.GetPreferenceRestrictions(restrictions);
+			var rotationRestrictions = extractOperation.GetRotationRestrictions(restrictions);
 
             if (useSchedules &&
                 (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff))
