@@ -65,38 +65,38 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateGroupingReadModel(Guid[] inputIds)
+        public void UpdateGroupingReadModel(ICollection<Guid> inputIds)
         {
             //change the array to comma seperated string
             string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
             using(var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
-               ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateGroupingReadModel] '{0}'", ids)).ExecuteUpdate();
+            	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+            		"exec [ReadModel].[UpdateGroupingReadModel] :idList").SetString("idList", ids).ExecuteUpdate();
             }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateGroupingReadModelGroupPage(Guid[] inputIds)
+        public void UpdateGroupingReadModelGroupPage(ICollection<Guid> inputIds)
         {
             //change the array to comma seperated string
             string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
-                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateGroupingReadModelGroupPage] '{0}'", ids)).ExecuteUpdate();
+            	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+            		"exec [ReadModel].[UpdateGroupingReadModelGroupPage] :idList").SetString("idList", ids).ExecuteUpdate();
             }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateGroupingReadModelData(Guid[] inputIds)
+        public void UpdateGroupingReadModelData(ICollection<Guid> inputIds)
         {
             //change the array to comma seperated string
             string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
-                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateGroupingReadModelData] '{0}'", ids)).ExecuteUpdate();
+            	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+            		"exec [ReadModel].[UpdateGroupingReadModelData] :idList").SetString("idList", ids).ExecuteUpdate();
             }
         }
 	}

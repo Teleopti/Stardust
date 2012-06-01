@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
          }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public  void UpdateFindPerson(Guid[] inputIds )
+        public  void UpdateFindPerson(ICollection<Guid> inputIds)
         {
             string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateFindPersonData(Guid[] inputIds)
+        public void UpdateFindPersonData(ICollection<Guid> inputIds)
         {
             string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
