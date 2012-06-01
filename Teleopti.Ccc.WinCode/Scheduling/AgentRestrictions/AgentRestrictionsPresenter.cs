@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
 	public interface IAgentRestrictionsView
 	{
 		void MergeHeaders();
-		void MergeCells(int rowIndex, bool unmerge);
-		void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons);
 	}
 
 	public interface IAgentRestrictionsWarningDrawer
@@ -21,14 +15,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 	public interface IAgentRestrictionsDrawer
 	{
-		bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e, IAgentRestrictionsDisplayRow agentRestrictionsDisplayRow);
+		bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e, AgentRestrictionsDisplayRow agentRestrictionsDisplayRow);
 	}
 
 	public class AgentRestrictionsPresenter
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly IAgentRestrictionsView _view;
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly IAgentRestrictionsModel _model;
 		private readonly IAgentRestrictionsWarningDrawer _warningDrawer;
 		private readonly IAgentRestrictionsDrawer _loadingDrawer;
@@ -53,7 +45,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			get { return ColCount; }
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public int GridQueryRowCount
 		{
 			get { return _model.DisplayRows.Count + HeaderCount; }
@@ -99,7 +90,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			}	
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		private void HandleDisplayRowQuerys(GridQueryCellInfoEventArgs e)
 		{
 			if(e.RowIndex > 1)

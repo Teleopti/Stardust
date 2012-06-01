@@ -7,28 +7,28 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
 	public interface IAgentRestrictionsDisplayRowCreator
 	{
-		IList<AgentRestrictionsDisplayRow> Create();
+		IList<AgentRestrictionsDisplayRow> Create(IList<IPerson> persons);
 	}
 
 	public class AgentRestrictionsDisplayRowCreator : IAgentRestrictionsDisplayRowCreator
 	{
 		private readonly ISchedulerStateHolder _stateHolder;
-		private readonly IList<IPerson> _persons;
 		private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
-
-		public AgentRestrictionsDisplayRowCreator(ISchedulerStateHolder stateHolder, IList<IPerson> persons, IScheduleMatrixListCreator scheduleMatrixListCreator)
+		
+		public AgentRestrictionsDisplayRowCreator(ISchedulerStateHolder stateHolder, IScheduleMatrixListCreator scheduleMatrixListCreator)
 		{
 			_stateHolder = stateHolder;
-			_persons = persons;
 			_scheduleMatrixListCreator = scheduleMatrixListCreator;
 		}
 
-		public IList<AgentRestrictionsDisplayRow> Create()	
+		public IList<AgentRestrictionsDisplayRow> Create(IList<IPerson> persons)
 		{
+			if (persons == null) throw new ArgumentNullException("persons");
+
 			var displayRows = new List<AgentRestrictionsDisplayRow>();
 			var period = _stateHolder.RequestedPeriod.DateOnlyPeriod;
 			
-			foreach (var person in _persons)
+			foreach (var person in persons)
 			{
 				var scheduleDays = new List<IScheduleDay>();
 

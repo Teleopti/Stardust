@@ -25,14 +25,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		public void ExtractTo(IAgentDisplayData agentDisplayData, ISchedulingOptions schedulingOptions, bool useSchedules)
 		{
 			_workShiftMinMaxCalculator.ResetCache();
-			MinMax<TimeSpan> minMaxTime = _workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(agentDisplayData.Matrix,
-			                                                                                     schedulingOptions);
+			MinMax<TimeSpan> minMaxTime = _workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(agentDisplayData.Matrix, schedulingOptions);
 			agentDisplayData.MinimumPossibleTime = minMaxTime.Minimum;
 			agentDisplayData.MaximumPossibleTime = minMaxTime.Maximum;
-			agentDisplayData.ScheduledAndRestrictionDaysOff =
-				_periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_restrictionExtractor, agentDisplayData.Matrix, useSchedules,
-				                                                        schedulingOptions.UsePreferences,
-				                                                        schedulingOptions.UseRotations);
+			agentDisplayData.ScheduledAndRestrictionDaysOff = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_restrictionExtractor, agentDisplayData.Matrix, useSchedules, schedulingOptions.UsePreferences, schedulingOptions.UseRotations);
 		}
 	}
 }
