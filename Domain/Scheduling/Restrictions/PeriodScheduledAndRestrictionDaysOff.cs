@@ -21,16 +21,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             int result = 0;
             foreach (IScheduleDayPro day in matrix.EffectivePeriodDays)
             {
-                result += isDayOff(extractor, matrix.Person, day, useSchedules, usePreferences, useRotations);
+                result += isDayOff(extractor, matrix.Person, day.DaySchedulePart(), day.Day, useSchedules, usePreferences, useRotations);
             }
 
             return result;
         }
 
-        private static int isDayOff(IRestrictionExtractor extractor, IPerson person, IScheduleDayPro day, bool useSchedules, bool usePreferences, bool useRotations)
+		private static int isDayOff(IRestrictionExtractor extractor, IPerson person, IScheduleDay scheduleDay, DateOnly date, bool useSchedules, bool usePreferences, bool useRotations)
         {
-            IScheduleDay scheduleDay = day.DaySchedulePart();
-            SchedulePartView significant = scheduleDay.SignificantPart();
+            var significant = scheduleDay.SignificantPart();
 
             if (useSchedules &&
                 (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff))
@@ -39,8 +38,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (useSchedules && scheduleDay.IsScheduled())
                 return 0;
 
-            extractor.Extract(person, day.Day);
-            foreach (IPreferenceRestriction restriction in extractor.PreferenceList)
+			extractor.Extract(person, date);
+            foreach (var restriction in extractor.PreferenceList)
             {
                 if (usePreferences && restriction.DayOffTemplate != null)
                 {
@@ -49,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
                 if(usePreferences && restriction.Absence != null)
                 {
+                	var person2 = scheduleDay.Person;
                     var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
                     var personPeriod = person.Period(scheduleDate);
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 }
             }
 
-            foreach (IRotationRestriction restriction in extractor.RotationList)
+            foreach (var restriction in extractor.RotationList)
             {
                 if (restriction.DayOffTemplate != null && useRotations)
                 {
