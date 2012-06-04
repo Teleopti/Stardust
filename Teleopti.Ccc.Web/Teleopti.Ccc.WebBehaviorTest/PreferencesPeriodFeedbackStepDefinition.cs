@@ -70,21 +70,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a message that I should have (\d) days off")]
 		public void ThenIShouldSeeAMessageThatIShouldHave2DaysOff(int numOfDaysoff)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetDaysOff.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff)));
 		}
 
 		[Then(@"I should see a message that I should have between (\d) and (\d) days off")]
 		public void ThenIShouldSeeAMessageThatIShouldHaveBetweenXAndYDaysOff(int lower, int upper)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetDaysOff.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveBetweenXAndYDaysOff, lower, upper)));
 		}
 
 		[Then(@"I should see a message that my preferences can result (\d) days off")]
 		public void ThenIShouldSeeAMessageThatMyPreferencesCanResult2DaysOff(int daysoff)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackPossibleResultDaysOff.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXDaysOff, daysoff)));
 		}
 
