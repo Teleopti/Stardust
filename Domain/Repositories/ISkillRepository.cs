@@ -45,5 +45,8 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created date: 2010-12-28
         /// </remarks>
         ICollection<ISkill> FindAllWithActivities(IEnumerable<IActivity> activities);
+
+        ISkill LoadSkill(ISkill skill);
+        IMultisiteSkill LoadMultisiteSkill(ISkill skill);
     }
 }

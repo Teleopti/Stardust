@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
     public interface IForecastWorkflowDataService
     {
-        IWorkload InitializeWorkload(IWorkload workload);
         IList<IOutlier> InitializeOutliers(IWorkload workload);
         IScenario InitializeDefaultScenario();
         void LoadWorkloadTemplates(IList<DateOnlyPeriod> dates, IWorkload workload);
