@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -34,8 +35,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
     	public TimeSpan TargetTime(IScheduleMatrixPro matrix)
     	{
 			if (matrix == null) throw new ArgumentNullException("matrix");
-			IVirtualSchedulePeriod schedulePeriod = matrix.SchedulePeriod;
-    	    var contract = schedulePeriod.Contract;
+    		IEnumerable<IScheduleDayPro> effectivePeriodDays = matrix.EffectivePeriodDays;
+			effectivePeriodDays = effectivePeriodDays ?? new IScheduleDayPro[] { };
+			var scheduleDays = (from d in effectivePeriodDays select d.DaySchedulePart());
+			return TargetTime(matrix.SchedulePeriod, scheduleDays);
+    	}
+
+		public TimeSpan TargetTime(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
+		{
+			var contract = schedulePeriod.Contract;
 			//IContract contract = schedulePeriod.PersonPeriod.PersonContract.Contract;
 			EmploymentType empType = contract.EmploymentType;
 
@@ -51,9 +59,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (empType == EmploymentType.FixedStaffDayWorkTime)
 			{
 				int daysOff = 0;
-				foreach (var day in matrix.EffectivePeriodDays)
+				foreach (var day in scheduleDays)
 				{
-					SchedulePartView significant = day.DaySchedulePart().SignificantPart();
+					SchedulePartView significant = day.SignificantPart();
 					if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
 						daysOff++;
 
@@ -61,20 +69,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				target =
 					TimeSpan.FromSeconds((schedulePeriod.DateOnlyPeriod.DayCount() - daysOff) *
 										 schedulePeriod.AverageWorkTimePerDay.TotalSeconds);
-                target = target.Add(TimeSpan.FromSeconds(target.TotalSeconds * schedulePeriod.Seasonality.Value));
+				target = target.Add(TimeSpan.FromSeconds(target.TotalSeconds * schedulePeriod.Seasonality.Value));
 				target = target.Add(balanceAdjustment);
 				return target;
 			}
 
 			target = schedulePeriod.PeriodTarget();
-            target = target.Add(TimeSpan.FromSeconds(target.TotalSeconds * schedulePeriod.Seasonality.Value));
+			target = target.Add(TimeSpan.FromSeconds(target.TotalSeconds * schedulePeriod.Seasonality.Value));
 			target = target.Add(balanceAdjustment);
-    		return target;
-    	}
-
-		public TimeSpan TargetTime(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
-		{
-			return TimeSpan.Zero;
+			return target;
 		}
     }
 }
