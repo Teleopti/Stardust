@@ -41,17 +41,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return TargetTime(matrix.SchedulePeriod, scheduleDays);
     	}
 
-		public TimeSpan TargetTime(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public TimeSpan TargetTime(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
-			var contract = schedulePeriod.Contract;
+			var contract = virtualSchedulePeriod.Contract;
 			var employmentType = contract.EmploymentType;
 
 			if (employmentType == EmploymentType.HourlyStaff)
 				return contract.MinTimeSchedulePeriod;
 
-			var target = PeriodTarget(schedulePeriod, scheduleDays);
-			target = target.Add(TimeSpan.FromSeconds(target.TotalSeconds * schedulePeriod.Seasonality.Value));
-			target = ApplyBalance(schedulePeriod, target);
+			var target = PeriodTarget(virtualSchedulePeriod, scheduleDays);
+			target = target.Add(TimeSpan.FromSeconds(target.TotalSeconds * virtualSchedulePeriod.Seasonality.Value));
+			target = ApplyBalance(virtualSchedulePeriod, target);
 			return target;
 		}
 
