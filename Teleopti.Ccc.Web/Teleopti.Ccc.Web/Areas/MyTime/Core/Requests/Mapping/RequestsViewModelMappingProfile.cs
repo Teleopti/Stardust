@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.RawDateTo, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime).ToShortDateString()))
 				.ForMember(d => d.RawTimeFrom, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime).ToShortTimeString()))
 				.ForMember(d => d.RawTimeTo, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime).ToShortTimeString()))
-				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription))
+				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription.Name))
 				;
 
 			CreateMap<IPersonRequest, Link>()
