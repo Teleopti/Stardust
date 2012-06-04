@@ -199,24 +199,28 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	function _showRequest(listItem) {
-		var url = listItem.attr('data-mytime-link');
-		var connector = listItem
+		//just temporary until it possible to modify a absence request a well.
+		//remove this if later
+		if (!listItem.find('#absenceInfo').is(":visible")) {
+			var url = listItem.attr('data-mytime-link');
+			var connector = listItem
 			.find('.request-connector')
 			;
-		$.myTimeAjax({
-			url: url,
-			dataType: "json",
-			type: 'GET',
-			beforeSend: function () {
-				_disconnectAllOthers(listItem);
-				Teleopti.MyTimeWeb.Request.TextRequest.FadeEditSection();
-				connector.connector("connecting");
-			},
-			success: function (data, textStatus, jqXHR) {
-				Teleopti.MyTimeWeb.Request.TextRequest.ShowRequest(data, listItem.position().top - 30);
-				connector.connector("connect");
-			}
-		});
+			$.myTimeAjax({
+				url: url,
+				dataType: "json",
+				type: 'GET',
+				beforeSend: function () {
+					_disconnectAllOthers(listItem);
+					Teleopti.MyTimeWeb.Request.TextRequest.FadeEditSection();
+					connector.connector("connecting");
+				},
+				success: function (data, textStatus, jqXHR) {
+					Teleopti.MyTimeWeb.Request.TextRequest.ShowRequest(data, listItem.position().top - 30);
+					connector.connector("connect");
+				}
+			});	
+		}
 	}
 
 	function _disconnectAll() {
