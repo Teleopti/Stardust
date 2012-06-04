@@ -1,12 +1,10 @@
-﻿
-using Rhino.ServiceBus;
+﻿using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-    public class UpdateFindPersonDataConsumer : ConsumerOf<PersonChangedMessage>
+	public class UpdateFindPersonDataConsumer : ConsumerOf<PersonPeriodChangedMessage>
 	{
 		private readonly IPersonFinderReadOnlyRepository _personFinderReadOnlyRepository;
 
@@ -16,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void Consume(PersonChangedMessage  message)
+		public void Consume(PersonPeriodChangedMessage message)
 		{
             _personFinderReadOnlyRepository.UpdateFindPersonData( message.PersonIdCollection);
 		}

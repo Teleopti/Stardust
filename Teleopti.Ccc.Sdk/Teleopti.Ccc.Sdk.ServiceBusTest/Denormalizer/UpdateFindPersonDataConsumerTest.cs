@@ -1,11 +1,9 @@
-﻿
-using System;
+﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
@@ -33,8 +31,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
             Guid tempGuid = Guid.NewGuid();
             skill.SetId(tempGuid);
 
-            Guid[] ids = new Guid[] { tempGuid };
-            var mess = new PersonChangedMessage();
+            var ids = new[] { tempGuid };
+            var mess = new PersonPeriodChangedMessage();
             mess.SetPersonIdCollection(ids);
 
             using (_mocks.Record())
