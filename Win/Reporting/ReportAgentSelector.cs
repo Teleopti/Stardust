@@ -4,24 +4,21 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Repositories;
+using Autofac;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
+using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.ScheduleFilter;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Reporting
 {
     public partial class ReportAgentSelector : BaseUserControl
     {
-        private IList<IPerson> _selectedPersons = new List<IPerson>();
+		private HashSet<Guid> _selectedPersonGuids = new HashSet<Guid>();
         private SchedulerStateHolder _stateHolder;
     	private string _selectedGroupPageKey;
         
@@ -57,7 +54,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			try
 			{
 				Cursor = Cursors.WaitCursor;
-				ShowFilterDialog();
+				showFilterDialog();
 				Cursor = Cursors.Default;
 			}
 			catch (DataSourceException dataSourceException)
@@ -80,14 +77,14 @@ namespace Teleopti.Ccc.Win.Reporting
             _stateHolder = stateHolder;
         }
 
-        public IList<IPerson> SelectedPersons
+        public HashSet<Guid> SelectedPersonGuids
         {
-            get { return _selectedPersons; }
+            get { return _selectedPersonGuids; }
         }
 
-		public void SetSelectedPersons(IList<IPerson> persons)
+		public void SetSelectedPersons(HashSet<Guid> persons)
 		{
-			_selectedPersons = persons;
+			_selectedPersonGuids = persons;
 		}
 
     	public string SelectedGroupPageKey
@@ -96,72 +93,28 @@ namespace Teleopti.Ccc.Win.Reporting
 			set { _selectedGroupPageKey = value; }
     	}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public void ShowFilterDialog()
-        {
-            using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                IRepository<IContract> contractRepository = new ContractRepository(unitOfWork);
-                IContractScheduleRepository contractScheduleRepository = new ContractScheduleRepository(unitOfWork);
-                IGroupPageRepository groupPageRepository = new GroupPageRepository(unitOfWork);
-                IRepository<IPartTimePercentage> partTimePercentageRepository = new PartTimePercentageRepository(unitOfWork);
-                IRepository<IRuleSetBag> ruleSetBagRepository = new RuleSetBagRepository(unitOfWork);
-                ISkillRepository skillRepository = new SkillRepository(unitOfWork);
-                IBusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(unitOfWork);
-                unitOfWork.Reassociate(_stateHolder.AllPermittedPersons);
+		private void showFilterDialog()
+		{
+			var all = _stateHolder.AllPermittedPersons.Select(p => p.Id.Value).ToList();
 
-				var scheduleFilterModel = new ScheduleFilterModel(_selectedPersons,
-                                                                                  _stateHolder,
-                                                                                  contractRepository,
-                                                                                  contractScheduleRepository,
-                                                                                  partTimePercentageRepository,
-                                                                                  ruleSetBagRepository,
-                                                                                  groupPageRepository,
-                                                                                  skillRepository,
-                                                                                  businessUnitRepository,
-                                                                                  TimeZoneHelper.ConvertToUtc(
-                                                                                      DateTime.Today,
-                                                                                      TeleoptiPrincipal.Current.Regional.TimeZone));
-
-				unitOfWork.Reassociate(scheduleFilterModel.BusinessUnit.SiteCollection);
-                var scheduleFilterView = new ScheduleFilterView(scheduleFilterModel);
-
-				if(!string.IsNullOrEmpty(_selectedGroupPageKey))
-				{
-					scheduleFilterView.SelectTab(_selectedGroupPageKey);
-				}
-
-                scheduleFilterView.StartPosition = FormStartPosition.Manual;
-                Point pointToScreen =
-                    comboBoxAdv1.PointToScreen(new Point(comboBoxAdv1.Bounds.Y - 4,
-                                                              comboBoxAdv1.Bounds.Y + comboBoxAdv1.Height));
-                scheduleFilterView.Location = pointToScreen;
+			using (var scheduleFilterView = new PersonsFilterView(_stateHolder.RequestedPeriod.DateOnly, _stateHolder.FilteredPersonDictionary.Keys,
+				ComponentContext,ReportApplicationFunction, _selectedGroupPageKey, all))
+			{
+				scheduleFilterView.StartPosition = FormStartPosition.Manual;
+				Point pointToScreen =
+					comboBoxAdv1.PointToScreen(new Point(comboBoxAdv1.Bounds.Y - 4,
+															  comboBoxAdv1.Bounds.Y + comboBoxAdv1.Height));
+				scheduleFilterView.Location = pointToScreen;
 				scheduleFilterView.AutoLocate();
-                scheduleFilterView.ShowDialog();
-
-                IEnumerable<IPerson> uniquePersons;
-                var page = scheduleFilterView.SelectedTabTag() as IGroupPage;
-				if (page == null)
+				if (scheduleFilterView.ShowDialog() == DialogResult.OK)
 				{
-					uniquePersons = new HashSet<IPerson>(scheduleFilterModel.SelectedPersonDictionary.Values);
-					_selectedGroupPageKey = string.Empty;
+					_selectedGroupPageKey = scheduleFilterView.SelectedGroupPageKey;
+					_selectedPersonGuids = scheduleFilterView.SelectedAgentGuids();
+					
+					UpdateComboWithSelectedAgents();
 				}
-				else
-				{
-					uniquePersons = new HashSet<IPerson>(scheduleFilterModel.SelectedPersons);
-					_selectedGroupPageKey = page.Key;
-				}
-
-            	_selectedPersons.Clear();
-                foreach (var uniquePerson in uniquePersons)
-                {
-                    _selectedPersons.Add(uniquePerson);
-                }
-
-                scheduleFilterView.Dispose();
-                UpdateComboWithSelectedAgents();
-            }
-        }
+			}
+		}
 
         public void UpdateComboWithSelectedAgents()
         {
@@ -169,12 +122,12 @@ namespace Teleopti.Ccc.Win.Reporting
 
             var builder = new StringBuilder();
 
-            builder.Append(_selectedPersons.Count().ToString(currentCultureInfo));
+            builder.Append(_selectedPersonGuids.Count().ToString(currentCultureInfo));
             builder.Append(":");
-
-            foreach (IPerson person in _selectedPersons)
+			_stateHolder.FilterPersons(_selectedPersonGuids);
+            foreach (var person in _stateHolder.FilteredPersonDictionary)
             {
-                builder.Append(person.Name);
+                builder.Append(person.Value.Name);
                 builder.Append(", ");
             }
 
@@ -188,5 +141,8 @@ namespace Teleopti.Ccc.Win.Reporting
                 return false;
             }
         }
+
+    	public IComponentContext ComponentContext { get; set; }
+		public IApplicationFunction ReportApplicationFunction { get; set; }
     }
 }

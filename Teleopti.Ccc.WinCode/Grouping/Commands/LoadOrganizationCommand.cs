@@ -55,11 +55,25 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                 toNodes = rep.GetOrganization(dateOnlyPeriod, loadUser);    
             }
             
+			
             toNodes = removeDuplicates(toNodes);
 			// Permissions
 var auth = PrincipalAuthorization.Instance();
 
             var toRemove = new List<IPersonSelectorOrganization>();
+			if(_view.VisiblePersonIds != null)
+			{
+				foreach (var toNode in toNodes)
+				{
+					if (!_view.VisiblePersonIds.Contains(toNode.PersonId))
+						toRemove.Add(toNode);
+					
+				}
+			}
+			foreach (var personSelectorOrganization in toRemove)
+			{
+				toNodes.Remove(personSelectorOrganization);
+			}
             foreach (var toNode in toNodes)
             {
                 if (toNode.PersonId != Guid.Empty)

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			SetDefaultValues();
 		}
 
-		public void MapTo(IExtraPreferences target, IList<IGroupPage> groupPages)
+		public void MapTo(IExtraPreferences target, IList<IGroupPageLight> groupPages)
 		{
 			InParameter.NotNull("groupPages", groupPages);
 

@@ -400,6 +400,7 @@
     <Compile Include="Grouping\Commands\LoadOrganizationCommand.cs" />
     <Compile Include="Grouping\Commands\LoadUserDefinedTabsCommand.cs" />
     <Compile Include="Grouping\PersonSelectorPresenter.cs" />
+    <Compile Include="Grouping\SchedulerGroupPagesProvider.cs" />
     <Compile Include="Intraday\DayLayerModel.cs" />
     <Compile Include="Intraday\DispatcherWrapper.cs" />
     <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommand.cs" />
