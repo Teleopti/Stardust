@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.DomainTest.Common
             target = new MinMax<int>(3, 5);
         }
 
-		[Test]
-		public void ShouldReturnAStringOnToString()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void ShouldHandleToString()
 		{
 			new MinMax<int>(3, 4).ToString().Should().Be("3-4");
 		}
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyContainsWork()
         {
             MinMax<int> target2 = new MinMax<int>(3, 5);
