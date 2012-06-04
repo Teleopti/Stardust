@@ -72,11 +72,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 application.Start(new BasicState(), encryptedAppSettings,
                                   encryptedNHibConfigs.DecryptList(EncryptionConstants.Image1,
                                                                    EncryptionConstants.Image2), null);
-                var messageBroker = StateHolder.Instance.StateReader.ApplicationScopeData.Messaging;
-                if (messageBroker != null && !(messageBroker is SignalBroker))
-                {
-                    messageBroker.StopMessageBroker();
-                }
 
                 Logger.Info("Initialized application");
             }
