@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(_activity);
             PersistAndRemoveFromUnitOfWork(_skill);
 
-            _workload = WorkloadFactory.CreateWorkload(_skill);
+            _workload = WorkloadFactory.CreateWorkloadWithFullOpenHours(_skill);
             PersistAndRemoveFromUnitOfWork(_workload);
 
             _date = timeZoneInfo.ConvertTimeToUtc(new DateTime(2008, 1, 8, 0, 0, 0));
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IList<TimePeriod> openHourPeriods = new List<TimePeriod>();
             openHourPeriods.Add(new TimePeriod("12:30-17:30"));
-
+            
             WorkloadDay workloadDay = new WorkloadDay();
             workloadDay.Create(new DateOnly(_date), _workload, openHourPeriods);
             workloadDay.Tasks = 7 * 20;
@@ -211,6 +211,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(sd.WorkloadDayCollection[0].OpenHourList));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(sd.WorkloadDayCollection[0].TaskPeriodList));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(sd.Scenario));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(sd.WorkloadDayCollection[0].Workload.TemplateWeekCollection[0].TaskPeriodList[0]));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(sd.WorkloadDayCollection[0].Workload.TemplateWeekCollection[0].OpenHourList[0]));
         }
 
         /// <summary>

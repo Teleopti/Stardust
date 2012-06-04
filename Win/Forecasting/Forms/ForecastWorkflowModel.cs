@@ -103,11 +103,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             get { return _outliersByWorkDate; }
         }
 
-        public void InitializeWorkload()
-        {
-            _workload = _dataService.InitializeWorkload(_workload);
-        }
-
         public void InitializeOutliers()
         {
             _outliers = _dataService.InitializeOutliers(_workload);
