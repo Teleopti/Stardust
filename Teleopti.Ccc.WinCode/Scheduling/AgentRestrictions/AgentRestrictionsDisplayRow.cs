@@ -5,6 +5,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
+	public enum AgentRestrictionDisplayRowColumn
+	{
+		AgentName = 0,
+		Warnings = 1,
+		Type = 2,
+		From = 3,
+		To = 4,
+		ContractTargetTime = 5,
+		DaysOff = 6,
+		ContractTime = 7,
+		DaysOffSchedule = 8,
+		Min = 9,
+		Max = 10,
+		DaysOffScheduleRestrictions = 11,
+		Ok = 12,
+		None = 13
+	}
+
 	public enum AgentRestrictionDisplayRowState
 	{
 		NotAvailable,
@@ -32,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		TimeSpan MinimumPossibleTime { get; set; }
 		TimeSpan MaximumPossibleTime { get; set; }
 		int ScheduledAndRestrictionDaysOff { get; set; }
-		string Ok {get; }
+		string Ok { get; }
 	}
 
 	public sealed class AgentRestrictionsDisplayRow : IAgentRestrictionsDisplayRow, IAgentDisplayData
@@ -47,7 +65,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		public TimeSpan ContractCurrentTime { get; set; }
 		public int CurrentDaysOff { get; set; }
 		private readonly Dictionary<AgentRestrictionDisplayRowColumn, string> _warnings;
-		private readonly AgentRestrictionsDisplayRowColumnMapper _columnMapper	;
 		public TimePeriod MinMaxTime { get; set; }
 
 		public AgentRestrictionsDisplayRow(IScheduleMatrixPro matrix)
@@ -55,7 +72,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			_matrix = matrix;
 			State = AgentRestrictionDisplayRowState.NotAvailable;
 			_warnings = new Dictionary<AgentRestrictionDisplayRowColumn, string>();
-			_columnMapper = new AgentRestrictionsDisplayRowColumnMapper();
 		}
 
 		public IScheduleMatrixPro Matrix
@@ -74,7 +90,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		public string Warning(int index)
 		{
 			if (_warnings.Count == 0) return null;
-			var column = _columnMapper.ColumnFromIndex(index);
+			var column = (AgentRestrictionDisplayRowColumn)index;
 			string warning;
 			_warnings.TryGetValue(column, out warning);
 			return warning;
