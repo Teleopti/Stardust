@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("en-GB"));
 
 			CommonMocks(0.5);
-			_contract.Stub(x => x.EmploymentType).Return(EmploymentType.HourlyStaff).Repeat.Once();
-			_schedulePeriod.Stub(x => x.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.Once();
+			_contract.Stub(x => x.EmploymentType).Return(EmploymentType.HourlyStaff);
+			_schedulePeriod.Stub(x => x.DateOnlyPeriod).Return(dateOnlyPeriod);
 
-			_contract.Stub(x => x.WorkTimeDirective).Return(new WorkTimeDirective(TimeSpan.FromHours(40),
-																				  TimeSpan.Zero, TimeSpan.Zero)).Repeat.Once();
-			_schedulePeriod.Stub(x => x.MinTimeSchedulePeriod).Return(TimeSpan.FromHours(8)).Repeat.AtLeastOnce();
-			_matrix.Stub(x => x.Person).Return(person).Repeat.Once();
+			_contract.Stub(x => x.WorkTimeDirective)
+				.Return(new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero));
+			_schedulePeriod.Stub(x => x.MinTimeSchedulePeriod).Return(TimeSpan.FromHours(8));
+			_matrix.Stub(x => x.Person).Return(person);
 
         	var result = _targetTime.TargetWithTolerance(_matrix);
 
@@ -65,14 +65,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_schedulePeriod.Stub(x => x.Extra).Return(TimeSpan.FromHours(2));
 			_schedulePeriod.Stub(x => x.BalanceIn).Return(TimeSpan.FromHours(3));
 			_schedulePeriod.Stub(x => x.BalanceOut).Return(TimeSpan.FromHours(4));
-            _contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime).Repeat.Twice();
-            _matrix.Stub(x => x.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays)).Repeat.Once();
-            dayDo.Stub(x => x.DaySchedulePart()).Return(partDo).Repeat.Any();
-            dayMain.Stub(x => x.DaySchedulePart()).Return(partMain).Repeat.Any();
-            partDo.Stub(x => x.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
-            partMain.Stub(x => x.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-            _schedulePeriod.Stub(x => x.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.Any();
-            _schedulePeriod.Stub(x => x.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8)).Repeat.Any();
+            _contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
+            _matrix.Stub(x => x.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays));
+            dayDo.Stub(x => x.DaySchedulePart()).Return(partDo);
+            dayMain.Stub(x => x.DaySchedulePart()).Return(partMain);
+            partDo.Stub(x => x.SignificantPart()).Return(SchedulePartView.DayOff);
+            partMain.Stub(x => x.SignificantPart()).Return(SchedulePartView.MainShift);
+            _schedulePeriod.Stub(x => x.DateOnlyPeriod).Return(dateOnlyPeriod);
+            _schedulePeriod.Stub(x => x.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 
         	var result = _targetTime.TargetWithTolerance(_matrix);
             
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_schedulePeriod.Stub(x => x.Extra).Return(TimeSpan.FromHours(2));
 			_schedulePeriod.Stub(x => x.BalanceIn).Return(TimeSpan.FromHours(3));
 			_schedulePeriod.Stub(x => x.BalanceOut).Return(TimeSpan.FromHours(4));
-			_contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime).Repeat.Twice();
-			_schedulePeriod.Stub(x => x.PeriodTarget()).Return(TimeSpan.FromHours(16)).Repeat.Once();
+			_contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
+			_schedulePeriod.Stub(x => x.PeriodTarget()).Return(TimeSpan.FromHours(16));
 
         	var result = _targetTime.TargetWithTolerance(_matrix);
 
@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_schedulePeriod.Stub(x => x.Extra).Return(TimeSpan.FromHours(2));
 			_schedulePeriod.Stub(x => x.BalanceIn).Return(TimeSpan.FromHours(3));
 			_schedulePeriod.Stub(x => x.BalanceOut).Return(TimeSpan.FromHours(4));
-			_contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime).Repeat.Twice();
-			_schedulePeriod.Stub(x => x.PeriodTarget()).Return(TimeSpan.FromHours(16)).Repeat.Once();
+			_contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
+			_schedulePeriod.Stub(x => x.PeriodTarget()).Return(TimeSpan.FromHours(16));
 
         	var result = _targetTime.TargetWithTolerance(_matrix);
 
@@ -114,11 +114,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
         private void CommonMocks(double seasonality)
         {
-            _matrix.Stub(x => x.SchedulePeriod).Return(_schedulePeriod).Repeat.Any();
-            _schedulePeriod.Stub(x => x.Contract).Return(_contract).Repeat.Any();
-            _contract.Stub(x => x.NegativePeriodWorkTimeTolerance).Return(TimeSpan.FromHours(1)).Repeat.Any();
-            _contract.Stub(x => x.PositivePeriodWorkTimeTolerance).Return(TimeSpan.FromHours(0.5)).Repeat.Any();
-            _schedulePeriod.Stub(x => x.Seasonality).Return(new Percent(seasonality)).Repeat.Any();
+            _matrix.Stub(x => x.SchedulePeriod).Return(_schedulePeriod);
+            _schedulePeriod.Stub(x => x.Contract).Return(_contract);
+            _contract.Stub(x => x.NegativePeriodWorkTimeTolerance).Return(TimeSpan.FromHours(1));
+            _contract.Stub(x => x.PositivePeriodWorkTimeTolerance).Return(TimeSpan.FromHours(0.5));
+            _schedulePeriod.Stub(x => x.Seasonality).Return(new Percent(seasonality));
         }
     }
 }

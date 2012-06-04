@@ -44,40 +44,46 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public TimeSpan TargetTime(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var contract = schedulePeriod.Contract;
-			//IContract contract = schedulePeriod.PersonPeriod.PersonContract.Contract;
-			EmploymentType empType = contract.EmploymentType;
+			var employmentType = contract.EmploymentType;
 
-			TimeSpan target;
-			if (empType == EmploymentType.HourlyStaff)
-			{
+			if (employmentType == EmploymentType.HourlyStaff)
 				return contract.MinTimeSchedulePeriod;
-			}
 
-			//PeriodTarget+(Extra+BalanceOut-BalanceIn)
-			TimeSpan balanceAdjustment =
-				schedulePeriod.Extra.Add(schedulePeriod.BalanceOut).Subtract(schedulePeriod.BalanceIn);
-			if (empType == EmploymentType.FixedStaffDayWorkTime)
-			{
-				int daysOff = 0;
-				foreach (var day in scheduleDays)
-				{
-					SchedulePartView significant = day.SignificantPart();
-					if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
-						daysOff++;
-
-				}
-				target =
-					TimeSpan.FromSeconds((schedulePeriod.DateOnlyPeriod.DayCount() - daysOff) *
-										 schedulePeriod.AverageWorkTimePerDay.TotalSeconds);
-				target = target.Add(TimeSpan.FromSeconds(target.TotalSeconds * schedulePeriod.Seasonality.Value));
-				target = target.Add(balanceAdjustment);
-				return target;
-			}
-
-			target = schedulePeriod.PeriodTarget();
+			var target = PeriodTarget(schedulePeriod, scheduleDays);
 			target = target.Add(TimeSpan.FromSeconds(target.TotalSeconds * schedulePeriod.Seasonality.Value));
-			target = target.Add(balanceAdjustment);
+			target = ApplyBalance(schedulePeriod, target);
 			return target;
 		}
-    }
+
+		private static TimeSpan PeriodTarget(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays) {
+			if (schedulePeriod.Contract.EmploymentType == EmploymentType.FixedStaffDayWorkTime)
+				return PeriodTargetForStaffDayWorkTime(schedulePeriod, scheduleDays);
+			else
+				return schedulePeriod.PeriodTarget();
+		}
+
+		private static TimeSpan PeriodTargetForStaffDayWorkTime(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
+		{
+			TimeSpan target;
+			var daysOff = 0;
+			foreach (var day in scheduleDays)
+			{
+				var significant = day.SignificantPart();
+				if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
+					daysOff++;
+			}
+			target =
+				TimeSpan.FromSeconds((schedulePeriod.DateOnlyPeriod.DayCount() - daysOff)*
+				                     schedulePeriod.AverageWorkTimePerDay.TotalSeconds);
+			return target;
+		}
+
+		private static TimeSpan ApplyBalance(IVirtualSchedulePeriod schedulePeriod, TimeSpan time)
+		{
+			time = time.Add(schedulePeriod.Extra);
+			time = time.Add(schedulePeriod.BalanceOut);
+			time = time.Subtract(schedulePeriod.BalanceIn);
+			return time;
+		}
+	}
 }
