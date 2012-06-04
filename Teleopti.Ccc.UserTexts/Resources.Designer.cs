@@ -1871,6 +1871,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anywhere.
+        /// </summary>
+        public static string Anywhere {
+            get {
+                return ResourceManager.GetString("Anywhere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apointment time.
         /// </summary>
         public static string ApointmentTime {

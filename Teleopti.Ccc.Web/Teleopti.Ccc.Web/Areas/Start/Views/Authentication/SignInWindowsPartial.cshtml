@@ -2,12 +2,13 @@
 @model SignInWindowsViewModel
 
 <div id="windows_partial_target">
-    @using (Ajax.BeginForm("Windows", new AjaxOptions
+    @using (Ajax.BeginForm(new AjaxOptions
     {
         UpdateTargetId = "windows_partial_target",
         InsertionMode = InsertionMode.Replace,
 		OnComplete = "Teleopti.Start.Authentication.SignInPartialInit",
 		OnFailure = "Teleopti.Start.Common.AjaxFailed",
+		Url = "Windows"
     }))
     { 
 

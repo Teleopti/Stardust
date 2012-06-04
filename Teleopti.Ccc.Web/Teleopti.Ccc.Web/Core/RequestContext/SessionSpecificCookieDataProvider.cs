@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 				handleSlidingExpiration(cookie, ticket);
 			}
 
-			setCookie(cookie);
 			return _dataStringSerializer.Deserialize(userData);
 		}
 
@@ -120,8 +119,11 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			if (!_sessionSpecificCookieDataProviderSettings.AuthenticationCookieSlidingExpiration) return;
 
 			var newTicket = FormsAuthentication.RenewTicketIfOld(ticket);
-			if (newTicket != null)
+			if (newTicket != ticket)
+			{
 				cookie.Value = encryptTicket(newTicket);
+				setCookie(cookie);				
+			}
 		}
 
 		private static FormsAuthenticationTicket decryptCookie(HttpCookie cookie)

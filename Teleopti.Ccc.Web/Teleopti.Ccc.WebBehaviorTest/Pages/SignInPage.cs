@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "BusinessUnitList")] public List BusinessUnitList;
 
+		[FindBy(Id = "global-menu-list")] public List GlobalMenuList;
+
 		[FindBy(Id = "signout")]
 		public Link SignOutLink;
 
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			PasswordTextField.Value = password;
 			ApplicationOkButton.Click();
 
-			WaitUntilSignInOrBusinessUnitListOrErrorAppears();
+			WaitUntilSignInOrBusinessUnitListOrErrorOrMenuAppears();
 		}
 
 		public void SignInWindows()
@@ -73,9 +75,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			WindowsOkButton.EventualClick();
 		}
 
-		private void WaitUntilSignInOrBusinessUnitListOrErrorAppears()
+		private void WaitUntilSignInOrBusinessUnitListOrErrorOrMenuAppears()
 		{
-			Func<bool> SignedInOrBusinessUnitListExists = () => SignOutLink.Exists || BusinessUnitList.Exists;
+			Func<bool> SignedInOrBusinessUnitListExists = () => SignOutLink.Exists || BusinessUnitList.Exists || GlobalMenuList.Exists;
 			SignedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(10), TimeSpan.FromSeconds(10));
 		}
 	}

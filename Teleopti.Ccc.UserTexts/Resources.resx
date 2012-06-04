@@ -10689,6 +10689,10 @@ These options are activated:
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>You should have {0} days off.</value>
     <comment>You should have X days off.</comment>
+    </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Anywhere</value>
+    <comment>The name of the mobile reports module used in permission</comment>
   </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>You should have between {0} and {1} days off.</value>

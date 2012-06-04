@@ -665,6 +665,7 @@
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Areas\Start\Views\Menu\MobileMenu.cshtml" />
     <Content Include="Areas\Start\Views\Menu\Index.cshtml" />
+    <Content Include="Areas\Start\Views\Menu\Menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
