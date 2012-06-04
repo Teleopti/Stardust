@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		public void Apply(IPerson user, CultureInfo cultureInfo)
 		{
 			// TODO: Use TestData.AgentRoleWithoutMyTimeWeb When logOnOff handles this
-			user.PermissionInformation.AddApplicationRole(TestData.AgentRole);
+			user.PermissionInformation.AddApplicationRole(TestData.SupervisorRole);
 		}
 
 		#endregion
