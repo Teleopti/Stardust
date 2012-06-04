@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Given(@"I have a day off scheduled on weekday (\d)")]
-		public void GivenIHaveADayOffScheduledOnWeekday3(int thOfDay)
+		public void GivenIHaveADayOffScheduledOnWeekday3(int weekday)
 		{
-			ScenarioContext.Current.Pending();
+			UserFactory.User().Setup(new DayOffScheduled(weekday));
 		}
 
 		[Given(@"I have a day off preference on weekday (\d)")]
@@ -96,5 +96,4 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 	}
-
 }
