@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             _schedulingResultLoader = schedulingResultLoader;
 
-            _intradayDate = HistoryOnly ? SchedulerStateHolder.RequestedPeriod.DateOnly.StartDate : DateOnly.Today;
+            _intradayDate = HistoryOnly ? SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate : DateOnly.Today;
         }
 
         public bool EarlyWarningEnabled

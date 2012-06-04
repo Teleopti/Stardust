@@ -68,11 +68,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
             eventArgs = new GridQueryCellInfoEventArgs(0, (int)ColumnType.StartScheduleColumns,new GridStyleInfo());
             ((DayPresenterTestClass)target).CreateDayHeaderTest(eventArgs);
-            Assert.AreEqual(target.SelectedPeriod.DateOnly.StartDate, eventArgs.Style.Tag);
+            Assert.AreEqual(target.SelectedPeriod.DateOnlyPeriod.StartDate, eventArgs.Style.Tag);
 
             eventArgs = new GridQueryCellInfoEventArgs(1, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
             ((DayPresenterTestClass)target).CreateDayHeaderTest(eventArgs);
-            Assert.AreEqual(target.SelectedPeriod.DateOnly.StartDate, eventArgs.Style.Tag);
+            Assert.AreEqual(target.SelectedPeriod.DateOnlyPeriod.StartDate, eventArgs.Style.Tag);
 
             mocks.VerifyAll();
         }

@@ -316,22 +316,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldFindTextRequestsForAgentWithPaging()
+		public void ShouldFindTextAndAbsenceRequestsForAgentWithPaging()
 		{
+			var shiftTradeRequest = new PersonRequest(_person, new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+				                      	{new ShiftTradeSwapDetail(_person, _person, new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.Date))}));
 			var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
 			var absenceRequest = CreateAggregateWithCorrectBusinessUnit();
 			var textRequest2 = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
-			var paging = new Paging {Skip = 0, Take = 2};
+			var paging = new Paging {Skip = 1, Take = 5};
 
+			PersistAndRemoveFromUnitOfWork(shiftTradeRequest);
+			SetUpdatedOnForRequest(textRequest, -3);
 			PersistAndRemoveFromUnitOfWork(textRequest);
 			SetUpdatedOnForRequest(textRequest, -2);
 			PersistAndRemoveFromUnitOfWork(absenceRequest);
 			SetUpdatedOnForRequest(absenceRequest, -1);
 			PersistAndRemoveFromUnitOfWork(textRequest2);
 
-			var result = new PersonRequestRepository(UnitOfWork).FindTextRequestsForAgent(_person, paging);
-
-			result.Should().Have.SameSequenceAs(new [] {textRequest2, textRequest});
+			var result = new PersonRequestRepository(UnitOfWork).FindTextAndAbsenceRequestsForAgent(_person, paging);
+			//no shifttraderequest, newest textrequest is skipped
+			result.Should().Have.SameSequenceAs(new [] {absenceRequest, textRequest});
 		}
 
 		[Test]

@@ -1,38 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
 	public interface IAgentRestrictionsModel
 	{
+
 		IList<AgentRestrictionsDisplayRow> DisplayRows { get; }
 		AgentRestrictionsDisplayRow DisplayRowFromRowIndex(int rowIndex);
-		void LoadData(IAgentRestrictionsDisplayRowCreator agentRestrictionsDisplayRowCreator);
+		IList<AgentRestrictionsDisplayRow> LoadDisplayRows(IAgentRestrictionsDisplayRowCreator agentRestrictionsDisplayRowCreator, IList<IPerson> persons);
 	}
 
 	public class AgentRestrictionsModel : IAgentRestrictionsModel
 	{
-		private IList<AgentRestrictionsDisplayRow> _displayRows;
-
-
+		private readonly IList<AgentRestrictionsDisplayRow> _displayRows;
+		public IList<AgentRestrictionsDisplayRow> DisplayRows { get { return _displayRows; } }
+		
 		public AgentRestrictionsModel()
 		{
-			_displayRows = new List<AgentRestrictionsDisplayRow>();
-		}
-
-		public IList<AgentRestrictionsDisplayRow> DisplayRows { get { return _displayRows; } }
-
-		public void LoadData(IAgentRestrictionsDisplayRowCreator agentRestrictionsDisplayRowCreator)
-		{
-			if(agentRestrictionsDisplayRowCreator == null) throw new ArgumentNullException("agentRestrictionsDisplayRowCreator");
-
-			_displayRows = agentRestrictionsDisplayRowCreator.Create();
+			_displayRows = new List<AgentRestrictionsDisplayRow>();		
 		}
 
 		public AgentRestrictionsDisplayRow DisplayRowFromRowIndex(int rowIndex)
 		{
-			if(rowIndex < int.MinValue + 2) throw new ArgumentOutOfRangeException("rowIndex");
+			if (rowIndex < int.MinValue + 2) throw new ArgumentOutOfRangeException("rowIndex");
 			return _displayRows[rowIndex - 1 - 1];
+		}
+
+		public IList<AgentRestrictionsDisplayRow> LoadDisplayRows(IAgentRestrictionsDisplayRowCreator agentRestrictionsDisplayRowCreator, IList<IPerson> persons)
+		{
+			if (agentRestrictionsDisplayRowCreator == null) throw new ArgumentNullException("agentRestrictionsDisplayRowCreator");
+			var rows = agentRestrictionsDisplayRowCreator.Create(persons);
+
+			foreach (var agentRestrictionsDisplayRow in rows)
+			{
+				_displayRows.Add(agentRestrictionsDisplayRow);
+			}
+
+			return rows;
 		}
 	}
 }

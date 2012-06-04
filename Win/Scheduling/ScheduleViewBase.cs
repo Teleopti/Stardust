@@ -960,7 +960,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             else
             {
-                tag = Presenter.SelectedPeriod.DateOnly.StartDate;
+                tag = Presenter.SelectedPeriod.DateOnlyPeriod.StartDate;
             }
             
             return tag;

@@ -6,16 +6,15 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {
 	public class AgentRestrictionsLoadingDrawer : IAgentRestrictionsDrawer
 	{
-		public bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e, IAgentRestrictionsDisplayRow agentRestrictionsDisplayRow)
+		public bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e, AgentRestrictionsDisplayRow agentRestrictionsDisplayRow)
 		{
 			if(view == null) throw new ArgumentNullException("view");
 			if(e == null) throw new ArgumentNullException("e");
 			if(agentRestrictionsDisplayRow == null) throw new ArgumentNullException("agentRestrictionsDisplayRow");
 
-			if(agentRestrictionsDisplayRow.State.Equals(AgentRestrictionDisplayRowState.Loading))
+			if (agentRestrictionsDisplayRow.State.Equals(AgentRestrictionDisplayRowState.Loading) && e.ColIndex > (int)AgentRestrictionDisplayRowColumn.DaysOffSchedule)
 			{
-				view.MergeCells(e.RowIndex, false);
-				e.Style.Text = UserTexts.Resources.LoadingDataTreeDots;
+				e.Style.Text = UserTexts.Resources.NA;
 				return true;
 			}
 
