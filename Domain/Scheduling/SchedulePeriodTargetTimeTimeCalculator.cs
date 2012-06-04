@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -71,5 +72,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
     		return target;
     	}
 
+		public TimeSpan TargetTime(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays) { return TimeSpan.Zero; }
     }
 }
