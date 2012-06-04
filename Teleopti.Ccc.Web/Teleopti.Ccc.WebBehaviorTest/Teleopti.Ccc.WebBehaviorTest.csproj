@@ -82,6 +82,7 @@
     <Compile Include="Data\User\CommonContract.cs" />
     <Compile Include="Data\User\ContractFromTable.cs" />
     <Compile Include="Data\User\ContractScheduleWith2DaysOff.cs" />
+    <Compile Include="Data\User\DayOffScheduled.cs" />
     <Compile Include="Data\User\IContractSetup.cs" />
     <Compile Include="Data\User\UserContractSchedule.cs" />
     <Compile Include="PreferencesPeriodFeedbackStepDefinition.cs" />
