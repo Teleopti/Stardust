@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         public void Initialize()
         {
-            _model.InitializeWorkload();   
             _model.InitializeOutliers();   
             _model.InitializeDefaultScenario();
             _view.SetWorkloadName(_model.Workload.Name);
