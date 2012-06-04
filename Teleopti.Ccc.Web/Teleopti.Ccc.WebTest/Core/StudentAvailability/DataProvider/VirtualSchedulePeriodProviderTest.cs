@@ -14,23 +14,39 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
 	public class VirtualSchedulePeriodProviderTest
 	{
 		[Test]
-		public void ShouldGetPeriodForDate()
+		public void ShouldGetCurrentOrNextVirtualPeriodForDate()
 		{
-			var personProvider = MockRepository.GenerateMock<ILoggedOnUser>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var person = MockRepository.GenerateMock<IPerson>();
 			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
-			var date = DateOnly.Today;
-			var period = new DateOnlyPeriod(date, date.AddDays(3));
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3));
 
-			personProvider.Stub(x => x.CurrentUser()).Return(person);
-			person.Stub(x => x.VirtualSchedulePeriodOrNext(date)).Return(virtualSchedulePeriod);
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.VirtualSchedulePeriodOrNext(DateOnly.Today)).Return(virtualSchedulePeriod);
 			virtualSchedulePeriod.Stub(x => x.DateOnlyPeriod).Return(period);
 
-			var target = new VirtualSchedulePeriodProvider(personProvider, null);
+			var target = new VirtualSchedulePeriodProvider(loggedOnUser, null);
 
-			var result = target.GetCurrentOrNextVirtualPeriodForDate(date);
+			var result = target.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today);
 
 			result.Should().Be.EqualTo(period);
+		}
+
+		[Test]
+		public void ShouldGetVirtualSchedulePeriodForDate()
+		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.VirtualSchedulePeriodOrNext(DateOnly.Today)).Return(virtualSchedulePeriod);
+
+			var target = new VirtualSchedulePeriodProvider(loggedOnUser, null);
+
+			var result = target.VirtualSchedulePeriodForDate(DateOnly.Today);
+
+			result.Should().Be.EqualTo(virtualSchedulePeriod);
 		}
 
 		[Test]
@@ -104,6 +120,5 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
 
 			result.Should().Be.EqualTo(date);
 		}
-
 	}
 }

@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	{
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly IRestrictionExtractor _restrictionExtractor;
 
 		public AgentRestrictionsDisplayDataExtractor(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IPeriodScheduledAndRestrictionDaysOff periodScheduledAndRestrictionDaysOff, IRestrictionExtractor restrictionExtractor)
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			MinMax<TimeSpan> minMaxTime = _workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(agentDisplayData.Matrix, schedulingOptions);
 			agentDisplayData.MinimumPossibleTime = minMaxTime.Minimum;
 			agentDisplayData.MaximumPossibleTime = minMaxTime.Maximum;
-			agentDisplayData.ScheduledAndRestrictionDaysOff = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_restrictionExtractor, agentDisplayData.Matrix, useSchedules, schedulingOptions.UsePreferences, schedulingOptions.UseRotations);
+			agentDisplayData.ScheduledAndRestrictionDaysOff = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(agentDisplayData.Matrix, useSchedules, schedulingOptions.UsePreferences, schedulingOptions.UseRotations);
 		}
 	}
 }

@@ -78,6 +78,13 @@
     </Compile>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="Data\DataFactory.cs" />
+    <Compile Include="Data\User\CommonContract.cs" />
+    <Compile Include="Data\User\ContractFromTable.cs" />
+    <Compile Include="Data\User\ContractScheduleWith2DaysOff.cs" />
+    <Compile Include="Data\User\IContractSetup.cs" />
+    <Compile Include="Data\User\UserContractSchedule.cs" />
+    <Compile Include="PreferencesPeriodFeedbackStepDefinition.cs" />
     <Compile Include="Core\TestMethods.cs" />
     <Compile Include="Data\User\AgentWithoutAbsenceRequestsAccess.cs" />
     <Compile Include="Data\User\AbsencePreferenceToday.cs" />
@@ -146,6 +153,11 @@
     <Compile Include="MobileReportsStepDefinitions.cs" />
     <Compile Include="Pages\Common\IEditTextRequestPage.cs" />
     <Compile Include="Pages\MobileReportsPage.cs" />
+    <Compile Include="PreferencesPeriodFeedback.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesPeriodFeedback.feature</DependentUpon>
+    </Compile>
     <Compile Include="PreferencesScheduleStepDefinition.cs" />
     <Compile Include="PreferencesFeedback2.feature.cs">
       <AutoGen>True</AutoGen>
@@ -221,7 +233,7 @@
     <Compile Include="Data\User\StudentAvailability.cs" />
     <Compile Include="Data\User\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
     <Compile Include="Data\User\USCulture.cs" />
-    <Compile Include="Data\User\PersonAndSchedulePeriod.cs" />
+    <Compile Include="Data\User\PersonPeriod.cs" />
     <Compile Include="Data\User\Interfaces\IUserDataSetup.cs" />
     <Compile Include="Data\User\Interfaces\IUserSetup.cs" />
     <Compile Include="LicenseStepDefinitions.cs" />
@@ -353,6 +365,10 @@
       <LastGenOutput>MyProfile.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="PreferencesPeriodFeedback.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesPeriodFeedback.feature.cs</LastGenOutput>
+    </None>
     <None Include="PreferencesSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesSchedule.feature.cs</LastGenOutput>

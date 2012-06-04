@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
@@ -42,6 +43,49 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 
 			result.Should().Be.SameInstanceAs(viewModel);
 		}
+
+	}
+
+	[TestFixture]
+	public class PreferencePeriodViewModelFactoryTest
+	{
+
+		[Test]
+		public void ShouldGetViewModelWithPossibleResultDaysOff()
+		{
+			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
+			preferencePeriodFeedbackProvider.Stub(x => x.PossibleResultDaysOff(DateOnly.Today)).Return(8);
+			var target = new PreferencePeriodViewModelFactory(preferencePeriodFeedbackProvider);
+
+			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
+
+			result.PossibleResultDaysOff.Should().Be.EqualTo(8);
+		}
+
+		[Test]
+		public void ShouldGetViewModelWithLowerTargetDaysOff()
+		{
+			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
+			preferencePeriodFeedbackProvider.Stub(x => x.TargetDaysOff(DateOnly.Today)).Return(new MinMax<int>(3, 4));
+			var target = new PreferencePeriodViewModelFactory(preferencePeriodFeedbackProvider);
+
+			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
+
+			result.TargetDaysOff.Lower.Should().Be.EqualTo(3);
+		}
+
+		[Test]
+		public void ShouldGetViewModelWithUpperTargetDaysOff()
+		{
+			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
+			preferencePeriodFeedbackProvider.Stub(x => x.TargetDaysOff(DateOnly.Today)).Return(new MinMax<int>(3, 4));
+			var target = new PreferencePeriodViewModelFactory(preferencePeriodFeedbackProvider);
+
+			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
+
+			result.TargetDaysOff.Upper.Should().Be.EqualTo(4);
+		}
+
 
 	}
 }

@@ -68,9 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static ISite CommonSite;
 		public static ISite AnotherSite;
 
-		public static IContract CommonContract;
 		public static IPartTimePercentage PartTimePercentageOne;
-		public static IContractSchedule WorkingWeekContractSchedule;
 		public static IContractSchedule DayOffTodayContractSchedule;
 	}
 }

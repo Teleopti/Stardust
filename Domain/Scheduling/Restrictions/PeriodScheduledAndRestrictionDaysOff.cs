@@ -1,25 +1,37 @@
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
-    public class PeriodScheduledAndRestrictionDaysOff : IPeriodScheduledAndRestrictionDaysOff
+	public class PeriodScheduledAndRestrictionDaysOff : IPeriodScheduledAndRestrictionDaysOff
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public int CalculatedDaysOff(IRestrictionExtractor extractor, IScheduleMatrixPro matrix, bool useSchedules, bool usePreferences, bool useRotations)
-        {
-            int result = 0;
-            foreach (IScheduleDayPro day in matrix.EffectivePeriodDays)
-            {
-                result += isDayOff(extractor, matrix, day, useSchedules, usePreferences, useRotations);
-            }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public int CalculatedDaysOff(IScheduleMatrixPro matrix, bool useSchedules, bool usePreferences, bool useRotations)
+		{
+			var scheduleDays = from d in matrix.EffectivePeriodDays select d.DaySchedulePart();
+			return CalculatedDaysOff(scheduleDays, useSchedules, usePreferences, useRotations);
+		}
 
-            return result;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), 
+		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+        public int CalculatedDaysOff(IEnumerable<IScheduleDay> scheduleDays, bool useSchedules, bool usePreferences, bool useRotations)
+        {
+        	return (
+					from d in scheduleDays
+        	       	select isDayOff(d, useSchedules, usePreferences, useRotations)
+        	       )
+        		.Sum();
         }
 
-        private static int isDayOff(IRestrictionExtractor extractor, IScheduleMatrixPro matrix, IScheduleDayPro day, bool useSchedules, bool usePreferences, bool useRotations)
+		private static int isDayOff(IScheduleDay scheduleDay, bool useSchedules, bool usePreferences, bool useRotations)
         {
-            IScheduleDay scheduleDay = day.DaySchedulePart();
-            SchedulePartView significant = scheduleDay.SignificantPart();
+        	var extractOperation = new RestrictionExtractOperation();
+            var significant = scheduleDay.SignificantPart();
+			var person = scheduleDay.Person;
+			var restrictions = scheduleDay.RestrictionCollection();
+			var preferenceRestrictions = extractOperation.GetPreferenceRestrictions(restrictions);
+			var rotationRestrictions = extractOperation.GetRotationRestrictions(restrictions);
 
             if (useSchedules &&
                 (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff))
@@ -28,8 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (useSchedules && scheduleDay.IsScheduled())
                 return 0;
 
-            extractor.Extract(matrix.Person, day.Day);
-            foreach (IPreferenceRestriction restriction in extractor.PreferenceList)
+			foreach (var restriction in preferenceRestrictions)
             {
                 if (usePreferences && restriction.DayOffTemplate != null)
                 {
@@ -38,7 +49,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
                 if(usePreferences && restriction.Absence != null)
                 {
-                    var person = scheduleDay.Person;
                     var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
                     var personPeriod = person.Period(scheduleDate);
 
@@ -47,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 }
             }
 
-            foreach (IRotationRestriction restriction in extractor.RotationList)
+            foreach (var restriction in rotationRestrictions)
             {
                 if (restriction.DayOffTemplate != null && useRotations)
                 {

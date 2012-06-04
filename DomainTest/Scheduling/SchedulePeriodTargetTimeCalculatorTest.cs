@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
-    [TestFixture]
+	[TestFixture]
     public class SchedulePeriodTargetTimeCalculatorTest
     {
         private ISchedulePeriodTargetTimeCalculator _targetTime;

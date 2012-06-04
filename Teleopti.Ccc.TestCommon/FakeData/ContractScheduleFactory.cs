@@ -18,6 +18,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return new ContractSchedule(name);
         }
 
+		public static IContractSchedule CreateContractScheduleWithoutWorkDays(string name)
+		{
+			var contractSchedule = CreateContractSchedule(name);
+			contractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
+			return contractSchedule;
+		}
+
         /// <summary>
         /// Creates a contract schedule aggregate with a working week contract schedule.
         /// </summary>

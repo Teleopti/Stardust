@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
 				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix, _schedulingOptions)).Return(
 					new MinMax<TimeSpan>());
-				Expect.Call(_periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_restrictionExtractor, _matrix, true,
+				Expect.Call(_periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_matrix, true,
 				                                                                    _schedulingOptions.UsePreferences,
 				                                                                    _schedulingOptions.UseRotations)).Return(33);
 			}

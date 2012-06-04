@@ -16,11 +16,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_defaultDateCalculator = defaultDateCalculator;
 		}
 
-		public DateOnlyPeriod GetCurrentOrNextVirtualPeriodForDate(DateOnly date)
+		public IVirtualSchedulePeriod VirtualSchedulePeriodForDate(DateOnly date)
 		{
 			var person = _personProvider.CurrentUser();
 			var virtualSchedulePeriod = person.VirtualSchedulePeriodOrNext(date);
-			return virtualSchedulePeriod.DateOnlyPeriod;
+			return virtualSchedulePeriod;
+		}
+
+		public DateOnlyPeriod GetCurrentOrNextVirtualPeriodForDate(DateOnly date)
+		{
+			return VirtualSchedulePeriodForDate(date).DateOnlyPeriod;
 		}
 
 		public bool HasSchedulePeriod()

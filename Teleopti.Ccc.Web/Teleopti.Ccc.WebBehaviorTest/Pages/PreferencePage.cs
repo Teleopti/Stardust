@@ -20,6 +20,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference-period")]
 		public Div PreferencePeriod;
 
+		[FindBy(Id = "Preference-period-feedback-shouldhave")]
+		public Div PreferencePeriodFeedbackShouldHave { get; set; }
+
+		[FindBy(Id = "Preference-period-feedback-canresult")]
+		public Div PreferencePeriodFeedbackCanResult { get; set; }
+
 		public void SelectPreferenceItemByText(string text, bool wait)
 		{
 			if (wait)

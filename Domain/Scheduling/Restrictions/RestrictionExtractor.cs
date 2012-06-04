@@ -8,40 +8,72 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
+	public interface IRestrictionExtractOperation
+	{
+		IEnumerable<IRotationRestriction> GetRotationRestrictions(IEnumerable<IRestrictionBase> restrictions);
+		IEnumerable<IAvailabilityRestriction> GetAvailabilityRestrictions(IEnumerable<IRestrictionBase> restrictions);
+		IEnumerable<IPreferenceRestriction> GetPreferenceRestrictions(IEnumerable<IRestrictionBase> restrictions);
+		IEnumerable<IStudentAvailabilityDay> GetStudentAvailabilityDays(IScheduleDay scheduleDay);
+	}
+
+	public class RestrictionExtractOperation : IRestrictionExtractOperation
+	{
+		public IEnumerable<IRotationRestriction> GetRotationRestrictions(IEnumerable<IRestrictionBase> restrictions)
+		{
+			return restrictions.FilterBySpecification(RestrictionMustBe.Rotation).Cast<IRotationRestriction>().ToArray();
+		}
+
+		public IEnumerable<IAvailabilityRestriction> GetAvailabilityRestrictions(IEnumerable<IRestrictionBase> restrictions)
+		{
+			return restrictions.FilterBySpecification(RestrictionMustBe.Availability).Cast<IAvailabilityRestriction>().ToArray();
+		}
+
+		public IEnumerable<IPreferenceRestriction> GetPreferenceRestrictions(IEnumerable<IRestrictionBase> restrictions)
+		{
+			return restrictions.FilterBySpecification(RestrictionMustBe.Preference).Cast<IPreferenceRestriction>().ToArray();
+		}
+
+		public IEnumerable<IStudentAvailabilityDay> GetStudentAvailabilityDays(IScheduleDay scheduleDay)
+		{
+			return scheduleDay.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>().ToArray();
+		}
+
+	}
 
     public class RestrictionExtractor : IRestrictionExtractor
     {
         private readonly ISchedulingResultStateHolder _resultStateHolder;
-        private readonly IList<IAvailabilityRestriction> _availList = new List<IAvailabilityRestriction>();
-        private readonly IList<IRotationRestriction> _rotList = new List<IRotationRestriction>();
-        private readonly IList<IStudentAvailabilityDay> _studentAvailabilityList = new List<IStudentAvailabilityDay>();
-        private readonly IList<IPreferenceRestriction> _preferenceList = new List<IPreferenceRestriction>();
+        private readonly IList<IAvailabilityRestriction> _availabilityRestrictions = new List<IAvailabilityRestriction>();
+        private readonly IList<IRotationRestriction> _rotationRestrictions = new List<IRotationRestriction>();
+        private readonly IList<IStudentAvailabilityDay> _studentAvailabilityDays = new List<IStudentAvailabilityDay>();
+        private readonly IList<IPreferenceRestriction> _preferenceRestrictions = new List<IPreferenceRestriction>();
         
 
         public RestrictionExtractor(ISchedulingResultStateHolder resultStateHolder)
         {
             _resultStateHolder = resultStateHolder;
         }
+
         private IScheduleDictionary ScheduleDictionary {get { return _resultStateHolder.Schedules; }}
 
         public IEnumerable<IAvailabilityRestriction> AvailabilityList
         {
-            get { return _availList; }
+            get { return _availabilityRestrictions; }
         }
 
         public IEnumerable<IRotationRestriction> RotationList
         {
-            get { return _rotList; }
+            get { return _rotationRestrictions; }
         }
 
         public IEnumerable<IStudentAvailabilityDay> StudentAvailabilityList
         {
-            get { return _studentAvailabilityList; }
+            get { return _studentAvailabilityDays; }
         }
 
         public IEnumerable<IPreferenceRestriction> PreferenceList
         {
-            get { return _preferenceList; }
+            get { return _preferenceRestrictions; }
         }
 
         public void Extract(IScheduleDay schedulePart)
@@ -50,25 +82,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             ExtractDay(schedulePart);
         }
 
-        private void ExtractDay(IScheduleDay schedulePart)
+        private void ExtractDay(IScheduleDay scheduleDay)
         {
-            if (schedulePart != null)
-            {
-                var restrictions = schedulePart.RestrictionCollection();
-                restrictions.FilterBySpecification(RestrictionMustBe.Rotation).ForEach(rot => _rotList.Add((IRotationRestriction)rot));
-                restrictions.FilterBySpecification(RestrictionMustBe.Availability).ForEach(rot => _availList.Add((IAvailabilityRestriction)rot));
-                restrictions.FilterBySpecification(RestrictionMustBe.Preference).ForEach(rot => _preferenceList.Add((IPreferenceRestriction)rot));
+        	if (scheduleDay == null) return;
 
-                schedulePart.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>().ForEach(_studentAvailabilityList.Add);
-            }
+        	var restrictions = scheduleDay.RestrictionCollection();
+        	var operation = new RestrictionExtractOperation();
+        	operation.GetRotationRestrictions(restrictions).ForEach(_rotationRestrictions.Add);
+        	operation.GetAvailabilityRestrictions(restrictions).ForEach(_availabilityRestrictions.Add);
+        	operation.GetPreferenceRestrictions(restrictions).ForEach(_preferenceRestrictions.Add);
+        	operation.GetStudentAvailabilityDays(scheduleDay).ForEach(_studentAvailabilityDays.Add);
         }
 
         private void ClearLists()
         {
-            _availList.Clear();
-            _rotList.Clear();
-            _studentAvailabilityList.Clear();
-            _preferenceList.Clear();
+            _availabilityRestrictions.Clear();
+            _rotationRestrictions.Clear();
+            _studentAvailabilityDays.Clear();
+            _preferenceRestrictions.Clear();
         }
 
         public void Extract(IPerson person, DateOnly dateOnly)

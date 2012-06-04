@@ -6,6 +6,7 @@ using NUnit.Framework.Constraints;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.User;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -59,6 +60,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestSiteConfigurationSetup.Setup();
 			Browser.MakeSureBrowserIsNotRunning();
 			EventualTimeouts.Set(TimeSpan.FromSeconds(5));
+
+			DataContext.Data().Setup(new CommonContract());
+			DataContext.Data().Setup(new ContractScheduleWith2DaysOff());
+			DataContext.Data().Persist();
 		}
 
 		[BeforeScenario]
