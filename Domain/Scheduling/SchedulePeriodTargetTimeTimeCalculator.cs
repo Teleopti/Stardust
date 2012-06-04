@@ -51,9 +51,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return contract.MinTimeSchedulePeriod;
 
 			var target = PeriodTarget(virtualSchedulePeriod, scheduleDays);
-			target = target.Add(TimeSpan.FromSeconds(target.TotalSeconds * virtualSchedulePeriod.Seasonality.Value));
+			target = ApplySeasonality(virtualSchedulePeriod, target);
 			target = ApplyBalance(virtualSchedulePeriod, target);
 			return target;
+		}
+
+		private static TimeSpan ApplySeasonality(IVirtualSchedulePeriod virtualSchedulePeriod, TimeSpan target)
+		{
+			return target.Add(TimeSpan.FromSeconds(target.TotalSeconds * virtualSchedulePeriod.Seasonality.Value));
 		}
 
 		private static TimeSpan PeriodTarget(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays) {
@@ -65,7 +70,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private static TimeSpan PeriodTargetForStaffDayWorkTime(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
-			TimeSpan target;
 			var daysOff = 0;
 			foreach (var day in scheduleDays)
 			{
@@ -73,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
 					daysOff++;
 			}
-			target =
+			var target =
 				TimeSpan.FromSeconds((schedulePeriod.DateOnlyPeriod.DayCount() - daysOff)*
 				                     schedulePeriod.AverageWorkTimePerDay.TotalSeconds);
 			return target;
