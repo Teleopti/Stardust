@@ -148,6 +148,7 @@
     <Compile Include="Collection\IdenticalLayersSpecificationTest.cs" />
     <Compile Include="Collection\TeamCollectionTest.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorterTest.cs" />
+    <Compile Include="Common\ListAggregatorTest.cs" />
     <Compile Include="Common\NowTest.cs" />
     <Compile Include="Common\JobResultDetailTest.cs" />
     <Compile Include="Common\JobResultTest.cs" />
