@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void GivenIHaveAContractWith(Table table)
 		{
 			var contract = table.CreateInstance<ContractFromTable>();
+			if (contract.EmploymentType == EmploymentType.FixedStaffDayWorkTime)
+				ScenarioContext.Current.Pending();
 			UserFactory.User().Setup(contract);
 			UserFactory.User().UserData<PersonPeriod>().Contract = contract;
 		}
