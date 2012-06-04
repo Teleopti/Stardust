@@ -69,7 +69,6 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Rows;
-using Teleopti.Ccc.WinCode.Common.ScheduleFilter;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
@@ -5834,7 +5833,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var all = SchedulerState.AllPermittedPersons.Select(p => p.Id.Value).ToList();
 
-        	using (var scheduleFilterView = new PersonsFilterView(SchedulerState.RequestedPeriod.DateOnly,SchedulerState.FilteredPersonDictionary.Keys,
+        	using (var scheduleFilterView = new PersonsFilterView(SchedulerState.RequestedPeriod.DateOnlyPeriod,SchedulerState.FilteredPersonDictionary.Keys,
 				_container,  ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
 			DefinedRaptorApplicationFunctionPaths.OpenSchedulePage), _selectedFilterGroupPage, all))
 			{

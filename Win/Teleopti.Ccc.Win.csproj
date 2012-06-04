@@ -580,12 +580,6 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\ScheduleFilterView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\ScheduleFilterView.Designer.cs">
-      <DependentUpon>ScheduleFilterView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\SearchPerson.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2928,9 +2922,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\ModifySelectionView.resx">
       <DependentUpon>ModifySelectionView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\ScheduleFilterView.resx">
-      <DependentUpon>ScheduleFilterView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\SearchPerson.resx">
       <DependentUpon>SearchPerson.cs</DependentUpon>

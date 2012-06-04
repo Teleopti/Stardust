@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 			
             toNodes = removeDuplicates(toNodes);
 			// Permissions
-var auth = PrincipalAuthorization.Instance();
+			var auth = PrincipalAuthorization.Instance();
 
             var toRemove = new List<IPersonSelectorOrganization>();
 			if(_view.VisiblePersonIds != null)
