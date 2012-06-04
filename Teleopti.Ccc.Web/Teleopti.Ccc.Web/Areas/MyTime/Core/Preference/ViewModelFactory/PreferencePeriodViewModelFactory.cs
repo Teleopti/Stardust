@@ -13,17 +13,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 
 		public PreferencePeriodFeedbackViewModel CreatePeriodFeedbackViewModel(DateOnly date)
 		{
-			var targetDaysOff = _preferencePeriodFeedbackProvider.TargetDaysOff(date);
-			var possibleResultDaysOff = _preferencePeriodFeedbackProvider.PossibleResultDaysOff(date);
+			var feedback = _preferencePeriodFeedbackProvider.PeriodFeedback(date);
 			return new PreferencePeriodFeedbackViewModel
-			       	{
-			       		PossibleResultDaysOff = possibleResultDaysOff,
-			       		TargetDaysOff = new TargetDaysOffViewModel()
-			       		                	{
-			       		                		Lower = targetDaysOff.Minimum,
-			       		                		Upper = targetDaysOff.Maximum
-			       		                	}
-			       	};
+					{
+						PossibleResultDaysOff = feedback.PossibleResultDaysOff,
+						TargetDaysOff = new TargetDaysOffViewModel
+											{
+												Lower = feedback.TargetDaysOff.Minimum,
+												Upper = feedback.TargetDaysOff.Maximum
+											},
+						TargetHours = feedback.TargetTime.Hours
+					};
 		}
 	}
 }

@@ -71,28 +71,28 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeAMessageThatIShouldHave2DaysOff(int numOfDaysoff)
 		{
 			ScenarioContext.Current.Pending();
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff)));
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetDaysOff.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff)));
 		}
 
 		[Then(@"I should see a message that I should have between (\d) and (\d) days off")]
 		public void ThenIShouldSeeAMessageThatIShouldHaveBetweenXAndYDaysOff(int lower, int upper)
 		{
 			ScenarioContext.Current.Pending();
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveBetweenXAndYDaysOff, lower, upper)));
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetDaysOff.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveBetweenXAndYDaysOff, lower, upper)));
 		}
 
 		[Then(@"I should see a message that my preferences can result (\d) days off")]
 		public void ThenIShouldSeeAMessageThatMyPreferencesCanResult2DaysOff(int daysoff)
 		{
 			ScenarioContext.Current.Pending();
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackCanResult.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXDaysOff, daysoff)));
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackPossibleResultDaysOff.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXDaysOff, daysoff)));
 		}
 
-		[Then(@"I should see a message that I should work (\d) hours")]
-		public void ThenIShouldSeeAMessageThatIShouldWork40Hours(int hours)
+		[Then(@"I should see a message that I should work (\d+) hours")]
+		public void ThenIShouldSeeAMessageThatIShouldWorkXHours(int hours)
 		{
 			ScenarioContext.Current.Pending();
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkXHours, hours)));
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetHours.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkXHours, hours)));
 		}
 
 	}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -20,5 +21,13 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="matrix">The matrix.</param>
 		/// <returns></returns>
     	TimeSpan TargetTime(IScheduleMatrixPro matrix);
+
+		/// <summary>
+		/// Times the target
+		/// </summary>
+		/// <param name="virtualSchedulePeriod"></param>
+		/// <param name="scheduleDays"></param>
+		/// <returns></returns>
+		TimeSpan TargetTime(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays);
     }
 }
