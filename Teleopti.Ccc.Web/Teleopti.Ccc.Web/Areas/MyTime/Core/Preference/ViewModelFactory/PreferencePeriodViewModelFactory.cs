@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 												Lower = feedback.TargetDaysOff.Minimum,
 												Upper = feedback.TargetDaysOff.Maximum
 											},
-						TargetHours = feedback.TargetTime.Hours
+						TargetHours = Convert.ToInt32(feedback.TargetTime.TotalHours)
 					};
 		}
 	}

@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		public void ShouldGetViewModelWithTargetHours()
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
-			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback { TargetTime = TimeSpan.FromHours(8) });
+			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback { TargetTime = TimeSpan.FromDays(2) });
 			var target = new PreferencePeriodViewModelFactory(preferencePeriodFeedbackProvider);
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
-			result.TargetHours.Should().Be.EqualTo(8);
+			result.TargetHours.Should().Be.EqualTo(TimeSpan.FromDays(2).TotalHours);
 		}
 	}
 }

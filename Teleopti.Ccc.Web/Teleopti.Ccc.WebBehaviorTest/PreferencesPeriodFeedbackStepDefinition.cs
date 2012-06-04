@@ -91,7 +91,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a message that I should work (\d+) hours")]
 		public void ThenIShouldSeeAMessageThatIShouldWorkXHours(int hours)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetHours.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkXHours, hours)));
 		}
 
