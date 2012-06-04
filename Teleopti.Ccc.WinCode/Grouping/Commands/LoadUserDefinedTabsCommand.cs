@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             _showPersons = showPersons;
         }
 
-        public void Execute()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		public void Execute()
         {
             var date = _personSelectorView.SelectedDate;
             IList<IPersonSelectorUserDefined> toNodes;

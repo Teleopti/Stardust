@@ -277,6 +277,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void FilterPersons(HashSet<Guid> selectedGuids)
 		{
 			_filteredPersons = new Dictionary<Guid, IPerson>();
