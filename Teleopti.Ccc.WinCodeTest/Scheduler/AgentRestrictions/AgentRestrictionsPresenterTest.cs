@@ -156,5 +156,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				_presenter.GridCellDrawn(null);	
 			}
 		}
+
+		[Test]
+		public void ShouldSort()
+		{
+			using(_mocks.Record())
+			{
+				Expect.Call(() => _model.SortAgentName(true));
+				_view.RefreshGrid();
+			}
+
+			using(_mocks.Playback())
+			{
+				_presenter.Sort(0);	
+			}		
+		}
 	}
 }

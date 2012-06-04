@@ -16,6 +16,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {
+	public class AgentDisplayRowEventArgs : EventArgs
+	{
+		private readonly AgentRestrictionsDisplayRow _agentDisplayRow;
+			
+		public AgentDisplayRowEventArgs(AgentRestrictionsDisplayRow agentRestrictionsDisplayRow)
+		{
+			_agentDisplayRow = agentRestrictionsDisplayRow;
+		}
+
+		public AgentRestrictionsDisplayRow AgentRestrictionsDisplayRow
+		{
+			get { return _agentDisplayRow; }
+		}
+	}
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class AgentRestrictionGrid : GridControl, IAgentRestrictionsView
 	{
 		private AgentRestrictionsPresenter _presenter;
@@ -28,9 +44,18 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private ISchedulerStateHolder _stateHolder;
 		private IRuleSetProjectionService _projectionService;
 		private int _loadedCounter;
-		private IList<IPerson> _persons; 
+		private IList<IPerson> _persons;
+		private IPerson _selectedPerson;
 
 		private delegate void GridDelegate();
+
+		public event EventHandler SelectedAgentIsReady;
+
+		public void OnSelectedAgentIsReady(EventArgs e)
+		{
+			var handler = SelectedAgentIsReady;
+			if (handler != null) handler(this, e);
+		}
 
 		public AgentRestrictionGrid()
 		{
@@ -64,11 +89,28 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			QueryRowCount += GridQueryRowCount;
 			QueryCellInfo += GridQueryCellInfo;
 			CellDrawn += GridCellDrawn;
+			CellClick += AgentRestrictionGridCellClick;
 			SelectionChanging += GridSelectionChanging;
 			SelectionChanged += GridSelectionChanged;
 
 			if (!CellModels.ContainsKey("NumericReadOnlyCellModel")) CellModels.Add("NumericReadOnlyCellModel",new NumericReadOnlyCellModel(Model) {NumberOfDecimals = 0});
 			if (!CellModels.ContainsKey("TimeSpan")) CellModels.Add("TimeSpan", new TimeSpanLongHourMinutesStaticCellModel(Model));
+		}
+
+		void AgentRestrictionGridCellClick(object sender, GridCellClickEventArgs e)
+		{
+			if (e.RowIndex == 1) _presenter.Sort(e.ColIndex);
+			if (e.RowIndex <= 1) return;
+			var displayRow = this[e.RowIndex, 0].Tag as AgentRestrictionsDisplayRow;
+			if (displayRow == null) return;
+			if(displayRow.State != AgentRestrictionDisplayRowState.Available)
+			{
+				_selectedPerson = displayRow.Matrix.Person;
+				return;
+			}
+
+			var displayRowArgs = new AgentDisplayRowEventArgs(displayRow);
+			OnSelectedAgentIsReady(displayRowArgs);
 		}
 
 		void GridSelectionChanged(object sender, GridSelectionChangedEventArgs e)
@@ -105,7 +147,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 9, 0, 12));	
 		}
 
-		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IRuleSetProjectionService ruleSetProjectionService)
+		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IRuleSetProjectionService ruleSetProjectionService, IPerson selectedPerson)
 		{
 			if (stateHolder == null) throw new ArgumentNullException("stateHolder");
 
@@ -113,6 +155,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_projectionService = ruleSetProjectionService;
 			_schedulingOptions = schedulingOptions;
 			_persons = persons;
+			_selectedPerson = selectedPerson;
 			_loadedCounter = 0;
 
 			var scheduleMatrixListCreator = new ScheduleMatrixListCreator(stateHolder.SchedulingResultState);
@@ -126,12 +169,20 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			var agentRestrictionsDisplayRowCreator = workObject as AgentRestrictionsDisplayRowCreator;
 			_model.LoadDisplayRows(agentRestrictionsDisplayRowCreator, _persons);
 
+			if (!IsHandleCreated) return;
+
 			Invoke(new GridDelegate(RefreshGrid));
 			Invoke(new GridDelegate(InvalidateGrid));
+			Invoke(new GridDelegate(SelectRowForSelectedAgent));
 
 			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
 			{
-				ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+				if (agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson)) ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+			}
+
+			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
+			{
+				if (!agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson)) ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
 			}	
 		}
 
@@ -171,12 +222,20 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			displayRow.CurrentDaysOff = currentDayOffs;
 			displayRow.MinMaxTime = minMax;
 
-			dataExtractor.ExtractTo(displayRow, _schedulingOptions, true); //<- TODO use scheduling
+			dataExtractor.ExtractTo(displayRow, _schedulingOptions, true); //<- TODO use schedules?
 			displayRow.SetWarnings();
 			displayRow.State = AgentRestrictionDisplayRowState.Available;
 
+			if (!IsHandleCreated) return;
+
+			if (displayRow.Matrix.Person.Equals(_selectedPerson))
+			{
+				var displayRowArgs = new AgentDisplayRowEventArgs(displayRow);
+				OnSelectedAgentIsReady(displayRowArgs);
+			}
+
 			_loadedCounter++;
-			if (_loadedCounter % 25 == 0 || _loadedCounter >= _model.DisplayRows.Count - 1) Invoke(new GridDelegate(InvalidateGrid));
+			if (_loadedCounter % 25 == 0 || _loadedCounter >= _model.DisplayRows.Count - 1) Invoke(new GridDelegate(InvalidateGrid));		
 		}
 
 		private void InvalidateGrid()
@@ -185,9 +244,29 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			Model.ColWidths.ResizeToFit(GridRangeInfo.Col(0), GridResizeToFitOptions.IncludeCellsWithinCoveredRange);
 		}
 
-		private void RefreshGrid()
+		public void RefreshGrid()
 		{
-			Refresh();
+			Refresh();	
+		}
+
+		private void SelectRowForSelectedAgent()
+		{
+			var row = -1;
+			for (var i = 1; i <= RowCount; i++)
+			{
+				var displayRow = Model[i, 0].Tag as AgentRestrictionsDisplayRow;
+				if (displayRow == null) continue;
+				if (!displayRow.Matrix.Person.Equals(_selectedPerson)) continue;
+				row = i;
+				break;
+			}
+
+			var info = GridRangeInfo.Cells(row, 0, row, 0);
+
+			Selections.Clear(true);
+			CurrentCell.Activate(row, 0, GridSetCurrentCellOptions.SetFocus);
+			Selections.ChangeSelection(info, info, true);
+			CurrentCell.MoveTo(row, 0, GridSetCurrentCellOptions.ScrollInView);
 		}
 
 		void GridQueryColCount(object sender, GridRowColCountEventArgs e)
