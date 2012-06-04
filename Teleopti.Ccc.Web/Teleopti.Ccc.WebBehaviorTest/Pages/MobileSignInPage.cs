@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectApplicationTestDataSource()
 		{
-			SigninDataSources.First().Click();
+			SigninDataSources.Filter(Find.ByValue("TestData")).First().Click();
 		}
 
 		public void SignInWindows()
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SignInApplication(string userName, string password)
 		{
-			SigninDataSources.First().Click();
+			SigninDataSources.Filter(Find.ByValue("TestData")).First().Click();
 			UserNameTextField.Value = userName;
 			PasswordTextField.Value = password;
 			SignInButton.Click();

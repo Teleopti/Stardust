@@ -157,6 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccPayrollIntegrationEnabled = true;
                 TeleoptiCccFreemiumForecastsEnabled = false;
                 TeleoptiCccMyTimeWebEnabled = true;
+                TeleoptiCccAnywhereEnabled = true;
             }
 
             #region Implementation of IDisposable
@@ -260,6 +261,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccPerformanceManagerEnabled = false;
                 TeleoptiCccPayrollIntegrationEnabled = false;
                 TeleoptiCccMyTimeWebEnabled = false;
+                TeleoptiCccAnywhereEnabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = true;
             }
@@ -366,6 +368,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccPerformanceManagerEnabled = false;
                 TeleoptiCccPayrollIntegrationEnabled = false;
                 TeleoptiCccMyTimeWebEnabled = false;
+                TeleoptiCccAnywhereEnabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = false;
             }
