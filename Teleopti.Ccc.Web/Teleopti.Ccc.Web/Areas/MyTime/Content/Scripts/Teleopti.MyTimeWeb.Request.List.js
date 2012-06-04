@@ -138,7 +138,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			listItem.find('.request-data-type').text(request.Type + ' \u2013 ' + request.Payload);
 		} else {
 			listItem.find('.request-data-type').text(request.Type);
-			listItem.find('#absenceInfo').hide();
 			//just temporary until it possible to modify a absence request a well.
 			//move this outside the if later...
 			connector.connector();
@@ -200,8 +199,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	function _showRequest(listItem) {
 		//just temporary until it possible to modify a absence request a well.
-		//remove this if later
-		if (!listItem.find('#absenceInfo').is(":visible")) {
+		//remove this if later - just a hack for now
+		if (listItem.find('.request-data-type').text().indexOf("\u2013")<1) {
 			var url = listItem.attr('data-mytime-link');
 			var connector = listItem
 			.find('.request-connector')
