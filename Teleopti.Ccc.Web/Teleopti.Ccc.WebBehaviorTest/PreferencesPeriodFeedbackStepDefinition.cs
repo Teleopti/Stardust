@@ -88,8 +88,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackCanResult.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXDaysOff, daysoff)));
 		}
 
-
-
+		[Then(@"I should see a message that I should work (\d) hours")]
+		public void ThenIShouldSeeAMessageThatIShouldWork40Hours(int hours)
+		{
+			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackShouldHave.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkXHours, hours)));
+		}
 
 	}
 

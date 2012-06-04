@@ -10689,7 +10689,7 @@ These options are activated:
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>You should have {0} days off.</value>
     <comment>You should have X days off.</comment>
-    </data>
+  </data>
   <data name="Anywhere" xml:space="preserve">
     <value>Anywhere</value>
     <comment>The name of the mobile reports module used in permission</comment>
@@ -10701,5 +10701,9 @@ These options are activated:
   <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
     <value>Your preferences can result in {0} days off.</value>
     <comment>Your preferences can result in X days off.</comment>
+  </data>
+  <data name="YouShouldWorkXHours" xml:space="preserve">
+    <value>You should work {0} hours.</value>
+    <comment>You should work X hours.</comment>
   </data>
 </root>

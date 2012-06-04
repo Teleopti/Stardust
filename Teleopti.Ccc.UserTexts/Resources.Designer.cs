@@ -24227,6 +24227,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You should work {0} hours..
+        /// </summary>
+        public static string YouShouldWorkXHours {
+            get {
+                return ResourceManager.GetString("YouShouldWorkXHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No activities found in database.
         /// </summary>
         public static string ZeroActivityInDb {
