@@ -72,6 +72,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
     		return target;
     	}
 
-		public TimeSpan TargetTime(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays) { return TimeSpan.Zero; }
+		public TimeSpan TargetTime(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
+		{
+			return TimeSpan.Zero;
+		}
     }
 }
