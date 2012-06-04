@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
@@ -14,6 +15,12 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             target = new MinMax<int>(3, 5);
         }
+
+		[Test]
+		public void ShouldReturnAStringOnToString()
+		{
+			new MinMax<int>(3, 4).ToString().Should().Be("3-4");
+		}
 
         [Test]
         public void VerifyProperties()
