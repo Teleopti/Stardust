@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				.ForMember(d => d.Person, o => o.MapFrom(s => s.Item1))
 				.ForMember(d => d.Projection, o => o.MapFrom(s => s.Item2 == null ? null : _projectionProvider().Projection(s.Item2)))
 				.ForMember(d => d.DisplayTimePeriod, o => o.Ignore())
-				.ForMember(d => d.HasDayOffUnder, o => o.MapFrom(s => s.Item2.SignificantPartForDisplay() == SchedulePartView.ContractDayOff))
+				.ForMember(d => d.HasDayOffUnder, o => o.MapFrom(s => s.Item2 != null && s.Item2.SignificantPartForDisplay() == SchedulePartView.ContractDayOff))
 				;
 
 			CreateMap<TeamScheduleDomainData, DateTimePeriod>()
