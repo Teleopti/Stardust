@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
             using (_mocks.Record())
             {
-               Expect.Call(() => _saveToDenormalizationQueue.Execute( message, session)).IgnoreArguments().Repeat.AtLeastOnce();
+               //Expect.Call(() => _saveToDenormalizationQueue.Execute( message, session)).IgnoreArguments();
                 
             }
             using (_mocks.Playback())

@@ -47,16 +47,24 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 			}
 		}
 
+        /// <summary>
+        /// This method will set the person id collection
+        /// </summary>
+        /// <param name="personIdCollection"></param>
 		public void SetPersonIdCollection(ICollection<Guid> personIdCollection)
 		{
-			var stringCollection = new string[personIdCollection.Count];
-			var index = 0;
-			foreach (var guid in personIdCollection)
+            if (personIdCollection != null)
 			{
-				stringCollection[index] = guid.ToString();
-				index++;
+                var stringCollection = new string[personIdCollection.Count];
+                var index = 0;
+                foreach (var guid in personIdCollection)
+                {
+                    stringCollection[index] = guid.ToString();
+                    index++;
+                }
+                _serializedPeople = string.Join(",", stringCollection);
 			}
-			_serializedPeople = string.Join(",", stringCollection);
+            
 		}
         
         /// <summary>

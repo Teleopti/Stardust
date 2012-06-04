@@ -51,24 +51,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
          }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public  void UpdateFindPerson(ICollection<Guid> inputIds)
+        public  void UpdateFindPerson(ICollection<Guid> ids)
         {
-            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
+            string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", ids)).ExecuteUpdate();
+                    string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", inputIds)).ExecuteUpdate();
             }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateFindPersonData(ICollection<Guid> inputIds)
+        public void UpdateFindPersonData(ICollection<Guid> ids)
         {
-            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
+            string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", ids)).ExecuteUpdate();
+                    string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", inputIds)).ExecuteUpdate();
             }
         }
 

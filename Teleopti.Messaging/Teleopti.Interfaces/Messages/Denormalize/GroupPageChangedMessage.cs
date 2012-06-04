@@ -24,6 +24,9 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 			get { return _messageId; }
 		}
 
+        /// <summary>
+        /// This property will return the group page id collection
+        /// </summary>
 		public ICollection<Guid> GroupPageIdCollection
 		{
 			get
@@ -44,16 +47,24 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 			}
 		}
 
+        /// <summary>
+        /// Set the group id collection
+        /// </summary>
+        /// <param name="groupPageIdCollection"></param>
 		public void SetGroupPageIdCollection(ICollection<Guid> groupPageIdCollection)
 		{
-			var stringCollection = new string[groupPageIdCollection.Count];
-			var index = 0;
-			foreach (var guid in groupPageIdCollection)
+			if (groupPageIdCollection != null)
 			{
-				stringCollection[index] = guid.ToString();
-				index++;
+                var stringCollection = new string[groupPageIdCollection.Count];
+                var index = 0;
+                foreach (var guid in groupPageIdCollection)
+                {
+                    stringCollection[index] = guid.ToString();
+                    index++;
+                }
+                _serializedGroupPageId = string.Join(",", stringCollection);
 			}
-			_serializedGroupPageId = string.Join(",", stringCollection);
+            
 		}
 
         /// <summary>
