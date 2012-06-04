@@ -3925,7 +3925,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private DeleteOption _deleteOption;
 
-        private void _backgroundWorkerDelete_DoWork(object sender, DoWorkEventArgs e)
+    	private void _backgroundWorkerDelete_DoWork(object sender, DoWorkEventArgs e)
         {
             setThreadCulture();
             var list = (IList<IScheduleDay>) e.Argument;
@@ -5829,13 +5829,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
+		private string _selectedFilterGroupPage;
 		private void showFilterDialog()
 		{
 			var all = SchedulerState.AllPermittedPersons.Select(p => p.Id.Value).ToList();
 
         	using (var scheduleFilterView = new PersonsFilterView(SchedulerState.RequestedPeriod.DateOnly,SchedulerState.FilteredPersonDictionary.Keys,
 				_container,  ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
-			DefinedRaptorApplicationFunctionPaths.OpenSchedulePage), "Main", all))
+			DefinedRaptorApplicationFunctionPaths.OpenSchedulePage), _selectedFilterGroupPage, all))
 			{
 				scheduleFilterView.StartPosition = FormStartPosition.Manual;
 				//TODO: Please come up with a better solution!
@@ -5848,7 +5849,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (scheduleFilterView.ShowDialog() == DialogResult.OK)
 				{
 					_schedulerState.FilterPersons(scheduleFilterView.SelectedAgentGuids());
-
+					_selectedFilterGroupPage = scheduleFilterView.SelectedGroupPageKey;
 					if (scheduleFilterView.SelectedAgentGuids().Count != SchedulerState.AllPermittedPersons.Count)
 						toolStripButtonFilterAgents.Checked = true;
 					else
