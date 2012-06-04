@@ -136,7 +136,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				where
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.All &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules &&
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential &&
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere
 				select r;
 			var agentRoleWithoutStudentAvailabilityApplicationFunctions =
 				from r in agentRoleApplicationFunctions
@@ -167,6 +168,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				from r in agentRoleApplicationFunctions
 				where
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.TeamSchedule
+				select r;
+			var supervisorRoleApplicationFunctions =
+				from r in allApplicationFunctions
+				where
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.All &&
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules &&
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential
 				select r;
 
 			var agentRoleWithoutMyTimeWebApplicationFunctions =
@@ -211,6 +219,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.AgentRoleWithoutMyTimeWeb = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoMyTimeWeb", null);
 			TestData.AgentRoleWithoutResReportServiceLevelAndAgentsReady = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoServiceLevelAndAgentsReady", null);
 			TestData.AdministratorRoleWithEveryoneData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AdministratorRole + "WithEveryoneData", null);
+			TestData.SupervisorRole = ApplicationRoleFactory.CreateRole("SupervisorRole", null);
 
 			var test = new AvailableData();
 			test.AddAvailableSite(TestData.AnotherSite);
@@ -231,6 +240,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 									new { role = TestData.AgentRoleWithSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MySite}},
 									new { role = TestData.AgentRoleWithAnotherSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = test},
 									new { role = TestData.AdministratorRoleWithEveryoneData, functions = allApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.Everyone}},
+									new { role = TestData.SupervisorRole, functions = supervisorRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 			                 	};
 
 			var allRoles = customTestRoles.Union(shippedRolesWithFunctions);
