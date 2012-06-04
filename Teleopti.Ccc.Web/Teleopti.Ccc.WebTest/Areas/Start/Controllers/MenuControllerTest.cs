@@ -70,13 +70,8 @@
 		[Test]
 		public void MenuShouldReturnDefaultView()
 		{
-			/*
 			var result = _target.Menu() as ViewResult;
 			result.ViewName.Should().Be.EqualTo(string.Empty);
-			 * */
-			// Until View implemented
-			var result = _target.Menu() as RedirectToRouteResult;
-			result.RouteValues["area"].Should().Be.EqualTo("MyTime");
 		}
 
 		[Test]
