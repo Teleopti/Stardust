@@ -17,8 +17,9 @@ namespace Teleopti.Ccc.Domain.Common
         private bool _isDeleted;
         private string _rootNodeName;
         private string _descriptionKey;
+    	private bool _isUserDefined;
 
-        protected GroupPage()
+    	protected GroupPage()
         {}
 
         public GroupPage(string description) : this()
@@ -38,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get
             {
-				if (_descriptionKey == null && Id.HasValue)
-					_descriptionKey = Id.Value.ToString();
+				checkKey();
                 return _descriptionKey;
             }
             set { _descriptionKey = value; }
@@ -53,9 +53,18 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
+		private void checkKey()
+		{
+			if (_descriptionKey == null && Id.HasValue)
+			{
+				_descriptionKey = Id.Value.ToString();
+				_isUserDefined = true;
+			}
+		}
     	public virtual bool IsUserDefined()
     	{
-    		return DescriptionKey == null;
+    		checkKey();
+    		return _isUserDefined;
     	}
 
     	public virtual ReadOnlyCollection<IRootPersonGroup> RootGroupCollection
