@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return schedulesToKeep.OrderBy(p => p.DateOnlyAsPeriod.DateOnly).ToList();
 		}
 
-		private IList<IList<IScheduleDay>> AggregatedAbsenceList(IList<IScheduleDay> scheduleDays)
+		private static IList<IList<IScheduleDay>> AggregatedAbsenceList(IList<IScheduleDay> scheduleDays)
 		{
 			ListAggregator<IScheduleDay> aggregator = new ListAggregator<IScheduleDay>();
 			return aggregator.Aggregate(scheduleDays, AreScheduleDaysAttached);

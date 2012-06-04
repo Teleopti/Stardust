@@ -23,6 +23,9 @@ namespace Teleopti.Ccc.DomainTest.Common
 			_numbers = new int[] { 1, 2, 4, 5, 6, 10 };
 			IList<IList<int>> result = _target.Aggregate(_numbers, AreAttached);
 
+			// This test should create three aggregated list
+ 			// 1-2, 4-5-6, 10 
+
 			Assert.AreEqual(3, result.Count);
 			Assert.AreEqual(2, result[0].Count);
 			Assert.AreEqual(3, result[1].Count);
