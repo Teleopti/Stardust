@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			get { return Document.RadioButtons.Filter(Find.ByName("signin-sel-businessunit")); }
 		}
 
+		[FindBy(Value = "TestData")] public RadioButton TestDataSource;
+
 		[FindBy(Id = "signout-button")] // Belongs to MobileReports
 			public Link SignoutButton { get; set; }
 
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectApplicationTestDataSource()
 		{
-			SigninDataSources.First().Click();
+			TestDataSource.Click();
 		}
 
 		public void SignInWindows()
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SignInApplication(string userName, string password)
 		{
-			SigninDataSources.First().Click();
+			TestDataSource.Click();
 			UserNameTextField.Value = userName;
 			PasswordTextField.Value = password;
 			SignInButton.Click();
