@@ -514,7 +514,6 @@
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayDataExtractor.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRow.cs" />
-    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRowColumnMapper.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRowCreator.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsModel.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPresenter.cs" />

@@ -10706,4 +10706,8 @@ These options are activated:
     <value>You should work {0} hours.</value>
     <comment>You should work X hours.</comment>
   </data>
+  <data name="MissingAbsenceType" xml:space="preserve">
+    <value>Missing absence type.</value>
+    <comment>Missing absence type.</comment>
+  </data>
 </root>

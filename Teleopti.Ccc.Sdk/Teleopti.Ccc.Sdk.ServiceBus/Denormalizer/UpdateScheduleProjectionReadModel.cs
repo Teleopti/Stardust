@@ -43,7 +43,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			{
 				var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 
-				_scheduleChangedNotification.Notify(scenario,person,date);
+                if (!_skipDelete)
+                {
+                    _scheduleChangedNotification.Notify(scenario,person,date);
+                }
 				
 				foreach (var layer in scheduleDay.ProjectionService().CreateProjection())
 				{

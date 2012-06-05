@@ -3,7 +3,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
 using Teleopti.Messaging.Exceptions;
-using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -12,15 +11,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private static readonly ILog Logger = LogManager.GetLogger(typeof(MessageBrokerSendEnabler));
         private readonly IMessageBroker _messaging;
         private readonly static object LockObject = new object();
+    	private readonly bool _wasStartedBefore;
 
-        public MessageBrokerSendEnabler()
+    	public MessageBrokerSendEnabler()
         {
             if (StateHolderReader.IsInitialized)
             {
                 _messaging = StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging;
 				if (_messaging != null)
 				{
-					if (_messaging.IsInitialized) return;
+					if (_messaging.IsInitialized)
+					{
+						_wasStartedBefore = true;
+						return;
+					}
                 
                     lock (LockObject)
                     {
@@ -71,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         /// </summary>
         protected virtual void ReleaseManagedResources()
         {
-			if (_messaging != null && !(_messaging is SignalBroker) && _messaging.IsInitialized)
+			if (_messaging != null && _messaging.IsInitialized && !_wasStartedBefore)
             {
                 lock (LockObject)
                 {
