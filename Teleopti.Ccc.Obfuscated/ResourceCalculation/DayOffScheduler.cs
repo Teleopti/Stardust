@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             }          
         }
 
-		private void addContractDaysOff(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
+        private void addContractDaysOff(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
         {
             if (rollbackService == null)
                 throw new ArgumentNullException("rollbackService");
@@ -113,13 +113,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         continue;
                     IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
 
-                    //this is to check if its a limited work day or not.
-                    if (effectiveRestriction != null)
-                    {
-                        if (effectiveRestriction.ShiftCategory != null || effectiveRestriction.NotAvailable)
-                            continue;
-                    }
-                    
+                    if (isRestrictionLimitedWorkDay(effectiveRestriction))
+                        continue;
+
                     try
                     {
                         part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
@@ -136,6 +132,21 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         return;
                 }
             }
+        }
+
+        /// <summary>
+        /// this is to check if its a limited work day or not.
+        /// </summary>
+        /// <param name="effectiveRestriction"></param>
+        /// <returns></returns>
+        private bool isRestrictionLimitedWorkDay(IEffectiveRestriction effectiveRestriction)
+        {
+            if (effectiveRestriction != null)
+            {
+                if (effectiveRestriction.ShiftCategory != null || effectiveRestriction.NotAvailable)
+                    return true;
+            }
+            return false;
         }
 
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
