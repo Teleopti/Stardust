@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));   
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldOnlyChangeEndTimeWhenDurationChangeOnMeeting()
 		{
 			var meeting = _mocks.DynamicMock<IMeeting>();
