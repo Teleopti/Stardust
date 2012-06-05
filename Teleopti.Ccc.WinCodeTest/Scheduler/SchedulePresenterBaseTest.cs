@@ -894,7 +894,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _day1 = _mocks.StrictMock<IScheduleDay>();
             _day2 = _mocks.StrictMock<IScheduleDay>();
         	const int numberOfDays = 2;
-            var period = new DateTimePeriod(_date, _date.AddDays(1));
+			var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_date, _date.AddDays(1), _timeZoneInfo);
 
             ExpectCallsDialogOnVerifyAddAbsence(period);
             ExpectCallsViewBaseOnVerifyAddAbsence(period);
@@ -1086,11 +1086,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var ass = _mocks.StrictMock<IPersonAssignment>();
 			var schedulePart = _mocks.StrictMock<IScheduleDay>();
 			var scheduleRange = _mocks.StrictMock<IScheduleRange>();
+			var date = new DateOnly(2009, 02, 02);
 
 			_selectedSchedules = new List<IScheduleDay> { schedulePart };
 			var startDateTime = _schedulerState.RequestedPeriod.Period().StartDateTime;
 			var period = new DateTimePeriod(startDateTime.AddHours(3), startDateTime.AddHours(3.5));
-			Expect.Call(schedulePart.Period).Return(DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(_date, DateTimeKind.Utc), 0)).Repeat.Any();
+			Expect.Call(schedulePart.Period).Return(DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(date, DateTimeKind.Utc), 0)).Repeat.Any();
 			ExpectCallsDialogOnShouldAddAbsenceWithDefaultPeriod(period);
 			ExpectCallsViewBaseOnShouldAddAbsenceWithDefaultPeriod(period);
 
@@ -1099,10 +1100,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, _person);
 			Expect.Call(schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
 
+
 			Expect.Call(scheduleDictionary[_person])
 				.Return(scheduleRange);
-			Expect.Call(scheduleRange.ScheduledDay(new DateOnly(2009, 02, 02)))
+			Expect.Call(scheduleRange.ScheduledDay(date))
 				.Return(schedulePart);
+
+			Expect.Call(() => schedulePart.CreateAndAddAbsence(null)).IgnoreArguments();
 
 
 			_mocks.ReplayAll();
