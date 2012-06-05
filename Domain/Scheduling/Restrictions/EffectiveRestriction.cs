@@ -310,19 +310,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return true;
         }
 
-        public bool IsLimitedWorkday
-        {
-            get
-            {
-                if (ShiftCategory != null)
-                    return true;
-                if (ActivityRestrictionCollection.Count > 0)
-                    return true;
-
-                return (StartTimeLimitation.HasValue() || EndTimeLimitation.HasValue() || WorkTimeLimitation.HasValue());
-            }
-        }
-
+        
         public bool IsRestriction
         {
             get
