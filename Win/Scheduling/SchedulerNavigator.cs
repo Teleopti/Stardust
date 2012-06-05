@@ -8,16 +8,14 @@ using Microsoft.Practices.Composite;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools.Events;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -36,25 +34,28 @@ namespace Teleopti.Ccc.Win.Scheduling
         private IOpenPeriodMode _scheduler;
 
         private readonly PortalSettings _portalSettings;
-       // protected IPersonSelectorPresenter SelectorPresenter;
-        private IScheduleNavigatorPresenter _myPresenter;
+    	private readonly IPersonRepository _personRepository;
+    	private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    	private readonly IGracefulDataSourceExceptionHandler _gracefulDataSourceExceptionHandler;
+    	private IScheduleNavigatorPresenter _myPresenter;
         private readonly IEventAggregator _localEventAggregator;
-
-
-        public SchedulerNavigator()
+    	
+    	public SchedulerNavigator()
         {
             InitializeComponent();
         }
 
-
-        public SchedulerNavigator(IComponentContext componentContext, PortalSettings portalSettings)
+        public SchedulerNavigator(IComponentContext componentContext, PortalSettings portalSettings, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
             : this()
         {
             var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
             _container = lifetimeScope.BeginLifetimeScope();
             _localEventAggregator = _container.Resolve<IEventAggregator>();
             _portalSettings = portalSettings;
-            SetTexts();
+        	_personRepository = personRepository;
+        	_unitOfWorkFactory = unitOfWorkFactory;
+        	_gracefulDataSourceExceptionHandler = gracefulDataSourceExceptionHandler;
+        	SetTexts();
             toolStripButtonOpen.Click += onOpenScheduler;
         }
 
@@ -74,36 +75,65 @@ namespace Teleopti.Ccc.Win.Scheduling
             get { return _scheduler ?? (_scheduler = new OpenPeriodSchedulerMode()); }
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            if (!DesignMode)
-            {
-                if (OpenPeriodMode == _scheduler)
-                    splitContainerAdv1.SplitterDistance = splitContainerAdv1.Height - _portalSettings.SchedulerActionPaneHeight;
-                else
-                {
-                    splitContainerAdv1.SplitterDistance = splitContainerAdv1.Height - _portalSettings.IntradayActionPaneHeight;
-                }
+		protected override void OnLoad(EventArgs e)
+		{
+			if (DesignMode) return;
 
-                SelectorPresenter = _container.Resolve<IPersonSelectorPresenter>();
-                SelectorPresenter.ApplicationFunction = MyApplicationFunction;
-                SelectorPresenter.ShowPersons = false;
-                SelectorPresenter.ShowFind = false;
+			if (OpenPeriodMode == _scheduler)
+			{
+				splitContainerAdv1.SplitterDistance = splitContainerAdv1.Height - _portalSettings.SchedulerActionPaneHeight;
+			}
+			else
+			{
+				splitContainerAdv1.SplitterDistance = splitContainerAdv1.Height - _portalSettings.IntradayActionPaneHeight;
+			}
 
-                var view = (Control)SelectorPresenter.View;
-                splitContainerAdv1.Panel1.Controls.Add(view);
-                view.Dock = DockStyle.Fill;
-                SelectorPresenter.LoadTabs();
+			tryLoadNavigationPanel();
+		}
 
-                _myPresenter = _container.Resolve<IScheduleNavigatorPresenter>();
-                _myPresenter.Init(this);
-                _localEventAggregator.GetEvent<SelectedNodesChanged>().Publish("");
+		private void tryLoadNavigationPanel()
+		{
+			if (!_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
+			{
+				SelectorPresenter = _container.Resolve<IPersonSelectorPresenter>();
+				SelectorPresenter.ApplicationFunction = MyApplicationFunction;
+				SelectorPresenter.ShowPersons = false;
+				SelectorPresenter.ShowFind = false;
 
-                SetTexts();
-            }
-        }
+				var view = (Control)SelectorPresenter.View;
+				splitContainerAdv1.Panel1.Controls.Add(view);
+				view.Dock = DockStyle.Fill;
+				SelectorPresenter.LoadTabs();
 
-        void onOpenScheduler(object sender, EventArgs e)
+				_myPresenter = _container.Resolve<IScheduleNavigatorPresenter>();
+				_myPresenter.Init(this);
+				_localEventAggregator.GetEvent<SelectedNodesChanged>().Publish("");
+
+				SetTexts();
+			}))
+			{
+				SelectorPresenter = null;
+				_myPresenter = null;
+				splitContainerAdv1.Panel1.Controls.Clear();
+			}
+		}
+
+		protected override void OnVisibleChanged(EventArgs e)
+		{
+			if (navigationPanelIsNotLoaded())
+			{
+				tryLoadNavigationPanel();
+			}
+
+			base.OnVisibleChanged(e);
+		}
+
+    	private bool navigationPanelIsNotLoaded()
+    	{
+    		return _myPresenter == null || SelectorPresenter == null;
+    	}
+
+    	void onOpenScheduler(object sender, EventArgs e)
         {
             openWizard();
         }
@@ -142,9 +172,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             var entityList = new Collection<IEntity>(); 
 
-            try
-            {
-                using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			if (!_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=>{
+                using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
                     loadNeededStuffIntoUnitOfWork(uow);
 
@@ -156,16 +185,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                     }
                     else
                     {
-                        var rep = new PersonRepository(uow);
-                        IEnumerable<IPerson> persons = rep.FindPeople(SelectorPresenter.SelectedPersonGuids);
+                        IEnumerable<IPerson> persons = _personRepository.FindPeople(SelectorPresenter.SelectedPersonGuids);
                         entityList.AddRange(persons.Cast<IEntity>());
                     }
                 }
-            }
-            catch (DataSourceException dataSourceException)
-            {
-                ShowDataSourceException(dataSourceException, Resources.OpenTeleoptiCCC);
-                return null;
+            }))
+			{
+				return null;
             }
 
             return entityList;
@@ -175,8 +201,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         protected virtual void StartModule(DateOnlyPeriod selectedPeriod, IScenario scenario, bool shrinkage,
             bool calculation, bool validation, bool teamLeaderMode, Collection<IEntity> entityCollection)
         {
-            try
-            {
+            _gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=>{
                 var sc = new SchedulingScreen(_container,
                                                            selectedPeriod,
                                                            scenario,
@@ -186,11 +211,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                            teamLeaderMode,
                                                            entityCollection);
                 sc.Show();
-            }
-            catch (DataSourceException dataSourceException)
-            {
-                ShowDataSourceException(dataSourceException, Resources.OpenTeleoptiCCC );
-            }
+            });
         }
 
 		private static void loadNeededStuffIntoUnitOfWork(IUnitOfWork uow)
@@ -254,16 +275,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             _localEventAggregator.GetEvent<OpenMeetingsOverviewClicked>().Publish("");
         }
 
-        public void ShowDataSourceException(DataSourceException dataSourceException, string dialogTitle)
-        {
-            using (var view = new SimpleExceptionHandlerView(dataSourceException,
-                                                                    dialogTitle,
-                                                                    Resources.ServerUnavailable))
-            {
-                view.ShowDialog();
-            }
-        }
-
         public bool AddGroupPageEnabled
         {
             get { return tsAddGroupPage.Enabled; }
@@ -321,7 +332,5 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _localEventAggregator.GetEvent<RefreshGroupPageClicked>().Publish("");
         }
-
-       
     }
 }

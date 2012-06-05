@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							var model = CreateSkillModel(skill);
 							if (model.IsDeleted || model.IsChild) continue;
 
-							TreeNode skillNode = GetSkillNode(CreateSkillModel(skill));
+							TreeNode skillNode = GetSkillNode(model);
 							foundNodes = treeViewSkills.Nodes.Find(skill.SkillType.Id.ToString(), false);
 							if (foundNodes.Length > 0)
 							{
