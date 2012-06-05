@@ -27,6 +27,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private DateOnlyPeriod _dateOnlyPeriod1;
 		private DateOnlyPeriod _dateOnlyPeriod2;
 		private DateOnlyPeriod _dateOnlyPeriod3;
+		private IContract _contract1;
+		private IContract _contract2;
+		private IContract _contract3;
 		
 
 		[SetUp]
@@ -49,6 +52,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_dateOnlyPeriod1 = new DateOnlyPeriod(2011, 1, 1, 2011, 1, 2);
 			_dateOnlyPeriod2 = new DateOnlyPeriod(2011, 2, 1, 2011, 2, 2);
 			_dateOnlyPeriod3 = new DateOnlyPeriod(2011, 3, 1, 2011, 3, 2);
+			_contract1 = _mocks.StrictMock<IContract>();
+			_contract2 = _mocks.StrictMock<IContract>();
+			_contract3 = _mocks.StrictMock<IContract>();
 		}
 
 		[Test]
@@ -108,7 +114,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			using(_mocks.Record())
 			{
 				Expect.Call(_scheduleMatrixPro2.SchedulePeriod).Return(_schedulePeriod1).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod1.DaysOff()).Return(11).Repeat.AtLeastOnce();	
+				Expect.Call(_schedulePeriod1.DaysOff()).Return(11).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod1.Contract).Return(_contract1);
+				Expect.Call(_contract1.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 			}
 
 			using (_mocks.Playback())
@@ -274,12 +282,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod1).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod1.DaysOff()).Return(1).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod1.Contract).Return(_contract1).Repeat.AtLeastOnce();
+				Expect.Call(_contract1.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime).Repeat.AtLeastOnce();
 
 				Expect.Call(_scheduleMatrixPro2.SchedulePeriod).Return(_schedulePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod2.DaysOff()).Return(2).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod2.Contract).Return(_contract2).Repeat.AtLeastOnce();
+				Expect.Call(_contract2.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime).Repeat.AtLeastOnce();
 
 				Expect.Call(_scheduleMatrixPro3.SchedulePeriod).Return(_schedulePeriod3).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod3.DaysOff()).Return(3).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod3.Contract).Return(_contract3).Repeat.AtLeastOnce();
+				Expect.Call(_contract3.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
@@ -427,6 +441,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				Expect.Call(_scheduleMatrixPro2.SchedulePeriod).Return(_schedulePeriod1).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod1.DaysOff()).Return(11).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod1.Contract).Return(_contract1);
+				Expect.Call(_contract1.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 			}
 
 			using (_mocks.Playback())
