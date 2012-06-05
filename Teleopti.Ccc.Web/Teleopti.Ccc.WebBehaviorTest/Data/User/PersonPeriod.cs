@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		public ITeam Team;
 		public PersonContract PersonContract;
 		public Domain.AgentInfo.PersonPeriod ThePersonPeriod;
-		public IContractSchedule ContractSchedule = DataContext.Data().Data<ContractScheduleWith2DaysOff>().ContractSchedule;
+		public IContractScheduleSetup ContractSchedule = DataContext.Data().Data<ContractScheduleWith2DaysOff>();
 		public IContractSetup Contract = DataContext.Data().Data<CommonContract>();
 		private DateTime StartDate;
 
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		{
 			PersonContract = new PersonContract(Contract.Contract,
 												TestData.PartTimePercentageOne,
-												ContractSchedule);
+												ContractSchedule.ContractSchedule);
 			ThePersonPeriod = new Domain.AgentInfo.PersonPeriod(new DateOnly(StartDate), 
 											PersonContract,
 											Team);

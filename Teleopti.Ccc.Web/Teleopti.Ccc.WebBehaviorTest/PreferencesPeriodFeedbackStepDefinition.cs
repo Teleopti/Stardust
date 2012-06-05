@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have a day off preference on weekday (\d)")]
 		public void GivenIHaveADayOffPreferenceOnWeekday3(int weekday)
 		{
-			UserFactory.User().Setup(new DayOffPreference(weekday));
+			UserFactory.User().Setup(new DayOffPreferenceOnWeekday(weekday));
 		}
 
 		[Given(@"I have a contract with:")]
@@ -53,16 +53,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().UserData<PersonPeriod>().Contract = contract;
 		}
 
-		[Given(@"I have a contract schedule with weekday (\d) day off")]
-		public void GivenIHaveAContractScheduleWithWeekday6DayOff(int thOfDay)
+		[Given(@"I have a contract schedule with:")]
+		public void GivenIHaveAContractScheduleWith(Table table)
 		{
-			ScenarioContext.Current.Pending();
+			var contractSchedule = table.CreateInstance<ContractScheduleFromTable>();
+			UserFactory.User().Setup(contractSchedule);
+			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
 		}
 
 		[Given(@"I have a absence preference on weekday (\d)")]
-		public void GivenIHaveAAbsencePreferenceOnWeekday5(int thOfDay)
+		public void GivenIHaveAAbsencePreferenceOnWeekday5(int weekday)
 		{
-			ScenarioContext.Current.Pending();
+			UserFactory.User().Setup(new AbsencePreferenceOnWeekday(weekday));
 		}
 
 

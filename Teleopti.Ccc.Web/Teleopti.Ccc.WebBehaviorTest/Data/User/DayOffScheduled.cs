@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		private readonly int _weekday;
 		public IDayOffTemplate DayOffTemplate = TestData.DayOffTemplate;
 
+		public IScenario Scenario = DataContext.Data().Data<CommonScenario>().Scenario;
+
 		public DayOffScheduled(int weekday)
 		{
 			_weekday = weekday;
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var date = new DateOnly(DateHelper.GetFirstDateInWeek(DateTime.Now.Date, cultureInfo).AddDays(_weekday));
-			var dayOff = new PersonDayOff(user, TestData.Scenario, DayOffTemplate, date);
+			var dayOff = new PersonDayOff(user, Scenario, DayOffTemplate, date);
 			var dayOffRepository = new DayOffRepository(uow);
 			dayOffRepository.Add(dayOff);
 		}

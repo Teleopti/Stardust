@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			UnitOfWorkAction(CreateAgentPersons);
 			UnitOfWorkAction(CreateGroupingActivity);
 			UnitOfWorkAction(CreateActivities);
-			UnitOfWorkAction(CreateScenario);
 		}
 
 	    private static void CreateLicense(IUnitOfWork uow)
@@ -328,12 +327,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static void CreateContractStuff(IUnitOfWork uow)
 		{
 			TestData.PartTimePercentageOne = PartTimePercentageFactory.CreatePartTimePercentage("PartTimePercentage One");
-
-			TestData.DayOffTodayContractSchedule = new ContractSchedule("Day off today schedule");
-			TestData.DayOffTodayContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
-
 			var repository = new Repository(uow);
-			repository.Add(TestData.DayOffTodayContractSchedule);
 			repository.Add(TestData.PartTimePercentageOne);
 		}
 
@@ -359,18 +353,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			var groupingActivityRepository = new GroupingActivityRepository(unitOfWork);
 			groupingActivityRepository.Add(TestData.GroupingActivity);
-		}
-
-		private static void CreateScenario(IUnitOfWork unitOfWork)
-		{
-			TestData.Scenario = ScenarioFactory.CreateScenarioAggregate("Default", true, false);
-			TestData.SecondScenario = ScenarioFactory.CreateScenarioAggregate("Default", true, false);
-
-			TestData.SecondScenario.SetBusinessUnit(TestData.SecondBusinessUnit);
-
-			var scenarioRepository = new ScenarioRepository(unitOfWork);
-			scenarioRepository.Add(TestData.Scenario);
-			scenarioRepository.Add(TestData.SecondScenario);
 		}
 
 		private static void CreateShiftCategory(IUnitOfWork unitOfWork)

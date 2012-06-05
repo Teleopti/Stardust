@@ -9,7 +9,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 	{
 		public IShiftCategory ShiftCategory = TestData.ShiftCategory;
 
-		protected override PreferenceRestriction ApplyRestriction() { return new PreferenceRestriction { ShiftCategory = ShiftCategory }; }
-		protected override DateTime ApplyDate(CultureInfo cultureInfo) { return DateTime.Now.Date; }
+		protected override PreferenceRestriction ApplyRestriction()
+		{
+			return new PreferenceRestriction { ShiftCategory = ShiftCategory };
+		}
+
+		protected override DateTime ApplyDate(CultureInfo cultureInfo)
+		{
+			return DateTime.Now.Date;
+		}
 	}
 }

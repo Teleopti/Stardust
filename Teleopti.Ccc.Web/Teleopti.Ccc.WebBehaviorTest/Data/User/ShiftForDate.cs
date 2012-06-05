@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		private readonly bool _withLunch;
 		private DateTimePeriod _assignmentPeriod;
 
+		public IScenario Scenario = DataContext.Data().Data<CommonScenario>().Scenario;
+
 		protected ShiftForDate(TimeSpan startTime, TimeSpan endTime)
 		{
 			StartTime = startTime;
@@ -46,7 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, TestData.Scenario);
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
 			assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, _assignmentPeriod, ShiftCategory));
 
 			// add lunch

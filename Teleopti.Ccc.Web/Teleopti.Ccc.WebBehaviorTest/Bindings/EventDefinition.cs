@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
@@ -63,6 +64,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			DataContext.Data().Setup(new CommonContract());
 			DataContext.Data().Setup(new ContractScheduleWith2DaysOff());
+			DataContext.Data().Setup(new CommonScenario());
+			DataContext.Data().Setup(new SecondScenario());
 			DataContext.Data().Persist();
 		}
 
