@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Common
         private DayOfWeek _firstDayOfWeek;
         private IWindowsAuthenticationInfo _windowsAuthenticationInfo;
         private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
+		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
 
         public Person()
         {
@@ -791,5 +792,45 @@ namespace Teleopti.Ccc.Domain.Common
            
             _isDeleted = true;
         }
+
+		public virtual ReadOnlyCollection<IOptionalColumnValue> OptionalColumnValueCollection
+		{
+			get
+			{
+				return new ReadOnlyCollection<IOptionalColumnValue>(_optionalColumnValueCollection);
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
+		{
+			InParameter.NotNull("value", value);
+			InParameter.NotNull("column", column);
+
+			var colValue = GetColumnValue(column);
+			if (colValue == null)
+			{
+				value.SetParent(column);
+				value.ReferenceObject = this;
+				_optionalColumnValueCollection.Add(value);
+			}
+			else
+			{
+				colValue.Description = value.Description;
+			}
+		}
+
+		public virtual void RemoveOptionalColumnValue(IOptionalColumnValue value)
+		{
+			InParameter.NotNull("value", value);
+
+			_optionalColumnValueCollection.Remove(value);
+		}
+
+		public virtual IOptionalColumnValue GetColumnValue(IOptionalColumn column)
+		{
+			IOptionalColumnValue result = _optionalColumnValueCollection.FirstOrDefault(v => v.Parent.Equals(column));
+			return result;
+		}
     }
 }

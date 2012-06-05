@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         	if (_optionalColumnList == null)
         	{
         		_optionalColumnList = new List<IOptionalColumn>();
-        		_optionalColumnList.AddRange(Repository.GetOptionalColumnValues<Person>());
+        		_optionalColumnList.AddRange(Repository.GetOptionalColumns<Person>());
         	}
 
         	if (_optionalColumnList.IsEmpty())

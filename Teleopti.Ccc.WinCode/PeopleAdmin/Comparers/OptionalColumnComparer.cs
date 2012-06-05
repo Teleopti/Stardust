@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Comparers
     /// Created by: Aruna Priyankara Wickrama
     /// Created date: 8/12/2008
     /// </remarks>
-    public class OptionalColumnComparer<T> : IComparer<T> where T : IOptionalColumnView, IEntity
+	public class OptionalColumnComparer<T> : IComparer<T> where T : PersonGeneralModel, IEntity
     {
         private string _bindingProperty;
 
@@ -69,8 +69,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Comparers
             if (selectedOptionalColumn!=null)
             {
                 // Gets the optional column value of object X and Y
-                IOptionalColumnValue valueX = selectedOptionalColumn.GetColumnValueById(x.Id);
-                IOptionalColumnValue valueY = selectedOptionalColumn.GetColumnValueById(y.Id);
+            	IOptionalColumnValue valueX =
+            		x.ContainedEntity.OptionalColumnValueCollection.FirstOrDefault(p => ((OptionalColumn)p.Parent).Name == _bindingProperty);
+				IOptionalColumnValue valueY = y.ContainedEntity.OptionalColumnValueCollection.FirstOrDefault(p => ((OptionalColumn)p.Parent).Name == _bindingProperty);
 
                 if ((valueX == null) && (valueY == null))
                 {
