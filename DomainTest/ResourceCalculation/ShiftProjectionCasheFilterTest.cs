@@ -94,6 +94,35 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
+    	[Test] public void ShouldReturnCorrectIfUsePreferenceMustHavesOnly()
+    	{
+			ISchedulingOptions schedulingOptions = new SchedulingOptions();
+			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+			var result = _mocks.StrictMock<IWorkShiftFinderResult>();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
+				Expect.Call(effectiveRestriction.IsPreferenceDay).Return(false);
+				Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
+			}
+
+			schedulingOptions.UseRotations = false;
+			schedulingOptions.RotationDaysOnly = false;
+			schedulingOptions.UsePreferences = true;
+			schedulingOptions.PreferencesDaysOnly = false;
+			schedulingOptions.UseAvailability = false;
+			schedulingOptions.AvailabilityDaysOnly = false;
+			schedulingOptions.UseStudentAvailability = false;
+    		schedulingOptions.UsePreferencesMustHaveOnly = true;
+
+			using (_mocks.Playback())
+			{
+				bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
+				Assert.IsFalse(ret);
+			}
+    	}
+
         [Test]
         public void VerifyRestrictionCheckWhenTrue()
         {
