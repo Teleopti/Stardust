@@ -38,10 +38,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		string PeriodType { get; }
 		string StartDate { get; }
 		string EndDate { get; }
-		TimeSpan ContractTargetTime { get; set; }
 		int TargetDaysOff { get; }
-		TimeSpan ContractCurrentTime { get; set; }
-		int CurrentDaysOff { get; set; }
+		string TargetDaysOffWithTolerance { get; }	
 	}
 
 	public interface IAgentDisplayData
@@ -50,6 +48,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		TimeSpan MinimumPossibleTime { get; set; }
 		TimeSpan MaximumPossibleTime { get; set; }
 		int ScheduledAndRestrictionDaysOff { get; set; }
+		TimeSpan ContractCurrentTime { get; set; }
+		TimeSpan ContractTargetTime { get; set; }
+		string ContractTargetTimeWithTolerance { get; }
+		string ContractTargetTimeHourlyEmployees { get; }
+		int CurrentDaysOff { get; set; }
+		TimePeriod MinMaxTime { get; set; }
 		string Ok { get; }
 	}
 
@@ -81,7 +85,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public void SetWarnings()
 		{
-			if (!ContractCurrentTime.Equals(ContractTargetTime)) _warnings.Add(AgentRestrictionDisplayRowColumn.ContractTime, UserTexts.Resources.ContractTimeDoesNotMeetTheTargetTime);
+			_warnings.Clear();
+
+			if (ContractCurrentTime < MinMaxTime.StartTime || ContractCurrentTime > MinMaxTime.EndTime) _warnings.Add(AgentRestrictionDisplayRowColumn.ContractTime, UserTexts.Resources.ContractTimeDoesNotMeetTheTargetTime);
 			if (!CurrentDaysOff.Equals(TargetDaysOff)) _warnings.Add(AgentRestrictionDisplayRowColumn.DaysOffSchedule, UserTexts.Resources.WrongNumberOfDaysOff);
 			if (((IAgentDisplayData)this).MinimumPossibleTime > MinMaxTime.EndTime) _warnings.Add(AgentRestrictionDisplayRowColumn.Min, UserTexts.Resources.LowestPossibleWorkTimeIsTooHigh);
 			if (((IAgentDisplayData)this).MaximumPossibleTime < MinMaxTime.StartTime) _warnings.Add(AgentRestrictionDisplayRowColumn.Max, UserTexts.Resources.HighestPossibleWorkTimeIsTooLow);
@@ -127,12 +133,38 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public int TargetDaysOff
 		{
-			get { return _matrix.SchedulePeriod.DaysOff(); }
+			get{return _matrix.SchedulePeriod.Contract.EmploymentType != EmploymentType.HourlyStaff ? _matrix.SchedulePeriod.DaysOff() : 0;}
 		}
 
 		public string Ok
 		{
 			get {return _warnings.Count > 0 ? UserTexts.Resources.No : UserTexts.Resources.Yes;}
+		}
+
+		public string ContractTargetTimeWithTolerance
+		{
+			get
+			{	
+				return TimeHelper.GetLongHourMinuteTimeString(ContractTargetTime, TeleoptiPrincipal.Current.Regional.Culture)	 + 
+					" (" + TimeHelper.GetLongHourMinuteTimeString(MinMaxTime.StartTime, TeleoptiPrincipal.Current.Regional.Culture) + 
+					" - " + TimeHelper.GetLongHourMinuteTimeString(MinMaxTime.EndTime, TeleoptiPrincipal.Current.Regional.Culture) + 
+					")";
+			}
+		}
+
+		public string ContractTargetTimeHourlyEmployees
+		{
+			get { return TimeHelper.GetLongHourMinuteTimeString(ContractTargetTime, TeleoptiPrincipal.Current.Regional.Culture); }
+		}
+
+		public string TargetDaysOffWithTolerance
+		{
+			get
+			{
+				return TargetDaysOff + " (" + (TargetDaysOff - _matrix.SchedulePeriod.Contract.NegativeDayOffTolerance) +
+							   " - " + (TargetDaysOff + _matrix.SchedulePeriod.Contract.PositiveDayOffTolerance) +
+							   ")";
+			}
 		}
 	}
 }
