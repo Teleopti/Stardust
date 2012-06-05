@@ -851,38 +851,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             _target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                new WorkTimeLimitation(), null, null, null,
-                                               new List<IActivityRestriction> ());
-            Assert.IsFalse(_target.IsLimitedWorkday);
+                                               new List<IActivityRestriction>());
+            Assert.IsFalse(_target.ShiftCategory != null || _target.NotAvailable);
 
             _target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                new WorkTimeLimitation(), null, new DayOffTemplate(new Description()), null,
                                                new List<IActivityRestriction>());
-            Assert.IsFalse(_target.IsLimitedWorkday);
+            Assert.IsFalse(_target.ShiftCategory != null || _target.NotAvailable);
 
             _target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                new WorkTimeLimitation(), ShiftCategoryFactory.CreateShiftCategory("hej"), null, null,
                                                new List<IActivityRestriction>());
-            Assert.IsTrue(_target.IsLimitedWorkday);
+            Assert.IsFalse(!(_target.ShiftCategory != null || _target.NotAvailable));
 
             _target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                new WorkTimeLimitation(), null, null, null,
                                                new List<IActivityRestriction> { activityRestriction });
-            Assert.IsTrue(_target.IsLimitedWorkday);
+            Assert.IsFalse(_target.ShiftCategory != null || _target.NotAvailable);
 
             _target = new EffectiveRestriction(new StartTimeLimitation(startTime, endTime), new EndTimeLimitation(),
                                                new WorkTimeLimitation(), null, null, null,
                                                new List<IActivityRestriction>());
-            Assert.IsTrue(_target.IsLimitedWorkday);
+            Assert.IsFalse(_target.ShiftCategory != null || _target.NotAvailable);
 
             _target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(startTime, endTime),
                                                new WorkTimeLimitation(), null, null, null,
                                                new List<IActivityRestriction>());
-            Assert.IsTrue(_target.IsLimitedWorkday);
+            Assert.IsFalse(_target.ShiftCategory != null || _target.NotAvailable);
 
             _target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                new WorkTimeLimitation(startTime, endTime), null, null, null,
                                                new List<IActivityRestriction>());
-            Assert.IsTrue(_target.IsLimitedWorkday);
+            Assert.IsFalse(_target.ShiftCategory != null || _target.NotAvailable);
 
         }
 
