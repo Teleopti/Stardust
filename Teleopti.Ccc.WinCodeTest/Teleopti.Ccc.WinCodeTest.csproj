@@ -284,10 +284,7 @@
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
     <Compile Include="Common\ScheduleContractTimeCalculatorTest.cs" />
     <Compile Include="Common\ScheduleDataLoaderTest.cs" />
-    <Compile Include="Common\ScheduleFilter\CccTreeNodeTest.cs" />
-    <Compile Include="Common\ScheduleFilter\ScheduleFilterTest.cs" />
     <Compile Include="Common\ReportSettingsHostPresenterTest.cs" />
-    <Compile Include="Common\ScheduleFilter\TeamPersonKeyTest.cs" />
     <Compile Include="Common\SchedulePeriodCloseCalculatorTest.cs" />
     <Compile Include="Common\ScheduleTargetTimeCalculatorTest.cs" />
     <Compile Include="Common\SchedulingResultLoaderTest.cs" />
@@ -367,6 +364,7 @@
     <Compile Include="Grouping\Commands\OpenModuleCommandTest.cs" />
     <Compile Include="Grouping\PeopleNavigatoPresenterTest.cs" />
     <Compile Include="Grouping\PersonSelectorPresenterTest.cs" />
+    <Compile Include="Grouping\SchedulerGroupPagesProviderTest.cs" />
     <Compile Include="Helpers\CollectionListener.cs" />
     <Compile Include="Helpers\CollectionViewComparer.cs" />
     <Compile Include="Helpers\PropertyChangedListener.cs" />

@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldGroupOnGroupPageChangesSetInSchedulingOptions()
         {
-            IGroupPage groupPage = new GroupPage("Test"); 
+            IGroupPageLight groupPage = new GroupPageLight{Name = "Test"}; 
             Assert.AreNotEqual(_schedulingOptions.GroupOnGroupPage, groupPage);
             _optimizationPreferences.Extra.GroupPageOnTeam = groupPage;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);

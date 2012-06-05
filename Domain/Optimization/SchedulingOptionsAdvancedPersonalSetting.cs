@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private int _screenRefreshRate = 10;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void MapTo(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories, IList<IGroupPage> groupPages)
+		public void MapTo(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories, IList<IGroupPageLight> groupPages)
 		{
 			schedulingOptions.UseMinimumPersons = _useMinStaff;
 			schedulingOptions.UseMaximumPersons = _useMaxStaff;

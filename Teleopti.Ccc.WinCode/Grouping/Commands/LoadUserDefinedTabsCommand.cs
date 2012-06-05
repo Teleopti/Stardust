@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             _showPersons = showPersons;
         }
 
-        public void Execute()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		public void Execute()
         {
             var date = _personSelectorView.SelectedDate;
             IList<IPersonSelectorUserDefined> toNodes;
@@ -52,6 +53,19 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             // rättigheter
             var auth = PrincipalAuthorization.Instance();
             var toRemove = new List<IPersonSelectorUserDefined>();
+			if (_personSelectorView.VisiblePersonIds != null)
+			{
+				foreach (var toNode in toNodes)
+				{
+					if (!toNode.PersonId.Equals(new Guid()) && !_personSelectorView.VisiblePersonIds.Contains(toNode.PersonId))
+						toRemove.Add(toNode);
+
+				}
+			}
+			foreach (var personSelectorOrganization in toRemove)
+			{
+				toNodes.Remove(personSelectorOrganization);
+			}
             foreach (var toNode in toNodes)
             {
                 if (toNode.PersonId != new Guid())

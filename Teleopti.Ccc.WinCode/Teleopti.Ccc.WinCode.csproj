@@ -400,6 +400,7 @@
     <Compile Include="Grouping\Commands\LoadOrganizationCommand.cs" />
     <Compile Include="Grouping\Commands\LoadUserDefinedTabsCommand.cs" />
     <Compile Include="Grouping\PersonSelectorPresenter.cs" />
+    <Compile Include="Grouping\SchedulerGroupPagesProvider.cs" />
     <Compile Include="Intraday\DayLayerModel.cs" />
     <Compile Include="Intraday\DispatcherWrapper.cs" />
     <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommand.cs" />
@@ -562,10 +563,6 @@
     <Compile Include="Scheduling\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Scheduling\NotSkillGroupSpecification.cs" />
     <Compile Include="Common\RestoreFocusWhenCompleted.cs" />
-    <Compile Include="Common\ScheduleFilter\CccTreeNode.cs" />
-    <Compile Include="Common\ScheduleFilter\IScheduleFilterView.cs" />
-    <Compile Include="Common\ScheduleFilter\ScheduleFilterModel.cs" />
-    <Compile Include="Common\ScheduleFilter\ScheduleFilterPresenter.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
     <Compile Include="Common\SearchPersonPresenter.cs" />
     <Compile Include="Common\Time\TimeDurationPickerPresenter.cs" />

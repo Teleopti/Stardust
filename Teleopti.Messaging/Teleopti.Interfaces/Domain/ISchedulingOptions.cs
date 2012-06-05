@@ -256,7 +256,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets or sets the group page used for grouping when UseGroupScheduling = true.
 		/// </summary>
 		/// <value>The group page.</value>
-		IGroupPage GroupOnGroupPage { get; set; }
+		IGroupPageLight GroupOnGroupPage { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [not break max staffing].
@@ -270,7 +270,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the group page for shift category fairness.
         /// </summary>
         /// <value>The group page for shift category fairness.</value>
-        IGroupPage GroupPageForShiftCategoryFairness { get; set; }
+        IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [use max seats].

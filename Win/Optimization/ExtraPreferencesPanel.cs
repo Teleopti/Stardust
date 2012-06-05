@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -8,8 +9,8 @@ namespace Teleopti.Ccc.Win.Optimization
     public partial class ExtraPreferencesPanel : BaseUserControl, IDataExchange
     {
 
-        private IList<IGroupPage> _groupPageOnTeams;
-        private IList<IGroupPage> _groupPageOnCompareWith;
+        private IList<IGroupPageLight> _groupPageOnTeams;
+        private IList<IGroupPageLight> _groupPageOnCompareWith;
 
         public IExtraPreferences Preferences { get; private set; }
 
@@ -19,15 +20,14 @@ namespace Teleopti.Ccc.Win.Optimization
             if (!DesignMode) SetTexts();
         }
 
-        public void Initialize(
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public void Initialize(
             IExtraPreferences extraPreferences,
-            IList<IGroupPage> groupPages)
+			ISchedulerGroupPagesProvider groupPagesProvider)
         {
             Preferences = extraPreferences;
-
-            var specification = new NotSkillGroupSpecification();
-            _groupPageOnTeams = new List<IGroupPage>(groupPages).FindAll(specification.IsSatisfiedBy);
-            _groupPageOnCompareWith = new List<IGroupPage>(groupPages).FindAll(specification.IsSatisfiedBy);
+			_groupPageOnTeams = groupPagesProvider.GetGroups(false);
+			_groupPageOnCompareWith = groupPagesProvider.GetGroups(false);
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             setInitialControlStatus();
         }
@@ -57,11 +57,11 @@ namespace Teleopti.Ccc.Win.Optimization
         private void bindGroupPages()
         {
             comboBoxGroupPageOnTeams.DataSource = _groupPageOnTeams;
-            comboBoxGroupPageOnTeams.DisplayMember = "Description";
+            comboBoxGroupPageOnTeams.DisplayMember = "Name";
             comboBoxGroupPageOnTeams.ValueMember = "Key";
 
             comboBoxGroupPageOnCompareWith.DataSource = _groupPageOnCompareWith;
-            comboBoxGroupPageOnCompareWith.DisplayMember = "Description";
+            comboBoxGroupPageOnCompareWith.DisplayMember = "Name";
             comboBoxGroupPageOnCompareWith.ValueMember = "Key";
         }
     
@@ -78,11 +78,11 @@ namespace Teleopti.Ccc.Win.Optimization
             Preferences.UseTeams = checkBoxTeams.Checked;
         	Preferences.KeepSameDaysOffInTeam = checkBoxKeepWeekEndsTogether.Checked;
 
-            Preferences.GroupPageOnTeam = (IGroupPage)comboBoxGroupPageOnTeams.SelectedItem;
+            Preferences.GroupPageOnTeam = (IGroupPageLight)comboBoxGroupPageOnTeams.SelectedItem;
 
             Preferences.FairnessValue = (double)trackBar1.Value / 100;
 
-            Preferences.GroupPageOnCompareWith = (IGroupPage)comboBoxGroupPageOnCompareWith.SelectedItem;
+            Preferences.GroupPageOnCompareWith = (IGroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
 
             Preferences.KeepShiftCategories = checkBoxKeepShiftCategories.Checked;
             Preferences.KeepStartAndEndTimes = checkBoxKeepStartEndTimes.Checked;

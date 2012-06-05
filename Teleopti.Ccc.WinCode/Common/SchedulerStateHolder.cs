@@ -277,7 +277,18 @@ namespace Teleopti.Ccc.WinCode.Common
 
         }
 
-        public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void FilterPersons(HashSet<Guid> selectedGuids)
+		{
+			_filteredPersons = new Dictionary<Guid, IPerson>();
+			foreach (var person in AllPermittedPersons)
+			{
+				if(selectedGuids.Contains(person.Id.Value))
+					_filteredPersons.Add(person.Id.Value, person);
+			}
+		}
+
+		public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId)
         {
             IPersonRequest updatedRequest = null;
             if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))

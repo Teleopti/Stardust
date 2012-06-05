@@ -203,7 +203,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
             Assert.AreEqual(gp.Id, row["group_page_code"]);
             Assert.AreEqual(gp.Description.Name, row["group_page_name"]);
-            Assert.AreEqual(DBNull.Value, row["group_page_name_resource_key"]);
+			Assert.AreEqual(DBNull.Value, row["group_page_name_resource_key"]);
             Assert.AreEqual(gp.RootGroupCollection[0].Id, row["group_code"]);
             Assert.AreEqual(gp.RootGroupCollection[0].Description.Name, row["group_name"]);
             Assert.IsTrue((bool)row["group_is_custom"]);

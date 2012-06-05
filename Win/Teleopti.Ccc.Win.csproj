@@ -580,12 +580,6 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\ScheduleFilterView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\ScheduleFilterView.Designer.cs">
-      <DependentUpon>ScheduleFilterView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\SearchPerson.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1195,6 +1189,12 @@
     </Compile>
     <Compile Include="Scheduling\AuditHistoryView.Designer.cs">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\PersonsFilterView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PersonsFilterView.Designer.cs">
+      <DependentUpon>PersonsFilterView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\RequestHistoryModule.cs" />
     <Compile Include="Scheduling\RequestHistoryView.cs">
@@ -2291,12 +2291,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\DateChangedEventArgs.cs" />
-    <Compile Include="Scheduling\FilterDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\FilterDialog.Designer.cs">
-      <DependentUpon>FilterDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forecasting\Forms\ModifyCellEventArgs.cs" />
     <Compile Include="Forecasting\Forms\ModifyCellOption.cs" />
     <Compile Include="Scheduling\FormClipboardSpecial.cs">
@@ -2673,16 +2667,15 @@
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
+      <DependentUpon>PersonsFilterView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\RequestHistoryView.resx">
       <DependentUpon>RequestHistoryView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulerNavigator.resx">
       <DependentUpon>SchedulerNavigator.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\FilterDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FilterDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FindMatching.resx">
       <DependentUpon>FindMatching.cs</DependentUpon>
@@ -2929,9 +2922,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\ModifySelectionView.resx">
       <DependentUpon>ModifySelectionView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\ScheduleFilterView.resx">
-      <DependentUpon>ScheduleFilterView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\SearchPerson.resx">
       <DependentUpon>SearchPerson.cs</DependentUpon>
