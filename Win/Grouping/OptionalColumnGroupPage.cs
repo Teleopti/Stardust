@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
@@ -41,8 +42,8 @@ namespace Teleopti.Ccc.Win.Grouping
 
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                OptionalColumnRepository optionalColumnRepository = new OptionalColumnRepository(uow);
-                IList<IOptionalColumn> optionalColumnCollection = optionalColumnRepository.GetOptionalColumnValues<Person>();
+                var optionalColumnRepository = new OptionalColumnRepository(uow);
+                IList<IOptionalColumn> optionalColumnCollection = optionalColumnRepository.GetOptionalColumns<Person>();
 
                 if (optionalColumnCollection != null)
                 {
@@ -50,30 +51,26 @@ namespace Teleopti.Ccc.Win.Grouping
                     {
                         if (_optionalColumnId == column.Id)
                         {
-                            ICollection<IOptionalColumnValue> columnValueCollection = column.ValueCollection;
-
-                            var optionalColumnGroups = from optionalColumn in columnValueCollection
-                                                                                  where string.IsNullOrEmpty(optionalColumn.Description) == false
-                            group optionalColumn by optionalColumn.Description;
-
+                        	var optionalColumnGroups = optionalColumnRepository.UniqueValuesOnColumn(column.Id.Value);
+							 
                             //Creates the GroupPage object
                             groupPage = new GroupPage(groupPageOptions.CurrentGroupPageName);
 
                             foreach (var optionalColumnGroup in optionalColumnGroups)
                             {
                                 //Creates a root Group object & add into GroupPage
-                                string groupName = optionalColumnGroup.Key.Length > 50
-                                                       ? optionalColumnGroup.Key.Substring(0, 48) + ".."
-                                                       : optionalColumnGroup.Key;
+                                string groupName = optionalColumnGroup.Description.Length > 50
+                                                       ? optionalColumnGroup.Description.Substring(0, 48) + ".."
+                                                       : optionalColumnGroup.Description;
                                 IRootPersonGroup rootGroup = new RootPersonGroup(groupName);
-                                foreach (var optionalColumn in optionalColumnGroup)
-                                {
-                                    Guid? id = optionalColumn.ReferenceId;
-                                    IPerson person = groupPageOptions.Persons.FirstOrDefault(p => p.Id == id);
-                                    if (person != null)
-                                        rootGroup.AddPerson(person);
+                                
+								foreach (var person in groupPageOptions.Persons)
+								{
+									var val = person.GetColumnValue(column);
+									if (val != null && val.Description.Equals(optionalColumnGroup.Description))
+										rootGroup.AddPerson(person);
                                 }
-
+                                
                                 //Add into GroupPage
                                 if(rootGroup.PersonCollection.Count > 0)
                                     groupPage.AddRootPersonGroup(rootGroup);

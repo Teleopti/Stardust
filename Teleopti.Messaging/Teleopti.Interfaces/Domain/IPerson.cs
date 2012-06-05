@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
@@ -421,5 +422,31 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The application authentication info.</value>
         IApplicationAuthenticationInfo ApplicationAuthenticationInfo { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		ReadOnlyCollection<IOptionalColumnValue> OptionalColumnValueCollection { get; }
+
+    	/// <summary>
+    	/// 
+    	/// </summary>
+    	/// <param name="value"></param>
+    	/// <param name="column"></param>
+    	void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column);
+
+    	/// <summary>
+    	/// 
+    	/// </summary>
+    	/// <param name="value"></param>
+    	void RemoveOptionalColumnValue(IOptionalColumnValue value);
+
+    	/// <summary>
+    	/// 
+    	/// </summary>
+    	/// <param name="column"></param>
+    	/// <returns></returns>
+    	IOptionalColumnValue GetColumnValue(IOptionalColumn column);
     }
 }

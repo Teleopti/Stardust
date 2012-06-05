@@ -30,6 +30,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         
         public IList<IShiftCategory> ShiftCategories { get; set; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public IList<IOptionalColumn> OptionalColumns { get; set; } 
+
         public ISkillStaffPeriodHolder SkillStaffPeriodHolder
         {
             get
