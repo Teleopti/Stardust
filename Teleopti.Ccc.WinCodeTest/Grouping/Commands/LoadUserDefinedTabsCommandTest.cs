@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         public void ShouldContainTheGuid()
         {
             Assert.That(_target.Id, Is.EqualTo(_guid));
+            Assert.That(_target.Key, Is.EqualTo(_guid.ToString()));
         }
     }
 

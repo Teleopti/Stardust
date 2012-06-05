@@ -722,7 +722,6 @@
     <Compile Include="Grouping\DynamicOptionType.cs" />
     <Compile Include="Grouping\FindPersonsModel.cs" />
     <Compile Include="Grouping\FindPersonsPresenter.cs" />
-    <Compile Include="Grouping\GroupPageLoaderInformation.cs" />
     <Compile Include="Grouping\FindPersonsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2010,7 +2009,6 @@
     <Compile Include="Forecasting\Forms\ZoomButtonsEventArgs.cs" />
     <Compile Include="Forecasting\TabHandler.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Grouping\BusinessHierarchyCreator.cs" />
     <Compile Include="Grouping\GroupingConstants.cs" />
     <Compile Include="Grouping\GroupPagePreviewScreen.cs">
       <SubType>Form</SubType>

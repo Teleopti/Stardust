@@ -77,7 +77,8 @@ namespace Teleopti.Ccc.WinCode.Grouping
 			_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Subscribe(nodeCheckChanged);
         }
 
-    	private void nodeCheckChanged(string obj)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "t")]
+		private void nodeCheckChanged(string obj)
     	{
 			var t = CheckedPersonGuids;
     	}

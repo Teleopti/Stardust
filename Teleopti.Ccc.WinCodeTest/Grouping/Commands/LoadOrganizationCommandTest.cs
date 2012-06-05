@@ -171,5 +171,11 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 			_target.Execute();
 			_mocks.VerifyAll();
 		}
+
+		[Test]
+		public void ShouldContainTheGuid()
+		{
+			Assert.That(_target.Key, Is.EqualTo("Organization"));
+		}
     }
 }

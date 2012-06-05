@@ -584,12 +584,8 @@
     <Compile Include="Common\Clipboard\MergePasteBehavior.cs" />
     <Compile Include="Common\Clipboard\NormalPasteBehavior.cs" />
     <Compile Include="Common\Collections\FilteredCollection.cs" />
-    <Compile Include="Common\Collections\ITreeNodeAdvDisplayInfo.cs" />
     <Compile Include="Common\Collections\FilterExtensions.cs" />
-    <Compile Include="Common\Collections\ITreeNodeDisplayInfo.cs" />
     <Compile Include="Common\Collections\ShowOnlyCollection.cs" />
-    <Compile Include="Common\Collections\TreeNodeAdvDisplayInfo.cs" />
-    <Compile Include="Common\Collections\TreeNodeDisplayInfo.cs" />
     <Compile Include="Common\Commands\ApplicationCommandModel.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\ExpanderBehavior.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\UIElementBehavior.cs" />
@@ -1073,10 +1069,6 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNameChangedEventArgs.cs" />
     <Compile Include="Common\PropertyReflector.cs" />
     <Compile Include="Common\SchedulerStateHolder.cs" />
-    <Compile Include="Common\Collections\ITreeItem.cs" />
-    <Compile Include="Common\Collections\TreeItem.cs" />
-    <Compile Include="Common\Collections\TreeItemEntityHelper.cs" />
-    <Compile Include="Common\Collections\TreeItemEventArgs.cs" />
     <Compile Include="Common\CommonStateHolder.cs" />
     <Compile Include="Common\DailyAssignmentList.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItem.cs" />

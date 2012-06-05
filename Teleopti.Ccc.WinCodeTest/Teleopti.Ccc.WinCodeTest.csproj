@@ -738,8 +738,6 @@
     <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPagesTest.cs" />
     <Compile Include="Presentation\PersonListBoxPresenterTest.cs" />
     <Compile Include="Presentation\SiteListBoxPresenterTest.cs" />
-    <Compile Include="Common\Collections\TreeNodeAdvDisplayInfoTest.cs" />
-    <Compile Include="Common\Collections\TreeNodeDisplayInfoTest.cs" />
     <Compile Include="Common\EntitiesUpdatedEventArgsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimeSpanSecondsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimePixelRelationHelperTest.cs" />
@@ -752,9 +750,6 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNameChangedEventArgsTest.cs" />
     <Compile Include="Common\PropertyReflectorTest.cs" />
     <Compile Include="Common\SchedulerStateHolderTest.cs" />
-    <Compile Include="Common\Collections\TreeItemEntityHelperTest.cs" />
-    <Compile Include="Common\Collections\TreeItemEventArgsTest.cs" />
-    <Compile Include="Common\Collections\TreeItemTest.cs" />
     <Compile Include="Common\CommonStateHolderTest.cs" />
     <Compile Include="Common\PasteOptionsTest.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItemTest.cs" />
