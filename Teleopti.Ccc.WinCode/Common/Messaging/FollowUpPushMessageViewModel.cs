@@ -26,17 +26,13 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 	{
 		private readonly IPushMessage _model;
 		private readonly IRepositoryFactory _repositoryFactory;
-
-		public FollowUpPushMessageViewModel(IPushMessage pushMessage)
-			: this(pushMessage, new RepositoryFactory(), UnitOfWorkFactory.Current)
-		{
-		}
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLoad")]
 		public FollowUpPushMessageViewModel(IPushMessage pushMessage, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
 		{
-
 			_repositoryFactory = repositoryFactory;
+			_unitOfWorkFactory = unitOfWorkFactory;
 			_model = pushMessage;
 			Delete = new DeleteCommandModel(this, repositoryFactory, unitOfWorkFactory);
 			LoadDialogues = CommandModelFactory.CreateRepositoryCommandModel(LoadAllDialogues, unitOfWorkFactory, "xxLoad Dialogues");
@@ -45,40 +41,30 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 			ReplyOptions = new List<ReplyOptionViewModel>();
 
 			//Add a replyoption for NotReplied:
-			ReplyOptionViewModel notRepliedOption = new ReplyOptionViewModel(Dialogues);
+			var notRepliedOption = new ReplyOptionViewModel(Dialogues);
 			notRepliedOption.FilterTarget = this;
 			ReplyOptions.Add(notRepliedOption);
 
-			foreach (string reply in pushMessage.ReplyOptions)
-			{
-				ReplyOptionViewModel replyOptionViewModel = new ReplyOptionViewModel(reply, Dialogues);
-				replyOptionViewModel.FilterTarget = this;
-				ReplyOptions.Add(replyOptionViewModel);
-			}
+			pushMessage.ReplyOptions.ForEach(r =>
+			                                 	{
+			                                 		var replyOptionViewModel = new ReplyOptionViewModel(r, Dialogues);
+			                                 		replyOptionViewModel.FilterTarget = this;
+			                                 		ReplyOptions.Add(replyOptionViewModel);
+			                                 	});
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public IList<IObservable<FollowUpPushMessageViewModel>> Observables { get; private set; }
 		public ObservableCollection<IFollowUpMessageDialogueViewModel> Dialogues { get; private set; }
 
-		public string GetTitle(ITextFormatter formatter)
-		{
-			return _model.GetTitle(formatter);
-		}
-
 		public string Title
 		{
-			get { return GetTitle(new NoFormatting()); }
-		}
-
-		public string GetMessage(ITextFormatter formatter)
-		{
-			return _model.GetMessage(new NoFormatting());
+			get { return _model.GetTitle(new NoFormatting()); }
 		}
 
 		public string Message
 		{
-			get { return GetMessage(new NoFormatting()); }
+			get { return _model.GetMessage(new NoFormatting()); }
 		}
 
 		public IList<ReplyOptionViewModel> ReplyOptions
@@ -101,7 +87,7 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 			Dialogues.Clear();
 			var repository = _repositoryFactory.CreatePushMessageDialogueRepository(uow);
 			IList<IPushMessageDialogue> dialogues = repository.Find(_model);
-			dialogues.ForEach(d => Dialogues.Add(new FollowUpMessageDialogueViewModel(d) { AllowDialogueReply = _model.AllowDialogueReply }));
+			dialogues.ForEach(d => Dialogues.Add(new FollowUpMessageDialogueViewModel(d,_repositoryFactory,_unitOfWorkFactory) { AllowDialogueReply = _model.AllowDialogueReply }));
 			ReplyOptions.ForEach(o => o.Total = dialogues.Count);//Todo, change this to databinding instead.....
 		}
 

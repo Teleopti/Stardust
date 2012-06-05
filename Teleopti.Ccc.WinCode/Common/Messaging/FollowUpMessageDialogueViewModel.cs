@@ -1,35 +1,46 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Common.Messaging
 {
-   
-
     public class FollowUpMessageDialogueViewModel:DependencyObject, IFollowUpMessageDialogueViewModel
     {
-      
+        private readonly IPushMessageDialogue _model;
+        private readonly IRepositoryFactory _repositoryFactory;
 
-        #region fields & props
-        private IPushMessageDialogue _model;
-        private IRepositoryFactory _repositoryFactory;   
-        
+		public FollowUpMessageDialogueViewModel(IPushMessageDialogue dialogue, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
+		{
+			_model = dialogue;
+			_repositoryFactory = repositoryFactory;
+			SendReply = new SendReplyCommandModel(this, unitOfWorkFactory);
+			DeleteDialogue = new DeleteDialogueCommandModel(this, unitOfWorkFactory);
+			Messages =
+				new ObservableCollection<DialogueMessageViewModel>(
+					dialogue.DialogueMessages.Select(
+						m =>
+						new DialogueMessageViewModel
+							{Created = m.Created, CreatedAsLocal = TimeZoneHelper.ConvertFromUtc(m.Created), Text = m.Text, Sender = m.Sender}).ToList());
+		}
+
         public CommandModel SendReply { get; private set; }
         public CommandModel DeleteDialogue { get; set;}
         public IPerson Receiver { get { return _model.Receiver; } }
-        public ObservableCollection<IDialogueMessage> Messages { get; private set; }
+        public ObservableCollection<DialogueMessageViewModel> Messages { get; private set; }
+
         public string ReplyText
         {
             get { return (string)GetValue(ReplyTextProperty); }
             set { SetValue(ReplyTextProperty, value); }
         }
+
         public bool IsReplied
         {
             get { return _model.IsReplied; }
@@ -39,45 +50,19 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
         {
 			return _model.GetReply(formatter);
         }
+
         public bool AllowDialogueReply { get; set; }
 
         public static readonly DependencyProperty ReplyTextProperty =
             DependencyProperty.Register("ReplyText", typeof(string), typeof(FollowUpMessageDialogueViewModel), new UIPropertyMetadata(string.Empty));
 
-       
-
-       
-       
-        #endregion
-
-        public FollowUpMessageDialogueViewModel(IPushMessageDialogue dialogue)
-            : this(dialogue, new RepositoryFactory(), UnitOfWorkFactory.Current)
-        {
-            
-        }
-
-
-
-        public FollowUpMessageDialogueViewModel(IPushMessageDialogue dialogue, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
-        {
-            _model = dialogue;
-            _repositoryFactory = repositoryFactory;
-            SendReply = new SendReplyCommandModel(this, unitOfWorkFactory);
-            DeleteDialogue = new DeleteDialogueCommandModel(this, unitOfWorkFactory);
-            Messages = new ObservableCollection<IDialogueMessage>(dialogue.DialogueMessages);
-        }
-
-        //CommandModel for adding a message to the dialogue
         private class SendReplyCommandModel : RepositoryCommandModel
         {
-            private FollowUpMessageDialogueViewModel _commandTarget;
-
+            private readonly FollowUpMessageDialogueViewModel _commandTarget;
 
             public SendReplyCommandModel(FollowUpMessageDialogueViewModel model, IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
             {
-               
                 _commandTarget = model;
-
             }
 
             public override string Text
@@ -88,12 +73,10 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
             public override void OnExecute(IUnitOfWork uow, object sender, ExecutedRoutedEventArgs e)
             {
                 _commandTarget.AddAndPersist(uow);
-               
             }
 
             public override void OnQueryEnabled(object sender, CanExecuteRoutedEventArgs e)
             {
-
                 e.CanExecute = (!string.IsNullOrEmpty(_commandTarget.ReplyText) && _commandTarget.AllowDialogueReply);
                 e.Handled = true;
             }
@@ -101,7 +84,7 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 
         private class DeleteDialogueCommandModel : RepositoryCommandModel
         {
-            private FollowUpMessageDialogueViewModel _commandTarget;
+            private readonly FollowUpMessageDialogueViewModel _commandTarget;
 
             public override string Text
             {
@@ -127,7 +110,7 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
             repository.Add(_model);
            
             Messages.Clear();
-            _model.DialogueMessages.ForEach(r => Messages.Add(r));
+            _model.DialogueMessages.ForEach(r => Messages.Add(new DialogueMessageViewModel{Created = r.Created, CreatedAsLocal = TimeZoneHelper.ConvertFromUtc(r.Created),Text = r.Text,Sender = r.Sender}));
             
             uow.PersistAll();
             ReplyText = string.Empty;
@@ -140,4 +123,12 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
             uow.PersistAll();
         }
     }
+
+	public class DialogueMessageViewModel
+	{
+		public DateTime Created { get; set; }
+		public DateTime CreatedAsLocal { get; set; }
+		public string Text { get; set; }
+		public IPerson Sender { get; set; }
+	}
 }
