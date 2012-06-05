@@ -4,15 +4,12 @@ using System.Linq;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using System.Windows.Forms;
-using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.PeopleAdmin.Views;
@@ -36,19 +33,25 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
         private readonly PortalSettings _portalSettings;
         private readonly IComponentContext _componentContext;
-        private readonly IComponentContext _container;
+    	private readonly IPersonRepository _personRepository;
+    	private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    	private readonly IGracefulDataSourceExceptionHandler _gracefulDataSourceExceptionHandler;
+    	private readonly IComponentContext _container;
         private IPersonSelectorPresenter _selectorPresenter;
         private IPeopleNavigatorPresenter _myPresenter;
         private readonly IEventAggregator _localEventAggregator;
         private readonly IEventAggregator _globalEventAggregator;
 
-        public PeopleNavigator(PortalSettings portalSettings, IComponentContext componentContext)
+        public PeopleNavigator(PortalSettings portalSettings, IComponentContext componentContext, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
             : this()
         {
             _portalSettings = portalSettings;
             _componentContext = componentContext;
+        	_personRepository = personRepository;
+        	_unitOfWorkFactory = unitOfWorkFactory;
+        	_gracefulDataSourceExceptionHandler = gracefulDataSourceExceptionHandler;
 
-            var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
+        	var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
             _container = lifetimeScope.BeginLifetimeScope();
             _localEventAggregator = _container.Resolve<IEventAggregator>();
             _globalEventAggregator = _container.Resolve<IEventAggregatorLocator>().GlobalAggregator();
@@ -63,32 +66,59 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);
-            if (!DesignMode)
-            {
-                toolStripButtonOpen.Click += onOpenPeople;
-                toolStripButtonAddPerson.Click += onAddNewPeople;
+        	base.OnLoad(e);
+        	if (DesignMode) return;
 
-                _selectorPresenter = _container.Resolve<IPersonSelectorPresenter>();
-                _selectorPresenter.ApplicationFunction = _myApplicationFunction;
-                _selectorPresenter.ShowPersons = true;
-                _selectorPresenter.ShowUsers = true;
-                _selectorPresenter.ShowFind = true;
+        	toolStripButtonOpen.Click += onOpenPeople;
+        	toolStripButtonAddPerson.Click += onAddNewPeople;
 
-                var view = (Control) _selectorPresenter.View;
-                splitContainerAdv1.Panel1.Controls.Add(view);
-                view.Dock = DockStyle.Fill;
-                _selectorPresenter.LoadTabs();
-
-                _myPresenter = _container.Resolve<IPeopleNavigatorPresenter>();
-                _myPresenter.Init(this);
-
-                splitContainerAdv1.SplitterDistance = splitContainerAdv1.Height - _portalSettings.PeopleActionPaneHeight;
-                _container.Resolve<IEventAggregator>().GetEvent<SelectedNodesChanged>().Publish("");
-            }
+			tryLoadNavigationPanel();
         }
 
-        void onOpenPeople(object sender, EventArgs e)
+		private void tryLoadNavigationPanel()
+    	{
+    		if (!_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
+    		                                                                             	{
+    		                                                                             		_selectorPresenter = _container.Resolve<IPersonSelectorPresenter>();
+    		                                                                             		_selectorPresenter.ApplicationFunction = _myApplicationFunction;
+    		                                                                             		_selectorPresenter.ShowPersons = true;
+    		                                                                             		_selectorPresenter.ShowUsers = true;
+    		                                                                             		_selectorPresenter.ShowFind = true;
+
+    		                                                                             		var view = (Control) _selectorPresenter.View;
+    		                                                                             		splitContainerAdv1.Panel1.Controls.Add(view);
+    		                                                                             		view.Dock = DockStyle.Fill;
+    		                                                                             		_selectorPresenter.LoadTabs();
+
+    		                                                                             		_myPresenter = _container.Resolve<IPeopleNavigatorPresenter>();
+    		                                                                             		_myPresenter.Init(this);
+
+    		                                                                             		splitContainerAdv1.SplitterDistance = splitContainerAdv1.Height - _portalSettings.PeopleActionPaneHeight;
+    		                                                                             		_container.Resolve<IEventAggregator>().GetEvent<SelectedNodesChanged>().Publish("");
+    		                                                                             	}))
+    		{
+    			_selectorPresenter = null;
+    			_myPresenter = null;
+				splitContainerAdv1.Panel1.Controls.Clear();
+    		}
+    	}
+
+		protected override void OnVisibleChanged(EventArgs e)
+		{
+			if (navigationPanelIsNotLoaded())
+			{
+				tryLoadNavigationPanel();
+			}
+
+			base.OnVisibleChanged(e);
+		}
+
+    	private bool navigationPanelIsNotLoaded()
+    	{
+    		return _myPresenter == null || _selectorPresenter == null;
+    	}
+
+    	void onOpenPeople(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             openPeople(_selectorPresenter.SelectedPersonGuids);
@@ -98,46 +128,35 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void openPeople(IEnumerable<Guid> selectedGuids)
         {
-            if (!selectedGuids.IsEmpty())
-            {
-                try
-                {
+            if (selectedGuids == null || selectedGuids.IsEmpty()) return;
 
-                    IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork();
-                    //var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
+        	_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
+        	                                                                             	{
+        	                                                                             		IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
 
-                    var rep = new PersonRepository(uow);
-                    var foundPeople = rep.FindPeople(selectedGuids).ToList();
-                    var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
+        	                                                                             		var foundPeople = _personRepository.FindPeople(selectedGuids).ToList();
+        	                                                                             		var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
 
-                    ITraceableRefreshService service =
-                        new TraceableRefreshService(new ScenarioRepository(uow).LoadDefaultScenario(), new RepositoryFactory());
+        	                                                                             		ITraceableRefreshService service = new TraceableRefreshService(new ScenarioRepository(uow).LoadDefaultScenario(),new RepositoryFactory());
 
-                    var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts)
-                    {
-                        SelectedDate = _selectorPresenter.SelectedDate, UnitOfWork = uow
-                    };
+        	                                                                             		var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts) {
+        	                                                                             					SelectedDate = _selectorPresenter.SelectedDate,
+        	                                                                             					UnitOfWork = uow
+        	                                                                             				};
 
-                    var state = new WorksheetStateHolder(service);
+        	                                                                             		var state = new WorksheetStateHolder(service);
 
-                    loadPeopleGeneralViewAndInitialReferences(state, uow);
+        	                                                                             		loadPeopleGeneralViewAndInitialReferences(state, uow);
 
-                    filteredPeopleHolder.LoadIt();
+        	                                                                             		filteredPeopleHolder.LoadIt();
 
-                    filteredPeopleHolder.SetRotationCollection(state.AllRotations);
-                    filteredPeopleHolder.SetAvailabilityCollection(state.AllAvailabilities);
+        	                                                                             		filteredPeopleHolder.SetRotationCollection(state.AllRotations);
+        	                                                                             		filteredPeopleHolder.SetAvailabilityCollection(state.AllAvailabilities);
 
-                    //filteredPeopleHolder.ReassociateSelectedPeopleWithNewUow(selectedGuids);
-                    filteredPeopleHolder.ReassociateSelectedPeopleWithNewUowOpenPeople(foundPeople);
+        	                                                                             		filteredPeopleHolder.ReassociateSelectedPeopleWithNewUowOpenPeople(foundPeople);
 
-                    //Open ppladmin form.
-                    openPeopleAdmin(state, filteredPeopleHolder);
-                }
-                catch (DataSourceException exception)
-                {
-                    ShowDataSourceException(exception, Resources.PersonAdmin);
-                }
-            }
+        	                                                                             		openPeopleAdmin(state, filteredPeopleHolder);
+        	                                                                             	});
         }
 
         void onAddNewPeople(object sender, EventArgs e)
@@ -192,9 +211,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         public void OpenNewPerson()
         {
             Cursor.Current = Cursors.WaitCursor;
-            try
+            _gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=>
             {
-                IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork();
+                IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
                 var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
                 IScenario defaultScenario = new ScenarioRepository(uow).LoadDefaultScenario();
                 ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(defaultScenario, new RepositoryFactory());
@@ -211,11 +230,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
                 
                 state.AddAndSavePerson(0, filteredPeopleHolder);
                 openPeopleAdmin(state, filteredPeopleHolder);
-            }
-            catch (DataSourceException dataSourceException)
-            {
-                ShowDataSourceException(dataSourceException,Resources.PersonAdmin);
-            }
+            });
             
             Cursor.Current = Cursors.Default;
         }
@@ -239,16 +254,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         public void Open()
         {
             OpenPeopleAdmin();
-        }
-
-        public void ShowDataSourceException(DataSourceException dataSourceException, string dialogTitle)
-        {
-            using (var view = new SimpleExceptionHandlerView(dataSourceException,
-                                                                    dialogTitle,
-                                                                    Resources.ServerUnavailable))
-            {
-                view.ShowDialog();
-            }
         }
 
         public bool AddGroupPageEnabled
@@ -287,26 +292,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         private void toolStripButtonSendInstantMessageClick(object sender, EventArgs e)
         {
             // we have to load real persons here
-            try
+            _gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=>
             {
-                using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
-                    var rep = new RepositoryFactory().CreatePersonRepository(uow);
-                    var persons = rep.FindPeople(_selectorPresenter.SelectedPersonGuids);
+                    var persons = _personRepository.FindPeople(_selectorPresenter.SelectedPersonGuids);
                     var messageForm = new PushMessageForm(persons);
                     messageForm.ShowFromWinForms(false);
                 }
-            }
-            catch (DataSourceException dataSourceException)
-            {
-                using (var view = new SimpleExceptionHandlerView(dataSourceException,
-                                                                    Resources.PersonAdmin,
-                                                                    Resources.ServerUnavailable))
-                {
-                    view.ShowDialog();
-                }
-            }
-            
+            });
         }
 
         private void splitContainerAdv1SplitterMoved(object sender, Syncfusion.Windows.Forms.Tools.Events.SplitterMoveEventArgs e)
