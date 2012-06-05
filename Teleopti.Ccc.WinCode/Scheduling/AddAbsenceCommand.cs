@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				IList<IScheduleDay> selectedAbsenceDaysPerPerson = new List<IScheduleDay>();
 
-				foreach (var dateTime in absencePeriod.DateCollection())
+				var dateOnlyPeriod = absencePeriod.ToDateOnlyPeriod(selectedPerson.PermissionInformation.DefaultTimeZone());
+				foreach (var dateOnly in dateOnlyPeriod.DayCollection())
 				{
-					var dateOnly = new DateOnly(dateTime);
 					var scheduleday = SchedulerStateHolder.Schedules[selectedPerson].ScheduledDay(dateOnly);
 					if (scheduleday != null)
 						selectedAbsenceDaysPerPerson.Add(scheduleday);
@@ -113,9 +113,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		private static bool AreScheduleDaysAttached(IScheduleDay object1, IScheduleDay object2)
 		{
-			if(object2.Period.StartDateTime.Subtract(object1.Period.EndDateTime) < new TimeSpan(1, 0, 0, 0))
-				return true;
-			return false;
+			return object1.DateOnlyAsPeriod.DateOnly.AddDays(1) == object2.DateOnlyAsPeriod.DateOnly;
 		}
 
 	}
