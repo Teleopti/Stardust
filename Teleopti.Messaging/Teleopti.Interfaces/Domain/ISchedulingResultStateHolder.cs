@@ -159,5 +159,11 @@ namespace Teleopti.Interfaces.Domain
 		/// <returns></returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		INewBusinessRuleCollection GetRulesToRun();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		IList<IOptionalColumn> OptionalColumns { get; set; } 
     }
 }

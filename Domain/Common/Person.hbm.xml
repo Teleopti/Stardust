@@ -140,7 +140,12 @@
     <property name="IsDeleted"
 		  type="boolean"
 		  not-null="true"/>
-    
+
+	<bag name="OptionalColumnValueCollection" cascade="all-delete-orphan" inverse="true">
+      <key column="ReferenceId" />
+      <one-to-many class="OptionalColumnValue"/>
+    </bag>
+	  
     <join table="WindowsAuthenticationInfo" fetch="join" optional="true">
       <key column="Person"></key>
       <component name="WindowsAuthenticationInfo"

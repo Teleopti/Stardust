@@ -1,6 +1,7 @@
 ﻿using System;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {
@@ -51,23 +52,39 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			//Contract Target Time
 			if (e.ColIndex == 5)
 			{
-				e.Style.CellType = "TimeSpan";
-				e.Style.CellValue = agentRestrictionsDisplayRow.ContractTargetTime;
+				if (agentRestrictionsDisplayRow.Matrix.SchedulePeriod.Contract.EmploymentType != EmploymentType.HourlyStaff)
+				{
+					e.Style.CellType = "Static";
+					e.Style.CellValue = agentRestrictionsDisplayRow.ContractTargetTimeWithTolerance;
+				}
+				else
+				{
+					e.Style.CellType = "Static";
+					e.Style.CellValue = agentRestrictionsDisplayRow.ContractTargetTimeHourlyEmployees;
+				}
 			}
 
 			//Days Off (Schedule Period)
 			if (e.ColIndex == 6)
 			{
-				e.Style.CellType = "NumericReadOnlyCellModel";
-				e.Style.CellValue = agentRestrictionsDisplayRow.TargetDaysOff;
-				var warning = agentRestrictionsDisplayRow.Warning(e.ColIndex);
-				e.Style.CellTipText = warning ?? string.Empty;
+				if (agentRestrictionsDisplayRow.Matrix.SchedulePeriod.Contract.EmploymentType != EmploymentType.HourlyStaff)
+				{
+					e.Style.CellType = "Static";
+					e.Style.CellValue = agentRestrictionsDisplayRow.TargetDaysOffWithTolerance;
+					var warning = agentRestrictionsDisplayRow.Warning(e.ColIndex);
+					e.Style.CellTipText = warning ?? string.Empty;
+				}
+				else
+				{
+					e.Style.CellType = e.Style.CellType = "Static";
+					e.Style.CellValue = agentRestrictionsDisplayRow.TargetDaysOff;
+				}
 			}
 
 			//Contract time
 			if (e.ColIndex == 7)
 			{
-				e.Style.CellType = "TimeSpan";
+				e.Style.CellType = "TimeSpan";	
 				e.Style.CellValue = agentRestrictionsDisplayRow.ContractCurrentTime;
 				var warning = agentRestrictionsDisplayRow.Warning(e.ColIndex);
 				e.Style.CellTipText = warning ?? string.Empty;

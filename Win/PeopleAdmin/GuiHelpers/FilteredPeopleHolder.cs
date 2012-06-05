@@ -1241,7 +1241,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             _optionalColumnCollection.Clear();
 
             var rep = new OptionalColumnRepository(UnitOfWork);
-            _optionalColumnCollection = rep.GetOptionalColumnValues<Person>();
+            _optionalColumnCollection = rep.GetOptionalColumns<Person>();
         }
 
         public void  LoadIt()
@@ -1351,7 +1351,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             //Load latest optional columns & values 
            
            IOptionalColumnRepository optionalColumnRepository =new OptionalColumnRepository(UnitOfWork);
-           _optionalColumnCollection = optionalColumnRepository.GetOptionalColumnValues<Person>();
+           _optionalColumnCollection = optionalColumnRepository.GetOptionalColumns<Person>();
             
 
             //Add to filtered ppl collection.

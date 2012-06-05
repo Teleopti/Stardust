@@ -17,10 +17,16 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		public AgentRestrictionViewTemp(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IRuleSetProjectionService projectionService, IPerson selectedPerson)
 		{
+			if(schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
+
 			InitializeComponent();
 			_stateHolder = stateHolder;
 			_persons = persons;
 			_schedulingOptions = schedulingOptions;
+			_schedulingOptions.UseAvailability = true;
+			_schedulingOptions.UseRotations = true;
+			_schedulingOptions.UsePreferences = true;
+			_schedulingOptions.UseStudentAvailability = true;
 			_projectionService = projectionService;
 			_selectedPerson = selectedPerson;
 			agentRestrictionGrid.SelectedAgentIsReady += AgentRestrictionGridSelectedAgentIsReady;
@@ -55,8 +61,18 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private void AgentRestrictionViewTempLoad(object sender, System.EventArgs e)
 		{
 			agentRestrictionGrid.MergeHeaders();
-			agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _projectionService, _selectedPerson);
+			agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _projectionService, _selectedPerson, true);
 			agentRestrictionGrid.Refresh();	
+		}
+
+		private void buttonRecalculate_Click(object sender, EventArgs e)
+		{
+			_schedulingOptions.UseAvailability = checkBoxAvailability.Checked;
+			_schedulingOptions.UseRotations = checkBoxRotation.Checked;
+			_schedulingOptions.UsePreferences = checkBoxPreference.Checked;
+			_schedulingOptions.UseStudentAvailability = checkBoxStudentAvailability.Checked;
+
+			agentRestrictionGrid.LoadData(_schedulingOptions, checkBoxSchedule.Checked);
 		}
 	}
 }
