@@ -113,6 +113,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         continue;
                     IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
 
+                    
                     if (isRestrictionLimitedWorkDay(effectiveRestriction))
                         continue;
 
@@ -139,7 +140,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// </summary>
         /// <param name="effectiveRestriction"></param>
         /// <returns></returns>
-        private bool isRestrictionLimitedWorkDay(IEffectiveRestriction effectiveRestriction)
+        private static bool isRestrictionLimitedWorkDay(IEffectiveRestriction effectiveRestriction)
         {
             if (effectiveRestriction != null)
             {
