@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             using (_mocks.Record())
             {
                 Expect.Call(_repositoryFactory.CreateOptionalColumnRepository(unitOfWork)).Return(optionalColumnRepository);
-                Expect.Call(optionalColumnRepository.GetOptionalColumnValues<Person>()).Return(new List<IOptionalColumn>() { null });
+                Expect.Call(optionalColumnRepository.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>() { null });
             }
             using (_mocks.Playback())
             {

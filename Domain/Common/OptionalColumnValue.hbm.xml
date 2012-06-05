@@ -10,7 +10,11 @@
     </id>
 
     <property name="Description" not-null="true" type="string"/>
-    <property name="ReferenceId" type="guid"/>
+    <!--<property name="ReferenceId" type="guid"/>-->
+
+	  <many-to-one name="ReferenceObject" column="ReferenceId"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"/>
     <many-to-one class="OptionalColumn"
                      name="Parent"
                      not-null="true" foreign-key="FK_OptionalColumnValue_OptionalColumn"/>

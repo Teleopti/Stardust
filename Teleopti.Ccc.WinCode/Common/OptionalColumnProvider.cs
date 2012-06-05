@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCode.Common
         public void LoadAllOptionalColumns(IUnitOfWork uow)
         {
             IOptionalColumnRepository optionalColumnRepository = _repositoryFactory.CreateOptionalColumnRepository(uow);
-            _optionalColumnCollection = optionalColumnRepository.GetOptionalColumnValues<Person>();
+            _optionalColumnCollection = optionalColumnRepository.GetOptionalColumns<Person>();
         }
 
         public void Dispose()
