@@ -26,6 +26,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Interop
             Assert.AreEqual(_target.ModelContent, _content);
             Assert.AreEqual(HostViewModel.ModelContentProperty.DefaultMetadata.DefaultValue,string.Empty);
             Assert.AreEqual(HostViewModel.ModelHeaderProperty.DefaultMetadata.DefaultValue,string.Empty);
+			_target.UpdateItem("huvud", "innehåll");
+			Assert.AreEqual(_target.ModelHeader, "huvud");
+			Assert.AreEqual(_target.ModelContent, "innehåll");
         }
 
     }
