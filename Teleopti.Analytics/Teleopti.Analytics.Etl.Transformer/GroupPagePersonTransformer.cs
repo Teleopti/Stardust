@@ -75,7 +75,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                             rootGroup.SetId(Guid.Empty);
 
                         
-                        if (groupPage.IsUserDefined())
+                        if (groupPage.DescriptionKey == null)
                         {
                             isCustomGroup = true;
                             row["group_page_name_resource_key"] = DBNull.Value;
@@ -102,13 +102,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 
         private static void TranslateNameToEnglish(IGroupPage groupPage)
         {
-			// does not exist until  .Net 4.0
-        	//if(Guid.TryParse(groupPage.DescriptionKey))
-        	Guid id;
-			if (tryStrToGuid(groupPage.DescriptionKey, out id))
-        		return;
-
-			if (groupPage.DescriptionKey != null)
+            if (groupPage.DescriptionKey != null)
             {
                 // Translate built in group page name to english for cube
                 CultureInfo englishCulture = CultureInfo.GetCultureInfo("en-GB");
@@ -116,20 +110,6 @@ namespace Teleopti.Analytics.Etl.Transformer
                 groupPage.Description = new Description(englishTerm);
             }
         }
-
-		private static bool tryStrToGuid(String s, out Guid value)
-		{
-			try
-			{
-				value = new Guid(s);
-				return true;
-			}
-			catch (FormatException)
-			{
-				value = Guid.Empty;
-				return false;
-			}
-		}
 
         private static void MovePersonsFromChildGroupToRoot(IRootPersonGroup rootGroup)
         {

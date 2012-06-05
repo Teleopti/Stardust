@@ -933,7 +933,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             			var groups = groupPageDataProvider.UserDefinedGroupings;
 						foreach (var group in groups)
 						{
-							if (group.DescriptionKey.Equals(selectedGrouping.Key))
+							if (group.IdOrDescriptionKey.Equals(selectedGrouping.Key))
 							{
 								groupPage = group;
 								break;

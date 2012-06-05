@@ -16,13 +16,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private SchedulerSkillHelper _target;
         private INonBlendSkillFromGroupingCreator _nonBlendSkillFromGroupingCreator;
         private ISchedulerSkillDayHelper _schedulerSkillDayHelper;
-        private IGroupPageDataProvider _groupPageDataProvider;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-            _groupPageDataProvider = _mocks.StrictMock<IGroupPageDataProvider>();
             _nonBlendSkillFromGroupingCreator = _mocks.StrictMock<INonBlendSkillFromGroupingCreator>();
             _schedulerSkillDayHelper = _mocks.StrictMock<ISchedulerSkillDayHelper>();
             _target = new SchedulerSkillHelper(_schedulerSkillDayHelper);
