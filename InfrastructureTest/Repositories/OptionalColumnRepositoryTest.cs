@@ -89,31 +89,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.PersistAll();
 		}
 
-		//[Test]
-		//public void VerifyGetOptionalColumnValues()
-		//{
-		//    string columnName = "Column A";
-		//    string columnValue = "Value of Column A";
+		[Test]
+		public void VerifyGetOptionalColumns()
+		{
+			const string columnName = "Column A";
+			var columnA = new OptionalColumn(columnName) {TableName = "Person"};
 
-		//    Guid guid = Guid.NewGuid();
+			PersistAndRemoveFromUnitOfWork(columnA);
 
-		//    OptionalColumn columnA = new OptionalColumn(columnName);
-		//    columnA.TableName = "Person";
+			IList<IOptionalColumn> returnList = repository.GetOptionalColumns<Person>();
 
-		//    OptionalColumnValue columnAValue = new OptionalColumnValue(columnValue);
-		//    columnAValue.ReferenceId = guid;
-
-		//    columnA.AddOptionalColumnValue(columnAValue);
-
-		//    PersistAndRemoveFromUnitOfWork(columnA);
- 
-		//    IList<IOptionalColumn> returnList = repository.GetOptionalColumns<Person>();
-            
-		//    Assert.AreEqual(1, returnList.Count);
-		//    Assert.AreEqual(columnName, returnList[0].Name);
-		//    //Assert.AreEqual(1, returnList[0].ValueCollection.Count);
-		//   // Assert.AreEqual(columnValue, returnList[0].ValueCollection[0].Description);
-		//   // Assert.AreEqual(guid, returnList[0].ValueCollection[0].ReferenceId);
-		//}
+			Assert.AreEqual(1, returnList.Count);
+			Assert.AreEqual(columnName, returnList[0].Name);
+		}
     }
 }
