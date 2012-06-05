@@ -66,9 +66,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             _grid.Refresh();
             _grid.Model.ColWidths.ResizeToFit(GridRangeInfo.Cols(0, _grid.ColCount));
-  
-
-            
         }
 
         #region IDisposable Members
@@ -77,7 +74,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-            return;
         }
 
         /// <summary>
@@ -92,7 +88,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             if (disposing)
             {
                 ReleaseManagedResources();
-
             }
             ReleaseUnmanagedResources();
         }
@@ -110,7 +105,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         protected virtual void ReleaseManagedResources()
         {
             SetEventHandlers(false);
-
         }
         #endregion
 
