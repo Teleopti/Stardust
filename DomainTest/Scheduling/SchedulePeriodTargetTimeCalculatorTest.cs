@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	[TestFixture]
     public class SchedulePeriodTargetTimeCalculatorTest
     {
-        private ISchedulePeriodTargetTimeCalculator _targetTime;
+        private SchedulePeriodTargetTimeCalculator target;
         private IScheduleMatrixPro _matrix;
         private IVirtualSchedulePeriod _schedulePeriod;
 		private IContract _contract;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [SetUp]
         public void Setup()
         {
-            _targetTime = new SchedulePeriodTargetTimeTimeCalculator();
+            target = new SchedulePeriodTargetTimeCalculator();
         	_matrix = MockRepository.GenerateMock<IScheduleMatrixPro>();
         	_schedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
 			_contract = MockRepository.GenerateMock<IContract>();
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_schedulePeriod.Stub(x => x.MinTimeSchedulePeriod).Return(TimeSpan.FromHours(8));
 			_matrix.Stub(x => x.Person).Return(person);
 
-        	var result = _targetTime.TargetWithTolerance(_matrix);
+        	var result = target.TargetWithTolerance(_matrix);
 
 			Assert.AreEqual(TimeSpan.FromHours(8), result.StartTime);
             Assert.AreEqual(TimeSpan.FromHours(80), result.EndTime);
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _schedulePeriod.Stub(x => x.DateOnlyPeriod).Return(dateOnlyPeriod);
             _schedulePeriod.Stub(x => x.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 
-        	var result = _targetTime.TargetWithTolerance(_matrix);
+        	var result = target.TargetWithTolerance(_matrix);
             
             Assert.AreEqual(TimeSpan.FromHours(14), result.StartTime);
             Assert.AreEqual(TimeSpan.FromHours(15.5), result.EndTime);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 			_schedulePeriod.Stub(x => x.PeriodTarget()).Return(TimeSpan.FromHours(16));
 
-        	var result = _targetTime.TargetWithTolerance(_matrix);
+        	var result = target.TargetWithTolerance(_matrix);
 
             Assert.AreEqual(TimeSpan.FromHours(26), result.StartTime);
             Assert.AreEqual(TimeSpan.FromHours(27.5), result.EndTime);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 			_schedulePeriod.Stub(x => x.PeriodTarget()).Return(TimeSpan.FromHours(16));
 
-        	var result = _targetTime.TargetWithTolerance(_matrix);
+        	var result = target.TargetWithTolerance(_matrix);
 
             Assert.AreEqual(TimeSpan.FromHours(10), result.StartTime);
             Assert.AreEqual(TimeSpan.FromHours(11.5), result.EndTime);

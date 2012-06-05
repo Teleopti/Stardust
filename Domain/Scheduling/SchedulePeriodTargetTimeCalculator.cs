@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class SchedulePeriodTargetTimeTimeCalculator : ISchedulePeriodTargetTimeCalculator
+	public class SchedulePeriodTargetTimeCalculator : ISchedulePeriodTargetTimeCalculator
     {
 
         public TimePeriod TargetWithTolerance(IScheduleMatrixPro matrix)

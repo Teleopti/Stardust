@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 		{
 			builder.RegisterType<ShiftTradeSkillSpecification>().As<IShiftTradeSkillSpecification>();
 			builder.RegisterType<OpenShiftTradePeriodSpecification>().As<IOpenShiftTradePeriodSpecification>();
-			builder.RegisterType<SchedulePeriodTargetTimeTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>();
+			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>();
 			builder.RegisterType<ShiftTradeTargetTimeSpecification>().As<IShiftTradeTargetTimeSpecification>();
 			builder.RegisterType<IsWorkflowControlSetNullSpecification>().As<IIsWorkflowControlSetNullSpecification>();
 			builder.RegisterType<ShiftTradeAbsenceSpecification>().As<IShiftTradeAbsenceSpecification>();
