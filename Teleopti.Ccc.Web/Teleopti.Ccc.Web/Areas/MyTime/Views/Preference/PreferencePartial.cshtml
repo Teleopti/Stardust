@@ -28,7 +28,12 @@
 		<div class="single">@single</div>
 	</div>
 	<div id="Preference-period-feedback-target-hours" class="pd5 info-pnl">
-		@Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span class='hours'>-</span>"))
+		@{
+			var rangeHours = Html.Raw(string.Format(Resources.YouShouldWorkBetweenXAndYHours, "<span class='lower'>-</span>", "<span class='upper'>-</span>"));
+			var singleHours = Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span class='hours'>-</span>"));
+		}
+		<div class="range">@rangeHours</div>
+		<div class="single">@singleHours</div>
 	</div>
 	<div id="Preference-period-feedback-possible-result-daysoff" class="pd5 info-pnl">
 		@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span class='days'>-</span>"))

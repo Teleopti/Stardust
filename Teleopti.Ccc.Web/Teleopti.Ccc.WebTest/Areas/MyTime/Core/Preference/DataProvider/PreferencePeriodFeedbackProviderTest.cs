@@ -83,7 +83,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			virtualSchedulePeriodProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
 			virtualSchedulePeriod.Stub(x => x.DateOnlyPeriod).Return(dateOnlyPeriod);
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(dateOnlyPeriod)).Return(scheduleDays);
-			schedulePeriodTargetTimeCalculator.Stub(x => x.TargetTime(virtualSchedulePeriod, scheduleDays)).Return(TimeSpan.FromHours(8));
+			var targetTime = new MinMax<TimeSpan>(TimeSpan.FromHours(2), TimeSpan.FromHours(5));
+			schedulePeriodTargetTimeCalculator.Stub(x => x.TargetTimeWithTolerance(virtualSchedulePeriod, scheduleDays)).Return(targetTime);
 
 			var target = new PreferencePeriodFeedbackProvider(
 				virtualSchedulePeriodProvider,
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			var result = target.PeriodFeedback(DateOnly.Today);
 
-			result.TargetTime.Should().Be(TimeSpan.FromHours(8));
+			result.TargetTime.Should().Be(targetTime);
 		}
 
 	}

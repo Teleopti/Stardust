@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_contract.Stub(x => x.WorkTimeDirective)
 				.Return(new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero));
 			_schedulePeriod.Stub(x => x.MinTimeSchedulePeriod).Return(TimeSpan.FromHours(8));
-			_matrix.Stub(x => x.Person).Return(person);
+			_schedulePeriod.Stub(x => x.Person).Return(person);
 
         	var result = target.TargetWithTolerance(_matrix);
 

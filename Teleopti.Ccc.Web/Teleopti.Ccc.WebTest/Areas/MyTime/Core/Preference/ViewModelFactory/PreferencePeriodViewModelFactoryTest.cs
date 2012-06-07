@@ -49,15 +49,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldGetViewModelWithTargetHours()
+		public void ShouldGetViewModelWithTargetLowerHours()
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
-			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback { TargetTime = TimeSpan.FromDays(2) });
+			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback { TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2),TimeSpan.FromDays(5)) });
 			var target = new PreferencePeriodViewModelFactory(preferencePeriodFeedbackProvider);
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
-			result.TargetHours.Should().Be.EqualTo(TimeSpan.FromDays(2).TotalHours);
+			result.TargetHours.Lower.Should().Be.EqualTo(TimeSpan.FromDays(2).TotalHours);
 		}
+
+		[Test]
+		public void ShouldGetViewModelWithTargetUpperHours()
+		{
+			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
+			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback { TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2), TimeSpan.FromDays(5)) });
+			var target = new PreferencePeriodViewModelFactory(preferencePeriodFeedbackProvider);
+
+			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
+
+			result.TargetHours.Upper.Should().Be.EqualTo(TimeSpan.FromDays(5).TotalHours);
+		}
+
 	}
 }

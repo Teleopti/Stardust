@@ -99,19 +99,30 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			data: { Date: _currentFixedDate() },
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
-				var area = $("#Preference-period-feedback-target-daysoff");
+				var daysoff = $("#Preference-period-feedback-target-daysoff");
 				if (data.TargetDaysOff.Lower == data.TargetDaysOff.Upper) {
-					$('.range', area).hide();
-					$('.single', area).show();
-					$('.days', area).text(data.TargetDaysOff.Lower);
+					$('.range', daysoff).hide();
+					$('.single', daysoff).show();
+					$('.days', daysoff).text(data.TargetDaysOff.Lower);
 				} else {
-					$('.range', area).show();
-					$('.single', area).hide();
-					$('.lower', area).text(data.TargetDaysOff.Lower);
-					$('.upper', area).text(data.TargetDaysOff.Upper);
+					$('.range', daysoff).show();
+					$('.single', daysoff).hide();
+					$('.lower', daysoff).text(data.TargetDaysOff.Lower);
+					$('.upper', daysoff).text(data.TargetDaysOff.Upper);
 				}
 				$("#Preference-period-feedback-possible-result-daysoff .days").text(data.PossibleResultDaysOff);
-				$('#Preference-period-feedback-target-hours .hours').text(data.TargetHours);
+
+				var hours = $("#Preference-period-feedback-target-hours");
+				if (data.TargetHours.Lower == data.TargetHours.Upper) {
+					$('.range', hours).hide();
+					$('.single', hours).show();
+					$('.hours', hours).text(data.TargetHours.Lower);
+				} else {
+					$('.range', hours).show();
+					$('.single', hours).hide();
+					$('.lower', hours).text(data.TargetHours.Lower);
+					$('.upper', hours).text(data.TargetHours.Upper);
+				}
 			}
 		});
 	}
