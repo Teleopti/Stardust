@@ -1,26 +1,4 @@
 ------------------
---dim_quality_quest_type
-------------------
-CREATE TABLE [mart].[dim_quality_quest_type](
-	[quality_quest_type_id] int identity(1,1) NOT NULL,
-	[quality_quest_type_name] nvarchar(200) NULL,
-	[insert_date] smalldatetime NOT NULL,
-	[update_date] smalldatetime NOT NULL,
-	[datasource_id] smallint NOT NULL
-)
-
-ALTER TABLE [mart].[dim_quality_quest_type]
-ADD CONSTRAINT [PK_dim_quality_quest_type] PRIMARY KEY CLUSTERED 
-(
-	[quality_quest_type_id] ASC
-)
-ALTER TABLE [mart].[dim_quality_quest_type] ADD  CONSTRAINT [DF_dim_quality_quest_type_name] DEFAULT (N'Not Defined') FOR [quality_quest_type_name]
-ALTER TABLE [mart].[dim_quality_quest_type] ADD  CONSTRAINT [DF_dim_quality_quest_type_datasource] DEFAULT ((-1)) FOR [datasource_id]
-ALTER TABLE [mart].[dim_quality_quest_type] ADD  CONSTRAINT [DF_dim_quality_quest_type_insert] DEFAULT (getdate()) FOR [insert_date]
-ALTER TABLE [mart].[dim_quality_quest_type] ADD  CONSTRAINT [DF_dim_quality_quest_type_update] DEFAULT (getdate()) FOR [update_date]
-GO
-
-------------------
 --dim_quality_quest
 ------------------
 CREATE TABLE [mart].[dim_quality_quest](
@@ -29,7 +7,7 @@ CREATE TABLE [mart].[dim_quality_quest](
 	[quality_quest_original_id] int NULL,
 	[quality_quest_score_weight] real NULL,
 	[quality_quest_name] nvarchar(200) NOT NULL,
-	[quality_quest_type_id] int NOT NULL,
+	[quality_quest_type_name] nvarchar(200) NOT NULL,
 	[log_object_name] nvarchar(100) NOT NULL,
 	[datasource_id] smallint NOT NULL,
 	[insert_date] smalldatetime NOT NULL,
@@ -42,11 +20,8 @@ ADD CONSTRAINT [PK_dim_quality_quest] PRIMARY KEY CLUSTERED
 	[quality_quest_id] ASC
 )
 
-ALTER TABLE [mart].[dim_quality_quest] WITH CHECK ADD  CONSTRAINT [FK_dim_quality_quest_dim_quality_quest_type] FOREIGN KEY([quality_quest_type_id])
-REFERENCES [mart].[dim_quality_quest_type] ([quality_quest_type_id])
-
 ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_code] DEFAULT (N'Not Defined') FOR [quality_quest_name]
-ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_type] DEFAULT (-1) FOR [quality_quest_type_id]
+ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_type_name] DEFAULT (N'Not Defined') FOR [quality_quest_type_name]
 ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_datasource] DEFAULT ((-1)) FOR [datasource_id]
 ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_insert] DEFAULT (getdate()) FOR [insert_date]
 ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_update] DEFAULT (getdate()) FOR [update_date]
