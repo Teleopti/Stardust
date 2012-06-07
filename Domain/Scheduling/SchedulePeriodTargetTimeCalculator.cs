@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return target;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public MinMax<TimeSpan> TargetTimeWithTolerance(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var contract = virtualSchedulePeriod.Contract;
