@@ -192,11 +192,14 @@
     <Compile Include="GroupPageCreator\PersonGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\SkillGroupPageTest.cs" />
     <Compile Include="Helper\DenormalizeScheduleProjectionTest.cs" />
+    <Compile Include="Helper\GroupPageChangedMessageTest.cs" />
     <Compile Include="Helper\InitialLoadScheduleProjectionTest.cs" />
     <Compile Include="Helper\LogPointOutputTest.cs" />
     <Compile Include="Helper\NoFormattingTest.cs" />
     <Compile Include="Helper\NormalizeTextTest.cs" />
     <Compile Include="Helper\NotificationTest.cs" />
+    <Compile Include="Helper\PersonChangedMessageTest.cs" />
+    <Compile Include="Helper\PersonPeriodChangedMessageTest.cs" />
     <Compile Include="Helper\ProcessDenormalizeQueueTest.cs" />
     <Compile Include="Helper\StringExtensionsTest.cs" />
     <Compile Include="Optimization\AdvancedPreferencesPersonalSettingsTest.cs" />
