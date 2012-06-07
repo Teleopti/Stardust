@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                 var details = workloadNames[index];
                 string name = details.Name;
 
-                if (details.CharactersToShow.HasValue)
+                if (details.CharactersToShow.HasValue && name.Length > details.CharactersToShow)
                 {
-                    name = name.Substring(0, (int)details.CharactersToShow) + "...";
+                    name = name.Substring(0, (int)details.CharactersToShow) + UserTexts.Resources.ThreeDots;
                 }
 
                 else
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                     Size textSize = System.Windows.Forms.TextRenderer.MeasureText(name, DefaultFont);
                     while (textSize.Width > 90)
                     {
-                        name = name.Substring(0, name.Length - 4) + "...";
+                        name = name.Substring(0, name.Length - 4) + UserTexts.Resources.ThreeDots;
                         textSize = System.Windows.Forms.TextRenderer.MeasureText(name, DefaultFont);
                     }
                     details.CharactersToShow = name.Length;
@@ -88,17 +88,17 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                 string workloadName = details.Name;
 
                 // check to truncate strings
-                if (details.CharactersToShow.HasValue)
+                if (details.CharactersToShow.HasValue && workloadName.Length > details.CharactersToShow)
                 {
-                    workloadName = workloadName.Substring(0, (int)details.CharactersToShow) + "...";
+                    workloadName = workloadName.Substring(0, (int)details.CharactersToShow) + UserTexts.Resources.ThreeDots;
                 }
                 // reduce the pixelwidth of string to fit UI
                 else
                 {
                     Size textSize = System.Windows.Forms.TextRenderer.MeasureText(workloadName, DefaultFont);
                     while (textSize.Width > 90)
-                    {
-                        workloadName = workloadName.Substring(0, workloadName.Length - 4) + "...";
+                    { 
+                        workloadName = workloadName.Substring(0, workloadName.Length - 4) + UserTexts.Resources.ThreeDots;
                         textSize = System.Windows.Forms.TextRenderer.MeasureText(workloadName, DefaultFont);
                     }
                     details.CharactersToShow = workloadName.Length;
