@@ -8,7 +8,7 @@
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
       <Value>
         <dds xmlns="">
-          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="380" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-12504" scrolltop="-9482" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="37571" y="24500" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="380" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-12504" scrolltop="-9482" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="31141" y="18574" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
             <font>
               <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
             </font>
@@ -1750,7 +1750,7 @@
             </layoutobject>
             <shape groupshapeid="0" groupnode="0" />
           </ddscontrol>
-          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge.2" tooltip="fact_quality_grade" left="-11166" top="-7858" logicalid="300" controlid="111" masterid="0" hint1="0" hint2="0" width="4048" height="3149" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge.2" tooltip="fact_quality_grade" left="-6642" top="-2937" logicalid="300" controlid="111" masterid="0" hint1="0" hint2="0" width="4048" height="3149" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobjectstreaminitwrapper binary="00080000d00f00004d0c0000" />
             </control>
@@ -1761,7 +1761,7 @@
             </layoutobject>
             <shape groupshapeid="0" groupnode="0" />
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="-11092" top="-5009" logicalid="301" controlid="112" masterid="0" hint1="0" hint2="0" width="5255" height="8129" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="-6636" top="-88" logicalid="301" controlid="112" masterid="0" hint1="0" hint2="0" width="799" height="3208" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -1777,11 +1777,11 @@
             <connector lineroutestyle="MSDDS.Rectilinear" sourceid="110" destid="111" sourceattachpoint="12" destattachpoint="1" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="-6237" y="2620" />
               <point x="-6237" y="808" />
-              <point x="-10792" y="808" />
-              <point x="-10792" y="-4709" />
+              <point x="-6268" y="808" />
+              <point x="-6268" y="212" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="-7418" top="-5484" logicalid="302" controlid="113" masterid="0" hint1="0" hint2="0" width="88316" height="69199" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="-2894" top="-563" logicalid="302" controlid="113" masterid="0" hint1="0" hint2="0" width="83792" height="64278" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -1797,8 +1797,8 @@
             <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="111" sourceattachpoint="16" destattachpoint="23" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="80598" y="63315" />
               <point x="42323" y="63315" />
-              <point x="42323" y="-5184" />
-              <point x="-7118" y="-5184" />
+              <point x="42323" y="-263" />
+              <point x="-2594" y="-263" />
             </connector>
           </ddscontrol>
           <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge.2" tooltip="fact_quality_point" left="6218" top="18" logicalid="303" controlid="114" masterid="0" hint1="0" hint2="0" width="3307" height="2725" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
@@ -8188,6 +8188,7 @@
               <ColumnID>score</ColumnID>
             </Source>
           </Source>
+          <Visible>false</Visible>
         </Measure>
         <Measure dwd:design-time-name="631b8d3f-e1d6-4ee6-9e8c-d73e65253f06">
           <ID>Quality Grades Count</ID>
@@ -8288,6 +8289,7 @@
               <ColumnID>score</ColumnID>
             </Source>
           </Source>
+          <Visible>false</Visible>
         </Measure>
         <Measure dwd:design-time-name="72e20494-f8bf-4c30-98af-6c0a4058ab93">
           <ID>Fact Quality Points Count</ID>
@@ -8340,6 +8342,32 @@
               <Type>Granularity</Type>
             </Attribute>
           </Attributes>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="635b9093-30b0-4539-8288-ef4c7066b31e">
+          <CubeDimensionID>ACD Login</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="34ccce86-775f-4689-b4c9-a61fca795c27">
+              <AttributeID>Dim Acd Login</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="d7de4543-3a2e-4b01-8cc9-0618f9e9c17a">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="7878ca26-8d41-442b-b516-b259ca1c9697">
+                    <TableID>mart_fact_quality_points</TableID>
+                    <ColumnID>acd_login_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="ManyToManyMeasureGroupDimension" dwd:design-time-name="9eb1a3cb-4407-4c9c-a2c0-6710a39a2829">
+          <CubeDimensionID>Team</CubeDimensionID>
+          <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
+        </Dimension>
+        <Dimension xsi:type="ManyToManyMeasureGroupDimension" dwd:design-time-name="2b1e71e4-ac60-487a-99a8-d3ff89a3465a">
+          <CubeDimensionID>Person</CubeDimensionID>
+          <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
       <Partitions />
