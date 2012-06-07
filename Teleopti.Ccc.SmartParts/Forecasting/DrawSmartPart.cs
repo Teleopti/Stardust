@@ -7,6 +7,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
+
 namespace Teleopti.Ccc.SmartParts.Forecasting
 {
     public class DrawSmartPart : IDrawSmartPart, IDisposable
@@ -15,7 +16,6 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
         private readonly Font _fontBold = new Font("Arial", 8, FontStyle.Bold);
         private readonly Color _defaultColor = Color.Green;
         private const string DateFormat = "g";
-        private const int OptimalWorkloadNameLength = 15;  // maximum length of the workload which can be displayed as Workload Name on forecast window.
 
         public Font DefaultFont
         {
@@ -39,11 +39,24 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
 
             if (index < workloadNames.Count)
             {
-                string name = workloadNames[index].Name;
-                
-                // if workload name length is greater than optimal workload name then we truncate the name till optimal workload length
-                if (name.Length > OptimalWorkloadNameLength)
-                    name = name.Substring(0, OptimalWorkloadNameLength) + "...";
+                var details = workloadNames[index];
+                string name = details.Name;
+
+                if (details.CharactersToShow.HasValue)
+                {
+                    name = name.Substring(0, (int)details.CharactersToShow) + "...";
+                }
+
+                else
+                {
+                    Size textSize = System.Windows.Forms.TextRenderer.MeasureText(name, DefaultFont);
+                    while (textSize.Width > 90)
+                    {
+                        name = name.Substring(0, name.Length - 4) + "...";
+                        textSize = System.Windows.Forms.TextRenderer.MeasureText(name, DefaultFont);
+                    }
+                    details.CharactersToShow = name.Length;
+                }
                 
                 drawProperties.Graphics.DrawString(name, DefaultFont, Brushes.Black, 0, drawProperties.Bounds.Y);
             }
@@ -71,12 +84,28 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             }
             else
             {
-                string workloadName = workloadNames[(rowIndex - 1) % rowsOfOneScenario].Name;
-                
-                // if workload name length is greater than optimal workload name then we truncate the name till optimal workload length
-                if (workloadName.Length > OptimalWorkloadNameLength)
-                    workloadName = workloadName.Substring(0, OptimalWorkloadNameLength) + "...";
-                
+                var details = workloadNames[(rowIndex - 1) % rowsOfOneScenario];
+                string workloadName = details.Name;
+
+                // check to truncate strings
+                if (details.CharactersToShow.HasValue)
+                {
+                    workloadName = workloadName.Substring(0, (int)details.CharactersToShow) + "...";
+                }
+                // reduce the pixelwidth of string to fit UI
+                else
+                {
+                    Size textSize = System.Windows.Forms.TextRenderer.MeasureText(workloadName, DefaultFont);
+                    while (textSize.Width > 90)
+                    {
+                        workloadName = workloadName.Substring(0, workloadName.Length - 4) + "...";
+                        textSize = System.Windows.Forms.TextRenderer.MeasureText(workloadName, DefaultFont);
+                    }
+                    details.CharactersToShow = workloadName.Length;
+                    workloadName = workloadName.Substring(0, (int)details.CharactersToShow);
+
+                }
+
                 drawProperties.Graphics.DrawString(workloadName, DefaultFont, Brushes.Black, drawProperties.NameColumnStartPosition, drawProperties.Bounds.Y);
             }
         }
