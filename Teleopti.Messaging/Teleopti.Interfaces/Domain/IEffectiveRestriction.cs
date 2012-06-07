@@ -111,14 +111,7 @@ namespace Teleopti.Interfaces.Domain
                                                                ICccTimeZoneInfo agentTimeZone,
 															   IEnumerable<IActivityRestrictableVisualLayer> layers);
 
-        /// <summary>
-        /// Determines whether this is a limited work day.
-        /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if [is limited work day]; otherwise, <c>false</c>.
-        /// </returns>
-        bool IsLimitedWorkday { get; }
-
+       
         /// <summary>
         /// Gets a value indicating whether this instance is restriction.
         /// returns true if one one more of IsPreferenceDay, IsRotationDay, IsAvailabilityDay or IsStudentAvailabilityDay is true

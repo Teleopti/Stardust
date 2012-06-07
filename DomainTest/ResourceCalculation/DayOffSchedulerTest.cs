@@ -473,6 +473,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                                  , null, null, null,
                                                                                  new List<IActivityRestriction>());
 
+            effectiveRestriction.NotAvailable = true;
+
             var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
 

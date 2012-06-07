@@ -103,3 +103,13 @@ IF EXISTS(SELECT * FROM sys.columns WHERE object_id=OBJECT_ID('dbo.StateGroupAct
 	END
 	
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2012-06-04
+--Desc: Add index for WorkloadDayBase
+----------------  
+
+CREATE NONCLUSTERED INDEX IX_WorkloadDayBase_Workload_WorkloadDate
+ON [dbo].[WorkloadDayBase] ([Workload],[WorkloadDate])
+INCLUDE ([Id])

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
@@ -6,6 +8,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	public interface IAgentRestrictionsView
 	{
 		void MergeHeaders();
+		void RefreshGrid();
 	}
 
 	public interface IAgentRestrictionsWarningDrawer
@@ -28,6 +31,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		private readonly IAgentRestrictionsDrawer _availableDrawer;
 		private const int ColCount = 12;
 		private const int HeaderCount = 1;
+		private readonly bool[] _sortDirection;
 
 		public AgentRestrictionsPresenter(IAgentRestrictionsView view, IAgentRestrictionsModel model, IAgentRestrictionsWarningDrawer warningDrawer, IAgentRestrictionsDrawer loadingDrawer, IAgentRestrictionsDrawer notAvailableDrawer, IAgentRestrictionsDrawer availableDrawer)
 		{
@@ -37,6 +41,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			_loadingDrawer = loadingDrawer;
 			_notAvailableDrawer = notAvailableDrawer;
 			_availableDrawer = availableDrawer;
+			_sortDirection = Enumerable.Repeat(false, ColCount + 1).ToArray();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
@@ -102,6 +107,27 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 				_availableDrawer.Draw(_view, e, displayRow);
 				
 			}
+		}
+
+		public void Sort(int column)
+		{
+			_sortDirection[column] = !_sortDirection[column];
+
+			if (column == 0) _model.SortAgentName(_sortDirection[column]); 
+			if (column == 1) _model.SortWarnings(_sortDirection[column]); 
+			if (column == 2) _model.SortPeriodType(_sortDirection[column]); 
+			if (column == 3) _model.SortStartDate(_sortDirection[column]); 
+			if (column == 4) _model.SortEndDate(_sortDirection[column]);
+			if (column == 5) _model.SortContractTargetTime(_sortDirection[column]); 
+			if (column == 6) _model.SortTargetDayOffs(_sortDirection[column]); 
+			if (column == 7) _model.SortContractCurrentTime(_sortDirection[column]);
+			if (column == 8) _model.SortCurrentDayOffs(_sortDirection[column]); 
+			if (column == 9) _model.SortMinimumPossibleTime(_sortDirection[column]); 
+			if (column == 10) _model.SortMaximumPossibleTime(_sortDirection[column]); 
+			if (column == 11) _model.SortScheduledAndRestrictionDayOffs(_sortDirection[column]);
+			if (column == 12) _model.SortOk(_sortDirection[column]); 
+			
+			_view.RefreshGrid();
 		}
 	}
 }

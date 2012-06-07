@@ -17,10 +17,10 @@
     <property name="Name" type="string" not-null="true" />
     <property name="TableName" type="string" not-null="true" />
     
-    <bag name="ValueCollection" cascade="all-delete-orphan" inverse="true">
+    <!--<bag name="ValueCollection" cascade="all-delete-orphan" inverse="true">
       <key column="Parent" />
       <one-to-many class="OptionalColumnValue"/>
-    </bag>
+    </bag>-->
 
     <many-to-one name="BusinessUnit"
      class="Teleopti.Ccc.Domain.Common.BusinessUnit"

@@ -52,7 +52,6 @@ packages/
 *Test.xml
 symbolmodule.xml
 *.ncov.bkp
-*.log.1
 *.sln
 Database/Tools/Restore/output
-log.txt*
+*.log.*

@@ -20,16 +20,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public IWorkload InitializeWorkload(IWorkload workload)
-        {
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-            {
-                var initializedWorkload = _repositoryFactory.CreateWorkloadRepository(uow).LoadWorkload(workload);
-
-                return initializedWorkload;
-            }
-        }
-
         public IList<IOutlier> InitializeOutliers(IWorkload workload)
         {
             IList<IOutlier> outliers;
@@ -81,9 +71,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var skillDayRepository = _repositoryFactory.CreateSkillDayRepository(uow);
-
+                var skillRepository = _repositoryFactory.CreateSkillRepository(uow);
 				uow.Reassociate(workload.Skill);
-                var skillDays = skillDayRepository.FindRange(period, workload.Skill, scenario);
+                var skillDays = skillDayRepository.FindRange(period, skillRepository.LoadSkill(workload.Skill), scenario);
                 skillDays = skillDayRepository.GetAllSkillDays(period, skillDays, workload.Skill, scenario, false);
 
                 //todo: Hmm, InitializeWorkPeriod, 

@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.tabSkillData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabSkillData.KeepSelectedTabInFrontRow = false;
             this.tabSkillData.Location = new System.Drawing.Point(0, 0);
-            this.tabSkillData.Multiline = true;
+            this.tabSkillData.Multiline = false;
             this.tabSkillData.Name = "tabSkillData";
             this.tabSkillData.Size = new System.Drawing.Size(772, 118);
             this.tabSkillData.TabGap = 10;

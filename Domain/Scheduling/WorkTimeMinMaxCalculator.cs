@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, date, effectiveRestriction);
 		}
 
-		private IWorkTimeMinMax WorkTimeMinMaxForAbsence(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
+		private static IWorkTimeMinMax WorkTimeMinMaxForAbsence(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
 		{
 			var person = scheduleDay.Person;
 			var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;

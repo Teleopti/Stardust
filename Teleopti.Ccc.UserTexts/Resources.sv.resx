@@ -2183,7 +2183,7 @@ Periods</comment>
     <comment>Validated talk time</comment>
   </data>
   <data name="ValidatedTasks" xml:space="preserve">
-    <value>Validerade samtal</value>
+    <value>Validerade uppgifter</value>
     <comment>Validated tasks</comment>
   </data>
   <data name="Validation" xml:space="preserve">
@@ -10380,5 +10380,26 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="FullDay" xml:space="preserve">
     <value>Hel dag</value>
+  </data>
+  <data name="YouShouldHaveXDaysOff" xml:space="preserve">
+    <value>Du ska ha {0} fridagar.</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Anywhere</value>
+  </data>
+  <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
+    <value>Du ska ha mellan {0} och {1} fridagar.</value>
+  </data>
+  <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
+    <value>Dina önskemål kan resultera i {0} fridagar.</value>
+  </data>
+  <data name="YouShouldWorkXHours" xml:space="preserve">
+    <value>Du ska arbeta {0} timmar.</value>
+  </data>
+  <data name="MissingAbsenceType" xml:space="preserve">
+    <value>Saknad frånvarotyp.</value>
+  </data>
+  <data name="AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime" xml:space="preserve">
+    <value>Redotid mot schemalagd kontraktstid</value>
   </data>
 </root>

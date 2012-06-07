@@ -1,4 +1,3 @@
-using System;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -21,14 +20,19 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         string Description { get; set; }
 
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        /// <value>The description.</value>
-        /// <remarks>
-        /// Created by: Viraj Siriwardana
-        /// Created date: 2008-07-24
-        /// </remarks>
-        Guid? ReferenceId { get; set; }
+		///// <summary>
+		///// Gets or sets the description.
+		///// </summary>
+		///// <value>The description.</value>
+		///// <remarks>
+		///// Created by: Viraj Siriwardana
+		///// Created date: 2008-07-24
+		///// </remarks>
+		//Guid? ReferenceId { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		IEntity ReferenceObject { get; set; }
     }
 }

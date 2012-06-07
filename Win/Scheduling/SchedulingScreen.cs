@@ -5417,6 +5417,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             using (PerformanceOutput.ForOperation("Loading people"))
             {
+            	SchedulerState.SchedulingResultState.OptionalColumns = new OptionalColumnRepository(uow).GetOptionalColumns<Person>();
                 var personRep = new PersonRepository(uow);
                 IPeopleLoader loader;
                 if (_teamLeaderMode)
@@ -8508,7 +8509,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void ToolStripMenuItemRestrictionViewTemp_MouseUp(object sender, MouseEventArgs e)
 		{
 			var persons = _schedulerState.FilteredPersonDictionary.Values.ToList();
-			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, _schedulingOptions, _ruleSetProjectionService);
+			if (persons.Count == 0) return;
+			var schedulePart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
+			var selectedPerson = persons.FirstOrDefault();
+			if(schedulePart != null) selectedPerson = schedulePart.Person;
+			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, _schedulingOptions, _ruleSetProjectionService, selectedPerson);
 			agentRestrictionView.ShowDialog(this);
 		}
     }

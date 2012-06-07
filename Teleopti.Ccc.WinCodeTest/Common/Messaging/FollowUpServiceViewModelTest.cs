@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
             _repositoryFactory = _mocker.StrictMock<IRepositoryFactory>();
             _unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
             _person = PersonFactory.CreatePerson();
-            _target = new FollowUpServiceViewModel(_person);
             _target = new FollowUpServiceViewModel(_person, _repositoryFactory, _unitOfWorkFactory);
             _testerForCommandModels = new TesterForCommandModels();
         }

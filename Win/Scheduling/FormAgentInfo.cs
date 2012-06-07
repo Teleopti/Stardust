@@ -57,7 +57,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             _ruleSetProjectionService = ruleSetProjectionService;
         }
 
-        public void UpdateData(IDictionary<IPerson, IScheduleRange> personDictionary, 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public void UpdateData(IDictionary<IPerson, IScheduleRange> personDictionary, 
             ICollection<DateOnly> dateOnlyList, ISchedulingResultStateHolder stateHolder,
             IDictionary<IPerson, IPersonAccountCollection> allAccounts)
         {
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _dateOnlyList = dateOnlyList;
             _stateHolder = stateHolder;
             _allAccounts = allAccounts;
-
+        	_optionalColumns = _stateHolder.OptionalColumns;
             update();
         }
 
@@ -584,11 +585,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             try
             {
-                foreach (var column in OptionalColumns)
+                foreach (var column in _optionalColumns)
                 {
                     createAndAddItem(listViewPerson, column.Name,
-                                     column.GetColumnValueById(person.Id) != null
-                                         ? column.GetColumnValueById(person.Id).Description
+									 person.GetColumnValue(column) != null
+                                         ? person.GetColumnValue(column).Description
                                          : "", 2);
                 }
             }
@@ -602,28 +603,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
             
-        }
-
-        private IEnumerable<IOptionalColumn> OptionalColumns
-        {
-            get
-            {
-                
-                if (_optionalColumns == null)
-                {
-                    using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                    {
-                        var rep = new OptionalColumnRepository(uow);
-                        _optionalColumns = rep.GetOptionalColumnValues<Person>();
-                        foreach (var optionalColumn in _optionalColumns)
-                        {
-                            //to load the values
-                            optionalColumn.GetColumnValueById(_selectedPerson.Id);
-                        }
-                    }
-                }
-                return _optionalColumns;
-            }
         }
 
         private void FormAgentInfoResizeEnd(object sender, EventArgs e)

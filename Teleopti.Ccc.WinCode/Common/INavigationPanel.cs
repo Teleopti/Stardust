@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.WinCode.Common
         bool RenameGroupPageEnabled { get; set; }
         bool DeleteGroupPageEnabled { get; set; }
         bool ModifyGroupPageEnabled { get; set; }
-        void ShowDataSourceException(DataSourceException dataSourceException, string dialogTitle);
         Cursor Cursor { get; set; }
     }
 }

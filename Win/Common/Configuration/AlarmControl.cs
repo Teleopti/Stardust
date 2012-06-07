@@ -152,8 +152,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _alarmTypes.Clear();
 			_alarmTypes.AddRange(_alarmTypeRepository.LoadAll());
 
-            ShowGrid();
+			if (_view!=null)
+			{
+				_view.LoadGrid();
+			}
         }
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			ShowGrid();
+		}
 
         public TreeFamily TreeFamily()
         {
