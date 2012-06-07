@@ -112,10 +112,12 @@ Scenario: Period feedback of contract time for employment type Fixed staff perio
 Scenario: Period feedback of contract time with target tolerance
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a contract with employment type Fixed staff normal work time
-	And I have a contract with an 8 hour average work time per day
-	And I have a contract with a target tolerance of negative 5 hours
-	And I have a contract with a target tolerance of positive 5 hours
+	And I have a contract with:
+		| Field                           | Value                        |
+		| Employment type                 | Fixed staff normal work time |
+		| Average work time per day       | 8                            |
+		| Negative target tolerance hours | 5                            |
+		| Positive target tolerance hours | 5                            |
 	And I have a contract schedule with 2 days off
 	When I view preferences
 	Then I should see a message that I should work 35 to 45 hours
