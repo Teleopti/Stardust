@@ -8,7 +8,8 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.DomainTest.Helper
 {
-    class GroupPageChangedMessageTest
+    [TestFixture]
+    public class GroupPageChangedMessageTest
     {
         private GroupPageChangedMessage _target;
         private Guid _tempGuid;

@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Messages.Denormalize;
 namespace Teleopti.Ccc.DomainTest.Helper
 {
     [TestFixture]
-    class PersonChangedMessageTest
+    public class PersonChangedMessageTest
     {
         private PersonChangedMessage _target;
         private Guid _tempGuid;
