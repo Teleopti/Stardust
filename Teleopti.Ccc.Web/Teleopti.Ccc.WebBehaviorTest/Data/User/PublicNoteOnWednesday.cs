@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 	public class PublicNoteOnWednesday : IUserDataSetup
 	{
 		public string PublicNote = "my public note";
+		public IScenario Scenario = DataContext.Data().Data<CommonScenario>().Scenario;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 			{
 				if (dateOnly.DayOfWeek != DayOfWeek.Tuesday) continue;
 
-				publicNoteRepository.Add(new PublicNote(user, dateOnly, TestData.Scenario, PublicNote));
+				publicNoteRepository.Add(new PublicNote(user, dateOnly, Scenario, PublicNote));
 			}
 		}
 	}

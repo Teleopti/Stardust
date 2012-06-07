@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class SchedulePeriodTargetTimeTimeCalculator : ISchedulePeriodTargetTimeCalculator
+	public class SchedulePeriodTargetTimeCalculator : ISchedulePeriodTargetTimeCalculator
     {
 
         public TimePeriod TargetWithTolerance(IScheduleMatrixPro matrix)
@@ -51,9 +52,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return contract.MinTimeSchedulePeriod;
 
 			var target = PeriodTarget(virtualSchedulePeriod, scheduleDays);
-			target = target.Add(TimeSpan.FromSeconds(target.TotalSeconds * virtualSchedulePeriod.Seasonality.Value));
+			target = ApplySeasonality(virtualSchedulePeriod, target);
 			target = ApplyBalance(virtualSchedulePeriod, target);
 			return target;
+		}
+
+		private static TimeSpan ApplySeasonality(IVirtualSchedulePeriod virtualSchedulePeriod, TimeSpan target)
+		{
+			return target.Add(TimeSpan.FromSeconds(target.TotalSeconds * virtualSchedulePeriod.Seasonality.Value));
 		}
 
 		private static TimeSpan PeriodTarget(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays) {
@@ -65,18 +71,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private static TimeSpan PeriodTargetForStaffDayWorkTime(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
-			TimeSpan target;
-			var daysOff = 0;
-			foreach (var day in scheduleDays)
-			{
-				var significant = day.SignificantPart();
-				if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
-					daysOff++;
-			}
-			target =
-				TimeSpan.FromSeconds((schedulePeriod.DateOnlyPeriod.DayCount() - daysOff)*
-				                     schedulePeriod.AverageWorkTimePerDay.TotalSeconds);
-			return target;
+			var daysOff = (
+			               	from d in scheduleDays
+			               	let restrictions = d.RestrictionCollection() ?? new IRestrictionBase[] {}
+			               	let dayOffPreferenceRestrictions = from r in restrictions.OfType<IPreferenceRestriction>()
+			               	                                   where r.DayOffTemplate != null
+			               	                                   select r
+			               	let significant = d.SignificantPart()
+			               	where
+			               		significant == SchedulePartView.DayOff ||
+			               		significant == SchedulePartView.ContractDayOff ||
+			               		dayOffPreferenceRestrictions.Any()
+			               	select d
+			               ).Count();
+
+			var workDays = schedulePeriod.DateOnlyPeriod.DayCount() - daysOff;
+
+			var periodTarget = TimeSpan.FromSeconds(workDays * schedulePeriod.AverageWorkTimePerDay.TotalSeconds);
+
+			return periodTarget;
 		}
 
 		private static TimeSpan ApplyBalance(IVirtualSchedulePeriod schedulePeriod, TimeSpan time)
@@ -87,4 +100,5 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return time;
 		}
 	}
+
 }

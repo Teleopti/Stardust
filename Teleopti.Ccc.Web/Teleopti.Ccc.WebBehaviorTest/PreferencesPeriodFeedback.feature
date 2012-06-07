@@ -45,9 +45,9 @@ Scenario: Period feedback of contract day off tolerance
 	And I have a scheduling period of 1 week
 	And I have a contract schedule with 2 days off
 	And I have a contract with:
-		| Field						 | Value |
-		| Positive day off tolerance | 1     |
-		| Negative day off tolerance | 1     |
+	| Field                      | Value  |
+	| Positive day off tolerance | 1      |
+	| Negative day off tolerance | 1      |
 	When I view preferences
 	Then I should see a message that I should have between 1 and 3 days off
 
@@ -55,9 +55,17 @@ Scenario: Period feedback of contract day off tolerance
 
 Scenario: Period feedback of absence on contract schedule day off
 	Given I am an agent
+	And I am swedish
 	And I have a scheduling period of 1 week
-	And I have a contract schedule with weekday 6 day off
-	And I have a contract schedule with weekday 7 day off
+	And I have a contract schedule with:
+	| Field              | Value |
+	| Monday work day    | true  |
+	| Tuesday work day   | true  |
+	| Wednesday work day | true  |
+	| Thursday work day  | true  |
+	| Friday work day    | true  |
+	| Saturday work day  | false |
+	| Sunday work day    | false |
 	And I have a absence preference on weekday 5
 	And I have a absence preference on weekday 6
 	When I view preferences
@@ -69,9 +77,9 @@ Scenario: Period feedback of contract time for employment type Fixed staff norma
 	Given I am an agent
 	And I have a scheduling period of 1 week
 	And I have a contract with:
-		| Field						 | Value							|
-		| Employment type			 | Fixed staff normal work time     |
-		| Average work time per day  | 8								|
+		| Field                     | Value                        |
+		| Employment type           | Fixed staff normal work time |
+		| Average work time per day | 8                            |
 	And I have a contract schedule with 2 days off
 	When I view preferences
 	Then I should see a message that I should work 40 hours
@@ -79,8 +87,10 @@ Scenario: Period feedback of contract time for employment type Fixed staff norma
 Scenario: Period feedback of contract time for employment type Fixed staff day work time
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a contract with employment type Fixed staff day work time
-	And I have a contract with an 8 hour average work time per day
+	And I have a contract with:
+		| Field                     | Value                     |
+		| Employment type           | Fixed staff day work time |
+		| Average work time per day | 8                         |
 	And I have a day off preference on weekday 6
 	And I have a day off preference on weekday 7
 	When I view preferences
@@ -89,8 +99,10 @@ Scenario: Period feedback of contract time for employment type Fixed staff day w
 Scenario: Period feedback of contract time for employment type Fixed staff period work time
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a contract with employment type Fixed staff period work time
-	And I have a contract with an 8 hour average work time per day
+	And I have a contract with:
+		| Field                     | Value                        |
+		| Employment type           | Fixed staff period work time |
+		| Average work time per day | 8                            |
 	And I have a contract schedule with 2 days off
 	When I view preferences
 	Then I should see a message that I should work 40 hours

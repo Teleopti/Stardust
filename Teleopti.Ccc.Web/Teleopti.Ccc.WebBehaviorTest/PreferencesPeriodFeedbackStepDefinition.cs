@@ -32,15 +32,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Given(@"I have a day off scheduled on weekday (\d)")]
-		public void GivenIHaveADayOffScheduledOnWeekday3(int thOfDay)
+		public void GivenIHaveADayOffScheduledOnWeekday3(int weekday)
 		{
-			ScenarioContext.Current.Pending();
+			UserFactory.User().Setup(new DayOffScheduled(weekday));
 		}
 
 		[Given(@"I have a day off preference on weekday (\d)")]
 		public void GivenIHaveADayOffPreferenceOnWeekday3(int weekday)
 		{
-			UserFactory.User().Setup(new DayOffPreference(weekday));
+			UserFactory.User().Setup(new DayOffPreferenceOnWeekday(weekday));
 		}
 
 		[Given(@"I have a contract with:")]
@@ -51,16 +51,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().UserData<PersonPeriod>().Contract = contract;
 		}
 
-		[Given(@"I have a contract schedule with weekday (\d) day off")]
-		public void GivenIHaveAContractScheduleWithWeekday6DayOff(int thOfDay)
+		[Given(@"I have a contract schedule with:")]
+		public void GivenIHaveAContractScheduleWith(Table table)
 		{
-			ScenarioContext.Current.Pending();
+			var contractSchedule = table.CreateInstance<ContractScheduleFromTable>();
+			UserFactory.User().Setup(contractSchedule);
+			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
 		}
 
 		[Given(@"I have a absence preference on weekday (\d)")]
-		public void GivenIHaveAAbsencePreferenceOnWeekday5(int thOfDay)
+		public void GivenIHaveAAbsencePreferenceOnWeekday5(int weekday)
 		{
-			ScenarioContext.Current.Pending();
+			UserFactory.User().Setup(new AbsencePreferenceOnWeekday(weekday));
 		}
 
 
@@ -70,31 +72,26 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a message that I should have (\d) days off")]
 		public void ThenIShouldSeeAMessageThatIShouldHave2DaysOff(int numOfDaysoff)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetDaysOff.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff)));
 		}
 
 		[Then(@"I should see a message that I should have between (\d) and (\d) days off")]
 		public void ThenIShouldSeeAMessageThatIShouldHaveBetweenXAndYDaysOff(int lower, int upper)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetDaysOff.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveBetweenXAndYDaysOff, lower, upper)));
 		}
 
 		[Then(@"I should see a message that my preferences can result (\d) days off")]
 		public void ThenIShouldSeeAMessageThatMyPreferencesCanResult2DaysOff(int daysoff)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackPossibleResultDaysOff.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXDaysOff, daysoff)));
 		}
 
 		[Then(@"I should see a message that I should work (\d+) hours")]
 		public void ThenIShouldSeeAMessageThatIShouldWorkXHours(int hours)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetHours.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkXHours, hours)));
 		}
 
 	}
-
 }

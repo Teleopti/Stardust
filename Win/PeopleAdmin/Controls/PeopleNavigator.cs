@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
                 using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
                     var persons = _personRepository.FindPeople(_selectorPresenter.SelectedPersonGuids);
-                    var messageForm = new PushMessageForm(persons);
+                    var messageForm = new PushMessageForm(persons,_unitOfWorkFactory,_container.Resolve<IRepositoryFactory>());
                     messageForm.ShowFromWinForms(false);
                 }
             });

@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 return;
 
             ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
-                new SchedulePeriodTargetTimeTimeCalculator(); //Out
+                new SchedulePeriodTargetTimeCalculator(); //Out
 
             _schedulePeriodTargetTime = schedulePeriodTargetTimeCalculator.TargetTime(_matrix);
             _schedulePeriodTargetMinMax = schedulePeriodTargetTimeCalculator.TargetWithTolerance(_matrix);
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private void setMinMaxData()
         {
             ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
-                       new SchedulePeriodTargetTimeTimeCalculator(); //Out
+                       new SchedulePeriodTargetTimeCalculator(); //Out
 
             IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder);
 

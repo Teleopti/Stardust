@@ -11,6 +11,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	public class ShiftsForTwoWeeks : IUserDataSetup
 	{
+		public IScenario Scenario = DataContext.Data().Data<CommonScenario>().Scenario;
+
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var today = DateOnly.Today;
@@ -28,14 +30,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 			{
 				if (date.Date.DayOfWeek == DayOfWeek.Saturday || date.Date.DayOfWeek == DayOfWeek.Sunday)
 				{
-					var personDayOff = PersonDayOffFactory.CreatePersonDayOff(user, TestData.Scenario, date, TestData.DayOffTemplate);
+					var personDayOff = PersonDayOffFactory.CreatePersonDayOff(user, Scenario, date, TestData.DayOffTemplate);
 					personDayOffRepository.Add(personDayOff);
 				}
 				else
 				{
 					var baseDate = timeZone.ConvertTimeToUtc(date.Date);
 					var layerPeriod = new DateTimePeriod(baseDate.AddHours(20), baseDate.AddHours(28));
-					var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, TestData.Scenario);
+					var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
 					assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, layerPeriod, TestData.ShiftCategory));
 
 					layerPeriod = layerPeriod.ChangeStartTime(TimeSpan.FromHours(3)).ChangeEndTime(TimeSpan.FromHours(-4));

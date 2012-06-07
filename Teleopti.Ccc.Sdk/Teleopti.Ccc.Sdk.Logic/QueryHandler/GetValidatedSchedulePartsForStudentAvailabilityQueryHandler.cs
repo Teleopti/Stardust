@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					//IScheduleTargetTimeCalculator periodTargetTimeCalculator = new ScheduleTargetTimeCalculator();
 
 					ISchedulePeriodTargetTimeCalculator periodTargetTimeCalculator =
-						new SchedulePeriodTargetTimeTimeCalculator();
+						new SchedulePeriodTargetTimeCalculator();
 					var schedulePeriodTargetBalanced =
 						periodTargetTimeCalculator.TargetTime(scheduleMatrix);
 					var tolerance = periodTargetTimeCalculator.TargetWithTolerance(scheduleMatrix);

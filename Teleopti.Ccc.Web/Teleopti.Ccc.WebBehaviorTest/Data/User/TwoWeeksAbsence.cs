@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	public class TwoWeeksAbsence : IUserDataSetup
 	{
+		public IScenario Scenario = DataContext.Data().Data<CommonScenario>().Scenario;
+
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var date = DateTime.Now.Date.AddDays(-7);
@@ -18,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 			var endTime = startTime.AddDays(14);
 			var period = new DateTimePeriod(startTime, endTime);
 
-			var absence = new PersonAbsence(user, TestData.Scenario, new AbsenceLayer(TestData.Absence, period));
+			var absence = new PersonAbsence(user, Scenario, new AbsenceLayer(TestData.Absence, period));
 
 			var absenceRepository = new PersonAbsenceRepository(uow);
 

@@ -2,8 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Ccc.WinCode.Common.Filter;
 using Teleopti.Ccc.WinCode.Common.Messaging.Filters;
@@ -22,21 +20,20 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 	public class FollowUpServiceViewModel : IObservable<FollowUpPushMessageViewModel>
 	{
 		private readonly IPerson _sender;
+		private readonly IRepositoryFactory _repositoryFactory;
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly PagingDetail _pagingDetail = new PagingDetail {Take = 20};
 
 		public FollowUpServiceViewModel(IPerson sender, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_sender = sender;
+			_repositoryFactory = repositoryFactory;
+			_unitOfWorkFactory = unitOfWorkFactory;
 			Load = new LoadCommandModel(this, repositoryFactory, unitOfWorkFactory);
 			LoadNextPage = new LoadNextCommandModel(this, _pagingDetail);
 			LoadPreviousPage = new LoadPreviousCommandModel(this, _pagingDetail);
 			PushMessages = new ObservableCollection<IFollowUpPushMessageViewModel>();
 			PushMessageFilter = new SpecificationFilterViewModel<IFollowUpPushMessageViewModel>(PushMessages, new PushMessageIsRepliedSpecification());
-		}
-
-		public FollowUpServiceViewModel(IPerson sender)
-			: this(sender, new RepositoryFactory(), UnitOfWorkFactory.Current)
-		{
 		}
 
 		public ICommand LoadNextPage { get; private set; }
@@ -57,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 
 			foreach (IPushMessage message in repository.Find(_sender,_pagingDetail))
 			{
-				IFollowUpPushMessageViewModel modelToAdd = new FollowUpPushMessageViewModel(message);
+				IFollowUpPushMessageViewModel modelToAdd = new FollowUpPushMessageViewModel(message,_repositoryFactory,_unitOfWorkFactory);
 				modelToAdd.Observables.Add(this);
 				PushMessages.Add(modelToAdd);
 			}

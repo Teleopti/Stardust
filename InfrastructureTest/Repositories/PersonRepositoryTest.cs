@@ -1628,6 +1628,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection));
 		}
 
+		[Test]
+		public void ShouldSaveOptionalColumnValueOnPerson()
+		{
+			var column = new OptionalColumn("COL1"){TableName = "Person"};
+			PersistAndRemoveFromUnitOfWork(column);
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			per1.AddOptionalColumnValue(new OptionalColumnValue("A VALUE"),column );
+			PersistAndRemoveFromUnitOfWork(per1);
+
+			IList<IPerson> testList = new List<IPerson>(
+					new PersonRepository(UnitOfWork).FindAllSortByName());
+			Assert.AreEqual(testList[0], per1);
+			Assert.That(testList[0].OptionalColumnValueCollection.Count,Is.EqualTo(1));
+		}
+
 		private static void verifyPermissionInfoIsLazy(bool expected, IPerson userRetOk)
 		{
 			Assert.AreEqual(expected,

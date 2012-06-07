@@ -55,7 +55,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			UserFactory.User().Setup(new Agent());
 			UserFactory.User().Setup(new SchedulePeriod());
-			UserFactory.User().Setup(new PersonPeriod {ContractSchedule = TestData.DayOffTodayContractSchedule});
+			var contractSchedule = new ContractScheduleFromTable
+			                       	{
+			                       		MondayWorkDay = false,
+			                       		TuesdayWorkDay = false,
+			                       		WednesdayWorkDay = false,
+			                       		ThursdayWorkDay = false,
+			                       		FridayWorkDay = false,
+			                       		SaturdayWorkDay = false,
+			                       		SundayWorkDay = false
+			                       	};
+			UserFactory.User().Setup(contractSchedule);
+			UserFactory.User().Setup(new PersonPeriod { ContractSchedule = contractSchedule });
 			UserFactory.User().Setup(new ScheduleIsPublished());
 		}
 

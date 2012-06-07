@@ -78,10 +78,17 @@
     </Compile>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="Data\User\AbsencePreferenceOnWeekday.cs" />
+    <Compile Include="Data\User\CommonScenario.cs" />
+    <Compile Include="Data\User\ContractScheduleFromTable.cs" />
+    <Compile Include="Data\User\DayOffPreferenceOnWeekday.cs" />
+    <Compile Include="Data\User\IContractScheduleSetup.cs" />
+    <Compile Include="Data\User\SecondScenario.cs" />
     <Compile Include="Data\DataFactory.cs" />
     <Compile Include="Data\User\CommonContract.cs" />
     <Compile Include="Data\User\ContractFromTable.cs" />
     <Compile Include="Data\User\ContractScheduleWith2DaysOff.cs" />
+    <Compile Include="Data\User\DayOffScheduled.cs" />
     <Compile Include="Data\User\IContractSetup.cs" />
     <Compile Include="Data\User\UserContractSchedule.cs" />
     <Compile Include="PreferencesPeriodFeedbackStepDefinition.cs" />
