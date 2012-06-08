@@ -165,13 +165,13 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
 
 		 [Test]
-		 public void ShouldBeValidForTimespanWithinDayWhenBothNull()
+		 public void ShouldBeValidForTimeSpanWithinDayWhenBothNull()
 		 {
 		 	target.IsValidFor(TimeSpan.FromHours(12)).Should().Be.True();
 		 }
 
 		 [Test]
-		 public void ShouldBeInvalidForTimespanOutsideDayWhenBothNull()
+		 public void ShouldBeInvalidForTimeSpanOutsideDayWhenBothNull()
 		 {
 		 	target.IsValidFor(TimeSpan.FromHours(25)).Should().Be.False();
 		 }
@@ -184,28 +184,28 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		 }
 
 		 [Test]
-		 public void ShouldBeInValidForTimespanBeforeStartTime()
+		 public void ShouldBeInvalidForTimeSpanBeforeStartTime()
 		 {
 			 target.StartTime = TimeSpan.FromHours(8);
 			 target.IsValidFor(TimeSpan.FromHours(7)).Should().Be.False();
 		 }
 
 		 [Test]
-		 public void ShouldBeValidForTimespanBeforeEndtime()
+		 public void ShouldBeValidForTimeSpanBeforeEndTime()
 		 {
 		 	target.EndTime = TimeSpan.FromHours(8);
 			 target.IsValidFor(TimeSpan.FromHours(7)).Should().Be.True();
 		 }
 
 		 [Test]
-		 public void ShouldBeInvalidForTimespanAfterEndtime()
+		 public void ShouldBeInvalidForTimeSpanAfterEndTime()
 		 {
 			 target.EndTime = TimeSpan.FromHours(8);
 			 target.IsValidFor(TimeSpan.FromHours(9)).Should().Be.False();
 		 }
 
 		 [Test]
-		 public void ShouldBeInvalidForTimepanBeforePeriod()
+		 public void ShouldBeInvalidForTimeSpanBeforePeriod()
 		 {
 		 	target.StartTime = TimeSpan.FromHours(8);
 		 	target.EndTime = TimeSpan.FromHours(10);
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		 }
 
 		 [Test]
-		 public void ShouldBeInvalidForTimepanAfterPeriod()
+		 public void ShouldBeInvalidForTimeSpanAfterPeriod()
 		 {
 			 target.StartTime = TimeSpan.FromHours(8);
 			 target.EndTime = TimeSpan.FromHours(10);
