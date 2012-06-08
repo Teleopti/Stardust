@@ -218,6 +218,11 @@ namespace Teleopti.Ccc.Domain.Common
 			return _contractScheduleWeeks.Count*7;
 		}
 
+		/// <summary>
+		/// Creates the contract workdays list.
+		/// </summary>
+		/// <param name="personWeekStartDay">The person week start day.</param>
+		/// <returns></returns>
 		private BitArray createContractWorkdaysList(DayOfWeek personWeekStartDay)
 		{
 			int bitArrayLength = schemaLength();
@@ -232,7 +237,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 				for (int dayIndexInWeek = 0; dayIndexInWeek < 7; dayIndexInWeek++)
 				{
-					DayOfWeek currentDay = transformDayOfWeek(dayIndexInWeek, personWeekStartDay);
+					DayOfWeek currentDay = getCorrectDayOfWeek(dayIndexInWeek, personWeekStartDay);
 					result[bitArrayCounter] = currentWeek.IsWorkday(currentDay);
 					bitArrayCounter++;
 				}
@@ -241,14 +246,19 @@ namespace Teleopti.Ccc.Domain.Common
 			return result;
 		}
 
-		private static DayOfWeek transformDayOfWeek(int dayIndexInWeek, DayOfWeek personWeekStartDay)
+		/// <summary>
+		/// Gets the correct day of week by the index that can be used to question the Contract week..
+		/// </summary>
+		/// <param name="dayIndexInWeek">The day index in week. Index 0 is always the start day in the person period week start day.</param>
+		/// <param name="personWeekStartDay">The person week start day.</param>
+		/// <returns></returns>
+		private static DayOfWeek getCorrectDayOfWeek(int dayIndexInWeek, DayOfWeek personWeekStartDay)
 		{
 			int personWeekStartDayIndex = (int)personWeekStartDay;
 			int realIndex = (dayIndexInWeek + personWeekStartDayIndex) % 7;
 			DayOfWeek resultDay = (DayOfWeek)realIndex;
 			return resultDay;
 		}
-
 
     	/// <summary>
 		/// Calculates the week start offset between the period start day and the contract start day.
