@@ -10399,7 +10399,4 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="MissingAbsenceType" xml:space="preserve">
     <value>Saknad frånvarotyp.</value>
   </data>
-  <data name="AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime" xml:space="preserve">
-    <value>Redotid mot schemalagd kontraktstid</value>
-  </data>
 </root>
