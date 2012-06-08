@@ -30,18 +30,35 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             DateTime start = schedulePart.ProjectedLayerCollection[0].Period.LocalStartDateTime;
             DateTime end = schedulePart.ProjectedLayerCollection[schedulePart.ProjectedLayerCollection.Length -1].Period.LocalEndDateTime;
 
-            ShiftCategoryDto shiftCategoryDto =
-                GetShiftCategory(schedulePart.PersonAssignmentCollection[0].MainShift.ShiftCategoryId);
-            string category = shiftCategoryDto.Name;
-           
-            ColorDto categoryColor = shiftCategoryDto.DisplayColor;
+        	var emptyColor = Color.Empty;
+			string category = string.Empty;
 
-            Height = Render(top, start, category, end, new TimeSpan( schedulePart.ContractTime.Ticks),
+        	ColorDto categoryColor = new ColorDto
+        	                         	{
+        	                         		Alpha = emptyColor.A,
+        	                         		AlphaSpecified = true,
+        	                         		Blue = emptyColor.B,
+        	                         		BlueSpecified = true,
+        	                         		Green = emptyColor.G,
+        	                         		GreenSpecified = true,
+        	                         		Red = emptyColor.R,
+        	                         		RedSpecified = true
+        	                         	};
+
+			if (schedulePart.PersonAssignmentCollection.Length > 0 && schedulePart.PersonAssignmentCollection[0].MainShift != null)
+			{
+				ShiftCategoryDto shiftCategoryDto =
+					GetShiftCategory(schedulePart.PersonAssignmentCollection[0].MainShift.ShiftCategoryId);
+
+				category = shiftCategoryDto.Name;
+				categoryColor = shiftCategoryDto.DisplayColor;
+			}
+        	Height = Render(top, start, category, end, TimeSpan.FromTicks(schedulePart.ContractTime.Ticks),
                              categoryColor, headerTop, schedulePart.ProjectedLayerCollection, details, schedulePart.PersonMeetingCollection);
 
 
             Template.Reset(new SizeF(columnWidth, Height));
-            Height = Render(top, start, category, end, new TimeSpan( schedulePart.ContractTime.Ticks),
+            Height = Render(top, start, category, end, TimeSpan.FromTicks(schedulePart.ContractTime.Ticks),
                              categoryColor, headerTop, schedulePart.ProjectedLayerCollection, details, schedulePart.PersonMeetingCollection);
 
         }
