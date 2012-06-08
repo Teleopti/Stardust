@@ -1149,7 +1149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person);
 
 			Session.Clear();
-			var loadedPerson = target.FindPeopleInOrganization(new DateTimePeriod(2000, 1, 1, 2001, 1, 1), true).First();
+			var loadedPerson = target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), true).First();
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonSchedulePeriodCollection.First().ShiftCategoryLimitationCollection()[0].ShiftCategory));
 		}
 
