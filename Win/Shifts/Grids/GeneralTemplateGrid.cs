@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             _accessibilityColumn = new DropDownColumn<IGeneralTemplateViewModel, string>("Accessibility",
                                                                                    UserTexts.Resources.Accessibility,
                                                                                    Presenter.Explorer.Model.AccessibilityCollection,
-                                                                                   "Accessibility",
+                                                                                   "",
                                                                                    UserTexts.Resources.Available);
             AddColumn(_accessibilityColumn);
 
