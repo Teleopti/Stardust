@@ -121,6 +121,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
+		public DateTime MainShiftStartDateTime
+		{
+			get { return MainShiftProjection.Period().Value.StartDateTime; }
+		}
+
+		public DateTime MainShiftEndDateTime
+		{
+			get { return MainShiftProjection.Period().Value.EndDateTime; }
+		}
+
         public DayOfWeek DayOfWeek { get { return _dayOfWeek; } }
 
         public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, ReadOnlyCollection<IPersonAssignment> personAssignments)

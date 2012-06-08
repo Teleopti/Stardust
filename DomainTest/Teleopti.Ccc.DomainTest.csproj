@@ -295,6 +295,7 @@
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPersonTest.cs" />
     <Compile Include="ResourceCalculation\LegalStateCheckerOptionsTest.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferencesTest.cs" />
+    <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryCreatorTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculateDaysDeciderTest.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityCheckerTest.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryCheckerTest.cs" />
