@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Properties;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
     [Serializable]
-    public class ActivityDropDownCellModel : DropDownCellStaticModel
+    public class ActivityDropDownCellModel : GridComboBoxCellModel
     {
         public ActivityDropDownCellModel(GridModel grid)
             : base(grid)
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         private static IActivity GetActivityFromName(GridStyleInfo style, string text)
         {
-            return ((IEnumerable<IActivity>)style.DataSource).FirstOrDefault(activity => activity.ToString().Equals(text) || activity.Name.Equals(text));
+            return ((IEnumerable<IActivity>)style.DataSource).FirstOrDefault(activity => activity.ToString() == text || activity.Name.StartsWith(text,StringComparison.CurrentCultureIgnoreCase));
         }
 
         public override bool ApplyText(GridStyleInfo style, string text)
@@ -67,107 +65,39 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         }
     }
 
-    public class ActivityPickerRenderer : StaticDropDownCellRenderer
+    public class ActivityPickerRenderer : GridComboBoxCellRenderer
     {
-        private ListBox _listBox;
         private readonly Image _masterImage = Resources.MasterActivity16x16;
-        private IList<IActivity> _dataSource = new List<IActivity>();
-
+        
         public ActivityPickerRenderer(GridControlBase grid, ActivityDropDownCellModel cellModel)
             : base(grid, cellModel)
         {
-            DropDownButton = new GridCellComboBoxButton(this);
-            MakeListBox();
         }
 
-        private void MakeListBox()
-        {
-            _listBox = new ListBox();
-            _listBox.Dock = DockStyle.Fill;
-            _listBox.Visible = true;
-            _listBox.DisplayMember = "Name";
-            _listBox.DrawMode = DrawMode.OwnerDrawFixed;
-            _listBox.ItemHeight = 18;
-            
-            _listBox.DrawItem += ListBoxDrawItem;
-            _listBox.SelectedIndexChanged += ListBoxSelectedIndexChanged;
-        }
-        public override void ChildClosing(IPopupChild childUI, PopupCloseType popupCloseType)
-        {
-            if (!NotifyCurrentCellChanging())
-            {
-                return;
-            }
-            ControlValue = _listBox.SelectedItem;
-            Grid.CurrentCell.Invalidate();
-            Grid.InvalidateRange(GridRangeInfo.Cell(RowIndex, ColIndex));
-            NotifyCurrentCellChanged();
-            Grid.CurrentCell.MoveTo(GridRangeInfo.Cell(RowIndex, ColIndex + 1));
-            Grid.CurrentCell.MoveTo(GridRangeInfo.Cell(RowIndex, ColIndex));
-            
-            DropDownContainerCloseDropDown(childUI, new PopupClosedEventArgs(popupCloseType));
-        }
+		protected override ListBox CreateListBoxPart()
+		{
+			var listBox = base.CreateListBoxPart();
+			listBox.DrawMode = DrawMode.OwnerDrawFixed;
+			listBox.ItemHeight = 18;
+			listBox.DrawItem += ListBoxDrawItem;
+			return listBox;
+		}
 
-        private void ListBoxSelectedIndexChanged(object sender, EventArgs e)
-        {
-            CurrentCell.CloseDropDown(PopupCloseType.Done);
-        }
+		protected override TextBoxBase CreateTextBox()
+		{
+			var textBox = base.CreateTextBox();
+			return textBox;
+		}
 
-        public override void DropDownContainerShowedDropDown(object sender, EventArgs e)
-        {
-            DropDownContainer.FocusParent();
-            NotifyShowedDropDown();
-            var activity = ControlValue as IActivity;
-            if (activity != null)
-            {
-                _listBox.SelectedIndexChanged -= ListBoxSelectedIndexChanged;
-                _listBox.SelectedIndex = -1;
-                _listBox.SelectedItem = activity;
-                _listBox.SelectedIndexChanged += ListBoxSelectedIndexChanged;
-            }
-        }
-
-        public override void DropDownContainerShowingDropDown(object sender, CancelEventArgs e)
-        {
-            if (e == null) return;
-
-            var width = Grid.GetColWidth(ColIndex);
-            DropDownContainer.Size = new Size(width, 500);
-
-            var cntItems = _dataSource.Count;
-            if (cntItems > 15)
-                cntItems = 15;
-
-            var size = new Size(width, 18 * cntItems);
-            
-            var args = new GridCurrentCellShowingDropDownEventArgs(size);
-            Grid.RaiseCurrentCellShowingDropDown(args);
-            if (args.Cancel)
-            {
-                e.Cancel = true;
-            }
-            else
-            {
-                 DropDownContainer.Size = size;
-            }
-            DropDownContainer.Height = _listBox.Height;
-            
-        }
-
-        protected override void InitializeDropDownContainer()
-        {
-            base.InitializeDropDownContainer();
-            DropDownContainer.Controls.Add(_listBox);
-        }
-        
-        void ListBoxDrawItem(object sender, DrawItemEventArgs e)
+        private void ListBoxDrawItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return;
 
             e.DrawBackground();
 
-            var activity = _listBox.Items[e.Index] as IActivity;
-            var masterActivity = _listBox.Items[e.Index] as IMasterActivity;
+        	var item = ListBoxPart.Items[e.Index];
+            var activity = item as IActivity;
+            var masterActivity = item as IMasterActivity;
             var color = Color.Black;
             var style = FontStyle.Regular;
             Image theImage = null;
@@ -197,23 +127,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             e.DrawFocusRectangle();
         }
 
-
         protected override void OnDraw(Graphics g, Rectangle clientRectangle, int rowIndex, int colIndex, GridStyleInfo style)
         {
             if (g == null) return;
             if (style == null) return;
 
             var activity = style.CellValue as IActivity;
-
-            if (_listBox != null && _listBox.DataSource == null)
-            {
-                _listBox.SelectedIndexChanged -= ListBoxSelectedIndexChanged;
-                _dataSource = (IList<IActivity>)style.DataSource;
-                _listBox.DataSource = style.DataSource;
-                _listBox.SelectedIndexChanged += ListBoxSelectedIndexChanged;
-
-                _listBox.SelectedItem = activity;
-            }
 
             var masterActivity = activity as IMasterActivity;
             var color = Color.Black;
@@ -241,6 +160,5 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 { g.DrawString(activity.Name, fontBold, customBrush, rect); }
             }
         }
-
     }
 }
