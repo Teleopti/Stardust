@@ -93,10 +93,9 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         bool HasValue();
 
-        /// <summary>
-        /// Returns a valid timeperiod limited by the minimum and/or maximum values defined by the limiter.
-        /// </summary>
-        /// <returns></returns>
-        TimePeriod ValidPeriod();
+		 /// <summary>
+		 /// Determines if limitation is valid for <paramref name="timeSpan"/>
+		 /// </summary>
+    	bool IsValidFor(TimeSpan timeSpan);
     }
 }

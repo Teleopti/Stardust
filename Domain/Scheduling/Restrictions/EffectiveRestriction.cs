@@ -83,17 +83,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         {
 			TimePeriod workShiftTimePeriod = workShiftProjection.TimePeriod;
 
-            TimePeriod validPeriod = StartTimeLimitation.ValidPeriod();
-            if (!validPeriod.ContainsPart(workShiftTimePeriod.StartTime))
+            if(!StartTimeLimitation.IsValidFor(workShiftTimePeriod.StartTime))
                 return false;
 
-            validPeriod = EndTimeLimitation.ValidPeriod();
-            if (!validPeriod.ContainsPart(workShiftTimePeriod.EndTime))
+				if (!EndTimeLimitation.IsValidFor(workShiftTimePeriod.EndTime))
                 return false;
 
-            validPeriod = WorkTimeLimitation.ValidPeriod();
             TimeSpan contractTime = workShiftProjection.ContractTime;
-            if (!validPeriod.ContainsPart(contractTime))
+				if (!WorkTimeLimitation.IsValidFor(contractTime))
                 return false;
 
             if (ShiftCategory != null)
