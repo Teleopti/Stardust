@@ -971,6 +971,8 @@ namespace Teleopti.Ccc.Win.Grouping
         /// </remarks>
         private void HandleGroupMove(TreeNodeAdv sourceNode, TreeNodeAdv destinationNode)
         {
+            if (sourceNode.Equals(destinationNode))
+                return;
             if ((GetTreeNodeLevel(sourceNode.Level) == TreeElementLevel.Root &&
                 GetTreeNodeLevel(destinationNode.Level) == TreeElementLevel.Root) ||
 
@@ -991,11 +993,6 @@ namespace Teleopti.Ccc.Win.Grouping
                     //Add other sub tree recursively here
                     AddChildMembersToDestinatioNodeRecursively(sourceNode, childPersonGroup);
                     destinationGroup.AddChildGroup(childPersonGroup);
-                    if (_cutSourceNode != null)
-                        for (int i = 0; i < _cutSourceNode.Count; i++)
-                        {
-                            _cutSourceNode[i].Move(_rightMouseDownNodeCached[0].Nodes);
-                        }
                 }
             }
 
@@ -1004,8 +1001,8 @@ namespace Teleopti.Ccc.Win.Grouping
             {
                 //2
                 ChildPersonGroup sourceRootPersonGroup = sourceNode.TagObject as ChildPersonGroup;
-                PersonGroupBase parentPersonGroupBase = sourceNode.Parent.TagObject as PersonGroupBase;
-
+                PersonGroupBase parentPersonGroupBase = sourceNode.Parent.TagObject as PersonGroupBase;    
+ 
                 if (sourceRootPersonGroup != null && parentPersonGroupBase != null)
                 {
                     //remove the group from the parent of the source node
@@ -1016,7 +1013,6 @@ namespace Teleopti.Ccc.Win.Grouping
                     sourceNode.TagObject = rootPersonGroup;
                     //Add other sub tree recursively here
                     AddChildMembersToDestinatioNodeRecursively(sourceNode, rootPersonGroup);
-                    //destinationRootPersonGroup.AddChildGroup(rootPersonGroup);
                     GroupPage.AddRootPersonGroup(rootPersonGroup);
                 }
             }
@@ -1042,6 +1038,14 @@ namespace Teleopti.Ccc.Win.Grouping
                     sourceNode.TagObject = childPersonGroup;
                     AddChildMembersToDestinatioNodeRecursively(sourceNode, childPersonGroup);
                     destinationGroup.AddChildGroup(childPersonGroup);
+                }
+            }
+
+            if (_cutSourceNode != null)
+            {
+                for (var i = 0; i < _cutSourceNode.Count; i++)
+                {
+                    _cutSourceNode[i].Move(_rightMouseDownNodeCached[0].Nodes, i);
                 }
             }
         }
