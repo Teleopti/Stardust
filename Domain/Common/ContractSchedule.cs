@@ -178,6 +178,11 @@ namespace Teleopti.Ccc.Domain.Common
             return ret;
         }
 
+		public virtual void SetDeleted()
+		{
+			_isDeleted = true;
+		}
+
         public virtual bool IsWorkday(DateOnly owningPeriodStartDate, DateOnly requestedDate)
         {
         	return IsWorkday(owningPeriodStartDate, requestedDate, DayOfWeek.Monday);
@@ -287,11 +292,6 @@ namespace Teleopti.Ccc.Domain.Common
                 contractScheduleWeek.WeekOrder = i;
                 i++;
             }
-        }
-
-        public virtual void SetDeleted()
-        {
-            _isDeleted = true;
         }
     }
 }
