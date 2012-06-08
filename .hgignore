@@ -54,4 +54,4 @@ symbolmodule.xml
 *.ncov.bkp
 *.sln
 Database/Tools/Restore/output
-*.log.*
+*log.*

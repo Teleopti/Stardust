@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             }
 			else if (e.RowIndex >= headerRows)
             {
-                //TData dataItem = dataItems.ElementAt(0);
                 TData dataItem = dataItems.ElementAt(e.RowIndex - headerRows);
                 e.Style.CellType = "ActivityDropDownCell";
                 e.Style.DataSource = _comboItems;
+				e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
                 e.Style.DisplayMember = _displayMember;
                 e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
                 OnCellDisplayChanged(dataItem, e);

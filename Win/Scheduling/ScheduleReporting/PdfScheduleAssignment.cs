@@ -28,16 +28,23 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         	var projectedPeriod = projection.Period().GetValueOrDefault();
             DateTime start = projectedPeriod.StartDateTimeLocal(timeZoneInfo);
             DateTime end = projectedPeriod.EndDateTimeLocal(timeZoneInfo);
-            IShiftCategory category = schedulePart.PersonAssignmentCollection()[0].MainShift.ShiftCategory;
 
+        	var categoryName = string.Empty;
+        	var categoryColor = Color.Empty;
 
-            Height = render(top, start, category.Description.Name, end, projection.ContractTime(),
-                             category.DisplayColor, headerTop, projection, timeZoneInfo, details);
+        	var personAssignments = schedulePart.PersonAssignmentCollection();
+			if (personAssignments.Count>0 && personAssignments[0].MainShift!=null)
+			{
+				IShiftCategory category = personAssignments[0].MainShift.ShiftCategory;
+				categoryColor = category.DisplayColor;
+				categoryName = category.Description.Name;
+			}
+
+        	Height = render(top, start, categoryName, end, projection.ContractTime(), categoryColor, headerTop, projection, timeZoneInfo, details);
 
 
             Template.Reset(new SizeF(columnWidth, Height));
-            Height = render(top, start, category.Description.Name, end, projection.ContractTime(),
-                             category.DisplayColor, headerTop, projection, timeZoneInfo, details);
+            Height = render(top, start, categoryName, end, projection.ContractTime(), categoryColor, headerTop, projection, timeZoneInfo, details);
         }
 
 
