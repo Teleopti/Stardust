@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Iesi.Collections.Generic;
@@ -177,33 +178,110 @@ namespace Teleopti.Ccc.Domain.Common
             return ret;
         }
 
+		public virtual void SetDeleted()
+		{
+			_isDeleted = true;
+		}
+
         public virtual bool IsWorkday(DateOnly owningPeriodStartDate, DateOnly requestedDate)
         {
-            if (_contractScheduleWeeks.Count == 0)
-                return true;
-
-            DayOfWeek startDayOfWeek = owningPeriodStartDate.DayOfWeek;
-            int startOffset = (int) DayOfWeek.Sunday - (int) startDayOfWeek;
-
-            DateOnly contractScheduleStartDate = owningPeriodStartDate.AddDays(startOffset);
-            TimeSpan dateOffset = requestedDate.Date.Subtract(contractScheduleStartDate);
-            int totalDays = (int) dateOffset.TotalDays;
-            int weekNo = ((totalDays -1) / 7);
-            int weekIndex = weekNo % ContractScheduleWeeks.Count();
-            int reminderDays = totalDays % 7;
-
-            foreach (var contractScheduleWeek in _contractScheduleWeeks)
-            {
-                if (contractScheduleWeek.WeekOrder == weekIndex)
-                {
-                    return contractScheduleWeek.IsWorkday((DayOfWeek) reminderDays);
-                }
-            }
-
-            throw new ArgumentException("Could not resolve requestedDate");
+        	return IsWorkday(owningPeriodStartDate, requestedDate, DayOfWeek.Monday);
         }
 
-        /// <summary>
+		public virtual bool IsWorkday(DateOnly personPeriodStartDate, DateOnly requestedDate, DayOfWeek personWeekStartDay)
+		{
+			if (_contractScheduleWeeks.Count == 0)
+			    return true;
+
+			if(requestedDate < personPeriodStartDate)
+				throw new ArgumentException("Requested date is earlier than the person period's start date");
+
+			BitArray contractWorkdaysList = createContractWorkdaysList(personWeekStartDay); // can be made in the constructor
+
+			DayOfWeek periodStartDayOfWeek = personPeriodStartDate.DayOfWeek;
+			int weekStartOffset = calculateWeekStartOffset(periodStartDayOfWeek, personWeekStartDay);
+			int daysBetweenPeriodStartAndRequested = daysBetweenDates(personPeriodStartDate, requestedDate);
+			int daysBetweenPeriodStartAndRequestedAdjustedWithWeekStartOffset = weekStartOffset + daysBetweenPeriodStartAndRequested;
+			
+			int schemaTotalLength = schemaLength();
+
+			int indexWithinInContractList =
+				daysBetweenPeriodStartAndRequestedAdjustedWithWeekStartOffset % schemaTotalLength;
+
+			return contractWorkdaysList[indexWithinInContractList];
+
+		}
+
+		private static int daysBetweenDates(DateOnly date1, DateOnly date2)
+		{
+			TimeSpan dateOffset = date2.Date.Subtract(date1.Date);
+			return (int)dateOffset.TotalDays;
+		}
+
+    	private int schemaLength()
+		{
+			return _contractScheduleWeeks.Count*7;
+		}
+
+		/// <summary>
+		/// Creates the contract workdays list.
+		/// </summary>
+		/// <param name="personWeekStartDay">The person week start day.</param>
+		/// <returns></returns>
+		private BitArray createContractWorkdaysList(DayOfWeek personWeekStartDay)
+		{
+			int bitArrayLength = schemaLength();
+			int bitArrayCounter = 0;
+			BitArray result = new BitArray(bitArrayLength);
+
+			var weeks = _contractScheduleWeeks.OrderBy(w => w.WeekOrder).ToList();
+
+			for (int weekIndex = 0; weekIndex < _contractScheduleWeeks.Count; weekIndex++)
+			{
+				IContractScheduleWeek currentWeek = weeks[weekIndex];
+
+				for (int dayIndexInWeek = 0; dayIndexInWeek < 7; dayIndexInWeek++)
+				{
+					DayOfWeek currentDay = getCorrectDayOfWeek(dayIndexInWeek, personWeekStartDay);
+					result[bitArrayCounter] = currentWeek.IsWorkday(currentDay);
+					bitArrayCounter++;
+				}
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the correct day of week by the index that can be used to question the Contract week..
+		/// </summary>
+		/// <param name="dayIndexInWeek">The day index in week. Index 0 is always the start day in the person period week start day.</param>
+		/// <param name="personWeekStartDay">The person week start day.</param>
+		/// <returns></returns>
+		private static DayOfWeek getCorrectDayOfWeek(int dayIndexInWeek, DayOfWeek personWeekStartDay)
+		{
+			int personWeekStartDayIndex = (int)personWeekStartDay;
+			int realIndex = (dayIndexInWeek + personWeekStartDayIndex) % 7;
+			DayOfWeek resultDay = (DayOfWeek)realIndex;
+			return resultDay;
+		}
+
+    	/// <summary>
+		/// Calculates the week start offset between the period start day and the contract start day.
+		/// </summary>
+		/// <param name="periodStartDay">The period start day.</param>
+		/// <param name="personWeekStartDay">The contract start day.</param>
+		/// <returns></returns>
+		private static int calculateWeekStartOffset(DayOfWeek periodStartDay, DayOfWeek personWeekStartDay)
+		{
+			//int periodStartDayIndex = transformDayOfWeekToMondayStart(personWeekStartDay);
+			//int contractStartDayIndex = transformDayOfWeekToMondayStart(personWeekStartDay);
+			//int result = periodStartDayIndex - contractStartDayIndex + 7 % 7;
+			int weekStartOffset =  (int)periodStartDay - (int)personWeekStartDay;
+			int result = (weekStartOffset + 7) % 7;
+			return result;
+		}
+
+    	/// <summary>
         /// Resets the WeekOrder property of ContractScheduleWeeks upon deleting a one Week.
         /// </summary>
         private void resetWeekOrdersUponDeletion()
@@ -214,11 +292,6 @@ namespace Teleopti.Ccc.Domain.Common
                 contractScheduleWeek.WeekOrder = i;
                 i++;
             }
-        }
-
-        public virtual void SetDeleted()
-        {
-            _isDeleted = true;
         }
     }
 }
