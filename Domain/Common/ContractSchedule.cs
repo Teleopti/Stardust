@@ -180,31 +180,7 @@ namespace Teleopti.Ccc.Domain.Common
 
         public virtual bool IsWorkday(DateOnly owningPeriodStartDate, DateOnly requestedDate)
         {
-			//if (_contractScheduleWeeks.Count == 0)
-			//    return true;
-
-			//DayOfWeek startDayOfWeek = owningPeriodStartDate.DayOfWeek;
-			//int startOffset = (int) DayOfWeek.Sunday - (int) startDayOfWeek;
-
-			//DateOnly contractScheduleStartDate = owningPeriodStartDate.AddDays(startOffset);
-			//TimeSpan dateOffset = requestedDate.Date.Subtract(contractScheduleStartDate);
-			//int totalDays = (int) dateOffset.TotalDays;
-			//int weekNo = ((totalDays -1) / 7);
-			//int weekIndex = weekNo % ContractScheduleWeeks.Count();
-			//int reminderDays = totalDays % 7;
-
-			//foreach (var contractScheduleWeek in _contractScheduleWeeks)
-			//{
-			//    if (contractScheduleWeek.WeekOrder == weekIndex)
-			//    {
-			//        return contractScheduleWeek.IsWorkday((DayOfWeek) reminderDays);
-			//    }
-			//}
-
-			//throw new ArgumentException("Could not resolve requestedDate");
-
         	return IsWorkday(owningPeriodStartDate, requestedDate, DayOfWeek.Monday);
-
         }
 
 		public virtual bool IsWorkday(DateOnly personPeriodStartDate, DateOnly requestedDate, DayOfWeek personWeekStartDay)
@@ -231,7 +207,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		}
 
-		private int daysBetweenDates(DateOnly date1, DateOnly date2)
+		private static int daysBetweenDates(DateOnly date1, DateOnly date2)
 		{
 			TimeSpan dateOffset = date2.Date.Subtract(date1.Date);
 			return (int)dateOffset.TotalDays;
@@ -265,7 +241,7 @@ namespace Teleopti.Ccc.Domain.Common
 			return result;
 		}
 
-		private DayOfWeek transformDayOfWeek(int dayIndexInWeek, DayOfWeek personWeekStartDay)
+		private static DayOfWeek transformDayOfWeek(int dayIndexInWeek, DayOfWeek personWeekStartDay)
 		{
 			int personWeekStartDayIndex = (int)personWeekStartDay;
 			int realIndex = (dayIndexInWeek + personWeekStartDayIndex) % 7;
@@ -280,7 +256,7 @@ namespace Teleopti.Ccc.Domain.Common
 		/// <param name="periodStartDay">The period start day.</param>
 		/// <param name="personWeekStartDay">The contract start day.</param>
 		/// <returns></returns>
-		private int calculateWeekStartOffset(DayOfWeek periodStartDay, DayOfWeek personWeekStartDay)
+		private static int calculateWeekStartOffset(DayOfWeek periodStartDay, DayOfWeek personWeekStartDay)
 		{
 			//int periodStartDayIndex = transformDayOfWeekToMondayStart(personWeekStartDay);
 			//int contractStartDayIndex = transformDayOfWeekToMondayStart(personWeekStartDay);
