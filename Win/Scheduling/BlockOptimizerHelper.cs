@@ -93,7 +93,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             service.ReportProgress -= resourceOptimizer_PersonOptimized;
         }
 
-        private void daysOffBackToLegalState(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void daysOffBackToLegalState(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
                                     BackgroundWorker backgroundWorker,
                                     IDayOffTemplate dayOffTemplate,
                                     bool reschedule)
