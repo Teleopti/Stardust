@@ -488,7 +488,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public ICollection<IPerson> FindPeopleInOrganization(DateTimePeriod period, bool includeRuleSetData)
+		public ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData)
         {
             IMultiCriteria multiCrit = Session.CreateMultiCriteria()
                                     .Add(personPeriodTeamAndSites(period))
