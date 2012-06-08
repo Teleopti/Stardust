@@ -19,7 +19,7 @@ Scenario: Can not add absence request from request view if no permission
 	When I click add request button in the toolbar
 	Then I should not see the absence request tab
 
-Scenario: Default absence-request values from request view
+Scenario: Default absence request values from request view
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I am viewing requests
@@ -46,7 +46,7 @@ Scenario: Cancel adding absence request from request view
 	And I click absence request tab
 	And I input absence request values with Vacation
 	And I click the Cancel button
-	Then I should see the absence request in the list
+	Then I should not see the absence request in the list
 
 Scenario: Adding invalid absence request values
 	Given I am an agent
