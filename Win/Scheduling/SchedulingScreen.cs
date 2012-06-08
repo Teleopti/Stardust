@@ -1497,9 +1497,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void toolStripButtonZoom_Click(object sender, EventArgs e)
         {
-            var button = ((ToolStripButton) sender);
-            var level = (ZoomLevel) button.Tag;
-            zoom(level);
+			var button = sender as ToolStripButton;
+			if (button != null && button.Tag != null) zoom((ZoomLevel)button.Tag);
+			else
+			{
+				var quickButton = sender as QuickButtonReflectable;
+				if (quickButton != null && quickButton.ReflectedButton.Tag != null) zoom((ZoomLevel)quickButton.ReflectedButton.Tag);
+			}
         }
 
         private void toolStripButtonQuickAccessSave_Click(object sender, EventArgs e)
