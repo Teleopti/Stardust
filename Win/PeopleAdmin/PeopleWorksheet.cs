@@ -197,6 +197,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                         ConfigureAndShowFindAndReplaceForm();
                         break;
 
+                    case Keys.Control | Keys.S:
+                        toolStripButtonMainSave_Click(this, null);
+                        break;
+
                     case Keys.Escape:
                         _findAndReplaceForm.Hide();
                         break;
