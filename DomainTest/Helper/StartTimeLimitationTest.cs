@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		 }
 
 		 [Test]
-		 public void ShouldBeValidForTimespanAfterStartTime()
+		 public void ShouldBeValidForTimeSpanAfterStartTime()
 		 {
 		 	target.StartTime = TimeSpan.FromHours(8);
 			 target.IsValidFor(TimeSpan.FromHours(9)).Should().Be.True();
