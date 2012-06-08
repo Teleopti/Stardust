@@ -134,13 +134,28 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 foreach (ISmartDayOffBackToLegalStateSolverContainer backToLegalStateSolverContainer in solverContainers)
                 {
-                    if (backToLegalStateSolverContainer.Result)
-                        OptimizerHelperHelper.SyncSmartDayOffContainerWithMatrix(
-                            backToLegalStateSolverContainer, 
-                            dayOffTemplate,
-                            optimizerPreferences.DaysOff, 
-                            _scheduleDayChangeCallback, 
-                            new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+					if (backToLegalStateSolverContainer.Result)
+					{
+						OptimizerHelperHelper.SyncSmartDayOffContainerWithMatrix(
+							backToLegalStateSolverContainer,
+							dayOffTemplate,
+							optimizerPreferences.DaysOff,
+							_scheduleDayChangeCallback,
+							new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+
+						var restrictionChecker = new RestrictionChecker();
+						var matrix = backToLegalStateSolverContainer.MatrixOriginalStateContainer.ScheduleMatrix;
+						var originalStateContainer = backToLegalStateSolverContainer.MatrixOriginalStateContainer;
+						var optimizationOverLimitByRestrictionDecider = new OptimizationOverLimitByRestrictionDecider(matrix,
+																													  restrictionChecker,
+																													  optimizerPreferences,
+																													  originalStateContainer);
+						if (optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit() || optimizationOverLimitByRestrictionDecider.OverLimit().Count > 0)
+						{
+							var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+							rollbackMatrixChanges(originalStateContainer, rollbackService);
+						}
+					}
                 }
             }
 
