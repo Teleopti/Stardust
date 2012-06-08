@@ -71,6 +71,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbsenceRequestFromRequests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AbsenceRequestFromRequests.feature</DependentUpon>
+    </Compile>
     <Compile Include="AbsenceRequestFromSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -343,6 +348,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="AbsenceRequestFromRequests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AbsenceRequestFromRequests.feature.cs</LastGenOutput>
+    </None>
     <None Include="AbsenceRequestFromSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AbsenceRequestFromSchedule.feature.cs</LastGenOutput>
