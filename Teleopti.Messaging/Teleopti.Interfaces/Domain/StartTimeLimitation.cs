@@ -266,7 +266,7 @@ namespace Teleopti.Interfaces.Domain
 
 
 
-		  private static readonly TimeSpan oneDay = TimeSpan.FromDays(2);
+		  private static readonly TimeSpan oneDay = TimeSpan.FromDays(1);
 
     	/// <summary>
     	/// Determines if limitation is valid for <paramref name="timeSpan"/>
