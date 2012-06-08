@@ -66,9 +66,11 @@ BEGIN
 	DELETE FROM mart.dim_skillset
 	DELETE FROM mart.dim_skill 
 	DELETE FROM mart.dim_team
-	DELETE FROM mart.dim_scorecard	
+	DELETE FROM mart.dim_scorecard
 	DELETE FROM mart.dim_site
 	DELETE FROM mart.dim_business_unit
+	DELETE FROM mart.dim_overtime
+	DELETE FROM mart.dim_group_page
 
 	--To realy delete All data, call this proc with @DeleteAll = 1
 	--This data corresponds to mart.sys_datasource_load followed by ETL.InitalLoad 
