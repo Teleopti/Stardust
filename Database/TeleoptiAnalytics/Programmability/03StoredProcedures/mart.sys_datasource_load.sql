@@ -30,7 +30,8 @@ INSERT INTO mart.sys_datasource
 	datasource_database_id,
 	datasource_database_name,
 	datasource_type_name,
-	source_id
+	source_id,
+	internal
 	)
 SELECT 
 	datasource_name			='Teleopti CCC Agg: '+ lo.log_object_desc Collate Database_Default,
@@ -39,7 +40,8 @@ SELECT
 	datasource_database_id	= 2,
 	datasource_database_name= 'Teleopti CCC Agg Default',
 	datasource_type_name	='Teleopti CCC Agg',
-	source_id				= CAST(lo.log_object_id AS NVARCHAR(50))
+	source_id				= CAST(lo.log_object_id AS NVARCHAR(50)),
+	internal				= 0
 FROM
 	mart.v_log_object lo
 WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource v where v.log_object_id = lo.log_object_id AND datasource_database_id= 2)
@@ -47,13 +49,14 @@ WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource v where v.log_object_id = lo
 UNION 
 --internal log objects
 SELECT 
-	datasource_name			='Teleopti CCC Agg: '+ lo.log_object_desc Collate Database_Default,
+	datasource_name			='Internal Agg: '+ lo.log_object_desc Collate Database_Default,
 	log_object_id			= lo.log_object_id,
 	log_object_name			= lo.log_object_desc Collate Database_Default,
 	datasource_database_id	= 2,
 	datasource_database_name= 'Teleopti CCC Agg Default',
-	datasource_type_name	= 'Teleopti CCC Agg',
-	source_id				= CAST(lo.log_object_id AS NVARCHAR(50))
+	datasource_type_name	= 'Internal Agg',
+	source_id				= CAST(lo.log_object_id AS NVARCHAR(50)),
+	internal				= 1
 FROM
 	dbo.log_object lo
 WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource v where v.log_object_id = lo.log_object_id AND datasource_database_id= 2)
