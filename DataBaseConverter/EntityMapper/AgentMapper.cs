@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                         new SchedulePeriod(new DateOnly(agentWorkRule.Period.StartDate),
                                            schedType, number);
                     schedulePeriod.AverageWorkTimePerDay = agentWorkRule.AverageWorktimePerDay;
-                    if (agentWorkRule.CategoryLimitationCollection.Count() > 0)
+                    if (agentWorkRule.CategoryLimitationCollection.Any())
                         mapCategoryLimitations(schedulePeriod, agentWorkRule.CategoryLimitationCollection);
 
                     newPerson.AddSchedulePeriod(schedulePeriod);

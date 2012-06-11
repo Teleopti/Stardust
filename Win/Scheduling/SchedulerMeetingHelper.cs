@@ -182,9 +182,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             IMeeting selectedMeeting = null;
 
-            if (personMeetings.Count() > 0)
+        	var numberOfMeetings = personMeetings.Count();
+            if (numberOfMeetings>0)
             {
-                if (personMeetings.Count() > 1)
+                if (numberOfMeetings > 1)
                 {
                     using (MeetingPicker meetingPicker = new MeetingPicker(_schedulerStateHolder.CommonNameDescription.BuildCommonNameDescription(person) + " " +
                         theDate.ToShortDateString(), personMeetings))

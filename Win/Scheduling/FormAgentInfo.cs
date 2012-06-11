@@ -206,13 +206,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             helper.SchedulePeriodData();
 
-            var perPeriod = from l in helper.SchedulePeriod.ShiftCategoryLimitationCollection()
-                            where !l.Weekly
-                            select l;
-            var perWeek = from l in helper.SchedulePeriod.ShiftCategoryLimitationCollection()
-                            where l.Weekly
-                            select l;
-            if (perWeek.Count() > 0)
+            var perPeriod = helper.SchedulePeriod.ShiftCategoryLimitationCollection().Where(l => !l.Weekly);
+            var perWeek = helper.SchedulePeriod.ShiftCategoryLimitationCollection().Where(l => l.Weekly);
+            if (perWeek.Any())
             {
                 createAndAddItem(listViewRestrictions, Resources.PerWeek,
                                  string.Empty, 2);
@@ -223,7 +219,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                      shiftCategoryLimitation.MaxNumberOf.ToString(person.PermissionInformation.Culture()), 3);
                 }
             }
-            if (perPeriod.Count() > 0)
+            if (perPeriod.Any())
             {
                 createAndAddItem(listViewRestrictions, Resources.PerPeriod,
                                  string.Empty, 2); 

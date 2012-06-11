@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic
                                          scheduleDay,
                                          NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 
-            if (invalidList != null && invalidList.Count() > 0)
+            if (invalidList != null && invalidList.Any())
                 throw new FaultException("Business rule violated: " + invalidList.First().Message);
 
             _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, dic.DifferenceSinceSnapshot());

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
             if (details != ScheduleReportDetail.None)
             {
-                if (payLoads.Count() > 0)
+                if (payLoads.Any())
                     top = RenderSplitter(Color.Gray, top, 1);
 
                 foreach (IVisualLayer visualLayer in payLoads)

@@ -1663,7 +1663,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                   _overriddenBusinessRulesHolder);
                 lstBusinessRuleResponseToOverride.AddRange(handleBusinessRules.Handle(lstBusinessRuleResponse,
                                                                                       lstBusinessRuleResponseToOverride));
-                if (lstBusinessRuleResponseToOverride.Count() > 0)
+                if (lstBusinessRuleResponseToOverride.Any())
                 {
                     lstBusinessRuleResponseToOverride.ForEach(newRules.Remove);
                     lstBusinessRuleResponse = swapAndModifyServiceNew.Swap(personList[0], personList[1], dates,
@@ -1679,7 +1679,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
 
                 //if it's more than zero now. Cancel!!!
-                if (lstBusinessRuleResponseToOverride.Count() > 0)
+                if (lstBusinessRuleResponseToOverride.Any())
                 {
                     // show a MessageBox, another not overridable rule (Mandatory) might have been found later in the SheduleRange
                     // will probably not happen
@@ -6179,13 +6179,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                                      orderby a.Description.ShortName , a.Description.Name
                                      select a;
 
-                if (sortedAbsences.Count() > 0)
+                if (sortedAbsences.Any())
                 {
                     toolStripMenuItemAbsenceLockRibbon.Text = Resources.All;
                     toolStripMenuItemAbsenceLockRM.Text = Resources.All;
 
                     toolStripMenuItemAbsenceLockRibbon.Click += toolStripMenuItemLockAbsenceDays_Click;
-                    //toolStripMenuItemAbsenceLockRM.Click += toolStripMenuItemLockAbsenceDays_Click;
                     toolStripMenuItemAbsenceLockRM.MouseUp += ToolStripMenuItemLockAbsenceDaysMouseUp;
                     toolStripMenuItemLockAbsence.DropDownItems.Add(toolStripMenuItemAbsenceLockRibbon);
                     toolStripMenuItemLockAbsencesRM.DropDownItems.Add(toolStripMenuItemAbsenceLockRM);
@@ -6204,7 +6203,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     toolStripMenuItemAbsenceLockRM.Tag = abs;
 
                     toolStripMenuItemAbsenceLockRibbon.Click += toolStripMenuItemLockAbsences_Click;
-                    //toolStripMenuItemAbsenceLockRM.Click += toolStripMenuItemLockAbsences_Click;
                     toolStripMenuItemAbsenceLockRM.MouseUp += ToolStripMenuItemAbsenceLockRmMouseUp;
 
                     toolStripMenuItemLockAbsence.DropDownItems.Add(toolStripMenuItemAbsenceLockRibbon);
@@ -6213,7 +6211,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var deleted = from a in sortedAbsences
                               where ((IDeleteTag) a).IsDeleted
                               select a;
-                if (deleted.Count() > 0)
+                if (deleted.Any())
                 {
                     toolStripMenuItemDeletedAbsenceLockRM.Text = Resources.Deleted;
                     toolStripMenuItemDeletedAbsenceLockRibbon.Text = Resources.Deleted;
@@ -6298,14 +6296,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var deleted = from a in displayList
                               where ((IDeleteTag) a).IsDeleted
                               select a;
-                if (deleted.Count() > 0)
+                if (deleted.Any())
                 {
                     toolStripMenuItemDeletedDayOffLockRibbon = new ToolStripMenuItem();
                     toolStripMenuDeletedItemDayOffLockRm = new ToolStripMenuItem();
                     toolStripMenuItemDeletedDayOffLockRibbon.Text = Resources.Deleted;
                     toolStripMenuDeletedItemDayOffLockRm.Text = Resources.Deleted;
-                    //toolStripMenuItemDeletedDayOffLockRibbon.Click += toolStripMenuItemLockSpecificDayOff_Click;
-                    //toolStripMenuDeletedItemDayOffLockRm.Click += toolStripMenuItemLockSpecificDayOff_Click;
                     toolStripMenuItemLockDayOff.DropDownItems.Add(toolStripMenuItemDeletedDayOffLockRibbon);
                     toolStripMenuItemLockFreeDaysRM.DropDownItems.Add(toolStripMenuDeletedItemDayOffLockRm);
 
@@ -6348,13 +6344,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var sortedCategories = from c in _schedulerState.CommonStateHolder.ShiftCategories
                                        orderby c.Description.ShortName , c.Description.Name
                                        select c;
-                if (sortedCategories.Count() > 0)
+                if (sortedCategories.Any())
                 {
                     toolStripMenuItemShiftCategoryLockRibbon.Text = Resources.All;
                     toolStripMenuItemShiftCategoryLockRM.Text = Resources.All;
 
                     toolStripMenuItemShiftCategoryLockRibbon.Click += toolStripMenuItemLockShiftCategoryDays_Click;
-                    //toolStripMenuItemShiftCategoryLockRM.Click += toolStripMenuItemLockShiftCategoryDays_Click;
                     toolStripMenuItemShiftCategoryLockRM.MouseUp += ToolStripMenuItemLockShiftCategoryDaysMouseUp;
                     toolStripMenuItemLockShiftCategory.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRibbon);
                     toolStripMenuItemLockShiftCategoriesRM.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRM);
@@ -6372,7 +6367,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     toolStripMenuItemShiftCategoryLockRM.Tag = shiftCategory;
 
                     toolStripMenuItemShiftCategoryLockRibbon.Click += toolStripMenuItemLockShiftCategories_Click;
-                    //toolStripMenuItemShiftCategoryLockRM.Click += toolStripMenuItemLockShiftCategories_Click;
                     toolStripMenuItemShiftCategoryLockRM.MouseUp += ToolStripMenuItemLockShiftCategoriesMouseUp;
                     toolStripMenuItemLockShiftCategory.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRibbon);
                     toolStripMenuItemLockShiftCategoriesRM.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRM);
@@ -6380,7 +6374,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var deleted = from a in sortedCategories
                               where ((IDeleteTag) a).IsDeleted
                               select a;
-                if (deleted.Count() > 0)
+                if (deleted.Any())
                 {
                     toolStripMenuItemDeletedShiftCategoryLockRibbon.Text = Resources.Deleted;
                     toolStripMenuItemDeletedShiftCategoryLockRM.Text = Resources.Deleted;
@@ -6399,7 +6393,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                         toolStripMenuItemShiftCategoryLockRM.Tag = category;
 
                         toolStripMenuItemShiftCategoryLockRibbon.Click += toolStripMenuItemLockShiftCategories_Click;
-                        //toolStripMenuItemShiftCategoryLockRM.Click += toolStripMenuItemLockShiftCategories_Click;
                         toolStripMenuItemShiftCategoryLockRM.MouseUp += ToolStripMenuItemLockShiftCategoriesMouseUp;
 
                         toolStripMenuItemDeletedShiftCategoryLockRibbon.DropDownItems.Add(
@@ -7824,7 +7817,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 changedEntitiesBuffer = new List<IPersistableScheduleData>(refreshedEntities);
 
             var result = new ConflictHandlingResult {ConflictsFound = false, DialogResult = DialogResult.None};
-            result.ConflictsFound = conflicts.Count() > 0;
+            result.ConflictsFound = conflicts.Any();
             if (result.ConflictsFound)
             {
                 result.DialogResult = showPersistConflictView(changedEntitiesBuffer, conflicts);
