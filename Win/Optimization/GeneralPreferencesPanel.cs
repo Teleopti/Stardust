@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Optimization
@@ -8,6 +10,7 @@ namespace Teleopti.Ccc.Win.Optimization
     {
         private IGeneralPreferences _generalPreferences;
         private IList<IScheduleTag> _scheduleTags;
+    	private IEventAggregator _eventAggregator;
 
         public GeneralPreferencesPanel()
         {
@@ -17,10 +20,15 @@ namespace Teleopti.Ccc.Win.Optimization
 
         public void Initialize(
             IGeneralPreferences generalPreferences, 
-            IList<IScheduleTag> scheduleTags)
+            IList<IScheduleTag> scheduleTags,
+			IEventAggregator eventAggregator)
         {
             _generalPreferences = generalPreferences;
             _scheduleTags = scheduleTags;
+        	_eventAggregator = eventAggregator;
+
+			if(_eventAggregator != null)
+			_eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>().Subscribe(EnableDisableShiftCategoryLimitations);	
 
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             setInitialControlStatus();
@@ -28,7 +36,21 @@ namespace Teleopti.Ccc.Win.Optimization
 
         #region IDataExchange Members
 
-        public bool ValidateData(ExchangeDataOption direction)
+		public void UnsubscribeEvents()
+		{
+			if (_eventAggregator == null) return;
+			_eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>().Unsubscribe(EnableDisableShiftCategoryLimitations); 
+		}
+
+		private void EnableDisableShiftCategoryLimitations(EventParameters<ExtraPreferencesPanelUseBlockScheduling> obj)
+		{
+			checkBoxShiftCategoryLimitations.Enabled = !obj.Value.Use;
+			if (!obj.Value.Use) return;
+			checkBoxShiftCategoryLimitations.Checked = false;
+			_generalPreferences.UseShiftCategoryLimitations = false;
+		}
+
+    	public bool ValidateData(ExchangeDataOption direction)
         {
             return true;
         }
