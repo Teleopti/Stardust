@@ -25,6 +25,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
             Add(new BridgeAcdLogOnPersonJobStep(jobParameters));
             Add(new FactAgentJobStep(jobParameters));
             Add(new FactAgentQueueJobStep(jobParameters));
+            Add(new DimQualityQuestLoadJobStep(jobParameters));
+            Add(new FactQualityLoadJobStep(jobParameters));
         }
     }
 }
