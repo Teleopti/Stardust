@@ -543,7 +543,6 @@
     <Compile Include="Domain\OpenForWork.cs" />
     <Compile Include="Domain\OptimizationRestriction.cs" />
     <Compile Include="Domain\JobResultProgress.cs" />
-    <Compile Include="Domain\PositiveTimeSpan.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />
     <Compile Include="Domain\ResourceOptimizerProgressEventArgs.cs" />
     <Compile Include="Domain\ITimeLayer.cs" />

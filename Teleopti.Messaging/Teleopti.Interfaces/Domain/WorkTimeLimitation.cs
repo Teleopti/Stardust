@@ -28,8 +28,8 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
 		public WorkTimeLimitation(TimeSpan? startTime, TimeSpan? endTime)
         {
-            _startTime = (PositiveTimeSpan?) startTime;
-			_endTime = (PositiveTimeSpan?) endTime;
+            _startTime = startTime;
+			_endTime = endTime;
 			verifyTimes();
 		  }
 

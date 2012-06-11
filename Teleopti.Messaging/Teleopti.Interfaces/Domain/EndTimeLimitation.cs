@@ -29,8 +29,8 @@ namespace Teleopti.Interfaces.Domain
         /// /// </remarks>
 		public EndTimeLimitation(TimeSpan? startTime, TimeSpan? endTime)
 		{
-			_startTime = (PositiveTimeSpan?) startTime;
-			_endTime = (PositiveTimeSpan?) endTime;
+			_startTime = startTime;
+			_endTime = endTime;
 			verifyTimes();
 		}
 
@@ -237,7 +237,7 @@ namespace Teleopti.Interfaces.Domain
             TimeSpan timeSpan;
             if (TimeHelper.TryParse(value, out timeSpan))
             {
-                return (PositiveTimeSpan?) timeSpan;
+                return timeSpan;
             }
 
             throw new ArgumentOutOfRangeException("value", value, "The string can not be converted to a TimeSpan");
