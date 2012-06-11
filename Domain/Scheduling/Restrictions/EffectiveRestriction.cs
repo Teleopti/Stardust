@@ -173,10 +173,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     return null;
 
                 if (startTimeLimitation.EndTime > endTimeLimitation.EndTime)
-                    startTimeLimitation.EndTime = endTimeLimitation.EndTime;
+						 startTimeLimitation = new StartTimeLimitation(startTimeLimitation.StartTime, endTimeLimitation.EndTime);
 
                 if (endTimeLimitation.StartTime < startTimeLimitation.StartTime)
-                    endTimeLimitation.StartTime = startTimeLimitation.StartTime;
+						 endTimeLimitation = new EndTimeLimitation(startTimeLimitation.StartTime, endTimeLimitation.EndTime);
             }
             start = resolveTime(_workTimeLimitation.StartTime, effectiveRestriction.WorkTimeLimitation.StartTime, false);
             end = resolveTime(_workTimeLimitation.EndTime, effectiveRestriction.WorkTimeLimitation.EndTime, true);

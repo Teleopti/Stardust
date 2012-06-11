@@ -22,7 +22,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// /// </remarks>
-        TimeSpan? StartTime { get; set; }
+        TimeSpan? StartTime { get; }
 
         /// <summary>
         /// Gets or sets the end time.
@@ -33,7 +33,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// /// </remarks>
-		TimeSpan? EndTime { get; set; }
+		TimeSpan? EndTime { get; }
 
         /// <summary>
         /// Sets the start time string.

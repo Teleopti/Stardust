@@ -13,8 +13,8 @@ namespace Teleopti.Interfaces.Domain
     [Serializable]
     public struct WorkTimeLimitation : ILimitation
     {
-        private PositiveTimeSpan? _startTime;
-		private PositiveTimeSpan? _endTime;
+        private TimeSpan? _startTime;
+		private TimeSpan? _endTime;
 
 
         /// <summary>
@@ -30,8 +30,29 @@ namespace Teleopti.Interfaces.Domain
         {
             _startTime = (PositiveTimeSpan?) startTime;
 			_endTime = (PositiveTimeSpan?) endTime;
-        }
+			verifyTimes();
+		  }
 
+		private void verifyTimes()
+		{
+			if (_startTime.HasValue)
+			{
+				if (_startTime.Value >= new TimeSpan(23, 59, 59))
+					throw new ArgumentOutOfRangeException("startTime", _startTime, "Start Time can't be bigger than 23:59:59 +1");
+
+				if (_endTime.HasValue && _startTime > _endTime.Value)
+					throw new ArgumentOutOfRangeException("startTime", _startTime, "Start Time can't be greater than End Time");
+			}
+
+			if (_endTime.HasValue)
+			{
+				if (_endTime.Value >= new TimeSpan(23, 59, 59))
+					throw new ArgumentOutOfRangeException("endTime", _endTime, "End Time can't be bigger than 23:59:59 +1");
+
+				if (_startTime.HasValue && _endTime < _startTime.Value)
+					throw new ArgumentOutOfRangeException("endTime", _endTime, "End Time can't be less than Start Time");
+			}
+		}
         /// <summary>
         /// Gets or sets the start time.
         /// </summary>
@@ -44,18 +65,6 @@ namespace Teleopti.Interfaces.Domain
 		public TimeSpan? StartTime
         {
 			get { return _startTime; }
-            set
-            {
-                if (value.HasValue)
-                {
-                    if (value > new TimeSpan(23, 59, 59))
-                        throw new ArgumentOutOfRangeException("value", value, "Start Time can't be bigger than 23.59.59");
-
-                    if (_endTime.HasValue && value > _endTime.Value)
-						throw new ArgumentOutOfRangeException("value", value, "Start Time can't be greater than End Time");
-                }
-				_startTime = (PositiveTimeSpan?) value;
-            }
         }
 
         /// <summary>
@@ -70,18 +79,6 @@ namespace Teleopti.Interfaces.Domain
 		public TimeSpan? EndTime
         {
             get { return _endTime; }
-            set
-            {
-                if (value.HasValue)
-                {
-                    if (value > new TimeSpan(23, 59, 59))
-                        throw new ArgumentOutOfRangeException("value", "End Time can't be bigger than 23.59.59");
-
-					if (_startTime.HasValue && value < _startTime.Value)
-						throw new ArgumentOutOfRangeException("value", "End Time can't less than Start Time");
-                }
-				_endTime = (PositiveTimeSpan?) value;
-            }
         }
 
         /// <summary>
@@ -123,7 +120,7 @@ namespace Teleopti.Interfaces.Domain
         {
             set
             {
-                StartTime = TimeSpanFromString(value);
+                _startTime = TimeSpanFromString(value);
             }
             get
             {
@@ -145,7 +142,7 @@ namespace Teleopti.Interfaces.Domain
         {
             set
             {
-                EndTime = TimeSpanFromString(value);
+                _endTime = TimeSpanFromString(value);
             }
 
             get
