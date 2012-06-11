@@ -306,7 +306,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (date) {
 			}
 		});
 	};
-	
+
 	this.PossibleContractTimeMinutesLower = ko.observable();
 	this.PossibleContractTimeMinutesUpper = ko.observable();
 
