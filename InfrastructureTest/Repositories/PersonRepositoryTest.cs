@@ -1054,7 +1054,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(2, loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
 		}
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldFindPeople()
         {
             var person = CreateAggregateWithCorrectBusinessUnit();
@@ -1066,14 +1066,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IContract ctr = ContractFactory.CreateContract("sdf");
             IPartTimePercentage pTime = PartTimePercentageFactory.CreatePartTimePercentage("sdf");
             IContractSchedule cSc = ContractScheduleFactory.CreateContractSchedule("sdf");
+        	var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shift cat");
+        	DateOnly date = new DateOnly(2000, 1, 2);
 
             PersistAndRemoveFromUnitOfWork(site);
             PersistAndRemoveFromUnitOfWork(team);
             PersistAndRemoveFromUnitOfWork(ctr);
             PersistAndRemoveFromUnitOfWork(pTime);
             PersistAndRemoveFromUnitOfWork(cSc);
+			PersistAndRemoveFromUnitOfWork(shiftCategory);
 
-            person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 2), PersonContractFactory.CreatePersonContract(ctr, pTime, cSc), team));
+            person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, PersonContractFactory.CreatePersonContract(ctr, pTime, cSc), team));
             foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
             {
                 PersistAndRemoveFromUnitOfWork(personPeriod.Team.Site);
@@ -1083,6 +1086,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(role);
 
             person.PermissionInformation.AddApplicationRole(role);
+
+			person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(date,SchedulePeriodType.Month, 1));
+			person.PersonSchedulePeriodCollection[0].AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategory){Weekly = true,MaxNumberOf = 1});
 
             PersistAndRemoveFromUnitOfWork(person);
 
