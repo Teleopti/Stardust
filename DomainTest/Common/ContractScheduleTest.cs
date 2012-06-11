@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -157,10 +156,15 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsTrue(testContractSchedule.ContractScheduleWeeks.Contains(_ContractScheduleWeek));
         }
 
-		[Test, Ignore("exposing bug 19581")]
-		public void ShouldReturnCorrectIsWorkdayForDate()
+		[Test]
+		public void VerifyIsWorkday()
 		{
+
 			testContractSchedule = new ContractSchedule("test");
+
+			// contract schedule - workday = 1
+			// 0000000 1111100
+
 			IContractScheduleWeek week = new ContractScheduleWeek();
 			testContractSchedule.AddContractScheduleWeek(week); // first week all days off
 			week = new ContractScheduleWeek();
@@ -171,21 +175,74 @@ namespace Teleopti.Ccc.DomainTest.Common
 			week.Add(DayOfWeek.Friday, true);
 			testContractSchedule.AddContractScheduleWeek(week); // second week sat and sun days off
 
-			DateOnly owningPeriodStartDate = new DateOnly(2012, 06, 01); // this is the first date of the scheduling period
+			DateOnly personPeriodStartDate = new DateOnly(2012, 06, 01); // this is the first date of the scheduling period
 			DateOnly requestedDate = new DateOnly(2012, 06, 01); //friday
-			Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+			Assert.IsFalse(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
 			requestedDate = new DateOnly(2012, 06, 02); //saturday
-			Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+			Assert.IsFalse(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
 			requestedDate = new DateOnly(2012, 06, 03); //sunday
-			Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+			Assert.IsFalse(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
 			requestedDate = new DateOnly(2012, 06, 04); //monday
-			Assert.IsTrue(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
-
-			owningPeriodStartDate = new DateOnly(2012, 07, 01); // this is the first date of the scheduling period
+			Assert.IsTrue(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
 			requestedDate = new DateOnly(2012, 07, 01); // sunday
-			Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
-			requestedDate = new DateOnly(2012, 07, 01); // monday
-			Assert.IsTrue(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+			Assert.IsFalse(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 07, 02); // monday
+			Assert.IsTrue(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+		}
+
+		[Test]
+		public void VerifyIsWorkdayFoundsCorrectWeekNumber()
+		{
+
+			testContractSchedule = new ContractSchedule("test");
+
+			// contract schedule - workday = 1
+			// 0000000 1111111
+
+			IContractScheduleWeek week = new ContractScheduleWeek();
+			testContractSchedule.AddContractScheduleWeek(week); // first week all days off
+			week = new ContractScheduleWeek();
+			week.Add(DayOfWeek.Monday, true);
+			week.Add(DayOfWeek.Tuesday, true);
+			week.Add(DayOfWeek.Wednesday, true);
+			week.Add(DayOfWeek.Thursday, true);
+			week.Add(DayOfWeek.Friday, true);
+			week.Add(DayOfWeek.Saturday, true);
+			week.Add(DayOfWeek.Sunday, true);
+			testContractSchedule.AddContractScheduleWeek(week); // second week sat and sun days off
+
+			DateOnly personPeriodStartDate = new DateOnly(2012, 06, 01); // this is the first date of the scheduling period
+			DateOnly requestedDate = new DateOnly(2012, 06, 01); //odd friday
+			Assert.IsFalse(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 06, 02); //odd saturday
+			Assert.IsFalse(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 06, 03); //odd sunday
+			Assert.IsFalse(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 06, 04); //even monday
+			Assert.IsTrue(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 06, 09); //even saturday
+			Assert.IsTrue(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 07, 01); // odd sunday
+			Assert.IsFalse(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 07, 02); // even monday
+			Assert.IsTrue(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 07, 08); // even sunday
+			Assert.IsTrue(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+
+			personPeriodStartDate = new DateOnly(2012, 06, 03); // this is the first date of the scheduling period
+
+			requestedDate = new DateOnly(2012, 06, 03); //odd sunday
+			Assert.IsFalse(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 06, 04); //even monday
+			Assert.IsTrue(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 06, 09); //even saturday
+			Assert.IsTrue(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 07, 01); // odd sunday
+			Assert.IsFalse(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 07, 02); // even monday
+			Assert.IsTrue(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 07, 08); // even sunday
+			Assert.IsTrue(testContractSchedule.IsWorkday(personPeriodStartDate, requestedDate));
 		}
 
         [Test]
@@ -264,6 +321,44 @@ namespace Teleopti.Ccc.DomainTest.Common
             DateOnly requestedDate = new DateOnly(2008, 1, 19);
             Assert.IsTrue(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
         }
+
+
+		/// <summary>
+		/// Expose the bug 19581]
+		/// </summary>
+		[Test]
+		public void ShouldReturnCorrectIsWorkdayForDate()
+		{
+			testContractSchedule = new ContractSchedule("test");
+			IContractScheduleWeek week = new ContractScheduleWeek();
+			testContractSchedule.AddContractScheduleWeek(week); // first week all days off
+			week = new ContractScheduleWeek();
+			week.Add(DayOfWeek.Monday, true);
+			week.Add(DayOfWeek.Tuesday, true);
+			week.Add(DayOfWeek.Wednesday, true);
+			week.Add(DayOfWeek.Thursday, true);
+			week.Add(DayOfWeek.Friday, true);
+			testContractSchedule.AddContractScheduleWeek(week); // second week sat and sun days off
+
+			DateOnly owningPeriodStartDate = new DateOnly(2012, 06, 01); // this is the first date of the scheduling period
+			DateOnly requestedDate = new DateOnly(2012, 06, 01); //friday
+			Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 06, 02); //saturday
+			Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 06, 03); //sunday
+			Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+			requestedDate = new DateOnly(2012, 06, 04); //monday
+			Assert.IsTrue(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+
+			owningPeriodStartDate = new DateOnly(2012, 07, 01); // this is the first date of the scheduling period
+			requestedDate = new DateOnly(2012, 07, 01); // odd sunday
+			Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+
+			// this day is false before the bugfix
+			requestedDate = new DateOnly(2012, 07, 02); // even monday
+			Assert.IsTrue(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+		}
+
 
     }
 }
