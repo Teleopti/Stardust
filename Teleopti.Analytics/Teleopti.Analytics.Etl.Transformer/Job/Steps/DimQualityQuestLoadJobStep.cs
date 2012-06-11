@@ -8,7 +8,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         public DimQualityQuestLoadJobStep(IJobParameters jobParameters)
             : base(jobParameters)
         {
-            Name = "DimQualityQuestLoad";
+            Name = "dim_quality_quest";
             JobCategory = JobCategoryType.AgentStatistics;
         }
 

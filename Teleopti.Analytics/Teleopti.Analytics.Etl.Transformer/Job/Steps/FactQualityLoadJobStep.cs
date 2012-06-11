@@ -10,7 +10,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
     {
         public FactQualityLoadJobStep(IJobParameters jobParameters):base(jobParameters)
         {
-            Name = "FactQualityLoad";
+            Name = "fact_quality";
             JobCategory = JobCategoryType.AgentStatistics;
         }
 
