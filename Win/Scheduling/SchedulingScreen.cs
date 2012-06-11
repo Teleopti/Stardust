@@ -2875,11 +2875,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             else
                 toolStripMenuItemNextAssignment.Enabled = false;
 
-            toolStripMenuItemMeetingOrganizer.Enabled =
-                toolStripMenuItemEditMeeting.Enabled =
-                ToolStripMenuItemCreateMeeting.Enabled =
+            ToolStripMenuItemCreateMeeting.Enabled =
                 toolStripMenuItemDeleteMeeting.Enabled =
                 toolStripMenuItemRemoveParticipant.Enabled = isPermittedToEditMeeting();
+            toolStripMenuItemMeetingOrganizer.Enabled =
+                toolStripMenuItemEditMeeting.Enabled = isPermittedToViewMeeting();
 
             toolStripMenuItemWriteProtectSchedule.Enabled =
                 toolStripMenuItemWriteProtectSchedule2.Enabled = isPermittedToWriteProtect();
@@ -2904,11 +2904,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             return true;
         }
 
-
-        private bool isPermittedToEditMeeting()
+        private bool isPermittedToViewMeeting()
         {
             const string functionPath = DefinedRaptorApplicationFunctionPaths.ModifyMeetings;
             return CheckPermission(functionPath);
+        }
+        private bool isPermittedToEditMeeting()
+        {
+            if (!isPermittedToViewMeeting())
+                return false;
+            return !_scenario.Restricted || PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
         }
 
         private bool isPermittedToWriteProtect()
@@ -3734,7 +3739,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         IList<ITeam> meetingPersonsTeams = getDistinctTeamList(meeting);
                         bool editPermission = hasFunctionPermissionForTeams(meetingPersonsTeams,
                                                                             DefinedRaptorApplicationFunctionPaths.
-                                                                                ModifyMeetings);
+                                                                                ModifyMeetings) && isPermittedToEditMeeting();
                         bool viewSchedulesPermission = isPermittedToViewSchedules();
                         _schedulerMeetingHelper.MeetingComposerStart(meeting, _scheduleView, editPermission,
                                                                      viewSchedulesPermission);
