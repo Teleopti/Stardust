@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         public void VerifyOperators()
         {
             Assert.IsFalse(target != new StartTimeLimitation());
-            Assert.IsFalse(target == new StartTimeLimitation(new TimeSpan(1, 1, 1), new TimeSpan()));
+            Assert.IsFalse(target == new StartTimeLimitation(new TimeSpan(1, 1, 1),null));
         }
 
         [Test]

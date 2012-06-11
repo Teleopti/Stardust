@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         public void VerifyOperators()
         {
             Assert.IsFalse(target != new WorkTimeLimitation());
-            Assert.IsFalse(target == new WorkTimeLimitation(new TimeSpan(1, 1, 1), new TimeSpan()));
+            Assert.IsFalse(target == new WorkTimeLimitation(new TimeSpan(1, 1, 1), null));
         }
         [Test]
         public void VerifyEquals()
@@ -188,10 +188,10 @@ namespace Teleopti.Ccc.DomainTest.Helper
 				target = new WorkTimeLimitation(TimeSpan.FromHours(2), TimeSpan.FromHours(2));
 				Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
 
-				target = new WorkTimeLimitation(null, TimeSpan.FromHours(3));
+				target = new WorkTimeLimitation(TimeSpan.FromHours(3), null);
 				Assert.IsFalse(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
 
-				target = new WorkTimeLimitation(null, TimeSpan.FromHours(1));
+				target = new WorkTimeLimitation(TimeSpan.FromHours(1), null);
 				Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
         }
 
