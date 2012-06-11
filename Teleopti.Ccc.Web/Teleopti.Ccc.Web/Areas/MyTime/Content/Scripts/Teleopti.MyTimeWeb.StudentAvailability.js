@@ -195,8 +195,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 })(jQuery);
 
-$(function () { Teleopti.MyTimeWeb.StudentAvailability.Init(); });
-
 Teleopti.MyTimeWeb.StudentAvailability.Layout = (function ($) {
 
 	function _setDayState(week) {

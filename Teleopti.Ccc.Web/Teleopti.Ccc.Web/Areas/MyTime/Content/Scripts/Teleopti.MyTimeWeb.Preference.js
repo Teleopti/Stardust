@@ -265,4 +265,60 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 
 })(jQuery);
 
-$(function () { Teleopti.MyTimeWeb.Preference.Init(); });
+Teleopti.MyTimeWeb.Preference.formatTimeSpan = function (totalMinutes) {
+	if (!totalMinutes)
+		return "0:00";
+	var minutes = totalMinutes % 60;
+	var hours = Math.floor(totalMinutes / 60);
+	return hours + ":" + Teleopti.MyTimeWeb.Preference.rightPadNumber(minutes, "00");
+};
+
+Teleopti.MyTimeWeb.Preference.rightPadNumber = function(number, padding) {
+	var formattedNumber = padding + number;
+	var start = formattedNumber.length - padding.length;
+	formattedNumber = formattedNumber.substring(start);
+	return formattedNumber;
+};
+
+Teleopti.MyTimeWeb.Preference.DayViewModel = function () {
+	var self = this;
+
+	this.PossibleContractTimeMinutesLower = ko.observable();
+	this.PossibleContractTimeMinutesUpper = ko.observable();
+
+	this.PossibleContractTimeLower = ko.computed(function () {
+		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleContractTimeMinutesLower());
+	});
+
+	this.PossibleContractTimeUpper = ko.computed(function () {
+		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleContractTimeMinutesUpper());
+	});
+};
+
+Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (dayViewModels) {
+	var self = this;
+
+	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
+		var sum = 0;
+		$.each(dayViewModels, function (index, day) {
+			sum += day.PossibleContractTimeMinutesLower();
+		});
+		return sum;
+	});
+
+	this.PossibleResultContractTimeMinutesUpper = ko.computed(function () {
+		var sum = 0;
+		$.each(dayViewModels, function (index, day) {
+			sum += day.PossibleContractTimeMinutesUpper();
+		});
+		return sum;
+	});
+
+	this.PossibleResultContractTimeLower = ko.computed(function () {
+		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesLower());
+	});
+
+	this.PossibleResultContractTimeUpper = ko.computed(function () {
+		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
+	});
+};

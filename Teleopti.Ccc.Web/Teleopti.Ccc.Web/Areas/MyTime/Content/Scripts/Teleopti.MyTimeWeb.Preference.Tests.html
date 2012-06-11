@@ -1,0 +1,63 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>Preference Tests</title>
+		<link rel="stylesheet" href="../../../../Content/Scripts/qunit.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="../../../../Content/Scripts/jquery-1.6.4.js"></script>
+		<script type="text/javascript" src="../../../../Content/Scripts/qunit.js"></script>
+		<script type="text/javascript" src="../../../../Content/Scripts/knockout-2.1.0.js"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.js"></script>
+
+		<script>
+			$(document).ready(function () {
+
+				module("Teleopti.MyTimeWeb.Preference");
+
+				test("period feedback view model should summarize possible contract time", function () {
+					var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+					var viewModelDay2 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+					var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel([viewModelDay1, viewModelDay2]);
+					viewModelDay1.PossibleContractTimeMinutesLower(6 * 60);
+					viewModelDay1.PossibleContractTimeMinutesUpper(10 * 60);
+					viewModelDay2.PossibleContractTimeMinutesLower(6 * 60);
+					viewModelDay2.PossibleContractTimeMinutesUpper(10 * 60);
+
+					expect(2);
+					equal(viewModel.PossibleResultContractTimeMinutesLower(), 12 * 60);
+					equal(viewModel.PossibleResultContractTimeMinutesUpper(), 20 * 60);
+				});
+
+				test("day view model should format possible contract time", function () {
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+					viewModelDay.PossibleContractTimeMinutesLower(6 * 60 + 30);
+					viewModelDay.PossibleContractTimeMinutesUpper(8 * 60 + 5);
+
+					expect(2);
+					equal(viewModelDay.PossibleContractTimeLower(), "6:30");
+					equal(viewModelDay.PossibleContractTimeUpper(), "8:05");
+				});
+
+				test("period feedback view model should format possible contract time", function () {
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+					var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel([viewModelDay]);
+					viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
+					viewModelDay.PossibleContractTimeMinutesUpper(160 * 60 + 5);
+
+					expect(2);
+					equal(viewModel.PossibleResultContractTimeLower(), "100:30");
+					equal(viewModel.PossibleResultContractTimeUpper(), "160:05");
+				});
+
+			});
+		</script>
+  
+	</head>
+	<body>
+		<h1 id="qunit-header">Preference tests</h1>
+		<h2 id="qunit-banner"></h2>
+		<div id="qunit-testrunner-toolbar"></div>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture"></div>
+	</body>
+</html>

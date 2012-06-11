@@ -354,5 +354,3 @@ Teleopti.MyTimeWeb.Schedule.Layout = (function ($) {
 
 })(jQuery);
 
-$(function () { Teleopti.MyTimeWeb.Schedule.Init(); });
-

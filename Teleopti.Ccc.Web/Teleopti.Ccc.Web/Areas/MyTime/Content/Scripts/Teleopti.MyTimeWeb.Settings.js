@@ -122,7 +122,3 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		}
 	};
 })(jQuery);
-
-$(function () {
-	Teleopti.MyTimeWeb.Settings.Init();
-});

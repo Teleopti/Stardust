@@ -27,5 +27,3 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
 })(jQuery);
 
-$(function () { Teleopti.MyTimeWeb.Request.Init(); });
-
