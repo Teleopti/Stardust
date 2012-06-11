@@ -11,7 +11,7 @@
 		<script>
 			$(document).ready(function () {
 
-				module("Teleopti.MyTimeWeb.Preference");
+				module("Teleopti.MyTimeWeb.Preference view model");
 
 				test("period feedback view model should summarize possible contract time", function () {
 					var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
@@ -48,6 +48,51 @@
 					equal(viewModel.PossibleResultContractTimeUpper(), "160:05");
 				});
 
+				test("day view model should load feedback", function () {
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel("2012-06-11");
+
+					$.myTimeAjax = function (options) {
+						equal(options.data.Date, "2012-06-11");
+						options.success({
+							PossibleContractTimeMinutesLower: 6 * 60
+						});
+					};
+
+					expect(2);
+					
+					viewModelDay.LoadFeedback();
+
+					equal(viewModelDay.PossibleContractTimeLower(), "6:00");
+				});
+
+				module("Teleopti.MyTimeWeb.Preference init");
+
+				//				test("init should create day view models", function () {
+				//					$("#qunit-fixture")
+				//						.html("<li data-mytime-date='2012-06-11' />")
+				//						.append("<li data-mytime-date='2012-06-12' />");
+				//					Teleopti.MyTimeWeb.Preference.InitViewModels();
+				//					expect(1);
+				//					equal(Teleopti.MyTimeWeb.Preference.DayViewModels.length, 2);
+				//				});
+
+//								test("init should load stuff", function () {
+
+//									$("#qunit-fixture")
+//										.html("<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>")
+//										.append("<li data-mytime-date='2012-06-11' />")
+//										.append("<li data-mytime-date='2012-06-12' />");
+//									
+//									$.myTimeAjax = function (options) {
+//										options.success({
+//											PossibleContractTimeMinutesLower: 6 * 60
+//										});
+//									};
+
+//									Teleopti.MyTimeWeb.Preference.InitViewModels();
+
+//									equal($('#Preference-period-feedback-view').text(), "12:00");
+//								});
 			});
 		</script>
   

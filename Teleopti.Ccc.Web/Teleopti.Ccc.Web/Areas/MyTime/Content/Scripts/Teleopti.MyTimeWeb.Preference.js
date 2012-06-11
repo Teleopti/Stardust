@@ -250,6 +250,15 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			_initSplitButton();
 			_initDeleteButton();
 		},
+		InitViewModels: function () {
+			var dayViewModels = [];
+			$('li[data-mytime-date]').each(function () {
+				dayViewModels.push(new Teleopti.MyTimeWeb.Preference.DayViewModel());
+			});
+			Teleopti.MyTimeWeb.Preference.DayViewModels = dayViewModels;
+			var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(dayViewModels);
+			ko.applyBindings(viewModel);
+		},
 		PreferencePartialInit: function () {
 			if (!$('#Preference-body').length)
 				return;
@@ -260,6 +269,9 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 		},
 		FeedbackIsLoaded: function () {
 			return _feedbackLoadingStarted && !Teleopti.MyTimeWeb.Ajax.IsRequesting();
+		},
+		AjaxForDate: function (options) {
+			return _ajaxForDate(options);
 		}
 	};
 
@@ -280,9 +292,21 @@ Teleopti.MyTimeWeb.Preference.rightPadNumber = function(number, padding) {
 	return formattedNumber;
 };
 
-Teleopti.MyTimeWeb.Preference.DayViewModel = function () {
+Teleopti.MyTimeWeb.Preference.DayViewModel = function (date) {
 	var self = this;
 
+	this.LoadFeedback = function () {
+		Teleopti.MyTimeWeb.Preference.AjaxForDate({
+			url: "PreferenceFeedback/Feedback",
+			type: 'GET',
+			data: { Date: date },
+			date: date,
+			fillData: function (cell, data) {
+				self.PossibleContractTimeMinutesLower(data.PossibleContractTimeMinutesLower);
+			}
+		});
+	};
+	
 	this.PossibleContractTimeMinutesLower = ko.observable();
 	this.PossibleContractTimeMinutesUpper = ko.observable();
 
@@ -293,11 +317,13 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function () {
 	this.PossibleContractTimeUpper = ko.computed(function () {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleContractTimeMinutesUpper());
 	});
+
+
 };
 
 Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (dayViewModels) {
 	var self = this;
-
+	
 	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
 		var sum = 0;
 		$.each(dayViewModels, function (index, day) {

@@ -18,7 +18,7 @@
 		@string.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
 	}
 </div>
-<div class="displaynone">
+<div id="Preference-period-feedback-view" class="displaynone">
 	<div id="Preference-period-feedback-target-daysoff" class="pd5 info-pnl">
 		@{
 			var range = Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span class='lower'>-</span>", "<span class='upper'>-</span>"));
