@@ -93,7 +93,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Determines whether the requested date would be a workdate relative to the owner start date.
         /// </summary>
-        /// <param name="owningPeriodStartDate">The owning period start date.</param>
+        /// <param name="personPeriodStartDate">The owning period start date.</param>
         /// <param name="requestedDate">The requested date.</param>
         /// <returns>
         /// 	<c>true</c> if [is work day] [the specified owning period start date]; otherwise, <c>false</c>.
@@ -102,6 +102,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-11-03
         /// </remarks>
-        bool IsWorkday(DateOnly owningPeriodStartDate, DateOnly requestedDate);
+        bool IsWorkday(DateOnly personPeriodStartDate, DateOnly requestedDate);
     }
 }
