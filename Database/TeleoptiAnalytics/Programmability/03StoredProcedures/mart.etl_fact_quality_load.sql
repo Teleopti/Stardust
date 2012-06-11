@@ -39,7 +39,7 @@ ELSE  --Single datasource_id
 BEGIN
 	DECLARE @start_date_id int
 	DECLARE @end_date_id int
-		PRINT 'datasource_id: ' + cast(@datasource_id as varchar(2))
+
 	------------
 	--Init
 	------------
