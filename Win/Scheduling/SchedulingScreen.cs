@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
+using Teleopti.Ccc.WinCode.Meetings.Commands;
 using log4net;
 using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _uIEnabled = true;
     	private SchedulePartFilter SchedulePartFilter = SchedulePartFilter.None;
         private bool _chartInIntradayMode;
-
+        
         private IHandleBusinessRuleResponse _handleBusinessRuleResponse;
         private IRequestPresenter _requestPresenter;
 
@@ -2899,11 +2900,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             else
                 toolStripMenuItemNextAssignment.Enabled = false;
 
-            toolStripMenuItemMeetingOrganizer.Enabled =
-                toolStripMenuItemEditMeeting.Enabled =
-                ToolStripMenuItemCreateMeeting.Enabled =
+            ToolStripMenuItemCreateMeeting.Enabled =
                 toolStripMenuItemDeleteMeeting.Enabled =
                 toolStripMenuItemRemoveParticipant.Enabled = isPermittedToEditMeeting();
+            toolStripMenuItemMeetingOrganizer.Enabled =
+                toolStripMenuItemEditMeeting.Enabled = isPermittedToViewMeeting();
 
             toolStripMenuItemWriteProtectSchedule.Enabled =
                 toolStripMenuItemWriteProtectSchedule2.Enabled = isPermittedToWriteProtect();
@@ -2928,11 +2929,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             return true;
         }
 
-
-        private bool isPermittedToEditMeeting()
+        private bool isPermittedToViewMeeting()
         {
             const string functionPath = DefinedRaptorApplicationFunctionPaths.ModifyMeetings;
             return CheckPermission(functionPath);
+        }
+        private bool isPermittedToEditMeeting()
+        {
+            if (!isPermittedToViewMeeting())
+                return false;
+            return !_scenario.Restricted || TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
         }
 
         private bool isPermittedToWriteProtect()
@@ -3760,7 +3766,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         IList<ITeam> meetingPersonsTeams = getDistinctTeamList(meeting);
                         bool editPermission = hasFunctionPermissionForTeams(meetingPersonsTeams,
                                                                             DefinedRaptorApplicationFunctionPaths.
-                                                                                ModifyMeetings);
+                                                                                ModifyMeetings) && isPermittedToEditMeeting();
                         bool viewSchedulesPermission = isPermittedToViewSchedules();
                         _schedulerMeetingHelper.MeetingComposerStart(meeting, _scheduleView, editPermission,
                                                                      viewSchedulesPermission);
