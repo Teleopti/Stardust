@@ -38,25 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             Assert.AreEqual(_period,target.WorkTime);
         }
 
-        [Test]
-        public void TestPropertiesDoesNotSetToNull()
-        {
-            ILimitation limitation = _mockRep.StrictMock<ILimitation>();
-            WorkTimeLimitationAdapter target = new WorkTimeLimitationAdapter(limitation);
-           
-            using (_mockRep.Record())
-            {
-                Expect.Call(limitation.StartTime = _start);
-                Expect.Call(limitation.EndTime = _end);
-            }
-            using(_mockRep.Playback())
-            {
-                target.StartTime = null;
-                target.StartTime = _start;
-                target.EndTime = null;
-                target.EndTime = _end;
-            }
-        }
+
         [Test]
         public void TestPropertiesCallsStringMethodsOnLimitation()
         {
