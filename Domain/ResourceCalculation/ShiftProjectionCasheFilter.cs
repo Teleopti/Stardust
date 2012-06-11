@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -446,5 +447,38 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 			return shiftList;
     	}
+
+        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList,IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
+        {
+            if (schedulingOptions.UseGroupSchedulingCommonStart && schedulingOptions.UseGroupSchedulingCommonEnd)
+            {
+                shiftList = (IList<IShiftProjectionCache>) (from sl in shiftList
+                                     where
+                                         sl.MainShiftStartDateTime.Equals(
+                                             possibleStartEndCategory.StartTime ) && sl.MainShiftEndDateTime.Equals(possibleStartEndCategory.EndTime )
+                                     select sl);
+            }
+            else if (schedulingOptions.UseGroupSchedulingCommonStart)
+            {
+                shiftList = (IList<IShiftProjectionCache>)(from sl in shiftList
+                                                           where
+                                                               sl.MainShiftStartDateTime.Equals(
+                                                                   possibleStartEndCategory.StartTime)
+                                                           select sl);
+            }
+            else if (schedulingOptions.UseGroupSchedulingCommonEnd)
+            {
+                shiftList = (IList<IShiftProjectionCache>)(from sl in shiftList
+                                                           where
+                                                                sl.MainShiftEndDateTime.Equals(possibleStartEndCategory.EndTime)
+                                                           select sl);
+            }
+
+            return shiftList;
+
+        }
+
+
+        
     }
 }

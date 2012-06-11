@@ -347,6 +347,8 @@
     <Compile Include="ResourceCalculation\ISwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferences.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeople.cs" />
+    <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
+    <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />
     <Compile Include="ResourceCalculation\SwapRawService.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityChecker.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />

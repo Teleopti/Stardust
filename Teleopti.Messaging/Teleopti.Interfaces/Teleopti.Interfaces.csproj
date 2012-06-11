@@ -752,6 +752,7 @@
     <Compile Include="Infrastructure\IWriteToFile.cs" />
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="Infrastructure\LicenseType.cs" />
+    <Compile Include="IPossibleStartEndCategory.cs" />
     <Compile Include="MessageBroker\Client\IConcurrentUsers.cs">
       <SubType>Code</SubType>
     </Compile>

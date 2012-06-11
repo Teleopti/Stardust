@@ -176,32 +176,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 	}
 
-	public class PossibleStartEndCategory: IEquatable<PossibleStartEndCategory>
-	{
-		private int? _hashCode;
-		public DateTime StartTime { get; set; }
-		public DateTime EndTime { get; set; }
-		public IShiftCategory ShiftCategory { get; set; }
-		// holds the best value of this combination
-		public double Shiftvalue { get; set; }
+	
+    
 
-		public bool Equals(PossibleStartEndCategory other)
-		{
-			return GetHashCode().Equals(other.GetHashCode());
-		}
 
-		public override int GetHashCode()
-		{
-			if (!_hashCode.HasValue)
-			{
-				var catHash = 0;
-				if (ShiftCategory != null)
-					catHash = ShiftCategory.GetHashCode();
-				_hashCode = StartTime.GetHashCode() ^ EndTime.GetHashCode() ^ catHash;
-			}
-			
-			return _hashCode.Value;
-		}
-		
-	}
 }
