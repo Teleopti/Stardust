@@ -30,6 +30,8 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		private readonly Timer _timer;
 		private DateTime _serviceStartTime;
 
+		public event EventHandler NeedToStopService;
+
 		public EtlJobStarter(string connectionString, string cube, string pmInstallation)
 		{
 			XmlConfigurator.Configure();
@@ -61,6 +63,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		void Tick(object sender, ElapsedEventArgs e)
 		{
+			bool isStopping = false;
 			_timer.Stop();
 			try
 			{
@@ -68,6 +71,8 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				if (!configHandler.IsConfigurationValid)
 				{
 					LogInvalidConfiguration(configHandler);
+					NeedToStopService(this, null);
+					isStopping = true;
 					return;
 				}
 
@@ -91,7 +96,8 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			}
 			finally
 			{
-				_timer.Start();
+				if (!isStopping) 
+					_timer.Start();
 			}
 		}
 
@@ -132,7 +138,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 									: "null";
 			var timeZone = configHandler.BaseConfiguration.TimeZoneCode ?? "null";
 			Log.WarnFormat(CultureInfo.InvariantCulture,
-						   "ETL Service could not run any jobs due to invalid base configuration. Please start the manual ETL Tool and configure. (Culture: '{0}'; IntervalLengthMinutes: '{1}; TimeZoneCode: '{2}'.)",
+						   "ETL Service was stopped due to invalid base configuration (Culture: '{0}'; IntervalLengthMinutes: '{1}; TimeZoneCode: '{2}'). Please start the manual ETL Tool and configure. Then start the service again.",
 						   culture, intervalLength, timeZone);
 		}
 
