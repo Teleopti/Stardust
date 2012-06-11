@@ -1066,7 +1066,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IContract ctr = ContractFactory.CreateContract("sdf");
             IPartTimePercentage pTime = PartTimePercentageFactory.CreatePartTimePercentage("sdf");
             IContractSchedule cSc = ContractScheduleFactory.CreateContractSchedule("sdf");
-        	var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shift cat");
         	DateOnly date = new DateOnly(2000, 1, 2);
 
             PersistAndRemoveFromUnitOfWork(site);
@@ -1074,7 +1073,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(ctr);
             PersistAndRemoveFromUnitOfWork(pTime);
             PersistAndRemoveFromUnitOfWork(cSc);
-			PersistAndRemoveFromUnitOfWork(shiftCategory);
 
             person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, PersonContractFactory.CreatePersonContract(ctr, pTime, cSc), team));
             foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
@@ -1086,9 +1084,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(role);
 
             person.PermissionInformation.AddApplicationRole(role);
-
-			person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(date,SchedulePeriodType.Month, 1));
-			person.PersonSchedulePeriodCollection[0].AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategory){Weekly = true,MaxNumberOf = 1});
 
             PersistAndRemoveFromUnitOfWork(person);
 
@@ -1128,35 +1123,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection[0].ExtenderCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection[0].LimiterCollection));
 			Assert.AreEqual(2, loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldInitializeShiftCategoryFromLimitations()
-		{
-			ITeam team = TeamFactory.CreateSimpleTeam("hola");
-			ISite site = SiteFactory.CreateSimpleSite();
-			site.AddTeam(team);
-			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("max 1");
-			IContract ctr = ContractFactory.CreateContract("sdf");
-			IPartTimePercentage pTime = PartTimePercentageFactory.CreatePartTimePercentage("sdf");
-			IContractSchedule cSc = ContractScheduleFactory.CreateContractSchedule("sdf");
-
-			PersistAndRemoveFromUnitOfWork(ctr);
-			PersistAndRemoveFromUnitOfWork(pTime);
-			PersistAndRemoveFromUnitOfWork(cSc);
-			PersistAndRemoveFromUnitOfWork(site);
-			PersistAndRemoveFromUnitOfWork(team);
-			PersistAndRemoveFromUnitOfWork(shiftCategory);
-
-			var person = PersonFactory.CreatePerson();
-			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1),new PersonContract(ctr,pTime,cSc), team));
-			person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2000,1,1)));
-			person.PersonSchedulePeriodCollection[0].AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategory){MaxNumberOf = 1,Weekly = true});
-			PersistAndRemoveFromUnitOfWork(person);
-
-			Session.Clear();
-			var loadedPerson = target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), true).First();
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonSchedulePeriodCollection.First().ShiftCategoryLimitationCollection()[0].ShiftCategory));
 		}
 
 		[Test]
