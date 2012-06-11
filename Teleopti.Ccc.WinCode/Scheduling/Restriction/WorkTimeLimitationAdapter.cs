@@ -37,10 +37,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
             {
                 return _limitation.StartTime == TimeSpan.Zero ? string.Empty : _limitation.StartTimeString;
             }
-            set
-            {
-                _limitation.StartTimeString = value;
-            }
         }
 
        
@@ -49,10 +45,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
             get
             {
                 return _limitation.EndTime == TimeSpan.Zero ? string.Empty : _limitation.EndTimeString;
-            }
-            set
-            {
-                _limitation.EndTimeString = value;   
             }
         }
 

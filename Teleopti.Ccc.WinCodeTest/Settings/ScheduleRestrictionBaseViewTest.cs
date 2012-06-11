@@ -105,18 +105,13 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 
 			Assert.AreEqual(_targetView.EarlyStartTime, _startTimeLimit.StartTimeString);
 
-			string time = "0825";
-			StartTimeLimitation timeLimit = new StartTimeLimitation();
-			timeLimit.EndTimeString = time;
-			timeLimit.StartTimeString = time;
+			var time = new TimeSpan(8, 25,0);
+			StartTimeLimitation timeLimit = new StartTimeLimitation(time, time);
 			_targetView.LateStartTime = timeLimit.EndTimeString;
 			_targetView.EarlyStartTime = timeLimit.StartTimeString;
 
 			Assert.AreEqual(_targetView.EarlyStartTime, timeLimit.StartTimeString);
 			Assert.AreEqual(_targetView.LateStartTime, timeLimit.EndTimeString);
-
-			//_targetView.MinimumStartTime = _startTimeLimit.StartTimeString;
-			//Assert.AreEqual(_targetView.MinimumStartTime, _startTimeLimit.StartTimeString);
 		}
 
 		[Test]
@@ -126,18 +121,13 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 
 			Assert.AreEqual(_targetView.LateEndTime, _endTimeLimit.EndTimeString);
 
-			string time = "0825";
-			EndTimeLimitation timeLimit = new EndTimeLimitation();
-			timeLimit.StartTimeString = time;
-			timeLimit.EndTimeString = time;
+			var time = new TimeSpan(8, 25, 0);
+			EndTimeLimitation timeLimit = new EndTimeLimitation(time, time);
 			_targetView.EarlyEndTime = timeLimit.StartTimeString;
 			_targetView.LateEndTime = timeLimit.EndTimeString;
 
 			Assert.AreEqual(_targetView.EarlyEndTime, timeLimit.StartTimeString);
 			Assert.AreEqual(_targetView.LateEndTime, timeLimit.EndTimeString);
-
-			//_targetView.MaximumEndTime = _endTimeLimit.EndTimeString;
-			//Assert.AreEqual(_targetView.MaximumEndTime, _endTimeLimit.EndTimeString);
 		}
 
 		[Test]
@@ -350,11 +340,12 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		[Test]
 		public void VerifyOvernightChange()
 		{
-			_endTimeLimit.EndTimeString = "0800";
+			_endTimeLimit = new EndTimeLimitation(null, new TimeSpan(8, 0, 0));
+
 			string time = ScheduleRestrictionBaseView.ToOvernight(_endTimeLimit.EndTimeString);
 			Assert.AreNotEqual(time, _endTimeLimit.EndTimeString);
 
-			_endTimeLimit.EndTimeString = "0000";
+			_endTimeLimit = new EndTimeLimitation(null, new TimeSpan(0, 0, 0));
 			string time1 = ScheduleRestrictionBaseView.ToOvernight(_endTimeLimit.EndTimeString);
 			Assert.AreNotEqual(time1, _endTimeLimit.EndTimeString);
 
@@ -369,21 +360,21 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		public void VerifyTimePeriodIsValidRange()
 		{
 			// Normal - From(lo) < To(hi)
-			_startTimeLimit.StartTimeString = "0800";
-			_endTimeLimit.EndTimeString = "1000";
+			_startTimeLimit = new StartTimeLimitation(new TimeSpan(8,0,0), null);
+			_endTimeLimit = new EndTimeLimitation(null, new TimeSpan(10,0,0));
 			Assert.IsTrue(ScheduleRestrictionBaseView.IsValidRange(_startTimeLimit.StartTime, _endTimeLimit.EndTime));
 			// Normal - From(lo) < To(hi)Overnight
-			_startTimeLimit.StartTimeString = "0800";
-			_endTimeLimit.EndTimeString = "1000+1";
+			_startTimeLimit = new StartTimeLimitation(new TimeSpan(8, 0, 0), null);
+			_endTimeLimit = new EndTimeLimitation(null, new TimeSpan(34, 0, 0));
 			Assert.IsTrue(ScheduleRestrictionBaseView.IsValidRange(_startTimeLimit.StartTime, _endTimeLimit.EndTime));
 			// Normal - From == To
-			_startTimeLimit.StartTimeString = "0800";
-			_endTimeLimit.EndTimeString = _startTimeLimit.StartTimeString;
+			_startTimeLimit = new StartTimeLimitation(new TimeSpan(8, 0, 0), null);
+			_endTimeLimit = new EndTimeLimitation(null, new TimeSpan(8, 0, 0));
 			Assert.IsTrue(ScheduleRestrictionBaseView.IsValidRange(_startTimeLimit.StartTime, _endTimeLimit.EndTime));
 
 			// From(hi) > To(lo)
-			_startTimeLimit.StartTimeString = "1800";
-			_endTimeLimit.EndTimeString = "1000";
+			_startTimeLimit = new StartTimeLimitation(new TimeSpan(18, 0, 0), null);
+			_endTimeLimit = new EndTimeLimitation(null, new TimeSpan(10, 0, 0));
 			Assert.IsFalse(ScheduleRestrictionBaseView.IsValidRange(_startTimeLimit.StartTime, _endTimeLimit.EndTime));
 			//// From(hi)Overnight > To(lo)
 			//_startTimeLimit.StartTimeString = "0800+1";

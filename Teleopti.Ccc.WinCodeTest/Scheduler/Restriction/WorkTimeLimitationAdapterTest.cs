@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
         [Test]
         public void TestPropertiesCallsStringMethodsOnLimitation()
         {
-            string test = "test";
             string timeString = "07:00";
             TimeSpan? timeSpan = null;
             ILimitation limitation = _mockRep.StrictMock<ILimitation>();
@@ -50,8 +49,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
 
             using (_mockRep.Record())
             {
-                Expect.Call(limitation.StartTimeString= test);
-                Expect.Call(limitation.EndTimeString = test);
                 Expect.Call(limitation.StartTimeString).Return(timeString);
                 Expect.Call(limitation.EndTimeString).Return(timeString);
                 Expect.Call(limitation.StringFromTimeSpan(timeSpan)).Return("nothing");
@@ -61,8 +58,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             }
             using (_mockRep.Playback())
             {
-                target.StartTimeString = test;
-                target.EndTimeString = test;
                 Assert.AreEqual(timeString,target.StartTimeString);
                 Assert.AreEqual(timeString,target.EndTimeString);
                 target.StringFromTimeSpan(timeSpan); //Expect call on underlying limitation

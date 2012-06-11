@@ -13,8 +13,8 @@ namespace Teleopti.Interfaces.Domain
     [Serializable]
     public struct WorkTimeLimitation : ILimitation
     {
-        private TimeSpan? _startTime;
-		private TimeSpan? _endTime;
+        private readonly TimeSpan? _startTime;
+		  private readonly TimeSpan? _endTime;
 
 
         /// <summary>
@@ -97,12 +97,12 @@ namespace Teleopti.Interfaces.Domain
         {
             if (_startTime.HasValue)
             {
-                if (((TimeSpan)_startTime.Value).CompareTo(timeSpanToCompareTo) > 0)
+                if (_startTime.Value.CompareTo(timeSpanToCompareTo) > 0)
                     return false;
             }
             if (_endTime.HasValue)
             {
-                if (((TimeSpan)_endTime.Value).CompareTo(timeSpanToCompareTo) < 0)
+                if (_endTime.Value.CompareTo(timeSpanToCompareTo) < 0)
                     return false;
             }
             return true;
@@ -119,10 +119,6 @@ namespace Teleopti.Interfaces.Domain
         /// /// </remarks>
         public string StartTimeString
         {
-            set
-            {
-                _startTime = TimeSpanFromString(value);
-            }
             get
             {
                 return StringFromTimeSpan(StartTime);
@@ -141,11 +137,6 @@ namespace Teleopti.Interfaces.Domain
         /// /// </remarks>
         public string EndTimeString
         {
-            set
-            {
-                _endTime = TimeSpanFromString(value);
-            }
-
             get
             {
                 return StringFromTimeSpan(EndTime);

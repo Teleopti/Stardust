@@ -14,8 +14,8 @@ namespace Teleopti.Interfaces.Domain
     [Serializable]
     public struct StartTimeLimitation : ILimitation
     {
-    	private TimeSpan? _startTime;
-        private TimeSpan? _endTime;
+    	private readonly TimeSpan? _startTime;
+        private readonly TimeSpan? _endTime;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StartTimeLimitation"/> struct.
@@ -95,10 +95,6 @@ namespace Teleopti.Interfaces.Domain
         /// /// </remarks>
         public string StartTimeString
         {
-            set
-            {
-                _startTime = TimeSpanFromString(value);
-            }
             get
             {
                 return StringFromTimeSpan(StartTime);
@@ -117,10 +113,6 @@ namespace Teleopti.Interfaces.Domain
         /// /// </remarks>
         public string EndTimeString
         {
-            set
-            {
-                _endTime = TimeSpanFromString(value);
-            }
             get
             {
                 return StringFromTimeSpan(EndTime);
