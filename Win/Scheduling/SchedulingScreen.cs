@@ -3051,11 +3051,19 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (skillSummery.DialogResult == DialogResult.OK)
                 {
                     IAggregateSkill newSkill = handleSummeryEditMenuItems(menuItem, skillSummery);
-                    _virtualSkillHelper.EditAndRenameVirtualSkill(newSkill, skill.Name);
-                    schedulerSplitters1.ReplaceOldWithNew((ISkill) newSkill, skill);
-                    schedulerSplitters1.SortSkills();
-                    if (_tabSkillData.SelectedTab.Tag == newSkill)
-                        drawSkillGrid();
+
+                    if (newSkill.AggregateSkills.Count != 0)
+                    {
+                        _virtualSkillHelper.EditAndRenameVirtualSkill(newSkill, skill.Name);
+                        schedulerSplitters1.ReplaceOldWithNew((ISkill) newSkill, skill);
+                        schedulerSplitters1.SortSkills();
+                        if (_tabSkillData.SelectedTab.Tag == newSkill)
+                            drawSkillGrid();
+                    }
+                    else
+                    {
+                        removeVirtualSkill(newSkill);
+                    }
                 }
             }
         }
@@ -3064,6 +3072,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             var menuItem = (ToolStripMenuItem) sender;
             var virtualSkill = (IAggregateSkill) menuItem.Tag;
+            removeVirtualSkill(virtualSkill);
+        }
+
+        private void removeVirtualSkill(IAggregateSkill virtualSkill)
+        {
             virtualSkill.ClearAggregateSkill();
             schedulerSplitters1.RemoveVirtualSkill((Skill) virtualSkill);
             foreach (TabPageAdv tabPage in _tabSkillData.TabPages)
@@ -3148,6 +3161,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (skillSummary.AggregateSkillSkill.AggregateSkills.Count == 0)
                 {
                     removeVirtualSkillToolStripMenuItem(tabPage, virtualSkill, "Edit");
+                    removeVirtualSkillToolStripMenuItem(tabPage, virtualSkill, "Delete");
                     return;
                 }
                 tabPage.Text = virtualSkill.Name;

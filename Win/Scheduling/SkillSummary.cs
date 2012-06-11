@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 return;
             }
 
-            if (_aggregateSkillSkill == null)
+           if (_aggregateSkillSkill == null)
                 _aggregateSkillSkill = new Skill(textBoxSummeryName.Text, textBoxSummeryName.Text, Color.Pink, 15, _skills[0].SkillType);
             else
 			{
@@ -117,8 +117,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 AggregateSkillSkill.AddAggregateSkill(skill);
 			}
 			AggregateSkillSkill.IsVirtual = true;
-			setDefaultResolutionFromSmallestSkillResolution();
-			DialogResult = DialogResult.OK;
+            setDefaultResolutionFromSmallestSkillResolution();
+
+            DialogResult = DialogResult.OK;
 		}
 
 		private void setDefaultResolutionFromSmallestSkillResolution()
