@@ -31,27 +31,27 @@ namespace Teleopti.Interfaces.Domain
 		{
 			_startTime = startTime;
 			_endTime = endTime;
-			verifyTimes();
+			verifyTimes(startTime, endTime);
 		}
 
-    	private void verifyTimes()
+		private static void verifyTimes(TimeSpan? startTime, TimeSpan? endTime)
     	{
-			if (_startTime.HasValue)
+			if (startTime.HasValue)
 			{
-				if (_startTime.Value >= new TimeSpan(2, 0, 0, 0))
-					throw new ArgumentOutOfRangeException("startTime", _startTime, "Start Time can't be bigger than 23:59:59 +1");
+				if (startTime.Value >= new TimeSpan(2, 0, 0, 0))
+					throw new ArgumentOutOfRangeException("startTime", startTime, "Start Time can't be bigger than 23:59:59 +1");
 
-				if (_endTime.HasValue && _startTime > _endTime.Value)
-					throw new ArgumentOutOfRangeException("startTime", _startTime, "Start Time can't be greater than End Time");
+				if (endTime.HasValue && startTime > endTime.Value)
+					throw new ArgumentOutOfRangeException("startTime", startTime, "Start Time can't be greater than End Time");
 			}
 
-			if (_endTime.HasValue)
+			if (endTime.HasValue)
 			{
-				if (_endTime.Value >= new TimeSpan(2, 0, 0, 0))
-					throw new ArgumentOutOfRangeException("endTime", _endTime, "End Time can't be bigger than 23:59:59 +1");
+				if (endTime.Value >= new TimeSpan(2, 0, 0, 0))
+					throw new ArgumentOutOfRangeException("endTime", endTime, "End Time can't be bigger than 23:59:59 +1");
 
-				if (_startTime.HasValue && _endTime < _startTime.Value)
-					throw new ArgumentOutOfRangeException("endTime", _endTime, "End Time can't be less than Start Time");
+				if (startTime.HasValue && endTime < startTime.Value)
+					throw new ArgumentOutOfRangeException("endTime", endTime, "End Time can't be less than Start Time");
 			}
     	}
 
