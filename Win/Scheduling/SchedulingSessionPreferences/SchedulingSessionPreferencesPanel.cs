@@ -448,6 +448,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void checkBoxUseShiftCategoryRestrictionsCheckedChanged(object sender, EventArgs e)
         {
+			if (checkBoxUseBlockScheduling.Checked) checkBoxUseShiftCategoryRestrictions.Checked = false;
+
             if (_dataLoaded)
             {
                 getDataFromControls();
@@ -470,6 +472,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             {
                 checkBoxUseShiftCategory.Checked = false;
                 radioButtonBetweenDayOff.Checked = true;
+
+				checkBoxUseShiftCategoryRestrictions.Checked = false;
             }
 
             checkBoxUseShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
@@ -477,6 +481,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             radioButtonSchedulePeriod.Enabled = checkBoxUseBlockScheduling.Checked;
             radioButtonBetweenDayOff.Enabled = checkBoxUseBlockScheduling.Checked;
 			checkBoxUseGroupScheduling.Enabled = !checkBoxUseBlockScheduling.Checked;
+        	checkBoxUseShiftCategoryRestrictions.Enabled = !checkBoxUseBlockScheduling.Checked;
 			if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
 				checkBoxUseGroupScheduling.Checked = false;
         }

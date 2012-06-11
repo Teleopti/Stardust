@@ -1,15 +1,23 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Optimization
 {
+	public class ExtraPreferencesPanelUseBlockScheduling
+	{
+		public bool Use { get; set; }
+	}
+
     public partial class ExtraPreferencesPanel : BaseUserControl, IDataExchange
     {
 
         private IList<IGroupPage> _groupPageOnTeams;
         private IList<IGroupPage> _groupPageOnCompareWith;
+    	private IEventAggregator _eventAggregator;
 
         public IExtraPreferences Preferences { get; private set; }
 
@@ -21,9 +29,11 @@ namespace Teleopti.Ccc.Win.Optimization
 
         public void Initialize(
             IExtraPreferences extraPreferences,
-            IList<IGroupPage> groupPages)
+            IList<IGroupPage> groupPages,
+			IEventAggregator eventAggregator)
         {
             Preferences = extraPreferences;
+        	_eventAggregator = eventAggregator;
 
             var specification = new NotSkillGroupSpecification();
             _groupPageOnTeams = new List<IGroupPage>(groupPages).FindAll(specification.IsSatisfiedBy);
@@ -132,6 +142,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
         {
+			new ExtraPreferencesPanelUseBlockScheduling { Use = checkBoxBlock.Checked }.PublishEvent("ExtraPreferencesPanelUseBlockScheduling", _eventAggregator);
         	checkBoxTeams.Enabled = !checkBoxBlock.Checked;
             setRadioButtonsStatus();
         }
