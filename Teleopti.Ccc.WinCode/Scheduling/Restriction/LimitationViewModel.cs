@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 				 return new EndTimeLimitation(startTime, endTime);
 			 if(_limitation is WorkTimeLimitation)
 				 return new WorkTimeLimitation(startTime, endTime);
-			 throw new NotImplementedException("Unkown ILimitation type");
+			 throw new NotImplementedException("Unknown ILimitation type");
 		 }
 
         public string EndTime
