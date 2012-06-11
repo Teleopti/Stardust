@@ -33,11 +33,12 @@ namespace Teleopti.Interfaces.Domain
 				verifyTimes(startTime, endTime);
 		  }
 
+		private static readonly TimeSpan verifyLimit = new TimeSpan(23, 59, 59);
 		private static void verifyTimes(TimeSpan? startTime, TimeSpan? endTime)
 		{
 			if (startTime.HasValue)
 			{
-				if (startTime.Value > new TimeSpan(23, 59, 59))
+				if (startTime.Value > verifyLimit)
 					throw new ArgumentOutOfRangeException("startTime", startTime, "Start Time can't be bigger than 23:59:59");
 
 				if (endTime.HasValue && startTime > endTime.Value)
@@ -46,7 +47,7 @@ namespace Teleopti.Interfaces.Domain
 
 			if (endTime.HasValue)
 			{
-				if (endTime.Value > new TimeSpan(23, 59, 59))
+				if (endTime.Value > verifyLimit)
 					throw new ArgumentOutOfRangeException("endTime", endTime, "End Time can't be bigger than 23:59:59");
 
 				if (startTime.HasValue && endTime < startTime.Value)
