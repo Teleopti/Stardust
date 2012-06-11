@@ -82,11 +82,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool UseTeams { get; set; }
 		public bool KeepSameDaysOffInTeam { get; set; }
-		public IGroupPage GroupPageOnTeam { get; set; }
+		public IGroupPageLight GroupPageOnTeam { get; set; }
 
 		public double FairnessValue { get; set; }
 
-		public IGroupPage GroupPageOnCompareWith { get; set; }
+		public IGroupPageLight GroupPageOnCompareWith { get; set; }
 
 		public bool KeepShiftCategories { get; set; }
 		public bool KeepStartAndEndTimes { get; set; }

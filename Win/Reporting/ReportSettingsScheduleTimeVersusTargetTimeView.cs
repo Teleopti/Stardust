@@ -2,8 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -21,13 +24,15 @@ namespace Teleopti.Ccc.Win.Reporting
 	public partial class ReportSettingsScheduleTimeVersusTargetTimeView : BaseUserControl, IReportSettingsScheduleTimeVersusTargetTimeView
 	{
 		private readonly IEventAggregator _eventAggregator;
+		private readonly IComponentContext _componentContext;
 		private readonly ReportSettingsScheduleTimeVersusTargetTimePresenter _presenter;
 		private SchedulerStateHolder _schedulerStateHolder;
 		private ReportSettingsScheduledTimeVersusTarget _setting;
 
-		public ReportSettingsScheduleTimeVersusTargetTimeView(IEventAggregator eventAggregator)
+		public ReportSettingsScheduleTimeVersusTargetTimeView(IEventAggregator eventAggregator, IComponentContext componentContext)
 		{
 			_eventAggregator = eventAggregator;
+			_componentContext = componentContext;
 			InitializeComponent();
 
 			if (!StateHolderReader.IsInitialized || DesignMode) return;
@@ -49,7 +54,10 @@ namespace Teleopti.Ccc.Win.Reporting
 			SetTexts();
 
 			LoadSetting();
-
+	    	reportAgentSelector1.ComponentContext = _componentContext;
+	    	reportAgentSelector1.ReportApplicationFunction =
+	    		ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+	    		                               DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport);
 			reportAgentSelector1.OpenDialog += ReportAgentSelector1BeforeDialog;
 		}
 
@@ -60,7 +68,11 @@ namespace Teleopti.Ccc.Win.Reporting
 
 		public IList<IPerson> Persons
 		{
-			get { return reportAgentSelector1.SelectedPersons; }
+			get
+			{
+				_schedulerStateHolder.FilterPersons(reportAgentSelector1.SelectedPersonGuids);
+				return _schedulerStateHolder.FilteredPersonDictionary.Values.ToList();
+			}
 		}
 
 		public IScenario Scenario
@@ -174,12 +186,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		{
 			if (!_setting.Scenario.HasValue) return;
 
-			IList<IPerson> settingPersons = (from guid in _setting.Persons
-			                                 from person in _schedulerStateHolder.AllPermittedPersons
-			                                 where person.Id == guid
-			                                 select person).ToList();
-
-			reportAgentSelector1.SetSelectedPersons(settingPersons);
+			reportAgentSelector1.SetSelectedPersons(new HashSet<Guid>(_setting.Persons));
 			reportAgentSelector1.UpdateComboWithSelectedAgents();
 			reportAgentSelector1.SelectedGroupPageKey = _setting.GroupPage;
 			reportDateFromToSelector1.WorkPeriodStart = new DateOnly(_setting.StartDate);
