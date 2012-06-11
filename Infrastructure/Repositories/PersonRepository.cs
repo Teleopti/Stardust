@@ -474,20 +474,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .List();
 
                 var foundPeople = CollectionHelper.ToDistinctGenericCollection<IPerson>(queryResult[0]);
-            	foreach (var person1 in foundPeople)
-            	{
-            		foreach (var period in person1.PersonSchedulePeriodCollection)
-            		{
-            			foreach (var shiftCategoryLimitation in period.ShiftCategoryLimitationCollection())
-            			{
-            				if (!LazyLoadingManager.IsInitialized(shiftCategoryLimitation.ShiftCategory))
-            				{
-            					LazyLoadingManager.Initialize(shiftCategoryLimitation.ShiftCategory);
-            				}
-            			}
-            		}
-            	}
-
                 result.AddRange(foundPeople);
             }
             return result;
@@ -536,17 +522,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					{
 						if (pSkill.Skill.Activity.Name == "xyyyxxxyyyyx")
 							throw new InvalidDataException("lazy load elände");
-					}
-				}
-
-				foreach (var schedulePeriod in person.PersonSchedulePeriodCollection)
-				{
-					foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
-					{
-						if (!LazyLoadingManager.IsInitialized(shiftCategoryLimitation.ShiftCategory))
-						{
-							LazyLoadingManager.Initialize(shiftCategoryLimitation.ShiftCategory);
-						}
 					}
 				}
 			}
