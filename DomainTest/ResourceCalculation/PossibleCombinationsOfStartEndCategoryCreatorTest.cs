@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -15,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	{
 		private MockRepository _mocks;
 		private ISchedulingOptions _schedulingOptions;
-		private IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private PossibleCombinationsOfStartEndCategoryCreator _target;
 		private ShiftCategory _category;
 		private IShiftProjectionCache _cashe1;
@@ -39,9 +36,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_shiftProjectionCacheManager = _mocks.StrictMock<IShiftProjectionCacheManager>();
 			_schedulingOptions = new SchedulingOptions {UseGroupScheduling = true, UseGroupSchedulingCommonStart = true};
 			_target = new PossibleCombinationsOfStartEndCategoryCreator( _schedulingOptions);
+			_category = new ShiftCategory("hej");
 		}
 
 		[Test]
