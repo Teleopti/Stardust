@@ -90,6 +90,7 @@
     <Compile Include="Data\User\ContractScheduleWith2DaysOff.cs" />
     <Compile Include="Data\User\DayOffScheduled.cs" />
     <Compile Include="Data\User\IContractSetup.cs" />
+    <Compile Include="Data\User\ShiftCategoryPreferenceOnWeekday.cs" />
     <Compile Include="Data\User\UserContractSchedule.cs" />
     <Compile Include="PreferencesPeriodFeedbackStepDefinition.cs" />
     <Compile Include="Core\TestMethods.cs" />

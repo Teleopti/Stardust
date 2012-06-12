@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have a shift category preference on weekday (\d)")]
 		public void GivenIHaveAShiftCategoryPreferenceOnWeekday1(int weekday)
 		{
-			ScenarioContext.Current.Pending();
+			UserFactory.User().Setup(new ShiftCategoryPreferenceOnWeekday(weekday));
 		}
 
 
