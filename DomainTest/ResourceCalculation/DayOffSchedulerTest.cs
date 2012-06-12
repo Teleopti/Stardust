@@ -61,8 +61,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();
             _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
-			_person = _mocks.StrictMock<IPerson>();
-        	_personPeriod = _mocks.StrictMock<IPersonPeriod>();
 		}
 
         [Test]
