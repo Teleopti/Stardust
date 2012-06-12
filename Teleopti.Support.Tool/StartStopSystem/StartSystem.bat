@@ -5,7 +5,7 @@ PING -n 4 127.0.0.1>nul
 
 ::Set the list of services to manuipulate
 ::note: Order matters!!
-SET serviceList=MsDtc;TeleoptiBrokerService;TeleoptiServiceBus;TeleoptiEtlService
+SET serviceList=MsDtc;TeleoptiServiceBus;TeleoptiEtlService
 
 ::Finally start our two App pools
 if exist "%windir%\system32\inetsrv\AppCmd.exe" (

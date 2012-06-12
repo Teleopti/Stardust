@@ -5,7 +5,7 @@ PING -n 4 127.0.0.1>nul
 
 ::Set the list of services to manuipulate
 ::note: Order matters!!
-set serviceList=TeleoptiEtlService;TeleoptiServiceBus;TeleoptiBrokerService
+set serviceList=TeleoptiEtlService;TeleoptiServiceBus
 
 ::For each service in list, stop
 call :processServiceList
