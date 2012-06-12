@@ -170,7 +170,7 @@ Scenario: Period feedback of schedules and preferences
 	And I have a scheduled day off on weekday 6
 	And I have a day off preference on weekday 7
 	When I view preferences
-	And I should see a message that my preferences can result in 34 to 46 hours
+	Then I should see a message that my preferences can result in 34 to 46 hours
 
 
 

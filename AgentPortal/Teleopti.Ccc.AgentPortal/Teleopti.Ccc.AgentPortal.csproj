@@ -723,6 +723,7 @@
     </Compile>
     <Content Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="Resources\boll.png" />
     <None Include="Resources\box.png" />

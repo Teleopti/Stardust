@@ -83,6 +83,7 @@
     <Compile Include="Data\User\ContractScheduleFromTable.cs" />
     <Compile Include="Data\User\DayOffPreferenceOnWeekday.cs" />
     <Compile Include="Data\User\IContractScheduleSetup.cs" />
+    <Compile Include="Data\User\ShiftOnWeekday.cs" />
     <Compile Include="Data\User\SecondScenario.cs" />
     <Compile Include="Data\DataFactory.cs" />
     <Compile Include="Data\User\CommonContract.cs" />

@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
@@ -31,12 +32,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().Setup(new UserContractSchedule(contractSchedule.ContractSchedule));
 		}
 
+		[Given(@"I have a scheduled day off on weekday (\d)")]
 		[Given(@"I have a day off scheduled on weekday (\d)")]
 		public void GivenIHaveADayOffScheduledOnWeekday3(int weekday)
 		{
 			UserFactory.User().Setup(new DayOffScheduled(weekday));
 		}
-
+		
 		[Given(@"I have a day off preference on weekday (\d)")]
 		public void GivenIHaveADayOffPreferenceOnWeekday3(int weekday)
 		{
@@ -71,6 +73,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().Setup(new ShiftCategoryPreferenceOnWeekday(weekday));
 		}
 
+		[Given(@"I have a scheduled shift of (\d) hours on weekday (\d)")]
+		public void GivenIHaveAScheduledShiftOf8HoursOnWeekday1(int hours, int weekday)
+		{
+			ScenarioContext.Current.Pending();
+			UserFactory.User().Setup(new ShiftOnWeekday(TimeSpan.FromHours(8), TimeSpan.FromHours(8 + hours), weekday));
+		}
+
+
 
 
 
@@ -99,15 +109,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"I should see a message that I should work (\d+) to (\d+) hours")]
-		public void ThenIShouldSeeAMessageThatIShouldWork35To45Hours(int lower, int upper)
+		public void ThenIShouldSeeAMessageThatIShouldWorkXToYHours(int lower, int upper)
 		{
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetHours.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkBetweenXAndYHours, lower, upper)));
 		}
 
 		[Then(@"I should see a message that my preferences can result in (\d+) to (\d+) hours")]
-		public void ThenIShouldSeeAMessageThatMyPreferencesCanResultIn42To70Hours(int lower, int upper)
+		public void ThenIShouldSeeAMessageThatMyPreferencesCanResultInXToYHours(int lower, int upper)
 		{
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackPossibleResultHours.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXToYHours, FormatHours(lower), FormatHours(upper))));
+		}
+
+		[Then(@"I should see a message that my preferences can result in (\d+) hours")]
+		public void ThenIShouldSeeAMessageThatMyPreferencesCanResultInXHours(int hours)
+		{
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackPossibleResultHours.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXHours, FormatHours(hours))));
 		}
 
 		private static string FormatHours(int hours)
