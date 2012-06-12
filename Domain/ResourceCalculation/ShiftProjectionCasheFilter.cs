@@ -450,31 +450,30 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList,IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
         {
+            if (schedulingOptions == null) return shiftList;
+
+            if (possibleStartEndCategory == null) return shiftList;
+
+             var finalShiftList = new List< IShiftProjectionCache >();
+
             if (schedulingOptions.UseGroupSchedulingCommonStart && schedulingOptions.UseGroupSchedulingCommonEnd)
             {
-                shiftList = (IList<IShiftProjectionCache>) (from sl in shiftList
-                                     where
-                                         sl.MainShiftStartDateTime.Equals(
-                                             possibleStartEndCategory.StartTime ) && sl.MainShiftEndDateTime.Equals(possibleStartEndCategory.EndTime )
-                                     select sl);
+                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.MainShiftStartDateTime && possibleStartEndCategory.EndTime  == shift.MainShiftEndDateTime ));
+                
             }
             else if (schedulingOptions.UseGroupSchedulingCommonStart)
             {
-                shiftList = (IList<IShiftProjectionCache>)(from sl in shiftList
-                                                           where
-                                                               sl.MainShiftStartDateTime.Equals(
-                                                                   possibleStartEndCategory.StartTime)
-                                                           select sl);
+
+                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.MainShiftStartDateTime));
+                
             }
             else if (schedulingOptions.UseGroupSchedulingCommonEnd)
             {
-                shiftList = (IList<IShiftProjectionCache>)(from sl in shiftList
-                                                           where
-                                                                sl.MainShiftEndDateTime.Equals(possibleStartEndCategory.EndTime)
-                                                           select sl);
+                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.EndTime == shift.MainShiftEndDateTime));
+               
             }
 
-            return shiftList;
+            return finalShiftList;
 
         }
 

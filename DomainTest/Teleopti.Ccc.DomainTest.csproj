@@ -904,6 +904,7 @@
     <Compile Include="Security\RegExpSpecificationTest.cs" />
     <Compile Include="Security\UserDetailTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
+    <Compile Include="ShiftCategoryPeriodValueExtractorThreadTest.cs" />
     <Compile Include="Specification\AllTest.cs" />
     <Compile Include="Specification\SpecificationTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSettingTest.cs" />

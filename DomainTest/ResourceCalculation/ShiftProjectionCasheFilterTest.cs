@@ -885,6 +885,100 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             return new List<IWorkShift> { _workShift1, _workShift2, _workShift3 };
         }
+
+        private IShiftProjectionCache _cashe1;
+        private IShiftProjectionCache _cashe2;
+        private IShiftProjectionCache _cashe3;
+        private IShiftProjectionCache _cashe4;
+
+        readonly DateTime _start1 = new DateTime(2012, 6, 8, 8, 0, 0);
+        readonly DateTime _start2 = new DateTime(2012, 6, 8, 7, 0, 0);
+        readonly DateTime _start3 = new DateTime(2012, 6, 8, 8, 0, 0);
+        readonly DateTime _start4 = new DateTime(2012, 6, 8, 10, 0, 0);
+
+        readonly DateTime _end1 = new DateTime(2012, 6, 8, 15, 0, 0);
+        readonly DateTime _end2 = new DateTime(2012, 6, 8, 16, 0, 0);
+        readonly DateTime _end3 = new DateTime(2012, 6, 8, 17, 0, 0);
+        readonly DateTime _end4 = new DateTime(2012, 6, 8, 16, 0, 0);
+
+        private IList<IShiftProjectionCache> getCashes()
+        {
+            _cashe1 = _mocks.DynamicMock<IShiftProjectionCache>();
+            _cashe2 = _mocks.DynamicMock<IShiftProjectionCache>();
+            _cashe3 = _mocks.DynamicMock<IShiftProjectionCache>();
+            _cashe4 = _mocks.DynamicMock<IShiftProjectionCache>();
+            return new List<IShiftProjectionCache> { _cashe1, _cashe2, _cashe3, _cashe4 };
+        }
+
+        [Test]
+        public void CanFilterOnGroupSchedulingCommonStart()
+        {
+            
+
+            var shiftList = getCashes();
+            Expect.Call(_cashe1.MainShiftStartDateTime).Return(_start1);
+            Expect.Call(_cashe2.MainShiftStartDateTime).Return(_start2);
+            Expect.Call(_cashe3.MainShiftStartDateTime).Return(_start3);
+            Expect.Call(_cashe4.MainShiftStartDateTime).Return(_start4);
+            _mocks.ReplayAll();
+            var possibleStartEndCategory = new PossibleStartEndCategory {StartTime = new DateTime(2012, 6, 8, 8, 0, 0)};
+                var schedulingOptions = new SchedulingOptions {UseGroupSchedulingCommonStart = true};
+
+            var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
+                                                                                                   possibleStartEndCategory,
+                                                                                                   schedulingOptions);
+
+            retShifts.Count.Should().Be.EqualTo(2);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void CanFilterOnGroupSchedulingCommonEnd()
+        {
+
+
+            var shiftList = getCashes();
+            Expect.Call(_cashe1.MainShiftEndDateTime ).Return(_end1 );
+            Expect.Call(_cashe2.MainShiftEndDateTime).Return(_end2);
+            Expect.Call(_cashe3.MainShiftEndDateTime).Return(_end3);
+            Expect.Call(_cashe4.MainShiftEndDateTime).Return(_end4);
+            _mocks.ReplayAll();
+            var possibleStartEndCategory = new PossibleStartEndCategory { EndTime  = new DateTime(2012, 6, 8, 15, 0, 0) };
+            var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true };
+
+            var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
+                                                                                                   possibleStartEndCategory,
+                                                                                                   schedulingOptions);
+
+            retShifts.Count.Should().Be.EqualTo(1);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void CanFilterOnGroupSchedulingCommonStartEnd()
+        {
+
+
+            var shiftList = getCashes();
+            Expect.Call(_cashe1.MainShiftStartDateTime).Return(_start1);
+            Expect.Call(_cashe2.MainShiftStartDateTime).Return(_start2);
+            Expect.Call(_cashe3.MainShiftStartDateTime).Return(_start3);
+            Expect.Call(_cashe4.MainShiftStartDateTime).Return(_start4);
+            Expect.Call(_cashe1.MainShiftEndDateTime).Return(_end1);
+            Expect.Call(_cashe2.MainShiftEndDateTime).Return(_end2).Repeat.Any() ;
+            Expect.Call(_cashe3.MainShiftEndDateTime).Return(_end3).Repeat.Any();
+            Expect.Call(_cashe4.MainShiftEndDateTime).Return(_end4).Repeat.Any();
+            _mocks.ReplayAll();
+            var possibleStartEndCategory = new PossibleStartEndCategory { EndTime = new DateTime(2012, 6, 8, 15, 0, 0), StartTime = new DateTime(2012, 6, 8, 8, 0, 0) };
+            var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true,UseGroupSchedulingCommonStart = true  };
+
+            var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
+                                                                                                   possibleStartEndCategory,
+                                                                                                   schedulingOptions);
+
+            retShifts.Count.Should().Be.EqualTo(1);
+            _mocks.VerifyAll();
+        }
     
         
     }

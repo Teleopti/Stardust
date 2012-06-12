@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -11,8 +12,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class ShiftCategoryPeriodValueExtractorThread
     {
 
-        private readonly PossibleStartEndCategory _possibleStartEndCategory;
-        private List<IShiftProjectionCache> _shiftProjectionList;
+        private readonly IPossibleStartEndCategory _possibleStartEndCategory;
+        private IList<IShiftProjectionCache> _shiftProjectionList;
         private readonly ISchedulingOptions _schedulingOptions;
         private readonly IBlockSchedulingWorkShiftFinderService _workShiftFinderService;
         private readonly DateOnly _dateOnly;
@@ -25,8 +26,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 
         //constructor
-        public ShiftCategoryPeriodValueExtractorThread( PossibleStartEndCategory possibleStartEndCategory,
-                                                        List<IShiftProjectionCache> shiftProjectionList,
+        public ShiftCategoryPeriodValueExtractorThread( IPossibleStartEndCategory possibleStartEndCategory,
+                                                        IList<IShiftProjectionCache> shiftProjectionList,
                                                         ISchedulingOptions schedulingOptions,
                                                         IBlockSchedulingWorkShiftFinderService workShiftFinderService,
                                                         DateOnly dateOnly,
@@ -59,11 +60,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
         // This method will be called when the thread is started.
-        public void ExtractShiftCategoryPeriodValue()
+        public double ExtractShiftCategoryPeriodValue()
         {
             var person = (IPerson)_groupPerson;
             var scheduleDictionary = _resultStateHolder.Schedules;
             var members = _groupPerson.GroupMembers;
+            
+
+            
             var agentFairness = scheduleDictionary.AverageFairnessPoints(members);
             var currentSchedulePeriod = person.VirtualSchedulePeriod(_dateOnly);
               
@@ -74,20 +78,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var averageWorkTime = currentSchedulePeriod.AverageWorkTimePerDay;
             var useShiftCategoryFairness = false;
             
-            IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = null;
+            IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = ExtractShiftCategoryFairnessFactor(person ) ;
             if (person.WorkflowControlSet != null)
             {
                 useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
-
-                var range = ScheduleDictionary[person];
-                var personCategoryFairness = range.CachedShiftCategoryFairness();
-                IShiftCategoryFairnessCalculator calculator = new ShiftCategoryFairnessCalculator();
-                var groupCategoryFairness =
-                    _groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(
-                        person, _dateOnly);
-
-                shiftCategoryFairnessFactors = calculator.ShiftCategoryFairnessFactors(groupCategoryFairness,
-                                                                                    personCategoryFairness);
+                
             }
                 
             var groupPerson = person as IGroupPerson;
@@ -113,10 +108,24 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                                         _schedulingOptions.UseMinimumPersons,
                                                         _schedulingOptions.UseMaximumPersons,
                                                         _schedulingOptions);
-                
+
             _possibleStartEndCategory.ShiftValue = shiftValue;
+            return shiftValue;
            
         }
+
+        private IShiftCategoryFairnessFactors ExtractShiftCategoryFairnessFactor(IPerson person)
+        {
+            var range = ScheduleDictionary[person];
+            var personCategoryFairness = range.CachedShiftCategoryFairness();
+            IShiftCategoryFairnessCalculator calculator = new ShiftCategoryFairnessCalculator();
+            var groupCategoryFairness =
+                    _groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(
+                        person, _dateOnly);
+            return calculator.ShiftCategoryFairnessFactors(groupCategoryFairness,
+                                                                                  personCategoryFairness);
+        }
+
 
        
         public IList<IShiftProjectionCache> FilterShiftCategoryPeriodOnSchedulingOptions(ICccTimeZoneInfo agentTimeZone, 
@@ -125,36 +134,38 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IWorkShiftFinderResult finderResult  )
         {
             var dictionary = ScheduleDictionary;
-            _shiftProjectionList = (List<IShiftProjectionCache>)_shiftProjectionCacheFilter.
+            _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnMainShiftOptimizeActivitiesSpecification(_shiftProjectionList);
             
-            _shiftProjectionList = (List<IShiftProjectionCache>)_shiftProjectionCacheFilter.
+            _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, agentTimeZone, _shiftProjectionList,
-                effectiveRestriction,_schedulingOptions.NotAllowedShiftCategories, finderResult);
+                                                                effectiveRestriction,_schedulingOptions.NotAllowedShiftCategories, finderResult);
             
-            _shiftProjectionList = (List<IShiftProjectionCache>)_shiftProjectionCacheFilter.
+            _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnBusinessRules(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
             
-            _shiftProjectionList = (List<IShiftProjectionCache>)_shiftProjectionCacheFilter.
+            _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnPersonalShifts(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
 
-            var shiftProjectionList = _shiftProjectionList;
 
-            _shiftProjectionList = (List<IShiftProjectionCache>) _shiftProjectionCacheFilter.
-                                                                         FilterOnGroupSchedulingCommonStartEnd(
-                                                                             _shiftProjectionList,
-                                                                             _possibleStartEndCategory,
-                                                                             _schedulingOptions);
+            
+
+            _shiftProjectionList =
+                _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(
+                    _shiftProjectionList,
+                    _possibleStartEndCategory,
+                    _schedulingOptions);
 
             if (_schedulingOptions.UseGroupSchedulingCommonCategory)
             {
-                _shiftProjectionList = (List<IShiftProjectionCache>)_shiftProjectionCacheFilter.
+                _shiftProjectionList = _shiftProjectionCacheFilter.
                     FilterOnShiftCategory(_possibleStartEndCategory.ShiftCategory, 
-                    _shiftProjectionList, finderResult); 
+                                          _shiftProjectionList, finderResult); 
 
             }
-            return shiftProjectionList;
+            return _shiftProjectionList;
         }
+
 
     }
 }
