@@ -324,53 +324,6 @@ namespace Teleopti.Interfaces.Domain
         DayOfWeek FirstDayOfWeek { get; set; }
 
         /// <summary>
-        /// Determines whether this date is a work day according to the contract schedule
-        /// </summary>
-        /// <param name="dateOnlyDate">The requested date.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is date contract schedule work day] [the specified requested date]; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-09-29
-        /// </remarks>
-        bool IsDateContractScheduleWorkday(DateOnly dateOnlyDate);
-
-        /// <summary>
-        /// The work time based on contract schedule.
-        /// </summary>
-        /// <param name="dateOnlyDate">The requested date.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-10-20
-        /// </remarks>
-        TimeSpan ContractScheduleWorkTime(DateOnly dateOnlyDate);
-
-        /// <summary>
-        /// Returns the ContractTime for a period
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// calaculates by looking at averageday contracttime
-        /// Created by: henrika
-        /// Created date: 2008-10-21
-        /// </remarks>
-        TimeSpan ContractScheduleWorkTime(DateOnlyPeriod period);
-
-        /// <summary>
-        /// Returns th number of Days Off for a period
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: henrika
-        /// Created date: 2008-10-21
-        /// </remarks>
-        int ContractScheduleDaysOff(DateOnlyPeriod period);
-
-        /// <summary>
         /// Get the Virtual Schedule Period.
         /// </summary>
         /// <param name="dateOnly">The date only.</param>

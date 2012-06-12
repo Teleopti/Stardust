@@ -106,32 +106,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(1, testContractSchedule.ContractScheduleWeeks.Count());
         }
 
-
-        /// <summary>
-        /// Verifies the can get work days from schedule.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-23
-        /// </remarks>
-        [Test]
-        public void VerifyCanGetWorkdaysFromSchedule()
-        {
-            ContractScheduleWeek contractScheduleWeek = new ContractScheduleWeek();
-            contractScheduleWeek.Add(DayOfWeek.Saturday, true);
-            contractScheduleWeek.Add(DayOfWeek.Sunday, true);
-
-            int workDays = testContractSchedule.GetWorkdays(DayOfWeek.Monday, DayOfWeek.Wednesday, 14);
-
-            Assert.AreEqual(14, workDays);
-
-            testContractSchedule.AddContractScheduleWeek(contractScheduleWeek);
-
-            workDays = testContractSchedule.GetWorkdays(DayOfWeek.Monday, DayOfWeek.Wednesday, 14);
-            
-            Assert.AreEqual(4, workDays);
-        }
-
         /// <summary>
         /// Protected constructor works.
         /// </summary>

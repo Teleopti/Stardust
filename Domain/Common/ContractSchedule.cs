@@ -99,32 +99,6 @@ namespace Teleopti.Ccc.Domain.Common
         }
 
         /// <summary>
-        /// Gets the number of anticipated work days.
-        /// </summary>
-        /// <param name="firstDayOfWeek">The first day of week.</param>
-        /// <param name="startDayOfWeek">The start day of week.</param>
-        /// <param name="days">The days.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-23
-        /// </remarks>
-        public virtual int GetWorkdays(DayOfWeek firstDayOfWeek, DayOfWeek startDayOfWeek, int days)
-        {
-            if (_contractScheduleWeeks.Count==0) return days;
-
-            int workDays = 0;
-            for (int dayIndex = 0; dayIndex < days; dayIndex++)
-            {
-                if (IsWorkday(firstDayOfWeek, startDayOfWeek, dayIndex))
-                    workDays++;
-            }
-
-            return workDays;
-        }
-
-
-        /// <summary>
         /// Gets a value indicating whether this instance is choosable.
         /// </summary>
         /// <value>
@@ -142,40 +116,6 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual bool IsDeleted
         {
             get { return _isDeleted; }
-        }
-
-        public virtual bool IsWorkday(DayOfWeek firstDayOfWeek, DayOfWeek startDayOfWeek, int dayIndex)
-        {
-            if (_contractScheduleWeeks.Count == 0)
-                return true;
-
-            var weeks = _contractScheduleWeeks.OrderBy(w => w.WeekOrder).ToList();
-            bool ret = true;
-            int weekCount = weeks.Count;
-            int currentWeek = 0;
-            DayOfWeek currentDayOfWeek = startDayOfWeek;
-            for (int currentDay = 0; currentDay <= dayIndex; currentDay++)
-            {
-                if (currentDay > 0 && firstDayOfWeek == currentDayOfWeek)
-                {
-                    currentWeek++;
-                    if (currentWeek == weekCount) currentWeek = 0;
-                }
-
-                //jump out if we have reached the correct day
-                if (currentDay == dayIndex)
-                {
-                    ret = weeks[currentWeek].IsWorkday(currentDayOfWeek);
-                    break;
-                }
-
-                int nextDayOfWeek = (int)currentDayOfWeek + 1;
-                if (nextDayOfWeek > 6) nextDayOfWeek -= 7;
-
-                currentDayOfWeek = (DayOfWeek)nextDayOfWeek;
-            }
-
-            return ret;
         }
 
 		public virtual void SetDeleted()
