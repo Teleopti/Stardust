@@ -627,7 +627,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             if (_efficiencyShrinkageSection.RowCount() > 0)
             {
                 var efficiencyRows = _efficiencyShrinkageSection.GetSelectedRows(gridControlMonthView.Selections.Ranges);
-                if (efficiencyRows.Count() > 0)
+                if (efficiencyRows.Any())
                 {
                     toolStripMenuItemUpdateEfficiencyShrinkageRow.Enabled = true;
                     toolStripMenuItemDeleteEfficiencyShrinkageRow.Enabled = true;
@@ -644,7 +644,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             {
                 var shrinkageRows = _shrinkageSection.GetSelectedRows(gridControlMonthView.Selections.Ranges);
 
-                if (shrinkageRows.Count() > 0)
+                if (shrinkageRows.Any())
                 {
                     toolStripMenuItemUpdateShrinkageRow.Enabled = true;
                     toolStripMenuItemDeleteShrinkageRow.Enabled = true;

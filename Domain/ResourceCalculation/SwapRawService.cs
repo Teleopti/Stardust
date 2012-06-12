@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (tempDay == null)
 				throw new ArgumentNullException("tempDay");
 
-			if (scheduleDay.PersonAssignmentCollection().Count() > 0)
+			if (scheduleDay.PersonAssignmentCollection().Any())
 			{
 				var personAssignment = scheduleDay.AssignmentHighZOrder();
 				if (personAssignment.MainShift != null)
@@ -105,13 +105,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 
-			if (scheduleDay.PersonDayOffCollection().Count > 0)
+			var dayOffCollection = scheduleDay.PersonDayOffCollection();
+			if (dayOffCollection.Count > 0)
 			{
-				tempDay.Add(scheduleDay.PersonDayOffCollection()[0].NoneEntityClone());
+				tempDay.Add(dayOffCollection[0].NoneEntityClone());
 				hasSwapData = true;
 			}
 
-			
 			return hasSwapData;
 		}	
 	}

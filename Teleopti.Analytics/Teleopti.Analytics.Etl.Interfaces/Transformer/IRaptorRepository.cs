@@ -203,5 +203,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
     	int PerformPurge();
         int FillFactRequestedDaysMart(DateTimePeriod period, IBusinessUnit businessUnit);
         ILicenseStatusUpdater LicenseStatusUpdater { get; }
+        int LoadQualityQuestDataMart(int dataSourceId, IBusinessUnit currentBusinessUnit);
+        int FillFactQualityDataMart(DateTimePeriod period, int dataSource, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit);
     }
 }

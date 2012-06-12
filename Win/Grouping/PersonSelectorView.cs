@@ -112,9 +112,9 @@ namespace Teleopti.Ccc.Win.Grouping
             treeViewAdvMainTabTree.InteractiveCheckBoxes = false;
             treeViewAdvMainTabTree.Nodes.Clear();
             treeViewAdvMainTabTree.Nodes.AddRange(treeNodeAdvs);
-            if(ShowCheckBoxes)
-                treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
-            treeViewAdvMainTabTree.EndUpdate();
+			if(ShowCheckBoxes)
+			    treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
+			treeViewAdvMainTabTree.EndUpdate();
             treeViewAdvMainTabTree.AfterCheck += treeViewAdvMainTabTreeAfterCheck;
         }
 
@@ -268,6 +268,8 @@ namespace Teleopti.Ccc.Win.Grouping
         }
 
         public IEnumerable<Guid> PreselectedPersonIds { get; set;  }
+
+		public IEnumerable<Guid> VisiblePersonIds { get; set; }
 
         private void tabControlAdvSelectedIndexChanged(object sender, EventArgs e)
         {

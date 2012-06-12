@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             _loadUsers = loadUsers;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Execute()
         {
             var loadUser = PrincipalAuthorization.Instance().EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(_applicationFunction.FunctionPath));
@@ -55,11 +55,25 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                 toNodes = rep.GetOrganization(dateOnlyPeriod, loadUser);    
             }
             
+			
             toNodes = removeDuplicates(toNodes);
 			// Permissions
-var auth = PrincipalAuthorization.Instance();
+			var auth = PrincipalAuthorization.Instance();
 
             var toRemove = new List<IPersonSelectorOrganization>();
+			if(_view.VisiblePersonIds != null)
+			{
+				foreach (var toNode in toNodes)
+				{
+					if (!_view.VisiblePersonIds.Contains(toNode.PersonId))
+						toRemove.Add(toNode);
+					
+				}
+			}
+			foreach (var personSelectorOrganization in toRemove)
+			{
+				toNodes.Remove(personSelectorOrganization);
+			}
             foreach (var toNode in toNodes)
             {
                 if (toNode.PersonId != Guid.Empty)

@@ -321,10 +321,10 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
             var authorization = PrincipalAuthorization.Instance();
 
-            if (_selectedEntityList.OfType<ITeam>().Count() > 0) 
+            if (_selectedEntityList.OfType<ITeam>().Any()) 
                 return _selectedEntityList.OfType<ITeam>().All(team => authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario, dateOnly, team));
 
-            if (_selectedEntityList.OfType<IPerson>().Count() > 0) 
+            if (_selectedEntityList.OfType<IPerson>().Any()) 
                 return _selectedEntityList.OfType<IPerson>().All(person => authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario, dateOnly, person));
 
             return true;

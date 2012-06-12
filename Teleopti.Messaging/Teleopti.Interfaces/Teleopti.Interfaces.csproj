@@ -127,6 +127,7 @@
     <Compile Include="Domain\IAuditSetter.cs" />
     <Compile Include="Domain\IEffectiveRestrictionForDisplayCreator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionOptions.cs" />
+    <Compile Include="Domain\IGroupPageLight.cs" />
     <Compile Include="Domain\ILicenseStatus.cs" />
     <Compile Include="Domain\IDetailedJobResult.cs" />
     <Compile Include="Domain\ILicenseStatusUpdater.cs" />

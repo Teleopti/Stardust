@@ -45,7 +45,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         public void ShouldCallRepositoryUserTabs()
         {
             var buId = Guid.NewGuid();
-            var onePersonId = Guid.NewGuid();
+            var olaPersonId = Guid.NewGuid();
+            var mickePersonId = Guid.NewGuid();
+            var robinPersonId = Guid.NewGuid();
             var date = new DateOnly(2012, 1, 19);
             var datePeriod = new DateOnlyPeriod(date, date);
             var lightPerson = _mocks.StrictMock<ILightPerson>();
@@ -55,15 +57,16 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
             Expect.Call(_personSelectorView.SelectedPeriod).Return(datePeriod);
             Expect.Call(rep.GetBuiltIn(datePeriod, PersonSelectorField.Contract)).Return(new List<IPersonSelectorBuiltIn>
                                                                     {
-                                                                        new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Node = "STO", PersonId = onePersonId},
-                                                                        new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Node = "STO" , PersonId = Guid.NewGuid()},
+                                                                        new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Node = "STO", PersonId = olaPersonId},
+                                                                        new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Node = "STO" , PersonId = mickePersonId},
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Claes", LastName = "H", Node = "STO", PersonId = Guid.NewGuid()},
-                                                                        new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Robin", LastName = "K", Node = "Str", PersonId = Guid.NewGuid()},
+                                                                        new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Robin", LastName = "K", Node = "Str", PersonId = robinPersonId},
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Jonas", LastName = "N", Node = "Str", PersonId = Guid.NewGuid()}
                                                                     });
-            Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> {onePersonId}).Repeat.Times(5);
+            Expect.Call(_personSelectorView.VisiblePersonIds).Return(new List<Guid> {olaPersonId, mickePersonId, robinPersonId}).Repeat.AtLeastOnce();
+            Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> {olaPersonId}).Repeat.Times(3);
             Expect.Call(() => _unitOfWork.Dispose());
-            Expect.Call(_commonNameSetting.BuildCommonNameDescription(lightPerson)).Repeat.Times(5).IgnoreArguments().Return("");
+            Expect.Call(_commonNameSetting.BuildCommonNameDescription(lightPerson)).Repeat.Times(3).IgnoreArguments().Return("");
             Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).IgnoreArguments();
             _mocks.ReplayAll();
             _target.Execute();
@@ -91,12 +94,19 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Jonas", LastName = "N", Node = "Str", PersonId = Guid.NewGuid()}
                                                                     });
                 Expect.Call(() => _unitOfWork.Dispose());
+				Expect.Call(_personSelectorView.VisiblePersonIds).Return(null).Repeat.AtLeastOnce();
                 Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).IgnoreArguments();
                 _mocks.ReplayAll();
                 _target.Execute();
                 _mocks.VerifyAll();
             }
-        }
-    }
+		}
+
+		[Test]
+		public void ShouldContainTheGuid()
+		{
+			Assert.That(_target.Key, Is.EqualTo("Contract"));
+		}
+	}
 
 }
