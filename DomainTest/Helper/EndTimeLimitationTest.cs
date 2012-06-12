@@ -88,7 +88,23 @@ namespace Teleopti.Ccc.DomainTest.Helper
 				Assert.IsTrue(target.HasValue());
         }
 
-
+		  [Test]
+		  [ExpectedException(typeof(ArgumentOutOfRangeException))]
+		  public void VerifyEndToBigViaString()
+		  {
+			  target.TimeSpanFromString("1:1:16:33");
+		  }
+		  [Test]
+		  public void VerifySetEndDateWithString()
+		  {
+			  target.TimeSpanFromString("5 AM")
+				  .Should().Be.EqualTo(new TimeSpan(5, 0, 0));
+		  }
+		 [Test]
+		 public void VerifyTimeSpanFromStringWhenNull()
+		 {
+		 	target.TimeSpanFromString(null).HasValue.Should().Be.False();
+		 }
 
 		  [Test]
 		  public void ShouldBeValidForTimeSpanWithinPeriodWhenBothNull()
