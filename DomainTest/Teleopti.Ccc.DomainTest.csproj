@@ -927,7 +927,6 @@
     <Compile Include="Time\DateTimePeriodMergerTest.cs" />
     <Compile Include="Time\PeriodScaleUnitTest.cs" />
     <Compile Include="Time\DateTimeExtensionsTest.cs" />
-    <Compile Include="Time\PositiveTimeSpanTest.cs" />
     <Compile Include="Time\SelectedSchedulesAreEmptyTest.cs" />
     <Compile Include="Time\SetupDateTimePeriodTest.cs" />
     <Compile Include="Time\SetupDateTimePeriodToDefaultWorkHoursTest.cs" />

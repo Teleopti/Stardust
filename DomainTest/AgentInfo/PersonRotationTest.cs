@@ -161,8 +161,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             rest = _person.GetPersonRotationDayRestrictions(lst, d);
             Assert.AreEqual(1, rest.Count, "Shiftcategory");
 
-            ILimitation limitation = new StartTimeLimitation();
-            limitation.StartTime = TimeSpan.FromHours(1);
+				ILimitation limitation = new StartTimeLimitation(TimeSpan.FromHours(1), null);
             _rotation.RotationDays[4].RestrictionCollection[0].StartTimeLimitation = (StartTimeLimitation)limitation;
             
             rest = _person.GetPersonRotationDayRestrictions(lst, d);

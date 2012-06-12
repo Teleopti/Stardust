@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.WinCode.Converters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Converters
 {
@@ -30,6 +32,15 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
             object value = _target.Convert(timeSpan, null, null, null);
             Assert.AreEqual(new TimeSpan(1, 13, 00, 00), value);
         }
+
+		 [Test]
+		 public void VerifyDateTimePeriod()
+		 {
+		 	var startdate = new DateTime(2000, 1, 1, 1, 1, 1,10,DateTimeKind.Utc);
+			var endDate = new DateTime(2000, 1, 1, 1, 1, 2, 0, DateTimeKind.Utc);
+		 	_target.Convert(new DateTimePeriod(startdate, endDate), null, null, null)
+				.Should().Be.EqualTo(TimeSpan.FromSeconds(1));
+		 }
 
         [Test]
         public void VerifyConvertBack()

@@ -79,26 +79,6 @@ namespace Teleopti.Interfaces.Domain
             }
         }
 
-        /// <summary>
-        /// Verifies that a nested argument in a parameter is not null.
-        /// </summary>
-        /// <param name="nestedArgumentName">Name of the nested argument.</param>
-        /// <param name="parameterName">Name of the param.</param>
-        /// <param name="nestedArgumentValue">The nested parameter value.</param>
-        public static void NestedArgumentNotNull(string parameterName, string nestedArgumentName, object nestedArgumentValue)
-        {
-            try
-            {
-                NotNull(nestedArgumentName, nestedArgumentValue);
-            }
-            catch (ArgumentNullException ex)
-            {
-                string errMsg = string.Format(CultureInfo.CurrentCulture,
-                                              "Nested argument '{0}' in parameter '{1}' must not be null.",
-                                              nestedArgumentName, parameterName);
-                throw new ArgumentException(errMsg, ex);
-            }
-        }
 
         /// <summary>
         /// Verifies that a string (e.g. a value) is not string.Empty or null

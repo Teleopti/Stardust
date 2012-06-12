@@ -1,27 +1,21 @@
 ﻿using System;
 using NUnit.Framework;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.FileImport;
 
 namespace Teleopti.Ccc.WinCodeTest.FileImport
 {
-    [TestFixture]
-    public class FileImportExceptionTest
-    {
-        private FileImportException _target;
+	[TestFixture]
+	public class FileImportExceptionTest : ExceptionTest<FileImportException>
+	{
+		protected override FileImportException CreateTestInstance(string message, Exception innerException)
+		{
+			return new FileImportException(message, innerException);
+		}
 
-        [SetUp]
-        public void Setup()
-        {
-            _target = new FileImportException();
-        }
-        [Test]
-        public void VerifyConstructor()
-        {
-            Assert.IsNotNull(_target);
-            _target = new FileImportException("Fel!");
-            Assert.IsNotNull(_target);
-            _target = new FileImportException("Fel igen!", new ArgumentException("Nu är det fel!"));
-            Assert.IsNotNull(_target);
-        }
-    }
+		protected override FileImportException CreateTestInstance(string message)
+		{
+			return new FileImportException(message);
+		}
+	}
 }
