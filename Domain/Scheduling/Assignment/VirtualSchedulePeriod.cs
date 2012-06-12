@@ -206,6 +206,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (_personContract == null || _personContract.ContractSchedule == null)
                 return 0;
 
+			// tamasb code review with Micke: what if the person changes the period, or leaves the company !!!!!
+			IPersonPeriod personPeriod = _person.Period(_thePeriodWithTheDateIn.StartDate);
+			if (personPeriod == null)
+				return 0;
+
             DateOnly startDate = _thePeriodWithTheDateIn.StartDate;
             DateOnly endDate = _thePeriodWithTheDateIn.EndDate;
             int workDays = 0;
@@ -217,7 +222,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 if (_person != null)
                 {
-                    if (_personContract.ContractSchedule.IsWorkday(_thePeriodWithTheDateIn.StartDate, startDate))                                                   
+					if (_personContract.ContractSchedule.IsWorkday(personPeriod.StartDate, startDate))                                                   
                         workDays++;
                 }
                 startDate = startDate.AddDays(1);

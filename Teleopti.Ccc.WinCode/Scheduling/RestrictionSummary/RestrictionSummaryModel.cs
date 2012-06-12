@@ -174,11 +174,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         {
             IVirtualSchedulePeriod schedulePeriod =
                 agentInfoHelper.Person.VirtualSchedulePeriod(cellData.TheDate);
-            if (!schedulePeriod.IsValid)
-                return;
+			if (!schedulePeriod.IsValid)
+				return;
+
+			IPersonPeriod personPeriod = agentInfoHelper.Person.Period(cellData.TheDate);
+			if (personPeriod == null)
+				return;
+
             cellData.HasAbsenceOnContractDayOff =
-                !schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate,
-                                                          cellData.TheDate);
+                !schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, cellData.TheDate);
             TimeSpan time = TimeSpan.Zero;
             if (!cellData.HasAbsenceOnContractDayOff && cellData.EffectiveRestriction.Absence.InContractTime)
                 time = schedulePeriod.AverageWorkTimePerDay;
@@ -202,11 +206,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             var endTimeLimitation = new EndTimeLimitation(null, null);
             IVirtualSchedulePeriod schedulePeriod =
                 agentInfoHelper.Person.VirtualSchedulePeriod(cellData.TheDate);
-            if (schedulePeriod.IsValid)
+        	IPersonPeriod personPeriod = agentInfoHelper.Person.Period(cellData.TheDate);
+			if (schedulePeriod.IsValid && personPeriod != null)
             {
                 cellData.HasAbsenceOnContractDayOff =
-               !schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate,
-                                                         cellData.TheDate);
+					!schedulePeriod.ContractSchedule.IsWorkday(personPeriod.StartDate, cellData.TheDate);
             }
             
             WorkTimeLimitation workTimeLimitation;
