@@ -74,6 +74,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             var repository = new ShiftCategoryRepository(_unitOfWork);
     		var source = repository.LoadAll();
+
+			_source.Clear();
             foreach (var shiftCategory in source)
             {
                 if (shiftCategory.DayOfWeekJusticeValues.Count != 7)
