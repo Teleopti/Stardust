@@ -45,15 +45,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         {
             foreach (TItems currentComboItem in _comboItems)
             {
-                string itemName = (_propertyReflector.GetValue(currentComboItem, _displayMember)).ToString().Trim();
-                if (itemName == selectedItem)
+                string itemName = _propertyReflector.GetValue(currentComboItem, _displayMember).ToString().Trim();
+                if (itemName.StartsWith(selectedItem,StringComparison.CurrentCultureIgnoreCase))
                 {
                     comboItem = currentComboItem;
                     return true;
                 }
             }
 
-            comboItem = _comboItems.ElementAtOrDefault(0);
+            comboItem = _comboItems.FirstOrDefault();
             return false;
         }
 
@@ -107,6 +107,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 e.Style.DataSource = _comboItems;
                 e.Style.DisplayMember = _displayMember;
                 e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+            	e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
                 OnCellDisplayChanged(dataItem, e);
             }
 
@@ -143,7 +144,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                     e.Style.CellType = "Static";
                 else
                     e.Style.ResetBackColor();
-                e.Style.CellValue = cellValue;
+				e.Style.CellValue = cellValue;
+				e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
                 OnCellDisplayChanged(dataItem, e);
             }
         }

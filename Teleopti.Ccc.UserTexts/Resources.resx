@@ -10682,8 +10682,32 @@ These options are activated:
     <value> Full Day</value>
     <comment>Full day for request</comment>
   </data>
-  <data name="AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime" xml:space="preserve">
+  <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
     <value>Ready Time vs. Contracted Schedule Time</value>
     <comment>Ready Time vs. Contracted Schedule Time</comment>
+  </data>
+  <data name="YouShouldHaveXDaysOff" xml:space="preserve">
+    <value>You should have {0} days off.</value>
+    <comment>You should have X days off.</comment>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Anywhere</value>
+    <comment>The name of the mobile reports module used in permission</comment>
+  </data>
+  <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
+    <value>You should have between {0} and {1} days off.</value>
+    <comment>You should have between X and Y days off.</comment>
+  </data>
+  <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
+    <value>Your preferences can result in {0} days off.</value>
+    <comment>Your preferences can result in X days off.</comment>
+  </data>
+  <data name="YouShouldWorkXHours" xml:space="preserve">
+    <value>You should work {0} hours.</value>
+    <comment>You should work X hours.</comment>
+  </data>
+  <data name="MissingAbsenceType" xml:space="preserve">
+    <value>Missing absence type.</value>
+    <comment>Missing absence type.</comment>
   </data>
 </root>

@@ -15,6 +15,12 @@ Scenario: See text request
 	When I view requests
 	Then I should see my existing text request
 
+Scenario: See absence request
+	Given I am an agent
+	And I have an existing absence request
+	When I view requests
+	Then I should see my existing absence request
+
 Scenario: Requests tab
 	Given I am an agent
 	When I sign in
@@ -33,7 +39,7 @@ Scenario: No access to requests page
 
 Scenario: No requests
 	Given I am an agent
-	And I have no existing text requests
+	And I have no existing requests
 	When I view requests
 	Then I should see a user-friendly message explaining I dont have anything to view
 
@@ -55,17 +61,3 @@ Scenario: Paging
 	When I view requests
 	And I scroll down to the bottom of the page
 	Then I should see the page fill with the next page of requests
-
-
-
-
-
-#Scenario: Open text request
-#Scenario: Edit text request
-#Scenario: Cancel text request
-#Scenario: Can not cancel approved text request
-#Scenario: Can not cancel denied text request
-#Scenario: Can not edit approved text request
-#Scenario: Can not edit cancel text request
-#Scenario: Cancel edit text request
-

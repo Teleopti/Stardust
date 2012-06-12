@@ -139,7 +139,7 @@ echo.
 ::Get the output from the trace implementation(traceid + first tracefile)
 FINDSTR /C:"%ROOTDIR%" /I "%TraceOutput%" > NUL
 if %errorlevel% EQU 0 (
-for /f "tokens=1,2 delims=," %%g in ('more %TraceOutput%') do call :GetOutput %%g %%h
+for /f "tokens=1,2 delims=," %%g in ('more "%TraceOutput%"') do call :GetOutput %%g %%h
 ) else (
 echo unexpected error. Could not find trace path in output. will abort scrip. Try clean up any unwanted traces manually:
 SQLCMD -S%INSTANCE% -E -Q"SELECT * FROM :: fn_trace_getinfo(default)"

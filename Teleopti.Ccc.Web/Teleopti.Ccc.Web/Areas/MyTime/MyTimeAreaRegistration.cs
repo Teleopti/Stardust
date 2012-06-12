@@ -18,6 +18,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			var mapRoute = context.MapRoute(
+				"MyTime-authentication-signin",
+				"MyTime/Authentication/SignIn",
+				new { controller = "Authentication", action = "SignIn", area = "Start", origin = "MyTime" },
+				null,
+				new[] { "Teleopti.Ccc.Web.Areas.Start.*" });
+			mapRoute.DataTokens["area"] = "Start";
+			
+			mapRoute = context.MapRoute(
 				"MyTime-authentication",
 				"MyTime/Authentication/{action}",
 				new { controller = "Authentication", action = "Index", area = "Start", origin= "MyTime" },

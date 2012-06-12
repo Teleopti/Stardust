@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
 	<CustomerName>Teleopti RD NOT for production use!</CustomerName>
-	<ExpirationDate>2012-09-30T12:00:00</ExpirationDate>
-	<ExpirationGracePeriod>P30D</ExpirationGracePeriod>
-	<MaxActiveAgents>10000</MaxActiveAgents>
-	<MaxActiveAgentsGrace>10</MaxActiveAgentsGrace>
+	<ExpirationDate>2013-12-31T11:17:02</ExpirationDate>
+	<ExpirationGracePeriod>P0D</ExpirationGracePeriod>
+	<MaxActiveAgents>0</MaxActiveAgents>
+	<MaxActiveAgentsGrace>100</MaxActiveAgentsGrace>
 	<AgentsOrSeats>0</AgentsOrSeats>
-	<MaxSeats>10000</MaxSeats>
+	<MaxSeats>0</MaxSeats>
 	<SeatRatio>1.5</SeatRatio>
 	<TeleoptiCCC>
 		<Base>true</Base>
 		<AgentScheduleMessenger>true</AgentScheduleMessenger>
 		<AgentSelfService>true</AgentSelfService>
-		<Developer>true</Developer>
 		<HolidayPlanner>true</HolidayPlanner>
 		<PayrollIntegration>true</PayrollIntegration>
 		<PerformanceManager>true</PerformanceManager>
 		<RealtimeAdherence>true</RealtimeAdherence>
 		<ShiftTrades>true</ShiftTrades>
 		<MyTimeWeb>true</MyTimeWeb>
+		<Anywhere>true</Anywhere>
 	</TeleoptiCCC>
 	<Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
 	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
@@ -30,9 +30,9 @@
 					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
 				</Transforms>
 				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-				<DigestValue>qh8qjVJW2/B0mV4G4kALta1Ovj0=</DigestValue>
+				<DigestValue>EDRKXu1IIHOzAhIL3+BdmXznBhU=</DigestValue>
 			</Reference>
 		</SignedInfo>
-		<SignatureValue>Xlr/+hpHugErjCsrvicGUeK8lK27xTC8s2S5IMaOzgH2198OjvsE9T/9WIWjHyTKyflBvvqDhE9GRkMETFtOh53ObtSaDhMpKp1q10mwG14DIB55smssoPUNqGq/hDROxFsHp7hvseh+CLhdEalFv3WK7I/phtWwkfJdOmCGAyw=</SignatureValue>
+		<SignatureValue>5/V/Tv8Vp5988naAzXI/ISIf4qb3pgA9LqumTGqVYmnMs//IDKHa0Cpf2GzkczD45CN5Mj9CAkxKIEOd5pgxDxyqeC98bB+AXuWBm1A1xh3uv9YPNJEgpCd5Hn5fxA6w9Yaz4XH8o7OCjdNJuEWK540D+XZIs5pGbsLQWqaqFbk=</SignatureValue>
 	</Signature>
 </License>

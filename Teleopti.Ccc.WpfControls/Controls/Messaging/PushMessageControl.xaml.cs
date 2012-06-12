@@ -2,10 +2,12 @@
 using System.Windows;
 using System.Windows.Controls;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.Messaging;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Messaging
 {
@@ -29,28 +31,28 @@ namespace Teleopti.Ccc.WpfControls.Controls.Messaging
         public SendPushMessageViewModel SendPushMessageModel { get; private set;}
         public FollowUpServiceViewModel FollowUpPushMessageModel { get; private set; }
 
-
         public PushMessageControl()
         {
-            IPerson currentPerson = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
-            SendPushMessageModel = new SendPushMessageViewModel();
-            if (currentPerson != null) FollowUpPushMessageModel = new FollowUpServiceViewModel(currentPerson);
-           
             InitializeComponent();
-            DataContext = this;
         }
 
-        //This could be factored out, but for now, just use this region to commit to the model: 
-        #region codebehind 
+    	public PushMessageControl(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory) : this()
+    	{
+			IPerson currentPerson = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
+			SendPushMessageModel = new SendPushMessageViewModel(repositoryFactory,unitOfWorkFactory);
+			if (currentPerson != null)
+			{
+				FollowUpPushMessageModel = new FollowUpServiceViewModel(currentPerson,repositoryFactory,unitOfWorkFactory);
+			}
+			
+			DataContext = this;
+    	}
+
         public void SetReceivers(IEnumerable<IPerson> receivers)
         {
             SendPushMessageModel.SetReceivers(receivers);
         }
-        #endregion
-
-
-        //Refactor this, make use of the existing commands
-        #region eventhandlers for tabitems that should be refactored to commands
+        
         private void SetReplyState(IEnumerable<string> replyoptions,ReplyState replyState)
         {
             if (_replyState!=replyState)
@@ -63,13 +65,13 @@ namespace Teleopti.Ccc.WpfControls.Controls.Messaging
 
         private void Standard_GotFocus(object sender, RoutedEventArgs e)
         {
-            SetReplyState(new List<string>() { UserTexts.Resources.Ok },ReplyState.Standard);
+            SetReplyState(new List<string> { UserTexts.Resources.Ok },ReplyState.Standard);
             HelpProvider.SetHelpString(this, "PeopleWorksheet+MessagesStandard");
         }
 
         private void YesNo_GotFocus(object sender, RoutedEventArgs e)
         {
-            SetReplyState(new List<string>() { UserTexts.Resources.Yes, UserTexts.Resources.No }, ReplyState.YesNo);
+            SetReplyState(new List<string> { UserTexts.Resources.Yes, UserTexts.Resources.No }, ReplyState.YesNo);
             HelpProvider.SetHelpString(this, "PeopleWorksheet+MessagesYesNo");
         }
 
@@ -79,13 +81,9 @@ namespace Teleopti.Ccc.WpfControls.Controls.Messaging
             HelpProvider.SetHelpString(this, "PeopleWorksheet+MessagesCustom");
         }
 
-
         private void FollowUp_GotFocus(object sender, RoutedEventArgs e)
         {
             HelpProvider.SetHelpString(this, "PeopleWorksheet+MessagesFollowUp");
-
         }
-        #endregion
-
     }
 }

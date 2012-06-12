@@ -5,7 +5,6 @@ using System.Windows.Data;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -27,24 +26,26 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
         private string _message;
         private FollowUpPushMessageViewModel _target;
         private TesterForCommandModels _testerForCommandModels;
+    	private IUnitOfWorkFactory _unitOfWorkFactory;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mocker = new MockRepository();
             _repositoryFactory = _mocker.StrictMock<IRepositoryFactory>();
+			_unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
             _title = "title";
             _message = "message";
             _pushMessage = new PushMessage {Title = _title, Message = _message};
-            _target = new FollowUpPushMessageViewModel(_pushMessage);
+            _target = new FollowUpPushMessageViewModel(_pushMessage,_repositoryFactory,_unitOfWorkFactory);
             _testerForCommandModels = new TesterForCommandModels();
         }
 
         [Test]
         public void VerifyConstructor()
         {
-           Assert.AreEqual(_title,_target.GetTitle(new NoFormatting()));
-           Assert.AreEqual(_message,_target.GetMessage(new NoFormatting()));
+           Assert.AreEqual(_title,_target.Title);
+           Assert.AreEqual(_message,_target.Message);
         }     
 
         [Test]
@@ -52,13 +53,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
         {
             IPushMessageRepository repository = _mocker.StrictMock<IPushMessageRepository>();
             IObservable<FollowUpPushMessageViewModel> observer = _mocker.StrictMock<IObservable<FollowUpPushMessageViewModel>>();
-            IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
             IUnitOfWork uow = _mocker.StrictMock<IUnitOfWork>();
 
-            _target = new FollowUpPushMessageViewModel(_pushMessage, _repositoryFactory, unitOfWorkFactory);
+            _target = new FollowUpPushMessageViewModel(_pushMessage, _repositoryFactory, _unitOfWorkFactory);
             using (_mocker.Record())
             {
-                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
                 Expect.Call(_repositoryFactory.CreatePushMessageRepository(uow)).Return(repository);
                 Expect.Call(() => repository.Remove(_pushMessage)); //Verifies that the message is removed
                 Expect.Call(() => observer.Notify(_target));  //Verifies that we can observe delete, used for removing from collections etc..
@@ -81,21 +81,20 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
         {
             IPerson person = PersonFactory.CreatePerson();
             IPushMessageDialogueRepository repository = _mocker.StrictMock<IPushMessageDialogueRepository>();
-            IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
             IUnitOfWork uow = _mocker.StrictMock<IUnitOfWork>();
 
             IList<IPushMessageDialogue> retListFromRep = new List<IPushMessageDialogue> { new PushMessageDialogue(_pushMessage, person) };
                 
             using (_mocker.Record())
             {
-                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
                 Expect.Call(_repositoryFactory.CreatePushMessageDialogueRepository(uow)).Return(repository);
                 Expect.Call(repository.Find(_pushMessage)).Return(retListFromRep);
                 uow.Dispose();
             }
             using (_mocker.Playback())
             {
-                _target = new FollowUpPushMessageViewModel(_pushMessage, _repositoryFactory, unitOfWorkFactory);
+                _target = new FollowUpPushMessageViewModel(_pushMessage, _repositoryFactory, _unitOfWorkFactory);
 
                 Assert.IsTrue(_testerForCommandModels.CanExecute(_target.LoadDialogues), "Verify that we can execute the command");
 

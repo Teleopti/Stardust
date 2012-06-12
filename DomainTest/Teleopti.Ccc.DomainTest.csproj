@@ -149,6 +149,7 @@
     <Compile Include="Collection\IdenticalLayersSpecificationTest.cs" />
     <Compile Include="Collection\TeamCollectionTest.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorterTest.cs" />
+    <Compile Include="Common\ListAggregatorTest.cs" />
     <Compile Include="Common\NowTest.cs" />
     <Compile Include="Common\JobResultDetailTest.cs" />
     <Compile Include="Common\JobResultTest.cs" />
@@ -603,6 +604,7 @@
     <Compile Include="Scheduling\Rules\WeekShiftCategoryLimitationRuleTest.cs" />
     <Compile Include="Scheduling\Rules\WorkTimeStartEndExtractorTest.cs" />
     <Compile Include="Scheduling\ScheduleMatrixListPeriodFinderTest.cs" />
+    <Compile Include="Scheduling\SchedulePeriodTargetDayOffCalculatorTest.cs" />
     <Compile Include="Scheduling\SchedulePeriodTargetTimeCalculatorTest.cs" />
     <Compile Include="Scheduling\SchedulerSkillDayHelperTest.cs" />
     <Compile Include="Scheduling\SchedulerSkillHelperTest.cs" />

@@ -21,6 +21,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
@@ -451,6 +452,15 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			var mbCacheFactory = requestContainer.Resolve<IMbCacheFactory>();
 			mbCacheFactory.ImplementationTypeFor(typeof(TeleoptiPrincipalInternalsFactory))
 				.Should().Be.EqualTo<TeleoptiPrincipalInternalsFactory>();
+		}
+
+		[Test]
+		public void ShouldResolvePreferenceFeedbackControllerWithDependenciesBecauseOfBugInEnableClassInterceptors()
+		{
+			requestContainer.Resolve<PreferenceFeedbackController>()
+				.Should().Not.Be.Null();
+			requestContainer.Resolve<IPreferencePeriodViewModelFactory>()
+				.Should().Not.Be.Null();
 		}
 
 	}

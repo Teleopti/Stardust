@@ -282,6 +282,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period)
 		{
 			ICollection<IPerson> tempList = Session.CreateCriteria(typeof(Person), "per")
+					  .SetFetchMode("OptionalColumnValueCollection",FetchMode.Join)
 					  .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
 					  .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
 					  .Add(Subqueries.Exists(findActivePeriod(team, period)))
@@ -438,7 +439,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 DetachedCriteria person = DetachedCriteria.For<Person>("person")
                     .Add(Restrictions.InG("Id", currentBatchIds))
                     //.SetFetchMode("PermissionInformation", FetchMode.Join)
-                    .SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join);
+                    .SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join)
+					.SetFetchMode("OptionalColumnValueCollection",FetchMode.Join);
 
                 DetachedCriteria personPeriod = DetachedCriteria.For<Person>("personPeriod")
                     .Add(Restrictions.InG("Id", currentBatchIds))
@@ -460,7 +462,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .List();
 
                 var foundPeople = CollectionHelper.ToDistinctGenericCollection<IPerson>(queryResult[0]);
-
                 result.AddRange(foundPeople);
             }
             return result;
@@ -472,7 +473,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return FindPeople(peopleId);
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "elände")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "elände"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData)
         {
             IMultiCriteria multiCrit = Session.CreateMultiCriteria()
@@ -501,20 +502,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             //ta bort detta - gammalt blajj. ska inte behövas om frågorna gör rätt. Gör om, gör rätt!
             //Ola: När man kör från PeopleLoader i Schedulern behövs inte detta nu. Vågar dock inte ta bort det för denna används från många ställen
-            foreach (IPerson person in persons)
-            {
-                foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
-                {
-                    foreach (PersonSkill pSkill in personPeriod.PersonSkillCollection)
-                    {
-                        if (pSkill.Skill.Activity.Name == "xyyyxxxyyyyx")
-                            throw new InvalidDataException("lazy load elände");
-                    }
-                }
-            }
+			foreach (IPerson person in persons)
+			{
+				foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
+				{
+					foreach (PersonSkill pSkill in personPeriod.PersonSkillCollection)
+					{
+						if (pSkill.Skill.Activity.Name == "xyyyxxxyyyyx")
+							throw new InvalidDataException("lazy load elände");
+					}
+				}
+			}
 
 
-            return persons;
+    		return persons;
         }
 
         private static DetachedCriteria personWorkflowControlSet()
@@ -543,6 +544,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                          Restrictions.Ge("TerminalDate", period.StartDate)
                          ))
                 .Add(Subqueries.Exists(findPeriodMatch(period)))
+				.SetFetchMode("OptionalColumnValueCollection",FetchMode.Join)
                 .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
                 .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
                 .SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)

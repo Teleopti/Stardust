@@ -51,6 +51,14 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
+		public virtual string IdOrDescriptionKey { 
+			get
+			{
+				if (DescriptionKey == null && Id.HasValue)
+					return Id.ToString();
+				return DescriptionKey;
+			} }
+
     	public virtual bool IsUserDefined()
     	{
     		return DescriptionKey == null;

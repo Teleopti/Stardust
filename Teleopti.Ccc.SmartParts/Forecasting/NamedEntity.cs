@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
     {
         public string Name { get; set; }
         public Guid Id { get; set; }
+        public int? CharactersToShow { get; set; }
 
         public override bool Equals(object obj)
         {

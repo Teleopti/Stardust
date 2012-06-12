@@ -248,8 +248,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             get
             {
-                return (ScheduleDataInternalCollection().OfType<IPersonAssignment>().Count() > 0 ||
-                        ScheduleDataInternalCollection().OfType<IPersonAbsence>().Count() > 0);
+                return (ScheduleDataInternalCollection().OfType<IPersonAssignment>().Any() ||
+                        ScheduleDataInternalCollection().OfType<IPersonAbsence>().Any());
             }
         }
 

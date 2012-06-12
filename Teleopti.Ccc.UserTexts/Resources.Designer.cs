@@ -1126,9 +1126,9 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to Ready Time vs. Contracted Schedule Time.
         /// </summary>
-        public static string AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime {
+        public static string AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime {
             get {
-                return ResourceManager.GetString("AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime", resourceCulture);
+                return ResourceManager.GetString("AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime", resourceCulture);
             }
         }
         
@@ -1867,6 +1867,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AnUnHandledExceptionOccured {
             get {
                 return ResourceManager.GetString("AnUnHandledExceptionOccured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anywhere.
+        /// </summary>
+        public static string Anywhere {
+            get {
+                return ResourceManager.GetString("Anywhere", resourceCulture);
             }
         }
         
@@ -11793,6 +11802,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MinWorkTime {
             get {
                 return ResourceManager.GetString("MinWorkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing absence type..
+        /// </summary>
+        public static string MissingAbsenceType {
+            get {
+                return ResourceManager.GetString("MissingAbsenceType", resourceCulture);
             }
         }
         
@@ -24154,6 +24172,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your preferences can result in {0} days off..
+        /// </summary>
+        public static string YourPreferencesCanResultXDaysOff {
+            get {
+                return ResourceManager.GetString("YourPreferencesCanResultXDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your schedule for {0} to {1}.
         /// </summary>
         public static string YourScheduleForDateParameters {
@@ -24163,11 +24190,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You should have between {0} and {1} days off..
+        /// </summary>
+        public static string YouShouldHaveBetweenXAndYDaysOff {
+            get {
+                return ResourceManager.GetString("YouShouldHaveBetweenXAndYDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You should have {0} Days Off. Currently you have {1}..
         /// </summary>
         public static string YouShouldHaveDaysOffParameterDotYouHaveParameterDot {
             get {
                 return ResourceManager.GetString("YouShouldHaveDaysOffParameterDotYouHaveParameterDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You should have {0} days off..
+        /// </summary>
+        public static string YouShouldHaveXDaysOff {
+            get {
+                return ResourceManager.GetString("YouShouldHaveXDaysOff", resourceCulture);
             }
         }
         
@@ -24187,6 +24232,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YouShouldWorkParameterHDotYourPreferencesCanNowResultInParameterHToParameterHDot {
             get {
                 return ResourceManager.GetString("YouShouldWorkParameterHDotYourPreferencesCanNowResultInParameterHToParameterHDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You should work {0} hours..
+        /// </summary>
+        public static string YouShouldWorkXHours {
+            get {
+                return ResourceManager.GetString("YouShouldWorkXHours", resourceCulture);
             }
         }
         

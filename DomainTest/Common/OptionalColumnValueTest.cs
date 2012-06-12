@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
-using Teleopti.Ccc.DomainTest.Helper;
-
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.DomainTest.Common
@@ -10,42 +6,40 @@ namespace Teleopti.Ccc.DomainTest.Common
     [TestFixture]
     public class OptionalColumnValueTest
     {
-        private OptionalColumnValue value;
+        private OptionalColumnValue _value;
 
         [Test]
         public void Setup()
         {
-            value = new OptionalColumnValue("Value");
+            _value = new OptionalColumnValue("Value");
         }
 
         [Test]
         public void VerifyCanCreate()
         {
-            string columnValue = "Value";
-            value = new OptionalColumnValue(columnValue);
+            const string columnValue = "Value";
+            _value = new OptionalColumnValue(columnValue);
 
-            Assert.AreEqual(columnValue, value.Description);
+            Assert.AreEqual(columnValue, _value.Description);
         }
 
         [Test]
         public void VerifyDescriptionCanSet()
         {
-            string columnValue = "Value";
-            value = new OptionalColumnValue(columnValue);
-            value.Description = columnValue;
-            Assert.AreEqual(columnValue, value.Description);
+            const string columnValue = "Value";
+        	_value = new OptionalColumnValue(columnValue) {Description = columnValue};
+        	Assert.AreEqual(columnValue, _value.Description);
         }
 
         [Test]
         public void VerifyReferenceIdCanSet()
         {
-            string columnValue = "Value";
-            Guid? id = Guid.NewGuid();
+            const string columnValue = "Value";
+        	var person = new Person();
 
-            value = new OptionalColumnValue(columnValue);
-            value.ReferenceId = id;
+        	_value = new OptionalColumnValue(columnValue) {ReferenceObject = person};
 
-            Assert.AreEqual(id, value.ReferenceId);
+        	Assert.That(_value.ReferenceObject, Is.EqualTo(person));
         }
     }
 }

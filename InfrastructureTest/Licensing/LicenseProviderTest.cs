@@ -157,6 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccPayrollIntegrationEnabled = true;
                 TeleoptiCccFreemiumForecastsEnabled = false;
                 TeleoptiCccMyTimeWebEnabled = true;
+                TeleoptiCccAnywhereEnabled = true;
             }
 
             #region Implementation of IDisposable
@@ -206,8 +207,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
             public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
+			public bool TeleoptiCccAnywhereEnabled { get; private set; }
 
-            public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
+        	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
         	public int MaxSeats
         	{
@@ -259,6 +261,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccPerformanceManagerEnabled = false;
                 TeleoptiCccPayrollIntegrationEnabled = false;
                 TeleoptiCccMyTimeWebEnabled = false;
+                TeleoptiCccAnywhereEnabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = true;
             }
@@ -309,7 +312,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccRealTimeAdherenceEnabled { get; private set; }
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
-            public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
+			public bool TeleoptiCccAnywhereEnabled { get; private set; }
+
+        	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
         	public int MaxSeats
         	{
@@ -363,6 +368,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccPerformanceManagerEnabled = false;
                 TeleoptiCccPayrollIntegrationEnabled = false;
                 TeleoptiCccMyTimeWebEnabled = false;
+                TeleoptiCccAnywhereEnabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = false;
             }
@@ -413,7 +419,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccRealTimeAdherenceEnabled { get; private set; }
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
-            public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
+			public bool TeleoptiCccAnywhereEnabled { get; private set; }
+
+        	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
         	public int MaxSeats
         	{

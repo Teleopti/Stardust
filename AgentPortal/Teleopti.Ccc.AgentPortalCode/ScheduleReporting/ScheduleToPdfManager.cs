@@ -47,36 +47,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                 // if the logic changes, remove the fx cop warning from the top of the method
                 MessageDialogs.ShowError(owner, ex.Message, Resources.ExportToPDF);
             }
-
         }
-
-
-        //public void ExportTeam(ICccTimeZoneInfo timeZoneInfo, CultureInfo culture, IList<PersonDto> persons,
-        //    DateOnlyPeriod period, AgentScheduleStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details, Control owner, string path)
-        //{
-        //    _headerColumnWidth = 70;
-        //    DayOfWeek firstDayOfWeek = culture.DateTimeFormat.FirstDayOfWeek;
-        //    DateOnly outerStart = new DateOnly(DateHelper.GetFirstDateInWeek(period.StartDate.Date, culture).Date);
-        //    DateOnly outerEnd = new DateOnly(DateHelper.GetLastDateInWeek(period.EndDate.Date, culture).Date);
-        //    DateOnlyPeriod fullWeekPeriod = new DateOnlyPeriod(outerStart, outerEnd);
-
-        //    _brush = new PdfSolidBrush(Color.DimGray);
-        //    _pen = new PdfPen(Color.Gray, 1);
-        //    _rtl = rightToLeft;
-
-        //    //Create a new document.
-        //    PdfDocument doc = new PdfDocument();
-        //    doc.PageSettings.Orientation = PdfPageOrientation.Landscape;
-
-        //    TeamPages(rightToLeft, doc, persons, firstDayOfWeek, fullWeekPeriod, stateHolder, timeZoneInfo, details);
-
-        //    AddHeader(doc);
-        //    AddFooter(doc, Resources.PoweredByTeleoptCCC);
-
-            
-        //    OpenDocument(doc, owner, path);
-
-        //}
 
         private void IndividualPages(bool rightToLeft, IList<PersonDto> persons, DateOnlyPeriod fullWeekPeriod, AgentScheduleStateHolder stateHolder, ScheduleReportDetail details, Control owner, bool singleFile, string path)
         {
@@ -147,54 +118,12 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             OpenDocument(doc, owner, path + "\\" + fileName + ".PDF");
         }
 
-        //private void TeamPages(bool rightToLeft, PdfDocument doc, IList<PersonDto> persons, DayOfWeek firstDayOfWeek, DateOnlyPeriod fullWeekPeriod, AgentScheduleStateHolder stateHolder, ICccTimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
-        //{
-        //    PdfPage page;
-
-        //    int offset = 0;
-        //    while (offset < fullWeekPeriod.DayCount())
-        //    {
-        //        _reportTitle = string.Concat(fullWeekPeriod.DayCollection()[offset].ToShortDateString(), " -- ",
-        //                                     fullWeekPeriod.DayCollection()[offset + 6].ToShortDateString());
-        //        float top;
-        //        top = NewPage(doc, firstDayOfWeek, 10, true, out page);
-
-        //        foreach (PersonDto person in persons)
-        //        {
-        //            //skapa en PdfSchedule per dag hela veckan
-        //            IList<IPdfScheduleTemplate> weekList;
-        //            weekList = CreateWeek(rightToLeft, fullWeekPeriod, offset, stateHolder,details);
-        //            float height = GetHeight(weekList);
-
-        //            if (top + height > page.GetClientSize().Height)
-        //            {
-        //                top = NewPage(doc, firstDayOfWeek, 0, false, out page);
-        //            }
-
-        //            RectangleF rect = new RectangleF(new PointF(0, top), new SizeF(_headerColumnWidth, height));
-        //            DrawRowHeader(rect, person.Name);
-
-        //            for (int i = 0; i < 7; i++)
-        //            {
-        //                float left = _headerColumnWidth + (i*_scheduleColumnWidth);
-        //                DrawLine(top, page.GetClientSize().Width);
-        //                weekList[i].Template.Draw(page, left, top);
-        //            }
-
-        //            top += height + 3;
-                    
-        //        }
-        //        offset += 7;
-        //    }
-        //}
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private static void OpenDocument(PdfDocument doc, Control owner, string fullPath)
         {
             bool success = false;
             try
             {
-                //doc.ViewerPreferences.HideMenubar = true;
                 doc.Save(fullPath);
                 success = true;
             }
@@ -218,12 +147,6 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                                          Resources.OpenFile);
             }
         }
-
-        //private static void OpenDocument(PdfDocument doc, Control owner, string path)
-        //{
-        //    string fileName = "16887";
-        //    OpenDocument(doc, owner, fileName);
-        //}
 
         private static float GetHeight(IList<IPdfScheduleTemplate> templateList)
         {
@@ -258,8 +181,6 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
                 if (part.IsFullDayAbsence)
                     significantPart = SchedulePartView.FullDayAbsence;
-
-                
 
                 switch (significantPart)
                 {
@@ -334,14 +255,6 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             float height = new PdfDayOfWeekHeader(_scheduleColumnWidth, firstDayOfWeek, rtl, _culture).Height;  //dynamic
             for (int i = 0; i < 7; i++)
             {
-                //if ((int)firstDayOfWeek + i < 7)
-                //{
-                //    dow = (DayOfWeek) i + (int) firstDayOfWeek;
-                //}
-                //else
-                //{
-                //    dow = (DayOfWeek)i + (int)firstDayOfWeek - 7;
-                //}
                 DateOnly dow = firstDayOfWeek.AddDays(i);
                 float left = _headerColumnWidth + (i * _scheduleColumnWidth);
 
@@ -405,12 +318,11 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                                  LineAlignment = PdfVerticalAlignment.Top,
                                  Alignment = PdfTextAlignment.Right
                              };
-            //format.Alignment = PdfTextAlignment.Left;
-
+            
             //Create page number field
             var pageNumber = new PdfPageNumberField(font, brush);
             var createdDate = new PdfCreationDateField(font, brush);
-            createdDate.DateFormatString = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern.ToString();
+            createdDate.DateFormatString = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern;
            
 
             //Create page count field
@@ -423,7 +335,6 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
             //Add header template at the top.
             doc.Template.Top = header;
-
         }
     }
 }

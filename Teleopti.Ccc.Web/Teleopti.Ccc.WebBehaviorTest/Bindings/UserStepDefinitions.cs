@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am a user with access only to MyTime")]
 		public void GivenIAmAUserWithAccessOnlyToMyTime()
 		{
-			UserFactory.User().Setup(new Agent());
+			UserFactory.User().Setup(new UserWithoutMobileReportsAccess());
 		}
 
 		[Given(@"I am a user with access only to Mobile Reports")]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am an agent")]
 		public void GivenIAmAnAgent()
 		{
-			UserFactory.User().Setup(new Agent());
+			UserFactory.User().Setup(new UserWithoutMobileReportsAccess());
 			UserFactory.User().Setup(new SchedulePeriod());
 			UserFactory.User().Setup(new PersonPeriod());
 			UserFactory.User().Setup(new ScheduleIsPublished());
@@ -55,7 +55,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			UserFactory.User().Setup(new Agent());
 			UserFactory.User().Setup(new SchedulePeriod());
-			UserFactory.User().Setup(new PersonPeriod {ContractSchedule = TestData.DayOffTodayContractSchedule});
+			var contractSchedule = new ContractScheduleFromTable
+			                       	{
+			                       		MondayWorkDay = false,
+			                       		TuesdayWorkDay = false,
+			                       		WednesdayWorkDay = false,
+			                       		ThursdayWorkDay = false,
+			                       		FridayWorkDay = false,
+			                       		SaturdayWorkDay = false,
+			                       		SundayWorkDay = false
+			                       	};
+			UserFactory.User().Setup(contractSchedule);
+			UserFactory.User().Setup(new PersonPeriod { ContractSchedule = contractSchedule });
 			UserFactory.User().Setup(new ScheduleIsPublished());
 		}
 
@@ -518,8 +529,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new ExistingTextRequest());
 		}
 
-		[Given(@"I have no existing text requests")]
-		public void GivenIHaveNoExistingTextRequests()
+		[Given(@"I have no existing requests")]
+		public void GivenIHaveNoExistingRequests()
 		{
 
 		}
@@ -637,7 +648,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var contract = new Contract("Kontraktet") { WorkTime = new WorkTime(new TimeSpan(hoursPerDay, 0, 0)) };
 			var partTimePercentage = new PartTimePercentage("Procent") { Percentage = new Percent(1) };
 
-			UserFactory.User().Setup(new PersonPeriod() { PersonContract = new PersonContract(contract, partTimePercentage, TestData.WorkingWeekContractSchedule) });
+			UserFactory.User().Setup(
+				new PersonPeriod()
+					{
+						PersonContract = new PersonContract(contract, partTimePercentage, DataContext.Data().Data<ContractScheduleWith2DaysOff>().ContractSchedule)
+					});
 		}
 
 	}

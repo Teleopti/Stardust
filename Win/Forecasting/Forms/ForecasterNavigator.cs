@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							var model = CreateSkillModel(skill);
 							if (model.IsDeleted || model.IsChild) continue;
 
-							TreeNode skillNode = GetSkillNode(CreateSkillModel(skill));
+							TreeNode skillNode = GetSkillNode(model);
 							foundNodes = treeViewSkills.Nodes.Find(skill.SkillType.Id.ToString(), false);
 							if (foundNodes.Length > 0)
 							{
@@ -790,10 +790,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				var repository = _repositoryFactory.CreateWorkloadRepository(unitOfWork);
 				var workload = repository.Get(workloadModel.Id);
-				LazyLoadingManager.Initialize(workload.Skill);
-				LazyLoadingManager.Initialize(workload.Skill.SkillType);
-				LazyLoadingManager.Initialize(workload.TemplateWeekCollection);
-				return workload;
+                return repository.LoadWorkload(workload);
 			}
 		}
 

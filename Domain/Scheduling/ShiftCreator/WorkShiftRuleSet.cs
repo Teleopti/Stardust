@@ -134,7 +134,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                                                         IEffectiveRestriction effectiveRestriction)
         {
             IWorkTimeMinMax resultWorkTimeMinMax = null;
+			if (effectiveRestriction.NotAvailable)
+			return null;
             IEnumerable<IWorkShiftProjection> infoList = ruleSetProjectionService.ProjectionCollection(this);
+				
+
             foreach (var visualLayerInfo in infoList)
             {
                 if (effectiveRestriction.ValidateWorkShiftInfo(visualLayerInfo))

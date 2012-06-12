@@ -141,6 +141,7 @@
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\EntityExtensions.cs" />
+    <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorter.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Forecasting\QueueStatisticsCalculator.cs" />
     <Compile Include="GroupPageCreator\ContractGroupPage.cs" />
     <Compile Include="GroupPageCreator\ContractScheduleGroupPage.cs" />
+    <Compile Include="GroupPageCreator\GroupPageLight.cs" />
     <Compile Include="GroupPageCreator\GroupPageOptions.cs" />
     <Compile Include="GroupPageCreator\IGroupingsCreator.cs" />
     <Compile Include="GroupPageCreator\ISearchIndexBuilder.cs" />
@@ -682,7 +684,8 @@
     <Compile Include="Scheduling\ScheduleDayAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Rules\WorkTimeStartEndExtractor.cs" />
     <Compile Include="Scheduling\ScheduleMatrixListPeriodFinder.cs" />
-    <Compile Include="Scheduling\SchedulePeriodTargetTimeTimeCalculator.cs" />
+    <Compile Include="Scheduling\SchedulePeriodTargetDayOffCalculator.cs" />
+    <Compile Include="Scheduling\SchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="Scheduling\ScheduleService.cs" />
     <Compile Include="Scheduling\SchedulerSkillDayHelper.cs" />
     <Compile Include="Scheduling\SchedulerSkillHelper.cs" />

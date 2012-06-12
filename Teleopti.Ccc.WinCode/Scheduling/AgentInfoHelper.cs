@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public int NumberOfDatesWithPreferenceOrScheduledDaysOff
         {
-            get { return _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(new RestrictionExtractor(_stateHolder), _matrix, IncludeScheduling(), _schedulingOptions.UsePreferences, _schedulingOptions.UseRotations); }
+            get { return _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_matrix, IncludeScheduling(), _schedulingOptions.UsePreferences, _schedulingOptions.UseRotations); }
         }
 
         public MinMax<TimeSpan> PossiblePeriodTime
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 return;
 
             ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
-                new SchedulePeriodTargetTimeTimeCalculator(); //Out
+                new SchedulePeriodTargetTimeCalculator(); //Out
 
             _schedulePeriodTargetTime = schedulePeriodTargetTimeCalculator.TargetTime(_matrix);
             _schedulePeriodTargetMinMax = schedulePeriodTargetTimeCalculator.TargetWithTolerance(_matrix);
@@ -258,8 +258,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                                 ")";
 
             _currentDaysOff =
-                    _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(new RestrictionExtractor(_stateHolder),
-                                                                            _matrix, IncludeScheduling(), false, false);
+                    _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_matrix, IncludeScheduling(), false, false);
             setCurrentScheduled();
             setMinMaxData();
             setRestrictionFullfillment();
@@ -268,7 +267,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private void setMinMaxData()
         {
             ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
-                       new SchedulePeriodTargetTimeTimeCalculator(); //Out
+                       new SchedulePeriodTargetTimeCalculator(); //Out
 
             IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder);
 

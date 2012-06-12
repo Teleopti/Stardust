@@ -66,9 +66,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             _grid.Refresh();
             _grid.Model.ColWidths.ResizeToFit(GridRangeInfo.Cols(0, _grid.ColCount));
-  
-
-            
         }
 
         #region IDisposable Members
@@ -77,7 +74,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-            return;
         }
 
         /// <summary>
@@ -92,7 +88,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             if (disposing)
             {
                 ReleaseManagedResources();
-
             }
             ReleaseUnmanagedResources();
         }
@@ -110,17 +105,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         protected virtual void ReleaseManagedResources()
         {
             SetEventHandlers(false);
-
         }
         #endregion
 
-
-
-
-
-        #region IAlarmControlView Members
-
-        public void ShowThisItem(int alarmid)
+    	public void ShowThisItem(int alarmid)
         {
         	var handler = PresentThisItem;
             if(handler!= null)
@@ -131,11 +119,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public event EventHandler<CustomEventArgs<int>> PresentThisItem;
 
-        #endregion
-
-        #region IAlarmControlView Members
-
-        public event EventHandler<CustomEventArgs<string>> WarnOfThis;
+    	public event EventHandler<CustomEventArgs<string>> WarnOfThis;
 		public void Warning(string message)
 		{
 			var handler = WarnOfThis;
@@ -144,7 +128,5 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				handler.Invoke(this, new CustomEventArgs<string>(message));
 			}
 		}
-
-    	#endregion
     }
 }

@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
 				var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(new[] { skillDay }, workload);
 				var tasks = _statisticRepository.LoadSpecificDates(workload.QueueSourceCollection, period).ToList();
 
-				workloadDays.ForEach(w => w.SplitTemplateTaskPeriods(w.OpenTaskPeriodList));
 				new Statistic(workload).Match(workloadDays, tasks);
 				foreach (var workloadDay in workloadDays)
 				{

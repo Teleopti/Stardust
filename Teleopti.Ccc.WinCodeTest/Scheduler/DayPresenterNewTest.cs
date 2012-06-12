@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Assert.AreEqual(new DateOnly(2011, 1, 1), eventArgs.Style.Tag);
 
                 eventArgs = new GridQueryCellInfoEventArgs(1, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
-                eventArgs.Style.Tag = target.SelectedPeriod.DateOnly.StartDate;
+                eventArgs.Style.Tag = target.SelectedPeriod.DateOnlyPeriod.StartDate;
                 ((DayPresenterNewTestClass)target).CreateDayHeaderTest(eventArgs);
                 Assert.AreEqual(new DateOnly(2011, 1, 1), eventArgs.Style.Tag);
             }

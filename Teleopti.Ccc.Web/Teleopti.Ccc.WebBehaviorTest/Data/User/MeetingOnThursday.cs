@@ -13,13 +13,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		public string MeetingLocation = "ADB-rummet";
 		public string MeetingSubject = "Utbildning";
 
+		public IScenario Scenario = DataContext.Data().Data<CommonScenario>().Scenario;
+
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var meeting = new Meeting(user,
 			                          new[] { new MeetingPerson(user, false) },
 			                          MeetingSubject, MeetingLocation,
 			                          "A nice description of the meeting.",
-			                          TestData.ActivityTraining, TestData.Scenario)
+			                          TestData.ActivityTraining, Scenario)
 			              	{
 			              		StartDate = DateOnly.Today.AddDays(-7),
 			              		EndDate = DateOnly.Today.AddDays(7),

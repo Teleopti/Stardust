@@ -55,6 +55,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
+		[Then(@"I should see my existing absence request")]
+		public void ThenIShouldSeeMyExistingAbsenceRequest()
+		{
+			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingAbsenceRequest>().PersonRequest.GetSubject(new NoFormatting())));
+		}
+
 		[Then(@"I should be able to see requests link")]
 		public void ThenIShouldBeAbleToSeeRequestsLink()
 		{

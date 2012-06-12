@@ -1054,7 +1054,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(2, loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
 		}
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldFindPeople()
         {
             var person = CreateAggregateWithCorrectBusinessUnit();
@@ -1066,6 +1066,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IContract ctr = ContractFactory.CreateContract("sdf");
             IPartTimePercentage pTime = PartTimePercentageFactory.CreatePartTimePercentage("sdf");
             IContractSchedule cSc = ContractScheduleFactory.CreateContractSchedule("sdf");
+        	DateOnly date = new DateOnly(2000, 1, 2);
 
             PersistAndRemoveFromUnitOfWork(site);
             PersistAndRemoveFromUnitOfWork(team);
@@ -1073,7 +1074,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(pTime);
             PersistAndRemoveFromUnitOfWork(cSc);
 
-            person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 2), PersonContractFactory.CreatePersonContract(ctr, pTime, cSc), team));
+            person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, PersonContractFactory.CreatePersonContract(ctr, pTime, cSc), team));
             foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
             {
                 PersistAndRemoveFromUnitOfWork(personPeriod.Team.Site);
@@ -1122,7 +1123,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection[0].ExtenderCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection[0].LimiterCollection));
 			Assert.AreEqual(2, loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
-
 		}
 
 		[Test]
@@ -1626,6 +1626,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(testList[1], per2);
 			Assert.AreEqual(testList[2], per1);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection));
+		}
+
+		[Test]
+		public void ShouldSaveOptionalColumnValueOnPerson()
+		{
+			var column = new OptionalColumn("COL1"){TableName = "Person"};
+			PersistAndRemoveFromUnitOfWork(column);
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			per1.AddOptionalColumnValue(new OptionalColumnValue("A VALUE"),column );
+			PersistAndRemoveFromUnitOfWork(per1);
+
+			IList<IPerson> testList = new List<IPerson>(
+					new PersonRepository(UnitOfWork).FindAllSortByName());
+			Assert.AreEqual(testList[0], per1);
+			Assert.That(testList[0].OptionalColumnValueCollection.Count,Is.EqualTo(1));
 		}
 
 		private static void verifyPermissionInfoIsLazy(bool expected, IPerson userRetOk)

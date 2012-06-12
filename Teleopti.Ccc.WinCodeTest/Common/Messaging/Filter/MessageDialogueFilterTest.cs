@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Filter;
 using Teleopti.Ccc.WinCode.Common.Messaging;
 using Teleopti.Ccc.WinCode.Common.Messaging.Filters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Messaging.Filter
 {
-
     /// <summary>
     /// Tests for testing filtering FollowUpDialogueViewModels and specifications.....
     /// </summary>
     [TestFixture]
     public class MessageDialogueFilterTest
     {
-
         private SpecificationFilter<IFollowUpMessageDialogueViewModel> _target;
         private FollowUpDialogueForTest _model1;
         private FollowUpDialogueForTest _model2;
@@ -34,7 +29,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging.Filter
             _model2 = new FollowUpDialogueForTest() { Reply = _reply2 };
         }
 
-        #region specifications
         [Test]
         public void VerifyDialogueIsRepliedSpecification()
         {
@@ -43,10 +37,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging.Filter
             _model1.IsReplied = true;
             _model2.IsReplied = false;
 
-
             Assert.IsTrue(specification.IsSatisfiedBy(_model2));
             Assert.IsFalse(specification.IsSatisfiedBy(_model1));
-
         }
 
         [Test]
@@ -55,21 +47,19 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging.Filter
             DialogueReplySpecification specification = new DialogueReplySpecification(_reply1);
             Assert.IsTrue(specification.IsSatisfiedBy(_model1));
             Assert.IsFalse(specification.IsSatisfiedBy(_model2));
-
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Common.Messaging.DialogueMessageViewModel.set_Text(System.String)"), Test]
         public void VerifyDialogueHasMoreMessagesThanSpecification()
         {
-            DialogueMessage message = new DialogueMessage("something", PersonFactory.CreatePerson());
+			var message = new DialogueMessageViewModel { Text = "something" };
             DialogueHasMoreMessagesThan specification = new DialogueHasMoreMessagesThan(1);
-            _model2.Messages = new ObservableCollection<IDialogueMessage>() { message,message };
-            _model1.Messages = new ObservableCollection<IDialogueMessage>();
+            _model2.Messages = new ObservableCollection<DialogueMessageViewModel> { message,message };
+            _model1.Messages = new ObservableCollection<DialogueMessageViewModel>();
             Assert.IsTrue(specification.IsSatisfiedBy(_model2));
             Assert.IsFalse(specification.IsSatisfiedBy(_model1));
         }
 
-        #endregion
         [Test, ExpectedException(typeof(ArgumentException))]
         public void VerifyParameter()
         {
@@ -114,7 +104,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging.Filter
             _target.Filter = new DialogueIsRepliedSpecification();
             Assert.IsTrue(_target.FilterAllButSpecification(_model2), "only model2 is satisfied by specification");
             Assert.IsFalse(_target.FilterAllButSpecification(_model1));
-
         }
     }
 }

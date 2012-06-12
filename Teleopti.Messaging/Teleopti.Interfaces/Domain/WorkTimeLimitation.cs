@@ -301,24 +301,31 @@ namespace Teleopti.Interfaces.Domain
             return StartTime.HasValue | EndTime.HasValue;
         }
 
-        /// <summary>
-        /// Returns a valid timeperiod limited by the minimum and/or maximum values defined by the limiter.
-        /// </summary>
-        /// <returns></returns>
-        public TimePeriod ValidPeriod()
-        {
-			TimeSpan startTime = TimeSpan.Zero;
-            TimeSpan endTime = TimeSpan.FromHours(36);
+ 
 
-            if (StartTime.HasValue)
-                startTime = StartTime.Value;
+		 private static readonly TimeSpan OneAndHalfDay = TimeSpan.FromHours(36);
 
-            if (EndTime.HasValue)
-                endTime = EndTime.Value;
-
-            return new TimePeriod(startTime, endTime);
-        }
-
+    	/// <summary>
+    	/// Determines if limitation is valid for <paramref name="timeSpan"/>
+    	/// </summary>
+    	public bool IsValidFor(TimeSpan timeSpan)
+		  {
+			  var startTimeHasValue = StartTime.HasValue;
+			  var endTimeHasValue = EndTime.HasValue;
+			  if (startTimeHasValue && endTimeHasValue)
+			  {
+				  return new TimePeriod(StartTime.Value, EndTime.Value).ContainsPart(timeSpan);
+			  }
+			  if (startTimeHasValue)
+			  {
+				  return new TimePeriod(StartTime.Value, OneAndHalfDay).ContainsPart(timeSpan);
+			  }
+			  if (endTimeHasValue)
+			  {
+				  return timeSpan < EndTime.Value;
+			  }
+			  return timeSpan < OneAndHalfDay;
+		  }
     }
 }
 

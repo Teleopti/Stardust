@@ -25,6 +25,10 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 					e.Graphics.FillPolygon(Brushes.Red, new[] {pt1, pt2, pt3});
 				}
+				else
+				{
+					e.Style.CellTipText = string.Empty;
+				}
 			}
 		}
 	}

@@ -25,6 +25,7 @@ SET ContentDest=%AzureWork%\AzureContent
 SET ContentSource=%AZUREDIR%\..
 SET msi=K:\Src\Wise\ccc7_azure\ccc7_azure.msi
 SET output=%AZUREOUTDIR%\%version%
+SET Dependencies=\\hebe\Installation\Dependencies\ccc7_server
 
 IF NOT EXIST "%msi%" (
 SET ERRORLEV=101
@@ -52,7 +53,7 @@ for /f "tokens=1,2 delims=," %%g in (contentMapping.txt) do ROBOCOPY "%ContentSo
 Echo Getting Previous build. Done
 
 ::Get ReportViewer
-XCOPY /d /y "%ContentSource%\Wise\ccc7_server\ReportViewer2010.exe" "%ContentDest%\TeleoptiCCC\bin"
+XCOPY /d /y "%Dependencies%\ReportViewer2010.exe" "%ContentDest%\TeleoptiCCC\bin"
 
 ::update config and run scpack
 FOR /F %%G IN ('DIR /B Customer\*.txt') DO CALL :FuncDeployConfig %%G 

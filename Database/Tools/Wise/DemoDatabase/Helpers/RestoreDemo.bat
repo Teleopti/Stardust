@@ -17,9 +17,12 @@ net start MSSQLSERVER
 SQLCMD -S. -E -v BakDir = "%ProgRoot%\Teleopti\DatabaseInstaller\DemoDatabase" -i"RestoreDemo.sql"
 SQLCMD -S. -E -v BakDir = "%ProgRoot%\Teleopti\DatabaseInstaller\DemoDatabase" -i"RestoreUsers.sql"
 
-"%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiCCC7_Demo -OTeleoptiCCC7 -E
-"%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiCCC7Agg_Demo -OTeleoptiCCCAgg -E
-"%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiAnalytics_Demo -OTeleoptiAnalytics -E
+"%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiCCC7_Demo -OTeleoptiCCC7 -E -T
+"%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiCCC7Agg_Demo -OTeleoptiCCCAgg -E -T
+"%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiAnalytics_Demo -OTeleoptiAnalytics -E -T
+
+SQLCMD -S. -E -dTeleoptiAnalytics_Demo -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', 'TeleoptiCCC7Agg_Demo'"
+SQLCMD -S. -E -dTeleoptiAnalytics_Demo -Q"EXEC mart.sys_crossDatabaseView_load"
 
 "%ProgRoot%\Teleopti\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS. -DDTeleoptiCCC7_Demo -EE
 

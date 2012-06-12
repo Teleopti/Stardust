@@ -671,7 +671,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		[Test]
 		public void VerifyProperties()
 		{
-			Assert.AreEqual(_period, _schedulerStateHolder.RequestedPeriod.DateOnly);
+			Assert.AreEqual(_period, _schedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
 			Assert.IsNotNull(_schedulerStateHolder.SchedulingResultState);
 			Assert.AreEqual(0, _schedulerStateHolder.SchedulingResultState.PersonsInOrganization.Count);
 			Assert.IsTrue(string.IsNullOrEmpty(_target.ChartIntradayDescription));

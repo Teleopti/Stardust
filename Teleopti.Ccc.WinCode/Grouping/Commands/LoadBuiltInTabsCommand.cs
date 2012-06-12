@@ -54,6 +54,19 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             // rättigheter
             var auth = PrincipalAuthorization.Instance();
             var toRemove = new List<IPersonSelectorBuiltIn>();
+			if (_personSelectorView.VisiblePersonIds != null)
+			{
+				foreach (var toNode in toNodes)
+				{
+					if (!_personSelectorView.VisiblePersonIds.Contains(toNode.PersonId))
+						toRemove.Add(toNode);
+
+				}
+			}
+			foreach (var personSelectorOrganization in toRemove)
+			{
+				toNodes.Remove(personSelectorOrganization);
+			}
             foreach (var toNode in toNodes)
             {
                 if (toNode.PersonId != new Guid())

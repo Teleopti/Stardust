@@ -121,6 +121,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 haveRestrictions = false;
             }
+
+			if (schedulingOptions.UsePreferencesMustHaveOnly && !effectiveRestriction.IsPreferenceDay)
+			{
+				haveRestrictions = false;
+			}
+
             if (schedulingOptions.UseStudentAvailability && !effectiveRestriction.IsStudentAvailabilityDay)
             {
                 haveRestrictions = false;

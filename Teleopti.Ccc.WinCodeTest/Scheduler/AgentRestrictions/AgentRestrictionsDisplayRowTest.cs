@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private DateOnlyPeriod _dateOnlyPeriod;
 		private TimeSpan _timeSpan;
 		private int _daysOff;
+		private IContract _contract;
 
 		[SetUp]
 		public void Setup()
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_dateOnlyPeriod = new DateOnlyPeriod(2011, 1, 1, 2011, 1, 30);
 			_timeSpan = new TimeSpan(100 ,0 ,0);
 			_daysOff = 5;
+			_contract = _mocks.StrictMock<IContract>();
 		}
 
 		[Test]
@@ -54,13 +56,33 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		}
 
 		[Test]
-		public void ShouldGetSetWarnings()
+		public void ShouldSetWarnings()
 		{
-			Assert.AreEqual(0, _displayRow.Warnings);
-			_displayRow.SetWarning(AgentRestrictionDisplayRowColumn.ContractTargetTime, "warning");
-			Assert.AreEqual(1, _displayRow.Warnings);
-			Assert.AreEqual("warning", _displayRow.Warning(5));
-			Assert.AreEqual(null, _displayRow.Warning(1));	
+			using(_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod.DaysOff()).Return(11);
+				Expect.Call(_schedulePeriod.Contract).Return(_contract);
+				Expect.Call(_contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
+			}
+
+			using(_mocks.Playback())
+			{
+				Assert.AreEqual(0, _displayRow.Warnings);
+
+				_displayRow.ContractTargetTime = TimeSpan.FromMinutes(10);
+				_displayRow.ContractCurrentTime = TimeSpan.FromMinutes(11);
+				_displayRow.CurrentDaysOff = 12;
+
+				((IAgentDisplayData) _displayRow).MinimumPossibleTime = TimeSpan.FromMinutes(17);
+				((IAgentDisplayData)_displayRow).MaximumPossibleTime = TimeSpan.FromMinutes(14);
+				_displayRow.MinMaxTime = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromMinutes(16));
+
+				_displayRow.SetWarnings();
+
+				Assert.AreEqual(UserTexts.Resources.No, _displayRow.Ok);
+				Assert.AreEqual(4, _displayRow.Warnings);
+			}	
 		}
 
 		[Test]
@@ -146,18 +168,84 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		}
 
 		[Test]
-		public void ShouldGetSchedulePeriodTargetDaysOff()
+		public void ShouldGetContractTargetTimeWithTolerance()
+		{
+			var minMax = new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(20));
+			_displayRow.MinMaxTime = minMax;
+			_displayRow.ContractTargetTime = _timeSpan;
+			
+			var expectedString = TimeHelper.GetLongHourMinuteTimeString(_timeSpan, TeleoptiPrincipal.Current.Regional.Culture) +
+					" (" + TimeHelper.GetLongHourMinuteTimeString(minMax.StartTime, TeleoptiPrincipal.Current.Regional.Culture) +
+					" - " + TimeHelper.GetLongHourMinuteTimeString(minMax.EndTime, TeleoptiPrincipal.Current.Regional.Culture) +
+					")";
+
+			Assert.AreEqual(expectedString, _displayRow.ContractTargetTimeWithTolerance);	
+		}
+
+		[Test]
+		public void ShouldGetContractTargetTimeHourlyEmployees()
+		{
+			_displayRow.ContractTargetTime = _timeSpan;
+
+			var expectedString = TimeHelper.GetLongHourMinuteTimeString(_timeSpan, TeleoptiPrincipal.Current.Regional.Culture);
+
+			Assert.AreEqual(expectedString, _displayRow.ContractTargetTimeHourlyEmployees);	
+		}
+
+		[Test]
+		public void ShouldGetSchedulePeriodTargetDaysOffForAllButHourlyEmployees()
 		{
 			using(_mocks.Record())
 			{
-				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.DaysOff()).Return(_daysOff);
+				Expect.Call(_schedulePeriod.Contract).Return(_contract);
+				Expect.Call(_contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 			}
 
 			using(_mocks.Playback())
 			{
 				Assert.AreEqual(_daysOff, _displayRow.TargetDaysOff);	
 			}
+		}
+
+		[Test]
+		public void ShouldGetSchedulePeriodTargetDaysOffForHourlyEmployees()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.Contract).Return(_contract);
+				Expect.Call(_contract.EmploymentType).Return(EmploymentType.HourlyStaff);
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.AreEqual(0, _displayRow.TargetDaysOff);
+			}
+		}
+
+		[Test]
+		public void ShouldGetSchedulePeriodTargetDaysOffWithTolerance()
+		{
+			var expectedString = _daysOff + " (" + (_daysOff - 1) +
+							   " - " + (_daysOff + 1) +
+							   ")";
+
+			using(_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod.DaysOff()).Return(_daysOff).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod.Contract).Return(_contract).Repeat.AtLeastOnce();
+				Expect.Call(_contract.NegativeDayOffTolerance).Return(1);
+				Expect.Call(_contract.PositiveDayOffTolerance).Return(1);
+				Expect.Call(_contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime).Repeat.AtLeastOnce();
+			}
+
+			using(_mocks.Playback())
+			{
+				Assert.AreEqual(expectedString, _displayRow.TargetDaysOffWithTolerance);		
+			}	
 		}
 
 		[Test]
@@ -172,14 +260,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			_displayRow.CurrentDaysOff = _daysOff;
 			Assert.AreEqual(_daysOff, _displayRow.CurrentDaysOff);
-		}
-
-		[Test]
-		public void ShouldGetOk()
-		{
-			Assert.AreEqual(UserTexts.Resources.Yes, _displayRow.Ok);
-			_displayRow.SetWarning(AgentRestrictionDisplayRowColumn.Min, "warning");
-			Assert.AreEqual(UserTexts.Resources.No, _displayRow.Ok);	
 		}
 	}
 }

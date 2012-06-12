@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             _loadUsers = loadUsers;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Execute()
         {
             var loadUser = PrincipalAuthorization.Instance().EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(_applicationFunction.FunctionPath));
@@ -55,12 +55,28 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                 toNodes = rep.GetOrganization(dateOnlyPeriod, loadUser);    
             }
             
-            // rättigheter
-            var auth = PrincipalAuthorization.Instance();
+			
+            toNodes = removeDuplicates(toNodes);
+			// Permissions
+			var auth = PrincipalAuthorization.Instance();
+
             var toRemove = new List<IPersonSelectorOrganization>();
+			if(_view.VisiblePersonIds != null)
+			{
+				foreach (var toNode in toNodes)
+				{
+					if (!_view.VisiblePersonIds.Contains(toNode.PersonId))
+						toRemove.Add(toNode);
+					
+				}
+			}
+			foreach (var personSelectorOrganization in toRemove)
+			{
+				toNodes.Remove(personSelectorOrganization);
+			}
             foreach (var toNode in toNodes)
             {
-                if (toNode.PersonId != new Guid())
+                if (toNode.PersonId != Guid.Empty)
                 {
                     if (!auth.IsPermitted(_applicationFunction.FunctionPath, dateOnlyPeriod.StartDate, toNode))
                         toRemove.Add(toNode);
@@ -70,7 +86,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             {
                 toNodes.Remove(personSelectorOrganization);
             }
-            //skapa treeviewnoder av det vi fått kvar
+            //Create treeviewnoder of what we have left
             var nodes = new List<TreeNodeAdv>();
             var root = new TreeNodeAdv(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Name) { LeftImageIndices = new[] { 0 }, Expanded = true, Tag = new List<Guid>(), TagObject = new List<Guid>() };
             nodes.Add(root);
@@ -138,7 +154,18 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             _view.ResetTreeView(nodes.ToArray());
         }
 
-        public string Key
+    	private static IList<IPersonSelectorOrganization> removeDuplicates(IEnumerable<IPersonSelectorOrganization> toNodes)
+    	{
+    		var result = from t in toNodes
+    		             group t by
+    		             	t.PersonId.ToString() + t.TeamId.GetValueOrDefault().ToString() +
+    		             	t.SiteId.GetValueOrDefault().ToString()
+    		             into g
+    		             select g.First();
+    		return result.ToList();
+    	}
+
+    	public string Key
         {
             get { return "Organization"; }
         }

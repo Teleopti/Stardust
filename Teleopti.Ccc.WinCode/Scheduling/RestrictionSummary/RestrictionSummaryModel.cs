@@ -84,22 +84,22 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
 
                 IEffectiveRestriction totalRestriction = extractor.CombinedRestriction(agentInfoHelper.SchedulingOptions);
                 var significantPart = schedulePart.SignificantPart();
-                if (agentInfoHelper.SchedulingOptions.UseAvailability)
-                {
-                    totalRestriction = GetTotalAvailabilityRestriction(extractor, totalRestriction);
-                }
-                if (agentInfoHelper.SchedulingOptions.UsePreferences)
-                {
-                    totalRestriction = GetTotalPreferenceRestriction(extractor, totalRestriction, cellData);
-                }
-                if (agentInfoHelper.SchedulingOptions.UseRotations)
-                {
-                    totalRestriction = GetTotalRotationRestriction(extractor, totalRestriction);
-                }
-                if (agentInfoHelper.SchedulingOptions.UseStudentAvailability)
-                {
-                    totalRestriction = GetTotalStudentRestriction(extractor, totalRestriction);
-                } 
+				//if (agentInfoHelper.SchedulingOptions.UseAvailability)
+				//{
+				//    totalRestriction = GetTotalAvailabilityRestriction(extractor, totalRestriction);
+				//}
+				//if (agentInfoHelper.SchedulingOptions.UsePreferences)
+				//{
+				//    totalRestriction = GetTotalPreferenceRestriction(extractor, totalRestriction, cellData);
+				//}
+				//if (agentInfoHelper.SchedulingOptions.UseRotations)
+				//{
+				//    totalRestriction = GetTotalRotationRestriction(extractor, totalRestriction);
+				//}
+				//if (agentInfoHelper.SchedulingOptions.UseStudentAvailability)
+				//{
+				//    totalRestriction = GetTotalStudentRestriction(extractor, totalRestriction);
+				//} 
                 if (((RestrictionSchedulingOptions)agentInfoHelper.SchedulingOptions).UseScheduling)
                 {
                     if (significantPart == SchedulePartView.MainShift)

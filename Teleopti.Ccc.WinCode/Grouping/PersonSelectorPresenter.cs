@@ -74,9 +74,16 @@ namespace Teleopti.Ccc.WinCode.Grouping
             _eventAggregator.GetEvent<SelectedNodesChanged>().Subscribe(selectedNodesChanged);
             _globalEventAggregator.GetEvent<PeopleSaved>().Subscribe(peopleSaved);
             _eventAggregator.GetEvent<RefreshGroupPageClicked>().Subscribe(refreshGroupPage);
+			_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Subscribe(nodeCheckChanged);
         }
 
-        private void refreshGroupPage(string obj)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "t")]
+		private void nodeCheckChanged(string obj)
+    	{
+			var t = CheckedPersonGuids;
+    	}
+
+    	private void refreshGroupPage(string obj)
         {
             var tab = _personSelectorView.SelectedTab;
             if (tab != null)

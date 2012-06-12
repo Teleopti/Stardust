@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
@@ -14,6 +15,12 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             target = new MinMax<int>(3, 5);
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void ShouldHandleToString()
+		{
+			new MinMax<int>(3, 4).ToString().Should().Be("3-4");
+		}
 
         [Test]
         public void VerifyProperties()
@@ -49,12 +56,13 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyContainsWork()
         {
             MinMax<int> target2 = new MinMax<int>(3, 5);
-            Assert.IsTrue(target.Contains(3));
-            Assert.IsTrue(target2.Contains(5));
+			Assert.IsFalse(target2.Contains(1));
+			Assert.IsTrue(target2.Contains(3));
+			Assert.IsTrue(target2.Contains(5));
             Assert.IsFalse(target2.Contains(7));
         }
     }

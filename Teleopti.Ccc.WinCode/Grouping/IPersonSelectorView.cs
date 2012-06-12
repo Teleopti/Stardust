@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
         bool ShowDateSelection { get; set; }
         Cursor Cursor { get; set; }
         IEnumerable<Guid> PreselectedPersonIds { get; set; }
+		IEnumerable<Guid> VisiblePersonIds { get; set; }
         bool HideMenu { get; set; }
         DateOnlyPeriod SelectedPeriod { get; set; }
         void SetDate(DateOnly newDate);

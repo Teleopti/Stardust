@@ -34,10 +34,10 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         {
             _mocks = new MockRepository();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            _unitOfWork = _mocks.StrictMock<IStatelessUnitOfWork>();
+            _unitOfWork = _mocks.DynamicMock<IStatelessUnitOfWork>();
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             _personSelectorView = _mocks.StrictMock<IPersonSelectorView>();
-            _commonNameSetting = _mocks.StrictMock<ICommonNameDescriptionSetting>();
+            _commonNameSetting = _mocks.DynamicMock<ICommonNameDescriptionSetting>();
             _target = new LoadOrganizationCommand(_unitOfWorkFactory, _repositoryFactory, _personSelectorView, _commonNameSetting, _myApplicationFunction, true, true);
 
         }
@@ -47,25 +47,26 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         {
             var buId = Guid.NewGuid();
             var teamId = Guid.NewGuid();
-            var onePersonId = Guid.NewGuid();
+			var olaPersonId = Guid.NewGuid();
+			var mickePersonId = Guid.NewGuid();
+			var robinPersonId = Guid.NewGuid();
             var date = new DateOnly(2012, 1, 19);
             var dateOnlyPeriod = new DateOnlyPeriod(date, date);
-            var lightPerson = _mocks.StrictMock<ILightPerson>();
             var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
             Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
             Expect.Call(_personSelectorView.SelectedPeriod).Return(dateOnlyPeriod);
             Expect.Call(rep.GetOrganization(dateOnlyPeriod, true)).Return(new List<IPersonSelectorOrganization>
                                                                     {
-                                                                        new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Site = "STO",Team = "Blue", TeamId = teamId, PersonId = onePersonId},
-                                                                        new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Site = "STO",Team = "Blue", TeamId = teamId, PersonId = Guid.NewGuid()},
+                                                                        new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Site = "STO",Team = "Blue", TeamId = teamId, PersonId = olaPersonId},
+                                                                        new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Site = "STO",Team = "Blue", TeamId = teamId, PersonId = mickePersonId},
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Claes", LastName = "H", Site = "STO",Team = "Blue", TeamId = teamId, PersonId = Guid.NewGuid()},
-                                                                        new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Robin", LastName = "K", Site = "Str",Team = "Red", TeamId = Guid.NewGuid(), PersonId = Guid.NewGuid()},
+                                                                        new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Robin", LastName = "K", Site = "Str",Team = "Red", TeamId = Guid.NewGuid(), PersonId = robinPersonId},
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Jonas", LastName = "N", Site = "Str",Team = "Yellow", TeamId = Guid.NewGuid(), PersonId = Guid.NewGuid()}
                                                                     });
-            Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> { onePersonId }).Repeat.Times(5);
-            Expect.Call(() => _unitOfWork.Dispose());
-            Expect.Call(_commonNameSetting.BuildCommonNameDescription(lightPerson)).Repeat.Times(5).IgnoreArguments().Return("");
+            
+			Expect.Call(_personSelectorView.VisiblePersonIds).Return(new List<Guid> { olaPersonId, mickePersonId, robinPersonId }).Repeat.AtLeastOnce();
+            Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> { olaPersonId }).Repeat.Times(3);
             Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).IgnoreArguments();
             _mocks.ReplayAll();
              _target.Execute();
@@ -92,13 +93,89 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Robin", LastName = "K", Site = "Str",Team = "Red", PersonId = Guid.NewGuid()},
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Jonas", LastName = "N", Site = "Str",Team = "Yellow", PersonId = Guid.NewGuid()}
                                                                     });
-                Expect.Call(() => _unitOfWork.Dispose());                
+				Expect.Call(_personSelectorView.VisiblePersonIds).Return(null).Repeat.AtLeastOnce();
                 Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).IgnoreArguments();
                 _mocks.ReplayAll();
                 _target.Execute();
                 _mocks.VerifyAll();
             }
         }
-    }
 
+		[Test]
+		public void ShouldRemoveDuplicateEntriesFromList()
+		{
+			var buId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var date = new DateOnly(2012, 1, 19);
+			var dateOnlyPeriod = new DateOnlyPeriod(date.AddDays(-730), date);
+			var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
+			Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
+			Expect.Call(_personSelectorView.SelectedPeriod).Return(dateOnlyPeriod);
+			Expect.Call(rep.GetOrganization(dateOnlyPeriod, true)).Return(new List<IPersonSelectorOrganization>
+			                                                               	{
+			                                                               		new PersonSelectorOrganization
+			                                                               			{
+			                                                               				BusinessUnitId = buId,
+			                                                               				FirstName = "Robin",
+			                                                               				LastName = "K",
+			                                                               				Site = "Str",
+			                                                               				Team = "Red",
+			                                                               				PersonId = personId,
+			                                                               				TeamId = teamId,
+			                                                               				SiteId = siteId
+			                                                               			},
+			                                                               		new PersonSelectorOrganization
+			                                                               			{
+			                                                               				BusinessUnitId = buId,
+			                                                               				FirstName = "Robin",
+			                                                               				LastName = "K",
+			                                                               				Site = "Str",
+			                                                               				Team = "Red",
+			                                                               				PersonId = personId,
+			                                                               				TeamId = teamId,
+			                                                               				SiteId = siteId
+			                                                               			},
+			                                                               		new PersonSelectorOrganization
+			                                                               			{
+			                                                               				BusinessUnitId = buId,
+			                                                               				FirstName = "Robin",
+			                                                               				LastName = "K",
+			                                                               				Site = "Str",
+			                                                               				Team = "Yellow",
+			                                                               				PersonId = personId,
+			                                                               				TeamId = Guid.NewGuid(),
+			                                                               				SiteId = siteId
+			                                                               			},
+			                                                               		new PersonSelectorOrganization
+			                                                               			{
+			                                                               				BusinessUnitId = buId,
+			                                                               				FirstName = "Robin",
+			                                                               				LastName = "K",
+			                                                               				Site = "STO",
+			                                                               				Team = "Red",
+			                                                               				PersonId = personId,
+			                                                               				TeamId = teamId,
+			                                                               				SiteId = Guid.NewGuid()
+			                                                               			}
+			                                                               	});
+
+			Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> { personId }).Repeat.AtLeastOnce();
+			Expect.Call(_personSelectorView.VisiblePersonIds).Return(null).Repeat.AtLeastOnce();
+			Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).Constraints(
+				Rhino.Mocks.Constraints.Is.Matching<TreeNodeAdv[]>(t =>
+					t[0].GetNodeCount(true) == 8)); //2 Sites (STO+STr), 3 Teams (Str/Yellow+Str/Red+STO/Red), 3 Occurences of person (Str/Yellow+Str/Red+STO/Red)
+			_mocks.ReplayAll();
+			_target.Execute();
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldContainTheGuid()
+		{
+			Assert.That(_target.Key, Is.EqualTo("Organization"));
+		}
+    }
 }

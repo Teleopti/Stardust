@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -97,13 +98,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         /// </remarks>
         public override bool IsValidAtEnd(IVisualLayerCollection endProjection)
         {
-            //Shifts remaining after IsValidAtStart should always be true?
-            if (endProjection.Count() > 0)
-                return true;
-            return false;
+        	//Shifts remaining after IsValidAtStart should always be true?
+        	return endProjection != null && endProjection.Any();
         }
 
-        /// <summary>
+    	/// <summary>
         /// Determines whether a shift is valid due to this limiter.
         /// </summary>
         /// <param name="shift">The shift.</param>

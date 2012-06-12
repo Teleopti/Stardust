@@ -86,14 +86,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceFeedbackController>().EnableClassInterceptors();
 
 			builder.RegisterType<PreferenceViewModelFactory>().As<IPreferenceViewModelFactory>();
+			builder.RegisterType<PreferencePeriodViewModelFactory>().As<IPreferencePeriodViewModelFactory>();
 			builder.RegisterType<PreferenceProvider>().As<IPreferenceProvider>();
 			builder.RegisterType<PreferenceOptionsProvider>().As<IPreferenceOptionsProvider>();
 			builder.RegisterType<PreferencePersister>().As<IPreferencePersister>();
 			builder.RegisterType<PreferenceFeedbackProvider>().As<IPreferenceFeedbackProvider>().SingleInstance();
+			builder.RegisterType<PreferencePeriodFeedbackProvider>().As<IPreferencePeriodFeedbackProvider>().SingleInstance();
 			builder.RegisterType<EffectiveRestrictionForDisplayCreator>().As<IEffectiveRestrictionForDisplayCreator>();
 			builder.RegisterType<WorkTimeMinMaxCalculator>().As<IWorkTimeMinMaxCalculator>();
+			builder.RegisterType<SchedulePeriodTargetDayOffCalculator>().As<ISchedulePeriodTargetDayOffCalculator>().SingleInstance();
+			builder.RegisterType<PeriodScheduledAndRestrictionDaysOff>().As<IPeriodScheduledAndRestrictionDaysOff>().SingleInstance();
+			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().SingleInstance();
 		}
-
+		 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<StudentAvailabilityViewModelFactory>().As<IStudentAvailabilityViewModelFactory>();

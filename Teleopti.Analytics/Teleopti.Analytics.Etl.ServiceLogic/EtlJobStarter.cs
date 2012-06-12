@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Timers;
 using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.Common.JobLog;
+using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Interfaces.Domain;
 using log4net;
 using log4net.Config;
-using Teleopti.Analytics.Etl.Common.Database;
-using Teleopti.Analytics.Etl.Common.Database.EtlLogs;
-using Teleopti.Analytics.Etl.Common.Database.EtlSchedules;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
@@ -29,6 +29,8 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		private JobHelper _jobHelper;
 		private readonly Timer _timer;
 		private DateTime _serviceStartTime;
+
+		public event EventHandler NeedToStopService;
 
 		public EtlJobStarter(string connectionString, string cube, string pmInstallation)
 		{
@@ -61,6 +63,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		void Tick(object sender, ElapsedEventArgs e)
 		{
+			bool isStopping = false;
 			_timer.Stop();
 			try
 			{
@@ -68,14 +71,16 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				if (!configHandler.IsConfigurationValid)
 				{
 					LogInvalidConfiguration(configHandler);
+					NeedToStopService(this, null);
+					isStopping = true;
 					return;
 				}
 
 				var rep = new Repository(_connectionString);
-				IEtlLogCollection etlLogCollection = new EtlLogCollection(rep);
-				IEtlScheduleCollection etlScheduleCollection = new EtlScheduleCollection(rep, etlLogCollection, _serviceStartTime);
+				IEtlJobLogCollection etlJobLogCollection = new EtlJobLogCollection(rep);
+				IEtlJobScheduleCollection etlJobScheduleCollection = new EtlJobScheduleCollection(rep, etlJobLogCollection, _serviceStartTime);
 				var schedulePriority = new SchedulePriority();
-				var scheduleToRun = schedulePriority.GetTopPriority(etlScheduleCollection, DateTime.Now, _serviceStartTime);
+				var scheduleToRun = schedulePriority.GetTopPriority(etlJobScheduleCollection, DateTime.Now, _serviceStartTime);
 				if (scheduleToRun != null)
 				{
 					IJob jobToRun = JobExtractor.ExtractJobFromSchedule(scheduleToRun, _jobHelper,
@@ -91,11 +96,12 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			}
 			finally
 			{
-				_timer.Start();
+				if (!isStopping) 
+					_timer.Start();
 			}
 		}
 
-		private void RunJob(IJob jobToRun, int scheduleId, ILogRepository repository, IList<IBusinessUnit> businessUnitCollection)
+		private void RunJob(IJob jobToRun, int scheduleId, IJobLogRepository repository, IList<IBusinessUnit> businessUnitCollection)
 		{
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
@@ -132,7 +138,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 									: "null";
 			var timeZone = configHandler.BaseConfiguration.TimeZoneCode ?? "null";
 			Log.WarnFormat(CultureInfo.InvariantCulture,
-						   "ETL Service could not run any jobs due to invalid base configuration. Please start the manual ETL Tool and configure. (Culture: '{0}'; IntervalLengthMinutes: '{1}; TimeZoneCode: '{2}'.)",
+						   "ETL Service was stopped due to invalid base configuration (Culture: '{0}'; IntervalLengthMinutes: '{1}; TimeZoneCode: '{2}'). Please start the manual ETL Tool and configure. Then start the service again.",
 						   culture, intervalLength, timeZone);
 		}
 

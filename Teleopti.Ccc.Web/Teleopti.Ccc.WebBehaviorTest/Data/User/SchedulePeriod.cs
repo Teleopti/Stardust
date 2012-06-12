@@ -7,17 +7,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	public class SchedulePeriod : IUserSetup
 	{
-		public int VirtualSchedulePeriodWeeks = 2;
+		public int VirtualSchedulePeriodWeeks;
 		public Domain.Scheduling.Assignment.SchedulePeriod TheSchedulePeriod;
 		public int CreatedWeeksAgo;
 
 		private CultureInfo _cultureInfo;
 		private IPerson _person;
 
-		public SchedulePeriod() : this(0) { }
-		public SchedulePeriod(int createdWeeksAgo)
+		public SchedulePeriod() : this(0, 2) { }
+		public SchedulePeriod(int createdWeeksAgo) : this(createdWeeksAgo, 2) { }
+		public SchedulePeriod(int createdWeeksAgo, int virtualSchedulePeriodWeeks)
 		{
 			CreatedWeeksAgo = createdWeeksAgo;
+			VirtualSchedulePeriodWeeks = virtualSchedulePeriodWeeks;
 		}
 
 		public void Apply(IPerson user, CultureInfo cultureInfo)

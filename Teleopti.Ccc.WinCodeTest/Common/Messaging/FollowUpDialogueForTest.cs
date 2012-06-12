@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
             get { throw new NotImplementedException(); }
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ObservableCollection<IDialogueMessage> Messages { get; set;}
+        public ObservableCollection<DialogueMessageViewModel> Messages { get; set;}
         public string ReplyText { get; set; }
         public bool IsReplied { get; set; }
     	public string Reply

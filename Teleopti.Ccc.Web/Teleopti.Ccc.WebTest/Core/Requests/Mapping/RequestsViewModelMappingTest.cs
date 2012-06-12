@@ -5,12 +5,12 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -65,6 +65,24 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
 			result.Link.Methods.Should().Not.Contain("DELETE");
+		}
+
+		[Test]
+		public void ShouldMapPayload()
+		{
+			const string payLoadName = "this is the one";
+			var abs = new Absence {Description = new Description(payLoadName)};
+			var request = new PersonRequest(new Person(), new AbsenceRequest(abs, new DateTimePeriod(1900, 1, 1, 1900, 1, 2)));
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+			result.Payload.Should().Be.EqualTo(payLoadName);
+		}
+
+		[Test]
+		public void ShouldNotMapPayload()
+		{
+			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+			result.Payload.Should().Be.Empty();
 		}
 
 		[Test]

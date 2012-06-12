@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Models
 
             IEnumerable<ContractTimeLimiter> limiters = WorkShiftRuleSet.LimiterCollection.OfType<ContractTimeLimiter>();
 
-            if (limiters.Count() == 0)
+            if (!limiters.Any())
             {
                 WorkShiftRuleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(new TimeSpan(8, 0, 0),
                                                            new TimeSpan(8, 0, 0)),
@@ -100,10 +100,6 @@ namespace Teleopti.Ccc.WinCode.Shifts.Models
         public TimeSpan WorkingStartTime { get; set; }
 
         public TimeSpan WorkingEndTime { get; set; }
-
-
-
-        
 
         public override bool Validate()
         {
@@ -244,13 +240,13 @@ namespace Teleopti.Ccc.WinCode.Shifts.Models
             if (WorkingStartTime.Equals(TimeSpan.Zero))
                 status = false;
 
-            if (WorkingEndTime > new TimeSpan(36,0,0))
+            if (WorkingEndTime > TimeSpan.FromHours(36))
                 status = false;
 
             if (WorkingSegment.Equals(TimeSpan.Zero))
                 status = false;
 
-            if (WorkingSegment > new TimeSpan(36, 0, 0))
+            if (WorkingSegment > TimeSpan.FromHours(36))
                 status = false;
             return status;
         }

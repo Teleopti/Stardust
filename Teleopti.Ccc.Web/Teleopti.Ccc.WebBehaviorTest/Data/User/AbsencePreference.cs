@@ -9,7 +9,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 	{
 		public IAbsence Absence = TestData.Absence;
 
-		protected override PreferenceRestriction ApplyRestriction() { return new PreferenceRestriction { Absence = Absence }; }
-		protected override DateTime ApplyDate(CultureInfo cultureInfo) { return DateHelper.GetFirstDateInWeek(DateTime.Now.Date, cultureInfo); }
+		protected override PreferenceRestriction ApplyRestriction()
+		{
+			return new PreferenceRestriction { Absence = Absence };
+		}
+
+		protected override DateTime ApplyDate(CultureInfo cultureInfo)
+		{
+			return DateHelper.GetFirstDateInWeek(DateTime.Now.Date, cultureInfo);
+		}
 	}
 }

@@ -116,6 +116,8 @@
     <Compile Include="Areas\MobileReports\TestData\CurrentThreadCultureProvider.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportProviderForTest.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportsApplicationFunctionsFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodViewModelFactoryTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
     <Compile Include="Core\Settings\PersonPersisterTest.cs" />
     <Compile Include="FakeCurrentHttpContext.cs" />
@@ -237,7 +239,6 @@
     <Compile Include="Core\WeekSchedule\Mapping\WeekScheduleViewModelMappingTest.cs" />
     <Compile Include="Core\Startup\ApplicationStartModuleTest.cs" />
     <Compile Include="Core\Startup\RegisterModelBindersTaskTest.cs" />
-    <Compile Include="Core\StubFactory.cs" />
     <Compile Include="Core\Authentication\Services\WebLogOnTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\WindowsAccountProviderTest.cs" />
     <Compile Include="Core\IoC\BootstrapperModuleTest.cs" />

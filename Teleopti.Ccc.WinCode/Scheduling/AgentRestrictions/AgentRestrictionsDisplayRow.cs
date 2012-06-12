@@ -5,6 +5,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
+	public enum AgentRestrictionDisplayRowColumn
+	{
+		AgentName = 0,
+		Warnings = 1,
+		Type = 2,
+		From = 3,
+		To = 4,
+		ContractTargetTime = 5,
+		DaysOff = 6,
+		ContractTime = 7,
+		DaysOffSchedule = 8,
+		Min = 9,
+		Max = 10,
+		DaysOffScheduleRestrictions = 11,
+		Ok = 12,
+		None = 13
+	}
+
 	public enum AgentRestrictionDisplayRowState
 	{
 		NotAvailable,
@@ -20,10 +38,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		string PeriodType { get; }
 		string StartDate { get; }
 		string EndDate { get; }
-		TimeSpan ContractTargetTime { get; set; }
-		int TargetDaysOff { get;}
-		TimeSpan ContractCurrentTime { get; set; }
-		int CurrentDaysOff { get; set; }
+		int TargetDaysOff { get; }
+		string TargetDaysOffWithTolerance { get; }	
 	}
 
 	public interface IAgentDisplayData
@@ -32,7 +48,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		TimeSpan MinimumPossibleTime { get; set; }
 		TimeSpan MaximumPossibleTime { get; set; }
 		int ScheduledAndRestrictionDaysOff { get; set; }
-		string Ok {get; }
+		TimeSpan ContractCurrentTime { get; set; }
+		TimeSpan ContractTargetTime { get; set; }
+		string ContractTargetTimeWithTolerance { get; }
+		string ContractTargetTimeHourlyEmployees { get; }
+		int CurrentDaysOff { get; set; }
+		TimePeriod MinMaxTime { get; set; }
+		string Ok { get; }
 	}
 
 	public sealed class AgentRestrictionsDisplayRow : IAgentRestrictionsDisplayRow, IAgentDisplayData
@@ -47,14 +69,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		public TimeSpan ContractCurrentTime { get; set; }
 		public int CurrentDaysOff { get; set; }
 		private readonly Dictionary<AgentRestrictionDisplayRowColumn, string> _warnings;
-		private readonly AgentRestrictionsDisplayRowColumnMapper _columnMapper;
+		public TimePeriod MinMaxTime { get; set; }
 
 		public AgentRestrictionsDisplayRow(IScheduleMatrixPro matrix)
 		{
 			_matrix = matrix;
 			State = AgentRestrictionDisplayRowState.NotAvailable;
 			_warnings = new Dictionary<AgentRestrictionDisplayRowColumn, string>();
-			_columnMapper = new AgentRestrictionsDisplayRowColumnMapper();
 		}
 
 		public IScheduleMatrixPro Matrix
@@ -62,15 +83,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			get { return _matrix; }
 		}
 
-		public void SetWarning(AgentRestrictionDisplayRowColumn agentRestrictionDisplayRowColumn, string warning)
+		public void SetWarnings()
 		{
-			_warnings.Add(agentRestrictionDisplayRowColumn, warning);
+			_warnings.Clear();
+
+			if (ContractCurrentTime < MinMaxTime.StartTime || ContractCurrentTime > MinMaxTime.EndTime) _warnings.Add(AgentRestrictionDisplayRowColumn.ContractTime, UserTexts.Resources.ContractTimeDoesNotMeetTheTargetTime);
+			if (!CurrentDaysOff.Equals(TargetDaysOff)) _warnings.Add(AgentRestrictionDisplayRowColumn.DaysOffSchedule, UserTexts.Resources.WrongNumberOfDaysOff);
+			if (((IAgentDisplayData)this).MinimumPossibleTime > MinMaxTime.EndTime) _warnings.Add(AgentRestrictionDisplayRowColumn.Min, UserTexts.Resources.LowestPossibleWorkTimeIsTooHigh);
+			if (((IAgentDisplayData)this).MaximumPossibleTime < MinMaxTime.StartTime) _warnings.Add(AgentRestrictionDisplayRowColumn.Max, UserTexts.Resources.HighestPossibleWorkTimeIsTooLow);
 		}
 
 		public string Warning(int index)
 		{
 			if (_warnings.Count == 0) return null;
-			var column = _columnMapper.ColumnFromIndex(index);
+			var column = (AgentRestrictionDisplayRowColumn)index;
 			string warning;
 			_warnings.TryGetValue(column, out warning);
 			return warning;
@@ -107,12 +133,38 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public int TargetDaysOff
 		{
-			get { return _matrix.SchedulePeriod.DaysOff(); }
+			get{return _matrix.SchedulePeriod.Contract.EmploymentType != EmploymentType.HourlyStaff ? _matrix.SchedulePeriod.DaysOff() : 0;}
 		}
 
 		public string Ok
 		{
 			get {return _warnings.Count > 0 ? UserTexts.Resources.No : UserTexts.Resources.Yes;}
+		}
+
+		public string ContractTargetTimeWithTolerance
+		{
+			get
+			{	
+				return TimeHelper.GetLongHourMinuteTimeString(ContractTargetTime, TeleoptiPrincipal.Current.Regional.Culture)	 + 
+					" (" + TimeHelper.GetLongHourMinuteTimeString(MinMaxTime.StartTime, TeleoptiPrincipal.Current.Regional.Culture) + 
+					" - " + TimeHelper.GetLongHourMinuteTimeString(MinMaxTime.EndTime, TeleoptiPrincipal.Current.Regional.Culture) + 
+					")";
+			}
+		}
+
+		public string ContractTargetTimeHourlyEmployees
+		{
+			get { return TimeHelper.GetLongHourMinuteTimeString(ContractTargetTime, TeleoptiPrincipal.Current.Regional.Culture); }
+		}
+
+		public string TargetDaysOffWithTolerance
+		{
+			get
+			{
+				return TargetDaysOff + " (" + (TargetDaysOff - _matrix.SchedulePeriod.Contract.NegativeDayOffTolerance) +
+							   " - " + (TargetDaysOff + _matrix.SchedulePeriod.Contract.PositiveDayOffTolerance) +
+							   ")";
+			}
 		}
 	}
 }

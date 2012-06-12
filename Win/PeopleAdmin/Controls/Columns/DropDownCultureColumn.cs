@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 e.Style.CellType = "ComboBox";
                 e.Style.DataSource = _comboItems;
                 e.Style.DisplayMember = _displayMember;
+				e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
                 e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
                 OnCellDisplayChanged(dataItem, e);
             }

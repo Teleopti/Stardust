@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 			var endDate = currentDate.AddDays(2);
 			_currentPeriod = new DateOnlyPeriod(currentDate.AddDays(-1), endDate);
 
-            if (!_schedulerStateHolder.RequestedPeriod.DateOnly.Contains(_currentPeriod) || _schedulerStateHolder.Schedules==null)
+            if (!_schedulerStateHolder.RequestedPeriod.DateOnlyPeriod.Contains(_currentPeriod) || _schedulerStateHolder.Schedules==null)
             {
             	var period = _currentPeriod.ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
             	var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period,

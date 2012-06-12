@@ -33,10 +33,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return View(_menuViewModelFactory.CreateMenyViewModel());
     	}
 
-		public ActionResult Menu()
+		public ViewResult Menu()
     	{
 			// until 
-			return RedirectToRoute(new RouteValueDictionary(new { area = "MyTime", controller = "", action = "" }));
+			//return RedirectToRoute(new RouteValueDictionary(new { area = "MyTime", controller = "", action = "" }));
+			return View(_menuViewModelFactory.CreateMenyViewModel());
     	}
     }
 }

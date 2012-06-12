@@ -91,6 +91,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPayrollIntegration);
             if (licenseService.TeleoptiCccMyTimeWebEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccMyTimeWeb);
+			if (licenseService.TeleoptiCccAnywhereEnabled)
+				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccAnywhere);
 
             if (licenseService.TeleoptiCccFreemiumForecastsEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccFreemiumForecasts);

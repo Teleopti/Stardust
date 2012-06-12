@@ -302,6 +302,28 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			_mocks.VerifyAll();
 		}
 
+		[Test]
+		public void ShouldSetCheckedPersonsGuidsOnNodeChecked()
+		{
+			var root = new TreeNodeAdv { Tag = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() } };
+			var next = new TreeNodeAdv { Tag = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() } };
+			next.Checked = true;
+			var nextAgain = new TreeNodeAdv { Tag = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() } };
+			nextAgain.Checked = true;
+			next.Nodes.Add(nextAgain);
+			root.Nodes.Add(next);
+
+			var nodes = new List<TreeNodeAdv> { root };
+			nextAgain.Nodes.Add(new TreeNodeAdv { Tag = new List<Guid> { Guid.NewGuid() } });
+			nextAgain.Nodes.Add(new TreeNodeAdv { Tag = new List<Guid> { Guid.NewGuid() } });
+
+			Expect.Call(_view.AllNodes).Return(nodes);
+			Expect.Call(_view.PreselectedPersonIds = new List<Guid>()).IgnoreArguments();
+			_mocks.ReplayAll();
+			_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Publish("");
+			_mocks.VerifyAll();
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldCallLoadCommandOnRefreshEvent()
 		{

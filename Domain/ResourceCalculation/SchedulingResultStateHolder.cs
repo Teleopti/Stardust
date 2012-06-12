@@ -30,6 +30,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         
         public IList<IShiftCategory> ShiftCategories { get; set; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public IList<IOptionalColumn> OptionalColumns { get; set; } 
+
         public ISkillStaffPeriodHolder SkillStaffPeriodHolder
         {
             get
@@ -88,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 return (from s in _skills
                         where
-                        (s.WorkloadCollection.Count() > 0 ||
+                        (s.WorkloadCollection.Any() ||
                         s is IChildSkill || s.SkillType.ForecastSource == ForecastSource.MaxSeatSkill
 						|| s.SkillType.ForecastSource == ForecastSource.NonBlendSkill) &&
                         !(s is IMultisiteSkill)

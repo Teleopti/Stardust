@@ -74,27 +74,28 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
             return _limitation.StringFromTimeSpan(value);
         }
 
-        /// <summary>
-        /// Determines whether this instance has value.
-        /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if StartTime or EndTime has value; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-01-28
-        /// </remarks>
-        public bool HasValue()
+    	/// <summary>
+    	/// Determines whether this instance has value.
+    	/// </summary>
+    	/// <exception cref="NotImplementedException"></exception>
+    	/// <returns>
+    	/// 	<c>true</c> if StartTime or EndTime has value; otherwise, <c>false</c>.
+    	/// </returns>
+    	/// <remarks>
+    	/// Created by: micke
+    	/// Created date: 2009-01-28
+    	/// </remarks>
+    	public bool HasValue()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public TimePeriod ValidPeriod()
-        {
-            throw new System.NotImplementedException();
-        }
+    	public bool IsValidFor(TimeSpan timeSpan)
+    	{
+			throw new System.NotImplementedException();
+    	}
 
-        public TimePeriod WorkTime
+    	public TimePeriod WorkTime
         {
             get
             {

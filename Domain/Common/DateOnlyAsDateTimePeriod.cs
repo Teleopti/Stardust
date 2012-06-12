@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 	public interface IDateOnlyPeriodAsDateTimePeriod
 	{
-		DateOnlyPeriod DateOnly { get; }
+		DateOnlyPeriod DateOnlyPeriod { get; }
 		DateTimePeriod Period();
 	}
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Common
 			_sourceTimeZone = sourceTimeZone;
 		}
 
-		public DateOnlyPeriod DateOnly
+		public DateOnlyPeriod DateOnlyPeriod
 		{
 			get { return _dateOnlyPeriod; }
 		}

@@ -234,9 +234,13 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 	}
 
 	function _getFormData() {
+		var absenceId = $('#Absence-type').children(":selected").val();
+		if(absenceId == undefined) {
+			absenceId = null;
+		}
 		return {
 			Subject: $('#Schedule-addRequest-subject-input').val(),
-			AbsenceId: $('#Absence-type').children(":selected").val(),
+			AbsenceId: absenceId,
 			Period: {
 				StartDate: $('#Schedule-addRequest-fromDate-input').val(),
 				StartTime: $('#Schedule-addRequest-fromTime-input-input').val(),

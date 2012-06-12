@@ -43,7 +43,7 @@ packages/
 *.vssscc
 *.vsps
 *log.txt
-*.config
+*.[Cc]onfig
 *.jrs
 *.esent
 *.chk
@@ -51,10 +51,7 @@ packages/
 *.ncov
 *Test.xml
 symbolmodule.xml
-Teleopti.Ccc.Web/Teleopti.Ccc.WebBehaviorTest/Teleopti.Ccc.WebBehaviorTest.dll.Config
-*[Tt]est.dll.[Cc]onfig
 *.ncov.bkp
-Teleopti.Ccc.Rta/Teleopti.Ccc.Rta.WebService/RtaWebService.log.1
 *.sln
 Database/Tools/Restore/output
-Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.Host/SdkWebService.log.1
+*log.*

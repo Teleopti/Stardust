@@ -46,8 +46,6 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
             individualPages(rightToLeft, persons, firstDayOfWeek, fullWeekPeriod, stateHolder, timeZoneInfo,
                             details, owner, singleFile, path, culture);
-            //doc.Pages.Add();
-
         }
 
 		public static void ExportShiftPerDayTeamViewGraphical(CultureInfo culture, IDictionary<IPerson, string> persons, DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, bool rightToLeft, Control owner, string path, ScheduleReportDialogGraphicalModel model)
@@ -276,9 +274,10 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             ISchedulingResultStateHolder stateHolder, ICccTimeZoneInfo timeZoneInfo, ScheduleReportDetail details, CultureInfo culture)
         {
             IList<IPdfScheduleTemplate> weekList = new List<IPdfScheduleTemplate>();
+        	var dayCollection = fullWeekPeriod.DayCollection();
             for (int i = 0; i < 7; i++)
             {
-                DateOnly date = fullWeekPeriod.DayCollection()[i + offset];
+                DateOnly date = dayCollection[i + offset];
                 IScheduleDay part = stateHolder.Schedules[person].ScheduledDay(date);
                 SchedulePartView significantPart = part.SignificantPartForDisplay();
                 
@@ -288,6 +287,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
                 switch (significantPart)
                 {
+					case SchedulePartView.Overtime:
                     case SchedulePartView.MainShift:
                         IPdfScheduleTemplate schedule = new PdfScheduleAssignment(_scheduleColumnWidth,
                                                                         part,
@@ -296,8 +296,8 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                         break;
 
                     case SchedulePartView.DayOff:
-
-                        if (part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count > 0 && details == ScheduleReportDetail.All)
+                		var assignments = part.PersonAssignmentCollection();
+                        if (assignments.Count > 0 && assignments[0].OvertimeShiftCollection.Count > 0 && details == ScheduleReportDetail.All)
                         {
                             schedule = new PdfScheduleDayOffOvertime(_scheduleColumnWidth,
                                                                  part, part.PersonDayOffCollection()[0],
