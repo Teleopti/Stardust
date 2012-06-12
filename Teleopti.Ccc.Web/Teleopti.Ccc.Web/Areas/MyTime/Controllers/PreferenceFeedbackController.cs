@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		public virtual void FeedbackTask(DateOnly date)
 		{
+			Thread.Sleep(new Random().Next(100, 2000));
 			AsyncManager.Parameters["model"] = _viewModelFactory.CreateDayFeedbackViewModel(date);
 		}
 

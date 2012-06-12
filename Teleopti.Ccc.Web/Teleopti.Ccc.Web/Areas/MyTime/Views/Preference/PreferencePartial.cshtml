@@ -18,7 +18,7 @@
 		@string.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
 	}
 </div>
-<div id="Preference-period-feedback-view" class="displaynone">
+<div id="Preference-period-feedback-view">
 	<div id="Preference-period-feedback-target-daysoff" class="pd5 info-pnl">
 		@{
 			var range = Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span class='lower'>-</span>", "<span class='upper'>-</span>"));
@@ -37,6 +37,15 @@
 	</div>
 	<div id="Preference-period-feedback-possible-result-daysoff" class="pd5 info-pnl">
 		@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span class='days'>-</span>"))
+	</div>
+	<div id="Preference-period-feedback-possible-result-contract-time" class="pd5 info-pnl">
+		<!-- ko if: PossibleResultContractTimeLower() == PossibleResultContractTimeUpper() -->
+		@Html.Raw(string.Format(Resources.YourPreferencesCanResultXHours, "<span data-bind='text: PossibleResultContractTimeLower' style='font-size: 100px; font-weight: bold; color: blue'>-</span>"))
+		 <!-- /ko -->
+		<!-- ko if: PossibleResultContractTimeLower() != PossibleResultContractTimeUpper() -->
+		@Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' style='font-size: 100px; font-weight: bold; color: blue'>-</span>","<span data-bind='text: PossibleResultContractTimeUpper' style='font-size: 100px; font-weight: bold; color: blue'>-</span>"))
+     <!-- /ko -->
+		
 	</div>
 </div>
 <div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
@@ -76,10 +85,10 @@
 									<div class="preference">
 										@preference.Preference
 									</div>
-									<div class="feedback-error truncate"></div>
-									<div class="possible-start-times icon leftarrow truncate"></div>
-									<div class="possible-end-times icon rightarrow truncate"></div>
-									<div class="possible-contract-times icon doublearrow-blue truncate"></div>
+									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
+									<div class="possible-start-times icon leftarrow truncate" data-bind="text: PossibleStartTimes"></div>
+									<div class="possible-end-times icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
+									<div class="possible-contract-times icon doublearrow-blue truncate" data-bind="text: PossibleContractTimes"></div>
 								}
 								@if (personAssignment != null)
 								{

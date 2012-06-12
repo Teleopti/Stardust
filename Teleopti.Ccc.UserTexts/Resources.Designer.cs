@@ -24181,6 +24181,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your preferences can result in {0} hours..
+        /// </summary>
+        public static string YourPreferencesCanResultXHours {
+            get {
+                return ResourceManager.GetString("YourPreferencesCanResultXHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your preferences can result in {0} to {1} hours..
+        /// </summary>
+        public static string YourPreferencesCanResultXToYHours {
+            get {
+                return ResourceManager.GetString("YourPreferencesCanResultXToYHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your schedule for {0} to {1}.
         /// </summary>
         public static string YourScheduleForDateParameters {

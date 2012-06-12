@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
 
 			Mapper.Reset();
-			Mapper.Initialize(x => x.AddProfile(new PreferenceDayFeedbackViewModelMappingProfile(Depend.On(preferenceFeedbackProvider))));
+			Mapper.Initialize(x => x.AddProfile(new PreferenceDayFeedbackViewModelMappingProfile(Depend.On(preferenceFeedbackProvider), Depend.On(() => Mapper.Engine))));
 		}
 
 		[Test]
@@ -71,18 +71,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldMapPossibleContractTimes()
+		public void ShouldMapPossibleContractTimeMinutesLower()
 		{
 			var workTimeMinMax = new WorkTimeMinMax
-			                     	{
-			                     		WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10))
-			                     	};
+			{
+				WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10))
+			};
 			PreferenceType? preferenceType;
 			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today, out preferenceType)).Return(workTimeMinMax);
 
 			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
 
-			result.PossibleContractTimes.Should().Be(workTimeMinMax.WorkTimeLimitation.StartTimeString + "-" + workTimeMinMax.WorkTimeLimitation.EndTimeString);
+			result.PossibleContractTimeMinutesLower.Should().Be(workTimeMinMax.WorkTimeLimitation.StartTime.Value.TotalMinutes.ToString());
+		}
+
+		[Test]
+		public void ShouldMapPossibleContractTimeMinutesUpper()
+		{
+			var workTimeMinMax = new WorkTimeMinMax
+			{
+				WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10))
+			};
+			PreferenceType? preferenceType;
+			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today, out preferenceType)).Return(workTimeMinMax);
+
+			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
+
+			result.PossibleContractTimeMinutesUpper.Should().Be(workTimeMinMax.WorkTimeLimitation.EndTime.Value.TotalMinutes.ToString());
 		}
 
 		[Test]

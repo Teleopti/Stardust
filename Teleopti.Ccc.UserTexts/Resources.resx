@@ -10702,6 +10702,14 @@ These options are activated:
     <value>Your preferences can result in {0} days off.</value>
     <comment>Your preferences can result in X days off.</comment>
   </data>
+  <data name="YourPreferencesCanResultXHours" xml:space="preserve">
+    <value>Your preferences can result in {0} hours.</value>
+    <comment>Your preferences can result in X hours.</comment>
+  </data>
+  <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
+    <value>Your preferences can result in {0} to {1} hours.</value>
+    <comment>Your preferences can result in X to Y hours.</comment>
+  </data>
   <data name="YouShouldWorkXHours" xml:space="preserve">
     <value>You should work {0} hours.</value>
     <comment>You should work X hours.</comment>
