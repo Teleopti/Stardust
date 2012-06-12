@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personPeriod = _mocks.StrictMock<IPersonPeriod>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-			TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
+			var zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
 			_timeZoneInfo = new CccTimeZoneInfo(zone);
              _scheduleDateOnlyPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 10),_timeZoneInfo);
 			_info = new PermissionInformation(_person);
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var dictionary = _mocks.StrictMock<IScheduleDictionary>();
 			var range = _mocks.StrictMock<IScheduleRange>();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			IList<IShiftProjectionCache> caches = getCashes();
+			var caches = getCashes();
 			var dateOnly = new DateOnly(2009, 2, 2);
             _scheduleDateOnlyPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZoneInfo);
 			var dataHolders = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> ();
@@ -108,6 +108,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(dictionary[_person]).Return(range).Repeat.AtLeastOnce();
                 Expect.Call(_person.WorkflowControlSet).Return(null).Repeat.AtLeastOnce();
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false)).Return(caches);
+				Expect.Call(_shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(caches, null, _schedulingOptions)).
+					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches)).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
                 effectiveRestriction.ShiftCategory = _category;
@@ -139,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions.ShiftCategory = _category;
 			using (_mocks.Playback())
 			{
-				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
+				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
 				Assert.IsNotNull(retShift);
 			}
 		}
@@ -162,6 +164,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_person.Period(dateOnly)).Return(_personPeriod);
                 Expect.Call(_personPeriod.RuleSetBag).Return(bag);
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false)).Return(caches);
+				Expect.Call(_shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(caches, null, _schedulingOptions)).
+					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches)).
                     IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
                 effectiveRestriction.ShiftCategory = _category;
@@ -174,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions.ShiftCategory = _category;
             using (_mocks.Playback())
             {
-                IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
+				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
                 Assert.That(retShift, Is.Null);
             }
         }
@@ -198,6 +202,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 //Expect.Call(_schedulePeriod.PersonPeriod).Return(_personPeriod);
                 Expect.Call(_personPeriod.RuleSetBag).Return(bag);
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false)).Return(caches);
+				Expect.Call(_shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(caches, null, _schedulingOptions)).
+					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(new List<IShiftProjectionCache>())).
                     IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
                 effectiveRestriction.ShiftCategory = _category;
@@ -212,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions.ShiftCategory = _category;
             using (_mocks.Playback())
             {
-                IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
+				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
                 Assert.That(retShift, Is.Null);
             }
         }
@@ -243,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             using (_mocks.Playback())
             {
-                IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
+				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
                 Assert.That(retShift, Is.Null);
             }
         }
@@ -269,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                     
 			_mocks.ReplayAll();
             _schedulingOptions.ShiftCategory = _category;
-            IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
+			IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
 			Assert.That(retShift, Is.Null);
 
 			_mocks.VerifyAll();
@@ -289,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.ReplayAll();
 
             _schedulingOptions.ShiftCategory = _category;
-            IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
+			IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
 			Assert.That(retShift, Is.Null);
 
 			_mocks.VerifyAll();
@@ -306,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_part.DateOnlyAsPeriod).Return(_scheduleDateOnlyPeriod).Repeat.AtLeastOnce();
 			_mocks.ReplayAll();
             _schedulingOptions.ShiftCategory = _category;
-            IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
+			IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
 			Assert.That(retShift, Is.Null);
 
 			_mocks.VerifyAll();
@@ -329,7 +335,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
            
 
             _schedulingOptions.ShiftCategory = _category;
-            IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
+			var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
 			Assert.That(retShift, Is.Null);
 
 			_mocks.VerifyAll();

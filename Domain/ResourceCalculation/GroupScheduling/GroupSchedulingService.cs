@@ -86,8 +86,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             IShiftCategory bestCategory = groupPerson.CommonShiftCategory;
             if (bestCategory == null)
             {
-                var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, totalFairness, agentAverageFairness, schedulingOptions);
+                
+				var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, totalFairness, agentAverageFairness, schedulingOptions);
                 bestCategory = bestCategoryResult.BestShiftCategory;
+
+
                 if (bestCategory == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)
                     _finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ErrorMessageNotAValidSchedulePeriod);
 
@@ -122,11 +125,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     }
                 }
 
+				// TODO Här ska vi hämta ut resultatet innan
+            	var bestPossible = new PossibleStartEndCategory();
                 if (!locked && !scheduleDay.IsScheduled())
                 {
 					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
-					bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, bestCategory, resourceCalculateDelayer);
+					bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, resourceCalculateDelayer,bestPossible);
                     if (!sucess)
                     {
                         return false;
