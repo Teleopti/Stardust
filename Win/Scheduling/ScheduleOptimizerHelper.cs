@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                             	var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
                             	var effectiveRestriction = effectiveRestrictionCreator.GetEffectiveRestriction(
                             		schedulePart, schedulingOptions);
-                                cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);
+                                cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction, null);
                             }
                             var result = finderService.FinderResult;
                             _allResults.AddResults(new List<IWorkShiftFinderResult> { result }, schedulingTime);

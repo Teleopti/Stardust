@@ -61,7 +61,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), 
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), 
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public IBestShiftCategoryResult BestShiftCategoryForDays(IBlockFinderResult result, IPerson person, IFairnessValueResult totalFairness, IFairnessValueResult agentFairness, ISchedulingOptions schedulingOptions)
+		public IBestShiftCategoryResult BestShiftCategoryForDays(IBlockFinderResult result, IPerson person, IFairnessValueResult totalFairness, 
+			IFairnessValueResult agentFairness, ISchedulingOptions schedulingOptions)
         {
 			InParameter.NotNull("result",result);
 			InParameter.NotNull("person", person);

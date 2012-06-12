@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                                 schedulePart, schedulingOptions);
 
                             bool schedulePersonOnDayResult =
-								_scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction, resourceCalculateDelayer);
+								_scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment,effectiveRestriction, resourceCalculateDelayer, null);
 
                                 result = result && schedulePersonOnDayResult;
                                 if (!result && breakIfPersonCannotSchedule)
