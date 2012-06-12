@@ -9,7 +9,18 @@ namespace Teleopti.Ccc.AgentPortal.Helper
     /// Date helper class 
     /// </summary>
     public static class DateHelper
-    {
+	{
+		//Nynorsk - Norway 2068
+		//Bokmål - Norway 1044
+		//Swedish - Sweden 1053
+		//German - Germany 1031
+		//German - Austria 3079
+		//German - Switzerland 2055
+		//Danish - Danmark 1030
+		//Finnish - Finland 1035
+		//France - France 1036
+		private static readonly IList<int> Iso8601Cultures = new List<int> { 2068, 1044, 1053, 1031, 3079, 2055, 1030, 1035, 1036 };
+		
         /// <summary>
         /// Returns week number. Contains a correction for FirstFourDayWeek CalendarWeekRule.
         /// </summary>
@@ -208,24 +219,9 @@ namespace Teleopti.Ccc.AgentPortal.Helper
             return dateTimeFormatInfo.GetMonthName(theDate.Month);
         }
 
-        public static bool UseIso8601Format(CultureInfo cultureInfo) 
+        public static bool UseIso8601Format(CultureInfo cultureInfo)
         {
-            if (Iso8601Cultures().Contains(cultureInfo.LCID))
-                return true;
-            return false;
-        }
-        private static IList<int> Iso8601Cultures()
-        {
-            IList<int> localIds = new List<int>{2068, 1044, 1053, 1031, 3079, 2055, 1030, 1035};
-            //Nynorsk - Norway 2068
-            //Bokmål - Norway 1044
-            //Swedish - Sweden 1053
-            //German - Germany 1031
-            //German - Austria 3079
-            //German - Switzerland 2055
-            //Danish - Danmark 1030
-            //Finnish - Finland 1035
-            return localIds;
+        	return Iso8601Cultures.Contains(cultureInfo.LCID);
         }
     }
 }
