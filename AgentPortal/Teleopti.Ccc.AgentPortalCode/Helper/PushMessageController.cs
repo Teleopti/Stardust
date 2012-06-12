@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
                             pushMessageDialogueDto.Id = args.Message.DomainObjectId.ToString();
                             PushMessageDialogueDto loadedPushMessageDialogueDto = SdkServiceHelper.OrganizationService.GetPushMessageDialogue(pushMessageDialogueDto);
                             
-                            if(loadedPushMessageDialogueDto!=null && loadedPushMessageDialogueDto.IsReplied )
+                            if(loadedPushMessageDialogueDto!=null && !loadedPushMessageDialogueDto.IsReplied )
                             {
                                 string title = loadedPushMessageDialogueDto.PushMessage.Title;
                                 string message = loadedPushMessageDialogueDto.Message; //Translated
