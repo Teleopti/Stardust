@@ -377,7 +377,14 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(_per.EndTime.Subtract(_per.StartTime).Ticks,_per.SpanningTime().Ticks);
         }
 
-
+		 [Test]
+		 public void VerifyOperator()
+		 {
+		 	var t1 = new TimePeriod(new TimeSpan(20, 0, 0), new TimeSpan(22, 0, 0));
+			var t2 = new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(23, 0, 0));
+			 Assert.IsTrue(t1 > t2);
+			 Assert.IsFalse(t1 < t2);
+		 }
 
 
         private void tryParseAndCheckResult(string stringToParse, int expectedStartHours, int expectedEndHours)

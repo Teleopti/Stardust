@@ -61,11 +61,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             Activity longDuty = ActivityFactory.CreateActivity("Long duty");
             DateTimePeriod period2 =
                 new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 1, 2, 8, 0, 0, DateTimeKind.Utc));
+                                   new DateTime(2007, 1, 2, 1, 0, 0, DateTimeKind.Utc));
 
             DateTimePeriod period3 =
-                new DateTimePeriod(new DateTime(2007, 1, 2, 12, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 1, 3, 12, 0, 0, DateTimeKind.Utc));
+                new DateTimePeriod(new DateTime(2007, 1, 2, 1, 0, 0, DateTimeKind.Utc),
+                                   new DateTime(2007, 1, 2, 2, 0, 0, DateTimeKind.Utc));
 
 
             MainShiftActivityLayer layer1 = new MainShiftActivityLayer(telephone, period1);

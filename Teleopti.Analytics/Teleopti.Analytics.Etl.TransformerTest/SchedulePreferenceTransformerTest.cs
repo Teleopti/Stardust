@@ -93,32 +93,32 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
             // Start time early
             preference = new PreferenceRestriction();
-            preference.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(2009, 12, 11), null);
+            preference.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(1, 0, 0), null);
             Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
 
             // Start time late
             preference = new PreferenceRestriction();
-            preference.StartTimeLimitation = new StartTimeLimitation(null, new TimeSpan(2009, 12, 11));
+            preference.StartTimeLimitation = new StartTimeLimitation(null, new TimeSpan(23,0,0));
             Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
 
             // End time early
             preference = new PreferenceRestriction();
-            preference.EndTimeLimitation = new EndTimeLimitation(new TimeSpan(2009, 12, 11), null);
+				preference.EndTimeLimitation = new EndTimeLimitation(new TimeSpan(1, 0, 0), null);
             Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
 
             // End time late
             preference = new PreferenceRestriction();
-            preference.EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(2009, 12, 11));
+				preference.EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(23, 0, 0));
             Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
 
             // Work time min
             preference = new PreferenceRestriction();
-            preference.WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(2009, 12, 11), null);
+				preference.WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(1, 0, 0), null);
             Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
 
             // Work time max
             preference = new PreferenceRestriction();
-            preference.WorkTimeLimitation = new WorkTimeLimitation(null, new TimeSpan(2009, 12, 11));
+				preference.WorkTimeLimitation = new WorkTimeLimitation(null, new TimeSpan(23, 0, 0));
             Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
         }
 

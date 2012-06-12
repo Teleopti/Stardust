@@ -185,7 +185,6 @@
     <Compile Include="Foundation\SessionData.cs" />
     <Compile Include="Foundation\State.cs" />
     <Compile Include="Foundation\StateHolder.cs" />
-    <Compile Include="NHibernateConfiguration\PositiveTimeSpanOrNullMappingType.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerExceptionConverter.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiAuditEventListener.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDatabaseNamingStrategy.cs" />

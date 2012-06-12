@@ -87,12 +87,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyValidateWorkShiftStartEndTime()
         {
-
-            _startTimeLimitation.StartTime = TimeSpan.FromHours(8);
-            _startTimeLimitation.EndTime = TimeSpan.FromHours(9);
-
-            _endTimeLimitation.StartTime = TimeSpan.FromHours(22);
-            _endTimeLimitation.EndTime = TimeSpan.FromDays(1).Add(TimeSpan.FromHours(6));
+			  _startTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9));
+			  _endTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(6)));
 
             _target = new EffectiveRestriction(
                 _startTimeLimitation,
