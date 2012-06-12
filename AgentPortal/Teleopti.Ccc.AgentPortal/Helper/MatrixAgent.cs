@@ -18,16 +18,14 @@ namespace Teleopti.Ccc.AgentPortal.Helper
     class MatrixAgent : IDisposable
     {
         private static MatrixAgent _instance = new MatrixAgent();
-        private ScoreCardControl _scoreCardPreview = new ScoreCardControl();
-        private WebBrowserControl _reportPreview = new WebBrowserControl();
+        private readonly WebBrowserControl _reportPreview = new WebBrowserControl();
         private WebBrowserControl _scoreCardDisplay;
         private string _queryStringBusinessUnit;
         private string _queryStringAuthenticationType;
 
         private const string MatrixWebSiteUrl = "MatrixWebSiteUrl";
         private const string RelativeAgentScoreCardUrl = "/Reports/Ccc/AgentScorecard.aspx";
-        //private const string DefaultAgentScoreCard = "Default";
-        private const string _reportPreviewDefaultPage = "http://www.teleopti.com/";
+        private const string ReportPreviewDefaultPage = "http://www.teleopti.com/";
 
         private MatrixAgent() { }
 
@@ -39,39 +37,6 @@ namespace Teleopti.Ccc.AgentPortal.Helper
                     _instance = new MatrixAgent();
 
                 return _instance;
-            }
-        }
-
-        /// <summary>
-        /// Gets the score card preview.
-        /// </summary>
-        /// <value>The score card preview.</value>
-        /// <remarks>
-        /// Created by: kosalanp
-        /// Created date: 5/15/2008
-        /// </remarks>
-        public ScoreCardControl ScoreCardPreview
-        {
-            get
-            {
-                if (_scoreCardPreview == null)
-                    _scoreCardPreview = new ScoreCardControl();
-
-                string matrixURL = StateHolder.Instance.StateReader.SessionScopeData.AppSettings[MatrixWebSiteUrl];
-                string scorecardUrl = string.Concat(matrixURL, RelativeAgentScoreCardUrl);
-                scorecardUrl = SetAnalyticsUrlQuerystring(scorecardUrl);
-                //string scorecarPreviewdUrl = scorecardUrl;
-                // Since no working preview (default) scorecard exists today we show the original scorecard instead.
-                //if (scorecardUrl.Contains("."))
-                //{
-                //    scorecarPreviewdUrl = scorecardUrl.Insert(scorecardUrl.IndexOf(".", StringComparison.OrdinalIgnoreCase), DefaultAgentScoreCard);
-                //}
-                //_scoreCardPreview.WebBrowser.Url = new Uri(scorecarPreviewdUrl);
-                //_scoreCardPreview.WebBrowser.Navigate(scorecarPreviewdUrl);
-                _scoreCardPreview.WebBrowser.Url = new Uri(scorecardUrl);
-                _scoreCardPreview.WebBrowser.Navigate(scorecardUrl);
-
-                return _scoreCardPreview;
             }
         }
 
@@ -88,13 +53,15 @@ namespace Teleopti.Ccc.AgentPortal.Helper
             get
             {
                 if (_scoreCardDisplay == null)
-                    _scoreCardDisplay = new WebBrowserControl();
+                {
+                	_scoreCardDisplay = new WebBrowserControl();
+                }
                 
-                //TODO: check for null here
-                string matrixURL = StateHolder.Instance.StateReader.SessionScopeData.AppSettings[MatrixWebSiteUrl];
-                string scorecardUrl = string.Concat(matrixURL, RelativeAgentScoreCardUrl);
-                //string scorecardUrl = StateHolder.Instance.StateReader.SessionScopeData.AppSettings[RelativeAgentScoreCardUrl];
-                _scoreCardDisplay.WebBrowser.Url = new Uri(scorecardUrl);
+                string matrixUrl = StateHolder.Instance.StateReader.SessionScopeData.AppSettings[MatrixWebSiteUrl];
+                string scorecardUrl = string.Concat(matrixUrl, RelativeAgentScoreCardUrl);
+
+				scorecardUrl = SetAnalyticsUrlQuerystring(scorecardUrl);
+				_scoreCardDisplay.WebBrowser.Url = new Uri(scorecardUrl);
                 _scoreCardDisplay.Name = "Scorecard";
                 _scoreCardDisplay.WebBrowser.Navigate(scorecardUrl);
 
@@ -163,7 +130,7 @@ namespace Teleopti.Ccc.AgentPortal.Helper
         public WebBrowserControl GetMatrixReport()
         {
             string url = MainScreen.SelectedReport;
-            if (string.IsNullOrEmpty(url)) url = _reportPreviewDefaultPage;
+            if (string.IsNullOrEmpty(url)) url = ReportPreviewDefaultPage;
 
             _reportPreview.Name = "Reports";
             url = SetAnalyticsUrlQuerystring(url);
@@ -175,17 +142,18 @@ namespace Teleopti.Ccc.AgentPortal.Helper
             return _reportPreview;
         }
 
-        /// <summary>
-        /// Tries the parse to URL.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="url">The URL.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: kosalanp
-        /// Created date: 5/15/2008
-        /// </remarks>
-        public static bool TryParseToUrl(ToolStripMenuItem sender, out string url, out string targetFrame)
+    	/// <summary>
+    	/// Tries the parse to URL.
+    	/// </summary>
+    	/// <param name="sender">The sender.</param>
+    	/// <param name="url">The URL.</param>
+    	/// <param name="targetFrame">The target frame.</param>
+    	/// <returns></returns>
+    	/// <remarks>
+    	/// Created by: kosalanp
+    	/// Created date: 5/15/2008
+    	/// </remarks>
+    	public static bool TryParseToUrl(ToolStripMenuItem sender, out string url, out string targetFrame)
         {
             if (sender == null)
             {
@@ -193,14 +161,14 @@ namespace Teleopti.Ccc.AgentPortal.Helper
                 targetFrame = string.Empty;
                 return false;
             }
-            else if (sender.Tag == null)
-            {
-                url = string.Empty;
-                targetFrame = string.Empty;
-                return false;
-            }
+        	if (sender.Tag == null)
+        	{
+        		url = string.Empty;
+        		targetFrame = string.Empty;
+        		return false;
+        	}
 
-            MatrixReportInfoDto matrixReportInfoDto = sender.Tag as MatrixReportInfoDto;
+        	var matrixReportInfoDto = sender.Tag as MatrixReportInfoDto;
             if (matrixReportInfoDto == null)
             {
                 url = string.Empty;
@@ -209,14 +177,7 @@ namespace Teleopti.Ccc.AgentPortal.Helper
             }
 
             url = matrixReportInfoDto.ReportUrl;
-            if (string.IsNullOrEmpty(matrixReportInfoDto.TargetFrame))
-            {
-                targetFrame = "_self";
-            }
-            else
-            {
-                targetFrame = matrixReportInfoDto.TargetFrame;
-            }
+            targetFrame = string.IsNullOrEmpty(matrixReportInfoDto.TargetFrame) ? "_self" : matrixReportInfoDto.TargetFrame;
             return !string.IsNullOrEmpty(url);
         }
 
@@ -254,10 +215,8 @@ namespace Teleopti.Ccc.AgentPortal.Helper
         {
             if (disposing)
             {
-                // dispose managed resources
                 _reportPreview.Dispose();
                 _scoreCardDisplay.Dispose();
-                _scoreCardPreview.Dispose();
             }
         }
 
