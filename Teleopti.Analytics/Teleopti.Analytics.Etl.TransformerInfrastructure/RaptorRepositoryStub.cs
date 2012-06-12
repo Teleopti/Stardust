@@ -656,7 +656,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillFactQualityDataMart(DateTimePeriod period, int dataSource, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit)
+        public int FillFactQualityDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit)
         {
             return 0;
         }
