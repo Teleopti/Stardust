@@ -558,58 +558,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
         [Test]
-        public void VerifyIsDateContractScheduleWorkday()
-        {
-            ITeam team3 = TeamFactory.CreateSimpleTeam("Team3");
-            IPersonPeriod personPeriod3 =
-                PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2009, 1, 1), team3); //this is a thursday
-            IContractSchedule contractSchedule = ContractScheduleFactory.CreateContractSchedule("test");
-            IContractScheduleWeek contractScheduleWeek = new ContractScheduleWeek();
-            contractScheduleWeek.Add(DayOfWeek.Friday, true);
-            contractScheduleWeek.Add(DayOfWeek.Saturday, true);
-            contractSchedule.AddContractScheduleWeek(contractScheduleWeek);
-            personPeriod3.PersonContract.ContractSchedule = contractSchedule;
-
-            _target.AddPersonPeriod(personPeriod3);
-            DateOnly requestedDate = new DateOnly(2009, 1, 1);
-            Assert.IsFalse(_target.IsDateContractScheduleWorkday(requestedDate));
-            Assert.AreEqual(TimeSpan.Zero, _target.ContractScheduleWorkTime(requestedDate));
-            Assert.IsTrue(_target.IsDateContractScheduleWorkday(requestedDate.AddDays(1)));
-            Assert.IsFalse(_target.IsDateContractScheduleWorkday(requestedDate.AddDays(7)));
-            Assert.IsTrue(_target.IsDateContractScheduleWorkday(requestedDate.AddDays(8)));
-        }
-
-        [Test]
-        public void VerifyIsDateContractScheduleWorkdayReturnsTrueIfNoPersonContract()
-        {
-            ITeam team3 = TeamFactory.CreateSimpleTeam("Team3");
-            IPersonPeriod personPeriod3 =
-                PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2009, 1, 1), team3); //this is a thursday
-            personPeriod3.PersonContract = null;
-            _target.AddPersonPeriod(personPeriod3);
-            DateOnly requestedDate = new DateOnly(2009, 1, 1);
-            Assert.IsTrue(_target.IsDateContractScheduleWorkday(requestedDate));
-            Assert.AreEqual(TimeSpan.Zero, _target.ContractScheduleWorkTime(requestedDate));
-            Assert.IsTrue(_target.IsDateContractScheduleWorkday(requestedDate.AddDays(1)));
-            Assert.IsTrue(_target.IsDateContractScheduleWorkday(requestedDate.AddDays(7)));
-            Assert.IsTrue(_target.IsDateContractScheduleWorkday(requestedDate.AddDays(8)));
-        }
-
-        [Test]
-        public void VerifyContractScheduleWorkTimeReturnAverageWorkTimeIfWorkday()
-        {
-            ITeam team3 = TeamFactory.CreateSimpleTeam("Team3");
-            IPersonPeriod personPeriod3 =
-                PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2009, 1, 1), team3); //this is a thursday
-            _target.AddPersonPeriod(personPeriod3);
-            ISchedulePeriod schedulePeriod = new SchedulePeriod(
-                new DateOnly(2008, 12, 31), SchedulePeriodType.Day, 7);
-            schedulePeriod.AverageWorkTimePerDay = TimeSpan.FromHours(10);
-            _target.AddSchedulePeriod(schedulePeriod);
-            Assert.AreEqual(TimeSpan.FromHours(10), _target.ContractScheduleWorkTime(new DateOnly(2009, 1, 1)));
-        }
-
-        [Test]
         public void VerifyPeriodWithTerminalDate()
         {
             ITeam teamA = TeamFactory.CreateSimpleTeam("TeamA");
@@ -656,55 +604,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsNull(_target.SchedulePeriod(dateTime));
 
 
-        }
-
-
-        [Test]
-        public void VerifyCanCheckPeriodOfContractTimes()
-        {
-            TimeSpan perDay = TimeSpan.FromMinutes(60);
-            TimeSpan total = TimeSpan.Zero;
-            PersonForTargetTimeTest person = new PersonForTargetTimeTest();
-            DateOnly baseDate = new DateOnly(2001, 1, 1);
-            person.everyDayWorkTime = perDay;
-            DateOnlyPeriod periodToCheck = new DateOnlyPeriod(baseDate, baseDate.AddDays(3));
-
-            int max = periodToCheck.DayCount();
-            for (int i = 0; i < max; i++)
-            {
-                total += perDay;
-            }
-            Assert.AreEqual(total, person.ContractScheduleWorkTime(periodToCheck));
-
-            foreach (DateOnly date in periodToCheck.DayCollection())
-            {
-                Assert.IsTrue(person.HitDates.Contains(date.Date));
-            }
-        }
-
-
-        [Test]
-        public void VerifyCanCheckPeriodOfDaysOff()
-        {
-            DateOnly workDayBaseDate = new DateOnly(2001, 1, 1);
-            PersonForTargetTimeTest person = new PersonForTargetTimeTest();
-            DateOnlyPeriod periodToCheck = new DateOnlyPeriod(workDayBaseDate, workDayBaseDate.AddDays(10));
-
-            Assert.AreEqual(periodToCheck.DayCount(),person.ContractScheduleDaysOff(periodToCheck));
-            //Add some fake workDays:
-            person.WorkDayDates.Add(workDayBaseDate);
-            person.WorkDayDates.Add(workDayBaseDate.AddDays(1));
-            person.WorkDayDates.Add(workDayBaseDate.AddDays(3));
-            Assert.AreEqual(periodToCheck.DayCount()-3,person.ContractScheduleDaysOff(periodToCheck));
-        }
-
-        [Test]
-        public void VerifyCanCallTargetScheduleDaysOffAndContractOnIPerson()
-        {
-            IPerson person = new PersonForTargetTimeTest();
-            DateOnlyPeriod periodToCheck= new DateOnlyPeriod();
-            person.ContractScheduleDaysOff(periodToCheck);
-            person.ContractScheduleWorkTime(periodToCheck);
         }
 
         [Test]
@@ -830,24 +729,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsTrue(_target.IsOkToAddSchedulePeriod(dateOnly));
             _target.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(dateOnly));
             Assert.IsFalse(_target.IsOkToAddSchedulePeriod(dateOnly));
-        }
-    }
-
-    internal class PersonForTargetTimeTest : Person
-    {
-        internal IList<DateTime> WorkDayDates = new List<DateTime>();
-        internal IList<DateTime> HitDates = new List<DateTime>();
-        internal TimeSpan everyDayWorkTime;
-
-        public override bool IsDateContractScheduleWorkday(DateOnly requestedDate)
-        {
-            return WorkDayDates.Contains(requestedDate);
-        }
-
-        public override TimeSpan ContractScheduleWorkTime(DateOnly requestedDate)
-        {
-            HitDates.Add(requestedDate.Date);
-            return everyDayWorkTime;
         }
     }
 }

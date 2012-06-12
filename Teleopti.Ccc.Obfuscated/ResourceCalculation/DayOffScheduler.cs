@@ -100,10 +100,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 if (hasCorrectNumberOfDaysOff && currentDaysOff > 0)
                     continue;
 
-				//  tamasb code review with Micke: what if the person changes the period, or leaves the company !!!!!
-            	var personPeriod = matrix.Person.Period(schedulePeriod.DateOnlyPeriod.StartDate);
-				if(personPeriod == null)
-					continue;
 
                 foreach (var scheduleDayPro in matrix.UnlockedDays)
                 {
@@ -114,7 +110,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     if (!_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(part))
                         continue;
 
-					if (schedulePeriod.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDayPro.Day))
+					if (schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, scheduleDayPro.Day))
                         continue;
 
                     IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);

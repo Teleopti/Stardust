@@ -193,10 +193,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 int y;
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, 0);
                 Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_scheduleDay)).Return(false);
-
-            	Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period);
-				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
-				Expect.Call(_person.Period(_date1)).Return(_personPeriod);
             }
 
             using (_mocks.Playback())
@@ -255,9 +251,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(null); //<----------
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
-            	Expect.Call(_scheduleMatrixPro.Person).Return(_person);
-            	Expect.Call(_person.Period(_date1)).Return(_personPeriod);
-            	Expect.Call(_personPeriod.StartDate).Return(_date1);
 				Expect.Call(_contractSchedule.IsWorkday(_date1, _date1)).Return(false);
             }
 
@@ -294,10 +287,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay)).Throw(new DayOffOutsideScheduleException());
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-
-				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
-				Expect.Call(_person.Period(_date1)).Return(_personPeriod);
-				Expect.Call(_personPeriod.StartDate).Return(_date1);
 				Expect.Call(_contractSchedule.IsWorkday(_date1, _date1)).Return(false);
             }
 
@@ -335,10 +324,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			    Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(null); //<-----
                 Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
-
-				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
-				Expect.Call(_person.Period(_date1)).Return(_personPeriod);
-				Expect.Call(_personPeriod.StartDate).Return(_date1);
 				Expect.Call(_contractSchedule.IsWorkday(_date1, _date1)).Return(false);
             }
 
@@ -442,11 +427,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 int x;
                 int y;
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(0, 0);
-
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period);
-				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
-				Expect.Call(_person.Period(_date1)).Return(_personPeriod);
-
             }
 
             using (_mocks.Playback())
@@ -479,10 +459,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_schedulePeriod.ContractSchedule).Return(_contractSchedule);
                 Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
                 Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
-
-				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
-				Expect.Call(_person.Period(_date1)).Return(_personPeriod);
-				Expect.Call(_personPeriod.StartDate).Return(_date1);
 				Expect.Call(_contractSchedule.IsWorkday(_date1, _date1)).Return(true);
             }
 
@@ -522,10 +498,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
                 Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(effectiveRestriction).Repeat.AtLeastOnce();
-
-				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
-				Expect.Call(_person.Period(_date1)).Return(_personPeriod);
-				Expect.Call(_personPeriod.StartDate).Return(_date1);
 				Expect.Call(_contractSchedule.IsWorkday(_date1, _date1)).Return(false);
 
             }
@@ -536,7 +508,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
        
-
         void _target_DayScheduled(object sender, SchedulingServiceBaseEventArgs e)
         {
             e.Cancel = true;

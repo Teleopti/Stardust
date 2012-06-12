@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             var personContract = personPeriod.PersonContract;
             var avgWorkTime = new TimeSpan((long)(personContract.Contract.WorkTime.AvgWorkTimePerDay.Ticks * personContract.PartTimePercentage.Percentage.Value));
 
+			// there is no real schedule period so we use person period's start date
             if (!personContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate))
                 return new WorkTimeMinMax {WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.Zero, TimeSpan.Zero)};
 

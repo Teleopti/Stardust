@@ -174,6 +174,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         {
             IVirtualSchedulePeriod schedulePeriod =
                 agentInfoHelper.Person.VirtualSchedulePeriod(cellData.TheDate);
+
 			if (!schedulePeriod.IsValid)
 				return;
 
@@ -182,7 +183,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
 				return;
 
             cellData.HasAbsenceOnContractDayOff =
-                !schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, cellData.TheDate);
+				!schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, cellData.TheDate);
+
             TimeSpan time = TimeSpan.Zero;
             if (!cellData.HasAbsenceOnContractDayOff && cellData.EffectiveRestriction.Absence.InContractTime)
                 time = schedulePeriod.AverageWorkTimePerDay;
@@ -210,7 +212,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
 			if (schedulePeriod.IsValid && personPeriod != null)
             {
                 cellData.HasAbsenceOnContractDayOff =
-					!schedulePeriod.ContractSchedule.IsWorkday(personPeriod.StartDate, cellData.TheDate);
+					!schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, cellData.TheDate);
             }
             
             WorkTimeLimitation workTimeLimitation;
