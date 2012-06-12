@@ -65,6 +65,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().Setup(new AbsencePreferenceOnWeekday(weekday));
 		}
 
+		[Given(@"I have a shift category preference on weekday (\d)")]
+		public void GivenIHaveAShiftCategoryPreferenceOnWeekday1(int weekday)
+		{
+			ScenarioContext.Current.Pending();
+		}
 
 
 
@@ -99,5 +104,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.PreferencePeriodFeedbackTargetHours.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkBetweenXAndYHours, lower, upper)));
 		}
 
+		[Then(@"I should see a message that my preferences can result in (\d+) to (\d+) hours")]
+		public void ThenIShouldSeeAMessageThatMyPreferencesCanResultIn42To70Hours(int lower, int upper)
+		{
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackPossibleResultHours.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXToYHours, FormatHours(lower), FormatHours(upper))));
+		}
+
+		private static string FormatHours(int hours)
+		{
+			return string.Format("{0}:00", hours);
+		}
 	}
 }

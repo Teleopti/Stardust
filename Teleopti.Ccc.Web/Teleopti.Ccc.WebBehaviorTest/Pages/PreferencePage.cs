@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference-period-feedback-target-hours")]
 		public Div PreferencePeriodFeedbackTargetHours { get; set; }
 
-		[FindBy(Id = "Preference-period-feedback-possible-result-hours")]
+		[FindBy(Id = "Preference-period-feedback-possible-result-contract-time")]
 		public Div PreferencePeriodFeedbackPossibleResultHours { get; set; }
 
 
