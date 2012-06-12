@@ -101,6 +101,9 @@ ALTER TABLE dbo.quality_logg ADD CONSTRAINT
 	[evaluation_id] ASC
 )
 
+ALTER TABLE dbo.quality_logg WITH CHECK ADD CONSTRAINT FK_quality_logg_agent_info FOREIGN KEY(agent_id)
+REFERENCES dbo.agent_info (Agent_id)
+
 ALTER TABLE [dbo].[quality_logg]  WITH CHECK ADD  CONSTRAINT [FK_quality_logg_quality_info] FOREIGN KEY([quality_id])
 REFERENCES [dbo].[quality_info] ([quality_id])
 GO
