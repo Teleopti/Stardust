@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IScheduleMatrixPro _scheduleMatrixPro;
         private IScheduleDay _scheduleDay;
 	    private IScheduleDayPro _scheduleDayPro2;
-		private IPerson _person;
-		private IPersonPeriod _personPeriod;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
