@@ -49,9 +49,6 @@ namespace Teleopti.Interfaces.Domain
 			{
 				if (endTime.Value > verifyLimit)
 					throw new ArgumentOutOfRangeException("endTime", endTime, "End Time can't be bigger than 23:59:59");
-
-				if (startTime.HasValue && endTime < startTime.Value)
-					throw new ArgumentOutOfRangeException("endTime", endTime, "End Time can't be less than Start Time");
 			}
 		}
         /// <summary>
