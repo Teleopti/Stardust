@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             var contractSchedule = personContract.ContractSchedule;
             if (contractSchedule == null)
                 return false;
-
+			
+			// there is no real schedule period so we use the person period's start date
             return !contractSchedule.IsWorkday(personPeriod.StartDate, dateOnly);
         }
     }

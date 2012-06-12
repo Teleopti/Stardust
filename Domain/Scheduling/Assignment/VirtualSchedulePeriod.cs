@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 if (_person != null)
                 {
-                    if (_personContract.ContractSchedule.IsWorkday(_thePeriodWithTheDateIn.StartDate, startDate))                                                   
+					if (_personContract.ContractSchedule.IsWorkday(_thePeriodWithTheDateIn.StartDate, startDate))                                                   
                         workDays++;
                 }
                 startDate = startDate.AddDays(1);
