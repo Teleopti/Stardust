@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
         // This method will be called when the thread is started.
-        public double ExtractShiftCategoryPeriodValue()
+        public void ExtractShiftCategoryPeriodValue()
         {
             var person = (IPerson)_groupPerson;
             var scheduleDictionary = _resultStateHolder.Schedules;
@@ -110,8 +110,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                                         _schedulingOptions);
 
             _possibleStartEndCategory.ShiftValue = shiftValue;
-            return shiftValue;
-           
+ 
         }
 
         private IShiftCategoryFairnessFactors ExtractShiftCategoryFairnessFactor(IPerson person)
@@ -147,10 +146,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnPersonalShifts(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
 
-
             
-
-            _shiftProjectionList =
+      _shiftProjectionList =
                 _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(
                     _shiftProjectionList,
                     _possibleStartEndCategory,
