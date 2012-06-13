@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
     public class AgentInfoHelper
     {
-        private readonly IRuleSetProjectionService _ruleSetProjectionService;
-        private IPerson _selectedPerson;
+    	private readonly IWorkShiftWorkTime _workShiftWorkTime;
+    	private IPerson _selectedPerson;
         private ISchedulingResultStateHolder _stateHolder;
 
         private bool _periodInLegalState;
@@ -44,10 +44,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private Percent _availabilityFulfillment;
         private Percent _studentAvailabilityFulfillment;
 
-        public AgentInfoHelper(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder, ISchedulingOptions schedulingOptions, IRuleSetProjectionService ruleSetProjectionService)
+        public AgentInfoHelper(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder, ISchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime)
         {
-            _ruleSetProjectionService = ruleSetProjectionService;
-            if (person != null)
+        	_workShiftWorkTime = workShiftWorkTime;
+        	if (person != null)
             {
                 _selectedPerson = person;
                 _stateHolder = stateHolder;
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
         }
 
-        public bool PeriodInLegalState
+    	public bool PeriodInLegalState
         {
             get { return _periodInLegalState; }
         }
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder);
 
             IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
-                new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _ruleSetProjectionService);
+					 new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _workShiftWorkTime);
 
             IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
             IWorkShiftMinMaxCalculator workShiftMinMaxCalculator =
