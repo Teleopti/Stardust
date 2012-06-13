@@ -127,7 +127,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                 if (significant == SchedulePartView.ContractDayOff)
                     dto.IsContractDayOff = true;
 
-                dto.IsWorkday = personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, dateOnly);
+				DateOnly? schedulePeriodStartDay = person.SchedulePeriodStartDate(dateOnly);
+				if(!schedulePeriodStartDay.HasValue)
+					continue;
+
+                dto.IsWorkday = personPeriod.PersonContract.ContractSchedule.IsWorkday(schedulePeriodStartDay.Value, dateOnly);
 
                 dto.TargetTimeNegativeToleranceInMinutes = periodNegativeTolerance;
                 dto.TargetTimePositiveToleranceInMinutes = periodPositiveTolerance;
@@ -234,7 +238,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             return resultSoFar;
         }
 
-        private static ValidatedSchedulePartDto AddFullDayAbsence(IEnumerable<IVisualLayer> visualLayerCollection, ValidatedSchedulePartDto resultSoFar)
+    	private static ValidatedSchedulePartDto AddFullDayAbsence(IEnumerable<IVisualLayer> visualLayerCollection, ValidatedSchedulePartDto resultSoFar)
         {
             if (visualLayerCollection.IsEmpty())
                 return resultSoFar;

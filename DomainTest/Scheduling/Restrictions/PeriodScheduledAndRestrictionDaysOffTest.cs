@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.ContractSchedule).Return(contractSchedule);
                 Expect.Call(contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(false);
-                Expect.Call(personPeriod.StartDate).Return(dateOnly);
+				Expect.Call(person.SchedulePeriodStartDate(dateOnly)).Return(dateOnly);
             }
 
             using(_mocks.Playback())

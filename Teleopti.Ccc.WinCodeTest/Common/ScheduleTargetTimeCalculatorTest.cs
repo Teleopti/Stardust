@@ -95,6 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				Expect.Call(_partTimePercentage.Percentage).Return(new Percent(1.0));
 				Expect.Call(_contract.WorkTime).Return(new WorkTime(TimeSpan.FromHours(8)));
 			    Expect.Call(_person.PreviousPeriod(_personPeriod)).Return(null);
+				Expect.Call(_person.SchedulePeriodStartDate(new DateOnly(2011, 1, 1))).Return(new DateOnly(2011, 1, 1)).Repeat.AtLeastOnce();
 			}
 
 			using (_mockRepository.Playback())

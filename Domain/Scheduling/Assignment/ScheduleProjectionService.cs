@@ -85,13 +85,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (fakeLayerMightBeAdded(projection, personAbsenceOnScheduleDay))
 			{
 				var scheduleDate = ScheduleDay.DateOnlyAsPeriod.DateOnly;
-				var personPeriod = ScheduleDay.Person.Period(scheduleDate);
+				var person = ScheduleDay.Person;
+				var personPeriod = person.Period(scheduleDate);
+				var periodStartDate = person.SchedulePeriodStartDate(scheduleDate);
 				long workLengthTicks = 0;
 				var shouldWork = false;
-				if (personPeriod != null)
+				if (personPeriod != null && periodStartDate.HasValue)
 				{
 					workLengthTicks = personPeriod.PersonContract.AverageWorkTimePerDay.Ticks;
-					shouldWork = personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate) &&
+					shouldWork = personPeriod.PersonContract.ContractSchedule.IsWorkday(periodStartDate.Value, scheduleDate) &&
 						ScheduleDay.PersonDayOffCollection().IsEmpty();
 				}
 				var fakeLayer = createFakeLayer(workLengthTicks, ScheduleDay.DateOnlyAsPeriod, shouldWork);

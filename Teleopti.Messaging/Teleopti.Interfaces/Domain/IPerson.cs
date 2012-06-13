@@ -202,6 +202,13 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         ISchedulePeriod SchedulePeriod(DateOnly dateOnly);
 
+		/// <summary>
+		/// Gets the schedule period start date.
+		/// </summary>
+		/// <param name="requestDate">The request date.</param>
+		/// <returns></returns>
+    	DateOnly? SchedulePeriodStartDate(DateOnly requestDate);
+
         /// <summary>
         /// Removes all person periods.
         /// </summary>
