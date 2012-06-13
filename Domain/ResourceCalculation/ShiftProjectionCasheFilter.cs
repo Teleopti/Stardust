@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return shiftList;
     	}
 
-        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList,IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
+        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList, IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
         {
             if (schedulingOptions == null) return shiftList;
 
@@ -458,26 +458,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             if (schedulingOptions.UseGroupSchedulingCommonStart && schedulingOptions.UseGroupSchedulingCommonEnd)
             {
-                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.MainShiftStartDateTime && possibleStartEndCategory.EndTime  == shift.MainShiftEndDateTime ));
+                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftProjectionPeriod.StartDateTime.TimeOfDay && possibleStartEndCategory.EndTime  == shift.WorkShiftProjectionPeriod.EndDateTime.TimeOfDay ));
                 
             }
             else if (schedulingOptions.UseGroupSchedulingCommonStart)
             {
 
-                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.MainShiftStartDateTime));
+				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftProjectionPeriod.StartDateTime.TimeOfDay));
                 
             }
             else if (schedulingOptions.UseGroupSchedulingCommonEnd)
             {
-                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.EndTime == shift.MainShiftEndDateTime));
+				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.EndTime == shift.WorkShiftProjectionPeriod.EndDateTime.TimeOfDay));
                
             }
 
             return finalShiftList;
 
-        }
-
-
-        
+        }      
     }
 }

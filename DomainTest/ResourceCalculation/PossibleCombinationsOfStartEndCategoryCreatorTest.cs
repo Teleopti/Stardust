@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -145,33 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 	}
 
-	public class PossibleCombinationsOfStartEndCategoryCreator
-	{
-		private readonly ISchedulingOptions _schedulingOptions;
-
-		public PossibleCombinationsOfStartEndCategoryCreator(ISchedulingOptions schedulingOptions)
-		{
-			_schedulingOptions = schedulingOptions;
-		}
-
-		public HashSet<PossibleStartEndCategory> FindCombinations(IList<IShiftProjectionCache> shiftProjectionCaches)
-		{
-			var ret = new HashSet<PossibleStartEndCategory>();
-
-			foreach (var shiftProjectionCach in shiftProjectionCaches)
-			{
-				var possible = new PossibleStartEndCategory();
-				if(_schedulingOptions.UseGroupSchedulingCommonStart)
-					possible.StartTime = shiftProjectionCach.MainShiftStartDateTime;
-				if(_schedulingOptions.UseGroupSchedulingCommonEnd)
-					possible.EndTime = shiftProjectionCach.MainShiftEndDateTime;
-				if(_schedulingOptions.UseGroupSchedulingCommonCategory)
-					possible.ShiftCategory = shiftProjectionCach.TheMainShift.ShiftCategory;
-				ret.Add(possible);
-			}
-			return ret;
-		}
-	}
+	
 
 	
     
