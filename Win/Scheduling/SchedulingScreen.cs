@@ -3085,8 +3085,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void skillGridMenuItemEdit_Click(object sender, EventArgs e)
         {
-            var menuItem = (ToolStripMenuItem) sender;
-            var skill = (ISkill) menuItem.Tag;
+            var menuItem = (ToolStripMenuItem)sender;
+            var skill = (ISkill)menuItem.Tag;
 
             using (var skillSummery = new SkillSummary(skill, _schedulerState.SchedulingResultState.Skills))
             {
@@ -3095,11 +3095,19 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (skillSummery.DialogResult == DialogResult.OK)
                 {
                     IAggregateSkill newSkill = handleSummeryEditMenuItems(menuItem, skillSummery);
-                    _virtualSkillHelper.EditAndRenameVirtualSkill(newSkill, skill.Name);
-                    schedulerSplitters1.ReplaceOldWithNew((ISkill) newSkill, skill);
-                    schedulerSplitters1.SortSkills();
-                    if (_tabSkillData.SelectedTab.Tag == newSkill)
-                        drawSkillGrid();
+
+                    if (newSkill.AggregateSkills.Count != 0)
+                    {
+                        _virtualSkillHelper.EditAndRenameVirtualSkill(newSkill, skill.Name);
+                        schedulerSplitters1.ReplaceOldWithNew((ISkill)newSkill, skill);
+                        schedulerSplitters1.SortSkills();
+                        if (_tabSkillData.SelectedTab.Tag == newSkill)
+                            drawSkillGrid();
+                    }
+                    else
+                    {
+                        removeVirtualSkill(newSkill);
+                    }
                 }
             }
         }
@@ -3108,8 +3116,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             var menuItem = (ToolStripMenuItem) sender;
             var virtualSkill = (IAggregateSkill) menuItem.Tag;
+            removeVirtualSkill(virtualSkill);
+        }
+
+
+        private void removeVirtualSkill(IAggregateSkill virtualSkill)
+        {
             virtualSkill.ClearAggregateSkill();
-            schedulerSplitters1.RemoveVirtualSkill((Skill) virtualSkill);
+            schedulerSplitters1.RemoveVirtualSkill((Skill)virtualSkill);
             foreach (TabPageAdv tabPage in _tabSkillData.TabPages)
             {
                 if (tabPage.Tag == virtualSkill)
@@ -3192,6 +3206,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (skillSummary.AggregateSkillSkill.AggregateSkills.Count == 0)
                 {
                     removeVirtualSkillToolStripMenuItem(tabPage, virtualSkill, "Edit");
+                    removeVirtualSkillToolStripMenuItem(tabPage, virtualSkill, "Delete");
                     return;
                 }
                 tabPage.Text = virtualSkill.Name;
