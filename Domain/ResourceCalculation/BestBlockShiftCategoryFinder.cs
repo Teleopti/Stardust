@@ -244,10 +244,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	            useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
 
 	            IScheduleRange range = ScheduleDictionary[person];
-	            IShiftCategoryFairnessCalculator calculator = new ShiftCategoryFairnessCalculator(range, person, dateOnly,
-	                                                                                              _groupShiftCategoryFairnessCreator);
+	            IShiftCategoryFairnessCalculator calculator = new ShiftCategoryFairnessCalculator(_groupShiftCategoryFairnessCreator);
 
-	            shiftCategoryFairnessFactors = calculator.ShiftCategoryFairnessFactors();
+	            shiftCategoryFairnessFactors = calculator.ShiftCategoryFairnessFactors(range, person, dateOnly );
 	        }
 
 	        return _workShiftFinderService.BestShiftValue(dateOnly,

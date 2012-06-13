@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private IShiftCategoryFairnessFactors ExtractShiftCategoryFairnessFactor(IPerson person)
         {
             var range = ScheduleDictionary[person];
-            IShiftCategoryFairnessCalculator calculator = new ShiftCategoryFairnessCalculator(range, person, _dateOnly, _groupShiftCategoryFairnessCreator);
-            return calculator.ShiftCategoryFairnessFactors();
+            IShiftCategoryFairnessCalculator calculator = new ShiftCategoryFairnessCalculator(_groupShiftCategoryFairnessCreator);
+            return calculator.ShiftCategoryFairnessFactors(range, person, _dateOnly);
         }
 
 
