@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
         private IScheduleDayPro _scheduleDayPro6; //su
         private IScheduleDay _schedulePartEmpty;
         private IEffectiveRestriction _extractedRestriction;
-        private IRuleSetProjectionService _ruleSetProjectionService;
+        private IWorkShiftWorkTime _workShiftWorkTime;
         private IPerson _person;
         private IRuleSetBag _ruleSetBag;
     	private IVirtualSchedulePeriod _virtualSchedulePeriod;
@@ -58,10 +58,10 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             var end = new EndTimeLimitation();
             var time = new WorkTimeLimitation();
             _extractedRestriction = new EffectiveRestriction(start, end, time, null, null, null, new List<IActivityRestriction>());
-            _ruleSetProjectionService = new RuleSetProjectionService(new ShiftCreatorService());
+				_workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
             _schedulingOptions = new SchedulingOptions();
 
-            _target = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExctractor, _ruleSetProjectionService);
+				_target = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExctractor, _workShiftWorkTime);
         }
 
         [Test]
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
                 Expect.Call(() => _restrictionExctractor.Extract(scheduleDays[i])).Repeat.Once();
                 Expect.Call(_restrictionExctractor.CombinedRestriction(_schedulingOptions)).Return(
                     _extractedRestriction).Repeat.Once();
-                Expect.Call(_ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, new DateOnly(2010, 8, 2).AddDays(i),
+					 Expect.Call(_ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, new DateOnly(2010, 8, 2).AddDays(i),
                                                        _extractedRestriction)).Return(wtMinMax).Repeat.Once();
             }
 
