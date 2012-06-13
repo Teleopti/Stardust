@@ -43,6 +43,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 								fillData: _fillPreference,
 								complete: function () {
 									dayViewModels[date].LoadFeedback();
+									periodFeedbackViewModel.LoadFeedback();
 								}
 							});
 						});
@@ -64,6 +65,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 							fillData: _fillPreference,
 							complete: function () {
 								dayViewModels[date].LoadFeedback();
+								periodFeedbackViewModel.LoadFeedback();
 							}
 						});
 					});
