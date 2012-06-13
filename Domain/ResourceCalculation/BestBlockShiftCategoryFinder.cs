@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IBlockSchedulingWorkShiftFinderService _workShiftFinderService;
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
+		private readonly IPossibleCombinationsOfStartEndCategoryRunner _possibleCombinationsOfStartEndCategoryRunner;
+		private readonly IPossibleCombinationsOfStartEndCategoryCreator _possibleCombinationsOfStartEndCategoryCreator;
 
 		public BestBlockShiftCategoryFinder(
             IShiftProjectionCacheManager shiftProjectionCacheManager,
@@ -47,7 +49,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             ISchedulingResultStateHolder schedulingResultStateHolder,
             IBlockSchedulingWorkShiftFinderService workShiftFinderService,
             IEffectiveRestrictionCreator effectiveRestrictionCreator, 
-            IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator)
+            IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator,
+			IPossibleCombinationsOfStartEndCategoryRunner possibleCombinationsOfStartEndCategoryRunner,
+			IPossibleCombinationsOfStartEndCategoryCreator possibleCombinationsOfStartEndCategoryCreator)
         {
 		    _shiftProjectionCacheManager = shiftProjectionCacheManager;
 		    _shiftProjectionCacheFilter = shiftProjectionCacheFilter;
@@ -56,6 +60,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    _workShiftFinderService = workShiftFinderService;
 		    _effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_groupShiftCategoryFairnessCreator = groupShiftCategoryFairnessCreator;
+			_possibleCombinationsOfStartEndCategoryRunner = possibleCombinationsOfStartEndCategoryRunner;
+			_possibleCombinationsOfStartEndCategoryCreator = possibleCombinationsOfStartEndCategoryCreator;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.DateOnly.ToShortDateString"), 
@@ -133,15 +139,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     if (shiftList == null)
                         continue;
 
-					//Ola just testing
-					//var finder = new PossibleCombinationsOfStartEndCategoryCreator(schedulingOptions);
-					//var combs = finder.FindCombinations(shiftList);
-					//var annat = bag.MinMaxWorkTime(new RuleSetProjectionService(new ShiftCreatorService()), dateOnly,
-					//                               effectiveRestriction);
+					var minmax = bag.MinMaxWorkTime(new RuleSetProjectionService(new ShiftCreatorService()), dateOnly,
+					                               effectiveRestriction);
 
-					//var combs2 = finder.FindCombinations(annat);
+					var combinations = _possibleCombinationsOfStartEndCategoryCreator.FindCombinations(minmax, schedulingOptions);
 
-					//shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(shiftList, combs2.FirstOrDefault(), schedulingOptions);
+					_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, groupPerson, schedulingOptions);
 
                 	IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders =
                 		_personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(dateOnly,

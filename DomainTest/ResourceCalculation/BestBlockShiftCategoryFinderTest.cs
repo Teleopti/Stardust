@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_schedulingOptions = new SchedulingOptions();
 
             _target = new BestBlockShiftCategoryFinder(_shiftProjectionCacheManager,_shiftProjectionCacheFilter,_personSkillPeriodsDataHolderManager,
-                _stateHolder,_finderService, _effectiveRestrictionCreator, _groupShiftCategoryFairnessCreator);
+                _stateHolder,_finderService, _effectiveRestrictionCreator, _groupShiftCategoryFairnessCreator,);
 
         }
 

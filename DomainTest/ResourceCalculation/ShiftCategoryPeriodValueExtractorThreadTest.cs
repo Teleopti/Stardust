@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target = new ShiftCategoryPeriodValueExtractorThread(_possibleStartEndCategory, _shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
+                _target = new ShiftCategoryPeriodValueExtractorThread(TODO, _possibleStartEndCategory, _shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
                 _groupPerson, _resultStateHolder, _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, _groupShiftCategoryFairnessCreater,
                 _shiftProjectionCacheFilter, _effectiveRestrictionCreator);
 
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target = new ShiftCategoryPeriodValueExtractorThread(_possibleStartEndCategory, _shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
+                _target = new ShiftCategoryPeriodValueExtractorThread(TODO, _possibleStartEndCategory, _shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
                _groupPerson, _resultStateHolder, _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, _groupShiftCategoryFairnessCreater,
                _shiftProjectionCacheFilter, _effectiveRestrictionCreator);
 
