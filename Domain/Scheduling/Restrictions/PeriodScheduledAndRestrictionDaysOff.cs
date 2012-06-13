@@ -51,8 +51,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 {
                     var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
                     var personPeriod = person.Period(scheduleDate);
+                	var periodStart = person.SchedulePeriodStartDate(scheduleDate);
+					if (!periodStart.HasValue)
+						return 0;
 
-                    if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate))
+                    if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(periodStart.Value, scheduleDate))
                         return 1;
                 }
             }

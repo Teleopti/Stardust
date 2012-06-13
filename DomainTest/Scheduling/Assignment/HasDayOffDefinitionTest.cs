@@ -124,10 +124,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
             Expect.Call(_personPeriod.PersonContract).Return(_personContract);
             Expect.Call(_personContract.Contract).Return(_contract);
-            Expect.Call(_contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
+            Expect.Call(_contract.EmploymentType)
+				.Return(EmploymentType.FixedStaffNormalWorkTime);
             Expect.Call(_personContract.ContractSchedule).Return(_contractSchedule);
-            Expect.Call(_personPeriod.StartDate).Return(_dateOnly);
-            Expect.Call(_contractSchedule.IsWorkday(_dateOnly, _dateOnly)).Return(false);
+			Expect.Call(_person.SchedulePeriodStartDate(_dateOnly))
+				.Return(_dateOnly);
+            Expect.Call(_contractSchedule.IsWorkday(_dateOnly, _dateOnly))
+				.Return(false);
             _mocks.ReplayAll();
             Assert.That(_target.IsDayOff(), Is.True);
             _mocks.VerifyAll();

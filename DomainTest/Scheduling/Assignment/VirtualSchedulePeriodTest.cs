@@ -176,10 +176,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
             Expect.Call(person.TerminalDate).Return(dateOnly).Repeat.AtLeastOnce();
             Expect.Call(person.NextPeriod(_personPeriod)).Return(null);
-            Expect.Call(person.Period(new DateOnly())).IgnoreArguments().Return(_personPeriod).Repeat.Any();
-
+            Expect.Call(person.Period(new DateOnly())).IgnoreArguments().Return(_personPeriod).Repeat.AtLeastOnce();
             Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
-
+			Expect.Call(person.SchedulePeriodStartDate(_dateOnly)).Return(_dateOnly).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
             var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
             _target = new VirtualSchedulePeriod(person, _dateOnly, splitChecker);
@@ -213,10 +212,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(person.Period(new DateOnly(2009, 02, 16))).Return(firstPersonPeriod).Repeat.AtLeastOnce();
             Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
             Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
-            Expect.Call(person.NextPeriod(firstPersonPeriod)).Return(null);
-
+        	Expect.Call(person.NextPeriod(firstPersonPeriod)).Return(null);
             Expect.Call(person.PreviousPeriod(firstPersonPeriod)).Return(null);
-
+			Expect.Call(person.SchedulePeriodStartDate(dateOnly))
+					.Return(dateOnly).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
             var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
             _target = new VirtualSchedulePeriod(person, new DateOnly(2009, 2, 20), splitChecker);
@@ -253,6 +252,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
             Expect.Call(person.NextPeriod(nextPersonPeriod)).Return(null);
+
+			Expect.Call(person.SchedulePeriodStartDate(_dateOnly)).Return(_dateOnly).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
             var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
@@ -295,12 +296,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(person.Period(_dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
             Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
             Expect.Call(person.TerminalDate).Return(terminalDateOnly).Repeat.AtLeastOnce();
-            //Expect.Call(person.NextPeriod(_personPeriod)).Return(nextPersonPeriod);
-
             Expect.Call(person.NextPeriod(_personPeriod)).Return(nextPersonPeriod);
-
             Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
             Expect.Call(person.NextPeriod(nextPersonPeriod)).Return(null);
+			Expect.Call(person.SchedulePeriodStartDate(_dateOnly)).Return(_dateOnly).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
             var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
@@ -366,7 +365,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(person.Period(new DateOnly(2009, 02, 20))).Return(personPeriod).Repeat.AtLeastOnce();
             Expect.Call(personPeriod.StartDate).Return(new DateOnly(2009, 02, 16)).Repeat.AtLeastOnce();
             Expect.Call(personPeriod.PersonContract).Return(_personContract);
-
+			Expect.Call(person.SchedulePeriodStartDate(new DateOnly(2009, 02, 20))).Return(_dateOnly).Repeat.AtLeastOnce();
 
             Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
 
@@ -385,6 +384,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void SchedulePeriodStartsInsidePersonPeriodIsCorrect()
         {
             var dateOnly = new DateOnly(2009, 2, 20);
+        	var dateOnly2 = new DateOnly(2009, 02, 15);
 
             var person = _mocks.StrictMock<IPerson>();
 
@@ -402,6 +402,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
             Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
             Expect.Call(person.NextPeriod(_personPeriod)).Return(null);
+			Expect.Call(person.SchedulePeriodStartDate(dateOnly2)).Return(dateOnly2).Repeat.AtLeastOnce();
+
 
             Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
 
