@@ -17,7 +17,6 @@ using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 using Teleopti.Interfaces.Domain;
-using DateHelper=Teleopti.Ccc.AgentPortal.Helper.DateHelper;
 
 namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 {
@@ -151,7 +150,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             _scheduleControl.Calendar.CalenderGrid.Model.TableStyle.CultureInfo = cultureFormat;
             _scheduleControl.Culture = newCulture;
 
-            _scheduleControl.ISO8601CalenderFormat = DateHelper.UseIso8601Format(cultureFormat);
+            _scheduleControl.ISO8601CalenderFormat = Iso8601Helper.UseIso8601Format(cultureFormat);
         }
 
         /// <summary>
