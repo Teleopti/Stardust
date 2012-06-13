@@ -172,22 +172,29 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
 
         private void cellDataForPreferredAbsence(AgentInfoHelper agentInfoHelper, IPreferenceCellData cellData)
         {
-            IVirtualSchedulePeriod schedulePeriod =
+			DateOnly cellDate = cellData.TheDate;
+
+            IVirtualSchedulePeriod virtualSchedulePeriod =
                 agentInfoHelper.Person.VirtualSchedulePeriod(cellData.TheDate);
 
-			if (!schedulePeriod.IsValid)
+			if (!virtualSchedulePeriod.IsValid)
 				return;
 
-			IPersonPeriod personPeriod = agentInfoHelper.Person.Period(cellData.TheDate);
+        	IPerson person = agentInfoHelper.Person;
+			IPersonPeriod personPeriod = person.Period(cellDate);
 			if (personPeriod == null)
 				return;
 
+			DateOnly? schedulePeriodStartDate = person.SchedulePeriodStartDate(cellDate);
+			if(!schedulePeriodStartDate.HasValue)
+				return;
+
             cellData.HasAbsenceOnContractDayOff =
-				!schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, cellData.TheDate);
+				!virtualSchedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, cellDate);
 
             TimeSpan time = TimeSpan.Zero;
             if (!cellData.HasAbsenceOnContractDayOff && cellData.EffectiveRestriction.Absence.InContractTime)
-                time = schedulePeriod.AverageWorkTimePerDay;
+                time = virtualSchedulePeriod.AverageWorkTimePerDay;
 
             cellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(time, CurrentCultureInfo());
             var totalRestriction = new EffectiveRestriction(cellData.EffectiveRestriction.StartTimeLimitation,
@@ -208,11 +215,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             var endTimeLimitation = new EndTimeLimitation(null, null);
             IVirtualSchedulePeriod schedulePeriod =
                 agentInfoHelper.Person.VirtualSchedulePeriod(cellData.TheDate);
-        	IPersonPeriod personPeriod = agentInfoHelper.Person.Period(cellData.TheDate);
-			if (schedulePeriod.IsValid && personPeriod != null)
+        	DateOnly?  schedulePeriodStart = agentInfoHelper.Person.SchedulePeriodStartDate(cellData.TheDate);
+			if (schedulePeriod.IsValid && schedulePeriodStart.HasValue)
             {
                 cellData.HasAbsenceOnContractDayOff =
-					!schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, cellData.TheDate);
+					!schedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStart.Value, cellData.TheDate);
             }
             
             WorkTimeLimitation workTimeLimitation;
