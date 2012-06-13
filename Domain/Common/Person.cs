@@ -404,6 +404,20 @@ namespace Teleopti.Ccc.Domain.Common
             return period;
         }
 
+		public DateOnly? SchedulePeriodStartDate(DateOnly requestDate)
+		{
+			ISchedulePeriod schedulePeriod = SchedulePeriod(requestDate);
+	
+			if (schedulePeriod == null)
+			{
+				IPersonPeriod personPeriod = Period(requestDate);
+				if (personPeriod == null)
+					return null;
+				return personPeriod.StartDate;
+			}
+			return schedulePeriod.DateFrom;
+		}
+
         /// <summary>
         /// Determines whether the specified date is terminated.
         /// </summary>
