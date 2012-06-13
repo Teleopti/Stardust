@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void CanGetWorkTimeMinMaxFromRuleSet()
         {
-            var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
+            var workShiftWorkTime = _mocks.DynamicMock<IWorkShiftWorkTime>();
             var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
             var ruleSet2 = _mocks.StrictMock<IWorkShiftRuleSet>();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void ShouldCheckRuleSetsWithOnlyForRestrictionIfIsRestriction()
         {
-			  var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
+			  var workShiftWorkTime = _mocks.DynamicMock<IWorkShiftWorkTime>();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
             var ruleSet = _mocks.StrictMock<IWorkShiftRuleSet>();
             var ruleSet2 = _mocks.StrictMock<IWorkShiftRuleSet>();

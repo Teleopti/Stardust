@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		[Test]
 		public void CanGetWorkTimeMinMaxFromRuleSet()
 		{
-			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
+			var workShiftWorkTime = _mocks.DynamicMock<IWorkShiftWorkTime>();
 			IWorkShiftRuleSet ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
 			IWorkShiftRuleSet ruleSet2 = _mocks.StrictMock<IWorkShiftRuleSet>();
 			IEffectiveRestriction effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
