@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private IAgentRestrictionsDrawer _availableDrawer;
 		private ISchedulingOptions _schedulingOptions;
 		private ISchedulerStateHolder _stateHolder;
-		private IRuleSetProjectionService _projectionService;
+		private IWorkShiftWorkTime _workShiftWorkTime;
 		private int _loadedCounter;
 		private IList<IPerson> _persons;
 		private IPerson _selectedPerson;
@@ -143,12 +143,12 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 9, 0, 12));	
 		}
 
-		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IRuleSetProjectionService ruleSetProjectionService, IPerson selectedPerson, bool useSchedule)
+		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson, bool useSchedule)
 		{
 			if (stateHolder == null) throw new ArgumentNullException("stateHolder");
 
 			_stateHolder = stateHolder;
-			_projectionService = ruleSetProjectionService;
+			_workShiftWorkTime = workShiftWorkTime;
 			_schedulingOptions = schedulingOptions;
 			_persons = persons;
 			_selectedPerson = selectedPerson;
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			displayRow.State = AgentRestrictionDisplayRowState.Loading;
 
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
-			IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor = new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _projectionService);
+			IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor = new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _workShiftWorkTime);
 			ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
 			IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor, schedulePeriodTargetTimeCalculator,workShiftWeekMinMaxCalculator);
