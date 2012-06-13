@@ -213,8 +213,6 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 
 	function _initViewModels(feedbackLoader) {
 		
-		feedbackLoadingStarted = true;
-
 		$('li[data-mytime-date].feedback').each(function (index, element) {
 			var cell = $(element);
 			var date = cell.attr('data-mytime-date');
@@ -233,6 +231,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 		feedbackLoader(function () {
 			$.each(dayViewModels, function (index, element) {
 				element.LoadFeedback();
+				feedbackLoadingStarted = true;
 			});
 		});
 	}
