@@ -31,7 +31,7 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<Target Name="Run" DependsOnTargets="BuildAndTest;PrepareDB;RunETL">
+	<Target Name="Run" DependsOnTargets="PrepareDB;RunETL">
 		<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
@@ -65,7 +65,7 @@
 	The SP will Loop until ETL job is finshed. If it finds an error Then a RaisError Should make SQLCMD to bail out
 	-->
 		<Message Text="Start ETL test. Working..." Importance="high" />
-		<Message Text="SQLExecute: Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True Statement: %22EXEC [$(AnalyticsDB)].[mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
+		<Message Text="SQLExecute: Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True Statement: %22EXEC [mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" ConnectionString="Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True"/>
 		<Message Text="Start ETL test. Done!" Importance="high" />
 
@@ -81,7 +81,6 @@
 		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
 		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
 		
-		<OnError ExecuteTargets="MessageErrorHandler2"/>
 	</Target>
 
 	<!--
