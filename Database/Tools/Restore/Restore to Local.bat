@@ -304,14 +304,6 @@ ECHO Encrypting passwords ...
 "%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD%Branch%_%Customer%_TeleoptiCCC7 -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
 
-ECHO Changing to Date Only in Forecasts ...
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD%Branch%_%Customer%_TeleoptiCCC7 -FM -EE
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=9 & GOTO :error
-
-ECHO Changing FirstDayInWeek on Person ...
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD%Branch%_%Customer%_TeleoptiCCC7 -PU -EE
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=8 & GOTO :error)
-
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'"
 if %errorlevel% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
@@ -365,8 +357,6 @@ IF %ERRORLEV% EQU 4 ECHO Agg DB have a bad trunk or the database is out of versi
 IF %ERRORLEV% EQU 5 ECHO Could not create views in Mart: EXEC %Branch%_%Customer%_TeleoptiAnalytics.mart.sys_crossDatabaseView_load
 IF %ERRORLEV% EQU 6 ECHO Could not build DBManager.exe & notepad "%temp%\build.log"
 IF %ERRORLEV% EQU 7 ECHO Could not build Teleopti.Support.Tool & notepad "%temp%\build.log"
-IF %ERRORLEV% EQU 8 ECHO An error occured while changing FirstDayInWeek on Person
-IF %ERRORLEV% EQU 9 ECHO An error occured while changing to Date Only in Forecasts
 IF %ERRORLEV% EQU 10 ECHO An error occured while encrypting
 IF %ERRORLEV% EQU 11 ECHO Could not restore databases
 IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%temp%\build.log"

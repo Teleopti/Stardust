@@ -32,7 +32,8 @@
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
 	<Target Name="Run" DependsOnTargets="BuildAndTest;PrepareDB;RunETL">
-	<Message Text="All target executed!" Importance="high" />
+	<Target Name="Run">
+		<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
 		<Message Text="Testing ETL service ..." Importance="high" />
@@ -66,9 +67,7 @@
 	-->
 		<Message Text="Start ETL test. Working..." Importance="high" />
 		<Message Text="$(SQLCmdConn) -dmaster -Q%22EXEC [$(AnalyticsDB)].[mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -dmaster -Q%22EXEC [$(AnalyticsDB)].[mart].[etl_nightlyBuild_CheckError]%22" ContinueOnError="false">
-			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-		</Exec>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" ConnectionString="Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True"/>
 		<Message Text="Start ETL test. Done!" Importance="high" />
 
 		<!-- Clean up-->
@@ -119,8 +118,6 @@
 		<Message Text="Applying data update via Teleopti.Support.Security.exe ..." Importance="high" />
 		<Message Text="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -EE" Importance="high" />
 		<Exec Command ="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -EE"/>
-		<Exec Command ="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -FM -EE"/>
-		<Exec Command ="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -PU -EE"/>
 		
 		<Message Text="Databases patched and data updated" Importance="high" />
 	</Target>
@@ -144,8 +141,4 @@
 		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -Q%22update [mart].[sys_datasource] set internal=1 where [log_object_id]=$(LogObjectId)%22"/>
 	</Target>
 	
-	<Target Name="MessageErrorHandler2">
-		<Message Text="An error has occurred while executing database scripts. Please review DBManager logfile: $(DbManagerExe)"/>
-	</Target>
-
 </Project>
