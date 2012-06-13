@@ -79,7 +79,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var useShiftCategoryFairness = false;
             
             IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = ExtractShiftCategoryFairnessFactor(person ) ;
-            if (person.WorkflowControlSet != null)
+            
+           if (person.WorkflowControlSet != null)
             {
                 useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
                 
@@ -116,13 +117,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private IShiftCategoryFairnessFactors ExtractShiftCategoryFairnessFactor(IPerson person)
         {
             var range = ScheduleDictionary[person];
-            var personCategoryFairness = range.CachedShiftCategoryFairness();
-            IShiftCategoryFairnessCalculator calculator = new ShiftCategoryFairnessCalculator();
-            var groupCategoryFairness =
-                    _groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(
-                        person, _dateOnly);
-            return calculator.ShiftCategoryFairnessFactors(groupCategoryFairness,
-                                                                                  personCategoryFairness);
+            IShiftCategoryFairnessCalculator calculator = new ShiftCategoryFairnessCalculator(range, person, _dateOnly, _groupShiftCategoryFairnessCreator);
+            return calculator.ShiftCategoryFairnessFactors();
         }
 
 

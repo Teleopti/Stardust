@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             //bool useShiftCategoryFairness = false;
             //if (person.WorkflowControlSet != null)
             //    useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
-            return _fairnessCalculator.ShiftCategoryFairnessFactors(groupFairness, personFairness);
+            return _fairnessCalculator.ShiftCategoryFairnessFactors();
         }
     }
 }

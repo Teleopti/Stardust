@@ -9,19 +9,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// </summary>
     public interface IShiftCategoryFairnessCalculator
     {
-        IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(
-            IShiftCategoryFairness groupCategoryFairness,
-            IShiftCategoryFairness personCategoryFairness);
+        IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors();
     }
 
     public class ShiftCategoryFairnessCalculator : IShiftCategoryFairnessCalculator
     {
+        private readonly IScheduleRange _range;
+        private readonly IPerson _person;
+        private readonly DateOnly _dateOnly;
+        private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 
 
-        public IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(
-            IShiftCategoryFairness groupCategoryFairness,
-            IShiftCategoryFairness personCategoryFairness)
+        public ShiftCategoryFairnessCalculator(IScheduleRange range, IPerson person, DateOnly dateOnly, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator)
         {
+            _range = range;
+            _person = person;
+            _dateOnly = dateOnly;
+            _groupShiftCategoryFairnessCreator = groupShiftCategoryFairnessCreator;
+        }
+
+        public IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors()
+        {
+            var groupCategoryFairness =
+                   _groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(
+                       _person, _dateOnly);
+            var personCategoryFairness = _range.CachedShiftCategoryFairness();
+
             IDictionary<IShiftCategory, double> dictionary = ExecuteCalculations(groupCategoryFairness, personCategoryFairness);
             return new ShiftCategoryFairnessFactors(dictionary, groupCategoryFairness.FairnessValueResult.FairnessPoints);
         }
