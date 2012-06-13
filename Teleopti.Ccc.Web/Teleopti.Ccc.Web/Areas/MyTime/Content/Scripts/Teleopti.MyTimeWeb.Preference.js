@@ -16,6 +16,7 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Preference = (function ($) {
 
 	var feedbackLoadingStarted = false;
+	var periodFeedbackViewModel = null;
 	var dayViewModels = {};
 
 	function _initPeriodSelection() {
@@ -69,45 +70,6 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			})
 			.removeAttr('disabled')
 			;
-	}
-
-	function _loadPeriodFeedback() {
-		$.myTimeAjax({
-			url: "PreferenceFeedback/PeriodFeedback",
-			dataType: "json",
-			data: { Date: _currentFixedDate() },
-			type: 'GET',
-			success: function (data, textStatus, jqXHR) {
-				var daysoff = $("#Preference-period-feedback-target-daysoff");
-				if (data.TargetDaysOff.Lower == data.TargetDaysOff.Upper) {
-					$('.range', daysoff).hide();
-					$('.single', daysoff).show();
-					$('.days', daysoff).text(data.TargetDaysOff.Lower);
-				} else {
-					$('.range', daysoff).show();
-					$('.single', daysoff).hide();
-					$('.lower', daysoff).text(data.TargetDaysOff.Lower);
-					$('.upper', daysoff).text(data.TargetDaysOff.Upper);
-				}
-				$("#Preference-period-feedback-possible-result-daysoff .days").text(data.PossibleResultDaysOff);
-
-				var hours = $("#Preference-period-feedback-target-hours");
-				if (data.TargetHours.Lower == data.TargetHours.Upper) {
-					$('.range', hours).hide();
-					$('.single', hours).show();
-					$('.hours', hours).text(data.TargetHours.Lower);
-				} else {
-					$('.range', hours).show();
-					$('.single', hours).hide();
-					$('.lower', hours).text(data.TargetHours.Lower);
-					$('.upper', hours).text(data.TargetHours.Upper);
-				}
-			}
-		});
-	}
-
-	function _currentFixedDate() {
-		return $('#Preference-body').data('mytime-periodselection').Date;
 	}
 
 	function _fillPreference(cell, data) {
@@ -221,14 +183,16 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			ko.applyBindings(dayViewModel, element);
 		});
 
-		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(dayViewModels);
+		var date = Teleopti.MyTimeWeb.Portal.CurrentFixedDate();
+		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(dayViewModels, date);
 
 		var element = $('#Preference-period-feedback-view')[0];
 		if (element)
-			ko.applyBindings(viewModel, element);
+			ko.applyBindings(periodFeedbackViewModel, element);
 
 		feedbackLoader = feedbackLoader || function (call) { call(); };
 		feedbackLoader(function () {
+			periodFeedbackViewModel.LoadFeedback();
 			$.each(dayViewModels, function (index, element) {
 				element.LoadFeedback();
 				feedbackLoadingStarted = true;
@@ -259,10 +223,9 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 		PreferencePartialInit: function () {
 			if (!$('#Preference-body').length)
 				return;
-			_initViewModels(_soon);
 			_initPeriodSelection();
+			_initViewModels(_soon);
 			_activateSelectable();
-			_loadPeriodFeedback();
 		},
 		CallWhenFeedbackIsLoaded: function (callback) {
 			_callWhenFeedbackIsLoaded(callback);
@@ -273,6 +236,65 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 	};
 
 })(jQuery);
+
+
+Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (dayViewModels, date) {
+	var self = this;
+
+	this.LoadFeedback = function () {
+		Teleopti.MyTimeWeb.Ajax.Ajax({
+			url: "PreferenceFeedback/PeriodFeedback",
+			dataType: "json",
+			data: { Date: date },
+			type: 'GET',
+			success: function (data, textStatus, jqXHR) {
+				self.TargetDaysOffLower(data.TargetDaysOff.Lower);
+				self.TargetDaysOffUpper(data.TargetDaysOff.Upper);
+				self.PossibleResultDaysOff(data.PossibleResultDaysOff);
+				self.TargetContractTimeLower(data.TargetHours.Lower);
+				self.TargetContractTimeUpper(data.TargetHours.Upper);
+			}
+		});
+	};
+
+	this.TargetDaysOffLower = ko.observable();
+	this.TargetDaysOffUpper = ko.observable();
+	this.PossibleResultDaysOff = ko.observable();
+
+	this.TargetContractTimeLower = ko.observable();
+	this.TargetContractTimeUpper = ko.observable();
+
+	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
+		var sum = 0;
+		$.each(dayViewModels, function (index, day) {
+			var value = day.PossibleContractTimeMinutesLower();
+			if (value)
+				sum += parseInt(value);
+			sum += day.ContractTimeMinutes;
+		});
+		return sum;
+	});
+
+	this.PossibleResultContractTimeMinutesUpper = ko.computed(function () {
+		var sum = 0;
+		$.each(dayViewModels, function (index, day) {
+			var value = day.PossibleContractTimeMinutesUpper();
+			if (value)
+				sum += parseInt(value);
+			sum += day.ContractTimeMinutes;
+		});
+		return sum;
+	});
+
+	this.PossibleResultContractTimeLower = ko.computed(function () {
+		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesLower());
+	});
+
+	this.PossibleResultContractTimeUpper = ko.computed(function () {
+		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
+	});
+
+};
 
 Teleopti.MyTimeWeb.Preference.DayViewModel = function () {
 	var self = this;
@@ -335,41 +357,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function () {
 		return "";
 	});
 
-};
-
-Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (dayViewModels) {
-	var self = this;
-
-	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
-		var sum = 0;
-		$.each(dayViewModels, function (index, day) {
-			var value = day.PossibleContractTimeMinutesLower();
-			if (value)
-				sum += parseInt(value);
-			sum += day.ContractTimeMinutes;
-		});
-		return sum;
-	});
-
-	this.PossibleResultContractTimeMinutesUpper = ko.computed(function () {
-		var sum = 0;
-		$.each(dayViewModels, function (index, day) {
-			var value = day.PossibleContractTimeMinutesUpper();
-			if (value)
-				sum += parseInt(value);
-			sum += day.ContractTimeMinutes;
-		});
-		return sum;
-	});
-
-	this.PossibleResultContractTimeLower = ko.computed(function () {
-		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesLower());
-	});
-
-	this.PossibleResultContractTimeUpper = ko.computed(function () {
-		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
-	});
-	
 };
 
 

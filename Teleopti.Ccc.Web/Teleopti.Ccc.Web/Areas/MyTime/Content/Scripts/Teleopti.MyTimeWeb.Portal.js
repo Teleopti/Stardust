@@ -17,6 +17,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	var _settings = {};
 	var _partialViewInitCallback = {};
 	var tabs = null;
+	var currentFixedDate = null;
 
 	function _layout() {
 		Teleopti.MyTimeWeb.Common.Layout.ActivateTabs();
@@ -182,15 +183,15 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		$.myTimeAjaxAbortAll();
 		$(".qtip").remove();
 		$.myTimeAjax({
-				url: hashInfo.hash,
-				global: true,
-				success: function(html) {
-					$('#body-inner').html(html);
-					var partialFn = _partialViewInitCallback[hashInfo.actionHash];
-					if ($.isFunction(partialFn))
-						partialFn();
-				}
-			});
+			url: hashInfo.hash,
+			global: true,
+			success: function (html) {
+				$('#body-inner').html(html);
+				var partialFn = _partialViewInitCallback[hashInfo.actionHash];
+				if ($.isFunction(partialFn))
+					partialFn();
+			}
+		});
 	}
 
 	return {
@@ -213,9 +214,13 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		RegisterPartialCallBack: function (viewId, callBack) {
 			_registerPartialCallback(viewId, callBack);
 		},
+		CurrentFixedDate: function () {
+			return currentFixedDate;
+		},
 		InitPeriodSelection: function (rangeSelectorId, periodData, actionSuffix) {
 			var common = Teleopti.MyTimeWeb.Common;
 			var range = $(rangeSelectorId);
+			currentFixedDate = periodData.Date;
 			var actionPrefix = range.data('mytime-action');
 			actionSuffix = actionSuffix || '';
 			if (typeof (periodData) !== 'undefined') {
