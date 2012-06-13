@@ -47,11 +47,13 @@ ADD CONSTRAINT PK_fact_quality PRIMARY KEY NONCLUSTERED
 	datasource_id
 	)
 
-CREATE CLUSTERED INDEX [CIX_fact_quality_date_id] ON [mart].[fact_quality] 
-(
-	[date_id] ASC,
-	[acd_login_id] ASC
-)
+CREATE CLUSTERED INDEX [CIX_fact_quality]
+ON [mart].[fact_quality]
+	(
+	[date_id],
+	[quality_quest_id],
+	[acd_login_id]
+	)
 
 ALTER TABLE [mart].[fact_quality]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_dim_agent] FOREIGN KEY([acd_login_id])
 REFERENCES [mart].[dim_acd_login] ([acd_login_id])
