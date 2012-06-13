@@ -212,12 +212,12 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 	}
 
 	function _initViewModels(feedbackLoader) {
-		
-		$('li[data-mytime-date].feedback').each(function (index, element) {
-			var cell = $(element);
-			var date = cell.attr('data-mytime-date');
-			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(date);
-			dayViewModels[date] = dayViewModel;
+
+		dayViewModels = {};
+		$('li[data-mytime-date].inperiod').each(function (index, element) {
+			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+			dayViewModel.ReadElement(element);
+			dayViewModels[dayViewModel.Date] = dayViewModel;
 			ko.applyBindings(dayViewModel, element);
 		});
 
@@ -274,15 +274,28 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 
 })(jQuery);
 
-Teleopti.MyTimeWeb.Preference.DayViewModel = function (date) {
+Teleopti.MyTimeWeb.Preference.DayViewModel = function () {
 	var self = this;
 
+	this.Date = "";
+	this.ContractTimeMinutes = 0;
+	this.HasFeedback = true;
+
+	this.ReadElement = function (element) {
+		var item = $(element);
+		self.Date = item.attr('data-mytime-date');
+		self.ContractTimeMinutes = parseInt($('[data-mytime-contract-time]', item).attr('data-mytime-contract-time')) || 0;
+		self.HasFeedback = item.hasClass("feedback");
+	};
+
 	this.LoadFeedback = function () {
+		if (!self.HasFeedback)
+			return;
 		Teleopti.MyTimeWeb.Preference.AjaxForDate({
 			url: "PreferenceFeedback/Feedback",
 			type: 'GET',
-			data: { Date: date },
-			date: date,
+			data: { Date: self.Date },
+			date: self.Date,
 			fillData: function (cell, data) {
 				self.FeedbackError(data.FeedbackError);
 				self.PossibleStartTimes(data.PossibleStartTimes);
@@ -322,7 +335,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (date) {
 		return "";
 	});
 
-
 };
 
 Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (dayViewModels) {
@@ -330,10 +342,11 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (dayViewModels)
 
 	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
 		var sum = 0;
-		$.each(dayViewModels, function(index, day) {
+		$.each(dayViewModels, function (index, day) {
 			var value = day.PossibleContractTimeMinutesLower();
 			if (value)
 				sum += parseInt(value);
+			sum += day.ContractTimeMinutes;
 		});
 		return sum;
 	});
@@ -344,6 +357,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (dayViewModels)
 			var value = day.PossibleContractTimeMinutesUpper();
 			if (value)
 				sum += parseInt(value);
+			sum += day.ContractTimeMinutes;
 		});
 		return sum;
 	});
@@ -355,6 +369,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (dayViewModels)
 	this.PossibleResultContractTimeUpper = ko.computed(function () {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
 	});
+	
 };
 
 

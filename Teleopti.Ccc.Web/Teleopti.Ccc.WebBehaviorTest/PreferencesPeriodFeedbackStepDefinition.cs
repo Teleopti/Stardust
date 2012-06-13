@@ -76,7 +76,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have a scheduled shift of (\d) hours on weekday (\d)")]
 		public void GivenIHaveAScheduledShiftOf8HoursOnWeekday1(int hours, int weekday)
 		{
-			ScenarioContext.Current.Pending();
 			UserFactory.User().Setup(new ShiftOnWeekday(TimeSpan.FromHours(8), TimeSpan.FromHours(8 + hours), weekday));
 		}
 

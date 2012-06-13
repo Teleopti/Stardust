@@ -74,7 +74,7 @@
 					PersonAssignmentDayViewModel personAssignment = day.PersonAssignment;
 					DayOffDayViewModel dayOff = day.DayOff;
 					AbsenceDayViewModel absence = day.Absence;
-					<li class="relative @(day.Feedback ? "feedback" : "") @(day.Editable ? "editable" : "non-editable") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)">
+					<li class="relative @(day.InPeriod ? "inperiod": "") @(day.Feedback ? "feedback" : "") @(day.Editable ? "editable" : "non-editable") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)">
 						<div>
 							<div class="day-header">
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
@@ -95,7 +95,7 @@
 									<div class="scheduled">
 										<span class="displayblock fullwidth">@personAssignment.ShiftCategory</span>
 										<strong class="displayblock fullwidth">@personAssignment.TimeSpan</strong>
-										<span class="displayblock fullwidth">@personAssignment.ContractTime</span>
+										<span class="displayblock fullwidth" data-mytime-contract-time="@personAssignment.ContractTimeMinutes">@personAssignment.ContractTime</span>
 									</div>
 								}
 								@if (dayOff != null)

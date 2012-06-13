@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 	public class DayViewModel
 	{
 		public DateOnly Date { get; set; }
+		public bool InPeriod { get; set; }
 		public bool Editable { get; set; }
 		public bool Feedback { get; set; }
 		public HeaderViewModel Header { get; set; }
@@ -60,6 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string ShiftCategory { get; set; }
 		public string TimeSpan { get; set; }
 		public string ContractTime { get; set; }
+		public int ContractTimeMinutes { get; set; }
 	}
 
 	public class DayOffDayViewModel
