@@ -66,7 +66,7 @@
 	-->
 		<Message Text="Start ETL test. Working..." Importance="high" />
 		<Message Text="SQLExecute: Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True Statement: %22EXEC [mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" ConnectionString="Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" CommandTimeout="1800" ConnectionString="Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True"/>
 		<Message Text="Start ETL test. Done!" Importance="high" />
 
 		<!-- Clean up-->
