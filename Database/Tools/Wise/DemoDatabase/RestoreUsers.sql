@@ -74,7 +74,9 @@ SELECT @WinDomain = LEFT(@csv, @commaindex-1)
 
 SELECT @WinUser = RIGHT(@csv, LEN(@csv) - @commaindex)
 
-UPDATE TeleoptiCCC7_Demo.dbo.Person SET DomainName=@WinDomain, WindowsLogOnName=@WinUser WHERE ID = @userid 
+UPDATE TeleoptiCCC7_Demo.dbo.WindowsAuthenticationInfo
+SET DomainName=@WinDomain, WindowsLogOnName=@WinUser WHERE person = @userid
+
 
 --Add currect user to IIS-users: update aspnet_users
 UPDATE TeleoptiAnalytics_Demo.dbo.aspnet_Users
