@@ -458,18 +458,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             if (schedulingOptions.UseGroupSchedulingCommonStart && schedulingOptions.UseGroupSchedulingCommonEnd)
             {
-                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftProjectionPeriod.StartDateTime.TimeOfDay && possibleStartEndCategory.EndTime  == shift.WorkShiftProjectionPeriod.EndDateTime.TimeOfDay ));
+                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime && possibleStartEndCategory.EndTime  == shift.WorkShiftEndTime ));
                 
             }
             else if (schedulingOptions.UseGroupSchedulingCommonStart)
             {
 
-				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftProjectionPeriod.StartDateTime.TimeOfDay));
+				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime));
                 
             }
             else if (schedulingOptions.UseGroupSchedulingCommonEnd)
             {
-				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.EndTime == shift.WorkShiftProjectionPeriod.EndDateTime.TimeOfDay));
+				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.EndTime == shift.WorkShiftEndTime));
                
             }
 
