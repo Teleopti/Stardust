@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
@@ -19,6 +20,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.InstancePerLifetimeScope();
 			builder.RegisterType<RuleSetProjectionService>()
 				.As<IRuleSetProjectionService>()
+				.InstancePerLifetimeScope();
+			builder.RegisterType<WorkShiftWorkTime>()
+				.As<IWorkShiftWorkTime>()
 				.InstancePerLifetimeScope();
 		}
 	}
