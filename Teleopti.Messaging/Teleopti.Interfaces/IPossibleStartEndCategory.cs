@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces
@@ -13,11 +11,11 @@ namespace Teleopti.Interfaces
         /// <summary>
         /// 
         /// </summary>
-        DateTime StartTime { get; set; }
+        TimeSpan StartTime { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        DateTime EndTime { get; set; }
+		TimeSpan EndTime { get; set; }
         /// <summary>
         /// 
         /// </summary>

@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return shiftList;
     	}
 
-        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList,IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
+        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList, IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
         {
             if (schedulingOptions == null) return shiftList;
 

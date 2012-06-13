@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target.RunTheList(_options);
 			foreach (var possibleStartEndCategory in _options)
 			{
-				Assert.That(possibleStartEndCategory.ShiftValue , Is.EqualTo(100));
+				Assert.That(possibleStartEndCategory.ShiftValue, Is.EqualTo(100));
 			}
 		}
 	}
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_doneEvent.Set();
 				return;
 			}
-            possible.ShiftValue = 100;
+			possible.ShiftValue = 100;
 			_doneEvent.Set();
 		}
 	}

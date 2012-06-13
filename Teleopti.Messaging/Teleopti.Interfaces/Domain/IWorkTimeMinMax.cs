@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -28,5 +30,10 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="workTimeMinMax">The work time min max.</param>
         /// <returns></returns>
         IWorkTimeMinMax Combine(IWorkTimeMinMax workTimeMinMax);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		IList<IPossibleStartEndCategory> PossibleStartEndCategories { get; set; }
     }
 }
