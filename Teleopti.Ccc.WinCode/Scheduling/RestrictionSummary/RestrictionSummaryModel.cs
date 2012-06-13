@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
 			DateOnly cellDate = cellData.TheDate;
 
             IVirtualSchedulePeriod virtualSchedulePeriod =
-                agentInfoHelper.Person.VirtualSchedulePeriod(cellData.TheDate);
+				agentInfoHelper.Person.VirtualSchedulePeriod(cellDate);
 
 			if (!virtualSchedulePeriod.IsValid)
 				return;
@@ -213,13 +213,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             TimeSpan timeSpan = projection.Period().Value.ElapsedTime();
             var startTimeLimitation = new StartTimeLimitation(null, null);
             var endTimeLimitation = new EndTimeLimitation(null, null);
-            IVirtualSchedulePeriod schedulePeriod =
+            IVirtualSchedulePeriod virtualSchedulePeriod =
                 agentInfoHelper.Person.VirtualSchedulePeriod(cellData.TheDate);
-        	DateOnly?  schedulePeriodStart = agentInfoHelper.Person.SchedulePeriodStartDate(cellData.TheDate);
-			if (schedulePeriod.IsValid && schedulePeriodStart.HasValue)
+        	DateOnly cellDate = cellData.TheDate;
+
+			DateOnly? schedulePeriodStart = agentInfoHelper.Person.SchedulePeriodStartDate(cellDate);
+			if (virtualSchedulePeriod.IsValid && schedulePeriodStart.HasValue)
             {
                 cellData.HasAbsenceOnContractDayOff =
-					!schedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStart.Value, cellData.TheDate);
+					!virtualSchedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStart.Value, cellDate);
             }
             
             WorkTimeLimitation workTimeLimitation;
