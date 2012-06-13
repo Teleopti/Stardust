@@ -3060,8 +3060,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void skillGridMenuItemEdit_Click(object sender, EventArgs e)
         {
-            var menuItem = (ToolStripMenuItem) sender;
-            var skill = (ISkill) menuItem.Tag;
+            var menuItem = (ToolStripMenuItem)sender;
+            var skill = (ISkill)menuItem.Tag;
 
             using (var skillSummery = new SkillSummary(skill, _schedulerState.SchedulingResultState.Skills))
             {
@@ -3094,10 +3094,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             removeVirtualSkill(virtualSkill);
         }
 
+
         private void removeVirtualSkill(IAggregateSkill virtualSkill)
         {
             virtualSkill.ClearAggregateSkill();
-            schedulerSplitters1.RemoveVirtualSkill((Skill) virtualSkill);
+            schedulerSplitters1.RemoveVirtualSkill((Skill)virtualSkill);
             foreach (TabPageAdv tabPage in _tabSkillData.TabPages)
             {
                 if (tabPage.Tag == virtualSkill)
