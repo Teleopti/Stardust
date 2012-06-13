@@ -208,6 +208,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             DateOnly startDate = _thePeriodWithTheDateIn.StartDate;
             DateOnly endDate = _thePeriodWithTheDateIn.EndDate;
+
+			// tamasb: code review subject > should the code check every day between the start and end date?
+			DateOnly? periodStart = Person.SchedulePeriodStartDate(_thePeriodWithTheDateIn.StartDate);
+			if (!periodStart.HasValue)
+				return 0;
+
             int workDays = 0;
             if (_schedulePeriod.DaysOff.HasValue)
             {
@@ -217,7 +223,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 if (_person != null)
                 {
-					if (_personContract.ContractSchedule.IsWorkday(_thePeriodWithTheDateIn.StartDate, startDate))                                                   
+					if (_personContract.ContractSchedule.IsWorkday(periodStart.Value, startDate))                                                   
                         workDays++;
                 }
                 startDate = startDate.AddDays(1);
@@ -237,14 +243,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (_personContract == null || _personContract.ContractSchedule == null)
                 return 0;
 
-            IPersonPeriod personPeriod = Person.Period(_thePeriodWithTheDateIn.StartDate);
+			// tamasb: code review subject > should the code check every day between the start and end date?
+            DateOnly? periodStart = Person.SchedulePeriodStartDate(_thePeriodWithTheDateIn.StartDate);
+			if (!periodStart.HasValue)
+				return 0;
 
             DateOnly startDate = _thePeriodWithTheDateIn.StartDate;
             DateOnly endDate = _thePeriodWithTheDateIn.EndDate;
             int daysOff = 0;
             while (startDate <= endDate)
             {
-                if (!_personContract.ContractSchedule.IsWorkday(personPeriod.StartDate, startDate))
+				if (!_personContract.ContractSchedule.IsWorkday(periodStart.Value, startDate))
                     daysOff++;
 
                 startDate = startDate.AddDays(1);

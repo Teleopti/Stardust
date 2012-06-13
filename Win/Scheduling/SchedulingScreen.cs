@@ -153,6 +153,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _showResult = true;
         private bool _showGraph = true;
         private bool _showRibbonTexts = true;
+    	private bool _gridBeginUpdate;
 
         #endregion
 
@@ -295,6 +296,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             _tmpTimer.Interval = 100;
             _tmpTimer.Enabled = false;
             _tmpTimer.Tick += _tmpTimer_Tick;
+
+			contextMenuViews.Closed += ContextMenuViewsClosed;
 
         }
 
@@ -2859,8 +2862,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region Context menu events
 
+		void ContextMenuViewsClosed(object sender, ToolStripDropDownClosedEventArgs e)
+		{
+			_grid.EndUpdate();
+			_gridBeginUpdate = false;
+		}
+
         private void contextMenuViews_Opening(object sender, CancelEventArgs e)
         {
+			if(!_gridBeginUpdate)
+			{
+				_gridBeginUpdate = true;
+				_grid.BeginUpdate();
+			}
 
             if (_scheduleView == null)
                 e.Cancel = true;
@@ -3046,8 +3060,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void skillGridMenuItemEdit_Click(object sender, EventArgs e)
         {
-            var menuItem = (ToolStripMenuItem) sender;
-            var skill = (ISkill) menuItem.Tag;
+            var menuItem = (ToolStripMenuItem)sender;
+            var skill = (ISkill)menuItem.Tag;
 
             using (var skillSummery = new SkillSummary(skill, _schedulerState.SchedulingResultState.Skills))
             {
@@ -3080,10 +3094,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             removeVirtualSkill(virtualSkill);
         }
 
+
         private void removeVirtualSkill(IAggregateSkill virtualSkill)
         {
             virtualSkill.ClearAggregateSkill();
-            schedulerSplitters1.RemoveVirtualSkill((Skill) virtualSkill);
+            schedulerSplitters1.RemoveVirtualSkill((Skill)virtualSkill);
             foreach (TabPageAdv tabPage in _tabSkillData.TabPages)
             {
                 if (tabPage.Tag == virtualSkill)
