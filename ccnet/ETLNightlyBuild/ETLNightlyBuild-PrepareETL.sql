@@ -37,7 +37,7 @@ BEGIN
 	BEGIN
 		-- Return an error with state 127 since it will abort SQLCMD
 		DECLARE @ErrorMessage varchar(400)
-		SELECT @ErrorMessage = CAST(error_exception_message as varchar(400)) FROM [mart].[etl_jobstep_error]
+		SELECT @ErrorMessage = CAST(error_exception_message as varchar(100)) + CAST(error_exception_stacktrace as varchar(400)) FROM [mart].[etl_jobstep_error]
 		RAISERROR (@ErrorMessage, 16, 127)
 	END
 
