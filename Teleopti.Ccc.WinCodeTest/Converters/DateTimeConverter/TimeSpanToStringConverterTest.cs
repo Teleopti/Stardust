@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCodeTest.Converters.DateTimeConverter
         private TimeSpanToStringConverter _target;
 
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
             _target = new TimeSpanToStringConverter();
         }
