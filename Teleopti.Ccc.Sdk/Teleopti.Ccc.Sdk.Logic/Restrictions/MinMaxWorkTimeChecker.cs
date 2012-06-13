@@ -14,17 +14,16 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
     public class MinMaxWorkTimeChecker : IMinMaxWorkTimeChecker
     {
-        private readonly IRuleSetProjectionService _projectionService;
+    	private readonly IWorkShiftWorkTime _workShiftWorkTime;
 
-        public MinMaxWorkTimeChecker(IRuleSetProjectionService projectionService)
+    	public MinMaxWorkTimeChecker(IWorkShiftWorkTime workShiftWorkTime)
         {
-            if (projectionService == null)
-                throw new ArgumentNullException("projectionService");
-
-            _projectionService = projectionService;
+        	if (workShiftWorkTime == null)
+				  throw new ArgumentNullException("workShiftWorkTime");
+			_workShiftWorkTime = workShiftWorkTime;
         }
 
-        public IWorkTimeMinMax MinMaxWorkTime(IScheduleDay scheduleDay, IRuleSetBag ruleSetBag, IEffectiveRestriction effectiveRestriction)
+    	public IWorkTimeMinMax MinMaxWorkTime(IScheduleDay scheduleDay, IRuleSetBag ruleSetBag, IEffectiveRestriction effectiveRestriction)
         {
             if (scheduleDay == null)
                 throw new ArgumentNullException("scheduleDay");
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             effectiveRestriction = GetEffectiveRestrictionForPersonalShift(scheduleDay, effectiveRestriction);
 
             var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
-            return ruleSetBag.MinMaxWorkTime(_projectionService, dateOnly, effectiveRestriction);
+				return ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, dateOnly, effectiveRestriction);
            
         }
 
