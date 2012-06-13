@@ -405,7 +405,7 @@ namespace Teleopti.Ccc.Domain.Common
             return period;
         }
 
-		public DateOnly? SchedulePeriodStartDate(DateOnly requestDate)
+		public virtual DateOnly? SchedulePeriodStartDate(DateOnly requestDate)
 		{
 			ISchedulePeriod schedulePeriod = SchedulePeriod(requestDate);
 	
