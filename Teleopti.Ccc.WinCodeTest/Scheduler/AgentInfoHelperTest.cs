@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private const int targetDaysOff = 2;
         private readonly TimeSpan _averageWorkTimePerDay = new TimeSpan(8, 0, 0);
         IScenario _scenario;
-        private IRuleSetProjectionService _ruleSetProjectionService;
+        private IWorkShiftWorkTime _workShiftWorkTime;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _schedulePeriod.SetDaysOff(targetDaysOff);
             _schedulePeriod.AverageWorkTimePerDay = _averageWorkTimePerDay;
             _person.AddSchedulePeriod(_schedulePeriod);
-            _ruleSetProjectionService = new RuleSetProjectionService(new ShiftCreatorService());
-            _target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _ruleSetProjectionService);
+            _workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
+            _target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
             _target.SchedulePeriodData();
         }
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyHandleNullSchedulePeriod()
         {
-            _target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _ruleSetProjectionService);
+            _target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _workShiftWorkTime);
             _target.SchedulePeriodData();
             Assert.IsFalse(_target.WeekInLegalState);
         }
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             prepareScheduleDictionary();
 
-            _target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _ruleSetProjectionService);
+            _target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
             _target.SchedulePeriodData();
             _target.SchedulePeriodData();
 
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             prepareScheduleDictionary();
 
-            _target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _ruleSetProjectionService);
+            _target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
             _target.SchedulePeriodData();
 
             Assert.AreEqual(4, _target.CurrentOccupiedSlots);
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyNumberOfWarnings()
         {
-            _target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _ruleSetProjectionService)
+            _target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _workShiftWorkTime)
                              {NumberOfWarnings = 5};
             _target.SchedulePeriodData();
             Assert.IsTrue(_target.NumberOfWarnings == 5);
@@ -300,14 +300,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPerson person = PersonFactory.CreatePerson("Person");
             person.RemoveAllSchedulePeriods();
             person.AddSchedulePeriod(schedulePeriod);
-            _target = new AgentInfoHelper(person, _dateOnly, _stateHolder, _schedulingOptions, _ruleSetProjectionService);
+            _target = new AgentInfoHelper(person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
             _target.SchedulePeriodData();
             Assert.AreEqual("Day", _target.PeriodType);
 
             person.RemoveAllSchedulePeriods();
             schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(_dateOnly, SchedulePeriodType.Month, 1);
             person.AddSchedulePeriod(schedulePeriod);
-            _target = new AgentInfoHelper(person, _dateOnly, _stateHolder, _schedulingOptions, _ruleSetProjectionService);
+            _target = new AgentInfoHelper(person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
             _target.SchedulePeriodData();
             Assert.AreEqual("Month", _target.PeriodType);
 

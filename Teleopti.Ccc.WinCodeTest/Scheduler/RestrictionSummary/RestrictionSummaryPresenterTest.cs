@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         private IPerson _person;
         private RestrictionSchedulingOptions _schedulingOptions; 
         private ISchedulePeriod _schedulePeriod;
-        private IRuleSetProjectionService _ruleSetProjectionService;
+        private IWorkShiftWorkTime _workShiftWorkTime;
         private IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
         private IScheduleDayChangeCallback _scheduleDayChangeCallback;
     	private IPreferenceNightRestChecker _preferenceNightRestChecker;
@@ -56,11 +56,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _person.AddSchedulePeriod(_schedulePeriod);
             _schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>());
         	_preferenceNightRestChecker = _mocks.StrictMock<IPreferenceNightRestChecker>();
-			_model = new RestrictionSummaryModel(_schedulingResultStateHolder, new RuleSetProjectionService(new ShiftCreatorService()), _schedulerState, _preferenceNightRestChecker);
+			_model = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService())), _schedulerState, _preferenceNightRestChecker);
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
             _target = new RestrictionSummaryPresenter(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart,
                                       SchedulePartFilter.None, _model, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);
-            _ruleSetProjectionService = _mocks.StrictMock<IRuleSetProjectionService>();
+				_workShiftWorkTime = _mocks.StrictMock<IWorkShiftWorkTime>();
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             Expect.Call(() => _viewBase.UpdateRowCount());
 			Expect.Call(() => _preferenceNightRestChecker.CheckNightlyRest(null)).IgnoreArguments();
             _mocks.ReplayAll();
-            var helper = new AgentInfoHelper(_person, new DateOnly(_date), _schedulingResultStateHolder, _schedulingOptions, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, new DateOnly(_date), _schedulingResultStateHolder, _schedulingOptions, _workShiftWorkTime);
             helper.SchedulePeriodData();
             _target.GetNextPeriod(helper);
             _mocks.VerifyAll();
