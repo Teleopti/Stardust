@@ -17,17 +17,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         private CultureInfo _currentUICultureInfo;
         private Dictionary<int, IPreferenceCellData> _cellDataCollection;
         private readonly ISchedulingResultStateHolder _scheduleResultStateHolder;
-        private readonly IRuleSetProjectionService _ruleSetProjectionService;
-        private DateTimePeriod _schedulerLoadedPeriod;
+    	private readonly IWorkShiftWorkTime _workShiftWorkTime;
+    	private DateTimePeriod _schedulerLoadedPeriod;
         private readonly ISchedulerStateHolder _schedulerState;
     	private readonly IPreferenceNightRestChecker _preferenceNightRestChecker;
 
-    	public RestrictionSummaryModel(ISchedulingResultStateHolder scheduleResultStateHolder, IRuleSetProjectionService ruleSetProjectionService, 
+    	public RestrictionSummaryModel(ISchedulingResultStateHolder scheduleResultStateHolder, IWorkShiftWorkTime workShiftWorkTime, 
 			ISchedulerStateHolder schedulerState, IPreferenceNightRestChecker preferenceNightRestChecker)
         {
-            _ruleSetProjectionService = ruleSetProjectionService;
             _scheduleResultStateHolder = scheduleResultStateHolder;
-            _cellDataCollection = new Dictionary<int, IPreferenceCellData>();
+    		_workShiftWorkTime = workShiftWorkTime;
+    		_cellDataCollection = new Dictionary<int, IPreferenceCellData>();
             _schedulerState = schedulerState;
         	_preferenceNightRestChecker = preferenceNightRestChecker;
         	loggedOnPersonCultures(TeleoptiPrincipal.Current.Regional);
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             if (ruleSetBag == null)
                 return null;
 
-            return ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, dateOnly, totalRestriction);
+				return ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, dateOnly, totalRestriction);
         }
 
         public static IEffectiveRestriction GetMainShiftTotalRestriction(IScheduleDay schedulePart, IEffectiveRestriction totalRestriction)

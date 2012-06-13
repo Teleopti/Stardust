@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using MbCache.Configuration;
+using MbCache.Core;
 using NUnit.Framework;
 using Autofac;
 using SharpTestsEx;
@@ -64,6 +65,21 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				}
 
 				Assert.AreNotSame(projSvc.ProjectionCollection(wsRs), projSvc2.ProjectionCollection(wsRs));
+			}
+		}
+
+		[Test]
+		public void ShouldCacheWorkShiftWorkTime()
+		{
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20), null);
+			containerBuilder.RegisterModule(mbCacheModule);
+			containerBuilder.RegisterModule(new RuleSetModule());
+			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
+
+			using (var container = containerBuilder.Build())
+			{
+				container.Resolve<IMbCacheFactory>()
+					.IsKnownInstance(container.Resolve<IWorkShiftWorkTime>());
 			}
 		}
 

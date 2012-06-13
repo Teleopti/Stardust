@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Domain;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -10,12 +7,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class WorkTimeMinMaxCalculator : IWorkTimeMinMaxCalculator
 	{
-		private readonly IRuleSetProjectionService _ruleSetProjectionService;
+		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private readonly IEffectiveRestrictionForDisplayCreator _effectiveRestrictionCreator;
 
-		public WorkTimeMinMaxCalculator(IRuleSetProjectionService ruleSetProjectionService, IEffectiveRestrictionForDisplayCreator effectiveRestrictionCreator)
+		public WorkTimeMinMaxCalculator(IWorkShiftWorkTime workShiftWorkTime, IEffectiveRestrictionForDisplayCreator effectiveRestrictionCreator)
 		{
-			_ruleSetProjectionService = ruleSetProjectionService;
+			_workShiftWorkTime = workShiftWorkTime;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
@@ -55,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return WorkTimeMinMaxForAbsence(scheduleDay, effectiveRestriction);
 			}
 
-			return ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, date, effectiveRestriction);
+			return ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, date, effectiveRestriction);
 		}
 
 		private static IWorkTimeMinMax WorkTimeMinMaxForAbsence(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)

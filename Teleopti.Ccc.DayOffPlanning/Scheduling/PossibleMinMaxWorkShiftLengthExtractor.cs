@@ -7,15 +7,15 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
     public class PossibleMinMaxWorkShiftLengthExtractor : IPossibleMinMaxWorkShiftLengthExtractor
     {
         private readonly IRestrictionExtractor _restrictionExtractor;
-        private readonly IRuleSetProjectionService _ruleSetProjectionService;
+    	private readonly IWorkShiftWorkTime _workShiftWorkTime;
         private readonly IDictionary<DateOnly, IWorkTimeMinMax> _extractedLengths = new Dictionary<DateOnly, IWorkTimeMinMax>();
 
         public PossibleMinMaxWorkShiftLengthExtractor(
             IRestrictionExtractor restrictionExtractor, 
-            IRuleSetProjectionService ruleSetProjectionService)
+            IWorkShiftWorkTime workShiftWorkTime)
         {
             _restrictionExtractor = restrictionExtractor;
-            _ruleSetProjectionService = ruleSetProjectionService;
+        	_workShiftWorkTime = workShiftWorkTime;
         }
 
         public void ResetCache()
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
                 if (matrix.SchedulePeriod.IsValid && ruleSetBag != null)
 				{
                     ret = ruleSetBag.MinMaxWorkTime(
-						_ruleSetProjectionService, dateOnly, restriction);
+						_workShiftWorkTime, dateOnly, restriction);
 					_extractedLengths[dateOnly] = ret;
 				}
 				if (ret == null)

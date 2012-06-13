@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private SchedulingScreenSettings _currentSchedulingScreenSettings;
         private ZoomLevel _currentZoomLevel;
         private SplitterManagerRestrictionView _splitterManager;
-        private readonly IRuleSetProjectionService _ruleSetProjectionService;
+        private readonly IWorkShiftWorkTime _workShiftWorkTime;
         private DateOnly _defaultFilterDate;
 
         private bool _inUpdate;
@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _optimizerOriginalPreferences = new OptimizerOriginalPreferences(new SchedulingOptions());
             _optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
             _overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
-            _ruleSetProjectionService = _container.Resolve<IRuleSetProjectionService>();
+            _workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
             _temporarySelectedEntitiesFromTreeView = allSelectedEntities;
             _virtualSkillHelper = _container.Resolve<IVirtualSkillHelper>();
             _budgetPermissionService = _container.Resolve<IBudgetPermissionService>();
@@ -460,7 +460,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             initializeDocking();
             var model = new SingleAgentRestrictionModel(_schedulerState.RequestedPeriod.Period(), _schedulerState.TimeZoneInfo,
-                                                        _ruleSetProjectionService);
+                                                        _workShiftWorkTime);
             _singleAgentRestrictionPresenter =
                 new SingleAgentRestrictionPresenter(schedulerSplitters1.RestrictionSummeryGrid, model);
             _schedulingOptions = new RestrictionSchedulingOptions
@@ -1498,7 +1498,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 return;
             if (_agentInfo == null)
             {
-                _agentInfo = new FormAgentInfo(_ruleSetProjectionService);
+                _agentInfo = new FormAgentInfo(_workShiftWorkTime);
                 _agentInfo.FormClosed += _agentInfo_FormClosed;
                 _agentInfo.Show(this);
             }
@@ -3060,8 +3060,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void skillGridMenuItemEdit_Click(object sender, EventArgs e)
         {
-            var menuItem = (ToolStripMenuItem) sender;
-            var skill = (ISkill) menuItem.Tag;
+            var menuItem = (ToolStripMenuItem)sender;
+            var skill = (ISkill)menuItem.Tag;
 
             using (var skillSummery = new SkillSummary(skill, _schedulerState.SchedulingResultState.Skills))
             {
@@ -3094,10 +3094,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             removeVirtualSkill(virtualSkill);
         }
 
+
         private void removeVirtualSkill(IAggregateSkill virtualSkill)
         {
             virtualSkill.ClearAggregateSkill();
-            schedulerSplitters1.RemoveVirtualSkill((Skill) virtualSkill);
+            schedulerSplitters1.RemoveVirtualSkill((Skill)virtualSkill);
             foreach (TabPageAdv tabPage in _tabSkillData.TabPages)
             {
                 if (tabPage.Tag == virtualSkill)
@@ -6021,7 +6022,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _scheduleView = new RestrictionSummaryView(_grid, SchedulerState, _gridLockManager,
                                                                SchedulePartFilter, _clipHandlerSchedule,
                                                                _singleAgentRestrictionPresenter,
-                                                               _ruleSetProjectionService, _overriddenBusinessRulesHolder,
+                                                               _workShiftWorkTime, _overriddenBusinessRulesHolder,
                                                                callback, _defaultScheduleTag);
                     //_schedulingOptions = schedulerSplitters1.SchedulingOptions;
                     prepareRestrictionSummaryView();
@@ -8442,7 +8443,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var schedulePart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
 			var selectedPerson = persons.FirstOrDefault();
 			if(schedulePart != null) selectedPerson = schedulePart.Person;
-			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, _schedulingOptions, _ruleSetProjectionService, selectedPerson);
+			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, _schedulingOptions, _workShiftWorkTime, selectedPerson);
 			agentRestrictionView.ShowDialog(this);
 		}
     }

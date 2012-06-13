@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         private IScheduleDateTimePeriod _scheduleDateTimePeriod;
         private IScheduleDictionary _scheduleDictionary;
         private ISchedulerStateHolder _stateHolder;
-        private IRuleSetProjectionService _ruleSetProjectionService;
+        private IWorkShiftWorkTime _workShiftWorkTime;
         private ISchedulingResultStateHolder _resultStateHolder;
     	private IPreferenceNightRestChecker _preferenceNightRestChecker;
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
             _resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_preferenceNightRestChecker = _mocks.StrictMock<IPreferenceNightRestChecker>();
-			_target = new RestrictionSummaryModel(_schedulingResultStateHolder, new RuleSetProjectionService(new ShiftCreatorService()), _stateHolder, _preferenceNightRestChecker);
+			_target = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService())), _stateHolder, _preferenceNightRestChecker);
             _options = new RestrictionSchedulingOptions
                            {
                                UseScheduling = true,
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _scheduleDateTimePeriod = new ScheduleDateTimePeriod(_dateTimePeriod);
             
             _scheduleDictionary = new ScheduleDictionaryForTest(_scenario, _scheduleDateTimePeriod, _dictionary);
-            _ruleSetProjectionService = _mocks.StrictMock<IRuleSetProjectionService>();
+            _workShiftWorkTime = _mocks.StrictMock<IWorkShiftWorkTime>();
 
         }
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _mocks.ReplayAll();
             IPersonPeriod period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
             _person.AddPersonPeriod(period);
-            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _workShiftWorkTime);
             helper.SchedulePeriodData();
             _target.GetNextPeriod(helper);
             _mocks.VerifyAll();
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             IPersonPeriod period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
             double maxWeekHours = period.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek.TotalHours;
             _person.AddPersonPeriod(period);
-            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _workShiftWorkTime);
             helper.SchedulePeriodData();
             _target.LoadPeriod(helper);
             Assert.AreEqual(21, _target.CellDataCollection.Count);
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _mocks.ReplayAll(); 
             IPersonPeriod period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
             _person.AddPersonPeriod(period);
-            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _workShiftWorkTime);
             helper.SchedulePeriodData();
             _target.LoadPeriod(helper);
             _mocks.VerifyAll();
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _mocks.ReplayAll();
             IPersonPeriod period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
             _person.AddPersonPeriod(period);
-            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _workShiftWorkTime);
             helper.SchedulePeriodData();
             _target.LoadPeriod(helper);
             _mocks.VerifyAll();
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _mocks.ReplayAll();
             IPersonPeriod period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
             _person.AddPersonPeriod(period);
-            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _workShiftWorkTime);
             helper.SchedulePeriodData();
             _target.LoadPeriod(helper);
             _mocks.VerifyAll();
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             IPersonPeriod period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
             _person.SetId(Guid.NewGuid());
             _person.AddPersonPeriod(period);
-            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _workShiftWorkTime);
             helper.SchedulePeriodData();
             using(new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
             {
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             Expect.Call(_range.ScheduledDay(new DateOnly(_dateTime))).IgnoreArguments().Return(part).Repeat.AtLeastOnce();
             Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
             _mocks.ReplayAll();
-            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _workShiftWorkTime);
             helper.SchedulePeriodData();
             var extractor = new RestrictionExtractor(_resultStateHolder);
                 extractor.Extract(helper.Person, helper.Period.Value.StartDate);
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
             Expect.Call(_range.ScheduledDay(new DateOnly(_dateTime))).IgnoreArguments().Return(part).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
-            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _workShiftWorkTime);
             helper.SchedulePeriodData();
             var extractor = new RestrictionExtractor(_resultStateHolder);
             extractor.Extract(helper.Person, helper.Period.Value.StartDate);
@@ -503,7 +503,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             ISchedulePeriod period = SchedulePeriodFactory.CreateSchedulePeriod(periodStartDate);
             period.PeriodType = SchedulePeriodType.Week;
             _person.AddSchedulePeriod(period);
-            var helper = new AgentInfoHelper(_person, periodStartDate, _schedulingResultStateHolder, _options, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, periodStartDate, _schedulingResultStateHolder, _options, _workShiftWorkTime);
             helper.SchedulePeriodData();
             IList<DateOnly> customizedList = _target.CustomizedDayCollection(helper);
             Assert.AreEqual(28, customizedList.Count);
@@ -527,7 +527,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             var cultureInfo = new CultureInfo(1033);
             regional.Culture = cultureInfo;
 
-			_target = new RestrictionSummaryModel(_schedulingResultStateHolder, new RuleSetProjectionService(new ShiftCreatorService()), _stateHolder, _preferenceNightRestChecker);
+			_target = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService())), _stateHolder, _preferenceNightRestChecker);
 
             var timeZoneInfoAgent = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfoAgent);
@@ -536,7 +536,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             period.Number = 4;
             period.PeriodType = SchedulePeriodType.Week;
             _person.AddSchedulePeriod(period);
-            var helper = new AgentInfoHelper(_person, periodStartDate, _schedulingResultStateHolder, _options, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(_person, periodStartDate, _schedulingResultStateHolder, _options, _workShiftWorkTime);
             helper.SchedulePeriodData();
             IList<DateOnly> customizedList = _target.CustomizedDayCollection(helper);
             Assert.AreEqual(49, customizedList.Count);

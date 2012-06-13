@@ -82,15 +82,15 @@ namespace Teleopti.Interfaces.Domain
 
         #region RK - Lägg dessa utanför denna entitiet!
 
-        /// <summary>
-        /// Returns MinMax of WorkTimeLimitation, StartTimeLimitation and EndTimeLimitation.
-        /// </summary>
-        /// <param name="ruleSetProjectionService">The rule set projection service.</param>
-        /// <param name="onDate">The on date.</param>
-        /// <param name="restriction">The restriction.</param>
-        /// <returns></returns>
-        IWorkTimeMinMax MinMaxWorkTime(IRuleSetProjectionService ruleSetProjectionService, DateOnly onDate, IEffectiveRestriction restriction);
+    	/// <summary>
+    	/// Returns MinMax of WorkTimeLimitation, StartTimeLimitation and EndTimeLimitation.
+    	/// </summary>
+    	/// <param name="workShiftWorkTime"> </param>
+    	/// <param name="onDate">The on date.</param>
+    	/// <param name="restriction">The restriction.</param>
+    	/// <returns></returns>
+    	IWorkTimeMinMax MinMaxWorkTime(IWorkShiftWorkTime workShiftWorkTime, DateOnly onDate, IEffectiveRestriction restriction);
 
-        #endregion
+    	#endregion
     }
 }

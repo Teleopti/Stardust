@@ -19,24 +19,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class MinMaxContractData : IMinMaxContractTimeCalculator, IScheduleExtractor
     {
         private readonly IDictionary<DateTime, TimeSpan> _contractTimeDictionary = new Dictionary<DateTime, TimeSpan>();
-        private readonly IRuleSetProjectionService _ruleSetProjectionService;
-        private readonly IPerson _person;
+    	private readonly IWorkShiftWorkTime _workShiftWorkTime;
+    	private readonly IPerson _person;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MinMaxContractData"/> class.
-        /// </summary>
-        /// <param name="ruleSetProjectionService">The rule set projection service.</param>
-        /// <param name="person">The person.</param>
-        /// <remarks>
-        /// TODO: Remove and replace with schedulePart ctor
-        /// Created by: henrika
-        /// Created date: 2008-05-20
-        /// </remarks>
-        public MinMaxContractData(IRuleSetProjectionService ruleSetProjectionService, IPerson person)
+
+    	public MinMaxContractData(IWorkShiftWorkTime workShiftWorkTime, IPerson person)
         {
             InParameter.NotNull("person", person);
-            _ruleSetProjectionService = ruleSetProjectionService;
-            _person = person;
+    		_workShiftWorkTime = workShiftWorkTime;
+    		_person = person;
         }
 
 		public MinMax<TimeSpan>? GetMinMaxContractTime(DateOnly workShiftDate, ISchedulingResultStateHolder resultStateHolder, ISchedulingOptions schedulingOptions)
@@ -60,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     if (restriction == null)
                         return null;
 
-                    IWorkTimeMinMax ret = period.RuleSetBag.MinMaxWorkTime(_ruleSetProjectionService, workShiftDate, restriction);
+						  IWorkTimeMinMax ret = period.RuleSetBag.MinMaxWorkTime(_workShiftWorkTime, workShiftDate, restriction);
                     if(ret == null)
                         return null;
 

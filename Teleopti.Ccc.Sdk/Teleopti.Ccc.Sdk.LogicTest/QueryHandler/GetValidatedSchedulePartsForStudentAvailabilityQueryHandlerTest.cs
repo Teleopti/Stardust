@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IScenarioProvider scenarioProvider;
 		private IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler;
 		private IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler;
-		private IRuleSetProjectionService ruleSetProjectionService;
+		private IWorkShiftWorkTime workShiftWorkTime;
 
 		[SetUp]
 		public void Setup()
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			preferenceDayAssembler = mocks.DynamicMock<IAssembler<IPreferenceDay, PreferenceRestrictionDto>>();
 			studentAvailabilityDayAssembler = mocks.DynamicMock<IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto>>();
-			ruleSetProjectionService = mocks.DynamicMock<IRuleSetProjectionService>();
+			workShiftWorkTime = mocks.DynamicMock<IWorkShiftWorkTime>();
 
-			target = new GetValidatedSchedulePartsForStudentAvailabilityQueryHandler(unitOfWorkFactory, shiftCategoryRepository, activityRepository, personRepository, scheduleRepository, scenarioProvider, preferenceDayAssembler, studentAvailabilityDayAssembler, ruleSetProjectionService);
+			target = new GetValidatedSchedulePartsForStudentAvailabilityQueryHandler(unitOfWorkFactory, shiftCategoryRepository, activityRepository, personRepository, scheduleRepository, scenarioProvider, preferenceDayAssembler, studentAvailabilityDayAssembler, workShiftWorkTime);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]

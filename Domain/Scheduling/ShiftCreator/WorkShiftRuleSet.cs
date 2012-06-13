@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using InParameter = Teleopti.Interfaces.Domain.InParameter;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         private DefaultAccessibility _defaultAccessibility = DefaultAccessibility.Included;
         private IList<DayOfWeek> _accessibilityDaysOfWeek = new List<DayOfWeek>(7);
         private IList<DateTime> _accessibilityDates = new List<DateTime>();
-        private IDictionary<IEffectiveRestriction, IWorkTimeMinMax> _restrictionCashe;
     	private bool _onlyForRestrictions;
 
     	public WorkShiftRuleSet(IWorkShiftTemplateGenerator generator)
@@ -108,55 +106,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         {
             get { return _templateGenerator; }
             set { _templateGenerator = value; }
-        }
-
-		public virtual IWorkTimeMinMax MinMaxWorkTime(IRuleSetProjectionService ruleSetProjectionService, 
-                                                        IEffectiveRestriction effectiveRestriction)
-        {
-            lock (this)
-            {
-                if (_restrictionCashe == null)
-                    _restrictionCashe = new Dictionary<IEffectiveRestriction, IWorkTimeMinMax>();
-                IWorkTimeMinMax cashedValue;
-
-                if (_restrictionCashe.TryGetValue(effectiveRestriction, out cashedValue))
-                {
-                    return cashedValue;
-                }
-
-                cashedValue = calculateWorkTimeMinMax(ruleSetProjectionService, effectiveRestriction);
-                _restrictionCashe.Add(effectiveRestriction, cashedValue);
-                return cashedValue;
-            }
-        }
-
-		private IWorkTimeMinMax calculateWorkTimeMinMax(IRuleSetProjectionService ruleSetProjectionService, 
-                                                        IEffectiveRestriction effectiveRestriction)
-        {
-            IWorkTimeMinMax resultWorkTimeMinMax = null;
-			if (effectiveRestriction.NotAvailable)
-			return null;
-            IEnumerable<IWorkShiftProjection> infoList = ruleSetProjectionService.ProjectionCollection(this);
-				
-
-            foreach (var visualLayerInfo in infoList)
-            {
-                if (effectiveRestriction.ValidateWorkShiftInfo(visualLayerInfo))
-                {
-						 var contractTime = visualLayerInfo.ContractTime;
-                    IWorkTimeMinMax thisWorkTimeMinMax = new WorkTimeMinMax();
-                    TimePeriod? period = visualLayerInfo.TimePeriod;
-                	thisWorkTimeMinMax.StartTimeLimitation = new StartTimeLimitation(period.Value.StartTime, period.Value.StartTime);
-                    thisWorkTimeMinMax.EndTimeLimitation = new EndTimeLimitation(period.Value.EndTime, period.Value.EndTime);
-                    thisWorkTimeMinMax.WorkTimeLimitation = new WorkTimeLimitation(contractTime, contractTime);
-                    if (resultWorkTimeMinMax == null)
-                        resultWorkTimeMinMax = new WorkTimeMinMax();
-
-                    resultWorkTimeMinMax = resultWorkTimeMinMax.Combine(thisWorkTimeMinMax);
-                }
-            }
-
-            return resultWorkTimeMinMax;
         }
         
         /// <summary>

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         ISchedulingResultStateHolder _schedulingResultStateHolder;
     	//private IScheduleDictionary _scheduleDictionary;
         private SchedulingOptions _schedulingOptions;
-        private IRuleSetProjectionService _projSvc;
+		  private IWorkShiftWorkTime _workShiftWorkTime;
         
         
 
@@ -32,10 +32,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _dateToCheck = new DateOnly(2008, 05, 19);
             _mocks = new MockRepository();
-            _projSvc = _mocks.StrictMock<IRuleSetProjectionService>();
+            _workShiftWorkTime = _mocks.StrictMock<IWorkShiftWorkTime>();
             _person = new Person();
             _schedulingOptions = new SchedulingOptions();
-            _target = new MinMaxContractData(_projSvc, _person);
+            _target = new MinMaxContractData(_workShiftWorkTime, _person);
             _personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateToCheck.AddDays(-2)), TeamFactory.CreateSimpleTeam("test"));
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
         	//_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();

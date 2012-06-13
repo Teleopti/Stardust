@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 {
 	public class RuleSetBagForGroupPerson : Entity, IRuleSetBag
 	{
-		private IList<IWorkShiftRuleSet> _ruleSetCollection = new List<IWorkShiftRuleSet>();
-		private Description _description = new Description();
+		private readonly IList<IWorkShiftRuleSet> _ruleSetCollection = new List<IWorkShiftRuleSet>();
+		private Description _description;
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			return categories;
 		}
 
-		public IWorkTimeMinMax MinMaxWorkTime(IRuleSetProjectionService ruleSetProjectionService, DateOnly onDate, IEffectiveRestriction restriction)
+		public IWorkTimeMinMax MinMaxWorkTime(IWorkShiftWorkTime workShiftWorkTime, DateOnly onDate, IEffectiveRestriction restriction)
 		{
 			if (restriction == null)
 				return null;
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 					!workShiftRuleSet.TemplateGenerator.Category.Equals(restriction.ShiftCategory))
 					continue;
 
-				var ruleSetWorkTimeMinMax = workShiftRuleSet.MinMaxWorkTime(ruleSetProjectionService, restriction);
+				var ruleSetWorkTimeMinMax = workShiftWorkTime.CalculateMinMax(workShiftRuleSet, restriction);
 				if (ruleSetWorkTimeMinMax != null)
 				{
 					if (retVal == null)
