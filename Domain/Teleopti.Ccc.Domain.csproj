@@ -342,6 +342,7 @@
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonFactory.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonsBuilder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonShiftCategoryConsistentChecker.cs" />
+    <Compile Include="ResourceCalculation\GroupScheduling\PossibleCombinationsOfStartEndCategoryCreator.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPerson.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyService.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyServiceNew.cs" />

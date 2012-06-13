@@ -1,5 +1,8 @@
 ﻿
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -7,7 +10,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
     public class WorkTimeMinMax : IWorkTimeMinMax
     {
-
+		private HashSet<IPossibleStartEndCategory> _possibleStartEndCategories = new HashSet<IPossibleStartEndCategory>();
+ 
         public StartTimeLimitation StartTimeLimitation { get; set; }
         public EndTimeLimitation EndTimeLimitation { get; set; }
         public WorkTimeLimitation WorkTimeLimitation { get; set; }
@@ -18,10 +22,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
             ret.StartTimeLimitation = combineLimitation(StartTimeLimitation, workTimeMinMax.StartTimeLimitation, new StartTimeLimitation());
             ret.EndTimeLimitation = combineLimitation(EndTimeLimitation, workTimeMinMax.EndTimeLimitation, new EndTimeLimitation());
             ret.WorkTimeLimitation = combineLimitation(WorkTimeLimitation, workTimeMinMax.WorkTimeLimitation, new WorkTimeLimitation());
+			ret.PossibleStartEndCategories = _possibleStartEndCategories.Concat(workTimeMinMax.PossibleStartEndCategories).ToList();
+			
             return ret;
         }
 
-        private static T combineLimitation<T>(T limitation1, T limitation2, T newLimitation) where T : ILimitation
+    	public IList<IPossibleStartEndCategory> PossibleStartEndCategories
+    	{
+			get { return _possibleStartEndCategories.ToList(); }
+			set { _possibleStartEndCategories = new HashSet<IPossibleStartEndCategory>(value); }
+    	}
+
+    	private static T combineLimitation<T>(T limitation1, T limitation2, T newLimitation) where T : ILimitation
         {
             newLimitation.StartTime = minTimeSpan(limitation1.StartTime, limitation2.StartTime);
             newLimitation.EndTime = maxTimeSpan(limitation1.EndTime, limitation2.EndTime);

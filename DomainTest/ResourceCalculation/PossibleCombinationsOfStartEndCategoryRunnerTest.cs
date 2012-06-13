@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target.RunTheList(_options);
 			foreach (var possibleStartEndCategory in _options)
 			{
-				Assert.That(possibleStartEndCategory.Shiftvalue, Is.EqualTo(100));
+				Assert.That(possibleStartEndCategory.ShiftValue, Is.EqualTo(100));
 			}
 		}
 	}
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_doneEvent.Set();
 				return;
 			}
-			possible.Shiftvalue = 100;
+			possible.ShiftValue = 100;
 			_doneEvent.Set();
 		}
 	}

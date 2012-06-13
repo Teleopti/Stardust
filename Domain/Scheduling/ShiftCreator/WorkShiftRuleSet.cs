@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using InParameter = Teleopti.Interfaces.Domain.InParameter;
 
@@ -137,8 +139,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 			if (effectiveRestriction.NotAvailable)
 			return null;
             IEnumerable<IWorkShiftProjection> infoList = ruleSetProjectionService.ProjectionCollection(this);
-				
 
+			var possibilities = new HashSet<IPossibleStartEndCategory>();
+			var cat = TemplateGenerator.Category;
             foreach (var visualLayerInfo in infoList)
             {
                 if (effectiveRestriction.ValidateWorkShiftInfo(visualLayerInfo))
@@ -146,6 +149,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 						 var contractTime = visualLayerInfo.ContractTime;
                     IWorkTimeMinMax thisWorkTimeMinMax = new WorkTimeMinMax();
                     TimePeriod? period = visualLayerInfo.TimePeriod;
+                	possibilities.Add(new PossibleStartEndCategory
+                	                  	{
+                	                  		StartTime = period.Value.StartTime,
+                	                  		EndTime = period.Value.EndTime,
+                	                  		ShiftCategory = cat
+                	                  	});
                 	thisWorkTimeMinMax.StartTimeLimitation = new StartTimeLimitation(period.Value.StartTime, period.Value.StartTime);
                     thisWorkTimeMinMax.EndTimeLimitation = new EndTimeLimitation(period.Value.EndTime, period.Value.EndTime);
                     thisWorkTimeMinMax.WorkTimeLimitation = new WorkTimeLimitation(contractTime, contractTime);
@@ -155,6 +164,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                     resultWorkTimeMinMax = resultWorkTimeMinMax.Combine(thisWorkTimeMinMax);
                 }
             }
+
+			if (resultWorkTimeMinMax != null)
+				resultWorkTimeMinMax.PossibleStartEndCategories = possibilities.ToList();
 
             return resultWorkTimeMinMax;
         }

@@ -448,30 +448,30 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return shiftList;
     	}
 
-        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList,IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
+        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList, IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
         {
             if (schedulingOptions.UseGroupSchedulingCommonStart && schedulingOptions.UseGroupSchedulingCommonEnd)
             {
-                shiftList = (IList<IShiftProjectionCache>) (from sl in shiftList
+                shiftList = (from sl in shiftList
                                      where
-                                         sl.MainShiftStartDateTime.Equals(
-                                             possibleStartEndCategory.StartTime ) && sl.MainShiftEndDateTime.Equals(possibleStartEndCategory.EndTime )
-                                     select sl);
+										 sl.WorkShiftProjectionPeriod.StartDateTime.TimeOfDay.Equals(
+											 possibleStartEndCategory.StartTime) && sl.WorkShiftProjectionPeriod.EndDateTime.TimeOfDay.Equals(possibleStartEndCategory.EndTime)
+                                     select sl).ToList();
             }
             else if (schedulingOptions.UseGroupSchedulingCommonStart)
             {
-                shiftList = (IList<IShiftProjectionCache>)(from sl in shiftList
-                                                           where
-                                                               sl.MainShiftStartDateTime.Equals(
-                                                                   possibleStartEndCategory.StartTime)
-                                                           select sl);
+                shiftList = (from sl in shiftList
+                                    where
+										sl.WorkShiftProjectionPeriod.StartDateTime.TimeOfDay.Equals(
+                                            possibleStartEndCategory.StartTime)
+                                    select sl).ToList();
             }
             else if (schedulingOptions.UseGroupSchedulingCommonEnd)
             {
-                shiftList = (IList<IShiftProjectionCache>)(from sl in shiftList
-                                                           where
-                                                                sl.MainShiftEndDateTime.Equals(possibleStartEndCategory.EndTime)
-                                                           select sl);
+                shiftList = (from sl in shiftList
+                                    where
+										sl.WorkShiftProjectionPeriod.EndDateTime.TimeOfDay.Equals(possibleStartEndCategory.EndTime)
+                                    select sl).ToList();
             }
 
             return shiftList;

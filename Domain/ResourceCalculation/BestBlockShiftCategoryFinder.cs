@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -124,8 +127,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     var personPeriod = currentSchedulePeriod.Person.Period(dateOnly);
                     IRuleSetBag bag = personPeriod.RuleSetBag;
                     var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, false);
+                	
+					
+
                     if (shiftList == null)
                         continue;
+
+					//Ola just testing
+					//var finder = new PossibleCombinationsOfStartEndCategoryCreator(schedulingOptions);
+					//var combs = finder.FindCombinations(shiftList);
+					//var annat = bag.MinMaxWorkTime(new RuleSetProjectionService(new ShiftCreatorService()), dateOnly,
+					//                               effectiveRestriction);
+
+					//var combs2 = finder.FindCombinations(annat);
+
+					//shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(shiftList, combs2.FirstOrDefault(), schedulingOptions);
 
                 	IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders =
                 		_personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(dateOnly,
