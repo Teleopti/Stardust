@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
-    [TestFixture]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses"), TestFixture]
     class ShiftCategoryPeriodValueExtractorThreadTest
     {
         private MockRepository _mocks;
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _effectiveRestriction = _mocks.DynamicMock<IEffectiveRestriction>();
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void TestDifferentFilterShiftCategory()
         {
             IPerson person = new Person();
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             return new List<IShiftProjectionCache> { _cashe1, _cashe2, _cashe3, _cashe4 };
         }
 
-        [Test ]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void TestExtractShiftCategoryPeriodValue()
         {
            
