@@ -4,6 +4,7 @@ using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
@@ -38,25 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 	}
 
-	public class PossibleCombinationsOfStartEndCategoryRunner
-	{
-		public void RunTheList(IList<PossibleStartEndCategory> possibleStartEndCategories )
-		{
-			var arrayLimit = possibleStartEndCategories.Count;
-			var doneEvents = new ManualResetEvent[arrayLimit];
-			var dummyArray = new Dummy[arrayLimit];
-			for (var i = 0; i < arrayLimit; i++)
-			{
-				doneEvents[i] = new ManualResetEvent(false);
-				var d = new Dummy(doneEvents[i] );
-				dummyArray[i] = d;
-				ThreadPool.QueueUserWorkItem(d.Calc, possibleStartEndCategories[i]);
-
-			}
-			WaitHandle.WaitAll(doneEvents);
-		}
-
-	}
+	
 
 	public class Dummy
 	{
