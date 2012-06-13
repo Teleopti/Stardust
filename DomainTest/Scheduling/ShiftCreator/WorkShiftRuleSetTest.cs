@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                                                ShiftCategoryFactory.CreateShiftCategory("sample"));
 
             _target = new WorkShiftRuleSet(_generator);
-
         }
 
 
