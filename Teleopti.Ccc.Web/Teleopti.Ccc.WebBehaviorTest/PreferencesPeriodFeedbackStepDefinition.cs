@@ -60,11 +60,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().Setup(contractSchedule);
 			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
 		}
-
+		
 		[Given(@"I have a absence preference on weekday (\d)")]
-		public void GivenIHaveAAbsencePreferenceOnWeekday5(int weekday)
+		[Given(@"I have a non-contract time absence preference on weekday (\d)")]
+		public void GivenIHaveAAbsencePreferenceOnWeekdayX(int weekday)
 		{
 			UserFactory.User().Setup(new AbsencePreferenceOnWeekday(weekday));
+		}
+
+		[Given(@"I have a contract time absence preference on weekday (\d)")]
+		public void GivenIHaveAContractTimeAbsencePreferenceOnWeekdayX(int weekday)
+		{
+			UserFactory.User().Setup(new AbsencePreferenceInContractTimeOnWeekday(weekday));
 		}
 
 		[Given(@"I have a shift category preference on weekday (\d)")]

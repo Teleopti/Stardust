@@ -177,9 +177,11 @@ Scenario: Period feedback of schedules and preferences
 Scenario: Period feedback of contract time absence
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a contract with an 8 hour average work time per day
-	And I have a contract schedule with weekday 6 day off
-	And I have a contract schedule with weekday 7 day off
+	And I have a contract with:
+		| Field                     | Value                        |
+		| Average work time per day | 8                            |
+	And I have a shift bag with start times 7 to 9 and end times 15 to 17
+	And I have a contract schedule with 2 days off
 	And I have a contract time absence preference on weekday 1
 	And I have a contract time absence preference on weekday 2
 	And I have a contract time absence preference on weekday 3
@@ -193,9 +195,11 @@ Scenario: Period feedback of contract time absence
 Scenario: Period feedback of non-contract time absence
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a contract with an 8 hour average work time per day
-	And I have a contract schedule with weekday 6 day off
-	And I have a contract schedule with weekday 7 day off
+	And I have a contract with:
+		| Field                     | Value                        |
+		| Average work time per day | 8                            |
+	And I have a shift bag with start times 7 to 9 and end times 15 to 17
+	And I have a contract schedule with 2 days off
 	And I have a non-contract time absence preference on weekday 1
 	And I have a non-contract time absence preference on weekday 2
 	And I have a non-contract time absence preference on weekday 3

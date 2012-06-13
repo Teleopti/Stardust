@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="Data\User\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\User\AbsencePreferenceOnWeekday.cs" />
     <Compile Include="Data\User\CommonScenario.cs" />
     <Compile Include="Data\User\ContractScheduleFromTable.cs" />

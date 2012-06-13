@@ -519,29 +519,36 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.Given("I am an agent");
 #line 179
  testRunner.And("I have a scheduling period of 1 week");
+#line hidden
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table7.AddRow(new string[] {
+                        "Average work time per day",
+                        "8"});
 #line 180
- testRunner.And("I have a contract with an 8 hour average work time per day");
-#line 181
- testRunner.And("I have a contract schedule with weekday 6 day off");
-#line 182
- testRunner.And("I have a contract schedule with weekday 7 day off");
+ testRunner.And("I have a contract with:", ((string)(null)), table7);
 #line 183
- testRunner.And("I have a contract time absence preference on weekday 1");
+ testRunner.And("I have a shift bag with start times 7 to 9 and end times 15 to 17");
 #line 184
- testRunner.And("I have a contract time absence preference on weekday 2");
+ testRunner.And("I have a contract schedule with 2 days off");
 #line 185
- testRunner.And("I have a contract time absence preference on weekday 3");
+ testRunner.And("I have a contract time absence preference on weekday 1");
 #line 186
- testRunner.And("I have a contract time absence preference on weekday 4");
+ testRunner.And("I have a contract time absence preference on weekday 2");
 #line 187
- testRunner.And("I have a contract time absence preference on weekday 5");
+ testRunner.And("I have a contract time absence preference on weekday 3");
 #line 188
- testRunner.And("I have a contract time absence preference on weekday 6");
+ testRunner.And("I have a contract time absence preference on weekday 4");
 #line 189
- testRunner.And("I have a contract time absence preference on weekday 7");
+ testRunner.And("I have a contract time absence preference on weekday 5");
 #line 190
- testRunner.When("I view preferences");
+ testRunner.And("I have a contract time absence preference on weekday 6");
 #line 191
+ testRunner.And("I have a contract time absence preference on weekday 7");
+#line 192
+ testRunner.When("I view preferences");
+#line 193
  testRunner.Then("I should see a message that my preferences can result in 40 hours");
 #line hidden
             this.ScenarioCleanup();
@@ -552,35 +559,42 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfNon_ContractTimeAbsence()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of non-contract time absence", ((string[])(null)));
-#line 193
-this.ScenarioSetup(scenarioInfo);
-#line 194
- testRunner.Given("I am an agent");
 #line 195
- testRunner.And("I have a scheduling period of 1 week");
+this.ScenarioSetup(scenarioInfo);
 #line 196
- testRunner.And("I have a contract with an 8 hour average work time per day");
+ testRunner.Given("I am an agent");
 #line 197
- testRunner.And("I have a contract schedule with weekday 6 day off");
+ testRunner.And("I have a scheduling period of 1 week");
+#line hidden
+            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table8.AddRow(new string[] {
+                        "Average work time per day",
+                        "8"});
 #line 198
- testRunner.And("I have a contract schedule with weekday 7 day off");
-#line 199
- testRunner.And("I have a non-contract time absence preference on weekday 1");
-#line 200
- testRunner.And("I have a non-contract time absence preference on weekday 2");
+ testRunner.And("I have a contract with:", ((string)(null)), table8);
 #line 201
- testRunner.And("I have a non-contract time absence preference on weekday 3");
+ testRunner.And("I have a shift bag with start times 7 to 9 and end times 15 to 17");
 #line 202
- testRunner.And("I have a non-contract time absence preference on weekday 4");
+ testRunner.And("I have a contract schedule with 2 days off");
 #line 203
- testRunner.And("I have a non-contract time absence preference on weekday 5");
+ testRunner.And("I have a non-contract time absence preference on weekday 1");
 #line 204
- testRunner.And("I have a non-contract time absence preference on weekday 6");
+ testRunner.And("I have a non-contract time absence preference on weekday 2");
 #line 205
- testRunner.And("I have a non-contract time absence preference on weekday 7");
+ testRunner.And("I have a non-contract time absence preference on weekday 3");
 #line 206
- testRunner.When("I view preferences");
+ testRunner.And("I have a non-contract time absence preference on weekday 4");
 #line 207
+ testRunner.And("I have a non-contract time absence preference on weekday 5");
+#line 208
+ testRunner.And("I have a non-contract time absence preference on weekday 6");
+#line 209
+ testRunner.And("I have a non-contract time absence preference on weekday 7");
+#line 210
+ testRunner.When("I view preferences");
+#line 211
  testRunner.Then("I should see a message that my preferences can result in 0 hours");
 #line hidden
             this.ScenarioCleanup();
