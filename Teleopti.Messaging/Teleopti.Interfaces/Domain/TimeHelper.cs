@@ -5,6 +5,66 @@ using System.Text.RegularExpressions;
 
 namespace Teleopti.Interfaces.Domain
 {
+	/// <summary>
+	/// 
+	/// </summary>
+	public interface ITimeFormatter
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="timeSpan"></param>
+		/// <returns></returns>
+		string GetLongHourMinuteTimeString(TimeSpan timeSpan);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class TimeFormatter : ITimeFormatter
+	{
+		private readonly IUserCulture _culture;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="culture"></param>
+		public TimeFormatter(IUserCulture culture) {
+			_culture = culture;
+		}
+
+		public string GetLongHourMinuteTimeString(TimeSpan timeSpan)
+		{
+			string separator = _culture.GetCulture().DateTimeFormat.TimeSeparator;
+			int sign = Math.Sign(timeSpan.Ticks);
+
+			TimeSpan absValue = TimeSpan.FromTicks(Math.Abs(timeSpan.Ticks));
+
+			int hour = (int)absValue.TotalHours;
+			int minutes = absValue.Minutes;
+
+			if (absValue.Seconds >= 30)
+				minutes += 1;
+			if (minutes == 60)
+			{
+				hour++;
+				minutes = 0;
+			}
+
+			string min = Convert.ToString(minutes, CultureInfo.CurrentCulture);
+			string hours = Convert.ToString(hour, CultureInfo.CurrentCulture);
+
+			string signChar = string.Empty;
+			if (sign == -1)
+				signChar = "-";
+
+			if (min.Length == 1)
+				min = "0" + min;
+
+			return string.Concat(signChar, hours, separator, min);
+		}
+
+	}
     /// <summary>
     /// Time helper class with utilities for time handling
     /// </summary>
@@ -421,34 +481,20 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static string GetLongHourMinuteTimeString(TimeSpan timeSpan, CultureInfo cultureInfo)
         {
-            string separator = cultureInfo.DateTimeFormat.TimeSeparator;
-            int sign = Math.Sign(timeSpan.Ticks);
-
-            TimeSpan absValue = TimeSpan.FromTicks(Math.Abs(timeSpan.Ticks));
-
-            int hour = (int)absValue.TotalHours;
-            int minutes = absValue.Minutes;
-
-            if (absValue.Seconds >= 30)
-                minutes += 1;
-            if (minutes == 60)
-            {
-                hour++;
-                minutes = 0;
-            }
-
-            string min = Convert.ToString(minutes, CultureInfo.CurrentCulture);
-            string hours = Convert.ToString(hour, CultureInfo.CurrentCulture);
-
-            string signChar = string.Empty;
-            if (sign == -1)
-                signChar = "-";
-
-            if (min.Length == 1)
-                min = "0" + min;
-
-            return string.Concat(signChar, hours, separator, min);
+			return new TimeFormatter(new ThisCulture(cultureInfo)).GetLongHourMinuteTimeString(timeSpan);
         }
+
+		private class ThisCulture : IUserCulture
+		{
+			private readonly CultureInfo _cultureInfo;
+
+			public ThisCulture(CultureInfo cultureInfo)
+			{
+				_cultureInfo = cultureInfo;
+			}
+
+			public CultureInfo GetCulture() { return _cultureInfo; }
+		}
 
         /// <summary>
         /// Gets the long hour and minutes tring from a timespan eg. 123:23.

@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 {
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 			ISkillProvider skillProvider = null;
 			IDefinedReportProvider definedReportProvider = null;
 			var userTextTranslator = new FakeUserTextTranslator();
-			var cultureProvider = MockRepository.GenerateStub<ICultureProvider>();
+			var cultureProvider = MockRepository.GenerateStub<IUserCulture>();
 			cultureProvider.Stub(s => s.GetCulture()).Return(CultureInfo.GetCultureInfo(1053));
 			var dateBoxGlobalizationViewModelFactory = new DateBoxGlobalizationViewModelFactory(cultureProvider);
 

@@ -2,15 +2,21 @@ using System;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 {
-	public class PreferencePeriodViewModelFactory : IPreferencePeriodViewModelFactory
+	public class PreferencePeriodFeedbackViewModelFactory : IPreferencePeriodFeedbackViewModelFactory
 	{
 		private readonly IPreferencePeriodFeedbackProvider _preferencePeriodFeedbackProvider;
+		private readonly ITimeFormatter _timeFormatter;
 
-		public PreferencePeriodViewModelFactory(IPreferencePeriodFeedbackProvider preferencePeriodFeedbackProvider) { _preferencePeriodFeedbackProvider = preferencePeriodFeedbackProvider; }
+		public PreferencePeriodFeedbackViewModelFactory(IPreferencePeriodFeedbackProvider preferencePeriodFeedbackProvider, ITimeFormatter timeFormatter)
+		{
+			_preferencePeriodFeedbackProvider = preferencePeriodFeedbackProvider;
+			_timeFormatter = timeFormatter;
+		}
 
 		public PreferencePeriodFeedbackViewModel CreatePeriodFeedbackViewModel(DateOnly date)
 		{
@@ -23,10 +29,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 			       		                		Lower = feedback.TargetDaysOff.Minimum,
 			       		                		Upper = feedback.TargetDaysOff.Maximum
 			       		                	},
-			       		TargetHours = new TargetHoursViewModel
+			       		TargetContractTime = new TargetContractTimeViewModel
 			       		              	{
-			       		              		Lower = (int) feedback.TargetTime.Minimum.TotalHours,
-			       		              		Upper = (int) feedback.TargetTime.Maximum.TotalHours
+											Lower = _timeFormatter.GetLongHourMinuteTimeString(feedback.TargetTime.Minimum),
+											Upper = _timeFormatter.GetLongHourMinuteTimeString(feedback.TargetTime.Maximum)
 			       		              	}
 			       	};
 		}

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var currentPrincipalProvider = MockRepository.GenerateStub<ICurrentTeleoptiPrincipal>();
 			currentPrincipalProvider.Stub(p => p.Current()).Return(null);
 
-			var target = new CultureProvider(currentPrincipalProvider);
+			var target = new UserCulture(currentPrincipalProvider);
 
 			var result = target.GetCulture();
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var currentPrincipalProvider = MockRepository.GenerateStub<ICurrentTeleoptiPrincipal>();
 			currentPrincipalProvider.Stub(p => p.Current()).Return(principal);
 
-			var target = new CultureProvider(currentPrincipalProvider);
+			var target = new UserCulture(currentPrincipalProvider);
 
 			var result = target.GetCulture();
 

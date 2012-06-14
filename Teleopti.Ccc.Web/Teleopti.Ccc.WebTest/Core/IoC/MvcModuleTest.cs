@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterCultureProvider()
 		{
-			requestContainer.Resolve<ICultureProvider>()
+			requestContainer.Resolve<IUserCulture>()
 				.Should().Not.Be.Null();
 		}
 
@@ -459,7 +459,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			requestContainer.Resolve<PreferenceFeedbackController>()
 				.Should().Not.Be.Null();
-			requestContainer.Resolve<IPreferencePeriodViewModelFactory>()
+			requestContainer.Resolve<IPreferencePeriodFeedbackViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
 

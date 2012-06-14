@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 {
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 	{
 		private readonly Func<IReportDataService> _dataService;
 
-		private readonly Func<ICultureProvider> _cultureProvider;
+		private readonly Func<IUserCulture> _cultureProvider;
 
 		private readonly NumberFormatInfo _fixedFormatInfo;
 		private readonly Func<IMappingEngine> _mappingEngine;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 		                                               Func<IUserTextTranslator> userTextTranslator,
 		                                               Func<ISkillProvider> skillProvider,
 		                                               Func<IReportDataService> dataService,
-													   Func<ICultureProvider> cultureProvider )
+													   Func<IUserCulture> cultureProvider )
 		{
 			_mappingEngine = mappingEngine;
 			_userTextTranslator = userTextTranslator;

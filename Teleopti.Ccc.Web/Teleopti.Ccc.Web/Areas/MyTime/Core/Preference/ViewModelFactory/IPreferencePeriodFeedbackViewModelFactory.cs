@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 {
-	public interface IPreferencePeriodViewModelFactory
+	public interface IPreferencePeriodFeedbackViewModelFactory
 	{
 		PreferencePeriodFeedbackViewModel CreatePeriodFeedbackViewModel(DateOnly date);
 	}

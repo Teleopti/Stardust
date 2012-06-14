@@ -29,14 +29,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 		{
 			_skillProvider = new TestSkillProvider();
 			_userTextTranslator = new TestUserTextTranslator();
-			_cultureProvider = new CurrentThreadCultureProvider();
+			_userCulture = new CurrentThreadUserCulture();
 
 			Mapper.Reset();
 			Mapper.Initialize(
 				c =>
 				c.AddProfile(
 					new ReportGenerationViewModelMappingProfile(
-					() => Mapper.Engine, () => _userTextTranslator, () => _skillProvider, () => null, () => _cultureProvider)));
+					() => Mapper.Engine, () => _userTextTranslator, () => _skillProvider, () => null, () => _userCulture)));
 		}
 
 		#endregion
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 
 		private ISkillProvider _skillProvider;
 
-		private CurrentThreadCultureProvider _cultureProvider;
+		private CurrentThreadUserCulture _userCulture;
 
 		protected class TestUserTextTranslator : IUserTextTranslator
 		{

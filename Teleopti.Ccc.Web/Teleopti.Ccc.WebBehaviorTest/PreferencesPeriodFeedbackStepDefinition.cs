@@ -111,13 +111,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a message that I should work (\d+) hours")]
 		public void ThenIShouldSeeAMessageThatIShouldWorkXHours(int hours)
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkXHours, hours)));
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkXHours, FormatHours(hours))));
 		}
 
 		[Then(@"I should see a message that I should work (\d+) to (\d+) hours")]
 		public void ThenIShouldSeeAMessageThatIShouldWorkXToYHours(int lower, int upper)
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkBetweenXAndYHours, lower, upper)));
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkBetweenXAndYHours, FormatHours(lower), FormatHours(upper))));
 		}
 
 		[Then(@"I should see a message that my preferences can result in (\d+) to (\d+) hours")]

@@ -193,10 +193,10 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferencePeriodFeedbackViewModel.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferencePeriodViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePeriodFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\IPersonPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\PersonPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormMappingProfile.cs" />
@@ -274,11 +274,7 @@
     <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactory.cs" />
     <Compile Include="Areas\Start\Models\Menu\ApplicationArea.cs" />
     <Compile Include="Areas\Start\Models\Menu\MenuViewModel.cs" />
-    <Compile Include="Core\RequestContext\CultureProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Core\RequestContext\DataSourceProvider.cs" />
-    <Compile Include="Core\RequestContext\ICultureProvider.cs" />
     <Compile Include="Core\RequestContext\IDataSourceProvider.cs" />
     <Compile Include="Core\RequestContext\ISessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializer.cs" />

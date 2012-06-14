@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnPeriodFeedback()
 		{
-			var preferencePeriodViewModelFactory = MockRepository.GenerateMock<IPreferencePeriodViewModelFactory>();
+			var preferencePeriodViewModelFactory = MockRepository.GenerateMock<IPreferencePeriodFeedbackViewModelFactory>();
 			var target = new PreferenceFeedbackController(null, preferencePeriodViewModelFactory);
 			var model = new PreferencePeriodFeedbackViewModel();
 

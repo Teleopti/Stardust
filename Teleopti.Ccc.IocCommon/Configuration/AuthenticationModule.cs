@@ -100,6 +100,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PrincipalAuthorization>()
 				.As<IPrincipalAuthorization>()
 				.SingleInstance();
+			builder.RegisterType<UserCulture>().As<IUserCulture>();
 		}
     }
 }
