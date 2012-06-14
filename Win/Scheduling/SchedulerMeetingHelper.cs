@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 var persons = meetingToRemove.MeetingPersons.Select(m => m.Person);
                 unitOfWork.Reassociate(persons);
-                if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, meetingToRemove.StartDate, scheduleViewBase, TeleoptiPrincipal.Current.PrincipalAuthorization))
+                if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, meetingToRemove.StartDate, scheduleViewBase, PrincipalAuthorization.Instance()))
                     return;
 				meetingToRemove.Snapshot();
 

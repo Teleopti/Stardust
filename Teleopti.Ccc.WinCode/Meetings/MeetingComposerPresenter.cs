@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                         currentMeeting = meetingRepository.Load(_model.Meeting.Id.GetValueOrDefault());
                         var persons = currentMeeting.MeetingPersons.Select(m => m.Person);
                         unitOfWork.Reassociate(persons);
-                        if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, currentMeeting.StartDate, _view, TeleoptiPrincipal.Current.PrincipalAuthorization))
+                        if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, currentMeeting.StartDate, _view, PrincipalAuthorization.Instance()))
                             return;
                         currentMeeting.Snapshot();
                     }
