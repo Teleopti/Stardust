@@ -533,6 +533,7 @@
     <Compile Include="Domain\IWorkShiftMinMaxCalculator.cs" />
     <Compile Include="Domain\IWorkShiftVisualLayerInfo.cs" />
     <Compile Include="Domain\IWorkShiftWeekMinMaxCalculator.cs" />
+    <Compile Include="Domain\IWorkShiftWorkTime.cs" />
     <Compile Include="Domain\IWorkTimeBackToLegalStateService.cs" />
     <Compile Include="Domain\IWorkTimeMinMax.cs" />
     <Compile Include="Domain\IPersonWriteProtectionInfo.cs" />
@@ -544,7 +545,6 @@
     <Compile Include="Domain\OpenForWork.cs" />
     <Compile Include="Domain\OptimizationRestriction.cs" />
     <Compile Include="Domain\JobResultProgress.cs" />
-    <Compile Include="Domain\PositiveTimeSpan.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />
     <Compile Include="Domain\ResourceOptimizerProgressEventArgs.cs" />
     <Compile Include="Domain\ITimeLayer.cs" />

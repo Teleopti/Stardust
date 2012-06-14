@@ -93,7 +93,7 @@ GO
 ----------------  
 IF EXISTS(SELECT * FROM sys.columns WHERE object_id=OBJECT_ID('dbo.StateGroupActivityAlarm','U') AND name='IsDeleted')
 	BEGIN
-		DELETE FROM dbo.StateGroupActivityAlarm	WHERE IsDeleted=1
+		EXECUTE('DELETE FROM dbo.StateGroupActivityAlarm WHERE IsDeleted=1')
 	END
 GO
 

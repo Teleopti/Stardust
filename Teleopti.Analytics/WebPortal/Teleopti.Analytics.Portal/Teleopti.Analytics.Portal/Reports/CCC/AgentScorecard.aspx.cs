@@ -21,10 +21,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
             Arrow_Straight = 0,
             Arrow_UpWard = 1
         }
-        protected void Page_Init(object sender, EventArgs e)
-        {
-           
-        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -41,8 +37,15 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
         protected void ScorecardsCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadOneScorecard();
-            
         }
+
+		protected override string QueryStringWithPrefix
+		{
+			get
+			{
+				return "?ReturnUrl=" + Request.Path;
+			}
+		}
 
         protected static string GetResource(string resKey)
         {
@@ -90,11 +93,10 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
         /// <summary>
         /// Loads the one scorecard.
         /// </summary>
-        /// /// 
         /// <remarks>
         ///  Created by: Ola
         ///  Created date: 2008-04-28    
-        /// /// </remarks>
+        /// </remarks>
         private void LoadOneScorecard()
         {
             Guid scorecardID = new Guid(ScorecardsCombo.SelectedValue);
@@ -133,7 +135,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
                 try
                 {
-
                     AddCellWithTrafficLightToRow(newRow, (int)set[3, rPos.Ordinal].Value);
                     AddCellWithNumberRow(newRow, GetDouble((double?)set[1, rPos.Ordinal].Value), format);
                     AddCellWithNumberRow(newRow, GetDouble((double?)set[0, rPos.Ordinal].Value), format);

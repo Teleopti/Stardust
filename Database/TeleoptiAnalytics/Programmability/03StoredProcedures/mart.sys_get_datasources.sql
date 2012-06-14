@@ -30,7 +30,8 @@ CREATE TABLE #sys_datasource(
 	[time_zone_id] [int] NULL,
 	[time_zone_code] [nvarchar](50) NULL,
 	[interval_length] [int] NULL,
-	[inactive] [bit] NOT NULL
+	[inactive] [bit] NOT NULL,
+	[sorting] int NULL
 )
 
     IF @get_valid_datasource = 1
@@ -44,7 +45,8 @@ CREATE TABLE #sys_datasource(
 			sd.time_zone_id,
 			tz.time_zone_code,
 			1440 / si.int_value 'interval_length',
-			sd.inactive
+			sd.inactive,
+			1
 		FROM mart.sys_datasource sd
 			INNER JOIN mart.v_ccc_system_info si
 				ON si.[id] = 1 --hardcoded key for "CCC intervals per day"
@@ -63,7 +65,8 @@ CREATE TABLE #sys_datasource(
 			sd.time_zone_id,
 			tz.time_zone_code,
 			1440 / si.int_value 'interval_length',
-			sd.inactive
+			sd.inactive,
+			1
 		FROM mart.sys_datasource sd
 			INNER JOIN dbo.ccc_system_info si
 				ON si.[id] = 1 --hardcoded key for "CCC intervals per day"
@@ -101,14 +104,22 @@ CREATE TABLE #sys_datasource(
 					cast(0 as smallint) as 'time_zone_id',
 					N'UTC' as 'time_zone_code',
 					15 as 'interval_length',
-					cast(0 as bit) as 'inactive'
+					cast(0 as bit) as 'inactive',
+					0
 			END
 		END
 		---------<All log Objects>-----------
 					
 		--return
-		SELECT * FROM #sys_datasource
-		ORDER BY datasource_name,datasource_id
+		SELECT
+			[datasource_id],
+			[datasource_name],
+			[time_zone_id],
+			[time_zone_code],
+			[interval_length],
+			[inactive]
+		FROM #sys_datasource
+		ORDER BY sorting, datasource_name,datasource_id
 
 	END
 	ELSE

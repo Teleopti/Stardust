@@ -123,10 +123,10 @@ namespace Teleopti.Analytics.Portal
 
         private string LoginUrl()
         {
-            return string.Format("Login.aspx{0}", QueryStringWithPrefix);
+            return string.Format("~/Login.aspx{0}", QueryStringWithPrefix);
         }
 
-    	protected string QueryStringWithPrefix
+    	protected virtual string QueryStringWithPrefix
     	{
     		get { return string.Concat("?", Request.QueryString.ToString()); }
     	}

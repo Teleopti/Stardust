@@ -10,7 +10,7 @@ namespace Teleopti.Analytics.Portal
 		{
 			if (Page.IsPostBack)
 			{
-				Response.Redirect(string.Format(CultureInfo.InvariantCulture, "Login.aspx?{0}", Request.QueryString), true);
+				Response.Redirect(string.Format(CultureInfo.InvariantCulture, "~/Login.aspx?{0}", Request.QueryString), true);
 			}
 			SetTexts();
 		}

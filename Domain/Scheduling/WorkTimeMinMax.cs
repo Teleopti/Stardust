@@ -14,20 +14,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public IWorkTimeMinMax Combine(IWorkTimeMinMax workTimeMinMax)
         {
-            WorkTimeMinMax ret = new WorkTimeMinMax();
-            ret.StartTimeLimitation = combineLimitation(StartTimeLimitation, workTimeMinMax.StartTimeLimitation, new StartTimeLimitation());
-            ret.EndTimeLimitation = combineLimitation(EndTimeLimitation, workTimeMinMax.EndTimeLimitation, new EndTimeLimitation());
-            ret.WorkTimeLimitation = combineLimitation(WorkTimeLimitation, workTimeMinMax.WorkTimeLimitation, new WorkTimeLimitation());
-            return ret;
+        	return new WorkTimeMinMax
+        	          	{
+        	          		StartTimeLimitation = new StartTimeLimitation(
+        	          			minTimeSpan(StartTimeLimitation.StartTime, workTimeMinMax.StartTimeLimitation.StartTime),
+        	          			maxTimeSpan(StartTimeLimitation.EndTime, workTimeMinMax.StartTimeLimitation.EndTime)),
+        	          		EndTimeLimitation = new EndTimeLimitation(
+        	          			minTimeSpan(EndTimeLimitation.StartTime, workTimeMinMax.EndTimeLimitation.StartTime),
+        	          			maxTimeSpan(EndTimeLimitation.EndTime, workTimeMinMax.EndTimeLimitation.EndTime)),
+        	          		WorkTimeLimitation = new WorkTimeLimitation(
+        	          			minTimeSpan(WorkTimeLimitation.StartTime, workTimeMinMax.WorkTimeLimitation.StartTime),
+        	          			maxTimeSpan(WorkTimeLimitation.EndTime, workTimeMinMax.WorkTimeLimitation.EndTime))
+        	          	};
         }
 
-        private static T combineLimitation<T>(T limitation1, T limitation2, T newLimitation) where T : ILimitation
-        {
-            newLimitation.StartTime = minTimeSpan(limitation1.StartTime, limitation2.StartTime);
-            newLimitation.EndTime = maxTimeSpan(limitation1.EndTime, limitation2.EndTime);
-
-            return newLimitation;
-        }
 
         private static TimeSpan? minTimeSpan(TimeSpan? t1, TimeSpan? t2)
         {

@@ -382,7 +382,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public bool IsInitialized
 		{
-			get { return _wrapper.IsInitialized(); }
+			get { return _wrapper!=null && _wrapper.IsInitialized(); }
 		}
 
 		public event EventHandler<EventMessageArgs> EventMessageHandler;

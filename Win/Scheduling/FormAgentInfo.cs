@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.Win.Scheduling
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public partial class FormAgentInfo : BaseRibbonForm
     {
-        private readonly IRuleSetProjectionService _ruleSetProjectionService;
-        private IPerson _selectedPerson;
+    	private readonly IWorkShiftWorkTime _workShiftWorkTime;
+    	private IPerson _selectedPerson;
         private ICollection<DateOnly> _dateOnlyList;
         private ISchedulingResultStateHolder _stateHolder;
         private bool _dateIsSelected;
@@ -52,12 +52,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             
         }
 
-        public FormAgentInfo(IRuleSetProjectionService ruleSetProjectionService) : this()
-        {
-            _ruleSetProjectionService = ruleSetProjectionService;
-        }
+		public FormAgentInfo(IWorkShiftWorkTime workShiftWorkTime)
+			: this()
+		{
+			_workShiftWorkTime = workShiftWorkTime;
+		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void UpdateData(IDictionary<IPerson, IScheduleRange> personDictionary, 
             ICollection<DateOnly> dateOnlyList, ISchedulingResultStateHolder stateHolder,
             IDictionary<IPerson, IPersonAccountCollection> allAccounts)
@@ -202,7 +203,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 UseStudentAvailability = true,
                 UseRotations = true
             };
-            var helper = new AgentInfoHelper(person, date, _stateHolder, schedulingOptions, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(person, date, _stateHolder, schedulingOptions, _workShiftWorkTime);
 
             helper.SchedulePeriodData();
 
@@ -370,7 +371,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                            UseStudentAvailability = true,
                                                            UseRotations = true
                                                        };
-            var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _ruleSetProjectionService);
+            var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
             
             helper.SchedulePeriodData();
             if (!helper.Period.HasValue)

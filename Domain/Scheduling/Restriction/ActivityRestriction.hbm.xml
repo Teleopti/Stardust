@@ -3,7 +3,6 @@
                    assembly="Teleopti.Ccc.Domain"
                    namespace="Teleopti.Ccc.Domain.Scheduling.Restriction"
                    default-access="field.camelcase-underscore">
-  <typedef name="PosTimeSpanType" class="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.PositiveTimeSpanOrNullMappingType, Teleopti.Ccc.Infrastructure"/>
   <class name="ActivityRestriction">
     <id name="Id"
 		  access="nosetter.camelcase-underscore"
@@ -15,18 +14,18 @@
     </id>
 
     <component  name="StartTimeLimitation" class="Teleopti.Interfaces.Domain.StartTimeLimitation, Teleopti.Interfaces">
-      <property name="StartTime" column="StartTimeMinimum" type ="PosTimeSpanType" />
-      <property name="EndTime" column="StartTimeMaximum" type ="PosTimeSpanType" />
+      <property name="StartTime" column="StartTimeMinimum" />
+      <property name="EndTime" column="StartTimeMaximum" />
     </component>
 
     <component name="EndTimeLimitation" class="Teleopti.Interfaces.Domain.EndTimeLimitation, Teleopti.Interfaces">
-      <property name="StartTime" column="EndTimeMinimum" type ="PosTimeSpanType" />
-      <property name="EndTime" column="EndTimeMaximum" type ="PosTimeSpanType" />
+      <property name="StartTime" column="EndTimeMinimum" />
+      <property name="EndTime" column="EndTimeMaximum" />
     </component>
 
     <component name="WorkTimeLimitation" class="Teleopti.Interfaces.Domain.WorkTimeLimitation, Teleopti.Interfaces">
-      <property name="StartTime" column="WorkTimeMinimum" type ="PosTimeSpanType" />
-      <property name="EndTime" column="WorkTimeMaximum" type ="PosTimeSpanType" />
+      <property name="StartTime" column="WorkTimeMinimum" />
+      <property name="EndTime" column="WorkTimeMaximum" />
     </component>
 
     <one-to-one name="Parent"

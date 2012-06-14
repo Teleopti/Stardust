@@ -542,7 +542,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Common\IDialogControl.cs" />
-    <Compile Include="Helper\DateHelper.cs" />
+    <Compile Include="Helper\Iso8601Helper.cs" />
     <Compile Include="Helper\GridHelper.cs" />
     <Compile Include="Helper\HelperFunctions.cs" />
     <Compile Include="Helper\MatrixAgent.cs" />

@@ -3,6 +3,7 @@ using Autofac;
 using Autofac.Builder;
 using MbCache.Configuration;
 using MbCache.Core;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
@@ -13,7 +14,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private readonly bool _perLifetimeScope;
 		private readonly CacheBuilder _cacheBuilder;
 
-		public RuleSetCacheModule(MbCacheModule mbCacheModule, bool perLifetimeScope) {
+		public RuleSetCacheModule(MbCacheModule mbCacheModule, bool perLifetimeScope) 
+		{
 			_perLifetimeScope = perLifetimeScope;
 			if (mbCacheModule == null)
 				throw new ArgumentException("MbCacheModule required", "mbCacheModule");
@@ -26,16 +28,27 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder
 					.RegisterRuleSetProjectionService()
-				.OnRelease(s => ((ICachingComponent) s).Invalidate())
-				.InstancePerLifetimeScope()
-				;
+					.OnRelease(s => ((ICachingComponent) s).Invalidate())
+					.InstancePerLifetimeScope();
+				builder
+					.RegisterRuleSetProjectionEntityService()
+					.OnRelease(s => ((ICachingComponent) s).Invalidate())
+					.InstancePerLifetimeScope();
+				builder
+					.RegisterWorkShiftWorkTime()
+					.OnRelease(s => ((ICachingComponent) s).Invalidate());
 			}
 			else
 			{
 				builder
 					.RegisterRuleSetProjectionService()
-					.SingleInstance()
-					;
+					.SingleInstance();
+				builder
+					.RegisterRuleSetProjectionEntityService()
+					.SingleInstance();
+				builder
+					.RegisterWorkShiftWorkTime()
+					.SingleInstance();
 			}
 			_cacheBuilder
 				.For<RuleSetProjectionService>()
@@ -44,30 +57,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRuleSetProjectionService>()
 				;
 
-
-
-			if (_perLifetimeScope)
-			{
-				builder
-					.RegisterRuleSetProjectionEntityService()
-					.OnRelease(s => ((ICachingComponent)s).Invalidate())
-					.InstancePerLifetimeScope()
-					;
-			}
-			else
-			{
-				builder
-					.RegisterRuleSetProjectionEntityService()
-					.SingleInstance()
-					;
-			}
 			_cacheBuilder
 				.For<RuleSetProjectionEntityService>()
 				.CacheMethod(m => m.ProjectionCollection(null))
 				.PerInstance()
 				.As<IRuleSetProjectionEntityService>()
 				;
-
+			_cacheBuilder
+				.For<WorkShiftWorkTime>()
+				.CacheMethod(m => m.CalculateMinMax(null, null))
+				.PerInstance()
+				.As<IWorkShiftWorkTime>();
 		}
 	}
 
@@ -98,6 +98,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			                        	}
 				)
 				.As<IRuleSetProjectionEntityService>();
+		}
+
+		public static IRegistrationBuilder<IWorkShiftWorkTime, SimpleActivatorData, SingleRegistrationStyle> RegisterWorkShiftWorkTime(this ContainerBuilder builder)
+		{
+			return builder.Register(c =>
+			                        	{
+			                        		var ruleSetProjectionService = c.Resolve<IRuleSetProjectionService>();
+			                        		var cacheProxyFactory = c.Resolve<IMbCacheFactory>();
+			                        		var instance = cacheProxyFactory.Create<IWorkShiftWorkTime>(ruleSetProjectionService);
+			                        		return instance;
+			                        	}
+				).As<IWorkShiftWorkTime>();
+
 		}
 	}
 

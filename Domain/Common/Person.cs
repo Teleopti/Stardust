@@ -405,6 +405,20 @@ namespace Teleopti.Ccc.Domain.Common
             return period;
         }
 
+		public virtual DateOnly? SchedulePeriodStartDate(DateOnly requestDate)
+		{
+			ISchedulePeriod schedulePeriod = SchedulePeriod(requestDate);
+	
+			if (schedulePeriod == null)
+			{
+				IPersonPeriod personPeriod = Period(requestDate);
+				if (personPeriod == null)
+					return null;
+				return personPeriod.StartDate;
+			}
+			return schedulePeriod.DateFrom;
+		}
+
         /// <summary>
         /// Determines whether the specified date is terminated.
         /// </summary>
@@ -732,57 +746,6 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get { return _firstDayOfWeek; }
             set { _firstDayOfWeek = value; }
-        }
-
-        public virtual bool IsDateContractScheduleWorkday(DateOnly dateOnlyDate)
-        {
-            IPersonPeriod currentPeriod = Period(dateOnlyDate);
-            if (currentPeriod == null)
-                return true;
-
-            if (currentPeriod.PersonContract == null)
-                return true;
-
-            return currentPeriod.PersonContract.ContractSchedule.IsWorkday(currentPeriod.StartDate, dateOnlyDate);
-        }
-
-        public virtual TimeSpan ContractScheduleWorkTime(DateOnly dateOnlyDate) 
-        {
-            IPersonPeriod currentPeriod = Period(dateOnlyDate);
-            if (currentPeriod == null)
-                return TimeSpan.Zero;
-
-            ISchedulePeriod schedulePeriod = SchedulePeriod(dateOnlyDate);
-
-            if (schedulePeriod != null && IsDateContractScheduleWorkday(dateOnlyDate))
-                return schedulePeriod.AverageWorkTimePerDay;
-            return TimeSpan.Zero;
-        }
-
-        public virtual TimeSpan ContractScheduleWorkTime(DateOnlyPeriod period)
-        {
-            TimeSpan result = TimeSpan.Zero;
-
-            DateOnly thisDate = period.StartDate;
-            while (thisDate <= period.EndDate)
-            {
-                result += ContractScheduleWorkTime(thisDate);
-                thisDate = thisDate.AddDays(1);
-            }
-
-            return result;
-        }
-
-        public virtual int ContractScheduleDaysOff(DateOnlyPeriod period)
-        {
-            int result = 0;
-
-            foreach (DateOnly day in period.DayCollection())
-            {
-
-                if (!IsDateContractScheduleWorkday(day)) result++;
-            }
-            return result;
         }
 
         public virtual void SetDeleted()

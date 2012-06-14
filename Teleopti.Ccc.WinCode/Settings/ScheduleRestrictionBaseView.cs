@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCode.Settings
 			}
 			set
 			{
-				_workTime.StartTimeString = value;
+				_workTime = new WorkTimeLimitation(_workTime.TimeSpanFromString(value), _workTime.EndTime);
 			}
 		}
 
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WinCode.Settings
 			}
 			set
 			{
-				_workTime.EndTimeString = value;
+				_workTime = new WorkTimeLimitation(_workTime.StartTime, _workTime.TimeSpanFromString(value));
 			}
 		}
 
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WinCode.Settings
 				if (_endTime.EndTime.HasValue &&  timeValue > _endTime.EndTime.Value)
 					throw new ArgumentOutOfRangeException(UserTexts.Resources.EarlyStartTime, "Early start time can't be greater than late end time");
 
-				_startTime.StartTimeString = value;
+				_startTime = new StartTimeLimitation(_startTime.TimeSpanFromString(value), _startTime.EndTime);
 				OnStartTimeChanged();
 			}
 		}
@@ -146,8 +146,8 @@ namespace Teleopti.Ccc.WinCode.Settings
 				return _startTime.EndTimeString;
 			}
 			set
-			{			
-				_startTime.EndTimeString = value;
+			{
+				_startTime = new StartTimeLimitation(_startTime.StartTime, _startTime.TimeSpanFromString(value));
 				OnStartTimeChanged();
 			}
 		}
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCode.Settings
 			}
 			set
 			{
-				_endTime.StartTimeString = value;
+				_endTime = new EndTimeLimitation(_endTime.TimeSpanFromString(value), _endTime.EndTime);
 				OnEndTimeChanged();
 			}
 		}
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WinCode.Settings
 				if (!string.IsNullOrEmpty(value) && _startTime.StartTime.HasValue && timeValue < _startTime.StartTime.Value)
 					throw new ArgumentOutOfRangeException(UserTexts.Resources.LateEndTime, "Early start time can't be greater than late end time");
 
-				_endTime.EndTimeString = value;
+				_endTime = new EndTimeLimitation(_endTime.StartTime, _endTime.TimeSpanFromString(value));
 				OnEndTimeChanged();
 			}
 		}

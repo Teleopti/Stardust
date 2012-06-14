@@ -36,8 +36,8 @@ BEGIN
 	IF EXISTS (SELECT jobstep_error_id FROM [mart].[etl_jobstep_error])
 	BEGIN
 		-- Return an error with state 127 since it will abort SQLCMD
-		DECLARE @ErrorMessage varchar(400)
-		SELECT @ErrorMessage = CAST(error_exception_message as varchar(400)) FROM [mart].[etl_jobstep_error]
+		DECLARE @ErrorMessage varchar(8000)
+		SELECT top 1 @ErrorMessage = CAST(error_exception_message as varchar(1000)) + CAST(error_exception_stacktrace as varchar(7000)) FROM [mart].[etl_jobstep_error] order by jobstep_error_id desc
 		RAISERROR (@ErrorMessage, 16, 127)
 	END
 

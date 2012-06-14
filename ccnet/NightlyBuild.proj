@@ -32,7 +32,7 @@
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
 	<Target Name="Run" DependsOnTargets="BuildAndTest;PrepareDB;RunETL">
-	<Message Text="All target executed!" Importance="high" />
+		<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
 		<Message Text="Testing ETL service ..." Importance="high" />
@@ -65,8 +65,8 @@
 	The SP will Loop until ETL job is finshed. If it finds an error Then a RaisError Should make SQLCMD to bail out
 	-->
 		<Message Text="Start ETL test. Working..." Importance="high" />
-		<Message Text="$(SQLCmdConn) -dmaster -Q%22EXEC [$(AnalyticsDB)].[mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -dmaster -Q%22EXEC [$(AnalyticsDB)].[mart].[etl_nightlyBuild_CheckError]%22"/>
+		<Message Text="SQLExecute: Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True Statement: %22EXEC [mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" CommandTimeout="1800" ConnectionString="Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True"/>
 		<Message Text="Start ETL test. Done!" Importance="high" />
 
 		<!-- Clean up-->
@@ -80,6 +80,7 @@
 		<!-- Un-Install ETL Service-->
 		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
 		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
+		
 	</Target>
 
 	<!--
@@ -97,7 +98,9 @@
 	<Target Name="PrepareDB" DependsOnTargets="RestoreDatabasesAndPatch;AddLic;MoveOneLogObject">
 		<Message Text="Prepare ETL. Working..." Importance="high" />
 		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
+		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
 		<Message Text="Prepare ETL. Done!" Importance="high" />
 	</Target>
   
@@ -113,8 +116,6 @@
 		<Message Text="Applying data update via Teleopti.Support.Security.exe ..." Importance="high" />
 		<Message Text="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -EE" Importance="high" />
 		<Exec Command ="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -EE"/>
-		<Exec Command ="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -FM -EE"/>
-		<Exec Command ="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -PU -EE"/>
 		
 		<Message Text="Databases patched and data updated" Importance="high" />
 	</Target>
@@ -137,5 +138,5 @@
 		<Message Text="make log object internal" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -Q%22update [mart].[sys_datasource] set internal=1 where [log_object_id]=$(LogObjectId)%22"/>
 	</Target>
-
+	
 </Project>

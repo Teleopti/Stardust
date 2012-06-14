@@ -64,7 +64,7 @@
         <StackPanel MinWidth="100" HorizontalAlignment="Center">
             <Label Content="{Binding Path=LayerDescription}"  HorizontalAlignment="Center"/>
             <Label Content="{Binding Path=Description}" FontWeight="Bold"  HorizontalAlignment="Center" FontSize="16"/>
-            <!--<TextBlock Text="{Binding Path=ElapsedTime,StringFormat=t}" FontWeight="Bold"  HorizontalAlignment="Center" FontSize="16" Opacity="0.7"/>-->
+            <TextBlock Text="{Binding Path=ElapsedTime,StringFormat=t,Converter={StaticResource TimeSpanToStringConverter}}" FontWeight="Bold"  HorizontalAlignment="Center" FontSize="16" Opacity="0.7"/>
         </StackPanel>
     </DockPanel>
 </UserControl>

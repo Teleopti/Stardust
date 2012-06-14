@@ -100,6 +100,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 if (hasCorrectNumberOfDaysOff && currentDaysOff > 0)
                     continue;
 
+				
+
                 foreach (var scheduleDayPro in matrix.UnlockedDays)
                 {
                     if (currentDaysOff >= targetDaysOff)
@@ -109,11 +111,17 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     if (!_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(part))
                         continue;
 
-                    if (schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, scheduleDayPro.Day))
-                        continue;
-                    IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
+                	DateOnly currentDay = scheduleDayPro.Day;
 
-                    
+                	DateOnly? periodStartDay = matrix.Person.SchedulePeriodStartDate(currentDay);
+					if(!periodStartDay.HasValue)
+						continue;
+
+					if (schedulePeriod.ContractSchedule.IsWorkday(periodStartDay.Value, currentDay))
+                        continue;
+
+					IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
+
                     if (isRestrictionLimitedWorkDay(effectiveRestriction))
                         continue;
 

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
                         }
                         else
                         {
-                            _limitation.StartTimeString = value;
+                        	_limitation = recreateLimitation(_limitation.TimeSpanFromString(value), _limitation.EndTime);
                             _invalidStartTime = _limitation.EndTime;
                         }
                         if (temp!=EndTime) 
@@ -95,6 +95,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
                 }
             }
         }
+
+		 private ILimitation recreateLimitation(TimeSpan? startTime, TimeSpan? endTime)
+		 {
+		 	//ugly hack - move to ILimitation if needed later
+			 //im in the middle of a huge refactoring phase... cant do it right now
+			 if(_limitation is StartTimeLimitation)
+				 return new StartTimeLimitation(startTime, endTime);
+			 if(_limitation is EndTimeLimitation)
+				 return new EndTimeLimitation(startTime, endTime);
+			 if(_limitation is WorkTimeLimitation)
+				 return new WorkTimeLimitation(startTime, endTime);
+			 throw new NotImplementedException("Unknown ILimitation type");
+		 }
 
         public string EndTime
         {
@@ -114,7 +127,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
                         }
                         else
                         {
-                            _limitation.EndTimeString = value;
+									_limitation = recreateLimitation(_limitation.StartTime, _limitation.TimeSpanFromString(value));
                             _invalidEndTime = _limitation.EndTime;
                         }
                         if (temp!=StartTime) 

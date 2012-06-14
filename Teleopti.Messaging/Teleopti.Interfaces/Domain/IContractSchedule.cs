@@ -51,19 +51,6 @@ namespace Teleopti.Interfaces.Domain
 
 
         /// <summary>
-        /// Gets the workdays.
-        /// </summary>
-        /// <param name="firstDayOfWeek">The first day of week.</param>
-        /// <param name="startDayOfWeek">The start day of week.</param>
-        /// <param name="days">The days.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-08-07
-        /// </remarks>
-        int GetWorkdays(DayOfWeek firstDayOfWeek, DayOfWeek startDayOfWeek, int days);
-
-        /// <summary>
         /// Gets a value indicating whether this instance is choosable.
         /// </summary>
         /// <value>
@@ -74,21 +61,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-09-09
         /// </remarks>
         bool IsChoosable { get; }
-
-        /// <summary>
-        /// Determines whether this day index is a work day.
-        /// </summary>
-        /// <param name="firstDayOfWeek">The first day of week.</param>
-        /// <param name="startDayOfWeek">The start day of week.</param>
-        /// <param name="dayIndex">Index of the day.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is work day] [the specified first day of week]; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-09-29
-        /// </remarks>
-        bool IsWorkday(DayOfWeek firstDayOfWeek, DayOfWeek startDayOfWeek, int dayIndex);
 
         /// <summary>
         /// Determines whether the requested date would be a workdate relative to the owner start date.

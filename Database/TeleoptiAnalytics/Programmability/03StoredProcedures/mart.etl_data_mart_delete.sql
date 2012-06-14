@@ -48,6 +48,7 @@ BEGIN
 	TRUNCATE TABLE mart.fact_schedule_preference
 	TRUNCATE TABLE mart.fact_request
 	TRUNCATE TABLE mart.fact_requested_days
+	TRUNCATE TABLE mart.fact_quality
 	
 	
 	-- Delete data from dim tables
@@ -71,6 +72,7 @@ BEGIN
 	DELETE FROM mart.dim_business_unit
 	DELETE FROM mart.dim_overtime
 	DELETE FROM mart.dim_group_page
+	DELETE FROM mart.dim_quality_quest
 
 	--To realy delete All data, call this proc with @DeleteAll = 1
 	--This data corresponds to mart.sys_datasource_load followed by ETL.InitalLoad 

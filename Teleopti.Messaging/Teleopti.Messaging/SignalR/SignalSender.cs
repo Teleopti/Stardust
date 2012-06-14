@@ -39,7 +39,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public bool IsAlive
 		{
-			get { return _wrapper.IsInitialized(); }
+			get { return _wrapper != null && _wrapper.IsInitialized(); }
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]

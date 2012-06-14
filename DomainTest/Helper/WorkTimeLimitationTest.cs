@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         public void VerifyOperators()
         {
             Assert.IsFalse(target != new WorkTimeLimitation());
-            Assert.IsFalse(target == new WorkTimeLimitation(new TimeSpan(1, 1, 1), new TimeSpan()));
+            Assert.IsFalse(target == new WorkTimeLimitation(new TimeSpan(1, 1, 1), null));
         }
         [Test]
         public void VerifyEquals()
@@ -40,13 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
         {
             Assert.IsNull(target.StartTime);
             Assert.IsNull(target.EndTime);
-            target = new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(10, 0, 0));
-
-            target.StartTimeString = "";
-            Assert.IsNull(target.StartTime);
-            target.EndTimeString = "";
-            Assert.IsNull(target.EndTime);
-
             target = new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(10, 0, 0));
 
             Assert.IsNotNull(target.StartTime);
@@ -77,136 +70,83 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyStartToBig()
         {
-            target.StartTime = new TimeSpan(1, 0, 0, 0);
+			  target = new WorkTimeLimitation(TimeSpan.FromDays(1), null);
         }
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyStartToBigViaString()
-        {
-            target.StartTimeString = "1:1:16:33";
-        }
+
 
         [Test]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyEndToBig()
         {
-            target.EndTime = new TimeSpan(1, 0, 0, 0);
+			  target = new WorkTimeLimitation(TimeSpan.FromHours(2), new TimeSpan(1, 0, 0, 0));
         }
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyEndToBigViaString()
-        {
-            target.EndTimeString = "1:1:16:33";
-        }
+
+		  [Test]
+		  [ExpectedException(typeof(ArgumentOutOfRangeException))]
+		  public void VerifyEndToBigViaString()
+		  {
+			  target.TimeSpanFromString("1:1:16:33");
+		  }
+		  [Test]
+		  public void VerifySetEndDateWithString()
+		  {
+			  target.TimeSpanFromString("5 AM")
+				  .Should().Be.EqualTo(new TimeSpan(5, 0, 0));
+		  }
+		  [Test]
+		  public void VerifyTimeSpanFromStringWhenNull()
+		  {
+			  target.TimeSpanFromString(null).HasValue.Should().Be.False();
+		  }
 
         [Test]
         public void VerifyEndCannotBeBiggerThanStart()
         {
-            target.EndTime = new TimeSpan(7, 0, 0);
-			Assert.Throws<ArgumentOutOfRangeException>(delegate { target.StartTime = new TimeSpan(8, 0, 0); });
-			
-			target.StartTime = new TimeSpan(6, 0, 0);
-        	Assert.Throws<ArgumentOutOfRangeException>(delegate { target.EndTime = new TimeSpan(5, 0, 0); });
-        }
-
-        [Test]
-        public void VerifySetStartDateWithString()
-        {
-            target.StartTimeString = "5 AM";
-            Assert.AreEqual(new TimeSpan(5, 0, 0), target.StartTime);
-            target.StartTimeString = "5 PM";
-            Assert.AreEqual(new TimeSpan(17, 0, 0), target.StartTime);
-            target.StartTimeString = "1:00";
-            Assert.AreEqual(new TimeSpan(1, 0, 0), target.StartTime);
-            target.StartTimeString = "16:33";
-            Assert.AreEqual(new TimeSpan(16, 33, 0), target.StartTime);
-            target.StartTimeString = "1:16:33";
-            Assert.AreEqual(new TimeSpan(1, 16, 33), target.StartTime);
-        }
-
-        [Test]
-        public void VerifySetEndDateWithString()
-        {
-            target.EndTimeString = "5 AM";
-            Assert.AreEqual(new TimeSpan(5, 0, 0), target.EndTime);
-            target.EndTimeString = "5 PM";
-            Assert.AreEqual(new TimeSpan(17, 0, 0), target.EndTime);
-            target.EndTimeString = "1:00";
-            Assert.AreEqual(new TimeSpan(1, 0, 0), target.EndTime);
-            target.EndTimeString = "16:33";
-            Assert.AreEqual(new TimeSpan(16, 33, 0), target.EndTime);
-            target.EndTimeString = "1:16:33";
-            Assert.AreEqual(new TimeSpan(1, 16, 33), target.EndTime);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyExceptionStartTime()
-        {
-            target.StartTimeString = "öalsfaslö";
-
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyExceptionEndTime()
-        {
-            target.EndTimeString = "lajfia ";
-
+				Assert.Throws<ArgumentOutOfRangeException>(() => target = new WorkTimeLimitation(TimeSpan.FromHours(2), TimeSpan.FromHours(1)));
         }
 
         [Test]
         public void VerifyHasValue()
         {
-            target.StartTime = null;
-            target.EndTime = null;
+			  target = new WorkTimeLimitation(null, null);
             Assert.IsFalse(target.HasValue());
-            target.StartTime = TimeSpan.FromHours(1);
+				target = new WorkTimeLimitation(TimeSpan.FromHours(2), null);
             Assert.IsTrue(target.HasValue());
-            target.EndTime = TimeSpan.FromHours(2);
-            Assert.IsTrue(target.HasValue());
-            target.StartTime = null;
-            Assert.IsTrue(target.HasValue());
+				target = new WorkTimeLimitation(null,TimeSpan.FromHours(2));
+				Assert.IsTrue(target.HasValue());
+				target = new WorkTimeLimitation(TimeSpan.FromHours(2), TimeSpan.FromHours(2));
+				Assert.IsTrue(target.HasValue());
         }
         [Test]
         public void VerifyCanCheckIsCorrespondingToWorkTimeLimitation()
         {
             TimeSpan timeSpanToCheck = new TimeSpan(2,0,0);
-            target.StartTime = new TimeSpan(2,0,0);
-            target.EndTime = new TimeSpan(6,0,0);
+				target = new WorkTimeLimitation(TimeSpan.FromHours(2), TimeSpan.FromHours(6));
             Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
 
-            target.StartTime = null;
-            target.EndTime = new TimeSpan(2, 0, 0);
+				target = new WorkTimeLimitation(null, TimeSpan.FromHours(2));
+				Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
+
+				target = new WorkTimeLimitation(null, null);
             Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
 
-            target.StartTime = null;
-            target.EndTime = null;
-            Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
-
-            target.StartTime = null;
-            target.EndTime = new TimeSpan(1, 0, 0);
+				target = new WorkTimeLimitation(null, TimeSpan.FromHours(1));
             Assert.IsFalse(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
 
-            target.StartTime = new TimeSpan(1, 0, 0);
-            target.EndTime = new TimeSpan(2, 0, 0);
-            Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
+				target = new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(2));
+				Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
 
-            target.StartTime = new TimeSpan(1, 0, 0);
-            target.EndTime = new TimeSpan(1, 0, 0);
-            Assert.IsFalse(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
+				target = new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(1));
+				Assert.IsFalse(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
 
-			target.EndTime = new TimeSpan(2, 0, 0);
-			target.StartTime = new TimeSpan(2, 0, 0);
-            Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
+				target = new WorkTimeLimitation(TimeSpan.FromHours(2), TimeSpan.FromHours(2));
+				Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
 
-			target.EndTime = null;
-			target.StartTime = new TimeSpan(3, 0, 0);
-            Assert.IsFalse(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
+				target = new WorkTimeLimitation(TimeSpan.FromHours(3), null);
+				Assert.IsFalse(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
 
-			target.EndTime = null;
-			target.StartTime = new TimeSpan(1, 0, 0);
-            Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
+				target = new WorkTimeLimitation(TimeSpan.FromHours(1), null);
+				Assert.IsTrue(target.IsCorrespondingToWorkTimeLimitation(timeSpanToCheck));
         }
 
 		  [Test]
@@ -224,44 +164,44 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		  [Test]
 		  public void ShouldBeValidForTimeSpanAfterStartTime()
 		  {
-			  target.StartTime = TimeSpan.FromHours(8);
+			  target = new WorkTimeLimitation(TimeSpan.FromHours(8), null);
 			  target.IsValidFor(TimeSpan.FromHours(9)).Should().Be.True();
 		  }
 
 		  [Test]
 		  public void ShouldBeInvalidForTimeSpanBeforeStartTime()
 		  {
-			  target.StartTime = TimeSpan.FromHours(8);
+			  target = new WorkTimeLimitation(TimeSpan.FromHours(8), null);
 			  target.IsValidFor(TimeSpan.FromHours(7)).Should().Be.False();
 		  }
 
 		  [Test]
 		  public void ShouldBeValidForTimeSpanBeforeEndTime()
 		  {
-			  target.EndTime = TimeSpan.FromHours(8);
+			  target = new WorkTimeLimitation(null, TimeSpan.FromHours(8));
 			  target.IsValidFor(TimeSpan.FromHours(7)).Should().Be.True();
 		  }
 
 		  [Test]
 		  public void ShouldBeInvalidForTimeSpanAfterEndTime()
 		  {
-			  target.EndTime = TimeSpan.FromHours(8);
+			  target = new WorkTimeLimitation(null, TimeSpan.FromHours(8));
 			  target.IsValidFor(TimeSpan.FromHours(9)).Should().Be.False();
 		  }
 
 		  [Test]
 		  public void ShouldBeInvalidForTimeSpanBeforePeriod()
 		  {
-			  target.StartTime = TimeSpan.FromHours(8);
-			  target.EndTime = TimeSpan.FromHours(10);
+			  target = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(10));
+
 			  target.IsValidFor(TimeSpan.FromHours(7)).Should().Be.False();
 		  }
 
 		  [Test]
 		  public void ShouldBeInvalidForTimeSpanAfterPeriod()
 		  {
-			  target.StartTime = TimeSpan.FromHours(8);
-			  target.EndTime = TimeSpan.FromHours(10);
+			  target = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(10));
+
 			  target.IsValidFor(TimeSpan.FromHours(11)).Should().Be.False();
 		  }
     }
