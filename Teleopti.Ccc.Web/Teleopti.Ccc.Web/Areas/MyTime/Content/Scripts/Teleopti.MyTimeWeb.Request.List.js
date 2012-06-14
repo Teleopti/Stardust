@@ -32,7 +32,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	function _loadAPage() {
 		var skip = $('#Requests-list li:not(.template)').length;
 		var take = 20;
-		$.myTimeAjax({
+		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: "Requests/Requests",
 			dataType: "json",
 			type: 'GET',
@@ -169,7 +169,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	function _deleteRequest(listItem) {
 		var url = listItem.data('mytime-link');
-		$.myTimeAjax({
+		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: url,
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
@@ -205,7 +205,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			var connector = listItem
 			.find('.request-connector')
 			;
-			$.myTimeAjax({
+			Teleopti.MyTimeWeb.Ajax.Ajax({
 				url: url,
 				dataType: "json",
 				type: 'GET',

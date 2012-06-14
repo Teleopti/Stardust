@@ -180,9 +180,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	function _loadContent(hashInfo) {
 		_disablePortalControls();
 
-		$.myTimeAjaxAbortAll();
+		Teleopti.MyTimeWeb.Ajax.AjaxAbortAll();
 		$(".qtip").remove();
-		$.myTimeAjax({
+		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: hashInfo.hash,
 			global: true,
 			success: function (html) {

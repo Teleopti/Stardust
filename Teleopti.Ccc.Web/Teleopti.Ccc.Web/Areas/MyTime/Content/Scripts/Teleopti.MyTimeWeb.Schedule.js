@@ -163,7 +163,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
 	function _addTextRequest() {
 		var formData = _getFormData();
-		$.myTimeAjax({
+		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: "Requests/TextRequest",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
@@ -188,7 +188,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
 	function _addAbsenceRequest() {
 		var formData = _getFormData();
-		$.myTimeAjax({
+		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: "Requests/AbsenceRequest",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',

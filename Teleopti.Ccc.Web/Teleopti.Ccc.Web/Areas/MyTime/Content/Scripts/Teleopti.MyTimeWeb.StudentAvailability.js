@@ -49,7 +49,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	}
 
 	function _xhr(type, successCallback, addressSuffix, reqData) {
-		$.myTimeAjax({
+		Teleopti.MyTimeWeb.Ajax.Ajax({
 				url: "StudentAvailability/StudentAvailability" + addressSuffix,
 				type: type,
 				data: reqData,

@@ -126,16 +126,6 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 
 })(jQuery);
 
-$.extend({
-		myTimeAjax: function(options) {
-			Teleopti.MyTimeWeb.Ajax.Ajax(options);
-		},
-		myTimeAjaxAbortAll: function() {
-			Teleopti.MyTimeWeb.Ajax.AjaxAbortAll();
-		}
-	})
-	;
-
 Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 
 	function _ajaxErrorBody(jqXHR, textStatus, errorThrown) {

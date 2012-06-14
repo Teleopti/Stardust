@@ -50,7 +50,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
 	function _updatePassword(oldPassword, newPassword) {
 		var data = { OldPassword: oldPassword, NewPassword: newPassword };
-		$.myTimeAjax({
+		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: "Settings/ChangePassword",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
@@ -91,7 +91,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
 	function _selectorChanged(value, url) {
 		var data = { LCID: value };
-		$.myTimeAjax({
+		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: url,
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
