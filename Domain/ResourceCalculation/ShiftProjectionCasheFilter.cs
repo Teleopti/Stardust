@@ -454,6 +454,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             if (possibleStartEndCategory == null) return shiftList;
 
+			if (!schedulingOptions.UseGroupSchedulingCommonStart && !schedulingOptions.UseGroupSchedulingCommonEnd) return shiftList;
+
              var finalShiftList = new List< IShiftProjectionCache >();
 
             if (schedulingOptions.UseGroupSchedulingCommonStart && schedulingOptions.UseGroupSchedulingCommonEnd)

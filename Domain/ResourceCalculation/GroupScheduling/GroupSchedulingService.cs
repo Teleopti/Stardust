@@ -75,30 +75,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             if(matrixList == null) throw new ArgumentNullException("matrixList");
 
             var scheduleDictionary = _resultStateHolder.Schedules;
-            var totalFairness = scheduleDictionary.FairnessPoints();
-
+            
             if (groupPerson == null)
                 return false;
             var members = groupPerson.GroupMembers;
-            var agentAverageFairness = scheduleDictionary.AverageFairnessPoints(members);
-
+           
             IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
-            IShiftCategory bestCategory = groupPerson.CommonShiftCategory;
-            if (bestCategory == null)
-            {
-                
-				var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, totalFairness, agentAverageFairness, schedulingOptions);
-                bestCategory = bestCategoryResult.BestShiftCategory;
+            
+			var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions);
+            var best = bestCategoryResult.BestPossible;
 
+			if (best == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)
+                _finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ErrorMessageNotAValidSchedulePeriod);
 
-                if (bestCategory == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)
-                    _finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ErrorMessageNotAValidSchedulePeriod);
+			if (best == null && bestCategoryResult.FailureCause == FailureCause.ConflictingRestrictions)
+                _finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ConflictingRestrictions);
 
-                if (bestCategory == null && bestCategoryResult.FailureCause == FailureCause.ConflictingRestrictions)
-                    _finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ConflictingRestrictions);
-            }
-
-            if (bestCategory == null)
+			if (best == null)
             {
                 return false;
             }
@@ -125,13 +118,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     }
                 }
 
-				// TODO Här ska vi hämta ut resultatet innan
-            	var bestPossible = new PossibleStartEndCategory();
                 if (!locked && !scheduleDay.IsScheduled())
                 {
 					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
-					bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, resourceCalculateDelayer,bestPossible);
+					bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, resourceCalculateDelayer, best);
                     if (!sucess)
                     {
                         return false;
