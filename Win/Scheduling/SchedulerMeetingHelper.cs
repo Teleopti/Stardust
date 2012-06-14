@@ -92,6 +92,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
+                var persons = meetingToRemove.MeetingPersons.Select(m => m.Person);
+                unitOfWork.Reassociate(persons);
+                if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, meetingToRemove.StartDate, scheduleViewBase, TeleoptiPrincipal.Current.PrincipalAuthorization))
+                    return;
 				meetingToRemove.Snapshot();
 
                 IMeetingRepository meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
