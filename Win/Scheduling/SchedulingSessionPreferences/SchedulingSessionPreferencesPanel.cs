@@ -115,6 +115,24 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             set { groupBoxShiftCategory.Visible = value; }
         }
 
+        public bool UseGroupSchedulingCommonStart
+        {
+            get { return checkBoxCommonStart.Checked ; }
+            set { checkBoxCommonStart.Checked = value; }
+        }
+
+        public bool UseGroupSchedulingCommonEnd
+        {
+            get { return checkBoxCommonEnd.Checked ; }
+            set { checkBoxCommonEnd.Checked = value; }
+        }
+
+        public bool UseGroupSchedulingCommonCategory
+        {
+            get { return checkBoxCommonCategory.Checked ; }
+            set { checkBoxCommonCategory.Checked = value; }
+        }
+
         #region IDataExchange Members
 
         public bool ValidateData(ExchangeDataOption direction)
@@ -222,6 +240,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
         	_schedulingOptions.ResourceCalculateFrequency = _localSchedulingOptions.ResourceCalculateFrequency;
 			_schedulingOptions.ShowTroubleshot = _localSchedulingOptions.ShowTroubleshot;
+            _schedulingOptions.UseGroupSchedulingCommonCategory =
+                _localSchedulingOptions.UseGroupSchedulingCommonCategory;
+            _schedulingOptions.UseGroupSchedulingCommonEnd = _localSchedulingOptions.UseGroupSchedulingCommonEnd;
+            _schedulingOptions.UseGroupSchedulingCommonStart = _localSchedulingOptions.UseGroupSchedulingCommonStart;
+
         }
 
         private void getDataFromControls()
@@ -267,6 +290,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.UseSameDayOffs = !checkBoxUseGroupScheduling.Checked ? checkBoxUseGroupScheduling.Checked : checkBoxUseSameDayOffs.Checked;
         	_localSchedulingOptions.ResourceCalculateFrequency = (int)numericUpDownResourceCalculateEvery.Value;
 			_localSchedulingOptions.ShowTroubleshot = checkBoxShowTroubleShot.Checked;
+            _localSchedulingOptions.UseGroupSchedulingCommonCategory = checkBoxCommonCategory.Checked;
+            _localSchedulingOptions.UseGroupSchedulingCommonStart = checkBoxCommonStart.Checked;
+            _localSchedulingOptions.UseGroupSchedulingCommonEnd = checkBoxCommonEnd.Checked;
 
         }
 
@@ -350,6 +376,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             checkBoxUseSameDayOffs.Checked = _localSchedulingOptions.UseSameDayOffs;
         	numericUpDownResourceCalculateEvery.Value = _localSchedulingOptions.ResourceCalculateFrequency;
 			checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleshot;
+            if(_localSchedulingOptions.UseGroupScheduling )
+            {
+                checkBoxCommonCategory.Checked = _localSchedulingOptions.UseGroupSchedulingCommonCategory;
+                checkBoxCommonEnd.Checked = _localSchedulingOptions.UseGroupSchedulingCommonEnd;
+                checkBoxCommonStart.Checked = _localSchedulingOptions.UseGroupSchedulingCommonStart;
+            }
         }
 
         private bool mustHaveSetAndOnlyPreferenceDaysVisible()
@@ -502,7 +534,30 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
 				checkBoxUseBlockScheduling.Checked = false;
 
+		    ChangeGrpSchedulingCommonOptionState(checkBoxUseGroupScheduling.Checked);
 		}
+
+        private void ChangeGrpSchedulingCommonOptionState(bool value)
+        {
+
+            if (value)
+            {
+                checkBoxCommonCategory.Checked = true;
+            }
+            else
+            {
+                checkBoxCommonCategory.Checked = false;
+            }
+
+            checkBoxCommonEnd.Checked = false;
+            checkBoxCommonStart.Checked = false;
+            
+            checkBoxCommonCategory.Enabled = value;
+            checkBoxCommonEnd.Enabled = value;
+            checkBoxCommonStart.Enabled = value;
+                
+            
+        }
 
     	private void checkBoxUseSameDayOffsCheckedChanged(object sender, EventArgs e)
         {
