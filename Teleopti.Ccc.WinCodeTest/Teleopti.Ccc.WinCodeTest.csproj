@@ -343,6 +343,7 @@
     <Compile Include="Forecasting\CopyToSkillPresenterTest.cs" />
     <Compile Include="Forecasting\CopyToSkillCommandTest.cs" />
     <Compile Include="Forecasting\DetailedJobHistoryPresenterTest.cs" />
+    <Compile Include="Forecasting\ExportPages\DestinationSkillModelTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProviderTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsWizardPagesTest.cs" />
