@@ -75,12 +75,10 @@
 							<div class="day-header">
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
 							</div>
-							<div class="day-content pdt10" style="border-left-color: @day.BorderColor">
+							<div class="day-content pdt10" style="border-left-color: @day.BorderColor" data-bind="style: { borderLeftColor: Color() }">
 								@if (preference != null)
 								{
-									<div class="preference">
-										@preference.Preference
-									</div>
+									<div class="preference" data-bind="text: Preference">@preference.Preference</div>
 									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
 									<div class="possible-start-times icon leftarrow truncate" data-bind="text: PossibleStartTimes"></div>
 									<div class="possible-end-times icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>

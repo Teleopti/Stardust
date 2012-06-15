@@ -33,19 +33,10 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 					$('#Preference-body-inner .ui-selected')
 						.each(function (index, cell) {
 							var date = $(cell).data('mytime-date');
-							_ajaxForDate({
-								type: 'POST',
-								data: {
-									Date: date,
-									Id: item.value
-								},
-								date: date,
-								fillData: _fillPreference,
-								complete: function () {
-									dayViewModels[date].LoadFeedback();
-									periodFeedbackViewModel.LoadFeedback();
-								}
-							});
+							dayViewModels[date].SetPreference(
+								item.value, 
+								function () { periodFeedbackViewModel.LoadFeedback(); }
+							);
 						});
 				}
 			});
@@ -57,28 +48,13 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 				$('#Preference-body-inner .ui-selected')
 					.each(function (index, cell) {
 						var date = $(cell).data('mytime-date');
-						_ajaxForDate({
-							type: 'DELETE',
-							data: { Date: date },
-							date: date,
-							statusCode404: function () { },
-							fillData: _fillPreference,
-							complete: function () {
-								dayViewModels[date].LoadFeedback();
-								periodFeedbackViewModel.LoadFeedback();
-							}
-						});
+						dayViewModels[date].DeletePreference(
+								function () { periodFeedbackViewModel.LoadFeedback(); }
+							);
 					});
 			})
 			.removeAttr('disabled')
 			;
-	}
-
-	function _fillPreference(cell, data) {
-		$('li[data-mytime-date="' + data.Date + '"] .day-content').css("border-left-color", data.HexColor);
-
-		var preference = $('.preference', cell);
-		preference.text(data.PreferenceRestriction || "");
 	}
 
 	function _ajaxForDate(options) {
@@ -128,7 +104,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			},
 			data: data,
 			success: function (data, textStatus, jqXHR) {
-				fillData(cell, data);
+				fillData(data);
 			},
 			statusCode404: statusCode404,
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -304,12 +280,16 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function () {
 	this.Date = "";
 	this.ContractTimeMinutes = 0;
 	this.HasFeedback = true;
+	this.Preference = ko.observable();
+	this.Color = ko.observable();
 
 	this.ReadElement = function (element) {
 		var item = $(element);
 		self.Date = item.attr('data-mytime-date');
 		self.ContractTimeMinutes = parseInt($('[data-mytime-contract-time]', item).attr('data-mytime-contract-time')) || 0;
 		self.HasFeedback = item.hasClass("feedback");
+		self.Preference($('.preference', element).text());
+		self.Color($('.day-content', element).css("border-left-color"));
 	};
 
 	this.LoadFeedback = function () {
@@ -320,12 +300,48 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function () {
 			type: 'GET',
 			data: { Date: self.Date },
 			date: self.Date,
-			fillData: function (cell, data) {
+			fillData: function (data) {
 				self.FeedbackError(data.FeedbackError);
 				self.PossibleStartTimes(data.PossibleStartTimes);
 				self.PossibleEndTimes(data.PossibleEndTimes);
 				self.PossibleContractTimeMinutesLower(data.PossibleContractTimeMinutesLower);
 				self.PossibleContractTimeMinutesUpper(data.PossibleContractTimeMinutesUpper);
+			}
+		});
+	};
+
+	this.SetPreference = function (value, complete) {
+		Teleopti.MyTimeWeb.Preference.AjaxForDate({
+			type: 'POST',
+			data: {
+				Date: self.Date,
+				Id: value
+			},
+			date: self.Date,
+			fillData: function (data) {
+				self.Color(data.HexColor);
+				self.Preference(data.PreferenceRestriction);
+			},
+			complete: function () {
+				self.LoadFeedback();
+				complete();
+			}
+		});
+	};
+
+	this.DeletePreference = function (complete) {
+		Teleopti.MyTimeWeb.Preference.AjaxForDate({
+			type: 'DELETE',
+			data: { Date: self.Date },
+			date: self.Date,
+			statusCode404: function () { },
+			fillData: function (data) {
+				self.Color(data.HexColor);
+				self.Preference(data.PreferenceRestriction);
+			},
+			complete: function () {
+				self.LoadFeedback();
+				complete();
 			}
 		});
 	};
