@@ -6,33 +6,39 @@ using System.Text.RegularExpressions;
 namespace Teleopti.Interfaces.Domain
 {
 	/// <summary>
-	/// 
+	/// Time formatter
 	/// </summary>
 	public interface ITimeFormatter
 	{
+		
 		/// <summary>
-		/// 
+		/// TimeSpan to xx:yy format, xx hours, yy minutes
 		/// </summary>
-		/// <param name="timeSpan"></param>
+		/// <param name="timeSpan">TimeSpan want to format</param>
 		/// <returns></returns>
 		string GetLongHourMinuteTimeString(TimeSpan timeSpan);
 	}
 
 	/// <summary>
-	/// 
+	/// Time formatter
 	/// </summary>
 	public class TimeFormatter : ITimeFormatter
 	{
 		private readonly IUserCulture _culture;
 
 		/// <summary>
-		/// 
+		/// constructor
 		/// </summary>
-		/// <param name="culture"></param>
+		/// <param name="culture">time culture</param>
 		public TimeFormatter(IUserCulture culture) {
 			_culture = culture;
 		}
 
+		/// <summary>
+		/// TimeSpan to xx:yy format, xx hours, yy minutes
+		/// </summary>
+		/// <param name="timeSpan">TimeSpan want to format</param>
+		/// <returns></returns>
 		public string GetLongHourMinuteTimeString(TimeSpan timeSpan)
 		{
 			string separator = _culture.GetCulture().DateTimeFormat.TimeSeparator;
