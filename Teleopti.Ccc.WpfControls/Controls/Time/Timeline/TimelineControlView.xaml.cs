@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Time.Timeline;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
@@ -60,8 +61,13 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
             if (panel != null)
             {
                 TimelineControlViewModel model = GetModel();
+                
                 if (model != null)
                 {
+                    /*
+                     * Problemet är att model refererar till fel modell som inte sitter på rätt intervall,
+                     * jag vill åt den model som ändras av slidern. I övrigt fungerar allt som det ska.
+                     */
                     model.HoverTime = panel.GetUtcDateTimeFromPosition(e.GetPosition(panel).X);
 
                     if (e.RightButton == MouseButtonState.Pressed)
@@ -84,13 +90,16 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
         private void DateTimePeriodPanel_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var panel = sender as DateTimePeriodPanel;
-           
+            
             if (panel != null && e.RightButton == MouseButtonState.Pressed)
             {
                 TimelineControlViewModel model = GetModel();
+                
                 if (model != null)
                 {
-                    _mouseDownTime = panel.GetUtcDateTimeFromPosition(e.GetPosition(panel).X);
+                    // här
+                    _mouseDownTime = panel.GetUtcDateTimeFromPosition(e.GetPosition(panel).X).ToInterval(model.Interval);
+
                     model.SelectedPeriod = new DateTimePeriod(_mouseDownTime, _mouseDownTime.AddMinutes(1));
 
                 }
@@ -112,7 +121,8 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
                     DateTime mouseUpTime = panel.GetUtcDateTimeFromPosition(e.GetPosition(panel).X);
                     if (mouseUpTime > model.SelectedPeriod.StartDateTime && e.RightButton==MouseButtonState.Pressed)
                     {
-                        model.SelectedPeriod = new DateTimePeriod(model.SelectedPeriod.StartDateTime, mouseUpTime);
+                        // där
+                        model.SelectedPeriod = new DateTimePeriod(model.SelectedPeriod.StartDateTime, mouseUpTime.ToInterval(model.Interval));
                     }
                 }
             }
