@@ -46,3 +46,22 @@
 	height: 13px;
 	font-variant: small-caps;
 }
+
+.feedback-detail 
+{
+	color: black;
+	font-size: 1.15em;
+}
+
+#Preference-period-feedback-view 
+{
+	color: gray;
+	margin-bottom: 0.6em;
+	padding-bottom: 0.6em;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+#Preference-period 
+{
+	line-height: 1em;
+	font-size: 0.8em;
+}

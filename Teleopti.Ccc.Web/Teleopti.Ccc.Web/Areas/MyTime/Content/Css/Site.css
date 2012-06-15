@@ -860,9 +860,23 @@ select.time-input
 #body{background: transparent url(../Images/main_content_bg.jpg) center repeat-y; }
 #body-inner{background: transparent url(../Images/main_content_top_bg.jpg) top center no-repeat; }
 #body-bottom{background: transparent url(../Images/main_content_bottom_bg.jpg) bottom center no-repeat; }
-.info-pnl {
+
+.information-panel 
+{
+	color: gray;
+
 	font-family: Verdana;
-	font-size: 11px;
+	font-size: 1em;
+	line-height: 2em;
+	
+	padding-top: 0.6em;
+	padding-bottom: 0.7em;
+	padding-left: 1.8em;
+	padding-right: 1.8em;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	background: #f8f8f8;
+	margin-top: 0.1em;
+	margin-bottom: 0.3em;
 }
 
 
