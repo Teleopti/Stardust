@@ -26,7 +26,7 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 		_setupGlobal(options);
 		_setupRequestStack(options);
 
-		$.ajax(options);
+		return $.ajax(options);
 	}
 
 	function _setupUrl(options) {
@@ -114,7 +114,7 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 			_settings = settings;
 		},
 		Ajax: function (options) {
-			_ajax(options);
+			return _ajax(options);
 		},
 		AjaxAbortAll: function () {
 			_ajaxAbortAll();
