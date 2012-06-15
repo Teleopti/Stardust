@@ -7,6 +7,10 @@ namespace Teleopti.Interfaces.Domain
 	/// </summary>
 	public interface IUserCulture
 	{
+		/// <summary>
+		/// get the culture
+		/// </summary>
+		/// <returns>the culture</returns>
 		CultureInfo GetCulture();
 	}
 }
