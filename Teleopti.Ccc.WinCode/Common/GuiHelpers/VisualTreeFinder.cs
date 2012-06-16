@@ -48,12 +48,12 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
        
 
-        public DependencyObject GetAncestorByType(DependencyObject element, Type type) 
-        { 
-            if (element == null) return null; 
-            if (element.GetType() == type) return element; 
-            return GetAncestorByType(VisualTreeHelper.GetParent(element), type); 
-        }   
+		//public DependencyObject GetAncestorByType(DependencyObject element, Type type) 
+		//{ 
+		//    if (element == null) return null; 
+		//    if (element.GetType() == type) return element; 
+		//    return GetAncestorByType(VisualTreeHelper.GetParent(element), type); 
+		//}   
    
         #endregion
 

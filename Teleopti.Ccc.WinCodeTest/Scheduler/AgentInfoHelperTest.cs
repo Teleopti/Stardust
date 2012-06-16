@@ -323,5 +323,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(1, _target.AvailabilityFulfillment.Value);
             Assert.AreEqual(1, _target.StudentAvailabilityFulfillment.Value);
         }
+
+		[Test]
+		public void Coverage()
+		{
+			Assert.AreEqual(0, _target.TimePerDefinitionSet.Count);
+			Assert.AreEqual(" (2 - 2)", _target.DayOffTolerance);
+		}
     }
 }

@@ -196,6 +196,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			Assert.IsFalse(data1 == data2);
 			Assert.IsTrue(data3 == data2);
+			Assert.IsFalse(data3 != data2);
 		}
 
 		private void verifyAgentText(string textToSearchFor)

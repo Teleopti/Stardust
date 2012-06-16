@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
@@ -349,5 +350,41 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 Assert.AreEqual(expectedPeriod, period);
             }    
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void GridQueryCellInfoShouldNotAlterDefaultCellTypeIfNoPageRows()
+		{
+			var eventArgs = new GridQueryCellInfoEventArgs(1, 1, new GridStyleInfo());
+			using (_mocks.Record())
+			{
+				Expect.Call(_model.PageRows).Return(new List<RevisionDisplayRow>());
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.GridQueryCellInfo(this, eventArgs);
+			}
+
+			Assert.AreEqual("TextBox", eventArgs.Style.CellType.ToString(CultureInfo.InvariantCulture));
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void GridQueryCellInfoShouldNotAlterDefaultCellTypeIfSomething()
+		{
+			var eventArgs = new GridQueryCellInfoEventArgs(7, 1, new GridStyleInfo());
+			var revDisplayRow = new RevisionDisplayRow();
+			using (_mocks.Record())
+			{
+				Expect.Call(_model.PageRows).Return(new List<RevisionDisplayRow>{ revDisplayRow}).Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.GridQueryCellInfo(this, eventArgs);
+			}
+
+			Assert.AreEqual("TextBox", eventArgs.Style.CellType.ToString(CultureInfo.InvariantCulture));
+		}
+
     }
 }
