@@ -32,5 +32,6 @@ namespace Teleopti.Ccc.WinCode.Grouping
         bool HideMenu { get; set; }
         DateOnlyPeriod SelectedPeriod { get; set; }
         void SetDate(DateOnly newDate);
+		bool KeepInteractiveOnDuringLoad { get; set; }
     }
 }

@@ -105,11 +105,14 @@ namespace Teleopti.Ccc.Win.Grouping
             get { return tabControlAdv; }
         }
 
+		public bool KeepInteractiveOnDuringLoad { get; set; }
+
         public void ResetTreeView(TreeNodeAdv[] treeNodeAdvs)
         {
             treeViewAdvMainTabTree.AfterCheck-= treeViewAdvMainTabTreeAfterCheck;
             treeViewAdvMainTabTree.BeginUpdate();
-            treeViewAdvMainTabTree.InteractiveCheckBoxes = false;
+			if (!KeepInteractiveOnDuringLoad)
+				treeViewAdvMainTabTree.InteractiveCheckBoxes = false;
             treeViewAdvMainTabTree.Nodes.Clear();
             treeViewAdvMainTabTree.Nodes.AddRange(treeNodeAdvs);
 			if(ShowCheckBoxes)
