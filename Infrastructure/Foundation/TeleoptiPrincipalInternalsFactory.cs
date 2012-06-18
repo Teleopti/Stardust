@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 	}
 
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"), 
+	System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
 	public class PersonNotFoundException : Exception
 	{
 		public PersonNotFoundException(string message, Exception innerException) : base(message, innerException) { }
