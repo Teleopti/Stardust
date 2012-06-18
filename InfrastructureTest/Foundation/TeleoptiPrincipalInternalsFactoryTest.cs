@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 	[TestFixture]
 	public class TeleoptiPrincipalInternalsFactoryTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldRetrieveThePersonsName()
 		{
 			var person = PersonFactory.CreatePerson();
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			name.Should().Be(person.Name.ToString());
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldThrowPersonNotFoundExceptionIfThePersonIsNotFound()
 		{
 			var person = MockRepository.GenerateMock<IPerson>();
