@@ -286,118 +286,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _mocks.VerifyAll();
         }
 
-        [Test]
-        public void VerifyGetTotalAvailabilityRestriction()
-        {
-            IAvailabilityRestriction restriction = new AvailabilityRestriction();
-            var extractor = _mocks.StrictMock<IRestrictionExtractor>();
-            restriction.NotAvailable = true;
-            IList<IAvailabilityRestriction> availabilityRestrictions = new List<IAvailabilityRestriction>{restriction};
+       
 
-            Expect.Call(extractor.AvailabilityList).Return(availabilityRestrictions).Repeat.AtLeastOnce();
-            _mocks.ReplayAll();
-
-            IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(null, null),
-                                                                              new EndTimeLimitation(null, null),
-                                                                              new WorkTimeLimitation(null, null), null,
-                                                                              null, null, new List<IActivityRestriction>());
-            totalRestriction = RestrictionSummaryModel.GetTotalAvailabilityRestriction(extractor, totalRestriction);
-            Assert.IsNotNull(totalRestriction);
-            Assert.IsTrue(totalRestriction.NotAvailable);
-            totalRestriction = RestrictionSummaryModel.GetTotalAvailabilityRestriction(extractor, null);
-            Assert.IsNotNull(totalRestriction);
-            Assert.IsTrue(totalRestriction.NotAvailable);
-            _mocks.VerifyAll();
-        }
         
-        [Test]
-        public void VerifyGetTotalRotationRestriction()
-        {
-            IRotationRestriction restriction = new RotationRestriction();
-            var extractor = _mocks.StrictMock<IRestrictionExtractor>();
-            restriction.EndTimeLimitation = new EndTimeLimitation(new TimeSpan(17,0,0), null);
-            IList<IRotationRestriction> rotationRestrictions = new List<IRotationRestriction>{restriction};
-
-            Expect.Call(extractor.RotationList).Return(rotationRestrictions).Repeat.AtLeastOnce();
-            _mocks.ReplayAll();
-
-            IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(null, null),
-                                                                              new EndTimeLimitation(null, null),
-                                                                              new WorkTimeLimitation(null, null), null,
-                                                                              null, null, new List<IActivityRestriction>());
-            totalRestriction = RestrictionSummaryModel.GetTotalRotationRestriction(extractor, totalRestriction);
-            Assert.IsNotNull(totalRestriction);
-            Assert.IsTrue(totalRestriction.EndTimeLimitation.HasValue());
-            Assert.AreEqual(new TimeSpan(17, 0, 0), totalRestriction.EndTimeLimitation.StartTime);
-            totalRestriction = RestrictionSummaryModel.GetTotalRotationRestriction(extractor, null);
-            Assert.IsTrue(totalRestriction.EndTimeLimitation.HasValue());
-            Assert.AreEqual(new TimeSpan(17, 0, 0), totalRestriction.EndTimeLimitation.StartTime);
-            Assert.IsNotNull(totalRestriction);
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifyGetTotalPreferenceRestriction()
-        {
-            IPreferenceCellData cellData = new PreferenceCellData();
-            IPreferenceRestriction restriction = new PreferenceRestriction();
-            restriction.AddActivityRestriction(new ActivityRestriction(ActivityFactory.CreateActivity("Lunch")));
-            var extractor = _mocks.StrictMock<IRestrictionExtractor>();
-            restriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(9, 0, 0), null);
-            IList<IPreferenceRestriction> preferenceRestrictions = new List<IPreferenceRestriction> { restriction };
-
-            Expect.Call(extractor.PreferenceList).Return(preferenceRestrictions).Repeat.AtLeastOnce();
-            _mocks.ReplayAll();
-
-            IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(new TimeSpan(8,0,0), new TimeSpan(10, 0, 0)),
-                                                                              new EndTimeLimitation(null, null),
-                                                                              new WorkTimeLimitation(null, null), null,
-                                                                              null, null, new List<IActivityRestriction>());
-            totalRestriction.IsPreferenceDay = true;
-            totalRestriction = RestrictionSummaryModel.GetTotalPreferenceRestriction(extractor, totalRestriction, cellData );
-            Assert.IsNotNull(totalRestriction);
-            Assert.IsTrue(totalRestriction.StartTimeLimitation.HasValue());
-            Assert.AreEqual(new TimeSpan(9, 0, 0), totalRestriction.StartTimeLimitation.StartTime);
-            totalRestriction = RestrictionSummaryModel.GetTotalPreferenceRestriction(extractor, null, cellData);
-            Assert.IsTrue(totalRestriction.StartTimeLimitation.HasValue());
-            Assert.AreEqual(new TimeSpan(9, 0, 0), totalRestriction.StartTimeLimitation.StartTime);
-            Assert.IsNotNull(totalRestriction);
-            Assert.IsTrue(totalRestriction.ActivityRestrictionCollection.Count == 1);
-            Assert.IsTrue(cellData.HasActivityPreference);
-            _mocks.VerifyAll();
-        }
 
        
 
-        [Test]
-        public void VerifyGetTotalStudentAvailabilityRestriction()
-        {
-            IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
-            var extractor = _mocks.StrictMock<IRestrictionExtractor>();
-            restriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(9, 0, 0), null);
-            IList<IStudentAvailabilityRestriction> studentAvailabilityRestrictions = new List<IStudentAvailabilityRestriction> { restriction };
-            IStudentAvailabilityDay studentAvailabilityDay = new StudentAvailabilityDay(_person, new DateOnly(_dateTime),
-                                                                                        studentAvailabilityRestrictions);
-            IList<IStudentAvailabilityDay> studentAvailabilityDays = new List<IStudentAvailabilityDay>
-                                                                         {studentAvailabilityDay};
-
-            Expect.Call(extractor.StudentAvailabilityList).Return(studentAvailabilityDays).Repeat.AtLeastOnce();
-            _mocks.ReplayAll();
-
-            IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
-                                                                              new EndTimeLimitation(null, null),
-                                                                              new WorkTimeLimitation(null, null), null,
-                                                                              null, null, new List<IActivityRestriction>());
-            totalRestriction = RestrictionSummaryModel.GetTotalStudentRestriction(extractor, totalRestriction);
-            Assert.IsNotNull(totalRestriction);
-            Assert.IsTrue(totalRestriction.StartTimeLimitation.HasValue());
-            Assert.AreEqual(new TimeSpan(9, 0, 0), totalRestriction.StartTimeLimitation.StartTime);
-            totalRestriction = RestrictionSummaryModel.GetTotalStudentRestriction(extractor, null);
-            Assert.IsTrue(totalRestriction.StartTimeLimitation.HasValue());
-            Assert.AreEqual(new TimeSpan(9, 0, 0), totalRestriction.StartTimeLimitation.StartTime);
-            Assert.IsNotNull(totalRestriction);
-            _mocks.VerifyAll();
-        }
+        
 
         [Test]
         public void CanGetCurrentTimePeriod()

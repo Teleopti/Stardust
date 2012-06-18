@@ -151,6 +151,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
                 cellData.PeriodTarget = agentInfoHelper.SchedulePeriodTargetTime;
                 cellData.SchedulingOption = (RestrictionSchedulingOptions)agentInfoHelper.SchedulingOptions;
 				cellData.NightlyRest = new TimeSpan(0);
+            	bool foundMustHave = false;
+            	foreach (var preferenceRestriction in extractor.PreferenceList)
+            	{
+            		if (preferenceRestriction.MustHave)
+            		{
+            			foundMustHave = true;
+            		}
+            	}
+            	cellData.MustHavePreference = foundMustHave;
                 if (agentInfoHelper.Person.Period(agentInfoHelper.SelectedDate) == null)
                     cellData.WeeklyMax = new TimeSpan(0);
                 else
@@ -350,145 +359,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             return totalRestriction;
         }
 
-        public static IEffectiveRestriction GetTotalAvailabilityRestriction(IRestrictionExtractor extractor, IEffectiveRestriction totalRestriction)
-        {
-            foreach (var availability in extractor.AvailabilityList)
-            {
-                if (totalRestriction == null)
-                {
-                    totalRestriction = new EffectiveRestriction(availability.StartTimeLimitation,
-                                                                availability.EndTimeLimitation,
-                                                                availability.WorkTimeLimitation, null, null, null,
-                                                                new List<IActivityRestriction>())
-                                       	{NotAvailable = availability.NotAvailable};
-                }
-                else
-                {
-                    totalRestriction =
-                        totalRestriction.Combine(new EffectiveRestriction(availability.StartTimeLimitation,
-                                                                          availability.EndTimeLimitation,
-                                                                          availability.WorkTimeLimitation, null,
-                                                                          null, null, new List<IActivityRestriction>()));
-                    if (totalRestriction != null)
-                    {
-                        totalRestriction.NotAvailable = availability.NotAvailable;
-                    }
-                }
-            }
-            return totalRestriction;
-        }
-
-        public static IEffectiveRestriction GetTotalPreferenceRestriction(IRestrictionExtractor extractor, IEffectiveRestriction totalRestriction, IPreferenceCellData cellData)
-        {
-            foreach (var preference in extractor.PreferenceList)
-            {
-                if (totalRestriction == null)
-                {
-                    totalRestriction = new EffectiveRestriction(preference.StartTimeLimitation,
-                                                                preference.EndTimeLimitation,
-                                                                preference.WorkTimeLimitation, preference.ShiftCategory,
-                                                                preference.DayOffTemplate,
-                                                                preference.Absence,
-                                                                preference.ActivityRestrictionCollection.ToList());
-                    cellData.HasExtendedPreference = DecideIfExtendedPreference(totalRestriction);
-                }
-                else
-                {
-                    IEffectiveRestriction preferenceRestriction =
-                        new EffectiveRestriction(preference.StartTimeLimitation, preference.EndTimeLimitation,
-                                                 preference.WorkTimeLimitation, preference.ShiftCategory,
-                                                 preference.DayOffTemplate,
-                                                 preference.Absence,
-                                                 preference.ActivityRestrictionCollection.ToList()) { IsPreferenceDay = true };
-                    //totalRestriction =
-                    //    preferenceRestriction.Combine(new EffectiveRestriction(preference.StartTimeLimitation,
-                    //                                                           preference.EndTimeLimitation,
-                    //                                                           preference.WorkTimeLimitation,
-                    //                                                           preference.ShiftCategory,
-                    //                                                           preference.DayOffTemplate,
-                    //                                                           preference.Absence,
-                    //                                                           new List<IActivityRestriction>()));
-
-                    totalRestriction =
-                        totalRestriction.Combine(preferenceRestriction);
-                    cellData.HasExtendedPreference = DecideIfExtendedPreference(preferenceRestriction);
-                }
-                if (preference.ActivityRestrictionCollection.Count > 0)
-                {
-                    cellData.HasActivityPreference = true;
-                }
-                cellData.MustHavePreference = preference.MustHave;
-            }
-            return totalRestriction;
-        }
-
-        public static IEffectiveRestriction GetTotalRotationRestriction(IRestrictionExtractor extractor, IEffectiveRestriction totalRestriction)
-        {
-            foreach (var rotation in extractor.RotationList)
-            {
-                if (totalRestriction == null)
-                {
-                    totalRestriction = new EffectiveRestriction(rotation.StartTimeLimitation, rotation.EndTimeLimitation,
-                                                                rotation.WorkTimeLimitation, rotation.ShiftCategory,
-                                                                rotation.DayOffTemplate, null, new List<IActivityRestriction>());
-                }
-                else
-                {
-                    totalRestriction =
-                        totalRestriction.Combine(new EffectiveRestriction(rotation.StartTimeLimitation,
-                                                                          rotation.EndTimeLimitation,
-                                                                          rotation.WorkTimeLimitation,
-                                                                          rotation.ShiftCategory, rotation.DayOffTemplate, null,
-                                                                          new List<IActivityRestriction>()));
-                }
-            }
-            return totalRestriction;
-        }
-
-        public static IEffectiveRestriction GetTotalStudentRestriction(IRestrictionExtractor extractor, IEffectiveRestriction totalRestriction)
-        {
-            foreach (var studentAvailability in extractor.StudentAvailabilityList)
-            {
-                if (totalRestriction == null)
-                {
-                    if (studentAvailability.RestrictionCollection.Count > 0)
-                    {
-                        foreach (var restriction in studentAvailability.RestrictionCollection)
-                        {
-                            if (totalRestriction == null)
-                            {
-                                totalRestriction =
-                                    new EffectiveRestriction(restriction.StartTimeLimitation,
-                                                             restriction.EndTimeLimitation,
-                                                             restriction.WorkTimeLimitation, null,
-                                                             null, null, new List<IActivityRestriction>());
-                            }
-                            else
-                            {
-                                totalRestriction =
-                                    totalRestriction.Combine(new EffectiveRestriction(restriction.StartTimeLimitation,
-                                                                                      restriction.EndTimeLimitation,
-                                                                                      restriction.WorkTimeLimitation,
-                                                                                      null, null, null,
-                                                                                      new List<IActivityRestriction>()));
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var restriction in studentAvailability.RestrictionCollection)
-                    {
-                        totalRestriction =
-                            totalRestriction.Combine(new EffectiveRestriction(restriction.StartTimeLimitation,
-                                                                              restriction.EndTimeLimitation,
-                                                                              restriction.WorkTimeLimitation,
-                                                                              null, null, null, new List<IActivityRestriction>()));
-                    }
-                }
-            }
-            return totalRestriction;
-        }
         public static bool DecideIfExtendedPreference(IEffectiveRestriction restriction)
         {
             return (restriction.WorkTimeLimitation.HasValue() || restriction.StartTimeLimitation.HasValue() || restriction.EndTimeLimitation.HasValue() || restriction.ActivityRestrictionCollection.Count > 0);
