@@ -113,7 +113,7 @@
 					equal(viewModelDay.PossibleContractTimes(), "7:00-12:00");
 				});
 
-				module("Teleopti.MyTimeWeb.Preference partial init");
+				module("Teleopti.MyTimeWeb.Preference initializer");
 
 				test("should load day feedback and bind", function () {
 
@@ -139,7 +139,9 @@
 
 					expect(3);
 
-					Teleopti.MyTimeWeb.Preference.InitViewModels();
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer();
+
+					target.InitViewModels();
 
 					equal($('#Preference-period-feedback-view').text(), "14:00");
 					equal($('li[data-mytime-date="2012-06-11"]').text(), "6:00");
@@ -159,7 +161,9 @@
 						});
 					};
 
-					Teleopti.MyTimeWeb.Preference.InitViewModels();
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer();
+
+					target.InitViewModels();
 
 					equal($('li[data-mytime-date="2012-06-11"]').text(), "");
 					equal($('li[data-mytime-date="2012-06-12"]').text(), "8:00");
@@ -179,7 +183,9 @@
 
 					expect(2);
 
-					Teleopti.MyTimeWeb.Preference.InitViewModels();
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer();
+
+					target.InitViewModels();
 
 					equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeLower"]').text(), "3:00", "lower contract time");
 					equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeUpper"]').text(), "3:00", "upper contract time");
@@ -199,9 +205,12 @@
 
 					expect(2);
 
-					Teleopti.MyTimeWeb.Preference.InitViewModels();
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer();
+
+					target.InitViewModels();
 
 				});
+
 			});
 		</script>
   
