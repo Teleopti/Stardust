@@ -13,7 +13,6 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _initTooltip() {
@@ -115,10 +114,12 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
 		$('#Text-request-tab')
 			.click(function () {
+				_clearValidationError();
 				_hideAbsenceTypes();
 			});
 		$('#Absence-request-tab')
 			.click(function () {
+				_clearValidationError();
 				_showAbsenceTypes();
 			});
 		$('#Fullday-check')
@@ -197,7 +198,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 	}
 
 	function _displayValidationError(data) {
-		var message = data.Errors.join(' ');
+		var message = data.Errors.join('</br>');
 		$('#Schedule-addRequest-error').html(message || '');
 	}
 
@@ -207,7 +208,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
 	function _getFormData() {
 		var absenceId = $('#Absence-type').children(":selected").val();
-		if(absenceId == undefined) {
+		if (absenceId == undefined) {
 			absenceId = null;
 		}
 		return {
@@ -327,4 +328,3 @@ Teleopti.MyTimeWeb.Schedule.Layout = (function ($) {
 })(jQuery);
 
 $(function () { Teleopti.MyTimeWeb.Schedule.Init(); });
-
