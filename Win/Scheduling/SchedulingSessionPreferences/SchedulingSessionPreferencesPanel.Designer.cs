@@ -606,7 +606,7 @@
             this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 28);
             this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
             this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-            this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 19);
+            this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 21);
             this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
             this.comboBoxAdvShiftCategory.TabIndex = 1;
@@ -705,7 +705,7 @@
             this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGroupingFairness.Location = new System.Drawing.Point(28, 124);
             this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-            this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 19);
+            this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 21);
             this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGroupingFairness.TabIndex = 22;
             this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingFairnessSelectedIndexChanged);
