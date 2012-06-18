@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class TeleoptiCacheKey : ToStringMbCacheKey
+	public class TeleoptiCacheKey : ToStringCacheKey
 	{
 		protected override string ParameterValue(object parameter)
 		{
