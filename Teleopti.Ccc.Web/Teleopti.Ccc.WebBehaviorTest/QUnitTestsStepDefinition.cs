@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	public class QUnitTestsStepDefinition
 	{
 
-		[When(@"I navigate to (.*)")]
+		[When(@"I navigate to url (.*)")]
 		public void WhenINavigateTo(string url)
 		{
 			Navigation.GoTo(url);

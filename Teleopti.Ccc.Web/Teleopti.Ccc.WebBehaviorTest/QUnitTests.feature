@@ -4,6 +4,6 @@
 	I want to run the javascript tests in the browser
 
 Scenario: Preferences tests
-	When I navigate to /Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.Tests.html
+	When I navigate to url /Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.Tests.html
 	Then I should see the tests run
 	And I should see all tests pass
