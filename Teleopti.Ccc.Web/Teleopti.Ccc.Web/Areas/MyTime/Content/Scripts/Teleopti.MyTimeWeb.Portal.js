@@ -220,10 +220,13 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		InitPeriodSelection: function (rangeSelectorId, periodData, actionSuffix) {
 			var common = Teleopti.MyTimeWeb.Common;
 			var range = $(rangeSelectorId);
-			currentFixedDate = periodData.Date;
 			var actionPrefix = range.data('mytime-action');
 			actionSuffix = actionSuffix || '';
+
+			currentFixedDate = null;
 			if (typeof (periodData) !== 'undefined') {
+				currentFixedDate = periodData.Date;
+				
 				var dp = range.find('.datepicker').datepicker({
 					minDate: common.ParseToDate(periodData.SelectableDateRange.MinDate),
 					maxDate: common.ParseToDate(periodData.SelectableDateRange.MaxDate),
