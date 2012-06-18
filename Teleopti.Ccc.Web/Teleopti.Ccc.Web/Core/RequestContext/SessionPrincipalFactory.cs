@@ -1,8 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext
 {
@@ -50,10 +53,33 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 				var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
 				var businessUnit = businessUnitRepository.Load(sessionData.BusinessUnitId);
 
-				principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, sessionData.AuthenticationType);
+				principal = MakePrincipalAndHandleThatPersonMightNotExist(sessionData, dataSource, businessUnit, person);
+				if (principal == null) return null;
+
 				_roleToPrincipalCommand.Execute(principal, uow, personRepository);
 			}
 
+			return principal;
+		}
+
+		private ITeleoptiPrincipal MakePrincipalAndHandleThatPersonMightNotExist(SessionSpecificData sessionData, IDataSource dataSource, IBusinessUnit businessUnit, IPerson person)
+		{
+			ITeleoptiPrincipal principal;
+			try
+			{
+				principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, sessionData.AuthenticationType);
+			}
+			catch (PersonNotFoundException)
+			{
+				return null;
+			}
+			catch (TargetInvocationException exception)
+			{
+				if (exception.InnerException == null) throw;
+				if (exception.InnerException.GetType() == typeof (PersonNotFoundException))
+					return null;
+				throw;
+			}
 			return principal;
 		}
 	}

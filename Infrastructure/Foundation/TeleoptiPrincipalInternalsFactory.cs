@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -17,7 +18,19 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public virtual string NameForPerson(IPerson person)
 		{
-			return person == null ? string.Empty : person.Name.ToString();
+			try
+			{
+				return person == null ? string.Empty : person.Name.ToString();
+			}
+			catch (NHibernate.ObjectNotFoundException exception)
+			{
+				throw new PersonNotFoundException("Person not found", exception);
+			}
 		}
+	}
+
+	public class PersonNotFoundException : Exception
+	{
+		public PersonNotFoundException(string message, Exception innerException) : base(message, innerException) { }
 	}
 }
