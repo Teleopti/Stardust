@@ -45,12 +45,9 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
-				var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
-
 				var person = personRepository.Load(sessionData.PersonId);
-				if (person == null)
-					return null;
 
+				var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
 				var businessUnit = businessUnitRepository.Load(sessionData.BusinessUnitId);
 
 				principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, sessionData.AuthenticationType);
