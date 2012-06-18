@@ -1175,6 +1175,7 @@
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsAvailableDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsLoadingDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsNotAvailableDrawer.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailView.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsWarningDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionViewTEMP.cs">
       <SubType>Form</SubType>
