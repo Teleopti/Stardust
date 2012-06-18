@@ -16,79 +16,74 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GoTo(string pageUrl)
 		{
-			Browser.Current.WaitUntilAjaxContentComplete();
-			var uri = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
-			Log.Write("Browsing to: " + uri);
-			Browser.Current.GoTo(uri);
-			Log.Write("Ended up in: " + Browser.Current.Url);
-			Browser.Current.WaitUntilAjaxContentComplete();
-		}
-
-		public static void GoToWithPossibleLongApplicationStartTime(string pageUrl)
-		{
-			using (new WatiNWaitForCompleteTimeout(60*5))
+			using (new WatiNWaitForCompleteTimeout(60)) // to handle possible application startup
 			{
-				GoTo(pageUrl);
+				Browser.Current.WaitUntilAjaxContentComplete();
+				var uri = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
+				Log.Write("Browsing to: " + uri);
+				Browser.Current.GoTo(uri);
+				Log.Write("Ended up in: " + Browser.Current.Url);
+				Browser.Current.WaitUntilAjaxContentComplete();
 			}
 		}
 
 		public static void GotoGlobalSignInPage()
 		{
-			GoToWithPossibleLongApplicationStartTime("Start/Authentication/SignIn");
+			GoTo("Start/Authentication/SignIn");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoGlobalMobileSignInPage()
 		{
-			GoToWithPossibleLongApplicationStartTime("Start/Authentication/MobileSignIn");
+			GoTo("Start/Authentication/MobileSignIn");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileSignInPage>());
 		}
 
 		public static void GotoGlobalMobileMenuPage()
 		{
-			GoToWithPossibleLongApplicationStartTime("Start/Menu/MobileMenu");
+			GoTo("Start/Menu/MobileMenu");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileSignInPage>());
 		}
 
 		public static void GotoMyTimeSignInPage()
 		{
-			GoToWithPossibleLongApplicationStartTime("MyTime/Authentication/SignIn");
+			GoTo("MyTime/Authentication/SignIn");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoMobileReportsSignInPage(string hash)
 		{
-			GoToWithPossibleLongApplicationStartTime("MobileReports/Authentication/SignIn" + hash);
+			GoTo("MobileReports/Authentication/SignIn" + hash);
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileSignInPage>());
 		}
 
 		public static void GotoMobileReportsSettings()
 		{
-			GoToWithPossibleLongApplicationStartTime("MobileReports#report-settings-view");
+			GoTo("MobileReports#report-settings-view");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
 		public static void GotoMyTime()
 		{
-			GoToWithPossibleLongApplicationStartTime("MyTime");
+			GoTo("MyTime");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoMobileReports()
 		{
-			GoToWithPossibleLongApplicationStartTime("MobileReports");
+			GoTo("MobileReports");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
 		public static void GotoSiteHomePage()
 		{
-			GoToWithPossibleLongApplicationStartTime("");
+			GoTo("");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoAnApplicationPageOutsidePortal()
 		{
-			GoToWithPossibleLongApplicationStartTime("MyTime/Schedule/Week");
+			GoTo("MyTime/Schedule/Week");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
