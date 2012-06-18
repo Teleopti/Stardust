@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="QUnitTestsStepDefinition.cs" />
     <Compile Include="Data\User\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\User\AbsencePreferenceOnWeekday.cs" />
     <Compile Include="Data\User\CommonScenario.cs" />
@@ -180,6 +181,11 @@
       <DependentUpon>PreferencesSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Data\User\RequestableAbsenceType.cs" />
+    <Compile Include="QUnitTests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QUnitTests.feature</DependentUpon>
+    </Compile>
     <Compile Include="Routing.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -382,6 +388,10 @@
     <None Include="PreferencesSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="QUnitTests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>QUnitTests.feature.cs</LastGenOutput>
     </None>
     <None Include="Routing.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
