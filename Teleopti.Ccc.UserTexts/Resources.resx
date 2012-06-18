@@ -10710,4 +10710,8 @@ These options are activated:
     <value>Missing absence type.</value>
     <comment>Missing absence type.</comment>
   </data>
+  <data name="SendRequest" xml:space="preserve">
+    <value>Send</value>
+    <comment>Send a text request/absence request...</comment>
+  </data>
 </root>
