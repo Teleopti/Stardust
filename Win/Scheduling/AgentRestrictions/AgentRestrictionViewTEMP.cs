@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
+using Teleopti.Ccc.WinCode.Common.Clipboard;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
@@ -13,9 +15,13 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private readonly IList<IPerson> _persons;
 		private readonly ISchedulingOptions _schedulingOptions;
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
-		private IPerson _selectedPerson;
+		private readonly IPerson _selectedPerson;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+		private AgentRestrictionsDetailView _detailView;
 
-		public AgentRestrictionViewTemp(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson)
+		public AgentRestrictionViewTemp(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson,
+			IGridlockManager lockManager, SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
+			IScheduleDayChangeCallback changeCallback, IScheduleTag scheduleTag)
 		{
 			if(schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
 
@@ -31,6 +37,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_selectedPerson = selectedPerson;
 			agentRestrictionGrid.SelectedAgentIsReady += AgentRestrictionGridSelectedAgentIsReady;
 			label1.Text = string.Empty;
+
+			_detailView = new AgentRestrictionsDetailView(grid, _stateHolder, lockManager, schedulePartFilter, clipHandler, overriddenBusinessRulesHolder, changeCallback, scheduleTag);
 		}
 
 

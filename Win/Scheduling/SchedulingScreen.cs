@@ -8438,13 +8438,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private void ToolStripMenuItemRestrictionViewTemp_MouseUp(object sender, MouseEventArgs e)
 		{
+			var callback = new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState);
+
 			var persons = _schedulerState.FilteredPersonDictionary.Values.ToList();
 			if (persons.Count == 0) return;
 			var schedulePart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
 			var selectedPerson = persons.FirstOrDefault();
 			if(schedulePart != null) selectedPerson = schedulePart.Person;
-			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, _schedulingOptions, _workShiftWorkTime, selectedPerson);
+			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, _schedulingOptions, _workShiftWorkTime, selectedPerson, _gridLockManager, SchedulePartFilter,
+
+				_clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
 			agentRestrictionView.ShowDialog(this);
+
 		}
     }
 }
