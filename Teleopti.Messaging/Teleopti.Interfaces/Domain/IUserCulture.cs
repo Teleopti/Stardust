@@ -11,6 +11,7 @@ namespace Teleopti.Interfaces.Domain
 		/// get the culture
 		/// </summary>
 		/// <returns>the culture</returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		CultureInfo GetCulture();
 	}
 }
