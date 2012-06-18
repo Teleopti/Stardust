@@ -30,7 +30,7 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 	}
 
 	function _setupUrl(options) {
-		if (options.url.indexOf('http://') != -1)
+		if (options.url.indexOf('://') != -1)
 			return;
 		if (options.url.indexOf('/') == 0)
 			return;
