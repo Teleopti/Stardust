@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Win.Common;
@@ -34,13 +35,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             selectorView.PreselectedPersonIds = selectedPersonGuids;
 			selectorView.VisiblePersonIds = visiblePersonGuids;
             selectorView.ShowCheckBoxes = true;
-            
+			selectorView.KeepInteractiveOnDuringLoad = true;
+
             selectorView.ShowDateSelection = false;
             selectorView.HideMenu = true;
             _personSelectorPresenter.LoadTabs();
             _personSelectorPresenter.SetSelectedTab(selectedGroupPage);
             SetTexts();
-            BackColor = ColorHelper.OfficeBlue;
+			BackColor = Color.FromArgb(191, 219, 254);
         }
 
         public HashSet<Guid> SelectedAgentGuids()
