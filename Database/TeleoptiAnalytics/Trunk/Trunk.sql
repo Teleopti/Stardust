@@ -110,12 +110,23 @@ ALTER TABLE [dbo].[quality_logg]  WITH CHECK ADD  CONSTRAINT [FK_quality_logg_qu
 REFERENCES [dbo].[quality_info] ([quality_id])
 GO
 
+
+-- Prepare for QM log objects
 declare @acd_type_id int
 declare @acd_type_desc varchar(50)
 
 set @acd_type_id=25
 set @acd_type_desc='Zoom QM'
 
+insert into dbo.acd_type
+           (
+           [acd_type_id]
+           ,[acd_type_desc]
+           )
+select @acd_type_id,@acd_type_desc
+
+set @acd_type_id=26
+set @acd_type_desc='Globitel Speechlog'
 insert into dbo.acd_type
            (
            [acd_type_id]
