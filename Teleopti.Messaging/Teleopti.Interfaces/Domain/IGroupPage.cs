@@ -72,5 +72,10 @@ namespace Teleopti.Interfaces.Domain
 		/// Returns true if the group page is user defined.
 		/// </summary>
     	bool IsUserDefined();
+
+		/// <summary>
+		/// Used when when fetching user defined in scheduling
+		/// </summary>
+		string IdOrDescriptionKey { get; }
     }
 }

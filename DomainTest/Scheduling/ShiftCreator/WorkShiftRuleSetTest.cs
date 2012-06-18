@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                                                ShiftCategoryFactory.CreateShiftCategory("sample"));
 
             _target = new WorkShiftRuleSet(_generator);
-
         }
 
 
@@ -414,87 +412,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             Assert.AreEqual(0, cloned.ExtenderCollection.Count);
             Assert.AreEqual(1, target.LimiterCollection.Count);
             Assert.AreEqual(0, cloned.LimiterCollection.Count);
-        }
-
-        [Test]
-        public void VerifyMinMaxWorkTimeAddingCorrect()
-        {
-            var restriction = _mocks.StrictMock<IEffectiveRestriction>();
-            var projectionService = _mocks.StrictMock<IRuleSetProjectionService>();
-			var info1 = new WorkShiftProjection
-			            	{
-								ContractTime = TimeSpan.FromHours(7),
-			            		TimePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17))
-			            	};
-        	var info2 = new WorkShiftProjection
-        	            	{
-        	            		ContractTime = TimeSpan.FromHours(9),
-        	            		TimePeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(16))
-        	            	};
-
-            using (_mocks.Record())
-            {
-                Expect.Call(projectionService.ProjectionCollection(null))
-					.IgnoreArguments()
-					.Return(new List<IWorkShiftProjection> { info1, info2 }).Repeat.AtLeastOnce();
-                //Expect.Call(restriction.IsLimitedWorkday).Return(true).Repeat.AtLeastOnce();
-                //first shift
-                Expect.Call(restriction.ValidateWorkShiftInfo(info1)).Return(true).Repeat.AtLeastOnce();
-                //second shift
-                Expect.Call(restriction.ValidateWorkShiftInfo(info2)).Return(true).Repeat.AtLeastOnce();
-            	Expect.Call(restriction.NotAvailable).Return(false);
-            }
-
-            IWorkTimeMinMax result; 
-            using (_mocks.Playback())
-            {
-                result = _target.MinMaxWorkTime(projectionService, restriction);
-            }
-            Assert.AreEqual(TimeSpan.FromHours(7), result.StartTimeLimitation.StartTime);
-            Assert.AreEqual(TimeSpan.FromHours(8), result.StartTimeLimitation.EndTime);
-            Assert.AreEqual(TimeSpan.FromHours(16), result.EndTimeLimitation.StartTime);
-            Assert.AreEqual(TimeSpan.FromHours(17), result.EndTimeLimitation.EndTime);
-            Assert.AreEqual(TimeSpan.FromHours(7), result.WorkTimeLimitation.StartTime);
-            Assert.AreEqual(TimeSpan.FromHours(9), result.WorkTimeLimitation.EndTime);
-
-        }
-
-        [Test]
-        public void VerifyMinMaxWorkTimeDisregardsShiftOutsideRestrictions()
-        {
-            var restriction = _mocks.StrictMock<IEffectiveRestriction>();
-            var projectionService = _mocks.StrictMock<IRuleSetProjectionService>();
-        	var info1 = new WorkShiftProjection
-        	            	{
-        	            		ContractTime = TimeSpan.FromHours(7),
-        	            		TimePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17))
-        	            	};
-			var info2 = new WorkShiftProjection();
-
-            using (_mocks.Record())
-            {
-                Expect.Call(projectionService.ProjectionCollection(null)).IgnoreArguments().Return(
-					new List<IWorkShiftProjection> { info1, info2 }).Repeat.AtLeastOnce();
-                //Expect.Call(restriction.IsLimitedWorkday).Return(true).Repeat.AtLeastOnce();
-                //first shift validates OK
-                Expect.Call(restriction.ValidateWorkShiftInfo(info1)).Return(true).Repeat.AtLeastOnce();
-                //second shift validates Not OK
-                Expect.Call(restriction.ValidateWorkShiftInfo(info2)).Return(false).Repeat.AtLeastOnce();
-            	Expect.Call(restriction.NotAvailable).Return(false);
-            }
-
-            IWorkTimeMinMax result;
-            using (_mocks.Playback())
-            {
-                result = _target.MinMaxWorkTime(projectionService, restriction);
-            }
-            Assert.AreEqual(TimeSpan.FromHours(8), result.StartTimeLimitation.StartTime);
-            Assert.AreEqual(TimeSpan.FromHours(8), result.StartTimeLimitation.EndTime);
-            Assert.AreEqual(TimeSpan.FromHours(17), result.EndTimeLimitation.StartTime);
-            Assert.AreEqual(TimeSpan.FromHours(17), result.EndTimeLimitation.EndTime);
-            Assert.AreEqual(TimeSpan.FromHours(7), result.WorkTimeLimitation.StartTime);
-            Assert.AreEqual(TimeSpan.FromHours(7), result.WorkTimeLimitation.EndTime);
-
         }
     }
 }

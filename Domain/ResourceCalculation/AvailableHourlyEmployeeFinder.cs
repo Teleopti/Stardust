@@ -139,11 +139,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				foreach (IStudentAvailabilityRestriction restriction in studentAvailabilityDay.RestrictionCollection)
 				{
 					
-					if (!restriction.StartTimeLimitation.ValidPeriod().Contains(startTime))
+					if (!restriction.StartTimeLimitation.IsValidFor(startTime))
 						return false;
-					if (!restriction.EndTimeLimitation.ValidPeriod().Contains(endTime))
+					if (!restriction.EndTimeLimitation.IsValidFor(endTime))
 						return false;
-					if (!restriction.WorkTimeLimitation.ValidPeriod().Contains(visualLayerCollection.ContractTime()))
+					if (!restriction.WorkTimeLimitation.IsValidFor(visualLayerCollection.ContractTime()))
 						return false;
 				}
 			}

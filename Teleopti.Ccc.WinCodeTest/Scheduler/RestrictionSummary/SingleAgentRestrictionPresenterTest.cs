@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         private ICccTimeZoneInfo _timeZoneInfo;
         private ScheduleDictionaryForTest _dic;
         private ScheduleRange _range;
-        private IRuleSetProjectionService _ruleSetProjectionService;
+        private IWorkShiftWorkTime _workShiftWorkTime;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
 
             _loadedPersons = new List<IPerson> { _person };
             _dateTimePeriod = new DateTimePeriod(start, end);
-            _ruleSetProjectionService = _mocks.StrictMock<IRuleSetProjectionService>();
-            _singleAgentRestrictionModel = new SingleAgentRestrictionModel(_dateTimePeriod, _timeZoneInfo, _ruleSetProjectionService);
+            _workShiftWorkTime = _mocks.StrictMock<IWorkShiftWorkTime>();
+            _singleAgentRestrictionModel = new SingleAgentRestrictionModel(_dateTimePeriod, _timeZoneInfo, _workShiftWorkTime);
             using (_mocks.Record())
             {
                 Expect.Call(_restrictionSummaryGrid.RowCount).Return(2).Repeat.AtLeastOnce();

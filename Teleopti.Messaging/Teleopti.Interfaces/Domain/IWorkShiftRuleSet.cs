@@ -197,19 +197,6 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="left">The left.</param>
         /// <param name="right">The right.</param>
         void SwapExtenders(IWorkShiftExtender left, IWorkShiftExtender right);
-
-        #region RK - Lägg dessa utanför denna entitiet!
-
-        /// <summary>
-        /// Mins the max work time.
-        /// </summary>
-        /// <param name="ruleSetProjectionService">The rule set projection service.</param>
-        /// <param name="effectiveRestriction">The effective restriction.</param>
-        /// <returns></returns>
-        IWorkTimeMinMax MinMaxWorkTime(IRuleSetProjectionService ruleSetProjectionService, IEffectiveRestriction effectiveRestriction);
-
-       
-        #endregion
     }
 
 }

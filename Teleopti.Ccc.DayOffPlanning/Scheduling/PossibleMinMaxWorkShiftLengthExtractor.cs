@@ -7,15 +7,15 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
     public class PossibleMinMaxWorkShiftLengthExtractor : IPossibleMinMaxWorkShiftLengthExtractor
     {
         private readonly IRestrictionExtractor _restrictionExtractor;
-        private readonly IRuleSetProjectionService _ruleSetProjectionService;
+    	private readonly IWorkShiftWorkTime _workShiftWorkTime;
         private readonly IDictionary<DateOnly, IWorkTimeMinMax> _extractedLengths = new Dictionary<DateOnly, IWorkTimeMinMax>();
 
         public PossibleMinMaxWorkShiftLengthExtractor(
             IRestrictionExtractor restrictionExtractor, 
-            IRuleSetProjectionService ruleSetProjectionService)
+            IWorkShiftWorkTime workShiftWorkTime)
         {
             _restrictionExtractor = restrictionExtractor;
-            _ruleSetProjectionService = ruleSetProjectionService;
+        	_workShiftWorkTime = workShiftWorkTime;
         }
 
         public void ResetCache()
@@ -33,17 +33,21 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
                 }
 			}
 
-			IVirtualSchedulePeriod schedulePeriod = matrix.SchedulePeriod;
+			IVirtualSchedulePeriod virtualSchedulePeriod = matrix.SchedulePeriod;
+
 			if (_extractedLengths[dateOnly] == null)
 			{
 				_restrictionExtractor.Extract(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart());
 				IEffectiveRestriction restriction = _restrictionExtractor.CombinedRestriction(schedulingOptions);
 
 				IWorkTimeMinMax ret = null;
-			    var personPeriod = schedulePeriod.Person.Period(dateOnly);
-                if(restriction != null && restriction.Absence != null)
+				var person = matrix.Person;
+			    var personPeriod = person.Period(dateOnly);
+				var schedulePeriodStartDate = person.SchedulePeriodStartDate(dateOnly);
+
+				if (restriction != null && restriction.Absence != null && schedulePeriodStartDate.HasValue)
                 {
-                    if(!personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, dateOnly) || !restriction.Absence.InContractTime)
+					if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, dateOnly) || !restriction.Absence.InContractTime)
                         return new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero);
 
                     return new MinMax<TimeSpan>(personPeriod.PersonContract.AverageWorkTimePerDay, personPeriod.PersonContract.AverageWorkTimePerDay);
@@ -55,7 +59,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
                 if (matrix.SchedulePeriod.IsValid && ruleSetBag != null)
 				{
                     ret = ruleSetBag.MinMaxWorkTime(
-						_ruleSetProjectionService, dateOnly, restriction);
+						_workShiftWorkTime, dateOnly, restriction);
 					_extractedLengths[dateOnly] = ret;
 				}
 				if (ret == null)
@@ -64,8 +68,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 				}
 			}
 
-            var contract = schedulePeriod.Contract;
-			//IContract contract = schedulePeriod.PersonPeriod.PersonContract.Contract;
+            var contract = virtualSchedulePeriod.Contract;
 			EmploymentType empType = contract.EmploymentType;
 
 			if (empType == EmploymentType.HourlyStaff)

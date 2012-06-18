@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Meetings;
@@ -26,28 +28,29 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
         private CccTimeZoneInfo _timeZone;
         private IMeetingOverviewView _view;
         private IMeetingParticipantPermittedChecker _meetingParticipantPermittedChecker;
+
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _meetingRepository = _mocks.StrictMock<IMeetingRepository>();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            _model = _mocks.StrictMock<IMeetingOverviewViewModel>();
             _view = _mocks.StrictMock<IMeetingOverviewView>();
             _meetingParticipantPermittedChecker = _mocks.StrictMock<IMeetingParticipantPermittedChecker>();
+			_scenario = _mocks.StrictMock<IScenario>();
+			_model = new MeetingOverviewViewModel { CurrentScenario = _scenario }; //_mocks.StrictMock<IMeetingOverviewViewModel>();
             _target = new MeetingChangerAndPersister(_meetingRepository, _unitOfWorkFactory, _model, _meetingParticipantPermittedChecker);
 
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));
-            
-            _scenario = _mocks.StrictMock<IScenario>();
+            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));   
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldOnlyChangeEndTimeWhenDurationChangeOnMeeting()
 		{
 			var meeting = _mocks.DynamicMock<IMeeting>();
 			var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
 			var period = new DateOnlyPeriod(2011, 4, 3, 2011, 4, 3);
+			_model.SelectedPeriod = period;
 			var bu = _mocks.StrictMock<IBusinessUnit>();
 
 			Expect.Call(meeting.MeetingDuration()).Return(TimeSpan.FromHours(2));
@@ -56,12 +59,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
 
 			Expect.Call(meeting.Id).Return(Guid.Empty);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			Expect.Call(meeting.MeetingPersons).Return(new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson>()));
+			Expect.Call(meeting.MeetingPersons).Return(new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson>{new MeetingPerson(new Person(), false)}));
 			Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
 
 			Expect.Call(meeting.BusinessUnit).Return(bu);
 			Expect.Call(() => unitOfWork.Reassociate(bu));
-			Expect.Call(_model.SelectedPeriod).Return(period);
+			//Expect.Call(_model.SelectedPeriod).Return(period);
 			Expect.Call(_meetingParticipantPermittedChecker.ValidatePermittedPersons(new List<IPerson>(),
 			                                                                         new DateOnly(2011, 4, 3), _view,
 			                                                                         null)).IgnoreArguments().Return(true);
@@ -83,6 +86,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             var userTimeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
             var period = new DateOnlyPeriod(2011, 4, 3, 2011, 4, 3);
+    		_model.SelectedPeriod = period;
             var bu = _mocks.StrictMock<IBusinessUnit>(); 
 
             Expect.Call(meeting.TimeZone).Return(_timeZone);
@@ -94,20 +98,21 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             // should add a hour to finland
             Expect.Call(() => meeting.StartTime = TimeSpan.FromHours(10));
             Expect.Call(() => meeting.EndTime = TimeSpan.FromHours(13));
-            Expect.Call(_model.CurrentScenario).Return(_scenario);
+            //Expect.Call(_model.CurrentScenario).Return(_scenario);
 
-            Expect.Call(meeting.Id).Return(Guid.Empty);
+            Expect.Call(meeting.Id).Return(null);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(meeting.MeetingPersons).Return(new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson>()));
             Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(meeting.BusinessUnit).Return(bu);
             Expect.Call(() => unitOfWork.Reassociate(bu));
-            Expect.Call(_model.SelectedPeriod).Return(period);
+            //Expect.Call(_model.SelectedPeriod).Return(period);
             Expect.Call(_meetingParticipantPermittedChecker.ValidatePermittedPersons(new List<IPerson>(),
                                                                                     new DateOnly(2011, 4, 3), _view,
                                                                                     null)).IgnoreArguments().Return(true);
-			Expect.Call(_meetingRepository.Load(Guid.Empty)).Return(meeting);
-			Expect.Call(() => unitOfWork.Merge(meeting));
+			//Expect.Call(_meetingRepository.Load(Guid.Empty)).Return(meeting);
+			//Expect.Call(() => unitOfWork.Merge(meeting));
+			Expect.Call(() =>_meetingRepository.Add(meeting));
             Expect.Call(unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>());
             Expect.Call(unitOfWork.Dispose);
 

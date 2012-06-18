@@ -481,5 +481,65 @@
         </Partition>
       </Partitions>
     </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Quality Grades</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="a0ea053c-b2b2-41e0-9ba6-8739f162ed86">
+          <ID>Fact Quality Grades</ID>
+          <Name>Fact Quality Grades</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="338884b7-463a-4485-9643-4cddfdf18e57">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>mart_fact_quality_grades</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Quality Percentage</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="6e8f4e40-556c-413a-b3d5-c0dc4c920bf6">
+          <ID>Fact Quality Percentage</ID>
+          <Name>Fact Quality Percentage</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="dc55f9ac-7b19-4f43-b0dc-8edcd71f9769">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>mart_fact_quality_percentage</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Quality Points</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="d2a2e5d4-702b-482b-8d73-b0eeea63ebef">
+          <ID>Fact Quality Points</ID>
+          <Name>Fact Quality Points</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="c08b8449-3d0b-4c86-9eeb-67d5d4e7d58e">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>mart_fact_quality_points</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
   </MeasureGroups>
 </Cube>

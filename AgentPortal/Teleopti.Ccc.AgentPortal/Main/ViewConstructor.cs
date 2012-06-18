@@ -71,18 +71,13 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 {
                     case ViewType.Schedule:
                         _hostedView = _scheduleControl;
-                        _scheduleControl.ScheduleView.Refresh(true);  //Hope this doesn't disturb the performance to much. but the schedules aren't refreshed 
+                        _scheduleControl.ScheduleView.Refresh(true);
                         break;
 
                     case ViewType.Legend:
-                        _hostedView = new LegendsView(SdkServiceHelper.SchedulingService);//new ActivityColorCodesControl();
+                        _hostedView = new LegendsView(SdkServiceHelper.SchedulingService);
                         ((XPTaskBarBox)container.Parent).PreferredChildPanelHeight = ((LegendsView)_hostedView).DefaultHeight;
                         //height vary with no. of different activities
-                        break;
-
-                    case ViewType.ScorecardPreview:
-
-                        _hostedView = MatrixAgent.Instance.ScoreCardPreview;
                         break;
 
                     case ViewType.Scorecard:
@@ -113,8 +108,6 @@ namespace Teleopti.Ccc.AgentPortal.Main
                     case ViewType.Accounts:
                         PersonAccountView personAccountView = new PersonAccountView(SdkServiceHelper.OrganizationService, StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson);
                         _hostedView = personAccountView;
-                        break;
-                    default:
                         break;
                 }
 

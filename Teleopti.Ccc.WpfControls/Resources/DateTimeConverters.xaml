@@ -8,4 +8,5 @@
     <Converters:DateTimeConverter x:Key="DateTimeConverter" />
     <Converters:DateTimeToTimeConverter x:Key="DateTimeToTimeConverter"/>
     <DateTimeConverters:DateTimeToLocalConverter x:Key="DateTimeToLocalConverter"/>
+    <DateTimeConverters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
 </ResourceDictionary>

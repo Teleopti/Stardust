@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			
             var data = new Dictionary<string, IList<IScheduledTimeVersusTargetTimeReportData>>();
 			var parameters = ReportHandler.CreateScheduledTimeVersusTargetParameters(model,_currentCulture);
-            if (model.Persons.Count() > 0)
+            if (model.Persons.Any())
             {
                 using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {

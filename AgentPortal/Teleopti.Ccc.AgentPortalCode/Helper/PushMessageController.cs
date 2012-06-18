@@ -36,17 +36,16 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
             PushMessageDialogueDto[] loadedPushMessageDialogueDto =
                 SdkServiceHelper.OrganizationService.GetPushMessageDialoguesNotRepliedTo(_affectedPerson);
             return loadedPushMessageDialogueDto.Length;
-
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public Collection<MessagePresenterObject> GetMessagePresenterObjects()
         {
             PushMessageDialogueDto[] loadedPushMessageDialogueDto = SdkServiceHelper.OrganizationService.GetPushMessageDialoguesNotRepliedTo(_affectedPerson);
-            Collection<MessagePresenterObject> messagePresenterObjects = new Collection<MessagePresenterObject>();
+            var messagePresenterObjects = new Collection<MessagePresenterObject>();
             foreach (PushMessageDialogueDto dto in loadedPushMessageDialogueDto)
             {
-                MessagePresenterObject messagePresenterObject = new MessagePresenterObject(dto);
+                var messagePresenterObject = new MessagePresenterObject(dto);
                 messagePresenterObjects.Add(messagePresenterObject);
             }
             return messagePresenterObjects;
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
             {
                 //note cache this value?
                 int numberOfUnreadMessages = GetNumberOfUnhandledMessages();
-                PushMessageHelperEventArgs pushMessageHelperEventArgs = new PushMessageHelperEventArgs(numberOfUnreadMessages,this);
+                var pushMessageHelperEventArgs = new PushMessageHelperEventArgs(numberOfUnreadMessages,this);
 
                 switch (args.Message.DomainUpdateType)
                 {
@@ -80,11 +79,11 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
                 		var handlerAdded = MessageAdded;
 						if (handlerAdded != null)
                         {
-                            PushMessageDialogueDto pushMessageDialogueDto = new PushMessageDialogueDto();
+                            var pushMessageDialogueDto = new PushMessageDialogueDto();
                             pushMessageDialogueDto.Id = args.Message.DomainObjectId.ToString();
                             PushMessageDialogueDto loadedPushMessageDialogueDto = SdkServiceHelper.OrganizationService.GetPushMessageDialogue(pushMessageDialogueDto);
                             
-                            if(loadedPushMessageDialogueDto!=null && loadedPushMessageDialogueDto.IsReplied )
+                            if(loadedPushMessageDialogueDto!=null && !loadedPushMessageDialogueDto.IsReplied )
                             {
                                 string title = loadedPushMessageDialogueDto.PushMessage.Title;
                                 string message = loadedPushMessageDialogueDto.Message; //Translated
@@ -107,10 +106,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
 
                     case DomainUpdateType.Update:
                         RaiseNumberOfUnreadMessagesChanged(pushMessageHelperEventArgs);
-                        break;
-
-                    default:
-                        //No need to raise any events?
                         break;
                 }
             }

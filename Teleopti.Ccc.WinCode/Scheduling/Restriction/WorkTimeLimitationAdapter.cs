@@ -22,20 +22,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
         public TimeSpan? StartTime
         {
             get { return _limitation.StartTime; }
-            set
-            {
-                if (value != null) _limitation.StartTime = value;
-            }
         }
 
        
         public TimeSpan? EndTime
         {
             get { return _limitation.EndTime; }
-            set
-            {
-                if (value != null) _limitation.EndTime = value;
-            }
         }
 
        
@@ -45,10 +37,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
             {
                 return _limitation.StartTime == TimeSpan.Zero ? string.Empty : _limitation.StartTimeString;
             }
-            set
-            {
-                _limitation.StartTimeString = value;
-            }
         }
 
        
@@ -57,10 +45,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
             get
             {
                 return _limitation.EndTime == TimeSpan.Zero ? string.Empty : _limitation.EndTimeString;
-            }
-            set
-            {
-                _limitation.EndTimeString = value;   
             }
         }
 
@@ -74,27 +58,28 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
             return _limitation.StringFromTimeSpan(value);
         }
 
-        /// <summary>
-        /// Determines whether this instance has value.
-        /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if StartTime or EndTime has value; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-01-28
-        /// </remarks>
-        public bool HasValue()
+    	/// <summary>
+    	/// Determines whether this instance has value.
+    	/// </summary>
+    	/// <exception cref="NotImplementedException"></exception>
+    	/// <returns>
+    	/// 	<c>true</c> if StartTime or EndTime has value; otherwise, <c>false</c>.
+    	/// </returns>
+    	/// <remarks>
+    	/// Created by: micke
+    	/// Created date: 2009-01-28
+    	/// </remarks>
+    	public bool HasValue()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public TimePeriod ValidPeriod()
-        {
-            throw new System.NotImplementedException();
-        }
+    	public bool IsValidFor(TimeSpan timeSpan)
+    	{
+			throw new System.NotImplementedException();
+    	}
 
-        public TimePeriod WorkTime
+    	public TimePeriod WorkTime
         {
             get
             {

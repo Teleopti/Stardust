@@ -26,15 +26,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				;
 
 			CreateMap<StudentAvailabilityDayForm, StartTimeLimitation>()
-				.ForMember(d => d.StartTime, o => o.MapFrom(s => s.StartTime.Time))
-				.ForMember(d => d.EndTime, o => o.Ignore())
+				.ConstructUsing(s => new StartTimeLimitation(s.StartTime.Time, null))
 				.ForMember(d => d.StartTimeString, o => o.Ignore())
 				.ForMember(d => d.EndTimeString, o => o.Ignore())
 				;
 
 			CreateMap<StudentAvailabilityDayForm, EndTimeLimitation>()
-				.ForMember(d => d.StartTime, o => o.Ignore())
-				.ForMember(d => d.EndTime, o => o.MapFrom(s => TimeHelper.ParseTimeSpanFromTimeOfDay(s.EndTime.Time, s.NextDay)))
+				.ConstructUsing(s => new EndTimeLimitation(null, TimeHelper.ParseTimeSpanFromTimeOfDay(s.EndTime.Time, s.NextDay)))
 				.ForMember(d => d.StartTimeString, o => o.Ignore())
 				.ForMember(d => d.EndTimeString, o => o.Ignore())
 				;

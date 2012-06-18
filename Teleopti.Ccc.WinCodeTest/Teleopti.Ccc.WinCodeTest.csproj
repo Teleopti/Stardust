@@ -284,10 +284,7 @@
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
     <Compile Include="Common\ScheduleContractTimeCalculatorTest.cs" />
     <Compile Include="Common\ScheduleDataLoaderTest.cs" />
-    <Compile Include="Common\ScheduleFilter\CccTreeNodeTest.cs" />
-    <Compile Include="Common\ScheduleFilter\ScheduleFilterTest.cs" />
     <Compile Include="Common\ReportSettingsHostPresenterTest.cs" />
-    <Compile Include="Common\ScheduleFilter\TeamPersonKeyTest.cs" />
     <Compile Include="Common\SchedulePeriodCloseCalculatorTest.cs" />
     <Compile Include="Common\ScheduleTargetTimeCalculatorTest.cs" />
     <Compile Include="Common\SchedulingResultLoaderTest.cs" />
@@ -331,6 +328,7 @@
     <Compile Include="Converters\DateTimeConverter\DateTimeParserTest.cs" />
     <Compile Include="Converters\DateTimeConverter\DateTimeToLocalConverterTest.cs" />
     <Compile Include="Converters\DateTimeConverter\DateTimeToLocalStringConverterTest.cs" />
+    <Compile Include="Converters\DateTimeConverter\TimeSpanToStringConverterTest.cs" />
     <Compile Include="Converters\DateTimeConverter\TimeSpanToDateTimeConverterTest.cs" />
     <Compile Include="Converters\ExtendDateTimePeriodConverterTest.cs" />
     <Compile Include="Converters\Layers\IsMoveAllLayersConverterTest.cs" />
@@ -345,6 +343,7 @@
     <Compile Include="Forecasting\CopyToSkillPresenterTest.cs" />
     <Compile Include="Forecasting\CopyToSkillCommandTest.cs" />
     <Compile Include="Forecasting\DetailedJobHistoryPresenterTest.cs" />
+    <Compile Include="Forecasting\ExportPages\DestinationSkillModelTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProviderTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsWizardPagesTest.cs" />
@@ -367,6 +366,7 @@
     <Compile Include="Grouping\Commands\OpenModuleCommandTest.cs" />
     <Compile Include="Grouping\PeopleNavigatoPresenterTest.cs" />
     <Compile Include="Grouping\PersonSelectorPresenterTest.cs" />
+    <Compile Include="Grouping\SchedulerGroupPagesProviderTest.cs" />
     <Compile Include="Helpers\CollectionListener.cs" />
     <Compile Include="Helpers\CollectionViewComparer.cs" />
     <Compile Include="Helpers\PropertyChangedListener.cs" />
@@ -498,6 +498,8 @@
     <Compile Include="Scheduler\AddOvertimeViewModelTest.cs" />
     <Compile Include="Scheduler\AddPersonalActivityViewModelTest.cs" />
     <Compile Include="Scheduler\AgentInfoHelperTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDetailModelTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDetailPresenterTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayDataExtractorTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowCreatorTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowTest.cs" />
@@ -740,8 +742,6 @@
     <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPagesTest.cs" />
     <Compile Include="Presentation\PersonListBoxPresenterTest.cs" />
     <Compile Include="Presentation\SiteListBoxPresenterTest.cs" />
-    <Compile Include="Common\Collections\TreeNodeAdvDisplayInfoTest.cs" />
-    <Compile Include="Common\Collections\TreeNodeDisplayInfoTest.cs" />
     <Compile Include="Common\EntitiesUpdatedEventArgsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimeSpanSecondsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimePixelRelationHelperTest.cs" />
@@ -754,9 +754,6 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNameChangedEventArgsTest.cs" />
     <Compile Include="Common\PropertyReflectorTest.cs" />
     <Compile Include="Common\SchedulerStateHolderTest.cs" />
-    <Compile Include="Common\Collections\TreeItemEntityHelperTest.cs" />
-    <Compile Include="Common\Collections\TreeItemEventArgsTest.cs" />
-    <Compile Include="Common\Collections\TreeItemTest.cs" />
     <Compile Include="Common\CommonStateHolderTest.cs" />
     <Compile Include="Common\PasteOptionsTest.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItemTest.cs" />

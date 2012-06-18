@@ -308,7 +308,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the group page on team.
         /// </summary>
         /// <value>The group page on team.</value>
-        IGroupPage GroupPageOnTeam { get; set; }
+        IGroupPageLight GroupPageOnTeam { get; set; }
 
         /// <summary>
         /// Gets or sets the fairness value.
@@ -320,7 +320,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the group page on compare with.
         /// </summary>
         /// <value>The group page on compare with.</value>
-        IGroupPage GroupPageOnCompareWith { get; set; }
+        IGroupPageLight GroupPageOnCompareWith { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to keep shift categories.

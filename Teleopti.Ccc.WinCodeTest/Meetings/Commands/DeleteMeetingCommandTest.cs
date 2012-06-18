@@ -1,6 +1,10 @@
+using System.Collections.Generic;
+using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Commands;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -17,6 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
         private IMeetingRepository _meetingRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private ICanModifyMeeting _canModifyMeeting;
+        private IMeetingParticipantPermittedChecker _meetingParticipantPermittedChecker;
 
         [SetUp]
         public void Setup()
@@ -26,7 +31,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             _meetingRepository = _mocks.StrictMock<IMeetingRepository>();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _canModifyMeeting = _mocks.StrictMock<ICanModifyMeeting>();
-            _target = new DeleteMeetingCommand(_view, _meetingRepository, _unitOfWorkFactory, _canModifyMeeting);
+            _meetingParticipantPermittedChecker = _mocks.StrictMock<IMeetingParticipantPermittedChecker>();
+            _target = new DeleteMeetingCommand(_view, _meetingRepository, _unitOfWorkFactory, _canModifyMeeting, _meetingParticipantPermittedChecker);
         }
 
 		[Test]
@@ -74,6 +80,11 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 				Expect.Call(() => _meetingRepository.Remove(meeting));
 				Expect.Call(() => unitOfWork.PersistAll());
 				Expect.Call(_view.ReloadMeetings);
+                Expect.Call(meeting.MeetingPersons).Return(new List<IMeetingPerson>());
+                Expect.Call(meeting.StartDate).Return(new DateOnly());
+                Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
+                Expect.Call(_meetingParticipantPermittedChecker.ValidatePermittedPersons(null, new DateOnly(), null, null)).
+                    IgnoreArguments().Return(true);
 			}
 			using (_mocks.Playback())
 			{
@@ -93,5 +104,28 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 				Assert.That(_target.CanExecute(), Is.False);
 			}
 		}
+
+        [Test]
+        public void ShouldNotDeleteIfAnyParticipantNotPermitted()
+        {
+            var meeting = _mocks.StrictMock<IMeeting>();
+            var unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
+            using (_mocks.Record())
+            {
+                Expect.Call(_view.SelectedMeeting).Return(meeting).Repeat.Twice();
+                Expect.Call(meeting.MeetingPersons).Return(new List<IMeetingPerson>());
+                Expect.Call(meeting.StartDate).Return(new DateOnly());
+                Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
+                Expect.Call(_meetingParticipantPermittedChecker.ValidatePermittedPersons(null, new DateOnly(), null, null)).
+                    IgnoreArguments().Return(false);
+                Expect.Call(_canModifyMeeting.CanExecute).Return(true);
+                Expect.Call(_view.ConfirmDeletion(meeting)).Return(true);
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            }
+            using (_mocks.Playback())
+            {
+                _target.Execute();
+            }
+        }
     }
 }

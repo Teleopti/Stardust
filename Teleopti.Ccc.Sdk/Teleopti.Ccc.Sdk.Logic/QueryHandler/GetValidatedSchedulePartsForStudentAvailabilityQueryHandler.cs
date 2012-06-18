@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
     	private readonly IScenarioProvider _scenarioProvider;
     	private readonly IAssembler<IPreferenceDay, PreferenceRestrictionDto> _preferenceDayAssembler;
     	private readonly IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> _studentAvailabilityDayAssembler;
-    	private readonly IRuleSetProjectionService _ruleSetProjectionService;
+    	private readonly IWorkShiftWorkTime _workShiftWorkTime;
 
-    	public GetValidatedSchedulePartsForStudentAvailabilityQueryHandler(IUnitOfWorkFactory unitOfWorkFactory, IShiftCategoryRepository shiftCategoryRepository, IActivityRepository activityRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IScenarioProvider scenarioProvider, IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler, IAssembler<IStudentAvailabilityDay,StudentAvailabilityDayDto> studentAvailabilityDayAssembler, IRuleSetProjectionService ruleSetProjectionService)
+    	public GetValidatedSchedulePartsForStudentAvailabilityQueryHandler(IUnitOfWorkFactory unitOfWorkFactory, IShiftCategoryRepository shiftCategoryRepository, IActivityRepository activityRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IScenarioProvider scenarioProvider, IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler, IAssembler<IStudentAvailabilityDay,StudentAvailabilityDayDto> studentAvailabilityDayAssembler, IWorkShiftWorkTime workShiftWorkTime)
         {
         	_unitOfWorkFactory = unitOfWorkFactory;
         	_shiftCategoryRepository = shiftCategoryRepository;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
     		_scenarioProvider = scenarioProvider;
     		_preferenceDayAssembler = preferenceDayAssembler;
     		_studentAvailabilityDayAssembler = studentAvailabilityDayAssembler;
-    		_ruleSetProjectionService = ruleSetProjectionService;
+    		_workShiftWorkTime = workShiftWorkTime;
         }
 
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 																		 _preferenceDayAssembler,
 																		 _studentAvailabilityDayAssembler,
 																		 new MinMaxWorkTimeChecker(
-																			 _ruleSetProjectionService), clientsCulture,
+																			 _workShiftWorkTime), clientsCulture,
 																			 new PreferenceNightRestChecker(new NightlyRestFromPersonOnDayExtractor(person)));
 
 					const bool useStudentAvailability = true;

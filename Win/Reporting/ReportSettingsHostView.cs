@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
         public IReportSettingsScheduledTimePerActivityView GetSettingsForScheduledTimePerActivityReport()
         {
-            return new ReportSettingsScheduledTimePerActivityView(_eventAggregator);
+            return new ReportSettingsScheduledTimePerActivityView(_eventAggregator,_componentContext);
         }
 
         public void SetHeaderText(string text)
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public IReportSettingsScheduleTimeVersusTargetTimeView GetSettingsForScheduleTimeVersusTargetTimeReport
 		{
-			get { return new ReportSettingsScheduleTimeVersusTargetTimeView(_eventAggregator); }
+			get { return new ReportSettingsScheduleTimeVersusTargetTimeView(_eventAggregator,_componentContext); }
 		}
 
     	public  ReportSettingsScheduleTimeVersusTargetTimeModel ScheduleTimeVersusTargetSettingsModel

@@ -40,7 +40,7 @@ Scenario: Browse to root and sign in to Mobile Reports
 	Given I am a user with access only to Mobile Reports
 	When I navigate to the site's root
 	And I sign in
-	Then I should see MyTime
+	Then I should see Mobile Reports
 
 Scenario: Browse to MyTime and sign in
 	Given I am a user with access to all areas

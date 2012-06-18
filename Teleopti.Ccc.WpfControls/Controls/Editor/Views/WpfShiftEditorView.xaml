@@ -24,7 +24,6 @@
             <MenuItem Command="{Binding Path=AddPersonalShiftCommand.Command}"/>
             <MenuItem Command="{Binding Path=AddOvertimeCommand.Command}"/>
             <MenuItem Command="{Binding Path=AddAbsenceCommand.Command}"/>
-            <MenuItem Command="{Binding Path=CommitChangesCommand.Command}"/>
             <MenuItem Command="Editor:ShiftEditorRoutedCommands.MoveUp"/>
             <MenuItem Command="Editor:ShiftEditorRoutedCommands.MoveDown"  />
             <MenuItem Command="Editor:ShiftEditorRoutedCommands.Delete"/>

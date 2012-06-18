@@ -165,47 +165,5 @@ namespace Teleopti.Ccc.DomainTest.Helper
         {
             InParameter.MustBeTrue("parameter", false);
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), Test]
-        public void VerifyVerifyNestedArgumentNull()
-        {
-            NestedArgumentHolder nestedArgumentHolder = new NestedArgumentHolder();
-            nestedArgumentHolder.TheNestedArgument = null;
-            ParameterHolder parameterHolder = new ParameterHolder();
-            parameterHolder.TheParameter = nestedArgumentHolder;
-            Exception exception = null;
-
-            try
-            {
-                InParameter.NestedArgumentNotNull("TheParameter", "TheNestedArgument", parameterHolder.TheParameter.TheNestedArgument);
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
-            Assert.IsNotNull(exception);
-            Assert.IsInstanceOf<ArgumentException>(exception);
-            Assert.IsNotNull(exception.InnerException);
-            Assert.IsInstanceOf<ArgumentNullException>(exception.InnerException);
-
-            string errorMessage = exception.Message;
-            Assert.IsTrue(errorMessage.Contains("TheParameter"));
-            Assert.IsTrue(errorMessage.Contains("TheNestedArgument"));
-
-            string innerErrorMessage = exception.InnerException.Message;
-            Assert.IsTrue(innerErrorMessage.Contains("TheNestedArgument"));
-            Assert.IsFalse(innerErrorMessage.Contains("TheParameter"));
-        }
-
-        private class ParameterHolder
-        {
-            public NestedArgumentHolder TheParameter{ get; set; }
-        }
-
-         private class NestedArgumentHolder
-        {
-            public string TheNestedArgument { get; set; }
-        }
-
     }
 }

@@ -13,18 +13,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         private DateOnlyPeriod _loadedDateOnlyPeriod;
         private readonly DateTimePeriod _loadedDateTimePeriod;
         private readonly ICccTimeZoneInfo _timeZoneInfo;
-        private readonly IRuleSetProjectionService _ruleSetProjectionService;
-        private ISchedulingResultStateHolder _stateHolder;
+    	private readonly IWorkShiftWorkTime _workShiftWorkTime;
+    	private ISchedulingResultStateHolder _stateHolder;
         private readonly IList<KeyValuePair<IPerson, DateOnly>> _personsAffectedPeriodDates = new List<KeyValuePair<IPerson, DateOnly>>();
     	readonly IDictionary<KeyValuePair<IPerson, DateOnly>, AgentInfoHelper> _personsAffectedPeriodDatesDic = new Dictionary<KeyValuePair<IPerson, DateOnly>, AgentInfoHelper>();
         private ISchedulingOptions _schedulingOptions;
         private KeyValuePair<IPerson, DateOnly> _selectedPersonDate;
 
-        public SingleAgentRestrictionModel(DateTimePeriod dateTimePeriod, ICccTimeZoneInfo timeZoneInfo, IRuleSetProjectionService ruleSetProjectionService)
+        public SingleAgentRestrictionModel(DateTimePeriod dateTimePeriod, ICccTimeZoneInfo timeZoneInfo, IWorkShiftWorkTime workShiftWorkTime)
         {
             _loadedDateTimePeriod = dateTimePeriod;
             _timeZoneInfo = timeZoneInfo;
-            _ruleSetProjectionService = ruleSetProjectionService;
+        	_workShiftWorkTime = workShiftWorkTime;
             _loadedDateOnlyPeriod = _loadedDateTimePeriod.ToDateOnlyPeriod(_timeZoneInfo);
         }
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
                 DateOnly startDate = onlyPeriod.Value.StartDate;
                 if (_personsAffectedPeriodDatesDic.ContainsKey(new KeyValuePair<IPerson, DateOnly>(person, startDate)))
                     continue;
-                var agentInfo = new AgentInfoHelper(person, startDate, StateHolder, _schedulingOptions, _ruleSetProjectionService);
+					 var agentInfo = new AgentInfoHelper(person, startDate, StateHolder, _schedulingOptions, _workShiftWorkTime);
                 //agentInfo.SchedulePeriodData(_schedulingOptions);
                 _personsAffectedPeriodDatesDic.Add(new KeyValuePair<IPerson, DateOnly>(person, startDate), agentInfo);
                 PersonsAffectedPeriodDates.Add(new KeyValuePair<IPerson, DateOnly>(person, startDate));

@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Logic;
-using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
 
@@ -32,6 +31,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
             builder.RegisterType<SwapService>().As<ISwapService>().InstancePerDependency();
             builder.RegisterType<EmptyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>().InstancePerDependency();
             builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>().InstancePerDependency();
+            builder.RegisterType<MessageBrokerEnablerFactory>().As<IMessageBrokerEnablerFactory>().InstancePerDependency();
         }
     }
 }

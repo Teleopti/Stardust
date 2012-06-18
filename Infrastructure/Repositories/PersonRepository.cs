@@ -462,7 +462,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .List();
 
                 var foundPeople = CollectionHelper.ToDistinctGenericCollection<IPerson>(queryResult[0]);
-
                 result.AddRange(foundPeople);
             }
             return result;
@@ -474,7 +473,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return FindPeople(peopleId);
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "elände")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "elände"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData)
         {
             IMultiCriteria multiCrit = Session.CreateMultiCriteria()
@@ -503,20 +502,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             //ta bort detta - gammalt blajj. ska inte behövas om frågorna gör rätt. Gör om, gör rätt!
             //Ola: När man kör från PeopleLoader i Schedulern behövs inte detta nu. Vågar dock inte ta bort det för denna används från många ställen
-            foreach (IPerson person in persons)
-            {
-                foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
-                {
-                    foreach (PersonSkill pSkill in personPeriod.PersonSkillCollection)
-                    {
-                        if (pSkill.Skill.Activity.Name == "xyyyxxxyyyyx")
-                            throw new InvalidDataException("lazy load elände");
-                    }
-                }
-            }
+			foreach (IPerson person in persons)
+			{
+				foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
+				{
+					foreach (PersonSkill pSkill in personPeriod.PersonSkillCollection)
+					{
+						if (pSkill.Skill.Activity.Name == "xyyyxxxyyyyx")
+							throw new InvalidDataException("lazy load elände");
+					}
+				}
+			}
 
 
-            return persons;
+    		return persons;
         }
 
         private static DetachedCriteria personWorkflowControlSet()

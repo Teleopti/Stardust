@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 return (from s in _skills
                         where
-                        (s.WorkloadCollection.Count() > 0 ||
+                        (s.WorkloadCollection.Any() ||
                         s is IChildSkill || s.SkillType.ForecastSource == ForecastSource.MaxSeatSkill
 						|| s.SkillType.ForecastSource == ForecastSource.NonBlendSkill) &&
                         !(s is IMultisiteSkill)

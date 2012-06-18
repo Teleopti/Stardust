@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
     [TestFixture]
     public class ExternalAgentStateTest
     {
-        private IExternalAgentState _target;
+        private ExternalAgentState _target;
         private DateTime _date;
         private DateTime _batchId;
 
@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _target.PlatformTypeId = platformId;
             _target.TimeInState = TimeSpan.FromSeconds(14);
             _target.IsSnapshot = true;
+        	_target.DataSourceId = 13;
+			  _target.BatchId = new DateTime(2000,1,1);
 
             Assert.AreEqual("47", _target.ExternalLogOn);
             Assert.AreEqual("69", _target.StateCode);
@@ -55,6 +57,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(platformId, _target.PlatformTypeId);
             Assert.AreEqual(TimeSpan.FromSeconds(14), _target.TimeInState);
             Assert.AreEqual(true,_target.IsSnapshot);
+			  Assert.AreEqual(13, _target.DataSourceId);
+			  Assert.AreEqual(new DateTime(2000,1,1), _target.BatchId);
         }
     }
 }

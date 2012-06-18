@@ -335,6 +335,7 @@
     <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPagesNoRoot.cs" />
     <Compile Include="Common\PropertyPageAndWizard\IAbstractPropertyPagesNoRoot.cs" />
     <Compile Include="Common\PropertyPageAndWizard\IPropertyPageNoRoot.cs" />
+    <Compile Include="Converters\DateTimeConverter\TimeSpanToStringConverter.cs" />
     <Compile Include="Forecasting\CopyToSkillCommand.cs" />
     <Compile Include="Forecasting\CopyToSkillModel.cs" />
     <Compile Include="Forecasting\CopyToSkillPresenter.cs" />
@@ -400,6 +401,7 @@
     <Compile Include="Grouping\Commands\LoadOrganizationCommand.cs" />
     <Compile Include="Grouping\Commands\LoadUserDefinedTabsCommand.cs" />
     <Compile Include="Grouping\PersonSelectorPresenter.cs" />
+    <Compile Include="Grouping\SchedulerGroupPagesProvider.cs" />
     <Compile Include="Intraday\DayLayerModel.cs" />
     <Compile Include="Intraday\DispatcherWrapper.cs" />
     <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommand.cs" />
@@ -512,11 +514,14 @@
     <Compile Include="Presentation\IReportSettingsScheduleTimeVersusTargetTimeView.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenter.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailModel.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailPresenter.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayDataExtractor.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRow.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRowCreator.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsModel.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPresenter.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\IAgentRestrictionsDetailView.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryDirection.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryModel.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryPresenter.cs" />
@@ -562,10 +567,6 @@
     <Compile Include="Scheduling\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Scheduling\NotSkillGroupSpecification.cs" />
     <Compile Include="Common\RestoreFocusWhenCompleted.cs" />
-    <Compile Include="Common\ScheduleFilter\CccTreeNode.cs" />
-    <Compile Include="Common\ScheduleFilter\IScheduleFilterView.cs" />
-    <Compile Include="Common\ScheduleFilter\ScheduleFilterModel.cs" />
-    <Compile Include="Common\ScheduleFilter\ScheduleFilterPresenter.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
     <Compile Include="Common\SearchPersonPresenter.cs" />
     <Compile Include="Common\Time\TimeDurationPickerPresenter.cs" />
@@ -587,12 +588,8 @@
     <Compile Include="Common\Clipboard\MergePasteBehavior.cs" />
     <Compile Include="Common\Clipboard\NormalPasteBehavior.cs" />
     <Compile Include="Common\Collections\FilteredCollection.cs" />
-    <Compile Include="Common\Collections\ITreeNodeAdvDisplayInfo.cs" />
     <Compile Include="Common\Collections\FilterExtensions.cs" />
-    <Compile Include="Common\Collections\ITreeNodeDisplayInfo.cs" />
     <Compile Include="Common\Collections\ShowOnlyCollection.cs" />
-    <Compile Include="Common\Collections\TreeNodeAdvDisplayInfo.cs" />
-    <Compile Include="Common\Collections\TreeNodeDisplayInfo.cs" />
     <Compile Include="Common\Commands\ApplicationCommandModel.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\ExpanderBehavior.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\UIElementBehavior.cs" />
@@ -1076,10 +1073,6 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNameChangedEventArgs.cs" />
     <Compile Include="Common\PropertyReflector.cs" />
     <Compile Include="Common\SchedulerStateHolder.cs" />
-    <Compile Include="Common\Collections\ITreeItem.cs" />
-    <Compile Include="Common\Collections\TreeItem.cs" />
-    <Compile Include="Common\Collections\TreeItemEntityHelper.cs" />
-    <Compile Include="Common\Collections\TreeItemEventArgs.cs" />
     <Compile Include="Common\CommonStateHolder.cs" />
     <Compile Include="Common\DailyAssignmentList.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItem.cs" />

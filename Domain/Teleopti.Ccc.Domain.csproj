@@ -200,6 +200,7 @@
     <Compile Include="Forecasting\QueueStatisticsCalculator.cs" />
     <Compile Include="GroupPageCreator\ContractGroupPage.cs" />
     <Compile Include="GroupPageCreator\ContractScheduleGroupPage.cs" />
+    <Compile Include="GroupPageCreator\GroupPageLight.cs" />
     <Compile Include="GroupPageCreator\GroupPageOptions.cs" />
     <Compile Include="GroupPageCreator\IGroupingsCreator.cs" />
     <Compile Include="GroupPageCreator\ISearchIndexBuilder.cs" />
@@ -723,6 +724,7 @@
     <Compile Include="Scheduling\TimeLayer\MultiplicatorDefinitionSet.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorLayer.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorProjectionService.cs" />
+    <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
     <Compile Include="Security\Authentication\ApplicationDataSourceProvider.cs" />

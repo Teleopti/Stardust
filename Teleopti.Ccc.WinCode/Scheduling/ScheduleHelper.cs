@@ -101,29 +101,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 IProjectionService projSvc = schedule.ProjectionService();
                 IVisualLayerCollection res = projSvc.CreateProjection();
 
-                if (res.Count() > 0)
+                if (res.Any())
                 {
                     //get each visual layer for schedule
-                    foreach (IVisualLayer layer in res.FilterLayers<IAbsence>())
+                    if (res.FilterLayers<IAbsence>().Any(layer => layer.Payload.Equals(absence)))
                     {
-                        if (layer.Payload.Equals(absence))
-                        {
-                            schedulesWithAbsence.Add(schedule);
-                            break;
-                        }
+                    	schedulesWithAbsence.Add(schedule);
                     }
                 }
                 else
                 {
-                    IList<IPersonAbsence> abses = schedule.PersonAbsenceCollection();
-                    foreach (IPersonAbsence abs in abses)
-                    {
-                        if (abs.Layer.Payload.Equals(absence))
-                        {
-                            schedulesWithAbsence.Add(schedule);
-                            break;
-                        }
-                    }
+                	IList<IPersonAbsence> abses = schedule.PersonAbsenceCollection();
+                	if (abses.Any(abs => abs.Layer.Payload.Equals(absence)))
+                	{
+                		schedulesWithAbsence.Add(schedule);
+                	}
                 }
             }
 

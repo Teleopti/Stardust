@@ -95,7 +95,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 e.Style.CellType = "ComboBox";
                 e.Style.DataSource = _comboItems;
                 e.Style.DisplayMember = _displayMember;
-
+				e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
+            	
                 OnCellDisplayChanged(dataItem, e);
                 e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
 

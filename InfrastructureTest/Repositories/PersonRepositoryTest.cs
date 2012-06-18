@@ -1054,7 +1054,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(2, loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
 		}
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldFindPeople()
         {
             var person = CreateAggregateWithCorrectBusinessUnit();
@@ -1066,6 +1066,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IContract ctr = ContractFactory.CreateContract("sdf");
             IPartTimePercentage pTime = PartTimePercentageFactory.CreatePartTimePercentage("sdf");
             IContractSchedule cSc = ContractScheduleFactory.CreateContractSchedule("sdf");
+        	DateOnly date = new DateOnly(2000, 1, 2);
 
             PersistAndRemoveFromUnitOfWork(site);
             PersistAndRemoveFromUnitOfWork(team);
@@ -1073,7 +1074,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(pTime);
             PersistAndRemoveFromUnitOfWork(cSc);
 
-            person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 2), PersonContractFactory.CreatePersonContract(ctr, pTime, cSc), team));
+            person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, PersonContractFactory.CreatePersonContract(ctr, pTime, cSc), team));
             foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
             {
                 PersistAndRemoveFromUnitOfWork(personPeriod.Team.Site);
@@ -1122,7 +1123,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection[0].ExtenderCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection[0].LimiterCollection));
 			Assert.AreEqual(2, loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
-
 		}
 
 		[Test]

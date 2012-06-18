@@ -1006,7 +1006,7 @@
     <value>Aperçu Résultats</value>
   </data>
   <data name="RightAxis" xml:space="preserve">
-    <value>Axe Droit</value>
+    <value>Axe droit</value>
   </data>
   <data name="RightToLeft" xml:space="preserve">
     <value>De droite à gauche</value>
@@ -1300,7 +1300,7 @@
     <value>A partir de</value>
   </data>
   <data name="DateTo" xml:space="preserve">
-    <value>Jusque</value>
+    <value>À</value>
   </data>
   <data name="NewAbsenceRequest" xml:space="preserve">
     <value>Nouvelle demande d'absence</value>
@@ -1357,7 +1357,7 @@
     <value>A partir de:</value>
   </data>
   <data name="ToColon" xml:space="preserve">
-    <value>Jusque:</value>
+    <value>À:</value>
   </data>
   <data name="QuestionDeleteTheWorkloadTwoParameters" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir supprimer le Volume {0}{1}{0}?</value>
@@ -1396,7 +1396,7 @@
     <value>Sélection</value>
   </data>
   <data name="WorkingIntervalWeek" xml:space="preserve">
-    <value>Semaine</value>
+    <value>Sem.</value>
   </data>
   <data name="Templates" xml:space="preserve">
     <value>Modèles</value>
@@ -1612,7 +1612,7 @@
     <value>Objet:</value>
   </data>
   <data name="ToThreeDots" xml:space="preserve">
-    <value>Jusque...</value>
+    <value>À...</value>
   </data>
   <data name="CombinedGrid" xml:space="preserve">
     <value>Activités</value>
@@ -1960,7 +1960,7 @@
     <value>Ajouter Overtime...</value>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
-    <value>Ajouter Activité personnelle...</value>
+    <value>Ajouter Activité Personnelle...</value>
   </data>
   <data name="GroupIsNotEmpty" xml:space="preserve">
     <value>Groupe n'est pas vide</value>
@@ -2044,7 +2044,7 @@
     <value>Etes-vous sûr de supprimer le planning contrat '{0}'?</value>
   </data>
   <data name="ApplicationLogInName" xml:space="preserve">
-    <value>Indentifiant Application</value>
+    <value>Identifiant Application</value>
   </data>
   <data name="AuthenticationFailed" xml:space="preserve">
     <value>Echec de l''authentification. Essayez à nouveau svp.</value>
@@ -2821,7 +2821,7 @@
     <value>Log on application</value>
   </data>
   <data name="LoginNameColon" xml:space="preserve">
-    <value>Indentifiant:</value>
+    <value>Identifiant:</value>
   </data>
   <data name="WindowsLogon" xml:space="preserve">
     <value>Connexion Windows</value>
@@ -4420,7 +4420,7 @@
     <value>Jour de semaine </value>
   </data>
   <data name="FromTo" xml:space="preserve">
-    <value>A partir de - Jusque </value>
+    <value>A partir de - À</value>
   </data>
   <data name="WrongNumberOfDaysOff" xml:space="preserve">
     <value>Mauvais nombre de Jours libres</value>
@@ -4519,7 +4519,7 @@
     <value>Entre Jours libres</value>
   </data>
   <data name="BlockScheduling" xml:space="preserve">
-    <value>Bloquer planification</value>
+    <value>Planification par blocs</value>
   </data>
   <data name="Left" xml:space="preserve">
     <value>Gauche</value>
@@ -4822,7 +4822,7 @@
     <value>Disponibilté:</value>
   </data>
   <data name="NextDayColon" xml:space="preserve">
-    <value>Prochain jour:</value>
+    <value>Jour + 1:</value>
   </data>
   <data name="DataSourceRequired" xml:space="preserve">
     <value>Source de données requise</value>
@@ -4846,7 +4846,7 @@
     <value>Mot de passe requis</value>
   </data>
   <data name="UserNameRequired" xml:space="preserve">
-    <value>Indentifiant requis</value>
+    <value>Identifiant requis</value>
   </data>
   <data name="ExportMeetings" xml:space="preserve">
     <value>Exporter Réunions</value>
@@ -5818,13 +5818,13 @@
     <value>Aucune disponibilité definie pour {0}</value>
   </data>
   <data name="NoPersonPeriodIsDefinedForTheDate" xml:space="preserve">
-    <value>Aucune Péridoe personne n'est definie à cette date</value>
+    <value>Aucune Période personne n'est definie à cette date</value>
   </data>
   <data name="NoPreferenceFor" xml:space="preserve">
     <value>Acune préférence pour {0}</value>
   </data>
   <data name="NoRotationDefinedFor" xml:space="preserve">
-    <value>Aucune rotations définie pour {0}</value>
+    <value>Aucune rotation définie pour {0}</value>
   </data>
   <data name="FilterPersonAccounts" xml:space="preserve">
     <value>Filtre comptes personne</value>
@@ -6064,7 +6064,7 @@
     <value>Alertes</value>
   </data>
   <data name="WeeklyWorkTime" xml:space="preserve">
-    <value>Temps de travail hebdomadaire</value>
+    <value>Travail hebdomadaire</value>
   </data>
   <data name="FilterDays" xml:space="preserve">
     <value>Filtrer jours</value>
@@ -6349,7 +6349,7 @@
     <value>Audit Trail Planning</value>
   </data>
   <data name="BlockAndTeamScheduling" xml:space="preserve">
-    <value>Bloquer et Planification équipe</value>
+    <value>Planification équipe et bloc</value>
   </data>
   <data name="UseTeamScheduling" xml:space="preserve">
     <value>Utiliser planification équipe</value>
@@ -6367,7 +6367,7 @@
     <value>Groupe Budget</value>
   </data>
   <data name="ErrorMessageNotAValidSchedulePeriod" xml:space="preserve">
-    <value>Ceci n'est pas une Période Planning valable</value>
+    <value>Pas une Période Planning valide</value>
   </data>
   <data name="NetNetStaff" xml:space="preserve">
     <value>Personnel net net</value>
@@ -6796,7 +6796,7 @@
     <value>Ne rompez pas ' max sièges '</value>
   </data>
   <data name="MaxSeatLimitBroken" xml:space="preserve">
-    <value>' Max sièges' sont rompus</value>
+    <value>'Max sièges' sont rompus</value>
   </data>
   <data name="UsePreferenceMustHavesOnly1" xml:space="preserve">
     <value>Utiliser Préférence 'Doit avoir seulement '</value>
@@ -6850,7 +6850,7 @@
     <value>Actualisation d'écran chaque:</value>
   </data>
   <data name="AddFromToPeriod" xml:space="preserve">
-    <value>Ajouter Période à partir de - jusque</value>
+    <value>Ajouter Période à partir de - à</value>
   </data>
   <data name="NewWorkflowControlSet" xml:space="preserve">
     <value>Nouveau contrôle de flux d'activités</value>
@@ -7770,7 +7770,7 @@ Période: {3}</value>
     <value>Filtre sur activité de préférence</value>
   </data>
   <data name="NotAllowedShiftCategories" xml:space="preserve">
-    <value>Catégories d'horaires non valide</value>
+    <value>Catégories d'horaires non valides</value>
   </data>
   <data name="CheckPermissionsForCastle" xml:space="preserve">
     <value>Permissions locales insuffisantes. Mise en cache doit être désactivée. Merci de contacter votre administrateur système.</value>
@@ -8175,5 +8175,74 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
     <value>La ressource externe est utilisée par un autre programme, merci de réessayer plus tard.</value>
+  </data>
+  <data name="AvailabilityFulfillment" xml:space="preserve">
+    <value>Disponibilités remplies</value>
+  </data>
+  <data name="MustHaveFulfillment" xml:space="preserve">
+    <value>Doit Avoir remplis</value>
+  </data>
+  <data name="PreferenceFulfillment" xml:space="preserve">
+    <value>Préférences remplies</value>
+  </data>
+  <data name="RotationFulfillment" xml:space="preserve">
+    <value>Rotations remplies</value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Disponibilités Etudiant remplies</value>
+  </data>
+  <data name="ResourceCalculateEveryColon" xml:space="preserve">
+    <value>Calcule ressources tous les:</value>
+  </data>
+  <data name="ImportForecastFromFile" xml:space="preserve">
+    <value>Importer fichier prévisions</value>
+  </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>Permissions de demandes</value>
+  </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>Montrer disponibilités pour échange</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>Heure de début {0} doit être antérieure à fin {1}</value>
+  </data>
+  <data name="DuplicateDaysOffValidationError" xml:space="preserve">
+    <value>Doublon jours libres à {0}</value>
+  </data>
+  <data name="NoAbsenceDefined" xml:space="preserve">
+    <value>Vous devez créer au moins une absence pour réaliser ceci.</value>
+  </data>
+  <data name="NoAbsenceDefinedCaption" xml:space="preserve">
+    <value>Pas d'absence définie</value>
+  </data>
+  <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
+    <value>La durée d'intervalle de cette sub-compétence doit être la même que celle de sa compétence mère, qui est {0} minutes.</value>
+  </data>
+  <data name="AbsenceType" xml:space="preserve">
+    <value>Type d'absence:</value>
+  </data>
+  <data name="AbsenceRequestsWeb" xml:space="preserve">
+    <value>Demandes d'Absence</value>
+  </data>
+  <data name="FullDay" xml:space="preserve">
+    <value>Jour entier</value>
+  </data>
+  <data name="YouShouldHaveXDaysOff" xml:space="preserve">
+    <value>Vous devez avoir {0} jours libres.</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Anywhere</value>
+  </data>
+  <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
+    <value>Vous devez avoir entre {0} et {1} jours libres.</value>
+  </data>
+  <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
+    <value>Vos préférences peuvent résulter en {0} jours libres.</value>
+  </data>
+  <data name="YouShouldWorkXHours" xml:space="preserve">
+    <value>Vous devez travailler {0} heures.</value>
+  </data>
+  <data name="MissingAbsenceType" xml:space="preserve">
+    <value>Type d'absence manquant.</value>
   </data>
 </root>

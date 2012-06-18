@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,7 +17,7 @@ namespace Teleopti.Ccc.Win.Optimization
 {
     public partial class OptimizationPreferencesDialog : BaseRibbonForm, IDataExchange
     {
-
+    	private readonly IEventAggregator _eventAggregator;
         public IOptimizationPreferences Preferences { get; private set; }
 
 		private GeneralPreferencesPersonalSettings _defaultGeneralPreferences;
@@ -25,19 +27,22 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private IList<IDataExchange> panels { get; set; }
 
-        private readonly IList<IGroupPage> _groupPages;
-        private readonly IList<IScheduleTag> _scheduleTags;
+        private readonly IList<IGroupPageLight> _groupPages;
+    	private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
+    	private readonly IList<IScheduleTag> _scheduleTags;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public OptimizationPreferencesDialog(
             IOptimizationPreferences preferences, 
-            IList<IGroupPage> groupPages, 
+            ISchedulerGroupPagesProvider  groupPagesProvider, 
             IList<IScheduleTag> scheduleTags)
             : this()
         {
             Preferences = preferences;
-            _groupPages = groupPages;
-            _scheduleTags = scheduleTags;
+			_groupPagesProvider = groupPagesProvider;
+			_groupPages = _groupPagesProvider.GetGroups(true);
+        	_scheduleTags = scheduleTags;
+			_eventAggregator = new EventAggregator();
         }
 
         private OptimizationPreferencesDialog()
@@ -49,9 +54,9 @@ namespace Teleopti.Ccc.Win.Optimization
         private void Form_Load(object sender, EventArgs e)
         {
 			LoadPersonalSettings();
-            generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags);
+            generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
             dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
-            extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPages);
+	    extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _eventAggregator);
             advancedPreferencesPanel1.Initialize(Preferences.Advanced);
             panels = new List<IDataExchange>{generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, advancedPreferencesPanel1};
 
@@ -162,6 +167,11 @@ namespace Teleopti.Ccc.Win.Optimization
 		private void tabControlTopLevel_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.SelectNextControl(this.ActiveControl, true, true, true, true);
+		}
+
+		private void OptimizationPreferencesDialog_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (generalPreferencesPanel1 != null) generalPreferencesPanel1.UnsubscribeEvents();
 		}
     }
 }

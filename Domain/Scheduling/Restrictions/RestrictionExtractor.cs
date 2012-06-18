@@ -195,8 +195,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 {
                     effectiveRestriction.IsStudentAvailabilityDay = true;
                     var studentAvailabilityRestriction = new StudentAvailabilityRestriction();
-                    studentAvailabilityRestriction.StartTimeLimitation = new StartTimeLimitation(TimeSpan.MaxValue, null);
-                    studentAvailabilityRestriction.EndTimeLimitation = new EndTimeLimitation(null, TimeSpan.Zero);
+						  studentAvailabilityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(23, 59, 59), new TimeSpan(23, 59, 59));
+                    studentAvailabilityRestriction.EndTimeLimitation = new EndTimeLimitation(TimeSpan.Zero, TimeSpan.Zero);
                     foreach (var restrict in restriction.RestrictionCollection)
                     {
                         if (!restrict.StartTimeLimitation.StartTime.HasValue || restrict.StartTimeLimitation.StartTime < studentAvailabilityRestriction.StartTimeLimitation.StartTime)

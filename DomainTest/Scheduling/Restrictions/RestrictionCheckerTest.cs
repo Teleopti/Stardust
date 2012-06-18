@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 EndTimeLimitation =
                 new EndTimeLimitation(
                     new TimeSpan(21, 0, 0),
-                    new TimeSpan(20, 0, 0))
+                    new TimeSpan(22, 0, 0))
             };
             dayRestriction.NotAvailable = false;
             var dayRestrictions = new List<IRestrictionBase> { dayRestriction };
