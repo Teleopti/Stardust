@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 #line 6
 this.ScenarioSetup(scenarioInfo);
 #line 7
- testRunner.When("I navigate to application url Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Pre" +
-                    "ference.Tests.html");
+ testRunner.When("I navigate to unit test url Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Prefe" +
+                    "rence.Tests.html");
 #line 8
  testRunner.Then("I should see the tests run");
 #line 9

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Find = WatiN.Core.Find;
@@ -9,9 +10,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	public class QUnitTestsStepDefinition
 	{
 
-		[When(@"I navigate to application url (.*)")]
+		[When(@"I navigate to unit test url (.*)")]
 		public void WhenINavigateTo(string url)
 		{
+			url += "?" + Guid.NewGuid();
 			Navigation.GoTo(url);
 		}
 
