@@ -954,4 +954,13 @@
   <data name="ResRequestPeriod" xml:space="preserve">
     <value>Anfrageperiode</value>
   </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Jetzt umleiten</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Zeitüberschreitung</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Ihre Sitzung wurde beendet, da Sie längere Zeit nicht auf der Seite aktiv waren. Sie werden gleich auf die Anmelde-Seite umgeleitet.</value>
+  </data>
 </root>
