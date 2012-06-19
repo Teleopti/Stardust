@@ -11,34 +11,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class AbsenceRequestFromScheduleStepDefinitions 
 	{
-		[When(@"I click absence request tab")]
-		public void WhenIClickAbsenceRequestTab()
-		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.EventualClick();
-		}
-
-
-		[When(@"I input absence request values with (.*)")]
-		public void WhenIInputAbsenceRequestValuesWithVacation(string name)
-		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			var date = DateTime.Today;
-			var time = date.AddHours(12);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-			Pages.Pages.CurrentEditRequestPage.AbsenceTypesSelectList.Select(name);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
-		}
-
-		[Given(@"I have a requestable absence called (.*)")]
-		public void GivenIHaveARequestableAbsenceCalledVacation(string name)
-		{
-			UserFactory.User().Setup(new RequestableAbsenceType(name));
-		}
 
 		[Then(@"I should see an absence type called (.*) in droplist")]
 		public void ThenIShouldSeeAAbsenceTypeCalledVacationInDroplist(string name)

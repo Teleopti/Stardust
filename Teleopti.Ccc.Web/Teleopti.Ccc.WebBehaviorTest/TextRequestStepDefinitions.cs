@@ -17,13 +17,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class TextRequestStepDefinitions
 	{
-		[When(@"I click add request button in the toolbar")]
-		public void WhenIClickAddTextRequestButtonInTheToolbar()
-		{
-			Pages.Pages.CurrentEditRequestPage.AddTextRequestButton.EventualClick();
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-		}
-
 		[When(@"I input text request values")]
 		public void WhenIInputTextRequstValues()
 		{
@@ -205,12 +198,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				ScenarioContext.Current.Pending();
 			
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AddTextRequestButton.Exists, Is.False);
-		}
-
-		[Then(@"I should see the text request in the list")]
-		public void ThenIShouldSeeTheTextRequestInTheList()
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.Exists, Is.True);
 		}
 
 		[Then(@"I should not see the text request in the list")]

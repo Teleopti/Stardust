@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the absence request in the list")]
 		public void ThenIShouldSeeTheAbsenceRequestInTheList()
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.Exists, Is.True);
 		}
-
 	}
 }
