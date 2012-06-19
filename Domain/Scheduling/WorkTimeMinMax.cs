@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return ret;
         }
 
-    	public IList<IPossibleStartEndCategory> PossibleStartEndCategories
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public IList<IPossibleStartEndCategory> PossibleStartEndCategories
     	{
 			get { return _possibleStartEndCategories.ToList(); }
 			set { _possibleStartEndCategories = new HashSet<IPossibleStartEndCategory>(value); }

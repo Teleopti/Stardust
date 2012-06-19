@@ -121,16 +121,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
-		public DateTime MainShiftStartDateTime
-		{
-			get { return MainShiftProjection.Period().Value.StartDateTime; }
-		}
-
-		public DateTime MainShiftEndDateTime
-		{
-			get { return MainShiftProjection.Period().Value.EndDateTime; }
-		}
-
         public DayOfWeek DayOfWeek { get { return _dayOfWeek; } }
 
         public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, ReadOnlyCollection<IPersonAssignment> personAssignments)
@@ -163,7 +153,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             get { return _mainShift.ShiftCategory.DayOfWeekJusticeValues[_dayOfWeek]; }
         }
 
-        private static bool PeriodIsWorkTimeInProjection(IVisualLayerCollection mainShiftProjection, DateTimePeriod period)
+    	public TimeSpan WorkShiftStartTime
+    	{
+			get { return WorkShiftProjectionPeriod.StartDateTime.TimeOfDay; }
+    	}
+
+		public TimeSpan WorkShiftEndTime
+    	{
+			get { return WorkShiftProjectionPeriod.EndDateTime.TimeOfDay; }
+    	}
+
+    	private static bool PeriodIsWorkTimeInProjection(IVisualLayerCollection mainShiftProjection, DateTimePeriod period)
         {
             foreach (VisualLayer visualLayer in mainShiftProjection)
             {

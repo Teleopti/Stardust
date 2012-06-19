@@ -84,10 +84,10 @@ namespace Teleopti.Interfaces.Domain
     	/// <summary>
     	/// 
     	/// </summary>
-    	DateTime MainShiftStartDateTime { get; }
+    	TimeSpan WorkShiftStartTime { get; }
     	/// <summary>
     	/// 
     	/// </summary>
-    	DateTime MainShiftEndDateTime { get; }
+		TimeSpan WorkShiftEndTime { get; }
     }
 }

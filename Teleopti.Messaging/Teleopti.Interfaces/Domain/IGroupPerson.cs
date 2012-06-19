@@ -14,9 +14,9 @@ namespace Teleopti.Interfaces.Domain
 		ReadOnlyCollection<IPerson> GroupMembers { get; }
 
 		/// <summary>
-		/// Gets or sets the common shift category.
+		/// Gets or sets the common PossibleStartEndCategory.
 		/// </summary>
-		/// <value>The common shift category.</value>
-    	IShiftCategory CommonShiftCategory { get; set; }
+		/// <value>The common nPossibleStartEndCategory.</value>
+		IPossibleStartEndCategory CommonPossibleStartEndCategory  { get; set; }
     }
 }

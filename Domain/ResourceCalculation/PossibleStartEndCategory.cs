@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return other != null && GetHashCode().Equals(other.GetHashCode());
         }
 		
-		public override bool Equals(object other)
+		public override bool Equals(object obj)
 		{
-			var poss = other as IPossibleStartEndCategory;
+			var poss = obj as IPossibleStartEndCategory;
 			return poss != null && Equals(poss);
 		}
 
