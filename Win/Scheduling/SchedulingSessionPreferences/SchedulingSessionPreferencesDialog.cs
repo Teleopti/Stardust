@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
         	loadPersonalSettings();
 
-            schedulingSessionPreferencesPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule, 
+            schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule, 
 				_backToLegal,_groupPages,_scheduleTags);
             dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
             dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
@@ -107,11 +107,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             // don not use for now in scheduling
             if (!_backToLegal)
                 tabControlTopLevel.TabPages.Remove(tabPageDayOffPlanningOptions);
-            schedulingSessionPreferencesPanel1.ShiftCategoryVisible = true;
-            schedulingSessionPreferencesPanel1.ScheduleOnlyAvailableDaysVisible = true;
-            schedulingSessionPreferencesPanel1.ScheduleOnlyPreferenceDaysVisible = true;
-            schedulingSessionPreferencesPanel1.ScheduleOnlyRotationDaysVisible = true;
-            schedulingSessionPreferencesPanel1.UseSameDayOffsVisible = false;
+            schedulingSessionPreferencesTabPanel1.ShiftCategoryVisible = true;
+            schedulingSessionPreferencesTabPanel1.ScheduleOnlyAvailableDaysVisible = true;
+            schedulingSessionPreferencesTabPanel1.ScheduleOnlyPreferenceDaysVisible = true;
+            schedulingSessionPreferencesTabPanel1.ScheduleOnlyRotationDaysVisible = true;
+            schedulingSessionPreferencesTabPanel1.UseSameDayOffsVisible = false;
         }
 
         private void AddToHelpContext()
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             BackColor = ColorHelper.DialogBackColor();
             dayOffPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
-            schedulingSessionPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
+            schedulingSessionPreferencesTabPanel1.BackColor = ColorHelper.DialogBackColor();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            schedulingSessionPreferencesPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
+            schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
 
             if(dayOffPreferencesPanel1.ValidateData(ExchangeDataOption.ClientToServer))
             {

@@ -17877,6 +17877,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Same end time.
+        /// </summary>
+        public static string SameEndTime {
+            get {
+                return ResourceManager.GetString("SameEndTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same shift category.
+        /// </summary>
+        public static string SameShiftCategory {
+            get {
+                return ResourceManager.GetString("SameShiftCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same start time.
+        /// </summary>
+        public static string SameStartTime {
+            get {
+                return ResourceManager.GetString("SameStartTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Saturday.
         /// </summary>
         public static string Saturday {
@@ -22716,6 +22743,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UserDefinedOptions {
             get {
                 return ResourceManager.GetString("UserDefinedOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Restrictions.
+        /// </summary>
+        public static string UseRestriction {
+            get {
+                return ResourceManager.GetString("UseRestriction", resourceCulture);
             }
         }
         
