@@ -26,8 +26,38 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 			.click(function () {
 				_addTextRequest();
 			});
+
+		$('#Text-request-tab')
+			.click(function () {
+				_clearValidationError();
+				_hideAbsenceTypes();
+//				requestViewModel.IsFullDay(false);
+		});
+		$('#Absence-request-tab')
+			.click(function () {
+				_clearValidationError();
+				_showAbsenceTypes();
+//				requestViewModel.IsFullDay(true);
+		});
+		
 		_initControls();
 		_initLabels();
+	}
+
+	function _clearValidationError() {
+		$('#Schedule-addRequest-error').html('');
+	}
+
+	function _showAbsenceTypes() {
+		$('#Absence-type-element').show();
+		$('#Absence-request-tab').addClass("selected-tab");
+		$('#Text-request-tab').removeClass("selected-tab");
+	}
+
+	function _hideAbsenceTypes() {
+		$('#Absence-type-element').hide();
+		$('#Text-request-tab').addClass("selected-tab");
+		$('#Absence-request-tab').removeClass("selected-tab");
 	}
 
 	function _initControls() {

@@ -1,9 +1,12 @@
-﻿using Teleopti.Ccc.Web.Models.Shared;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
 	public class RequestsViewModel
 	{
+		public IEnumerable<AbsenceTypeViewModel> AbsenceTypes { get; set; }
 	}
 
 	public class RequestViewModel
