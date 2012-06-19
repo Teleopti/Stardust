@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -26,10 +25,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			var period = new DateOnlyPeriod(dateOnly, dateOnly).ToDateTimePeriod(skill.TimeZone);
 			period = period.ChangeEndTime(skill.MidnightBreakOffset.Add(TimeSpan.FromHours(1)));
 
+			var skillDays = skillStaffPeriods.Select(s => (ISkillDay) s.Parent).Distinct();
 			foreach (var workload in skill.WorkloadCollection)
 			{
-				var skillDay = skillStaffPeriods.First().Parent as ISkillDay;
-				var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(new[] { skillDay }, workload);
+				var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(skillDays, workload);
 				var tasks = _statisticRepository.LoadSpecificDates(workload.QueueSourceCollection, period).ToList();
 
 				new Statistic(workload).Match(workloadDays, tasks);
@@ -42,7 +41,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			var activeAgentCounts = _statisticRepository.LoadActiveAgentCount(skill, period);
 
 			var taskPeriods = Statistic.CreateTaskPeriodsFromPeriodized(skillStaffPeriods);
-			var provider = new QueueStatisticsProvider(statisticTasks, new QueueStatisticsCalculator(skill.WorkloadCollection.First().QueueAdjustments));
+			var provider = new QueueStatisticsProvider(statisticTasks,
+			                                           new QueueStatisticsCalculator(
+			                                           	skill.WorkloadCollection.First().QueueAdjustments));
 			foreach (var taskPeriod in taskPeriods)
 			{
 				Statistic.UpdateStatisticTask(provider.GetStatisticsForPeriod(taskPeriod.Period), taskPeriod);
