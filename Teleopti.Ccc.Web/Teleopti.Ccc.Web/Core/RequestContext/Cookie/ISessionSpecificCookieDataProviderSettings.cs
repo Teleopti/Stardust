@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext
+namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 {
 	/// <summary>
 	/// Holds applicationspecific settings
