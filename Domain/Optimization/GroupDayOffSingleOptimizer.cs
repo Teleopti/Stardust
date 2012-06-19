@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             foreach (var dateOnly in daysOffToRemove)
             {
-                var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnly, _allSelectedPersons, true);
+                var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnly, _allSelectedPersons, true, schedulingOptions);
                 var groupPerson = findGroupPersonForPerson(matrix.Person, groupPersons);
                 if (groupPerson == null)
                     return false;

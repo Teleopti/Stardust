@@ -287,6 +287,7 @@
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManagerTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet3.cs" />
+    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonConsistentCheckerTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonsBuilderTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonShiftCategoryConsistentCheckerTest.cs" />
