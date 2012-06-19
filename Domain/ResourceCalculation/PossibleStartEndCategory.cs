@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 var catHash = 0;
                 if (ShiftCategory != null)
                     catHash = ShiftCategory.GetHashCode();
-                _hashCode = StartTime.GetHashCode() ^ EndTime.GetHashCode() ^ catHash;
+                _hashCode = StartTime.GetHashCode() ^ EndTime.GetHashCode() ^ catHash ^ ShiftValue.GetHashCode() ;
             }
 
             return _hashCode.Value;
