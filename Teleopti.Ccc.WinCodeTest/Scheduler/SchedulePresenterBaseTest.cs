@@ -955,6 +955,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(range1.ScheduledDay(new DateOnly(_date.AddDays(1))))
                 .Return(_day1);
 			Expect.Call(range1.ScheduledDay(new DateOnly(_date.AddDays(2))))
+				.Return(_day1);
             //Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, periodPart1)).IgnoreArguments().Repeat.Times(3);
 
         
