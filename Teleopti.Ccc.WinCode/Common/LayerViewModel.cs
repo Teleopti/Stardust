@@ -235,9 +235,11 @@ namespace Teleopti.Ccc.WinCode.Common
         private void calculateMove(TimeSpan t)
         {
             var p = Period.MovePeriod(t);
-            var start = p.StartDateTime.ToInterval((int)Interval.TotalMinutes);
-            var end = p.EndDateTime.ToInterval(Interval);
+            var start = p.StartDateTime;
+            var end = p.EndDateTime;
             if (start == end) end = end.Add(Interval);
+            if (TimeSpan.FromMinutes(start.Minute) == Interval) start.ToInterval((int) Interval.TotalMinutes);
+            if (TimeSpan.FromMinutes(end.Minute) == Interval) end.ToInterval((int) Interval.TotalMinutes);
             Period = new DateTimePeriod(start, end);
         }
 
