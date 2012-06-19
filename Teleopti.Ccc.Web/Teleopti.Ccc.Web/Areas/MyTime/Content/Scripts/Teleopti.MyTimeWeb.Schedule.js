@@ -39,7 +39,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				show: function (event, api) {
 					var date = $(event.originalEvent.target).closest('ul').attr('data-request-default-date');
 					Teleopti.MyTimeWeb.Schedule.TextRequest.ClearFormData(date);
-					
 				}
 			},
 			show: {
@@ -87,7 +86,41 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 })(jQuery);
 
+Teleopti.MyTimeWeb.Schedule.RequestViewModel = (function RequestViewModel() {
+	var self = this;
+	this.IsFullDay = ko.observable(false);
+
+	ko.computed(function () {
+		if (self.IsFullDay()) {
+			$('#Schedule-addRequest-fromTime-input-input').val($('#Schedule-addRequest-default-start-time').text());
+			$('#Schedule-addRequest-toTime-input-input').val($('#Schedule-addRequest-default-end-time').text());
+			_disableTimeinput();
+		} else {
+			$('#Schedule-addRequest-fromTime-input-input').reset();
+			$('#Schedule-addRequest-toTime-input-input').reset();
+			_enableTimeinput();
+		}
+		
+	});
+
+	function _enableTimeinput() {
+		$('#Schedule-addRequest-fromTime button, #Schedule-addRequest-fromTime-input-input, #Schedule-addRequest-toTime button, #Schedule-addRequest-toTime-input-input')
+			.removeAttr("disabled");
+		$('#Schedule-addRequest-fromTime-input-input').css("color", "black");
+		$('#Schedule-addRequest-toTime-input-input').css("color", "black");
+	}
+
+	function _disableTimeinput() {
+		$('#Schedule-addRequest-fromTime button, #Schedule-addRequest-fromTime-input-input, #Schedule-addRequest-toTime button, #Schedule-addRequest-toTime-input-input')
+			.attr("disabled", "disabled");
+		$('#Schedule-addRequest-fromTime-input-input').css("color", "grey");
+		$('#Schedule-addRequest-toTime-input-input').css("color", "grey");
+	}
+});
+
 Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
+
+	var requestViewModel = null;
 
 	function _initEditSection() {
 		_initButtons();
@@ -116,38 +149,14 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			.click(function () {
 				_clearValidationError();
 				_hideAbsenceTypes();
+				requestViewModel.IsFullDay(false);
 			});
 		$('#Absence-request-tab')
 			.click(function () {
 				_clearValidationError();
 				_showAbsenceTypes();
+				requestViewModel.IsFullDay(true);
 			});
-		$('#Fullday-check')
-			.click(function () {
-				if ($(this).is(':checked')) {
-					$('#Schedule-addRequest-fromTime-input-input').val($('#Schedule-addRequest-default-start-time').text());
-					$('#Schedule-addRequest-toTime-input-input').val($('#Schedule-addRequest-default-end-time').text());
-					_disableTimeinput();
-				} else {
-					$('#Schedule-addRequest-fromTime-input-input').reset();
-					$('#Schedule-addRequest-toTime-input-input').reset();
-					_enableTimeinput();
-				}
-			});
-	}
-
-	function _enableTimeinput() {
-		$('#Schedule-addRequest-fromTime button, #Schedule-addRequest-fromTime-input-input, #Schedule-addRequest-toTime button, #Schedule-addRequest-toTime-input-input')
-			.removeAttr("disabled");
-		$('#Schedule-addRequest-fromTime-input-input').css("color", "black");
-		$('#Schedule-addRequest-toTime-input-input').css("color", "black");
-	}
-
-	function _disableTimeinput() {
-		$('#Schedule-addRequest-fromTime button, #Schedule-addRequest-fromTime-input-input, #Schedule-addRequest-toTime button, #Schedule-addRequest-toTime-input-input')
-			.attr("disabled", "disabled");
-		$('#Schedule-addRequest-fromTime-input-input').css("color", "grey");
-		$('#Schedule-addRequest-toTime-input-input').css("color", "grey");
 	}
 
 	function _initControls() {
@@ -158,6 +167,9 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		$("#Schedule-addRequest-section .combobox.absence-input").combobox();
 		;
 		$("#Absence-type-input").attr('readonly', 'true');
+
+		requestViewModel = new Teleopti.MyTimeWeb.Schedule.RequestViewModel();
+		ko.applyBindings(requestViewModel, $('#Fullday-check')[0]);
 	}
 
 	function _addRequest(requestUrl) {
@@ -230,10 +242,9 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			.reset()
 			;
 		$('#Absence-type').prop('selectedIndex', 0);
-		$('#Fullday-check').removeAttr("checked");
-		_enableTimeinput();
 		$('#Schedule-addRequest-fromDate-input').val(date);
 		$('#Schedule-addRequest-toDate-input').val(date);
+		$('#Text-request-tab').click();
 	}
 
 	function _displayRequest(inputDate) {
