@@ -85,8 +85,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					IAbsenceLayer absLayer = new AbsenceLayer(absence, currentAbsencePeriod.Value);
 					fistDayInList.CreateAndAddAbsence(absLayer);
 					Presenter.ModifySchedulePart(new List<IScheduleDay> { fistDayInList });
-					//foreach (IScheduleDay part in selectedAbsenceDaysPerPerson)
-					//    ScheduleViewBase.RefreshRangeForAgentPeriod(part.Person, absencePeriod);
 				}
 
 				ScheduleViewBase.RefreshRangeForAgentPeriod(selectedPerson, absencePeriod);
