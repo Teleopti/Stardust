@@ -401,9 +401,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             //When a new part is loaded, the timeline should show extra time before and after:
             _target.LoadSchedulePart(_partForTest);
             DateTime start =
-                _target.Layers.TotalDateTimePeriod(false).StartDateTime.Subtract(_target.SurroundingTime);
+                _target.Layers.TotalDateTimePeriod(true).StartDateTime.Subtract(_target.SurroundingTime);
             DateTime end = 
-                _target.Layers.TotalDateTimePeriod(false).EndDateTime.Add(_target.SurroundingTime);
+                _target.Layers.TotalDateTimePeriod(true).EndDateTime.Add(_target.SurroundingTime);
             Assert.AreEqual(start,_target.Timeline.Period.StartDateTime);
             Assert.AreEqual(end,_target.Timeline.Period.EndDateTime);
         }

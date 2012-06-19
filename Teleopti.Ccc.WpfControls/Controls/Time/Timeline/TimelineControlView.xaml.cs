@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Teleopti.Ccc.WinCode.Common;
@@ -24,6 +25,13 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
         private void TimelineControlView_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             Keyboard.Focus(hiddenButtonForFocusThatShouldBeHandledInViewModelInstead);
+            TimeLineContextMenu.PlacementTarget = this;
+            TimeLineContextMenu.IsOpen = true;
+        }
+
+        private void ContextMenu_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ((ContextMenu) sender).PlacementTarget.Focus();
         }
 
         #region MoveToModelIfPossible
@@ -67,7 +75,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
                     model.HoverTime = panel.GetUtcDateTimeFromPosition(e.GetPosition(panel).X).ToInterval(model.Interval);
 
 
-                    if (e.RightButton == MouseButtonState.Pressed)
+                    if (e.RightButton == MouseButtonState.Pressed || e.LeftButton == MouseButtonState.Pressed)
                     {
                         
                         if (model.HoverTime <= _mouseDownTime)
@@ -88,7 +96,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
         {
             var panel = sender as DateTimePeriodPanel;
             
-            if (panel != null && e.RightButton == MouseButtonState.Pressed)
+            if (panel != null && (e.RightButton == MouseButtonState.Pressed || e.LeftButton == MouseButtonState.Pressed))
             {
                 TimelineControlViewModel model = GetModel();
                 
@@ -97,7 +105,6 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
                     _mouseDownTime = panel.GetUtcDateTimeFromPosition(e.GetPosition(panel).X).ToInterval(model.Interval);
 
                     model.SelectedPeriod = new DateTimePeriod(_mouseDownTime, _mouseDownTime.AddMinutes(1));
-
                 }
               
             }
@@ -115,7 +122,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
                 {
                     model.ShowSelectedPeriod = false;
                     DateTime mouseUpTime = panel.GetUtcDateTimeFromPosition(e.GetPosition(panel).X).ToInterval(model.Interval);
-                    if (mouseUpTime > model.SelectedPeriod.StartDateTime && e.RightButton==MouseButtonState.Pressed)
+                    if (mouseUpTime > model.SelectedPeriod.StartDateTime && (e.RightButton==MouseButtonState.Pressed || e.LeftButton == MouseButtonState.Pressed))
                     {
                         model.SelectedPeriod = new DateTimePeriod(model.SelectedPeriod.StartDateTime, mouseUpTime.ToInterval(model.Interval));
                     }
