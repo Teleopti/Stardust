@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				_feedback.Info(string.Format(CultureInfo.InvariantCulture,
 				                             "Incoming number of child skills for multisite skill {0}: {1}.", message.MultisiteSkillSelections.MultisiteSkillId,
 				                             message.MultisiteSkillSelections.ChildSkillSelections.Count()));
-				_feedback.ReportProgress(1,
-				                         string.Format(CultureInfo.InvariantCulture, "Export forecasts to target skills for skill {0} period {1}.",
-				                                       message.MultisiteSkillSelections.MultisiteSkillId, message.Period));
+			    var multisteSkill = (IMultisiteSkill) _skillRepository.Get(message.MultisiteSkillSelections.MultisiteSkillId);
+                _feedback.ReportProgress(1,string.Format(CultureInfo.InvariantCulture, "Export forecasts to target skills for skill {0} period {1}.",
+				                                       multisteSkill.Name, message.Period));
 
 				using (unitOfWork.DisableFilter(QueryFilter.BusinessUnit))
 				{
