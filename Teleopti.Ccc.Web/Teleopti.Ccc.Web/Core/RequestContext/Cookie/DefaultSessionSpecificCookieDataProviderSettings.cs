@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Security;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext
+namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 {
 	public class DefaultSessionSpecificCookieDataProviderSettings : ISessionSpecificCookieDataProviderSettings
 	{

@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.Security;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext
+namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 {
 	public class SessionSpecificCookieDataProvider : ISessionSpecificDataProvider
 	{

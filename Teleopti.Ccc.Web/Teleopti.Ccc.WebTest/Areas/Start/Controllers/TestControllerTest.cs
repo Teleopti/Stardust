@@ -2,6 +2,7 @@
 using Rhino.Mocks;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext
+namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 {
 	public class SessionPrincipalFactory : ISessionPrincipalFactory
 	{
@@ -72,13 +70,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			catch (PersonNotFoundException)
 			{
 				return null;
-			}
-			catch (TargetInvocationException exception)
-			{
-				if (exception.InnerException == null) throw;
-				if (exception.InnerException.GetType() == typeof (PersonNotFoundException))
-					return null;
-				throw;
 			}
 			return principal;
 		}

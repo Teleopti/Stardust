@@ -327,6 +327,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         public void SettingsAltered(ShiftEditorSettings settings)
         {
             Layers.Interval = settings.Interval;
+            Timeline.Interval = settings.Interval;
             if (EditLayer != null) EditLayer.Period.Interval = settings.Interval;
         }
 
