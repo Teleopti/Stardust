@@ -5,19 +5,22 @@ PING -n 4 127.0.0.1>nul
 
 ::Set the list of services to manuipulate
 ::note: Order matters!!
-SET serviceList=MsDtc;TeleoptiBrokerService;TeleoptiServiceBus;TeleoptiEtlService
+SET serviceList=MsDtc;TeleoptiServiceBus;TeleoptiEtlService
 
 ::Finally start our two App pools
 if exist "%windir%\system32\inetsrv\AppCmd.exe" (
 echo trying to start iis 7.0 or 7.5 App Pools ...
 "%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v3.5"
 "%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v3.5" /autoStart:true
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0" /autoStart:true
+"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0 Web"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 Web" /autoStart:true
+"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0 Broker"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 Broker" /autoStart:true
 ) else (
 echo trying to start iis 5.1 or 6.0 App Pools ...
 CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v3.5"
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 Web"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 Broker"
 )
 
 echo Start App Pools. Done
