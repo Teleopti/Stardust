@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IScheduleChangedNotification _scheduleChangedNotification;
-		private bool _skipDelete;
+		private bool _initialLoad;
 
 		public UpdateScheduleProjectionReadModel(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleRepository scheduleRepository, IScheduleChangedNotification scheduleChangedNotification)
 		{
@@ -28,22 +28,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
                                                                    new ScheduleDictionaryLoadOptions(false, false), dateOnlyPeriod.ToDateTimePeriod(timeZone), scenario);
 
 			var personId = person.Id.GetValueOrDefault();
-
-			if (!_skipDelete)
+			var range = schedule[person];
+			
+			DateTimePeriod? actualPeriod;
+			if (_initialLoad)
 			{
+				actualPeriod = range.TotalPeriod();
+			}
+			else
+			{
+				actualPeriod = period;
 				_scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(dateOnlyPeriod, scenario, personId);
 			}
 
-			var range = schedule[person];
-			var actualPeriod = range.TotalPeriod();
 			if (!actualPeriod.HasValue) return;
 
 			dateOnlyPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
-			foreach (var scheduleDay in schedule[person].ScheduledDayCollection(dateOnlyPeriod))
+			foreach (var scheduleDay in range.ScheduledDayCollection(dateOnlyPeriod))
 			{
 				var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 
-                if (!_skipDelete)
+                if (!_initialLoad)
                 {
                     _scheduleChangedNotification.Notify(scenario,person,date);
                 }
@@ -55,9 +60,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			}
 		}
 
-		public void SetSkipDelete(bool skipDelete)
+		public void SetInitialLoad(bool initialLoad)
 		{
-			_skipDelete = skipDelete;
+			_initialLoad = initialLoad;
 		}
 	}
 }

@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				Expect.Call(scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
 				Expect.Call(personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
 				Expect.Call(() => updateScheduleProjectionReadModel.Execute(scenario, period, person));
-				Expect.Call(() => updateScheduleProjectionReadModel.SetSkipDelete(true));
+				Expect.Call(() => updateScheduleProjectionReadModel.SetInitialLoad(true));
 			}
 			using (mocks.Playback())
 			{
