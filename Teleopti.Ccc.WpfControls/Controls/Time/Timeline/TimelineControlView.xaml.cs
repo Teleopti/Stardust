@@ -5,7 +5,6 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Time.Timeline;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Time;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
 {
