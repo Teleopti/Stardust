@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.WinCode.Common;
@@ -18,7 +19,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
 			: base(grid)
 		{
-			_model = new AgentRestrictionsDetailModel();
+			if(schedulerState == null) throw new ArgumentNullException("schedulerState");
+
+			_model = new AgentRestrictionsDetailModel(schedulerState.RequestedPeriod.Period());
 			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag);
 
 			InitializeGrid();
@@ -75,6 +78,13 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			ViewGrid.Rows.FrozenCount = 0;
 			ViewGrid.Cols.FrozenCount = 0;
 			ViewGrid.Model.Options.MergeCellsMode = GridMergeCellsMode.None;
+		}
+
+		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro)
+		{
+			_model.LoadDetails(scheduleMatrixPro);
+			ViewGrid.Refresh();
+			InitializeGrid();
 		}
 	}
 }

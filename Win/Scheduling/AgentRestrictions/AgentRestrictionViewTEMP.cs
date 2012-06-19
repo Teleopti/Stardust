@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			}
 			else
 			{
-				label1.Text = displayRow.AgentName + " is ready";	
+				label1.Text = displayRow.AgentName + " is ready";
+				_detailView.LoadDetails(displayRow.Matrix);
 			}
 			
 		}
