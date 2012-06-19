@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, period, scenario)).IgnoreArguments().
 					Return(dictionary);
 				Expect.Call(scheduleRange.ScheduledDayCollection(dateOnlyPeriod)).Return(new[] {scheduleDay});
-				Expect.Call(scheduleRange.TotalPeriod()).Return(period);
 			}
 			using (mocks.Playback())
 			{
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 			using (mocks.Playback())
 			{
-				target.SetSkipDelete(true);
+				target.SetInitialLoad(true);
 				target.Execute(scenario, period, person);
 			}
 		}
