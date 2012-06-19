@@ -6,7 +6,7 @@
 Scenario: Add text request
 	Given I am an agent
 	And I am viewing requests
-	When I click add text request button in the toolbar
+	When I click add request button in the toolbar
 	And I input text request values
 	And I click the OK button
 	Then I should see the text request in the list

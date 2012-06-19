@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="AbsenceRequestFromRequestStepDefinitions.cs" />
     <Compile Include="QUnitTestsStepDefinition.cs" />
     <Compile Include="Data\User\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\User\AbsencePreferenceOnWeekday.cs" />
@@ -167,7 +168,7 @@
       <DependentUpon>MobileReports.feature</DependentUpon>
     </Compile>
     <Compile Include="MobileReportsStepDefinitions.cs" />
-    <Compile Include="Pages\Common\IEditTextRequestPage.cs" />
+    <Compile Include="Pages\Common\IEditRequestPage.cs" />
     <Compile Include="Pages\MobileReportsPage.cs" />
     <Compile Include="PreferencesPeriodFeedback.feature.cs">
       <AutoGen>True</AutoGen>

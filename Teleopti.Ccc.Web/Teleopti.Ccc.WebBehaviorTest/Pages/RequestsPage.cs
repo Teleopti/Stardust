@@ -8,7 +8,7 @@ using WatiN.Core.Constraints;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class RequestsPage : PortalPage, IEditTextRequestPage, IOkButton, ICancelButton
+	public class RequestsPage : PortalPage, IEditRequestPage, IOkButton, ICancelButton
 	{
 		[FindBy(Id = "Requests-list")]
 		public List RequestsList { get; set; }
