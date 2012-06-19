@@ -218,14 +218,16 @@ namespace Teleopti.Ccc.WinCode.Common
         public DateTimePeriod TotalDateTimePeriod(bool includeAbsence)
         {
             IEnumerable<ILayerViewModel> listToCheck;
+
             if (includeAbsence)
-                listToCheck = this;
+                listToCheck = this.Where(v => v.Period.StartDateTime.Date == _part.Period.StartDateTime.Date 
+                    && v.Period.EndDateTime.Date == _part.Period.EndDateTime.Date);
             else
             {
                 listToCheck = this.Where(v => !(v is AbsenceLayerViewModel));
             }
             if (listToCheck.Count() == 0) return _part.Period;
-
+            
             return new DateTimePeriod(listToCheck.Min(l => l.Period.StartDateTime),
                                       listToCheck.Max(l => l.Period.EndDateTime));
         }
