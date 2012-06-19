@@ -222,7 +222,7 @@
     <Compile Include="Core\RequestContext\ICurrentHttpContext.cs" />
     <Compile Include="Core\RequestContext\IdentityProvider.cs" />
     <Compile Include="Core\RequestContext\IIdentityProvider.cs" />
-    <Compile Include="Core\RequestContext\WebRequestPrincipalContext.cs" />
+    <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -274,8 +274,8 @@
     <Compile Include="Areas\Start\Models\Menu\MenuViewModel.cs" />
     <Compile Include="Core\RequestContext\DataSourceProvider.cs" />
     <Compile Include="Core\RequestContext\IDataSourceProvider.cs" />
-    <Compile Include="Core\RequestContext\ISessionSpecificDataStringSerializer.cs" />
-    <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializer.cs" />
+    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataStringSerializer.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Models\Shared\Link.cs" />
@@ -310,8 +310,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Startup\BootstrapperModule.cs" />
-    <Compile Include="Core\RequestContext\ISessionSpecificDataProvider.cs" />
-    <Compile Include="Core\RequestContext\SessionSpecificData.cs" />
+    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataProvider.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificData.cs" />
     <Compile Include="Areas\Start\Models\Authentication\BusinessUnitViewModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\DataSourceViewModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\SignInApplicationModel.cs" />
@@ -408,14 +408,14 @@
     <Compile Include="Areas\MyTime\Core\Portal\IPermissionProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\PermissionProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\PortalViewModelFactory.cs" />
-    <Compile Include="Core\RequestContext\DefaultSessionSpecificCookieDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieDataProviderSettings.cs" />
     <Compile Include="Core\RequestContext\ISetThreadCulture.cs" />
-    <Compile Include="Core\RequestContext\ISessionSpecificCookieDataProviderSettings.cs" />
-    <Compile Include="Core\RequestContext\IRequestContextInitializer.cs" />
-    <Compile Include="Core\RequestContext\ISessionPrincipalFactory.cs" />
-    <Compile Include="Core\RequestContext\SessionPrincipalFactory.cs" />
-    <Compile Include="Core\RequestContext\RequestContextInitializer.cs" />
-    <Compile Include="Core\RequestContext\SessionSpecificCookieDataProvider.cs" />
+    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificCookieDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Initialize\IRequestContextInitializer.cs" />
+    <Compile Include="Core\RequestContext\Initialize\ISessionPrincipalFactory.cs" />
+    <Compile Include="Core\RequestContext\Initialize\SessionPrincipalFactory.cs" />
+    <Compile Include="Core\RequestContext\Initialize\RequestContextInitializer.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificCookieDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\DateOnlyModelBinder.cs" />
     <Compile Include="Areas\MyTime\Core\IoC\MyTimeAreaModule.cs" />
     <Compile Include="Core\RequestContext\SetThreadCulture.cs" />

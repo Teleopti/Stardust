@@ -1,7 +1,6 @@
-﻿using System.Web;
-using Teleopti.Ccc.Infrastructure.Foundation;
+﻿using Teleopti.Ccc.Infrastructure.Foundation;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext
+namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 {
 	public class RequestContextInitializer : IRequestContextInitializer
 	{
