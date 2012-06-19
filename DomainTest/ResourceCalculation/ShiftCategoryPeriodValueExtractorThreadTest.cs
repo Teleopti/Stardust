@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -77,8 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                        new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc));
             IScheduleDateTimePeriod period1 = new ScheduleDateTimePeriod(period);
             var scheduleDictionary = new ScheduleDictionary(scenario, period1);
-
-            using (_mocks.Record())
+			using (_mocks.Record())
             {
                 Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftProjectionList)).IgnoreArguments().Return
@@ -106,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target = new ShiftCategoryPeriodValueExtractorThread(TODO, _possibleStartEndCategory, _shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
+				_target = new ShiftCategoryPeriodValueExtractorThread( _shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
                 _groupPerson, _resultStateHolder, _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, _groupShiftCategoryFairnessCreater,
                 _shiftProjectionCacheFilter, _effectiveRestrictionCreator);
 
@@ -116,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                                                            _dateOnly,
                                                                                                            _schedulingOptions,
                                                                                                            scheduleDictionary),
-                                                                               personList, finderResult);
+																			   personList, finderResult, _possibleStartEndCategory);
 
                 Assert.That(result.Count, Is.EqualTo(4));
             }   
@@ -154,8 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                        new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc));
             IScheduleDateTimePeriod period1 = new ScheduleDateTimePeriod(period);
             var scheduleDictionary = new ScheduleDictionary(scenario, period1);
-
-
+        	
             using (_mocks.Record())
             {
                 Expect.Call(_groupShiftCategoryFairnessCreater.CalculateGroupShiftCategoryFairness(person, _dateOnly)).IgnoreArguments().
@@ -168,11 +164,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                _target = new ShiftCategoryPeriodValueExtractorThread(TODO, _possibleStartEndCategory, _shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
+				_target = new ShiftCategoryPeriodValueExtractorThread(_shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
                _groupPerson, _resultStateHolder, _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, _groupShiftCategoryFairnessCreater,
                _shiftProjectionCacheFilter, _effectiveRestrictionCreator);
 
-                _target.ExtractShiftCategoryPeriodValue();
+				_target.ExtractShiftCategoryPeriodValue(_possibleStartEndCategory);
             }
 
            

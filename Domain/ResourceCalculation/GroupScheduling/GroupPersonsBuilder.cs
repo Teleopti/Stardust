@@ -13,21 +13,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		private readonly ISchedulingResultStateHolder _resultStateHolder;
         
 		private readonly IGroupPersonFactory _groupPersonFactory;
-		private readonly IGroupPersonShiftCategoryConsistentChecker _groupPersonShiftCategoryConsistentChecker;
+		private readonly IGroupPersonConsistentChecker _groupPersonConsistentChecker;
 		private readonly IWorkShiftFinderResultHolder _finderResultHolder;
 	    private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 
-	    public GroupPersonsBuilder(ISchedulingResultStateHolder resultStateHolder, IGroupPersonFactory groupPersonFactory, IGroupPersonShiftCategoryConsistentChecker groupPersonShiftCategoryConsistentChecker, 
+		public GroupPersonsBuilder(ISchedulingResultStateHolder resultStateHolder, IGroupPersonFactory groupPersonFactory, IGroupPersonConsistentChecker groupPersonConsistentChecker, 
 				 IWorkShiftFinderResultHolder finderResultHolder, IGroupPagePerDateHolder groupPagePerDateHolder)
 		{
 			_resultStateHolder = resultStateHolder;
             _groupPersonFactory = groupPersonFactory;
-			_groupPersonShiftCategoryConsistentChecker = groupPersonShiftCategoryConsistentChecker;
+			_groupPersonConsistentChecker = groupPersonConsistentChecker;
 			_finderResultHolder = finderResultHolder;
 		    _groupPagePerDateHolder = groupPagePerDateHolder;
 		}
 
-        public IList<IGroupPerson> BuildListOfGroupPersons(DateOnly dateOnly, IList<IPerson> selectedPersons, bool checkShiftCategoryConsistency)
+		public IList<IGroupPerson> BuildListOfGroupPersons(DateOnly dateOnly, IList<IPerson> selectedPersons, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions)
 		{
             _selectedPersons = selectedPersons;
 			var pageOnDate = _groupPagePerDateHolder.GroupPersonGroupPagePerDate.GetGroupPageByDate(dateOnly);
@@ -39,13 +39,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				personGroups.Add(rootPersonGroup);
 			}
 
-			checkGroupCollection(dateOnly, personGroups, retLis, checkShiftCategoryConsistency);
+			checkGroupCollection(dateOnly, personGroups, retLis, checkShiftCategoryConsistency, schedulingOptions);
 
 			return retLis;
 		}
 
-        private void checkGroupCollection(DateOnly dateOnly, IEnumerable<IPersonGroup> groups, List<IGroupPerson> retLis, bool checkShiftCategoryConsistency)
+		private void checkGroupCollection(DateOnly dateOnly, IEnumerable<IPersonGroup> groups, List<IGroupPerson> retLis, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions)
 		{
+			schedulingOptions.UseGroupSchedulingCommonStart = true;
             if (groups.IsEmpty())
 		    return;
 		    var dic = _resultStateHolder.Schedules;
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                 var personsInGroup = personsInDictionary.Where(person => _selectedPersons.Contains(person)).ToList();
                 if (!personsInGroup.IsEmpty())
                 {
-                    if (checkShiftCategoryConsistency && !_groupPersonShiftCategoryConsistentChecker.AllPersonsHasSameOrNoneShiftCategoryScheduled(dic, personsInDictionary, dateOnly))
+                    if (checkShiftCategoryConsistency && !_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(dic, personsInDictionary, dateOnly, schedulingOptions))
                     {
                         addResult(personGroup.Description.Name, dateOnly);
 
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     var newGroupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name);
                     if (!newGroupPerson.GroupMembers.IsEmpty())
                     {
-                        newGroupPerson.CommonShiftCategory = _groupPersonShiftCategoryConsistentChecker.CommonShiftCategory;
+                        newGroupPerson.CommonPossibleStartEndCategory = _groupPersonConsistentChecker.CommonPossibleStartEndCategory;
                         retLis.Add(newGroupPerson);
                     }
                 }
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				{
 					personGroups.Add(rootPersonGroup);
 				}
-				checkGroupCollection(dateOnly, personGroups, retLis, checkShiftCategoryConsistency);
+				checkGroupCollection(dateOnly, personGroups, retLis, checkShiftCategoryConsistency, schedulingOptions);
 			}
 		}
 

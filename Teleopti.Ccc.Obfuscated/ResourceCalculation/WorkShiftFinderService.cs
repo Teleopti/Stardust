@@ -176,7 +176,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 				}
 
-				_shiftList = _shiftProjectionCacheFilter.FilterOnShiftCategory(possibleStartEndCategory.ShiftCategory, _shiftList,
+				if(possibleStartEndCategory != null)
+					_shiftList = _shiftProjectionCacheFilter.FilterOnShiftCategory(possibleStartEndCategory.ShiftCategory, _shiftList,
 				                                                               FinderResult);
 
 				_shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(_shiftList, possibleStartEndCategory, schedulingOptions);

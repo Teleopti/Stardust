@@ -7,8 +7,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class ShiftCategoryPeriodValueExtractorThread
-    {
+	public interface IShiftCategoryPeriodValueExtractorThread
+	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		void ExtractShiftCategoryPeriodValue(object possibleStartEndCategory);
+
+		ManualResetEvent ManualResetEvent { get; }
+	}
+
+	public class ShiftCategoryPeriodValueExtractorThread : IShiftCategoryPeriodValueExtractorThread
+	{
     	private readonly ManualResetEvent _manualResetEvent;
     	private IList<IShiftProjectionCache> _shiftProjectionList;
         private readonly ISchedulingOptions _schedulingOptions;
@@ -23,9 +31,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 
         //constructor
-        public ShiftCategoryPeriodValueExtractorThread(ManualResetEvent manualResetEvent,  IList<IShiftProjectionCache> shiftProjectionList, ISchedulingOptions schedulingOptions, IBlockSchedulingWorkShiftFinderService workShiftFinderService, DateOnly dateOnly, IGroupPerson groupPerson, ISchedulingResultStateHolder resultStateHolder, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator, IShiftProjectionCacheFilter shiftProjectionCacheFilter, IEffectiveRestrictionCreator effectiveRestrictionCreator)
+        public ShiftCategoryPeriodValueExtractorThread( IList<IShiftProjectionCache> shiftProjectionList, ISchedulingOptions schedulingOptions, IBlockSchedulingWorkShiftFinderService workShiftFinderService, DateOnly dateOnly, IGroupPerson groupPerson, ISchedulingResultStateHolder resultStateHolder, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator, IShiftProjectionCacheFilter shiftProjectionCacheFilter, IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {
-        	_manualResetEvent = manualResetEvent;
+        	_manualResetEvent = new ManualResetEvent(false);
             _shiftProjectionList = shiftProjectionList;
             _schedulingOptions = schedulingOptions;
             _workShiftFinderService = workShiftFinderService;
@@ -45,7 +53,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
         // This method will be called when the thread is started.
-        public void ExtractShiftCategoryPeriodValue(object possibleStartEndCategory)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public void ExtractShiftCategoryPeriodValue(object possibleStartEndCategory)
         {
 			var possible = possibleStartEndCategory as PossibleStartEndCategory;
 			if (possible == null)
@@ -68,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var averageWorkTime = currentSchedulePeriod.AverageWorkTimePerDay;
             var useShiftCategoryFairness = false;
             
-            IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = ExtractShiftCategoryFairnessFactor(person ) ;
+            var shiftCategoryFairnessFactors = extractShiftCategoryFairnessFactor(person ) ;
             
            if (person.WorkflowControlSet != null)
             {
@@ -105,7 +114,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         	_manualResetEvent.Set();
         }
 
-        private IShiftCategoryFairnessFactors ExtractShiftCategoryFairnessFactor(IPerson person)
+		public ManualResetEvent ManualResetEvent
+		{
+			get { return _manualResetEvent; }
+		}
+
+		private IShiftCategoryFairnessFactors extractShiftCategoryFairnessFactor(IPerson person)
         {
 			lock (ScheduleDictionary)
 			{
@@ -116,8 +130,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
 
-       
-        public IList<IShiftProjectionCache> FilterShiftCategoryPeriodOnSchedulingOptions(ICccTimeZoneInfo agentTimeZone, 
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
+		public IList<IShiftProjectionCache> FilterShiftCategoryPeriodOnSchedulingOptions(ICccTimeZoneInfo agentTimeZone, 
             IEffectiveRestriction effectiveRestriction,IList<IPerson>persons,
 			IWorkShiftFinderResult finderResult, IPossibleStartEndCategory possibleStartEndCategory)
         {

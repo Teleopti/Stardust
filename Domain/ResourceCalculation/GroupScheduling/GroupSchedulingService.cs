@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             _cancelMe = false;
 			foreach (var dateOnly in selectedDays.DayCollection())
 			{
-                var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnly, selectedPersons, true);
+                var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnly, selectedPersons, true, schedulingOptions);
 				foreach (var groupPerson in groupPersons.GetRandom(groupPersons.Count, true))
 				{
                     if (backgroundWorker.CancellationPending)
@@ -78,19 +79,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             
             if (groupPerson == null)
                 return false;
-            var members = groupPerson.GroupMembers;
-           
-            IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
-            
-			var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions);
-            var best = bestCategoryResult.BestPossible;
+			var best = groupPerson.CommonPossibleStartEndCategory;
+			if(best == null)
+			{
+				IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
 
-			if (best == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)
-                _finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ErrorMessageNotAValidSchedulePeriod);
+				var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions);
+				best = bestCategoryResult.BestPossible;
 
-			if (best == null && bestCategoryResult.FailureCause == FailureCause.ConflictingRestrictions)
-                _finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ConflictingRestrictions);
+				if (best == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)
+					_finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ErrorMessageNotAValidSchedulePeriod);
 
+				if (best == null && bestCategoryResult.FailureCause == FailureCause.ConflictingRestrictions)
+					_finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ConflictingRestrictions);
+			}
+
+			var members = groupPerson.GroupMembers;
 			if (best == null)
             {
                 return false;

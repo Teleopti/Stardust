@@ -30,8 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     	private ReadOnlyCollection<IPerson> _persons;
     	private IGroupPerson _groupPerson;
     	private List<IGroupPerson> _groupPersons;
-    	private IFairnessValueResult _totalFairness;
-		private IFairnessValueResult _averagePersonFairness;
     	private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private WorkShiftFinderResultHolder _schedulingResults;
 		private IScheduleService _scheduleService;
@@ -56,18 +54,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			_groupPerson = _mock.StrictMock<IGroupPerson>();
 			_groupPersons = new List<IGroupPerson> { _groupPerson };
 			_useCategory = new PossibleStartEndCategory { ShiftCategory = _shiftCategory };
-			_totalFairness = new FairnessValueResult
-			{
-				FairnessPoints = 5,
-				TotalNumberOfShifts = 20
-			};
-
-			_averagePersonFairness = new FairnessValueResult
-			{
-				FairnessPoints = 5,
-				TotalNumberOfShifts = 20
-			};
-
     		_resourceOptimizationHelper = _mock.StrictMock<IResourceOptimizationHelper>();
     		_bestBlockShiftCategoryFinder = _mock.StrictMock<IBestBlockShiftCategoryFinder>();
 			_groupPersonsBuilder = _mock.StrictMock<IGroupPersonsBuilder>();
@@ -118,6 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             using (_mock.Record())
             {
                 commonMocks(false);
+				
                 Expect.Call(_scheduleDictionary[_person1]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
@@ -310,27 +297,25 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
     	private void commonMocks(bool failOnBestShiftCategoryForDays)
     	{
-    		var original = _shiftCategory;
-    		
+    		var returnPoss = new PossibleStartEndCategory {ShiftCategory = _shiftCategory};
 			if (failOnBestShiftCategoryForDays)
-				original = null;
+				returnPoss = null;
 
-			var result = new BestShiftCategoryResult(new PossibleStartEndCategory(), FailureCause.NoFailure);
+			var result = new BestShiftCategoryResult(returnPoss, FailureCause.NoFailure);
 			IBlockFinderResult result1 = new BlockFinderResult(null, new List<DateOnly> {_date1 },
     		                                                   new Dictionary<string, IWorkShiftFinderResult>());
 			IBlockFinderResult result2 = new BlockFinderResult(null, new List<DateOnly> { _date2 },
 															   new Dictionary<string, IWorkShiftFinderResult>());
             Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.Any();
-            Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_date1, _selectedPersons, true)).Return(_groupPersons);
-            Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_date2, _selectedPersons, true)).Return(_groupPersons);
-    		Expect.Call(_groupPerson.CommonShiftCategory).Return(null).Repeat.Twice();
-    		Expect.Call(_scheduleDictionary.FairnessPoints()).Return(_totalFairness).Repeat.Twice();
+			Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_date1, _selectedPersons, true, _schedulingOptions)).Return(_groupPersons);
+			Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_date2, _selectedPersons, true, _schedulingOptions)).Return(_groupPersons);
+			Expect.Call(_groupPerson.CommonPossibleStartEndCategory).Return(null).Repeat.AtLeastOnce();
     		Expect.Call(_groupPerson.GroupMembers).Return(_persons).Repeat.Twice();
-    		Expect.Call(_scheduleDictionary.AverageFairnessPoints(_persons)).Return(_averagePersonFairness).Repeat.Twice();
     		Expect.Call(
 				_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result1, _groupPerson, _schedulingOptions)).Return(result).IgnoreArguments();
     		Expect.Call(
-				_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result2, _groupPerson, _schedulingOptions)).Return(new BestShiftCategoryResult(new PossibleStartEndCategory(), FailureCause.NoFailure)).IgnoreArguments();
+    			_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result2, _groupPerson, _schedulingOptions)).Return(
+					new BestShiftCategoryResult(new PossibleStartEndCategory{ShiftCategory = _shiftCategory}, FailureCause.NoFailure)).IgnoreArguments();
     		Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.Twice();
     	}
     }

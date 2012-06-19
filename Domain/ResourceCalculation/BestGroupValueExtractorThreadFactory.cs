@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public interface IBestGroupValueExtractorThreadFactory
 	{
-		ShiftCategoryPeriodValueExtractorThread GetNewBestGroupValueExtractorThread(IList<IShiftProjectionCache> shiftProjectionList,DateOnly dateOnly,
-																					IGroupPerson person, ManualResetEvent doneEvent,
-																					ISchedulingOptions schedulingOptions);
+		IShiftCategoryPeriodValueExtractorThread GetNewBestGroupValueExtractorThread(IList<IShiftProjectionCache> shiftProjectionList,DateOnly dateOnly,
+																					IGroupPerson person,ISchedulingOptions schedulingOptions);
 	}
 
 	public class BestGroupValueExtractorThreadFactory : IBestGroupValueExtractorThreadFactory
@@ -38,10 +36,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
-		public ShiftCategoryPeriodValueExtractorThread GetNewBestGroupValueExtractorThread(IList<IShiftProjectionCache> shiftProjectionList,DateOnly dateOnly,
-														IGroupPerson person, ManualResetEvent doneEvent, ISchedulingOptions schedulingOptions)
+		public IShiftCategoryPeriodValueExtractorThread GetNewBestGroupValueExtractorThread(IList<IShiftProjectionCache> shiftProjectionList,DateOnly dateOnly,
+														IGroupPerson person, ISchedulingOptions schedulingOptions)
 		{
-			return new ShiftCategoryPeriodValueExtractorThread(doneEvent,
+			return new ShiftCategoryPeriodValueExtractorThread(
 				shiftProjectionList,
 				schedulingOptions,
 				_workShiftFinderService,

@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 {
 	public interface IPossibleCombinationsOfStartEndCategoryCreator
 	{
-		HashSet<PossibleStartEndCategory> FindCombinations(IWorkTimeMinMax workTimeMinMax, ISchedulingOptions schedulingOptions);
+		HashSet<IPossibleStartEndCategory> FindCombinations(IWorkTimeMinMax workTimeMinMax, ISchedulingOptions schedulingOptions);
 	}
 
 	public class PossibleCombinationsOfStartEndCategoryCreator : IPossibleCombinationsOfStartEndCategoryCreator
 	{
-		public HashSet<PossibleStartEndCategory> FindCombinations(IWorkTimeMinMax workTimeMinMax, ISchedulingOptions schedulingOptions)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public HashSet<IPossibleStartEndCategory> FindCombinations(IWorkTimeMinMax workTimeMinMax, ISchedulingOptions schedulingOptions)
 		{
-			var ret = new HashSet<PossibleStartEndCategory>();
+			var ret = new HashSet<IPossibleStartEndCategory>();
 
 			foreach (var poss in workTimeMinMax.PossibleStartEndCategories)
 			{

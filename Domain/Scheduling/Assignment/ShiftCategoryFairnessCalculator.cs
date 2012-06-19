@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _groupShiftCategoryFairnessCreator = groupShiftCategoryFairnessCreator;
         }
 
-        public IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(IScheduleRange range, IPerson person, DateOnly dateOnly )
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(IScheduleRange range, IPerson person, DateOnly dateOnly )
         {
             var groupCategoryFairness =
                    _groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -57,10 +58,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_possibleCombinationsOfStartEndCategoryCreator = possibleCombinationsOfStartEndCategoryCreator;
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IBestShiftCategoryResult BestShiftCategoryForDays(IBlockFinderResult result, IPerson person, ISchedulingOptions schedulingOptions)
         {
 			InParameter.NotNull("result",result);
 			InParameter.NotNull("person", person);
+			InParameter.NotNull("schedulingOptions", schedulingOptions);
 
             var dates = result.BlockDays;
 			var dictionary = ScheduleDictionary;
@@ -142,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 				if(!finderResult.Successful)
 				{
-					string key = Resources.ScheduleBlockDayWith + dateOnly.ToShortDateString();
+					string key = Resources.ScheduleBlockDayWith + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
 					if(!result.WorkShiftFinderResult.ContainsKey(key))
 						result.WorkShiftFinderResult.Add(key, finderResult);
 				}

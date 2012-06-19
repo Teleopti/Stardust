@@ -332,6 +332,7 @@
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinder.cs" />
     <Compile Include="ResourceCalculation\BestGroupValueExtractorThreadFactory.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecification.cs" />
+    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonConsistentChecker.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDate.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateHolder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPerson.cs" />

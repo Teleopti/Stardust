@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<GroupSchedulingService>().As<IGroupSchedulingService>().InstancePerLifetimeScope();
             builder.RegisterType<GroupPersonsBuilder>().As<IGroupPersonsBuilder>().InstancePerLifetimeScope();
             builder.RegisterType<GroupPersonFactory>().As<IGroupPersonFactory>().InstancePerLifetimeScope();
-            builder.RegisterType<GroupPersonShiftCategoryConsistentChecker>().As<IGroupPersonShiftCategoryConsistentChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupPersonConsistentChecker>().As<IGroupPersonConsistentChecker>().InstancePerLifetimeScope();
             builder.RegisterType<WorkShiftFinderResultHolder>().As<IWorkShiftFinderResultHolder>().InstancePerLifetimeScope();
 
             builder.RegisterType<WorkShiftWeekMinMaxCalculator>().As<IWorkShiftWeekMinMaxCalculator>().InstancePerLifetimeScope();
