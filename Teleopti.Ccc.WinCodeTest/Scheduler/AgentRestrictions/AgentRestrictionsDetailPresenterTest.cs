@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Rhino.Mocks;
+using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
@@ -24,7 +26,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private ClipHandler<IScheduleDay> _clipHandler;
 		private IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
 		private IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private GridStyleInfo _info;// = new GridStyleInfo { CellValue = string.Empty };
+		private GridStyleInfo _info;
+		private Dictionary<int, IPreferenceCellData> _detailData;
 
 		[SetUp]
 		public void Setup()
@@ -38,7 +41,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_overriddenBusinessRulesHolder = _mocks.StrictMock<IOverriddenBusinessRulesHolder>();
 			_scheduleDayChangeCallback = _mocks.DynamicMock<IScheduleDayChangeCallback>();
 			_presenter = new AgentRestrictionsDetailPresenter(_view, _model, _schedulerStateHolder, _gridlockManager, _clipHandler, SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);
-			_info = new GridStyleInfo();//{ CellValue = string.Empty };
+			_info = new GridStyleInfo();
+			_detailData = new Dictionary<int, IPreferenceCellData>();
 		}
 
 		[Test]
@@ -47,19 +51,29 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(7, _presenter.ColCount);	
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "period"), Test]
 		public void ShouldReturnRowCount()
 		{
-			//just testing testdata at the moment
-			Assert.AreEqual(7, _presenter.RowCount);
+			_detailData.Add(0, null);
+			_detailData.Add(1, null);
+
+			using(_mocks.Record())
+			{
+				Expect.Call(_model.DetailData()).Return(_detailData);
+			}
+
+			using(_mocks.Playback())
+			{
+				//because of constructor in SchedulePresenterBase
+				var period = _schedulerStateHolder.RequestedPeriod;
+				Assert.AreEqual(1, _presenter.RowCount);	
+			}	
 		}
 
 		[Test]
 		public void ShouldQueryCellInfo()
 		{
 			//just testing testdata at the moment
-			
-
 			var e = new GridQueryCellInfoEventArgs(-1, -1, _info);
 			_presenter.QueryCellInfo(null, e);
 			Assert.AreEqual(string.Empty, e.Style.CellValue.ToString());
