@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public interface IBestGroupValueExtractorThreadFactory
 	{
 		IShiftCategoryPeriodValueExtractorThread GetNewBestGroupValueExtractorThread(IList<IShiftProjectionCache> shiftProjectionList,DateOnly dateOnly,
-																					IGroupPerson person,ISchedulingOptions schedulingOptions);
+																					IPerson person,ISchedulingOptions schedulingOptions);
 	}
 
 	public class BestGroupValueExtractorThreadFactory : IBestGroupValueExtractorThreadFactory
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		public IShiftCategoryPeriodValueExtractorThread GetNewBestGroupValueExtractorThread(IList<IShiftProjectionCache> shiftProjectionList,DateOnly dateOnly,
-														IGroupPerson person, ISchedulingOptions schedulingOptions)
+														IPerson person, ISchedulingOptions schedulingOptions)
 		{
 			return new ShiftCategoryPeriodValueExtractorThread(
 				shiftProjectionList,

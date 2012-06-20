@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             var dates = result.BlockDays;
 			var dictionary = ScheduleDictionary;
-			IPossibleStartEndCategory bestPossible = null;
+			var bestPossible = new HashSet<IPossibleStartEndCategory>();
 
             var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
             var schedulePeriodFound = false;
@@ -119,28 +118,24 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				var minmax = bag.MinMaxWorkTime(_ruleSetProjectionService, dateOnly, effectiveRestriction);
                 	
-				//REMOVE WHEN IN GUI
-				schedulingOptions.UseGroupSchedulingCommonCategory = true;
-				schedulingOptions.UseGroupSchedulingCommonEnd = true;
-
 				var combinations = _possibleCombinationsOfStartEndCategoryCreator.FindCombinations(minmax, schedulingOptions);
-
-				_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, groupPerson, schedulingOptions);
+				// CONTINUE TO NEXT IF EMPTY??
+				_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions);
  
 				IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, dateOnly);
 
 				IPossibleStartEndCategory tmpBestPossible = null;
 				if (!combinations.IsEmpty())
-				{
 					tmpBestPossible = combinations.OrderBy(c => c.ShiftValue).Last();
-				}
+				
 
 				if (tmpBestPossible == null && effectiveRestriction.IsRestriction)
 				{
 					//finderResult.Successful = true;
 					shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, true);
-					_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, groupPerson, schedulingOptions);
-					tmpBestPossible = combinations.OrderBy(c => c.ShiftValue).First();
+					_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions);
+					if (!combinations.IsEmpty())
+						tmpBestPossible = combinations.OrderBy(c => c.ShiftValue).Last();
 						
 				}
 				if(!finderResult.Successful)
@@ -150,21 +145,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						result.WorkShiftFinderResult.Add(key, finderResult);
 				}
 
-				if (bestPossible == null && tmpBestPossible != null)
-						bestPossible = tmpBestPossible;
+				if (tmpBestPossible != null)
+					bestPossible.Add(tmpBestPossible);
 
-				if (bestPossible != null && tmpBestPossible != null)
-				{
-					if (tmpBestPossible.ShiftValue > bestPossible.ShiftValue)
-						bestPossible = tmpBestPossible;
-				}
-
-				
 			}
             if (!schedulePeriodFound)
                 return new BestShiftCategoryResult(null, FailureCause.NoValidPeriod);
 
-			return new BestShiftCategoryResult(bestPossible, FailureCause.NoFailure); 
+			IPossibleStartEndCategory best = null;
+			if (bestPossible.Count > 0)
+				best = bestPossible.OrderBy(c => c.ShiftValue).Last();
+
+			return new BestShiftCategoryResult(best, FailureCause.NoFailure); 
         }
 
 	    private DateTimePeriod extendedVisiblePeriod()

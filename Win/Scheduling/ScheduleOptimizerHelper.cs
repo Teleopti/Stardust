@@ -1027,6 +1027,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             schedulingOptions.RefreshRate = 1;
             blockSchedulingService.BlockScheduled += blockSchedulingServiceBlockScheduled;
 
+			schedulingOptions.UseGroupSchedulingCommonCategory = true;
+			schedulingOptions.UseGroupSchedulingCommonEnd = false;
+			schedulingOptions.UseGroupSchedulingCommonStart = false;
+
             using (PerformanceOutput.ForOperation("Scheduling x blocks"))
                 blockSchedulingService.Execute(matrixes, schedulingOptions, schedulingResults);
 

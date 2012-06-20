@@ -922,7 +922,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_cashe3.WorkShiftStartTime).Return(_start3);
 			Expect.Call(_cashe4.WorkShiftStartTime).Return(_start4);
             _mocks.ReplayAll();
-            var possibleStartEndCategory = new PossibleStartEndCategory {StartTime = TimeSpan.FromHours(8)};
             var possibleStartEndCategory = new PossibleStartEndCategory { StartTime = new TimeSpan(8,0,0) };
             var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonStart = true };
 
