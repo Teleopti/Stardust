@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		//constructor
         public ShiftCategoryPeriodValueExtractorThread( IList<IShiftProjectionCache> shiftProjectionList, ISchedulingOptions schedulingOptions, 
-			IBlockSchedulingWorkShiftFinderService workShiftFinderService, DateOnly dateOnly, IPerson person, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator, IShiftProjectionCacheFilter shiftProjectionCacheFilter, IEffectiveRestrictionCreator effectiveRestrictionCreator)
+			IBlockSchedulingWorkShiftFinderService workShiftFinderService, DateOnly dateOnly, IPerson person,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager, 
 			 IShiftProjectionCacheFilter shiftProjectionCacheFilter, IEffectiveRestrictionCreator effectiveRestrictionCreator, 
 			bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors)

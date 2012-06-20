@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>());
 			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>());
-            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPage>());
+            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>());
 		}
 
     	public BlockFinderType UseBlockScheduling
