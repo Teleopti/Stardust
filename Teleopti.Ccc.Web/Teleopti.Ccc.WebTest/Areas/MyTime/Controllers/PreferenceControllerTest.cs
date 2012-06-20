@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
 			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null);
 
-			virtualSchedulePeriodProvider.Stub(x => x.HasSchedulePeriod()).Return(true);
 			viewModelFactory.Stub(x => x.CreateViewModel(DateOnly.Today)).Return(new PreferenceViewModel());
 
 			var result = target.Index(DateOnly.Today);
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null);
 			var defaultDate = DateOnly.Today.AddDays(23);
 
-			virtualSchedulePeriodProvider.Stub(x => x.HasSchedulePeriod()).Return(true);
 			virtualSchedulePeriodProvider.Stub(x => x.CalculatePreferenceDefaultDate()).Return(defaultDate);
 
 			target.Index(null);
@@ -54,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
 			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null);
 
-			virtualSchedulePeriodProvider.Stub(x => x.HasSchedulePeriod()).Return(false);
+			virtualSchedulePeriodProvider.Stub(x => x.MissingSchedulePeriod()).Return(true);
 
 			var result = target.Index(null);
 

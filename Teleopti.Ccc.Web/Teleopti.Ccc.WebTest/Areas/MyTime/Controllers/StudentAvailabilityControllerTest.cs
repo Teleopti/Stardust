@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			var target = new StudentAvailabilityController(viewModelFactory, virtualSchedulePeriodProvider, null);
 
-			virtualSchedulePeriodProvider.Stub(x => x.HasSchedulePeriod()).Return(true);
 			viewModelFactory.Stub(x => x.CreateViewModel(DateOnly.Today)).Return(new StudentAvailabilityViewModel());
 
 			var result = target.Index(DateOnly.Today) as ViewResult;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var target = new StudentAvailabilityController(viewModelFactory, virtualSchedulePeriodProvider, null);
 			var defaultDate = DateOnly.Today.AddDays(23);
 
-			virtualSchedulePeriodProvider.Stub(x => x.HasSchedulePeriod()).Return(true);
 			virtualSchedulePeriodProvider.Stub(x => x.CalculateStudentAvailabilityDefaultDate()).Return(defaultDate);
 
 			target.Index(null);
@@ -55,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			var target = new StudentAvailabilityController(null, virtualSchedulePeriodProvider, null);
 
-			virtualSchedulePeriodProvider.Stub(x => x.HasSchedulePeriod()).Return(false);
+			virtualSchedulePeriodProvider.Stub(x => x.MissingSchedulePeriod()).Return(true);
 
 			var result = target.Index(null) as ViewResult;
 
