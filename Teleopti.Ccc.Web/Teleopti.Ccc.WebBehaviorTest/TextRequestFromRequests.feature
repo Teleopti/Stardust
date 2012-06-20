@@ -6,7 +6,7 @@
 Scenario: Add text request
 	Given I am an agent
 	And I am viewing requests
-	When I click add text request button in the toolbar
+	When I click add request button in the toolbar
 	And I input text request values
 	And I click the OK button
 	Then I should see the text request in the list
@@ -14,14 +14,14 @@ Scenario: Add text request
 Scenario: Default text-request values from request view
 	Given I am an agent
 	And I am viewing requests
-	When I click add text request button in the toolbar
+	When I click add request button in the toolbar
 	Then I should see the text request form with today's date as default
 	And I should see 8:00 - 17:00 as the default times
 
 Scenario: Adding invalid text request values
 	Given I am an agent
 	And I am viewing requests
-	When I click add text request button in the toolbar
+	When I click add request button in the toolbar
 	And I input empty subject
 	And I input later start time than end time
 	And I click the OK button
@@ -31,7 +31,7 @@ Scenario: Adding invalid text request values
 Scenario: Adding too long text request
 	Given I am an agent
 	And I am viewing requests
-	When I click add text request button in the toolbar
+	When I click add request button in the toolbar
 	And I input too long text request values
 	And I click the OK button
 	Then I should see texts describing too long text error
@@ -40,7 +40,7 @@ Scenario: Adding too long text request
 Scenario: Adding too long subject request
 	Given I am an agent
 	And I am viewing requests
-	When I click add text request button in the toolbar
+	When I click add request button in the toolbar
 	And I input too long subject request values
 	And I click the OK button
 	Then I should see texts describing too long subject error

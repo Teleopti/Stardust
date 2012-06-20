@@ -8,7 +8,7 @@ using WatiN.Core.Constraints;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class RequestsPage : PortalPage, IEditTextRequestPage, IOkButton, ICancelButton
+	public class RequestsPage : PortalPage, IEditRequestPage, IOkButton, ICancelButton
 	{
 		[FindBy(Id = "Requests-list")]
 		public List RequestsList { get; set; }
@@ -36,29 +36,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-section")]
 		public Div RequestDetailSection { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public Span AbsenceRequestTab
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[FindBy(Id = "Absence-request-tab")]
+		public Span AbsenceRequestTab { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public TextField AbsenceTypesTextField
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[FindBy(Id = "Absence-type-input")]
+		public TextField AbsenceTypesTextField { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public SelectList AbsenceTypesSelectList
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[FindBy(Id = "Absence-type")]
+		public SelectList AbsenceTypesSelectList { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public CheckBox FulldayCheck
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[FindBy(Id = "Fullday-check")]
+		public CheckBox FulldayCheck { get; set; }
 
 		[FindBy(Id = "Request-detail-subject-input")]
 		public TextField TextRequestDetailSubjectInput { get; set; }

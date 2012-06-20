@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Security.Permissions;
 using System.Windows.Forms;
 using log4net;
 using Syncfusion.Drawing;
@@ -1458,6 +1459,25 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         #endregion
 
         //--------------------
+
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            const int WM_KEYDOWN = 0x100;
+            const int WM_SYSKEYDOWN = 0x104;
+
+            if ((msg.Msg == WM_KEYDOWN) || (msg.Msg == WM_SYSKEYDOWN))
+            {
+                switch (keyData)
+                {
+                    case Keys.Control | Keys.S:
+                        btnSave_click(this, null);
+                        break;
+                }
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
         #region ribbon events
 
