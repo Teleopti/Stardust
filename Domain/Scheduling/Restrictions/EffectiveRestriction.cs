@@ -83,17 +83,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         {
 			TimePeriod workShiftTimePeriod = workShiftProjection.TimePeriod;
 
-            TimePeriod validPeriod = StartTimeLimitation.ValidPeriod();
-            if (!validPeriod.ContainsPart(workShiftTimePeriod.StartTime))
+            if(!StartTimeLimitation.IsValidFor(workShiftTimePeriod.StartTime))
                 return false;
 
-            validPeriod = EndTimeLimitation.ValidPeriod();
-            if (!validPeriod.ContainsPart(workShiftTimePeriod.EndTime))
+				if (!EndTimeLimitation.IsValidFor(workShiftTimePeriod.EndTime))
                 return false;
 
-            validPeriod = WorkTimeLimitation.ValidPeriod();
             TimeSpan contractTime = workShiftProjection.ContractTime;
-            if (!validPeriod.ContainsPart(contractTime))
+				if (!WorkTimeLimitation.IsValidFor(contractTime))
                 return false;
 
             if (ShiftCategory != null)
@@ -176,10 +173,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     return null;
 
                 if (startTimeLimitation.EndTime > endTimeLimitation.EndTime)
-                    startTimeLimitation.EndTime = endTimeLimitation.EndTime;
+						 startTimeLimitation = new StartTimeLimitation(startTimeLimitation.StartTime, endTimeLimitation.EndTime);
 
                 if (endTimeLimitation.StartTime < startTimeLimitation.StartTime)
-                    endTimeLimitation.StartTime = startTimeLimitation.StartTime;
+						 endTimeLimitation = new EndTimeLimitation(startTimeLimitation.StartTime, endTimeLimitation.EndTime);
             }
             start = resolveTime(_workTimeLimitation.StartTime, effectiveRestriction.WorkTimeLimitation.StartTime, false);
             end = resolveTime(_workTimeLimitation.EndTime, effectiveRestriction.WorkTimeLimitation.EndTime, true);

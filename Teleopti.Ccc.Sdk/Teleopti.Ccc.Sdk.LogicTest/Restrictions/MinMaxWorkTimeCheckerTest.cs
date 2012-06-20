@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         private MinMaxWorkTimeChecker _target;
         private IRuleSetBag _ruleSetBag;
         private IScheduleDay _scheduleDay;
-        private IRuleSetProjectionService _projectionService;
+        private IWorkShiftWorkTime _workShiftWorkTime;
         private readonly IEffectiveRestriction _restriction = new EffectiveRestriction(new StartTimeLimitation(null, null),
             new EndTimeLimitation(null, null), new WorkTimeLimitation(null, null), null, null, null, new List<IActivityRestriction>());
 
@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             _mocks = new MockRepository();
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();
             _ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
-            _projectionService = _mocks.StrictMock<IRuleSetProjectionService>();
-            _target = new MinMaxWorkTimeChecker(_projectionService);
+				_workShiftWorkTime = _mocks.StrictMock<IWorkShiftWorkTime>();
+            _target = new MinMaxWorkTimeChecker(_workShiftWorkTime);
 
             _person = PersonFactory.CreatePersonWithBasicPermissionInfo("mycket", "hemligt");
             //_person.SetId(Guid.NewGuid());
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
             Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
             Expect.Call(dateOnlyAsPeriod.DateOnly).Return(onDate);
-            Expect.Call(_ruleSetBag.MinMaxWorkTime(_projectionService, onDate, _restriction)).Return(new WorkTimeMinMax());
+            Expect.Call(_ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, onDate, _restriction)).Return(new WorkTimeMinMax());
             _mocks.ReplayAll();
 
             var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, _restriction);

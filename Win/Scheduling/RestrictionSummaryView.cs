@@ -25,11 +25,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public RestrictionSummaryView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
             SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler,
-            SingleAgentRestrictionPresenter singleAgentRestrictionPresenter, IRuleSetProjectionService ruleSetProjectionService, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
+            SingleAgentRestrictionPresenter singleAgentRestrictionPresenter, IWorkShiftWorkTime workShiftWorkTime, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
             IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
             : base(grid)
         {
-            _model = new RestrictionSummaryModel(schedulerState.SchedulingResultState, ruleSetProjectionService, schedulerState, new PreferenceNightRestChecker());
+            _model = new RestrictionSummaryModel(schedulerState.SchedulingResultState, workShiftWorkTime, schedulerState, new PreferenceNightRestChecker());
             Presenter = new RestrictionSummaryPresenter(this, schedulerState, lockManager, clipHandler,
                                                         schedulePartFilter, _model, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag);
             InitializePreferenceView();

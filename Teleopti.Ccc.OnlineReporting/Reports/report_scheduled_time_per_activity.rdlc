@@ -468,8 +468,8 @@
         <DataSetName>DataSet1</DataSetName>
         <Top>0.3175cm</Top>
         <Left>0.25cm</Left>
-        <Height>3cm</Height>
-        <Width>26.95cm</Width>
+        <Height>2.99999cm</Height>
+        <Width>26.94999cm</Width>
         <Style>
           <Direction>=Parameters!Direction.Value</Direction>
           <Language>=User!Language</Language>
@@ -1112,7 +1112,8 @@
               <Color>DimGray</Color>
             </Style>
             <Position>RightCenter</Position>
-            <Layout>Column</Layout>
+            <DockToChartArea>Default</DockToChartArea>
+            <DockOutsideChartArea>true</DockOutsideChartArea>
             <ChartLegendTitle>
               <Caption />
               <Style>
@@ -1144,7 +1145,7 @@
         <Top>3.5675cm</Top>
         <Left>0.25cm</Left>
         <Height>6.86905cm</Height>
-        <Width>14cm</Width>
+        <Width>23.02229cm</Width>
         <ZIndex>2</ZIndex>
         <CustomProperties>
           <CustomProperty>

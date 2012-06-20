@@ -42,10 +42,9 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 	}
 
 	function _informWhenPreferenceFeedbackIsLoaded(message) {
-		if (Teleopti.MyTimeWeb.Preference.FeedbackIsLoaded())
+		Teleopti.MyTimeWeb.Preference.CallWhenFeedbackIsLoaded(function() {
 			_pageLog(message);
-		else
-			setTimeout(function () { _informWhenPreferenceFeedbackIsLoaded(message); }, 100);
+		});
 	}
 
 	return {

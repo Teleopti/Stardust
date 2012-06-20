@@ -46,7 +46,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.AbsenceTypesSelectList.InnerHtml, Is.StringContaining(name));
 		}
 
-		[When(@"I click full day checkbox")]
+		[When(@"I unchecked the full day checkbox")]
+		public void WhenIUncheckedTheFullDayCheckbox()
+		{
+			Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.WaitUntilDisplayed();
+			Pages.Pages.CurrentEditTextRequestPage.FulldayCheck.Checked = false;
+		}
+
+		[When(@"I checked the full day checkbox")]
 		public void WhenIClickFullDayCheckbox()
 		{
 			Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.WaitUntilDisplayed();
@@ -56,7 +63,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my existing inputs")]
 		public void ThenIShouldSeeMyExistingInputs()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.FulldayCheck.Checked, Is.False);
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value, Is.StringContaining("The cake is a.. Cake!"));
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailMessageTextField.Value, Is.StringContaining("A message. A very very very short message. Or maybe not."));
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value, Is.StringContaining(DateTime.Today.ToShortDateString(UserFactory.User().Culture)));

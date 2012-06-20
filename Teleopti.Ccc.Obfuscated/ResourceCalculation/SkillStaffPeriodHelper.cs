@@ -129,17 +129,15 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// </remarks>
         public static TimeSpan? ForecastedTime(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
-            TimeSpan ret = TimeSpan.Zero;
+            TimeSpan? ret = null;
             
             foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriods)
             {
-                ret = ret.Add(skillStaffPeriod.FStaffTime());
+            	var toAdd = skillStaffPeriod.FStaffTime();
+				ret = !ret.HasValue ? toAdd : ret.Value.Add(toAdd);
             }
 
-            if (skillStaffPeriods.Count() > 0)
-                return ret;
-
-            return null;
+            return ret;
         }
 
         /// <summary>
@@ -173,19 +171,17 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// </remarks>
         public static TimeSpan? ScheduledTime(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
-            TimeSpan ret = TimeSpan.Zero;
+            TimeSpan? ret = null;
             foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriods)
             {
-                TimeSpan toAdd =
+            	TimeSpan toAdd =
                     TimeSpan.FromMinutes(skillStaffPeriod.CalculatedResource*
                                          skillStaffPeriod.Period.ElapsedTime().TotalMinutes);
-                ret = ret.Add(toAdd);
+
+            	ret = !ret.HasValue ? toAdd : ret.Value.Add(toAdd);
             }
 
-            if (skillStaffPeriods.Count() > 0)
-                return ret;
-
-            return null;
+            return ret;
         }
 
         /// <summary>
@@ -274,7 +270,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// </remarks>
         public static double? GetHighestIntraIntervalDeviation(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
-            return skillStaffPeriods.Count() > 0 ? skillStaffPeriods.Max(p => p.IntraIntervalDeviation) : (double?)null;
+            return skillStaffPeriods.Any() ? skillStaffPeriods.Max(p => p.IntraIntervalDeviation) : (double?)null;
         }
 
         /// <summary>

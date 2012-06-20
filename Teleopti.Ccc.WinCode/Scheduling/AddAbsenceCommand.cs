@@ -83,12 +83,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						continue;
 
 					IAbsenceLayer absLayer = new AbsenceLayer(absence, currentAbsencePeriod.Value);
-					lastDayInList.CreateAndAddAbsence(absLayer);
-					Presenter.ModifySchedulePart(selectedAbsenceDaysPerPerson);
-					foreach (IScheduleDay part in selectedAbsenceDaysPerPerson)
-						ScheduleViewBase.RefreshRangeForAgentPeriod(part.Person, absencePeriod);
+					fistDayInList.CreateAndAddAbsence(absLayer);
+					Presenter.ModifySchedulePart(new List<IScheduleDay> { fistDayInList });
 				}
+
+				ScheduleViewBase.RefreshRangeForAgentPeriod(selectedPerson, absencePeriod);
 			}
+			
 		}
 
 		private IList<IScheduleDay> removeLockedSchedules(IEnumerable<IScheduleDay> selectedSchedules)

@@ -102,5 +102,3 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
 })(jQuery);
 
-$(function () { Teleopti.MyTimeWeb.TeamSchedule.Init(); });
-

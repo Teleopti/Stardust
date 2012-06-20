@@ -26,11 +26,11 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 		_setupGlobal(options);
 		_setupRequestStack(options);
 
-		$.ajax(options);
+		return $.ajax(options);
 	}
 
 	function _setupUrl(options) {
-		if (options.url.indexOf('http://') != -1)
+		if (options.url.indexOf('://') != -1)
 			return;
 		if (options.url.indexOf('/') == 0)
 			return;
@@ -114,7 +114,7 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 			_settings = settings;
 		},
 		Ajax: function (options) {
-			_ajax(options);
+			return _ajax(options);
 		},
 		AjaxAbortAll: function () {
 			_ajaxAbortAll();
@@ -125,16 +125,6 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 	};
 
 })(jQuery);
-
-$.extend({
-		myTimeAjax: function(options) {
-			Teleopti.MyTimeWeb.Ajax.Ajax(options);
-		},
-		myTimeAjaxAbortAll: function() {
-			Teleopti.MyTimeWeb.Ajax.AjaxAbortAll();
-		}
-	})
-	;
 
 Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 

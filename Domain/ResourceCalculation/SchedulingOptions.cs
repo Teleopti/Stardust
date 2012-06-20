@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public Percent Fairness { get; set; }
         public bool UseStudentAvailability { get; set; }
 		public bool UseGroupScheduling { get; set; }
-		public IGroupPage GroupOnGroupPage { get; set; }
+		public IGroupPageLight GroupOnGroupPage { get; set; }
         public bool DoNotBreakMaxStaffing { get; set; }
-        public IGroupPage GroupPageForShiftCategoryFairness { get; set; }
+        public IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }
         public int RefreshRate { get; set; }
 		public bool UseMaxSeats { get; set; }
 		public bool DoNotBreakMaxSeats { get; set; }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -20,12 +21,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class PreferenceFeedbackController : AsyncController
 	{
 		private readonly IPreferenceViewModelFactory _viewModelFactory;
-		private readonly IPreferencePeriodViewModelFactory _preferencePeriodViewModelFactory;
+		private readonly IPreferencePeriodFeedbackViewModelFactory _preferencePeriodFeedbackViewModelFactory;
 
-		public PreferenceFeedbackController(IPreferenceViewModelFactory viewModelFactory, IPreferencePeriodViewModelFactory preferencePeriodViewModelFactory)
+		public PreferenceFeedbackController(IPreferenceViewModelFactory viewModelFactory, IPreferencePeriodFeedbackViewModelFactory preferencePeriodFeedbackViewModelFactory)
 		{
 			_viewModelFactory = viewModelFactory;
-			_preferencePeriodViewModelFactory = preferencePeriodViewModelFactory;
+			_preferencePeriodFeedbackViewModelFactory = preferencePeriodFeedbackViewModelFactory;
 		}
 
 
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		public virtual void FeedbackTask(DateOnly date)
 		{
+			//Thread.Sleep(new Random().Next(100, 2000));
 			AsyncManager.Parameters["model"] = _viewModelFactory.CreateDayFeedbackViewModel(date);
 		}
 
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		public virtual void PeriodFeedbackTask(DateOnly date)
 		{
-			AsyncManager.Parameters["model"] = _preferencePeriodViewModelFactory.CreatePeriodFeedbackViewModel(date);
+			AsyncManager.Parameters["model"] = _preferencePeriodFeedbackViewModelFactory.CreatePeriodFeedbackViewModel(date);
 		}
 
 		public JsonResult PeriodFeedbackCompleted(PreferencePeriodFeedbackViewModel model, Task task)

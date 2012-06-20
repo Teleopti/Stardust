@@ -72,12 +72,15 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		{
 			skill.MidnightBreakOffset = TimeSpan.FromHours(2);
 
-			var skillDay = mocks.DynamicMock<ISkillDay>();
+			var skillDay1 = mocks.DynamicMock<ISkillDay>();
+			var skillDay2 = mocks.DynamicMock<ISkillDay>();
 			var activeAgentCounts = new List<IActiveAgentCount>();
 			var statisticTasks = new List<IStatisticTask>();
 			var skillStaffPeriod1 = mocks.DynamicMock<ISkillStaffPeriod>();
-			var skillStaffPeriods = new List<ISkillStaffPeriod> { skillStaffPeriod1 };
-			var workloadDay = mocks.DynamicMock<IWorkloadDay>();
+			var skillStaffPeriod2 = mocks.DynamicMock<ISkillStaffPeriod>();
+			var skillStaffPeriods = new List<ISkillStaffPeriod> { skillStaffPeriod1,skillStaffPeriod2 };
+			var workloadDay1 = mocks.DynamicMock<IWorkloadDay>();
+			var workloadDay2 = mocks.DynamicMock<IWorkloadDay>();
 			var skillDayCalculator = mocks.DynamicMock<ISkillDayCalculator>();
 			var smallPeriod = new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15));
 			var dayPeriod = period.ChangeEndTime(skill.MidnightBreakOffset.Add(TimeSpan.FromHours(1)));
@@ -86,12 +89,18 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			{
 				Expect.Call(repository.LoadActiveAgentCount(skill, dayPeriod)).Return(activeAgentCounts).Repeat.Once();
 				Expect.Call(repository.LoadSpecificDates(workload.QueueSourceCollection, dayPeriod)).Return(statisticTasks).Repeat.Once();
-				Expect.Call(skillStaffPeriod1.Parent).Return(skillDay).Repeat.AtLeastOnce();
+				Expect.Call(skillStaffPeriod1.Parent).Return(skillDay1).Repeat.AtLeastOnce();
+				Expect.Call(skillStaffPeriod2.Parent).Return(skillDay2).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod1.Period).Return(smallPeriod).Repeat.AtLeastOnce();
-				Expect.Call(workloadDay.Workload.Equals(workload)).Return(true);
-				Expect.Call(workloadDay.OpenTaskPeriodList).Return(new ReadOnlyCollection<ITemplateTaskPeriod>(new List<ITemplateTaskPeriod>()));
-				Expect.Call(skillDay.WorkloadDayCollection).Return(new ReadOnlyCollection<IWorkloadDay>(new[] { workloadDay }));
-				Expect.Call(skillDay.SkillDayCalculator).Return(skillDayCalculator);
+				Expect.Call(skillStaffPeriod2.Period).Return(smallPeriod.MovePeriod(TimeSpan.FromMinutes(15))).Repeat.AtLeastOnce();
+				Expect.Call(workloadDay1.Workload.Equals(workload)).Return(true);
+				Expect.Call(workloadDay2.Workload.Equals(workload)).Return(true);
+				Expect.Call(workloadDay1.OpenTaskPeriodList).Return(new ReadOnlyCollection<ITemplateTaskPeriod>(new List<ITemplateTaskPeriod>()));
+				Expect.Call(workloadDay2.OpenTaskPeriodList).Return(new ReadOnlyCollection<ITemplateTaskPeriod>(new List<ITemplateTaskPeriod>()));
+				Expect.Call(skillDay1.WorkloadDayCollection).Return(new ReadOnlyCollection<IWorkloadDay>(new[] { workloadDay1 }));
+				Expect.Call(skillDay2.WorkloadDayCollection).Return(new ReadOnlyCollection<IWorkloadDay>(new[] { workloadDay2 }));
+				Expect.Call(skillDay1.SkillDayCalculator).Return(skillDayCalculator);
+				Expect.Call(skillDay2.SkillDayCalculator).Return(skillDayCalculator);
 			}
 
 			using (mocks.Playback())

@@ -126,6 +126,8 @@ namespace Teleopti.Ccc.WinCode.Common
 
         void FilterPersons(IList<IPerson> selectedPersons);
 
+		void FilterPersons(HashSet<Guid> selectedGuids);
+
         void ClearDaysToRecalculate();
 
         void LoadSettings(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory);

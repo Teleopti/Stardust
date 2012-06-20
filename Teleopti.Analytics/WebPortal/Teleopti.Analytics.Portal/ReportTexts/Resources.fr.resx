@@ -954,4 +954,13 @@
   <data name="ResRequestPeriod" xml:space="preserve">
     <value>Période demandée</value>
   </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Rediriger</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Session Expirée</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Votre session à expiré à cause d'une période d'incativité étendue. Vous allez bientôt être redirigé vers la page de log on.</value>
+  </data>
 </root>

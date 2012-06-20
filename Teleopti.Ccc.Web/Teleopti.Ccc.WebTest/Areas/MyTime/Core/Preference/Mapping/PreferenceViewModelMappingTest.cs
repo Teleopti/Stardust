@@ -329,6 +329,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldFlagInPeriodWhenInsideSchedulePeriod()
+		{
+			data.SelectedDate = data.Period.StartDate;
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.InPeriod.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotFlagInPeriodWhenOutsideSchedulePeriod()
+		{
+			var outsideDate = data.Period.EndDate.AddDays(1);
+			data.SelectedDate = outsideDate;
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.InPeriod.Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldMapPreferenceShiftCategory()
 		{
 			var shiftCategory = new ShiftCategory("PM");
@@ -484,6 +507,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			result.DayViewModel(data.SelectedDate)
 				.PersonAssignment.ContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
+		}
+
+		[Test]
+		public void ShouldMapPersonAssignmentContractTimeMinutes()
+		{
+			var contractTime = TimeSpan.FromHours(8);
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
+			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
+			projection.Stub(x => x.ContractTime()).Return(contractTime);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay, Projection = projection } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.PersonAssignment.ContractTimeMinutes.Should().Be(contractTime.TotalMinutes);
 		}
 
 		[Test]

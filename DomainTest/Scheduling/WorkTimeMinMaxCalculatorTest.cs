@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
 			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
 			var person = MockRepository.GenerateMock<IPerson>();
-			var ruleSetProjectionService = MockRepository.GenerateMock<IRuleSetProjectionService>();
+			var workShiftWorkTime = MockRepository.GenerateMock<IWorkShiftWorkTime>();
 			var workTimeMineMax = new WorkTimeMinMax();
 
 			scheduleDay.Stub(x => x.Person).Return(person);
@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
 			effectiveRestrictionForDisplayCreator.Stub(x => x.GetEffectiveRestrictionForDisplay(scheduleDay, new EffectiveRestrictionOptions(true, true)))
 				.Return(effectiveRestriction);
-			ruleSetBag.Stub(x => x.MinMaxWorkTime(ruleSetProjectionService, DateOnly.Today, effectiveRestriction))
+			ruleSetBag.Stub(x => x.MinMaxWorkTime(workShiftWorkTime, DateOnly.Today, effectiveRestriction))
 				.Return(workTimeMineMax);
 
-			var target = new WorkTimeMinMaxCalculator(ruleSetProjectionService, effectiveRestrictionForDisplayCreator);
+			var target = new WorkTimeMinMaxCalculator(workShiftWorkTime, effectiveRestrictionForDisplayCreator);
 			PreferenceType? preferenceType;
 			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
 			effectiveRestriction.Stub(x => x.ShiftCategory).Return(new ShiftCategory("Kategori"));
 			var person = MockRepository.GenerateMock<IPerson>();
-			var ruleSetProjectionService = MockRepository.GenerateMock<IRuleSetProjectionService>();
+			var workShiftWorkTime = MockRepository.GenerateMock<IWorkShiftWorkTime>();
 			var workTimeMineMax = new WorkTimeMinMax();
 
 			scheduleDay.Stub(x => x.Person).Return(person);
@@ -68,10 +68,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
 			effectiveRestrictionForDisplayCreator.Stub(x => x.GetEffectiveRestrictionForDisplay(scheduleDay, new EffectiveRestrictionOptions(true, true)))
 				.Return(effectiveRestriction);
-			ruleSetBag.Stub(x => x.MinMaxWorkTime(ruleSetProjectionService, DateOnly.Today, effectiveRestriction))
+			ruleSetBag.Stub(x => x.MinMaxWorkTime(workShiftWorkTime, DateOnly.Today, effectiveRestriction))
 				.Return(workTimeMineMax);
 
-			var target = new WorkTimeMinMaxCalculator(ruleSetProjectionService, effectiveRestrictionForDisplayCreator);
+			var target = new WorkTimeMinMaxCalculator(workShiftWorkTime, effectiveRestrictionForDisplayCreator);
 			PreferenceType? preferenceType;
 			target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
 			preferenceType.Should().Be.EqualTo(PreferenceType.ShiftCategory);

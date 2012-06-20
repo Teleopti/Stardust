@@ -622,7 +622,34 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 	            return _licenseStatusUpdater;
 	        }
 	    }
-        
+
+	    public int LoadQualityQuestDataMart(int dataSourceId, IBusinessUnit currentBusinessUnit)
+	    {
+            //Prepare sql parameters
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("datasource_id", dataSourceId));
+
+            return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_quality_quest_load", parameterList,
+                                                   _dataMartConnectionString);
+	    }
+
+	    public int FillFactQualityDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit)
+	    {
+            //Convert time back to local time before sp call
+            DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
+            DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
+
+            //Prepare sql parameters
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("start_date", startDate.Date));
+            parameterList.Add(new SqlParameter("end_date", endDate.Date));
+            parameterList.Add(new SqlParameter("datasource_id", dataSourceId));
+
+            return
+                HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_quality_load", parameterList,
+                                              _dataMartConnectionString);
+	    }
+
 	    public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
 			List<IScheduleDay> scheduleParts = new List<IScheduleDay>();

@@ -1,0 +1,80 @@
+﻿using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Common.Clipboard;
+using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
+{
+	public class AgentRestrictionsDetailView : ScheduleViewBase, IAgentRestrictionsDetailView
+	{
+		private readonly AgentRestrictionsDetailModel _model;
+
+		public AgentRestrictionsDetailView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
+			SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
+			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
+			: base(grid)
+		{
+			_model = new AgentRestrictionsDetailModel();
+			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag);
+
+			InitializeGrid();
+		}
+
+		private void InitializeGrid()
+		{
+			ViewGrid.Rows.HeaderCount = 0;
+			ViewGrid.Cols.HeaderCount = 0;
+			ViewGrid.ColWidths.SetRange(1, ViewGrid.ColCount, 120);
+			ViewGrid.ColWidthEntries[0].Width = 140;
+			ViewGrid.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
+			ViewGrid.NumberedRowHeaders = false;
+			ViewGrid.RowHeights.SetRange(1, ViewGrid.RowCount, 80);
+			ViewGrid.RowHeightEntries[0].Height = 30;
+		}
+
+		protected override int CellWidth()
+		{
+			return 120;
+		}
+
+		internal override void QueryColWidth(object sender, GridRowColSizeEventArgs e)
+		{
+			if (e.Index == (int)ColumnType.None)
+			{
+				e.Size = CellWidth();
+				e.Handled = true;
+			}
+			else if (e.Index >= (int)ColumnType.RowHeaderColumn)
+			{
+				e.Size = CellWidth();
+				e.Handled = true;
+			}
+		}
+
+		internal override void QueryColCount(object sender, GridRowColCountEventArgs e)
+		{
+			e.Count = Presenter.ColCount;
+			e.Handled = true;
+		}
+
+		internal override void QueryRowCount(object sender, GridRowColCountEventArgs e)
+		{
+
+			e.Count = Presenter.RowCount;
+			e.Handled = true;
+		}
+
+		internal override void CreateHeaders()
+		{
+			ViewGrid.Rows.HeaderCount = 0;
+			ViewGrid.Cols.HeaderCount = 0;
+			ViewGrid.Rows.FrozenCount = 0;
+			ViewGrid.Cols.FrozenCount = 0;
+			ViewGrid.Model.Options.MergeCellsMode = GridMergeCellsMode.None;
+		}
+	}
+}

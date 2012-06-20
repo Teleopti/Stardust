@@ -12,18 +12,18 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 
 	public class ReportDataFetcher : IReportRequestValidator
 	{
-		private readonly ICultureProvider _cultureProvider;
+		private readonly IUserCulture _userCulture;
 
 		private readonly IReportDataService _dataService;
 
 		private readonly IDefinedReportProvider _definedReportProvider;
 
 		public ReportDataFetcher(
-			IDefinedReportProvider definedReportProvider, IReportDataService dataService, ICultureProvider _cultureProvider)
+			IDefinedReportProvider definedReportProvider, IReportDataService dataService, IUserCulture _userCulture)
 		{
 			_definedReportProvider = definedReportProvider;
 			_dataService = dataService;
-			this._cultureProvider = _cultureProvider;
+			this._userCulture = _userCulture;
 		}
 
 		#region IReportRequestValidator Members
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 		{
 			
 			DateOnly firstDay = interval.IsTypeWeek()
-			                    	? new DateOnly(DateHelper.GetFirstDateInWeek(request.ReportDate, _cultureProvider.GetCulture()))
+			                    	? new DateOnly(DateHelper.GetFirstDateInWeek(request.ReportDate, _userCulture.GetCulture()))
 			                    	: request.ReportDate;
 			var addDays = interval.IsTypeWeek() ? 6 : 0;
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(addDays));

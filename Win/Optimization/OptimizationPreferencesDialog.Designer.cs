@@ -235,6 +235,7 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxSchedulingSessionOptions";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OptimizationPreferencesDialog_FormClosing);
 			this.Load += new System.EventHandler(this.Form_Load);
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControHeader)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);

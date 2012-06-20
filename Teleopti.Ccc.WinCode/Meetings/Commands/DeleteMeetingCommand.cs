@@ -1,4 +1,6 @@
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,14 +17,16 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
         private readonly IMeetingRepository _meetingRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ICanModifyMeeting _canModifyMeeting;
+        private readonly IMeetingParticipantPermittedChecker _meetingParticipantPermittedChecker;
 
         public DeleteMeetingCommand(IMeetingOverviewView meetingOverviewView, IMeetingRepository meetingRepository,
-            IUnitOfWorkFactory unitOfWorkFactory, ICanModifyMeeting canModifyMeeting)
+            IUnitOfWorkFactory unitOfWorkFactory, ICanModifyMeeting canModifyMeeting, IMeetingParticipantPermittedChecker meetingParticipantPermittedChecker)
         {
             _meetingOverviewView = meetingOverviewView;
             _meetingRepository = meetingRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _canModifyMeeting = canModifyMeeting;
+            _meetingParticipantPermittedChecker = meetingParticipantPermittedChecker;
         }
 
         public void Execute()
@@ -36,6 +40,10 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
 
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
+                var persons = theMeeting.MeetingPersons.Select(m => m.Person);
+                unitOfWork.Reassociate(persons);
+                if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, theMeeting.StartDate, _meetingOverviewView, PrincipalAuthorization.Instance()))
+                    return;
 				theMeeting.Snapshot();
 
                 _meetingRepository.Remove(theMeeting);

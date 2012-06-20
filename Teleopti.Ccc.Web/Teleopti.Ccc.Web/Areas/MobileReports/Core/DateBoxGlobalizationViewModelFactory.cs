@@ -4,23 +4,24 @@ using System.Linq;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
 	public class DateBoxGlobalizationViewModelFactory : IDateBoxGlobalizationViewModelFactory
 	{
-		private readonly ICultureProvider _cultureProvider;
+		private readonly IUserCulture _userCulture;
 
-		public DateBoxGlobalizationViewModelFactory(ICultureProvider cultureProvider)
+		public DateBoxGlobalizationViewModelFactory(IUserCulture userCulture)
 		{
-			_cultureProvider = cultureProvider;
+			_userCulture = userCulture;
 		}
 
 		#region IDateBoxGlobalizationViewModelFactory Members
 
 		public DateBoxGlobalizationViewModel CreateDateBoxGlobalizationViewModel()
 		{
-			var currentCulture = _cultureProvider.GetCulture();
+			var currentCulture = _userCulture.GetCulture();
 			var dateTimeFormatInfo = currentCulture.DateTimeFormat;
 
 			return new DateBoxGlobalizationViewModel

@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Time;
@@ -257,12 +258,15 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             var id = new Guid();
             _meeting.SetId(id);
+            var person = PersonFactory.CreatePerson("test");
+            _meeting.AddMeetingPerson(new MeetingPerson(person, false));
 
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             var meetingRepository = _mocks.StrictMock<IMeetingRepository>();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
             Expect.Call(meetingRepository.Load(id)).Return(_meeting);
+            Expect.Call(()=>unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             meetingRepository.Remove(_meeting);
             Expect.Call(unitOfWork.PersistAll(_target)).Return(new List<IRootChangeInfo>());
             unitOfWork.Dispose();

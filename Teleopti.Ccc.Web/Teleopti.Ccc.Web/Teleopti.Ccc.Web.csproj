@@ -73,8 +73,8 @@
     <Reference Include="Elmah">
       <HintPath>..\..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="Esent.Interop">
-      <HintPath>..\..\packages\Rhino.ServiceBus.References.2.3.1.1\lib\Esent.Interop.dll</HintPath>
+    <Reference Include="Esent.Interop, Version=1.6.0.0, Culture=neutral, PublicKeyToken=8dd49bbdae3f61af, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rhino.ServiceBus.References.2.3.2.1\lib\Esent.Interop.dll</HintPath>
     </Reference>
     <Reference Include="LinFu.DynamicProxy">
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
@@ -82,21 +82,17 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=1.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=1.4.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.1.3\lib\Net35\MbCache.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.1.4\lib\Net35\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.4.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.1.3\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.1.4\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate.Caches.SysCache, Version=3.1.0.4000, Culture=neutral, PublicKeyToken=6876f2ea66c9f443, processorArchitecture=MSIL">
       <HintPath>..\..\nhibernateAddons\Cache_Providers\NHibernate.Caches.SysCache.dll</HintPath>
@@ -107,11 +103,13 @@
     <Reference Include="Rhino.Queues, Version=1.4.2.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Rhino.Queues.1.4.2.0\lib\4.0\Rhino.Queues.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus, Version=2.3.1.1, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rhino.ServiceBus.2.3.1.1\lib\4.0\Rhino.ServiceBus.dll</HintPath>
+    <Reference Include="Rhino.ServiceBus, Version=2.3.2.1, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rhino.ServiceBus.2.3.2.1\lib\4.0\Rhino.ServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.Autofac, Version=2.3.1.1, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.2.3.1.1\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
+    <Reference Include="Rhino.ServiceBus.Autofac, Version=2.3.2.1, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.2.3.2.1\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
@@ -193,10 +191,10 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferencePeriodFeedbackViewModel.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferencePeriodViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePeriodFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\IPersonPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\PersonPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormMappingProfile.cs" />
@@ -224,7 +222,7 @@
     <Compile Include="Core\RequestContext\ICurrentHttpContext.cs" />
     <Compile Include="Core\RequestContext\IdentityProvider.cs" />
     <Compile Include="Core\RequestContext\IIdentityProvider.cs" />
-    <Compile Include="Core\RequestContext\WebRequestPrincipalContext.cs" />
+    <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -274,14 +272,10 @@
     <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactory.cs" />
     <Compile Include="Areas\Start\Models\Menu\ApplicationArea.cs" />
     <Compile Include="Areas\Start\Models\Menu\MenuViewModel.cs" />
-    <Compile Include="Core\RequestContext\CultureProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Core\RequestContext\DataSourceProvider.cs" />
-    <Compile Include="Core\RequestContext\ICultureProvider.cs" />
     <Compile Include="Core\RequestContext\IDataSourceProvider.cs" />
-    <Compile Include="Core\RequestContext\ISessionSpecificDataStringSerializer.cs" />
-    <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializer.cs" />
+    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataStringSerializer.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Models\Shared\Link.cs" />
@@ -316,8 +310,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Startup\BootstrapperModule.cs" />
-    <Compile Include="Core\RequestContext\ISessionSpecificDataProvider.cs" />
-    <Compile Include="Core\RequestContext\SessionSpecificData.cs" />
+    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataProvider.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificData.cs" />
     <Compile Include="Areas\Start\Models\Authentication\BusinessUnitViewModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\DataSourceViewModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\SignInApplicationModel.cs" />
@@ -414,14 +408,14 @@
     <Compile Include="Areas\MyTime\Core\Portal\IPermissionProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\PermissionProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\PortalViewModelFactory.cs" />
-    <Compile Include="Core\RequestContext\DefaultSessionSpecificCookieDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieDataProviderSettings.cs" />
     <Compile Include="Core\RequestContext\ISetThreadCulture.cs" />
-    <Compile Include="Core\RequestContext\ISessionSpecificCookieDataProviderSettings.cs" />
-    <Compile Include="Core\RequestContext\IRequestContextInitializer.cs" />
-    <Compile Include="Core\RequestContext\ISessionPrincipalFactory.cs" />
-    <Compile Include="Core\RequestContext\SessionPrincipalFactory.cs" />
-    <Compile Include="Core\RequestContext\RequestContextInitializer.cs" />
-    <Compile Include="Core\RequestContext\SessionSpecificCookieDataProvider.cs" />
+    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificCookieDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Initialize\IRequestContextInitializer.cs" />
+    <Compile Include="Core\RequestContext\Initialize\ISessionPrincipalFactory.cs" />
+    <Compile Include="Core\RequestContext\Initialize\SessionPrincipalFactory.cs" />
+    <Compile Include="Core\RequestContext\Initialize\RequestContextInitializer.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificCookieDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\DateOnlyModelBinder.cs" />
     <Compile Include="Areas\MyTime\Core\IoC\MyTimeAreaModule.cs" />
     <Compile Include="Core\RequestContext\SetThreadCulture.cs" />
@@ -485,6 +479,7 @@
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Init.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Ajax.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.tabberiet.js" />
@@ -492,6 +487,7 @@
     <Content Include="Areas\MyTime\Content\Css\Preference.css" />
     <Content Include="Areas\MyTime\Content\Css\ScheduleStyles.css" />
     <Content Include="Areas\MyTime\Content\Css\WeekView.css" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.Tests.html" />
     <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
@@ -584,6 +580,8 @@
     <Content Include="Content\Scripts\excanvas.compressed.js" />
     <Content Include="Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
+    <Content Include="Content\Scripts\qunit.css" />
+    <Content Include="Content\Scripts\qunit.js" />
     <Content Include="Content\Scripts\RGraph.bar.js" />
     <Content Include="Content\Scripts\jquery.qtip.js" />
     <Content Include="Content\Scripts\RGraph.common.context.js" />
@@ -654,6 +652,8 @@
     <Content Include="Areas\MobileReports\Content\Images\icon_sprite.png" />
     <Content Include="Content\Scripts\jquery.signalR.js" />
     <Content Include="Content\Scripts\jquery.signalR.min.js" />
+    <Content Include="Content\Scripts\knockout-2.1.0.debug.js" />
+    <Content Include="Content\Scripts\knockout-2.1.0.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

@@ -1,0 +1,256 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>Preference Tests</title>
+		<link rel="stylesheet" href="../../../../Content/Scripts/qunit.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="../../../../Content/Scripts/jquery-1.6.4.js"></script>
+		<script type="text/javascript" src="../../../../Content/Scripts/qunit.js"></script>
+		<script type="text/javascript" src="../../../../Content/Scripts/knockout-2.1.0.js"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.js"></script>
+
+		<script>
+
+			$(document).ready(function () {
+
+				module("Teleopti.MyTimeWeb.Preference period feedback view model");
+
+				test("should summarize possible contract time", function () {
+					var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+					var viewModelDay2 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+					var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay1, viewModelDay2]);
+					viewModelDay1.PossibleContractTimeMinutesLower(6 * 60);
+					viewModelDay1.PossibleContractTimeMinutesUpper(10 * 60);
+					viewModelDay2.PossibleContractTimeMinutesLower(6 * 60);
+					viewModelDay2.PossibleContractTimeMinutesUpper(10 * 60);
+
+					expect(2);
+					equal(viewModel.PossibleResultContractTimeMinutesLower(), 12 * 60);
+					equal(viewModel.PossibleResultContractTimeMinutesUpper(), 20 * 60);
+				});
+
+				test("should format possible contract time", function () {
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+					var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay]);
+					viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
+					viewModelDay.PossibleContractTimeMinutesUpper(160 * 60 + 5);
+
+					expect(2);
+					equal(viewModel.PossibleResultContractTimeLower(), "100:30");
+					equal(viewModel.PossibleResultContractTimeUpper(), "160:05");
+				});
+
+				test("should load feedback", function () {
+
+					var ajax = {
+						Ajax: function (options) {
+							equal(options.data.Date, "2012-06-11");
+							options.success({
+								TargetDaysOff: {
+									Lower: 2,
+									Upper: 4
+								},
+								PossibleResultDaysOff: 1,
+								TargetContractTime: {
+									Lower: "35:00",
+									Upper: "45:00"
+								}
+							});
+						}
+					};
+
+					var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, [], "2012-06-11");
+
+					viewModel.LoadFeedback();
+
+					equal(viewModel.TargetDaysOffLower(), 2);
+					equal(viewModel.TargetDaysOffUpper(), 4);
+					equal(viewModel.PossibleResultDaysOff(), 1);
+					equal(viewModel.TargetContractTimeLower(), "35:00");
+					equal(viewModel.TargetContractTimeUpper(), "45:00");
+				});
+
+				module("Teleopti.MyTimeWeb.Preference day view model");
+
+				test("should format possible contract time", function () {
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+					viewModelDay.PossibleContractTimeMinutesLower(6 * 60 + 30);
+					viewModelDay.PossibleContractTimeMinutesUpper(8 * 60 + 5);
+
+					expect(2);
+					equal(viewModelDay.PossibleContractTimeLower(), "6:30");
+					equal(viewModelDay.PossibleContractTimeUpper(), "8:05");
+				});
+
+				test("should load feedback", function () {
+
+					var ajax = {
+						Ajax: function (options) {
+							equal(options.data.Date, "2012-06-11");
+							options.success({
+								FeedbackError: "an error",
+								PossibleStartTimes: "6:00-9:00",
+								PossibleEndTimes: "16:00-18:00",
+								PossibleContractTimeMinutesLower: 7 * 60,
+								PossibleContractTimeMinutesUpper: 12 * 60
+							});
+						}
+					};
+
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+					viewModelDay.Date = "2012-06-11";
+
+
+					expect(5);
+
+					viewModelDay.LoadFeedback();
+
+					equal(viewModelDay.FeedbackError(), "an error");
+					equal(viewModelDay.PossibleStartTimes(), "6:00-9:00");
+					equal(viewModelDay.PossibleEndTimes(), "16:00-18:00");
+					equal(viewModelDay.PossibleContractTimes(), "7:00-12:00");
+				});
+
+				module("Teleopti.MyTimeWeb.Preference initializer");
+
+				test("should load day feedback and bind", function () {
+
+					$("#qunit-fixture")
+						.html("<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>")
+						.append("<li data-mytime-date='2012-06-11' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />")
+						.append("<li data-mytime-date='2012-06-12' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />");
+
+					var ajax = {
+						Ajax: function (options) {
+							if (options.url != "PreferenceFeedback/Feedback")
+								return;
+							if (options.data.Date == '2012-06-11')
+								options.success({
+									PossibleContractTimeMinutesLower: 6 * 60
+								});
+							if (options.data.Date == '2012-06-12')
+								options.success({
+									PossibleContractTimeMinutesLower: 8 * 60
+								});
+						}
+					};
+
+					expect(3);
+
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
+
+					target.InitViewModels();
+
+					equal($('#Preference-period-feedback-view').text(), "14:00");
+					equal($('li[data-mytime-date="2012-06-11"]').text(), "6:00");
+					equal($('li[data-mytime-date="2012-06-12"]').text(), "8:00");
+				});
+
+				test("should only load feedback for days with class feedback", function () {
+					$("#qunit-fixture")
+						.html("<li data-mytime-date='2012-06-11' data-bind='text: PossibleContractTimeLower' />")
+						.append("<li data-mytime-date='2012-06-12' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />");
+
+					var ajax = {
+						Ajax: function (options) {
+							if (options.url != "PreferenceFeedback/Feedback")
+								return;
+							options.success({
+								PossibleContractTimeMinutesLower: 8 * 60
+							});
+						}
+					};
+
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
+
+					target.InitViewModels();
+
+					equal($('li[data-mytime-date="2012-06-11"]').text(), "");
+					equal($('li[data-mytime-date="2012-06-12"]').text(), "8:00");
+				});
+
+				test("should compute with static schedule data", function () {
+
+					$("#qunit-fixture")
+						.html("<div id='Preference-period-feedback-view'><span data-bind='text: PossibleResultContractTimeLower' /><span data-bind='text: PossibleResultContractTimeUpper' /></div>")
+						.append("<li data-mytime-date='2012-06-13' class='inperiod'><span data-mytime-contract-time='120' /></li>")
+						.append("<li data-mytime-date='2012-06-14' class='inperiod'><span data-mytime-contract-time='60' /></li>");
+
+					var ajax = {
+						Ajax: function (options) {
+							if (options.url == "PreferenceFeedback/Feedback")
+								ok(true, "feedback should not be loaded");
+						}
+					};
+
+					expect(2);
+
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
+
+					target.InitViewModels();
+
+					equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeLower"]').text(), "3:00", "lower contract time");
+					equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeUpper"]').text(), "3:00", "upper contract time");
+				});
+
+				test("should load feedback", function () {
+
+					var ajax = {
+						Ajax: function (options) {
+							equal(options.url, "PreferenceFeedback/PeriodFeedback", "period feedback ajax url");
+							equal(options.data.Date, "2012-06-13", "period feedback date");
+						}
+					};
+					var portal = {
+						CurrentFixedDate: function () { return "2012-06-13"; }
+					};
+
+					expect(2);
+
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax, portal);
+
+					target.InitViewModels();
+
+				});
+
+				test("should clear day view models on init", function () {
+					
+					$("#qunit-fixture")
+						.html("<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>")
+						.append("<li data-mytime-date='2012-06-19' class='inperiod feedback' />");
+
+					var ajax = {
+						Ajax: function (options) {
+							if (options.url != "PreferenceFeedback/Feedback")
+								return;
+							if (options.data.Date == '2012-06-19' || options.data.Date == '2012-06-20')
+								options.success({
+									PossibleContractTimeMinutesLower: 6 * 60
+								});
+						}
+					};
+
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
+
+					target.InitViewModels();
+
+					$("#qunit-fixture")
+						.html("<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>")
+						.append("<li data-mytime-date='2012-06-20' class='inperiod feedback' />");
+					
+					target.InitViewModels();
+
+					equal($('#Preference-period-feedback-view').text(), "6:00", "day sum after reinit same instance");
+				});
+			});
+		</script>
+  
+	</head>
+	<body>
+		<h1 id="qunit-header">Preference tests</h1>
+		<h2 id="qunit-banner"></h2>
+		<div id="qunit-testrunner-toolbar"></div>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture"></div>
+	</body>
+</html>

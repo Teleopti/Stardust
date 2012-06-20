@@ -28,7 +28,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public IShiftCategoryFairnessFactors GetFactorsForPersonOnDate(IPerson person, DateOnly dateOnly)
         {
-            return _fairnessCalculator.ShiftCategoryFairnessFactors(ScheduleDictionary[person],person,dateOnly );
+			var personFairness = ScheduleDictionary[person].CachedShiftCategoryFairness();
+			var groupFairness = _groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(person, dateOnly);
+
+			//bool useShiftCategoryFairness = false;
+			//if (person.WorkflowControlSet != null)
+			//    useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
+			return _fairnessCalculator.ShiftCategoryFairnessFactors(groupFairness, personFairness);
         }
     }
 }

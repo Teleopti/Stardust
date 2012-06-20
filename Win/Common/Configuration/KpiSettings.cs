@@ -269,6 +269,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             comboBoxSite.Sorted = false;
             comboBoxSite.DisplayMember = "Description";
             comboBoxSite.ValueMember = "Id";
+            comboBoxSite.Items.Clear();
 
             IEnumerable<ISite> query = lst.OrderBy(s => s.Description.Name);
 

@@ -102,13 +102,13 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=1.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=1.4.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.1.3\lib\Net35\MbCache.dll</HintPath>
+      <HintPath>..\packages\MbCache.1.4\lib\Net35\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.4.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.1.3\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\packages\MbCache.1.4\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -580,12 +580,6 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\ScheduleFilterView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\ScheduleFilterView.Designer.cs">
-      <DependentUpon>ScheduleFilterView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\SearchPerson.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -728,7 +722,6 @@
     <Compile Include="Grouping\DynamicOptionType.cs" />
     <Compile Include="Grouping\FindPersonsModel.cs" />
     <Compile Include="Grouping\FindPersonsPresenter.cs" />
-    <Compile Include="Grouping\GroupPageLoaderInformation.cs" />
     <Compile Include="Grouping\FindPersonsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1182,6 +1175,7 @@
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsAvailableDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsLoadingDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsNotAvailableDrawer.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailView.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsWarningDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionViewTEMP.cs">
       <SubType>Form</SubType>
@@ -1195,6 +1189,12 @@
     </Compile>
     <Compile Include="Scheduling\AuditHistoryView.Designer.cs">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\PersonsFilterView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PersonsFilterView.Designer.cs">
+      <DependentUpon>PersonsFilterView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\RequestHistoryModule.cs" />
     <Compile Include="Scheduling\RequestHistoryView.cs">
@@ -2010,7 +2010,6 @@
     <Compile Include="Forecasting\Forms\ZoomButtonsEventArgs.cs" />
     <Compile Include="Forecasting\TabHandler.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Grouping\BusinessHierarchyCreator.cs" />
     <Compile Include="Grouping\GroupingConstants.cs" />
     <Compile Include="Grouping\GroupPagePreviewScreen.cs">
       <SubType>Form</SubType>
@@ -2291,12 +2290,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\DateChangedEventArgs.cs" />
-    <Compile Include="Scheduling\FilterDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\FilterDialog.Designer.cs">
-      <DependentUpon>FilterDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forecasting\Forms\ModifyCellEventArgs.cs" />
     <Compile Include="Forecasting\Forms\ModifyCellOption.cs" />
     <Compile Include="Scheduling\FormClipboardSpecial.cs">
@@ -2508,6 +2501,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main\Legal.resx">
       <DependentUpon>Legal.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\LicenseAgreementForm.resx">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
@@ -2673,16 +2667,15 @@
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
+      <DependentUpon>PersonsFilterView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\RequestHistoryView.resx">
       <DependentUpon>RequestHistoryView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulerNavigator.resx">
       <DependentUpon>SchedulerNavigator.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\FilterDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FilterDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FindMatching.resx">
       <DependentUpon>FindMatching.cs</DependentUpon>
@@ -2929,9 +2922,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\ModifySelectionView.resx">
       <DependentUpon>ModifySelectionView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\ScheduleFilterView.resx">
-      <DependentUpon>ScheduleFilterView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\SearchPerson.resx">
       <DependentUpon>SearchPerson.cs</DependentUpon>

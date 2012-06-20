@@ -11,36 +11,27 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public TimePeriod TargetWithTolerance(IScheduleMatrixPro matrix)
         {
-            if (matrix == null) throw new ArgumentNullException("matrix");
-            IVirtualSchedulePeriod schedulePeriod = matrix.SchedulePeriod;
-            var contract = schedulePeriod.Contract;
-           
-            EmploymentType empType = contract.EmploymentType;
-
-            if (empType == EmploymentType.HourlyStaff)
-            {
-                int weeks = schedulePeriod.DateOnlyPeriod.CalendarWeeksAffected(matrix.Person.FirstDayOfWeek);
-                TimeSpan maxTime =
-                    TimeSpan.FromSeconds(contract.WorkTimeDirective.MaxTimePerWeek.TotalSeconds*weeks);
-                if (maxTime < schedulePeriod.MinTimeSchedulePeriod)
-                    maxTime = schedulePeriod.MinTimeSchedulePeriod;
-                return new TimePeriod(schedulePeriod.MinTimeSchedulePeriod, maxTime);
-            }
-
-        	TimeSpan target = TargetTime(matrix);
-            return new TimePeriod(target.Subtract(contract.NegativePeriodWorkTimeTolerance),
-                                  target.Add(contract.PositivePeriodWorkTimeTolerance));
-
+			if (matrix == null) throw new ArgumentNullException("matrix");
+        	var result = TargetTimeWithTolerance(matrix.SchedulePeriod, MatrixScheduleDays(matrix));
+        	return new TimePeriod(result.Minimum, result.Maximum);
         }
 
-    	public TimeSpan TargetTime(IScheduleMatrixPro matrix)
+		public TimeSpan TargetTime(IScheduleMatrixPro matrix)
     	{
 			if (matrix == null) throw new ArgumentNullException("matrix");
-    		IEnumerable<IScheduleDayPro> effectivePeriodDays = matrix.EffectivePeriodDays;
-			effectivePeriodDays = effectivePeriodDays ?? new IScheduleDayPro[] { };
-			var scheduleDays = (from d in effectivePeriodDays select d.DaySchedulePart());
-			return TargetTime(matrix.SchedulePeriod, scheduleDays);
+			return TargetTime(matrix.SchedulePeriod, MatrixScheduleDays(matrix));
     	}
+
+		private static IEnumerable<IScheduleDay> MatrixScheduleDays(IScheduleMatrixPro matrix)
+		{
+			IEnumerable<IScheduleDayPro> effectivePeriodDays = matrix.EffectivePeriodDays;
+			effectivePeriodDays = effectivePeriodDays ?? new IScheduleDayPro[] { };
+			return from d in effectivePeriodDays select d.DaySchedulePart();
+		}
+
+
+
+
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public TimeSpan TargetTime(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
@@ -57,12 +48,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return target;
 		}
 
-		private static TimeSpan ApplySeasonality(IVirtualSchedulePeriod virtualSchedulePeriod, TimeSpan target)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public MinMax<TimeSpan> TargetTimeWithTolerance(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
-			return target.Add(TimeSpan.FromSeconds(target.TotalSeconds * virtualSchedulePeriod.Seasonality.Value));
+			var contract = virtualSchedulePeriod.Contract;
+			var employmentType = contract.EmploymentType;
+
+			if (employmentType == EmploymentType.HourlyStaff)
+			{
+				var weeks = virtualSchedulePeriod.DateOnlyPeriod.CalendarWeeksAffected(virtualSchedulePeriod.Person.FirstDayOfWeek);
+				var maxTime = TimeSpan.FromSeconds(contract.WorkTimeDirective.MaxTimePerWeek.TotalSeconds * weeks);
+				if (maxTime < virtualSchedulePeriod.MinTimeSchedulePeriod)
+					maxTime = virtualSchedulePeriod.MinTimeSchedulePeriod;
+				return new MinMax<TimeSpan>(virtualSchedulePeriod.MinTimeSchedulePeriod, maxTime);
+			}
+
+			var target = TargetTime(virtualSchedulePeriod, scheduleDays);
+
+			return ApplyTolerance(contract, target);
 		}
 
-		private static TimeSpan PeriodTarget(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays) {
+
+
+		private static TimeSpan PeriodTarget(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
+		{
 			if (schedulePeriod.Contract.EmploymentType == EmploymentType.FixedStaffDayWorkTime)
 				return PeriodTargetForStaffDayWorkTime(schedulePeriod, scheduleDays);
 			else
@@ -72,18 +81,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private static TimeSpan PeriodTargetForStaffDayWorkTime(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var daysOff = (
-			               	from d in scheduleDays
-			               	let restrictions = d.RestrictionCollection() ?? new IRestrictionBase[] {}
-			               	let dayOffPreferenceRestrictions = from r in restrictions.OfType<IPreferenceRestriction>()
-			               	                                   where r.DayOffTemplate != null
-			               	                                   select r
-			               	let significant = d.SignificantPart()
-			               	where
-			               		significant == SchedulePartView.DayOff ||
-			               		significant == SchedulePartView.ContractDayOff ||
-			               		dayOffPreferenceRestrictions.Any()
-			               	select d
-			               ).Count();
+							from d in scheduleDays
+							let restrictions = d.RestrictionCollection() ?? new IRestrictionBase[] { }
+							let dayOffPreferenceRestrictions = from r in restrictions.OfType<IPreferenceRestriction>()
+															   where r.DayOffTemplate != null
+															   select r
+							let significant = d.SignificantPart()
+							where
+								significant == SchedulePartView.DayOff ||
+								significant == SchedulePartView.ContractDayOff ||
+								dayOffPreferenceRestrictions.Any()
+							select d
+						   ).Count();
 
 			var workDays = schedulePeriod.DateOnlyPeriod.DayCount() - daysOff;
 
@@ -92,12 +101,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return periodTarget;
 		}
 
+
+
+		private static TimeSpan ApplySeasonality(IVirtualSchedulePeriod virtualSchedulePeriod, TimeSpan target)
+		{
+			return target.Add(TimeSpan.FromSeconds(target.TotalSeconds * virtualSchedulePeriod.Seasonality.Value));
+		}
+
 		private static TimeSpan ApplyBalance(IVirtualSchedulePeriod schedulePeriod, TimeSpan time)
 		{
 			time = time.Add(schedulePeriod.Extra);
 			time = time.Add(schedulePeriod.BalanceOut);
 			time = time.Subtract(schedulePeriod.BalanceIn);
 			return time;
+		}
+
+		private static MinMax<TimeSpan> ApplyTolerance(IContract contract, TimeSpan target)
+		{
+			var min = target.Subtract(contract.NegativePeriodWorkTimeTolerance);
+			var max = target.Add(contract.PositivePeriodWorkTimeTolerance);
+			return new MinMax<TimeSpan>(min, max);
 		}
 	}
 

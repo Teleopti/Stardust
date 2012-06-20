@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 			var targetDaysOff = _schedulePeriodTargetDayOffCalculator.TargetDaysOff(virtualSchedulePeriod);
 			var possibleResultDaysOff = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(scheduleDays, true, true, false);
-			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTime(virtualSchedulePeriod, scheduleDays);
+			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTimeWithTolerance(virtualSchedulePeriod, scheduleDays);
 
 			return new PeriodFeedback
 			    {
@@ -46,6 +46,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	{
 		public MinMax<int> TargetDaysOff { get; set; }
 		public int PossibleResultDaysOff { get; set; }
-		public TimeSpan TargetTime { get; set; }
+		public MinMax<TimeSpan> TargetTime { get; set; }
 	}
 }

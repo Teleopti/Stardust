@@ -538,7 +538,7 @@ header {
     font-size: 12px;
     font-weight: bold;
     text-shadow: 1px 1px 0px #fff;
-    width: 162px;
+    width: 165px;
 }
 .select-list{background-position: 0px -403px; height: 117px; width: 298px;}
 .select-list ul{
@@ -608,7 +608,7 @@ header {
 #body{background: transparent url(../Images/main_content_bg.jpg) center repeat-y; }
 #body-inner{background: transparent url(../Images/main_content_top_bg.jpg) top center no-repeat; }
 #body-bottom{background: transparent url(../Images/main_content_bottom_bg.jpg) bottom center no-repeat; }
-.info-pnl {
+.information-panel {
 	font-family: Verdana;
 	font-size: 11px;
 }

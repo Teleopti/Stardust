@@ -288,9 +288,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times", false));
 			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times", false));
 
-			startTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();
-			endTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();
-			contractTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();
+			EventualAssert.That(() => startTimeDiv.InnerHtml, Is.Not.Null.Or.Empty);
+			EventualAssert.That(() => endTimeDiv.InnerHtml, Is.Not.Null.Or.Empty);
+			EventualAssert.That(() => contractTimeDiv.InnerHtml, Is.Not.Null.Or.Empty);
 		}
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)

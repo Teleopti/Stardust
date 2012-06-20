@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -22,7 +20,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// /// </remarks>
-        TimeSpan? StartTime { get; set; }
+        TimeSpan? StartTime { get; }
 
         /// <summary>
         /// Gets or sets the end time.
@@ -33,7 +31,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// /// </remarks>
-		TimeSpan? EndTime { get; set; }
+		TimeSpan? EndTime { get; }
 
         /// <summary>
         /// Sets the start time string.
@@ -44,7 +42,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// /// </remarks>
-        string StartTimeString { set; get; }
+        string StartTimeString { get; }
 
         /// <summary>
         /// Gets or sets the end time string.
@@ -55,7 +53,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// /// </remarks>
-        string EndTimeString { set; get; }
+        string EndTimeString { get; }
 
         /// <summary>
         /// Exposes the parselogic for parsing string to timespan
@@ -93,10 +91,9 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         bool HasValue();
 
-        /// <summary>
-        /// Returns a valid timeperiod limited by the minimum and/or maximum values defined by the limiter.
-        /// </summary>
-        /// <returns></returns>
-        TimePeriod ValidPeriod();
+		 /// <summary>
+		 /// Determines if limitation is valid for <paramref name="timeSpan"/>
+		 /// </summary>
+    	bool IsValidFor(TimeSpan timeSpan);
     }
 }

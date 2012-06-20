@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             {
                 _restrictionExtractor.Extract(scheduleDay);
   
-                if(_restrictionExtractor.PreferenceList.Count() > 0)
+                if(_restrictionExtractor.PreferenceList.Any())
                     restrictedDays.Add(scheduleDay);
             }
 

@@ -8,7 +8,26 @@ namespace Teleopti.Interfaces.Domain
     /// Date helper class 
     /// </summary>
     public static class DateHelper
-    {
+	{
+		/// <summary>
+		/// The cultures that should use week number from ISO8601
+		/// </summary>
+		/// <remarks>
+		/// Nynorsk - Norway 2068
+		/// Bokmål - Norway 1044
+		/// Swedish - Sweden 1053
+		/// German - Germany 1031
+		/// German - Austria 3079
+		/// German - Switzerland 2055
+		/// Danish - Danmark 1030
+		/// Finnish - Finland 1035
+		/// French - France 1036
+		/// English - UK 2057
+		/// Spanish - Spain 3082
+		/// </remarks>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
+		public static readonly IList<int> Iso8601Cultures = new List<int> { 2068, 1044, 1053, 1031, 3079, 2055, 1030, 1035, 1036, 2057, 3082 };
+
         private readonly static DateTime _minSmallDateTime = new DateTime(1901,1,1);
         private readonly static DateTime _maxSmallDateTime = new DateTime(2029,1,1);
 
@@ -57,7 +76,12 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static int WeekNumber(DateTime date, CultureInfo cult)
         {
-            int weekNo = cult.Calendar.GetWeekOfYear(date, cult.DateTimeFormat.CalendarWeekRule, cult.DateTimeFormat.FirstDayOfWeek);
+        	var calendarWeekRule = cult.DateTimeFormat.CalendarWeekRule;
+			if (Iso8601Cultures.Contains(cult.LCID))
+			{
+				calendarWeekRule = CalendarWeekRule.FirstFourDayWeek;
+			}
+            int weekNo = cult.Calendar.GetWeekOfYear(date, calendarWeekRule, cult.DateTimeFormat.FirstDayOfWeek);
 
             if (weekNo == 53 && cult.DateTimeFormat.Calendar.GetType() == typeof(GregorianCalendar)
                 && cult.DateTimeFormat.CalendarWeekRule == CalendarWeekRule.FirstFourDayWeek)

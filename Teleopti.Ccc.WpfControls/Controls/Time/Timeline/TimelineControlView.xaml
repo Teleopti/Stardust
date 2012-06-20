@@ -96,10 +96,12 @@
         </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
+        
+
     <Grid Background="{StaticResource RaptorStandardGradientBrush}" >
         <Grid.ContextMenu>
 
-            <ContextMenu  >
+            <ContextMenu x:Name="TimeLineContextMenu"  IsVisibleChanged="ContextMenu_IsVisibleChanged" MouseLeftButtonUp="TimelineControlView_PreviewMouseUp" MouseLeftButtonDown="TimelineControlView_PreviewMouseUp">
                 <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddActivityWithPeriod}"/>
                 <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddAbsenceWithPeriod}"/>
                 <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddOvertimeWithPeriod}"/>

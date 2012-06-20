@@ -18,12 +18,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 			foreach (var poss in workTimeMinMax.PossibleStartEndCategories)
 			{
+				if(schedulingOptions.NotAllowedShiftCategories.Contains(poss.ShiftCategory))
+					continue;
 				var possible = new PossibleStartEndCategory();
 				if (schedulingOptions.UseGroupSchedulingCommonStart)
 					possible.StartTime = poss.StartTime;
 				if (schedulingOptions.UseGroupSchedulingCommonEnd)
 					possible.EndTime = poss.EndTime;
-				if (schedulingOptions.UseGroupSchedulingCommonCategory)
+				if (schedulingOptions.UseGroupSchedulingCommonCategory )
 					possible.ShiftCategory = poss.ShiftCategory;
 				ret.Add(possible);
 			}

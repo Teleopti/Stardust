@@ -127,6 +127,7 @@
     <Compile Include="Domain\IAuditSetter.cs" />
     <Compile Include="Domain\IEffectiveRestrictionForDisplayCreator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionOptions.cs" />
+    <Compile Include="Domain\IGroupPageLight.cs" />
     <Compile Include="Domain\ILicenseStatus.cs" />
     <Compile Include="Domain\IDetailedJobResult.cs" />
     <Compile Include="Domain\ILicenseStatusUpdater.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="Domain\IUnsafePersonProvider.cs" />
     <Compile Include="Domain\IUnsavedDaysInfo.cs" />
+    <Compile Include="Domain\IUserCulture.cs" />
     <Compile Include="Domain\IUserDetail.cs" />
     <Compile Include="Domain\IUserTimeZone.cs" />
     <Compile Include="Domain\IValidatedVolumeDay.cs" />
@@ -532,6 +534,7 @@
     <Compile Include="Domain\IWorkShiftMinMaxCalculator.cs" />
     <Compile Include="Domain\IWorkShiftVisualLayerInfo.cs" />
     <Compile Include="Domain\IWorkShiftWeekMinMaxCalculator.cs" />
+    <Compile Include="Domain\IWorkShiftWorkTime.cs" />
     <Compile Include="Domain\IWorkTimeBackToLegalStateService.cs" />
     <Compile Include="Domain\IWorkTimeMinMax.cs" />
     <Compile Include="Domain\IPersonWriteProtectionInfo.cs" />
@@ -543,7 +546,6 @@
     <Compile Include="Domain\OpenForWork.cs" />
     <Compile Include="Domain\OptimizationRestriction.cs" />
     <Compile Include="Domain\JobResultProgress.cs" />
-    <Compile Include="Domain\PositiveTimeSpan.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />
     <Compile Include="Domain\ResourceOptimizerProgressEventArgs.cs" />
     <Compile Include="Domain\ITimeLayer.cs" />

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var date = new DateOnly(DateHelper.GetFirstDateInWeek(DateTime.Now.Date, cultureInfo).AddDays(_weekday));
+			var date = new DateOnly(DateHelper.GetFirstDateInWeek(DateTime.Now.Date, cultureInfo).AddDays(_weekday - 1));
 			var dayOff = new PersonDayOff(user, Scenario, DayOffTemplate, date);
 			var dayOffRepository = new DayOffRepository(uow);
 			dayOffRepository.Add(dayOff);

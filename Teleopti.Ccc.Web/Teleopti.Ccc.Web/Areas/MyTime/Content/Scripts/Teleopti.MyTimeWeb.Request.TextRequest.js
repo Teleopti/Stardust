@@ -109,7 +109,7 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 
 	function _addTextRequest() {
 		var formData = _getFormData();
-		$.myTimeAjax({
+		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: "Requests/TextRequest",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',

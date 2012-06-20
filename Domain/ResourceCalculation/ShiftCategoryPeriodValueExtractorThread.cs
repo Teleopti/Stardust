@@ -24,13 +24,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IPerson _person;
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IPersonSkillPeriodsDataHolderManager _personSkillPeriodsDataHolderManager;
-        private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
         private readonly IShiftProjectionCacheFilter _shiftProjectionCacheFilter;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+		private readonly bool _useShiftCategoryFairness;
+		private readonly IShiftCategoryFairnessFactors _shiftCategoryFairnessFactors;
 
-        //constructor
+
+		//constructor
         public ShiftCategoryPeriodValueExtractorThread( IList<IShiftProjectionCache> shiftProjectionList, ISchedulingOptions schedulingOptions, 
 			IBlockSchedulingWorkShiftFinderService workShiftFinderService, DateOnly dateOnly, IPerson person, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator, IShiftProjectionCacheFilter shiftProjectionCacheFilter, IEffectiveRestrictionCreator effectiveRestrictionCreator)
+			ISchedulingResultStateHolder schedulingResultStateHolder, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager, 
+			 IShiftProjectionCacheFilter shiftProjectionCacheFilter, IEffectiveRestrictionCreator effectiveRestrictionCreator, 
+			bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors)
         {
         	_manualResetEvent = new ManualResetEvent(false);
             _shiftProjectionList = shiftProjectionList;
@@ -40,9 +45,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _person = person;
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _personSkillPeriodsDataHolderManager = personSkillPeriodsDataHolderManager;
-            _groupShiftCategoryFairnessCreator = groupShiftCategoryFairnessCreator;
             _shiftProjectionCacheFilter = shiftProjectionCacheFilter;
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
+        	_useShiftCategoryFairness = useShiftCategoryFairness;
+        	_shiftCategoryFairnessFactors = shiftCategoryFairnessFactors;
         }
 
         public IScheduleDictionary ScheduleDictionary
@@ -90,15 +96,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     currentSchedulePeriod);
 
             var averageWorkTime = currentSchedulePeriod.AverageWorkTimePerDay;
-            var useShiftCategoryFairness = false;
             
-            var shiftCategoryFairnessFactors = extractShiftCategoryFairnessFactor(_person ) ;
-            
-           if (_person.WorkflowControlSet != null)
-            {
-                useShiftCategoryFairness = _person.WorkflowControlSet.UseShiftCategoryFairness;
-                
-            }
 
 
 		   var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dateOnly, _schedulingOptions, scheduleDictionary);
@@ -114,8 +112,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                                         scheduleDictionary.FairnessPoints(),
                                                         agentFairness, 5,
                                                         averageWorkTime,
-                                                        useShiftCategoryFairness,
-                                                        shiftCategoryFairnessFactors,
+                                                        _useShiftCategoryFairness,
+                                                        _shiftCategoryFairnessFactors,
                                                         (double)_schedulingOptions.WorkShiftLengthHintOption,
                                                         _schedulingOptions.UseMinimumPersons,
                                                         _schedulingOptions.UseMaximumPersons,
@@ -130,16 +128,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			get { return _manualResetEvent; }
 		}
 
-		private IShiftCategoryFairnessFactors extractShiftCategoryFairnessFactor(IPerson person)
-        {
-			lock (ScheduleDictionary)
-			{
-				var range = ScheduleDictionary[person];
-				IShiftCategoryFairnessCalculator calculator = new ShiftCategoryFairnessCalculator(_groupShiftCategoryFairnessCreator);
-				return calculator.ShiftCategoryFairnessFactors(range, person, _dateOnly);
-			}
-        }
-
+		
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
@@ -162,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 FilterOnPersonalShifts(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
 
             
-      _shiftProjectionList =
+			_shiftProjectionList =
                 _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(
                     _shiftProjectionList,
                     possibleStartEndCategory,

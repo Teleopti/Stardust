@@ -29,5 +29,13 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="scheduleDays"></param>
 		/// <returns></returns>
 		TimeSpan TargetTime(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays);
+
+    	/// <summary>
+    	/// Tolerates the targets time
+    	/// </summary>
+    	/// <param name="virtualSchedulePeriod"></param>
+    	/// <param name="scheduleDays"></param>
+    	/// <returns></returns>
+		MinMax<TimeSpan> TargetTimeWithTolerance(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays);
     }
 }

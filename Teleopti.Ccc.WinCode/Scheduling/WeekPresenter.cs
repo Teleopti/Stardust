@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     break;
                 case SchedulePartView.FullDayAbsence:
                     IVisualLayerCollection layerCollection = schedulePart.ProjectionService().CreateProjection();
-                    if (layerCollection.Count() > 0)
+                    if (layerCollection.Any())
                     {
                         start = layerCollection.ElementAt(0).Period.StartDateTimeLocal(schedulePart.TimeZone);
                         end = layerCollection.ElementAt(0).Period.EndDateTimeLocal(schedulePart.TimeZone);

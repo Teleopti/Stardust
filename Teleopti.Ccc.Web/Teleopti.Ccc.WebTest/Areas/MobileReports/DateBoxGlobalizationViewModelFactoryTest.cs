@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 		[Test, SetCulture("ar-SA"), SetUICulture("ar-SA")]
 		public void ShouldCreateModelFromProvidedArSaCulture()
 		{
-			var target = new DateBoxGlobalizationViewModelFactory(new CurrentThreadCultureProvider());
+			var target = new DateBoxGlobalizationViewModelFactory(new CurrentThreadUserCulture());
 
 			var result = target.CreateDateBoxGlobalizationViewModel();
 
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 		[Test, SetCulture("en-US"), SetUICulture("en-US")]
 		public void ShouldCreateModelFromProvidedEnUsCulture()
 		{
-			var target = new DateBoxGlobalizationViewModelFactory(new CurrentThreadCultureProvider());
+			var target = new DateBoxGlobalizationViewModelFactory(new CurrentThreadUserCulture());
 
 			var result = target.CreateDateBoxGlobalizationViewModel();
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
 		public void ShouldCreateModelFromProvidedSwedishCulture()
 		{
-			var target = new DateBoxGlobalizationViewModelFactory(new CurrentThreadCultureProvider());
+			var target = new DateBoxGlobalizationViewModelFactory(new CurrentThreadUserCulture());
 
 			var result = target.CreateDateBoxGlobalizationViewModel();
 

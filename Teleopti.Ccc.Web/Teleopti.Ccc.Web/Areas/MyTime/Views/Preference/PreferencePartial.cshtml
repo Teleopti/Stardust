@@ -7,37 +7,47 @@
 	Layout = null;
 }
 
-<div id="Preference-period" class="pd5 info-pnl">
-	@if (Model.PreferencePeriod == null)
-	{
-		@string.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
-	}
-	else
-	{
-		@string.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
-		@string.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
-	}
-</div>
-<div class="displaynone">
-	<div id="Preference-period-feedback-target-daysoff" class="pd5 info-pnl">
-		@{
-			var range = Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span class='lower'>-</span>", "<span class='upper'>-</span>"));
-			var single = Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span class='days'>-</span>"));
+<div class="pd5 information-panel ui-corner-all">
+	<div id="Preference-period-feedback-view">
+		<div>
+			<!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->
+			@Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>"))
+			<!-- /ko -->
+			<!-- ko if: TargetContractTimeLower() != TargetContractTimeUpper() -->
+			@Html.Raw(string.Format(Resources.YouShouldWorkBetweenXAndYHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetContractTimeUpper' class='feedback-detail'>-</span>"))
+			<!-- /ko -->
+		
+			<!-- ko if: PossibleResultContractTimeLower() == PossibleResultContractTimeUpper() -->
+			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>"))
+			<!-- /ko -->
+			<!-- ko if: PossibleResultContractTimeLower() != PossibleResultContractTimeUpper() -->
+			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
+			<!-- /ko -->
+		</div>
+		<div>
+			<!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
+			@Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
+			<!-- /ko -->
+			<!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
+			@Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
+			<!-- /ko -->
+			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
+		</div>
+	</div>
+	<div id="Preference-period">
+		@if (Model.PreferencePeriod == null)
+		{
+			@string.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
 		}
-		<div class="range">@range</div>
-		<div class="single">@single</div>
-	</div>
-	<div id="Preference-period-feedback-target-hours" class="pd5 info-pnl">
-		@Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span class='hours'>-</span>"))
-	</div>
-	<div id="Preference-period-feedback-possible-result-daysoff" class="pd5 info-pnl">
-		@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span class='days'>-</span>"))
+		else
+		{
+			@string.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
+			@string.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
+		}
 	</div>
 </div>
+
 <div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
-
-
-
 		
 	<div id="Preference-body-inner" class="body-calendarview-inner clearfix">
 		<ul class="weekdays">
@@ -60,28 +70,26 @@
 					PersonAssignmentDayViewModel personAssignment = day.PersonAssignment;
 					DayOffDayViewModel dayOff = day.DayOff;
 					AbsenceDayViewModel absence = day.Absence;
-					<li class="relative @(day.Feedback ? "feedback" : "") @(day.Editable ? "editable" : "non-editable") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)">
+					<li class="relative @(day.InPeriod ? "inperiod": "") @(day.Feedback ? "feedback" : "") @(day.Editable ? "editable" : "non-editable") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)">
 						<div>
 							<div class="day-header">
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
 							</div>
-							<div class="day-content pdt10" style="border-left-color: @day.BorderColor">
+							<div class="day-content pdt10" style="border-left-color: @day.BorderColor" data-bind="style: { borderLeftColor: Color() }">
 								@if (preference != null)
 								{
-									<div class="preference">
-										@preference.Preference
-									</div>
-									<div class="feedback-error truncate"></div>
-									<div class="possible-start-times icon leftarrow truncate"></div>
-									<div class="possible-end-times icon rightarrow truncate"></div>
-									<div class="possible-contract-times icon doublearrow-blue truncate"></div>
+									<div class="preference" data-bind="text: Preference">@preference.Preference</div>
+									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
+									<div class="possible-start-times icon leftarrow truncate" data-bind="text: PossibleStartTimes"></div>
+									<div class="possible-end-times icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
+									<div class="possible-contract-times icon doublearrow-blue truncate" data-bind="text: PossibleContractTimes"></div>
 								}
 								@if (personAssignment != null)
 								{
 									<div class="scheduled">
 										<span class="displayblock fullwidth">@personAssignment.ShiftCategory</span>
 										<strong class="displayblock fullwidth">@personAssignment.TimeSpan</strong>
-										<span class="displayblock fullwidth">@personAssignment.ContractTime</span>
+										<span class="displayblock fullwidth" data-mytime-contract-time="@personAssignment.ContractTimeMinutes">@personAssignment.ContractTime</span>
 									</div>
 								}
 								@if (dayOff != null)

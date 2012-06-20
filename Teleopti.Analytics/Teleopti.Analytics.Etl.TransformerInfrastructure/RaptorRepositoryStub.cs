@@ -651,6 +651,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             get { throw new NotImplementedException(); }
         }
 
+        public int LoadQualityQuestDataMart(int dataSourceId, IBusinessUnit currentBusinessUnit)
+        {
+            return 0;
+        }
+
+        public int FillFactQualityDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit)
+        {
+            return 0;
+        }
+
         public DateTime GetMaxDateInDimDate()
         {
             return new DateTime(1900,1,1,0,0,0,DateTimeKind.Unspecified);

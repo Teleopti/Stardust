@@ -22,7 +22,7 @@
 		public void Setup()
 		{
 			_dataService = MockRepository.GenerateMock<IReportDataService>();
-			_target = new ReportDataFetcher(new DefinedReportProviderForTest(), _dataService, new CurrentThreadCultureProvider());
+			_target = new ReportDataFetcher(new DefinedReportProviderForTest(), _dataService, new CurrentThreadUserCulture());
 		}
 
 		#endregion

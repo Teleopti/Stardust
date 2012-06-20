@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         }
 
 
-        public virtual IWorkTimeMinMax MinMaxWorkTime(IRuleSetProjectionService ruleSetProjectionService,
+		  public virtual IWorkTimeMinMax MinMaxWorkTime(IWorkShiftWorkTime workShiftWorkTime,
                                                         DateOnly onDate,
                                                         IEffectiveRestriction restriction)
         {
@@ -96,25 +96,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             if (restriction.DayOffTemplate != null)
                 return null;
 
-            IWorkTimeMinMax retVal = null;
-
-            var validRuleSets = _ruleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.IsValidDate(onDate)).ToList();
+		  	var validRuleSets = _ruleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.IsValidDate(onDate)).ToList();
             
             var nonRestrictionSets = validRuleSets.Where(workShiftRuleSet => !workShiftRuleSet.OnlyForRestrictions).ToList();
-            retVal = GetRetVal(restriction, nonRestrictionSets, ruleSetProjectionService, retVal);
+				var retVal = worktimeForRuleSetsAndRestriction(restriction, nonRestrictionSets, workShiftWorkTime);
 
             if(retVal == null && restriction.IsRestriction)
             {
                 var restrictionSets = validRuleSets.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions).ToList();
-                retVal = GetRetVal(restriction, restrictionSets, ruleSetProjectionService, retVal);
+					 retVal = worktimeForRuleSetsAndRestriction(restriction, restrictionSets, workShiftWorkTime);
             }
 
             return retVal;
         }
 
-        private static IWorkTimeMinMax GetRetVal(IEffectiveRestriction restriction, IEnumerable<IWorkShiftRuleSet> validRuleSets, 
-            IRuleSetProjectionService ruleSetProjectionService, IWorkTimeMinMax retVal)
+        private static IWorkTimeMinMax worktimeForRuleSetsAndRestriction(IEffectiveRestriction restriction, IEnumerable<IWorkShiftRuleSet> validRuleSets,
+				IWorkShiftWorkTime workShiftWorkTime)
         {
+			  IWorkTimeMinMax retVal = null;
             foreach (var workShiftRuleSet in validRuleSets)
             {
                 
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                     !workShiftRuleSet.TemplateGenerator.Category.Equals(restriction.ShiftCategory))
                     continue;
 
-                var ruleSetWorkTimeMinMax = workShiftRuleSet.MinMaxWorkTime(ruleSetProjectionService, restriction);
+            	var ruleSetWorkTimeMinMax = workShiftWorkTime.CalculateMinMax(workShiftRuleSet, restriction);
                 if (ruleSetWorkTimeMinMax != null)
                 {
                     if (retVal == null)
