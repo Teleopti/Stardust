@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 			_absenceRepository = absenceRepository;
 		}
 
-		public IList<IAbsence> GetRequestableAbsences()
+		public IEnumerable<IAbsence> GetRequestableAbsences()
 		{
 			return _absenceRepository.LoadRequestableAbsence();
 		}

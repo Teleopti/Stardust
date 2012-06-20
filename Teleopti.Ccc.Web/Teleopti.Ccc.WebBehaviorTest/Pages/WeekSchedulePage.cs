@@ -13,7 +13,7 @@ using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class WeekSchedulePage : PortalPage, IOkButton, ICancelButton, IEditTextRequestPage, IDateRangeSelector
+	public class WeekSchedulePage : PortalPage, IOkButton, ICancelButton, IEditRequestPage, IDateRangeSelector
 	{
 		private Constraint DayConstraint = Find.By("data-mytime-date", v => v != null);
 		private ListCollection DayLists { get { return Document.Lists.Filter(DayConstraint); } }

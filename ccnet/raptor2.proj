@@ -32,6 +32,7 @@
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17774'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI15499'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17994'">true</RunWebBehaviorTests>
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17914'">true</RunWebBehaviorTests>
 		<AzureDeploy>false</AzureDeploy>
 		<AzureDeploy Condition="'$(CCNetProject)' == 'EtlAndAzure'">true</AzureDeploy>
 		<AzureAnalyticsReportTest>false</AzureAnalyticsReportTest>

@@ -83,6 +83,8 @@
     </Compile>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="AbsenceRequestFromRequestStepDefinitions.cs" />
+    <Compile Include="ManageRequestStepDefinitions.cs" />
     <Compile Include="Data\User\DoNotHavePersonPeriods.cs" />
     <Compile Include="Data\User\DoNotHaveSchedulePeriods.cs" />
     <Compile Include="QUnitTestsStepDefinition.cs" />
@@ -169,7 +171,7 @@
       <DependentUpon>MobileReports.feature</DependentUpon>
     </Compile>
     <Compile Include="MobileReportsStepDefinitions.cs" />
-    <Compile Include="Pages\Common\IEditTextRequestPage.cs" />
+    <Compile Include="Pages\Common\IEditRequestPage.cs" />
     <Compile Include="Pages\MobileReportsPage.cs" />
     <Compile Include="PreferencesPeriodFeedback.feature.cs">
       <AutoGen>True</AutoGen>
