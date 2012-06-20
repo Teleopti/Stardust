@@ -75,7 +75,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 7
  testRunner.Given("I am an agent");
 #line 8
- testRunner.And("I have an existinng extended preference");
+ testRunner.And("I have an existing extended preference");
 #line 9
  testRunner.When("I view preferences");
 #line 10
@@ -94,7 +94,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 13
  testRunner.Given("I am an agent");
 #line 14
- testRunner.And("I have an existinng extended preference");
+ testRunner.And("I have an existing extended preference");
 #line 15
  testRunner.When("I view preferences");
 #line 16
@@ -115,7 +115,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 20
  testRunner.Given("I am an agent without access to extended preferences");
 #line 21
- testRunner.And("I have an existinng extended preference");
+ testRunner.And("I have an existing extended preference");
 #line 22
  testRunner.When("I view preferences");
 #line 23
