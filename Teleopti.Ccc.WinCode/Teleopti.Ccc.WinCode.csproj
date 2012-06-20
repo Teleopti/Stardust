@@ -419,6 +419,7 @@
     <Compile Include="PeopleAdmin\Commands\SendInstantMessageCommand.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodMustHavePreferenceComparer.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodSeasonalityComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodTimeOverrideComparer.cs" />
     <Compile Include="PeopleAdmin\DayOfWeekDisplay.cs" />
     <Compile Include="PeopleAdmin\IScheduleNavigator.cs" />
     <Compile Include="PeopleAdmin\IPersonFinderView.cs" />

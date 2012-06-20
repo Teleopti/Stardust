@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private TimeSpan _extra;
         private Percent _seasonality;
         private TimeSpan _balanceIn;
+		private TimeSpan? _periodTime;
 
         /// <summary>
         /// Default constructor
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             get
             {
-                if (_averageWorkTimePerDay.HasValue)
+				if (IsAverageWorkTimePerDayOverride)
                     return _averageWorkTimePerDay.Value;
 
                 IPersonPeriod period = GetPersonPeriod();
@@ -218,6 +219,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         //    return TimeSpan.FromMinutes(minutes);
         //}
+
+
+		public virtual bool IsPeriodTimeOverride
+		{
+			get { return _periodTime.HasValue; }
+		}
+
+		public virtual TimeSpan? PeriodTime
+		{
+			get { return _periodTime; }
+			set { _periodTime = value; }
+		}
 
         private IPerson CurrentPerson
         {

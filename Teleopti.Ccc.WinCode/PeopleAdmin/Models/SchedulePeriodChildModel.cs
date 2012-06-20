@@ -282,6 +282,46 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             }
         }
 
+
+		/// <summary>
+		/// Gets a value indicating whether the eperiod target is overriden.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if period target is overriden; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsPeriodTimeOverride
+		{
+			get
+			{
+				SchedulePeriod currentSchedulePeriod = (SchedulePeriod)ContainedEntity;
+				return currentSchedulePeriod.IsPeriodTimeOverride;
+
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the eperiod target is overriden.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if period target is overriden; otherwise, <c>false</c>.
+		/// </value>
+		public TimeSpan PeriodTime
+		{
+			get
+			{
+				SchedulePeriod currentSchedulePeriod = (SchedulePeriod)ContainedEntity;
+				TimeSpan? value = currentSchedulePeriod.PeriodTime;
+				if (!value.HasValue)
+					return TimeSpan.MinValue;
+				return currentSchedulePeriod.PeriodTime.Value;
+			}
+			set
+			{
+				SchedulePeriod currentSchedulePeriod = (SchedulePeriod)ContainedEntity;
+				currentSchedulePeriod.PeriodTime = value;
+			}
+		}
+
         /// <summary>
         /// Gets the schedule period.
         /// </summary>

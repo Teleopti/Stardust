@@ -172,31 +172,41 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             private set { _number = value; }
         }
 
-        public TimeSpan AverageWorkTimePerDay
-        {
-            get
-            {
-                if (!IsValid)
-                    return new TimeSpan();
+		public TimeSpan AverageWorkTimePerDay
+		{
+			get
+			{
+				if (!IsValid)
+					return new TimeSpan();
 
-                //Handle override in original schedule period
-                if (_schedulePeriod != null && _schedulePeriod.IsAverageWorkTimePerDayOverride)
-                    return _schedulePeriod.AverageWorkTimePerDay;
+				if (_schedulePeriod.IsPeriodTimeOverride)
+				{
+					double periodTime = _schedulePeriod.PeriodTime.Value.TotalMinutes;
+					int workDays = Workdays();
+					int minutes = (int)(periodTime / workDays);
+					return TimeSpan.FromMinutes(minutes);
+				}
 
-                if (_personContract == null)
-                    return new TimeSpan();
-                return _personContract.AverageWorkTimePerDay;
-            }
-        }
+				//Handle override in original schedule period
+				if (_schedulePeriod != null && _schedulePeriod.IsAverageWorkTimePerDayOverride)
+					return _schedulePeriod.AverageWorkTimePerDay;
 
-        public TimeSpan PeriodTarget()
-        {
-            int workDays = Workdays();
+				if (_personContract == null)
+					return new TimeSpan();
+				return _personContract.AverageWorkTimePerDay;
+			}
+		}
 
-            double minutes = AverageWorkTimePerDay.TotalMinutes * workDays;
+		public TimeSpan PeriodTarget()
+		{
+			if (_schedulePeriod.IsPeriodTimeOverride)
+				return _schedulePeriod.PeriodTime.Value;
 
-            return TimeSpan.FromMinutes(minutes);
-        }
+			int workDays = Workdays();
+			double minutes = AverageWorkTimePerDay.TotalMinutes * workDays;
+			return TimeSpan.FromMinutes(minutes);
+		}
+
 
         public int Workdays()
         {

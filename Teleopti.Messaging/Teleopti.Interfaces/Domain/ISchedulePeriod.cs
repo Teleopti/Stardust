@@ -61,6 +61,29 @@ namespace Teleopti.Interfaces.Domain
         //[Obsolete("It only works right to agents with normal worktime contract")]
         //TimeSpan PeriodTarget(DateOnly dateOnly);
 
+		/// <summary>
+		/// Gets a value indicating whether the period is overriden.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if the period value is overriden; otherwise, <c>false</c>.
+		/// </value>
+		/// <remarks>
+		/// Created by: tamasb
+		/// Created date: 2012-06-15
+		/// </remarks>
+		bool IsPeriodTimeOverride { get; }
+
+		/// <summary>
+		/// Gets or sets the period time.
+		/// </summary>
+		/// <value>The period time.</value>
+		/// <remarks>
+		/// Created by: tamasb
+		/// Created date: 2012-06-15
+		/// </remarks>
+		TimeSpan? PeriodTime
+		{ get; set; }
+
         /// <summary>
         /// Gets the real schedule period with a real start and an end date. If the parameter is not part of the period, 
         /// will return null.
