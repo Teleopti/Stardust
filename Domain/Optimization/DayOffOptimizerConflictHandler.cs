@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _rollbackService.Modify(scheduleDayBefore.DaySchedulePart());
 
                 var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayBefore.DaySchedulePart(), schedulingOptions);
-				result = _scheduleService.SchedulePersonOnDay(scheduleDayBefore.DaySchedulePart(), schedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer);
+				result = _scheduleService.SchedulePersonOnDay(scheduleDayBefore.DaySchedulePart(), schedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer, null);
 
                 if (result) return true;
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _rollbackService.Modify(scheduleDayAfter.DaySchedulePart());
 
                 var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayAfter.DaySchedulePart(), schedulingOptions);
-				result = _scheduleService.SchedulePersonOnDay(scheduleDayAfter.DaySchedulePart(), schedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer);
+				result = _scheduleService.SchedulePersonOnDay(scheduleDayAfter.DaySchedulePart(), schedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer,null);
 
                 if (!result)
                     _rollbackService.Rollback();

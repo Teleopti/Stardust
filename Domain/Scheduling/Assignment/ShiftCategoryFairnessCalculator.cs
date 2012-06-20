@@ -9,19 +9,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// </summary>
     public interface IShiftCategoryFairnessCalculator
     {
-        IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(
-            IShiftCategoryFairness groupCategoryFairness,
-            IShiftCategoryFairness personCategoryFairness);
+        IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(IScheduleRange range, IPerson person, DateOnly dateOnly);
     }
 
     public class ShiftCategoryFairnessCalculator : IShiftCategoryFairnessCalculator
     {
+        private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 
 
-        public IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(
-            IShiftCategoryFairness groupCategoryFairness,
-            IShiftCategoryFairness personCategoryFairness)
+        public ShiftCategoryFairnessCalculator(IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator)
         {
+            _groupShiftCategoryFairnessCreator = groupShiftCategoryFairnessCreator;
+        }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(IScheduleRange range, IPerson person, DateOnly dateOnly )
+        {
+            var groupCategoryFairness =
+                   _groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(
+                       person, dateOnly);
+            var personCategoryFairness = range.CachedShiftCategoryFairness();
+
             IDictionary<IShiftCategory, double> dictionary = ExecuteCalculations(groupCategoryFairness, personCategoryFairness);
             return new ShiftCategoryFairnessFactors(dictionary, groupCategoryFairness.FairnessValueResult.FairnessPoints);
         }

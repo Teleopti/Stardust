@@ -95,6 +95,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptions.UsePreferencesMustHaveOnly).Return(true);
             Expect.Call(_schedulingOptions.UseShiftCategoryLimitations).Return(true);
             Expect.Call(_schedulingOptions.ShowTroubleshot).Return(true);
+			Expect.Call(_schedulingOptions.UseGroupSchedulingCommonStart).Return(true);
+			Expect.Call(_schedulingOptions.UseGroupSchedulingCommonEnd).Return(true);
+			Expect.Call(_schedulingOptions.UseGroupSchedulingCommonCategory).Return(false);
         }
 
        
@@ -114,6 +117,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _schedulingOptions.UsePreferencesMustHaveOnly = true);
             Expect.Call(() => _schedulingOptions.UseShiftCategoryLimitations = true);
             Expect.Call(() => _schedulingOptions.ShowTroubleshot = true);        
+            Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonStart = true);        
+            Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonEnd = true);        
+            Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonCategory = false);        
         }
     }
 }

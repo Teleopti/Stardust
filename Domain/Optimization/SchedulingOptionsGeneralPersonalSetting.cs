@@ -24,6 +24,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private Guid? _scheduleTagId;
 		private bool _useRotations = true;
 		private bool _showTroubleshotInformation;
+		private bool _useGroupSchedulingCommonStart;
+		private bool _useGroupSchedulingCommonEnd;
+		private bool _useGroupSchedulingCommonCategory;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages)
@@ -55,6 +58,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.UsePreferencesMustHaveOnly = _useMustHavesOnly;
 			schedulingOptions.UseShiftCategoryLimitations = _useShiftCategoryLimitations;
 			schedulingOptions.ShowTroubleshot = _showTroubleshotInformation;
+
+			schedulingOptions.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
+			schedulingOptions.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
+			schedulingOptions.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -74,6 +81,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_useMustHavesOnly = schedulingOptions.UsePreferencesMustHaveOnly;
 			_useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
 			_showTroubleshotInformation = schedulingOptions.ShowTroubleshot;
+			_useGroupSchedulingCommonStart = schedulingOptions.UseGroupSchedulingCommonStart;
+			_useGroupSchedulingCommonEnd = schedulingOptions.UseGroupSchedulingCommonEnd;
+			_useGroupSchedulingCommonCategory = schedulingOptions.UseGroupSchedulingCommonCategory;
+
 		}
 		
 	}

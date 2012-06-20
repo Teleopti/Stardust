@@ -1288,6 +1288,12 @@
       <DependentUpon>SchedulerSplitters.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\SchedulingServiceModule.cs" />
+    <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.Designer.cs">
+      <DependentUpon>SchedulingSessionPreferencesTabPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\SchedulingSessionPreferences\TempNonBlendSchedulingPreferences.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3103,6 +3109,9 @@
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesPanel.resx">
       <DependentUpon>SchedulingSessionPreferencesPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.resx">
+      <DependentUpon>SchedulingSessionPreferencesTabPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\TempNonBlendSchedulingPreferences.resx">
       <DependentUpon>TempNonBlendSchedulingPreferences.cs</DependentUpon>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction)
+		public IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction, IPossibleStartEndCategory possibleStartEndCategory)
         {
             _workShiftMinMaxCalculator.ResetCache();
             _scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
             IWorkShiftCalculationResultHolder result = null;
             if(_shiftList.Count > 0)
-				result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions);
+				result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions, possibleStartEndCategory);
 
             return result;
         }
@@ -165,7 +166,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private IWorkShiftCalculationResultHolder findBestShift(IEffectiveRestriction effectiveRestriction,
-            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, IPossibleStartEndCategory possibleStartEndCategory)
         {
 			using (PerformanceOutput.ForOperation("Filtering shifts before calculating"))
 			{
@@ -174,6 +175,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					// override the one in Effective
 					effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 				}
+
+				if(possibleStartEndCategory != null)
+					_shiftList = _shiftProjectionCacheFilter.FilterOnShiftCategory(possibleStartEndCategory.ShiftCategory, _shiftList,
+				                                                               FinderResult);
+
+				_shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(_shiftList, possibleStartEndCategory, schedulingOptions);
 
 				_shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList);
 

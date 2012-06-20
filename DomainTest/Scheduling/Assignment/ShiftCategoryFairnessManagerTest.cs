@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(_dic[_person]).Return(range);
             Expect.Call(range.CachedShiftCategoryFairness()).Return(fairness);
             Expect.Call(_groupCreator.CalculateGroupShiftCategoryFairness(_person, dateOnly)).Return(fairness);
-            Expect.Call(_fairnessCalc.ShiftCategoryFairnessFactors(fairness, fairness)).Return(factors);
+            Expect.Call(_fairnessCalc.ShiftCategoryFairnessFactors(range,_person,dateOnly ) ).Return(factors);
             _mocks.ReplayAll();
             _target.GetFactorsForPersonOnDate(_person, dateOnly);
             _mocks.VerifyAll();

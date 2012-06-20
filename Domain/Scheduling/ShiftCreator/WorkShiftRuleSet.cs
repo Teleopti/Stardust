@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using InParameter = Teleopti.Interfaces.Domain.InParameter;
 
@@ -108,6 +110,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             set { _templateGenerator = value; }
         }
         
+			var cat = TemplateGenerator.Category;
+                	possibilities.Add(new PossibleStartEndCategory
+                	                  	{
+                	                  		StartTime = period.Value.StartTime,
+                	                  		EndTime = period.Value.EndTime,
+                	                  		ShiftCategory = cat
+                	                  	});
+
+			if (resultWorkTimeMinMax != null)
+				resultWorkTimeMinMax.PossibleStartEndCategories = possibilities.ToList();
         /// <summary>
         /// Gets the default accessibility.
         /// </summary>

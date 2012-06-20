@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
 
-			if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer))
+			if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer, null))
             {
                 _rollbackService.Rollback();
                 return false;

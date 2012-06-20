@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -48,38 +49,36 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _finderResults.Clear();
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public bool SchedulePersonOnDay(
-			IScheduleDay schedulePart, 
-			ISchedulingOptions schedulingOptions, 
-			bool useOccupancyAdjustment, 
-			IShiftCategory useThisCategory, 
-			IResourceCalculateDelayer resourceCalculateDelayer)
-        {
-            var originalCategory = schedulingOptions.ShiftCategory;
-            schedulingOptions.ShiftCategory = useThisCategory;
-			var result = SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, resourceCalculateDelayer);
-            schedulingOptions.ShiftCategory = originalCategory;
-            return result;
-        }
-
         public bool SchedulePersonOnDay(
 			IScheduleDay schedulePart, 
 			ISchedulingOptions schedulingOptions, 
 			bool useOccupancyAdjustment, 
-			IResourceCalculateDelayer resourceCalculateDelayer)
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			IPossibleStartEndCategory possibleStartEndCategory)
         {
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
-            return SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction, resourceCalculateDelayer);
+            return SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction, resourceCalculateDelayer, possibleStartEndCategory);
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool SchedulePersonOnDay(
+			IScheduleDay schedulePart,
+			ISchedulingOptions schedulingOptions,
+			bool useOccupancyAdjustment,
+			IEffectiveRestriction effectiveRestriction,
+			IResourceCalculateDelayer resourceCalculateDelayer)
+		{
+			return SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction,
+			                           resourceCalculateDelayer, null);
+		}
+
+    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
             ISchedulingOptions schedulingOptions,
             bool useOccupancyAdjustment, 
             IEffectiveRestriction effectiveRestriction,
-			IResourceCalculateDelayer resourceCalculateDelayer)
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			IPossibleStartEndCategory possibleStartEndCategory)
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
             {
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                         return false;
                     IScheduleMatrixPro matrix = matrixList[0];
 
-                    cache = _finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);
+                    cache = _finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction, possibleStartEndCategory);
                 }
 
                 if (cache == null)
