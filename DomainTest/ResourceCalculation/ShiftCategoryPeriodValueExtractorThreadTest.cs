@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                        new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc));
             IScheduleDateTimePeriod period1 = new ScheduleDateTimePeriod(period);
             var scheduleDictionary = new ScheduleDictionary(scenario, period1);
+        	var fairness = _mocks.DynamicMock<IShiftCategoryFairnessFactors>();
 			using (_mocks.Record())
             {
                 Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
@@ -102,8 +103,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
 				_target = new ShiftCategoryPeriodValueExtractorThread( _shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
-                _groupPerson,  _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, _groupShiftCategoryFairnessCreater,
-                _shiftProjectionCacheFilter, _effectiveRestrictionCreator);
+                _groupPerson,  _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, 
+                _shiftProjectionCacheFilter, _effectiveRestrictionCreator,false, fairness);
 
                 var result = _target.FilterShiftCategoryPeriodOnSchedulingOptions(agentTimeZone,
                                                                                _effectiveRestrictionCreator.
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                        new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc));
             IScheduleDateTimePeriod period1 = new ScheduleDateTimePeriod(period);
             var scheduleDictionary = new ScheduleDictionary(scenario, period1);
-        	
+			var fairness = _mocks.DynamicMock<IShiftCategoryFairnessFactors>();
             using (_mocks.Record())
             {
                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
@@ -156,8 +157,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
 				_target = new ShiftCategoryPeriodValueExtractorThread(_shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
-               _groupPerson,  _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, _groupShiftCategoryFairnessCreater,
-               _shiftProjectionCacheFilter, _effectiveRestrictionCreator);
+               _groupPerson,  _schedulingResultStateHolder, _personSkillPeriodDataHolderManager,
+               _shiftProjectionCacheFilter, _effectiveRestrictionCreator, false, fairness);
 
 				_target.ExtractShiftCategoryPeriodValue(_possibleStartEndCategory);
             }

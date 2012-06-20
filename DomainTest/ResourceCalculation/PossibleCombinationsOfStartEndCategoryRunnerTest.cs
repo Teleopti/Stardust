@@ -41,35 +41,35 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 				                                                                          dateOnly, person,
-				                                                                          schedulingOptions)).
+																						  schedulingOptions, false, null)).
 				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
-																						  schedulingOptions)).
+																						  schedulingOptions, false, null)).
 				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
-																						  schedulingOptions)).
+																						  schedulingOptions, false, null)).
 				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
-																						  schedulingOptions)).
+																						  schedulingOptions, false, null)).
 				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
-																						  schedulingOptions)).
+																						  schedulingOptions, false, null)).
 				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
 				IgnoreArguments();
 			_mocks.ReplayAll();
-			_target.RunTheList(_options, new List<IShiftProjectionCache>(), dateOnly,person,schedulingOptions);
+			_target.RunTheList(_options, new List<IShiftProjectionCache>(), dateOnly,person,schedulingOptions, false, null);
 			foreach (var possibleStartEndCategory in _options)
 			{
 				Assert.That(possibleStartEndCategory.ShiftValue, Is.EqualTo(100));

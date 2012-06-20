@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Time;
@@ -42,6 +43,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IPossibleCombinationsOfStartEndCategoryRunner _possibleCombinationsOfStartEndCategoryRunner;
     	private IPossibleCombinationsOfStartEndCategoryCreator _possibleCombinationsOfStartEndCategoryCreator;
     	private IWorkShiftWorkTime _workShiftWorkTime;
+    	private IShiftCategoryFairnessCalculator _fairnessCalculator;
+		IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 
     	[SetUp]
         public void Setup()
@@ -74,11 +77,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_schedulingOptions = new SchedulingOptions();
     		_possibleCombinationsOfStartEndCategoryRunner = _mocks.StrictMock<IPossibleCombinationsOfStartEndCategoryRunner>();
     		_possibleCombinationsOfStartEndCategoryCreator = _mocks.StrictMock<IPossibleCombinationsOfStartEndCategoryCreator>();
-
-			_target = new BestBlockShiftCategoryFinder(_workShiftWorkTime, _shiftProjectionCacheManager, _stateHolder,
+    		_fairnessCalculator = _mocks.StrictMock<IShiftCategoryFairnessCalculator>();
+    		_groupShiftCategoryFairnessCreator = _mocks.StrictMock<IGroupShiftCategoryFairnessCreator>();
+    		_target = new BestBlockShiftCategoryFinder(_workShiftWorkTime, _shiftProjectionCacheManager, _stateHolder,
     		                                           _effectiveRestrictionCreator,
     		                                           _possibleCombinationsOfStartEndCategoryRunner,
-    		                                           _possibleCombinationsOfStartEndCategoryCreator);
+    		                                           _possibleCombinationsOfStartEndCategoryCreator, 
+													   _groupShiftCategoryFairnessCreator,
+													   _fairnessCalculator);
 
         }
 
@@ -125,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				Expect.Call(() =>  _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
 																					 getCashes(), _dateOnly1, gPerson,
-																					 _schedulingOptions)).IgnoreArguments().Repeat.AtLeastOnce();
+																					 _schedulingOptions, false, null)).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(new TimeSpan(8, 0, 0)).Repeat.Any();
 
                 Expect.Call(_stateHolder.Schedules).Return(scheduleDictionary).Repeat.Any();
@@ -183,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				Expect.Call(() => _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
 																					 getCashes(), _dateOnly1, gPerson,
-																					 _schedulingOptions)).IgnoreArguments().Repeat.AtLeastOnce();
+																					 _schedulingOptions, false, null)).IgnoreArguments().Repeat.AtLeastOnce();
 
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
