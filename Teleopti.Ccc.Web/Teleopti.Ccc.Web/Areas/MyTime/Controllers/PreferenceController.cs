@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		public virtual ViewResult Index(DateOnly? date)
 		{
+			if (_virtualSchedulePeriodProvider.MissingPersonPeriod())
+				return View("NoPersonPeriodPartial");
 			if (!_virtualSchedulePeriodProvider.HasSchedulePeriod())
 				return View("NoSchedulePeriodPartial");
 			if (!date.HasValue)

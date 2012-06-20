@@ -62,6 +62,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReturnNoPersonPeriodPartialWhenNoPersonPeriod()
+		{
+			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
+			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
+			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null);
+
+			virtualSchedulePeriodProvider.Stub(x => x.MissingPersonPeriod()).Return(true);
+
+			var result = target.Index(null);
+
+			result.ViewName.Should().Be.EqualTo("NoPersonPeriodPartial");
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPersistPreferenceInput()
 		{
 			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();

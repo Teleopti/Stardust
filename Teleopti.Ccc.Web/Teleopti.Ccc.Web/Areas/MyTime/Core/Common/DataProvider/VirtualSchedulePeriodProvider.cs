@@ -34,6 +34,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return person.PersonSchedulePeriodCollection.Any();
 		}
 
+		public bool MissingPersonPeriod()
+		{
+			var person = _personProvider.CurrentUser();
+			return !person.PersonPeriodCollection.Any();
+		}
+
 		public static readonly Func<IWorkflowControlSet, DateOnlyPeriod> StudentAvailabilityPeriod = w => w.StudentAvailabilityPeriod;
 		public static readonly Func<IWorkflowControlSet, DateOnlyPeriod> PreferencePeriod = w => w.PreferencePeriod;
 
