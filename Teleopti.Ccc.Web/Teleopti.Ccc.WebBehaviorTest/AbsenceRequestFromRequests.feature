@@ -26,10 +26,10 @@ Scenario: Default absence request values from request view
 	When I click add request button in the toolbar
 	And I click absence request tab
 	Then I should see the absence request form with today's date as default
-	And I should see 8:00 - 17:00 as the default times
+	And I should see 00:00 - 23:59 as the default times
 	And I should see an absence type called Vacation in droplist
 
-Scenario: Default absence request values from request view When checked Fullday
+Scenario: Default absence request values from request view when checked Fullday
 	Given I am an agent
 	And I am viewing requests
 	When I click add request button in the toolbar
@@ -38,15 +38,14 @@ Scenario: Default absence request values from request view When checked Fullday
 	Then I should see the absence request form with today's date as default
 	And I should see 00:00 - 23:59 as the default times
 
-Scenario: Cancel adding absence request from request view
+Scenario: Default absence request values from request view when unchecked Fullday
 	Given I am an agent
-	And I have a requestable absence called Vacation
 	And I am viewing requests
 	When I click add request button in the toolbar
 	And I click absence request tab
-	And I input absence request values with Vacation
-	And I click the Cancel button
-	Then I should not see the absence request in the list
+	And I unchecked the full day checkbox
+	Then I should see the absence request form with today's date as default
+	And I should see 08:00 - 17:00 as the default times
 
 Scenario: Adding invalid absence request values
 	Given I am an agent

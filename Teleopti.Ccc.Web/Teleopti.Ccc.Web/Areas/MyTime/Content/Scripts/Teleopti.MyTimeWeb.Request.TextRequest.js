@@ -10,7 +10,7 @@
 Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 
 	var requestViewModel = null;
-	
+
 	function _initToolbarButtons() {
 		$('#Requests-addTextRequest-button')
 			.click(function () {
@@ -47,7 +47,7 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	function _initControls() {
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 		ko.applyBindings(requestViewModel, $('#Fullday-check')[0]);
-		
+
 		$('#Request-detail-section .date-input')
 			.datepicker()
 			;
@@ -67,13 +67,13 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 			.click(function () {
 				_clearValidationError();
 				_hideAbsenceTypes();
-				//				requestViewModel.IsFullDay(false);
+				requestViewModel.IsFullDay(false);
 			});
 		$('#Absence-request-tab')
 			.click(function () {
 				_clearValidationError();
 				_showAbsenceTypes();
-				//				requestViewModel.IsFullDay(true);
+				requestViewModel.IsFullDay(true);
 			});
 	}
 
@@ -179,7 +179,7 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		if (absenceId == undefined) {
 			absenceId = null;
 		}
-		
+
 		return {
 			Subject: $('#Request-detail-subject-input').val(),
 			AbsenceId: absenceId,
