@@ -52,6 +52,7 @@ Scenario: Adding invalid absence request values
 	Given I am an agent
 	And I am viewing requests
 	When I click add request button in the toolbar
+	And I click absence request tab
 	And I input empty subject
 	And I input later start time than end time
 	And I click the OK button
@@ -62,6 +63,7 @@ Scenario: Adding too long message on absence request
 	Given I am an agent
 	And I am viewing requests
 	When I click add request button in the toolbar
+	And I click absence request tab
 	And I input too long message request values
 	And I click the OK button
 	Then I should see texts describing too long text error
@@ -71,6 +73,7 @@ Scenario: Adding too long subject on absence request
 	Given I am an agent
 	And I am viewing requests
 	When I click add request button in the toolbar
+	And I click absence request tab
 	And I input too long subject request values
 	And I click the OK button
 	Then I should see texts describing too long subject error

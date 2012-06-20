@@ -204,14 +204,16 @@ this.ScenarioSetup(scenarioInfo);
 #line 54
  testRunner.When("I click add request button in the toolbar");
 #line 55
- testRunner.And("I input empty subject");
+ testRunner.And("I click absence request tab");
 #line 56
- testRunner.And("I input later start time than end time");
+ testRunner.And("I input empty subject");
 #line 57
- testRunner.And("I click the OK button");
+ testRunner.And("I input later start time than end time");
 #line 58
- testRunner.Then("I should see texts describing my errors");
+ testRunner.And("I click the OK button");
 #line 59
+ testRunner.Then("I should see texts describing my errors");
+#line 60
  testRunner.And("I should not see the absence request in the list");
 #line hidden
             this.ScenarioCleanup();
@@ -222,21 +224,23 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void AddingTooLongMessageOnAbsenceRequest()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding too long message on absence request", ((string[])(null)));
-#line 61
-this.ScenarioSetup(scenarioInfo);
 #line 62
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 63
- testRunner.And("I am viewing requests");
+ testRunner.Given("I am an agent");
 #line 64
- testRunner.When("I click add request button in the toolbar");
+ testRunner.And("I am viewing requests");
 #line 65
- testRunner.And("I input too long message request values");
+ testRunner.When("I click add request button in the toolbar");
 #line 66
- testRunner.And("I click the OK button");
+ testRunner.And("I click absence request tab");
 #line 67
- testRunner.Then("I should see texts describing too long text error");
+ testRunner.And("I input too long message request values");
 #line 68
+ testRunner.And("I click the OK button");
+#line 69
+ testRunner.Then("I should see texts describing too long text error");
+#line 70
  testRunner.And("I should not see the absence request in the list");
 #line hidden
             this.ScenarioCleanup();
@@ -247,21 +251,23 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void AddingTooLongSubjectOnAbsenceRequest()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding too long subject on absence request", ((string[])(null)));
-#line 70
-this.ScenarioSetup(scenarioInfo);
-#line 71
- testRunner.Given("I am an agent");
 #line 72
- testRunner.And("I am viewing requests");
+this.ScenarioSetup(scenarioInfo);
 #line 73
- testRunner.When("I click add request button in the toolbar");
+ testRunner.Given("I am an agent");
 #line 74
- testRunner.And("I input too long subject request values");
+ testRunner.And("I am viewing requests");
 #line 75
- testRunner.And("I click the OK button");
+ testRunner.When("I click add request button in the toolbar");
 #line 76
- testRunner.Then("I should see texts describing too long subject error");
+ testRunner.And("I click absence request tab");
 #line 77
+ testRunner.And("I input too long subject request values");
+#line 78
+ testRunner.And("I click the OK button");
+#line 79
+ testRunner.Then("I should see texts describing too long subject error");
+#line 80
  testRunner.And("I should not see the absence request in the list");
 #line hidden
             this.ScenarioCleanup();
@@ -272,19 +278,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ViewAbsenceTypes()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View absence types", ((string[])(null)));
-#line 79
-this.ScenarioSetup(scenarioInfo);
-#line 80
- testRunner.Given("I am an agent");
-#line 81
- testRunner.And("I have a requestable absence called Vacation");
 #line 82
- testRunner.And("I am viewing requests");
+this.ScenarioSetup(scenarioInfo);
 #line 83
- testRunner.When("I click add request button in the toolbar");
+ testRunner.Given("I am an agent");
 #line 84
- testRunner.And("I click absence request tab");
+ testRunner.And("I have a requestable absence called Vacation");
 #line 85
+ testRunner.And("I am viewing requests");
+#line 86
+ testRunner.When("I click add request button in the toolbar");
+#line 87
+ testRunner.And("I click absence request tab");
+#line 88
  testRunner.Then("I should see an absence type called Vacation in droplist");
 #line hidden
             this.ScenarioCleanup();

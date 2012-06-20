@@ -127,7 +127,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditRequestPage.TextRequestDetailSubjectInput.Value = string.Empty;
 		}
 
-        [When(@"I input too long text request values")]
+		[When(@"I input too long message request values")]
+		[When(@"I input too long text request values")]
         public void WhenIInputTooLongTextRequestValues()
         {
             Pages.Pages.CurrentEditRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
@@ -200,6 +201,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AddTextRequestButton.Exists, Is.False);
 		}
 
+		[Then(@"I should not see the absence request in the list")]
 		[Then(@"I should not see the text request in the list")]
 		public void ThenIShouldNotSeeTheTextRequestInTheList()
 		{
