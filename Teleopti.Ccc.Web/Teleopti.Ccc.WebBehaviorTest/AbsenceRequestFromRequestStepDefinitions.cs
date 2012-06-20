@@ -15,6 +15,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheAbsenceRequestInTheList()
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.Exists, Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Is.StringContaining("Absence"));
 		}
+
 	}
 }

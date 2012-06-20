@@ -100,7 +100,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 16
  testRunner.And("I am viewing requests");
 #line 17
- testRunner.When("I click add text request button in the toolbar");
+ testRunner.When("I click add request button in the toolbar");
 #line 18
  testRunner.Then("I should see the text request form with today\'s date as default");
 #line 19
@@ -121,7 +121,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 23
  testRunner.And("I am viewing requests");
 #line 24
- testRunner.When("I click add text request button in the toolbar");
+ testRunner.When("I click add request button in the toolbar");
 #line 25
  testRunner.And("I input empty subject");
 #line 26
@@ -148,7 +148,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 33
  testRunner.And("I am viewing requests");
 #line 34
- testRunner.When("I click add text request button in the toolbar");
+ testRunner.When("I click add request button in the toolbar");
 #line 35
  testRunner.And("I input too long text request values");
 #line 36
@@ -173,7 +173,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 42
  testRunner.And("I am viewing requests");
 #line 43
- testRunner.When("I click add text request button in the toolbar");
+ testRunner.When("I click add request button in the toolbar");
 #line 44
  testRunner.And("I input too long subject request values");
 #line 45

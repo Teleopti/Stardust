@@ -46,11 +46,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditRequestPage.TextRequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
 		}
 
-		[Then(@"I should see the absence request in the list")]
 		[Then(@"I should see the text request in the list")]
 		public void ThenIShouldSeeTheTextRequestInTheList()
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.Exists, Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Is.StringContaining("Text"));
 		}
 	}
 }
