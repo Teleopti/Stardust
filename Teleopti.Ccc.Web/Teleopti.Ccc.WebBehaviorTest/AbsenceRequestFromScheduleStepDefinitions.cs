@@ -39,18 +39,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestDetailMessageTextField.Value, Is.StringContaining("A message. A very very very short message. Or maybe not."));
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestDetailFromDateTextField.Value, Is.StringContaining(DateTime.Today.ToShortDateString(UserFactory.User().Culture)));
 		}
-
-
-		[Then(@"I should not see the absence request tab")]
-		public void ThenIShouldNotSeeTheAbsenceRequestTab()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.Exists, Is.False);
-		}
-
-		[Given(@"I am an agent without access to absence requests")]
-		public void GivenIAmAnAgentWithoutAccessToAbsenceRequests()
-		{
-			UserFactory.User().Setup(new AgentWithoutAbsenceRequestsAccess());
-		}
+		
 	}
 }

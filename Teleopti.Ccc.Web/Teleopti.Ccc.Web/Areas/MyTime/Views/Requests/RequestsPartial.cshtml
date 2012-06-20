@@ -10,11 +10,11 @@
 		<input type="hidden" id="Request-detail-entityid"/>
 		<div id="Schedule-addRequest-title">
 			<span id="Text-request-tab" class="selectable-tab selected-tab">@Resources.TextRequest</span>
-			@*@if (Model.RequestPermission.AbsenceRequestPermission)
-			{*@
+			@if (Model.RequestPermission.AbsenceRequestPermission)
+			{
 				<span>|</span>
 				<span id="Absence-request-tab" class="selectable-tab">@Resources.AbsenceRequest</span>
-			@*}*@
+			}
 		</div>
 		<div class="edit-module-element">
 			<label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>

@@ -52,5 +52,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.Exists, Is.True);
 			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Is.StringContaining("Text"));
 		}
+
+		[Given(@"I am an agent without access to absence requests")]
+		public void GivenIAmAnAgentWithoutAccessToAbsenceRequests()
+		{
+			UserFactory.User().Setup(new AgentWithoutAbsenceRequestsAccess());
+		}
+
+		[Then(@"I should not see the absence request tab")]
+		public void ThenIShouldNotSeeTheAbsenceRequestTab()
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.Exists, Is.False);
+		}
 	}
 }
