@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public IBestShiftCategoryResult BestShiftCategoryForDays(IBlockFinderResult result, IPerson person, ISchedulingOptions schedulingOptions)
+		public IBestShiftCategoryResult BestShiftCategoryForDays(IBlockFinderResult result, IPerson person, ISchedulingOptions schedulingOptions,
+			IFairnessValueResult agentFairness)
         {
 			InParameter.NotNull("result",result);
 			InParameter.NotNull("person", person);
@@ -105,16 +106,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					}
 
 					if(persons.Count == 0)
-						return new BestShiftCategoryResult(new PossibleStartEndCategory(), FailureCause.AlreadyAssigned);
+						return new BestShiftCategoryResult(null, FailureCause.AlreadyAssigned);
 				}
 				else
 				{
 					persons = new List<IPerson> { person };
 				}
+				
+				var totalFairness = ScheduleDictionary.FairnessPoints();
 
 				var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(persons, dateOnly, schedulingOptions, dictionary);
 				if (effectiveRestriction == null)
-					return new BestShiftCategoryResult(new PossibleStartEndCategory(), FailureCause.ConflictingRestrictions);
+					return new BestShiftCategoryResult(null, FailureCause.ConflictingRestrictions);
 
 				var personPeriod = currentSchedulePeriod.Person.Period(dateOnly);
 				var bag = personPeriod.RuleSetBag;
@@ -138,7 +141,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					shiftCategoryFairnessFactors = extractShiftCategoryFairnessFactor(person, dateOnly);
 				}
 
-				_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions, useShiftCategoryFairness, shiftCategoryFairnessFactors);
+				_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions, 
+					useShiftCategoryFairness, shiftCategoryFairnessFactors, totalFairness, agentFairness, persons, effectiveRestriction);
  
 				IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, dateOnly);
 
@@ -151,7 +155,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					finderResult.Successful = true;
 					shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, true);
-					_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions, useShiftCategoryFairness, shiftCategoryFairnessFactors);
+					_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions,
+						useShiftCategoryFairness, shiftCategoryFairnessFactors, totalFairness, agentFairness, persons, effectiveRestriction);
 					if (!combinations.IsEmpty())
 						tmpBestPossible = combinations.OrderBy(c => c.ShiftValue).Last();
 						
@@ -168,9 +173,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			}
             if (!schedulePeriodFound)
-                return new BestShiftCategoryResult(new PossibleStartEndCategory(), FailureCause.NoValidPeriod);
+                return new BestShiftCategoryResult(null, FailureCause.NoValidPeriod);
 
-			IPossibleStartEndCategory best = new PossibleStartEndCategory();
+			IPossibleStartEndCategory best = null;
 			if (bestPossible.Count > 0)
 				best = bestPossible.OrderBy(c => c.ShiftValue).Last();
 

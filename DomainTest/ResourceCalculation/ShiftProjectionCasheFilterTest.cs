@@ -970,7 +970,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_cashe3.WorkShiftEndTime).Return(_end3).Repeat.Any();
 			Expect.Call(_cashe4.WorkShiftEndTime).Return(_end4).Repeat.Any();
             _mocks.ReplayAll();
-			var possibleStartEndCategory = new PossibleStartEndCategory { EndTime = TimeSpan.FromHours(16), StartTime = TimeSpan.FromHours(8) };
+			var possibleStartEndCategory = new PossibleStartEndCategory { EndTime = TimeSpan.FromHours(15), StartTime = TimeSpan.FromHours(8) };
             var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true, UseGroupSchedulingCommonStart = true };
 
             var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,

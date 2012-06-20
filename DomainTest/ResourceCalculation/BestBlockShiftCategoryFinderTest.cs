@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             	Expect.Call(_possibleCombinationsOfStartEndCategoryCreator.FindCombinations(new WorkTimeMinMax(),
             	                                                                            _schedulingOptions)).Return(
             	                                                                            	new HashSet
-            	                                                                            		<IPossibleStartEndCategory>()).IgnoreArguments().Repeat.AtLeastOnce();
+            	                                                                            		<IPossibleStartEndCategory>{new PossibleStartEndCategory()}).IgnoreArguments().Repeat.AtLeastOnce();
 
 				Expect.Call(() =>  _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
 																					 getCashes(), _dateOnly1, gPerson,
