@@ -28,10 +28,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return VirtualSchedulePeriodForDate(date).DateOnlyPeriod;
 		}
 
-		public bool HasSchedulePeriod()
+		public bool MissingSchedulePeriod()
 		{
 			var person = _personProvider.CurrentUser();
-			return person.PersonSchedulePeriodCollection.Any();
+			return !person.PersonSchedulePeriodCollection.Any();
+		}
+
+		public bool MissingPersonPeriod()
+		{
+			var person = _personProvider.CurrentUser();
+			return !person.PersonPeriodCollection.Any();
 		}
 
 		public static readonly Func<IWorkflowControlSet, DateOnlyPeriod> StudentAvailabilityPeriod = w => w.StudentAvailabilityPeriod;

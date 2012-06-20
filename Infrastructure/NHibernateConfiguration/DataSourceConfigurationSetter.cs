@@ -16,27 +16,27 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 		public static IDataSourceConfigurationSetter ForEtl()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "ETL tool");
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Analytics.ETL.nhib");
 		}
 		public static IDataSourceConfigurationSetter ForApplicationConfig()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Application Config");
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.ApplicationConfiguration");
 		}
 		public static IDataSourceConfigurationSetter ForSdk()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "SDK");
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Ccc.Sdk.Host");
 		}
 		public static IDataSourceConfigurationSetter ForServiceBus()
 		{
-			return new DataSourceConfigurationSetter(false, true, "thread_static", "Service bus");
+			return new DataSourceConfigurationSetter(false, true, "thread_static", "Teleopti.Ccc.Sdk.ServiceBus.Host");
 		}
 		public static IDataSourceConfigurationSetter ForWeb()
 		{
-			return new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure", "Web mytime");
+			return new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure", "Teleopti.Ccc.Web");
 		}
 		public static IDataSourceConfigurationSetter ForDesktop()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Desktop");
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Ccc.SmartClientPortal.Shell");
 		}
 
 		private const string noDataSourceName = "[not set]";

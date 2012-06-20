@@ -995,7 +995,6 @@
     </Compile>
     <Compile Include="Repositories\IValidatedVolumeDayRepository.cs" />
     <Compile Include="ResourceCalculation\ActivityDivider.cs" />
-    <Compile Include="ResourceCalculation\MinMaxContractData.cs" />
     <Compile Include="ResourceCalculation\ScheduleProjectionExtractor.cs" />
     <Compile Include="ResourceCalculation\DividedActivityData.cs" />
     <Compile Include="ResourceCalculation\PersonSkillDictionary.cs" />

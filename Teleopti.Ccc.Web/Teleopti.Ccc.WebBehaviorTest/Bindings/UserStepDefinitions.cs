@@ -223,6 +223,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new DoNotHaveVirtualSchedulePeriods());
 		}
 
+		[Given(@"I do not have a schedule period")]
+		public void GivenIDoNotHaveASchedulePeriod()
+		{
+			UserFactory.User().Setup(new DoNotHaveSchedulePeriods());
+		}
+
+		[Given(@"I do not have a person period")]
+		public void GivenIDoNotHaveAPersonPeriod()
+		{
+			UserFactory.User().Setup(new DoNotHavePersonPeriods());
+		}
+
 		[Given(@"I have (existing|a) student availability")]
 		public void GivenIHaveExistingStudentAvailability(string aOrExisting)
 		{

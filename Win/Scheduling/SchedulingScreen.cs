@@ -8445,11 +8445,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var schedulePart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
 			var selectedPerson = persons.FirstOrDefault();
 			if(schedulePart != null) selectedPerson = schedulePart.Person;
-			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, _schedulingOptions, _workShiftWorkTime, selectedPerson, _gridLockManager, SchedulePartFilter,
 
-				_clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+			var schedulingOptions = new RestrictionSchedulingOptions
+			{
+				UseAvailability = true,
+				UsePreferences = true,
+				UseStudentAvailability = true,
+				UseRotations = true,
+				UseScheduling = true
+			};
+
+			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, schedulingOptions, _workShiftWorkTime, selectedPerson, _gridLockManager, SchedulePartFilter,_clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
 			agentRestrictionView.ShowDialog(this);
-
 		}
     }
 }
