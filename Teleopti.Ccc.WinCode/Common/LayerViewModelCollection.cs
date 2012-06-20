@@ -220,14 +220,15 @@ namespace Teleopti.Ccc.WinCode.Common
             IEnumerable<ILayerViewModel> listToCheck;
 
             if (includeAbsence)
-                listToCheck = this.Where(v => v.Period.StartDateTime.Date == _part.Period.StartDateTime.Date 
-                    && v.Period.EndDateTime.Date == _part.Period.EndDateTime.Date);
+                listToCheck = this.Where(
+                    v => v.Period.LocalStartDateTime.Date == _part.Period.LocalStartDateTime.Date &&
+                        v.Period.LocalEndDateTime.Date == _part.Period.LocalEndDateTime.Date);
             else
             {
                 listToCheck = this.Where(v => !(v is AbsenceLayerViewModel));
             }
             if (listToCheck.Count() == 0) return _part.Period;
-            
+
             return new DateTimePeriod(listToCheck.Min(l => l.Period.StartDateTime),
                                       listToCheck.Max(l => l.Period.EndDateTime));
         }
