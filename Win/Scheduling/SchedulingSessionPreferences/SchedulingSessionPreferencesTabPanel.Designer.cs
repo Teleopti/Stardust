@@ -459,9 +459,9 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(3, 98);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(65, 13);
+            this.label5.Size = new System.Drawing.Size(81, 13);
             this.label5.TabIndex = 21;
-            this.label5.Text = "xxGroupings";
+            this.label5.Text = "xxCompareWith";
             // 
             // comboBoxGroupingFairness
             // 
@@ -710,7 +710,7 @@
             this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 29);
             this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
             this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-            this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 21);
+            this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 19);
             this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
             this.comboBoxAdvShiftCategory.TabIndex = 1;
