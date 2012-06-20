@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool _rotationDaysOnly;
 		private bool _useAvailability = true;
 		private bool _availabilityDaysOnly;
-       private bool _useStudentAvailability;
+        private bool _useStudentAvailability;
 		private bool _usePreferences = true;
 		private bool _preferenceDaysOnly;
 		private bool _useMustHavesOnly;

@@ -1374,12 +1374,6 @@
     <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesDialog.Designer.cs">
       <DependentUpon>SchedulingSessionPreferencesDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesPanel.Designer.cs">
-      <DependentUpon>SchedulingSessionPreferencesPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\SingleAgentRestriction\RestrictionSummaryViewCellModel.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\RestrictionWeekHeaderViewCellModel.cs" />
     <Compile Include="Scheduling\SkillSummary.cs">
@@ -3114,10 +3108,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesDialog.resx">
       <DependentUpon>SchedulingSessionPreferencesDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesPanel.resx">
-      <DependentUpon>SchedulingSessionPreferencesPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.resx">

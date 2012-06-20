@@ -1,5 +1,5 @@
 ﻿using SchedulingSessionPreferencesPanel=
-    Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences.SchedulingSessionPreferencesPanel;
+    Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences.SchedulingSessionPreferencesTabPanel;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 {

@@ -14,9 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private SchedulingOptionsAdvancedPersonalSetting _target;
         private ISchedulingOptions _schedulingOptions;
         private MockRepository _mocks;
-        private IList<IGroupPage> _groupPages;
         private IShiftCategory _shiftCategory;
-        private IGroupPage _groupPage;
         private Guid _guid;
 
         [SetUp]
@@ -25,8 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mocks = new MockRepository();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
             _shiftCategory = _mocks.StrictMock<IShiftCategory>();
-            _groupPage = _mocks.StrictMock<IGroupPage>();
-            _groupPages = new List<IGroupPage> { _groupPage };
             _target = new SchedulingOptionsAdvancedPersonalSetting();
             _guid = new Guid();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
