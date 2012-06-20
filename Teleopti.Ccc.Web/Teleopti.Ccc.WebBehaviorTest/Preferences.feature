@@ -11,21 +11,18 @@ Scenario: View preferences
 Scenario: See shift category preference
 	Given I am an agent
 	And I have existing shift category preference
-	And My schedule is published
 	When I view preferences
 	Then I should see my existing shift category preference
 
 Scenario: See day off preference
 	Given I am an agent
 	And I have existing day off preference
-	And My schedule is published
 	When I view preferences
 	Then I should see my existing day off preference
 	
 Scenario: See absence preference
 	Given I am an agent
 	And I have existing absence preference
-	And My schedule is published
 	When I view preferences
 	Then I should see my existing absence preference
 
