@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly ISchedulingOptions _schedulingOptions;
         private readonly IBlockSchedulingWorkShiftFinderService _workShiftFinderService;
         private readonly DateOnly _dateOnly;
-        private readonly IGroupPerson _groupPerson;
+        private readonly IPerson _person;
         private readonly ISchedulingResultStateHolder _resultStateHolder;
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IPersonSkillPeriodsDataHolderManager _personSkillPeriodsDataHolderManager;
@@ -31,14 +30,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 
         //constructor
-        public ShiftCategoryPeriodValueExtractorThread( IList<IShiftProjectionCache> shiftProjectionList, ISchedulingOptions schedulingOptions, IBlockSchedulingWorkShiftFinderService workShiftFinderService, DateOnly dateOnly, IGroupPerson groupPerson, ISchedulingResultStateHolder resultStateHolder, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator, IShiftProjectionCacheFilter shiftProjectionCacheFilter, IEffectiveRestrictionCreator effectiveRestrictionCreator)
+        public ShiftCategoryPeriodValueExtractorThread( IList<IShiftProjectionCache> shiftProjectionList, ISchedulingOptions schedulingOptions, 
+			IBlockSchedulingWorkShiftFinderService workShiftFinderService, DateOnly dateOnly, IPerson person, ISchedulingResultStateHolder resultStateHolder, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator, IShiftProjectionCacheFilter shiftProjectionCacheFilter, IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {
         	_manualResetEvent = new ManualResetEvent(false);
             _shiftProjectionList = shiftProjectionList;
             _schedulingOptions = schedulingOptions;
             _workShiftFinderService = workShiftFinderService;
             _dateOnly = dateOnly;
-            _groupPerson = groupPerson;
+            _person = person;
             _resultStateHolder = resultStateHolder;
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _personSkillPeriodsDataHolderManager = personSkillPeriodsDataHolderManager;
@@ -63,12 +63,29 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return;
 			}
 
-            var person = (IPerson)_groupPerson;
-            var scheduleDictionary = _resultStateHolder.Schedules;
-            var members = _groupPerson.GroupMembers;
-            
-            var agentFairness = scheduleDictionary.AverageFairnessPoints(members);
-            var currentSchedulePeriod = person.VirtualSchedulePeriod(_dateOnly);
+			var scheduleDictionary = ScheduleDictionary;
+			IList<IPerson> persons;
+			var groupPerson = _person as IGroupPerson;
+			if (groupPerson != null)
+			{
+				persons = new List<IPerson>();
+				foreach (var member in groupPerson.GroupMembers)
+				{
+					var scheduleDay = scheduleDictionary[member].ScheduledDay(_dateOnly);
+					if (!scheduleDay.IsScheduled())
+						persons.Add(member);
+				}
+
+				if (persons.Count == 0)
+					return;
+			}
+			else
+			{
+				persons = new List<IPerson> { _person };
+			}
+
+			var agentFairness = scheduleDictionary.AverageFairnessPoints(persons);
+            var currentSchedulePeriod = _person.VirtualSchedulePeriod(_dateOnly);
               
             var dataHolders =
                     _personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(_dateOnly,
@@ -77,24 +94,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var averageWorkTime = currentSchedulePeriod.AverageWorkTimePerDay;
             var useShiftCategoryFairness = false;
             
-            var shiftCategoryFairnessFactors = extractShiftCategoryFairnessFactor(person ) ;
+            var shiftCategoryFairnessFactors = extractShiftCategoryFairnessFactor(_person ) ;
             
-           if (person.WorkflowControlSet != null)
+           if (_person.WorkflowControlSet != null)
             {
-                useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
+                useShiftCategoryFairness = _person.WorkflowControlSet.UseShiftCategoryFairness;
                 
             }
-                
-            var groupPerson = person as IGroupPerson;
-            var dictionary = ScheduleDictionary;
-            IList<IPerson> persons = (from member in groupPerson.GroupMembers let scheduleDay = 
-                                            dictionary[member].ScheduledDay(_dateOnly) where !scheduleDay.IsScheduled() select member).ToList();
 
-            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dateOnly, _schedulingOptions, dictionary);
-            var finderResult = new WorkShiftFinderResult(person, _dateOnly);
+
+		   var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dateOnly, _schedulingOptions, scheduleDictionary);
+            var finderResult = new WorkShiftFinderResult(_person, _dateOnly);
 
             //applying the filters
-            var shiftProjectionList = FilterShiftCategoryPeriodOnSchedulingOptions(person.PermissionInformation.DefaultTimeZone(),
+            var shiftProjectionList = FilterShiftCategoryPeriodOnSchedulingOptions(_person.PermissionInformation.DefaultTimeZone(),
 				effectiveRestriction, persons, finderResult, possible);
 
             var shiftValue = _workShiftFinderService.BestShiftValue(_dateOnly,

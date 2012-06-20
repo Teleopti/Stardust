@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public interface IPossibleCombinationsOfStartEndCategoryRunner
 	{
 		void RunTheList(IList<IPossibleStartEndCategory> possibleStartEndCategories, IList<IShiftProjectionCache> shiftProjectionList,
-										DateOnly dateOnly, IGroupPerson person, ISchedulingOptions schedulingOptions);
+										DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions);
 	}
 
 	public class PossibleCombinationsOfStartEndCategoryRunner : IPossibleCombinationsOfStartEndCategoryRunner
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void RunTheList(IList<IPossibleStartEndCategory> possibleStartEndCategories, IList<IShiftProjectionCache> shiftProjectionList,
-			DateOnly dateOnly, IGroupPerson person, ISchedulingOptions schedulingOptions)
+			DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions)
 		{
 			var arrayLimit = possibleStartEndCategories.Count;
 			var doneEvents = new ManualResetEvent[arrayLimit];

@@ -118,13 +118,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				var minmax = bag.MinMaxWorkTime(_ruleSetProjectionService, dateOnly, effectiveRestriction);
                 	
-				//REMOVE WHEN IN GUI
-				schedulingOptions.UseGroupSchedulingCommonCategory = true;
-				schedulingOptions.UseGroupSchedulingCommonEnd = true;
-
 				var combinations = _possibleCombinationsOfStartEndCategoryCreator.FindCombinations(minmax, schedulingOptions);
 				// CONTINUE TO NEXT IF EMPTY??
-				_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, groupPerson, schedulingOptions);
+				_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions);
  
 				IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, dateOnly);
 
@@ -137,7 +133,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					//finderResult.Successful = true;
 					shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, true);
-					_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, groupPerson, schedulingOptions);
+					_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions);
 					if (!combinations.IsEmpty())
 						tmpBestPossible = combinations.OrderBy(c => c.ShiftValue).Last();
 						
