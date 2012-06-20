@@ -62,6 +62,38 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			
 		}
 
+		//[Test]
+		//public void ShouldExtractDayOff()
+		//{
+		//    var dateOnly = new DateOnly(_dateTime);
+		//    var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(30));
+		//    var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
+		//    var dayOff = new DayOffTemplate(new Description("test"));
+		//    dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
+		//    dayOff.Anchor = TimeSpan.FromHours(12);
+		//    var personDayOff = new PersonDayOff(_person, _scenario, dayOff, new DateOnly(_dateTime));
+		//    part.Add(personDayOff);
+		//    var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
+		//    _person.AddPersonPeriod(period);
+
+		//    using(_mocks.Record())
+		//    {
+		//        Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(_scheduleDayPro);
+		//        Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(part);
+		//        Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
+		//        Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
+		//        Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
+		//        Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
+		//        Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
+		//        Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>());
+		//    }
+
+		//    using(_mocks.Playback())
+		//    {
+		//        _effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget);	
+		//    }
+		//}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldExtractMainShift()
 		{
@@ -75,7 +107,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using(_mocks.Record())
 			{
-				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(_scheduleDayPro);
+				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(_scheduleDayPro);	
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(part);
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
