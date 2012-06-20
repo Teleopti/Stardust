@@ -47,13 +47,15 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	function _initControls() {
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 		ko.applyBindings(requestViewModel, $('#Fullday-check')[0]);
-
+		
 		$('#Request-detail-section .date-input')
 			.datepicker()
 			;
 		$("#Request-detail-section .combobox.time-input")
 			.combobox()
 			;
+		$("#Request-detail-section .combobox.absence-input").combobox();
+		
 		$('#Request-detail-ok-button')
 			.click(function () {
 				if ($('#Text-request-tab.selected-tab').length > 0) {
@@ -170,7 +172,7 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	}
 
 	function _displayValidationError(data) {
-		var message = data.Errors.join(' ');
+		var message = data.Errors.join('</br>');
 		$('#Request-detail-error').html(message || '');
 	}
 
