@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IList<IShiftProjectionCache> _shiftProjectionList;
         private IBlockSchedulingWorkShiftFinderService _workShiftFinderService;
         private DateOnly _dateOnly;
-        private ISchedulingResultStateHolder _resultStateHolder;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IPersonSkillPeriodsDataHolderManager _personSkillPeriodDataHolderManager;
         private IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreater;
@@ -50,7 +49,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _shiftProjectionList = _mocks.DynamicMock<IList<IShiftProjectionCache>>();
             _workShiftFinderService = _mocks.DynamicMock<IBlockSchedulingWorkShiftFinderService>();
             _dateOnly = new DateOnly(new DateTime(2012, 6, 8, 8, 0, 0));
-            _resultStateHolder = _mocks.DynamicMock<ISchedulingResultStateHolder>();
             _schedulingResultStateHolder = _mocks.DynamicMock<ISchedulingResultStateHolder>();
             _personSkillPeriodDataHolderManager = _mocks.DynamicMock<IPersonSkillPeriodsDataHolderManager>();
             _groupShiftCategoryFairnessCreater = _mocks.DynamicMock<IGroupShiftCategoryFairnessCreator>();
@@ -104,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
 				_target = new ShiftCategoryPeriodValueExtractorThread( _shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
-                _groupPerson, _resultStateHolder, _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, _groupShiftCategoryFairnessCreater,
+                _groupPerson,  _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, _groupShiftCategoryFairnessCreater,
                 _shiftProjectionCacheFilter, _effectiveRestrictionCreator);
 
                 var result = _target.FilterShiftCategoryPeriodOnSchedulingOptions(agentTimeZone,
@@ -143,9 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IDictionary<IShiftCategory, int> shiftDictionary = new Dictionary<IShiftCategory, int>();
             _possibleStartEndCategory.ShiftCategory = new ShiftCategory("newshiftcat");
             shiftDictionary.Add(_possibleStartEndCategory.ShiftCategory,25 );
-            IFairnessValueResult fairnessValueResult = new FairnessValueResult();
-            IShiftCategoryFairness objToReturn = new ShiftCategoryFairness(shiftDictionary, fairnessValueResult);
-            IScenario scenario = new Scenario("sc");
+             IScenario scenario = new Scenario("sc");
 
             var period = new DateTimePeriod(new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                                                        new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc));
@@ -154,18 +150,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         	
             using (_mocks.Record())
             {
-                Expect.Call(_groupShiftCategoryFairnessCreater.CalculateGroupShiftCategoryFairness(person, _dateOnly)).IgnoreArguments().
-                Return(objToReturn);
-
-               
-                Expect.Call(_resultStateHolder.Schedules).Return(scheduleDictionary);
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
+               Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
             }
 
             using (_mocks.Playback())
             {
 				_target = new ShiftCategoryPeriodValueExtractorThread(_shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
-               _groupPerson, _resultStateHolder, _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, _groupShiftCategoryFairnessCreater,
+               _groupPerson,  _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, _groupShiftCategoryFairnessCreater,
                _shiftProjectionCacheFilter, _effectiveRestrictionCreator);
 
 				_target.ExtractShiftCategoryPeriodValue(_possibleStartEndCategory);

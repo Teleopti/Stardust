@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IBlockSchedulingWorkShiftFinderService _workShiftFinderService;
         private readonly DateOnly _dateOnly;
         private readonly IPerson _person;
-        private readonly ISchedulingResultStateHolder _resultStateHolder;
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IPersonSkillPeriodsDataHolderManager _personSkillPeriodsDataHolderManager;
         private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         //constructor
         public ShiftCategoryPeriodValueExtractorThread( IList<IShiftProjectionCache> shiftProjectionList, ISchedulingOptions schedulingOptions, 
-			IBlockSchedulingWorkShiftFinderService workShiftFinderService, DateOnly dateOnly, IPerson person, ISchedulingResultStateHolder resultStateHolder, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator, IShiftProjectionCacheFilter shiftProjectionCacheFilter, IEffectiveRestrictionCreator effectiveRestrictionCreator)
+			IBlockSchedulingWorkShiftFinderService workShiftFinderService, DateOnly dateOnly, IPerson person, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator, IShiftProjectionCacheFilter shiftProjectionCacheFilter, IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {
         	_manualResetEvent = new ManualResetEvent(false);
             _shiftProjectionList = shiftProjectionList;
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _workShiftFinderService = workShiftFinderService;
             _dateOnly = dateOnly;
             _person = person;
-            _resultStateHolder = resultStateHolder;
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _personSkillPeriodsDataHolderManager = personSkillPeriodsDataHolderManager;
             _groupShiftCategoryFairnessCreator = groupShiftCategoryFairnessCreator;
