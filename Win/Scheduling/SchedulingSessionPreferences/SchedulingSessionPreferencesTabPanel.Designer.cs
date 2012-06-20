@@ -470,9 +470,10 @@
             this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGroupingFairness.Location = new System.Drawing.Point(137, 94);
             this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-            this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 19);
+            this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 21);
             this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGroupingFairness.TabIndex = 22;
+            this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingFairnessSelectedIndexChanged);
             // 
             // pnlBlockTeamScheduling
             // 
@@ -565,6 +566,7 @@
             this.checkBoxUseSameDayOffs.TabIndex = 7;
             this.checkBoxUseSameDayOffs.Text = "xxUseSameDayOffs";
             this.checkBoxUseSameDayOffs.UseVisualStyleBackColor = true;
+            this.checkBoxUseSameDayOffs.CheckedChanged += new System.EventHandler(this.checkBoxUseSameDayOffsCheckedChanged);
             // 
             // radioButtonSchedulePeriod
             // 
@@ -585,9 +587,10 @@
             this.comboBoxGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGrouping.Location = new System.Drawing.Point(165, 78);
             this.comboBoxGrouping.Name = "comboBoxGrouping";
-            this.comboBoxGrouping.Size = new System.Drawing.Size(151, 19);
+            this.comboBoxGrouping.Size = new System.Drawing.Size(151, 21);
             this.comboBoxGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGrouping.TabIndex = 5;
+            this.comboBoxGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);
             // 
             // checkBoxCommonStart
             // 
@@ -707,11 +710,11 @@
             this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 29);
             this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
             this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-            this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 19);
+            this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 21);
             this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
             this.comboBoxAdvShiftCategory.TabIndex = 1;
-            this.comboBoxAdvShiftCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingFairnessSelectedIndexChanged);
+            this.comboBoxAdvShiftCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvShiftCategorySelectedIndexChanged);
             // 
             // tableLayoutPanel8
             // 

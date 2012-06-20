@@ -584,13 +584,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 
 		private void comboBoxGroupingFairnessSelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (_dataLoaded)
-			{
-				getDataFromControls();
-				setDataInControls();
-			}
-		}
+        {
+
+        }
 
 		private void checkBoxUseMaxSeatsCheckedChanged(object sender, EventArgs e)
 		{
