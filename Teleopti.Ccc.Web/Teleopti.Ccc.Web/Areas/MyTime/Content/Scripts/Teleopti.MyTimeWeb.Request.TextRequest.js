@@ -24,22 +24,26 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	function _initEditSection() {
 		$('#Request-detail-ok-button')
 			.click(function () {
-				_addTextRequest();
+				if ($('#Text-request-tab.selected-tab').length > 0) {
+					_addRequest("Requests/TextRequest");
+				} else {
+					_addRequest("Requests/AbsenceRequest");
+				}
 			});
 
 		$('#Text-request-tab')
 			.click(function () {
 				_clearValidationError();
 				_hideAbsenceTypes();
-//				requestViewModel.IsFullDay(false);
-		});
+				//				requestViewModel.IsFullDay(false);
+			});
 		$('#Absence-request-tab')
 			.click(function () {
 				_clearValidationError();
 				_showAbsenceTypes();
-//				requestViewModel.IsFullDay(true);
-		});
-		
+				//				requestViewModel.IsFullDay(true);
+			});
+
 		_initControls();
 		_initLabels();
 	}
@@ -137,10 +141,10 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 			;
 	}
 
-	function _addTextRequest() {
+	function _addRequest(requestUrl) {
 		var formData = _getFormData();
 		Teleopti.MyTimeWeb.Ajax.Ajax({
-			url: "Requests/TextRequest",
+			url: requestUrl,//"Requests/TextRequest",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: "POST",
@@ -161,14 +165,45 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		});
 	}
 
+//	function _addRequest(requestUrl) {
+//		var formData = _getFormData();
+//		Teleopti.MyTimeWeb.Ajax.Ajax({
+//			url: requestUrl,
+//			dataType: "json",
+//			contentType: 'application/json; charset=utf-8',
+//			type: "POST",
+//			cache: false,
+//			data: JSON.stringify(formData),
+//			success: function (data, textStatus, jqXHR) {
+//				_displayRequest(formData.Period.StartDate);
+//				$('#Schedule-addRequest-section').parents(".qtip").hide();
+//				_clearValidationError();
+//			},
+//			error: function (jqXHR, textStatus, errorThrown) {
+//				if (jqXHR.status == 400) {
+//					var data = $.parseJSON(jqXHR.responseText);
+//					_displayValidationError(data);
+//					return;
+//				}
+//				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+//			}
+//		});
+//	}
+
 	function _displayValidationError(data) {
 		var message = data.Errors.join(' ');
 		$('#Request-detail-error').html(message || '');
 	}
 
 	function _getFormData() {
+		var absenceId = $('#Absence-type').children(":selected").val();
+		if (absenceId == undefined) {
+			absenceId = null;
+		}
+		
 		return {
 			Subject: $('#Request-detail-subject-input').val(),
+			AbsenceId: absenceId,
 			Period: {
 				StartDate: $('#Request-detail-fromDate-input').val(),
 				StartTime: $('#Request-detail-fromTime-input-input').val(),
