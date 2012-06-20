@@ -83,6 +83,11 @@
     </Compile>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="PreferencesExtended.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesExtended.feature</DependentUpon>
+    </Compile>
     <Compile Include="QUnitTestsStepDefinition.cs" />
     <Compile Include="Data\User\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\User\AbsencePreferenceOnWeekday.cs" />
@@ -390,6 +395,10 @@
       <LastGenOutput>MyProfile.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="PreferencesExtended.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesExtended.feature.cs</LastGenOutput>
+    </None>
     <None Include="PreferencesPeriodFeedback.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesPeriodFeedback.feature.cs</LastGenOutput>
