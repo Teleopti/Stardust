@@ -14,6 +14,18 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
     /// </summary>
     public partial class TimelineControlView : UserControl
     {
+        public TimeSpan ElapsedTime
+        {
+            get { return (TimeSpan) GetValue(ElapsedTimeProperty); }
+            set { SetValue(ElapsedTimeProperty, value); }
+        }
+
+        public static readonly DependencyProperty ElapsedTimeProperty =
+            DependencyProperty.Register(
+                "ElapsedTime",
+                typeof (TimeSpan),
+                typeof (TimelineControlView));
+
         private DateTime _mouseDownTime = DateHelper.MinSmallDateTime.ToUniversalTime();
 
         public TimelineControlView()
@@ -65,7 +77,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
         private void DateTimePeriodPanel_MouseMove(object sender, MouseEventArgs e)
         {
             var panel = sender as DateTimePeriodPanel;
-           
+            
             if (panel != null)
             {
                 TimelineControlViewModel model = GetModel();
@@ -77,14 +89,19 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
 
                     if (e.RightButton == MouseButtonState.Pressed || e.LeftButton == MouseButtonState.Pressed)
                     {
-                        
+
                         if (model.HoverTime <= _mouseDownTime)
                         {
                             model.SelectedPeriod = new DateTimePeriod(model.HoverTime, _mouseDownTime);
+                            ElapsedTime = model.SelectedPeriod.StartDateTime.Subtract(model.SelectedPeriod.EndDateTime).Negate();
                         }
                         else
-                            model.SelectedPeriod = new DateTimePeriod(_mouseDownTime,model.HoverTime);
+                        {
+                            model.SelectedPeriod = new DateTimePeriod(_mouseDownTime, model.HoverTime);
+                            ElapsedTime = model.SelectedPeriod.EndDateTime.Subtract(model.SelectedPeriod.StartDateTime);
+                        }
                         model.ShowSelectedPeriod = true;
+                        
                     }
 
                 }
