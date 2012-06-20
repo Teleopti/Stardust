@@ -219,6 +219,7 @@
             this.checkBoxOnlyPreferenceDays.TabIndex = 10;
             this.checkBoxOnlyPreferenceDays.Text = "xxScheduleOnlyPreferenceDays";
             this.checkBoxOnlyPreferenceDays.UseVisualStyleBackColor = true;
+            this.checkBoxOnlyPreferenceDays.CheckedChanged += new System.EventHandler(this.checkBoxOnlyPreferenceDaysCheckedChanged);
             // 
             // checkBoxUsePreferences
             // 
@@ -300,6 +301,7 @@
             this.checkBoxMustHaves.TabIndex = 11;
             this.checkBoxMustHaves.Text = "xxUsePreferencesMustHavesOnly";
             this.checkBoxMustHaves.UseVisualStyleBackColor = true;
+            this.checkBoxMustHaves.CheckedChanged += new System.EventHandler(this.checkBoxMustHavesCheckedChanged);
             // 
             // tableLayoutPanelTagWith
             // 
@@ -468,7 +470,7 @@
             this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGroupingFairness.Location = new System.Drawing.Point(137, 94);
             this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-            this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 21);
+            this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 19);
             this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGroupingFairness.TabIndex = 22;
             // 
@@ -583,7 +585,7 @@
             this.comboBoxGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGrouping.Location = new System.Drawing.Point(165, 78);
             this.comboBoxGrouping.Name = "comboBoxGrouping";
-            this.comboBoxGrouping.Size = new System.Drawing.Size(151, 21);
+            this.comboBoxGrouping.Size = new System.Drawing.Size(151, 19);
             this.comboBoxGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGrouping.TabIndex = 5;
             // 
@@ -705,7 +707,7 @@
             this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 29);
             this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
             this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-            this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 21);
+            this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 19);
             this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
             this.comboBoxAdvShiftCategory.TabIndex = 1;

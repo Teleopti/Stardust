@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private readonly IList<IScheduleTag> _scheduleTags;
     	private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
+        private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
     	
 
         private readonly bool _reschedule;
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 					var settingRepository = new PersonalSettingDataRepository(uow);
 					_defaultGeneralSettings = settingRepository.FindValueByKey("SchedulingOptionsGeneralSettings", new SchedulingOptionsGeneralPersonalSetting());
 					_defaultAdvancedSettings = settingRepository.FindValueByKey("SchedulingOptionsAdvancedSettings", new SchedulingOptionsAdvancedPersonalSetting());
+                    _defaultExtraSettings = settingRepository.FindValueByKey("SchedulingOptionsExtraSetting", new SchedulingOptionsExtraPersonalSetting());
 				}
 			}
 			catch (DataSourceException)
@@ -70,12 +72,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages);
 			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories, _groupPages);
+            _defaultExtraSettings.MapTo(_schedulingOptions,_scheduleTags,_groupPages );
 		}
 
 		private void savePersonalSettings()
 		{
 			_defaultGeneralSettings.MapFrom(_schedulingOptions);
 			_defaultAdvancedSettings.MapFrom(_schedulingOptions);
+            _defaultExtraSettings.MapFrom(_schedulingOptions );
 
 			try
 			{
@@ -85,6 +89,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 					uow.PersistAll();
 					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultAdvancedSettings);
 					uow.PersistAll();
+                    new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultExtraSettings );
+                    uow.PersistAll();
 				}
 			}
 			catch (DataSourceException)

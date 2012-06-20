@@ -265,6 +265,7 @@
     <Compile Include="Optimization\ScheduleDayEquator.cs" />
     <Compile Include="Optimization\SchedulingOptionsAdvancedPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
+    <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />
