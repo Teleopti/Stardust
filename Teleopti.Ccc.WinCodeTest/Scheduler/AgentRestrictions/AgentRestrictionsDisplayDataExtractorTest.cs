@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private MockRepository _mocks;
 		private IAgentRestrictionsDisplayDataExtractor _target;
 		private IScheduleMatrixPro _matrix;
-		private ISchedulingOptions _schedulingOptions;
+		private RestrictionSchedulingOptions _schedulingOptions;
 		private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff;
 		private IRestrictionExtractor _restrictionExtractor;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_restrictionExtractor = _mocks.StrictMock<IRestrictionExtractor>();
 			_schedulePeriodTargetTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
 			_target = new AgentRestrictionsDisplayDataExtractor(_schedulePeriodTargetTimeCalculator, _workShiftMinMaxCalculator, _periodScheduledAndRestrictionDaysOff, _restrictionExtractor);
-			_schedulingOptions = new SchedulingOptions();
+			_schedulingOptions = new RestrictionSchedulingOptions(){UseScheduling = true};
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_effectiveDays = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro});
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
@@ -62,12 +62,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 				Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
 				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix, _schedulingOptions)).Return(new MinMax<TimeSpan>());
-				Expect.Call(_periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_matrix, true, _schedulingOptions.UsePreferences, _schedulingOptions.UseRotations)).Return(33);
+				Expect.Call(_periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_matrix, _schedulingOptions.UseScheduling, _schedulingOptions.UsePreferences, _schedulingOptions.UseRotations)).Return(33).Repeat.AtLeastOnce();
 			}
 
 			using(_mocks.Playback())
 			{
-				_target.ExtractTo(data, _schedulingOptions, true);
+				_target.ExtractTo(data, _schedulingOptions);
 			}
 
 			Assert.AreEqual(TimeSpan.MaxValue, data.ContractCurrentTime);

@@ -516,6 +516,7 @@
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Common.js" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoTeamsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
@@ -549,6 +550,7 @@
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.labeledinput.js" />
+    <Content Include="Content\favicon.ico" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.js" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
@@ -628,7 +630,6 @@
     <Content Include="Content\themes\mobile\images\icons-36-white.png" />
     <Content Include="Content\themes\mobile\mobile.css" />
     <Content Include="Content\themes\mobile\mobile.min.css" />
-    <Content Include="favicon.ico" />
     <Content Include="Content\Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Content\Scripts\jquery-1.6.4.js" />
     <Content Include="Content\Scripts\jquery-1.6.4.min.js" />

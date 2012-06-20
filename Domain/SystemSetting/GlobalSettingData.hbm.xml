@@ -37,8 +37,10 @@
               unique-key="GlobalSettingUniqueKey"
               />
     <property name="serializedValue" 
-              not-null="true" 
-              access="field"/>
+              not-null="true"
+              access="field"
+              length="10000"
+              />
     <many-to-one name="BusinessUnit"
                 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
                 access="nosetter.camelcase-underscore"
