@@ -5,6 +5,9 @@
 @{
 	Layout = null;
 }
+<div class="displaynone" id="Request-detail-default-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))</div>
+<div class="displaynone" id="Request-detail-default-end-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
+
 <div id="Requests-body-inner" class="request-body-inner relative">
 	<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all">
 		<input type="hidden" id="Request-detail-entityid"/>

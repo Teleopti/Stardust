@@ -9,6 +9,8 @@
 
 Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 
+	var requestViewModel = null;
+	
 	function _initToolbarButtons() {
 		$('#Requests-addTextRequest-button')
 			.click(function () {
@@ -22,6 +24,36 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	}
 
 	function _initEditSection() {
+		_initControls();
+		_initLabels();
+	}
+
+	function _clearValidationError() {
+		$('#Request-detail-error').html('');
+	}
+
+	function _showAbsenceTypes() {
+		$('#Absence-type-element').show();
+		$('#Absence-request-tab').addClass("selected-tab");
+		$('#Text-request-tab').removeClass("selected-tab");
+	}
+
+	function _hideAbsenceTypes() {
+		$('#Absence-type-element').hide();
+		$('#Text-request-tab').addClass("selected-tab");
+		$('#Absence-request-tab').removeClass("selected-tab");
+	}
+
+	function _initControls() {
+		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+		ko.applyBindings(requestViewModel, $('#Fullday-check')[0]);
+		
+		$('#Request-detail-section .date-input')
+			.datepicker()
+			;
+		$("#Request-detail-section .combobox.time-input")
+			.combobox()
+			;
 		$('#Request-detail-ok-button')
 			.click(function () {
 				if ($('#Text-request-tab.selected-tab').length > 0) {
@@ -43,34 +75,6 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 				_showAbsenceTypes();
 				//				requestViewModel.IsFullDay(true);
 			});
-
-		_initControls();
-		_initLabels();
-	}
-
-	function _clearValidationError() {
-		$('#Schedule-addRequest-error').html('');
-	}
-
-	function _showAbsenceTypes() {
-		$('#Absence-type-element').show();
-		$('#Absence-request-tab').addClass("selected-tab");
-		$('#Text-request-tab').removeClass("selected-tab");
-	}
-
-	function _hideAbsenceTypes() {
-		$('#Absence-type-element').hide();
-		$('#Text-request-tab').addClass("selected-tab");
-		$('#Absence-request-tab').removeClass("selected-tab");
-	}
-
-	function _initControls() {
-		$('#Request-detail-section .date-input')
-			.datepicker()
-			;
-		$("#Request-detail-section .combobox.time-input")
-			.combobox()
-			;
 	}
 
 	function _initLabels() {
@@ -144,7 +148,7 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	function _addRequest(requestUrl) {
 		var formData = _getFormData();
 		Teleopti.MyTimeWeb.Ajax.Ajax({
-			url: requestUrl,//"Requests/TextRequest",
+			url: requestUrl,
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: "POST",
@@ -164,31 +168,6 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 			}
 		});
 	}
-
-//	function _addRequest(requestUrl) {
-//		var formData = _getFormData();
-//		Teleopti.MyTimeWeb.Ajax.Ajax({
-//			url: requestUrl,
-//			dataType: "json",
-//			contentType: 'application/json; charset=utf-8',
-//			type: "POST",
-//			cache: false,
-//			data: JSON.stringify(formData),
-//			success: function (data, textStatus, jqXHR) {
-//				_displayRequest(formData.Period.StartDate);
-//				$('#Schedule-addRequest-section').parents(".qtip").hide();
-//				_clearValidationError();
-//			},
-//			error: function (jqXHR, textStatus, errorThrown) {
-//				if (jqXHR.status == 400) {
-//					var data = $.parseJSON(jqXHR.responseText);
-//					_displayValidationError(data);
-//					return;
-//				}
-//				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-//			}
-//		});
-//	}
 
 	function _displayValidationError(data) {
 		var message = data.Errors.join(' ');
@@ -254,3 +233,34 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 
 })(jQuery);
 
+Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
+	var self = this;
+	this.IsFullDay = ko.observable(false);
+
+	ko.computed(function () {
+		if (self.IsFullDay()) {
+			$('#Request-detail-fromTime-input-input').val($('#Request-detail-default-start-time').text());
+			$('#Request-detail-toTime-input-input').val($('#Request-detail-default-end-time').text());
+			_disableTimeinput();
+		} else {
+			$('#Request-detail-fromTime-input-input').reset();
+			$('#Request-detail-toTime-input-input').reset();
+			_enableTimeinput();
+		}
+
+	});
+
+	function _enableTimeinput() {
+		$('#Request-detail-fromTime button, #Request-detail-fromTime-input-input, #Request-detail-toTime button, #Request-detail-toTime-input-input')
+			.removeAttr("disabled");
+		$('#Request-detail-fromTime-input-input').css("color", "black");
+		$('#Request-detail-toTime-input-input').css("color", "black");
+	}
+
+	function _disableTimeinput() {
+		$('#Request-detail-fromTime button, #Request-detail-fromTime-input-input, #Request-detail-toTime button, #Request-detail-toTime-input-input')
+			.attr("disabled", "disabled");
+		$('#Request-detail-fromTime-input-input').css("color", "grey");
+		$('#Request-detail-toTime-input-input').css("color", "grey");
+	}
+});
