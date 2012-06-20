@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private IAgentRestrictionsDetailView _view;
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-		private IAgentRestrictionsDetailModel _model;
+		private readonly IAgentRestrictionsDetailModel _model;
 
 		public AgentRestrictionsDetailPresenter(IAgentRestrictionsDetailView view, IAgentRestrictionsDetailModel model, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter,IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
@@ -23,18 +23,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public override int RowCount
 		{
-			get
-			{
-				return 7;
-			}
+			get { return (_model.DetailData().Count + 7 - 1) / 7; }
 		}
 
 		public override int ColCount
 		{
-			get
-			{
-				return 7;
-			}
+			get { return 7; }
 		}
 
 		public override void QueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)

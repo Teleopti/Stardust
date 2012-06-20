@@ -1,10 +1,12 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
+using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
@@ -12,14 +14,19 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	public class AgentRestrictionsDetailView : ScheduleViewBase, IAgentRestrictionsDetailView
 	{
 		private readonly AgentRestrictionsDetailModel _model;
+		private IWorkShiftWorkTime _workShiftWorkTime;
 
 		public AgentRestrictionsDetailView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
-			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
+			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IWorkShiftWorkTime workShiftWorkTime)
 			: base(grid)
 		{
-			_model = new AgentRestrictionsDetailModel();
+			if(schedulerState == null) throw new ArgumentNullException("schedulerState");
+
+			_model = new AgentRestrictionsDetailModel(schedulerState.RequestedPeriod.Period());
 			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag);
+
+			_workShiftWorkTime = workShiftWorkTime;
 
 			InitializeGrid();
 		}
@@ -75,6 +82,15 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			ViewGrid.Rows.FrozenCount = 0;
 			ViewGrid.Cols.FrozenCount = 0;
 			ViewGrid.Model.Options.MergeCellsMode = GridMergeCellsMode.None;
+		}
+
+		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, IRestrictionExtractor restrictionExtractor, RestrictionSchedulingOptions schedulingOptions, TimeSpan periodTarget)
+		{
+			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor, schedulingOptions);
+			var preferenceNightRestChecker = new PreferenceNightRestChecker();
+			_model.LoadDetails(scheduleMatrixPro, restrictionExtractor, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
+			ViewGrid.Refresh();
+			InitializeGrid();
 		}
 	}
 }
