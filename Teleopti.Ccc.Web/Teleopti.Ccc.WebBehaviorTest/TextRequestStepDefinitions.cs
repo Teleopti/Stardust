@@ -100,6 +100,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Contains.Substring("cinnemon roll"));
 		}
 
+		[Then(@"I should see the absence request form with today's date as default")]
 		[Then(@"I should see the text request form with today's date as default")]
 		public void ThenIShouldSeeTheTextRequestFormWithTodaySDateAsDefault()
 		{

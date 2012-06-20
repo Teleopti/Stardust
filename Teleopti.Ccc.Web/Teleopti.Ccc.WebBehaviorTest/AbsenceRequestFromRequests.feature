@@ -34,8 +34,8 @@ Scenario: Default absence request values from request view When checked Fullday
 	And I am viewing requests
 	When I click add request button in the toolbar
 	And I click absence request tab
-	And I click full day checkbox
-	Then I should see the request form with tomorrow as default date
+	And I checked the full day checkbox
+	Then I should see the absence request form with today's date as default
 	And I should see 00:00 - 23:59 as the default times
 
 Scenario: Cancel adding absence request from request view
