@@ -10714,16 +10714,20 @@ These options are activated:
     <value>You should work {0} hours.</value>
     <comment>You should work X hours.</comment>
   </data>
-	<data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
     <value>You should work {0} to {1} hours.</value>
     <comment>You should work X to Y hours.</comment>
   </data>
-	<data name="MissingAbsenceType" xml:space="preserve">
+  <data name="MissingAbsenceType" xml:space="preserve">
     <value>Missing absence type.</value>
     <comment>Missing absence type.</comment>
   </data>
   <data name="SendRequest" xml:space="preserve">
     <value>Send</value>
     <comment>Send a text request/absence request...</comment>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>Override Period</value>
+    <comment>Overrride period time</comment>
   </data>
 </root>
