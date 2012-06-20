@@ -110,16 +110,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             set { _templateGenerator = value; }
         }
         
-			var cat = TemplateGenerator.Category;
-                	possibilities.Add(new PossibleStartEndCategory
-                	                  	{
-                	                  		StartTime = period.Value.StartTime,
-                	                  		EndTime = period.Value.EndTime,
-                	                  		ShiftCategory = cat
-                	                  	});
-
-			if (resultWorkTimeMinMax != null)
-				resultWorkTimeMinMax.PossibleStartEndCategories = possibilities.ToList();
         /// <summary>
         /// Gets the default accessibility.
         /// </summary>

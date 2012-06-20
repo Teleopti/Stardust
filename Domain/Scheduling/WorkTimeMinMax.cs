@@ -19,15 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public IWorkTimeMinMax Combine(IWorkTimeMinMax workTimeMinMax)
         {
         	return new WorkTimeMinMax
-			ret.PossibleStartEndCategories = _possibleStartEndCategories.Concat(workTimeMinMax.PossibleStartEndCategories).ToList();
-			
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public IList<IPossibleStartEndCategory> PossibleStartEndCategories
-    	{
-			get { return _possibleStartEndCategories.ToList(); }
-			set { _possibleStartEndCategories = new HashSet<IPossibleStartEndCategory>(value); }
-    	}
-
         	          	{
         	          		StartTimeLimitation = new StartTimeLimitation(
         	          			minTimeSpan(StartTimeLimitation.StartTime, workTimeMinMax.StartTimeLimitation.StartTime),
@@ -37,9 +28,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
         	          			maxTimeSpan(EndTimeLimitation.EndTime, workTimeMinMax.EndTimeLimitation.EndTime)),
         	          		WorkTimeLimitation = new WorkTimeLimitation(
         	          			minTimeSpan(WorkTimeLimitation.StartTime, workTimeMinMax.WorkTimeLimitation.StartTime),
-        	          			maxTimeSpan(WorkTimeLimitation.EndTime, workTimeMinMax.WorkTimeLimitation.EndTime))
+        	          			maxTimeSpan(WorkTimeLimitation.EndTime, workTimeMinMax.WorkTimeLimitation.EndTime)),
+        	          		PossibleStartEndCategories =
+        	          			_possibleStartEndCategories.Concat(workTimeMinMax.PossibleStartEndCategories).ToList()
         	          	};
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public IList<IPossibleStartEndCategory> PossibleStartEndCategories
+		{
+		    get { return _possibleStartEndCategories.ToList(); }
+		    set { _possibleStartEndCategories = new HashSet<IPossibleStartEndCategory>(value); }
+		}
 
 
         private static TimeSpan? minTimeSpan(TimeSpan? t1, TimeSpan? t2)

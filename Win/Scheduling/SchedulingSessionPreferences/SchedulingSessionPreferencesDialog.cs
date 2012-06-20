@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
         	loadPersonalSettings();
 
-            schedulingSessionPreferencesPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule,
+			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule,
 				_backToLegal, _groupPagesProvider, _scheduleTags);
             dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
             dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;

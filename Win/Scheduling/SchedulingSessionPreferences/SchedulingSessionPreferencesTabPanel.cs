@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -21,11 +16,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private ISchedulingOptions _schedulingOptions;
         private IList<IShiftCategory> _shiftCategories;
         private bool _dataLoaded;
-    	private IList<IGroupPage> _groupPages;
-		private IList<IGroupPage> _groupPagesFairness;
+    	private IList<IGroupPageLight> _groupPages;
+		private IList<IGroupPageLight> _groupPagesFairness;
         private IList<IScheduleTag> _scheduleTags;
+    	private ISchedulerGroupPagesProvider _groupPagesProvider;
 
-        public SchedulingSessionPreferencesTabPanel()
+    	public SchedulingSessionPreferencesTabPanel()
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
@@ -33,9 +29,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Initialize(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
-			bool reschedule, bool backToLegal, IList<IGroupPage> groupPages, 
+			bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider, 
             IList<IScheduleTag> scheduleTags)
         {
+			_groupPagesProvider = groupPagesProvider;
             if(!reschedule)
             {
 
@@ -64,8 +61,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions = schedulingOptions;
             _shiftCategories = (from s in shiftCategories where ((IDeleteTag)s).IsDeleted == false select s).ToList();
             _scheduleTags = scheduleTags;
-            var specification = new NotSkillGroupSpecification();
-        	_groupPages = new List<IGroupPage>(groupPages).FindAll(specification.IsSatisfiedBy);
+			// inga skill
+			_groupPages = _groupPagesProvider.GetGroups(false);
 			_groupPagesFairness = _groupPages.ToList();
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             _dataLoaded = true;
@@ -286,8 +283,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.Fairness = new Percent(trackBar1.Value / 100d);
             _localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.UseGroupScheduling = checkBoxUseGroupScheduling.Checked;
-        	_localSchedulingOptions.GroupOnGroupPage = (IGroupPage)comboBoxGrouping.SelectedItem;
-			_localSchedulingOptions.GroupPageForShiftCategoryFairness = (IGroupPage)comboBoxGroupingFairness.SelectedItem;
+        	_localSchedulingOptions.GroupOnGroupPage = (IGroupPageLight)comboBoxGrouping.SelectedItem;
+			_localSchedulingOptions.GroupPageForShiftCategoryFairness = (IGroupPageLight)comboBoxGroupingFairness.SelectedItem;
 			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
         	_localSchedulingOptions.UseMaxSeats = checkBoxUseMaxSeats.Checked;
         	_localSchedulingOptions.DoNotBreakMaxSeats = checkBoxDoNotBreakMaxSeats.Checked;

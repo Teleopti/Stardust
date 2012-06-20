@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private ISchedulingOptions _schedulingOptions;
     	private IPossibleCombinationsOfStartEndCategoryRunner _possibleCombinationsOfStartEndCategoryRunner;
     	private IPossibleCombinationsOfStartEndCategoryCreator _possibleCombinationsOfStartEndCategoryCreator;
-    	private IRuleSetProjectionService _ruleSetProjectionService;
+    	private IWorkShiftWorkTime _workShiftWorkTime;
 
     	[SetUp]
         public void Setup()
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks = new MockRepository();
         	_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
     		_activity = _mocks.DynamicMock<IActivity>();
-
+    		_workShiftWorkTime = _mocks.DynamicMock<IWorkShiftWorkTime>();
             _dateOnly1 = new DateOnly(2009, 2, 2);
             _dateOnly2 = new DateOnly(2009, 2, 3);
             _dates = new List<DateOnly> { _dateOnly1, _dateOnly2 };
@@ -72,12 +72,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(8, 0, 0)),
                null, null, null, new List<IActivityRestriction>());
 			_schedulingOptions = new SchedulingOptions();
-
-    		_ruleSetProjectionService = _mocks.StrictMock<IRuleSetProjectionService>();
     		_possibleCombinationsOfStartEndCategoryRunner = _mocks.StrictMock<IPossibleCombinationsOfStartEndCategoryRunner>();
     		_possibleCombinationsOfStartEndCategoryCreator = _mocks.StrictMock<IPossibleCombinationsOfStartEndCategoryCreator>();
 
-    		_target = new BestBlockShiftCategoryFinder(_ruleSetProjectionService, _shiftProjectionCacheManager, _stateHolder,
+			_target = new BestBlockShiftCategoryFinder(_workShiftWorkTime, _shiftProjectionCacheManager, _stateHolder,
     		                                           _effectiveRestrictionCreator,
     		                                           _possibleCombinationsOfStartEndCategoryRunner,
     		                                           _possibleCombinationsOfStartEndCategoryCreator);
@@ -116,9 +114,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_person.Period(_dateOnly2)).Return(personPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePeriod.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(personPeriod.RuleSetBag).Return(ruleSetBag).Repeat.AtLeastOnce();
-            	Expect.Call(ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, _dateOnly1, _effectiveRestriction)).Return
+				Expect.Call(ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, _dateOnly1, _effectiveRestriction)).Return
             		(new WorkTimeMinMax());
-				Expect.Call(ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, _dateOnly2, _effectiveRestriction)).Return
+				Expect.Call(ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, _dateOnly2, _effectiveRestriction)).Return
 					(new WorkTimeMinMax());
             	Expect.Call(_possibleCombinationsOfStartEndCategoryCreator.FindCombinations(new WorkTimeMinMax(),
             	                                                                            _schedulingOptions)).Return(
@@ -176,8 +174,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly1, _permissionInformation.DefaultTimeZone(), ruleSetBag, false)).Return(cashes).Repeat.AtLeastOnce();
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly2, _permissionInformation.DefaultTimeZone(), ruleSetBag, false)).Return(cashes).Repeat.AtLeastOnce();
 
-				Expect.Call(ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, _dateOnly1, _effectiveRestriction)).Return(new WorkTimeMinMax());
-				Expect.Call(ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, _dateOnly2, _effectiveRestriction)).Return(new WorkTimeMinMax());
+				Expect.Call(ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, _dateOnly1, _effectiveRestriction)).Return(new WorkTimeMinMax());
+				Expect.Call(ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, _dateOnly2, _effectiveRestriction)).Return(new WorkTimeMinMax());
 				Expect.Call(_possibleCombinationsOfStartEndCategoryCreator.FindCombinations(new WorkTimeMinMax(),
 																							_schedulingOptions)).Return(
 																								new HashSet
