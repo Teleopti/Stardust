@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private SchedulingOptionsAdvancedPersonalSetting _target;
         private ISchedulingOptions _schedulingOptions;
         private MockRepository _mocks;
-        //private IList<IScheduleTag> _scheduleTags;
         private IList<IGroupPage> _groupPages;
         private IShiftCategory _shiftCategory;
         private IGroupPage _groupPage;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _mocks = new MockRepository();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
-           // _scheduleTag = _mocks.StrictMock<IScheduleTag>();
             _shiftCategory = _mocks.StrictMock<IShiftCategory>();
             _groupPage = _mocks.StrictMock<IGroupPage>();
             _groupPages = new List<IGroupPage> { _groupPage };
@@ -51,35 +49,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Playback())
             {
-                //_scheduleTags = new List<IScheduleTag> { _scheduleTag };
-
+               
                 _target.MapFrom(_schedulingOptions);
-                _target.MapTo(_schedulingOptions, new List<IShiftCategory > { _shiftCategory }, _groupPages);
+                _target.MapTo(_schedulingOptions, new List<IShiftCategory > { _shiftCategory });
             }
         }
 
-        [Test]
-        public void ShouldSetTagToNullScheduleInstanceWhenNoTag()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(_schedulingOptions.ShiftCategory).Return(_shiftCategory );
-                Expect.Call(_shiftCategory .Id).Return(null);
-                MapFromExpectations();
-
-                Expect.Call(_schedulingOptions.TagToUseOnScheduling).Return(null);
-                Expect.Call(() => _schedulingOptions.TagToUseOnScheduling = NullScheduleTag.Instance);
-                MapToExpectations();
-            }
-
-            using (_mocks.Playback())
-            {
-                //_scheduleTags = new List<IScheduleTag>();
-                _target.MapFrom(_schedulingOptions);
-                _target.MapTo(_schedulingOptions, new List<IShiftCategory> { _shiftCategory }, _groupPages);
-            }
-        }
-
+        
         private void MapFromExpectations()
         {
             Expect.Call(_schedulingOptions.UseMinimumPersons).Return(true);
@@ -92,10 +68,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void MapToExpectations()
         {
-            Expect.Call(_schedulingOptions.UseMinimumPersons).Return(true);
-            Expect.Call(_schedulingOptions.UseMaximumPersons).Return(true);
-            Expect.Call(_schedulingOptions.UseMaxSeats).Return(true);
-            Expect.Call(_schedulingOptions.DoNotBreakMaxSeats).Return(true);
+            Expect.Call(_schedulingOptions.UseMinimumPersons = true);
+            Expect.Call(_schedulingOptions.UseMaximumPersons = true);
+            Expect.Call(_schedulingOptions.UseMaxSeats = true );
+            Expect.Call(_schedulingOptions.DoNotBreakMaxSeats = true );
         }
     }
 }

@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			{
 			}
 
-			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages);
-			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories, _groupPages);
+			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags);
+			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories);
             _defaultExtraSettings.MapTo(_schedulingOptions,_scheduleTags,_groupPages );
 		}
 

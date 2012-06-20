@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 _scheduleTags = new List<IScheduleTag> { _scheduleTag };
                 _target.MapFrom(_schedulingOptions);
-                _target.MapTo(_schedulingOptions, _scheduleTags, _groupPages);    
+                _target.MapTo(_schedulingOptions, _scheduleTags);    
             }   
         }
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 _scheduleTags = new List<IScheduleTag> ();
                 _target.MapFrom(_schedulingOptions);
-                _target.MapTo(_schedulingOptions, _scheduleTags, _groupPages);
+                _target.MapTo(_schedulingOptions, _scheduleTags);
             }    
         }
 
@@ -85,19 +85,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptions.RotationDaysOnly).Return(true);
             Expect.Call(_schedulingOptions.UseAvailability).Return(true);
             Expect.Call(_schedulingOptions.AvailabilityDaysOnly).Return(true);
-            //Expect.Call(_schedulingOptions.UseBlockScheduling).Return(BlockFinderType.BetweenDayOff);
-            //Expect.Call(_schedulingOptions.UseGroupScheduling).Return(true);
-            //Expect.Call(_schedulingOptions.GroupOnGroupPage).Return(_groupPage);
-            //Expect.Call(_groupPage.Key).Return("groupPageKey");
             Expect.Call(_schedulingOptions.UseStudentAvailability).Return(true);
             Expect.Call(_schedulingOptions.UsePreferences).Return(true);
             Expect.Call(_schedulingOptions.PreferencesDaysOnly).Return(true);
             Expect.Call(_schedulingOptions.UsePreferencesMustHaveOnly).Return(true);
             Expect.Call(_schedulingOptions.UseShiftCategoryLimitations).Return(true);
             Expect.Call(_schedulingOptions.ShowTroubleshot).Return(true);
-            //Expect.Call(_schedulingOptions.UseGroupSchedulingCommonStart).Return(true);
-            //Expect.Call(_schedulingOptions.UseGroupSchedulingCommonEnd).Return(true);
-            //Expect.Call(_schedulingOptions.UseGroupSchedulingCommonCategory).Return(false);
         }
 
        
@@ -107,19 +100,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _schedulingOptions.RotationDaysOnly = true);
             Expect.Call(() => _schedulingOptions.UseAvailability = true);
             Expect.Call(() => _schedulingOptions.AvailabilityDaysOnly = true);
-            //Expect.Call(() => _schedulingOptions.UseBlockScheduling = BlockFinderType.BetweenDayOff);
-            //Expect.Call(() => _schedulingOptions.UseGroupScheduling = true);
-            //Expect.Call(_groupPage.Key).Return("groupPageKey");
-            //Expect.Call(() => _schedulingOptions.GroupOnGroupPage = _groupPage);
             Expect.Call(() => _schedulingOptions.UseStudentAvailability = true);
             Expect.Call(() => _schedulingOptions.UsePreferences = true);
             Expect.Call(() => _schedulingOptions.PreferencesDaysOnly = true);
             Expect.Call(() => _schedulingOptions.UsePreferencesMustHaveOnly = true);
             Expect.Call(() => _schedulingOptions.UseShiftCategoryLimitations = true);
             Expect.Call(() => _schedulingOptions.ShowTroubleshot = true);        
-            //Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonStart = true);        
-            //Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonEnd = true);        
-            //Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonCategory = false);        
+                    
         }
     }
 }
