@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(7, _presenter.ColCount);	
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "period"), Test]
 		public void ShouldReturnRowCount()
 		{
 			_detailData.Add(0, null);

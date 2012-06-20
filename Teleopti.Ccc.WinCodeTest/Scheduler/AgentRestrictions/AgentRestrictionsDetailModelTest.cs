@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using NUnit.Framework;
+using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 
@@ -14,9 +16,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IScheduleMatrixPro _scheduleMatrixPro;
 		private MockRepository _mocks;
 		private IVirtualSchedulePeriod _schedulePeriod;
-		private IScheduleDay _scheduleDay;
-		private IScheduleDayPro _scheduleDayPro;
 		private DateTimePeriod _period;
+		private IRestrictionExtractor _restrictionExtractor;
+		private RestrictionSchedulingOptions _schedulingOptions;
+		private IAgentRestrictionsDetailEffectiveRestrictionExtractor _effectiveRestrictionExtractor;
+		private IPreferenceNightRestChecker _preferenceNightRestChecker;
+		private PreferenceCellData _preferenceCellData;
 
 		[SetUp]
 		public void Setup()
@@ -26,42 +31,33 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_mocks = new MockRepository();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+			_restrictionExtractor = _mocks.StrictMock<IRestrictionExtractor>();
+			_schedulingOptions = new RestrictionSchedulingOptions {UseScheduling = true};
+			_effectiveRestrictionExtractor = _mocks.StrictMock<IAgentRestrictionsDetailEffectiveRestrictionExtractor>();
+			_preferenceNightRestChecker = _mocks.StrictMock<IPreferenceNightRestChecker>();
+			_preferenceCellData = new PreferenceCellData();
 		}
 
 		[Test]
 		public void ShouldLoadDetails()
 		{
 			var dateOnlyPeriod = new DateOnlyPeriod(2012, 6, 28, 2012, 7, 4);
+			var loadedPeriod = new DateTimePeriod(2012, 6, 28, 2012, 7, 4);
 
-			using (_mocks.Record())
+			using(_mocks.Record())
 			{
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(new DateOnly())).Return(_scheduleDayPro).Repeat.AtLeastOnce().IgnoreArguments();
-				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+				Expect.Call(() =>_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, new DateOnly(), loadedPeriod,TimeSpan.FromHours(40))).IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(() => _preferenceNightRestChecker.CheckNightlyRest(null)).IgnoreArguments();
 			}
 
 			using(_mocks.Playback())
 			{
-				_model.LoadDetails(_scheduleMatrixPro);		
+				_model.LoadDetails(_scheduleMatrixPro, _restrictionExtractor, _schedulingOptions, _effectiveRestrictionExtractor, TimeSpan.FromHours(40), _preferenceNightRestChecker);
 			}
 
-			Assert.AreEqual(28, _model.DetailData().Count());
-			Assert.AreEqual(new DateOnly(2012, 6, 18), _model.DetailData()[0].TheDate);
-			Assert.AreEqual(new DateOnly(2012, 7, 15),_model.DetailData()[27].TheDate);
-			Assert.AreEqual(_scheduleDay, _model.DetailData()[0].SchedulePart);
-			Assert.AreEqual(_scheduleDay, _model.DetailData()[27].SchedulePart);
-
-			for (var i = 0; i < 28; i++ )
-			{
-				Assert.AreEqual(dateOnlyPeriod.StartDate, _model.DetailData()[10].TheDate);
-				Assert.AreEqual(dateOnlyPeriod.EndDate, _model.DetailData()[16].TheDate);
-
-				if (i < 10 || i > 16) Assert.IsFalse(_model.DetailData()[i].Enabled);
-				else Assert.IsTrue(_model.DetailData()[i].Enabled);
-			}
+			Assert.AreEqual(28, _model.DetailData().Count);
 		}
 		
 		[Test]

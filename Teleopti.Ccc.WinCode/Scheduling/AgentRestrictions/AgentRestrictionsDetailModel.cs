@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
 	public interface IAgentRestrictionsDetailModel
 	{
-		void LoadDetails(IScheduleMatrixPro scheduleMatrixPro);
+		void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, IRestrictionExtractor restrictionExtractor, RestrictionSchedulingOptions schedulingOptions,  IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor, TimeSpan periodTarget, IPreferenceNightRestChecker preferenceNightRestChecker);
 		IList<DateOnly> DetailDates(DateTime startDate, DateTime endDate);
 		Dictionary<int, IPreferenceCellData> DetailData();
 	}
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	public class AgentRestrictionsDetailModel : IAgentRestrictionsDetailModel
 	{
 		private Dictionary<int, IPreferenceCellData> _detailData;
-		private DateTimePeriod _loadedPeriod;
+		private readonly DateTimePeriod _loadedPeriod;
 
 		public AgentRestrictionsDetailModel(DateTimePeriod loadedPeriod)
 		{
@@ -25,9 +25,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			_loadedPeriod = loadedPeriod;
 		}
 
-		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro)
+		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, IRestrictionExtractor restrictionExtractor, RestrictionSchedulingOptions schedulingOptions, IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor, TimeSpan periodTarget, IPreferenceNightRestChecker preferenceNightRestChecker)
 		{
 			if(scheduleMatrixPro == null) throw new ArgumentNullException("scheduleMatrixPro");
+			if(effectiveRestrictionExtractor == null) throw new ArgumentNullException("effectiveRestrictionExtractor");
+			if(preferenceNightRestChecker == null) throw new ArgumentNullException("preferenceNightRestChecker");
 
 			_detailData = new Dictionary<int, IPreferenceCellData>();
 			var dates = DetailDates(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.StartDate.Date, scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.EndDate.Date);
@@ -37,13 +39,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			foreach (var dateOnly in dates)
 			{
 				var data = new PreferenceCellData();
-				data.TheDate = dateOnly;
-				data.SchedulePart = scheduleMatrixPro.GetScheduleDayByKey(dateOnly).DaySchedulePart();
-				data.Enabled = _loadedPeriod.Contains(dateOnly) && scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly);
-
+				effectiveRestrictionExtractor.Extract(scheduleMatrixPro, data, dateOnly, _loadedPeriod, periodTarget);
 				_detailData.Add(counter, data);
+
 				counter++;
 			}
+
+			preferenceNightRestChecker.CheckNightlyRest(_detailData);
 		}
 
 		public Dictionary<int, IPreferenceCellData> DetailData()

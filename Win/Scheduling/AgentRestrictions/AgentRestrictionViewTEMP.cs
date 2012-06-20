@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
@@ -13,13 +14,13 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	{
 		private readonly ISchedulerStateHolder _stateHolder;
 		private readonly IList<IPerson> _persons;
-		private readonly ISchedulingOptions _schedulingOptions;
+		private readonly RestrictionSchedulingOptions _schedulingOptions;
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private readonly IPerson _selectedPerson;
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private AgentRestrictionsDetailView _detailView;
 
-		public AgentRestrictionViewTemp(ISchedulerStateHolder stateHolder, IList<IPerson> persons, ISchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson,
+		public AgentRestrictionViewTemp(ISchedulerStateHolder stateHolder, IList<IPerson> persons, RestrictionSchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson,
 			IGridlockManager lockManager, SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
 			IScheduleDayChangeCallback changeCallback, IScheduleTag scheduleTag)
 		{
@@ -34,11 +35,12 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_schedulingOptions.UseRotations = true;
 			_schedulingOptions.UsePreferences = true;
 			_schedulingOptions.UseStudentAvailability = true;
+			_schedulingOptions.UseScheduling = true;
 			_selectedPerson = selectedPerson;
 			agentRestrictionGrid.SelectedAgentIsReady += AgentRestrictionGridSelectedAgentIsReady;
 			label1.Text = string.Empty;
 
-			_detailView = new AgentRestrictionsDetailView(grid, _stateHolder, lockManager, schedulePartFilter, clipHandler, overriddenBusinessRulesHolder, changeCallback, scheduleTag);
+			_detailView = new AgentRestrictionsDetailView(grid, _stateHolder, lockManager, schedulePartFilter, clipHandler, overriddenBusinessRulesHolder, changeCallback, scheduleTag, workShiftWorkTime);
 		}
 
 
@@ -56,7 +58,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			else
 			{
 				label1.Text = displayRow.AgentName + " is ready";
-				_detailView.LoadDetails(displayRow.Matrix);
+				IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
+				_detailView.LoadDetails(displayRow.Matrix, restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
 			}
 			
 		}
@@ -70,7 +73,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private void AgentRestrictionViewTempLoad(object sender, System.EventArgs e)
 		{
 			agentRestrictionGrid.MergeHeaders();
-			agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _workShiftWorkTime, _selectedPerson, true);
+			agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _workShiftWorkTime, _selectedPerson);
 			agentRestrictionGrid.Refresh();	
 		}
 
@@ -80,8 +83,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_schedulingOptions.UseRotations = checkBoxRotation.Checked;
 			_schedulingOptions.UsePreferences = checkBoxPreference.Checked;
 			_schedulingOptions.UseStudentAvailability = checkBoxStudentAvailability.Checked;
+			_schedulingOptions.UseScheduling = checkBoxSchedule.Checked;
 
-			agentRestrictionGrid.LoadData(_schedulingOptions, checkBoxSchedule.Checked);
+			agentRestrictionGrid.LoadData(_schedulingOptions);
 		}
 	}
 }

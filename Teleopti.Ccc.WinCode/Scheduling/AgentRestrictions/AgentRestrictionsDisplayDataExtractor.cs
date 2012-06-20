@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
 	public interface IAgentRestrictionsDisplayDataExtractor
 	{
-		void ExtractTo(IAgentDisplayData agentDisplayData, ISchedulingOptions schedulingOptions, bool useSchedules);
+		void ExtractTo(IAgentDisplayData agentDisplayData, RestrictionSchedulingOptions schedulingOptions);
 	}
 
 	public class AgentRestrictionsDisplayDataExtractor : IAgentRestrictionsDisplayDataExtractor
@@ -25,20 +25,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void ExtractTo(IAgentDisplayData agentDisplayData, ISchedulingOptions schedulingOptions, bool useSchedules)
+		public void ExtractTo(IAgentDisplayData agentDisplayData, RestrictionSchedulingOptions schedulingOptions)
 		{
 			var currentContractTime = TimeSpan.Zero;
 			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTime(agentDisplayData.Matrix);
 			var minMax = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(agentDisplayData.Matrix);
-			var includeScheduling = (schedulingOptions.GetType() != typeof(RestrictionSchedulingOptions) || ((RestrictionSchedulingOptions)schedulingOptions).UseScheduling);
-			var currentDayOffs = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(agentDisplayData.Matrix, includeScheduling, schedulingOptions.UsePreferences, schedulingOptions.UseRotations);
+			//var includeScheduling = (schedulingOptions.GetType() != typeof(RestrictionSchedulingOptions) || ((RestrictionSchedulingOptions)schedulingOptions).UseScheduling);
+			var currentDayOffs = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(agentDisplayData.Matrix, schedulingOptions.UseScheduling, schedulingOptions.UsePreferences, schedulingOptions.UseRotations);
 
 			foreach (var scheduleDayPro in agentDisplayData.Matrix.EffectivePeriodDays)
 			{
 				var projSvc = scheduleDayPro.DaySchedulePart().ProjectionService();
 				var res = projSvc.CreateProjection();
 
-				if (includeScheduling) currentContractTime = currentContractTime.Add(res.ContractTime());
+				if (schedulingOptions.UseScheduling) currentContractTime = currentContractTime.Add(res.ContractTime());
 			}
 
 			agentDisplayData.ContractCurrentTime = currentContractTime;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var minMaxTime = _workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(agentDisplayData.Matrix, schedulingOptions);
 			agentDisplayData.MinimumPossibleTime = minMaxTime.Minimum;
 			agentDisplayData.MaximumPossibleTime = minMaxTime.Maximum;
-			agentDisplayData.ScheduledAndRestrictionDaysOff = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(agentDisplayData.Matrix, useSchedules, schedulingOptions.UsePreferences, schedulingOptions.UseRotations);
+			agentDisplayData.ScheduledAndRestrictionDaysOff = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(agentDisplayData.Matrix, schedulingOptions.UseScheduling , schedulingOptions.UsePreferences, schedulingOptions.UseRotations);
 		}
 	}
 }
