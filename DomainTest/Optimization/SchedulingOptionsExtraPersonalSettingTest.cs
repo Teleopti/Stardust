@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingOptions _schedulingOptions;
         private MockRepository _mocks;
         private IList<IScheduleTag> _scheduleTags;
-        private IList<IGroupPage> _groupPages;
+        private IList<IGroupPageLight> _groupPages;
         private IScheduleTag _scheduleTag;
-        private IGroupPage _groupPage;
+        private IGroupPageLight _groupPageLight;
         private Percent _fairnessValue;
         private Guid _guid;
         private const int _resourceCalculateFrequency = 1;
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
             _scheduleTag = _mocks.StrictMock<IScheduleTag>();
 
-            _groupPage = _mocks.StrictMock<IGroupPage>();
-            _groupPages = new List<IGroupPage> { _groupPage };
+            _groupPageLight = _mocks.StrictMock<IGroupPageLight>();
+            _groupPages = new List<IGroupPageLight> { _groupPageLight };
             _target = new SchedulingOptionsExtraPersonalSetting();
             _guid = new Guid();
             _fairnessValue = new Percent( 0) ;
@@ -87,10 +87,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             Expect.Call(_schedulingOptions.UseBlockScheduling).Return(BlockFinderType.BetweenDayOff);
             Expect.Call(_schedulingOptions.UseGroupScheduling).Return(true);
-            Expect.Call(_groupPage.Key).Return("groupPageKey") ;
-            Expect.Call(_schedulingOptions.GroupOnGroupPage).Return(_groupPage);
+            Expect.Call(_groupPageLight.Key).Return("groupPageKey") ;
+            Expect.Call(_schedulingOptions.GroupOnGroupPage).Return(_groupPageLight);
              Expect.Call(_schedulingOptions.Fairness).Return(_fairnessValue );
-            Expect.Call(_schedulingOptions.GroupPageForShiftCategoryFairness).Return(_groupPage);
+            Expect.Call(_schedulingOptions.GroupPageForShiftCategoryFairness).Return(_groupPageLight);
             Expect.Call(_schedulingOptions.ResourceCalculateFrequency).Return(_resourceCalculateFrequency );
             Expect.Call(_schedulingOptions.RefreshRate).Return(1);
             Expect.Call(_schedulingOptions.UseGroupSchedulingCommonStart).Return(true);
@@ -103,9 +103,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             Expect.Call(() => _schedulingOptions.UseBlockScheduling = BlockFinderType.BetweenDayOff);
             Expect.Call(() => _schedulingOptions.UseGroupScheduling = true);
-            Expect.Call(_groupPage.Key).Return("groupPageKey").Repeat.AtLeastOnce();
-            Expect.Call(() => _schedulingOptions.GroupOnGroupPage = _groupPage);
-            Expect.Call(() =>_schedulingOptions.GroupPageForShiftCategoryFairness = _groupPage);
+            Expect.Call(_groupPageLight.Key).Return("groupPageKey").Repeat.AtLeastOnce();
+            Expect.Call(() => _schedulingOptions.GroupOnGroupPage = _groupPageLight);
+            Expect.Call(() =>_schedulingOptions.GroupPageForShiftCategoryFairness = _groupPageLight);
             Expect.Call(() => _schedulingOptions.ResourceCalculateFrequency = _resourceCalculateFrequency);
             Expect.Call(_schedulingOptions.RefreshRate = 1);
 

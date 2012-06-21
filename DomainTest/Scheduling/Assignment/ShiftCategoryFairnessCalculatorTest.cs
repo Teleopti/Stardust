@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _range = _mocks.DynamicMock<IScheduleRange>();
             _person = _mocks.DynamicMock<IPerson>();
             _dateOnly = new DateOnly(2012,08,08);
-            _target = new ShiftCategoryFairnessCalculator(_groupShiftCategoryFairnessCreator );
+            _target = new ShiftCategoryFairnessCalculator();
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             
             using (_mocks.Playback())
             {
-                IShiftCategoryFairnessFactors result = _target.ShiftCategoryFairnessFactors(_range,_person,_dateOnly);
+                IShiftCategoryFairnessFactors result = _target.ShiftCategoryFairnessFactors(_groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(_person,_dateOnly ),_personCategoryFairness );
                 Assert.AreEqual(0.96d, result.FairnessFactor(_m), 0.01d);
                 Assert.AreEqual(1.21d, result.FairnessFactor(_d), 0.01d);
                 Assert.AreEqual(0.81d, result.FairnessFactor(_l), 0.01d);
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocks.Playback())
             {
-                IShiftCategoryFairnessFactors result = _target.ShiftCategoryFairnessFactors(_range, _person, _dateOnly);
+                IShiftCategoryFairnessFactors result = _target.ShiftCategoryFairnessFactors(_groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(_person, _dateOnly), _personCategoryFairness);
                 Assert.AreEqual(1d, result.FairnessFactor(_m));
             }
 		    
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocks.Playback())
             {
-                IShiftCategoryFairnessFactors result = _target.ShiftCategoryFairnessFactors(_range, _person, _dateOnly);
+                IShiftCategoryFairnessFactors result = _target.ShiftCategoryFairnessFactors(_groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(_person, _dateOnly), _personCategoryFairness);
                 Assert.AreEqual(0, result.FairnessFactor(_d));
             }
             

@@ -16,8 +16,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private List<IPossibleStartEndCategory> _options;
 		private PossibleCombinationsOfStartEndCategoryRunner _target;
 		private IBestGroupValueExtractorThreadFactory _bestGroupValueExtractorThreadFactory;
+	    private IShiftCategoryFairnessFactors _shiftCategoryFairnessFactors;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_options = new List<IPossibleStartEndCategory> {option1, option2, option3, option4, option5};
 			_bestGroupValueExtractorThreadFactory = _mocks.StrictMock<IBestGroupValueExtractorThreadFactory>();
 			_target = new PossibleCombinationsOfStartEndCategoryRunner(_bestGroupValueExtractorThreadFactory);
+	        _shiftCategoryFairnessFactors = _mocks.DynamicMock<IShiftCategoryFairnessFactors>();
 		}
 
 		[Test]
@@ -41,35 +43,35 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 				                                                                          dateOnly, person,
-				                                                                          schedulingOptions)).
+				                                                                          schedulingOptions,true,_shiftCategoryFairnessFactors)).
 				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
-																						  schedulingOptions)).
+                                                                                          schedulingOptions, true, _shiftCategoryFairnessFactors)).
 				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
-																						  schedulingOptions)).
+                                                                                          schedulingOptions, true, _shiftCategoryFairnessFactors)).
 				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
-																						  schedulingOptions)).
+                                                                                          schedulingOptions, true, _shiftCategoryFairnessFactors)).
 				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
-																						  schedulingOptions)).
+                                                                                          schedulingOptions, true, _shiftCategoryFairnessFactors)).
 				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
 				IgnoreArguments();
 			_mocks.ReplayAll();
-			_target.RunTheList(_options, new List<IShiftProjectionCache>(), dateOnly,person,schedulingOptions);
+			_target.RunTheList(_options, new List<IShiftProjectionCache>(), dateOnly,person,schedulingOptions,true,_shiftCategoryFairnessFactors );
 			foreach (var possibleStartEndCategory in _options)
 			{
 				Assert.That(possibleStartEndCategory.ShiftValue, Is.EqualTo(100));

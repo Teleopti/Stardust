@@ -75,10 +75,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     		_possibleCombinationsOfStartEndCategoryRunner = _mocks.StrictMock<IPossibleCombinationsOfStartEndCategoryRunner>();
     		_possibleCombinationsOfStartEndCategoryCreator = _mocks.StrictMock<IPossibleCombinationsOfStartEndCategoryCreator>();
 
-			_target = new BestBlockShiftCategoryFinder(_workShiftWorkTime, _shiftProjectionCacheManager, _stateHolder,
-    		                                           _effectiveRestrictionCreator,
-    		                                           _possibleCombinationsOfStartEndCategoryRunner,
-    		                                           _possibleCombinationsOfStartEndCategoryCreator);
+            //_target = new BestBlockShiftCategoryFinder(_workShiftWorkTime, _shiftProjectionCacheManager, _stateHolder,
+            //                                           _effectiveRestrictionCreator,
+            //                                           _possibleCombinationsOfStartEndCategoryRunner,
+            //                                           _possibleCombinationsOfStartEndCategoryCreator);
 
         }
 
@@ -123,9 +123,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             	                                                                            	new HashSet
             	                                                                            		<IPossibleStartEndCategory>()).IgnoreArguments().Repeat.AtLeastOnce();
 
-				Expect.Call(() =>  _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
-																					 getCashes(), _dateOnly1, gPerson,
-																					 _schedulingOptions)).IgnoreArguments().Repeat.AtLeastOnce();
+                //Expect.Call(() =>  _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
+                //                                                                     getCashes(), _dateOnly1, gPerson,
+                //                                                                     _schedulingOptions)).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(new TimeSpan(8, 0, 0)).Repeat.Any();
 
                 Expect.Call(_stateHolder.Schedules).Return(scheduleDictionary).Repeat.Any();
@@ -181,9 +181,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																								new HashSet
 																									<IPossibleStartEndCategory>()).IgnoreArguments().Repeat.AtLeastOnce();
 
-				Expect.Call(() => _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
-																					 getCashes(), _dateOnly1, gPerson,
-																					 _schedulingOptions)).IgnoreArguments().Repeat.AtLeastOnce();
+                //Expect.Call(() => _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
+                //                                                                     getCashes(), _dateOnly1, gPerson,
+                //                                                                     _schedulingOptions)).IgnoreArguments().Repeat.AtLeastOnce();
 
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
