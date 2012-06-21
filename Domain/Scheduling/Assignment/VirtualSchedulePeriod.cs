@@ -179,17 +179,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				if (!IsValid)
 					return new TimeSpan();
 
-				if (_schedulePeriod.IsPeriodTimeOverride)
+				if (_schedulePeriod != null)
 				{
-					double periodTime = _schedulePeriod.PeriodTime.Value.TotalMinutes;
-					int workDays = Workdays();
-					int minutes = (int)(periodTime / workDays);
-					return TimeSpan.FromMinutes(minutes);
-				}
+					if (_schedulePeriod.IsPeriodTimeOverride)
+					{
+						double periodTime = _schedulePeriod.PeriodTime.Value.TotalMinutes;
+						int workDays = Workdays();
+						int minutes = (int)(periodTime / workDays);
+						return TimeSpan.FromMinutes(minutes);
+					}
 
-				//Handle override in original schedule period
-				if (_schedulePeriod != null && _schedulePeriod.IsAverageWorkTimePerDayOverride)
 					return _schedulePeriod.AverageWorkTimePerDay;
+				}
 
 				if (_personContract == null)
 					return new TimeSpan();
@@ -199,7 +200,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public TimeSpan PeriodTarget()
 		{
-			if (_schedulePeriod.IsPeriodTimeOverride)
+			if (_schedulePeriod != null && _schedulePeriod.IsPeriodTimeOverride)
 				return _schedulePeriod.PeriodTime.Value;
 
 			int workDays = Workdays();
@@ -285,7 +286,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (intersection == null)
                 return new Percent(0);
 
-            var originalWorkDays = (double)((SchedulePeriod)schedulePeriod).GetOriginalWorkdaysForVirtualPeriodUseOnly();
+            var originalWorkDays = (double)((SchedulePeriod)schedulePeriod).GetWorkdays();
             if (originalWorkDays == 0)
                 return new Percent(0);
             var currentWorkDays = (double)Workdays();
