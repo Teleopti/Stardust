@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private List<IPossibleStartEndCategory> _options;
 		private PossibleCombinationsOfStartEndCategoryRunner _target;
 		private IBestGroupValueExtractorThreadFactory _bestGroupValueExtractorThreadFactory;
-	    private IShiftCategoryFairnessFactors _shiftCategoryFairnessFactors;
 
 	    [SetUp]
 		public void Setup()
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_options = new List<IPossibleStartEndCategory> {option1, option2, option3, option4, option5};
 			_bestGroupValueExtractorThreadFactory = _mocks.StrictMock<IBestGroupValueExtractorThreadFactory>();
 			_target = new PossibleCombinationsOfStartEndCategoryRunner(_bestGroupValueExtractorThreadFactory);
-	        _shiftCategoryFairnessFactors = _mocks.DynamicMock<IShiftCategoryFairnessFactors>();
 		}
 
 		[Test]
@@ -82,7 +80,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 	}
 
-	public class ShiftCategoryPeriodValueExtractorThreadForTest : IShiftCategoryPeriodValueExtractorThread
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
+    public class ShiftCategoryPeriodValueExtractorThreadForTest : IShiftCategoryPeriodValueExtractorThread
 	{
 		private readonly ManualResetEvent _manualResetEvent;
 
@@ -91,7 +90,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_manualResetEvent = new ManualResetEvent(false);
 		}
 
-		public void ExtractShiftCategoryPeriodValue(object possibleStartEndCategory)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)")]
+        public void ExtractShiftCategoryPeriodValue(object possibleStartEndCategory)
 		{
 			var possible = possibleStartEndCategory as PossibleStartEndCategory;
 			if (possible == null)

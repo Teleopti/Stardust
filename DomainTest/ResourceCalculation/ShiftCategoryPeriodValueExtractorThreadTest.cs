@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IShiftProjectionCache _cashe2;
         private IShiftProjectionCache _cashe3;
         private IShiftProjectionCache _cashe4;
-        private IShiftCategoryFairnessFactors _shiftCategoryFairnessFactors;
-
 
         [SetUp]
         public void Setup()
@@ -53,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _effectiveRestrictionCreator = _mocks.DynamicMock<IEffectiveRestrictionCreator>();
             _possibleStartEndCategory = new PossibleStartEndCategory();
             _effectiveRestriction = _mocks.DynamicMock<IEffectiveRestriction>();
-            _shiftCategoryFairnessFactors = _mocks.DynamicMock<IShiftCategoryFairnessFactors>();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
