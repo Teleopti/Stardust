@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		ManualResetEvent ManualResetEvent { get; }
 	}
 
-	public class ShiftCategoryPeriodValueExtractorThread : IShiftCategoryPeriodValueExtractorThread
+	public class ShiftCategoryPeriodValueExtractorThread : IShiftCategoryPeriodValueExtractorThread, IDisposable
 	{
-    	private readonly ManualResetEvent _manualResetEvent;
+    	private ManualResetEvent _manualResetEvent;
     	private IList<IShiftProjectionCache> _shiftProjectionList;
         private readonly ISchedulingOptions _schedulingOptions;
         private readonly IBlockSchedulingWorkShiftFinderService _workShiftFinderService;
@@ -70,7 +70,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var possible = possibleStartEndCategory as PossibleStartEndCategory;
 			if (possible == null)
 			{
-				_manualResetEvent.Set();
+				if (_manualResetEvent != null)
+					_manualResetEvent.Set();
 				return;
 			}
 
@@ -103,7 +104,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                                         _schedulingOptions);
 
 			possible.ShiftValue = shiftValue;
-        	_manualResetEvent.Set();
+			if (_manualResetEvent != null)
+        		_manualResetEvent.Set();
         }
 
 		public ManualResetEvent ManualResetEvent
@@ -151,5 +153,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
 
-    }
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if(_manualResetEvent != null)
+					_manualResetEvent.Close();
+				_manualResetEvent = null;
+			}
+		}
+	}
 }

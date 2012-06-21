@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_shiftProjectionCacheFilter = shiftProjectionCacheFilter;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public IShiftCategoryPeriodValueExtractorThread GetNewBestGroupValueExtractorThread(IList<IShiftProjectionCache> shiftProjectionList,DateOnly dateOnly,
 			IPerson person, ISchedulingOptions schedulingOptions, bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors,
 			IFairnessValueResult totalFairness, IFairnessValueResult agentFairness, IList<IPerson> persons, IEffectiveRestriction effectiveRestriction)
