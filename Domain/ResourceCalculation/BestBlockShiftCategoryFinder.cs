@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					persons = new List<IPerson> { person };
 				}
 				
-				var totalFairness = ScheduleDictionary.FairnessPoints();
+				
 
 				var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(persons, dateOnly, schedulingOptions, dictionary);
 				if (effectiveRestriction == null)
@@ -141,6 +141,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					shiftCategoryFairnessFactors = extractShiftCategoryFairnessFactor(person, dateOnly);
 				}
 
+				var totalFairness = ScheduleDictionary.FairnessPoints();
 				_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions, 
 					useShiftCategoryFairness, shiftCategoryFairnessFactors, totalFairness, agentFairness, persons, effectiveRestriction);
  

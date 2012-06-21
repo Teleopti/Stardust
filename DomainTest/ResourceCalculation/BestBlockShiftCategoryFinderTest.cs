@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTime startDateTime = new DateTime(2009, 2, 1, 11, 0, 0, 0, DateTimeKind.Utc);
             DateTimePeriod dateTimePeriod = new DateTimePeriod(startDateTime.AddDays(-1), startDateTime.AddDays(1));
 
-            Expect.Call(_stateHolder.Schedules).Return(scheduleDictionary).Repeat.Times(2);
+            Expect.Call(_stateHolder.Schedules).Return(scheduleDictionary).Repeat.Any();
             Expect.Call(scheduleDictionary.Period).Return(scheduleDateTimePeriod).Repeat.Times(1);
             Expect.Call(scheduleDateTimePeriod.VisiblePeriod).Return(dateTimePeriod).Repeat.Times(1);
 
