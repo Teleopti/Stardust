@@ -6,7 +6,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public interface IBestGroupValueExtractorThreadFactory
 	{
 		IShiftCategoryPeriodValueExtractorThread GetNewBestGroupValueExtractorThread(IList<IShiftProjectionCache> shiftProjectionList,DateOnly dateOnly, IPerson person,
-			ISchedulingOptions schedulingOptions, bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors);
+			ISchedulingOptions schedulingOptions, bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors,
+			IFairnessValueResult totalFairness, IFairnessValueResult agentFairness, IList<IPerson> persons, IEffectiveRestriction effectiveRestriction);
 	}
 
 	public class BestGroupValueExtractorThreadFactory : IBestGroupValueExtractorThreadFactory
@@ -15,24 +16,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IPersonSkillPeriodsDataHolderManager _personSkillPeriodsDataHolderManager;
 		private readonly IShiftProjectionCacheFilter _shiftProjectionCacheFilter;
-		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		
 
 		public BestGroupValueExtractorThreadFactory(IBlockSchedulingWorkShiftFinderService workShiftFinderService,
 														ISchedulingResultStateHolder schedulingResultStateHolder,
 														IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager,
-														IShiftProjectionCacheFilter shiftProjectionCacheFilter,
-														IEffectiveRestrictionCreator effectiveRestrictionCreator)
+														IShiftProjectionCacheFilter shiftProjectionCacheFilter)
 		{
 			_workShiftFinderService = workShiftFinderService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_personSkillPeriodsDataHolderManager = personSkillPeriodsDataHolderManager;
 			_shiftProjectionCacheFilter = shiftProjectionCacheFilter;
-			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
 		public IShiftCategoryPeriodValueExtractorThread GetNewBestGroupValueExtractorThread(IList<IShiftProjectionCache> shiftProjectionList,DateOnly dateOnly,
-														IPerson person, ISchedulingOptions schedulingOptions, bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors)
+			IPerson person, ISchedulingOptions schedulingOptions, bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors,
+			IFairnessValueResult totalFairness, IFairnessValueResult agentFairness, IList<IPerson> persons, IEffectiveRestriction effectiveRestriction)
 		{
 			return new ShiftCategoryPeriodValueExtractorThread(
 				shiftProjectionList,
@@ -43,9 +42,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				_schedulingResultStateHolder,
 				_personSkillPeriodsDataHolderManager,
 				_shiftProjectionCacheFilter,
-				_effectiveRestrictionCreator,
 				useShiftCategoryFairness,
-				shiftCategoryFairnessFactors); 
+				shiftCategoryFairnessFactors,
+				totalFairness,
+				agentFairness,
+				persons,effectiveRestriction); 
 			
 		}
 	}

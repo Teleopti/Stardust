@@ -79,12 +79,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             
             if (groupPerson == null)
                 return false;
+			var members = groupPerson.GroupMembers;
+			var agentAverageFairness = scheduleDictionary.AverageFairnessPoints(members);
 			var best = groupPerson.CommonPossibleStartEndCategory;
 			if(best == null)
 			{
 				IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
 
-				var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions);
+				var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions, agentAverageFairness);
 				best = bestCategoryResult.BestPossible;
 
 				if (best == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 					_finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ConflictingRestrictions);
 			}
 
-			var members = groupPerson.GroupMembers;
+
 			if (best == null)
             {
                 return false;

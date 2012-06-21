@@ -33,18 +33,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void ShouldCombineFromDictionaryAndCalculators()
         {
-            var range = _mocks.StrictMock<IScheduleRange>();
-            var dateOnly = new DateOnly(2011, 4, 19);
-            var fairness = new ShiftCategoryFairness();
-            var factors = _mocks.StrictMock<IShiftCategoryFairnessFactors>();
-            Expect.Call(_stateHolder.Schedules).Return(_dic);
-            Expect.Call(_dic[_person]).Return(range);
-            Expect.Call(range.CachedShiftCategoryFairness()).Return(fairness);
-            Expect.Call(_groupCreator.CalculateGroupShiftCategoryFairness(_person, dateOnly)).Return(fairness);
-            //Expect.Call(_fairnessCalc.ShiftCategoryFairnessFactors(range,_person,dateOnly ) ).Return(factors);
-            _mocks.ReplayAll();
-            _target.GetFactorsForPersonOnDate(_person, dateOnly);
-            _mocks.VerifyAll();
+			var range = _mocks.StrictMock<IScheduleRange>();
+			var dateOnly = new DateOnly(2011, 4, 19);
+			var fairness = new ShiftCategoryFairness();
+			var factors = _mocks.StrictMock<IShiftCategoryFairnessFactors>();
+			Expect.Call(_stateHolder.Schedules).Return(_dic);
+			Expect.Call(_dic[_person]).Return(range);
+			Expect.Call(range.CachedShiftCategoryFairness()).Return(fairness);
+			Expect.Call(_groupCreator.CalculateGroupShiftCategoryFairness(_person, dateOnly)).Return(fairness);
+			Expect.Call(_fairnessCalc.ShiftCategoryFairnessFactors(fairness, fairness)).Return(factors);
+			_mocks.ReplayAll();
+			_target.GetFactorsForPersonOnDate(_person, dateOnly);
+			_mocks.VerifyAll();
         }
     }
 

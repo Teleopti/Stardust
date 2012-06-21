@@ -136,6 +136,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             bool scheduled;
             if(result.ShiftCategory == null)
             {
+				var dictionary = _blockShiftCategoryFinder.ScheduleDictionary;
                 do
                 {
                     if (bestCategory != null)
@@ -147,9 +148,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                             schedulingOptions.NotAllowedShiftCategories.Add(category);
                         }
                     }
-					
-					bestCategory = _blockShiftCategoryFinder.BestShiftCategoryForDays(result, matrix.Person, schedulingOptions).BestPossible.ShiftCategory;
-                    if (bestCategory == null)
+
+                	var best =
+						_blockShiftCategoryFinder.BestShiftCategoryForDays(result, matrix.Person, schedulingOptions, dictionary[matrix.Person].FairnessPoints()).
+                			BestPossible;
+					if (best != null)
+						bestCategory = best.ShiftCategory;
+					else
+						bestCategory = null;
+
+					if (bestCategory == null)
                         return false;
 
                     schedulingOptions.ShiftCategory = bestCategory;
