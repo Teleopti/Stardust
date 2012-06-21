@@ -52,6 +52,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_schedulingOptions = new SchedulingOptions();
         }
 
+		[Test]
+		public void ShouldGetBeteewnDayOffFromFactory()
+		{
+			var factory = new BlockFinderFactory();
+			Assert.That(factory.CreateBetweenDayOffBlockFinder(_matrix0), Is.Not.Null);
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyExecute()
         {
