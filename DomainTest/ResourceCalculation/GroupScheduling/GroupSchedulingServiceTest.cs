@@ -311,6 +311,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_date2, _selectedPersons, true, _schedulingOptions)).Return(_groupPersons);
 			Expect.Call(_groupPerson.CommonPossibleStartEndCategory).Return(null).Repeat.AtLeastOnce();
     		Expect.Call(_groupPerson.GroupMembers).Return(_persons).Repeat.Twice();
+    		Expect.Call(_scheduleDictionary.AverageFairnessPoints(_persons)).Repeat.Any();
     		Expect.Call(
 				_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result1, _groupPerson, _schedulingOptions, null)).Return(result).IgnoreArguments();
     		Expect.Call(
