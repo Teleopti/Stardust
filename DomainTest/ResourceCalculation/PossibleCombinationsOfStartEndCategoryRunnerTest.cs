@@ -10,14 +10,19 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[TestFixture]
-	public class PossibleCombinationsOfStartEndCategoryRunnerTest
+	public class PossibleCombinationsOfStartEndCategoryRunnerTest :IDisposable
 	{
 		private MockRepository _mocks;
 		private List<IPossibleStartEndCategory> _options;
 		private PossibleCombinationsOfStartEndCategoryRunner _target;
 		private IBestGroupValueExtractorThreadFactory _bestGroupValueExtractorThreadFactory;
+		private ShiftCategoryPeriodValueExtractorThreadForTest _thread1;
+		private ShiftCategoryPeriodValueExtractorThreadForTest _thread2;
+		private ShiftCategoryPeriodValueExtractorThreadForTest _thread3;
+		private ShiftCategoryPeriodValueExtractorThreadForTest _thread4;
+		private ShiftCategoryPeriodValueExtractorThreadForTest _thread5;
 
-	    [SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -29,6 +34,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_options = new List<IPossibleStartEndCategory> {option1, option2, option3, option4, option5};
 			_bestGroupValueExtractorThreadFactory = _mocks.StrictMock<IBestGroupValueExtractorThreadFactory>();
 			_target = new PossibleCombinationsOfStartEndCategoryRunner(_bestGroupValueExtractorThreadFactory);
+	    	_thread1 = new ShiftCategoryPeriodValueExtractorThreadForTest();
+	    	_thread2 = new ShiftCategoryPeriodValueExtractorThreadForTest();
+			_thread3 = new ShiftCategoryPeriodValueExtractorThreadForTest();
+			_thread4 = new ShiftCategoryPeriodValueExtractorThreadForTest();
+			_thread5 = new ShiftCategoryPeriodValueExtractorThreadForTest();
+
 		}
 
 		[Test]
@@ -39,35 +50,36 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var schedulingOptions = new SchedulingOptions { UseGroupScheduling = true, UseGroupSchedulingCommonStart = true };
 			var persons = new List<IPerson>();
 			var effectiveRestriction = _mocks.DynamicMock<IEffectiveRestriction>();
+			
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 				                                                                          dateOnly, person,
 																						  schedulingOptions, false, null, null, null, persons, effectiveRestriction)).
-				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
+				Return(_thread1).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
 																						  schedulingOptions, false, null, null, null, persons, effectiveRestriction)).
-				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
+				Return(_thread2).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
 																						  schedulingOptions, false, null, null, null, persons, effectiveRestriction)).
-				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
+				Return(_thread3).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
 																						  schedulingOptions, false, null, null, null, persons, effectiveRestriction)).
-				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
+				Return(_thread4).
 				IgnoreArguments();
 			Expect.Call(_bestGroupValueExtractorThreadFactory.
 							GetNewBestGroupValueExtractorThread(new List<IShiftProjectionCache>(),
 																						  dateOnly, person,
 																						  schedulingOptions, false, null, null, null, persons, effectiveRestriction)).
-				Return(new ShiftCategoryPeriodValueExtractorThreadForTest()).
+				Return(_thread5).
 				IgnoreArguments();
 			_mocks.ReplayAll();
 			_target.RunTheList(_options, new List<IShiftProjectionCache>(), dateOnly, person, schedulingOptions, false, null, null, null, persons, effectiveRestriction);
@@ -77,6 +89,25 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 
 			_mocks.VerifyAll();
+			
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				_thread1.Dispose();
+				_thread2.Dispose();
+				_thread3.Dispose();
+				_thread4.Dispose();
+				_thread5.Dispose();
+			}
 		}
 	}
 
@@ -126,5 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_manualResetEvent = null;
 			}
 		}
+
+		
 	}
 }
