@@ -4,19 +4,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
 	public interface IEditRequestPage
 	{
-		Button AddTextRequestButton { get; }
+		Button AddRequestButton { get; }
 		Div RequestDetailSection { get; }
 		Span AbsenceRequestTab { get; }
 		TextField AbsenceTypesTextField { get; }
 		SelectList AbsenceTypesSelectList { get; }
 		CheckBox FulldayCheck { get; }
-		TextField TextRequestDetailSubjectInput { get; }
-		TextField TextRequestDetailFromDateTextField { get; }
-		TextField TextRequestDetailFromTimeTextField { get; }
-		TextField TextRequestDetailToDateTextField { get; }
-		TextField TextRequestDetailToTimeTextField { get; }
-		TextField TextRequestDetailMessageTextField { get; }
-		TextField TextRequestDetailEntityId { get; }
+		TextField RequestDetailSubjectInput { get; }
+		TextField RequestDetailFromDateTextField { get; }
+		TextField RequestDetailFromTimeTextField { get; }
+		TextField RequestDetailToDateTextField { get; }
+		TextField RequestDetailToTimeTextField { get; }
+		TextField RequestDetailMessageTextField { get; }
+		TextField RequestDetailEntityId { get; }
 		Div ValidationErrorText { get; }
 
 		Button OkButton { get; set; }

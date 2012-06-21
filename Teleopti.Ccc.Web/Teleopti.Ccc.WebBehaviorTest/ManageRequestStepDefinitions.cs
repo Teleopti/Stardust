@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click add request button in the toolbar")]
 		public void WhenIClickAddRequestButtonInTheToolbar()
 		{
-			Pages.Pages.CurrentEditRequestPage.AddTextRequestButton.EventualClick();
+			Pages.Pages.CurrentEditRequestPage.AddRequestButton.EventualClick();
 			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
 		}
 
@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
 			var date = DateTime.Today;
 			var time = date.AddHours(12);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
+			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
 			Pages.Pages.CurrentEditRequestPage.AbsenceTypesSelectList.Select(name);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.TextRequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+			Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
 		}
 
 		[Then(@"I should see the text request in the list")]
