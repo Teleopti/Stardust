@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var minmax = bag.MinMaxWorkTime(_workShiftWorkTime, dateOnly, effectiveRestriction);
                 	
 				var combinations = _possibleCombinationsOfStartEndCategoryCreator.FindCombinations(minmax, schedulingOptions);
-				// CONTINUE TO NEXT IF EMPTY
+				// CONTINUE TO NEXT IF EMPTY, WE SHOULD SKIP OUT MAYBE, THIS DAY CAN'T BE SCHEDULED 
 				if(combinations.IsEmpty())
 					continue;
 

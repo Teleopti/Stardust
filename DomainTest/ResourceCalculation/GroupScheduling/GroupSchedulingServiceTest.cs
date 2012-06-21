@@ -312,9 +312,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_groupPerson.CommonPossibleStartEndCategory).Return(null).Repeat.AtLeastOnce();
     		Expect.Call(_groupPerson.GroupMembers).Return(_persons).Repeat.Twice();
     		Expect.Call(
-				_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result1, _groupPerson, _schedulingOptions)).Return(result).IgnoreArguments();
+				_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result1, _groupPerson, _schedulingOptions, null)).Return(result).IgnoreArguments();
     		Expect.Call(
-    			_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result2, _groupPerson, _schedulingOptions)).Return(
+    			_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result2, _groupPerson, _schedulingOptions, null)).Return(
 					new BestShiftCategoryResult(new PossibleStartEndCategory{ShiftCategory = _shiftCategory}, FailureCause.NoFailure)).IgnoreArguments();
     		Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.Twice();
     	}

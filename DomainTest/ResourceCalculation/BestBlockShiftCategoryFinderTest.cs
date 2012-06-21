@@ -128,10 +128,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             	                                                                            _schedulingOptions)).Return(
             	                                                                            	new HashSet
             	                                                                            		<IPossibleStartEndCategory>{new PossibleStartEndCategory()}).IgnoreArguments().Repeat.AtLeastOnce();
-
+            	Expect.Call(_person.WorkflowControlSet).Return(null);
 				Expect.Call(() =>  _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
 																					 getCashes(), _dateOnly1, gPerson,
-																					 _schedulingOptions, false, null)).IgnoreArguments().Repeat.AtLeastOnce();
+																					 _schedulingOptions, false, null,null,null,persons, _effectiveRestriction)).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(new TimeSpan(8, 0, 0)).Repeat.Any();
 
                 Expect.Call(_stateHolder.Schedules).Return(scheduleDictionary).Repeat.Any();
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             using (_mocks.Playback())
             {
-				 _target.BestShiftCategoryForDays(result, _person, _options);
+				 _target.BestShiftCategoryForDays(result, _person, _options, null);
             }
         }
 
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				Expect.Call(() => _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
 																					 getCashes(), _dateOnly1, gPerson,
-																					 _schedulingOptions, false, null)).IgnoreArguments().Repeat.AtLeastOnce();
+																					 _schedulingOptions, false, null, null, null, persons, _effectiveRestriction)).IgnoreArguments().Repeat.AtLeastOnce();
 
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             using (_mocks.Playback())
             {
-                var ret = _target.BestShiftCategoryForDays(result, _person, _options);
+                var ret = _target.BestShiftCategoryForDays(result, _person, _options, null);
                 Assert.IsNull( ret.BestPossible);
             }
         }
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly1, _permissionInformation.DefaultTimeZone(), ruleSetBag, false)).Return(null);
 
 			_mocks.ReplayAll();
-			var ret = _target.BestShiftCategoryForDays(result, _person, _options);
+			var ret = _target.BestShiftCategoryForDays(result, _person, _options,null);
 			Assert.IsNull(ret.BestPossible);
 			_mocks.VerifyAll();
 		}
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(scheduleDay.IsScheduled()).Return(true);
 
 			_mocks.ReplayAll();
-			var ret = _target.BestShiftCategoryForDays(result, groupPerson, _options);
+			var ret = _target.BestShiftCategoryForDays(result, groupPerson, _options, null);
 			Assert.IsNull(ret.BestPossible);
 			Assert.That(ret.FailureCause, Is.EqualTo(FailureCause.AlreadyAssigned));
 			_mocks.VerifyAll();
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             using (_mocks.Playback())
             {
-                _target.BestShiftCategoryForDays(blockFinderResult, _person,  _options);
+                _target.BestShiftCategoryForDays(blockFinderResult, _person,  _options, null);
             }
         }
 

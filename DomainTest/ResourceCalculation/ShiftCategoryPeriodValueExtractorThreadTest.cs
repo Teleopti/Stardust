@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -104,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
 				_target = new ShiftCategoryPeriodValueExtractorThread( _shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
                 _groupPerson,  _schedulingResultStateHolder, _personSkillPeriodDataHolderManager, 
-                _shiftProjectionCacheFilter, _effectiveRestrictionCreator,false, fairness);
+                _shiftProjectionCacheFilter, false, fairness, null, null,new List<IPerson>(),_effectiveRestriction );
 
                 var result = _target.FilterShiftCategoryPeriodOnSchedulingOptions(agentTimeZone,
                                                                                _effectiveRestrictionCreator.
@@ -158,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
 				_target = new ShiftCategoryPeriodValueExtractorThread(_shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
                _groupPerson,  _schedulingResultStateHolder, _personSkillPeriodDataHolderManager,
-               _shiftProjectionCacheFilter, _effectiveRestrictionCreator, false, fairness);
+			   _shiftProjectionCacheFilter, false, fairness, null, null, new List<IPerson>(), _effectiveRestriction);
 
 				_target.ExtractShiftCategoryPeriodValue(_possibleStartEndCategory);
             }

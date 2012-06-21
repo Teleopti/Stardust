@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             	Expect.Call(_dictionary[_person]).Return(_range);
             	Expect.Call(_range.FairnessPoints()).Return(_fairness);
                 Expect.Call(
-                    _blockShiftCategoryFinder.BestShiftCategoryForDays(_result,_person,  _schedulingOptions)).Return(
+                    _blockShiftCategoryFinder.BestShiftCategoryForDays(_result,_person,  _schedulingOptions, null)).Return(
 					new BestShiftCategoryResult(poss, FailureCause.NoFailure)).Repeat.Any();
                     Expect.Call(scheduleDayPro.DaySchedulePart()).Return(schedulePart).Repeat.Any();
                     Expect.Call(_blockFinder.NextBlock()).Return(new BlockFinderResult(null, new List<DateOnly>(), _reportList)).Repeat.
@@ -126,8 +126,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var poss = new PossibleStartEndCategory { ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("xx") };
             using(_mocks.Record())
             {
+            	Expect.Call(_blockShiftCategoryFinder.ScheduleDictionary).Return(_dictionary);
+				Expect.Call(_dictionary[_person]).Return(_range);
+				Expect.Call(_range.FairnessPoints()).Return(_fairness);
                 Expect.Call(
-					_blockShiftCategoryFinder.BestShiftCategoryForDays(_result, _person, _schedulingOptions)).Return(
+					_blockShiftCategoryFinder.BestShiftCategoryForDays(_result, _person, _schedulingOptions, null)).Return(
 					new BestShiftCategoryResult(poss, FailureCause.NoFailure)).IgnoreArguments().Repeat.Once();
                 Expect.Call(_matrix0.Person).Return(_person).Repeat.Any();
                 Expect.Call(_matrix0.GetScheduleDayByKey(new DateOnly(2010, 1, 1))).Return(scheduleDayPro).Repeat.Any();
@@ -151,8 +154,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             using (_mocks.Record())
             {
+				Expect.Call(_blockShiftCategoryFinder.ScheduleDictionary).Return(_dictionary);
+				Expect.Call(_dictionary[_person]).Return(_range);
+				Expect.Call(_range.FairnessPoints()).Return(_fairness);
             	Expect.Call(
-            		_blockShiftCategoryFinder.BestShiftCategoryForDays(null, null, _schedulingOptions)).
+            		_blockShiftCategoryFinder.BestShiftCategoryForDays(null, null, _schedulingOptions, null)).
             		IgnoreArguments().Return(new BestShiftCategoryResult(new PossibleStartEndCategory(), FailureCause.AlreadyAssigned)).Repeat.Once();
                 Expect.Call(_matrix0.Person).Return(_person).Repeat.Any();
             }
@@ -170,11 +176,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var poss = new PossibleStartEndCategory { ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("xx") };
             using (_mocks.Record())
             {
+				Expect.Call(_blockShiftCategoryFinder.ScheduleDictionary).Return(_dictionary);
+				Expect.Call(_dictionary[_person]).Return(_range).Repeat.AtLeastOnce();
+				Expect.Call(_range.FairnessPoints()).Return(_fairness).Repeat.AtLeastOnce();
                 Expect.Call(
-                    _blockShiftCategoryFinder.BestShiftCategoryForDays(_result, _person, _schedulingOptions)).Return(
+                    _blockShiftCategoryFinder.BestShiftCategoryForDays(_result, _person, _schedulingOptions, null)).Return(
 					new BestShiftCategoryResult(poss, FailureCause.NoFailure)).IgnoreArguments().Repeat.Once();
                 Expect.Call(
-                    _blockShiftCategoryFinder.BestShiftCategoryForDays(_result, _person, _schedulingOptions)).Return(
+                    _blockShiftCategoryFinder.BestShiftCategoryForDays(_result, _person, _schedulingOptions, null)).Return(
 					new BestShiftCategoryResult(poss, FailureCause.NoFailure)).IgnoreArguments().Repeat.Once();
                 Expect.Call(_matrix0.Person).Return(_person).Repeat.Any();
                 Expect.Call(_matrix0.GetScheduleDayByKey(new DateOnly(2010, 1, 1))).Return(scheduleDayPro).Repeat.AtLeastOnce();
@@ -242,8 +251,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                     Once();
                 Expect.Call(_matrix0.GetScheduleDayByKey(new DateOnly(2010, 1, 1))).Return(scheduleDayPro).Repeat.Any();
 
+				Expect.Call(_blockShiftCategoryFinder.ScheduleDictionary).Return(_dictionary);
+				Expect.Call(_dictionary[_person]).Return(_range);
+				Expect.Call(_range.FairnessPoints()).Return(_fairness);
+
 				Expect.Call(
-					_blockShiftCategoryFinder.BestShiftCategoryForDays(_result, _person,  _schedulingOptions)).
+					_blockShiftCategoryFinder.BestShiftCategoryForDays(_result, _person,  _schedulingOptions, null)).
 					Return(new BestShiftCategoryResult(poss, FailureCause.NoFailure)).IgnoreArguments().Repeat.Any();
                 Expect.Call(scheduleDayPro.DaySchedulePart()).Return(schedulePart).Repeat.Any();
                 Expect.Call(_blockFinder.NextBlock()).Return(new BlockFinderResult(null, new List<DateOnly>(), _reportList)).Repeat.

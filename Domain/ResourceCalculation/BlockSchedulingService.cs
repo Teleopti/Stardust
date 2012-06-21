@@ -152,9 +152,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 	var best =
 						_blockShiftCategoryFinder.BestShiftCategoryForDays(result, matrix.Person, schedulingOptions, dictionary[matrix.Person].FairnessPoints()).
                 			BestPossible;
-					if(best != null)
+					if (best != null)
 						bestCategory = best.ShiftCategory;
-                    
+					else
+						bestCategory = null;
+
 					if (bestCategory == null)
                         return false;
 
