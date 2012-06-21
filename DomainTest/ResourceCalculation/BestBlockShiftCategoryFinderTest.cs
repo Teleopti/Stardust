@@ -128,7 +128,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             	                                                                            _schedulingOptions)).Return(
             	                                                                            	new HashSet
             	                                                                            		<IPossibleStartEndCategory>{new PossibleStartEndCategory()}).IgnoreArguments().Repeat.AtLeastOnce();
-            	Expect.Call(_person.WorkflowControlSet).Return(null);
+            	Expect.Call(_person.WorkflowControlSet).Return(null).Repeat.Any();
+            	Expect.Call(scheduleDictionary.FairnessPoints()).Return(null).Repeat.Any();
 				Expect.Call(() =>  _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
 																					 getCashes(), _dateOnly1, gPerson,
 																					 _schedulingOptions, false, null,null,null,persons, _effectiveRestriction)).IgnoreArguments().Repeat.AtLeastOnce();
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IScheduleDateTimePeriod scheduleDateTimePeriod = _mocks.StrictMock<IScheduleDateTimePeriod>();
             DateTime startDateTime = new DateTime(2009, 2, 1, 11, 0, 0, 0, DateTimeKind.Utc);
             DateTimePeriod dateTimePeriod = new DateTimePeriod(startDateTime.AddDays(-1), startDateTime.AddDays(1));
-			var gPerson = _mocks.DynamicMock<IGroupPerson>();
+			
         	var cashes = getCashes();
             IBlockFinderResult result = new BlockFinderResult(null, _dates,
                                                               new Dictionary<string, IWorkShiftFinderResult>());
@@ -186,11 +187,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																							_schedulingOptions)).Return(
 																								new HashSet
 																									<IPossibleStartEndCategory>()).IgnoreArguments().Repeat.AtLeastOnce();
-
-				Expect.Call(() => _possibleCombinationsOfStartEndCategoryRunner.RunTheList(new List<IPossibleStartEndCategory>(),
-																					 getCashes(), _dateOnly1, gPerson,
-																					 _schedulingOptions, false, null, null, null, persons, _effectiveRestriction)).IgnoreArguments().Repeat.AtLeastOnce();
-
+				Expect.Call(_person.WorkflowControlSet).Return(null).Repeat.Any();
+				Expect.Call(scheduleDictionary.FairnessPoints()).Return(null).Repeat.Any();
+				
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 
@@ -215,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTime startDateTime = new DateTime(2009, 2, 1, 11, 0, 0, 0, DateTimeKind.Utc);
             DateTimePeriod dateTimePeriod = new DateTimePeriod(startDateTime.AddDays(-1), startDateTime.AddDays(1));
 
-            Expect.Call(_stateHolder.Schedules).Return(scheduleDictionary).Repeat.Times(2);
+            Expect.Call(_stateHolder.Schedules).Return(scheduleDictionary).Repeat.Any();
             Expect.Call(scheduleDictionary.Period).Return(scheduleDateTimePeriod).Repeat.Times(1);
             Expect.Call(scheduleDateTimePeriod.VisiblePeriod).Return(dateTimePeriod).Repeat.Times(1);
 
