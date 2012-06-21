@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         // This method will be called when the thread is started.
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		[MTAThread]
 		public void ExtractShiftCategoryPeriodValue(object possibleStartEndCategory)
         {
 			var possible = possibleStartEndCategory as PossibleStartEndCategory;
