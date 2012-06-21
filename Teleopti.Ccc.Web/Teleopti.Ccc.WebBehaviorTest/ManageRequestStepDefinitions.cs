@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input absence request values with (.*)")]
 		public void WhenIInputAbsenceRequestValuesWithVacation(string name)
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+			Pages.Pages.CurrentEditRequestPage.AbsenceTypesElement.WaitUntilDisplayed();
 			var date = DateTime.Today;
 			var time = date.AddHours(12);
 			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";

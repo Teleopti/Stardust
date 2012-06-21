@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		Button AddRequestButton { get; }
 		Div RequestDetailSection { get; }
 		Span AbsenceRequestTab { get; }
+		Div AbsenceTypesElement { get; }
 		TextField AbsenceTypesTextField { get; }
 		SelectList AbsenceTypesSelectList { get; }
 		CheckBox FulldayCheck { get; }

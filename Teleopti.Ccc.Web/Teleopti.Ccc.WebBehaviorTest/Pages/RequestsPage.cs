@@ -39,6 +39,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Absence-request-tab")]
 		public Span AbsenceRequestTab { get; set; }
 
+		[FindBy(Id = "Absence-type-element")]
+		public Div AbsenceTypesElement { get; set; }
+
 		[FindBy(Id = "Absence-type-input")]
 		public TextField AbsenceTypesTextField { get; set; }
 
