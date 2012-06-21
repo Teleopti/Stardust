@@ -55,6 +55,7 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 			.combobox()
 			;
 		$("#Request-detail-section .combobox.absence-input").combobox();
+		$("#Absence-type-input").attr('readonly', 'true');
 		
 		$('#Request-detail-ok-button')
 			.click(function () {
