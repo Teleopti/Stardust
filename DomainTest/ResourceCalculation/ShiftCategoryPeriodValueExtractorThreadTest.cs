@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses"), TestFixture]
-    class ShiftCategoryPeriodValueExtractorThreadTest
+    class ShiftCategoryPeriodValueExtractorThreadTest : IDisposable
     {
         private MockRepository _mocks;
         private ISchedulingOptions _schedulingOptions;
@@ -163,7 +163,21 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         
 
         }
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if (_target != null)
+					_target.Dispose();
+				_target = null;
+			}
+		}
      
     }
 }

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         }
 
 		[Test]
-		public void ShouldGetBeteewnDayOffFromFactory()
+		public void ShouldGetBetweenDayOffFromFactory()
 		{
 			var factory = new BlockFinderFactory();
 			Assert.That(factory.CreateBetweenDayOffBlockFinder(_matrix0), Is.Not.Null);
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReturnFalseIfNotScheduled()
 		{
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();

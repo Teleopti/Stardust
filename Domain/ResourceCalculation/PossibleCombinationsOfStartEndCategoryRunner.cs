@@ -41,7 +41,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				ThreadPool.QueueUserWorkItem(d.ExtractShiftCategoryPeriodValue, possibleStartEndCategories[i]);
 
 			}
-			WaitHandle.WaitAll(doneEvents);
+
+			//WaitHandle.WaitAll(doneEvents);
+			// complains about STA Thread on above
+			foreach (var manualResetEvent in doneEvents)
+			{
+				manualResetEvent.WaitOne();
+			}
+			
 		}
 
 	}

@@ -81,9 +81,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	}
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
-    public class ShiftCategoryPeriodValueExtractorThreadForTest : IShiftCategoryPeriodValueExtractorThread
+    public class ShiftCategoryPeriodValueExtractorThreadForTest : IShiftCategoryPeriodValueExtractorThread ,IDisposable
 	{
-		private readonly ManualResetEvent _manualResetEvent;
+		private ManualResetEvent _manualResetEvent;
 
 		public ShiftCategoryPeriodValueExtractorThreadForTest()
 		{
@@ -103,12 +103,28 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			possible.ShiftValue = 100;
 			_manualResetEvent.Set();
 
-			Console.WriteLine("Resetting it manual");
+			//Console.WriteLine("Resetting it manual");
 		}
 
 		public ManualResetEvent ManualResetEvent
 		{
 			get { return _manualResetEvent; }
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if (_manualResetEvent != null)
+					_manualResetEvent.Close();
+				_manualResetEvent = null;
+			}
 		}
 	}
 }
