@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static TimeSpan Timeout { get; private set; }
 		public static TimeSpan Poll { get; private set; }
 
-		static EventualTimeouts() { Set(TimeSpan.FromSeconds(15)); }
+		static EventualTimeouts() { Set(TimeSpan.FromSeconds(30)); }
 
 		public static void Set(TimeSpan timeout)
 		{
