@@ -55,13 +55,14 @@ namespace Teleopti.Ccc.Domain.Optimization
                     schedulingOptions.GroupPageForShiftCategoryFairness = groupPage;
             }
 
-            if (_resourceCalculateFrequency < 1 || _resourceCalculateFrequency > 10)
-                _resourceCalculateFrequency = 1;
             schedulingOptions.ResourceCalculateFrequency = _resourceCalculateFrequency;
+            if (_resourceCalculateFrequency < 1 || _resourceCalculateFrequency > 10)
+                schedulingOptions.ResourceCalculateFrequency = 1;
 
-            if (_screenRefreshRate < 1 || _screenRefreshRate > 999)
-                _screenRefreshRate = 10;
             schedulingOptions.RefreshRate = _screenRefreshRate;
+            if (_screenRefreshRate < 1 || _screenRefreshRate > 999)
+                schedulingOptions.RefreshRate = 10;
+            
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
