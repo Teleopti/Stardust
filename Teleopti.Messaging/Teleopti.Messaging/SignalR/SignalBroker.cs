@@ -5,13 +5,12 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
-using SignalR.Client._20.Hubs;
+using SignalR.Client.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.Events;
-using SignalR.Client._20.Transports;
 using Teleopti.Messaging.Exceptions;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
@@ -150,8 +149,7 @@ namespace Teleopti.Messaging.SignalR
 				BusinessUnitId = Subscription.IdToString(businessUnitId),
 			};
 
-			EventSignal<object> result = _wrapper.AddSubscription(subscription);
-			result.Finished += (sender, e) =>
+			_wrapper.AddSubscription(subscription).Then(_ =>
 			{
 				var route = subscription.Route();
 
@@ -162,7 +160,7 @@ namespace Teleopti.Messaging.SignalR
 					_subscriptionHandlers.Add(route, handlers);
 				}
 				handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription });
-			};
+			});
 		}
 
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
