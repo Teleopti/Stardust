@@ -153,7 +153,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="Wintellect.Threading">
-      <HintPath>..\..\packages\PowerThreading.20120420.0\lib\net20\Wintellect.Threading.dll</HintPath>
+      <HintPath>..\..\packages\PowerThreading.20101026.0\lib\net20\Wintellect.Threading.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
