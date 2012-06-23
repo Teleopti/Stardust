@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 		private void checkGroupCollection(DateOnly dateOnly, IEnumerable<IPersonGroup> groups, List<IGroupPerson> retLis, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions)
 		{
-			schedulingOptions.UseGroupSchedulingCommonStart = true;
             if (groups.IsEmpty())
 		    return;
 		    var dic = _resultStateHolder.Schedules;
