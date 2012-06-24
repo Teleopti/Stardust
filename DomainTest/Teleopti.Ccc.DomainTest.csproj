@@ -650,7 +650,6 @@
     <Compile Include="Scheduling\Tracking\TrackerCalculatorTest.cs" />
     <Compile Include="Scheduling\Tracking\TrackerTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingTest.cs" />
-    <Compile Include="ResourceCalculation\MinMaxContractDataTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleProjectionExtractorTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillDictionaryTestClass.cs" />
     <Compile Include="Scheduling\AbsenceSorterTest.cs" />

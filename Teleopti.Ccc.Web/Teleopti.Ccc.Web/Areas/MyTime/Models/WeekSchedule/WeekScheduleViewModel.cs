@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 	public class AbsenceTypeViewModel
 	{
 		public string Name { get; set; }
-		public Guid Id { get; set; }
+		public Guid? Id { get; set; }
 	}
 
 	[Flags]

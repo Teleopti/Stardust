@@ -165,7 +165,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			;
 		$("#Schedule-addRequest-section .combobox.time-input").combobox();
 		$("#Schedule-addRequest-section .combobox.absence-input").combobox();
-		;
+		
 		$("#Absence-type-input").attr('readonly', 'true');
 
 		requestViewModel = new Teleopti.MyTimeWeb.Schedule.RequestViewModel();

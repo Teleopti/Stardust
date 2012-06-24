@@ -8,7 +8,7 @@ using WatiN.Core.Constraints;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class RequestsPage : PortalPage, IEditTextRequestPage, IOkButton, ICancelButton
+	public class RequestsPage : PortalPage, IEditRequestPage, IOkButton, ICancelButton
 	{
 		[FindBy(Id = "Requests-list")]
 		public List RequestsList { get; set; }
@@ -31,47 +31,38 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		}
 
 		[FindBy(Id = "Requests-addTextRequest-button")]
-		public Button AddTextRequestButton { get; set; }
+		public Button AddRequestButton { get; set; }
 
 		[FindBy(Id = "Request-detail-section")]
 		public Div RequestDetailSection { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public Span AbsenceRequestTab
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[FindBy(Id = "Absence-request-tab")]
+		public Span AbsenceRequestTab { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public TextField AbsenceTypesTextField
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[FindBy(Id = "Absence-type-element")]
+		public Div AbsenceTypesElement { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public SelectList AbsenceTypesSelectList
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[FindBy(Id = "Absence-type-input")]
+		public TextField AbsenceTypesTextField { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public CheckBox FulldayCheck
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[FindBy(Id = "Absence-type")]
+		public SelectList AbsenceTypesSelectList { get; set; }
+
+		[FindBy(Id = "Fullday-check")]
+		public CheckBox FulldayCheck { get; set; }
 
 		[FindBy(Id = "Request-detail-subject-input")]
-		public TextField TextRequestDetailSubjectInput { get; set; }
+		public TextField RequestDetailSubjectInput { get; set; }
 		[FindBy(Id = "Request-detail-fromDate-input")]
-		public TextField TextRequestDetailFromDateTextField { get; set; }
+		public TextField RequestDetailFromDateTextField { get; set; }
 		[FindBy(Id = "Request-detail-fromTime-input-input")]
-		public TextField TextRequestDetailFromTimeTextField { get; set; }
+		public TextField RequestDetailFromTimeTextField { get; set; }
 		[FindBy(Id = "Request-detail-toDate-input")]
-		public TextField TextRequestDetailToDateTextField { get; set; }
+		public TextField RequestDetailToDateTextField { get; set; }
 		[FindBy(Id = "Request-detail-toTime-input-input")]
-		public TextField TextRequestDetailToTimeTextField { get; set; }
+		public TextField RequestDetailToTimeTextField { get; set; }
 		[FindBy(Id = "Request-detail-message-input")]
-		public TextField TextRequestDetailMessageTextField { get; set; }
+		public TextField RequestDetailMessageTextField { get; set; }
 		[FindBy(Id = "Request-detail-error")]
 		public Div ValidationErrorText { get; set; }
 
@@ -81,6 +72,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Element CancelButton { get; set; }
 
 		[FindBy(Id = "Request-detail-entityid")]
-		public TextField TextRequestDetailEntityId { get; set; }
+		public TextField RequestDetailEntityId { get; set; }
 	}
 }

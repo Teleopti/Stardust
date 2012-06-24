@@ -160,10 +160,10 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Default absence request values from week schedule When checked Fullday")]
+        [NUnit.Framework.DescriptionAttribute("Default absence request values from week schedule when checked Fullday")]
         public virtual void DefaultAbsenceRequestValuesFromWeekScheduleWhenCheckedFullday()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default absence request values from week schedule When checked Fullday", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default absence request values from week schedule when checked Fullday", ((string[])(null)));
 #line 39
 this.ScenarioSetup(scenarioInfo);
 #line 40

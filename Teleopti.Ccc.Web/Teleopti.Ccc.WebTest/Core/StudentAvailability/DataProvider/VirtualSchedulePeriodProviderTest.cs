@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
 
 			var target = new VirtualSchedulePeriodProvider(personProvider, null);
 
-			var result = target.HasSchedulePeriod();
+			var result = target.MissingSchedulePeriod();
 
-			result.Should().Be.True();
+			result.Should().Be.False();
 		}
 
 		[Test]
@@ -76,7 +76,39 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
 
 			var target = new VirtualSchedulePeriodProvider(personProvider, null);
 
-			var result = target.HasSchedulePeriod();
+			var result = target.MissingSchedulePeriod();
+
+			result.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldDetermineThatPersonHasNoPeriodPeriods()
+		{
+			var personProvider = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+
+			personProvider.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.PersonPeriodCollection).Return(new List<IPersonPeriod>());
+
+			var target = new VirtualSchedulePeriodProvider(personProvider, null);
+
+			var result = target.MissingPersonPeriod();
+
+			result.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldDetermineThatPersonHasPeriodPeriods()
+		{
+			var personProvider = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+
+			personProvider.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.PersonPeriodCollection).Return(new List<IPersonPeriod>(new[] { MockRepository.GenerateMock<IPersonPeriod>() }));
+
+			var target = new VirtualSchedulePeriodProvider(personProvider, null);
+
+			var result = target.MissingPersonPeriod();
 
 			result.Should().Be.False();
 		}

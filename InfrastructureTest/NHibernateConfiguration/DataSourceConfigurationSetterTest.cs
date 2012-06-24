@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("ETL tool");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Analytics.ETL.nhib");
 		}
 
 		[Test]
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("Application Config");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.ApplicationConfiguration");
 		}
 
 		[Test]
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("SDK");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Ccc.Sdk.Host");
 		}
 
 		[Test]
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.True();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("Service bus");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Ccc.Sdk.ServiceBus.Host");
 		}
 
 		[Test]
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.True();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure");
-			target.ApplicationName.Should().Be.EqualTo("Web mytime");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Ccc.Web");
 		}
 
 		[Test]
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("Desktop");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Ccc.SmartClientPortal.Shell");
 		}
 
 

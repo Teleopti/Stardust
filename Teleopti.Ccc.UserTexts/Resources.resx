@@ -9886,10 +9886,13 @@ Period</comment>
     <value>Personal Activity</value>
     <comment>Personal Activity</comment>
   </data>
-  <data name="NoSchedulePeriodFoundForUser" xml:space="preserve">
+	<data name="NoSchedulePeriodFoundForUser" xml:space="preserve">
     <value>No schedule period found for this user</value>
   </data>
-  <data name="AlsoShowsMeetingsCreatedByMe" xml:space="preserve">
+	<data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+    <value>No person period found for this user</value>
+  </data>
+	<data name="AlsoShowsMeetingsCreatedByMe" xml:space="preserve">
     <value>Also show meetings created by me but where I not participate in the meeting.</value>
     <comment>Also show meetings created by me but where I not participate in the meeting.</comment>
   </data>

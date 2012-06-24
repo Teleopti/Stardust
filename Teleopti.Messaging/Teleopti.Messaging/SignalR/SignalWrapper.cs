@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using Newtonsoft.Json.Linq;
-using SignalR.Client._20.Hubs;
-using SignalR.Client._20.Transports;
+using SignalR.Client.Hubs;
+using SignalR.Client.Net20.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
@@ -27,7 +27,7 @@ namespace Teleopti.Messaging.SignalR
 			_hubConnection = hubConnection;
 		}
 
-		public EventSignal<object> NotifyClients(Notification notification)
+		public Task<object> NotifyClients(Notification notification)
 		{
 			verifyStillConnected();
 			return _hubProxy.Invoke("NotifyClients", notification);
@@ -58,7 +58,24 @@ namespace Teleopti.Messaging.SignalR
 		{
 			try
 			{
-				_hubConnection.Start();
+				var resetEvent = new ManualResetEvent(false);
+				Exception startException = null;
+				_hubConnection.Start().ContinueWith(t =>
+				{
+					if (t.IsFaulted)
+					{
+						startException = t.Exception;
+					}
+					resetEvent.Set();
+				});
+				if (resetEvent.WaitOne()==false)
+				{
+					throw new InvalidOperationException("Time out occurred upon startup of Message Broker.");
+				}
+				if (startException!=null)
+				{
+					throw startException;
+				}
 			}
 			catch (InvalidOperationException exception)
 			{
@@ -76,13 +93,13 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public EventSignal<object> AddSubscription(Subscription subscription)
+		public Task<object> AddSubscription(Subscription subscription)
 		{
 			verifyStillConnected();
 			return _hubProxy.Invoke("AddSubscription", subscription);
 		}
 
-		public EventSignal<object> RemoveSubscription(string route)
+		public Task<object> RemoveSubscription(string route)
 		{
 			verifyStillConnected();
 			return _hubProxy.Invoke("RemoveSubscription", route);
@@ -94,8 +111,7 @@ namespace Teleopti.Messaging.SignalR
 			if (_hubConnection != null && _hubConnection.IsActive)
 			{
 				var reset = new ManualResetEvent(false);
-				var signal = _hubProxy.Invoke("NotifyClients", new Notification());
-				signal.Finished += (sender, e) =>
+				_hubProxy.Invoke("NotifyClients", new Notification()).ContinueWith(t =>
 				                   	{
 				                   		var proxy = (HubProxy)_hubProxy;
 				                   		var subscriptionList = new List<string>(proxy.GetSubscriptions());
@@ -106,7 +122,7 @@ namespace Teleopti.Messaging.SignalR
 				                   		}
 				                   		_hubConnection.Stop();
 				                   		reset.Set();
-				                   	};
+				                   	});
 				try
 				{
 					reset.WaitOne(20 * 1000);

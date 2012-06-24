@@ -13,7 +13,7 @@ using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class WeekSchedulePage : PortalPage, IOkButton, ICancelButton, IEditTextRequestPage, IDateRangeSelector
+	public class WeekSchedulePage : PortalPage, IOkButton, ICancelButton, IEditRequestPage, IDateRangeSelector
 	{
 		private Constraint DayConstraint = Find.By("data-mytime-date", v => v != null);
 		private ListCollection DayLists { get { return Document.Lists.Filter(DayConstraint); } }
@@ -55,13 +55,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		}
 
 		[FindBy(Id = "Schedule-addRequest-button")]
-		public Button AddTextRequestButton { get; set; }
+		public Button AddRequestButton { get; set; }
 
 		[FindBy(Id = "Schedule-addRequest-section")]
 		public Div RequestDetailSection { get; set; }
 
 		[FindBy(Id = "Absence-request-tab")]
 		public Span AbsenceRequestTab { get; set; }
+
+		[FindBy(Id = "Absence-type-element")]
+		public Div AbsenceTypesElement { get; set; }
 
 		[FindBy(Id = "Absence-type-input")]
 		public TextField AbsenceTypesTextField { get; set; }
@@ -71,17 +74,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public CheckBox FulldayCheck { get; set; }
 
 		[FindBy(Id = "Schedule-addRequest-subject-input")]
-		public TextField TextRequestDetailSubjectInput { get; set; }
+		public TextField RequestDetailSubjectInput { get; set; }
 		[FindBy(Id = "Schedule-addRequest-fromDate-input")]
-		public TextField TextRequestDetailFromDateTextField { get; set; }
+		public TextField RequestDetailFromDateTextField { get; set; }
 		[FindBy(Id = "Schedule-addRequest-fromTime-input-input")]
-		public TextField TextRequestDetailFromTimeTextField { get; set; }
+		public TextField RequestDetailFromTimeTextField { get; set; }
 		[FindBy(Id = "Schedule-addRequest-toDate-input")]
-		public TextField TextRequestDetailToDateTextField { get; set; }
+		public TextField RequestDetailToDateTextField { get; set; }
 		[FindBy(Id = "Schedule-addRequest-toTime-input-input")]
-		public TextField TextRequestDetailToTimeTextField { get; set; }
+		public TextField RequestDetailToTimeTextField { get; set; }
 		[FindBy(Id = "Schedule-addRequest-message-input")]
-		public TextField TextRequestDetailMessageTextField { get; set; }
+		public TextField RequestDetailMessageTextField { get; set; }
 		[FindBy(Id = "Schedule-addRequest-error")]
 		public Div ValidationErrorText { get; set; }
 
@@ -93,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		}
 
 		//not yet used
-		public TextField TextRequestDetailEntityId { get; private set; }
+		public TextField RequestDetailEntityId { get; private set; }
 
 
 		[FindBy(Id = "WeekScheduleDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }

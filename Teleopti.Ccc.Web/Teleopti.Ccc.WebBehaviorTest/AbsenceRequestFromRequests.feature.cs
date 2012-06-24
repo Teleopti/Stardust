@@ -131,7 +131,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 28
  testRunner.Then("I should see the absence request form with today\'s date as default");
 #line 29
- testRunner.And("I should see 8:00 - 17:00 as the default times");
+ testRunner.And("I should see 00:00 - 23:59 as the default times");
 #line 30
  testRunner.And("I should see an absence type called Vacation in droplist");
 #line hidden
@@ -139,10 +139,10 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Default absence request values from request view When checked Fullday")]
+        [NUnit.Framework.DescriptionAttribute("Default absence request values from request view when checked Fullday")]
         public virtual void DefaultAbsenceRequestValuesFromRequestViewWhenCheckedFullday()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default absence request values from request view When checked Fullday", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default absence request values from request view when checked Fullday", ((string[])(null)));
 #line 32
 this.ScenarioSetup(scenarioInfo);
 #line 33
@@ -154,9 +154,9 @@ this.ScenarioSetup(scenarioInfo);
 #line 36
  testRunner.And("I click absence request tab");
 #line 37
- testRunner.And("I click full day checkbox");
+ testRunner.And("I checked the full day checkbox");
 #line 38
- testRunner.Then("I should see the request form with tomorrow as default date");
+ testRunner.Then("I should see the absence request form with today\'s date as default");
 #line 39
  testRunner.And("I should see 00:00 - 23:59 as the default times");
 #line hidden
@@ -164,28 +164,26 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Cancel adding absence request from request view")]
-        public virtual void CancelAddingAbsenceRequestFromRequestView()
+        [NUnit.Framework.DescriptionAttribute("Default absence request values from request view when unchecked Fullday")]
+        public virtual void DefaultAbsenceRequestValuesFromRequestViewWhenUncheckedFullday()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cancel adding absence request from request view", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default absence request values from request view when unchecked Fullday", ((string[])(null)));
 #line 41
 this.ScenarioSetup(scenarioInfo);
 #line 42
  testRunner.Given("I am an agent");
 #line 43
- testRunner.And("I have a requestable absence called Vacation");
-#line 44
  testRunner.And("I am viewing requests");
-#line 45
+#line 44
  testRunner.When("I click add request button in the toolbar");
-#line 46
+#line 45
  testRunner.And("I click absence request tab");
+#line 46
+ testRunner.And("I unchecked the full day checkbox");
 #line 47
- testRunner.And("I input absence request values with Vacation");
+ testRunner.Then("I should see the absence request form with today\'s date as default");
 #line 48
- testRunner.And("I click the Cancel button");
-#line 49
- testRunner.Then("I should not see the absence request in the list");
+ testRunner.And("I should see 08:00 - 17:00 as the default times");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -195,14 +193,16 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void AddingInvalidAbsenceRequestValues()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding invalid absence request values", ((string[])(null)));
-#line 51
+#line 50
 this.ScenarioSetup(scenarioInfo);
-#line 52
+#line 51
  testRunner.Given("I am an agent");
-#line 53
+#line 52
  testRunner.And("I am viewing requests");
-#line 54
+#line 53
  testRunner.When("I click add request button in the toolbar");
+#line 54
+ testRunner.And("I click absence request tab");
 #line 55
  testRunner.And("I input empty subject");
 #line 56
@@ -231,12 +231,14 @@ this.ScenarioSetup(scenarioInfo);
 #line 64
  testRunner.When("I click add request button in the toolbar");
 #line 65
- testRunner.And("I input too long message request values");
+ testRunner.And("I click absence request tab");
 #line 66
- testRunner.And("I click the OK button");
+ testRunner.And("I input too long message request values");
 #line 67
- testRunner.Then("I should see texts describing too long text error");
+ testRunner.And("I click the OK button");
 #line 68
+ testRunner.Then("I should see texts describing too long text error");
+#line 69
  testRunner.And("I should not see the absence request in the list");
 #line hidden
             this.ScenarioCleanup();
@@ -247,21 +249,23 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void AddingTooLongSubjectOnAbsenceRequest()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding too long subject on absence request", ((string[])(null)));
-#line 70
-this.ScenarioSetup(scenarioInfo);
 #line 71
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 72
- testRunner.And("I am viewing requests");
+ testRunner.Given("I am an agent");
 #line 73
- testRunner.When("I click add request button in the toolbar");
+ testRunner.And("I am viewing requests");
 #line 74
- testRunner.And("I input too long subject request values");
+ testRunner.When("I click add request button in the toolbar");
 #line 75
- testRunner.And("I click the OK button");
+ testRunner.And("I click absence request tab");
 #line 76
- testRunner.Then("I should see texts describing too long subject error");
+ testRunner.And("I input too long subject request values");
 #line 77
+ testRunner.And("I click the OK button");
+#line 78
+ testRunner.Then("I should see texts describing too long subject error");
+#line 79
  testRunner.And("I should not see the absence request in the list");
 #line hidden
             this.ScenarioCleanup();
@@ -272,19 +276,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ViewAbsenceTypes()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View absence types", ((string[])(null)));
-#line 79
-this.ScenarioSetup(scenarioInfo);
-#line 80
- testRunner.Given("I am an agent");
 #line 81
- testRunner.And("I have a requestable absence called Vacation");
+this.ScenarioSetup(scenarioInfo);
 #line 82
- testRunner.And("I am viewing requests");
+ testRunner.Given("I am an agent");
 #line 83
- testRunner.When("I click add request button in the toolbar");
+ testRunner.And("I have a requestable absence called Vacation");
 #line 84
- testRunner.And("I click absence request tab");
+ testRunner.And("I am viewing requests");
 #line 85
+ testRunner.When("I click add request button in the toolbar");
+#line 86
+ testRunner.And("I click absence request tab");
+#line 87
  testRunner.Then("I should see an absence type called Vacation in droplist");
 #line hidden
             this.ScenarioCleanup();
