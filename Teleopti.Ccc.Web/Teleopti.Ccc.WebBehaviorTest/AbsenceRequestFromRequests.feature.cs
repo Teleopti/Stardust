@@ -293,6 +293,209 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Hide text request tab when view an absence request")]
+        public virtual void HideTextRequestTabWhenViewAnAbsenceRequest()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Hide text request tab when view an absence request", ((string[])(null)));
+#line 92
+this.ScenarioSetup(scenarioInfo);
+#line 93
+ testRunner.Given("I am an agent");
+#line 94
+ testRunner.And("I have an existing absence request");
+#line 95
+ testRunner.And("I am viewing requests");
+#line 96
+ testRunner.When("I click on the request");
+#line 97
+ testRunner.Then("I should not see the text request tab");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("View absence request details")]
+        public virtual void ViewAbsenceRequestDetails()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View absence request details", ((string[])(null)));
+#line 99
+this.ScenarioSetup(scenarioInfo);
+#line 100
+ testRunner.Given("I am an agent");
+#line 101
+ testRunner.And("I have an existing absence request");
+#line 102
+ testRunner.And("I am viewing requests");
+#line 103
+ testRunner.When("I click on the request");
+#line 104
+ testRunner.Then("I should see the absence request\'s details form");
+#line 105
+ testRunner.And("I should see the absence request\'s values");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Edit absence request")]
+        public virtual void EditAbsenceRequest()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Edit absence request", ((string[])(null)));
+#line 107
+this.ScenarioSetup(scenarioInfo);
+#line 108
+ testRunner.Given("I am an agent");
+#line 109
+ testRunner.And("I have an existing absence request");
+#line 110
+ testRunner.And("I am viewing requests");
+#line 111
+ testRunner.When("I click on the request");
+#line 112
+ testRunner.And("I input new absence request values");
+#line 113
+ testRunner.And("I click the OK button");
+#line 114
+ testRunner.Then("I should see the new absence request values in the list");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Delete absence request")]
+        public virtual void DeleteAbsenceRequest()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Delete absence request", ((string[])(null)));
+#line 116
+this.ScenarioSetup(scenarioInfo);
+#line 117
+ testRunner.Given("I am an agent");
+#line 118
+ testRunner.And("I have an existing absence request");
+#line 119
+ testRunner.And("I am viewing requests");
+#line 120
+ testRunner.When("I click the request\'s delete button");
+#line 121
+ testRunner.Then("I should not see the absence request in the list");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Can not edit approved absence requests")]
+        public virtual void CanNotEditApprovedAbsenceRequests()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not edit approved absence requests", ((string[])(null)));
+#line 123
+this.ScenarioSetup(scenarioInfo);
+#line 124
+ testRunner.Given("I am an agent");
+#line 125
+ testRunner.And("I have an approved absence request");
+#line 126
+ testRunner.And("I am viewing requests");
+#line 127
+ testRunner.When("I click on the request");
+#line 128
+ testRunner.Then("I should see the absence request\'s details form");
+#line 129
+ testRunner.And("I should not be able to input values");
+#line 130
+ testRunner.And("I should not see a save button");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Can not edit denied absence requests")]
+        public virtual void CanNotEditDeniedAbsenceRequests()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not edit denied absence requests", ((string[])(null)));
+#line 132
+this.ScenarioSetup(scenarioInfo);
+#line 133
+ testRunner.Given("I am an agent");
+#line 134
+ testRunner.And("I have a denied absence request");
+#line 135
+ testRunner.And("I am viewing requests");
+#line 136
+ testRunner.When("I click on the request");
+#line 137
+ testRunner.Then("I should see the absence request\'s details form");
+#line 138
+ testRunner.And("I should not be able to input values");
+#line 139
+ testRunner.And("I should not see a save button");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Can not delete approved absence request")]
+        public virtual void CanNotDeleteApprovedAbsenceRequest()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not delete approved absence request", ((string[])(null)));
+#line 141
+this.ScenarioSetup(scenarioInfo);
+#line 142
+ testRunner.Given("I am an agent");
+#line 143
+ testRunner.And("I have an approved absence request");
+#line 144
+ testRunner.When("I am viewing requests");
+#line 145
+ testRunner.Then("I should not see a delete button");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Can not delete denied absence request")]
+        public virtual void CanNotDeleteDeniedAbsenceRequest()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not delete denied absence request", ((string[])(null)));
+#line 147
+this.ScenarioSetup(scenarioInfo);
+#line 148
+ testRunner.Given("I am an agent");
+#line 149
+ testRunner.And("I have a denied absence request");
+#line 150
+ testRunner.When("I am viewing requests");
+#line 151
+ testRunner.Then("I should not see a delete button");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Hide absence request tab when view a text request")]
+        public virtual void HideAbsenceRequestTabWhenViewATextRequest()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Hide absence request tab when view a text request", ((string[])(null)));
+#line 157
+this.ScenarioSetup(scenarioInfo);
+#line 158
+ testRunner.Given("I am an agent");
+#line 159
+ testRunner.And("I have an existing text request");
+#line 160
+ testRunner.And("I am viewing requests");
+#line 161
+ testRunner.When("I click on the request");
+#line 162
+ testRunner.Then("I should see the text request\'s details form");
+#line 163
+ testRunner.And("I should see the request\'s values");
+#line 164
+ testRunner.And("I should not see the absence request tab");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
