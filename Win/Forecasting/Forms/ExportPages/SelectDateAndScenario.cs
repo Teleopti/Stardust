@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
@@ -19,12 +20,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         public SelectDateAndScenario()
         {
             InitializeComponent();
-            if (!DesignMode)
-            {
-                SetTexts();
-                setColors();
-            }
-                
+            if (!DesignMode) SetTexts();
+            setColors();
         }
 
         private void setColors()
@@ -62,7 +59,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public string PageName
         {
-            get { return "DateAndScenario: Name not Implemented yet"; }
+            get { return Resources.SelectDateAndScenario; }
         }
 
         public ICollection<string> ErrorMessages

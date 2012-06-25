@@ -10714,16 +10714,40 @@ These options are activated:
     <value>You should work {0} hours.</value>
     <comment>You should work X hours.</comment>
   </data>
-	<data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
     <value>You should work {0} to {1} hours.</value>
     <comment>You should work X to Y hours.</comment>
   </data>
-	<data name="MissingAbsenceType" xml:space="preserve">
+  <data name="MissingAbsenceType" xml:space="preserve">
     <value>Missing absence type.</value>
     <comment>Missing absence type.</comment>
   </data>
   <data name="SendRequest" xml:space="preserve">
     <value>Send</value>
     <comment>Send a text request/absence request...</comment>
+  </data>
+  <data name="ExportToBU" xml:space="preserve">
+    <value>Export to business unit</value>
+    <comment>Export to business unit</comment>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Export to file</value>
+    <comment>Export to file</comment>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>File export is done</value>
+    <comment>File export is done</comment>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>Select a date and a scenario</value>
+    <comment>Select a date and a scenario</comment>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>Select file destination</value>
+    <comment>Select file destination</comment>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>Select a skill</value>
+    <comment>Select a skill</comment>
   </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
@@ -8,7 +9,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
     public partial class FileExportDone : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
     {
-        private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
 
         public FileExportDone()
@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public void Populate(ExportSkillModel stateObj)
         {
-            _stateObj = stateObj;
         }
 
         public bool Depopulate(ExportSkillModel stateObj)
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public string PageName
         {
-            get { return "File Export: Name not Implemented yet"; }
+            get { return Resources.FileExportDone; }
         }
 
         public ICollection<string> ErrorMessages

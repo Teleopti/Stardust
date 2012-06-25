@@ -89,9 +89,9 @@
             this.Controls.Add(this.btnOk);
             this.ForeColor = System.Drawing.Color.Navy;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "TypeOfExport";
+            this.Name = "xxTypeOfExport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "TypeOfExport";
+            this.Text = "xxTypeOfExport";
             this.ResumeLayout(false);
             this.PerformLayout();
 

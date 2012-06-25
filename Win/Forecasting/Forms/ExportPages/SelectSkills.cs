@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public string PageName
         {
-            get { return "Skills: Name not Implemented yet"; }
+            get { return Resources.SelectSkill; }
         }
 
         public ICollection<string> ErrorMessages
@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         {
             var header = new ColumnHeader {Text = Resources.Skill, Width = 150};
             listViewSkills.Columns.Add(header);
+            header.Dispose();
         }
 
         private void reloadSkillsListView()

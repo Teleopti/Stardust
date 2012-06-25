@@ -200,6 +200,7 @@ namespace Teleopti.Ccc.Win.Common
             return new SelectExportType(pageChange);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage ("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static IList<IPropertyPageNoRoot<ExportSkillModel>> GetExportAcrossBusinessUnitsPages(SelectExportType firstPage)
         {
             return new List<IPropertyPageNoRoot<ExportSkillModel>>
@@ -211,6 +212,7 @@ namespace Teleopti.Ccc.Win.Common
                        };
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage ("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static IList<IPropertyPageNoRoot<ExportSkillModel>> GetExportSkillToFilePages(SelectExportType firstPage)
         {
             return new List<IPropertyPageNoRoot<ExportSkillModel>>

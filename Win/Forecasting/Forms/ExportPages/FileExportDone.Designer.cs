@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
+﻿using Teleopti.Ccc.UserTexts;
+
+namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
     partial class FileExportDone
     {
@@ -57,9 +59,9 @@
             this.label1.Location = new System.Drawing.Point(10, 315);
             this.label1.Margin = new System.Windows.Forms.Padding(10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(81, 13);
+            this.label1.Size = new System.Drawing.Size(89, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "xxExportIsDone";
+            this.label1.Text = Resources.FileExportDone;
             // 
             // FileExportDone
             // 

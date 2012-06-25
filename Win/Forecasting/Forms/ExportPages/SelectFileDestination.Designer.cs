@@ -65,7 +65,7 @@
             this.btnChoose.Name = "btnChoose";
             this.btnChoose.Size = new System.Drawing.Size(75, 23);
             this.btnChoose.TabIndex = 1;
-            this.btnChoose.Text = "xxChoose";
+            this.btnChoose.Text = "xxSelectFileDestination";
             this.btnChoose.UseVisualStyleBackColor = true;
             this.btnChoose.Click += new System.EventHandler(this.btnChoose_Click);
             // 
