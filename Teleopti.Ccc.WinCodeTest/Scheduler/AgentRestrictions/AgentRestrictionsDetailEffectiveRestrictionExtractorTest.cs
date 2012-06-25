@@ -110,6 +110,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
 			var absence = AbsenceFactory.CreateAbsence("Sick");
 			var layer = new AbsenceLayer(absence, _dateTimePeriod);
+			var mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+			part.AddMainShift(mainShift);
 			part.CreateAndAddAbsence(layer);
 			var projection = part.ProjectionService().CreateProjection();
 			var period = projection.Period();
@@ -125,7 +127,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
 				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>());
-				Expect.Call(_effectiveRestriction.IsRestriction).Return(false);
 			}
 
 			using (_mocks.Playback())
@@ -138,7 +139,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(part.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(_person), _preferenceCellData.DisplayColor);
 			Assert.IsTrue(_preferenceCellData.HasFullDayAbsence);
 			Assert.AreEqual(TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), TeleoptiPrincipal.Current.Regional.Culture), _preferenceCellData.ShiftLengthScheduledShift);
-			Assert.AreEqual(period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture), _preferenceCellData.StartEndScheduledShift);		
+			
 		}
 
 
