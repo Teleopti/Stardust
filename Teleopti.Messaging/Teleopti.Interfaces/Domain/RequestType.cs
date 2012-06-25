@@ -6,13 +6,13 @@ namespace Teleopti.Interfaces.Domain
 	public enum RequestType
 	{
 		/// <summary>
-		/// absence request
-		/// </summary>
-		AbsenceRequest,
-		/// <summary>
 		/// text request
 		/// </summary>
 		TextRequest,
+		/// <summary>
+		/// absence request
+		/// </summary>
+		AbsenceRequest,
 		/// <summary>
 		/// shift trade request
 		/// </summary>
