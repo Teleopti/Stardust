@@ -10729,4 +10729,8 @@ These options are activated:
     <value>Send</value>
     <comment>Send a text request/absence request...</comment>
   </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>This Workload {0} window is open. Please close it as it is no longer valid.</value>
+    <comment>please close workload window.</comment>
+  </data>
 </root>

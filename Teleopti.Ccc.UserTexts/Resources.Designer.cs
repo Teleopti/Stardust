@@ -23776,6 +23776,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This Workload {0} window is open. Please close it as it is no longer valid..
+        /// </summary>
+        public static string WorkloadWindowAlreadyOpen {
+            get {
+                return ResourceManager.GetString("WorkloadWindowAlreadyOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Workload wizard.
         /// </summary>
         public static string WorkloadWizard {
