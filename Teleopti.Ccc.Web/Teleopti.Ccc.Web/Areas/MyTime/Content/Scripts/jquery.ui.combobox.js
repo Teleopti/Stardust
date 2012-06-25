@@ -53,6 +53,13 @@
 							}
 						}
 					})
+					.keydown(function (event) {
+						if (event.keyCode == 13) {
+						//Prevent refresh in IE
+							event.preventDefault();
+							return false;
+						}
+					})
 					.addClass("ui-widget ui-widget-content ui-corner-left")
 				;
 			input[0].defaultValue = value;
