@@ -600,7 +600,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_childGridColumns.Add(_childGridFreeDaysColumn);
 
 			_childGridOverrideDaysOffColumn = new NumericCellColumnForSchedulePeriod
-				<SchedulePeriodChildModel>("OverrideDaysOff", UserTexts.Resources.OverrideDaysOff);
+				<SchedulePeriodChildModel>("OverrideDaysOff", UserTexts.Resources.OverrideDaysOff, 150);
 			_childGridOverrideDaysOffColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 			_childGridOverrideDaysOffColumn.CellChanged += ChildColumn_CellChanged;
 			_childGridColumns.Add(_childGridOverrideDaysOffColumn);
@@ -696,7 +696,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_gridColumns.Add(_daysOffColumn);
 
 			_overrideDaysOffColumn = new NumericCellColumnForSchedulePeriod<SchedulePeriodModel>
-					("OverrideDaysOff", UserTexts.Resources.OverrideDaysOff);
+					("OverrideDaysOff", UserTexts.Resources.OverrideDaysOff, 150);
 			_overrideDaysOffColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
 			_overrideDaysOffColumn.CellChanged += ParentColumn_CellChanged;
 			_overrideDaysOffColumn.ColumnComparer = new SchedulePeriodDaysOffComparer();
