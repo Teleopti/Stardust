@@ -37,6 +37,11 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         string RequestTypeDescription { get; set; }
 
+		/// <summary>
+		/// Type of request
+		/// </summary>
+		RequestType RequestType { get; }
+
         /// <summary>
         /// Description for the payload
         /// </summary>

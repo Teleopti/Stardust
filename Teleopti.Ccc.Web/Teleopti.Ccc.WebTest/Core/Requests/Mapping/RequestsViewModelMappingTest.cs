@@ -169,6 +169,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
+		public void ShouldMapRequestTypeEnum()
+		{
+			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+
+			result.TypeEnum.Should().Be(RequestType.TextRequest);
+		}
+
+		[Test]
 		public void ShouldMapUpdatedOn()
 		{
 			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));

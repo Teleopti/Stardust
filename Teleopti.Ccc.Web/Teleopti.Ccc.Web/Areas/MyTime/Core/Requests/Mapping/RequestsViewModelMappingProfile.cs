@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Status, o => o.MapFrom(s => s.StatusText))
 				.ForMember(d => d.Text, o => o.MapFrom(s => s.GetMessage(new NoFormatting())))
 				.ForMember(d => d.Type, o => o.MapFrom(s => s.Request.RequestTypeDescription))
+				.ForMember(d => d.TypeEnum, o => o.MapFrom(s => s.Request.RequestType))
 				.ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn.HasValue
 																					? _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.UpdatedOn.Value).ToShortDateTimeString()
 																					: null))
