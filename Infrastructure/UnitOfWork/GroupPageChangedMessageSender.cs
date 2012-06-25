@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
                 //get the group page ids
 				var groupPage = modifiedRoots.Select(r => r.Root).OfType<IGroupPage>();
-				foreach (var groupPageList in groupPage.Batch(400))
+				foreach (var groupPageList in groupPage.Batch(25))
 				{
 					var idsAsString = (from p in groupPageList select p.Id.GetValueOrDefault()).ToArray();
 					var message = new GroupPageChangedMessage();

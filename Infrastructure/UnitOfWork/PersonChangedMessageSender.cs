@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
             if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
             {
 				var persons = modifiedRoots.Select(r => r.Root).OfType<IPerson>();
-				foreach (var personList in persons.Batch(400))
+				foreach (var personList in persons.Batch(25))
 				{
 					var idsAsString = personList.Select(p => p.Id.GetValueOrDefault()).ToArray();
 					var message = new PersonChangedMessage();

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
             if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
             {
 				var notPerson = (from p in modifiedRoots where !(p.Root is IPerson) select p.Root).ToList();
-				foreach (var notpersonList in notPerson.Batch(400))
+				foreach (var notpersonList in notPerson.Batch(25))
 				{
 					var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.GetValueOrDefault()).ToArray();
                     
