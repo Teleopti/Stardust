@@ -10730,4 +10730,12 @@ These options are activated:
     <value>Override Period</value>
     <comment>Overrride period time</comment>
   </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Override hours per day</value>
+    <comment>Override hours per dad, the average worktime per day</comment>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Override days off</value>
+    <comment>Override days off</comment>
+  </data>
 </root>

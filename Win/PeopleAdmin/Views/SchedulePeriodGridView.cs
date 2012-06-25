@@ -590,7 +590,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_childGridColumns.Add(_childGridHoursPerDayColumn);
 
 			_childGridOverrideAverageWorkTimePerDayColumn = new EditableAverageWorkTimeInSchedulePeriodColumn
-				<SchedulePeriodChildModel>("AverageWorkTimePerDayForDisplay", UserTexts.Resources.Override);
+				<SchedulePeriodChildModel>("AverageWorkTimePerDayForDisplay", UserTexts.Resources.OverrideHoursPerDay);
 			_childGridOverrideAverageWorkTimePerDayColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 			_childGridOverrideAverageWorkTimePerDayColumn.CellChanged += ChildColumn_CellChanged;
 			_childGridColumns.Add(_childGridOverrideAverageWorkTimePerDayColumn);
@@ -600,7 +600,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_childGridColumns.Add(_childGridFreeDaysColumn);
 
 			_childGridOverrideDaysOffColumn = new NumericCellColumnForSchedulePeriod
-				<SchedulePeriodChildModel>("OverrideDaysOff", UserTexts.Resources.Override);
+				<SchedulePeriodChildModel>("OverrideDaysOff", UserTexts.Resources.OverrideDaysOff);
 			_childGridOverrideDaysOffColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 			_childGridOverrideDaysOffColumn.CellChanged += ChildColumn_CellChanged;
 			_childGridColumns.Add(_childGridOverrideDaysOffColumn);
@@ -683,7 +683,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_gridColumns.Add(_hoursPerDayColumn);
 
 			_averageWorkTimePerDayColumn = new EditableAverageWorkTimeInSchedulePeriodColumn<SchedulePeriodModel>
-				("AverageWorkTimePerDayForDisplay", UserTexts.Resources.Override);
+				("AverageWorkTimePerDayForDisplay", UserTexts.Resources.OverrideHoursPerDay);
 			_averageWorkTimePerDayColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
 			_averageWorkTimePerDayColumn.CellChanged += ParentColumn_CellChanged;
 			_averageWorkTimePerDayColumn.ColumnComparer = new SchedulePeriodAverageWorkTimePerDayComparer();
@@ -696,7 +696,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_gridColumns.Add(_daysOffColumn);
 
 			_overrideDaysOffColumn = new NumericCellColumnForSchedulePeriod<SchedulePeriodModel>
-					("OverrideDaysOff", UserTexts.Resources.Override);
+					("OverrideDaysOff", UserTexts.Resources.OverrideDaysOff);
 			_overrideDaysOffColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
 			_overrideDaysOffColumn.CellChanged += ParentColumn_CellChanged;
 			_overrideDaysOffColumn.ColumnComparer = new SchedulePeriodDaysOffComparer();

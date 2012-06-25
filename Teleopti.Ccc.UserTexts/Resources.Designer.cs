@@ -14753,6 +14753,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Override days off.
+        /// </summary>
+        public static string OverrideDaysOff {
+            get {
+                return ResourceManager.GetString("OverrideDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override hours per day.
+        /// </summary>
+        public static string OverrideHoursPerDay {
+            get {
+                return ResourceManager.GetString("OverrideHoursPerDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Override Period.
         /// </summary>
         public static string OverridePeriod {
