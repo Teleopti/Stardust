@@ -590,7 +590,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_childGridColumns.Add(_childGridHoursPerDayColumn);
 
 			_childGridOverrideAverageWorkTimePerDayColumn = new EditableAverageWorkTimeInSchedulePeriodColumn
-				<SchedulePeriodChildModel>("AverageWorkTimePerDayForDisplay", UserTexts.Resources.OverrideHoursPerDay);
+				<SchedulePeriodChildModel>("AverageWorkTimePerDayOverride", UserTexts.Resources.OverrideHoursPerDay);
 			_childGridOverrideAverageWorkTimePerDayColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 			_childGridOverrideAverageWorkTimePerDayColumn.CellChanged += ChildColumn_CellChanged;
 			_childGridColumns.Add(_childGridOverrideAverageWorkTimePerDayColumn);
@@ -683,7 +683,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_gridColumns.Add(_hoursPerDayColumn);
 
 			_averageWorkTimePerDayColumn = new EditableAverageWorkTimeInSchedulePeriodColumn<SchedulePeriodModel>
-				("AverageWorkTimePerDayForDisplay", UserTexts.Resources.OverrideHoursPerDay);
+				("AverageWorkTimePerDayOverride", UserTexts.Resources.OverrideHoursPerDay);
 			_averageWorkTimePerDayColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
 			_averageWorkTimePerDayColumn.CellChanged += ParentColumn_CellChanged;
 			_averageWorkTimePerDayColumn.ColumnComparer = new SchedulePeriodAverageWorkTimePerDayComparer();

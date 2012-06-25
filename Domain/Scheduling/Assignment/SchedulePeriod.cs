@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		/// Created by: cs 
 		/// Created date: 2008-03-10
 		/// </remarks>
-		public virtual TimeSpan AverageWorkTimePerDayForDisplay
+		public virtual TimeSpan AverageWorkTimePerDayOverride
 		{
 			get
 			{

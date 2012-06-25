@@ -226,17 +226,17 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		/// Created by: cs 
 		/// Created date: 2008-03-10
 		/// </remarks>
-		public virtual TimeSpan AverageWorkTimePerDayForDisplay
+		public virtual TimeSpan AverageWorkTimePerDayOverride
 		{
 			get
 			{
                 if (_currentSchedulePeriod == null) return TimeSpan.MinValue;
-				return _currentSchedulePeriod.AverageWorkTimePerDayForDisplay;
+				return _currentSchedulePeriod.AverageWorkTimePerDayOverride;
 			}
 			set
 			{
 				if (_currentSchedulePeriod != null)
-					_currentSchedulePeriod.AverageWorkTimePerDayForDisplay = value;
+					_currentSchedulePeriod.AverageWorkTimePerDayOverride = value;
 			}
 		}
 

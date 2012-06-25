@@ -142,17 +142,17 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		/// Created by: Dinesh Ranasinghe
 		/// Created date: 2008-06-17
 		/// </remarks>
-		public TimeSpan AverageWorkTimePerDayForDisplay
+		public TimeSpan AverageWorkTimePerDayOverride
 		{
 			get
 			{
-				TimeSpan retTimeSpan = ContainedEntity.AverageWorkTimePerDayForDisplay;
+				TimeSpan retTimeSpan = ContainedEntity.AverageWorkTimePerDayOverride;
 
 				return retTimeSpan;
 			}
 			set
 			{
-				ContainedEntity.AverageWorkTimePerDayForDisplay = value;
+				ContainedEntity.AverageWorkTimePerDayOverride = value;
 			}
 		}
 

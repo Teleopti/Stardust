@@ -59,7 +59,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: cs 
 		/// Created date: 2008-03-10
 		/// </remarks>
-		TimeSpan AverageWorkTimePerDayForDisplay { get; set; }
+		TimeSpan AverageWorkTimePerDayOverride { get; set; }
 
         ///// <summary>
         ///// Get target time

@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 //            helper.person1.AddPersonPeriod(helper._personPeriod4);
             helper.person1.AddSchedulePeriod(helper._schedulePeriod4);
             _schedulePeriodModel = new SchedulePeriodModel(new DateOnly(helper.universalTime2.Date), helper.person1, null);
-			_schedulePeriodModel.AverageWorkTimePerDayForDisplay = new TimeSpan(0, 0, 1);
+			_schedulePeriodModel.AverageWorkTimePerDayOverride = new TimeSpan(0, 0, 1);
             _schedulePeriodModel.DaysOff = 1;
 
             // Calls the compares method

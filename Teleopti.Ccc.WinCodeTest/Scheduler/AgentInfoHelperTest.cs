@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             ((RestrictionSchedulingOptions)_schedulingOptions).UseScheduling = true;
             _schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(_dateOnly);
             _schedulePeriod.SetDaysOff(targetDaysOff);
-			_schedulePeriod.AverageWorkTimePerDayForDisplay = _averageWorkTimePerDay;
+			_schedulePeriod.AverageWorkTimePerDayOverride = _averageWorkTimePerDay;
             _person.AddSchedulePeriod(_schedulePeriod);
             _workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
             _target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
