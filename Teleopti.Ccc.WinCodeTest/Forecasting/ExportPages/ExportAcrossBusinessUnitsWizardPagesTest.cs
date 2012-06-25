@@ -6,11 +6,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
+    [TestFixture, System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     public class ExportAcrossBusinessUnitsWizardPagesTest
     {
-        private ExportAcrossBusinessUnitsWizardPages _target;
-        private ExportMultisiteSkillToSkillCommandModel _exportAcrossBusinessUnits;
+        private ExportSkillWizardPages _target;
+        private ExportSkillModel _exportSkillModel;
         private MockRepository _mocks;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IExportAcrossBusinessUnitsSettingsProvider _exportAcrossBusinessUnitsSettingsProvider;
@@ -20,24 +20,24 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         public void Setup()
         {
             _mocks = new MockRepository();
-            _exportAcrossBusinessUnits = new ExportMultisiteSkillToSkillCommandModel();
+            _exportSkillModel = new ExportSkillModel();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             _exportAcrossBusinessUnitsSettingsProvider = new ExportAcrossBusinessUnitsSettingsProvider(_unitOfWorkFactory, _repositoryFactory);
-            _target = new ExportAcrossBusinessUnitsWizardPages(_exportAcrossBusinessUnits, _exportAcrossBusinessUnitsSettingsProvider);
+            _target = new ExportSkillWizardPages(_exportSkillModel, _exportAcrossBusinessUnitsSettingsProvider);
         }
 
         [Test]
         public void VerifyCreated()
         {
             Assert.IsNotNull(_target);
-            Assert.AreEqual(_exportAcrossBusinessUnits, _target.StateObj);
+            Assert.AreEqual(_exportSkillModel, _target.StateObj);
         }
 
         [Test]
         public void ShouldCreateNewAggregateRoot()
         {
-            _target = new ExportAcrossBusinessUnitsWizardPages(_exportAcrossBusinessUnits, _exportAcrossBusinessUnitsSettingsProvider);
+            _target = new ExportSkillWizardPages(_exportSkillModel, _exportAcrossBusinessUnitsSettingsProvider);
             Assert.IsNotNull(_target);
         }
 

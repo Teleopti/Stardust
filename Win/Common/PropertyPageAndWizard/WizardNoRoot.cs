@@ -12,7 +12,7 @@ using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 {
 
-    public partial class WizardNoRoot<T> : BaseRibbonForm where T : ContainerControl, new()
+    public partial class WizardNoRoot<T> : BaseRibbonForm where T : class
     {
         private readonly IAbstractPropertyPagesNoRoot<T> _propertyPages;
         private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
@@ -44,8 +44,14 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
             Name = Name + "." + propertyPages.GetType().Name; // For TestComplete
             _propertyPages = propertyPages;
             _propertyPages.Owner = this;
+            _propertyPages.PageListChanged += onListChanged;
 
             SetWindowText();
+        }
+
+        private void onListChanged(object sender, EventArgs e)
+        {
+            UpdatePageList();
         }
 
         private void SetWindowText()
@@ -93,6 +99,11 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
         private void PropertyPageWizard_Load(object sender, EventArgs e)
         {
             treeViewPages.RightToLeftLayout = RightToLeftLayout;
+            UpdatePageList();
+        }
+
+        public void UpdatePageList()
+        {
             if (_propertyPages != null)
             {
                 MinimumSize = _propertyPages.MinimumSize;

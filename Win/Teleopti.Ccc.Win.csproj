@@ -615,6 +615,30 @@
     <Compile Include="Forecasting\Forms\CopyToSkillView.Designer.cs">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\FileExportDone.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\FileExportDone.Designer.cs">
+      <DependentUpon>FileExportDone.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectFileDestination.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectFileDestination.Designer.cs">
+      <DependentUpon>SelectFileDestination.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectExportType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectExportType.Designer.cs">
+      <DependentUpon>SelectExportType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.Designer.cs">
+      <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forecasting\Forms\ExportPages\JobStatusView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -644,6 +668,18 @@
     </Compile>
     <Compile Include="Forecasting\Forms\ExportPages\SelectMultiSiteSkills.Designer.cs">
       <DependentUpon>SelectMultiSiteSkills.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectSkills.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectSkills.Designer.cs">
+      <DependentUpon>SelectSkills.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\TypeOfExport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\TypeOfExport.Designer.cs">
+      <DependentUpon>TypeOfExport.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.cs">
       <SubType>Form</SubType>
@@ -2448,6 +2484,21 @@
     <EmbeddedResource Include="Forecasting\Forms\CopyToSkillView.resx">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\FileExportDone.resx">
+      <DependentUpon>FileExportDone.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectFileDestination.resx">
+      <DependentUpon>SelectFileDestination.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectExportType.resx">
+      <DependentUpon>SelectExportType.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.resx">
+      <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\JobStatusView.resx">
       <DependentUpon>JobStatusView.cs</DependentUpon>
     </EmbeddedResource>
@@ -2463,6 +2514,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectMultiSiteSkills.resx">
       <DependentUpon>SelectMultiSiteSkills.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectSkills.resx">
+      <DependentUpon>SelectSkills.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\TypeOfExport.resx">
+      <DependentUpon>TypeOfExport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ImportForecast\ImportForecastView.resx">
       <DependentUpon>ImportForecastView.cs</DependentUpon>

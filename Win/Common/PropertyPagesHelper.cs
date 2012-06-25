@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -188,19 +189,38 @@ namespace Teleopti.Ccc.Win.Common
         /// </remarks>
         public static IList<IPropertyPage> GetMultisiteSkillDistributionPages()
         {
-            return new List<IPropertyPage>()
+            return new List<IPropertyPage>
                             {
                                 new MultisiteDistributions()
                             };
         }
 
-        public static IList<IPropertyPageNoRoot<ExportMultisiteSkillToSkillCommandModel>> GetExportAcrossBusinessUnitsPages()
+        public static SelectExportType GetExportSkillFirstPage(Action<bool> pageChange)
         {
-            return new List<IPropertyPageNoRoot<ExportMultisiteSkillToSkillCommandModel>>{
-                                                                                               new SelectMultisiteSkills(),
-                                                                                               new SelectDestination(),
-                                                                                               new SelectDateRange()
-                                                                                           };
+            return new SelectExportType(pageChange);
+        }
+
+        public static IList<IPropertyPageNoRoot<ExportSkillModel>> GetExportAcrossBusinessUnitsPages(SelectExportType firstPage)
+        {
+            return new List<IPropertyPageNoRoot<ExportSkillModel>>
+                       {
+                           firstPage,
+                           new SelectMultisiteSkills(),
+                           new SelectDestination(),
+                           new SelectDateRange()
+                       };
+        }
+
+        public static IList<IPropertyPageNoRoot<ExportSkillModel>> GetExportSkillToFilePages(SelectExportType firstPage)
+        {
+            return new List<IPropertyPageNoRoot<ExportSkillModel>>
+                       {
+                           firstPage,
+                           new SelectDateAndScenario(),
+                           new SelectSkills(),
+                           new SelectFileDestination(),
+                           new FileExportDone()
+                       };
         }
     }
 }

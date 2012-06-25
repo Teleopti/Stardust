@@ -1,21 +1,69 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 {
-    public class ExportMultisiteSkillToSkillCommandModel : ContainerControl //Stupid inheritance to make Generic Forms to work
+    public class ExportSkillModel : IDisposable
     {
+        public ExportSkillModel()
+        {
+            ExportMultisiteSkillToSkillCommandModel = new ExportMultisiteSkillToSkillCommandModel();
+            ExportSkillToFileCommandModel = new ExportSkillToFileCommandModel();
+            ExportToFile = true;
+        }
+
+        public ExportMultisiteSkillToSkillCommandModel ExportMultisiteSkillToSkillCommandModel { get; set; }
+        public ExportSkillToFileCommandModel ExportSkillToFileCommandModel { get; set; }
+
+        public void ChangeExportType(bool exportToFile)
+        {
+            if (exportToFile)
+            {
+                ExportMultisiteSkillToSkillCommandModel.ToExportSkillToFileModel(ExportSkillToFileCommandModel);
+            }
+            else
+            {
+                ExportSkillToFileCommandModel.ToExportMultisiteModel(ExportMultisiteSkillToSkillCommandModel);
+            }
+            ExportToFile = exportToFile;
+        }
+
+        public bool ExportToFile { get; private set; }
+
+        public void Dispose()
+        {
+            ExportMultisiteSkillToSkillCommandModel = null;
+            ExportSkillToFileCommandModel = null;
+        }
+    }
+
+    public class ExportSkillToFileCommandModel
+    {
+        public string FileName { get; set; }
+        public ISkill Skill { get; set; }
+        public DateOnlyPeriod Period { get; set; }
+        public IScenario Scenario { get; set; }
+
+        public void ToExportMultisiteModel(ExportMultisiteSkillToSkillCommandModel model)
+        {
+            model.Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(Period.StartDate), EndDate = new DateOnlyDto(Period.EndDate) };
+        }
+    }
+
+    public class ExportMultisiteSkillToSkillCommandModel
+    {
+        public ICollection<MultisiteSkillSelectionModel> MultisiteSkillSelectionModels { get; private set; }
+        public DateOnlyPeriodDto Period { get; set; }
+
         public ExportMultisiteSkillToSkillCommandModel()
         {
             MultisiteSkillSelectionModels = new List<MultisiteSkillSelectionModel>();
             Period = new DateOnlyPeriodDto(new DateOnlyPeriod(DateOnly.Today,DateOnly.Today.AddDays(30)));
         }
-        public ICollection<MultisiteSkillSelectionModel> MultisiteSkillSelectionModels { get; private set; }
-        public DateOnlyPeriodDto Period { get; set; }
 
         public bool HasChildSkillMappings
         {
@@ -46,6 +94,12 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
             }
             
             return exportMultisiteSkillToSkillCommandDto;
+        }
+
+        public void ToExportSkillToFileModel(ExportSkillToFileCommandModel model)
+        {
+            model.Period = new DateOnlyPeriod(new DateOnly(Period.StartDate.DateTime),
+                                                  new DateOnly(Period.EndDate.DateTime));
         }
     }
 }

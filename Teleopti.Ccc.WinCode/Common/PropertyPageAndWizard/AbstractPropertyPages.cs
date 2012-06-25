@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
     {
         private T _aggregateRoot;
         private IPropertyPage _currentPage;
-        private IList<IPropertyPage> _propertyPages;
+        private List<IPropertyPage> _propertyPages;
         private Form _owningForm;
         private readonly IRepositoryFactory _repositoryFactory;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;

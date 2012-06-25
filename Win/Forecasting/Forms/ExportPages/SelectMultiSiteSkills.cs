@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
-    public partial class SelectMultisiteSkills : BaseUserControl, IPropertyPageNoRoot<ExportMultisiteSkillToSkillCommandModel>
+    public partial class SelectMultisiteSkills : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
     {
         private IList<ListViewItem> _filteredItems;
         private IList<ListViewItem> _allItems;
@@ -36,18 +36,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             listViewSkills.BackColor = ColorHelper.WizardPanelBackgroundColor();
         }
 
-        public void Populate(ExportMultisiteSkillToSkillCommandModel stateObj)
+        public void Populate(ExportSkillModel stateObj)
         {
             loadMultisiteSkills();
             var listViewColumnSorter = new ListViewColumnSorter {Order = SortOrder.Ascending};
             listViewSkills.ListViewItemSorter = listViewColumnSorter;
-            reloadSkillsListView(stateObj);
+            reloadSkillsListView(stateObj.ExportMultisiteSkillToSkillCommandModel);
         }
 
-        public bool Depopulate(ExportMultisiteSkillToSkillCommandModel stateObj)
+        public bool Depopulate(ExportSkillModel stateObj)
         {
             if (!validated()) return false;
-            saveSelected(stateObj);
+            saveSelected(stateObj.ExportMultisiteSkillToSkillCommandModel);
             return true;
         }
 

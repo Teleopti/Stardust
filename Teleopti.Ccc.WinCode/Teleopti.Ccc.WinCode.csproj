@@ -349,10 +349,8 @@
     <Compile Include="Forecasting\ExportPages\DestinationSkillModel.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettings.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProvider.cs" />
-    <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsWizardPages.cs" />
-    <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModel.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Forecasting\ExportPages\ExportSkillWizardPages.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModel.cs" />
     <Compile Include="Forecasting\ExportPages\IExportAcrossBusinessUnitsSettings.cs" />
     <Compile Include="Forecasting\ExportPages\IExportAcrossBusinessUnitsSettingsProvider.cs" />
     <Compile Include="Forecasting\ExportPages\MultisiteSkillModel.cs" />
