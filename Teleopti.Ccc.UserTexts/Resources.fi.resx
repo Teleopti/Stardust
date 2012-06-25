@@ -9946,4 +9946,196 @@ Lisenssin nimi on {3} ja sisältää seuraavat lisäosat: {4}</value>
   <data name="ChooseScheduleTagToChange" xml:space="preserve">
     <value>Valitse työvuoro tägi muutokseen</value>
   </data>
+  <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
+    <value>Sinun työvuorotoiveesi voivat antaa tuloksen {0} - {1} hours. </value>
+  </data>
+  <data name="YourPreferencesCanResultXHours" xml:space="preserve">
+    <value>Sinun työvuorotoiveesi voivat antaa tuloksen {0} tuntia.</value>
+  </data>
+  <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
+    <value>Sinun työvuorotoiveesi voivat antaa tuloset {0} vapaapäivää. </value>
+  </data>
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+    <value>Sinun pitäisi työskennellä {0} - {1} tuntia.</value>
+  </data>
+  <data name="YouShouldWorkXHours" xml:space="preserve">
+    <value>Sinun pitäisi työskennellä {0} tuntia. </value>
+  </data>
+  <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
+    <value>Sinulla pitää olla vähintään {0} - {1} vapaapäivää.</value>
+  </data>
+  <data name="YouShouldHaveXDaysOff" xml:space="preserve">
+    <value>Sinulla tulisi olla {0} vapaapäivää.</value>
+  </data>
+  <data name="NoAbsenceDefined" xml:space="preserve">
+    <value>Sinun tulee luoda vähintää yksi poissaolo jotta voit suorittaa tämän tehtävän. </value>
+  </data>
+  <data name="WorkloadNameColon" xml:space="preserve">
+    <value>Työmäärän nimi:</value>
+  </data>
+  <data name="JobHistoryView" xml:space="preserve">
+    <value>Näytä työhistoria</value>
+  </data>
+  <data name="ViewHistory" xml:space="preserve">
+    <value>Näytä historia</value>
+  </data>
+  <data name="NoTeamsAvailable" xml:space="preserve">
+    <value>Ei tiimejä saatavilla. </value>
+  </data>
+  <data name="ThePersonsRoles" xml:space="preserve">
+    <value>Henkilön rooli</value>
+  </data>
+  <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
+    <value>Aikavälin pituus tälle alataidolle pitäisi sama kuin päätaidolla, mikä on {0} minuuttia. </value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>Poissaolopyyntö {0} on evätty. </value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>Poissaolopyyntö {0} on hyväksytty. </value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Tuntityöntekijä saatavuuden noudattaminen</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>Aloitusajan {0} tulisi olla aikaisemmin, kuin päättymisaika {1}.</value>
+  </data>
+  <data name="SkillNameColon" xml:space="preserve">
+    <value>Taidon nimi:</value>
+  </data>
+  <data name="ShowPublicNote" xml:space="preserve">
+    <value>Näytä julkinen huomautus</value>
+  </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>Näytä saatavuus vain työvuoropyynnöille</value>
+  </data>
+  <data name="SendRequest" xml:space="preserve">
+    <value>Lähetä</value>
+  </data>
+  <data name="RotationFulfillment" xml:space="preserve">
+    <value>Työvuorokierron noudattaminen</value>
+  </data>
+  <data name="ResourceCalculateEveryColon" xml:space="preserve">
+    <value>Lähde lasketaan joka:</value>
+  </data>
+  <data name="RequestHistory" xml:space="preserve">
+    <value>Kyselyhistoria</value>
+  </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>Pyyntöjen salliminen</value>
+  </data>
+  <data name="RemoveWriteProtection" xml:space="preserve">
+    <value>Poista kirjoitussuojaus</value>
+  </data>
+  <data name="PreferenceFulfillment" xml:space="preserve">
+    <value>Työvuorotoiveiden noudattaminen</value>
+  </data>
+  <data name="Persons" xml:space="preserve">
+    <value>Henkilöt</value>
+  </data>
+  <data name="PermissionsViewer" xml:space="preserve">
+    <value>Oikeudet</value>
+  </data>
+  <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+    <value>Henkilöjaksoa ei löytynyt käyttäjälle</value>
+  </data>
+  <data name="NoAvailableShifts" xml:space="preserve">
+    <value>Ei työvuoroja saatavilla</value>
+  </data>
+  <data name="NoAbsenceDefinedCaption" xml:space="preserve">
+    <value>Poissaoloa ei ole määritelty</value>
+  </data>
+  <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
+    <value>Uusi työvuoronvaihtopyyntö {0}, hyväksytty tai hylätty sinun pyyntönäkymässäsi.</value>
+  </data>
+  <data name="MustHaveFulfillment" xml:space="preserve">
+    <value>Pakkosaada noudattaminen</value>
+  </data>
+  <data name="MissingAbsenceType" xml:space="preserve">
+    <value>Poissaolo kateissa:</value>
+  </data>
+  <data name="IncludeTroubleshootingInformation" xml:space="preserve">
+    <value>Sisällytä virheilmoitus tiedot</value>
+  </data>
+  <data name="ImportWorkloadAndStaffing" xml:space="preserve">
+    <value>Tuo työmäärä ja henkilöt</value>
+  </data>
+  <data name="ImportWorkload" xml:space="preserve">
+    <value>Tuo työmäärä</value>
+  </data>
+  <data name="ImportStaffing" xml:space="preserve">
+    <value>Tuo henkilöt:</value>
+  </data>
+  <data name="ImportForecastFromFile" xml:space="preserve">
+    <value>Tuo ennuste tiedostosta</value>
+  </data>
+  <data name="ImportForecast" xml:space="preserve">
+    <value>Tuo ennuste:</value>
+  </data>
+  <data name="ImportFileNameColon" xml:space="preserve">
+    <value>Tuo tiedosto nimellä:</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Tuo</value>
+  </data>
+  <data name="FunctionsCap" xml:space="preserve">
+    <value>Toiminnot</value>
+  </data>
+  <data name="FromRole" xml:space="preserve">
+    <value>Roolista</value>
+  </data>
+  <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
+    <value>Ulkoista lähdettä käytettään toisen ohjelman toimesta, ole yställinen ja yritä myöhemmin uudelleen. </value>
+  </data>
+  <data name="ExternalResourceInUse" xml:space="preserve">
+    <value>Ulkoinen lähde on käytössä. </value>
+  </data>
+  <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
+    <value>Vie DPF-muodossa työvuorot per päivä</value>
+  </data>
+  <data name="DuplicateDaysOffValidationError" xml:space="preserve">
+    <value>Päällekkäisiä vapaapäiviä {0}</value>
+  </data>
+  <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
+    <value>Teleopti Customer WEB ei ole saatavilla juuri nyt!</value>
+  </data>
+  <data name="ContractTimeDesc" xml:space="preserve">
+    <value>Sopimusaika laskevasti</value>
+  </data>
+  <data name="ContractTimeAsc" xml:space="preserve">
+    <value>Sopimusaika nousevasti</value>
+  </data>
+  <data name="AvailabilityFulfillment" xml:space="preserve">
+    <value>Käytettävyyden noudattaminen</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Anywhere</value>
+  </data>
+  <data name="ActualAfterCallWorkTime" xml:space="preserve">
+    <value>Todellinen ACW aika</value>
+  </data>
+  <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
+    <value>Aktiviteetti ei voi olla tyhjä. </value>
+  </data>
+  <data name="AbsenceType" xml:space="preserve">
+    <value>Poissaolo tyyppi:</value>
+  </data>
+  <data name="AbsenceRequestsWeb" xml:space="preserve">
+    <value>Poissaolopyyntö</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>Työvuoronvaihtopyyntö {0} on evätty. </value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>Työvuoropyyntö {0} on hyväksytty. </value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
+    <value>Työvuorotoive {0} on hyväksytty toisen henkilön toimesta. </value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
+    <value>Työvuoronvaihto toive {0} on hyväksyttävä uudelleen, koska työvuoroja on muutettu. </value>
+  </data>
+  <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
+    <value>{0} agenttia ei voitu aikatauluttaa.</value>
+  </data>
 </root>
