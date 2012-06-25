@@ -42,6 +42,7 @@ foreach ($site_name in $iis.sites)
 					$apppoolobject = $iis.ApplicationPools[$appPoolName]
 					$apppoolobject.ManagedRuntimeVersion = "v4.0";
 					$iis.CommitChanges();
+                    break
 				}
        }
 }
