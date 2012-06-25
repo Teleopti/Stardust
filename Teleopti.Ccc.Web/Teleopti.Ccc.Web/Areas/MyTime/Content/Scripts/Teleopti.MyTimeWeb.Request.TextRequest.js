@@ -34,13 +34,13 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		$('#Request-detail-error').html('');
 	}
 
-	function _showAbsenceTypes() {
+	function _selectAbsenceRequestTab() {
 		$('#Absence-type-element').show();
 		$('#Absence-request-tab').addClass("selected-tab");
 		$('#Text-request-tab').removeClass("selected-tab");
 	}
 
-	function _hideAbsenceTypes() {
+	function _selectTextRequestTab() {
 		$('#Absence-type-element').hide();
 		$('#Text-request-tab').addClass("selected-tab");
 		$('#Absence-request-tab').removeClass("selected-tab");
@@ -71,13 +71,13 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		$('#Text-request-tab')
 			.click(function () {
 				_clearValidationError();
-				_hideAbsenceTypes();
+				_selectTextRequestTab();
 				requestViewModel.IsFullDay(false);
 			});
 		$('#Absence-request-tab')
 			.click(function () {
 				_clearValidationError();
-				_showAbsenceTypes();
+				_selectAbsenceRequestTab();
 				requestViewModel.IsFullDay(true);
 			});
 	}
@@ -100,10 +100,12 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	function _showRequestTypeTab(requestType) {
 		if (requestType == 0) {
 			requestViewModel.TextRequestTabVisible(true);
+			_selectTextRequestTab();
 			requestViewModel.AbsenceRequestTabVisible(false);
 		} else if (requestType == 1) {
 			requestViewModel.TextRequestTabVisible(false);
 			requestViewModel.AbsenceRequestTabVisible(true);
+			_selectAbsenceRequestTab();
 		}
 	}
 
