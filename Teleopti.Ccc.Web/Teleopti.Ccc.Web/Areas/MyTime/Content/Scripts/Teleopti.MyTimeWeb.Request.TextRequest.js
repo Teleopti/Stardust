@@ -15,6 +15,8 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		$('#Requests-addTextRequest-button')
 			.click(function () {
 				Teleopti.MyTimeWeb.Request.List.DisconnectAll();
+				requestViewModel.TextRequestTabVisible(true);
+				requestViewModel.AbsenceRequestTabVisible(true);
 				_hideEditSection();
 				_clearFormData();
 				_showEditSection();
@@ -46,8 +48,8 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 
 	function _initControls() {
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
-		ko.applyBindings(requestViewModel, $('#Fullday-check')[0]);
-		
+		ko.applyBindings(requestViewModel, ko.dataFor($('#Request-detail-section')));
+
 		$('#Request-detail-section .date-input')
 			.datepicker()
 			;
@@ -56,7 +58,7 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 			;
 		$("#Request-detail-section .combobox.absence-input").combobox();
 		$("#Absence-type-input").attr('readonly', 'true');
-		
+
 		$('#Request-detail-ok-button')
 			.click(function () {
 				if ($('#Text-request-tab.selected-tab').length > 0) {
@@ -89,9 +91,20 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	function _showRequest(data, position) {
 		_hideEditSection();
 		_clearFormData();
+		_showRequestTypeTab(data.TypeEnum);
 		_fillFormData(data);
 		_enableDisableDetailSection(data);
 		_showEditSection(position);
+	}
+
+	function _showRequestTypeTab(requestType) {
+		if (requestType == 0) {
+			requestViewModel.TextRequestTabVisible(true);
+			requestViewModel.AbsenceRequestTabVisible(false);
+		} else if (requestType == 1) {
+			requestViewModel.TextRequestTabVisible(false);
+			requestViewModel.AbsenceRequestTabVisible(true);
+		}
 	}
 
 	function _enableDisableDetailSection(data) {
@@ -229,8 +242,8 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		FadeEditSection: function () {
 			_fadeEditSection();
 		},
-		ShowRequest: function (url, position) {
-			_showRequest(url, position);
+		ShowRequest: function (data, position) {
+			_showRequest(data, position);
 		}
 	};
 
@@ -238,6 +251,12 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 
 Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
 	var self = this;
+
+	this.TextRequestTabVisible = ko.observable(true);
+	this.AbsenceRequestTabVisible = ko.observable(true);
+	this.TabSeparatorVisible = ko.computed(function () {
+		return self.TextRequestTabVisible() && self.AbsenceRequestTabVisible();
+	});
 	this.IsFullDay = ko.observable(false);
 
 	ko.computed(function () {

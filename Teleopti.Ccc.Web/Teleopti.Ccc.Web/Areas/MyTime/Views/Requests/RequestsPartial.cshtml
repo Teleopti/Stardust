@@ -12,11 +12,11 @@
 	<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all">
 		<input type="hidden" id="Request-detail-entityid"/>
 		<div id="Schedule-addRequest-title" class="pdb5">
-			<span id="Text-request-tab" class="selectable-tab selected-tab">@Resources.TextRequest</span>
+			<span id="Text-request-tab" class="selectable-tab selected-tab" data-bind="visible:TextRequestTabVisible">@Resources.TextRequest</span>
 			@if (Model.RequestPermission.AbsenceRequestPermission)
 			{
-				<span>|</span>
-				<span id="Absence-request-tab" class="selectable-tab">@Resources.AbsenceRequest</span>
+				<span data-bind="visible:TabSeparatorVisible">|</span>
+				<span id="Absence-request-tab" class="selectable-tab" data-bind="visible:AbsenceRequestTabVisible">@Resources.AbsenceRequest</span>
 			}
 		</div>
 		
