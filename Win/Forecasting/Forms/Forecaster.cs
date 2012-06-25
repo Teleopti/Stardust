@@ -831,7 +831,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     if (e.UpdatedIds.Contains(workload.Id.Value))
                     {
                         string temp = String.Format(UserTexts.Resources.WorkloadWindowAlreadyOpen,workload.Name);
-                        MessageBox.Show(temp, "Warning", MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                        MessageBox.Show(temp, UserTexts.Resources.WarningMessageTitle, MessageBoxButtons.OK,MessageBoxIcon.Warning);
                         return;
                     }
                 }
