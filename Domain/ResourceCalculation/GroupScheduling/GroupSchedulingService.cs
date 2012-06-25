@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
@@ -25,13 +24,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IWorkShiftFinderResultHolder _finderResultHolder;
-		private bool _cancelMe;
+    	private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+    	private bool _cancelMe;
         
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public GroupSchedulingService(IGroupPersonsBuilder groupPersonsBuilder, IBestBlockShiftCategoryFinder bestBlockShiftCategoryFinder, 
-            ISchedulingResultStateHolder resultStateHolder, IScheduleService scheduleService, ISchedulePartModifyAndRollbackService rollbackService, 
-            IResourceOptimizationHelper resourceOptimizationHelper, IWorkShiftFinderResultHolder finderResultHolder)
+            ISchedulingResultStateHolder resultStateHolder, IScheduleService scheduleService, ISchedulePartModifyAndRollbackService rollbackService,
+			IResourceOptimizationHelper resourceOptimizationHelper, IWorkShiftFinderResultHolder finderResultHolder, IEffectiveRestrictionCreator effectiveRestrictionCreator)
 		{
 			_groupPersonsBuilder = groupPersonsBuilder;
 			_bestBlockShiftCategoryFinder = bestBlockShiftCategoryFinder;
@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			_rollbackService = rollbackService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_finderResultHolder = finderResultHolder;
+			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             {
                 return false;
             }
-
+			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(members, dateOnly, schedulingOptions, scheduleDictionary);
             foreach (var person in members.GetRandom(members.Count, true))
             {
                 IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
@@ -128,7 +129,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                 {
 					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
-					bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, resourceCalculateDelayer, best);
+					
+					bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true,effectiveRestriction, resourceCalculateDelayer, best);
                     if (!sucess)
                     {
                         return false;

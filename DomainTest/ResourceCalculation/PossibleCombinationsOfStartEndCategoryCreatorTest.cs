@@ -53,7 +53,21 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.VerifyAll();
 		}
 
+		[Test]
+		public void ShouldHandleNullMinMax()
+		{
+			var result = _target.FindCombinations(null, _schedulingOptions);
+			Assert.That(result.Count, Is.EqualTo(0));
+			_mocks.VerifyAll();
+		}
 
+		[Test]
+		public void ShouldHandleNullOptions()
+		{
+			var result = _target.FindCombinations(new WorkTimeMinMax(),null);
+			Assert.That(result.Count, Is.EqualTo(0));
+			_mocks.VerifyAll();
+		}
 	}
 
 	
