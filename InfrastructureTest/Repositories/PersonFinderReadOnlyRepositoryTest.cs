@@ -44,6 +44,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
             _target.UpdateFindPersonData(new Guid[] { Guid.NewGuid() });
 		}
+
+        [Test]
+        public void ShouldCallUpdateFindPersonWithoutCrash()
+        {
+            Guid[] ids = new Guid[200];
+            for (int i = 0; i < 200; i++)
+            {
+                ids[i] = Guid.NewGuid();
+            }
+            UnitOfWork.PersistAll();
+            SkipRollback();
+            _target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
+            _target.UpdateFindPerson( ids);
+        }
+        [Test]
+        public void ShouldCallUpdateFindPersonDataWithoutCrash()
+        {
+            Guid[] ids = new Guid[200];
+            for (int i = 0; i < 200; i++)
+            {
+                ids[i] = Guid.NewGuid();
+            }
+            UnitOfWork.PersistAll();
+            SkipRollback();
+            _target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
+            _target.UpdateFindPersonData(ids);
+        }
     }
 
     internal class PersonFinderSearchCriteriaForTest : IPersonFinderSearchCriteria

@@ -53,23 +53,71 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
         public  void UpdateFindPerson(ICollection<Guid> ids)
         {
-            string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
-            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
-            {
-                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", inputIds)).ExecuteUpdate();
-            }
+            string inputIds = string.Empty;
+            if (ids != null)
+                foreach (var p in ids)
+                {
+
+                    if (inputIds.Length < 3900)
+                    {
+                        if (inputIds.Length > 0)
+                            inputIds = inputIds + ",";
+                        inputIds = inputIds + p.ToString();
+                    }
+
+                    else
+                    {
+                        using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+                        {
+                            ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                                string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", inputIds)).ExecuteUpdate();
+                        }
+                        inputIds = string.Empty;
+                    }
+                }
+
+            if (inputIds.Length > 0)
+                using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+                {
+                    ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                        string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", inputIds)).ExecuteUpdate();
+                }
+            
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
         public void UpdateFindPersonData(ICollection<Guid> ids)
         {
-            string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
-            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
-            {
-                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                    string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", inputIds)).ExecuteUpdate();
-            }
+            string inputIds = string.Empty;
+            if (ids != null)
+                foreach (var p in ids)
+                {
+
+                    if (inputIds.Length < 3900)
+                    {
+                        if (inputIds.Length > 0)
+                            inputIds = inputIds + ",";
+                        inputIds = inputIds + p.ToString();
+                    }
+
+                    else
+                    {
+                        using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+                        {
+                            ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                                string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", inputIds)).ExecuteUpdate();
+                        }
+                        inputIds = string.Empty;
+                    }
+                }
+
+            if (inputIds.Length > 0)
+                using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+                {
+                    ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                        string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", inputIds)).ExecuteUpdate();
+                }
+            
         }
 
     }

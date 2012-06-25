@@ -46,6 +46,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
            Assert.That(mess.Identity, Is.Not.Null);
         }
 
+        [Test]
+        public void GroupingReadModelTestWithManyIds()
+        {
+            var person = PersonFactory.CreatePerson();
+            Guid tempGuid = Guid.NewGuid();
+            person.SetId(tempGuid);
+
+            Guid[] ids = new Guid[70];
+            for(int i= 0;i<70;i++)
+            {
+                ids[i] = Guid.NewGuid();
+            }
+            var mess = new PersonChangedMessage();
+            mess.SetPersonIdCollection(ids);
+
+            using (_mocks.Record())
+            {
+                Expect.Call(() => _groupReadOnlyRepository.UpdateGroupingReadModel(ids));
+            }
+            using (_mocks.Playback())
+            {
+                _target.Consume(mess);
+            }
+
+            Assert.That(mess.Identity, Is.Not.Null);
+        }
+
         
     }
 }

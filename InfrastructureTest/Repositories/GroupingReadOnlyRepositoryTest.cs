@@ -44,7 +44,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldCallUpdateReadModelWithoutCrash()
         {
-            _target.UpdateGroupingReadModel(new Guid[] { Guid.NewGuid() });
+            Guid[] ids = new Guid[200];
+            for (int i = 0; i < 200; i++)
+            {
+                ids[i] = Guid.NewGuid();
+            }
+
+            _target.UpdateGroupingReadModel(ids);
+        }
+
+        [Test]
+        public void ShouldCallUpdateReadModelGroupPageWithoutCrash()
+        {
+            Guid[] ids = new Guid[200];
+            for (int i = 0; i < 200; i++)
+            {
+                ids[i] = Guid.NewGuid();
+            }
+
+            _target.UpdateGroupingReadModelGroupPage( ids);
+        }
+
+        [Test]
+        public void ShouldCallUpdateReadModelDataWithoutCrash()
+        {
+            Guid[] ids = new Guid[200];
+            for (int i = 0; i < 200; i++)
+            {
+                ids[i] = Guid.NewGuid();
+            }
+
+            _target.UpdateGroupingReadModelData( ids);
         }
 
         [Test]
