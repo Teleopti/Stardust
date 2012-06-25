@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private void initGroupPages()
 		{
 			comboBoxGrouping.DataSource = _groupPages;
-			comboBoxGrouping.DisplayMember = "Description";
+            comboBoxGrouping.DisplayMember = "Name";
 
 			if(_localSchedulingOptions.GroupOnGroupPage != null)
 			{
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private void initGroupPagesFairness()
 		{
 			comboBoxGroupingFairness.DataSource = _groupPagesFairness;
-			comboBoxGroupingFairness.DisplayMember = "Description";
+			comboBoxGroupingFairness.DisplayMember = "Name";
 
 			if (_localSchedulingOptions.GroupPageForShiftCategoryFairness != null)
 			{
