@@ -310,7 +310,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 96
  testRunner.When("I click on the request");
 #line 97
- testRunner.Then("I should not see the text request tab");
+ testRunner.Then("I should not see the text request tab (invisible)");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -492,7 +492,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 163
  testRunner.And("I should see the request\'s values");
 #line 164
- testRunner.And("I should not see the absence request tab");
+ testRunner.And("I should not see the absence request tab (invisible)");
 #line hidden
             this.ScenarioCleanup();
         }

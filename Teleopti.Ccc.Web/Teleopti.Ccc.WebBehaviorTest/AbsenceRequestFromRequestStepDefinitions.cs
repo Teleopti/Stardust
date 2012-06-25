@@ -51,10 +51,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailEntityId.Value, Is.EqualTo(request.PersonRequest.Id.ToString()));
 		}
 
-		[Then(@"I should not see the text request tab")]
-		public void WhenIShouldNotSeeTheTextRequestTab()
+		[Then(@"I should not see the text request tab \(invisible\)")]
+		public void ThenIShouldNotSeeTheTextRequestTabInvisible()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.Exists, Is.False);
+			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.DisplayHidden(), Is.True);
 		}
 
 	}

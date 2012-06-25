@@ -94,7 +94,7 @@ Scenario: Hide text request tab when view an absence request
 	And I have an existing absence request
 	And I am viewing requests
 	When I click on the request
-	Then I should not see the text request tab
+	Then I should not see the text request tab (invisible)
 
 Scenario: View absence request details
 	Given I am an agent
@@ -161,4 +161,4 @@ Scenario: Hide absence request tab when view a text request
 	When I click on the request
 	Then I should see the text request's details form
 	And I should see the request's values
-	And I should not see the absence request tab
+	And I should not see the absence request tab (invisible)
