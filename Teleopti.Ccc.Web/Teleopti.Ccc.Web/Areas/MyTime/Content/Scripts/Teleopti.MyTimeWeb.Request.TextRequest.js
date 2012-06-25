@@ -15,11 +15,12 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		$('#Requests-addTextRequest-button')
 			.click(function () {
 				Teleopti.MyTimeWeb.Request.List.DisconnectAll();
+				_clearFormData();
 				requestViewModel.TextRequestTabVisible(true);
 				requestViewModel.AbsenceRequestTabVisible(true);
 				_hideEditSection();
-				_clearFormData();
 				_showEditSection();
+				$('#Text-request-tab').click();
 			})
 			.removeAttr('disabled')
 			;
@@ -93,6 +94,9 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		_clearFormData();
 		_showRequestTypeTab(data.TypeEnum);
 		_fillFormData(data);
+		if (data.TypeEnum == 1) {
+			_fillFormRequestType(data.Payload);
+		}
 		_enableDisableDetailSection(data);
 		_showEditSection(position);
 	}
@@ -213,15 +217,19 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	}
 
 	function _fillFormData(data) {
-		$('#Request-detail-subject-input').val(data.Subject),
-		$('#Request-detail-fromDate-input').val(data.RawDateFrom),
-		$('#Request-detail-fromTime-input-input').val(data.RawTimeFrom),
+		$('#Request-detail-subject-input').val(data.Subject);
+		$('#Request-detail-fromDate-input').val(data.RawDateFrom);
+		$('#Request-detail-fromTime-input-input').val(data.RawTimeFrom);
 		$('#Request-detail-toDate-input').val(data.RawDateTo),
-		$('#Request-detail-toTime-input-input').val(data.RawTimeTo),
+		$('#Request-detail-toTime-input-input').val(data.RawTimeTo);
 		$('#Request-detail-message-input').val(data.Text);
 		$('#Request-detail-entityid').val(data.Id);
 		$('#Request-detail-subject-input').change();
 		$('#Request-detail-message-input').change();
+	};
+
+	function _fillFormRequestType(payload) {
+		$('#Absence-type-input').val(payload);
 	};
 
 	function _clearFormData() {
