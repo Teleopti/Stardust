@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				Expect.Call(_person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.Culture()).Return(CultureInfo.CurrentCulture).Repeat.AtLeastOnce();
 				Expect.Call(_contract.MinTimeSchedulePeriod).Return(TimeSpan.FromHours(20));
-				Expect.Call(_person.TerminalDate).Return(null);
+				Expect.Call(_person.TerminalDate).Return(null).Repeat.AtLeastOnce();
 				Expect.Call(_person.NextPeriod(_personPeriod)).Return(null);
 				Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_schedulingResultStateHolder);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);

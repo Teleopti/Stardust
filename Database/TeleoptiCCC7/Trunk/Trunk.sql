@@ -113,3 +113,15 @@ GO
 CREATE NONCLUSTERED INDEX IX_WorkloadDayBase_Workload_WorkloadDate
 ON [dbo].[WorkloadDayBase] ([Workload],[WorkloadDate])
 INCLUDE ([Id])
+
+----------------  
+--Name: Tamas Balog
+--Date: 2012-06-19
+--Desc: Add PeriodTime colums to SchedulePeriod table
+----------------  
+
+ALTER TABLE dbo.SchedulePeriod ADD
+	PeriodTime bigint NULL
+GO
+ALTER TABLE dbo.SchedulePeriod SET (LOCK_ESCALATION = TABLE)
+GO

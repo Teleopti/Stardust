@@ -44,6 +44,10 @@
     
     <property name="DaysOff"
 				  not-null="false"/>
+
+    <property name="PeriodTime"
+          not-null="true"
+          type="TimeSpan"/>
     
     <property name="MustHavePreference"
               not-null="true"
