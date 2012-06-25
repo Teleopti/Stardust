@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2009, 1, 1)));
             _schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2010, 2, 3),
                                                                          SchedulePeriodType.Week, 4);
-            _schedulePeriod.AverageWorkTimePerDay = new TimeSpan(8, 0, 0);
+            _schedulePeriod.AverageWorkTimePerDayForDisplay = new TimeSpan(8, 0, 0);
             _schedulePeriod.DaysOff = 8;
             _person.RemoveAllSchedulePeriods();
             _person.AddSchedulePeriod(_schedulePeriod);

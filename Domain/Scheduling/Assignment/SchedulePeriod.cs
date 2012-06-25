@@ -125,6 +125,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				TimeSpan retTimeSpan = period.PersonContract.AverageWorkTimePerDay;
 				return retTimeSpan;
 			}
+		}
+
+		/// <summary>
+		/// Gets the average work time per day for display.
+		/// </summary>
+		/// <remarks>
+		/// Created by: cs 
+		/// Created date: 2008-03-10
+		/// </remarks>
+		public virtual TimeSpan AverageWorkTimePerDayForDisplay
+		{
+			get
+			{
+				if (IsAverageWorkTimePerDayOverride)
+					return _averageWorkTimePerDay.Value;
+
+				return TimeSpan.MinValue;
+			}
 			set
 			{
 				_averageWorkTimePerDay = value;
@@ -379,6 +397,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual void ResetAverageWorkTimePerDay()
 		{
 			_averageWorkTimePerDay = null;
+		}
+
+		/// <summary>
+		/// Resets the period time.
+		/// </summary>
+		/// <remarks>
+		/// Created by: tamasb
+		/// Created date: 2012-06-21
+		/// </remarks>
+		public virtual void ResetPeriodTime()
+		{
+			_periodTime = null;
 		}
 
 		/// <summary>

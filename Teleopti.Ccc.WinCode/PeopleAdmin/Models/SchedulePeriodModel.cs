@@ -217,12 +217,28 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                 if (_currentSchedulePeriod == null) return TimeSpan.MinValue;
                 return _currentSchedulePeriod.AverageWorkTimePerDay;
             }
-            set
-            {
-                if (_currentSchedulePeriod != null)
-                    _currentSchedulePeriod.AverageWorkTimePerDay = value;
-            }
         }
+
+		/// <summary>
+		/// Gets the average work time per day for display.
+		/// </summary>
+		/// <remarks>
+		/// Created by: cs 
+		/// Created date: 2008-03-10
+		/// </remarks>
+		public virtual TimeSpan AverageWorkTimePerDayForDisplay
+		{
+			get
+			{
+                if (_currentSchedulePeriod == null) return TimeSpan.MinValue;
+				return _currentSchedulePeriod.AverageWorkTimePerDayForDisplay;
+			}
+			set
+			{
+				if (_currentSchedulePeriod != null)
+					_currentSchedulePeriod.AverageWorkTimePerDayForDisplay = value;
+			}
+		}
 
         /// <summary>
         /// Balance in

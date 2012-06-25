@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void CanGetPeriodTarget()
         {
             Assert.AreEqual(TimeSpan.FromHours(8 * 20), _target.PeriodTarget());
-            _schedulePeriod.AverageWorkTimePerDay = TimeSpan.FromHours(6);
+            _schedulePeriod.AverageWorkTimePerDayForDisplay = TimeSpan.FromHours(6);
             Assert.AreEqual(TimeSpan.FromHours(6 * 20), _target.PeriodTarget());
         }
 
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyAverageWorkTimePerDay()
         {
             Assert.AreEqual(TimeSpan.FromHours(8), _target.AverageWorkTimePerDay);
-            _schedulePeriod.AverageWorkTimePerDay = TimeSpan.FromHours(9);
+			_schedulePeriod.AverageWorkTimePerDayForDisplay = TimeSpan.FromHours(9);
             Assert.AreEqual(TimeSpan.FromHours(9), _target.AverageWorkTimePerDay);
         }
 

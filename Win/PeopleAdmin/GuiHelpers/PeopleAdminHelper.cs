@@ -508,6 +508,26 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
         }
 
+		/// <summary>
+		/// Resets the period time.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="dataItem">The data item.</param>
+		public static void ResetPeriodTime<T>(T dataItem)
+		{
+			ISchedulePeriodModel schedulePeriodAdapter = dataItem as ISchedulePeriodModel;
+
+			if ((schedulePeriodAdapter != null))
+			{
+				SchedulePeriod schedulePeriod = schedulePeriodAdapter.SchedulePeriod as SchedulePeriod;
+
+				if (schedulePeriod != null)
+				{
+					schedulePeriod.ResetPeriodTime();
+				}
+			}
+		}
+
         /// <summary>
         /// Bolds the column.
         /// </summary>

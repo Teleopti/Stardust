@@ -48,7 +48,18 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: cs 
         /// Created date: 2008-03-10
         /// </remarks>
-        TimeSpan AverageWorkTimePerDay { get; set; }
+        TimeSpan AverageWorkTimePerDay { get; }
+
+
+		/// <summary>
+		/// Gets or sets the average work time per day for display.
+		/// </summary>
+		/// <value>The average work time per day for display.</value>
+		/// <remarks>
+		/// Created by: cs 
+		/// Created date: 2008-03-10
+		/// </remarks>
+		TimeSpan AverageWorkTimePerDayForDisplay { get; set; }
 
         ///// <summary>
         ///// Get target time

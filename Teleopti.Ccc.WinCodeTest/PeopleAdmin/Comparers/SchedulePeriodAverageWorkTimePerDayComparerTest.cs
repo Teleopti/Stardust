@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         public void VerifyCompareMethodAscending()
         {
 //            helper.person.AddPersonPeriod(helper._personPeriod1);
-            helper._schedulePeriod1.AverageWorkTimePerDay = new TimeSpan(1, 1, 1);
+			helper._schedulePeriod1.AverageWorkTimePerDayForDisplay = new TimeSpan(1, 1, 1);
             helper.person.AddSchedulePeriod(helper._schedulePeriod1);
             _target = new SchedulePeriodModel(new DateOnly(helper.universalTime3.Date), helper.person, null);
 
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
             _target = new SchedulePeriodModel(new DateOnly(helper.universalTime2.Date), helper.person, null);
 
 //            helper.person1.AddPersonPeriod(helper._personPeriod4);
-            helper._schedulePeriod4.AverageWorkTimePerDay = new TimeSpan(1, 1, 1);
+			helper._schedulePeriod4.AverageWorkTimePerDayForDisplay = new TimeSpan(1, 1, 1);
             helper.person1.AddSchedulePeriod(helper._schedulePeriod4);
             _schedulePeriodModel = new SchedulePeriodModel(new DateOnly(helper.universalTime2.Date), helper.person1, null);
 

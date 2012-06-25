@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void CheckAverageWorkTimePerDaySetter()
         {
             TimeSpan value = new TimeSpan(1,1,1);
-            _target.AverageWorkTimePerDay = value;
+			_target.AverageWorkTimePerDayForDisplay = value;
 
             Assert.AreEqual(value, _target.AverageWorkTimePerDay);
         }
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.IsFalse(schedulePeriodModel.IsAverageWorkTimePerDayOverride);
             Assert.IsFalse(schedulePeriodModel.IsDaysOffOverride);
 
-            schedulePeriodModel.AverageWorkTimePerDay = TimeSpan.Zero;
+			schedulePeriodModel.AverageWorkTimePerDayForDisplay = TimeSpan.Zero;
             schedulePeriodModel.DaysOff = 5;
 
             Assert.IsTrue(schedulePeriodModel.IsAverageWorkTimePerDayOverride);

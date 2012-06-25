@@ -590,7 +590,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_childGridColumns.Add(_childGridHoursPerDayColumn);
 
 			_childGridOverrideAverageWorkTimePerDayColumn = new EditableAverageWorkTimeInSchedulePeriodColumn
-				<SchedulePeriodChildModel>("AverageWorkTimePerDay", UserTexts.Resources.Override);
+				<SchedulePeriodChildModel>("AverageWorkTimePerDayForDisplay", UserTexts.Resources.Override);
 			_childGridOverrideAverageWorkTimePerDayColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 			_childGridOverrideAverageWorkTimePerDayColumn.CellChanged += ChildColumn_CellChanged;
 			_childGridColumns.Add(_childGridOverrideAverageWorkTimePerDayColumn);
@@ -611,7 +611,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_childGridMustHavePreference.CellChanged += ChildColumn_CellChanged;
 			_childGridColumns.Add(_childGridMustHavePreference);
 
-			_childGridOverridePeriodColumn = new EditableTimeSpanInSchedulePeriodColumn<SchedulePeriodChildModel>("PeriodTime", UserTexts.Resources.OverridePeriod);
+			_childGridOverridePeriodColumn = new EditablePeriodTimeOverrideSchedulePeriodColumn<SchedulePeriodChildModel>
+				("PeriodTime", UserTexts.Resources.OverridePeriod);
 			_childGridOverridePeriodColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 			_childGridOverridePeriodColumn.CellChanged += ChildColumn_CellChanged;
 			_childGridColumns.Add(_childGridOverridePeriodColumn);
@@ -682,7 +683,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_gridColumns.Add(_hoursPerDayColumn);
 
 			_averageWorkTimePerDayColumn = new EditableAverageWorkTimeInSchedulePeriodColumn<SchedulePeriodModel>
-				("AverageWorkTimePerDay", UserTexts.Resources.Override);
+				("AverageWorkTimePerDayForDisplay", UserTexts.Resources.Override);
 			_averageWorkTimePerDayColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
 			_averageWorkTimePerDayColumn.CellChanged += ParentColumn_CellChanged;
 			_averageWorkTimePerDayColumn.ColumnComparer = new SchedulePeriodAverageWorkTimePerDayComparer();
@@ -708,7 +709,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_mustHavePreference.ColumnComparer = new SchedulePeriodMustHavePreferenceComparer();
 			_gridColumns.Add(_mustHavePreference);
 
-			_overridePeriodColumn = new EditableTimeSpanInSchedulePeriodColumn<SchedulePeriodModel>
+			_overridePeriodColumn = new EditablePeriodTimeOverrideSchedulePeriodColumn<SchedulePeriodModel>
 				("PeriodTime", UserTexts.Resources.OverridePeriod);
 			_overridePeriodColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
 			_overridePeriodColumn.CellChanged += ParentColumn_CellChanged;

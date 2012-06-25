@@ -132,11 +132,29 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 
                 return retTimeSpan;
             }
-            set
-            {
-                ContainedEntity.AverageWorkTimePerDay = value;
-            }
         }
+
+		/// <summary>
+		/// Gets the average work time per day.
+		/// </summary>
+		/// <value>The average work time per day.</value>
+		/// <remarks>
+		/// Created by: Dinesh Ranasinghe
+		/// Created date: 2008-06-17
+		/// </remarks>
+		public TimeSpan AverageWorkTimePerDayForDisplay
+		{
+			get
+			{
+				TimeSpan retTimeSpan = ContainedEntity.AverageWorkTimePerDayForDisplay;
+
+				return retTimeSpan;
+			}
+			set
+			{
+				ContainedEntity.AverageWorkTimePerDayForDisplay = value;
+			}
+		}
 
         /// <summary>
         /// Gets or sets the balance in.
