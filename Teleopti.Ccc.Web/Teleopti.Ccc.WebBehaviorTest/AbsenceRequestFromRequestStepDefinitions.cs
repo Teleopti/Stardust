@@ -13,6 +13,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class AbsenceRequestFromRequestStepDefinitions 
 	{
+		[When(@"I click the absence request's delete button")]
+		public void WhenIClickTheAbsenceRequestSDeleteButton()
+		{
+			var requestId = UserFactory.User().UserData<ExistingAbsenceRequest>().PersonRequest.Id.Value;
+			Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).EventualClick();
+		}
+
 		[Then(@"I should see the absence request in the list")]
 		public void ThenIShouldSeeTheAbsenceRequestInTheList()
 		{
@@ -56,6 +63,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.DisplayHidden(), Is.True);
 		}
-
 	}
 }

@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = DateTime.Today.AddHours(-2).ToShortTimeString(UserFactory.User().Culture);
 		}
 
-		[When(@"I click the request's delete button")]
+		[When(@"I click the text request's delete button")]
 		public void WhenIClickTheRequestSDeleteButton()
 		{
 			var requestId = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.Id.Value;

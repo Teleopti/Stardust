@@ -377,7 +377,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 119
  testRunner.And("I am viewing requests");
 #line 120
- testRunner.When("I click the request\'s delete button");
+ testRunner.When("I click the absence request\'s delete button");
 #line 121
  testRunner.Then("I should not see the absence request in the list");
 #line hidden

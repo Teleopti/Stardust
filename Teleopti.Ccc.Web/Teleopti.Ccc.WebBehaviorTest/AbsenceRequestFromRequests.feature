@@ -117,7 +117,7 @@ Scenario: Delete absence request
 	Given I am an agent
 	And I have an existing absence request
 	And I am viewing requests
-	When I click the request's delete button
+	When I click the absence request's delete button
 	Then I should not see the absence request in the list
 
 Scenario: Can not edit approved absence requests

@@ -248,7 +248,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 69
  testRunner.And("I am viewing requests");
 #line 70
- testRunner.When("I click the request\'s delete button");
+ testRunner.When("I click the text request\'s delete button");
 #line 71
  testRunner.Then("I should not see the text request in the list");
 #line hidden
