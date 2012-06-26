@@ -43,7 +43,7 @@
 			<span class="edit-module-element floatleft">
 				<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
 			</span>
-			<span class="edit-module-element floatleft">
+			<span id="Request-detail-fromTime" class="edit-module-element floatleft">
 				<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
 				<select id="Request-detail-fromTime-input" class="time-input combobox">
 					@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
@@ -57,7 +57,7 @@
 			<span class="edit-module-element clearleftfloat floatleft">
 				<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
 			</span>
-			<span class="edit-module-element floatleft">
+			<span id="Request-detail-toTime" class="edit-module-element floatleft">
 				<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
 				<select id="Request-detail-toTime-input" class="time-input combobox">
 					@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))

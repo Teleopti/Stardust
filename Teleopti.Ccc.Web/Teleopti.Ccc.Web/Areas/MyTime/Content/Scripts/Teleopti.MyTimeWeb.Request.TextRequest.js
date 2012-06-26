@@ -241,8 +241,17 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 			.not(':button, :submit, :reset')
 			.reset()
 			;
-		$('#Request-detail-error').html('');
+		$('#Fullday-check').attr('checked', false);
+		_clearValidationError();
 		_enableDetailSecion();
+		_enableTimeinput();
+	}
+
+	function _enableTimeinput() {
+		$('#Request-detail-fromTime button, #Request-detail-fromTime-input-input, #Request-detail-toTime button, #Request-detail-toTime-input-input')
+			.removeAttr("disabled");
+		$('#Request-detail-fromTime-input-input').css("color", "black");
+		$('#Request-detail-toTime-input-input').css("color", "black");
 	}
 
 	return {
@@ -258,6 +267,9 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		},
 		ShowRequest: function (data, position) {
 			_showRequest(data, position);
+		},
+		EnableTimeinput: function () {
+			_enableTimeinput();
 		}
 	};
 
@@ -281,17 +293,10 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
 		} else {
 			$('#Request-detail-fromTime-input-input').reset();
 			$('#Request-detail-toTime-input-input').reset();
-			_enableTimeinput();
+			Teleopti.MyTimeWeb.Request.TextRequest.EnableTimeinput();
 		}
 
 	});
-
-	function _enableTimeinput() {
-		$('#Request-detail-fromTime button, #Request-detail-fromTime-input-input, #Request-detail-toTime button, #Request-detail-toTime-input-input')
-			.removeAttr("disabled");
-		$('#Request-detail-fromTime-input-input').css("color", "black");
-		$('#Request-detail-toTime-input-input').css("color", "black");
-	}
 
 	function _disableTimeinput() {
 		$('#Request-detail-fromTime button, #Request-detail-fromTime-input-input, #Request-detail-toTime button, #Request-detail-toTime-input-input')
