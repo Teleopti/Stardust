@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Newtonsoft.Json.Linq;
+using SignalR.Client;
 using SignalR.Client.Hubs;
 using SignalR.Client.Net20.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
@@ -37,7 +38,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 			lock (LockObject)
 			{
-				if (!_hubConnection.IsActive)
+				if (_hubConnection.State != ConnectionState.Connected)
 				{
 					startHubConnection();
 				}
@@ -108,7 +109,7 @@ namespace Teleopti.Messaging.SignalR
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void StopListening()
 		{
-			if (_hubConnection != null && _hubConnection.IsActive)
+			if (_hubConnection != null && _hubConnection.State==ConnectionState.Connected)
 			{
 				var reset = new ManualResetEvent(false);
 				_hubProxy.Invoke("NotifyClients", new Notification()).ContinueWith(t =>
