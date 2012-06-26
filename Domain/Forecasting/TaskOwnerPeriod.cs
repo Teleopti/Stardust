@@ -616,7 +616,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         private IList<ITaskOwner> TaskOwnerDayOpenCollection()
         {
-            return _taskOwnerDayCollection.Where(wd => wd.OpenForWork.IsOpen).ToList();
+            return _taskOwnerDayCollection.Where(wd => wd.OpenForWork.IsOpenForIncomingWork).ToList();
         }
 
         /// <summary>
