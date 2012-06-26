@@ -39,9 +39,9 @@ namespace AnalysisServicesManager
             int dbVersion = version(sqlConnectionString);
             sqlConnectionString = fixConnString(dbVersion, sqlConnectionString);
             string post = _pre;
-            post = post.Replace(@"$(AS_DATABASE)", SqlDatabaseName);
-            post = post.Replace(@"$(SQL_DATABASE_NAME)", SqlDatabaseName);
-            post = post.Replace(@"$(SQL_CONN_STRING)", sqlConnectionString);
+            post = post.Replace(@"#(AS_DATABASE)", SqlDatabaseName);
+            post = post.Replace(@"#(SQL_DATABASE_NAME)", SqlDatabaseName);
+            post = post.Replace(@"#(SQL_CONN_STRING)", sqlConnectionString);
 
             return post;
         }
