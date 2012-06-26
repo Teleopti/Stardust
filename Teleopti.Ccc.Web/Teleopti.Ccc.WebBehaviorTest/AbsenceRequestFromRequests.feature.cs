@@ -402,7 +402,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 128
  testRunner.Then("I should see the absence request\'s details form");
 #line 129
- testRunner.And("I should not be able to input values");
+ testRunner.And("I should not be able to input values for absence request");
 #line 130
  testRunner.And("I should not see a save button");
 #line hidden
@@ -427,7 +427,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 137
  testRunner.Then("I should see the absence request\'s details form");
 #line 138
- testRunner.And("I should not be able to input values");
+ testRunner.And("I should not be able to input values for absence request");
 #line 139
  testRunner.And("I should not see a save button");
 #line hidden

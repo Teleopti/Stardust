@@ -13,11 +13,37 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class AbsenceRequestFromRequestStepDefinitions 
 	{
+		[Given(@"I have an approved absence request")]
+		public void GivenIHaveAnApprovedAbsenceRequest()
+		{
+			UserFactory.User().Setup(new ExistingApprovedAbsenceRequest());
+		}
+
+
+
 		[When(@"I click the absence request's delete button")]
 		public void WhenIClickTheAbsenceRequestSDeleteButton()
 		{
 			var requestId = UserFactory.User().UserData<ExistingAbsenceRequest>().PersonRequest.Id.Value;
 			Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).EventualClick();
+		}
+
+
+
+		[Then(@"I should not be able to input values for absence request")]
+		public void ThenIShouldNotBeAbleToInputValuesForAbsenceRequest()
+		{
+			const string disabledAttr = "disabled";
+			const string readonlyAttr = "readonly";
+			var detailForm = Pages.Pages.CurrentEditRequestPage;
+			EventualAssert.That(() => detailForm.RequestDetailFromDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "TextRequestDetailFromDateInput");
+			EventualAssert.That(() => detailForm.RequestDetailFromTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailFromTimeTextField");
+			EventualAssert.That(() => detailForm.RequestDetailSubjectInput.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailSubjectInput");
+			EventualAssert.That(() => detailForm.RequestDetailToDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToDateTextField");
+			EventualAssert.That(() => detailForm.RequestDetailToTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToTimeTextField");
+			EventualAssert.That(() => detailForm.RequestDetailMessageTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), "RequestDetailMessageTextField");
+			EventualAssert.That(() => detailForm.AbsenceTypesTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), "AbsenceTypesTextField");
+			EventualAssert.That(() => detailForm.FulldayCheck.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "FulldayCheck");
 		}
 
 		[Then(@"I should see the absence request in the list")]
@@ -26,7 +52,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.Exists, Is.True);
 			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Is.StringContaining("Vacation"));
 		}
-
 
 		[Then(@"I should see the absence request's details form")]
 		public void ThenIShouldSeeTheAbsenceRequestSDetailsForm()

@@ -126,7 +126,7 @@ Scenario: Can not edit approved absence requests
 	And I am viewing requests
 	When I click on the request
 	Then I should see the absence request's details form
-	And I should not be able to input values
+	And I should not be able to input values for absence request
 	And I should not see a save button
 
 Scenario: Can not edit denied absence requests
@@ -135,7 +135,7 @@ Scenario: Can not edit denied absence requests
 	And I am viewing requests
 	When I click on the request
 	Then I should see the absence request's details form
-	And I should not be able to input values
+	And I should not be able to input values for absence request
 	And I should not see a save button
 
 Scenario: Can not delete approved absence request
