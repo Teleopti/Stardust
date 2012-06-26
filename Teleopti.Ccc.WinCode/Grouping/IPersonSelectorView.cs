@@ -33,5 +33,6 @@ namespace Teleopti.Ccc.WinCode.Grouping
         DateOnlyPeriod SelectedPeriod { get; set; }
         void SetDate(DateOnly newDate);
 		bool KeepInteractiveOnDuringLoad { get; set; }
+		bool ExpandSelected { get; set; }
     }
 }
