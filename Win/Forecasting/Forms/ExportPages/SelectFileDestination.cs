@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public string PageName
         {
-            // Ska ändras 
             get { return Resources.SelectFileDestination; }
         }
 

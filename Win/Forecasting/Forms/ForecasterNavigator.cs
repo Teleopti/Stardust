@@ -1264,7 +1264,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						{
                             if (model.ExportToFile)
                             {
-                                ViewBase.ShowInformationMessage(Resources.ExportToFile, Resources.Export);
+                                // FileExport is done, show something here?
                             }
                             else
                             {
