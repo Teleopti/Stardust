@@ -224,6 +224,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				request = UserFactory.User().UserData<ExistingApprovedTextRequest>().PersonRequest;
 			else if (UserFactory.User().HasSetup<ExistingDeniedTextRequest>())
 				request = UserFactory.User().UserData<ExistingDeniedTextRequest>().PersonRequest;
+			else if (UserFactory.User().HasSetup<ExistingApprovedAbsenceRequest>())
+				request = UserFactory.User().UserData<ExistingApprovedAbsenceRequest>().PersonRequest;
+			else if (UserFactory.User().HasSetup<ExistingDeniedAbsenceRequest>())
+				request = UserFactory.User().UserData<ExistingDeniedAbsenceRequest>().PersonRequest;
 			if (request == null)
 				ScenarioContext.Current.Pending();
 			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(request.Id.Value).Exists, Is.True);

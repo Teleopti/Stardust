@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
@@ -19,6 +20,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().Setup(new ExistingApprovedAbsenceRequest());
 		}
 
+		[Given(@"I have a denied absence request")]
+		public void GivenIHaveADeniedAbsenceRequest()
+		{
+			UserFactory.User().Setup(new ExistingDeniedAbsenceRequest());
+		}
+
 
 
 		[When(@"I click the absence request's delete button")]
@@ -28,7 +35,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).EventualClick();
 		}
 
+		[When(@"I input new absence request values")]
+		public void WhenIInputNewAbsenceRequestValues()
+		{
+			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. cinnemon roll!";
+		}
 
+
+
+		[Then(@"I should see the new absence request values in the list")]
+		public void ThenIShouldSeeTheNewAbsenceRequestValuesInTheList()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.Requests.Count(), Is.EqualTo(1));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Contains.Substring("cinnemon roll"));
+		}
 
 		[Then(@"I should not be able to input values for absence request")]
 		public void ThenIShouldNotBeAbleToInputValuesForAbsenceRequest()

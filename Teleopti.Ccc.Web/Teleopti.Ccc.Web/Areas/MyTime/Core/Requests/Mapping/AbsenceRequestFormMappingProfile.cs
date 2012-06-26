@@ -2,7 +2,6 @@ using System;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -55,9 +54,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				var source = context.SourceValue as AbsenceRequestForm;
 				var destination = context.DestinationValue as IPersonRequest;
 
-				destination = new PersonRequest(_loggedOnUser.Invoke().CurrentUser()) {Subject = source.Subject};
-
-				destination.TrySetMessage(source.Message ?? "");
+				if (destination == null)
+				{
+					destination = new PersonRequest(_loggedOnUser.Invoke().CurrentUser()) { Subject = source.Subject };
+					destination.Pending();
+				}
 
 				DateTimePeriod period;
 
@@ -74,8 +75,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 				destination.Request = new AbsenceRequest(_absenceRepository.Invoke().Load(source.AbsenceId), period);
 
+				destination.TrySetMessage(source.Message ?? "");
+
 				if (source.EntityId != null)
 					destination.SetId(source.EntityId);
+
+				destination.Subject = source.Subject;
 
 				return destination;
 			}

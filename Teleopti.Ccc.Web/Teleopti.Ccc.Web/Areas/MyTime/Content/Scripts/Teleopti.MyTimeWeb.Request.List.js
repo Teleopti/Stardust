@@ -4,6 +4,7 @@
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.TextRequest.js"/>
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
