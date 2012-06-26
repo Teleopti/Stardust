@@ -1219,7 +1219,9 @@
     <EmbeddedResource Include="Scheduling\PersonDayOff.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Common\Contract.hbm.xml" />
+    <EmbeddedResource Include="Common\Contract.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Common\PartTimePercentage.hbm.xml" />

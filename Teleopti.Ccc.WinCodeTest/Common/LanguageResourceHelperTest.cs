@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         {
             //Enum as key, string as value
             IDictionary<object, string> enumTranslation = LanguageResourceHelper.TranslateEnum(typeof(EmploymentType));
-            Assert.AreEqual(4, enumTranslation.Count);
+            Assert.AreEqual(3, enumTranslation.Count);
             Assert.IsTrue(enumTranslation.ContainsKey(EmploymentType.FixedStaffNormalWorkTime));
             Assert.IsFalse(string.IsNullOrEmpty(enumTranslation[EmploymentType.FixedStaffNormalWorkTime]));
         }
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyEnumCanBeTranslatedToList()
         {
             IList<KeyValuePair<EmploymentType, string>> enumTranslation = LanguageResourceHelper.TranslateEnumToList<EmploymentType>();
-            Assert.AreEqual(4, enumTranslation.Count);
+            Assert.AreEqual(3, enumTranslation.Count);
             Assert.IsFalse(string.IsNullOrEmpty(enumTranslation[0].Value));
         }
 
