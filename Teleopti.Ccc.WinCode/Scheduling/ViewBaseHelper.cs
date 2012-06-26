@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
 
@@ -18,7 +20,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     /// <summary>
     /// ViewBase helper
     /// </summary>
-    public static class ViewBaseHelper
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	public static class ViewBaseHelper
     {
         /// <summary>
         /// GetToolTip
@@ -139,14 +142,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public static string ToLocalStartEndTimeString(DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo)
         {
+			var culture = TeleoptiPrincipal.Current.Regional.Culture;
             const string separator = " - ";
 
-            return string.Concat(period.StartDateTimeLocal(timeZoneInfo).ToShortTimeString(), separator,
-                                 period.EndDateTimeLocal(timeZoneInfo).ToShortTimeString());
+            return string.Concat(TimeHelper.TimeOfDayFromTimeSpan(period.StartDateTimeLocal(timeZoneInfo).TimeOfDay, culture), separator,
+                                 TimeHelper.TimeOfDayFromTimeSpan(period.EndDateTimeLocal(timeZoneInfo).TimeOfDay, culture));
         }
 
         public static string ToLocalStartEndTimeStringAbsences(DateTimePeriod partPeriod, DateTimePeriod absencePeriod, ICccTimeZoneInfo timeZoneInfo)
         {
+			var culture = TeleoptiPrincipal.Current.Regional.Culture;
             const string separator = " - ";
             DateTimePeriod startTimePeriod = absencePeriod;
             DateTimePeriod endTimePeriod = absencePeriod;
@@ -157,8 +162,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (absencePeriod.EndDateTime > partPeriod.EndDateTime)
                 endTimePeriod = partPeriod;
 
-            return string.Concat(startTimePeriod.StartDateTimeLocal(timeZoneInfo).ToShortTimeString(), separator,
-                                    endTimePeriod.EndDateTimeLocal(timeZoneInfo).ToShortTimeString());
+            return string.Concat(TimeHelper.TimeOfDayFromTimeSpan(startTimePeriod.StartDateTimeLocal(timeZoneInfo).TimeOfDay, culture), separator,
+									TimeHelper.TimeOfDayFromTimeSpan(endTimePeriod.EndDateTimeLocal(timeZoneInfo).TimeOfDay, culture));
         }
 
         /// <summary>
@@ -240,7 +245,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
                 sb.Append(personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()));
                 sb.Append(": ");
-                sb.Append(ToLocalStartEndTimeString(personMeeting.Period, cell.TimeZone));
+            	sb.Append(ToLocalStartEndTimeString(personMeeting.Period, cell.TimeZone));
 
                 if (personMeeting.Optional)
                     sb.AppendFormat(" ({0})", UserTexts.Resources.Optional);
@@ -281,15 +286,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <returns></returns>
         public static string GetToolTipDayOff(ISchedulePart cell)
         {
-            string dayOff = string.Empty;
+			StringBuilder sb = new StringBuilder();
+        	var culture = TeleoptiPrincipal.Current.Regional.Culture;
 
             var personDayOffs = cell.PersonDayOffCollection();
             if (personDayOffs.Count > 0)
             {
-                dayOff = personDayOffs[0].DayOff.Description.Name;
+            	var dayOff = personDayOffs[0].DayOff;
+				sb.AppendLine(dayOff.Description.Name);
+            	sb.Append(Resources.TargetLengthColon + " ");
+				sb.AppendLine(TimeHelper.GetLongHourMinuteTimeString(dayOff.TargetLength, culture));
+				sb.Append(Resources.AnchorColon + " ");
+            	sb.AppendLine(
+            		TimeHelper.TimeOfDayFromTimeSpan(TimeZoneHelper.ConvertFromUtc(dayOff.Anchor, cell.TimeZone).TimeOfDay,
+													 culture));
+				sb.Append(Resources.FlexibilityColon + " ");
+				sb.Append(TimeHelper.GetLongHourMinuteTimeString(dayOff.Flexibility, culture));
             }
 
-            return dayOff;
+			return sb.ToString();
         }
 
         /// <summary>

@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyToolTipDayOff()
         {
-            Assert.AreEqual(_scheduleRange.ScheduledDay(new DateOnly(2001,1,1)).PersonDayOffCollection()[0].DayOff.Description.Name,
+			StringAssert.Contains(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)).PersonDayOffCollection()[0].DayOff.Description.Name,
                 ViewBaseHelper.GetToolTipDayOff(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1))));
         }
 
