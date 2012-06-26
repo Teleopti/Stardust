@@ -45,6 +45,7 @@
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
+	<Import Project="$(CCNetWorkingDirectory)\ccnet\ASBuild.proj"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll" />
 	<UsingTask TaskName="ThrowIfWarning" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\FxCopUgly.dll" />
@@ -84,7 +85,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="AzureDeploy;FxCop">
+	<Target Name="BuildAndTest" DependsOnTargets="BuildSSASXmla;AzureDeploy;FxCop">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 
