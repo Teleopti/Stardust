@@ -144,7 +144,8 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                             if (_personSelectorView.PreselectedPersonIds.Contains(personSelectorUserDefined.PersonId))
                             {
                                 personNode.Checked = true;
-                                currNode.Expanded = true;
+								if (_personSelectorView.ExpandSelected)
+									currNode.Expanded = true;
                             }
                         //}
                         
