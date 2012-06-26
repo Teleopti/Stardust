@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
@@ -15,19 +19,28 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
     {
         private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
-        private IList<IScenario> _scenarios; 
+        private IList<IScenario> _scenarios;
 
         public SelectDateAndScenario()
         {
             InitializeComponent();
-            if (!DesignMode) SetTexts();
-            setColors();
+            if (!DesignMode)
+            {
+                SetTexts();
+                setColors();
+                reportDateFromToSelector1.PeriodChanged += reportDateFromToSelector1PeriodChanged;
+            }
+        }
+
+        void reportDateFromToSelector1PeriodChanged(object sender, EventArgs e)
+        {
+            if (hasScenarioDataChanged(_scenarios))
+                bindScenarioCombo(_scenarios);
         }
 
         private void setColors()
         {
             BackColor = ColorHelper.WizardBackgroundColor();
-            label1.BackColor = ColorHelper.WizardPanelBackgroundColor();
         }
 
         public void Populate(ExportSkillModel stateObj)
@@ -38,12 +51,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         protected override void OnLoad(System.EventArgs e)
         {
             base.OnLoad(e);
-
-            loadScenarios();
-            bindScenarioCombo(_scenarios);
             var exportModel = _stateObj.ExportMultisiteSkillToSkillCommandModel;
             reportDateFromToSelector1.WorkPeriodStart = new DateOnly(exportModel.Period.StartDate.DateTime);
             reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(exportModel.Period.EndDate.DateTime);
+
+            loadScenarios();
+
+            if (!noScenarioAvailable(_scenarios))
+            {
+                bindScenarioCombo(_scenarios);
+            }
         }
 
         public bool Depopulate(ExportSkillModel stateObj)
@@ -85,9 +102,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             }
         }
 
+        private bool hasScenarioDataChanged(IList<IScenario> scenariosToLoad)
+        {
+            if (comboBoxScenario.DataSource == null)
+                return true;
+            return (comboBoxScenario.Items.Count != scenariosToLoad.Count);
+        }
+
         private void bindScenarioCombo(IList<IScenario> scenariosToLoad)
         {
             comboBoxScenario.DataSource = null;
+            comboBoxScenario.DisplayMember = "Description";
             comboBoxScenario.DataSource = scenariosToLoad;
         }
        

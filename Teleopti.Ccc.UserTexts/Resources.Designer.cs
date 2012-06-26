@@ -4897,6 +4897,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CSV files (*.csv)|*.csv.
+        /// </summary>
+        public static string CSVFile {
+            get {
+                return ResourceManager.GetString("CSVFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Culture settings.
         /// </summary>
         public static string CultureSettings {

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
 using Teleopti.Ccc.Win.Forecasting.Forms.SkillPages;
 using Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages;
 using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages;
@@ -218,8 +219,8 @@ namespace Teleopti.Ccc.Win.Common
             return new List<IPropertyPageNoRoot<ExportSkillModel>>
                        {
                            firstPage,
-                           new SelectDateAndScenario(),
                            new SelectSkills(),
+                           new SelectDateAndScenario(),
                            new SelectFileDestination(),
                            new FileExportDone()
                        };

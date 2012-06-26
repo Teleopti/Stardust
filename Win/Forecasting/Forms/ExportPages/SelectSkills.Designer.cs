@@ -61,6 +61,7 @@
             this.listViewSkills.Size = new System.Drawing.Size(347, 323);
             this.listViewSkills.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewSkills.TabIndex = 6;
+            this.listViewSkills.TileSize = new System.Drawing.Size(100, 100);
             this.listViewSkills.UseCompatibleStateImageBehavior = false;
             this.listViewSkills.View = System.Windows.Forms.View.Details;
             // 

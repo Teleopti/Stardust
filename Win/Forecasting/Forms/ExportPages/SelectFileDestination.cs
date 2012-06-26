@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
     {
         private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
+        private SaveFileDialog _saveFileDialog; 
 
         public SelectFileDestination()
         {
@@ -34,15 +35,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         private void SaveFile()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            // TODO: Default mapp?
-            saveFileDialog.InitialDirectory = @"C:\";
-            saveFileDialog.Title = Resources.SelectFileDestination;
-            // TODO:Resources ?
-            saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
+            _saveFileDialog = new SaveFileDialog();
+            _saveFileDialog.Title = Resources.SelectFileDestination;
+            _saveFileDialog.Filter = Resources.CSVFile;
 
-            if (saveFileDialog.ShowDialog() == DialogResult.OK) textBox1.Text = saveFileDialog.FileName;
-            saveFileDialog.Dispose();
+            if (_saveFileDialog.ShowDialog() == DialogResult.OK) textBox1.Text = _saveFileDialog.FileName;
         }
 
         private void setColors()
@@ -60,6 +57,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         {
             if (String.IsNullOrEmpty(textBox1.Text)) return false;
             stateObj.ExportSkillToFileCommandModel.FileName = textBox1.Text;
+            _saveFileDialog.Dispose();
             return true;
         }
 

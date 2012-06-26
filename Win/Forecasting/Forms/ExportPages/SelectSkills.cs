@@ -74,9 +74,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         private void buildColumns()
         {
-            var header = new ColumnHeader {Text = Resources.Skill, Width = 150};
+            var header = new ColumnHeader {Text = Resources.Skill, Width = 250};
             listViewSkills.Columns.Add(header);
-            header.Dispose();
         }
 
         private void reloadSkillsListView()

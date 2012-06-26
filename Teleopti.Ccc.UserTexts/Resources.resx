@@ -10750,4 +10750,8 @@ These options are activated:
     <value>Select a skill</value>
     <comment>Select a skill</comment>
   </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>CSV files (*.csv)|*.csv</value>
+    <comment>CSV files (*.csv)|*.csv</comment>
+  </data>
 </root>
