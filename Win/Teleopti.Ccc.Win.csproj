@@ -1023,6 +1023,7 @@
     <Compile Include="Payroll\PayrollExportNavigator.Designer.cs">
       <DependentUpon>PayrollExportNavigator.cs</DependentUpon>
     </Compile>
+    <Compile Include="PeopleAdmin\Controls\Columns\EditablePeriodTimeOverrideSchedulePeriodColumn.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\PercentageCellColumnForSchedulePeriod.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\EditableTimeSpanInSchedulePeriodColumn.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\EditableDateOnlyColumnForPeriodGrids.cs" />

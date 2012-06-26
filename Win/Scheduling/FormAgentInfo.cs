@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			
 			_employmentTypeList.Add(EmploymentType.FixedStaffNormalWorkTime, Resources.EmploymentTypeFixedStaffNormalWorkTime);
-			_employmentTypeList.Add(EmploymentType.FixedStaffPeriodWorkTime, Resources.EmploymentTypeFixedStaffPeriodWorkTime);
 			_employmentTypeList.Add(EmploymentType.FixedStaffDayWorkTime, Resources.EmploymentTypeFixedStaffDayWorkTime);
 			_employmentTypeList.Add(EmploymentType.HourlyStaff, Resources.EmploymentTypeHourlyStaff);
 

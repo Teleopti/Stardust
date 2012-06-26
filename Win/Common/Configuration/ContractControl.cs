@@ -456,7 +456,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
             if (_employmentTypeList.Count > 0) return;
             _employmentTypeList.Add(EmploymentType.FixedStaffNormalWorkTime, Resources.EmploymentTypeFixedStaffNormalWorkTime);
-            _employmentTypeList.Add(EmploymentType.FixedStaffPeriodWorkTime, Resources.EmploymentTypeFixedStaffPeriodWorkTime);
             _employmentTypeList.Add(EmploymentType.FixedStaffDayWorkTime, Resources.EmploymentTypeFixedStaffDayWorkTime);
             _employmentTypeList.Add(EmploymentType.HourlyStaff, Resources.EmploymentTypeHourlyStaff);
 

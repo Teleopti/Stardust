@@ -46,25 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void ShouldReturnFixedIfNotFixedStaffDayWorkTime()
-		{
-			_person.Period(new DateOnly()).PersonContract.Contract.EmploymentType = EmploymentType.FixedStaffPeriodWorkTime;
-			using (_mocks.Record())
-			{
-				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.IsValid).Return(true);
-                Expect.Call(_schedulePeriod.Contract).Return(_person.Period(new DateOnly()).PersonContract.Contract);
-				//Expect.Call(_schedulePeriod.PersonPeriod).Return(_person.Period(new DateOnly()));
-			}
-
-			using (_mocks.Playback())
-			{
-				ISchedulePeriodTargetCalculator calculator = _target.CreatePeriodTargetCalculator() as NewFixedDayOffSchedulePeriodTargetCalculator;
-				Assert.IsNotNull(calculator);
-			}
-		}
-
-		[Test]
 		public void ShouldReturnNullIfSchedulePeriodNotValid()
 		{
 			using (_mocks.Record())
