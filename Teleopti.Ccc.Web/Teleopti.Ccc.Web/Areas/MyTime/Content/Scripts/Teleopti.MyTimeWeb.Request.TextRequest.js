@@ -72,14 +72,18 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		$('#Text-request-tab')
 			.click(function () {
 				_clearValidationError();
-				_selectTextRequestTab();
-				requestViewModel.IsFullDay(false);
+				if (!$('#Text-request-tab').hasClass('selected-tab')) {
+					_selectTextRequestTab();
+					requestViewModel.IsFullDay(false);
+				}
 			});
 		$('#Absence-request-tab')
 			.click(function () {
 				_clearValidationError();
-				_selectAbsenceRequestTab();
-				requestViewModel.IsFullDay(true);
+				if (!$('#Absence-request-tab').hasClass('selected-tab')) {
+					_selectAbsenceRequestTab();
+					requestViewModel.IsFullDay(true);
+				}
 			});
 	}
 
