@@ -46,7 +46,7 @@
 				  not-null="false"/>
 
     <property name="PeriodTime"
-          not-null="true"
+          not-null="false"
           type="TimeSpan"/>
     
     <property name="MustHavePreference"
