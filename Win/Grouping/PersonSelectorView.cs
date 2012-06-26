@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -375,16 +374,4 @@ namespace Teleopti.Ccc.Win.Grouping
         
     }
 
-	public class NodeSorter : IComparer
-	{
-		// Compare the length of the strings, or the strings themselves, if they are of the same length.
-		public int Compare(object x, object y)
-		{
-			var tx = x as TreeNodeAdv;
-			var ty = y as TreeNodeAdv;
-
-			return String.CompareOrdinal(tx.Text, ty.Text);
-
-		}
-	}
 }
