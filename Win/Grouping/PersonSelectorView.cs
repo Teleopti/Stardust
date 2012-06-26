@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -37,6 +38,9 @@ namespace Teleopti.Ccc.Win.Grouping
             xdtpDate.Culture = CultureInfo.CurrentCulture;
             SetTexts();
             PreselectedPersonIds = new List<Guid>();
+			treeViewAdvMainTabTree.SortWithChildNodes = true;
+			treeViewAdvMainTabTree.Root.SortType = TreeNodeAdvSortType.Text;
+			treeViewAdvMainTabTree.Root.SortOrder = SortOrder.Ascending;
         }
 
         protected override void SetCommonTexts()
@@ -107,6 +111,8 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		public bool KeepInteractiveOnDuringLoad { get; set; }
 
+		public bool ExpandSelected { get; set; }
+
         public void ResetTreeView(TreeNodeAdv[] treeNodeAdvs)
         {
             treeViewAdvMainTabTree.AfterCheck-= treeViewAdvMainTabTreeAfterCheck;
@@ -117,6 +123,7 @@ namespace Teleopti.Ccc.Win.Grouping
             treeViewAdvMainTabTree.Nodes.AddRange(treeNodeAdvs);
 			if(ShowCheckBoxes)
 			    treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
+			treeViewAdvMainTabTree.Root.Sort();
 			treeViewAdvMainTabTree.EndUpdate();
             treeViewAdvMainTabTree.AfterCheck += treeViewAdvMainTabTreeAfterCheck;
         }
@@ -367,4 +374,17 @@ namespace Teleopti.Ccc.Win.Grouping
         }
         
     }
+
+	public class NodeSorter : IComparer
+	{
+		// Compare the length of the strings, or the strings themselves, if they are of the same length.
+		public int Compare(object x, object y)
+		{
+			var tx = x as TreeNodeAdv;
+			var ty = y as TreeNodeAdv;
+
+			return String.CompareOrdinal(tx.Text, ty.Text);
+
+		}
+	}
 }
