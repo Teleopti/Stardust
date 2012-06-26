@@ -69,12 +69,6 @@
       <HintPath>..\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SsasBuilder">
-      <HintPath>..\packages\SsasBuilder.1.0.0\lib\Net35\SsasBuilder.dll</HintPath>
-    </Reference>
-    <Reference Include="SsasHelper">
-      <HintPath>..\packages\SsasBuilder.1.0.0\lib\Net35\SsasHelper.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -99,7 +93,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
