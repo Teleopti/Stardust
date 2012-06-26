@@ -54,14 +54,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 315);
+            this.label1.Location = new System.Drawing.Point(10, 50);
             this.label1.Margin = new System.Windows.Forms.Padding(10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = Resources.FileExportDone;
+            this.label1.Text = "xxFileExportDone";
             // 
             // FileExportDone
             // 
