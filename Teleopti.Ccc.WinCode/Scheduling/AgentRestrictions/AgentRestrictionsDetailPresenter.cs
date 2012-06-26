@@ -74,7 +74,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			//if (e.Style.CellModel != null) ((IRestrictionSummaryViewCellModel)e.Style.CellModel).RestrictionSummaryPresenter = this;
 			//e.Style.CellValue = preferenceCellData.SchedulePart;
 
-			e.Style.CellValue = preferenceCellData.TheDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
+			e.Style.CellType = "AgentRestrictionsDetailViewCellModel";
+			if (e.Style.CellModel != null) ((IAgentRestrictionsDetailViewCellModel)e.Style.CellModel).DetailModel = _model;
+			e.Style.CellValue = preferenceCellData.SchedulePart;
+
+			//e.Style.CellValue = preferenceCellData.TheDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
 			e.Style.Tag = preferenceCellData.TheDate;
 
 			if (preferenceCellData.SchedulePart.FullAccess)
