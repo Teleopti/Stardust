@@ -14,32 +14,11 @@ namespace Teleopti.Ccc.Win.Main
 
 		public static void TriggerEntitiesNeedRefresh(object sender, IEnumerable<IRootChangeInfo> updatedEntities)
 		{
-		    IList<IAggregateRoot> aggregateRoots = updatedEntities.Select(updatedEntity => (IAggregateRoot)updatedEntity.Root).ToList();
-		    TriggerEntitiesNeedRefresh(sender, aggregateRoots);
-
-		    //if (EntitiesNeedsRefresh != null && updatedEntities != null)
-		    //{
-		    //    var multicast = EntitiesNeedsRefresh as MulticastDelegate;
-		    //    var targets = multicast.GetInvocationList();
-		    //    var targetsExcludingSender = (from t in targets where t.Target != sender select t).ToArray();
-		    //    if (!targets.Any())
-		    //        return;
-
-		    //    var entitiesPerType = (from e in updatedEntities
-		    //                       group e by e.Root.GetType() into g
-		    //                       select g).ToArray();
-
-		    //    foreach (var entities in entitiesPerType)
-		    //    {
-		    //        var ids = (from e in entities select ((IAggregateRoot)e.Root).Id.Value).ToArray();
-		    //        var eventArgs = new EntitiesUpdatedEventArgs { EntityType = entities.Key, UpdatedIds = ids };				   
-
-		    //        targetsExcludingSender.ForEach(t => t.Method.Invoke(t.Target, new[] { sender, eventArgs }));
-		    //    }
-		    //}
+		    var aggregateRoots = updatedEntities.Select(updatedEntity => new UpdatedEntities{UpdatedEntity = (IAggregateRoot) updatedEntity.Root,EntityStatus = updatedEntity.Status}).ToList();
+            TriggerEntitiesNeedRefresh(sender, aggregateRoots);
 		}
 
-        public static void TriggerEntitiesNeedRefresh(object sender, IEnumerable<IAggregateRoot> updatedEntities)
+        public static void TriggerEntitiesNeedRefresh(object sender, IEnumerable<UpdatedEntities> updatedEntities)
         {
         	var handler = EntitiesNeedsRefresh;
             if (handler != null && updatedEntities != null)
@@ -51,15 +30,21 @@ namespace Teleopti.Ccc.Win.Main
                     return;
 
                 var entitiesPerType = (from e in updatedEntities
-                                       group e by e.GetType() into g
+                                       group e by e.UpdatedEntity.GetType() into g
                                        select g).ToArray();
 
                 foreach (var entities in entitiesPerType)
                 {
-                    var ids = (from e in entities select e.Id.Value).ToArray();
-                    var eventArgs = new EntitiesUpdatedEventArgs { EntityType = entities.Key, UpdatedIds = ids };
+                    var entitiesPerUpdateType = (from e in entities
+                                           group e by e.EntityStatus into g
+                                           select g).ToArray();
 
-                    targetsExcludingSender.ForEach(t => t.Method.Invoke(t.Target, new[] { sender, eventArgs }));
+                    foreach(var entity in entitiesPerUpdateType)
+                    {
+                        var ids = (from e in entity select e.UpdatedEntity.Id.Value).ToArray();
+                        var eventArgs = new EntitiesUpdatedEventArgs { EntityType = entities.Key, UpdatedIds = ids, EntityStatus = entity.Key };
+                        targetsExcludingSender.ForEach(t => t.Method.Invoke(t.Target, new[] { sender, eventArgs }));
+                    }
                 }
             }
         }

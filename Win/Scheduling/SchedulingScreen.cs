@@ -901,7 +901,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                             Tag = ClipboardItems.PersonalShift
                                                         });
             _clipboardControl.PasteSpecialItems.Add(new ToolStripButton
-                                                        {Text = Resources.PasteSpecial, Tag = ClipboardItems.Special});
+                                                        {Text = Resources.PasteNew, Tag = ClipboardItems.Special});
             _clipboardControl.PasteSpecialItems.Add(new ToolStripButton
                                                         {
                                                             Text = Resources.PasteShiftFromShifts,
@@ -2683,8 +2683,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             var options = new PasteOptions();
             bool showRestrictions = _scheduleView is RestrictionSummaryView;
-            var pasteSpecial = new FormClipboardSpecial(false, showRestrictions, options)
-                                   {Text = Resources.PasteSpecial};
+            var pasteSpecial = new FormClipboardSpecial(false, showRestrictions, options) {Text = Resources.PasteNew};
             pasteSpecial.ShowDialog();
 
             if (_scheduleView != null)

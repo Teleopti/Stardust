@@ -1151,4 +1151,19 @@
   <data name="ResRequestType" xml:space="preserve">
     <value>Tyyppi</value>
   </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Hakemus päivämäärä</value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>Pyyntöjakso</value>
+  </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Ohjaauudelleen</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Istunto päättynyt</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Sinun istuntosi on päättynyt, koska et ole ollut aktiivisena. Sinut ohjataan sisäänkirjautumissivulle. </value>
+  </data>
 </root>

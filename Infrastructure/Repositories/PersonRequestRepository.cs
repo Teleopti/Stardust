@@ -229,10 +229,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return allRequestExceptShiftTrade.Union(allShiftTradeRequests).ToList();
 		}
 
-
 		private IList<IPersonRequest> FindPersonRequestWithinPeriodExceptShiftTrade(DateTimePeriod period)
 		{
-
 			var requestForPeriod = DetachedCriteria.For<Request>()
 				 .SetProjection(Projections.Property("Parent"))
 				 .Add(Restrictions.Between("Period.period.Minimum", period.StartDateTime, period.EndDateTime))
@@ -248,7 +246,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private IList<IPersonRequest> FindShiftTradeRequestWithinPeriod(DateTimePeriod period)
 		{
-
 			var requestForPeriod = DetachedCriteria.For<ShiftTradeRequest>()
 				 .SetProjection(Projections.Property("Parent"))
 				 .Add(Restrictions.Between("Period.period.Minimum", period.StartDateTime, period.EndDateTime));
@@ -289,7 +286,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var personRequestResults =
 				from personChunk in personChunks
-				let personChunkList = personChunk.ToList()
+				let personChunkList = personChunk.ToArray()
 				select
 				Session.CreateCriteria(typeof(PersonRequest))
 				 .SetFetchMode("requests", FetchMode.Join)
@@ -303,7 +300,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Subqueries.PropertyIn("requests", DetachedCriteria.For(typeof(ShiftTradeRequest))
 					 .SetProjection(Projections.Property("Parent"))
 					 .Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", DetachedCriteria.For<ShiftTradeSwapDetail>().SetProjection(Projections.Property("Parent"))
-						 .Add(Restrictions.Or(Restrictions.In("PersonFrom", personChunkList), Restrictions.In("PersonTo", personChunkList)))))))
+						 .Add(Restrictions.Or(Restrictions.InG("PersonFrom", personChunkList), Restrictions.InG("PersonTo", personChunkList)))))))
 				.List<IPersonRequest>();
 
 			var personRequests =
@@ -333,7 +330,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				retList.AddRange(Session.CreateCriteria(typeof(PersonRequest))
 										.SetFetchMode("requests", FetchMode.Join)
 										.SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
-										.Add(Restrictions.In("Person", item.ToArray()))
+										.Add(Restrictions.InG("Person", item.ToArray()))
 										.Add(Restrictions.Or(Restrictions.Between("UpdatedOn", period.StartDateTime, period.EndDateTime),
 																	Restrictions.Eq("requestStatus", 0)))
 										.List<IPersonRequest>());

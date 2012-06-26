@@ -586,7 +586,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPerson person = PersonFactory.CreatePerson("person");
             PersistAndRemoveFromUnitOfWork(person);
             
-            var personList = (from n in Enumerable.Range(1, 3000) select person).ToList();
+            var personList = Enumerable.Range(1, 2200).Select(s => person).ToArray();
             IList<IPersonRequest> personRequestList = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(personList, new DateTimePeriod(2010, 1, 1, 2010, 1, 1));
         
             Assert.IsNotNull(personRequestList);

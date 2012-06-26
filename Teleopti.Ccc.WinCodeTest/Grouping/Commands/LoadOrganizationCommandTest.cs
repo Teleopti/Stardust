@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
             
 			Expect.Call(_personSelectorView.VisiblePersonIds).Return(new List<Guid> { olaPersonId, mickePersonId, robinPersonId }).Repeat.AtLeastOnce();
             Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> { olaPersonId }).Repeat.Times(3);
+        	Expect.Call(_personSelectorView.ExpandSelected).Return(true).Repeat.AtLeastOnce();
             Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).IgnoreArguments();
             _mocks.ReplayAll();
              _target.Execute();
@@ -164,6 +165,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 
 			Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> { personId }).Repeat.AtLeastOnce();
 			Expect.Call(_personSelectorView.VisiblePersonIds).Return(null).Repeat.AtLeastOnce();
+			Expect.Call(_personSelectorView.ExpandSelected).Return(true).Repeat.AtLeastOnce();
 			Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).Constraints(
 				Rhino.Mocks.Constraints.Is.Matching<TreeNodeAdv[]>(t =>
 					t[0].GetNodeCount(true) == 8)); //2 Sites (STO+STr), 3 Teams (Str/Yellow+Str/Red+STO/Red), 3 Occurences of person (Str/Yellow+Str/Red+STO/Red)

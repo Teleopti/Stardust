@@ -49,6 +49,21 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.AddParent(_parent);
         }
 
+        [Test]
+        public void ShouldHaveCorrectWeeklyWorkloadSummaryForNonTelephonySkills()
+        {
+            var skill = SkillFactory.CreateSkill("Email", SkillTypeFactory.CreateSkillTypeEmail(), 60);
+            var workload = WorkloadFactory.CreateWorkload(skill);
+            var openHours = new List<TimePeriod>();
+            var workloadDay = new WorkloadDay();
+            workloadDay.Create(new DateOnly(2012, 6, 26), workload, openHours);
+            workloadDay.Tasks = 100;
+
+            target.Add(workloadDay);
+
+            Assert.That(target.Tasks, Is.EqualTo(100));
+        }
+
         /// <summary>
         /// Verifies the is loaded works.
         /// </summary>
