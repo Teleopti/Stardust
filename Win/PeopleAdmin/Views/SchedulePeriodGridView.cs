@@ -1378,7 +1378,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             _copySpecialSchedulePeriodMenuItem.Click += CopySpecial;
             Grid.ContextMenuStrip.Items.Add(_copySpecialSchedulePeriodMenuItem);
 
-            _pasteSpecialSchedulePeriodMenuItem = new ToolStripMenuItem(UserTexts.Resources.PasteSpecial);
+            _pasteSpecialSchedulePeriodMenuItem = new ToolStripMenuItem(UserTexts.Resources.PasteNew);
             _pasteSpecialSchedulePeriodMenuItem.Click += PasteSpecial;
             Grid.ContextMenuStrip.Items.Add(_pasteSpecialSchedulePeriodMenuItem);
         }

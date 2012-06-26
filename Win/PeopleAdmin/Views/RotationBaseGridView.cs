@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_copySpecialPersonPeriodMenuItem.Click += CopySpecial;
 			Grid.ContextMenuStrip.Items.Add(_copySpecialPersonPeriodMenuItem);
 
-			_pasteSpecialPersonPeriodMenuItem = new ToolStripMenuItem(Resources.PasteSpecial);
+            _pasteSpecialPersonPeriodMenuItem = new ToolStripMenuItem(Resources.PasteNew);
 			_pasteSpecialPersonPeriodMenuItem.Click += PasteSpecial;
 			Grid.ContextMenuStrip.Items.Add(_pasteSpecialPersonPeriodMenuItem);
 
