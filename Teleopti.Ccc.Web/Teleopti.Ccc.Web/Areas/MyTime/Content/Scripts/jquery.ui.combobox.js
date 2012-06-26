@@ -100,7 +100,9 @@
 			this.element.show();
 			$.Widget.prototype.destroy.call(this);
 		},
+
 		set: function (value) {
+			this.element.val(value);
 			$(this.input).val(value);
 			$(this.input).trigger('change');
 		}

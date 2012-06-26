@@ -106,6 +106,7 @@ Scenario: View absence request details
 
 Scenario: Edit absence request
 	Given I am an agent
+	And I have a requestable absence called Illness
 	And I have an existing absence request
 	And I am viewing requests
 	When I click on the request

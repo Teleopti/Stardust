@@ -34,7 +34,7 @@
 			<select id="Absence-type" class="floatleft absence-input combobox tooltip-dropdown-menu">
 				@foreach (var absenceType in Model.AbsenceTypes)
 				{
-					<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+					<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
 				}
 			</select>
 		

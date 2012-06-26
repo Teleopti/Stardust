@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIInputNewAbsenceRequestValues()
 		{
 			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. cinnemon roll!";
+			Pages.Pages.CurrentEditRequestPage.AbsenceTypesSelectList.Select("Illness");
 		}
 
 

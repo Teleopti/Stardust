@@ -197,7 +197,7 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	}
 
 	function _getFormData() {
-		var absenceId = $('#Absence-type').children(":selected").val();
+		var absenceId = $('#Absence-type').children(":selected").attr('typeid');
 		if (absenceId == undefined) {
 			absenceId = null;
 		}
@@ -229,7 +229,7 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	};
 
 	function _fillFormRequestType(payload) {
-		$('#Absence-type-input').val(payload);
+		$('#Absence-type').combobox("set", payload);
 	};
 
 	function _clearFormData() {
