@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                     if(_showPersons)
                     {
                         currTeam.Nodes.Add(personNode);
-                        if(personNode.Checked)
+						if (_view.ExpandSelected && personNode.Checked)
                         {
                             currTeam.Expanded = true;
                             currSite.Expanded = true;
