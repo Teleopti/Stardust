@@ -211,29 +211,11 @@ namespace Teleopti.Ccc.Win.Shifts
             var clipboardhost = new ToolStripControlHost(_clipboardControl);
             tsClipboard.Items.Add(clipboardhost);
 
-            _clipboardControl.CutClicked += (clipboardControlCutClicked);
             _clipboardControl.CopyClicked += (clipboardControlCopyClicked);
             _clipboardControl.PasteClicked += (clipboardControlPasteClicked);
+            _clipboardControl.ToolStripSplitButtonCut.Enabled = false;
+            _clipboardControl.ToolStripSplitButtonCut.Visible = false;
             _clipboardControl.SetButtonState(ClipboardAction.Paste, false);
-        }
-
-        private void clipboardControlCutClicked(object sender, EventArgs e)
-        {
-            _externalExceptionHandler.AttemptToUseExternalResource(Clipboard.Clear);
-            switch (Presenter.Model.SelectedView)
-            {
-                case ShiftCreatorViewType.RuleSet:
-                case ShiftCreatorViewType.RuleSetBag:
-                    _navigationView.Cut();
-                    _clipboardControl.SetButtonState(ClipboardAction.Paste, true);
-                    break;
-                case ShiftCreatorViewType.Activities:
-                case ShiftCreatorViewType.Limitation:
-                case ShiftCreatorViewType.DateExclusion:
-                    _generalView.Cut();
-                    _clipboardControl.SetButtonState(ClipboardAction.Paste, true);
-                    break;
-            }
         }
 
         private void clipboardControlPasteClicked(object sender, EventArgs e)
