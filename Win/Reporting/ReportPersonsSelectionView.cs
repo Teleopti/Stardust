@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Win.Reporting
         private readonly IPersonSelectorPresenter _personSelectorPresenter;
         private ReportPersonsSelectionView(){}
 
-        public ReportPersonsSelectionView(DateOnly dateOnly, IEnumerable<Guid> selectedAgentGuids, IComponentContext componentContext, IApplicationFunction applicationFunction, string selectedGroupPage)
+		public ReportPersonsSelectionView(DateOnlyPeriod dateOnlyPeriod, IEnumerable<Guid> selectedAgentGuids, IComponentContext componentContext, IApplicationFunction applicationFunction, string selectedGroupPage)
         {
             InitializeComponent();
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Win.Reporting
             view.Dock = DockStyle.Fill;
 
             var selectorView = _personSelectorPresenter.View;
-            selectorView.SetDate(dateOnly);
+			selectorView.SelectedPeriod = dateOnlyPeriod;
             _personSelectorPresenter.ShowPersons = true;
             _personSelectorPresenter.ShowUsers = false;
             selectorView.PreselectedPersonIds = selectedAgentGuids;
