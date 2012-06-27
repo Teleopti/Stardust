@@ -10806,6 +10806,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Longterm Forecast.
+        /// </summary>
+        public static string LongtermForecast {
+            get {
+                return ResourceManager.GetString("LongtermForecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LookUp.
         /// </summary>
         public static string LookUp {
