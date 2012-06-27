@@ -91,6 +91,7 @@ namespace Teleopti.Messaging.SignalR
 					          		StartDate = Subscription.DateToString(floor),
 					          		EndDate = Subscription.DateToString(ceiling),
 					          		DomainId = Subscription.IdToString(domainObjectId),
+									DomainQualifiedType = domainInterfaceType.AssemblyQualifiedName,
 					          		DomainType = domainInterfaceType.Name,
 					          		ModuleId = Subscription.IdToString(moduleId),
 					          		DomainUpdateType = (int) DomainUpdateType.Insert,

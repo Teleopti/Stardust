@@ -65,7 +65,7 @@ namespace Teleopti.Messaging.SignalR
 						EndDate = Subscription.DateToString(eventEndDate),
 						DomainId = Subscription.IdToString(domainObjectId),
 						DomainType = type.Name,
-						DomainQualifiedType =  type.AssemblyQualifiedName,
+						DomainQualifiedType =  types[0].AssemblyQualifiedName,
 						DomainReferenceId = Subscription.IdToString(referenceObjectId),
 						DomainReferenceType =
 							(referenceObjectType == null)
