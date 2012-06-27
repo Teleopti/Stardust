@@ -19,7 +19,7 @@ Scenario: See day off preference
 	And I have existing day off preference
 	When I view preferences
 	Then I should see my existing day off preference
-	
+
 Scenario: See absence preference
 	Given I am an agent
 	And I have existing absence preference
