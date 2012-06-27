@@ -32,14 +32,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private ITransaction _transaction;
 		private readonly ILog _logger = LogManager.GetLogger(typeof (NHibernateUnitOfWork));
 		private NHibernateFilterManager _filterManager;
-		private IEnumerable<IDenormalizer> _activeDenormalizers;
+		private IEnumerable<IMessageSender> _activeDenormalizers;
 		private readonly Action<ISession> _unbind;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
 
 
 		protected internal NHibernateUnitOfWork(ISession session, 
 													IMessageBroker messageBroker,
-IEnumerable<IDenormalizer> activeDenormalizers,
+IEnumerable<IMessageSender> activeDenormalizers,
 													NHibernateFilterManager filterManager,
 													ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService,
 													Action<ISession> unbind)

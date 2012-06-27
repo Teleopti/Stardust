@@ -100,6 +100,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<AvailableHourlyEmployeeFinderResult> result = _target.Find();
 			Assert.AreEqual(1, result.Count);
 			Assert.AreEqual(extraPerson2, result[0].Person);
+			Assert.That(result[0].Matching, Is.Not.Null);
+			Assert.That(result[0].StudentAvailabilityDay, Is.Not.Null);
             _mocks.VerifyAll();
 		}
 
