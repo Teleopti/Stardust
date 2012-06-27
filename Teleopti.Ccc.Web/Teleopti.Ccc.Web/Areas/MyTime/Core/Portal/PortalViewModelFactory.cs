@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 						{
 							new ToolBarButtonItem
 							{
-								Title = Resources.NewTextRequest,
+								Title = Resources.NewRequest,
 								ButtonType = "addTextRequest"
 							}
 						}
