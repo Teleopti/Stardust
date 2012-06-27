@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 		public IEnumerable<IScheduleDay> ScheduleDays { get; private set; }
 
 		private IStudentAvailabilityRestriction _studentAvailabilityRestriction;
-		private IStudentAvailabilityProvider _studentAvailabilityProvider;
+		private readonly IStudentAvailabilityProvider _studentAvailabilityProvider;
 
 		public IStudentAvailabilityRestriction StudentAvailability
 		{

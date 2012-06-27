@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 
 
 			CreateMap<DateOnly, StudentAvailabilityDomainData>()
-				.ConstructUsing(s => new StudentAvailabilityDomainData(_scheduleProvider(), _studentAvailabilityProvider(), _loggedOnUser()))
+				.ConstructUsing(s => new StudentAvailabilityDomainData(_scheduleProvider(), _loggedOnUser()))
 				.ForMember(d => d.ChoosenDate, c => c.MapFrom(s => s))
 				.ForMember(d => d.Period, c => c.MapFrom(s => _virtualSchedulePeriodProvider().GetCurrentOrNextVirtualPeriodForDate(s)))
 				.ForMember(d => d.ScheduleDays, c => c.Ignore())

@@ -9,15 +9,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 	public class StudentAvailabilityDomainData
 	{
 		private readonly IScheduleProvider _scheduleProvider;
-		private readonly IStudentAvailabilityProvider _studentAvailabilityProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private IEnumerable<IScheduleDay> _scheduleDays;
-		private IStudentAvailabilityRestriction _studentAvailabilityRestriction;
 
-		public StudentAvailabilityDomainData(IScheduleProvider scheduleProvider, IStudentAvailabilityProvider studentAvailabilityProvider, ILoggedOnUser loggedOnUser)
+		public StudentAvailabilityDomainData(IScheduleProvider scheduleProvider, ILoggedOnUser loggedOnUser)
 		{
 			_scheduleProvider = scheduleProvider;
-			_studentAvailabilityProvider = studentAvailabilityProvider;
 			_loggedOnUser = loggedOnUser;
 		}
 
