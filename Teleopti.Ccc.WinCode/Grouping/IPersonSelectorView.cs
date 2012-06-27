@@ -30,6 +30,5 @@ namespace Teleopti.Ccc.WinCode.Grouping
         IEnumerable<Guid> PreselectedPersonIds { get; set; }
         bool HideMenu { get; set; }
         DateOnlyPeriod SelectedPeriod { get; set; }
-        void SetDate(DateOnly newDate);
     }
 }

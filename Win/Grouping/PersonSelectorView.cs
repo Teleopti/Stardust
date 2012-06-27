@@ -355,10 +355,6 @@ namespace Teleopti.Ccc.Win.Grouping
 
         public  bool HideMenu { get; set; }
 
-        public void SetDate(DateOnly newDate)
-        {
-            xdtpDate.Value = newDate;
-        }
 
         private void refreshListToolStripMenuItemClick(object sender, EventArgs e)
         {
