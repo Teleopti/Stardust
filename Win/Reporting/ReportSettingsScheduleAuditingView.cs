@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
         private void setPersonSelectorDate()
         {
-            reportPersonSelector1.SetDate(reportDateFromToSelectorSchedulePeriod.GetSelectedDates.First().StartDate);
+            reportPersonSelector1.SetPeriod(reportDateFromToSelectorSchedulePeriod.GetSelectedDates.First());
         }
 
         protected override void OnLoad(EventArgs e)
