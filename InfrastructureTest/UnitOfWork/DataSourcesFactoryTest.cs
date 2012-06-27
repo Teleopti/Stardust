@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			enversConfiguration = MockRepository.GenerateMock<IEnversConfiguration>();
-			target = new DataSourcesFactory(enversConfiguration, new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTest());
+			target = new DataSourcesFactory(enversConfiguration, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest());
 			string currDirectory = Directory.GetCurrentDirectory();
 			testFile = currDirectory + "test.hbm.xml";
 		}
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void VerifyXmlBasedWithDistributedTransaction()
 		{
-			target = new DataSourcesFactory(enversConfiguration, new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTest());
+			target = new DataSourcesFactory(enversConfiguration, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest());
 			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
 
 			string xmlString = xmlText("test", correctMatrix);

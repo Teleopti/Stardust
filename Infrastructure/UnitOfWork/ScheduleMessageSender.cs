@@ -6,12 +6,12 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class ScheduleDenormalizer : IDenormalizer
+	public class ScheduleMessageSender : IMessageSender
 	{
 		private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
 		private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
 
-		public ScheduleDenormalizer(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
+		public ScheduleMessageSender(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
 		{
 			_sendDenormalizeNotification = sendDenormalizeNotification;
 			_saveToDenormalizationQueue = saveToDenormalizationQueue;
