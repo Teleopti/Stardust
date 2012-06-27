@@ -42,6 +42,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			_detailView = new AgentRestrictionsDetailView(grid, _stateHolder, lockManager, schedulePartFilter, clipHandler, overriddenBusinessRulesHolder, changeCallback, scheduleTag, workShiftWorkTime);
 			_detailView.LoadScheduleViewGrid();
+
+			
 		}
 
 

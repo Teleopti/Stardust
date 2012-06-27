@@ -1174,9 +1174,12 @@
       <DependentUpon>AgentRestrictionGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsAvailableDrawer.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailViewCellModel.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsLoadingDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsNotAvailableDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailView.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPreferencePainter.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainter.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsWarningDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionViewTEMP.cs">
       <SubType>Form</SubType>

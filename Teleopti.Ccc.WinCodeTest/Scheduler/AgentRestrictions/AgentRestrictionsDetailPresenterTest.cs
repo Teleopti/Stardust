@@ -105,10 +105,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			e = new GridQueryCellInfoEventArgs(0, 0, _info);
 			_presenter.QueryCellInfo(null, e);
 			Assert.AreEqual(string.Empty, e.Style.CellValue.ToString());
-
-			e = new GridQueryCellInfoEventArgs(1, 1, _info);
-			_presenter.QueryCellInfo(null, e);	
-			//Assert.AreEqual("--ScheduleDay--", e.Style.CellValue.ToString());
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "period"), Test]
@@ -120,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				Expect.Call(_model.DetailData()).Return(_detailData);
 				Expect.Call(_preferenceCellData.TheDate).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
-				Expect.Call(_preferenceCellData.SchedulePart).Return(part);
+				Expect.Call(_preferenceCellData.SchedulePart).Return(part).Repeat.AtLeastOnce();
 				Expect.Call(_preferenceCellData.ViolatesNightlyRest).Return(true);
 				Expect.Call(_preferenceCellData.NoShiftsCanBeFound).Return(true);
 			}

@@ -41,6 +41,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			ViewGrid.NumberedRowHeaders = false;
 			ViewGrid.RowHeights.SetRange(1, ViewGrid.RowCount, 80);
 			ViewGrid.RowHeightEntries[0].Height = 30;
+
+			if (!ViewGrid.CellModels.ContainsKey("AgentRestrictionsDetailViewCellModel")) ViewGrid.Model.CellModels.Add("AgentRestrictionsDetailViewCellModel", new AgentRestrictionsDetailViewCellModel(ViewGrid.Model));
 		}
 
 		protected override int CellWidth()
