@@ -85,11 +85,11 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="BuildSSASXmla;AzureDeploy;FxCop">
+	<Target Name="BuildAndTest" DependsOnTargets="AzureDeploy;FxCop">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 
-	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;CreateTrunkDb;CreateNHibDb">
+	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;CreateTrunkDb;CreateNHibDb;BuildSSASXmla">
 		<Message Importance="high" Text="Compile starting..." />
 
 		<MSBuild Projects="@(SolutionFile)"
