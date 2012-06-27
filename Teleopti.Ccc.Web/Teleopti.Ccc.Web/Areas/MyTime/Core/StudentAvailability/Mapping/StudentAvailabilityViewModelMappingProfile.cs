@@ -48,23 +48,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 			CreateMap<DateOnly, StudentAvailabilityViewModel>()
 				.ConvertUsing(twoStepMapping<DateOnly, StudentAvailabilityDomainData, StudentAvailabilityViewModel>);
 
-			// for testing purposes
-			CreateMap<DateOnly, PeriodSelectionViewModel>()
-				.ConvertUsing(twoStepMapping<DateOnly, StudentAvailabilityDomainData, PeriodSelectionViewModel>);
-			CreateMap<DateOnly, DayViewModelBase>()
-				.ConvertUsing(twoStepMapping<DateOnly, StudentAvailabilityDomainData, DayViewModelBase>);
-			CreateMap<DateOnly, AvailableDayViewModel>()
-				.ConvertUsing(twoStepMapping<DateOnly, StudentAvailabilityDomainData, AvailableDayViewModel>);
-
-
 			CreateMap<DateOnly, StudentAvailabilityDomainData>()
-				.ConstructUsing(s => new StudentAvailabilityDomainData(_scheduleProvider(), _studentAvailabilityProvider(), _loggedOnUser()))
-				.ForMember(d => d.Date, c => c.MapFrom(s => s))
+				.ConstructUsing(s => new StudentAvailabilityDomainData(_scheduleProvider(), _loggedOnUser()))
+				.ForMember(d => d.ChoosenDate, c => c.MapFrom(s => s))
 				.ForMember(d => d.Period, c => c.MapFrom(s => _virtualSchedulePeriodProvider().GetCurrentOrNextVirtualPeriodForDate(s)))
 				.ForMember(d => d.ScheduleDays, c => c.Ignore())
 				.ForMember(d => d.Person, c => c.Ignore())
 				;
-
 
 			CreateMap<StudentAvailabilityDomainData, StudentAvailabilityViewModel>()
 				.ForMember(d => d.PeriodSelection, c => c.MapFrom(s => s))
@@ -80,32 +70,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				                                        			firstDateOfWeek = firstDateOfWeek.AddDays(7);
 				                                        		}
 				                                        		var mappingDatas = firstDatesOfWeeks.Select(d =>
-				                                        		                                            new StudentAvailabilityDomainData(_scheduleProvider(), _studentAvailabilityProvider(), _loggedOnUser())
-				                                        		                                            {Date = d, Period = s.Period});
-				                                        		return mappingDatas.ToArray() as IEnumerable<StudentAvailabilityDomainData>;
+				                                        				new StudentAvailabilityWeekDomainData(d, s.Person, s.Period,s.ScheduleDays));
+				                                        		return mappingDatas.ToArray();
 				                                        	}))
 				.ForMember(d => d.PeriodSummary, c => c.UseValue(new PeriodSummaryViewModel()))
 				.ForMember(d => d.StudentAvailabilityPeriod, c => c.MapFrom(s => s.Person.WorkflowControlSet))
 				;
 
-			CreateMap<StudentAvailabilityDomainData, WeekViewModel>()
+			CreateMap<StudentAvailabilityWeekDomainData, WeekViewModel>()
 				.ForMember(d => d.Summary, c => c.UseValue(new WeekSummaryViewModel()))
 				.ForMember(d => d.Days, c => c.MapFrom(s =>
-				                                       	{
-				                                       		var dates = s.Date.DateRange(7);
-				                                       		var dateOnlys = dates.Select(d => new DateOnly(d));
-				                                       		var mappingDatas = dateOnlys.Select(d =>
-																							new StudentAvailabilityDomainData(_scheduleProvider(), _studentAvailabilityProvider(), _loggedOnUser()) 
-																							{ Date = d, Period = s.Period });
-															return mappingDatas.ToArray() as IEnumerable<StudentAvailabilityDomainData>;
-				                                       	}))
+																		{
+																			var dates = s.FirstDateOfWeek.DateRange(7);
+																			var dateOnlys = dates.Select(d => new DateOnly(d));
+																			var mappingDatas = dateOnlys.Select(d =>
+																			                                new StudentAvailabilityDayDomainData(d, s.Period, s.Person, _studentAvailabilityProvider(), s.ScheduleDays));
+																			return mappingDatas.ToArray();
+																		}))
 				;
 
-			CreateMap<StudentAvailabilityDomainData, DayViewModelBase>()
-				.ConvertUsing(s => _mapper().Map<StudentAvailabilityDomainData, AvailableDayViewModel>(s))
+			CreateMap<StudentAvailabilityDayDomainData, DayViewModelBase>()
+				.ConvertUsing(s => _mapper().Map<StudentAvailabilityDayDomainData, AvailableDayViewModel>(s))
 				;
 
-			CreateMap<StudentAvailabilityDomainData, AvailableDayViewModel>()
+			CreateMap<StudentAvailabilityDayDomainData, AvailableDayViewModel>()
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date))
 				.ForMember(d => d.Header, c => c.MapFrom(s => s))
 				.ForMember(d => d.State, c => c.MapFrom(s =>
@@ -137,7 +125,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.WorkTimeSpan, c => c.Ignore())
 				;
 
-			CreateMap<StudentAvailabilityDomainData, HeaderViewModel>()
+			CreateMap<StudentAvailabilityDayDomainData, HeaderViewModel>()
 				.ForMember(d => d.DayDescription, c => c.MapFrom(s =>
 				                                                 	{
 				                                                 		if (s.Date.Day.Equals(1))
@@ -150,7 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				;
 
 			CreateMap<StudentAvailabilityDomainData, PeriodSelectionViewModel>()
-				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date.ToFixedClientDateOnlyFormat()))
+				.ForMember(d => d.Date, c => c.MapFrom(s => s.ChoosenDate.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.Display, c => c.MapFrom(s => s.Period.DateString))
 				.ForMember(d => d.Navigation, c => c.MapFrom(s => s))
 				.ForMember(d => d.SelectableDateRange, c => c.MapFrom(s => new PeriodDateRangeViewModel
