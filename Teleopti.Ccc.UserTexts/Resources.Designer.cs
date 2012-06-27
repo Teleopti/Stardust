@@ -19000,15 +19000,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send.
-        /// </summary>
-        public static string SendRequest {
-            get {
-                return ResourceManager.GetString("SendRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Seniority.
         /// </summary>
         public static string Seniority {
@@ -20707,6 +20698,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SubjectColon {
             get {
                 return ResourceManager.GetString("SubjectColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Submit.
+        /// </summary>
+        public static string SubmitRequest {
+            get {
+                return ResourceManager.GetString("SubmitRequest", resourceCulture);
             }
         }
         
