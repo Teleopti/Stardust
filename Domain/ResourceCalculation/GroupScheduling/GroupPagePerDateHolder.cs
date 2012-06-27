@@ -8,13 +8,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
     public class GroupPagePerDateHolder : IGroupPagePerDateHolder
     {
-        private IGroupPagePerDate _shiftCategoryFairnessGroupPagePerDate;
-        public IGroupPagePerDate ShiftCategoryFairnessGroupPagePerDate
-        {
-            get { return _shiftCategoryFairnessGroupPagePerDate; }
-            set { _shiftCategoryFairnessGroupPagePerDate = value; }
-        }
+    	public IGroupPagePerDate ShiftCategoryFairnessGroupPagePerDate { get; set; }
 
-        public IGroupPagePerDate GroupPersonGroupPagePerDate { get; set; }
+    	public IGroupPagePerDate GroupPersonGroupPagePerDate { get; set; }
     }
 }

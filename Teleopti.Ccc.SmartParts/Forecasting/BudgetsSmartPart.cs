@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                                                         : string.Empty);
                 labelDefaultScenarioName.Text = string.Format(CultureInfo.CurrentCulture, "{0}", UserTexts.Resources.DefaultScenario);
             }
-            labelTitle.Text = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.BudgetForecasting, _skill.Name);
+            labelTitle.Text = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.LongtermForecast, _skill.Name);
         }
 
         private void AddForecastGraphsControl()

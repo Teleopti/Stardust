@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -47,6 +49,29 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                  }
              }  
          }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        public  void UpdateFindPerson(ICollection<Guid> ids)
+        {
+            string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
+            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            {
+                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                    string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", inputIds)).ExecuteUpdate();
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        public void UpdateFindPersonData(ICollection<Guid> ids)
+        {
+            string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
+            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            {
+                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                    string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", inputIds)).ExecuteUpdate();
+            }
+        }
+
     }
 
     public class PersonFinderDisplayRow : IPersonFinderDisplayRow

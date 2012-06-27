@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -29,7 +30,9 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		private DateOnly lastDisplayedDate;
 		private DateOnlyPeriod displayedPeriod;
 		private StudentAvailabilityRestriction studentAvailabilityRestriction;
+		private IStudentAvailabilityProvider studentAvailabilityProvider;
 		private Person person;
+		private IEnumerable<IScheduleDay> scheduleDays;
 
 		[SetUp]
 		public void Setup()
@@ -54,9 +57,9 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
-			var scheduleDays = new[] {scheduleDay};
+			scheduleDays = new[] {scheduleDay};
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(displayedPeriod)).Return(scheduleDays);
-			var studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
+			studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
 			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDate(scheduleDays, date)).Return(studentAvailabilityRestriction);
 
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
@@ -81,7 +84,8 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldMapPeriodSelectionDate()
 		{
-			var result = Mapper.Map<DateOnly, PeriodSelectionViewModel>(date);
+			var sa = Mapper.Map<DateOnly, StudentAvailabilityDomainData>(date);
+			var result = Mapper.Map<StudentAvailabilityDomainData, PeriodSelectionViewModel>(sa);
 
 			result.Date.Should().Be.EqualTo(date.ToFixedClientDateOnlyFormat());
 		}
@@ -89,7 +93,8 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldMapPeriodSelectionDisplay()
 		{
-			var result = Mapper.Map<DateOnly, PeriodSelectionViewModel>(date);
+			var sa = Mapper.Map<DateOnly, StudentAvailabilityDomainData>(date);
+			var result = Mapper.Map<StudentAvailabilityDomainData, PeriodSelectionViewModel>(sa);
 
 			result.Display.Should().Be.EqualTo(period.DateString);
 		}
@@ -97,7 +102,8 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldFillPeriodSelectionNavigation()
 		{
-			var result = Mapper.Map<DateOnly, PeriodSelectionViewModel>(date);
+			var sa = Mapper.Map<DateOnly, StudentAvailabilityDomainData>(date);
+			var result = Mapper.Map<StudentAvailabilityDomainData, PeriodSelectionViewModel>(sa);
 
 			result.Navigation.CanPickPeriod.Should().Be.True();
 			result.Navigation.HasNextPeriod.Should().Be.True();
@@ -109,7 +115,8 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldFillPeriodSelectaleDateRange()
 		{
-			var result = Mapper.Map<DateOnly, PeriodSelectionViewModel>(date);
+			var sa = Mapper.Map<DateOnly, StudentAvailabilityDomainData>(date);
+			var result = Mapper.Map<StudentAvailabilityDomainData, PeriodSelectionViewModel>(sa);
 
 			result.SelectableDateRange.MinDate.Should().Be.EqualTo(new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime).ToFixedClientDateOnlyFormat());
 			result.SelectableDateRange.MaxDate.Should().Be.EqualTo(new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime).ToFixedClientDateOnlyFormat());
@@ -118,7 +125,8 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldMapPeriodSelectedDateRange()
 		{
-			var result = Mapper.Map<DateOnly, PeriodSelectionViewModel>(date);
+			var sa = Mapper.Map<DateOnly, StudentAvailabilityDomainData>(date);
+			var result = Mapper.Map<StudentAvailabilityDomainData, PeriodSelectionViewModel>(sa);
 
 			result.SelectedDateRange.MinDate.Should().Be.EqualTo(period.StartDate.ToFixedClientDateOnlyFormat());
 			result.SelectedDateRange.MaxDate.Should().Be.EqualTo(period.EndDate.ToFixedClientDateOnlyFormat());
@@ -164,7 +172,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldFillDayViewModelDate()
 		{
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(date);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(new StudentAvailabilityDayDomainData(date, new DateOnlyPeriod(2000,1,1, 2000,1,2),null,null,null ));
 
 			result.Date.Should().Be(date);
 		}
@@ -172,7 +180,8 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldFillDayViewHeaderDayNumber()
 		{
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(date);
+			var input = new StudentAvailabilityDayDomainData(date, new DateOnlyPeriod(2000,1,1, 2000,1,2), null, null, null);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(input);
 
 			result.Header.DayNumber.Should().Be(date.Day.ToString());
 		}
@@ -181,8 +190,8 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		public void ShouldFillDayViewHeaderWithMonthNameWhenFirstDayOfMonth()
 		{
 			var firstDateInMonth = new DateOnly(date.Year, date.Month, 1);
-
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(firstDateInMonth);
+			var input = new StudentAvailabilityDayDomainData(firstDateInMonth, new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2), null, null, null);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(input);
 
 			result.Header.DayDescription.Should().Be.EqualTo(
 				CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month));
@@ -195,7 +204,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 			if (noDayDescriptionDate == firstDisplayedDate) // because first displayed date should have month name no matter what
 				noDayDescriptionDate = new DateOnly(date.Year, date.Month, 3);
 
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(noDayDescriptionDate);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(new StudentAvailabilityDayDomainData(noDayDescriptionDate, period,null,null,null ));
 
 			result.Header.DayDescription.Should().Be.Empty();
 		}
@@ -204,8 +213,8 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		public void ShouldFillDayViewHeaderWithMonthNameForFirstDayOfDisplayedPeriod()
 		{
 			var firstDisplayedDateOnly = new DateOnly(firstDisplayedDate);
-
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(firstDisplayedDateOnly);
+			var input = new StudentAvailabilityDayDomainData(firstDisplayedDateOnly, period, null, studentAvailabilityProvider, null);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(input);
 
 			result.Header.DayDescription.Should().Be.EqualTo(
 				CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(firstDisplayedDateOnly.Month));
@@ -214,7 +223,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldFillStateEditable()
 		{
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(date);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(new StudentAvailabilityDayDomainData(date, period, person, studentAvailabilityProvider, scheduleDays));
 
 			var actual = DayState.Editable & result.State;
 			actual.Should().Be(DayState.Editable);
@@ -223,7 +232,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldFillStateDeletableWhenStudentAvailabilityDayExists()
 		{
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(date);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(new StudentAvailabilityDayDomainData(date, period, person, studentAvailabilityProvider, scheduleDays));
 
 			var actual = DayState.Deletable & result.State;
 			actual.Should().Be(DayState.Deletable);
@@ -234,7 +243,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		{
 			var dateWithoutStudentAvailability = date.AddDays(1);
 
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(dateWithoutStudentAvailability);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(new StudentAvailabilityDayDomainData(dateWithoutStudentAvailability, new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2), null, studentAvailabilityProvider, null));
 
 			var actual = DayState.Deletable & result.State;
 			actual.Should().Be(DayState.None);
@@ -245,7 +254,8 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		{
 			var outsideDate = period.EndDate.AddDays(1);
 
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(outsideDate);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(new StudentAvailabilityDayDomainData(outsideDate, period, null, null, null));
+
 
 			result.State.Should().Be(DayState.None);
 		}
@@ -255,7 +265,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		{
 			person.WorkflowControlSet = null;
 
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(date);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(new StudentAvailabilityDayDomainData(date, period, person, null, null));
 
 			result.State.Should().Be(DayState.None);
 		}
@@ -267,7 +277,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 			person.WorkflowControlSet.StudentAvailabilityInputPeriod = new DateOnlyPeriod(closedInputPeriodDate, closedInputPeriodDate);
 			person.WorkflowControlSet.StudentAvailabilityPeriod = new DateOnlyPeriod(date, date);
 
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(date);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(new StudentAvailabilityDayDomainData(closedInputPeriodDate, period, person, null, null));
 
 			result.State.Should().Be(DayState.None);
 		}
@@ -279,7 +289,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 			person.WorkflowControlSet.StudentAvailabilityInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
 			person.WorkflowControlSet.StudentAvailabilityPeriod = new DateOnlyPeriod(closedPeriodDate, closedPeriodDate);
 
-			var result = Mapper.Map<DateOnly, DayViewModelBase>(date);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(new StudentAvailabilityDayDomainData(closedPeriodDate, period, person, null, null));
 
 			result.State.Should().Be(DayState.None);
 		}
@@ -287,7 +297,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldMapAvailableDayAvailableTimeSpan()
 		{
-			var result = Mapper.Map<DateOnly, AvailableDayViewModel>(date);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, AvailableDayViewModel>(new StudentAvailabilityDayDomainData(date, period, null, studentAvailabilityProvider, scheduleDays));
 
 			result.AvailableTimeSpan.Should().Be(studentAvailabilityRestriction.StartTimeLimitation.StartTimeString + " - " + studentAvailabilityRestriction.EndTimeLimitation.EndTimeString);
 		}
@@ -297,7 +307,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		{
 			var dateWithoutStudentAvailability = date.AddDays(1);
 
-			var result = Mapper.Map<DateOnly, AvailableDayViewModel>(dateWithoutStudentAvailability);
+			var result = Mapper.Map<StudentAvailabilityDayDomainData, AvailableDayViewModel>(new StudentAvailabilityDayDomainData(dateWithoutStudentAvailability, period, null, studentAvailabilityProvider, scheduleDays));
 
 			result.AvailableTimeSpan.Should().Be.Empty();
 		}

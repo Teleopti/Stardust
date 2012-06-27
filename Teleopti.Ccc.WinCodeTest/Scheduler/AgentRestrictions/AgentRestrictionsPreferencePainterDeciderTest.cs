@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WinCode.Scheduling;
+﻿using System;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -44,6 +45,42 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				Assert.IsFalse(_decider.ShouldPaint(_preferenceCellData));
 			}	
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaint()
+		{
+			_decider.ShouldPaint(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaintPreferredDayOff()
+		{
+			_decider.ShouldPaintPreferredDayOff(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaintPreferredShiftCategory()
+		{
+			_decider.ShouldPaintPreferredDayOff(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaintPreferredAbsence()
+		{
+			_decider.ShouldPaintPreferredAbsence(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaintPreferredAbsenceOnContractDayOff()
+		{
+			_decider.ShouldPaintPreferredAbsenceOnContractDayOff(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaintPreferredExtended()
+		{
+			_decider.ShouldPaintPreferredExtended(null);
 		}
 
 		[Test]
@@ -110,6 +147,43 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		}
 
 		[Test]
+		public void ShouldNotPaintPreferredDayOffWhenNoRestriction()
+		{
+			_restrictionSchedulingOptions.UseScheduling = true;
+			_restrictionSchedulingOptions.UsePreferences = true;
+			_restrictionSchedulingOptions.UseRotations = true;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_preferenceCellData.EffectiveRestriction).Return(null).Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsFalse(_decider.ShouldPaintPreferredDayOff(_preferenceCellData));
+			}
+		}
+
+		[Test]
+		public void ShouldNotPaintPreferredDayOffWhenNoDayOffTemplate()
+		{
+			_restrictionSchedulingOptions.UseScheduling = true;
+			_restrictionSchedulingOptions.UsePreferences = true;
+			_restrictionSchedulingOptions.UseRotations = true;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_preferenceCellData.EffectiveRestriction).Return(_effectiveRestriction).Repeat.AtLeastOnce();
+				Expect.Call(_effectiveRestriction.DayOffTemplate).Return(null);
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsFalse(_decider.ShouldPaintPreferredDayOff(_preferenceCellData));
+			}
+		}
+
+		[Test]
 		public void ShouldPaintPreferredShiftCategory()
 		{
 			_restrictionSchedulingOptions.UseScheduling = true;
@@ -128,6 +202,45 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				Assert.IsTrue(_decider.ShouldPaintPreferredShiftCategory(_preferenceCellData));
 			}	
+		}
+
+		[Test]
+		public void ShouldNotPaintPreferredShiftCategoryWhenNoEffectiveRestriction()
+		{
+			_restrictionSchedulingOptions.UseScheduling = true;
+			_restrictionSchedulingOptions.UsePreferences = true;
+			_restrictionSchedulingOptions.UseRotations = false;
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_preferenceCellData.EffectiveRestriction).Return(null).Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsFalse(_decider.ShouldPaintPreferredShiftCategory(_preferenceCellData));
+			}
+		}
+
+		[Test]
+		public void ShouldNotPaintPreferredShiftCategoryWhenNoShiftCategory()
+		{
+			_restrictionSchedulingOptions.UseScheduling = true;
+			_restrictionSchedulingOptions.UsePreferences = true;
+			_restrictionSchedulingOptions.UseRotations = false;
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_preferenceCellData.EffectiveRestriction).Return(_effectiveRestriction).Repeat.AtLeastOnce();
+				Expect.Call(_effectiveRestriction.ShiftCategory).Return(null);
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsFalse(_decider.ShouldPaintPreferredShiftCategory(_preferenceCellData));
+			}
 		}
 
 		[Test]
@@ -150,6 +263,66 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			using (_mocks.Playback())
 			{
 				Assert.IsTrue(_decider.ShouldPaintPreferredAbsence(_preferenceCellData));
+			}
+		}
+
+		[Test]
+		public void ShouldNotPaintPreferredAbsenceWhenNoEffectiveRestriction()
+		{
+			_restrictionSchedulingOptions.UseScheduling = true;
+			_restrictionSchedulingOptions.UsePreferences = true;
+			_restrictionSchedulingOptions.UseRotations = true;
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_preferenceCellData.EffectiveRestriction).Return(null).Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsFalse(_decider.ShouldPaintPreferredAbsence(_preferenceCellData));
+			}
+		}
+
+		[Test]
+		public void ShouldNotPaintPreferredAbsenceWhenNoAbsence()
+		{
+			_restrictionSchedulingOptions.UseScheduling = true;
+			_restrictionSchedulingOptions.UsePreferences = true;
+			_restrictionSchedulingOptions.UseRotations = true;
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_preferenceCellData.EffectiveRestriction).Return(_effectiveRestriction).Repeat.AtLeastOnce();
+				Expect.Call(_effectiveRestriction.Absence).Return(null);
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsFalse(_decider.ShouldPaintPreferredAbsence(_preferenceCellData));
+			}
+		}
+
+		[Test]
+		public void ShouldNotPaintPreferredAbsenceWhenOnContractOnDayOff()
+		{
+			_restrictionSchedulingOptions.UseScheduling = true;
+			_restrictionSchedulingOptions.UsePreferences = true;
+			_restrictionSchedulingOptions.UseRotations = true;
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_preferenceCellData.EffectiveRestriction).Return(_effectiveRestriction).Repeat.AtLeastOnce();
+				Expect.Call(_preferenceCellData.HasAbsenceOnContractDayOff).Return(true);
+				Expect.Call(_effectiveRestriction.Absence).Return(_absence);
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsFalse(_decider.ShouldPaintPreferredAbsence(_preferenceCellData));
 			}
 		}
 

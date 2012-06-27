@@ -2,7 +2,6 @@
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-7%
 SET MsbuildProjRaptor2=ccnet\Raptor2.proj
-SET MsbuildProjNightlyBuild=ccnet\NightlyBuild.proj
 SET CCNetWorkingDirectory=%ROOTDIR%
 SET MSBUILD=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
 
@@ -17,20 +16,13 @@ ECHO %CCNetWorkingDirectory%
 ::Standard build
 ::Select build type
 CHOICE /C wn /M "Do you want to include (w)eb-test or run (n)ot"
-IF ERRORLEVEL 1 SET CCNetProject=NightlyBuild
-IF ERRORLEVEL 2 SET CCNetProject=RaptorMain
+IF ERRORLEVEL 1 SET CCNetProject=RaptorMain
+IF ERRORLEVEL 2 SET CCNetProject=ThisIsDummyName
 ECHO.
 
 ::Run Build
-IF "%CCNetProject%"=="RaptorMain" (
 ECHO "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProjRaptor2%"
 "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProjRaptor2%"
-)
-
-IF "%CCNetProject%"=="NightlyBuild" (
-ECHO "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProjNightlyBuild%"
-"%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProjNightlyBuild%"
-)
 
 ECHO.
 ECHO reverting updated checked in config files ...
