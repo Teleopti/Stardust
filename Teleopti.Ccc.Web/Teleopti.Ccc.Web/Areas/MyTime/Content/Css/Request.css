@@ -61,3 +61,9 @@
 .request-data-text {
 	word-wrap: break-word;	
 }
+.absence-type-input-label 
+{
+	padding-top: 4px;
+	height: 16px;
+	padding-right: 1em;
+}

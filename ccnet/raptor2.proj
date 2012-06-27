@@ -25,17 +25,18 @@
 		
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
 		<!-- rk: how can we make this smarter? We will forget to remove old ones here.... -->
-		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'NightlyBuild'">true</RunWebBehaviorTests>
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'RaptorMain'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI15494'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI30000'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI18357'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17774'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI15499'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17994'">true</RunWebBehaviorTests>
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17914'">true</RunWebBehaviorTests>
 		<AzureDeploy>false</AzureDeploy>
-		<AzureDeploy Condition="'$(CCNetProject)' == 'RaptorMain' or '$(CCNetProject)' == 'NightlyBuild'">true</AzureDeploy>
+		<AzureDeploy Condition="'$(CCNetProject)' == 'EtlAndAzure'">true</AzureDeploy>
 		<AzureAnalyticsReportTest>false</AzureAnalyticsReportTest>
-		<AzureAnalyticsReportTest Condition="'$(CCNetProject)' == 'NightlyBuild'">true</AzureAnalyticsReportTest>
+		<AzureAnalyticsReportTest Condition="'$(CCNetProject)' == 'EtlAndAzure'">true</AzureAnalyticsReportTest>
 		<AzureServer>s8v4m110k9.database.windows.net</AzureServer>
 		<AzureMasterLogin>teleopti@s8v4m110k9</AzureMasterLogin>
 		<AzureMasterPwd>T3l30pt1</AzureMasterPwd>
@@ -85,7 +86,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="AzureDeploy;FxCop">
+	<Target Name="BuildAndTest" DependsOnTargets="FxCop">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 

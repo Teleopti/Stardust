@@ -25,14 +25,23 @@ Scenario: Default absence request values from week schedule
 	When I click on tomorrows summary
 	And I click absence request tab
 	Then I should see the text request form with tomorrow as default date
-	And I should see 08:00 - 17:00 as the default times
+	And I should see 00:00 - 23:59 as the default times
 
-Scenario: Default absence request values from week schedule When checked Fullday
+Scenario: Default absence request values from week schedule when unchecked Fullday
 	Given I am an agent
 	And I am viewing week schedule
 	When I click on tomorrows summary
 	And I click absence request tab
-	And I click full day checkbox
+	And I unchecked the full day checkbox
+	Then I should see the text request form with tomorrow as default date
+	And I should see 08:00 - 17:00 as the default times
+
+Scenario: Default absence request values from week schedule when checked Fullday
+	Given I am an agent
+	And I am viewing week schedule
+	When I click on tomorrows summary
+	And I click absence request tab
+	And I checked the full day checkbox
 	Then I should see the text request form with tomorrow as default date
 	And I should see 00:00 - 23:59 as the default times
 

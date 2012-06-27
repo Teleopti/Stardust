@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
-	public interface IEditTextRequestPage
+	public interface IEditRequestPage
 	{
 		Button AddTextRequestButton { get; }
 		Div RequestDetailSection { get; }

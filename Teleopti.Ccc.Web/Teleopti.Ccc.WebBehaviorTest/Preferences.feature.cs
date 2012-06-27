@@ -94,8 +94,10 @@ this.ScenarioSetup(scenarioInfo);
 #line 13
  testRunner.And("I have existing shift category preference");
 #line 14
- testRunner.When("I view preferences");
+ testRunner.And("My schedule is published");
 #line 15
+ testRunner.When("I view preferences");
+#line 16
  testRunner.Then("I should see my existing shift category preference");
 #line hidden
             this.ScenarioCleanup();
@@ -106,15 +108,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SeeDayOffPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See day off preference", ((string[])(null)));
-#line 17
-this.ScenarioSetup(scenarioInfo);
 #line 18
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 19
- testRunner.And("I have existing day off preference");
+ testRunner.Given("I am an agent");
 #line 20
- testRunner.When("I view preferences");
+ testRunner.And("I have existing day off preference");
 #line 21
+ testRunner.And("My schedule is published");
+#line 22
+ testRunner.When("I view preferences");
+#line 23
  testRunner.Then("I should see my existing day off preference");
 #line hidden
             this.ScenarioCleanup();
@@ -125,34 +129,55 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SeeAbsencePreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See absence preference", ((string[])(null)));
-#line 23
-this.ScenarioSetup(scenarioInfo);
-#line 24
- testRunner.Given("I am an agent");
 #line 25
- testRunner.And("I have existing absence preference");
+this.ScenarioSetup(scenarioInfo);
 #line 26
- testRunner.When("I view preferences");
+ testRunner.Given("I am an agent");
 #line 27
+ testRunner.And("I have existing absence preference");
+#line 28
+ testRunner.And("My schedule is published");
+#line 29
+ testRunner.When("I view preferences");
+#line 30
  testRunner.Then("I should see my existing absence preference");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("No virtual schedule period")]
-        public virtual void NoVirtualSchedulePeriod()
+        [NUnit.Framework.DescriptionAttribute("No schedule period")]
+        public virtual void NoSchedulePeriod()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No virtual schedule period", ((string[])(null)));
-#line 29
-this.ScenarioSetup(scenarioInfo);
-#line 30
- testRunner.Given("I am an agent");
-#line 31
- testRunner.And("I do not have a virtual schedule period");
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No schedule period", ((string[])(null)));
 #line 32
- testRunner.When("I view preferences");
+this.ScenarioSetup(scenarioInfo);
 #line 33
+ testRunner.Given("I am an agent");
+#line 34
+ testRunner.And("I do not have a schedule period");
+#line 35
+ testRunner.When("I view preferences");
+#line 36
+ testRunner.Then("I should see a user-friendly message explaining I dont have anything to view");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("No person period")]
+        public virtual void NoPersonPeriod()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No person period", ((string[])(null)));
+#line 38
+this.ScenarioSetup(scenarioInfo);
+#line 39
+ testRunner.Given("I am an agent");
+#line 40
+ testRunner.And("I do not have a person period");
+#line 41
+ testRunner.When("I view preferences");
+#line 42
  testRunner.Then("I should see a user-friendly message explaining I dont have anything to view");
 #line hidden
             this.ScenarioCleanup();
@@ -163,13 +188,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NoAccessToPreferencesMenuItem()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No access to preferences menu item", ((string[])(null)));
-#line 35
+#line 44
 this.ScenarioSetup(scenarioInfo);
-#line 36
+#line 45
  testRunner.Given("I am an agent without access to preferences");
-#line 37
+#line 46
  testRunner.When("I sign in");
-#line 38
+#line 47
  testRunner.Then("I should not be able to see preferences link");
 #line hidden
             this.ScenarioCleanup();
@@ -180,15 +205,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NoAccessToPreferencesPage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No access to preferences page", ((string[])(null)));
-#line 40
+#line 49
 this.ScenarioSetup(scenarioInfo);
-#line 41
+#line 50
  testRunner.Given("I am an agent without access to preferences");
-#line 42
+#line 51
  testRunner.When("I sign in");
-#line 43
+#line 52
  testRunner.And("I navigate to the preferences page");
-#line 44
+#line 53
  testRunner.Then("I should see an error message");
 #line hidden
             this.ScenarioCleanup();
@@ -199,17 +224,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NavigateNextVirtualSchedulePeriod()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate next virtual schedule period", ((string[])(null)));
-#line 46
+#line 55
 this.ScenarioSetup(scenarioInfo);
-#line 47
+#line 56
  testRunner.Given("I am an agent");
-#line 48
+#line 57
  testRunner.And("I have several virtual schedule periods");
-#line 49
+#line 58
  testRunner.And("I am viewing preferences");
-#line 50
+#line 59
  testRunner.When("I click next virtual schedule period button");
-#line 51
+#line 60
  testRunner.Then("I should see next virtual schedule period");
 #line hidden
             this.ScenarioCleanup();
@@ -220,17 +245,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NavigatePreviousVirtualSchedulePeriod()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate previous virtual schedule period", ((string[])(null)));
-#line 53
+#line 62
 this.ScenarioSetup(scenarioInfo);
-#line 54
+#line 63
  testRunner.Given("I am an agent");
-#line 55
+#line 64
  testRunner.And("I have several virtual schedule periods");
-#line 56
+#line 65
  testRunner.And("I am viewing preferences");
-#line 57
+#line 66
  testRunner.When("I click previous virtual schedule period button");
-#line 58
+#line 67
  testRunner.Then("I should see previous virtual schedule period");
 #line hidden
             this.ScenarioCleanup();
@@ -241,19 +266,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SelectPeriodFromPeriod_Picker()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Select period from period-picker", ((string[])(null)));
-#line 60
+#line 69
 this.ScenarioSetup(scenarioInfo);
-#line 61
+#line 70
  testRunner.Given("I am an agent");
-#line 62
+#line 71
  testRunner.And("I am viewing preferences");
-#line 63
+#line 72
  testRunner.When("I open the period-picker");
-#line 64
+#line 73
  testRunner.And("I click on any day of a week");
-#line 65
+#line 74
  testRunner.Then("the period-picker should close");
-#line 66
+#line 75
  testRunner.And("I should see the selected virtual schedule period");
 #line hidden
             this.ScenarioCleanup();
@@ -264,17 +289,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ViewStandardPreferenceList()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View standard preference list", ((string[])(null)));
-#line 73
+#line 82
 this.ScenarioSetup(scenarioInfo);
-#line 74
+#line 83
  testRunner.Given("I am an agent");
-#line 75
+#line 84
  testRunner.And("I have an open workflow control set with an allowed standard preference");
-#line 76
+#line 85
  testRunner.And("I am viewing preferences");
-#line 77
+#line 86
  testRunner.When("I click the standard preference split-button");
-#line 78
+#line 87
  testRunner.Then("I should see the workflow control set\'s standard preferences list");
 #line hidden
             this.ScenarioCleanup();
@@ -285,19 +310,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void RememberSelectedStandardPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remember selected standard preference", ((string[])(null)));
-#line 80
+#line 89
 this.ScenarioSetup(scenarioInfo);
-#line 81
+#line 90
  testRunner.Given("I am an agent");
-#line 82
+#line 91
  testRunner.And("I have an open workflow control set with an allowed standard preference");
-#line 83
+#line 92
  testRunner.And("I am viewing preferences");
-#line 84
+#line 93
  testRunner.When("I change standard preference");
-#line 85
+#line 94
  testRunner.And("I click next virtual schedule period button");
-#line 86
+#line 95
  testRunner.Then("I should see the selected standard preference in the split-button");
 #line hidden
             this.ScenarioCleanup();
@@ -308,19 +333,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void AddStandardPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add standard preference", ((string[])(null)));
-#line 88
+#line 97
 this.ScenarioSetup(scenarioInfo);
-#line 89
+#line 98
  testRunner.Given("I am an agent");
-#line 90
+#line 99
  testRunner.And("I have an open workflow control set with an allowed standard preference");
-#line 91
+#line 100
  testRunner.And("I am viewing preferences");
-#line 92
+#line 101
  testRunner.When("I select an editable day without preference");
-#line 93
+#line 102
  testRunner.And("I select a standard preference");
-#line 94
+#line 103
  testRunner.Then("I should see the standard preference in the calendar");
 #line hidden
             this.ScenarioCleanup();
@@ -331,23 +356,23 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ReplaceStandardPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Replace standard preference", ((string[])(null)));
-#line 96
+#line 105
 this.ScenarioSetup(scenarioInfo);
-#line 97
+#line 106
  testRunner.Given("I am an agent");
-#line 98
+#line 107
  testRunner.And("I have an open workflow control set with an allowed standard preference");
-#line 99
+#line 108
  testRunner.And("I have existing standard preference");
-#line 100
+#line 109
  testRunner.And("I am viewing preferences");
-#line 101
+#line 110
  testRunner.When("I select an editable day with standard preference");
-#line 102
+#line 111
  testRunner.And("I select a standard preference");
-#line 103
+#line 112
  testRunner.Then("I should see the standard preference in the calendar");
-#line 104
+#line 113
  testRunner.And("I should not see the former standard preference in the calendar");
 #line hidden
             this.ScenarioCleanup();
@@ -358,23 +383,23 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SetMultiplePreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Set multiple preference", ((string[])(null)));
-#line 106
+#line 115
 this.ScenarioSetup(scenarioInfo);
-#line 107
+#line 116
  testRunner.Given("I am an agent");
-#line 108
+#line 117
  testRunner.And("I have an open workflow control set with an allowed standard preference");
-#line 109
+#line 118
  testRunner.And("I have existing standard preference");
-#line 110
+#line 119
  testRunner.And("I am viewing preferences");
-#line 111
+#line 120
  testRunner.When("I select an editable day with standard preference");
-#line 112
+#line 121
  testRunner.And("I also select an editable day without standard preference");
-#line 113
+#line 122
  testRunner.And("I select a standard preference");
-#line 114
+#line 123
  testRunner.Then("I should see the 2 standard preferences in the calendar");
 #line hidden
             this.ScenarioCleanup();
@@ -385,21 +410,21 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void DeleteMultipleStandardPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Delete multiple standard preference", ((string[])(null)));
-#line 116
+#line 125
 this.ScenarioSetup(scenarioInfo);
-#line 117
+#line 126
  testRunner.Given("I am an agent");
-#line 118
+#line 127
  testRunner.And("I have a workflow control set with open standard preference period");
-#line 119
+#line 128
  testRunner.And("I have 2 existing standard preference");
-#line 120
+#line 129
  testRunner.And("I am viewing preferences");
-#line 121
+#line 130
  testRunner.When("I select 2 editable day with standard preference");
-#line 122
+#line 131
  testRunner.And("I click the delete button");
-#line 123
+#line 132
  testRunner.Then("I should no longer see the 2 standard preferences in the calendar");
 #line hidden
             this.ScenarioCleanup();
@@ -410,17 +435,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CanNotEditPreferenceWithoutWorkflowControlSet()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not edit preference without workflow control set", ((string[])(null)));
-#line 128
+#line 137
 this.ScenarioSetup(scenarioInfo);
-#line 129
+#line 138
  testRunner.Given("I am an agent");
-#line 130
+#line 139
  testRunner.And("I do not have a workflow control set");
-#line 131
+#line 140
  testRunner.When("I view preferences");
-#line 132
+#line 141
  testRunner.Then("I should see a message saying I am missing a workflow control set");
-#line 133
+#line 142
  testRunner.And("the preference calendar should not be editable");
 #line hidden
             this.ScenarioCleanup();
@@ -431,15 +456,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void DisplayPreferencePeriodInformation()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Display preference period information", ((string[])(null)));
-#line 135
+#line 144
 this.ScenarioSetup(scenarioInfo);
-#line 136
+#line 145
  testRunner.Given("I am an agent");
-#line 137
+#line 146
  testRunner.And("I have a workflow control set");
-#line 138
+#line 147
  testRunner.When("I view preferences");
-#line 139
+#line 148
  testRunner.Then("I should see the preference period information");
 #line hidden
             this.ScenarioCleanup();
@@ -450,15 +475,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CanNotEditPreferenceInClosedPeriod()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not edit preference in closed period", ((string[])(null)));
-#line 141
+#line 150
 this.ScenarioSetup(scenarioInfo);
-#line 142
+#line 151
  testRunner.Given("I am an agent");
-#line 143
+#line 152
  testRunner.And("I have a workflow control set with closed preference periods");
-#line 144
+#line 153
  testRunner.When("I view preferences");
-#line 145
+#line 154
  testRunner.Then("the preference calendar should not be editable");
 #line hidden
             this.ScenarioCleanup();
@@ -469,15 +494,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CanEditPreferenceInOpenPeriod()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can edit preference in open period", ((string[])(null)));
-#line 147
+#line 156
 this.ScenarioSetup(scenarioInfo);
-#line 148
+#line 157
  testRunner.Given("I am an agent");
-#line 149
+#line 158
  testRunner.And("I have a workflow control set with open standard preference period");
-#line 150
+#line 159
  testRunner.When("I view preferences");
-#line 151
+#line 160
  testRunner.Then("the preference calendar should be editable");
 #line hidden
             this.ScenarioCleanup();
@@ -488,15 +513,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void DefaultToFirstVirtualSchedulePeriodOverlappingOpenPreferencePeriod()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default to first virtual schedule period overlapping open preference period", ((string[])(null)));
-#line 153
+#line 162
 this.ScenarioSetup(scenarioInfo);
-#line 154
+#line 163
  testRunner.Given("I am an agent");
-#line 155
+#line 164
  testRunner.And("I have a workflow control set with preference periods open next month");
-#line 156
+#line 165
  testRunner.When("I view preferences");
-#line 157
+#line 166
  testRunner.Then("I should see the first virtual schedule period overlapping open preference period" +
                     "");
 #line hidden

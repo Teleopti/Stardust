@@ -25,13 +25,19 @@ Scenario: See absence preference
 	And I have existing absence preference
 	When I view preferences
 	Then I should see my existing absence preference
-
-Scenario: No virtual schedule period
+	
+Scenario: No schedule period
 	Given I am an agent
-	And I do not have a virtual schedule period
+	And I do not have a schedule period
 	When I view preferences
 	Then I should see a user-friendly message explaining I dont have anything to view
 	
+Scenario: No person period
+	Given I am an agent
+	And I do not have a person period
+	When I view preferences
+	Then I should see a user-friendly message explaining I dont have anything to view
+
 Scenario: No access to preferences menu item
 	Given I am an agent without access to preferences
 	When I sign in

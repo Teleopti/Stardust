@@ -87,7 +87,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesExtended.feature</DependentUpon>
-    </Compile>
+      </Compile>
+    <Compile Include="AbsenceRequestFromRequestStepDefinitions.cs" />
+    <Compile Include="ManageRequestStepDefinitions.cs" />
+    <Compile Include="Data\User\DoNotHavePersonPeriods.cs" />
+    <Compile Include="Data\User\DoNotHaveSchedulePeriods.cs" />   
     <Compile Include="QUnitTestsStepDefinition.cs" />
     <Compile Include="Data\User\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\User\AbsencePreferenceOnWeekday.cs" />
@@ -172,7 +176,7 @@
       <DependentUpon>MobileReports.feature</DependentUpon>
     </Compile>
     <Compile Include="MobileReportsStepDefinitions.cs" />
-    <Compile Include="Pages\Common\IEditTextRequestPage.cs" />
+    <Compile Include="Pages\Common\IEditRequestPage.cs" />
     <Compile Include="Pages\MobileReportsPage.cs" />
     <Compile Include="PreferencesPeriodFeedback.feature.cs">
       <AutoGen>True</AutoGen>

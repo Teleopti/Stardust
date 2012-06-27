@@ -9,6 +9,8 @@
 
 Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 
+	var requestViewModel = null;
+
 	function _initToolbarButtons() {
 		$('#Requests-addTextRequest-button')
 			.click(function () {
@@ -22,21 +24,59 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	}
 
 	function _initEditSection() {
-		$('#Request-detail-ok-button')
-			.click(function () {
-				_addTextRequest();
-			});
 		_initControls();
 		_initLabels();
 	}
 
+	function _clearValidationError() {
+		$('#Request-detail-error').html('');
+	}
+
+	function _showAbsenceTypes() {
+		$('#Absence-type-element').show();
+		$('#Absence-request-tab').addClass("selected-tab");
+		$('#Text-request-tab').removeClass("selected-tab");
+	}
+
+	function _hideAbsenceTypes() {
+		$('#Absence-type-element').hide();
+		$('#Text-request-tab').addClass("selected-tab");
+		$('#Absence-request-tab').removeClass("selected-tab");
+	}
+
 	function _initControls() {
+		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+		ko.applyBindings(requestViewModel, $('#Fullday-check')[0]);
+		
 		$('#Request-detail-section .date-input')
 			.datepicker()
 			;
 		$("#Request-detail-section .combobox.time-input")
 			.combobox()
 			;
+		$("#Request-detail-section .combobox.absence-input").combobox();
+		
+		$('#Request-detail-ok-button')
+			.click(function () {
+				if ($('#Text-request-tab.selected-tab').length > 0) {
+					_addRequest("Requests/TextRequest");
+				} else {
+					_addRequest("Requests/AbsenceRequest");
+				}
+			});
+
+		$('#Text-request-tab')
+			.click(function () {
+				_clearValidationError();
+				_hideAbsenceTypes();
+				requestViewModel.IsFullDay(false);
+			});
+		$('#Absence-request-tab')
+			.click(function () {
+				_clearValidationError();
+				_showAbsenceTypes();
+				requestViewModel.IsFullDay(true);
+			});
 	}
 
 	function _initLabels() {
@@ -107,10 +147,10 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 			;
 	}
 
-	function _addTextRequest() {
+	function _addRequest(requestUrl) {
 		var formData = _getFormData();
 		Teleopti.MyTimeWeb.Ajax.Ajax({
-			url: "Requests/TextRequest",
+			url: requestUrl,
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: "POST",
@@ -132,13 +172,19 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 	}
 
 	function _displayValidationError(data) {
-		var message = data.Errors.join(' ');
+		var message = data.Errors.join('</br>');
 		$('#Request-detail-error').html(message || '');
 	}
 
 	function _getFormData() {
+		var absenceId = $('#Absence-type').children(":selected").val();
+		if (absenceId == undefined) {
+			absenceId = null;
+		}
+
 		return {
 			Subject: $('#Request-detail-subject-input').val(),
+			AbsenceId: absenceId,
 			Period: {
 				StartDate: $('#Request-detail-fromDate-input').val(),
 				StartTime: $('#Request-detail-fromTime-input-input').val(),
@@ -189,3 +235,34 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 
 })(jQuery);
 
+Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
+	var self = this;
+	this.IsFullDay = ko.observable(false);
+
+	ko.computed(function () {
+		if (self.IsFullDay()) {
+			$('#Request-detail-fromTime-input-input').val($('#Request-detail-default-start-time').text());
+			$('#Request-detail-toTime-input-input').val($('#Request-detail-default-end-time').text());
+			_disableTimeinput();
+		} else {
+			$('#Request-detail-fromTime-input-input').reset();
+			$('#Request-detail-toTime-input-input').reset();
+			_enableTimeinput();
+		}
+
+	});
+
+	function _enableTimeinput() {
+		$('#Request-detail-fromTime button, #Request-detail-fromTime-input-input, #Request-detail-toTime button, #Request-detail-toTime-input-input')
+			.removeAttr("disabled");
+		$('#Request-detail-fromTime-input-input').css("color", "black");
+		$('#Request-detail-toTime-input-input').css("color", "black");
+	}
+
+	function _disableTimeinput() {
+		$('#Request-detail-fromTime button, #Request-detail-fromTime-input-input, #Request-detail-toTime button, #Request-detail-toTime-input-input')
+			.attr("disabled", "disabled");
+		$('#Request-detail-fromTime-input-input').css("color", "grey");
+		$('#Request-detail-toTime-input-input').css("color", "grey");
+	}
+});
