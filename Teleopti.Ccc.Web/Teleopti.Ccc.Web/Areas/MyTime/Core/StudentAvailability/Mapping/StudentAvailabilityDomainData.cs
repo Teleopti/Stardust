@@ -89,6 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 			}
 		}
 
+		//this one should probably go away - need to stop refactoring on release branch though...
 		public DateOnlyPeriod DisplayedPeriod
 		{
 			get
