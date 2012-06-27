@@ -7,24 +7,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 {
 	public class StudentAvailabilityWeekDomainData
 	{
-		private readonly IStudentAvailabilityProvider _studentAvailabilityProvider;
-
-		public StudentAvailabilityWeekDomainData(DateOnly firstDateOfWeek, IPerson person, DateOnlyPeriod period, IStudentAvailabilityProvider studentAvailabilityProvider, IEnumerable<IScheduleDay> scheduleDays)
+		public StudentAvailabilityWeekDomainData(DateOnly firstDateOfWeek, IPerson person, DateOnlyPeriod period, IEnumerable<IScheduleDay> scheduleDays)
 		{
-			_studentAvailabilityProvider = studentAvailabilityProvider;
 			FirstDateOfWeek = firstDateOfWeek;
 			Person = person;
 			Period = period;
 			ScheduleDays = scheduleDays;
-		}
-
-		private IStudentAvailabilityRestriction _studentAvailabilityRestriction;
-		public IStudentAvailabilityRestriction StudentAvailability
-		{
-			get
-			{
-				return _studentAvailabilityRestriction ?? (_studentAvailabilityRestriction = _studentAvailabilityProvider.GetStudentAvailabilityForDate(ScheduleDays, FirstDateOfWeek));
-			}
 		}
 
 		public DateOnly FirstDateOfWeek { get; private set; }

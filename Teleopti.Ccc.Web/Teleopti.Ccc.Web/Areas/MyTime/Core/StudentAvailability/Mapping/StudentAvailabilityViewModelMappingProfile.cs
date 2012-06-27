@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				                                        			firstDateOfWeek = firstDateOfWeek.AddDays(7);
 				                                        		}
 				                                        		var mappingDatas = firstDatesOfWeeks.Select(d =>
-				                                        				new StudentAvailabilityWeekDomainData(d, s.Person, s.Period,_studentAvailabilityProvider(),s.ScheduleDays));
+				                                        				new StudentAvailabilityWeekDomainData(d, s.Person, s.Period, s.ScheduleDays));
 				                                        		return mappingDatas.ToArray();
 				                                        	}))
 				.ForMember(d => d.PeriodSummary, c => c.UseValue(new PeriodSummaryViewModel()))
