@@ -365,11 +365,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			ITransaction tx = mocks.DynamicMock<ITransaction>();
 			ISessionImplementor sessImpl = mocks.StrictMock<ISessionImplementor>();
-			IDenormalizer denormalizer = mocks.StrictMock<IDenormalizer>();
+			IMessageSender messageSender = mocks.StrictMock<IMessageSender>();
 
 			session = mocks.DynamicMock<ISession>();
 			messageBroker = mocks.DynamicMock<IMessageBroker>();
-			uow = new TestUnitOfWork(session, messageBroker,pushMessageService,new []{denormalizer});
+			uow = new TestUnitOfWork(session, messageBroker,pushMessageService,new []{messageSender});
 
 			AggregateRootInterceptor interceptor = new AggregateRootInterceptor();
 
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 					.Call(session.BeginTransaction())
 					.Return(tx);
 
-				Expect.Call(() => denormalizer.Execute(null, new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
+				Expect.Call(() => messageSender.Execute(null, new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
 				
 				Expect.Call(messageBroker.IsInitialized).Return(true);
 			}
@@ -469,7 +469,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 		private class TestUnitOfWork : NHibernateUnitOfWork
 		{
-            public TestUnitOfWork(ISession mock, IMessageBroker messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IDenormalizer> denormalizers)
+            public TestUnitOfWork(ISession mock, IMessageBroker messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
 				: base(mock, messageBroker, denormalizers, null, pushMessageService, NHibernateUnitOfWorkFactory.UnbindStatic)
 			{
 			}

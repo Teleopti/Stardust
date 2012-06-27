@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	[TestFixture]
 	public class MeetingDenormalizerTest
 	{
-		private IDenormalizer target;
+		private IMessageSender target;
 		private MockRepository mocks;
 		private ISendDenormalizeNotification sendDenormalizeNotification;
 		private ISaveToDenormalizationQueue saveToDenormalizationQueue;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			mocks = new MockRepository();
 			sendDenormalizeNotification = mocks.DynamicMock<ISendDenormalizeNotification>();
 			saveToDenormalizationQueue = mocks.DynamicMock<ISaveToDenormalizationQueue>();
-			target = new MeetingDenormalizer(sendDenormalizeNotification,saveToDenormalizationQueue);
+			target = new MeetingMessageSender(sendDenormalizeNotification,saveToDenormalizationQueue);
 		}
 
 		[Test]
