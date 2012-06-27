@@ -174,7 +174,6 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityWeekDomainData.cs" />
     <Compile Include="Core\Aop\Core\AspectAttribute.cs" />
     <Compile Include="Core\Aop\Core\AspectInterceptor.cs" />
     <Compile Include="Core\Aop\Core\AspectsAttribute.cs" />
