@@ -7,12 +7,12 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class MeetingDenormalizer : IDenormalizer
+	public class MeetingMessageSender : IMessageSender
 	{
 		private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
 		private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
 
-		public MeetingDenormalizer(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
+		public MeetingMessageSender(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
 		{
 			_sendDenormalizeNotification = sendDenormalizeNotification;
 			_saveToDenormalizationQueue = saveToDenormalizationQueue;
