@@ -12,6 +12,7 @@ namespace Teleopti.Interfaces.MessageBroker
 	public class Subscription
 	{
 		private static readonly StringCollection TypesWithException = new StringCollection {typeof (IExternalAgentState).Name};
+		private static readonly StringCollection TypesWithBusinessUnitException = new StringCollection {typeof (IExternalAgentState).Name, typeof(IStatisticTask).Name};
 
 		/// <summary>
 		/// Creates a new instance of <see cref="Subscription"/>
@@ -146,7 +147,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		private string excludeBusinessUnitForCertainTypes()
 		{
 			var emptyId = IdToString(Guid.Empty);
-			return TypesWithException.Contains(DomainType) && emptyId.Equals(DomainId) ? emptyId : BusinessUnitId;
+			return (TypesWithBusinessUnitException.Contains(DomainType) || (TypesWithBusinessUnitException.Contains(DomainType) && emptyId.Equals(DomainId))) ? emptyId : BusinessUnitId;
 		}
 	}
 }

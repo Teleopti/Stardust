@@ -40,7 +40,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 										   typeof(IStatisticTask),
 										   DomainUpdateType.Insert,
 										   identity.DataSource.DataSourceName,
-										   identity.BusinessUnit.Id.GetValueOrDefault());
+										   Guid.Empty);
 				}
 			}
 			catch (BrokerNotInstantiatedException exception)

@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using SignalR.Client.Hubs;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
@@ -86,7 +87,9 @@ namespace Teleopti.Messaging.SignalR
 				try
 				{
 					sendAttempt++;
-					_wrapper.NotifyClients(new Notification
+
+					var waitForSend = new ManualResetEvent(false);
+					var task = _wrapper.NotifyClients(new Notification
 					          	{
 					          		StartDate = Subscription.DateToString(floor),
 					          		EndDate = Subscription.DateToString(ceiling),
@@ -99,6 +102,8 @@ namespace Teleopti.Messaging.SignalR
 					          		BusinessUnitId = Subscription.IdToString(businessUnitId),
 					          		BinaryData = null
 					          	});
+					task.OnFinish += (sender, e) => waitForSend.Set();
+					waitForSend.WaitOne(TimeSpan.FromSeconds(20));
 					break;
 				}
 				catch (Exception)
