@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private RestrictionSchedulingOptions _schedulingOptions;
 		private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff;
-		private IRestrictionExtractor _restrictionExtractor;
 		private ISchedulePeriodTargetTimeCalculator _schedulePeriodTargetTimeCalculator;
 		private IScheduleDayPro _scheduleDayPro;
 		private ReadOnlyCollection<IScheduleDayPro> _effectiveDays;
@@ -34,9 +33,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
 			_periodScheduledAndRestrictionDaysOff = _mocks.StrictMock<IPeriodScheduledAndRestrictionDaysOff>();
-			_restrictionExtractor = _mocks.StrictMock<IRestrictionExtractor>();
 			_schedulePeriodTargetTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
-			_target = new AgentRestrictionsDisplayDataExtractor(_schedulePeriodTargetTimeCalculator, _workShiftMinMaxCalculator, _periodScheduledAndRestrictionDaysOff, _restrictionExtractor);
+			_target = new AgentRestrictionsDisplayDataExtractor(_schedulePeriodTargetTimeCalculator, _workShiftMinMaxCalculator, _periodScheduledAndRestrictionDaysOff);
 			_schedulingOptions = new RestrictionSchedulingOptions(){UseScheduling = true};
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_effectiveDays = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro});
