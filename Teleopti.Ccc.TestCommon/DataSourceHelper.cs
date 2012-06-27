@@ -33,6 +33,14 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
+		public static void ClearCcc7Data()
+		{
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			{
+				ccc7.Clean();
+			}
+		}
+
 		public static void ClearAnalyticsData()
 		{
 			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))

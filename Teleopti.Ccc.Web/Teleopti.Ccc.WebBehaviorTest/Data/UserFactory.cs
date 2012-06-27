@@ -24,6 +24,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static readonly DataFactory _dataFactory = new DataFactory();
 
 		public static DataFactory Data() { return _dataFactory; }
+
+		//public static DataFactory Data()
+		//{
+		//    if (ScenarioContext.Current.Value<DataFactory>("data") == null)
+		//        ScenarioContext.Current.Value("data", new DataFactory());
+		//    return ScenarioContext.Current.Value<DataFactory>("data");
+		//}
 	}
 
 	public class UserFactory

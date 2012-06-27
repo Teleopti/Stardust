@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -29,45 +30,58 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static readonly ILog Log = LogManager.GetLogger(typeof(TestDataSetup));
 
 		private static NHibernateUnitOfWorkFactory _unitOfWorkFactory;
-		private static TeleoptiPrincipal Principal;
+		private static TeleoptiPrincipal _principal;
 
-		public static void Setup()
+		public static void CreateDataSource()
 		{
-			var testDataSetupStartTime = DateTime.Now;
+			var startTime = DateTime.Now;
 
-			var createDataSourceStartTime = DateTime.Now;
 			TestData.DataSource = DataSourceHelper.CreateDataSource();
-			// no longer required since CreateDataSource above will drop and recreate the whole database
-			//DataSourceHelper.CleanDatabase();
-			Log.Write("Create data source took " + DateTime.Now.Subtract(createDataSourceStartTime));
+
+			Log.Write("CreateDataSource took " + DateTime.Now.Subtract(startTime));
+		}
+
+		public static void SetupFakeState()
+		{
+			var startTime = DateTime.Now;
 
 			TestData.PersonThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", TestData.CommonPassword);
 			TestData.BusinessUnit = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
 			TestData.BusinessUnit.Name = "BusinessUnit";
 
-			var createFakeStateStartTime = DateTime.Now;
-			StateHolderProxyHelper.SetupFakeState(TestData.DataSource, TestData.PersonThatCreatesTestData, TestData.BusinessUnit);
-			Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
-			Log.Write("Create fake state took " + DateTime.Now.Subtract(createFakeStateStartTime));
+			StateHolderProxyHelper.SetupFakeState(TestData.DataSource, TestData.PersonThatCreatesTestData, TestData.BusinessUnit, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
+			_principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 			_unitOfWorkFactory = UnitOfWorkFactory.Current as NHibernateUnitOfWorkFactory;
 
-			var createAndPersistTestDataStartTime = DateTime.Now;
-			CreateAndPersistTestData();
-			Log.Write("Create and persist test data took " + DateTime.Now.Subtract(createAndPersistTestDataStartTime));
+			Log.Write("SetupFakeState took " + DateTime.Now.Subtract(startTime));
+		}
 
-			Log.Write("Test data setup took totally " + DateTime.Now.Subtract(testDataSetupStartTime));
+		public static void CreateLegacyTestData()
+		{
+			var startTime = DateTime.Now;
+			CreateAndPersistTestData();
+			Log.Write("CreateLegacyTestData took " + DateTime.Now.Subtract(startTime));
+		}
+
+		public static void ClearCcc7Data()
+		{
+			var startTime = DateTime.Now;
+			DataSourceHelper.ClearCcc7Data();
+			Log.Write("ClearCcc7Data took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void ClearAnalyticsData()
 		{
+			var startTime = DateTime.Now;
 			DataSourceHelper.ClearAnalyticsData();
+			Log.Write("ClearAnalyticsData took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void EnsureThreadPrincipal()
 		{
 			if (Thread.CurrentPrincipal.GetType() == typeof(GenericPrincipal))
-				Thread.CurrentPrincipal = Principal;
+				Thread.CurrentPrincipal = _principal;
 		}
 
 		public static void UnitOfWorkAction(Action<IUnitOfWork> action)
@@ -78,6 +92,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				unitOfWork.PersistAll();
 			}
 		}
+
+
+
+
+
+
 
 		private static void CreateAndPersistTestData()
 		{

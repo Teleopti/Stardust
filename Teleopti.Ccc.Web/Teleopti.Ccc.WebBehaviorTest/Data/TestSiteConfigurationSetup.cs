@@ -38,8 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			}
 			GenerateAndWriteTestDataNHibFileFromTemplate();
 
-			var setupTime = DateTime.Now.Subtract(startTime);
-			Log.Write("Test site setup took " + setupTime);
+			Log.Write("TestSiteConfigurationSetup.Setup() took " + DateTime.Now.Subtract(startTime));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
