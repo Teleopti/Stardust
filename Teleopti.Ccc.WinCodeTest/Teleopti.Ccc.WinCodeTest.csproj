@@ -454,6 +454,7 @@
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodBalanceOutComparerTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodBalanceInComparerTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\PersonPeriodBudgetGroupComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodTimeOverrideComparerTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\WorkflowControlSetComparerTest.cs" />
     <Compile Include="PeopleAdmin\DayOfWeekDisplayTest.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderDisplayRowTest.cs" />

@@ -10729,6 +10729,18 @@ These options are activated:
     <value>Send</value>
     <comment>Send a text request/absence request...</comment>
   </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>Override Period</value>
+    <comment>Overrride period time</comment>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Override hours per day</value>
+    <comment>Override hours per dad, the average worktime per day</comment>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Override days off</value>
+    <comment>Override days off</comment>
+  </data>
   <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
     <value>This Workload {0} window is open. Please close it as it is no longer valid.</value>
     <comment>please close workload window.</comment>

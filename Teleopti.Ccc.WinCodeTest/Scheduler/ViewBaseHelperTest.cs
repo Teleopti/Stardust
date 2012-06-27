@@ -940,7 +940,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             person.PermissionInformation.SetDefaultTimeZone(info);
             var schedulePeriod = new SchedulePeriod(new DateOnly(2009, 6, 1), SchedulePeriodType.Week, 1)
                                      {
-                                         AverageWorkTimePerDay = new TimeSpan(0, 7, 0)
+										 AverageWorkTimePerDayOverride = new TimeSpan(0, 7, 0)
                                      };
 
             person.AddSchedulePeriod(schedulePeriod);

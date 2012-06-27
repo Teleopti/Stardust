@@ -12,12 +12,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
         private string _headerText;
         private string _bindingProperty;
+    	private int _preferredWidth;
+    	private const int _preferredWidthDefault = 110;
 
         public NumericCellColumnForSchedulePeriod(string bindingProperty, string headerText)
-        {
-            _headerText = headerText;
-            _bindingProperty = bindingProperty;
-        }
+			: this(bindingProperty, headerText, _preferredWidthDefault) { }
+
+		public NumericCellColumnForSchedulePeriod(string bindingProperty, string headerText, int preferredWidth)
+		{
+			_headerText = headerText;
+			_bindingProperty = bindingProperty;
+			_preferredWidth = preferredWidth;
+		}
 
         public override string BindingProperty
         {
@@ -29,7 +35,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
         public override int PreferredWidth
         {
-            get { return 110; }
+            get { return _preferredWidth; }
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
