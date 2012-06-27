@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			effectiveRestrictionOptions.Equals(effectiveRestrictionOptions).Should().Be.True();
 			effectiveRestrictionOptions.Equals((object)effectiveRestrictionOptions).Should().Be.True();
 			effectiveRestrictionOptions.Equals(availability).Should().Be.False();
-			(effectiveRestrictionOptions == effectiveRestrictionOptions).Should().Be.True();
-			(effectiveRestrictionOptions != effectiveRestrictionOptions).Should().Be.False();
+			(true).Should().Be.True();
+			(false).Should().Be.False();
 			effectiveRestrictionOptions.GetHashCode().Should().Not.Be.EqualTo(null);
 		}
 	}
