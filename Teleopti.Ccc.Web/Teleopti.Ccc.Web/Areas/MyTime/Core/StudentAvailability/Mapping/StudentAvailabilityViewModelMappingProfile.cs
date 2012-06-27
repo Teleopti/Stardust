@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				                                        			firstDateOfWeek = firstDateOfWeek.AddDays(7);
 				                                        		}
 				                                        		var mappingDatas = firstDatesOfWeeks.Select(d =>
-				                                        				new StudentAvailabilityWeekDomainData(s.Date, s.Person, s.Period,_studentAvailabilityProvider(),s.ScheduleDays));
+				                                        				new StudentAvailabilityWeekDomainData(d, s.Person, s.Period,_studentAvailabilityProvider(),s.ScheduleDays));
 				                                        		return mappingDatas.ToArray();
 				                                        	}))
 				.ForMember(d => d.PeriodSummary, c => c.UseValue(new PeriodSummaryViewModel()))
@@ -93,13 +93,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 																		{
 																			var dates = s.Date.DateRange(7);
 																			var dateOnlys = dates.Select(d => new DateOnly(d));
-																			//var mappingDatas = dateOnlys.Select(d =>
-																			//                                    new StudentAvailabilityWeekDomainData(
-																			//                                       s.Date, s.Person, s.Period,
-																			//                                       _studentAvailabilityProvider(),
-																			//                                       s.ScheduleDays));
 																			var mappingDatas = dateOnlys.Select(d =>
-																			                                new StudentAvailabilityDayDomainData(s.Date, s.Period, s.Person, _studentAvailabilityProvider(), s.ScheduleDays));
+																			                                new StudentAvailabilityDayDomainData(d, s.Period, s.Person, _studentAvailabilityProvider(), s.ScheduleDays));
 																			return mappingDatas.ToArray();
 																		}))
 				;
