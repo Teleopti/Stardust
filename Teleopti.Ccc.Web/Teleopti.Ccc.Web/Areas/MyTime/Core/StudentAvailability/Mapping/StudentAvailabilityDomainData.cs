@@ -35,8 +35,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 			}
 		}
 
-		public IEnumerable<IScheduleDay> ScheduleDays { get { return _scheduleDays ?? (_scheduleDays = _scheduleProvider.GetScheduleForPeriod(DisplayedPeriod)); } set { _scheduleDays = value; } }
+		public IEnumerable<IScheduleDay> ScheduleDays
+		{
+			get
+			{
+				return _scheduleDays ?? (_scheduleDays = _scheduleProvider.GetScheduleForPeriod(DisplayedPeriod));
+			} 
+			set
+			{
+				_scheduleDays = value;
+			}
+		}
 
-		public IStudentAvailabilityRestriction StudentAvailability { get { return _studentAvailabilityRestriction ?? (_studentAvailabilityRestriction = _studentAvailabilityProvider.GetStudentAvailabilityForDate(ScheduleDays, Date)); } }
+		public IStudentAvailabilityRestriction StudentAvailability
+		{
+			get
+			{
+				return _studentAvailabilityRestriction ?? (_studentAvailabilityRestriction = _studentAvailabilityProvider.GetStudentAvailabilityForDate(ScheduleDays, Date));
+			}
+		}
 	}
 }
