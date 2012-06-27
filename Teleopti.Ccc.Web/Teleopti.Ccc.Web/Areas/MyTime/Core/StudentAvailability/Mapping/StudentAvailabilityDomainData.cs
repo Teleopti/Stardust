@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 		}
 
 		public DateOnlyPeriod Period;
-		public DateOnly Date;
+		public DateOnly ChoosenDate;
 		public IPerson Person { get { return _loggedOnUser.CurrentUser(); } }
 
 		public DateOnlyPeriod DisplayedPeriod

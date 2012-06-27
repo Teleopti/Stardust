@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 
 			CreateMap<DateOnly, StudentAvailabilityDomainData>()
 				.ConstructUsing(s => new StudentAvailabilityDomainData(_scheduleProvider(), _studentAvailabilityProvider(), _loggedOnUser()))
-				.ForMember(d => d.Date, c => c.MapFrom(s => s))
+				.ForMember(d => d.ChoosenDate, c => c.MapFrom(s => s))
 				.ForMember(d => d.Period, c => c.MapFrom(s => _virtualSchedulePeriodProvider().GetCurrentOrNextVirtualPeriodForDate(s)))
 				.ForMember(d => d.ScheduleDays, c => c.Ignore())
 				.ForMember(d => d.Person, c => c.Ignore())
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.Summary, c => c.UseValue(new WeekSummaryViewModel()))
 				.ForMember(d => d.Days, c => c.MapFrom(s =>
 																		{
-																			var dates = s.Date.DateRange(7);
+																			var dates = s.FirstDateOfWeek.DateRange(7);
 																			var dateOnlys = dates.Select(d => new DateOnly(d));
 																			var mappingDatas = dateOnlys.Select(d =>
 																			                                new StudentAvailabilityDayDomainData(d, s.Period, s.Person, _studentAvailabilityProvider(), s.ScheduleDays));
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				;
 
 			CreateMap<StudentAvailabilityDomainData, PeriodSelectionViewModel>()
-				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date.ToFixedClientDateOnlyFormat()))
+				.ForMember(d => d.Date, c => c.MapFrom(s => s.ChoosenDate.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.Display, c => c.MapFrom(s => s.Period.DateString))
 				.ForMember(d => d.Navigation, c => c.MapFrom(s => s))
 				.ForMember(d => d.SelectableDateRange, c => c.MapFrom(s => new PeriodDateRangeViewModel
