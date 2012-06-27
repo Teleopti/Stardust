@@ -4,14 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{D2ABAB84-BF74-430A-B69E-9DC6D40DDA17}") = "TeleoptiAnalytics", "TeleoptiAnalytics.dwproj", "{10702025-0ACF-414D-9AC0-2AD705E87AB4}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://teamserver:8080/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = TeleoptiAnalytics.dwproj
-		SccLocalPath1 = .
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CreateDatabase2005|Default = CreateDatabase2005|Default
 	EndGlobalSection
