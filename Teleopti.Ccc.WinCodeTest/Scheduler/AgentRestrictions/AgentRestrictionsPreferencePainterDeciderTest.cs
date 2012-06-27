@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WinCode.Scheduling;
+﻿using System;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -44,6 +45,42 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				Assert.IsFalse(_decider.ShouldPaint(_preferenceCellData));
 			}	
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaint()
+		{
+			_decider.ShouldPaint(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaintPrefferedDayOff()
+		{
+			_decider.ShouldPaintPreferredDayOff(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaintPrefferedShiftCategory()
+		{
+			_decider.ShouldPaintPreferredDayOff(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaintPrefferedAbsence()
+		{
+			_decider.ShouldPaintPreferredAbsence(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaintPrefferedAbsenceOnContractDayOff()
+		{
+			_decider.ShouldPaintPreferredAbsenceOnContractDayOff(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgumentShouldPaintPrefferedExtended()
+		{
+			_decider.ShouldPaintPreferredExtended(null);
 		}
 
 		[Test]
