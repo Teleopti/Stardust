@@ -48,15 +48,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 			CreateMap<DateOnly, StudentAvailabilityViewModel>()
 				.ConvertUsing(twoStepMapping<DateOnly, StudentAvailabilityDomainData, StudentAvailabilityViewModel>);
 
-			// for testing purposes
-			CreateMap<DateOnly, PeriodSelectionViewModel>()
-				.ConvertUsing(twoStepMapping<DateOnly, StudentAvailabilityDomainData, PeriodSelectionViewModel>);
-			CreateMap<DateOnly, DayViewModelBase>()
-				.ConvertUsing(twoStepMapping<DateOnly, StudentAvailabilityDomainData, DayViewModelBase>);
-			CreateMap<DateOnly, AvailableDayViewModel>()
-				.ConvertUsing(twoStepMapping<DateOnly, StudentAvailabilityDomainData, AvailableDayViewModel>);
-
-
 			CreateMap<DateOnly, StudentAvailabilityDomainData>()
 				.ConstructUsing(s => new StudentAvailabilityDomainData(_scheduleProvider(), _loggedOnUser()))
 				.ForMember(d => d.ChoosenDate, c => c.MapFrom(s => s))
@@ -64,7 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.ScheduleDays, c => c.Ignore())
 				.ForMember(d => d.Person, c => c.Ignore())
 				;
-
 
 			CreateMap<StudentAvailabilityDomainData, StudentAvailabilityViewModel>()
 				.ForMember(d => d.PeriodSelection, c => c.MapFrom(s => s))
@@ -80,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				                                        			firstDateOfWeek = firstDateOfWeek.AddDays(7);
 				                                        		}
 				                                        		var mappingDatas = firstDatesOfWeeks.Select(d =>
-				                                        				new StudentAvailabilityWeekDomainData(d, s.Person, s.Period, s.ScheduleDays));
+				                                        				new StudentAvailabilityWeekDomainData(d, s.Person, s.Period,s.ScheduleDays));
 				                                        		return mappingDatas.ToArray();
 				                                        	}))
 				.ForMember(d => d.PeriodSummary, c => c.UseValue(new PeriodSummaryViewModel()))
