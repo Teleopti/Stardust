@@ -1,5 +1,5 @@
 @ECHO OFF
-
+ 
 ::Get user input
 SET /P SQLServerInstance=name of SQL Server instance: 
 SET /P ASServerInstance=name of AS Server instance: 
