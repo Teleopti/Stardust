@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using NUnit.Framework;
@@ -333,5 +334,24 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 					_averagePersonFairness, _schedulingOptions)).Return(new BestShiftCategoryResult(_shiftCategory, FailureCause.NoFailure)).IgnoreArguments();
     		Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.Twice();
     	}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowIfMatrixIsnull()
+		{
+			_target.Execute(new DateOnlyPeriod(new DateOnly(),new DateOnly()),null, _schedulingOptions, _persons ,_bgWorker);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowIfWorkerIsnull()
+		{
+			var matrixProList = new List<IScheduleMatrixPro>();
+			_target.Execute(new DateOnlyPeriod(new DateOnly(), new DateOnly()), matrixProList, _schedulingOptions, _persons, null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowIfMatrixIsnullOnSchedule()
+		{
+			_target.ScheduleOneDay(new DateOnly(), _schedulingOptions,_groupPerson, null);
+		}
     }
 }
