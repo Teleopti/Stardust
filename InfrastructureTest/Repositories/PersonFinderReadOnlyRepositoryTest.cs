@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -27,7 +27,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(crit.TotalRows, Is.EqualTo(0));
         }
 
+		[Test]
+		public void ShouldCallUpdateReadModelWithoutCrash()
+		{
+			UnitOfWork.PersistAll();
+			SkipRollback();
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
+			_target.UpdateFindPerson(new Guid[ ] {Guid.NewGuid()});
+		}
 
+		[Test]
+		public void ShouldCallUpdateGroupingReadModelGroupPageWithoutCrash()
+		{
+			UnitOfWork.PersistAll();
+			SkipRollback();
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
+            _target.UpdateFindPersonData(new Guid[] { Guid.NewGuid() });
+		}
     }
 
     internal class PersonFinderSearchCriteriaForTest : IPersonFinderSearchCriteria
