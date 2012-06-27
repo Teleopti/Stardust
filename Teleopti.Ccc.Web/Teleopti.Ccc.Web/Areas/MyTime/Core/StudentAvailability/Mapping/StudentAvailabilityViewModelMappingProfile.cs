@@ -81,8 +81,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				                                        		}
 				                                        		var mappingDatas = firstDatesOfWeeks.Select(d =>
 				                                        		                                            new StudentAvailabilityDomainData(_scheduleProvider(), _studentAvailabilityProvider(), _loggedOnUser())
-				                                        		                                            {Date = d, Period = s.Period});
-				                                        		return mappingDatas.ToArray() as IEnumerable<StudentAvailabilityDomainData>;
+				                                        		                                            	{
+				                                        		                                            		Date = d, 
+																																			Period = s.Period
+				                                        		                                            	});
+				                                        		return mappingDatas.ToArray();
 				                                        	}))
 				.ForMember(d => d.PeriodSummary, c => c.UseValue(new PeriodSummaryViewModel()))
 				.ForMember(d => d.StudentAvailabilityPeriod, c => c.MapFrom(s => s.Person.WorkflowControlSet))
@@ -95,9 +98,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				                                       		var dates = s.Date.DateRange(7);
 				                                       		var dateOnlys = dates.Select(d => new DateOnly(d));
 				                                       		var mappingDatas = dateOnlys.Select(d =>
-																							new StudentAvailabilityDomainData(_scheduleProvider(), _studentAvailabilityProvider(), _loggedOnUser()) 
-																							{ Date = d, Period = s.Period });
-															return mappingDatas.ToArray() as IEnumerable<StudentAvailabilityDomainData>;
+																							new StudentAvailabilityDomainData(_scheduleProvider(), _studentAvailabilityProvider(), _loggedOnUser())
+																								{
+																									Date = d, 
+																									Period = s.Period
+																								});
+																			return mappingDatas.ToArray();
 				                                       	}))
 				;
 
