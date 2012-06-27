@@ -206,7 +206,7 @@
             this.checkBoxUseShiftCategoryRestrictions.Location = new System.Drawing.Point(3, 189);
             this.checkBoxUseShiftCategoryRestrictions.Name = "checkBoxUseShiftCategoryRestrictions";
             this.checkBoxUseShiftCategoryRestrictions.Size = new System.Drawing.Size(173, 17);
-            this.checkBoxUseShiftCategoryRestrictions.TabIndex = 12;
+            this.checkBoxUseShiftCategoryRestrictions.TabIndex = 20;
             this.checkBoxUseShiftCategoryRestrictions.Text = "xxUseShiftCategoryRestrictions";
             this.checkBoxUseShiftCategoryRestrictions.UseVisualStyleBackColor = true;
             this.checkBoxUseShiftCategoryRestrictions.CheckedChanged += new System.EventHandler(this.checkBoxUseShiftCategoryRestrictionsCheckedChanged);
@@ -217,7 +217,7 @@
             this.checkBoxOnlyPreferenceDays.Location = new System.Drawing.Point(33, 26);
             this.checkBoxOnlyPreferenceDays.Name = "checkBoxOnlyPreferenceDays";
             this.checkBoxOnlyPreferenceDays.Size = new System.Drawing.Size(178, 17);
-            this.checkBoxOnlyPreferenceDays.TabIndex = 10;
+            this.checkBoxOnlyPreferenceDays.TabIndex = 13;
             this.checkBoxOnlyPreferenceDays.Text = "xxScheduleOnlyPreferenceDays";
             this.checkBoxOnlyPreferenceDays.UseVisualStyleBackColor = true;
             this.checkBoxOnlyPreferenceDays.CheckedChanged += new System.EventHandler(this.checkBoxOnlyPreferenceDaysCheckedChanged);
@@ -229,7 +229,7 @@
             this.checkBoxUsePreferences.Location = new System.Drawing.Point(3, 3);
             this.checkBoxUsePreferences.Name = "checkBoxUsePreferences";
             this.checkBoxUsePreferences.Size = new System.Drawing.Size(112, 17);
-            this.checkBoxUsePreferences.TabIndex = 9;
+            this.checkBoxUsePreferences.TabIndex = 12;
             this.checkBoxUsePreferences.Text = "xxUsePreferences";
             this.checkBoxUsePreferences.UseVisualStyleBackColor = true;
             this.checkBoxUsePreferences.CheckedChanged += new System.EventHandler(this.checkBoxUsePreferencesCheckedChanged);
@@ -241,7 +241,7 @@
             this.checkBoxUseStudentAvailability.Location = new System.Drawing.Point(3, 164);
             this.checkBoxUseStudentAvailability.Name = "checkBoxUseStudentAvailability";
             this.checkBoxUseStudentAvailability.Size = new System.Drawing.Size(141, 17);
-            this.checkBoxUseStudentAvailability.TabIndex = 8;
+            this.checkBoxUseStudentAvailability.TabIndex = 19;
             this.checkBoxUseStudentAvailability.Text = "xxUseStudentAvailability";
             this.checkBoxUseStudentAvailability.UseVisualStyleBackColor = true;
             this.checkBoxUseStudentAvailability.CheckedChanged += new System.EventHandler(this.checkBoxUseStudentAvailabilityCheckedChanged);
@@ -252,7 +252,7 @@
             this.checkBoxOnlyAvailabilityDays.Location = new System.Drawing.Point(33, 141);
             this.checkBoxOnlyAvailabilityDays.Name = "checkBoxOnlyAvailabilityDays";
             this.checkBoxOnlyAvailabilityDays.Size = new System.Drawing.Size(175, 17);
-            this.checkBoxOnlyAvailabilityDays.TabIndex = 7;
+            this.checkBoxOnlyAvailabilityDays.TabIndex = 18;
             this.checkBoxOnlyAvailabilityDays.Text = "xxScheduleOnlyAvailabilityDays";
             this.checkBoxOnlyAvailabilityDays.UseVisualStyleBackColor = true;
             this.checkBoxOnlyAvailabilityDays.CheckedChanged += new System.EventHandler(this.checkBoxOnlyAvailabilityDaysCheckedChanged);
@@ -264,7 +264,7 @@
             this.checkBoxUseAvailability.Location = new System.Drawing.Point(3, 118);
             this.checkBoxUseAvailability.Name = "checkBoxUseAvailability";
             this.checkBoxUseAvailability.Size = new System.Drawing.Size(104, 17);
-            this.checkBoxUseAvailability.TabIndex = 6;
+            this.checkBoxUseAvailability.TabIndex = 17;
             this.checkBoxUseAvailability.Text = "xxUseAvailability";
             this.checkBoxUseAvailability.UseVisualStyleBackColor = true;
             this.checkBoxUseAvailability.CheckedChanged += new System.EventHandler(this.checkBoxUseAvailabilityCheckedChanged);
@@ -276,7 +276,7 @@
             this.checkBoxUseRotations.Location = new System.Drawing.Point(3, 72);
             this.checkBoxUseRotations.Name = "checkBoxUseRotations";
             this.checkBoxUseRotations.Size = new System.Drawing.Size(100, 17);
-            this.checkBoxUseRotations.TabIndex = 4;
+            this.checkBoxUseRotations.TabIndex = 15;
             this.checkBoxUseRotations.Text = "xxUseRotations";
             this.checkBoxUseRotations.UseVisualStyleBackColor = true;
             this.checkBoxUseRotations.CheckedChanged += new System.EventHandler(this.checkBoxUseRotationsCheckedChanged);
@@ -287,7 +287,7 @@
             this.checkBoxOnlyRotationDays.Location = new System.Drawing.Point(33, 95);
             this.checkBoxOnlyRotationDays.Name = "checkBoxOnlyRotationDays";
             this.checkBoxOnlyRotationDays.Size = new System.Drawing.Size(166, 17);
-            this.checkBoxOnlyRotationDays.TabIndex = 5;
+            this.checkBoxOnlyRotationDays.TabIndex = 16;
             this.checkBoxOnlyRotationDays.Text = "xxScheduleOnlyRotationDays";
             this.checkBoxOnlyRotationDays.UseVisualStyleBackColor = true;
             this.checkBoxOnlyRotationDays.CheckedChanged += new System.EventHandler(this.checkBoxOnlyRotationDaysCheckedChanged);
@@ -299,7 +299,7 @@
             this.checkBoxMustHaves.Location = new System.Drawing.Point(33, 49);
             this.checkBoxMustHaves.Name = "checkBoxMustHaves";
             this.checkBoxMustHaves.Size = new System.Drawing.Size(390, 17);
-            this.checkBoxMustHaves.TabIndex = 11;
+            this.checkBoxMustHaves.TabIndex = 14;
             this.checkBoxMustHaves.Text = "xxUsePreferencesMustHavesOnly";
             this.checkBoxMustHaves.UseVisualStyleBackColor = true;
             this.checkBoxMustHaves.CheckedChanged += new System.EventHandler(this.checkBoxMustHavesCheckedChanged);
@@ -337,7 +337,7 @@
             this.comboBoxAdvTag.Name = "comboBoxAdvTag";
             this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 21);
             this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
-            this.comboBoxAdvTag.TabIndex = 5;
+            this.comboBoxAdvTag.TabIndex = 11;
             // 
             // lblUseRestrictions
             // 
@@ -406,7 +406,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.Size = new System.Drawing.Size(426, 232);
-            this.tableLayoutPanel5.TabIndex = 24;
+            this.tableLayoutPanel5.TabIndex = 25;
             // 
             // panel1
             // 
@@ -450,7 +450,7 @@
             this.trackBar1.Maximum = 100;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(386, 45);
-            this.trackBar1.TabIndex = 0;
+            this.trackBar1.TabIndex = 39;
             this.trackBar1.TickFrequency = 5;
             this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1ValueChanged);
             // 
@@ -473,7 +473,7 @@
             this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
             this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 21);
             this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
-            this.comboBoxGroupingFairness.TabIndex = 22;
+            this.comboBoxGroupingFairness.TabIndex = 40;
             this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingFairnessSelectedIndexChanged);
             // 
             // pnlBlockTeamScheduling
@@ -483,7 +483,7 @@
             this.pnlBlockTeamScheduling.Location = new System.Drawing.Point(3, 3);
             this.pnlBlockTeamScheduling.Name = "pnlBlockTeamScheduling";
             this.pnlBlockTeamScheduling.Size = new System.Drawing.Size(426, 208);
-            this.pnlBlockTeamScheduling.TabIndex = 25;
+            this.pnlBlockTeamScheduling.TabIndex = 24;
             // 
             // tableLayoutPanel4
             // 
@@ -515,7 +515,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(426, 208);
-            this.tableLayoutPanel4.TabIndex = 0;
+            this.tableLayoutPanel4.TabIndex = 1;
             // 
             // checkBoxUseGroupScheduling
             // 
@@ -525,7 +525,7 @@
             this.checkBoxUseGroupScheduling.Location = new System.Drawing.Point(3, 78);
             this.checkBoxUseGroupScheduling.Name = "checkBoxUseGroupScheduling";
             this.checkBoxUseGroupScheduling.Size = new System.Drawing.Size(156, 24);
-            this.checkBoxUseGroupScheduling.TabIndex = 4;
+            this.checkBoxUseGroupScheduling.TabIndex = 34;
             this.checkBoxUseGroupScheduling.Text = "xxUseTeamScheduling";
             this.checkBoxUseGroupScheduling.UseVisualStyleBackColor = true;
             this.checkBoxUseGroupScheduling.CheckedChanged += new System.EventHandler(this.checkBoxUseGroupSchedulingCheckedChanged);
@@ -538,7 +538,7 @@
             this.checkBoxUseBlockScheduling.Location = new System.Drawing.Point(3, 3);
             this.checkBoxUseBlockScheduling.Name = "checkBoxUseBlockScheduling";
             this.checkBoxUseBlockScheduling.Size = new System.Drawing.Size(156, 19);
-            this.checkBoxUseBlockScheduling.TabIndex = 0;
+            this.checkBoxUseBlockScheduling.TabIndex = 31;
             this.checkBoxUseBlockScheduling.Text = "xxUseBlockScheduling";
             this.checkBoxUseBlockScheduling.UseVisualStyleBackColor = true;
             this.checkBoxUseBlockScheduling.CheckedChanged += new System.EventHandler(this.checkBoxUseBlockSchedulingCheckedChanged);
@@ -550,7 +550,7 @@
             this.radioButtonBetweenDayOff.Location = new System.Drawing.Point(33, 28);
             this.radioButtonBetweenDayOff.Name = "radioButtonBetweenDayOff";
             this.radioButtonBetweenDayOff.Size = new System.Drawing.Size(110, 17);
-            this.radioButtonBetweenDayOff.TabIndex = 2;
+            this.radioButtonBetweenDayOff.TabIndex = 32;
             this.radioButtonBetweenDayOff.TabStop = true;
             this.radioButtonBetweenDayOff.Text = "xxBetweenDayOff";
             this.radioButtonBetweenDayOff.UseVisualStyleBackColor = true;
@@ -564,7 +564,7 @@
             this.checkBoxUseSameDayOffs.Location = new System.Drawing.Point(33, 192);
             this.checkBoxUseSameDayOffs.Name = "checkBoxUseSameDayOffs";
             this.checkBoxUseSameDayOffs.Size = new System.Drawing.Size(433, 13);
-            this.checkBoxUseSameDayOffs.TabIndex = 7;
+            this.checkBoxUseSameDayOffs.TabIndex = 70;
             this.checkBoxUseSameDayOffs.Text = "xxUseSameDayOffs";
             this.checkBoxUseSameDayOffs.UseVisualStyleBackColor = true;
             this.checkBoxUseSameDayOffs.CheckedChanged += new System.EventHandler(this.checkBoxUseSameDayOffsCheckedChanged);
@@ -576,7 +576,7 @@
             this.radioButtonSchedulePeriod.Location = new System.Drawing.Point(33, 55);
             this.radioButtonSchedulePeriod.Name = "radioButtonSchedulePeriod";
             this.radioButtonSchedulePeriod.Size = new System.Drawing.Size(110, 17);
-            this.radioButtonSchedulePeriod.TabIndex = 3;
+            this.radioButtonSchedulePeriod.TabIndex = 33;
             this.radioButtonSchedulePeriod.TabStop = true;
             this.radioButtonSchedulePeriod.Text = "xxSchedulePeriod";
             this.radioButtonSchedulePeriod.UseVisualStyleBackColor = true;
@@ -590,7 +590,7 @@
             this.comboBoxGrouping.Name = "comboBoxGrouping";
             this.comboBoxGrouping.Size = new System.Drawing.Size(151, 21);
             this.comboBoxGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
-            this.comboBoxGrouping.TabIndex = 5;
+            this.comboBoxGrouping.TabIndex = 35;
             this.comboBoxGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);
             // 
             // checkBoxCommonStart
@@ -600,7 +600,7 @@
             this.checkBoxCommonStart.Location = new System.Drawing.Point(33, 137);
             this.checkBoxCommonStart.Name = "checkBoxCommonStart";
             this.checkBoxCommonStart.Size = new System.Drawing.Size(108, 17);
-            this.checkBoxCommonStart.TabIndex = 8;
+            this.checkBoxCommonStart.TabIndex = 37;
             this.checkBoxCommonStart.Text = "xxSameStartTime";
             this.checkBoxCommonStart.UseVisualStyleBackColor = true;
             // 
@@ -611,7 +611,7 @@
             this.checkBoxCommonEnd.Location = new System.Drawing.Point(33, 165);
             this.checkBoxCommonEnd.Name = "checkBoxCommonEnd";
             this.checkBoxCommonEnd.Size = new System.Drawing.Size(105, 17);
-            this.checkBoxCommonEnd.TabIndex = 9;
+            this.checkBoxCommonEnd.TabIndex = 38;
             this.checkBoxCommonEnd.Text = "xxSameEndTime";
             this.checkBoxCommonEnd.UseVisualStyleBackColor = true;
             // 
@@ -622,7 +622,7 @@
             this.checkBoxCommonCategory.Location = new System.Drawing.Point(33, 108);
             this.checkBoxCommonCategory.Name = "checkBoxCommonCategory";
             this.checkBoxCommonCategory.Size = new System.Drawing.Size(126, 17);
-            this.checkBoxCommonCategory.TabIndex = 7;
+            this.checkBoxCommonCategory.TabIndex = 36;
             this.checkBoxCommonCategory.Text = "xxSameShiftCategory";
             this.checkBoxCommonCategory.UseVisualStyleBackColor = true;
             // 
@@ -673,7 +673,7 @@
             this.pnlShiftCategory.Location = new System.Drawing.Point(3, 183);
             this.pnlShiftCategory.Name = "pnlShiftCategory";
             this.pnlShiftCategory.Size = new System.Drawing.Size(432, 154);
-            this.pnlShiftCategory.TabIndex = 23;
+            this.pnlShiftCategory.TabIndex = 22;
             // 
             // tableLayoutPanel7
             // 
@@ -698,7 +698,7 @@
             this.checkBoxUseShiftCategory.Location = new System.Drawing.Point(3, 3);
             this.checkBoxUseShiftCategory.Name = "checkBoxUseShiftCategory";
             this.checkBoxUseShiftCategory.Size = new System.Drawing.Size(118, 17);
-            this.checkBoxUseShiftCategory.TabIndex = 11;
+            this.checkBoxUseShiftCategory.TabIndex = 55;
             this.checkBoxUseShiftCategory.Text = "xxUseShiftCategory";
             this.checkBoxUseShiftCategory.UseVisualStyleBackColor = true;
             this.checkBoxUseShiftCategory.CheckedChanged += new System.EventHandler(this.checkBoxUseShiftCategoryCheckedChanged);
@@ -711,10 +711,10 @@
             this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 29);
             this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
             this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-            this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 19);
+            this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 21);
             this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
-            this.comboBoxAdvShiftCategory.TabIndex = 1;
+            this.comboBoxAdvShiftCategory.TabIndex = 56;
             this.comboBoxAdvShiftCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvShiftCategorySelectedIndexChanged);
             // 
             // tableLayoutPanel8
@@ -737,7 +737,7 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tableLayoutPanel8.Size = new System.Drawing.Size(432, 58);
-            this.tableLayoutPanel8.TabIndex = 22;
+            this.tableLayoutPanel8.TabIndex = 23;
             // 
             // labelScheduleOrSchedules2
             // 
@@ -765,7 +765,7 @@
             0});
             this.numericUpDownRefreshRate.Name = "numericUpDownRefreshRate";
             this.numericUpDownRefreshRate.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDownRefreshRate.TabIndex = 21;
+            this.numericUpDownRefreshRate.TabIndex = 58;
             this.numericUpDownRefreshRate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDownRefreshRate.Value = new decimal(new int[] {
             1,
@@ -809,7 +809,7 @@
             0});
             this.numericUpDownResourceCalculateEvery.Name = "numericUpDownResourceCalculateEvery";
             this.numericUpDownResourceCalculateEvery.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDownResourceCalculateEvery.TabIndex = 19;
+            this.numericUpDownResourceCalculateEvery.TabIndex = 57;
             this.numericUpDownResourceCalculateEvery.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDownResourceCalculateEvery.Value = new decimal(new int[] {
             1,
@@ -855,7 +855,7 @@
             this.checkBoxUseMaxSeats.Location = new System.Drawing.Point(3, 53);
             this.checkBoxUseMaxSeats.Name = "checkBoxUseMaxSeats";
             this.checkBoxUseMaxSeats.Size = new System.Drawing.Size(102, 17);
-            this.checkBoxUseMaxSeats.TabIndex = 12;
+            this.checkBoxUseMaxSeats.TabIndex = 53;
             this.checkBoxUseMaxSeats.Text = "xxUseMaxSeats";
             this.checkBoxUseMaxSeats.UseVisualStyleBackColor = true;
             this.checkBoxUseMaxSeats.CheckedChanged += new System.EventHandler(this.checkBoxUseMaxSeatsCheckedChanged);
@@ -867,7 +867,7 @@
             this.checkBoxUseMaximumPersons.Location = new System.Drawing.Point(3, 28);
             this.checkBoxUseMaximumPersons.Name = "checkBoxUseMaximumPersons";
             this.checkBoxUseMaximumPersons.Size = new System.Drawing.Size(111, 17);
-            this.checkBoxUseMaximumPersons.TabIndex = 10;
+            this.checkBoxUseMaximumPersons.TabIndex = 52;
             this.checkBoxUseMaximumPersons.Text = "xxUseMaxStaffing";
             this.checkBoxUseMaximumPersons.UseVisualStyleBackColor = true;
             // 
@@ -878,7 +878,7 @@
             this.checkBoxUseMinimumPersons.Location = new System.Drawing.Point(3, 3);
             this.checkBoxUseMinimumPersons.Name = "checkBoxUseMinimumPersons";
             this.checkBoxUseMinimumPersons.Size = new System.Drawing.Size(108, 17);
-            this.checkBoxUseMinimumPersons.TabIndex = 9;
+            this.checkBoxUseMinimumPersons.TabIndex = 51;
             this.checkBoxUseMinimumPersons.Text = "xxUseMinStaffing";
             this.checkBoxUseMinimumPersons.UseVisualStyleBackColor = true;
             // 
@@ -888,7 +888,7 @@
             this.checkBoxDoNotBreakMaxSeats.Location = new System.Drawing.Point(28, 78);
             this.checkBoxDoNotBreakMaxSeats.Name = "checkBoxDoNotBreakMaxSeats";
             this.checkBoxDoNotBreakMaxSeats.Size = new System.Drawing.Size(142, 17);
-            this.checkBoxDoNotBreakMaxSeats.TabIndex = 11;
+            this.checkBoxDoNotBreakMaxSeats.TabIndex = 54;
             this.checkBoxDoNotBreakMaxSeats.Text = "xxDoNotBreakMaxSeats";
             this.checkBoxDoNotBreakMaxSeats.UseVisualStyleBackColor = true;
             // 

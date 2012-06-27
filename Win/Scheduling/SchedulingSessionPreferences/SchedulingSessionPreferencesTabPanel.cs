@@ -182,10 +182,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		{
 			comboBoxGrouping.DataSource = _groupPages;
             comboBoxGrouping.DisplayMember = "Name";
-
+		    comboBoxGrouping.ValueMember  = "Key";
 			if(_localSchedulingOptions.GroupOnGroupPage != null)
 			{
-				comboBoxGrouping.SelectedItem = _localSchedulingOptions.GroupOnGroupPage;
+                comboBoxGrouping.SelectedValue  = _localSchedulingOptions.GroupOnGroupPage.Key ;
 			}
 		}
 
@@ -200,10 +200,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		{
 			comboBoxGroupingFairness.DataSource = _groupPagesFairness;
 			comboBoxGroupingFairness.DisplayMember = "Name";
+            comboBoxGroupingFairness.ValueMember  = "Key";
 
 			if (_localSchedulingOptions.GroupPageForShiftCategoryFairness != null)
 			{
-				comboBoxGroupingFairness.SelectedItem = _localSchedulingOptions.GroupPageForShiftCategoryFairness;
+				comboBoxGroupingFairness.SelectedValue  = _localSchedulingOptions.GroupPageForShiftCategoryFairness.Key  ;
 			}
 		}
 
