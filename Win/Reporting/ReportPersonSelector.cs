@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Reporting
     public partial class ReportPersonSelector : BaseUserControl
     {
         private HashSet<Guid> _selectedAgentGuids = new HashSet<Guid>();
-        private DateOnly _dateOnly = new DateOnly(DateTime.Today);
+		private DateOnlyPeriod _dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(DateTime.Today), new DateOnly(DateTime.Today));
         private IApplicationFunction _applicationFunction;
         private IComponentContext _componentContext;
         private ICollection<IPerson> _selectedAgents = new List<IPerson>();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
             try
             {
-                personsSelectionView = new ReportPersonsSelectionView(_dateOnly, _selectedAgentGuids, _componentContext, _applicationFunction, _selectedGroupPage);
+				personsSelectionView = new ReportPersonsSelectionView(_dateOnlyPeriod, _selectedAgentGuids, _componentContext, _applicationFunction, _selectedGroupPage);
 
                 Point pointToScreen =
                     comboBoxAdv1.PointToScreen(new Point(comboBoxAdv1.Bounds.Y - 4,
@@ -157,9 +157,9 @@ namespace Teleopti.Ccc.Win.Reporting
             get { return _selectedAgentGuids; }
         }
 
-        public void SetDate(DateOnly first)
+        public void SetPeriod(DateOnlyPeriod period)
         {
-            _dateOnly = first;
+			_dateOnlyPeriod = period;
         }
 
         public string SelectedGroupPage()
