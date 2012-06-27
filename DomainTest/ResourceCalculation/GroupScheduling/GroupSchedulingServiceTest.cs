@@ -336,20 +336,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     	}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowIfMatrixIsnull()
+		public void ShouldThrowIfMatrixIsNull()
 		{
 			_target.Execute(new DateOnlyPeriod(new DateOnly(),new DateOnly()),null, _schedulingOptions, _persons ,_bgWorker);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowIfWorkerIsnull()
+		public void ShouldThrowIfWorkerIsNull()
 		{
 			var matrixProList = new List<IScheduleMatrixPro>();
 			_target.Execute(new DateOnlyPeriod(new DateOnly(), new DateOnly()), matrixProList, _schedulingOptions, _persons, null);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowIfMatrixIsnullOnSchedule()
+		public void ShouldThrowIfMatrixIsNullOnSchedule()
 		{
 			_target.ScheduleOneDay(new DateOnly(), _schedulingOptions,_groupPerson, null);
 		}
