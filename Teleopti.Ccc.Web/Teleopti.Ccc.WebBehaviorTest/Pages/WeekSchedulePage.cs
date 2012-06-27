@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Schedule-addRequest-section")]
 		public Div RequestDetailSection { get; set; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public Span TextRequestTab
 		{
 			get { throw new NotImplementedException(); }
