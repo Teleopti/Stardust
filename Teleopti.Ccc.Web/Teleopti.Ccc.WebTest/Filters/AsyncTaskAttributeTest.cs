@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Globalization;
 using System.Security.Principal;
 using System.Threading;
 using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Filters
 {

@@ -70,14 +70,14 @@
 		[Test]
 		public void MenuShouldReturnDefaultView()
 		{
-			var result = _target.Menu() as ViewResult;
+			var result = _target.Menu();
 			result.ViewName.Should().Be.EqualTo(string.Empty);
 		}
 
 		[Test]
 		public void MobileMenuShouldReturnDefaultView()
 		{
-			var result = this._target.MobileMenu();
+			var result = _target.MobileMenu();
 			result.ViewName.Should().Be.EqualTo(string.Empty);
 		}
 	}

@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.WebTest
 {

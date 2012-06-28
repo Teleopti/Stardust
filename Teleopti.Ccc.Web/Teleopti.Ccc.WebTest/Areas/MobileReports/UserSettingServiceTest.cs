@@ -10,10 +10,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 	using Domain.Common;
 	using Domain.Repositories;
 	using Domain.Security.Principal;
-	using TestCommon;
 	using Web.Areas.MobileReports.Core;
 	using Web.Areas.MobileReports.Models.Domain;
-	using Web.Core.RequestContext;
 
 	[TestFixture]
 	public class UserSettingServiceTest

@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IVirtualSchedulePeriodProvider virtualScheduleProvider;
 		private IPreferenceProvider preferenceProvider;
 		private IPerson person;
-		private IPreferenceFeedbackProvider preferenceFeedbackProvider;
 		private IScheduleProvider scheduleProvider;
 		private IProjectionProvider projectionProvider;
 
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			virtualScheduleProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
-			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
 			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
  

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Scheduling;
+﻿using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
