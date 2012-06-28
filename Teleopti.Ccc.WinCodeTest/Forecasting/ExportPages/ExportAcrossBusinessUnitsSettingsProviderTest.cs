@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
             }
             using(_mocks.Playback())
             {
-                Assert.That(_target.TransformSerilizableToSelectionModels().Count(), Is.EqualTo(multisiteSkillSelectionModels.Count));
-                Assert.That(_target.TransformSerilizableToSelectionModels().First().MultisiteSkillModel.Id,
+                Assert.That(_target.TransformSerializableToSelectionModels().Count(), Is.EqualTo(multisiteSkillSelectionModels.Count));
+                Assert.That(_target.TransformSerializableToSelectionModels().First().MultisiteSkillModel.Id,
                             Is.EqualTo(multisiteSkillSelectionModels.First().MultisiteSkillModel.Id));
             }
         }
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
             }
             using (_mocks.Playback())
             {
-                _target.TransformToSerilizableModel(multisiteSkillSelectionModels);
+                _target.TransformToSerializableModel(multisiteSkillSelectionModels);
 
                 Assert.That(_target.ExportAcrossBusinessUnitsSettings.MultisiteSkillSelections.Count, Is.EqualTo(1));
                 Assert.That(
