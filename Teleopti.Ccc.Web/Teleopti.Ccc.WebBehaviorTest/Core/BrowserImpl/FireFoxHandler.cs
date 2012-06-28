@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 		private static IDisposable BrowserLock { get { return ScenarioContext.Current.Value<SystemLevelLock>(); } set { ScenarioContext.Current.Value((SystemLevelLock) value); } }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public FireFox Start()
 		{
 			LockBrowser();

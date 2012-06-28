@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
 	public static class BrowserProcessHelpers
 	{
-		public static bool CloseByClosingMainWindow(string processName)
+		internal static bool CloseByClosingMainWindow(string processName)
 		{
 			var processes = Process.GetProcessesByName(processName);
 			foreach (var process in processes)
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			return true;
 		}
 
-		public static bool CloseByKillingProcesses(string processName)
+		internal static bool CloseByKillingProcesses(string processName)
 		{
 			var processes = Process.GetProcessesByName(processName);
 			foreach (var process in processes)
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			return true;
 		}
 
-		public static bool WaitForProcessToExit(string processName)
+		internal static bool WaitForProcessToExit(string processName)
 		{
 			Func<bool> isStopped = () => !Process.GetProcessesByName(processName).Any();
 			return isStopped.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(10));
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 
 
-		public static bool AttemptToCloseProcess(string processName, IEnumerable<Func<bool>> processClosingActions)
+		internal static bool AttemptToCloseProcess(string processName, IEnumerable<Func<bool>> processClosingActions)
 		{
 			return processClosingActions.Any(action => AttemptToCloseProcess(processName, action));
 		}

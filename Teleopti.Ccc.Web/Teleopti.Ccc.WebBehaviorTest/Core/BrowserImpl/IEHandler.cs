@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 		private static bool CloseByWatiNCloseNDisposeFailed = false;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public IE Start()
 		{
 			LockBrowser();
