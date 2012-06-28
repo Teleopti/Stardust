@@ -66,8 +66,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_groupPagesFairness = _groupPages.ToList();
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             _dataLoaded = true;
-            
         }
+
+		public override string HelpId
+		{
+			get
+			{
+				return Tag.ToString();
+			}
+		}
 
         public bool UseBlockSchedulingVisible
         {
@@ -591,6 +598,13 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			if (!checkBoxUseMaxSeats.Checked)
 				checkBoxDoNotBreakMaxSeats.Checked = false;
 			checkBoxDoNotBreakMaxSeats.Enabled = checkBoxUseMaxSeats.Checked;
+		}
+
+		private void tabControl1SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (tabControl1.SelectedIndex == 0) Tag = "Main";
+			if (tabControl1.SelectedIndex == 1) Tag = "Extra";
+			if (tabControl1.SelectedIndex == 2) Tag = "Advanced";
 		}
     }
     
