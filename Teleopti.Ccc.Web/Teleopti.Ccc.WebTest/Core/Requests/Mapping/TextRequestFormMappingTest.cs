@@ -39,9 +39,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			                  	{
 			                  		c.AddProfile(
 			                  			new TextRequestFormMappingProfile(
-			                  				() => Mapper.Engine,
-			                  				() => loggedOnUser,
-			                  				() => userTimeZone,
 			                  				() => textRequestFormToPersonRequest
 			                  				));
 			                  		c.AddProfile(new DateTimePeriodFormMappingProfile(() => userTimeZone));
