@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestDataSetup.CreateDataSource();
 			TestSiteConfigurationSetup.Setup();
 
-			PrepareData();
+			//PrepareData();
 
 			Log.Write("BeforeTestRun took " + DateTime.Now.Subtract(startTime));
 			_testRunScenariosStartTime = DateTime.Now;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			//                                            TaskScheduler.FromCurrentSynchronizationContext());
 			//Task.WaitAll(prepareData, startBrowser);
 
-			//PrepareData();
+			PrepareData();
 
 			var spentTime = DateTime.Now.Subtract(startTime);
 			_beforeScenarioTimeSpent = _beforeScenarioTimeSpent.Add(spentTime);
