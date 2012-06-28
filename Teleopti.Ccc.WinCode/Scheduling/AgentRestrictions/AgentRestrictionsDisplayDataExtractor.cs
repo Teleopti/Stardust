@@ -12,15 +12,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	{
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff;
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly ISchedulePeriodTargetTimeCalculator _schedulePeriodTargetTimeCalculator;
 
-		public AgentRestrictionsDisplayDataExtractor(ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IPeriodScheduledAndRestrictionDaysOff periodScheduledAndRestrictionDaysOff, IRestrictionExtractor restrictionExtractor)
+		public AgentRestrictionsDisplayDataExtractor(ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IPeriodScheduledAndRestrictionDaysOff periodScheduledAndRestrictionDaysOff)
 		{
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_periodScheduledAndRestrictionDaysOff = periodScheduledAndRestrictionDaysOff;
-			_restrictionExtractor = restrictionExtractor;
 			_schedulePeriodTargetTimeCalculator = schedulePeriodTargetTimeCalculator;
 		}
 
@@ -30,7 +27,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var currentContractTime = TimeSpan.Zero;
 			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTime(agentDisplayData.Matrix);
 			var minMax = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(agentDisplayData.Matrix);
-			//var includeScheduling = (schedulingOptions.GetType() != typeof(RestrictionSchedulingOptions) || ((RestrictionSchedulingOptions)schedulingOptions).UseScheduling);
 			var currentDayOffs = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(agentDisplayData.Matrix, schedulingOptions.UseScheduling, schedulingOptions.UsePreferences, schedulingOptions.UseRotations);
 
 			foreach (var scheduleDayPro in agentDisplayData.Matrix.EffectivePeriodDays)

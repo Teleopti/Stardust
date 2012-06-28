@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			if (e.RowIndex == 0 && e.ColIndex > 0)
 			{
 				//"--Veckodag--";
-				//IPreferenceCellData preferenceCellData;
 				_model.DetailData().TryGetValue(e.ColIndex - 1, out preferenceCellData);
 				if (preferenceCellData == null) e.Style.CellValue = string.Empty;
 				else e.Style.CellValue = TeleoptiPrincipal.Current.Regional.Culture.DateTimeFormat.GetDayName(TeleoptiPrincipal.Current.Regional.Culture.Calendar.GetDayOfWeek(preferenceCellData.TheDate));	
@@ -70,11 +69,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			_model.DetailData().TryGetValue(currentCell - 1, out preferenceCellData);
 			if (preferenceCellData == null) return;
 
-			//e.Style.CellType = "RestrictionSummaryViewCellModel";
-			//if (e.Style.CellModel != null) ((IRestrictionSummaryViewCellModel)e.Style.CellModel).RestrictionSummaryPresenter = this;
-			//e.Style.CellValue = preferenceCellData.SchedulePart;
-
-			e.Style.CellValue = preferenceCellData.TheDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
+			e.Style.CellType = "AgentRestrictionsDetailViewCellModel";
+			if (e.Style.CellModel != null) ((IAgentRestrictionsDetailViewCellModel)e.Style.CellModel).DetailModel = _model;
+			e.Style.CellValue = preferenceCellData.SchedulePart;
 			e.Style.Tag = preferenceCellData.TheDate;
 
 			if (preferenceCellData.SchedulePart.FullAccess)

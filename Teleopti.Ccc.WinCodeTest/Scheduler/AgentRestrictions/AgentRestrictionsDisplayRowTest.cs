@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 				Assert.AreEqual(UserTexts.Resources.No, _displayRow.Ok);
 				Assert.AreEqual(4, _displayRow.Warnings);
+				Assert.IsNotNull(_displayRow.Warning(7));
 			}	
 		}
 

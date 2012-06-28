@@ -81,11 +81,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 return "";
 
             String ret = string.Empty;
-            if (value.GetType() == typeof(TimeSpan))
-            {
-                ret = TimeHelper.GetLongHourMinuteTimeString((TimeSpan)value, ci);
-            }
-            return ret;
+
+			if (value is TimeSpan)
+			{
+				var typedValue = (TimeSpan) value;
+				if (typedValue == TimeSpan.MinValue)
+					return string.Empty;
+				ret = TimeHelper.GetLongHourMinuteTimeString(typedValue, ci);
+			}
+        	return ret;
         }
         [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

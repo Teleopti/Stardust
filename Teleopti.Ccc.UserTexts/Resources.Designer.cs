@@ -10806,6 +10806,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Longterm Forecast.
+        /// </summary>
+        public static string LongtermForecast {
+            get {
+                return ResourceManager.GetString("LongtermForecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LookUp.
         /// </summary>
         public static string LookUp {
@@ -14758,6 +14767,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Override {
             get {
                 return ResourceManager.GetString("Override", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override days off.
+        /// </summary>
+        public static string OverrideDaysOff {
+            get {
+                return ResourceManager.GetString("OverrideDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override hours per day.
+        /// </summary>
+        public static string OverrideHoursPerDay {
+            get {
+                return ResourceManager.GetString("OverrideHoursPerDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override Period.
+        /// </summary>
+        public static string OverridePeriod {
+            get {
+                return ResourceManager.GetString("OverridePeriod", resourceCulture);
             }
         }
         

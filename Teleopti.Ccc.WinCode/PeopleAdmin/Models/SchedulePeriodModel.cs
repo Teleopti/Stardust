@@ -217,12 +217,28 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                 if (_currentSchedulePeriod == null) return TimeSpan.MinValue;
                 return _currentSchedulePeriod.AverageWorkTimePerDay;
             }
-            set
-            {
-                if (_currentSchedulePeriod != null)
-                    _currentSchedulePeriod.AverageWorkTimePerDay = value;
-            }
         }
+
+		/// <summary>
+		/// Gets the average work time per day for display.
+		/// </summary>
+		/// <remarks>
+		/// Created by: cs 
+		/// Created date: 2008-03-10
+		/// </remarks>
+		public virtual TimeSpan AverageWorkTimePerDayOverride
+		{
+			get
+			{
+                if (_currentSchedulePeriod == null) return TimeSpan.MinValue;
+				return _currentSchedulePeriod.AverageWorkTimePerDayOverride;
+			}
+			set
+			{
+				if (_currentSchedulePeriod != null)
+					_currentSchedulePeriod.AverageWorkTimePerDayOverride = value;
+			}
+		}
 
         /// <summary>
         /// Balance in
@@ -470,5 +486,52 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                 GridControl.Invalidate();
             }
         }
+
+		/// <summary>
+		/// Gets if the is period overriden.
+		/// </summary>
+		/// <value>The period override value.</value>
+		/// <remarks>
+		/// Created by: tamasb
+		/// Created date: 2012-06-15
+		/// </remarks>
+		public bool IsPeriodTargetOverride
+		{
+			get
+			{
+				if (_currentSchedulePeriod != null)
+				{
+					SchedulePeriod currentSchedulePeriod = _currentSchedulePeriod as SchedulePeriod;
+					if (currentSchedulePeriod != null)
+						return currentSchedulePeriod.IsPeriodTimeOverride;
+				}
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the period time.
+		/// </summary>
+		/// <value>The period time.</value>
+		/// <remarks>
+		/// Created by: tamasb
+		/// Created date: 2012-06-15
+		/// </remarks>
+		public TimeSpan PeriodTime
+		{
+			get
+			{
+				if (_currentSchedulePeriod == null) return TimeSpan.MinValue;
+				TimeSpan? value = _currentSchedulePeriod.PeriodTime;
+				if (!value.HasValue)
+					return TimeSpan.MinValue;
+				return _currentSchedulePeriod.PeriodTime.Value;
+			}
+			set
+			{
+				if (_currentSchedulePeriod != null)
+					_currentSchedulePeriod.PeriodTime = value;
+			}
+		}
     }
 }

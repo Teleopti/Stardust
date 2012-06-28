@@ -603,7 +603,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					SmartPartEnvironment.SmartPartWorkspace.GridSize = GridSizeType.TwoByTwo;
 					loadSmartPart(skill.Id, 1, Resources.SkillValidationSmartPart, classPrefix + validation, 0, 0);
 					loadSmartPart(skill.Id, 2, Resources.DetailedForecastSmartPart, classPrefix + detailed, 0, 1);
-					loadSmartPart(skill.Id, 3, Resources.BudgetForecasting, classPrefix + budget, 1, 0);
+					loadSmartPart(skill.Id, 3, Resources.LongtermForecast, classPrefix + budget, 1, 0);
 					loadSmartPart(skill.Id, 4, Resources.TemplatesSmartpart, classPrefix + template, 1, 1);
 				}
 			}

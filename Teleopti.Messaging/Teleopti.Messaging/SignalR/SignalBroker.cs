@@ -59,13 +59,13 @@ namespace Teleopti.Messaging.SignalR
 			{
 				foreach (var type in types)
 				{
-					ThreadPool.QueueUserWorkItem(callProxy, new Notification
+					callProxy(new Notification
 					{
 						StartDate = Subscription.DateToString(eventStartDate),
 						EndDate = Subscription.DateToString(eventEndDate),
 						DomainId = Subscription.IdToString(domainObjectId),
 						DomainType = type.Name,
-						DomainQualifiedType =  type.AssemblyQualifiedName,
+						DomainQualifiedType =  types[0].AssemblyQualifiedName,
 						DomainReferenceId = Subscription.IdToString(referenceObjectId),
 						DomainReferenceType =
 							(referenceObjectType == null)
@@ -82,9 +82,9 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		private void callProxy(object state)
+		private void callProxy(Notification state)
 		{
-			_wrapper.NotifyClients((Notification) state);
+			_wrapper.NotifyClients(state);
 		}
 
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)

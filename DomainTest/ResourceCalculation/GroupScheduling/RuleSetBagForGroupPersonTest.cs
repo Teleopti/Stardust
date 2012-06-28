@@ -231,5 +231,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Assert.IsNull(_target.MinMaxWorkTime(workShiftWorkTime, new DateOnly(), effectiveRestriction));
 			}
 		}
+
+		[Test, ExpectedException(typeof(NotImplementedException))]
+		public void ShouldNotImplementClone()
+		{
+			_target.Clone();
+		}
+		[Test, ExpectedException(typeof(NotImplementedException))]
+		public void ShouldNotImplementEntityClone()
+		{
+			_target.EntityClone();
+		}
 	}
 }

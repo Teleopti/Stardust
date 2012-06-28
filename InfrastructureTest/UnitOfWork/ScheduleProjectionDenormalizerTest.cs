@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	[TestFixture]
 	public class ScheduleProjectionDenormalizerTest
 	{
-		private IDenormalizer target;
+		private IMessageSender target;
 		private MockRepository mocks;
 		private ISendDenormalizeNotification sendDenormalizeNotification;
 		private ISaveToDenormalizationQueue saveToDenormalizationQueue;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			mocks = new MockRepository();
 			sendDenormalizeNotification = mocks.DynamicMock<ISendDenormalizeNotification>();
 			saveToDenormalizationQueue = mocks.DynamicMock<ISaveToDenormalizationQueue>();
-			target = new ScheduleDenormalizer(sendDenormalizeNotification,saveToDenormalizationQueue);
+			target = new ScheduleMessageSender(sendDenormalizeNotification,saveToDenormalizationQueue);
 		}
 
 		[Test]

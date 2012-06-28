@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public interface IDenormalizer
+	public interface IMessageSender
 	{
 		void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots);
 	}

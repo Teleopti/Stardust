@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private IScenarioRepository scenarioRepository;
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IPersonRepository personRepository;
+		private IUnitOfWork unitOfWork;
 
 		[SetUp]
 		public void Setup()
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			updateScheduleProjectionReadModel = mocks.DynamicMock<IUpdateScheduleProjectionReadModel>();
 			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			personRepository = mocks.DynamicMock<IPersonRepository>();
 			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory,scenarioRepository,personRepository,updateScheduleProjectionReadModel);
 		}
@@ -48,6 +50,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				Expect.Call(scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
 				Expect.Call(personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
 				Expect.Call(()=>updateScheduleProjectionReadModel.Execute(scenario,period,person));
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWork.PersistAll());
 			}
 			using (mocks.Playback())
 			{
@@ -79,6 +83,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				Expect.Call(personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
 				Expect.Call(() => updateScheduleProjectionReadModel.Execute(scenario, period, person));
 				Expect.Call(() => updateScheduleProjectionReadModel.SetInitialLoad(true));
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWork.PersistAll());
 			}
 			using (mocks.Playback())
 			{

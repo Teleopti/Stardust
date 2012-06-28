@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
                 contractMapList.Add((WorktimeType)3, defaultContractFixedNormal);
                 contractRep.Add(defaultContractFixedNormal);
 
-                Contract defaultContractFixedPeriod = new Contract("Fixed Staff Period");
-                defaultContractFixedPeriod.EmploymentType = Teleopti.Interfaces.Domain.EmploymentType.FixedStaffPeriodWorkTime;
-                defaultContractFixedPeriod.WorkTime = new WorkTime(new TimeSpan(8, 0, 0));
-                contractMapList.Add((WorktimeType)1, defaultContractFixedPeriod);
-                contractRep.Add(defaultContractFixedPeriod);
+				//Contract defaultContractFixedPeriod = new Contract("Fixed Staff Period");
+				//defaultContractFixedPeriod.EmploymentType = Teleopti.Interfaces.Domain.EmploymentType.FixedStaffPeriodWorkTime;
+				//defaultContractFixedPeriod.WorkTime = new WorkTime(new TimeSpan(8, 0, 0));
+				//contractMapList.Add((WorktimeType)1, defaultContractFixedPeriod);
+				//contractRep.Add(defaultContractFixedPeriod);
 
                 Contract defaultContractFixedDay = new Contract("Fixed Staff Day");
                 defaultContractFixedDay.EmploymentType = Teleopti.Interfaces.Domain.EmploymentType.FixedStaffDayWorkTime;
