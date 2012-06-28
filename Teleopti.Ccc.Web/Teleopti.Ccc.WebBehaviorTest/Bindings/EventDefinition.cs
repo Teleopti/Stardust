@@ -16,6 +16,11 @@ using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
+	public static class ExperimentalDataMode
+	{
+		public static bool ForEachScenario = false;
+	}
+
 	[Binding]
 	public class EventDefinition
 	{
@@ -47,7 +52,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestDataSetup.CreateDataSource();
 			TestSiteConfigurationSetup.Setup();
 
-			//PrepareData();
+			if (!ExperimentalDataMode.ForEachScenario)
+			{
+				CreateData();
+			}
 
 			Log.Write("BeforeTestRun took " + DateTime.Now.Subtract(startTime));
 			_testRunScenariosStartTime = DateTime.Now;
@@ -70,7 +78,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			//                                            TaskScheduler.FromCurrentSynchronizationContext());
 			//Task.WaitAll(prepareData, startBrowser);
 
-			PrepareData();
+			if (ExperimentalDataMode.ForEachScenario)
+			{
+				ClearCcc7Data();
+				CreateData();
+			}
+
+			TestDataSetup.ClearAnalyticsData();
 
 			var spentTime = DateTime.Now.Subtract(startTime);
 			_beforeScenarioTimeSpent = _beforeScenarioTimeSpent.Add(spentTime);
@@ -112,38 +126,38 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 
 
-		private static void PrepareData()
-		{
-			//ITeleoptiPrincipal principal = null;
-			//var clearCcc7Data = Task.Factory.StartNew(TestDataSetup.ClearCcc7Data);
-			//var clearAnalyticsData = Task.Factory.StartNew(TestDataSetup.ClearAnalyticsData);
-			//var setupFakeState = Task.Factory.StartNew(() =>
-			//                                            {
-			//                                                TestDataSetup.SetupFakeState();
-			//                                                principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
-			//                                            });
-			//var createTestData = Task.Factory.StartNew(() =>
-			//                                            {
-			//                                                Task.WaitAll(clearCcc7Data, setupFakeState);
-			//                                                Thread.CurrentPrincipal = principal;
+		//private static void PrepareData()
+		//{
+		//    //ITeleoptiPrincipal principal = null;
+		//    //var clearCcc7Data = Task.Factory.StartNew(TestDataSetup.ClearCcc7Data);
+		//    //var clearAnalyticsData = Task.Factory.StartNew(TestDataSetup.ClearAnalyticsData);
+		//    //var setupFakeState = Task.Factory.StartNew(() =>
+		//    //                                            {
+		//    //                                                TestDataSetup.SetupFakeState();
+		//    //                                                principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+		//    //                                            });
+		//    //var createTestData = Task.Factory.StartNew(() =>
+		//    //                                            {
+		//    //                                                Task.WaitAll(clearCcc7Data, setupFakeState);
+		//    //                                                Thread.CurrentPrincipal = principal;
 
-			//                                                TestDataSetup.CreateLegacyTestData();
+		//    //                                                TestDataSetup.CreateLegacyTestData();
 
-			//                                                DataContext.Data().Setup(new CommonContract());
-			//                                                DataContext.Data().Setup(new ContractScheduleWith2DaysOff());
-			//                                                DataContext.Data().Setup(new CommonScenario());
-			//                                                DataContext.Data().Setup(new SecondScenario());
-			//                                                DataContext.Data().Persist();
+		//    //                                                DataContext.Data().Setup(new CommonContract());
+		//    //                                                DataContext.Data().Setup(new ContractScheduleWith2DaysOff());
+		//    //                                                DataContext.Data().Setup(new CommonScenario());
+		//    //                                                DataContext.Data().Setup(new SecondScenario());
+		//    //                                                DataContext.Data().Persist();
 
-			//                                            });
+		//    //                                            });
 
-			//Task.WaitAll(clearCcc7Data, clearAnalyticsData, setupFakeState, createTestData);
-			//Thread.CurrentPrincipal = principal;
-			//return;
+		//    //Task.WaitAll(clearCcc7Data, clearAnalyticsData, setupFakeState, createTestData);
+		//    //Thread.CurrentPrincipal = principal;
+		//    //return;
 
-			ClearData();
-			CreateData();
-		}
+		//    ClearCcc7Data();
+		//    CreateData();
+		//}
 
 		private static void CreateData()
 		{
@@ -163,12 +177,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			_createDataTimeSpent = _createDataTimeSpent.Add(spentTime);
 		}
 
-		private static void ClearData()
+		private static void ClearCcc7Data()
 		{
 			var startTime = DateTime.Now;
 
 			TestDataSetup.ClearCcc7Data();
-			TestDataSetup.ClearAnalyticsData();
 
 			var spentTime = DateTime.Now.Subtract(startTime);
 			_clearDataTimeSpent = _clearDataTimeSpent.Add(spentTime);
