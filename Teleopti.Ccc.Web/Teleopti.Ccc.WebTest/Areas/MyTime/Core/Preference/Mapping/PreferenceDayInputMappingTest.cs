@@ -41,8 +41,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 							));
 						c.AddProfile(
 							new PreferenceDayInputMappingProfile(
-						        () => Mapper.Engine,
-						        () => loggedOnUser,
 						        () => shiftCategoryRepository,
 						        () => dayOffRepository,
 						        () => absenceRepository

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 				c =>
 				c.AddProfile(
 					new ReportGenerationViewModelMappingProfile(
-					() => Mapper.Engine, () => _userTextTranslator, () => _skillProvider, () => null, () => _userCulture)));
+					() => Mapper.Engine, () => _userTextTranslator, () => _skillProvider, () => _userCulture)));
 		}
 
 		#endregion

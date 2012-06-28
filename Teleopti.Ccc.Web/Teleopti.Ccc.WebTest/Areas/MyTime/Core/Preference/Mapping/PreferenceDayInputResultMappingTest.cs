@@ -20,15 +20,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	[TestFixture]
 	public class PreferenceDayInputResultMappingTest
 	{
-		private IPreferenceFeedbackProvider preferenceFeedbackProvider;
-
 		[SetUp]
 		public void Setup()
 		{
-			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
-
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PreferenceDayInputResultMappingProfile(Depend.On(preferenceFeedbackProvider))));
+			Mapper.Initialize(c => c.AddProfile(new PreferenceDayInputResultMappingProfile()));
 		}
 
 		[Test]

@@ -14,27 +14,20 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 	public class ReportViewModelMappingProfile : Profile
 	{
 		private readonly Func<IDateBoxGlobalizationViewModelFactory> _dateBoxGlobalizationViewModelFactory;
-
 		private readonly Func<IDefinedReportProvider> _definedReportProvider;
-
-		private readonly Func<IMappingEngine> _mappingEngine;
-
 		private readonly Func<ISkillProvider> _skillProvider;
-
 		private readonly Func<IUserTextTranslator> _userTextTranslator;
 
 		public ReportViewModelMappingProfile(
-			Func<IMappingEngine> mappingEngine,
 			Func<IUserTextTranslator> userTextTranslator,
 			Func<IDefinedReportProvider> definedReportProvider,
 			Func<ISkillProvider> skillProvider,
 			Func<IDateBoxGlobalizationViewModelFactory> dateBoxGlobalizationViewModelFactory)
 		{
-			this._mappingEngine = mappingEngine;
-			this._userTextTranslator = userTextTranslator;
-			this._definedReportProvider = definedReportProvider;
-			this._skillProvider = skillProvider;
-			this._dateBoxGlobalizationViewModelFactory = dateBoxGlobalizationViewModelFactory;
+			_userTextTranslator = userTextTranslator;
+			_definedReportProvider = definedReportProvider;
+			_skillProvider = skillProvider;
+			_dateBoxGlobalizationViewModelFactory = dateBoxGlobalizationViewModelFactory;
 		}
 
 		protected override void Configure()

@@ -11,13 +11,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 {
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
-	using Teleopti.Ccc.Web.Core.RequestContext;
+	using Models.Domain;
 
 	public class ReportGenerationViewModelMappingProfile : Profile
 	{
-		private readonly Func<IReportDataService> _dataService;
-
 		private readonly Func<IUserCulture> _cultureProvider;
 
 		private readonly NumberFormatInfo _fixedFormatInfo;
@@ -28,13 +25,11 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 		public ReportGenerationViewModelMappingProfile(Func<IMappingEngine> mappingEngine,
 		                                               Func<IUserTextTranslator> userTextTranslator,
 		                                               Func<ISkillProvider> skillProvider,
-		                                               Func<IReportDataService> dataService,
 													   Func<IUserCulture> cultureProvider )
 		{
 			_mappingEngine = mappingEngine;
 			_userTextTranslator = userTextTranslator;
 			_skillProvider = skillProvider;
-			_dataService = dataService;
 			_cultureProvider = cultureProvider;
 
 			_fixedFormatInfo = new NumberFormatInfo {NumberDecimalSeparator = "."};

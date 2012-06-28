@@ -44,13 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 			                  	{
-			                  		c.AddProfile(new AbsenceRequestFormMappingProfile(
-			                  		             	() => Mapper.Engine,
-			                  		             	() => _loggedOnUser,
-			                  		             	() => _userTimeZone,
-			                  		             	() => _absenceRequestFormToPersonRequest,
-			                  		             	() => _absenceRepository
-			                  		             	));
+			                  		c.AddProfile(new AbsenceRequestFormMappingProfile(() => _absenceRequestFormToPersonRequest));
 			                  		c.AddProfile(new DateTimePeriodFormMappingProfile(() => _userTimeZone));
 			                  	});
 		}

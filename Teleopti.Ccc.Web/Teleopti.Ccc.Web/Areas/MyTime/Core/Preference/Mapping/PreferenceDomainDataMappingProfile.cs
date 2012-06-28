@@ -16,16 +16,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly IResolve<IVirtualSchedulePeriodProvider> _virtualSchedulePeriodProvider;
 		private readonly IResolve<IPreferenceProvider> _preferenceProvider;
 		private readonly IResolve<ILoggedOnUser> _loggedOnUser;
-		private readonly IResolve<IPreferenceFeedbackProvider> _preferenceFeedbackProvider;
 		private readonly IResolve<IScheduleProvider> _scheduleProvider;
 		private readonly IResolve<IProjectionProvider> _projectionProvider;
 
-		public PreferenceDomainDataMappingProfile(IResolve<IVirtualSchedulePeriodProvider> virtualSchedulePeriodProvider, IResolve<IPreferenceProvider> preferenceProvider, IResolve<ILoggedOnUser> loggedOnUser, IResolve<IPreferenceFeedbackProvider> preferenceFeedbackProvider, IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider)
+		public PreferenceDomainDataMappingProfile(IResolve<IVirtualSchedulePeriodProvider> virtualSchedulePeriodProvider, IResolve<IPreferenceProvider> preferenceProvider, IResolve<ILoggedOnUser> loggedOnUser, IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider)
 		{
 			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
 			_preferenceProvider = preferenceProvider;
 			_loggedOnUser = loggedOnUser;
-			_preferenceFeedbackProvider = preferenceFeedbackProvider;
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
 		}

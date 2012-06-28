@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 
 		public static PortalHtmlHelper Portal(this HtmlHelper htmlHelper)
 		{
-			return new PortalHtmlHelper(htmlHelper);
+			return new PortalHtmlHelper();
 		}
 
 		public static LayoutBaseHtmlHelper LayoutBase(this HtmlHelper htmlHelper)

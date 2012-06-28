@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 			Mapper.Reset();
 			Mapper.Initialize(
 				c =>
-				c.AddProfile(new ReportViewModelMappingProfile(() => Mapper.Engine, () => userTextTranslator,
+				c.AddProfile(new ReportViewModelMappingProfile(() => userTextTranslator,
 				                                               () => definedReportProvider, () => skillProvider,
 				                                               () => dateBoxGlobalizationViewModelFactory)));
 		}

@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					Depend.On(virtualScheduleProvider),
 					Depend.On(preferenceProvider),
 					Depend.On(loggedOnUser),
-					Depend.On(preferenceFeedbackProvider),
 					Depend.On(scheduleProvider),
 					Depend.On(projectionProvider)
 					)));

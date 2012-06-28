@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			                      		                  	}
 			                      	};
 
-			var target = new PortalHtmlHelper(null);
+			var target = new PortalHtmlHelper();
 
 			var result = target.GetDefaultAction(portalViewModel);
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			              		Action = "A2",
 			              		Title = "C2A2"
 			              	};
-			var target = new PortalHtmlHelper(null);
+			var target = new PortalHtmlHelper();
 
 			var result = target.GetAction(navItem);
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			              		Action = "A2",
 			              		Title = "C2A2"
 			              	};
-			var target = new PortalHtmlHelper(null);
+			var target = new PortalHtmlHelper();
 
 			var result = target.GetId(navItem);
 
