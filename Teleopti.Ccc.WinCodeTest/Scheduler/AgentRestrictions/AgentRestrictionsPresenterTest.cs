@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
@@ -36,6 +37,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_agentRestrictionsDisplayRow = new AgentRestrictionsDisplayRow(_scheduleMatrixPro);
 		}
 
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgument()
+		{
+			_presenter.GridQueryCellInfo(null, null);		
+		}
+
 		[Test]
 		public void ShouldReturnColCountEqual12()
 		{
@@ -67,7 +74,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 					using (var gridStyleInfo = new GridStyleInfo())
 					{
 						var args = new GridQueryCellInfoEventArgs(i, j, gridStyleInfo);
-						_presenter.GridQueryCellInfo(null, args);
+						_presenter.GridQueryCellInfo(null, args);	
 						Assert.AreEqual("TextBox", args.Style.CellType);
 					}
 				}
