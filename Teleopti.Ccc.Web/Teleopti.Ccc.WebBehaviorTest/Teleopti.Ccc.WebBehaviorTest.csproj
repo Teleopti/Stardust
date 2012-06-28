@@ -83,15 +83,19 @@
     </Compile>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="Core\BrowserImpl\BrowserProcessHelpers.cs" />
+    <Compile Include="Core\BrowserImpl\FireFoxHandler.cs" />
+    <Compile Include="Core\BrowserImpl\IBrowserHandler.cs" />
+    <Compile Include="Core\BrowserImpl\IEHandler.cs" />
     <Compile Include="PreferencesExtended.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesExtended.feature</DependentUpon>
-      </Compile>
+    </Compile>
     <Compile Include="AbsenceRequestFromRequestStepDefinitions.cs" />
     <Compile Include="ManageRequestStepDefinitions.cs" />
     <Compile Include="Data\User\DoNotHavePersonPeriods.cs" />
-    <Compile Include="Data\User\DoNotHaveSchedulePeriods.cs" />   
+    <Compile Include="Data\User\DoNotHaveSchedulePeriods.cs" />
     <Compile Include="QUnitTestsStepDefinition.cs" />
     <Compile Include="Data\User\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\User\AbsencePreferenceOnWeekday.cs" />

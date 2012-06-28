@@ -86,11 +86,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void UnitOfWorkAction(Action<IUnitOfWork> action)
 		{
+			var startTime = DateTime.Now;
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				action.Invoke(unitOfWork);
 				unitOfWork.PersistAll();
 			}
+			Log.Write(action.Method.Name + " took " + DateTime.Now.Subtract(startTime));
 		}
 
 
