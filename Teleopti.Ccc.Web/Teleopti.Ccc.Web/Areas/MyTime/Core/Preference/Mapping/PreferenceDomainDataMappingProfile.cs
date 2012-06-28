@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				              		preferenceDays = preferenceDays ?? new IPreferenceDay[] {};
 									var dates = period.DayCollection();
 				              		var days = (from d in dates
-				              		            let preferenceDay = (from pd in preferenceDays where pd.RestrictionDate == d select pd).SingleOrDefault()
+				              		            let preferenceDay = (from pd in preferenceDays where pd.RestrictionDate == d select pd).OrderByDescending(k=>k.UpdatedOn).FirstOrDefault()
 												let providedScheduleDay = (from sd in scheduleDays where sd.DateOnlyAsPeriod.DateOnly == d select sd).SingleOrDefault()
 												let scheduleDay = providedScheduleDay != null && providedScheduleDay.IsScheduled() ? providedScheduleDay : null
 												let projection = scheduleDay != null ? _projectionProvider.Invoke().Projection(scheduleDay) : null
@@ -57,13 +57,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 															Projection = projection
 				              		                   	}).ToArray();
 				              		var workflowControlSet = _loggedOnUser.Invoke().CurrentUser().WorkflowControlSet;
-				              		var colorSource = new ScheduleColorSource
-				              		                  	{
-				              		                  		ScheduleDays = scheduleDays,
-				              		                  		Projections = (from p in days where p.Projection != null select p.Projection).ToArray(),
-				              		                  		PreferenceDays = preferenceDays,
+									var colorSource = new ScheduleColorSource
+														{
+															ScheduleDays = scheduleDays,
+															Projections = (from p in days where p.Projection != null select p.Projection).ToArray(),
+															PreferenceDays = preferenceDays,
 															WorkflowControlSet = workflowControlSet
-				              		                  	};
+														};
 				              		return new PreferenceDomainData
 				              		       	{
 				              		       		SelectedDate = s,

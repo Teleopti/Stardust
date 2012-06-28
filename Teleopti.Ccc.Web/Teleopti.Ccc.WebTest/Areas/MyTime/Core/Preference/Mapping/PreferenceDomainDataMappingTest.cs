@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -119,6 +120,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
 
 			result.Days.Single().PreferenceDay.Should().Be.SameInstanceAs(preferenceDay);
+		}
+
+		[Test]
+		public void ShouldMapLatestPreferenceDayForTheSameDate()
+		{
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var preferenceDay1 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
+			var preferenceDay2 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
+			preferenceDay1.UpdatedOn = DateTime.Now.AddHours(-1);
+			preferenceDay2.UpdatedOn = DateTime.Now;
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			preferenceProvider.Stub(x => x.GetPreferencesForPeriod(period)).Return(new[] { preferenceDay1, preferenceDay2 });
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.Days.Single().PreferenceDay.Should().Be.SameInstanceAs(preferenceDay2);
 		}
 
 		[Test]
