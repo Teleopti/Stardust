@@ -34,7 +34,7 @@ Scenario: Default full day text request values from week schedule
 	Given I am an agent
 	And I am viewing week schedule
 	When I click on today's summary
-	And I click full day checkbox
+	And I checked the full day checkbox
 	Then I should see 00:00 - 23:59 as the default times
 
 Scenario: Cancel adding text request
