@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 					ProcessName,
 					new Func<bool>[]
 						{
-							() => CloseByWatiNCloseNDispose(browser as IE),
+							() => CloseByWatiNCloseNDispose(browser),
 							() => BrowserProcessHelpers.CloseByClosingMainWindow(ProcessName),
-							() => CloseByWatiNForceClose(browser as IE),
+							() => CloseByWatiNForceClose(browser),
 							() => BrowserProcessHelpers.CloseByKillingProcesses(ProcessName)
 						});
 				if (!result)

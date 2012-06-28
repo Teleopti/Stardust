@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 					ProcessName,
 					new Func<bool>[]
 						{
-							() => CloseByWatiNCloseNDispose(browser as FireFox),
+							() => CloseByWatiNCloseNDispose(browser),
 							() => BrowserProcessHelpers.CloseByClosingMainWindow(ProcessName),
 							() => BrowserProcessHelpers.CloseByKillingProcesses(ProcessName)
 						});
@@ -83,18 +83,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 		private static bool CloseByWatiNCloseNDispose(WatiN.Core.Browser browser)
 		{
-			var success = Task.Factory
+			return Task.Factory
 				.StartNew(() =>
 				          	{
 				          		browser.Close();
 				          		browser.Dispose();
 				          	})
 				.Wait(TimeSpan.FromSeconds(2));
-			if (!success)
-			{
-				return false;
-			}
-			return true;
 		}
 
 

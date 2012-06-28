@@ -87,6 +87,7 @@
     <Compile Include="Core\BrowserImpl\FireFoxHandler.cs" />
     <Compile Include="Core\BrowserImpl\IBrowserHandler.cs" />
     <Compile Include="Core\BrowserImpl\IEHandler.cs" />
+    <Compile Include="Data\DataContext.cs" />
     <Compile Include="PreferencesExtended.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
