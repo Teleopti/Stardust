@@ -505,7 +505,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.selectbox.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamSchedule.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.connector.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.TextRequest.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestDetail.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.List.js" />
     <Content Include="Areas\Start\Content\Css\jquery.ui.custom.css" />
     <Content Include="Areas\Start\Content\Css\Site.css" />
