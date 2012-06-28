@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		static StateHolderProxyHelper() { DefaultPrincipalContext = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()); }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static void SetupFakeState(
 			IDataSource dataSource, 
 			IPerson person, 
