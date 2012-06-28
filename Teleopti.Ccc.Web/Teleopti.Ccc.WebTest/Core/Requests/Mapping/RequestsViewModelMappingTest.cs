@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(new Person());
 			request.SetId(Guid.NewGuid());
 
-			_linkProvider.Stub(x => x.TextRequestLink(request.Id.Value)).Return("aLink");
+			_linkProvider.Stub(x => x.RequestDetailLink(request.Id.Value)).Return("aLink");
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 

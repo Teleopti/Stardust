@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			CreateMap<IPersonRequest, Link>()
 				.ForMember(d => d.rel, o => o.UseValue("self"))
 				.ForMember(d => d.href, o => o.MapFrom(s => s.Id.HasValue ? 
-																			_linkProvider.Invoke().TextRequestLink(s.Id.Value) : 
+																			_linkProvider.Invoke().RequestDetailLink(s.Id.Value) : 
 																			null))
 				.ForMember(d => d.Methods, o => o.MapFrom(s =>
 																			{

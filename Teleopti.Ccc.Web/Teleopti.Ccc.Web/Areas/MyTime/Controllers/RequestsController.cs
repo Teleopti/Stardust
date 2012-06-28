@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult TextRequest(Guid id)
+		public JsonResult RequestDetail(Guid id)
 		{
 			return Json(_requestsViewModelFactory.CreateRequestViewModel(id), JsonRequestBehavior.AllowGet);
 		}
@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpDelete]
-		[ActionName("TextRequest")]
-		public EmptyResult TextRequestDelete(Guid id)
+		[ActionName("RequestDetail")]
+		public EmptyResult RequestDelete(Guid id)
 		{
 			_textRequestPersister.Delete(id);
 			return new EmptyResult();

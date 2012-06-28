@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new LinkProvider(urlHelper.Resolver());
 			var id = Guid.NewGuid();
 
-			var result = target.TextRequestLink(id);
+			var result = target.RequestDetailLink(id);
 
-			result.Should().Be("http://hostname/MyTime/Requests/TextRequest/" + id);
+			result.Should().Be("http://hostname/MyTime/Requests/RequestDetail/" + id);
 		}
 	}
 }

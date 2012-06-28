@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				var id = Guid.NewGuid();
 
-				target.TextRequestDelete(id);
+				target.RequestDelete(id);
 
 				textRequestPersister.AssertWasCalled(x => x.Delete(id));
 			}
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 				modelFactory.Stub(f => f.CreateRequestViewModel(id)).Return(viewModel);
 
-				var result = target.TextRequest(id);
+				var result = target.RequestDetail(id);
 				var data = (RequestViewModel)result.Data;
 
 				assertRequestEqual(data, viewModel);	
