@@ -94,10 +94,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			// move this to the actual navigation, which is the one that actually acts too early?
 			Func<bool> SignedInOrBusinessUnitListExists = () =>
 			                                              	{
-			                                              		return SignOutLink.Exists ||
-			                                              		       BusinessUnitList.Exists ||
-			                                              		       GlobalMenuList.Exists ||
-			                                              		       ValidationSummary.Exists;
+																return SignOutLink.IESafeExists() ||
+																	   BusinessUnitList.IESafeExists() ||
+																	   GlobalMenuList.IESafeExists() ||
+																	   ValidationSummary.IESafeExists();
 			                                              	};
 			SignedInOrBusinessUnitListExists.WaitUntil(EventualTimeouts.Poll, EventualTimeouts.Timeout);
 		}

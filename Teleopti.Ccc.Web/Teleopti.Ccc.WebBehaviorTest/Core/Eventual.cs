@@ -9,6 +9,45 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
+	public static class Robustness
+	{
+		public static bool IESafeExists(this Element element)
+		{
+			return SafeIEOperation(() => element.Exists, e => false);
+		}
+
+		public static T SafeIEOperation<T>(Func<T> action, Func<Exception, T> failureCallback)
+		{
+			try
+			{
+				return action.Invoke();
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				// sometimes IE api gives these errors when the page is in a state between pages or something
+				// if so, lets just try again
+				// maybe this behavior should be placed elsewhere and not only apply to asserts..
+				return failureCallback.Invoke(ex);
+			}
+			catch (NullReferenceException ex)
+			{
+				// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
+				// if so, lets just try again
+				// maybe this behavior should be placed elsewhere and not only apply to asserts..
+				return failureCallback.Invoke(ex);
+			}
+			catch (ArgumentNullException ex)
+			{
+				// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
+				// if so, lets just try again
+				// maybe this behavior should be placed elsewhere and not only apply to asserts..
+				return failureCallback.Invoke(ex);
+			}
+		}
+	}
+
+
+
 	public static class EventualTimeouts
 	{
 		public static TimeSpan Timeout { get; private set; }
@@ -37,38 +76,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			ReusableConstraint reusableConstraint = constraint;
 			Exception exception = null;
 			Func<bool> longPollTimeSafeAssert = () =>
-			                   	{
+			                                    	{
+			                                    		
 									try
 									{
+										Func<Exception, T> failingValue = e =>
+										                                  	{
+										                                  		exception = e;
+										                                  		return default(T);
+										                                  	};
+
+										Func<T> robustValue = () => Robustness.SafeIEOperation(value.Invoke, failingValue);
+
 										if (string.IsNullOrEmpty(message))
-											Assert.That(value.Invoke(), reusableConstraint);
+											Assert.That(() => robustValue.Invoke(), reusableConstraint);
 										else
-											Assert.That(value.Invoke(), reusableConstraint, message);
+											Assert.That(() => robustValue.Invoke(), reusableConstraint, message);
 										return true;
-									}
-									catch (UnauthorizedAccessException ex)
-									{
-										// sometimes IE api gives these errors when the page is in a state between pages or something
-										// if so, lets just try again
-										// maybe this behavior should be placed elsewhere and not only apply to asserts..
-										exception = ex;
-										return false;
-									}
-									catch (NullReferenceException ex)
-									{
-										// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
-										// if so, lets just try again
-										// maybe this behavior should be placed elsewhere and not only apply to asserts..
-										exception = ex;
-										return false;
-									}
-									catch (ArgumentNullException ex)
-									{
-										// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
-										// if so, lets just try again
-										// maybe this behavior should be placed elsewhere and not only apply to asserts..
-										exception = ex;
-										return false;
 									}
 									catch (AssertionException ex)
 									{
