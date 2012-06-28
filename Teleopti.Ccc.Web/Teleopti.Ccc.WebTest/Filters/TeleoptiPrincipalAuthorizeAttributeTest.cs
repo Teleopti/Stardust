@@ -1,10 +1,8 @@
-﻿using System.Security.Principal;
-using System.Threading;
+﻿using System.Threading;
 using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Filters;
 

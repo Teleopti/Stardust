@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			var form = new TextRequestForm() { FullDay = true };
+			var form = new TextRequestForm { FullDay = true };
 
 			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form);
 
