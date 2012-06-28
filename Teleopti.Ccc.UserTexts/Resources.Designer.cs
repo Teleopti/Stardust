@@ -8510,7 +8510,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Full Day.
+        ///   Looks up a localized string similar to Full Day.
         /// </summary>
         public static string FullDay {
             get {

@@ -10682,7 +10682,7 @@ These options are activated:
     <comment>Application function Absence requests for the web</comment>
   </data>
   <data name="FullDay" xml:space="preserve">
-    <value> Full Day</value>
+    <value>Full Day</value>
     <comment>Full day for request</comment>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">

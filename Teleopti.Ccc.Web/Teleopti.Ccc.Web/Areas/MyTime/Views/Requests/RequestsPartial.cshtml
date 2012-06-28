@@ -29,15 +29,18 @@
 			<textarea id="Request-detail-message-input" />
 		</div>
 		
-		<div id="Absence-type-element" class="edit-module-element floatleft displaynone pdr20">
-			<div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
-			<select id="Absence-type" class="floatleft absence-input combobox">
-				@foreach (var absenceType in Model.AbsenceTypes)
-				{
-					<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-				}
-			</select>
-		
+		<div id="Absence-type-element" class="floatleft displaynone pdr20">
+			<div class="edit-module-element floatleft">
+				<div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
+			</div>
+			<div class="edit-module-element floatleft">
+				<select id="Absence-type" class="floatleft absence-input combobox">
+					@foreach (var absenceType in Model.AbsenceTypes)
+					{
+						<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+					}
+				</select>
+			</div>
 		</div>
 		<div class="floatleft">
 			<span class="edit-module-element floatleft">
@@ -67,9 +70,12 @@
 				</select>
 			</span>
 		</div>
-		<div class="edit-module-element clearleftfloat floatleft">
-			<input type="checkbox" id="Fullday-check" data-bind="checked:IsFullDay"/>@Resources.FullDay<br />
-		</div>
+		<span class="edit-module-element clearleftfloat floatleft">
+			<input type="checkbox" id="Fullday-check" data-bind="checked:IsFullDay"/>
+		</span>
+		<label class="floatleft pdl5" for="Fullday-check">
+			@Resources.FullDay
+		</label>
 		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
 		<div id="Request-detail-error" class="error clearleftfloat"></div>
 	</div>
