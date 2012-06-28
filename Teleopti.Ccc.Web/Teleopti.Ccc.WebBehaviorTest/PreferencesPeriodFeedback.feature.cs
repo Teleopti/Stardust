@@ -274,76 +274,76 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+
+		[NUnit.Framework.TestAttribute()]
+		[NUnit.Framework.DescriptionAttribute("Period feedback of contract time for employment type Fixed staff day work time")]
+		public virtual void PeriodFeedbackOfContractTimeForEmploymentTypeFixedStaffDayWorkTime()
+		{
+			TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of contract time for employment type Fixed staff day work time", ((string[])(null)));
+#line 87
+			this.ScenarioSetup(scenarioInfo);
+#line 88
+			testRunner.Given("I am an agent");
+#line 89
+			testRunner.And("I have a scheduling period of 1 week");
+#line hidden
+			TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+			table4.AddRow(new string[] {
+                        "Employment type",
+                        "Fixed staff day work time"});
+			table4.AddRow(new string[] {
+                        "Average work time per day",
+                        "8"});
+#line 90
+			testRunner.And("I have a contract with:", ((string)(null)), table4);
+#line 94
+			testRunner.And("I have a day off preference on weekday 6");
+#line 95
+			testRunner.And("I have a day off preference on weekday 7");
+#line 96
+			testRunner.When("I view preferences");
+#line 97
+			testRunner.Then("I should see a message that I should work 40 hours");
+#line hidden
+			this.ScenarioCleanup();
+		}
         
 //        [NUnit.Framework.TestAttribute()]
-//        [NUnit.Framework.DescriptionAttribute("Period feedback of contract time for employment type Fixed staff day work time")]
-//        public virtual void PeriodFeedbackOfContractTimeForEmploymentTypeFixedStaffDayWorkTime()
+//        [NUnit.Framework.DescriptionAttribute("Period feedback of contract time for employment type Fixed staff period work time" +
+//            "")]
+//        public virtual void PeriodFeedbackOfContractTimeForEmploymentTypeFixedStaffPeriodWorkTime()
 //        {
-//            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of contract time for employment type Fixed staff day work time", ((string[])(null)));
-//#line 87
+//            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of contract time for employment type Fixed staff period work time" +
+//                    "", ((string[])(null)));
+//#line 99
 //this.ScenarioSetup(scenarioInfo);
-//#line 88
+//#line 100
 // testRunner.Given("I am an agent");
-//#line 89
+//#line 101
 // testRunner.And("I have a scheduling period of 1 week");
 //#line hidden
-//            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+//            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
 //                        "Field",
 //                        "Value"});
-//            table4.AddRow(new string[] {
+//            table5.AddRow(new string[] {
 //                        "Employment type",
-//                        "Fixed staff day work time"});
-//            table4.AddRow(new string[] {
+//                        "Fixed staff period work time"});
+//            table5.AddRow(new string[] {
 //                        "Average work time per day",
 //                        "8"});
-//#line 90
-// testRunner.And("I have a contract with:", ((string)(null)), table4);
-//#line 94
-// testRunner.And("I have a day off preference on weekday 6");
-//#line 95
-// testRunner.And("I have a day off preference on weekday 7");
-//#line 96
+//#line 102
+// testRunner.And("I have a contract with:", ((string)(null)), table5);
+//#line 106
+// testRunner.And("I have a contract schedule with 2 days off");
+//#line 107
 // testRunner.When("I view preferences");
-//#line 97
+//#line 108
 // testRunner.Then("I should see a message that I should work 40 hours");
 //#line hidden
 //            this.ScenarioCleanup();
 //        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Period feedback of contract time for employment type Fixed staff period work time" +
-            "")]
-        public virtual void PeriodFeedbackOfContractTimeForEmploymentTypeFixedStaffPeriodWorkTime()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of contract time for employment type Fixed staff period work time" +
-                    "", ((string[])(null)));
-#line 99
-this.ScenarioSetup(scenarioInfo);
-#line 100
- testRunner.Given("I am an agent");
-#line 101
- testRunner.And("I have a scheduling period of 1 week");
-#line hidden
-            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table5.AddRow(new string[] {
-                        "Employment type",
-                        "Fixed staff period work time"});
-            table5.AddRow(new string[] {
-                        "Average work time per day",
-                        "8"});
-#line 102
- testRunner.And("I have a contract with:", ((string)(null)), table5);
-#line 106
- testRunner.And("I have a contract schedule with 2 days off");
-#line 107
- testRunner.When("I view preferences");
-#line 108
- testRunner.Then("I should see a message that I should work 40 hours");
-#line hidden
-            this.ScenarioCleanup();
-        }
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Period feedback of contract time with target tolerance")]
