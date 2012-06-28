@@ -82,5 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(logins.Contains(source1));
             Assert.IsTrue(logins.Contains(source2));
         }
+
+        
     }
 }
