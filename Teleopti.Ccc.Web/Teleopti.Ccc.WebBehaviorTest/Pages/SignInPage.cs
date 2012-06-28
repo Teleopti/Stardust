@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
@@ -19,6 +21,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "BusinessUnitOkButton")] public Button BusinessUnitOkButton;
 
 		[FindBy(Id = "SignIn_UserName")] public TextField UserNameTextField { get; set; }
+
+		public Div ValidationSummary
+		{
+			get
+			{
+				using (PerformanceOutput.ForOperation("ValidationSummary!!!!"))
+				{
+					return Document.Div(Find.ByClass("validation-summary-errors", false));
+				}
+			}
+		}
+
 		[FindBy(Id = "SignIn_Password")] public TextField PasswordTextField;
 
 		[FindBy(Id = "BusinessUnitList")] public List BusinessUnitList;
@@ -65,7 +79,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			PasswordTextField.Value = password;
 			ApplicationOkButton.Click();
 
-			WaitUntilSignInOrBusinessUnitListOrErrorOrMenuAppears();
+			WaitForSigninResult();
 		}
 
 		public void SignInWindows()
@@ -75,10 +89,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			WindowsOkButton.EventualClick();
 		}
 
-		private void WaitUntilSignInOrBusinessUnitListOrErrorOrMenuAppears()
+		private void WaitForSigninResult()
 		{
-			Func<bool> SignedInOrBusinessUnitListExists = () => SignOutLink.Exists || BusinessUnitList.Exists || GlobalMenuList.Exists;
-			SignedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(10), TimeSpan.FromSeconds(10));
+			// move this to the actual navigation, which is the one that actually acts too early?
+			Func<bool> SignedInOrBusinessUnitListExists = () =>
+			                                              	{
+			                                              		return SignOutLink.Exists ||
+			                                              		       BusinessUnitList.Exists ||
+			                                              		       GlobalMenuList.Exists ||
+			                                              		       ValidationSummary.Exists;
+			                                              	};
+			SignedInOrBusinessUnitListExists.WaitUntil(EventualTimeouts.Poll, EventualTimeouts.Timeout);
 		}
 	}
 }

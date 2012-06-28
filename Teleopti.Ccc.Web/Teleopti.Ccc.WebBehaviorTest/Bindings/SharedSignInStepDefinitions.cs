@@ -1,5 +1,9 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -25,9 +29,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			string userName;
 			if (_hasPermission)
 			{
-				userName = _singleBusinessUnit
-				           	? UserTestData.PersonApplicationUserSingleBusinessUnitUserName
-				           	: UserTestData.PersonApplicationUserName;
+				if (_singleBusinessUnit)
+				{
+					userName = UserTestData.PersonApplicationUserSingleBusinessUnitUserName;
+			}
+			else
+			{
+					userName = UserTestData.PersonApplicationUserName;
+				}
 			}
 			else
 			{
@@ -67,20 +76,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I sign in by user name and wrong password")]
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
-			Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.SignInApplication(UserTestData.PersonApplicationUserSingleBusinessUnitUserName, "wrong password");
+			using (PerformanceOutput.ForOperation("WhenISignInByUserNameAndWrongPassword!!!"))
+			{
+				Navigation.GotoGlobalSignInPage();
+			}
+			using (PerformanceOutput.ForOperation("WhenISignInByUserNameAndWrongPassword   LOGIN!!!"))
+			{
+				Pages.Pages.CurrentSignInPage.SignInApplication(UserTestData.PersonApplicationUserSingleBusinessUnitUserName, "wrong password");
+			}
 		}
 
 		[Then(@"I should see an log on error")]
 		public void ThenIShouldSeeAnLogOnError()
 		{
-			Browser.Current.ContainsText(Resources.LogOnFailedInvalidUserNameOrPassword);
+			using (PerformanceOutput.ForOperation("ThenIShouldSeeAnLogOnError!!"))
+			{
+				EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new AnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
+			}
 		}
 
 		[Then(@"I should not be signed in")]
 		public void ThenIAmNotSignedIn()
 		{
-			EventualAssert.That(() => Browser.Current.Link("signout").Exists, Is.False);
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
 		}
 
@@ -96,5 +113,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentSignInPage.SignInWindows();
 		}
 
+	}
+
+
+	public class AnyLanguageResourceContraint : Constraint
+	{
+		private readonly List<string> _texts = new List<string>();
+
+		public AnyLanguageResourceContraint(string resource)
+		{
+			// add any browser language in which tests need to run on here
+			_texts.Add(Resources.ResourceManager.GetString(resource, new CultureInfo("en-US")));
+			_texts.Add(Resources.ResourceManager.GetString(resource, new CultureInfo("sv-SE")));
+		}
+
+		public override bool Matches(object actual)
+		{
+			return _texts.Contains(actual as string);
+		}
+
+		public override void WriteDescriptionTo(MessageWriter writer) { }
 	}
 }
