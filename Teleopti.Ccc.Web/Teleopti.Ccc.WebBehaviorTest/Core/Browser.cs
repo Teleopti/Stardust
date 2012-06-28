@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		private static bool AttemptToCloseBrowser(Func<bool> browserClosingAction)
 		{
-			var successfulAttempt = false;
+			bool successfulAttempt;
 			try
 			{
 				successfulAttempt = browserClosingAction.Invoke();

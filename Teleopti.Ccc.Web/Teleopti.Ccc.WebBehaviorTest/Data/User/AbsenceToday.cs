@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
