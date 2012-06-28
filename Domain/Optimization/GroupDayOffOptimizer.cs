@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix, _daysOffPreferences.ConsiderWeekBefore);
             IList<DateOnly> daysOffToAdd = _changesTracker.DaysOffAdded(workingBitArray, originalArray, matrix, _daysOffPreferences.ConsiderWeekBefore);
 
-            IGroupPerson groupPerson = _groupPersonPreOptimizationChecker.CheckPersonOnDates(allMatrixes, matrix.Person, daysOffToRemove, daysOffToAdd, _allSelectedPersons);
+            IGroupPerson groupPerson = _groupPersonPreOptimizationChecker.CheckPersonOnDates(allMatrixes, matrix.Person, daysOffToRemove, daysOffToAdd, _allSelectedPersons, schedulingOptions);
             if (groupPerson == null)
                 return false;
 

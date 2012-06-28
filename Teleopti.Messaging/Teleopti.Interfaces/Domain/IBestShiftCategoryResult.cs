@@ -27,11 +27,11 @@ namespace Teleopti.Interfaces.Domain
 	/// </summary>
 	public interface IBestShiftCategoryResult
 	{
+
 		/// <summary>
-		/// Gets the best shift category.
+		/// 
 		/// </summary>
-		/// <value>The best shift category.</value>
-		IShiftCategory BestShiftCategory { get; }
+		IPossibleStartEndCategory BestPossible { get; }
 		/// <summary>
 		/// Gets the failure cause.
 		/// </summary>

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IGroupPersonPreOptimizationChecker
     {
         IGroupPerson CheckPersonOnDates(IList<IScheduleMatrixPro> matrixes, IPerson person, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd,
-                                                IList<IPerson> allSelectedPersons);
+												IList<IPerson> allSelectedPersons, ISchedulingOptions schedulingOptions);
 
         IGroupPersonsBuilder GroupPersonBuilder { get; }
     }
@@ -27,15 +27,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupPersonSchedulePeriodChecker = groupPersonSchedulePeriodChecker;
         }
 
-        public IGroupPerson CheckPersonOnDates(IList<IScheduleMatrixPro> matrixes, IPerson person, IList<DateOnly> daysOffToRemove, 
-            IList<DateOnly> daysOffToAdd, IList<IPerson> allSelectedPersons)
+        public IGroupPerson CheckPersonOnDates(IList<IScheduleMatrixPro> matrixes, IPerson person, IList<DateOnly> daysOffToRemove,
+			IList<DateOnly> daysOffToAdd, IList<IPerson> allSelectedPersons, ISchedulingOptions schedulingOptions)
         {
             var dateOnlyList = new List<DateOnly>(daysOffToRemove);
             dateOnlyList.AddRange(daysOffToAdd);
 
-            var groupPerson = _groupPersonSameForPersonOnDateChecker.FindCommonGroupPersonForPersonOnDates(person,
-                                                                                                           dateOnlyList,
-                                                                                                           allSelectedPersons);
+            var groupPerson = _groupPersonSameForPersonOnDateChecker.FindCommonGroupPersonForPersonOnDates(person,dateOnlyList,
+                                                                                                           allSelectedPersons,schedulingOptions);
             if (groupPerson == null)
                 return null;
 

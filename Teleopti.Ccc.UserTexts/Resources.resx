@@ -10749,4 +10749,20 @@ These options are activated:
     <value>Longterm Forecast</value>
     <comment>Longterm Forecast</comment>
   </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>Same end time</value>
+    <comment>This is to use same end  in scheduling options. When using group scheduling</comment>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>Same shift category</value>
+    <comment>This is to use same shift category in scheduling options. When using group scheduling</comment>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>Same start time</value>
+    <comment>This is to use same start  in scheduling options. When using group scheduling</comment>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>Use Restrictions</value>
+    <comment>Use restrictions option in scheduling options under the General tab</comment>
+  </data>
 </root>
