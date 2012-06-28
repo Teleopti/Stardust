@@ -103,7 +103,7 @@ namespace Teleopti.Messaging.SignalR
 					          		BinaryData = null
 					          	});
 					task.OnFinish += (sender, e) => waitForSend.Set();
-					waitForSend.WaitOne(TimeSpan.FromSeconds(20));
+					waitForSend.WaitOne();
 					break;
 				}
 				catch (Exception)

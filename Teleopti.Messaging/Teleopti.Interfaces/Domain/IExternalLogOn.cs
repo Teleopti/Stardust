@@ -68,5 +68,10 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-06-18
         /// </remarks>
         int DataSourceId { get; set; }
+
+        /// <summary>
+        /// Name of the Log object name
+        /// </summary>
+        string DataSourceName { get; set; }
     }
 }

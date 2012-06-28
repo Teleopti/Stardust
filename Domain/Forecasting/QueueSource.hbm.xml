@@ -69,5 +69,8 @@
     <filter name="deletedFlagFilter"
       condition="IsDeleted = 0" />
 	</class>
+  <query name="distinctLogItemName">
+    select distinct qs.DataSourceId,qs.LogObjectName from QueueSource qs
+  </query>
 </hibernate-mapping>
 

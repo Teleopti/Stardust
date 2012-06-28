@@ -21,5 +21,12 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created date: 2008-05-07
         /// </remarks>
         IList<IQueueSource> LoadAllQueues();
+
+        /// <summary>
+        /// This is to get the distinct log item names
+        /// </summary>
+        /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        IDictionary<int, string> GetDistinctLogItemName();
     }
 }

@@ -31,5 +31,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             return Session.CreateCriteria(typeof(QueueSource)).List<IQueueSource>();
         }
+
+        public IDictionary<int, string> GetDistinctLogItemName()
+        {
+            var dbResult = Session.GetNamedQuery("distinctLogItemName").List();
+            var res = new Dictionary<int, string>();
+            foreach (object[] dbItem in dbResult)
+            {
+                res[(int)dbItem[0]] = (string)dbItem[1];
+            }
+            return res;
+        }
     }
 }

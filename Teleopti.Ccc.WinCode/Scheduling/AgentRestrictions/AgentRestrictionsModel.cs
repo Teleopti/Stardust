@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		public AgentRestrictionsDisplayRow DisplayRowFromRowIndex(int rowIndex)
 		{
 			if (rowIndex < int.MinValue + 2) throw new ArgumentOutOfRangeException("rowIndex");
+			if (_displayRows.Count == 0) return null;
 			return _displayRows[rowIndex - 1 - 1];
 		}
 
