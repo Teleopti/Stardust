@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 	public class LinkProviderTest
 	{
 		[Test]
-		public void ShouldProvideTextRequestLink()
+		public void ShouldProvideRequestDetailLink()
 		{
 			var urlHelperBuilder = new TestUrlHelperBuilder();
 			urlHelperBuilder.Routes(new TestRouteBuilder().MakeAreaDefaultRoute("MyTime"));
