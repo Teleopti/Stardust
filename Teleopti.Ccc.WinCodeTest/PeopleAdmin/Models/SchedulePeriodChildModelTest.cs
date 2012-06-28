@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.IsFalse(_target.CanGray);
             Assert.IsFalse(_target.IsAverageWorkTimePerDayOverride);
             Assert.IsFalse(_target.IsDaysOffOverride);
+			Assert.IsFalse(_target.IsPeriodTimeOverride);
             Assert.IsNotNull(_target.SchedulePeriod);
         }
 
@@ -164,6 +165,28 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _target.Extra = TimeSpan.FromDays(3);
             Assert.That(_target.Extra.Equals(TimeSpan.FromDays(3)));
         }
+
+		[Test]
+		public void VerifySeasonality()
+		{
+			_target.Seasonality = new Percent(0.3);
+			Assert.That(_target.Seasonality.Equals(new Percent(0.3)));
+		}
+
+		[Test]
+		public void VerifyPeriodTime()
+		{
+			_target.PeriodTime = TimeSpan.FromDays(3);
+			Assert.That(_target.PeriodTime.Equals(TimeSpan.FromDays(3)));
+		}
+
+		[Test]
+		public void VerifyAverageWorkTimePerDayOverride()
+		{
+			_target.AverageWorkTimePerDayOverride = TimeSpan.FromDays(3);
+			Assert.That(_target.AverageWorkTimePerDayOverride.Equals(TimeSpan.FromDays(3)));
+		}
+		
 
         [Test]
         public void ShouldSetBalanceOut()
