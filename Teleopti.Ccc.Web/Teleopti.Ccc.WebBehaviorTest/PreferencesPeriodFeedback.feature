@@ -96,19 +96,6 @@ Scenario: Period feedback of contract time for employment type Fixed staff day w
 	When I view preferences
 	Then I should see a message that I should work 40 hours
 
-Scenario: Period feedback of contract time for employment type Fixed staff period work time
-	Given I am an agent
-	And I have a scheduling period of 1 week
-	And I have a contract with:
-		| Field                     | Value                        |
-		| Employment type           | Fixed staff period work time |
-		| Average work time per day | 8                            |
-	And I have a contract schedule with 2 days off
-	When I view preferences
-	Then I should see a message that I should work 40 hours
-
-
-
 Scenario: Period feedback of contract time with target tolerance
 	Given I am an agent
 	And I have a scheduling period of 1 week
