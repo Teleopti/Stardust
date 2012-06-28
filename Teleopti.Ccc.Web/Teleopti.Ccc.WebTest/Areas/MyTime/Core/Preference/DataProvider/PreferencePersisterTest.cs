@@ -75,6 +75,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			preferenceDayRepository.AssertWasNotCalled(x => x.Add(preferenceDay));
 		}
 
+		[Test]
+		public void ShouldDeleteOrphanPreferencesOnUpdate()
+		{
+			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
+			var input = new PreferenceDayInput { Date = DateOnly.Today };
+			var preferenceDay1 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction()) {UpdatedOn = DateTime.Now.AddHours(-1)};
+			var preferenceDay2 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction()) { UpdatedOn = DateTime.Now };
+			var preferenceDay3 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction()) {UpdatedOn = DateTime.Now.AddHours(-2)};
+			var target = new PreferencePersister(preferenceDayRepository, MockRepository.GenerateMock<IMappingEngine>(), MockRepository.GenerateMock<ILoggedOnUser>());
+
+			preferenceDayRepository.Stub(x => x.Find(input.Date, null)).Return(new List<IPreferenceDay> { preferenceDay1, preferenceDay2, preferenceDay3 });
+
+			target.Persist(input);
+
+			preferenceDayRepository.AssertWasCalled(x => x.Remove(preferenceDay1));
+			preferenceDayRepository.AssertWasCalled(x => x.Remove(preferenceDay3));
+		}
 
 		[Test]
 		public void ShouldReturnFormResultModelOnUpdate()
@@ -99,14 +116,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldDelete()
 		{
 			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
-			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
+			var preferenceDay1 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
+			var preferenceDay2 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
 			var target = new PreferencePersister(preferenceDayRepository, null, MockRepository.GenerateMock<ILoggedOnUser>());
 
-			preferenceDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IPreferenceDay> { preferenceDay });
+			preferenceDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IPreferenceDay> { preferenceDay1, preferenceDay2 });
 
 			target.Delete(DateOnly.Today);
 
-			preferenceDayRepository.AssertWasCalled(x => x.Remove(preferenceDay));
+			preferenceDayRepository.AssertWasCalled(x => x.Remove(preferenceDay1));
+			preferenceDayRepository.AssertWasCalled(x => x.Remove(preferenceDay2));
 		}
 
 		[Test]
