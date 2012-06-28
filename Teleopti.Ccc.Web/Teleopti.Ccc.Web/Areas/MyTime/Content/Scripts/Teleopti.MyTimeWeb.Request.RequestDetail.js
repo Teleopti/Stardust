@@ -7,7 +7,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 
-Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
+Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	var requestViewModel = null;
 
@@ -293,7 +293,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
 		} else {
 			$('#Request-detail-fromTime-input-input').reset();
 			$('#Request-detail-toTime-input-input').reset();
-			Teleopti.MyTimeWeb.Request.TextRequest.EnableTimeinput();
+			Teleopti.MyTimeWeb.Request.RequestDetail.EnableTimeinput();
 		}
 
 	});

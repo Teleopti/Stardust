@@ -4,7 +4,7 @@
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.TextRequest.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
@@ -150,7 +150,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					if (count > 1) { return false; }
 					event.stopPropagation();
 					_disconnectAll();
-					Teleopti.MyTimeWeb.Request.TextRequest.HideEditSection();
+					Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
 					_deleteRequest(listItem);
 				})
 				.removeAttr('disabled', 'disabled')
@@ -207,11 +207,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			type: 'GET',
 			beforeSend: function() {
 				_disconnectAllOthers(listItem);
-				Teleopti.MyTimeWeb.Request.TextRequest.FadeEditSection();
+				Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 				connector.connector("connecting");
 			},
 			success: function(data, textStatus, jqXHR) {
-				Teleopti.MyTimeWeb.Request.TextRequest.ShowRequest(data, listItem.position().top - 30);
+				Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, listItem.position().top - 30);
 				connector.connector("connect");
 			}
 		});
