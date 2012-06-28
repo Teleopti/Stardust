@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -44,13 +41,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 			                  	{
-			                  		c.AddProfile(new AbsenceRequestFormMappingProfile(
-			                  		             	() => Mapper.Engine,
-			                  		             	() => _loggedOnUser,
-			                  		             	() => _userTimeZone,
-			                  		             	() => _absenceRequestFormToPersonRequest,
-			                  		             	() => _absenceRepository
-			                  		             	));
+			                  		c.AddProfile(new AbsenceRequestFormMappingProfile(() => _absenceRequestFormToPersonRequest));
 			                  		c.AddProfile(new DateTimePeriodFormMappingProfile(() => _userTimeZone));
 			                  	});
 		}
@@ -101,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var id = Guid.NewGuid();
 			_absenceRepository.Stub(x => x.Load(id)).Return(absence);
 
-			var form = new AbsenceRequestForm() {AbsenceId = id};
+			var form = new AbsenceRequestForm {AbsenceId = id};
 
 			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
 
@@ -113,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			var form = new AbsenceRequestForm() {FullDay = true};
+			var form = new AbsenceRequestForm {FullDay = true};
 
 			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
 

@@ -13,7 +13,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Core.RequestContext;
-using Teleopti.Ccc.WebTest.Core;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IVirtualSchedulePeriodProvider virtualScheduleProvider;
 		private IPreferenceProvider preferenceProvider;
 		private IPerson person;
-		private IPreferenceFeedbackProvider preferenceFeedbackProvider;
 		private IScheduleProvider scheduleProvider;
 		private IProjectionProvider projectionProvider;
 
@@ -34,7 +32,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			virtualScheduleProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
-			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
 			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
  
@@ -55,7 +52,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					Depend.On(virtualScheduleProvider),
 					Depend.On(preferenceProvider),
 					Depend.On(loggedOnUser),
-					Depend.On(preferenceFeedbackProvider),
 					Depend.On(scheduleProvider),
 					Depend.On(projectionProvider)
 					)));

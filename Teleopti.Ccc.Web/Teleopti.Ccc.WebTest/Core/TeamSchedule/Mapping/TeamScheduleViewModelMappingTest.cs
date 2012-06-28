@@ -6,7 +6,6 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Time;
@@ -146,7 +145,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			result.AgentSchedules.Single().Layers.First().EndPositionPercent.Should().Be.EqualTo(((decimal)periodEndPosition.Ticks) / ((decimal)displayPeriod.ElapsedTime().Ticks));
+			result.AgentSchedules.Single().Layers.First().EndPositionPercent.Should().Be.EqualTo(periodEndPosition.Ticks / ((decimal)displayPeriod.ElapsedTime().Ticks));
 		}
 
 		[Test]
@@ -175,7 +174,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			result.AgentSchedules.Single().Layers.First().PositionPercent.Should().Be.EqualTo(((decimal)periodPosition.Ticks) / ((decimal)displayPeriod.ElapsedTime().Ticks));
+			result.AgentSchedules.Single().Layers.First().PositionPercent.Should().Be.EqualTo(periodPosition.Ticks / ((decimal)displayPeriod.ElapsedTime().Ticks));
 		}
 
 		[Test]
@@ -230,7 +229,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		public void ShouldMapLayerActivityName()
 		{
 			timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var activityName = "Phone";
+			const string activityName = "Phone";
 			data.Days = new[]
 			            	{
 			            		new TeamScheduleDayDomainData

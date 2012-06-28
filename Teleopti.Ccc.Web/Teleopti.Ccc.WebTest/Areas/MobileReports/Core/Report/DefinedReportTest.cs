@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 

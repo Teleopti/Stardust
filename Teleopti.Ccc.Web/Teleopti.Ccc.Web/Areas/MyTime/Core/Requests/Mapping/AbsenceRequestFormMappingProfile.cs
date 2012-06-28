@@ -11,19 +11,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class AbsenceRequestFormMappingProfile : Profile
 	{
-		private readonly Func<IMappingEngine> _mapper;
-		private readonly Func<ILoggedOnUser> _loggedOnUser;
-		private readonly Func<IUserTimeZone> _userTimeZone;
 		private readonly Func<ITypeConverter<AbsenceRequestForm, IPersonRequest>> _absenceRequestFormToPersonRequest;
-		private readonly Func<IAbsenceRepository> _absenceRepository;
 
-		public AbsenceRequestFormMappingProfile(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser, Func<IUserTimeZone> userTimeZone, Func<ITypeConverter<AbsenceRequestForm, IPersonRequest>> absenceRequestFormToPersonRequest, Func<IAbsenceRepository> absenceRepository)
+		public AbsenceRequestFormMappingProfile(Func<ITypeConverter<AbsenceRequestForm, IPersonRequest>> absenceRequestFormToPersonRequest)
 		{
-			_mapper = mapper;
-			_loggedOnUser = loggedOnUser;
-			_userTimeZone = userTimeZone;
 			_absenceRequestFormToPersonRequest = absenceRequestFormToPersonRequest;
-			_absenceRepository = absenceRepository;
 		}
 
 		protected override void Configure()

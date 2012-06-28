@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Web;
-using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
@@ -10,13 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule
 {
 	public class ScheduleHtmlHelper
 	{
-		private readonly HtmlHelper _htmlHelper;
-
-		public ScheduleHtmlHelper(HtmlHelper htmlHelper)
-		{
-			_htmlHelper = htmlHelper;
-		}
-
 		public string FormatDate(DateOnly dateOnly)
 		{
 			return dateOnly.ToFixedClientDateOnlyFormat();

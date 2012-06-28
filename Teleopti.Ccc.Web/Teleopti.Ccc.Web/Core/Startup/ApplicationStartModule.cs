@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 {
 	public class ApplicationStartModule : IHttpModule
 	{
-		private static ILog log = LogManager.GetLogger(typeof (ApplicationStartModule));
+		private static readonly ILog log = LogManager.GetLogger(typeof (ApplicationStartModule));
 
 		public static void RegisterModule()
 		{

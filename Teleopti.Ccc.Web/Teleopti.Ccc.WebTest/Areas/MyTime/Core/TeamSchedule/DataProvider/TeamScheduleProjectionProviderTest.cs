@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
-using Teleopti.Ccc.WebTest.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		[Test]
 		public void ShouldReturnProjectionLayerActivityName()
 		{
-			var activityName = "Phone";
+			const string activityName = "Phone";
 			
 			var stubs = new StubFactory();
 			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);

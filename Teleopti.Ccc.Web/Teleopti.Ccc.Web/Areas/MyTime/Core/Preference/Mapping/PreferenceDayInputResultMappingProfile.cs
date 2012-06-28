@@ -1,21 +1,11 @@
 ﻿using AutoMapper;
-using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceDayInputResultMappingProfile : Profile
 	{
-		private readonly IResolve<IPreferenceFeedbackProvider> _preferenceFeedbackProvider;
-
-		public PreferenceDayInputResultMappingProfile(IResolve<IPreferenceFeedbackProvider> preferenceFeedbackProvider)
-		{
-			_preferenceFeedbackProvider = preferenceFeedbackProvider;
-		}
-
 		protected override void Configure()
 		{
 			base.Configure();
