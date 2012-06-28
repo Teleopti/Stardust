@@ -363,6 +363,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				case SchedulePeriodType.Week:
 					return new IncreaseWeekByOne();
 				case SchedulePeriodType.Month:
+				case SchedulePeriodType.ChineseMonth:
 					return new IncreaseMonthByOne(cultureInfo);
 				default: //Day
 					return new IncreaseDayByOne();
