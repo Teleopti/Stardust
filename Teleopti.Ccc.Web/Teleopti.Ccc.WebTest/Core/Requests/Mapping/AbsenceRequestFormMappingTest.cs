@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var id = Guid.NewGuid();
 			_absenceRepository.Stub(x => x.Load(id)).Return(absence);
 
-			var form = new AbsenceRequestForm() {AbsenceId = id};
+			var form = new AbsenceRequestForm {AbsenceId = id};
 
 			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
 
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			var form = new AbsenceRequestForm() {FullDay = true};
+			var form = new AbsenceRequestForm {FullDay = true};
 
 			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
 

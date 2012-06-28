@@ -6,12 +6,11 @@
 
 	using SharpTestsEx;
 
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
-	using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
-	using Teleopti.Interfaces.Domain;
+	using Web.Areas.MobileReports.Core;
+	using Web.Areas.MobileReports.Core.Matrix;
+	using Web.Areas.MobileReports.Models.Report;
+	using TestData;
+	using Interfaces.Domain;
 
 	[TestFixture]
 	public class ReportDataFetcherTest

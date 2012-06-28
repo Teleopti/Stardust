@@ -168,7 +168,6 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		public void ShouldMapAuthenticationRequestToStartArea()
 		{
 			var routes = new RouteCollection();
-			var target = new MyTimeAreaRegistration();
 			new RegisterRoutesTask(() => { }).registerRoutes(routes);
 
 			var httpContext = MockRepository.GenerateMock<HttpContextBase>();

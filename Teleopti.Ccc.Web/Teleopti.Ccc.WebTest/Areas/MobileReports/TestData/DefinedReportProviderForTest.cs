@@ -3,9 +3,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.TestData
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Web.Areas.MobileReports.Core;
+	using Web.Areas.MobileReports.Core.Providers;
+	using Web.Areas.MobileReports.Models.Domain;
 
 	public class DefinedReportProviderForTest : IDefinedReportProvider
 	{

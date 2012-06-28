@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		[Test]
 		public void ShouldReturnProjectionLayerActivityName()
 		{
-			var activityName = "Phone";
+			const string activityName = "Phone";
 			
 			var stubs = new StubFactory();
 			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);

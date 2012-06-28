@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var expected = new[]
 			               	{
 			               		new {Value = "-", Text = "site"},
-			               		new {Value = teams[0].Id.Value.ToString(), Text = "team"},
+			               		new {Value = teams[0].Id.Value.ToString(), Text = "team"}
 			               	};
 			result.Select(t => t.Value).Should().Have.SameSequenceAs(expected.Select(t => t.Value));
 			result.Select(t => t.Text).Should().Have.SameSequenceAs(expected.Select(t => t.Text));

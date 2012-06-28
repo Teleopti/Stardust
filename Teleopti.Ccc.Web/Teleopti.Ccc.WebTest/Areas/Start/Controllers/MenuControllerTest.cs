@@ -58,7 +58,7 @@
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_menuViewModelFactory.CreateMenyViewModel()).Return(new[] { new MenuViewModel(), new MenuViewModel(), });
+				Expect.Call(_menuViewModelFactory.CreateMenyViewModel()).Return(new[] { new MenuViewModel(), new MenuViewModel() });
 			}
 			using (_mocks.Playback())
 			{

@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
+﻿using System.Security.Principal;
 using System.Threading;
 using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Interfaces.Domain;
 

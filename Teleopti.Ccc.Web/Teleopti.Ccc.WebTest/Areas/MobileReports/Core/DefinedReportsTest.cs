@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core
 
 	using SharpTestsEx;
 
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
+	using Web.Areas.MobileReports.Core;
 
 	[TestFixture]
 	public class DefinedReportsTest
