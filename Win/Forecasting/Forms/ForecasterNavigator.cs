@@ -809,34 +809,49 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripMenuItemSkillsDelete_Click(object sender, EventArgs e)
 		{
-			var skill = (SkillModel)_lastContextMenuNode.Tag;
-			removeSkill(skill);
+            if (_lastContextMenuNode != null)
+            {
+                var skill = (SkillModel) _lastContextMenuNode.Tag;
+                removeSkill(skill);
+            }
 		}
 
 		void toolStripMenuItemActionWorkloadDelete_Click(object sender, EventArgs e)
 		{
-			var workload = (WorkloadModel) _lastActionNode.Tag;
-			removeWorkload(workload);
+            if (_lastActionNode != null)
+            {
+                var workload = (WorkloadModel) _lastActionNode.Tag;
+                removeWorkload(workload);
+            }
 		}
 
 		private void toolStripMenuItemDeleteWorkload_Click(object sender, EventArgs e)
 		{
-			var workload = (WorkloadModel)_lastContextMenuNode.Tag;
-			removeWorkload(workload);
+            if (_lastContextMenuNode != null)
+            {
+                var workload = (WorkloadModel) _lastContextMenuNode.Tag;
+                removeWorkload(workload);
+            }
 		}
 
 		private void toolStripMenuItemRemoveQueue_Click(object sender, EventArgs e)
 		{
-			var workload = (WorkloadModel)_lastContextMenuNode.Parent.Tag;
-			var queueSource = (QueueModel)_lastContextMenuNode.Tag;
-			removeQueueSource(workload, queueSource);
+            if (_lastContextMenuNode != null)
+            {
+                var workload = (WorkloadModel) _lastContextMenuNode.Parent.Tag;
+                var queueSource = (QueueModel) _lastContextMenuNode.Tag;
+                removeQueueSource(workload, queueSource);
+            }
 		}
 
 		private void toolStripMenuItemActionQueueSourceDelete_Click(object sender, EventArgs e)
 		{
-			var workload = (WorkloadModel) _lastActionNode.Parent.Tag;
-			var queueSource = (QueueModel) _lastActionNode.Tag;
-			removeQueueSource(workload, queueSource);
+            if (_lastActionNode != null)
+            {
+                var workload = (WorkloadModel) _lastActionNode.Parent.Tag;
+                var queueSource = (QueueModel) _lastActionNode.Tag;
+                removeQueueSource(workload, queueSource);
+            }
 		}
 
 		private void removeQueueSource(WorkloadModel workloadModel, QueueModel queueSourceModel)
@@ -862,14 +877,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripMenuItemWorkloadProperties_Click(object sender, EventArgs e)
 		{
-			var w = (WorkloadModel)_lastContextMenuNode.Tag;
-			showWorkloadProperties(w);
+            if (_lastContextMenuNode != null)
+            {
+                var w = (WorkloadModel) _lastContextMenuNode.Tag;
+                showWorkloadProperties(w);
+            }
 		}
 
 		void toolStripMenuItemActionWorkloadProperties_Click(object sender, EventArgs e)
 		{
-			var w = (WorkloadModel) _lastActionNode.Tag;
-			showWorkloadProperties(w);
+            if (_lastActionNode != null)
+            {
+                var w = (WorkloadModel) _lastActionNode.Tag;
+                showWorkloadProperties(w);
+            }
 		}
 
 		private void showWorkloadProperties(WorkloadModel workloadModel)
@@ -1002,14 +1023,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		void toolStripMenuItemActionWorkloadPrepareForecast_Click(object sender, EventArgs e)
 		{
-			var w = _lastActionNode.Tag as WorkloadModel;
-			showPrepareWorkload(w);
+            if (_lastActionNode != null)
+            {
+                var w = _lastActionNode.Tag as WorkloadModel;
+                showPrepareWorkload(w);
+            }
 		}
 
 		private void toolStripMenuItemWorkloadPrepareWorkload_Click(object sender, EventArgs e)
 		{
-			var w = _lastContextMenuNode.Tag as WorkloadModel;
-			showPrepareWorkload(w);
+            if (_lastContextMenuNode != null)
+            {
+                var w = _lastContextMenuNode.Tag as WorkloadModel;
+                showPrepareWorkload(w);
+            }
 		}
 
 		private void toolStripMenuItemManageDayTemplates_Click(object sender, EventArgs e)
@@ -1025,26 +1052,38 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripMenuItemActionSkillNewMultisiteSkill_Click(object sender, EventArgs e)
 		{
-			var skillType = getSkillType(_lastActionNode);
-			createMultisiteSkill(skillType);
+            if (_lastActionNode != null)
+            {
+                var skillType = getSkillType(_lastActionNode);
+                createMultisiteSkill(skillType);
+            }
 		}
 
 		private void toolStripMenuItemMultisiteSkillNew_Click(object sender, EventArgs e)
 		{
-			var skillType = getSkillType(_lastContextMenuNode);
-			createMultisiteSkill(skillType);
+            if (_lastContextMenuNode != null)
+            {
+                var skillType = getSkillType(_lastContextMenuNode);
+                createMultisiteSkill(skillType);
+            }
 		}
 
 		private void toolStripMenuItemActionSkillTypeNewMultisiteSkill_Click(object sender, EventArgs e)
 		{
-			var skillType = getSkillType(_lastActionNode);
-			createMultisiteSkill(skillType);
+            if (_lastActionNode != null)
+            {
+                var skillType = getSkillType(_lastActionNode);
+                createMultisiteSkill(skillType);
+            }
 		}
 
 		private void toolStripMenuItemSkillTypesMultisiteSkillNew_Click(object sender, EventArgs e)
 		{
-			var skillType = getSkillType(_lastContextMenuNode);
-			createMultisiteSkill(skillType);
+            if (_lastContextMenuNode != null)
+            {
+                var skillType = getSkillType(_lastContextMenuNode);
+                createMultisiteSkill(skillType);
+            }
 		}
 
 		private ISkillType GetInitializedSkillType(SkillTypeModel skillTypeModel)
