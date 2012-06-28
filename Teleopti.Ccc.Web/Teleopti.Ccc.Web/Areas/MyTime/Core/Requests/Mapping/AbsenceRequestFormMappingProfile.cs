@@ -44,10 +44,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			public IPersonRequest Convert(ResolutionContext context)
 			{
 				var source = context.SourceValue as AbsenceRequestForm;
+				var destination = context.DestinationValue as IPersonRequest;
 
-				var destination = new PersonRequest(_loggedOnUser.Invoke().CurrentUser()) {Subject = source.Subject};
-
-				destination.TrySetMessage(source.Message ?? "");
+				if (destination == null)
+				{
+					destination = new PersonRequest(_loggedOnUser.Invoke().CurrentUser()) { Subject = source.Subject };
+					destination.Pending();
+				}
 
 				DateTimePeriod period;
 
@@ -64,8 +67,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 				destination.Request = new AbsenceRequest(_absenceRepository.Invoke().Load(source.AbsenceId), period);
 
+				destination.TrySetMessage(source.Message ?? "");
+
 				if (source.EntityId != null)
 					destination.SetId(source.EntityId);
+
+				destination.Subject = source.Subject;
 
 				return destination;
 			}

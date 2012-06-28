@@ -547,6 +547,7 @@
     <Compile Include="Domain\OptimizationRestriction.cs" />
     <Compile Include="Domain\JobResultProgress.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />
+    <Compile Include="Domain\RequestType.cs" />
     <Compile Include="Domain\ResourceOptimizerProgressEventArgs.cs" />
     <Compile Include="Domain\ITimeLayer.cs" />
     <Compile Include="Domain\ITimeLayerOfDouble.cs" />

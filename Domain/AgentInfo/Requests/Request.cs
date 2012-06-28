@@ -67,7 +67,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// </summary>
         public abstract string RequestTypeDescription { get; set; }
 
-        /// <summary>
+    	public abstract RequestType RequestType { get;}
+
+    	/// <summary>
         /// Description for the payload
         /// </summary>
         public abstract Description RequestPayloadDescription { get; }

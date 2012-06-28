@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(new Person());
 			request.SetId(Guid.NewGuid());
 
-			_linkProvider.Stub(x => x.TextRequestLink(request.Id.Value)).Return("aLink");
+			_linkProvider.Stub(x => x.RequestDetailLink(request.Id.Value)).Return("aLink");
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
@@ -166,6 +166,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
 			result.Type.Should().Be(request.Request.RequestTypeDescription);
+		}
+
+		[Test]
+		public void ShouldMapRequestTypeEnum()
+		{
+			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+
+			result.TypeEnum.Should().Be(RequestType.TextRequest);
 		}
 
 		[Test]

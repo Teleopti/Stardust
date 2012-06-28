@@ -36,6 +36,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-section")]
 		public Div RequestDetailSection { get; set; }
 
+		[FindBy(Id = "Text-request-tab")]
+		public Span TextRequestTab { get; set; }
+
 		[FindBy(Id = "Absence-request-tab")]
 		public Span AbsenceRequestTab { get; set; }
 

@@ -335,7 +335,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             set { _typeDescription = value; }
         }
 
-        /// <summary>
+    	public override RequestType RequestType
+    	{
+    		get { return RequestType.ShiftTradeRequest; }
+    	}
+
+    	/// <summary>
         /// Payload description
         /// </summary>
         public override Description RequestPayloadDescription

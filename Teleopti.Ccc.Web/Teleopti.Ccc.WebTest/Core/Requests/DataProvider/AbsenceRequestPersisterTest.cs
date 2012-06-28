@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 	internal class AbsenceRequestPersisterTest
 	{
 		[Test]
-		public void ShouldAddTextRequest()
+		public void ShouldAddAbsenceRequest()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
@@ -136,6 +136,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			serviceBusSender.AssertWasNotCalled(x => x.NotifyServiceBus(Arg<RaptorDomainMessage>.Is.Anything));
 			personRequest.AssertWasCalled(x => x.Pending());
+		}
+
+		[Test]
+		public void ShouldUpdateExistingAbsenceRequest()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
+			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
+			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
+			var currentDataSourceProvider = MockRepository.GenerateMock<IDataSourceProvider>();
+			var now = MockRepository.GenerateMock<INow>();
+
+			var form = new AbsenceRequestForm();
+			var personRequestId = Guid.NewGuid();
+			form.EntityId = personRequestId;
+			personRequestRepository.Stub(x => x.Find(personRequestId)).Return(personRequest);
+
+			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
+
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now);
+			target.Persist(form);
+
+			personRequestRepository.AssertWasNotCalled(x => x.Add(personRequest));
+			mapper.AssertWasCalled(x => x.Map(form, personRequest));
 		}
 	}
 }

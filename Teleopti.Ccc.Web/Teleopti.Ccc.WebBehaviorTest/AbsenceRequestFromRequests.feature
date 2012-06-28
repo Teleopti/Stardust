@@ -85,3 +85,81 @@ Scenario: View absence types
 	When I click add request button in the toolbar
 	And I click absence request tab
 	Then I should see an absence type called Vacation in droplist
+
+
+
+
+Scenario: Hide text request tab when view an absence request
+	Given I am an agent
+	And I have an existing absence request
+	And I am viewing requests
+	When I click on the request
+	Then I should not see the text request tab (invisible)
+
+Scenario: View absence request details
+	Given I am an agent
+	And I have an existing absence request
+	And I am viewing requests
+	When I click on the request
+	Then I should see the absence request's details form 
+	And I should see the absence request's values
+
+Scenario: Edit absence request
+	Given I am an agent
+	And I have a requestable absence called Illness
+	And I have an existing absence request
+	And I am viewing requests
+	When I click on the request
+	And I input new absence request values
+	And I click the OK button
+	Then I should see the new absence request values in the list
+
+Scenario: Delete absence request
+	Given I am an agent
+	And I have an existing absence request
+	And I am viewing requests
+	When I click the absence request's delete button
+	Then I should not see the absence request in the list
+
+Scenario: Can not edit approved absence requests
+	Given I am an agent
+	And I have an approved absence request
+	And I am viewing requests
+	When I click on the request
+	Then I should see the absence request's details form
+	And I should not be able to input values for absence request
+	And I should not see a save button
+
+Scenario: Can not edit denied absence requests
+	Given I am an agent
+	And I have a denied absence request
+	And I am viewing requests
+	When I click on the request
+	Then I should see the absence request's details form
+	And I should not be able to input values for absence request
+	And I should not see a save button
+
+Scenario: Can not delete approved absence request
+	Given I am an agent
+	And I have an approved absence request
+	When I am viewing requests
+	Then I should not see a delete button
+
+Scenario: Can not delete denied absence request
+	Given I am an agent
+	And I have a denied absence request
+	When I am viewing requests
+	Then I should not see a delete button
+
+
+
+
+
+Scenario: Hide absence request tab when view a text request
+	Given I am an agent
+	And I have an existing text request
+	And I am viewing requests
+	When I click on the request
+	Then I should see the text request's details form
+	And I should see the request's values
+	And I should not see the absence request tab (invisible)

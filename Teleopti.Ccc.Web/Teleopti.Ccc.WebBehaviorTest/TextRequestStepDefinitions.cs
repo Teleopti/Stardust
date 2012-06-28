@@ -88,9 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => detailForm.RequestDetailToDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToDateTextField");
 			EventualAssert.That(() => detailForm.RequestDetailToTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToTimeTextField");
 			EventualAssert.That(() => detailForm.RequestDetailMessageTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), "RequestDetailMessageTextField");
-
-
-
+			EventualAssert.That(() => detailForm.FulldayCheck.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "FulldayCheck");
 		}
 
 		[Then(@"I should see the new text request values in the list")]
@@ -162,7 +160,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = DateTime.Today.AddHours(-2).ToShortTimeString(UserFactory.User().Culture);
 		}
 
-		[When(@"I click the request's delete button")]
+		[When(@"I click the text request's delete button")]
 		public void WhenIClickTheRequestSDeleteButton()
 		{
 			var requestId = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.Id.Value;
@@ -226,6 +224,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				request = UserFactory.User().UserData<ExistingApprovedTextRequest>().PersonRequest;
 			else if (UserFactory.User().HasSetup<ExistingDeniedTextRequest>())
 				request = UserFactory.User().UserData<ExistingDeniedTextRequest>().PersonRequest;
+			else if (UserFactory.User().HasSetup<ExistingApprovedAbsenceRequest>())
+				request = UserFactory.User().UserData<ExistingApprovedAbsenceRequest>().PersonRequest;
+			else if (UserFactory.User().HasSetup<ExistingDeniedAbsenceRequest>())
+				request = UserFactory.User().UserData<ExistingDeniedAbsenceRequest>().PersonRequest;
 			if (request == null)
 				ScenarioContext.Current.Pending();
 			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(request.Id.Value).Exists, Is.True);

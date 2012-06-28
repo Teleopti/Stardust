@@ -80,11 +80,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null, null);
 			var paging = new Paging();
 
-			personRequestProvider.Stub(x => x.RetrieveTextRequests(paging)).Return(new IPersonRequest[] { });
+			personRequestProvider.Stub(x => x.RetrieveTextAndAbsenceRequests(paging)).Return(new IPersonRequest[] { });
 
 			target.CreatePagingViewModel(paging);
 
-			personRequestProvider.AssertWasCalled(x => x.RetrieveTextRequests(paging));
+			personRequestProvider.AssertWasCalled(x => x.RetrieveTextAndAbsenceRequests(paging));
 		}
 
 		[Test]

@@ -18,15 +18,28 @@
 						source: function (request, response) {
 							var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
 							response(select.children("option").map(function () {
+
 								var text = $(this).text();
+								var html = $('<div/>').text(text).html();
+
+								if (request.term) {
+									// if we have a search term, we have to match that BEFORE we encode, or we will match encoded characters
+									// although I dont understand the regex here (its from jquery examples I think) I think it might have been
+									// designed to work, but it surely doesnt when a value have < or > in it.
+									// MS/KM
+									var matchedText = text.replace(
+									new RegExp(
+										"(?![^&;]+;)(?!<[^<>]*)(" +
+											$.ui.autocomplete.escapeRegex(request.term) +
+												")(?![^<>]*>)(?![^&;]+;)", "gi"
+									), "**match**$1**endmatch**");
+									var encodedText = $('<div/>').text(matchedText).html();
+									html = encodedText.replace(/\*\*match\*\*/g, "<strong>").replace(/\*\*endmatch\*\*/g, "</strong>");
+								}
+
 								if (this.value && (!request.term || matcher.test(text)))
 									return {
-										label: text.replace(
-											new RegExp(
-												"(?![^&;]+;)(?!<[^<>]*)(" +
-												$.ui.autocomplete.escapeRegex(request.term) +
-												")(?![^<>]*>)(?![^&;]+;)", "gi"
-											), "<strong>$1</strong>"),
+										label: html,
 										value: text,
 										option: this
 									};
@@ -107,7 +120,9 @@
 			this.element.show();
 			$.Widget.prototype.destroy.call(this);
 		},
+
 		set: function (value) {
+			this.element.val(value);
 			$(this.input).val(value);
 			$(this.input).trigger('change');
 		}

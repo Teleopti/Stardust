@@ -248,7 +248,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                 set { throw new NotImplementedException(); }
             }
 
-            public override Description RequestPayloadDescription
+        	public override RequestType RequestType
+        	{
+        		get { throw new NotImplementedException(); }
+        	}
+
+        	public override Description RequestPayloadDescription
             {
                 get { throw new NotImplementedException(); }
             }

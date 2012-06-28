@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Status, o => o.MapFrom(s => s.StatusText))
 				.ForMember(d => d.Text, o => o.MapFrom(s => s.GetMessage(new NoFormatting())))
 				.ForMember(d => d.Type, o => o.MapFrom(s => s.Request.RequestTypeDescription))
+				.ForMember(d => d.TypeEnum, o => o.MapFrom(s => s.Request.RequestType))
 				.ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn.HasValue
 																					? _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.UpdatedOn.Value).ToShortDateTimeString()
 																					: null))
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			CreateMap<IPersonRequest, Link>()
 				.ForMember(d => d.rel, o => o.UseValue("self"))
 				.ForMember(d => d.href, o => o.MapFrom(s => s.Id.HasValue ? 
-																			_linkProvider.Invoke().TextRequestLink(s.Id.Value) : 
+																			_linkProvider.Invoke().RequestDetailLink(s.Id.Value) : 
 																			null))
 				.ForMember(d => d.Methods, o => o.MapFrom(s =>
 																			{

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
 
@@ -64,5 +65,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.Exists, Is.False);
 		}
+
+		[Then(@"I should not see the absence request tab \(invisible\)")]
+		public void ThenIShouldNotSeeTheAbsenceRequestTabInvisible()
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.DisplayHidden(), Is.True);
+		}
+
 	}
 }

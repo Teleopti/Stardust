@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			repository.Stub(x => x.FindTextAndAbsenceRequestsForAgent(person, paging)).Return(personRequests);
 
-			target.RetrieveTextRequests(paging);
+			target.RetrieveTextAndAbsenceRequests(paging);
 
 			repository.AssertWasCalled(x => x.FindTextAndAbsenceRequestsForAgent(person, paging));
 		}

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -10682,7 +10682,7 @@ These options are activated:
     <comment>Application function Absence requests for the web</comment>
   </data>
   <data name="FullDay" xml:space="preserve">
-    <value> Full Day</value>
+    <value>Full Day</value>
     <comment>Full day for request</comment>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
@@ -10725,9 +10725,9 @@ These options are activated:
     <value>Missing absence type.</value>
     <comment>Missing absence type.</comment>
   </data>
-  <data name="SendRequest" xml:space="preserve">
-    <value>Send</value>
-    <comment>Send a text request/absence request...</comment>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Submit</value>
+    <comment>Submit a text request/absence request...</comment>
   </data>
   <data name="OverridePeriod" xml:space="preserve">
     <value>Override Period</value>
