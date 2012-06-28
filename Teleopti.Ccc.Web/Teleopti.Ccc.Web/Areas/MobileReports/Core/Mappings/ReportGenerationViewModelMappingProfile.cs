@@ -123,13 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 		{
 			// Analytics always returns order Monday..Sunday with 1..7 but there may be gaps...
 			return orig.OrderBy(
-				o =>
-					{
-						return ((o.PeriodNumber - (int)firstDayOfWeek) + 7) % 7;
-					}
-		
-
-	);
+				o => ((o.PeriodNumber - (int)firstDayOfWeek) + 7) % 7);
 		}
 	}
 

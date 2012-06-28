@@ -53,9 +53,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			public IPersonRequest Convert(ResolutionContext context)
 			{
 				var source = context.SourceValue as AbsenceRequestForm;
-				var destination = context.DestinationValue as IPersonRequest;
 
-				destination = new PersonRequest(_loggedOnUser.Invoke().CurrentUser()) {Subject = source.Subject};
+				var destination = new PersonRequest(_loggedOnUser.Invoke().CurrentUser()) {Subject = source.Subject};
 
 				destination.TrySetMessage(source.Message ?? "");
 
