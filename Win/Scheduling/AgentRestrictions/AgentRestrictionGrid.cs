@@ -216,9 +216,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor, schedulePeriodTargetTimeCalculator,workShiftWeekMinMaxCalculator);
 			var periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
-			var dataExtractor = new AgentRestrictionsDisplayDataExtractor(schedulePeriodTargetTimeCalculator, workShiftMinMaxCalculator,periodScheduledAndRestrictionDaysOff,restrictionExtractor);
+			var dataExtractor = new AgentRestrictionsDisplayDataExtractor(schedulePeriodTargetTimeCalculator, workShiftMinMaxCalculator, periodScheduledAndRestrictionDaysOff);
 
-			dataExtractor.ExtractTo(displayRow, _schedulingOptions); //<- TODO use schedules?
+			dataExtractor.ExtractTo(displayRow, _schedulingOptions); 
 			displayRow.SetWarnings();
 			displayRow.State = AgentRestrictionDisplayRowState.Available;
 

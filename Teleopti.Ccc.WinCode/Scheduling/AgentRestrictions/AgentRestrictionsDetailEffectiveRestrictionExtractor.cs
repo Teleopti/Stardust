@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var virtualSchedulePeriod = scheduleDay.Person.VirtualSchedulePeriod(preferenceCellData.TheDate);
 			if (!virtualSchedulePeriod.IsValid) return;
 
-			IPersonPeriod personPeriod = scheduleDay.Person.Period(preferenceCellData.TheDate);
+			var personPeriod = scheduleDay.Person.Period(preferenceCellData.TheDate);
 			if (personPeriod == null) return;
 
 			var schedulePeriodStartDate = scheduleDay.Person.SchedulePeriodStartDate(preferenceCellData.TheDate);

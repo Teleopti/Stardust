@@ -50,11 +50,11 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		private void PaintPrefferedShiftCategory(Graphics g, Rectangle clientRectangle, IEffectiveRestriction effectiveRestriction, StringFormat format)
 		{
-			Rectangle rect = RestrictionRect(clientRectangle);
-			Rectangle gradRect = new Rectangle(rect.Location, rect.Size);
+			var rect = RestrictionRect(clientRectangle);
+			var gradRect = new Rectangle(rect.Location, rect.Size);
 			gradRect.Inflate(0, 16);
 			gradRect.Offset(0, 15);
-			using (LinearGradientBrush lBrush = new LinearGradientBrush(gradRect, Color.WhiteSmoke, effectiveRestriction.ShiftCategory.DisplayColor, 90, false))
+			using (var lBrush = new LinearGradientBrush(gradRect, Color.WhiteSmoke, effectiveRestriction.ShiftCategory.DisplayColor, 90, false))
 			{
 				GridHelper.FillRoundedRectangle(g, rect, 7, lBrush, 0);
 			}
@@ -64,15 +64,15 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		private void PaintPrefferedAbsence(Graphics g, Rectangle clientRectangle, IEffectiveRestriction effectiveRestriction, StringFormat format, IPreferenceCellData preferenceCellData)
 		{
-			Rectangle rect = RestrictionRect(clientRectangle);
-			Rectangle gradRect = new Rectangle(rect.Location, rect.Size);
+			var rect = RestrictionRect(clientRectangle);
+			var gradRect = new Rectangle(rect.Location, rect.Size);
 			gradRect.Inflate(0, 16);
 			gradRect.Offset(0, 15);
 
 			var startSize = g.MeasureString(preferenceCellData.ShiftLengthScheduledShift, GridControlBase.Font);
 			var paddingLength = Math.Max((rect.Width - startSize.Width) / 2, 0);
 
-			using (LinearGradientBrush lBrush = new LinearGradientBrush(gradRect, Color.WhiteSmoke, effectiveRestriction.Absence.DisplayColor, 90, false))
+			using (var lBrush = new LinearGradientBrush(gradRect, Color.WhiteSmoke, effectiveRestriction.Absence.DisplayColor, 90, false))
 			{
 				GridHelper.FillRoundedRectangle(g, rect, 0, lBrush, 0);
 			}
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		private void PaintPrefferedAbsenceOnContractDayOff(Graphics g, Rectangle clientRectangle, StringFormat format, IPreferenceCellData preferenceCellData)
 		{
-			Rectangle rect = RestrictionRect(clientRectangle);
+			var rect = RestrictionRect(clientRectangle);
 			using (var lBrush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, preferenceCellData.EffectiveRestriction.Absence.DisplayColor))
 			{
 				GridHelper.FillRoundedRectangle(g, rect, 0, lBrush, 0);
@@ -102,11 +102,11 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		private void PaintPrefferedExtended(Graphics g, Rectangle clientRectangle , StringFormat format)
 		{
-			Rectangle rect = RestrictionRect(clientRectangle);
-			Rectangle gradRect = new Rectangle(rect.Location, rect.Size);
+			var rect = RestrictionRect(clientRectangle);
+			var gradRect = new Rectangle(rect.Location, rect.Size);
 			gradRect.Inflate(0, 16);
 			gradRect.Offset(0, 15);
-			using (LinearGradientBrush lBrush = new LinearGradientBrush(gradRect, Color.WhiteSmoke, Color.LightGray, 90, false))
+			using (var lBrush = new LinearGradientBrush(gradRect, Color.WhiteSmoke, Color.LightGray, 90, false))
 			{
 				GridHelper.FillRoundedRectangle(g, rect, 7, lBrush, 0);
 			}

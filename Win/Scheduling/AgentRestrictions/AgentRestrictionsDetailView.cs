@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	public class AgentRestrictionsDetailView : ScheduleViewBase, IAgentRestrictionsDetailView
 	{
 		private readonly AgentRestrictionsDetailModel _model;
-		private IWorkShiftWorkTime _workShiftWorkTime;
+		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 
 		public AgentRestrictionsDetailView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,

@@ -90,20 +90,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_cellPainters = new List<IPreferenceCellPainter>
                                 {
 									new AgentRestrictionsSchedulePainter(grid),
-									//new ScheduledPainter(), --
-									//new AbsencePainter(grid), --
-									//new AbsenceOnContractDayOffPainter(grid),--
-									//new ScheduledDayOffPainter(grid), --
-									//new ScheduledShiftPainter(grid), --
-
 									new AgentRestrictionsPreferencePainter(grid),
-									//new PreferredDayOffPainter(grid), --
-									//new PreferredShiftCategoryPainter(grid),--
-									//new PreferredAbsencePainter(grid), --
-									//new AbsenceOnContractDayOffPainter(grid),
-									//new PreferredExtendedPainter(grid), --
-									//new PreferredAbsenceOnContractDayOffPainter(grid) --,
-
 									new EffectiveRestrictionPainter(grid),
 									new EffectiveRestrictionRtlPainter(grid),
 									new NotValidPainter(),
@@ -119,18 +106,15 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "rowIndex-1")]
 		protected override void OnDraw(Graphics g, Rectangle clientRectangle, int rowIndex, int colIndex, GridStyleInfo style)
 		{
-			int currentCell = ((rowIndex - 1) * 7) + colIndex;
+			var currentCell = ((rowIndex - 1) * 7) + colIndex;
 			IPreferenceCellData cellData;
 			_model.DetailModel.DetailData().TryGetValue(currentCell - 1, out cellData);
-			//_model.RestrictionSummaryPresenter.CellDataCollection.TryGetValue(currentCell - 1, out cellData);
+			
 			g.SmoothingMode = SmoothingMode.HighQuality;
 
 			base.OnDraw(g, clientRectangle, rowIndex, colIndex, style);
-			PreferenceRestriction preference = new PreferenceRestriction();
+			var preference = new PreferenceRestriction();
 			var effectiveRestriction = cellData.EffectiveRestriction;
-
-			//StringFormat format = new StringFormat();
-			//format.Alignment = StringAlignment.Center;
 
 			using (var format = new StringFormat())
 			{
@@ -149,7 +133,6 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 					}
 				}
 			}
-			//format.Dispose();
 		}
 
 		protected override void Dispose(bool disposing)
