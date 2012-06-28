@@ -241,6 +241,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			.not(':button, :submit, :reset')
 			.reset()
 			;
+		$('#Absence-type').prop('selectedIndex', 0);
 		$('#Fullday-check').attr('checked', false);
 		_clearValidationError();
 		_enableDetailSecion();
