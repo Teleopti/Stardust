@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldRollbackGroupIfAnyoneInGroupIsUnsuccessful()
         {
             var range1 = _mock.StrictMock<IScheduleRange>();
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldJumpIfBestShiftCategoryIsNull()
         {
             var range1 = _mock.StrictMock<IScheduleRange>();
