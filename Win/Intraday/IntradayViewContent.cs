@@ -496,15 +496,6 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void wpfShiftEditor_AddAbsence(object sender, ShiftEditorEventArgs e)
         {
-            //Note: When selecting in scheduler, the part is always 24h, in intraday it differs
-            //so if e.Period == null, we need to get a 24h period from the part:
-
-            if (e.Period == null && e.SchedulePart != null)
-            {
-                DateTime localDay = TimeZoneHelper.ConvertFromUtc(e.SchedulePart.Period.StartDateTime);
-                DateTime localDayZero = localDay.Date;
-                e.Period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDayZero, localDayZero.AddDays(1));
-            }
             _scheduleView.Presenter.AddAbsence(new List<IScheduleDay> { e.SchedulePart }, e.Period);
             InvalidateScheduleView(e.SchedulePart);
         }
