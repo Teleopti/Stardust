@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			{
 				successfulAttempt = processClosingAction.Invoke();
 			}
-			catch (Exception exception)
+			catch (Exception)
 			{
 				return false;
 			}
