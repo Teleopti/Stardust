@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.Win.Shifts
                             _eventAggregator.GetEvent<RuleSetBagChanged>().Publish(((IRuleSetBag)currentNode.TagObject));
                         }
                     }
-                    catch (ArgumentOutOfRangeException ex)
+                    catch (ArgumentOutOfRangeException)
                     {
-                        showMessagebox(UserTexts.Resources.TheNameIsTooLong, ex.ToString());
+						showMessagebox(UserTexts.Resources.TheNameIsTooLong, UserTexts.Resources.TextTooLong);
                         _defaultTreeView.BeginEdit();
                         return;
                     }
