@@ -246,6 +246,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			.reset()
 			;
 		$('#Absence-type').prop('selectedIndex', 0);
+		requestViewModel.IsFullDay(false);
 		$('#Schedule-addRequest-fromDate-input').val(date);
 		$('#Schedule-addRequest-toDate-input').val(date);
 		$('#Text-request-tab').click();
