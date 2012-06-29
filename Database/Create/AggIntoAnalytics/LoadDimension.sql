@@ -110,11 +110,12 @@ WHERE --filter out Existing log_object
 					WHERE	target.log_object_id = source.log_object_id
 				)
 AND		source.log_object_id = $(logobjectid)
+
 ----------------
 -- update changes on queues
+----------------
 UPDATE dbo.queues
 SET 
-	queue			= source.queue, 
 	orig_desc		= source.orig_desc,
 	log_object_id	= source.log_object_id,
 	orig_queue_id	= source.orig_queue_id, 
@@ -126,6 +127,7 @@ WHERE
 AND dbo.queues.log_object_id = $(logobjectid)
 
 -- Insert new queues
+SET IDENTITY_INSERT dbo.queues ON
 INSERT INTO dbo.queues
 	( 
 	queue,
@@ -147,11 +149,13 @@ WHERE --filter out Existing queues
 					WHERE	target.queue = source.queue
 				)
 AND		source.log_object_id = $(logobjectid)
+SET IDENTITY_INSERT dbo.queues OFF
+
 ------------------
 -- update changes on agent_info
+------------------
 UPDATE dbo.agent_info
 SET 
-	Agent_id		= source.Agent_id, 
 	Agent_name		= source.Agent_name,
 	is_active		= source.is_active,
 	log_object_id	= source.log_object_id, 
@@ -163,6 +167,7 @@ WHERE
 AND dbo.agent_info.log_object_id = $(logobjectid)
 
 -- Insert new agent_info
+SET IDENTITY_INSERT dbo.agent_info ON
 INSERT INTO dbo.agent_info
 	( 
 	Agent_id,
@@ -185,6 +190,7 @@ WHERE --filter out Existing agent_info
 					WHERE	target.Agent_id = source.Agent_id
 				)
 AND		source.log_object_id = $(logobjectid)
+SET IDENTITY_INSERT dbo.agent_info OFF
 ------------------
 -- update changes on ccc_system_info
 UPDATE dbo.ccc_system_info
