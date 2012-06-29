@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IList<IShiftProjectionCache> FilterList(IList<IShiftProjectionCache> shiftList, IList<IPerson> persons, 
 			ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, DateOnly dateOnly)
 		{
