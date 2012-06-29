@@ -162,5 +162,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Current.GoTo("about:blank");
 		}
 
+		public static void GotoBlank()
+		{
+			Browser.Current.GoTo("about:blank");
+		}
+
 	}
 }
