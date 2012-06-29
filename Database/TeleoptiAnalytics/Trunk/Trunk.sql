@@ -1,5 +1,8 @@
---Robin: Changing behavior of ETL locking
-
+----------------
+--Name: Robin
+--Date: 2012-06-29
+--Desc: #19922 -  Changing behavior of ETL locking
+---------------- 
 if not exists(select * from sys.columns where Name = N'lock_until' and Object_ID = Object_ID(N'mart.sys_etl_running_lock')) 
 begin 
 ALTER TABLE mart.sys_etl_running_lock ADD
@@ -8,7 +11,7 @@ end
 GO
 ----------------  
 --Name: DavidJ
---Date: 2012-06-28
+--Date: 2012-06-29
 --Desc: #19806 - Fix two Identity Columns and Add correct Clustered index on queue_logg + agent_logg
 ----------------
 
@@ -20,6 +23,8 @@ ALTER TABLE dbo.queues DROP CONSTRAINT FK_queues_log_object
 ALTER TABLE dbo.agent_logg DROP CONSTRAINT FK_agent_logg_queues
 GO
 
+EXEC sp_rename N'[dbo].[queues].[PK_queues]', N'PK_queues_toBeDropped', N'INDEX'
+
 --move data to temp table
 CREATE TABLE dbo.Tmp_queues
 	(
@@ -29,11 +34,19 @@ CREATE TABLE dbo.Tmp_queues
 	orig_queue_id int NULL,
 	display_desc nvarchar(50) NULL
 	)
+
+--Re-Add contstraints
+ALTER TABLE dbo.Tmp_queues ADD CONSTRAINT
+	PK_queues PRIMARY KEY CLUSTERED 
+	(
+	queue
+	)
 	
 SET IDENTITY_INSERT dbo.Tmp_queues ON
 GO
+
 INSERT INTO dbo.Tmp_queues (queue, orig_desc, log_object_id, orig_queue_id, display_desc)
-SELECT queue, orig_desc, log_object_id, orig_queue_id, display_desc FROM dbo.queues WITH (HOLDLOCK TABLOCKX)
+SELECT queue, orig_desc, log_object_id, orig_queue_id, display_desc FROM dbo.queues WITH (HOLDLOCK, TABLOCKX)
 
 SET IDENTITY_INSERT dbo.Tmp_queues OFF
 GO
@@ -43,14 +56,6 @@ DROP TABLE dbo.queues
 GO
 EXECUTE sp_rename N'dbo.Tmp_queues', N'queues', 'OBJECT' 
 GO
-
---Re-Add contstraints
-ALTER TABLE dbo.queues ADD CONSTRAINT
-	PK_queues PRIMARY KEY CLUSTERED 
-	(
-	queue
-	)
-
 
 ALTER TABLE [dbo].[queue_logg]  ADD CONSTRAINT [FK_queue_logg_queues] FOREIGN KEY([queue]) REFERENCES [dbo].[queues] ([queue])
 ALTER TABLE dbo.queues ADD CONSTRAINT FK_queues_log_object FOREIGN KEY (log_object_id) REFERENCES dbo.log_object
@@ -63,6 +68,9 @@ ALTER TABLE dbo.agent_info DROP CONSTRAINT FK_agent_info_log_object
 ALTER TABLE dbo.quality_logg DROP CONSTRAINT FK_quality_logg_agent_info
 ALTER TABLE dbo.agent_logg DROP CONSTRAINT FK_agent_logg_agent_info
 
+EXEC sp_rename N'[dbo].[agent_info].[PK_agent_info]', N'PK_agent_info_toBeDropped', N'INDEX'
+EXEC sp_rename N'[dbo].[agent_info].[uix_orig_agent_id]', N'uix_orig_agent_id_toBeDropped', N'INDEX'
+
 --move data to tmp table
 CREATE TABLE dbo.Tmp_agent_info
 	(
@@ -73,10 +81,20 @@ CREATE TABLE dbo.Tmp_agent_info
 	orig_agent_id nvarchar(50) NOT NULL
 	)
 GO
+--re-Add constraints and indexes
+ALTER TABLE dbo.Tmp_agent_info ADD CONSTRAINT PK_agent_info PRIMARY KEY CLUSTERED (Agent_id)
+
+CREATE UNIQUE NONCLUSTERED INDEX uix_orig_agent_id ON dbo.Tmp_agent_info
+	(
+	log_object_id,
+	orig_agent_id
+	)
+GO
+
 SET IDENTITY_INSERT dbo.Tmp_agent_info ON
 GO
 INSERT INTO dbo.Tmp_agent_info (Agent_id, Agent_name, is_active, log_object_id, orig_agent_id)
-SELECT Agent_id, Agent_name, is_active, log_object_id, orig_agent_id FROM dbo.agent_info WITH (HOLDLOCK TABLOCKX)
+SELECT Agent_id, Agent_name, is_active, log_object_id, orig_agent_id FROM dbo.agent_info WITH (HOLDLOCK, TABLOCKX)
 SET IDENTITY_INSERT dbo.Tmp_agent_info OFF
 GO
 
@@ -86,15 +104,6 @@ GO
 EXECUTE sp_rename N'dbo.Tmp_agent_info', N'agent_info', 'OBJECT' 
 GO
 
---re-Add constraints and indexes
-ALTER TABLE dbo.agent_info ADD CONSTRAINT PK_agent_info PRIMARY KEY CLUSTERED (Agent_id)
-
-CREATE UNIQUE NONCLUSTERED INDEX uix_orig_agent_id ON dbo.agent_info
-	(
-	log_object_id,
-	orig_agent_id
-	)
-GO
 ALTER TABLE dbo.agent_info ADD CONSTRAINT FK_agent_info_log_object FOREIGN KEY (log_object_id) REFERENCES dbo.log_object (log_object_id)
 ALTER TABLE dbo.agent_logg ADD CONSTRAINT FK_agent_logg_agent_info FOREIGN KEY (agent_id) REFERENCES dbo.agent_info	(Agent_id)
 ALTER TABLE dbo.quality_logg ADD CONSTRAINT	FK_quality_logg_agent_info FOREIGN KEY (agent_id) REFERENCES dbo.agent_info (Agent_id)
@@ -181,7 +190,7 @@ SELECT [queue]
       ,[direct_in_call_dur]
       ,[transfer_out_call_cnt]
       ,[admin_dur]
-FROM [dbo].[agent_logg]
+FROM [dbo].[agent_logg] WITH (HOLDLOCK, TABLOCKX)
 
 --swap names
 DROP TABLE [dbo].[agent_logg]
@@ -236,6 +245,47 @@ ALTER TABLE [dbo].[tmp_queue_logg] ADD  CONSTRAINT [PK_queue_logg] PRIMARY KEY N
 	[date_from] ASC,
 	[interval] ASC
 )
+
+INSERT INTO [dbo].[tmp_queue_logg]
+           ([queue]
+           ,[date_from]
+           ,[interval]
+           ,[offd_direct_call_cnt]
+           ,[overflow_in_call_cnt]
+           ,[aband_call_cnt]
+           ,[overflow_out_call_cnt]
+           ,[answ_call_cnt]
+           ,[queued_and_answ_call_dur]
+           ,[queued_and_aband_call_dur]
+           ,[talking_call_dur]
+           ,[wrap_up_dur]
+           ,[queued_answ_longest_que_dur]
+           ,[queued_aband_longest_que_dur]
+           ,[avg_avail_member_cnt]
+           ,[ans_servicelevel_cnt]
+           ,[wait_dur]
+           ,[aband_short_call_cnt]
+           ,[aband_within_sl_cnt])
+SELECT [queue]
+      ,[date_from]
+      ,[interval]
+      ,[offd_direct_call_cnt]
+      ,[overflow_in_call_cnt]
+      ,[aband_call_cnt]
+      ,[overflow_out_call_cnt]
+      ,[answ_call_cnt]
+      ,[queued_and_answ_call_dur]
+      ,[queued_and_aband_call_dur]
+      ,[talking_call_dur]
+      ,[wrap_up_dur]
+      ,[queued_answ_longest_que_dur]
+      ,[queued_aband_longest_que_dur]
+      ,[avg_avail_member_cnt]
+      ,[ans_servicelevel_cnt]
+      ,[wait_dur]
+      ,[aband_short_call_cnt]
+      ,[aband_within_sl_cnt]
+FROM [dbo].[queue_logg] WITH (HOLDLOCK, TABLOCKX)
 
 --swap names
 DROP TABLE [dbo].[queue_logg]
