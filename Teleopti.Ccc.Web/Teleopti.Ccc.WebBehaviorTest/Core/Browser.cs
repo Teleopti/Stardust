@@ -10,9 +10,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof (Browser));
 
-		private static readonly IBrowserHandler<IE> BrowserHandler = new IEHandler();
+		private static readonly IBrowserHandler<IE> BrowserHandler = new WatiNMultiBrowserIEHandler();
 
-		private static IE ScenarioBrowser { get { return ScenarioContext.Current.Value<IE>(); } set { ScenarioContext.Current.Value(value); } }
+		//private static IE ScenarioBrowser { get { return ScenarioContext.Current.Value<IE>(); } set { ScenarioContext.Current.Value(value); } }
+		private static IE GlobalBrowser { get; set; }
 
 		public static IE Current
 		{
@@ -20,22 +21,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			{
 				if (!IsStarted())
 					Start();
-				return ScenarioBrowser;
+				return GlobalBrowser;
 			}
 		}
 
-		private static void Start() { ScenarioBrowser = BrowserHandler.Start(); }
+		public static void Start() { GlobalBrowser = BrowserHandler.Start(); }
 
-		public static bool IsStarted() { return ScenarioBrowser != null; }
+		public static bool IsStarted() { return GlobalBrowser != null; }
 
 		public static void PrepareForTestRun() { BrowserHandler.PrepareForTestRun(); }
 
 		public static void Close()
 		{
-			var browser = ScenarioBrowser;
-			ScenarioBrowser = null;
+			GlobalBrowser = null;
 			Log.Write("Closing the browser");
-			BrowserHandler.Close(browser);
+			BrowserHandler.Close();
 		}
 
 	}

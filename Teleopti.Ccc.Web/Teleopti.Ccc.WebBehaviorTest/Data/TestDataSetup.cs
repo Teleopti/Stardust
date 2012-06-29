@@ -57,6 +57,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Log.Write("SetupFakeState took " + DateTime.Now.Subtract(startTime));
 		}
 
+		public static void CreateMinimumTestData()
+		{
+			var startTime = DateTime.Now;
+			DataSourceHelper.PersistAuditSetting();
+			UnitOfWorkAction(CreatePersonThatCreatesTestData);
+			UnitOfWorkAction(CreateLicense);
+			Log.Write("CreateMinimumTestData took " + DateTime.Now.Subtract(startTime));
+		}
+
 		public static void CreateLegacyTestData()
 		{
 			var startTime = DateTime.Now;
@@ -103,9 +112,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateAndPersistTestData()
 		{
-			DataSourceHelper.PersistAuditSetting();
-			UnitOfWorkAction(CreatePersonThatCreatesTestData);
-			UnitOfWorkAction(CreateLicense);
 			UnitOfWorkAction(CreateBusinessUnits);
 			UnitOfWorkAction(CreateAllRaptorApplicationFunctions);
 			UnitOfWorkAction(CreateMatrixApplicationFunctions);

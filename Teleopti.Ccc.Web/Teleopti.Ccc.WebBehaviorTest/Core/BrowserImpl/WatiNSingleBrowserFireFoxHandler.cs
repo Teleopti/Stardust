@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -8,36 +7,32 @@ using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
-	public class IEHandler : IBrowserHandler<IE>
+	public class WatiNSingleBrowserFireFoxHandler : IBrowserHandler<FireFox>
 	{
-		private const string ProcessName = "iexplore";
+		private const string ProcessName = "firefox";
 
-		private static readonly ILog Log = LogManager.GetLogger(typeof(IEHandler));
+		private static readonly ILog Log = LogManager.GetLogger(typeof (WatiNSingleBrowserFireFoxHandler));
 
-		private static IDisposable BrowserLock { get { return ScenarioContext.Current.Value<SystemLevelLock>(); } set { ScenarioContext.Current.Value((SystemLevelLock)value); } }
+		private static IDisposable BrowserLock { get { return ScenarioContext.Current.Value<SystemLevelLock>(); } set { ScenarioContext.Current.Value((SystemLevelLock) value); } }
 
-		private static bool CloseByWatiNCloseNDisposeFailed = false;
+		private FireFox _browser;
 
-		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public IE Start()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		public FireFox Start()
 		{
 			LockBrowser();
 			Settings.AutoCloseDialogs = true;
 			Settings.AutoMoveMousePointerToTopLeft = false;
 			Settings.HighLightColor = "Green";
 			Settings.HighLightElement = true;
-			Settings.MakeNewIe8InstanceNoMerge = true;
-			Settings.MakeNewIeInstanceVisible = true;
-			var browser = new IE();
-			browser.ClearCache();
-			browser.ClearCookies();
-			browser.BringToFront();
-			return browser;
+			_browser = new FireFox();
+			_browser.BringToFront();
+			return _browser;
 		}
 
 		public void PrepareForTestRun() { MakeSureBrowserIsNotRunning(); }
 
-		public void Close(IE browser)
+		public void Close()
 		{
 			var startTime = DateTime.Now;
 
@@ -47,9 +42,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 					ProcessName,
 					new Func<bool>[]
 						{
-							() => CloseByWatiNCloseNDispose(browser),
+							() => CloseByWatiNCloseNDispose(_browser),
 							() => BrowserProcessHelpers.CloseByClosingMainWindow(ProcessName),
-							() => CloseByWatiNForceClose(browser),
 							() => BrowserProcessHelpers.CloseByKillingProcesses(ProcessName)
 						});
 				if (!result)
@@ -89,29 +83,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 
 
-		private static bool CloseByWatiNForceClose(IE browser)
-		{
-			browser.ForceClose();
-			return true;
-		}
-
 		private static bool CloseByWatiNCloseNDispose(WatiN.Core.Browser browser)
 		{
-			if (CloseByWatiNCloseNDisposeFailed)
-				return false;
-			var success = Task.Factory
+			return Task.Factory
 				.StartNew(() =>
 				          	{
 				          		browser.Close();
 				          		browser.Dispose();
 				          	})
 				.Wait(TimeSpan.FromSeconds(2));
-			if (!success)
-			{
-				CloseByWatiNCloseNDisposeFailed = true;
-				return false;
-			}
-			return true;
 		}
 
 
@@ -126,6 +106,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			BrowserLock.Dispose();
 			BrowserLock = null;
 		}
-
 	}
 }

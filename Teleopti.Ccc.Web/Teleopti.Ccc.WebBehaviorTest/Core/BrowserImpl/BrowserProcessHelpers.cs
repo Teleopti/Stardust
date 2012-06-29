@@ -8,6 +8,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
 	public static class BrowserProcessHelpers
 	{
+		internal static bool CloseByClosingMainWindow(string processName, IntPtr windowHandle)
+		{
+			var processes = Process.GetProcessesByName(processName);
+			foreach (var process in processes)
+			{
+				if (process.MainWindowHandle == windowHandle)
+				{
+					process.CloseMainWindow();
+					return true;
+				}
+			}
+			return false;
+		}
+
 		internal static bool CloseByClosingMainWindow(string processName)
 		{
 			var processes = Process.GetProcessesByName(processName);
@@ -34,22 +48,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 		internal static bool AttemptToCloseProcess(string processName, IEnumerable<Func<bool>> processClosingActions)
 		{
-			return processClosingActions.Any(action => AttemptToCloseProcess(processName, action));
+			System.IO.File.AppendAllText(@"C:\AfterTestRun.txt", "AttemptToCloseProcess\r\n");
+			return processClosingActions.Any(action =>
+			                                 	{
+													System.IO.File.AppendAllText(@"C:\AfterTestRun.txt", "AttemptToCloseProcess/Action\r\n");
+													return AttemptToCloseProcess(processName, action);
+			                                 	});
 		}
 
 		private static bool AttemptToCloseProcess(string processName, Func<bool> processClosingAction)
 		{
+			System.IO.File.AppendAllText(@"C:\AfterTestRun.txt", "AttemptToCloseProcess\r\n");
 			var successfulAttempt = false;
 			try
 			{
+				System.IO.File.AppendAllText(@"C:\AfterTestRun.txt", "AttemptToCloseProcess/Invoke\r\n");
 				successfulAttempt = processClosingAction.Invoke();
+				System.IO.File.AppendAllText(@"C:\AfterTestRun.txt", "/AttemptToCloseProcess/Invoke" + successfulAttempt + "\r\n");
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+				System.IO.File.AppendAllText(@"C:\AfterTestRun.txt", "AttemptToCloseProcess/Exception" + e + "\r\n");
 				return false;
 			}
 			if (successfulAttempt)
 			{
+				System.IO.File.AppendAllText(@"C:\AfterTestRun.txt", "AttemptToCloseProcess/Wait\r\n");
 				return WaitForProcessToExit(processName);
 			}
 			return false;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
@@ -13,6 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public TestController(ISessionSpecificDataProvider sessionSpecificDataProvider)
 		{
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
+		}
+
+		public ActionResult AfterScenario()
+		{
+			_sessionSpecificDataProvider.RemoveCookie();
+			return new FilePathResult(@"~\Areas\Start\Views\Test\AfterScenario.html", "text/html");
 		}
 
 		public EmptyResult ExpireMyCookie()

@@ -1,9 +1,10 @@
+using System;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
-	public static class TestMethods
+	public static class TestControllerMethods
 	{
 
 		public static void CreateCorruptCookie()
@@ -19,6 +20,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void ExpireMyCookie()
 		{
 			Navigation.GoTo("Test/ExpireMyCookie");
+		}
+
+		public static void BeforeTestRun()
+		{
+			Browser.Current.GoTo("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"));
+		}
+
+		public static void AfterScenario()
+		{
+			Navigation.GoTo("Test/AfterScenario");
 		}
 
 		public static void ExpireMyCookieInsidePortal()

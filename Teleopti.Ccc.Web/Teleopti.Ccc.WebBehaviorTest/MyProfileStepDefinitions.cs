@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		private static void ChangeCulture(string culture)
 		{
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			TestMethods.PageLog("Page have not refreshed");
+			TestControllerMethods.PageLog("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
 			page.CultureSelect.Select(culture);
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		private static void ChangeUiCulture(string culture)
 		{
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			TestMethods.PageLog("Page have not refreshed");
+			TestControllerMethods.PageLog("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
 			page.CultureUiSelect.Select(culture);
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));

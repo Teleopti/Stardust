@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
 	public static class ExperimentalDataMode
 	{
-		public static bool ForEachScenario = false;
+		public static bool ForEachScenario = true;
 	}
 
 	[Binding]
@@ -45,15 +45,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			_createDataTimeSpent = TimeSpan.Zero;
 			_scenarioCount = 0;
 
-			log4net.Config.XmlConfigurator.Configure();
 			Browser.PrepareForTestRun();
+			if (!Browser.IsStarted())
+				Browser.Start();
+			TestControllerMethods.BeforeTestRun();
+
+			TestSiteConfigurationSetup.Setup();
+
+			log4net.Config.XmlConfigurator.Configure();
 			EventualTimeouts.Set(TimeSpan.FromSeconds(5));
 
 			TestDataSetup.CreateDataSource();
-			TestSiteConfigurationSetup.Setup();
 
 			if (!ExperimentalDataMode.ForEachScenario)
 			{
+				TestDataSetup.SetupFakeState();
+				TestDataSetup.CreateMinimumTestData();
 				CreateData();
 			}
 
@@ -80,7 +87,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			if (ExperimentalDataMode.ForEachScenario)
 			{
+				TestDataSetup.SetupFakeState();
 				ClearCcc7Data();
+				TestDataSetup.CreateMinimumTestData();
 				CreateData();
 			}
 
@@ -97,7 +106,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			var startTime = DateTime.Now;
 
-			CloseBrowserAndSaveExceptions();
+			HandleScenarioException();
+			//if (Browser.IsStarted())
+			//    Browser.Close();
+			TestControllerMethods.AfterScenario();
 
 			var spentTime = DateTime.Now.Subtract(startTime);
 			_afterScenarioTimeSpent = _afterScenarioTimeSpent.Add(spentTime);
@@ -120,7 +132,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[AfterTestRun]
 		public static void AfterTestRun()
 		{
+			var startTime = DateTime.Now;
+
+			if (Browser.IsStarted())
+				Browser.Close();
+
 			TestSiteConfigurationSetup.TearDown();
+
+			Log.Write("AfterTestRun took " + DateTime.Now.Subtract(startTime));
 		}
 
 
@@ -163,8 +182,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			var startTime = DateTime.Now;
 
-			TestDataSetup.SetupFakeState();
-
 			TestDataSetup.CreateLegacyTestData();
 
 			DataContext.Data().Setup(new CommonContract());
@@ -187,22 +204,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			_clearDataTimeSpent = _clearDataTimeSpent.Add(spentTime);
 		}
 
-
-		private void CloseBrowserAndSaveExceptions()
+		private void HandleScenarioException()
 		{
 			if (!Browser.IsStarted()) return;
-			try
+			if (ScenarioContext.Current.TestError != null)
 			{
-				if (ScenarioContext.Current.TestError != null)
-				{
-					var artifactFileName = GetCommonArtifactFileNameForScenario();
-					SaveScreenshot(artifactFileName);
-					throw MakeScenarioException(artifactFileName);
-				}
-			}
-			finally
-			{
-				Browser.Close();
+				var artifactFileName = GetCommonArtifactFileNameForScenario();
+				SaveScreenshot(artifactFileName);
+				throw MakeScenarioException(artifactFileName);
 			}
 		}
 
