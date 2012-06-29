@@ -32,7 +32,7 @@
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17774'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI15499'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17994'">true</RunWebBehaviorTests>
-		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17914'">true</RunWebBehaviorTests>
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17995'">true</RunWebBehaviorTests>
 		
 		<vs2008ide>c:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe</vs2008ide>
 		<AsDBDeploy>c:\Program Files (x86)\Microsoft SQL Server\100\Tools\Binn\VSShell\Common7\IDE\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>

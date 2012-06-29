@@ -50,15 +50,6 @@ namespace Teleopti.Ccc.Win.Common
 				Result = numericTextBox1.DoubleValue;
         }
 
-		protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-		{
-			base.OnClosing(e);
-			if(!numericTextBox1.IsValid())
-			{
-				e.Cancel = true;
-			}
-		}
-
 		public double? Result { get; private set; }
 
         private void buttonAdvCancel_Click(object sender, EventArgs e)
@@ -68,7 +59,16 @@ namespace Teleopti.Ccc.Win.Common
 
 		private void numericTextBox1_TextChanged(object sender, EventArgs e)
 		{
-			numericTextBox1.ForeColor = numericTextBox1.IsValid() ? Color.Black : Color.Red;
+            if (numericTextBox1.IsValid())
+            {
+                numericTextBox1.ForeColor = Color.Black;
+                buttonAdvSave.Enabled = true;
+            }
+            else
+            {
+                numericTextBox1.ForeColor = Color.Red;
+                buttonAdvSave.Enabled = false;
+            }
 		}
 
         public override string HelpId

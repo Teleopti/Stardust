@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.AgentPortal.Common
         //help class
         //private readonly HelpHelper _raptorHelp = new HelpHelper();
         private readonly IList<Control> _manualHelpContextList = new List<Control>();
+        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseRibbonForm"/> class.
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.AgentPortal.Common
         {
              if (e.KeyCode == Keys.F1)
              {
-                 bool local = true;
+                bool local = true;
                 GuiHelper guiHelper = new GuiHelper();
                 Control activeControl = guiHelper.GetActiveControl(this);
                 BaseUserControl userControl = null;

@@ -139,7 +139,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 				_updateDayAndCloseEditSection,
 				'',
 				_extractDataFromForm($('#StudentAvailability-edit-section').data('mytime-selected-date')));
-		});
+		}).button('enable');
 		_initLabels();
 	}
 

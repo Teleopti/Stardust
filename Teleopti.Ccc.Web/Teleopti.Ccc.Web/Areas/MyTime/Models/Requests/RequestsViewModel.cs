@@ -29,5 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string RawDateTo;
 		public string RawTimeFrom;
 		public string RawTimeTo;
+		public bool IsFullDay;
 	}
 }

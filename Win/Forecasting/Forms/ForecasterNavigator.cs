@@ -1309,7 +1309,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private static void initializeExportAcrossBusinessUnitsWizard(ExportMultisiteSkillToSkillCommandModel model, IExportAcrossBusinessUnitsSettingsProvider settingProvider)
         {
             var savedSettings = settingProvider.ExportAcrossBusinessUnitsSettings;
-            settingProvider.TransformSerilizableToSelectionModels().ForEach(
+            settingProvider.TransformSerializableToSelectionModels().ForEach(
                 model.MultisiteSkillSelectionModels.Add);
             if (!savedSettings.Period.Equals(new DateOnlyPeriod()))
                 model.Period = new DateOnlyPeriodDto(savedSettings.Period);

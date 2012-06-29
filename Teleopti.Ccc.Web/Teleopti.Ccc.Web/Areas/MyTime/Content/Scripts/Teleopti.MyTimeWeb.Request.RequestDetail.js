@@ -62,6 +62,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		$('#Request-detail-ok-button')
 			.click(function () {
+				$(this).prop('disabled', true);
 				if ($('#Text-request-tab.selected-tab').length > 0) {
 					_addRequest("Requests/TextRequest");
 				} else {
@@ -87,6 +88,30 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			});
 	}
 
+	function _addRequest(requestUrl) {
+		var formData = _getFormData();
+		Teleopti.MyTimeWeb.Ajax.Ajax({
+			url: requestUrl,
+			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
+			type: "POST",
+			data: JSON.stringify(formData),
+			success: function (data, textStatus, jqXHR) {
+				Teleopti.MyTimeWeb.Request.List.RemoveItem(data);
+				_fadeEditSection();
+				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					_displayValidationError(data);
+					return;
+				}
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	}
+
 	function _initLabels() {
 		$('#Request-detail-section input[type=text], #Request-detail-section textarea')
 			.labeledinput()
@@ -97,11 +122,11 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		_hideEditSection();
 		_clearFormData();
 		_showRequestTypeTab(data.TypeEnum);
-		_fillFormData(data);
 		if (data.TypeEnum == 1) {
 			_fillFormRequestType(data.Payload);
 		}
 		_enableDisableDetailSection(data);
+		_fillFormData(data);
 		_showEditSection(position);
 	}
 
@@ -171,30 +196,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			;
 	}
 
-	function _addRequest(requestUrl) {
-		var formData = _getFormData();
-		Teleopti.MyTimeWeb.Ajax.Ajax({
-			url: requestUrl,
-			dataType: "json",
-			contentType: 'application/json; charset=utf-8',
-			type: "POST",
-			data: JSON.stringify(formData),
-			success: function (data, textStatus, jqXHR) {
-				Teleopti.MyTimeWeb.Request.List.RemoveItem(data);
-				_fadeEditSection();
-				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
-					var data = $.parseJSON(jqXHR.responseText);
-					_displayValidationError(data);
-					return;
-				}
-				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			}
-		});
-	}
-
 	function _displayValidationError(data) {
 		var message = data.Errors.join('</br>');
 		$('#Request-detail-error').html(message || '');
@@ -230,6 +231,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		$('#Request-detail-entityid').val(data.Id);
 		$('#Request-detail-subject-input').change();
 		$('#Request-detail-message-input').change();
+		requestViewModel.IsFullDay(data.IsFullDay);
 	};
 
 	function _fillFormRequestType(payload) {
@@ -242,7 +244,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			.reset()
 			;
 		$('#Absence-type').prop('selectedIndex', 0);
-		$('#Fullday-check').attr('checked', false);
+		requestViewModel.IsFullDay(false);
 		_clearValidationError();
 		_enableDetailSecion();
 		_enableTimeinput();

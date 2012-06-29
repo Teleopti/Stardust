@@ -161,7 +161,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 36
  testRunner.When("I click on today\'s summary");
 #line 37
- testRunner.And("I click full day checkbox");
+ testRunner.And("I checked the full day checkbox");
 #line 38
  testRunner.Then("I should see 00:00 - 23:59 as the default times");
 #line hidden

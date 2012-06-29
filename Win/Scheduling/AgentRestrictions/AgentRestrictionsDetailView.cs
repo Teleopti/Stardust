@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			InitializeGrid();
 		}
 
-		private void InitializeGrid()
+		public void InitializeGrid()
 		{
 			ViewGrid.Rows.HeaderCount = 0;
 			ViewGrid.Cols.HeaderCount = 0;
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor, schedulingOptions);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
 			_model.LoadDetails(scheduleMatrixPro, restrictionExtractor, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
-			ViewGrid.Refresh();
-			InitializeGrid();
+			//ViewGrid.Refresh();
+			//InitializeGrid();	
 		}
 	}
 }
