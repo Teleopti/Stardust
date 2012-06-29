@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using TechTalk.SpecFlow;
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see an log on error")]
 		public void ThenIShouldSeeAnLogOnError()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new AnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
 		}
 
 		[Then(@"I should not be signed in")]
@@ -107,11 +108,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	}
 
 
-	public class AnyLanguageResourceContraint : Constraint
+	public class StringContainsAnyLanguageResourceContraint : Constraint
 	{
 		private readonly List<string> _texts = new List<string>();
 
-		public AnyLanguageResourceContraint(string resource)
+		public StringContainsAnyLanguageResourceContraint(string resource)
 		{
 			// add any browser language in which tests need to run on here
 			_texts.Add(Resources.ResourceManager.GetString(resource, new CultureInfo("en-US")));
@@ -120,9 +121,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		public override bool Matches(object actual)
 		{
-			return _texts.Contains(actual as string);
+			this.actual = actual;
+			var actualString = (string)actual;
+			return _texts.Any(actualString.Contains);
 		}
 
-		public override void WriteDescriptionTo(MessageWriter writer) { }
+		public override void WriteDescriptionTo(MessageWriter writer)
+		{
+			writer.WriteMessageLine("Should contain a string in any language: ");
+			_texts.ForEach(s =>
+			               	{
+								writer.WriteMessageLine("");
+			               		writer.WriteExpectedValue(s);
+			               	});
+		}
 	}
 }
