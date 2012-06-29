@@ -11058,6 +11058,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage rule sets.
+        /// </summary>
+        public static string ManageRuleSets {
+            get {
+                return ResourceManager.GetString("ManageRuleSets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage scenarios.
         /// </summary>
         public static string ManageScenarios {

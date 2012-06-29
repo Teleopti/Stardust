@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
+using Teleopti.Ccc.AgentPortal.Common;
 using Teleopti.Ccc.AgentPortal.Common.Controls;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortal.Main;
@@ -64,8 +65,20 @@ namespace Teleopti.Ccc.AgentPortal.Helper
 				_scoreCardDisplay.WebBrowser.Url = new Uri(scorecardUrl);
                 _scoreCardDisplay.Name = "Scorecard";
                 _scoreCardDisplay.WebBrowser.Navigate(scorecardUrl);
+                _scoreCardDisplay.WebBrowser.WebBrowserShortcutsEnabled = false;
+                _scoreCardDisplay.WebBrowser.PreviewKeyDown += _scoreCardDisplay_OnPreviewKeyDown;
 
                 return _scoreCardDisplay;
+            }
+        }
+
+        protected void _scoreCardDisplay_OnPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            bool local = true;
+            if (e.KeyCode == Keys.F1)
+            {
+                if (e.Modifiers == Keys.Shift) local = false;
+                HelpHelper.GetHelp(_scoreCardDisplay.ParentForm, _scoreCardDisplay, local);
             }
         }
 

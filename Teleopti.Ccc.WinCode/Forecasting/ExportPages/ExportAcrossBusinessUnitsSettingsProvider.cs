@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
             }
         }
 
-        public IEnumerable<MultisiteSkillSelectionModel> TransformSerilizableToSelectionModels()
+        public IEnumerable<MultisiteSkillSelectionModel> TransformSerializableToSelectionModels()
         {
             var multisiteSkillSelectionModels = new List<MultisiteSkillSelectionModel>();
             foreach (var keyValuePair in ExportAcrossBusinessUnitsSettings.MultisiteSkillSelections)
@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
             return multisiteSkillSelectionModels;
         }
 
-        public void TransformToSerilizableModel(IEnumerable<MultisiteSkillSelectionModel> multisiteSkillSelectionModels)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void TransformToSerializableModel(IEnumerable<MultisiteSkillSelectionModel> multisiteSkillSelectionModels)
         {
             ExportAcrossBusinessUnitsSettings.MultisiteSkillSelections.Clear();
             foreach (var multisiteSkillSelectionModel in multisiteSkillSelectionModels)

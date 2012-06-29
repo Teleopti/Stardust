@@ -11,6 +11,7 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
@@ -32,7 +33,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
                 foreach (var selection in stateObj.MultisiteSkillSelectionModels)
                 {
                     var skill = new MultisiteSkillRepository(uow).Get(selection.MultisiteSkillModel.Id);
-                    
+					if (((IDeleteTag)skill).IsDeleted) continue;
+
                     foreach (var childSkill in skill.ChildSkills)
                     {
                         skills.Add(new DestinationSkillModel(childSkill, selection.ChildSkillMappingModels));

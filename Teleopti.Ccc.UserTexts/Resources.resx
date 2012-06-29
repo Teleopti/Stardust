@@ -10749,4 +10749,8 @@ These options are activated:
     <value>Longterm Forecast</value>
     <comment>Longterm Forecast</comment>
   </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>Manage rule sets</value>
+    <comment>Manage rule sets</comment>
+  </data>
 </root>

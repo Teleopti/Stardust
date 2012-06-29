@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 
         public void SaveSettings()
         {
-            _exportAcrossBusinessUnitsSettingsProvider.TransformToSerilizableModel(_stateObj.MultisiteSkillSelectionModels);
+            _exportAcrossBusinessUnitsSettingsProvider.TransformToSerializableModel(_stateObj.MultisiteSkillSelectionModels);
             _exportAcrossBusinessUnitsSettingsProvider.ExportAcrossBusinessUnitsSettings.Period =
                 new DateOnlyPeriod(new DateOnly(_stateObj.Period.StartDate.DateTime),
                                    new DateOnly(_stateObj.Period.EndDate.DateTime));
