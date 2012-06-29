@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             var viewSchedulesPermission = isPermittedToViewSchedules();
             var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
                                                               _eventAggregator);
-            meetingComposerView.Show(this);
+            meetingComposerView.ShowDialog(this);
         }
 
         public bool EditEnabled
