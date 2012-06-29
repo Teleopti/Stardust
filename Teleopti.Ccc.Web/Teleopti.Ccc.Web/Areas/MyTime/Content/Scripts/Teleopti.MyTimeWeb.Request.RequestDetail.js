@@ -62,6 +62,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		$('#Request-detail-ok-button')
 			.click(function () {
+				$(this).prop('disabled', true);
 				if ($('#Text-request-tab.selected-tab').length > 0) {
 					_addRequest("Requests/TextRequest");
 				} else {
@@ -85,6 +86,30 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 					requestViewModel.IsFullDay(true);
 				}
 			});
+	}
+
+	function _addRequest(requestUrl) {
+		var formData = _getFormData();
+		Teleopti.MyTimeWeb.Ajax.Ajax({
+			url: requestUrl,
+			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
+			type: "POST",
+			data: JSON.stringify(formData),
+			success: function (data, textStatus, jqXHR) {
+				Teleopti.MyTimeWeb.Request.List.RemoveItem(data);
+				_fadeEditSection();
+				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					_displayValidationError(data);
+					return;
+				}
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
 	}
 
 	function _initLabels() {
@@ -169,30 +194,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		$('#Request-detail-section')
 			.fadeOut()
 			;
-	}
-
-	function _addRequest(requestUrl) {
-		var formData = _getFormData();
-		Teleopti.MyTimeWeb.Ajax.Ajax({
-			url: requestUrl,
-			dataType: "json",
-			contentType: 'application/json; charset=utf-8',
-			type: "POST",
-			data: JSON.stringify(formData),
-			success: function (data, textStatus, jqXHR) {
-				Teleopti.MyTimeWeb.Request.List.RemoveItem(data);
-				_fadeEditSection();
-				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
-					var data = $.parseJSON(jqXHR.responseText);
-					_displayValidationError(data);
-					return;
-				}
-				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			}
-		});
 	}
 
 	function _displayValidationError(data) {

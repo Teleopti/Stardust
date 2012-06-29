@@ -142,12 +142,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		}
 		connector.connector();
 
-		var count = 0;
 		if (request.Link.Methods.indexOf("DELETE") != -1) {
 			deleteButton
 				.click(function (event) {
-					count++;
-					if (count > 1) { return false; }
+					$(this).prop('disabled', true);
 					event.stopPropagation();
 					_disconnectAll();
 					Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
@@ -205,12 +203,12 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			url: url,
 			dataType: "json",
 			type: 'GET',
-			beforeSend: function() {
+			beforeSend: function () {
 				_disconnectAllOthers(listItem);
 				Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 				connector.connector("connecting");
 			},
-			success: function(data, textStatus, jqXHR) {
+			success: function (data, textStatus, jqXHR) {
 				Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, listItem.position().top - 30);
 				connector.connector("connect");
 			}
