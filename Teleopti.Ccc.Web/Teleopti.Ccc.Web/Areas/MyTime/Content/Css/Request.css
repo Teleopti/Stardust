@@ -66,7 +66,8 @@
 }
 .absence-type-input-label 
 {
+	width: 6.5em;
 	padding-top: 4px;
-	padding-right: 4px;
+	padding-right: 2px;
 	height: 16px;
 }
