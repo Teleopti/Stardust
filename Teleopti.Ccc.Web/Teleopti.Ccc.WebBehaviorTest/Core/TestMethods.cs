@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void ExpireMyCookie()
 		{
+			Navigation.GoTo("Test/ExpireMyCookie");
+		}
+
+		public static void ExpireMyCookieInsidePortal()
+		{
 			// doing this twice because IE fails to grab the cookie after the first one sometimes..
 			// probably depending on how quickly the next request takes places.
 			// making a second request seems to enforce the cookie somehow..

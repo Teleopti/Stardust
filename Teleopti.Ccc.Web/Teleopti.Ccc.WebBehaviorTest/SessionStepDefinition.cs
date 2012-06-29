@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			{
 				TestMethods.WaitForPreferenceFeedbackToLoad();
 			}
-			TestMethods.ExpireMyCookie();
+			TestMethods.ExpireMyCookieInsidePortal();
 		}
 
 		[When(@"My cookie gets corrupt")]
