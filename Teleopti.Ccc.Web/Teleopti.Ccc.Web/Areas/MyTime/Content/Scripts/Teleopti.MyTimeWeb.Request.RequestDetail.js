@@ -105,6 +105,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 				if (jqXHR.status == 400) {
 					var data = $.parseJSON(jqXHR.responseText);
 					_displayValidationError(data);
+					$('#Request-detail-ok-button').prop('disabled', false);
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
