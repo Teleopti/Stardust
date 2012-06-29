@@ -21,6 +21,5 @@ namespace Teleopti.Analytics.Etl.Common
 		{
 			etlJobLock.CreateLock(jobName, isStartByService);
 		}
-
 	}
 }

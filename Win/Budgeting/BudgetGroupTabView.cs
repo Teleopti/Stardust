@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 				return (double?)Invoke(new Func<double, double?>(GetFulltimeEquivalentHoursPerDay), fulltimeEquivalentHours);
 			}
 			using (var promptDoubleBox = new PromptDoubleBox(fulltimeEquivalentHours,
-																  UserTexts.Resources.FulltimeEquivalentHoursPerDay, 0d, 100d))
+																  UserTexts.Resources.FulltimeEquivalentHoursPerDay, 0d, 12d))
 			{
 				promptDoubleBox.SetHelpId("FulltimeEquivalentHours");
 				promptDoubleBox.ShowDialog(this);

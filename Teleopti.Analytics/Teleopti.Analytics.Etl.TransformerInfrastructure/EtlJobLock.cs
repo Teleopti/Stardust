@@ -1,38 +1,65 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
+using System.Threading;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
 	public class EtlJobLock: IEtlJobLock
 	{
 		private readonly string _connectionString;
-		private SqlConnection _sqlConnection;
-
+		private Timer timer;
+		const string insertStatement = "INSERT INTO mart.sys_etl_running_lock (computer_name,start_time,job_name,is_started_by_service,lock_until) VALUES (@computer_name,@start_time,@job_name,@is_started_by_service,DATEADD(mi,1,GETUTCDATE()))";
+		const string updateStatement = "UPDATE mart.sys_etl_running_lock SET lock_until=DATEADD(mi,1,GETUTCDATE())";
+		const string deleteStatement = "DELETE FROM mart.sys_etl_running_lock";
+		
 		public EtlJobLock(string connectionString)
 		{
 			_connectionString = connectionString;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public void CreateLock(string jobName, bool isStartByService)
 		{
-			_sqlConnection= new SqlConnection(_connectionString);
-			_sqlConnection.Open();
-			SqlTransaction sqlTransaction = _sqlConnection.BeginTransaction();
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.Open();
+				SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
 
-			SqlCommand sqlCommand = _sqlConnection.CreateCommand();
-			sqlCommand.Transaction = sqlTransaction;
+				SqlCommand sqlCommand = sqlConnection.CreateCommand();
+				sqlCommand.Transaction = sqlTransaction;
 
-			string computerName = Environment.MachineName;
-			DateTime startTime = DateTime.Now;
-			string sqlText = "insert into mart.sys_etl_running_lock ";
-			sqlText += string.Format(CultureInfo.InvariantCulture, "select '{0}','{1}','{2}',{3}", computerName, startTime, jobName, isStartByService ? 1 : 0);
-			sqlCommand.CommandType = CommandType.Text;
-			sqlCommand.CommandText = sqlText;
-			sqlCommand.ExecuteNonQuery();
+				string computerName = Environment.MachineName;
 
+				sqlCommand.CommandType = CommandType.Text;
+				sqlCommand.CommandText = insertStatement;
+				sqlCommand.Parameters.AddWithValue("@computer_name", computerName);
+				sqlCommand.Parameters.AddWithValue("@start_time", DateTime.Now);
+				sqlCommand.Parameters.AddWithValue("@job_name", jobName);
+				sqlCommand.Parameters.AddWithValue("@is_started_by_service", isStartByService);
+				sqlCommand.ExecuteNonQuery();
+
+				sqlTransaction.Commit();
+			}
+
+			timer = new Timer(lockForAnotherMinute,null,TimeSpan.FromSeconds(45),TimeSpan.FromMinutes(1));
+		}
+
+		private void lockForAnotherMinute(object state)
+		{
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.Open();
+				SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
+
+				SqlCommand sqlCommand = sqlConnection.CreateCommand();
+				sqlCommand.Transaction = sqlTransaction;
+
+				sqlCommand.CommandType = CommandType.Text;
+				sqlCommand.CommandText = updateStatement;
+				sqlCommand.ExecuteNonQuery();
+
+				sqlTransaction.Commit();
+			}
 		}
 
 		public void Dispose()
@@ -54,9 +81,31 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		protected virtual void ReleaseManagedResources()
 		{
-			_sqlConnection.Dispose();
+			try
+			{
+				using (var sqlConnection = new SqlConnection(_connectionString))
+				{
+					sqlConnection.Open();
+					SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
+
+					SqlCommand sqlCommand = sqlConnection.CreateCommand();
+					sqlCommand.Transaction = sqlTransaction;
+
+					sqlCommand.CommandType = CommandType.Text;
+					sqlCommand.CommandText = deleteStatement;
+					sqlCommand.ExecuteNonQuery();
+
+					sqlTransaction.Commit();
+				}
+			}
+			catch (Exception)
+			{
+				//Suppress any errors in here...
+			}
+			timer.Dispose();
 		}
 	}
 }

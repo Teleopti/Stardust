@@ -415,6 +415,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
     	public void UpdateView()
     	{
+			RecreateParticipantList();
     	    SetCurrentDate(_meetingViewModel.StartDate);
 			_view.SetStartDate(_meetingViewModel.StartDate);
 			_view.SetEndDate(_meetingViewModel.EndDate);
@@ -423,7 +424,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 			_view.SetRecurringDates(_meetingViewModel.Meeting.GetRecurringDates());
 			_view.SetCurrentDate(_currentDate);
 
-			RecreateParticipantList();
+			
 			_view.OnMeetingDatesChanged();
     	}
 

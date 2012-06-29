@@ -48,8 +48,9 @@ IF "%WindowsNT%"=="" GOTO desc
 SET SDKPath=%SDKPath:~0,-1%
 SET ServiceBusPath=%SDKPath%\..\ServiceBus
 
+::remarked! This is a temp fix to get behavior tests running (in parallell)
 ::restart IIS
-IISRESET /RESTART
+::IISRESET /RESTART
 
 ::Statics
 SET PermissionStyle=""
