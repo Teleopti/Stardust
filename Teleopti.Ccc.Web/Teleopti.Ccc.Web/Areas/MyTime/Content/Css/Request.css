@@ -39,11 +39,14 @@
 .no-rgba .request-body-inner li {
 	 border: 1px solid #dfdfdf;
 }
-.request-body-inner .request-subject {
+.request-body-inner .request-subject 
+{
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 .request-body-inner .request-details 
 {
 	font-size: smaller;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 .request-body-inner .request-caption 
 {
