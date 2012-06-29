@@ -13,3 +13,9 @@ IF EXISTS(SELECT * FROM sys.columns WHERE object_id=OBJECT_ID('dbo.StateGroupAct
 	
 GO
 
+--Anders: Adding possiblity to purge old messages cause it's been asked for
+if not exists (select 1 from PurgeSetting where [Key] = 'Message')
+begin
+	insert into PurgeSetting values ('Message', 10)
+end
+
