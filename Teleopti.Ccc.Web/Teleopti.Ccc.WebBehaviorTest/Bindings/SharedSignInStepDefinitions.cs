@@ -76,23 +76,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I sign in by user name and wrong password")]
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
-			using (PerformanceOutput.ForOperation("WhenISignInByUserNameAndWrongPassword!!!"))
-			{
-				Navigation.GotoGlobalSignInPage();
-			}
-			using (PerformanceOutput.ForOperation("WhenISignInByUserNameAndWrongPassword   LOGIN!!!"))
-			{
-				Pages.Pages.CurrentSignInPage.SignInApplication(UserTestData.PersonApplicationUserSingleBusinessUnitUserName, "wrong password");
-			}
+			Navigation.GotoGlobalSignInPage();
+			Pages.Pages.CurrentSignInPage.SignInApplication(UserTestData.PersonApplicationUserSingleBusinessUnitUserName, "wrong password");
 		}
 
 		[Then(@"I should see an log on error")]
 		public void ThenIShouldSeeAnLogOnError()
 		{
-			using (PerformanceOutput.ForOperation("ThenIShouldSeeAnLogOnError!!"))
-			{
-				EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new AnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
-			}
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new AnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
 		}
 
 		[Then(@"I should not be signed in")]
