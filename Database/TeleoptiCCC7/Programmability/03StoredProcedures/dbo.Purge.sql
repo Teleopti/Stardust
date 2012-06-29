@@ -23,6 +23,8 @@ declare @ForecastKeepYears int
 declare @ForecastsKeepUntil datetime
 declare @ScheduleKeepYears int
 declare @ScheduleKeepUntil datetime
+declare @MessageKeepYears int
+declare @MessageKeepUntil datetime
 declare @BatchSize int
 declare @MaxDate datetime
 
@@ -34,10 +36,12 @@ select @ForecastKeepYears = isnull(KeepYears,100) from PurgeSetting where [Key] 
 select @ForecastsKeepUntil = dateadd(year,-1*@ForecastKeepYears,getdate())
 select @ScheduleKeepYears = isnull(KeepYears,100) from PurgeSetting where [Key] = 'Schedule'
 select @ScheduleKeepUntil = dateadd(year,-1*@ScheduleKeepYears,getdate())
+select @MessageKeepYears = isnull(KeepYears,100) from PurgeSetting where [Key] = 'Message'
+select @MessageKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
 select @BatchSize = 14
 
 --Forecast
-select @MaxDate = dateadd(day,@BatchSize,min(WorkloadDate))
+select @MaxDate = dateadd(day,@BatchSize,isnull(min(WorkloadDate),'19900101'))
 from WorkloadDayBase wdb
 inner join WorkloadDay wd on wdb.id = wd.WorkloadDayBase
 where wdb.WorkloadDate > '19600101' --Avoid hitting templates
@@ -90,7 +94,7 @@ and sd.SkillDayDate < @MaxDate
 
 
 --Schedule
-select @MaxDate = dateadd(day,@BatchSize,min(Minimum)) from PersonAssignment
+select @MaxDate = dateadd(day,@BatchSize,isnull(min(Minimum),'19900101')) from PersonAssignment
 
 delete PersonAssignment --Lovely, cascade delete is on...
 from PersonAssignment pa
@@ -122,6 +126,28 @@ from PersonSkill ps
 inner join Skill s on ps.Skill = s.Id
 where s.IsDeleted = 1
 
+--Messages
+select @MaxDate = dateadd(day,@BatchSize,isnull(min(UpdatedOn),'19900101')) from PushMessageDialogue
+
+delete DialogueMessage
+from DialogueMessage dm
+inner join PushMessageDialogue pmd on pmd.Id = dm.Parent
+where pmd.UpdatedOn < @MessageKeepUntil
+and pmd.UpdatedOn < @MaxDate
+
+delete PushMessageDialogue
+from PushMessageDialogue pmd
+where pmd.UpdatedOn < @MessageKeepUntil
+and pmd.UpdatedOn < @MaxDate
+
+delete ReplyOptions
+from ReplyOptions ro
+inner join PushMessage pm on ro.id = pm.Id
+where not exists (select 1 from PushMessageDialogue pmd where pmd.PushMessage = pm.Id)
+
+delete PushMessage
+from PushMessage pm
+where not exists (select 1 from PushMessageDialogue pmd where pmd.PushMessage = pm.Id)
 
 
 END
