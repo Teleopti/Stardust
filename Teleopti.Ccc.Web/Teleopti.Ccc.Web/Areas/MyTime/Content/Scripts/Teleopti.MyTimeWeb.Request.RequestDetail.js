@@ -97,11 +97,11 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		_hideEditSection();
 		_clearFormData();
 		_showRequestTypeTab(data.TypeEnum);
-		_fillFormData(data);
 		if (data.TypeEnum == 1) {
 			_fillFormRequestType(data.Payload);
 		}
 		_enableDisableDetailSection(data);
+		_fillFormData(data);
 		_showEditSection(position);
 	}
 
@@ -230,6 +230,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		$('#Request-detail-entityid').val(data.Id);
 		$('#Request-detail-subject-input').change();
 		$('#Request-detail-message-input').change();
+		requestViewModel.IsFullDay(data.IsFullDay);
 	};
 
 	function _fillFormRequestType(payload) {
@@ -242,7 +243,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			.reset()
 			;
 		$('#Absence-type').prop('selectedIndex', 0);
-		$('#Fullday-check').attr('checked', false);
+		requestViewModel.IsFullDay(false);
 		_clearValidationError();
 		_enableDetailSecion();
 		_enableTimeinput();

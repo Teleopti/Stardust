@@ -39,6 +39,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.RawTimeFrom, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime).ToShortTimeString()))
 				.ForMember(d => d.RawTimeTo, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime).ToShortTimeString()))
 				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription.Name))
+				.ForMember(d => d.IsFullDay, o => o.MapFrom(s =>
+				                                            	{
+																	var start = _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime);
+																	var end = _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime);
+																	var allDayEndDateTime = start.AddDays(1).AddMinutes(-1);
+																	return start.TimeOfDay == TimeSpan.Zero && end.TimeOfDay == allDayEndDateTime.TimeOfDay;
+				                                            	}))
 				;
 
 			CreateMap<IPersonRequest, Link>()
