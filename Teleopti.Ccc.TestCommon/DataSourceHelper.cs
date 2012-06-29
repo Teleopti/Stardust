@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.TestCommon
 					if (IniFileInfo.Create)
 						CreateSchemas(dataSourceFactory, ccc7, analytics);
 
+					//ccc7.Backup();
+
 					return dataSource;
 				}
 			}
@@ -37,7 +40,9 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
 			{
-				ccc7.Clean();
+				//ccc7.DropConnections();
+				//ccc7.Restore();
+				ccc7.CleanByGenericProcedure();
 			}
 		}
 
@@ -45,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
 			{
-				analytics.CleanAnalytics();
+				analytics.CleanByAnalyticsProcedure();
 			}
 		}
 

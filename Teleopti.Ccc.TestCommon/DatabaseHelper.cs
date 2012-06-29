@@ -2,6 +2,7 @@ using System;
 using System.Data.SqlClient;
 using System.IO;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -61,24 +62,25 @@ namespace Teleopti.Ccc.TestCommon
 			ExecuteNonQuery("USE [{0}]", _databaseName);
 		}
 
-		public void Clean()
+		public void CleanByGenericProcedure()
 		{
 			ExecuteNonQuery(File.ReadAllText("Teleopti.Ccc.TestCommon.sp_deleteAllData.DROP.sql"));
 			ExecuteNonQuery(File.ReadAllText("Teleopti.Ccc.TestCommon.sp_deleteAllData.sql"));
 			ExecuteNonQuery("EXEC sp_deleteAllData");
 		}
 
-		public void CleanAnalytics()
+		public void CleanByAnalyticsProcedure()
 		{
 			ExecuteNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1");
 		}
 
 		public void DropConnections()
 		{
-			ExecuteNonQuery("USE master");
-			ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
-			ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
-			ExecuteNonQuery("USE [{0}]", _databaseName);
+			using (UseMasterScope())
+			{
+				ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
+				ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
+			}
 		}
 
 		public void CreateSchemaByDbManager()
@@ -90,6 +92,39 @@ namespace Teleopti.Ccc.TestCommon
 			schemaCreator.Create(_databaseType);
 		}
 
+		//public void Backup()
+		//{
+		//    using (UseMasterScope())
+		//    {
+		//        ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
+		//        File.Copy(@"C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\RepositoryTest_Data.mdf", @"C:\1.mdf", true);
+		//        File.Copy(@"C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\RepositoryTest_Log.ldf", @"C:\1.ldf", true);
+		//        ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
+		//    }
+		//    //ExecuteNonQuery(@"BACKUP DATABASE [{0}] TO DISK='{0}.bak' WITH INIT, STATS=10", _databaseName);
+		//}
+
+		//public void Restore()
+		//{
+		//    using (UseMasterScope())
+		//    {
+		//        using (PerformanceOutput.ForOperation("offline"))
+		//            ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
+		//        using (PerformanceOutput.ForOperation("copy"))
+		//            File.Copy(@"C:\1.mdf", @"C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\RepositoryTest_Data.mdf", true);
+		//        using (PerformanceOutput.ForOperation("copy"))
+		//            File.Copy(@"C:\1.ldf", @"C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\RepositoryTest_Log.ldf", true);
+		//        using (PerformanceOutput.ForOperation("online"))
+		//            ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
+		//        //ExecuteNonQuery(@"RESTORE DATABASE [{0}] FROM DISK='{0}.bak' WITH REPLACE, RECOVERY, STATS=10", _databaseName);
+		//    }
+		//}
+
+		public IDisposable UseMasterScope()
+		{
+			ExecuteNonQuery("USE master");
+			return new GenericDisposable(() => ExecuteNonQuery("USE [{0}]", _databaseName));
+		}
 
 
 
@@ -123,5 +158,24 @@ namespace Teleopti.Ccc.TestCommon
 				_connection.Dispose();
 		}
 
+
 	}
+
+
+	public class GenericDisposable : IDisposable
+	{
+		private Action _disposeAction;
+
+		public GenericDisposable(Action disposeAction)
+		{
+			_disposeAction = disposeAction;
+		}
+
+		public void Dispose()
+		{
+			_disposeAction.Invoke();
+			_disposeAction = null;
+		}
+	}
+
 }
