@@ -592,10 +592,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"the other site has 2 teams")]
 		public void GivenTheOtherSiteHas2Teams()
 		{
-			UserFactory.User().Setup(new AnotherSitesTeam());
+			if (!UserFactory.User().HasSetup<AnotherSitesTeam>())
+				UserFactory.User().Setup(new AnotherSitesTeam());
 			UserFactory.User().Setup(new AnotherSitesSecondTeam());
 		}
-	
+		
 		[Given(@"I belong to another site's team tomorrow")]
 		public void GivenIBelongToAnotherSiteSTeamTomorrow()
 		{
