@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public EmptyResult ExpireMyCookie()
 		{
-			_sessionSpecificDataProvider.ExpireCookie();
+			_sessionSpecificDataProvider.ExpireTicket();
 			return new EmptyResult();
 		}
 

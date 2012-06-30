@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			target.GrabFromCookie().Should().Not.Be.Null();
 
-			target.ExpireCookie();
+			target.ExpireTicket();
 
 			target.GrabFromCookie().Should().Be.Null();
 		}

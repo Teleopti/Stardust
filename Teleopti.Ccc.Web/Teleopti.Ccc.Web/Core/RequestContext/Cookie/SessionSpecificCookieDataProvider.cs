@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			return _dataStringSerializer.Deserialize(userData);
 		}
 
-		public void ExpireCookie()
+		public void ExpireTicket()
 		{
 			var cookie = getCookie();
 			var ticket = decryptCookie(cookie);
