@@ -90,6 +90,8 @@
     <Compile Include="Core\BrowserImpl\WatiNMultiBrowserIEHandler.cs" />
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Data\User\AgentSecondBusinessUnit.cs" />
+    <Compile Include="Data\User\AgentWithAnotherSiteAccess.cs" />
+    <Compile Include="Data\User\IUserRoleSetup.cs" />
     <Compile Include="Data\User\SupervisorSecondBusinessUnit.cs" />
     <Compile Include="Data\User\UserNoPermission.cs" />
     <Compile Include="PreferencesExtended.feature.cs">

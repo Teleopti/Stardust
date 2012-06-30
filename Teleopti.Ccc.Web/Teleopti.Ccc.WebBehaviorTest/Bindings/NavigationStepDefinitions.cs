@@ -2,6 +2,7 @@ using System;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.User;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 
@@ -11,11 +12,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	public class NavigationStepDefinitions
 	{
 		[When(@"I sign in")]
+		[When(@"I sign in by user name")]
 		public void WhenISignIn()
 		{
 			var userName = UserFactory.User().MakeUser();
 			if (!(Browser.Current.Url.Contains("/SignIn") || Browser.Current.Url.Contains("/MobileSignIn")))
 				Navigation.GotoGlobalSignInPage();
+			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+		}
+
+		[When(@"I sign in again")]
+		public void WhenISignInAgain()
+		{
+			Navigation.GotoGlobalSignInPage();
+			Pages.Pages.CurrentSignInPage.SignInApplication(UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName, TestData.CommonPassword);
+		}
+
+		[Given(@"I am signed in")]
+		public void IAmSignedIn()
+		{
+			if (!UserFactory.User().HasSetup<IUserRoleSetup>())
+				UserFactory.User().Setup(new Agent());
+			var userName = UserFactory.User().MakeUser();
+			Navigation.GotoGlobalSignInPage();
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
 		}
 

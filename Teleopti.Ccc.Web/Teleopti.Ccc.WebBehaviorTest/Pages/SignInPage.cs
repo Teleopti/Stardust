@@ -64,11 +64,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SignInApplication(string username, string password)
 		{
-			ApplicationTabLink.Click();
+			ApplicationTabLink.EventualClick();
 			SelectApplicationTestDataSource();
 			UserNameTextField.Value = username;
 			PasswordTextField.Value = password;
-			ApplicationOkButton.Click();
+			ApplicationOkButton.EventualClick();
 
 			WaitForSigninResult();
 		}

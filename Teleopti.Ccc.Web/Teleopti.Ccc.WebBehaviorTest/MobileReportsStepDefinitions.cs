@@ -58,12 +58,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.SignoutButton.EventualClick();
 		}
 
-		[Then(@"I should be signed out")]
-		public void ThenIShouldBeSignedOut()
-		{
-			EventualAssert.That(() => Browser.Current.Url.EndsWith("/SignIn"), Is.True);
-		}
-
 		[Then(@"I should see a report")]
 		public void ThenIShouldSeAReport()
 		{

@@ -58,13 +58,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				UserFactory.User().Setup(new Agent());
 		}
 
-		[When(@"I sign in by user name")]
-		public void WhenISignInByApplicationAuthentication()
-		{
-			var userName = UserFactory.User().MakeUser();
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
-		}
-
 		[When(@"I sign in by windows credentials")]
 		public void WhenISignInByWindowsAuthentication()
 		{
@@ -103,12 +96,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[Then(@"I should not be signed in")]
+		[Then(@"I should be signed out")]
 		[Then(@"I should see the login page")]
 		public void ThenIAmNotSignedIn()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
 		}
-
 
 	}
 

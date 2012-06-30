@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 	using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 	using Teleopti.Interfaces.Domain;
 
-	public class UserWithoutResReportServiceLevelAndAgentsReadyAccess : IUserSetup
+	public class UserWithoutResReportServiceLevelAndAgentsReadyAccess : IUserSetup, IUserRoleSetup
 	{
 		public void Apply(IPerson user, CultureInfo cultureInfo)
 		{

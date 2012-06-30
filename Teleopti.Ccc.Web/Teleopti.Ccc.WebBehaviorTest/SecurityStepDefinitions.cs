@@ -16,17 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Current.ClearCookies();
 		}
 
-		[Given(@"I am signed in")]
-		public void GivenIAmSignedIn()
-		{
-			Navigation.GotoGlobalSignInPage();
-			var page = Browser.Current.Page<SignInPage>();
-			page.SignInWindows();
-			page.SelectFirstBusinessUnit();
-			page.BusinessUnitOkButton.EventualClick();
-			Resources.Culture = UserTestData.AgentWindowsUser.PermissionInformation.Culture();
-		}
-
 		[Then(@"I should see an application page")]
 		public void ThenIShouldSeeAnApplicationPage()
 		{
