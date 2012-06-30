@@ -85,14 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			{
 				if (span.Text == null)
 					return false;
-				try
-				{
-					return span.Text.Trim().Length > 0;
-				}
-				catch (Exception e)
-				{
-					throw;
-				}
+				return span.Text.Trim().Length > 0;
 			}
 			return false;
 		}
