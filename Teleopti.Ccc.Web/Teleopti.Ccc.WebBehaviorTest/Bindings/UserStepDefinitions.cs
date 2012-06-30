@@ -657,14 +657,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I should work (.*) hours per day according to my contract")]
 		public void GivenIShouldWorkHoursPerDayAccordingToMyContract(int hoursPerDay)
 		{
-			var contract = new Contract("Kontraktet") { WorkTime = new WorkTime(new TimeSpan(hoursPerDay, 0, 0)) };
-			var partTimePercentage = new PartTimePercentage("Procent") { Percentage = new Percent(1) };
-
-			UserFactory.User().Setup(
-				new PersonPeriod()
-					{
-						PersonContract = new PersonContract(contract, partTimePercentage, DataContext.Data().Data<ContractScheduleWith2DaysOff>().ContractSchedule)
-					});
+			var contractSchedule = new ContractScheduleFromTable
+			                       	{
+			                       		MondayWorkDay = true,
+			                       		TuesdayWorkDay = true,
+			                       		WednesdayWorkDay = true,
+			                       		ThursdayWorkDay = true,
+			                       		FridayWorkDay = true,
+			                       		SaturdayWorkDay = true,
+			                       		SundayWorkDay = true
+			                       	};
+			var contract = new ContractFromTable
+			               	{
+			               		AverageWorkTimePerDay = 8
+			               	};
+			UserFactory.User().Setup(contract);
+			UserFactory.User().Setup(contractSchedule);
+			UserFactory.User().UserData<PersonPeriod>().Contract = contract;
+			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
 		}
 
 	}
