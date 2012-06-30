@@ -21,12 +21,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	{
 		private MobileReportsPage _page;
 
-		[Given(@"I browse with a mobile")]
-		public void GivenIBrowseWithAMobile()
-		{
-			// Inject mobile UserAgent String /Replace CurrentBrowser?
-		}
-
 		[Given(@"I have skill analytics data")]
 		public void GivenIHaveSkillAnalyticsData()
 		{

@@ -209,11 +209,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				where
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTimeWeb
 				select r;
-			var agentRoleWithoutMobileReportsApplicationFunctions =
-				from r in agentRoleApplicationFunctions
-				where
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere
-				select r;
 			var agentRoleWithoutAgentRoleWithoutResReportServiceLevelAndAgentsReadyMatrixFunction =
 				from r in supervisorRoleApplicationFunctions
 				where
@@ -242,11 +237,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.AgentRoleOnlyWithOwnData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "OnlyWithOwnData", null);
 			TestData.AgentRoleWithSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithSiteData", null);
 			TestData.AgentRoleWithAnotherSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithAnotherSiteData", null);
-			TestData.AgentRoleWithoutMobileReports = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoMobileReports", null);
 			TestData.AgentRoleWithoutMyTimeWeb = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoMyTimeWeb", null);
 			TestData.AgentRoleWithoutResReportServiceLevelAndAgentsReady = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoServiceLevelAndAgentsReady", null);
 			TestData.AdministratorRoleWithEveryoneData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AdministratorRole + "WithEveryoneData", null);
 			TestData.SupervisorRole = ApplicationRoleFactory.CreateRole("SupervisorRole", null);
+			TestData.SupervisorRoleSecondBusinessUnit = ApplicationRoleFactory.CreateRole("SupervisorRole", null);
+			TestData.SupervisorRoleSecondBusinessUnit.SetBusinessUnit(TestData.SecondBusinessUnit);
 
 			var test = new AvailableData();
 			test.AddAvailableSite(TestData.AnotherSite);
@@ -261,13 +257,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 									new { role = TestData.AgentRoleWithoutAbsenceRequests, functions = agentRoleWithoutAbsenceRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutTeamSchedule, functions = agentRoleWithoutTeamScheduleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutMyTimeWeb, functions = agentRoleWithoutMyTimeWebApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
-									new { role = TestData.AgentRoleWithoutMobileReports, functions = agentRoleWithoutMobileReportsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutResReportServiceLevelAndAgentsReady, functions = agentRoleWithoutAgentRoleWithoutResReportServiceLevelAndAgentsReadyMatrixFunction, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleOnlyWithOwnData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyOwn}},
 									new { role = TestData.AgentRoleWithSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MySite}},
 									new { role = TestData.AgentRoleWithAnotherSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = test},
 									new { role = TestData.AdministratorRoleWithEveryoneData, functions = allApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.Everyone}},
 									new { role = TestData.SupervisorRole, functions = supervisorRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
+									new { role = TestData.SupervisorRoleSecondBusinessUnit, functions = supervisorRoleApplicationFunctions, businessUnit = TestData.SecondBusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 			                 	};
 
 			var allRoles = customTestRoles.Union(shippedRolesWithFunctions);
@@ -293,33 +289,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateAgentPersons(IUnitOfWork uow)
 		{
-			UserTestData.PersonWindowsUser = PersonFactory.CreatePersonWithWindowsPermissionInfo(Environment.UserName, Environment.UserDomainName);
-			UserTestData.PersonWindowsUser.PermissionInformation.AddApplicationRole(TestData.AgentRole);
-			UserTestData.PersonWindowsUser.PermissionInformation.AddApplicationRole(TestData.AgentRoleSecondBusinessUnit);
-			UserTestData.PersonWindowsUser.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			UserTestData.PersonWindowsUser.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo("sv-SE"));
+			UserTestData.AgentWindowsUser = PersonFactory.CreatePersonWithWindowsPermissionInfo(Environment.UserName, Environment.UserDomainName);
+			UserTestData.AgentWindowsUser.PermissionInformation.AddApplicationRole(TestData.AgentRole);
+			UserTestData.AgentWindowsUser.PermissionInformation.AddApplicationRole(TestData.AgentRoleSecondBusinessUnit);
+			UserTestData.AgentWindowsUser.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			UserTestData.AgentWindowsUser.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo("sv-SE"));
 
-			UserTestData.PersonApplicationUser = PersonFactory.CreatePersonWithBasicPermissionInfo(UserTestData.PersonApplicationUserName, TestData.CommonPassword);
-			UserTestData.PersonApplicationUser.PermissionInformation.AddApplicationRole(TestData.AgentRole);
-			UserTestData.PersonApplicationUser.PermissionInformation.AddApplicationRole(TestData.AgentRoleSecondBusinessUnit);
+			UserTestData.AgentApplicationUser = PersonFactory.CreatePersonWithBasicPermissionInfo(UserTestData.AgentApplicationUserName, TestData.CommonPassword);
+			UserTestData.AgentApplicationUser.PermissionInformation.AddApplicationRole(TestData.AgentRole);
+			UserTestData.AgentApplicationUser.PermissionInformation.AddApplicationRole(TestData.AgentRoleSecondBusinessUnit);
 
-			UserTestData.PersonApplicationUserSingleBusinessUnit = PersonFactory.CreatePersonWithBasicPermissionInfo(UserTestData.PersonApplicationUserSingleBusinessUnitUserName, TestData.CommonPassword);
-			UserTestData.PersonApplicationUserSingleBusinessUnit.PermissionInformation.AddApplicationRole(TestData.AgentRole);
-			UserTestData.PersonApplicationUserSingleBusinessUnit.WorkflowControlSet = TestData.WorkflowControlSetPublished;
+			UserTestData.AgentApplicationUserSingleBusinessUnit = PersonFactory.CreatePersonWithBasicPermissionInfo(UserTestData.AgentApplicationUserSingleBusinessUnitUserName, TestData.CommonPassword);
+			UserTestData.AgentApplicationUserSingleBusinessUnit.PermissionInformation.AddApplicationRole(TestData.AgentRole);
+			UserTestData.AgentApplicationUserSingleBusinessUnit.WorkflowControlSet = TestData.WorkflowControlSetPublished;
 
-			UserTestData.PersonWithNoPermission = new Person();
-		    UserTestData.PersonWithNoPermission.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+			UserTestData.UserWithNoPermission = new Person();
+		    UserTestData.UserWithNoPermission.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
 		                                                                            {
 		                                                                                ApplicationLogOnName =
 		                                                                                    UserTestData.
-		                                                                                    PersonWithNoPermissionUserName,
+		                                                                                    UserWithNoPermissionUserName,
 		                                                                                Password = TestData.CommonPassword
 		                                                                            };
             var personRepository = new PersonRepository(uow);
 			personRepository.Add(TestData.PersonThatCreatesTestData);
-			personRepository.Add(UserTestData.PersonWindowsUser);
-			personRepository.Add(UserTestData.PersonApplicationUser);
-			personRepository.Add(UserTestData.PersonApplicationUserSingleBusinessUnit);
+			personRepository.Add(UserTestData.AgentWindowsUser);
+			personRepository.Add(UserTestData.AgentApplicationUser);
+			personRepository.Add(UserTestData.AgentApplicationUserSingleBusinessUnit);
 		}
 
 		private static void CreateBusinessUnits(IUnitOfWork uow)

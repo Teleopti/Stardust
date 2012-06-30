@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.SignInWindows();
 			page.SelectFirstBusinessUnit();
 			page.BusinessUnitOkButton.EventualClick();
-			Resources.Culture = UserTestData.PersonWindowsUser.PermissionInformation.Culture();
+			Resources.Culture = UserTestData.AgentWindowsUser.PermissionInformation.Culture();
 		}
 
 		[Then(@"I should see an application page")]

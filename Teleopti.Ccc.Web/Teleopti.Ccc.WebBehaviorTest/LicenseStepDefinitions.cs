@@ -15,12 +15,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			ScenarioContext.Current.Pending();
 		}
 
-		[When(@"I open the sign in page")]
-		public void WhenIOpenTheSignInPage()
-		{
-			Navigation.GotoGlobalSignInPage();
-		}
-
 		[Then(@"I should get a message telling me I dont have a license")]
 		public void ThenIShouldGetAMessageTellingMeIDontHaveALicense()
 		{

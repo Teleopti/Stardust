@@ -89,6 +89,9 @@
     <Compile Include="Core\BrowserImpl\WatiNSingleBrowserIEHandler.cs" />
     <Compile Include="Core\BrowserImpl\WatiNMultiBrowserIEHandler.cs" />
     <Compile Include="Data\DataContext.cs" />
+    <Compile Include="Data\User\AgentSecondBusinessUnit.cs" />
+    <Compile Include="Data\User\SupervisorSecondBusinessUnit.cs" />
+    <Compile Include="Data\User\UserNoPermission.cs" />
     <Compile Include="PreferencesExtended.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -138,7 +141,6 @@
     <Compile Include="Data\User\UserWithoutResReportServiceLevelAndAgentsReadyAccess.cs" />
     <Compile Include="MobileSignInStepDefinitions.cs" />
     <Compile Include="Data\User\AbsenceToday.cs" />
-    <Compile Include="Data\User\UserWithoutMobileReportsAccess.cs" />
     <Compile Include="Data\User\AgentWithoutTeamDataAccess.cs" />
     <Compile Include="Data\User\AgentWithSiteAccess.cs" />
     <Compile Include="Data\User\AnotherSitesSecondTeam.cs" />

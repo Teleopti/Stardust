@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "SignIn_UserName")] public TextField UserNameTextField { get; set; }
 
-		public Div ValidationSummary { get { return Document.Div(Find.ByClass("validation-summary-errors", false)); } }
+		public Element ValidationSummary { get { return Document.Div(Find.ByClass("validation-summary-errors", false)); } }
 
 		[FindBy(Id = "SignIn_Password")] public TextField PasswordTextField;
 
@@ -83,14 +83,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		private void WaitForSigninResult()
 		{
 			// move this to the actual navigation, which is the one that actually acts too early?
-			Func<bool> SignedInOrBusinessUnitListExists = () =>
+			Func<bool> signedInOrBusinessUnitListExists = () =>
 			                                              	{
 																return SignOutLink.IESafeExists() ||
 																	   BusinessUnitList.IESafeExists() ||
 																	   GlobalMenuList.IESafeExists() ||
 																	   ValidationSummary.IESafeExists();
 			                                              	};
-			SignedInOrBusinessUnitListExists.WaitUntil(EventualTimeouts.Poll, EventualTimeouts.Timeout);
+			var found = signedInOrBusinessUnitListExists.WaitUntil(EventualTimeouts.Poll, EventualTimeouts.Timeout);
+			if (!found)
+				throw new ApplicationException("Waiting for signin result failed!");
 		}
 	}
 }

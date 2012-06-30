@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
@@ -12,7 +13,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "application-signin-button")] public Button SignInButton;
 		[FindBy(Id = "ApplicationSignIn_SignIn_UserName")] public TextField UserNameTextField { get; set; }
-		public Div ValidationSummary { get { return null; } }
+
+		public Element ValidationSummary { get { return Document.Span(Find.ByClass("error")); } }
 
 		[FindBy(Id = "businessunit-ok-button")]public Button SignInBusinessInitsOkButton;
 
@@ -23,6 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get { return Document.RadioButtons.Filter(Find.ByName("signin-sel-datasource")); }
 		}
+
 		public RadioButtonCollection SignInBusinessUnits
 		{
 			get { return Document.RadioButtons.Filter(Find.ByName("signin-sel-businessunit")); }
@@ -51,18 +54,60 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			SigninDataSources.Filter(Find.ByValue("TestData")).First().Click();
 			UserNameTextField.Value = userName;
 			PasswordTextField.Value = password;
-			SignInButton.Click();
+			SignInButton.EventualClick();
 
-			WaitUntilSignInOrBusinessUnitListOrErrorAppears();
+			WaitForSigninResult();
 		}
 
-		private void WaitUntilSignInOrBusinessUnitListOrErrorAppears()
+		private void WaitForSigninResult()
 		{
-			Func<bool> signedInOrBusinessUnitListExists =
-				() => SignoutButton.Exists || SignInBusinessUnits.Any(e => e.Style.Display != "none");
-					  /*|| ErrorSpans.Any(e => e.Style != null && e.Style.Display != "none");*/
-			signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
+			Func<bool> signedInOrBusinessUnitListExists = () =>
+			                                              	{
+																return SignoutButton.IESafeExists() ||
+																	ErrorDisplayed() ||
+																	BusinessUnitsDisplayed()
+			                                              			;
+			                                              	};
+			var found = signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
+			if (!found)
+				throw new ApplicationException("Waiting for signin result failed!");
 		}
+
+		private bool BusinessUnitsDisplayed()
+		{
+			return Document.RadioButton(Find.ByName("signin-sel-businessunit")).IESafeExists();
+		}
+
+		private bool ErrorDisplayed()
+		{
+			var span = Document.Span(Find.ByClass("error", false));
+			if (span.IESafeExists())
+			{
+				if (span.Text == null)
+					return false;
+				try
+				{
+					return span.Text.Trim().Length > 0;
+				}
+				catch (Exception e)
+				{
+					throw;
+				}
+			}
+			return false;
+		}
+
+		/*
+					                                              		       SignInBusinessUnits.Any(e => e.Style.Display != "none")
+
+		 * * 
+		 * 			                                              	{
+																return SignoutButton.IESafeExists() ||
+																	(Document.RadioButton(Find.ByName("signin-sel-businessunit")).IESafeExists() && )
+			                                              		       SignInBusinessUnits.Any(e => e.Style.Display != "none")
+			                                              			;
+			                                              	};
+*/
 
 		public void SelectFirstBusinessUnit()
 		{

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am a user with access only to MyTime")]
 		public void GivenIAmAUserWithAccessOnlyToMyTime()
 		{
-			UserFactory.User().Setup(new UserWithoutMobileReportsAccess());
+			UserFactory.User().Setup(new Agent());
 		}
 
 		[Given(@"I am a user with access only to Mobile Reports")]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am an agent")]
 		public void GivenIAmAnAgent()
 		{
-			UserFactory.User().Setup(new UserWithoutMobileReportsAccess());
+			UserFactory.User().Setup(new Agent());
 			UserFactory.User().Setup(new SchedulePeriod());
 			UserFactory.User().Setup(new PersonPeriod());
 			UserFactory.User().Setup(new ScheduleIsPublished());
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am user without permission to MobileReports")]
 		public void GivenIAmUserWithoutPermissionToMobileReports()
 		{
-			UserFactory.User().Setup(new UserWithoutMobileReportsAccess());
+			UserFactory.User().Setup(new Agent());
 		}
 
 

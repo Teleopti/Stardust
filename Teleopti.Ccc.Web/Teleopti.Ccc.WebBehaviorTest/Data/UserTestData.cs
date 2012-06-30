@@ -4,14 +4,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class UserTestData
 	{
-		public static IPerson PersonWindowsUser;
+		public static IPerson AgentWindowsUser;
 
-		public static IPerson PersonApplicationUser;
-		public static string PersonApplicationUserName = "applicationUser";
-		public static IPerson PersonApplicationUserSingleBusinessUnit;
-		public static string PersonApplicationUserSingleBusinessUnitUserName = "applicationUserSingleBusinessUnit";
+		public static IPerson AgentApplicationUser;
+		public static string AgentApplicationUserName = "applicationUser";
+		public static IPerson AgentApplicationUserSingleBusinessUnit;
+		public static string AgentApplicationUserSingleBusinessUnitUserName = "applicationUserSingleBusinessUnit";
 
-		public static IPerson PersonWithNoPermission;
-		public static string PersonWithNoPermissionUserName = "noPermission";
+		public static IPerson UserWithNoPermission;
+		public static string UserWithNoPermissionUserName = "noPermission";
 	}
 }
