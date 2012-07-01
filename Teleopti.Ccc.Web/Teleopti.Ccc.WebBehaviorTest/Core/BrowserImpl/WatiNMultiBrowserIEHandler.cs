@@ -8,6 +8,7 @@ using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
 	public class WatiNMultiBrowserIEHandler : IBrowserHandler<IE>
 	{
 		private const string ProcessName = "iexplore";

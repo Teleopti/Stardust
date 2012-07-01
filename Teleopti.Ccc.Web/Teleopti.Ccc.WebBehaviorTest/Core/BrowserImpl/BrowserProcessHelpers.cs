@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
 	public static class BrowserProcessHelpers
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
 		internal static bool CloseByClosingMainWindow(string processName, IntPtr windowHandle)
 		{
 			var processes = Process.GetProcessesByName(processName);
