@@ -90,18 +90,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return false;
 		}
 
-		/*
-					                                              		       SignInBusinessUnits.Any(e => e.Style.Display != "none")
-
-		 * * 
-		 * 			                                              	{
-																return SignoutButton.IESafeExists() ||
-																	(Document.RadioButton(Find.ByName("signin-sel-businessunit")).IESafeExists() && )
-			                                              		       SignInBusinessUnits.Any(e => e.Style.Display != "none")
-			                                              			;
-			                                              	};
-*/
-
 		public void SelectFirstBusinessUnit()
 		{
 			SignInBusinessUnits.First().Click();
