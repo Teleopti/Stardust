@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
+	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
 	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.StudentAvailability)]
 	public class StudentAvailabilityController : Controller
 	{
