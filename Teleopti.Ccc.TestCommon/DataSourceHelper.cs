@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Threading;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Helper;
@@ -56,6 +57,7 @@ namespace Teleopti.Ccc.TestCommon
 			{
 				var result = ccc7.BackupByFileCopy();
 				ccc7.ClearPool();
+				Thread.Sleep(1000);
 				return result;
 			}
 		}
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.TestCommon
 			{
 				ccc7.RestoreByFileCopy(backup);
 				ccc7.ClearPool();
+				Thread.Sleep(1000);
 			}
 		}
 
