@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Interfaces.Domain;

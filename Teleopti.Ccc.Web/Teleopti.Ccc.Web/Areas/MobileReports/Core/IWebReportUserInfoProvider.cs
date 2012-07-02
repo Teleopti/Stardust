@@ -1,8 +1,6 @@
-﻿using Teleopti.Ccc.Web.Areas.MobileReports.Models;
-
-namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
+﻿namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Models.Domain;
 
 	public interface IWebReportUserInfoProvider
 	{

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 

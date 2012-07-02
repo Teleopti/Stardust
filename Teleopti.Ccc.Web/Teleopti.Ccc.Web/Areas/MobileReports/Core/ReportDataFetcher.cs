@@ -2,13 +2,12 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
 	using System;
 
-	using Teleopti.Ccc.UserTexts;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
-	using Teleopti.Ccc.Web.Core.RequestContext;
-	using Teleopti.Interfaces.Domain;
+	using UserTexts;
+	using Matrix;
+	using Providers;
+	using Models.Domain;
+	using Models.Report;
+	using Interfaces.Domain;
 
 	public class ReportDataFetcher : IReportRequestValidator
 	{
