@@ -32,13 +32,15 @@
 			this.button1 = new System.Windows.Forms.Button();
 			this.searchPersonView1 = new Teleopti.Ccc.Win.SearchPersonView();
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdv();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
+			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button1
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Location = new System.Drawing.Point(354, 565);
+			this.button1.Location = new System.Drawing.Point(353, 525);
 			this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(100, 28);
@@ -49,13 +51,11 @@
 			// 
 			// searchPersonView1
 			// 
-			this.searchPersonView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.searchPersonView1.Location = new System.Drawing.Point(8, 44);
+			this.searchPersonView1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.searchPersonView1.Location = new System.Drawing.Point(5, 5);
 			this.searchPersonView1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
 			this.searchPersonView1.Name = "searchPersonView1";
-			this.searchPersonView1.Size = new System.Drawing.Size(458, 500);
+			this.searchPersonView1.Size = new System.Drawing.Size(419, 489);
 			this.searchPersonView1.TabIndex = 0;
 			this.searchPersonView1.ItemDoubleClick += new System.EventHandler<System.EventArgs>(this.searchPersonView1_ItemDoubleClick);
 			// 
@@ -78,21 +78,37 @@
 			this.ribbonControlAdv1.ShowLauncher = false;
 			this.ribbonControlAdv1.ShowMinimizeButton = false;
 			this.ribbonControlAdv1.ShowQuickItemsDropDownButton = false;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(470, 41);
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(469, 41);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.ribbonControlAdv1.TabIndex = 2;
 			this.ribbonControlAdv1.Text = "ribbonControlAdv1";
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.searchPersonView1, 0, 0);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(24, 59);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 1;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(429, 452);
+			this.tableLayoutPanel1.TabIndex = 3;
 			// 
 			// SearchPerson
 			// 
 			this.AcceptButton = this.button1;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.ClientSize = new System.Drawing.Size(472, 605);
+			this.ClientSize = new System.Drawing.Size(471, 604);
+			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.Controls.Add(this.button1);
-			this.Controls.Add(this.searchPersonView1);
 			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -103,6 +119,7 @@
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SearchPerson_FormClosing);
 			this.Load += new System.EventHandler(this.SearchPerson_Load);
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
+			this.tableLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -113,5 +130,6 @@
         private SearchPersonView searchPersonView1;
         private System.Windows.Forms.Button button1;
         private Syncfusion.Windows.Forms.Tools.RibbonControlAdv ribbonControlAdv1;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }

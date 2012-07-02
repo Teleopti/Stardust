@@ -86,9 +86,6 @@ Scenario: View absence types
 	And I click absence request tab
 	Then I should see an absence type called Vacation in droplist
 
-
-
-
 Scenario: Hide text request tab when view an absence request
 	Given I am an agent
 	And I have an existing absence request
@@ -150,16 +147,3 @@ Scenario: Can not delete denied absence request
 	And I have a denied absence request
 	When I am viewing requests
 	Then I should not see a delete button
-
-
-
-
-
-Scenario: Hide absence request tab when view a text request
-	Given I am an agent
-	And I have an existing text request
-	And I am viewing requests
-	When I click on the request
-	Then I should see the text request's details form
-	And I should see the request's values
-	And I should not see the absence request tab (invisible)
