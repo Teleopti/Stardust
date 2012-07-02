@@ -1,5 +1,6 @@
 using System.Drawing;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Win.Properties;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -35,16 +36,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
 
-        public void DrawPreference(PermissionState permissionState)
+        public void DrawPreference(PermissionState permissionState,bool isMustHave)
         {
             if (permissionState != PermissionState.None)
             {
-                Brush brush = getBrush(permissionState);
-                Point x = new Point(_gridDrawCellEventArgs.Bounds.Right - 45, _gridDrawCellEventArgs.Bounds.Top + 5);
-                Point y = new Point(_gridDrawCellEventArgs.Bounds.Right - 45 + 8, _gridDrawCellEventArgs.Bounds.Top + 5 + 8);
-                Point z = new Point(_gridDrawCellEventArgs.Bounds.Right - 45, _gridDrawCellEventArgs.Bounds.Top + 5 + 8);
+                if(!isMustHave)
+                {
+                    Brush brush = getBrush(permissionState);
+                    Point x = new Point(_gridDrawCellEventArgs.Bounds.Right - 45, _gridDrawCellEventArgs.Bounds.Top + 5);
+                    Point y = new Point(_gridDrawCellEventArgs.Bounds.Right - 45 + 8, _gridDrawCellEventArgs.Bounds.Top + 5 + 8);
+                    Point z = new Point(_gridDrawCellEventArgs.Bounds.Right - 45, _gridDrawCellEventArgs.Bounds.Top + 5 + 8);
 
-                _gridDrawCellEventArgs.Graphics.FillPolygon(brush, new[] { x, z, y });
+                    _gridDrawCellEventArgs.Graphics.FillPolygon(brush, new[] { x, z, y });
+                }
+                else
+                {
+                    Image mustHaveImage = Resources.heart_8x8;
+                    Point x = new Point(_gridDrawCellEventArgs.Bounds.Right - 45, _gridDrawCellEventArgs.Bounds.Top + 5);
+                    _gridDrawCellEventArgs.Graphics.DrawImage( mustHaveImage,x.X,x.Y );
+                }
+               
             }
         }
 
