@@ -4,6 +4,7 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -66,12 +67,20 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		Teleopti.MyTimeWeb.Portal.InitPeriodSelection(rangeSelectorId, periodData);
 	}
 
+	function _initTodayButton() {
+		$('#Schedule-today-button')
+			.click(function() {
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
+			});
+	}
+
 	return {
 		Init: function () {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
 				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/Week', Teleopti.MyTimeWeb.Schedule.PartialInit);
 			}
 			Teleopti.MyTimeWeb.Schedule.TextRequest.Init();
+			_initTodayButton();
 		},
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();

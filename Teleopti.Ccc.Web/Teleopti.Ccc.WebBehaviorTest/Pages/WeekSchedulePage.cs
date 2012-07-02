@@ -105,9 +105,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public TextField RequestDetailEntityId { get; private set; }
 
 
-		[FindBy(Id = "WeekScheduleDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
+		[FindBy(Id = "ScheduleDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
 		[FindBy(Id = "ScheduleDatePicker")] public DatePicker DatePicker { get; set; }
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }
+
+		[FindBy(Id = "Schedule-today-button")]
+		public Button TodayButton { get; set; }
 	}
 }

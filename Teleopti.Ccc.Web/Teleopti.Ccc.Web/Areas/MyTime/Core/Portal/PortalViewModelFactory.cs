@@ -220,7 +220,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			                   			{
 			                   				NextTitle = Resources.NextPeriod,
 			                   				PrevTitle = Resources.PreviousPeriod
-			                   			}
+			                   			},
+									new ToolBarSeparatorItem(),
+									new ToolBarButtonItem
+										{
+											Title = Resources.Today,
+											ButtonType = "today"
+										}
 			                   	};
 			return new SectionNavigationItem
 					{

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -66,6 +67,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule();
 		}
 
+		[Given(@"I view my week schedule one month ago")]
+		public void GivenIViewMyWeekScheduleOneMonthAgo()
+		{
+			var userName = UserFactory.User().MakeUser();
+			Navigation.GotoGlobalSignInPage();
+			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+			Navigation.GotoWeekSchedulePage(DateTime.Now.AddMonths(1));
+		}
+
 		[Given(@"I am viewing team schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()
 		{
@@ -100,5 +110,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoSiteHomePage();
 		}
 
+		[When(@"I click the current week button")]
+		public void WhenIClickTheCurrentWeekButton()
+		{
+			Pages.Pages.WeekSchedulePage.TodayButton.EventualClick();
+		}
 	}
 }
