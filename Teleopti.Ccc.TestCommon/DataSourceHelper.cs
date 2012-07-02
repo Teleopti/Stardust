@@ -54,7 +54,9 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
 			{
-				return ccc7.BackupByFileCopy();
+				var result = ccc7.BackupByFileCopy();
+				ccc7.ClearPool();
+				return result;
 			}
 		}
 
@@ -63,6 +65,7 @@ namespace Teleopti.Ccc.TestCommon
 			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
 			{
 				ccc7.RestoreByFileCopy(backup);
+				ccc7.ClearPool();
 			}
 		}
 

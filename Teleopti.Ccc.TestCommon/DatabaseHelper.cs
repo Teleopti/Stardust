@@ -87,6 +87,13 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
+		public void ClearPool()
+		{
+			SqlConnection.ClearPool(_connection);
+			_connection.Dispose();
+			_connection = null;
+		}
+
 		public void CreateSchemaByDbManager()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
@@ -129,6 +136,7 @@ namespace Teleopti.Ccc.TestCommon
 				backup.Files.ForEach(f => File.Copy(f.Backup, f.Source, true));
 				ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
 			}
+			SqlConnection.ClearPool(Connection());
 		}
 
 		public class Backup
