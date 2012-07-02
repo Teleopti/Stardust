@@ -13,6 +13,7 @@ using Teleopti.Ccc.SyncfusionGridBinding;
 using Teleopti.Ccc.Win.Budgeting.Events;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
+using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.WinCode.Budgeting.Views;
@@ -299,14 +300,16 @@ namespace Teleopti.Ccc.Win.Budgeting
 		private void InitializeGrid()
 		{
 			var numCell = new NumericReadOnlyCellModel(gridControlWeekView.Model) { NumberOfDecimals = 2 };
-			var percentCell = new PercentReadOnlyCellModel(gridControlWeekView.Model) { NumberOfDecimals = 2 };
+            var percentCell = new PercentReadOnlyCellModel(gridControlWeekView.Model) { NumberOfDecimals = 2 };
 			var percentWithTwoDecimalsCell = new PercentCellModel(gridControlWeekView.Model) { NumberOfDecimals = 2, MinMax = new MinMax<double>(0, 1) };
-			var numericWithTwoDecimalsCell = new NumericCellModel(gridControlWeekView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
+            var restrictedValueForFte = new NumericCellModel(gridControlWeekView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 12d }; 
+            var numericWithTwoDecimalsCell = new NumericCellModel(gridControlWeekView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
 			var nullableCellModelWithTwoCecimal = new NullableNumericCellModel(gridControlWeekView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
             var nullableNegativeCellModelWithTwoDecimalsCell = new NullableNumericCellModel(gridControlWeekView.Model) { NumberOfDecimals = 2, MinValue = -99999999d, MaxValue = 99999999d };
 
 			gridControlWeekView.CellModels.Add("NumericReadOnlyCellModel", numCell);
 			gridControlWeekView.CellModels.Add("PercentReadOnlyCellModel", percentCell);
+            gridControlWeekView.CellModels.Add("RestrictedValueForFTE", restrictedValueForFte);
 			gridControlWeekView.CellModels.Add("PercentWithTwoDecimalsCell", percentWithTwoDecimalsCell);
 			gridControlWeekView.CellModels.Add("NumericWithTwoDecimalsCell", numericWithTwoDecimalsCell);
 			gridControlWeekView.CellModels.Add("NullableNumericWithTwoDecimalsCell", nullableCellModelWithTwoCecimal);
@@ -326,7 +329,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 				ValueMember =
 					new ModelProperty<BudgetGroupWeekDetailModel>("FulltimeEquivalentHours"),
 				CellValueType = typeof(double),
-				CellModel = "NumericWithTwoDecimalsCell"
+                CellModel = "RestrictedValueForFTE"
+                
 			});
 			_entityBinder.AddRow(new GridRow<BudgetGroupWeekDetailModel>
 			{
@@ -496,7 +500,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             }
 
 		    gridControlWeekView.Rows.HeaderCount = 1;
-			_entityBinder.SetColumnParentHeaderMember(new ModelProperty<BudgetGroupWeekDetailModel>("MonthYear"));
+            _entityBinder.SetColumnParentHeaderMember(new ModelProperty<BudgetGroupWeekDetailModel>("MonthYear"));
 			_entityBinder.SetColumnHeaderMember(new ModelProperty<BudgetGroupWeekDetailModel>("Week"));
 		}
 
@@ -670,6 +674,5 @@ namespace Teleopti.Ccc.Win.Budgeting
 				_localEventAggregator.GetEvent<ChangeCustomEfficiencyShrinkage>().Publish((ICustomEfficiencyShrinkage)efficiency.Tag);
 			}
 		}
-
 	}
 }

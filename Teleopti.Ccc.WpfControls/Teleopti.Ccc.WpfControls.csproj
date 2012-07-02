@@ -1310,14 +1310,7 @@
   <ItemGroup>
     <Resource Include="Resources\ccc_Agent_ListRequests_32x32.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\Editor\Models\" />
-    <Folder Include="Controls\Messaging\Models\" />
-    <Folder Include="Controls\Request\Views\" />
-    <Folder Include="Controls\Time\Timeline\Models\" />
-    <Folder Include="Controls\Time\TimeZoom\Models\" />
-    <Folder Include="Editor\ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
