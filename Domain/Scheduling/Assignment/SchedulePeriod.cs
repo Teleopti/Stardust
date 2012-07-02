@@ -157,7 +157,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual int GetDaysOff(DateOnly dateFrom)
 		{
-			if (_daysOff.HasValue)
+			if (PeriodType == SchedulePeriodType.ChineseMonth)
+				return getDaysOffForChineseMonth(dateFrom);
+
+			if (_daysOff.HasValue) // if days off overriden
 				return _daysOff.Value;
 
 			DateOnlyPeriod? period = GetSchedulePeriod(dateFrom);
@@ -179,8 +182,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 							if (personPeriod.PersonContract.ContractSchedule != null)
 							{
 
-								if (
-									!personPeriod.PersonContract.ContractSchedule.IsWorkday(period.Value.StartDate, startDate))
+								if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(period.Value.StartDate, startDate))
 									daysOff++;
 							}
 						}
@@ -363,6 +365,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				case SchedulePeriodType.Week:
 					return new IncreaseWeekByOne();
 				case SchedulePeriodType.Month:
+				case SchedulePeriodType.ChineseMonth:
 					return new IncreaseMonthByOne(cultureInfo);
 				default: //Day
 					return new IncreaseDayByOne();
@@ -469,7 +472,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private int getWorkDaysForPeriod(DateOnly startDate, DateOnly endDate)
 		{
 			int workDays = 0;
-			if (_daysOff.HasValue)
+
+			if(PeriodType == SchedulePeriodType.ChineseMonth)
+			{
+				int daysOff = getDaysOffForChineseMonth(startDate);
+				return (int)endDate.Date.Subtract(startDate).TotalDays + 1 - daysOff;
+			}
+
+			if (_daysOff.HasValue) // if days off are overriden
 			{
 				return (int)endDate.Date.Subtract(startDate).TotalDays + 1 - _daysOff.Value;
 			}
@@ -495,6 +505,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 
 			return workDays;
+		}
+
+		private int getDaysOffForChineseMonth(DateOnly startDate)
+		{
+			DateTime lastDateInMonth = DateHelper.GetLastDateInMonth(startDate.Date, CurrentPerson.PermissionInformation.Culture());
+			int daysInMonth = lastDateInMonth.Day;
+
+			if (daysInMonth == 31)
+				return 8;
+
+			return 7;
 		}
 
 		public virtual void ClearShiftCategoryLimitation()

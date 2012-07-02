@@ -16,6 +16,10 @@
         /// <summary>
         /// day
         /// </summary>
-        Day
+        Day,
+		/// <summary>
+		/// Chinese month
+		/// </summary>
+		ChineseMonth
     }
 }

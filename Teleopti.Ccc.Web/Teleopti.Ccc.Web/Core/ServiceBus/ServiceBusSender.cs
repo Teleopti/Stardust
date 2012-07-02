@@ -1,9 +1,7 @@
 using System;
-using System.Configuration;
 using System.Globalization;
 using System.IO;
 using Autofac;
-using Autofac.Core;
 using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;

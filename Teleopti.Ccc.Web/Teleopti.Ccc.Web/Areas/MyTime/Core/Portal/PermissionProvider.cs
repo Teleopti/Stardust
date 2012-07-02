@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Web.Core.RequestContext;
+﻿using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal

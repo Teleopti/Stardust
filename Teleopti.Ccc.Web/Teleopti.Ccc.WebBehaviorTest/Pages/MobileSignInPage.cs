@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
@@ -30,11 +29,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "signout-button")] // Belongs to MobileReports
 			public Link SignoutButton { get; set; }
-
-		//public SpanCollection ErrorSpans
-		//{
-		//    get { return Document.Spans.Filter(Find.ByClass("error")); }
-		//}
 
 		public void SelectApplicationTestDataSource()
 		{

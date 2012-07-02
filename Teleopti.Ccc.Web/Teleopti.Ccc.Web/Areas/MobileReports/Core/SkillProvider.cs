@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WebReport;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Models.Domain;
 
 	public class SkillProvider : ISkillProvider
 	{

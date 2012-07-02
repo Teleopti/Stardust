@@ -5,7 +5,6 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 using Teleopti.Interfaces.Domain;
 

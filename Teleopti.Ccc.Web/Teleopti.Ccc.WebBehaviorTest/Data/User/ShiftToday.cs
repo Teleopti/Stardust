@@ -1,7 +1,5 @@
 using System;
 using System.Globalization;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {

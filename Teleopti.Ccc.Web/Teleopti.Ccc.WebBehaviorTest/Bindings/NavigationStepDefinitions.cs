@@ -4,7 +4,6 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
-using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
