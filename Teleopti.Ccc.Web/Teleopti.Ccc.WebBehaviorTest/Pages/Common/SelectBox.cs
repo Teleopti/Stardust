@@ -6,7 +6,6 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using WatiN.Core;
 using log4net;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common

@@ -1,16 +1,11 @@
 using System;
 using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
-using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
