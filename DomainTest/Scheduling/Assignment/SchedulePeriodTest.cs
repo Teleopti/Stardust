@@ -23,12 +23,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private SchedulePeriod _periodDay;
         private SchedulePeriod _periodWeek;
         private SchedulePeriod _periodMonth;
+		private SchedulePeriod _periodChineseMonth;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         private SchedulePeriod _periodException;
         private TimeSpan _avgWorkTimePerDay;
         private IPerson _person1;
         private IPerson _person2;
         private IPerson _person3;
+		private IPerson _person4;
         private IPerson _normalPerson;
         private IPersonContract _personContract;
         private IContract _contract1;
@@ -55,31 +57,43 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _normalPerson = PersonFactory.CreatePerson();
             _normalPerson.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
             _normalPerson.PermissionInformation.SetDefaultTimeZone(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone); 
-            _normalPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1),
-                                     _personContract, simpleTeam));
-            _person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 3),
-                                     _personContract, simpleTeam));
-            _person2 = PersonFactory.CreatePerson();
+            _normalPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1), _personContract, simpleTeam));
+            
+			_person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 3), _personContract, simpleTeam));
+            
+			_person2 = PersonFactory.CreatePerson();
             _person2.PermissionInformation.SetCulture(new CultureInfo("en-US"));
             _person2.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
-            _person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2007, 12, 30),
-                                         _personContract, simpleTeam));
+            _person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2007, 12, 30), _personContract, simpleTeam));
+
             _person3 = PersonFactory.CreatePerson();
             _person3.PermissionInformation.SetCulture(new CultureInfo("en-US"));
             _person3.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
-            _person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1),
-                                         _personContract, simpleTeam));
+            _person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1), _personContract, simpleTeam));
+
+			_person4 = PersonFactory.CreatePerson();
+			_person4.PermissionInformation.SetCulture(new CultureInfo("en-US"));
+			_person4.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
+			_person4.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1), _personContract, simpleTeam));
+
+
             _from = new DateOnly(2008, 1, 3); //Thursday, sunday before is 12-30
             _type = SchedulePeriodType.Day;
             _number = 10;
             _avgWorkTimePerDay = TimeSpan.FromHours(8d);
-            _periodDay = new SchedulePeriod(_from, _type, _number);
+            
+			_periodDay = new SchedulePeriod(_from, _type, _number);
             _person1.AddSchedulePeriod(_periodDay);
-            _periodWeek = new SchedulePeriod(_from, SchedulePeriodType.Week, 3);
+            
+			_periodWeek = new SchedulePeriod(_from, SchedulePeriodType.Week, 3);
             _person2.AddSchedulePeriod(_periodWeek);
-            _periodMonth = new SchedulePeriod(_from, SchedulePeriodType.Month, 1);
 
+            _periodMonth = new SchedulePeriod(_from, SchedulePeriodType.Month, 1);
             _person3.AddSchedulePeriod(_periodMonth);
+
+			_periodChineseMonth = new SchedulePeriod(_from, SchedulePeriodType.ChineseMonth, 1);
+			_person4.AddSchedulePeriod(_periodChineseMonth);
+
             _mustHavePreference = 3;
         }
 
@@ -112,12 +126,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _normalPerson.AddSchedulePeriod(weekPeriod3);
             DateOnly expectedDate = new DateOnly(2009,1,12);
             DateOnly requestdDateTime = new DateOnly(2009, 1, 15);
-            //DateTime periodStartUtc = _normalPerson.SchedulePeriod(requestdDateTime).GetSchedulePeriod(requestdDateTime).Value.StartDateTime;
             DateOnly periodStart =
                 _normalPerson.SchedulePeriod(requestdDateTime).GetSchedulePeriod(requestdDateTime).Value.StartDate;
-            //DateTime agentLocal =
-            //    TimeZoneHelper.ConvertFromUtc(periodStartUtc, _normalPerson.PermissionInformation.DefaultTimeZone());
-
             Assert.AreEqual(weekPeriod1, _normalPerson.SchedulePeriod(new DateOnly(2008, 12, 31)));
             Assert.AreEqual(weekPeriod2, _normalPerson.SchedulePeriod(new DateOnly(2009, 1, 5)));
             Assert.AreEqual(weekPeriod2, _normalPerson.SchedulePeriod(new DateOnly(2009, 1, 13)));
@@ -504,6 +514,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _periodDay.SetDaysOff(5);
             Assert.AreEqual(5, _periodDay.GetDaysOff(_from));
         }
+
+		[Test]
+		public void VerifyGetScheduleDaysOffChineseMonth()
+		{
+			_from = new DateOnly(2009, 01, 01);
+			Assert.AreEqual(8, _periodChineseMonth.GetDaysOff(_from));
+			_from = new DateOnly(2009, 02, 01);
+			Assert.AreEqual(7, _periodChineseMonth.GetDaysOff(_from));
+			_from = new DateOnly(2009, 04, 01);
+			Assert.AreEqual(7, _periodChineseMonth.GetDaysOff(_from));
+			_from = new DateOnly(2012, 02, 01);
+			Assert.AreEqual(7, _periodChineseMonth.GetDaysOff(_from));
+			_from = new DateOnly(2009, 01, 02);
+			Assert.AreEqual(8, _periodChineseMonth.GetDaysOff(_from));
+			_from = new DateOnly(2009, 01, 31);
+			Assert.AreEqual(8, _periodChineseMonth.GetDaysOff(_from));
+		}
 
         [Test]
         public void VerifyTargetTimeWhenPersonPeriodStartsInSchedulePeriod()
