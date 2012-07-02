@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.WebTest.Core.RequestContext

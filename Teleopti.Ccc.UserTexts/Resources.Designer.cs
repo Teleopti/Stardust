@@ -8510,7 +8510,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Full Day.
+        ///   Looks up a localized string similar to Full Day.
         /// </summary>
         public static string FullDay {
             get {
@@ -10806,6 +10806,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Longterm Forecast.
+        /// </summary>
+        public static string LongtermForecast {
+            get {
+                return ResourceManager.GetString("LongtermForecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LookUp.
         /// </summary>
         public static string LookUp {
@@ -11045,6 +11054,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ManageRTA {
             get {
                 return ResourceManager.GetString("ManageRTA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage rule sets.
+        /// </summary>
+        public static string ManageRuleSets {
+            get {
+                return ResourceManager.GetString("ManageRuleSets", resourceCulture);
             }
         }
         
@@ -14758,6 +14776,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Override {
             get {
                 return ResourceManager.GetString("Override", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override days off.
+        /// </summary>
+        public static string OverrideDaysOff {
+            get {
+                return ResourceManager.GetString("OverrideDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override hours per day.
+        /// </summary>
+        public static string OverrideHoursPerDay {
+            get {
+                return ResourceManager.GetString("OverrideHoursPerDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override Period.
+        /// </summary>
+        public static string OverridePeriod {
+            get {
+                return ResourceManager.GetString("OverridePeriod", resourceCulture);
             }
         }
         
@@ -19000,15 +19045,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send.
-        /// </summary>
-        public static string SendRequest {
-            get {
-                return ResourceManager.GetString("SendRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Seniority.
         /// </summary>
         public static string Seniority {
@@ -20707,6 +20743,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SubjectColon {
             get {
                 return ResourceManager.GetString("SubjectColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Submit.
+        /// </summary>
+        public static string SubmitRequest {
+            get {
+                return ResourceManager.GetString("SubmitRequest", resourceCulture);
             }
         }
         
@@ -23772,6 +23817,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WorkloadTemplate {
             get {
                 return ResourceManager.GetString("WorkloadTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Workload {0} window is open. Please close it as it is no longer valid..
+        /// </summary>
+        public static string WorkloadWindowAlreadyOpen {
+            get {
+                return ResourceManager.GetString("WorkloadWindowAlreadyOpen", resourceCulture);
             }
         }
         

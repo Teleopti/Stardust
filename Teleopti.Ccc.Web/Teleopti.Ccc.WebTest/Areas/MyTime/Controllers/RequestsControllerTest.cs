@@ -3,14 +3,12 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -115,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				var id = Guid.NewGuid();
 
-				target.TextRequestDelete(id);
+				target.RequestDelete(id);
 
 				textRequestPersister.AssertWasCalled(x => x.Delete(id));
 			}
@@ -132,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 				modelFactory.Stub(f => f.CreateRequestViewModel(id)).Return(viewModel);
 
-				var result = target.TextRequest(id);
+				var result = target.RequestDetail(id);
 				var data = (RequestViewModel)result.Data;
 
 				assertRequestEqual(data, viewModel);	

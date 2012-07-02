@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -12,7 +13,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Core.RequestContext;
-using Teleopti.Ccc.WebTest.Core;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IVirtualSchedulePeriodProvider virtualScheduleProvider;
 		private IPreferenceProvider preferenceProvider;
 		private IPerson person;
-		private IPreferenceFeedbackProvider preferenceFeedbackProvider;
 		private IScheduleProvider scheduleProvider;
 		private IProjectionProvider projectionProvider;
 
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			virtualScheduleProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
-			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
 			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
  
@@ -54,7 +52,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					Depend.On(virtualScheduleProvider),
 					Depend.On(preferenceProvider),
 					Depend.On(loggedOnUser),
-					Depend.On(preferenceFeedbackProvider),
 					Depend.On(scheduleProvider),
 					Depend.On(projectionProvider)
 					)));
@@ -119,6 +116,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
 
 			result.Days.Single().PreferenceDay.Should().Be.SameInstanceAs(preferenceDay);
+		}
+
+		[Test]
+		public void ShouldMapLatestPreferenceDayForTheSameDate()
+		{
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var preferenceDay1 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
+			var preferenceDay2 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
+			preferenceDay1.UpdatedOn = DateTime.Now.AddHours(-1);
+			preferenceDay2.UpdatedOn = DateTime.Now;
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			preferenceProvider.Stub(x => x.GetPreferencesForPeriod(period)).Return(new[] { preferenceDay1, preferenceDay2 });
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.Days.Single().PreferenceDay.Should().Be.SameInstanceAs(preferenceDay2);
 		}
 
 		[Test]

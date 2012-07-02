@@ -5,13 +5,12 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
-using SignalR.Client._20.Hubs;
+using SignalR.Client.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.Events;
-using SignalR.Client._20.Transports;
 using Teleopti.Messaging.Exceptions;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
@@ -60,13 +59,13 @@ namespace Teleopti.Messaging.SignalR
 			{
 				foreach (var type in types)
 				{
-					ThreadPool.QueueUserWorkItem(callProxy, new Notification
+					callProxy(new Notification
 					{
 						StartDate = Subscription.DateToString(eventStartDate),
 						EndDate = Subscription.DateToString(eventEndDate),
 						DomainId = Subscription.IdToString(domainObjectId),
 						DomainType = type.Name,
-						DomainQualifiedType =  type.AssemblyQualifiedName,
+						DomainQualifiedType =  types[0].AssemblyQualifiedName,
 						DomainReferenceId = Subscription.IdToString(referenceObjectId),
 						DomainReferenceType =
 							(referenceObjectType == null)
@@ -83,9 +82,9 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		private void callProxy(object state)
+		private void callProxy(Notification state)
 		{
-			_wrapper.NotifyClients((Notification) state);
+			_wrapper.NotifyClients(state);
 		}
 
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
@@ -150,8 +149,7 @@ namespace Teleopti.Messaging.SignalR
 				BusinessUnitId = Subscription.IdToString(businessUnitId),
 			};
 
-			EventSignal<object> result = _wrapper.AddSubscription(subscription);
-			result.Finished += (sender, e) =>
+			_wrapper.AddSubscription(subscription).Then(_ =>
 			{
 				var route = subscription.Route();
 
@@ -162,7 +160,7 @@ namespace Teleopti.Messaging.SignalR
 					_subscriptionHandlers.Add(route, handlers);
 				}
 				handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription });
-			};
+			});
 		}
 
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)

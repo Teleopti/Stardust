@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Security.Principal;
-using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Core.RequestContext;
-using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider

@@ -233,6 +233,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     unitOfWork.PersistAll();
                     _updateScheduleProjectionReadModel.Execute(_scenarioProvider.DefaultScenario(),
                                                                _absenceRequest.Period, _absenceRequest.Person);
+
+					unitOfWork.PersistAll();
                 }
             }
             ClearStateHolder();

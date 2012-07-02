@@ -768,6 +768,7 @@
     <Compile Include="Main\NavigationPanelProvider.cs" />
     <Compile Include="Main\PortalSettings.cs" />
     <Compile Include="Main\PortalSettingsProvider.cs" />
+    <Compile Include="Main\UpdatedEntities.cs" />
     <Compile Include="MapiMailMessage.cs" />
     <Compile Include="Matrix\MatrixNavigationView.cs">
       <SubType>UserControl</SubType>
@@ -1022,6 +1023,7 @@
     <Compile Include="Payroll\PayrollExportNavigator.Designer.cs">
       <DependentUpon>PayrollExportNavigator.cs</DependentUpon>
     </Compile>
+    <Compile Include="PeopleAdmin\Controls\Columns\EditablePeriodTimeOverrideSchedulePeriodColumn.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\PercentageCellColumnForSchedulePeriod.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\EditableTimeSpanInSchedulePeriodColumn.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\EditableDateOnlyColumnForPeriodGrids.cs" />
@@ -1173,9 +1175,12 @@
       <DependentUpon>AgentRestrictionGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsAvailableDrawer.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailViewCellModel.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsLoadingDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsNotAvailableDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailView.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPreferencePainter.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainter.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsWarningDrawer.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionViewTEMP.cs">
       <SubType>Form</SubType>

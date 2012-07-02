@@ -107,11 +107,12 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.0.7.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.4.0.7\lib\net20\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.7\lib\net20\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SignalR.Client.20, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0259a897762d58c9, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SignalR.Client.20.0.5.0.3\lib\net20\SignalR.Client.20.dll</HintPath>
+    <Reference Include="SignalR.Client.Net20, Version=0.5.1.0, Culture=neutral, PublicKeyToken=0259a897762d58c9, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SignalR.Client.Net20.0.5.2.1\lib\net20\SignalR.Client.Net20.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -322,7 +323,7 @@
     <None Include="ClassDiagrams\CodersClassDiagram.cd" />
     <None Include="ClassDiagrams\DALClassDiagram.cd" />
     <None Include="ClassDiagrams\EventsClassDiagram.cd" />
-    <Content Include="packages.config" />
+    <None Include="packages.config" />
     <None Include="Teleopti.Messaging.pfx" />
   </ItemGroup>
   <ItemGroup>

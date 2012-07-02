@@ -107,7 +107,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
         }
 
-        /// <summary>
+    	public override RequestType RequestType
+    	{
+    		get { return RequestType.TextRequest; }
+    	}
+
+    	/// <summary>
         /// Payload description
         /// </summary>
         public override Description RequestPayloadDescription

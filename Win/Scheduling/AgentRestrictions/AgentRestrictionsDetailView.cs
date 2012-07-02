@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	public class AgentRestrictionsDetailView : ScheduleViewBase, IAgentRestrictionsDetailView
 	{
 		private readonly AgentRestrictionsDetailModel _model;
-		private IWorkShiftWorkTime _workShiftWorkTime;
+		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 
 		public AgentRestrictionsDetailView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			InitializeGrid();
 		}
 
-		private void InitializeGrid()
+		public void InitializeGrid()
 		{
 			ViewGrid.Rows.HeaderCount = 0;
 			ViewGrid.Cols.HeaderCount = 0;
@@ -41,6 +41,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			ViewGrid.NumberedRowHeaders = false;
 			ViewGrid.RowHeights.SetRange(1, ViewGrid.RowCount, 80);
 			ViewGrid.RowHeightEntries[0].Height = 30;
+
+			if (!ViewGrid.CellModels.ContainsKey("AgentRestrictionsDetailViewCellModel")) ViewGrid.Model.CellModels.Add("AgentRestrictionsDetailViewCellModel", new AgentRestrictionsDetailViewCellModel(ViewGrid.Model));
 		}
 
 		protected override int CellWidth()
@@ -89,8 +91,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor, schedulingOptions);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
 			_model.LoadDetails(scheduleMatrixPro, restrictionExtractor, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
-			ViewGrid.Refresh();
-			InitializeGrid();
+			//ViewGrid.Refresh();
+			//InitializeGrid();	
 		}
 	}
 }

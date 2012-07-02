@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.IsFalse(_target.CanGray);
             Assert.IsFalse(_target.IsAverageWorkTimePerDayOverride);
             Assert.IsFalse(_target.IsDaysOffOverride);
+			Assert.IsFalse(_target.IsPeriodTimeOverride);
             Assert.IsNotNull(_target.SchedulePeriod);
         }
 
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void CheckAverageWorkTimePerDaySetter()
         {
             TimeSpan value = new TimeSpan(1, 1, 1);
-            _target.AverageWorkTimePerDay = value;
+			_target.AverageWorkTimePerDayOverride = value;
 
             Assert.AreEqual(value, _target.AverageWorkTimePerDay);
         }
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.IsFalse(schedulePeriodModel.IsAverageWorkTimePerDayOverride);
             Assert.IsFalse(schedulePeriodModel.IsDaysOffOverride);
 
-            schedulePeriodModel.AverageWorkTimePerDay = TimeSpan.Zero;
+			schedulePeriodModel.AverageWorkTimePerDayOverride = TimeSpan.Zero;
             schedulePeriodModel.DaysOff = 5;
 
             Assert.IsTrue(schedulePeriodModel.IsAverageWorkTimePerDayOverride);
@@ -164,6 +165,28 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _target.Extra = TimeSpan.FromDays(3);
             Assert.That(_target.Extra.Equals(TimeSpan.FromDays(3)));
         }
+
+		[Test]
+		public void VerifySeasonality()
+		{
+			_target.Seasonality = new Percent(0.3);
+			Assert.That(_target.Seasonality.Equals(new Percent(0.3)));
+		}
+
+		[Test]
+		public void VerifyPeriodTime()
+		{
+			_target.PeriodTime = TimeSpan.FromDays(3);
+			Assert.That(_target.PeriodTime.Equals(TimeSpan.FromDays(3)));
+		}
+
+		[Test]
+		public void VerifyAverageWorkTimePerDayOverride()
+		{
+			_target.AverageWorkTimePerDayOverride = TimeSpan.FromDays(3);
+			Assert.That(_target.AverageWorkTimePerDayOverride.Equals(TimeSpan.FromDays(3)));
+		}
+		
 
         [Test]
         public void ShouldSetBalanceOut()

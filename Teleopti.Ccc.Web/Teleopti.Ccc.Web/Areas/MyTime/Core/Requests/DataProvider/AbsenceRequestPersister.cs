@@ -30,13 +30,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public RequestViewModel Persist(AbsenceRequestForm form)
 		{
-			var personRequest = _mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
-
-			_personRequestRepository.Add(personRequest);
+			IPersonRequest personRequest = null;
+			if (form.EntityId.HasValue)
+			{
+				personRequest = _personRequestRepository.Find(form.EntityId.Value);
+			}
+			if (personRequest != null)
+			{
+				_mapper.Map(form, personRequest);
+			}
+			else
+			{
+				personRequest = _mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
+				_personRequestRepository.Add(personRequest);
+			}
 
 			if (_serviceBusSender.EnsureBus())
 			{		
-				var message = new NewAbsenceRequestCreated()
+				var message = new NewAbsenceRequestCreated
 				              	{
 				              		BusinessUnitId = _businessUnitProvider.CurrentBusinessUnit().Id.GetValueOrDefault(Guid.Empty),
 				              		Datasource = _dataSourceProvider.CurrentDataSource().DataSourceName,

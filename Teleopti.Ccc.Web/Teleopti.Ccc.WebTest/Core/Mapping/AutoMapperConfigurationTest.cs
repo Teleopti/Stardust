@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.Mapping
 			target.Execute();
 
 			Mapper.AssertConfigurationIsValid();
-			var result = Mapper.Map<TestSource, TestTarget>(new TestSource{Prop = "value"});
+			Mapper.Map<TestSource, TestTarget>(new TestSource{Prop = "value"});
 		}
 
 		public class TestSource

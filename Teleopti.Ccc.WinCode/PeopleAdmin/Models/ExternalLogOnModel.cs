@@ -47,5 +47,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         public string DescriptionText { get { return ContainedEntity.AcdLogOnName; } }
 
 		public string AcdText { get { return ContainedEntity.DataSourceId.ToString(CultureInfo.CurrentCulture); } }
+
+        public string LogObjectName { get { return ContainedEntity.DataSourceName ; } }
     }
 }

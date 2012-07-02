@@ -34,7 +34,7 @@ Scenario: Default full day text request values from week schedule
 	Given I am an agent
 	And I am viewing week schedule
 	When I click on today's summary
-	And I click full day checkbox
+	And I checked the full day checkbox
 	Then I should see 00:00 - 23:59 as the default times
 
 Scenario: Cancel adding text request
@@ -54,3 +54,12 @@ Scenario: Adding invalid text request values
 	And I click the OK button
 	Then I should see texts describing my errors
 	And I should not see a symbol at the top of the schedule
+
+Scenario: Hide absence request tab when view a text request
+	Given I am an agent
+	And I have an existing text request
+	And I am viewing requests
+	When I click on the request
+	Then I should see the text request's details form
+	And I should see the request's values
+	And I should not see the absence request tab (invisible)

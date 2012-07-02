@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Permissions;
 using System.Windows.Forms;
+using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
@@ -824,6 +825,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void MainScreen_EntitiesNeedsRefresh(object sender, EntitiesUpdatedEventArgs e)
         {
+           if (e.EntityStatus == DomainUpdateType.Delete)
+            {
+                foreach (var workload in _skill.WorkloadCollection)
+                {
+                    if (e.UpdatedIds.Contains(workload.Id.Value))
+                    {
+                        string warningMessage = String.Format(CultureInfo.CurrentCulture, UserTexts.Resources.WorkloadWindowAlreadyOpen, workload.Name);
+                        ShowWarningMessage(warningMessage, UserTexts.Resources.WarningMessageTitle);
+                        return;
+                    }
+                }
+            }
+
             if (InvokeRequired)
             {
                 BeginInvoke(new Action<object, EntitiesUpdatedEventArgs>(MainScreen_EntitiesNeedsRefresh), sender, e);
@@ -1997,8 +2011,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             {
                 foreach (DayOfWeek dayOfWeek in DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture))
                 {
-                    IForecastDayTemplate template = templateList[(int)dayOfWeek];
-                    galleryControl.Items.Add(GetGalleryItem(template));
+                    if (templateList.Count > 0)
+                    {
+                        IForecastDayTemplate template = templateList[(int) dayOfWeek];
+                        galleryControl.Items.Add(GetGalleryItem(template));
+                    }
                 }
             }
             else
@@ -2006,8 +2023,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 //Loop'em backwards!!!
                 for (int i = DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture).Count - 1; i >= 0; i--)
                 {
-                    IForecastDayTemplate template = templateList[i];
-                    galleryControl.Items.Add(GetGalleryItem(template));
+                    if (templateList.Count > 0)
+                    {
+                        IForecastDayTemplate template = templateList[i];
+                        galleryControl.Items.Add(GetGalleryItem(template));
+                    }
                 }
             }
 

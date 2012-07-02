@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             if (parentRuleSetBag!=null)
             {
                 parentRuleSetBag.RemoveRuleSet(ruleSet);
-                return;
             }
 
             Explorer.Model.RemoveRuleSet(ruleSet);

@@ -260,7 +260,6 @@
     <Compile Include="Data\User\DayOffPreference.cs" />
     <Compile Include="Data\User\AbsencePreference.cs" />
     <Compile Include="Data\User\DoNotHaveVirtualSchedulePeriods.cs" />
-    <Compile Include="Data\User\MultipleVirtualSchedulePeriods.cs" />
     <Compile Include="Data\User\NoWorkflowControlSet.cs" />
     <Compile Include="Data\User\PreferenceOpenWithAllowedPreferencesWorkflowControlSet.cs" />
     <Compile Include="Data\User\ScheduleIsNotPublished.cs" />

@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.toolStripButtonAddRuleSet.Name = "toolStripButtonAddRuleSet";
 			this.SetShortcut(this.toolStripButtonAddRuleSet, System.Windows.Forms.Keys.None);
 			this.toolStripButtonAddRuleSet.Size = new System.Drawing.Size(82, 68);
-			this.toolStripButtonAddRuleSet.Text = "xxAddRuleSet";
+            this.toolStripButtonAddRuleSet.Text = "xxManageRuleSets";
 			this.toolStripButtonAddRuleSet.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonAddRuleSet.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonAddRuleSet, true);

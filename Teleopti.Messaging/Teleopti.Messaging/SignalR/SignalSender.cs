@@ -3,7 +3,8 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using SignalR.Client._20.Hubs;
+using System.Threading;
+using SignalR.Client.Hubs;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -23,7 +24,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 			_serverUrl = serverUrl;
 
-			ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ignoreInvalidCertificate);
+			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 		}
 
 		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
@@ -86,11 +87,14 @@ namespace Teleopti.Messaging.SignalR
 				try
 				{
 					sendAttempt++;
-					_wrapper.NotifyClients(new Notification
+
+					var waitForSend = new ManualResetEvent(false);
+					var task = _wrapper.NotifyClients(new Notification
 					          	{
 					          		StartDate = Subscription.DateToString(floor),
 					          		EndDate = Subscription.DateToString(ceiling),
 					          		DomainId = Subscription.IdToString(domainObjectId),
+									DomainQualifiedType = domainInterfaceType.AssemblyQualifiedName,
 					          		DomainType = domainInterfaceType.Name,
 					          		ModuleId = Subscription.IdToString(moduleId),
 					          		DomainUpdateType = (int) DomainUpdateType.Insert,
@@ -98,6 +102,8 @@ namespace Teleopti.Messaging.SignalR
 					          		BusinessUnitId = Subscription.IdToString(businessUnitId),
 					          		BinaryData = null
 					          	});
+					task.OnFinish += (sender, e) => waitForSend.Set();
+					waitForSend.WaitOne();
 					break;
 				}
 				catch (Exception)

@@ -21,7 +21,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		RequestPartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 			Teleopti.MyTimeWeb.Request.List.Init();
-			Teleopti.MyTimeWeb.Request.TextRequest.Init();
+			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
 		}
 	};
 

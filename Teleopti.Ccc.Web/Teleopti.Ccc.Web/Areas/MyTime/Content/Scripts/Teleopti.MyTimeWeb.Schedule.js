@@ -148,14 +148,18 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		$('#Text-request-tab')
 			.click(function () {
 				_clearValidationError();
-				_hideAbsenceTypes();
-				requestViewModel.IsFullDay(false);
+				if (!$('#Text-request-tab').hasClass('selected-tab')) {
+					_hideAbsenceTypes();
+					requestViewModel.IsFullDay(false);
+				}
 			});
 		$('#Absence-request-tab')
 			.click(function () {
 				_clearValidationError();
-				_showAbsenceTypes();
-				requestViewModel.IsFullDay(true);
+				if (!$('#Absence-request-tab').hasClass('selected-tab')) {
+					_showAbsenceTypes();
+					requestViewModel.IsFullDay(true);
+				}
 			});
 	}
 
@@ -165,7 +169,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			;
 		$("#Schedule-addRequest-section .combobox.time-input").combobox();
 		$("#Schedule-addRequest-section .combobox.absence-input").combobox();
-		
+
 		$("#Absence-type-input").attr('readonly', 'true');
 
 		requestViewModel = new Teleopti.MyTimeWeb.Schedule.RequestViewModel();
@@ -242,6 +246,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			.reset()
 			;
 		$('#Absence-type').prop('selectedIndex', 0);
+		requestViewModel.IsFullDay(false);
 		$('#Schedule-addRequest-fromDate-input').val(date);
 		$('#Schedule-addRequest-toDate-input').val(date);
 		$('#Text-request-tab').click();

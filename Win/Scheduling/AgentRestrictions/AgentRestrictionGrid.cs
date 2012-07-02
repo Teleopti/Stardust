@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
 using Syncfusion.Windows.Forms.Grid;
@@ -31,6 +32,26 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		}
 	}
 
+	internal class PersonsToLoad
+	{
+		private readonly ICollection<IPerson> _personsToLoad;
+
+		public PersonsToLoad()
+		{
+			_personsToLoad = new Collection<IPerson>();	
+		}
+		
+		public void AddPerson(IPerson person)
+		{
+			_personsToLoad.Add(person);	
+		}
+
+		public bool Contains(IPerson person)
+		{
+			return _personsToLoad.Contains(person);
+		}
+	}
+
 	public partial class AgentRestrictionGrid : GridControl, IAgentRestrictionsView
 	{
 		private AgentRestrictionsPresenter _presenter;
@@ -45,7 +66,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private int _loadedCounter;
 		private IList<IPerson> _persons;
 		private IPerson _selectedPerson;
-		//private bool _useSchedule;
+		private AgentRestrictionsDetailView _detailView;
 
 		private delegate void GridDelegate();
 
@@ -105,7 +126,18 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (displayRow == null) return;
 			_selectedPerson = displayRow.Matrix.Person;
 			if (displayRow.State != AgentRestrictionDisplayRowState.Available) return;
-			
+
+			ThreadPool.QueueUserWorkItem(LoadDetails, displayRow);	
+		}
+
+		void LoadDetails(object workObject)
+		{
+			var displayRow = workObject as AgentRestrictionsDisplayRow;
+			if (displayRow == null) return;
+
+			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
+			_detailView.LoadDetails(displayRow.Matrix, restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
+
 			var displayRowArgs = new AgentDisplayRowEventArgs(displayRow);
 			OnSelectedAgentIsReady(displayRowArgs);
 		}
@@ -135,6 +167,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			Rows.HeaderCount = 1; // = 2 headers
 			Cols.HeaderCount = 0; // = 1 header
 			Rows.FrozenCount = 1;
+
+			NumberedColHeaders = false;
 		}
 
 		public void MergeHeaders()
@@ -144,7 +178,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 9, 0, 12));	
 		}
 
-		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, RestrictionSchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson)
+		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, RestrictionSchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson, AgentRestrictionsDetailView detailView)
 		{
 			if (stateHolder == null) throw new ArgumentNullException("stateHolder");
 
@@ -154,18 +188,19 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_persons = persons;
 			_selectedPerson = selectedPerson;
 			_loadedCounter = 0;
-			//_useSchedule = useSchedule;
+			_detailView = detailView;
+
+			_model.DisplayRows.Clear();
 
 			var scheduleMatrixListCreator = new ScheduleMatrixListCreator(stateHolder.SchedulingResultState);
 			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, scheduleMatrixListCreator);
 
-			ThreadPool.QueueUserWorkItem(Load, agentRestrictionsDisplayRowCreator);	
+			ThreadPool.QueueUserWorkItem(Load, agentRestrictionsDisplayRowCreator);
 		}
 
 		public void LoadData(RestrictionSchedulingOptions schedulingOptions)
 		{
 			_loadedCounter = 0;
-			//_useSchedule = useSchedule;
 			_schedulingOptions = schedulingOptions;
 
 			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
@@ -176,6 +211,38 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			Invalidate();
 
 			ThreadPool.QueueUserWorkItem(Load, null);
+		}
+
+		public void LoadData(RestrictionSchedulingOptions schedulingOptions, ICollection<IPerson> persons)
+		{
+			if (persons == null) return;
+
+			_loadedCounter = 0;
+			_schedulingOptions = schedulingOptions;
+			var personsToLoad = new PersonsToLoad();
+
+			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
+			{
+				if (!persons.Contains(agentRestrictionsDisplayRow.Matrix.Person)) continue;
+				agentRestrictionsDisplayRow.State = AgentRestrictionDisplayRowState.NotAvailable;
+				personsToLoad.AddPerson(agentRestrictionsDisplayRow.Matrix.Person);
+			}
+
+			Invalidate();
+
+			ThreadPool.QueueUserWorkItem(LoadDataPersons, personsToLoad);
+		}
+
+		void LoadDataPersons(object workObject)
+		{
+			var persons = workObject as PersonsToLoad;
+			if (persons == null) return;
+
+			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
+			{
+				if(persons.Contains(agentRestrictionsDisplayRow.Matrix.Person))
+				ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+			}
 		}
 
 		void Load(object workObject)
@@ -216,16 +283,18 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor, schedulePeriodTargetTimeCalculator,workShiftWeekMinMaxCalculator);
 			var periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
-			var dataExtractor = new AgentRestrictionsDisplayDataExtractor(schedulePeriodTargetTimeCalculator, workShiftMinMaxCalculator,periodScheduledAndRestrictionDaysOff,restrictionExtractor);
+			var dataExtractor = new AgentRestrictionsDisplayDataExtractor(schedulePeriodTargetTimeCalculator, workShiftMinMaxCalculator, periodScheduledAndRestrictionDaysOff);
 
-			dataExtractor.ExtractTo(displayRow, _schedulingOptions); //<- TODO use schedules?
+			dataExtractor.ExtractTo(displayRow, _schedulingOptions); 
 			displayRow.SetWarnings();
 			displayRow.State = AgentRestrictionDisplayRowState.Available;
 
 			if (!IsHandleCreated) return;
 
+			
 			if (displayRow.Matrix.Person.Equals(_selectedPerson))
 			{
+				_detailView.LoadDetails(displayRow.Matrix, restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
 				var displayRowArgs = new AgentDisplayRowEventArgs(displayRow);
 				OnSelectedAgentIsReady(displayRowArgs);
 			}

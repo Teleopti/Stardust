@@ -16,16 +16,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly IResolve<IVirtualSchedulePeriodProvider> _virtualSchedulePeriodProvider;
 		private readonly IResolve<IPreferenceProvider> _preferenceProvider;
 		private readonly IResolve<ILoggedOnUser> _loggedOnUser;
-		private readonly IResolve<IPreferenceFeedbackProvider> _preferenceFeedbackProvider;
 		private readonly IResolve<IScheduleProvider> _scheduleProvider;
 		private readonly IResolve<IProjectionProvider> _projectionProvider;
 
-		public PreferenceDomainDataMappingProfile(IResolve<IVirtualSchedulePeriodProvider> virtualSchedulePeriodProvider, IResolve<IPreferenceProvider> preferenceProvider, IResolve<ILoggedOnUser> loggedOnUser, IResolve<IPreferenceFeedbackProvider> preferenceFeedbackProvider, IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider)
+		public PreferenceDomainDataMappingProfile(IResolve<IVirtualSchedulePeriodProvider> virtualSchedulePeriodProvider, IResolve<IPreferenceProvider> preferenceProvider, IResolve<ILoggedOnUser> loggedOnUser, IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider)
 		{
 			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
 			_preferenceProvider = preferenceProvider;
 			_loggedOnUser = loggedOnUser;
-			_preferenceFeedbackProvider = preferenceFeedbackProvider;
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
 		}
@@ -43,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				              		preferenceDays = preferenceDays ?? new IPreferenceDay[] {};
 									var dates = period.DayCollection();
 				              		var days = (from d in dates
-				              		            let preferenceDay = (from pd in preferenceDays where pd.RestrictionDate == d select pd).SingleOrDefault()
+				              		            let preferenceDay = (from pd in preferenceDays where pd.RestrictionDate == d select pd).OrderByDescending(k=>k.UpdatedOn).FirstOrDefault()
 												let providedScheduleDay = (from sd in scheduleDays where sd.DateOnlyAsPeriod.DateOnly == d select sd).SingleOrDefault()
 												let scheduleDay = providedScheduleDay != null && providedScheduleDay.IsScheduled() ? providedScheduleDay : null
 												let projection = scheduleDay != null ? _projectionProvider.Invoke().Projection(scheduleDay) : null
@@ -57,13 +55,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 															Projection = projection
 				              		                   	}).ToArray();
 				              		var workflowControlSet = _loggedOnUser.Invoke().CurrentUser().WorkflowControlSet;
-				              		var colorSource = new ScheduleColorSource
-				              		                  	{
-				              		                  		ScheduleDays = scheduleDays,
-				              		                  		Projections = (from p in days where p.Projection != null select p.Projection).ToArray(),
-				              		                  		PreferenceDays = preferenceDays,
+									var colorSource = new ScheduleColorSource
+														{
+															ScheduleDays = scheduleDays,
+															Projections = (from p in days where p.Projection != null select p.Projection).ToArray(),
+															PreferenceDays = preferenceDays,
 															WorkflowControlSet = workflowControlSet
-				              		                  	};
+														};
 				              		return new PreferenceDomainData
 				              		       	{
 				              		       		SelectedDate = s,

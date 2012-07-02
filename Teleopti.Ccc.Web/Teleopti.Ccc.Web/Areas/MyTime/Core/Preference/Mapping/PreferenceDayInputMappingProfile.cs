@@ -10,16 +10,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceDayInputMappingProfile : Profile
 	{
-		private readonly Func<IMappingEngine> _mapper;
-		private readonly Func<ILoggedOnUser> _loggedOnUser;
 		private readonly Func<IShiftCategoryRepository> _shiftCategoryRepository;
 		private readonly Func<IDayOffRepository> _dayOffRepository;
 		private readonly Func<IAbsenceRepository> _absenceRepository;
 
-		public PreferenceDayInputMappingProfile(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser, Func<IShiftCategoryRepository> shiftCategoryRepository, Func<IDayOffRepository> dayOffRepository, Func<IAbsenceRepository> absenceRepository)
+		public PreferenceDayInputMappingProfile(Func<IShiftCategoryRepository> shiftCategoryRepository, Func<IDayOffRepository> dayOffRepository, Func<IAbsenceRepository> absenceRepository)
 		{
-			_mapper = mapper;
-			_loggedOnUser = loggedOnUser;
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_dayOffRepository = dayOffRepository;
 			_absenceRepository = absenceRepository;

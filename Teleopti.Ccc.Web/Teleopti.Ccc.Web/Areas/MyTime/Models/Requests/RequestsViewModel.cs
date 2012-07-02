@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Models.Shared;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string Subject;
 		public string Text;
 		public string Type;
+		public RequestType TypeEnum;
 		public string Dates;
 		public string UpdatedOn;
 		public string Status;
@@ -27,5 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string RawDateTo;
 		public string RawTimeFrom;
 		public string RawTimeTo;
+		public bool IsFullDay;
 	}
 }

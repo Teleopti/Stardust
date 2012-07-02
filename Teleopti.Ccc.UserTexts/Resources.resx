@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -9886,13 +9886,13 @@ Period</comment>
     <value>Personal Activity</value>
     <comment>Personal Activity</comment>
   </data>
-	<data name="NoSchedulePeriodFoundForUser" xml:space="preserve">
+  <data name="NoSchedulePeriodFoundForUser" xml:space="preserve">
     <value>No schedule period found for this user</value>
   </data>
-	<data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+  <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
     <value>No person period found for this user</value>
   </data>
-	<data name="AlsoShowsMeetingsCreatedByMe" xml:space="preserve">
+  <data name="AlsoShowsMeetingsCreatedByMe" xml:space="preserve">
     <value>Also show meetings created by me but where I not participate in the meeting.</value>
     <comment>Also show meetings created by me but where I not participate in the meeting.</comment>
   </data>
@@ -10682,7 +10682,7 @@ These options are activated:
     <comment>Application function Absence requests for the web</comment>
   </data>
   <data name="FullDay" xml:space="preserve">
-    <value> Full Day</value>
+    <value>Full Day</value>
     <comment>Full day for request</comment>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
@@ -10717,16 +10717,40 @@ These options are activated:
     <value>You should work {0} hours.</value>
     <comment>You should work X hours.</comment>
   </data>
-	<data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
     <value>You should work {0} to {1} hours.</value>
     <comment>You should work X to Y hours.</comment>
   </data>
-	<data name="MissingAbsenceType" xml:space="preserve">
+  <data name="MissingAbsenceType" xml:space="preserve">
     <value>Missing absence type.</value>
     <comment>Missing absence type.</comment>
   </data>
-  <data name="SendRequest" xml:space="preserve">
-    <value>Send</value>
-    <comment>Send a text request/absence request...</comment>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Submit</value>
+    <comment>Submit a text request/absence request...</comment>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>Override Period</value>
+    <comment>Overrride period time</comment>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Override hours per day</value>
+    <comment>Override hours per dad, the average worktime per day</comment>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Override days off</value>
+    <comment>Override days off</comment>
+  </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>This Workload {0} window is open. Please close it as it is no longer valid.</value>
+    <comment>please close workload window.</comment>
+  </data>
+  <data name="LongtermForecast" xml:space="preserve">
+    <value>Longterm Forecast</value>
+    <comment>Longterm Forecast</comment>
+  </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>Manage rule sets</value>
+    <comment>Manage rule sets</comment>
   </data>
 </root>

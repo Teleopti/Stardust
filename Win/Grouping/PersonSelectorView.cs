@@ -37,6 +37,9 @@ namespace Teleopti.Ccc.Win.Grouping
             xdtpDate.Culture = CultureInfo.CurrentCulture;
             SetTexts();
             PreselectedPersonIds = new List<Guid>();
+			treeViewAdvMainTabTree.SortWithChildNodes = true;
+			treeViewAdvMainTabTree.Root.SortType = TreeNodeAdvSortType.Text;
+			treeViewAdvMainTabTree.Root.SortOrder = SortOrder.Ascending;
         }
 
         protected override void SetCommonTexts()
@@ -107,6 +110,8 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		public bool KeepInteractiveOnDuringLoad { get; set; }
 
+		public bool ExpandSelected { get; set; }
+
         public void ResetTreeView(TreeNodeAdv[] treeNodeAdvs)
         {
             treeViewAdvMainTabTree.AfterCheck-= treeViewAdvMainTabTreeAfterCheck;
@@ -117,6 +122,7 @@ namespace Teleopti.Ccc.Win.Grouping
             treeViewAdvMainTabTree.Nodes.AddRange(treeNodeAdvs);
 			if(ShowCheckBoxes)
 			    treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
+			treeViewAdvMainTabTree.Root.Sort();
 			treeViewAdvMainTabTree.EndUpdate();
             treeViewAdvMainTabTree.AfterCheck += treeViewAdvMainTabTreeAfterCheck;
         }
@@ -356,10 +362,6 @@ namespace Teleopti.Ccc.Win.Grouping
 
         public  bool HideMenu { get; set; }
 
-        public void SetDate(DateOnly newDate)
-        {
-            xdtpDate.Value = newDate;
-        }
 
         private void refreshListToolStripMenuItemClick(object sender, EventArgs e)
         {
@@ -367,4 +369,5 @@ namespace Teleopti.Ccc.Win.Grouping
         }
         
     }
+
 }

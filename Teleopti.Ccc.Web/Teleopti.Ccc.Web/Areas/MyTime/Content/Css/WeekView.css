@@ -156,6 +156,8 @@
 
 .ui-tooltip-input .date-input {
 	width: 8em;
+	padding-left: 1px !important;
+	padding-right: 1px !important;
 }
 
 .ui-tooltip-input button.ui-button-icon-only {
@@ -183,8 +185,10 @@
 .absence-input-label 
 {
 	padding-top: 4px;
+	padding-left: 2px;
+	padding-right: 2px;
 	height: 16px;
-	width: 10em;
+	width: 8em;
 }
 .rtl .absence-input-label 
 {

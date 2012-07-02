@@ -419,6 +419,7 @@
     <Compile Include="PeopleAdmin\Commands\SendInstantMessageCommand.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodMustHavePreferenceComparer.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodSeasonalityComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodTimeOverrideComparer.cs" />
     <Compile Include="PeopleAdmin\DayOfWeekDisplay.cs" />
     <Compile Include="PeopleAdmin\IScheduleNavigator.cs" />
     <Compile Include="PeopleAdmin\IPersonFinderView.cs" />
@@ -521,8 +522,11 @@
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRow.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRowCreator.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsModel.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPreferencePainterDecider.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPresenter.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainterDecider.cs" />
     <Compile Include="Scheduling\AgentRestrictions\IAgentRestrictionsDetailView.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\IAgentRestrictionsDetailViewCellModel.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryDirection.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryModel.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryPresenter.cs" />

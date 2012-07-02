@@ -4,8 +4,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.TestData
 {
 	using System.Globalization;
 
-	using Teleopti.Ccc.Web.Core.RequestContext;
-
 	public class CurrentThreadUserCulture : IUserCulture
 	{
 		#region ICultureProvider Members

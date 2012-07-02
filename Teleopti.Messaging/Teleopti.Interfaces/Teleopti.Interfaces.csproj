@@ -547,6 +547,7 @@
     <Compile Include="Domain\OptimizationRestriction.cs" />
     <Compile Include="Domain\JobResultProgress.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />
+    <Compile Include="Domain\RequestType.cs" />
     <Compile Include="Domain\ResourceOptimizerProgressEventArgs.cs" />
     <Compile Include="Domain\ITimeLayer.cs" />
     <Compile Include="Domain\ITimeLayerOfDouble.cs" />
@@ -838,8 +839,11 @@
     <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
+    <Compile Include="Messages\Denormalize\GroupPageChangedMessage.cs" />
+    <Compile Include="Messages\Denormalize\PersonChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
+    <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />

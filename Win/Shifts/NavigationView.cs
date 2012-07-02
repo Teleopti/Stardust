@@ -20,13 +20,19 @@ namespace Teleopti.Ccc.Win.Shifts
         private TreeViewAdv _defaultTreeView;
         private ShiftCreatorViewType _currentView = ShiftCreatorViewType.RuleSet;
 
+        public TreeViewAdv DefaultTreeView
+        {
+            get { return _defaultTreeView; }
+            set { _defaultTreeView = value; }
+        }
+
         private string ContextMenuText
         {
             get
             {
-                string text = UserTexts.Resources.AddToBags;
+                string text = UserTexts.Resources.ManageRuleSets;
                 if (tabControlShiftCreator.SelectedIndex == 1)
-                    text = UserTexts.Resources.AddRuleSet;
+                    text = UserTexts.Resources.ManageRuleSets;
                 return text;
             }
         }
@@ -101,9 +107,9 @@ namespace Teleopti.Ccc.Win.Shifts
                             _eventAggregator.GetEvent<RuleSetBagChanged>().Publish(((IRuleSetBag)currentNode.TagObject));
                         }
                     }
-                    catch (ArgumentOutOfRangeException ex)
+                    catch (ArgumentOutOfRangeException)
                     {
-                        showMessagebox(UserTexts.Resources.TheNameIsTooLong, ex.ToString());
+						showMessagebox(UserTexts.Resources.TheNameIsTooLong, UserTexts.Resources.TextTooLong);
                         _defaultTreeView.BeginEdit();
                         return;
                     }
@@ -261,11 +267,20 @@ namespace Teleopti.Ccc.Win.Shifts
 
             _defaultTreeView.AfterSelect -= defaultTreeViewAfterSelect;
             if (_currentView == ShiftCreatorViewType.RuleSet)
+            {
                 createRuleSetNodes(ExplorerPresenter.Model.RuleSetCollection);
+            }
             else if (_currentView == ShiftCreatorViewType.RuleSetBag)
+            {
                 createRuleSetBagNodes(ExplorerPresenter.Model.RuleSetBagCollection);
+            }
             _defaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
 
+
+            if (_defaultTreeView.Nodes[0] != null)
+            {
+                _defaultTreeView.SelectedNode = _defaultTreeView.Nodes[0].Nodes[0] ?? _defaultTreeView.Nodes[0];
+            }
             _defaultTreeView.ContextMenuStrip.Items[3].Text = ContextMenuText;
 
             ExplorerView.AddControlHelpContext(_defaultTreeView);
@@ -458,9 +473,9 @@ namespace Teleopti.Ccc.Win.Shifts
         public override void RefreshView()
         {
             _defaultTreeView.AfterSelect -= defaultTreeViewAfterSelect;
-            if(_currentView == ShiftCreatorViewType.RuleSet)
+            if (_currentView == ShiftCreatorViewType.RuleSet)
                 createRuleSetNodes(ExplorerPresenter.Model.RuleSetCollection);
-            else 
+            else
                 createRuleSetBagNodes(ExplorerPresenter.Model.RuleSetBagCollection);
             _defaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
         }

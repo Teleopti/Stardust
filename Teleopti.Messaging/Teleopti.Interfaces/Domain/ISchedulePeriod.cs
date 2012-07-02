@@ -48,7 +48,18 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: cs 
         /// Created date: 2008-03-10
         /// </remarks>
-        TimeSpan AverageWorkTimePerDay { get; set; }
+        TimeSpan AverageWorkTimePerDay { get; }
+
+
+		/// <summary>
+		/// Gets or sets the average work time per day for display.
+		/// </summary>
+		/// <value>The average work time per day for display.</value>
+		/// <remarks>
+		/// Created by: cs 
+		/// Created date: 2008-03-10
+		/// </remarks>
+		TimeSpan AverageWorkTimePerDayOverride { get; set; }
 
         ///// <summary>
         ///// Get target time
@@ -60,6 +71,29 @@ namespace Teleopti.Interfaces.Domain
         ///// </remarks>
         //[Obsolete("It only works right to agents with normal worktime contract")]
         //TimeSpan PeriodTarget(DateOnly dateOnly);
+
+		/// <summary>
+		/// Gets a value indicating whether the period is overriden.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if the period value is overriden; otherwise, <c>false</c>.
+		/// </value>
+		/// <remarks>
+		/// Created by: tamasb
+		/// Created date: 2012-06-15
+		/// </remarks>
+		bool IsPeriodTimeOverride { get; }
+
+		/// <summary>
+		/// Gets or sets the period time.
+		/// </summary>
+		/// <value>The period time.</value>
+		/// <remarks>
+		/// Created by: tamasb
+		/// Created date: 2012-06-15
+		/// </remarks>
+		TimeSpan? PeriodTime
+		{ get; set; }
 
         /// <summary>
         /// Gets the real schedule period with a real start and an end date. If the parameter is not part of the period, 

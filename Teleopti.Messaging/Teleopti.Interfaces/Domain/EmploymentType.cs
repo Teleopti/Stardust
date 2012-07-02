@@ -8,18 +8,14 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Employed as fixed staff with normal work time
         /// </summary>
-        FixedStaffNormalWorkTime,
+        FixedStaffNormalWorkTime = 0,
         /// <summary>
         /// Employed at hourly basis
         /// </summary>
-        HourlyStaff,
-        /// <summary>
-        /// Employed as fixed staff with period work time
-        /// </summary>
-        FixedStaffPeriodWorkTime,
+        HourlyStaff = 1,
         /// <summary>
         /// Employed as fixed staff with normal work time
         /// </summary>
-        FixedStaffDayWorkTime,
+        FixedStaffDayWorkTime = 3
     }
 }

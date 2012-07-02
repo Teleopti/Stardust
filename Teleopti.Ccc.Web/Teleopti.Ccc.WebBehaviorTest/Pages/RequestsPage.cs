@@ -31,13 +31,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		}
 
 		[FindBy(Id = "Requests-addTextRequest-button")]
-		public Button AddTextRequestButton { get; set; }
+		public Button AddRequestButton { get; set; }
 
 		[FindBy(Id = "Request-detail-section")]
 		public Div RequestDetailSection { get; set; }
 
+		[FindBy(Id = "Text-request-tab")]
+		public Span TextRequestTab { get; set; }
+
 		[FindBy(Id = "Absence-request-tab")]
 		public Span AbsenceRequestTab { get; set; }
+
+		[FindBy(Id = "Absence-type-element")]
+		public Div AbsenceTypesElement { get; set; }
 
 		[FindBy(Id = "Absence-type-input")]
 		public TextField AbsenceTypesTextField { get; set; }
@@ -49,17 +55,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public CheckBox FulldayCheck { get; set; }
 
 		[FindBy(Id = "Request-detail-subject-input")]
-		public TextField TextRequestDetailSubjectInput { get; set; }
+		public TextField RequestDetailSubjectInput { get; set; }
 		[FindBy(Id = "Request-detail-fromDate-input")]
-		public TextField TextRequestDetailFromDateTextField { get; set; }
+		public TextField RequestDetailFromDateTextField { get; set; }
 		[FindBy(Id = "Request-detail-fromTime-input-input")]
-		public TextField TextRequestDetailFromTimeTextField { get; set; }
+		public TextField RequestDetailFromTimeTextField { get; set; }
 		[FindBy(Id = "Request-detail-toDate-input")]
-		public TextField TextRequestDetailToDateTextField { get; set; }
+		public TextField RequestDetailToDateTextField { get; set; }
 		[FindBy(Id = "Request-detail-toTime-input-input")]
-		public TextField TextRequestDetailToTimeTextField { get; set; }
+		public TextField RequestDetailToTimeTextField { get; set; }
 		[FindBy(Id = "Request-detail-message-input")]
-		public TextField TextRequestDetailMessageTextField { get; set; }
+		public TextField RequestDetailMessageTextField { get; set; }
 		[FindBy(Id = "Request-detail-error")]
 		public Div ValidationErrorText { get; set; }
 
@@ -69,6 +75,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Element CancelButton { get; set; }
 
 		[FindBy(Id = "Request-detail-entityid")]
-		public TextField TextRequestDetailEntityId { get; set; }
+		public TextField RequestDetailEntityId { get; set; }
 	}
 }

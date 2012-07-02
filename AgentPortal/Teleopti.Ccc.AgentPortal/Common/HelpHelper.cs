@@ -105,10 +105,12 @@ namespace Teleopti.Ccc.AgentPortal.Common
           /*  */
 
         }
+
         private static void HelpHttp(string formName, IHelpContext control)
         {
             Help.ShowHelp(null, GetUrl(formName, control));
         }
+
         private static void HelpOnlineHttp(string formName, IHelpContext control)
         {
             Help.ShowHelp(null, GetOnlineUrl(formName, control));
@@ -120,12 +122,14 @@ namespace Teleopti.Ccc.AgentPortal.Common
             topic = HttpUtility.UrlEncode(topic);
             return string.Concat(_http,_helpLang, _prefix, topic, _suffix);
         }
+
         private static string GetOnlineUrl(string formName, IHelpContext control)
         {
             string topic = GetTopicUrlOnline(formName, control);
             topic = HttpUtility.UrlEncode(topic);
             return string.Concat(_httpOnline, _helpLang, _prefixOnline, topic, _suffixOnline);
         }
+
         private static string GetTopicUrlOnline(string formName, IHelpContext control)
         {
             string controlName = null;
@@ -141,6 +145,7 @@ namespace Teleopti.Ccc.AgentPortal.Common
             if (string.IsNullOrEmpty(controlName)) controlName = "Main";
             return formName + _divider + controlName;
         }
+
         public static void GetHelp(Control form, IHelpContext control, bool local)
         {
             switch (_helpType)

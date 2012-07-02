@@ -233,6 +233,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(() => _updateScheduleProjectionReadModel.Execute(_scenario, _period, _person));
                 ExpectLoadOfSchedules();
                 ExpectPersistOfDictionary();
+				Expect.Call(_unitOfWork.PersistAll()).Return(null);
             }
             using (_mockRepository.Playback())
             {
@@ -296,6 +297,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(() => _updateScheduleProjectionReadModel.Execute(_scenario, _period, _person));
                 ExpectLoadOfSchedules();
                 ExpectPersistOfDictionary();
+				Expect.Call(_unitOfWork.PersistAll()).Return(null);
             }
             using (_mockRepository.Playback())
             {
@@ -417,6 +419,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
                 Expect.Call(() => _updateScheduleProjectionReadModel.Execute(_scenario, _period, _person));
                 ExpectPersistOfDictionary();
+				Expect.Call(_unitOfWork.PersistAll()).Return(null);
             }
             using (_mockRepository.Playback())
             {
@@ -462,6 +465,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
                 Expect.Call(() => _updateScheduleProjectionReadModel.Execute(_scenario, _period, _person));
                 ExpectPersistOfDictionary();
+				Expect.Call(_unitOfWork.PersistAll()).Return(null);
             }
             using (_mockRepository.Playback())
             {
@@ -489,6 +493,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(true);
                 Expect.Call(() => _updateScheduleProjectionReadModel.Execute(_scenario, _period, _person));
                 ExpectPersistOfDictionary();
+				Expect.Call(_unitOfWork.PersistAll()).Return(null);
             }
             using (_mockRepository.Playback())
             {

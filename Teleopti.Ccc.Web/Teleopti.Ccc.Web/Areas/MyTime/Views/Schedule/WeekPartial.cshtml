@@ -92,15 +92,18 @@
 		<label class="displayblock" for="Schedule-addRequest-message-input">@Resources.Message</label>
 		<textarea id="Schedule-addRequest-message-input" />
 	</div>
-	<div id="Absence-type-element" class="edit-module-element floatleft displaynone">
-		<div class="floatleft absence-input-label">@Resources.AbsenceType</div>
-		<select id="Absence-type" class="floatleft absence-input combobox tooltip-dropdown-menu">
-			@foreach (var absenceType in Model.AbsenceTypes)
-   {
-				<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-   }
-		</select>
-		
+	<div id="Absence-type-element" class="floatleft displaynone">
+		<div class="edit-module-element floatleft">
+			<div class="floatleft absence-input-label">@Resources.AbsenceType</div>
+		</div>
+		<div class="edit-module-element floatleft">
+			<select id="Absence-type" class="floatleft absence-input combobox tooltip-dropdown-menu">
+				@foreach (var absenceType in Model.AbsenceTypes)
+				{
+					<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+				}
+			</select>
+		</div>
 	</div>
 	<div class="edit-module-element floatleft">
 		<input id="Schedule-addRequest-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
@@ -109,9 +112,9 @@
 		<label class="displayblock" for="Schedule-addRequest-fromTime-input-input">@Resources.Time</label>
 		<select id="Schedule-addRequest-fromTime-input" class="time-input combobox tooltip-dropdown-menu">
 			@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
-   {
+			{
 				<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-   }
+			}
 		</select>
 	</div>
 	<div class="edit-module-element clearleftfloat floatleft">
@@ -121,16 +124,16 @@
 		<label class="displayblock" for="Schedule-addRequest-toTime-input-input">@Resources.Time</label>
 		<select id="Schedule-addRequest-toTime-input" class="time-input combobox tooltip-dropdown-menu">
 			@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
-   {
+			{
 				<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-   }
+			}
 		</select>
 	</div>
 	<div class="edit-module-element clearleftfloat floatleft">
 		<input type="checkbox" id="Fullday-check" data-bind="checked:IsFullDay"/>@Resources.FullDay<br />
 	</div>
 	<div class="edit-module-element clearleftfloat">
-		<input id="Schedule-addRequest-ok-button" type="button" class="button mb5 floatright" value="@Html.AttributeEncode(Resources.SendRequest)"/>
+		<input id="Schedule-addRequest-ok-button" type="button" class="button mb5 floatright" value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
 	</div>
 	<div id="Schedule-addRequest-error" class="error clearleftfloat"></div>
 </div>

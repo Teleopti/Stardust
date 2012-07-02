@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         private bool _active;
         private int _dataSourceId = -1;
         private bool _isDeleted;
+        private string _dataSourceName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExternalLogOn"/> class.
@@ -137,6 +138,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         {
             get { return _dataSourceId; }
             set { _dataSourceId = value; }
+        }
+
+        /// <summary>
+        /// This method will return the data source name
+        /// </summary>
+        public virtual string DataSourceName
+        {
+            get { return _dataSourceName; }
+            set { _dataSourceName = value; }
         }
 
         public virtual bool IsDeleted

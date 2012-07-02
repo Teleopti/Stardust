@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -62,6 +63,42 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<ReadOnlyGroupDetail>();
 			}
 		}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        public void UpdateGroupingReadModel(ICollection<Guid> inputIds)
+        {
+            //change the array to comma seperated string
+            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
+            using(var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            {
+            	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+            		"exec [ReadModel].[UpdateGroupingReadModel] :idList").SetString("idList", ids).ExecuteUpdate();
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        public void UpdateGroupingReadModelGroupPage(ICollection<Guid> inputIds)
+        {
+            //change the array to comma seperated string
+            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
+            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            {
+            	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+            		"exec [ReadModel].[UpdateGroupingReadModelGroupPage] :idList").SetString("idList", ids).ExecuteUpdate();
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        public void UpdateGroupingReadModelData(ICollection<Guid> inputIds)
+        {
+            //change the array to comma seperated string
+            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
+            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            {
+            	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+            		"exec [ReadModel].[UpdateGroupingReadModelData] :idList").SetString("idList", ids).ExecuteUpdate();
+            }
+        }
 	}
 
 	public class ReadOnlyGroupDetail : IAuthorizeOrganisationDetail

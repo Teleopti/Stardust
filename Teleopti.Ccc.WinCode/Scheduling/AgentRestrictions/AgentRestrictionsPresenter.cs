@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 
@@ -100,6 +99,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			if(e.RowIndex > 1)
 			{
 				var displayRow = _model.DisplayRowFromRowIndex(e.RowIndex);
+				if (displayRow == null) return;
 
 				if (_loadingDrawer.Draw(_view, e, displayRow) && e.ColIndex > 0) return;
 				if (_notAvailableDrawer.Draw(_view, e, displayRow) && e.ColIndex > 0) return;

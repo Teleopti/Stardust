@@ -2,7 +2,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	using System.Globalization;
 
-	using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
+	using Interfaces;
 	using Teleopti.Interfaces.Domain;
 
 	public class UserWithoutResReportServiceLevelAndAgentsReadyAccess : IUserSetup, IUserRoleSetup

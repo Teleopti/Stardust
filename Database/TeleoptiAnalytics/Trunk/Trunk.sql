@@ -1,135 +1,297 @@
-------------------
---dim_quality_quest
-------------------
-CREATE TABLE [mart].[dim_quality_quest](
-	[quality_quest_id] int IDENTITY(1,1) NOT NULL,
-	[quality_quest_agg_id] int NULL,
-	[quality_quest_original_id] int NULL,
-	[quality_quest_score_weight] real NULL,
-	[quality_quest_name] nvarchar(200) NOT NULL,
-	[quality_quest_type_name] nvarchar(200) NOT NULL,
-	[log_object_name] nvarchar(100) NOT NULL,
-	[datasource_id] smallint NOT NULL,
-	[insert_date] smalldatetime NOT NULL,
-	[update_date] smalldatetime NOT NULL
-)
+----------------
+--Name: Robin
+--Date: 2012-06-29
+--Desc: #19922 -  Changing behavior of ETL locking
+---------------- 
+if not exists(select * from sys.columns where Name = N'lock_until' and Object_ID = Object_ID(N'mart.sys_etl_running_lock')) 
+begin 
+ALTER TABLE mart.sys_etl_running_lock ADD
+	lock_until datetime NOT NULL CONSTRAINT DF_sys_etl_running_lock_lock_until DEFAULT dateadd(mi,1,getutcdate())
+end
+GO
+----------------  
+--Name: DavidJ
+--Date: 2012-06-29
+--Desc: #19806 - Fix two Identity Columns and Add correct Clustered index on queue_logg + agent_logg
+----------------
 
-ALTER TABLE [mart].[dim_quality_quest]
-ADD CONSTRAINT [PK_dim_quality_quest] PRIMARY KEY CLUSTERED 
-(
-	[quality_quest_id] ASC
-)
-
-ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_code] DEFAULT (N'Not Defined') FOR [quality_quest_name]
-ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_type_name] DEFAULT (N'Not Defined') FOR [quality_quest_type_name]
-ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_datasource] DEFAULT ((-1)) FOR [datasource_id]
-ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_insert] DEFAULT (getdate()) FOR [insert_date]
-ALTER TABLE [mart].[dim_quality_quest] ADD  CONSTRAINT [DF_dim_quality_quest_update] DEFAULT (getdate()) FOR [update_date]
-
+------------------------
+--Add IDENTITY column on table [queues]
+--drop FKs
+ALTER TABLE dbo.queue_logg DROP CONSTRAINT FK_queue_logg_queues
+ALTER TABLE dbo.queues DROP CONSTRAINT FK_queues_log_object
+ALTER TABLE dbo.agent_logg DROP CONSTRAINT FK_agent_logg_queues
 GO
 
-------------------
---fact_quality
-------------------
-CREATE TABLE [mart].[fact_quality](
-	[date_id] int NOT NULL,
-	[acd_login_id] int NOT NULL,
-	[evaluation_id] int NOT NULL,
-	[quality_quest_id] int NOT NULL,
-	[score] decimal(20,6) NULL,
-	[datasource_id] int NOT NULL
-)
+EXEC sp_rename N'[dbo].[queues].[PK_queues]', N'PK_queues_toBeDropped', N'INDEX'
 
-ALTER TABLE mart.fact_quality
-ADD CONSTRAINT PK_fact_quality PRIMARY KEY NONCLUSTERED 
+--move data to temp table
+CREATE TABLE dbo.Tmp_queues
 	(
-	evaluation_id,
-	datasource_id
+	queue int NOT NULL IDENTITY (1, 1),
+	orig_desc nvarchar(50) NULL,
+	log_object_id int NOT NULL,
+	orig_queue_id int NULL,
+	display_desc nvarchar(50) NULL
 	)
 
-CREATE CLUSTERED INDEX [CIX_fact_quality]
-ON [mart].[fact_quality]
+--Re-Add contstraints
+ALTER TABLE dbo.Tmp_queues ADD CONSTRAINT
+	PK_queues PRIMARY KEY CLUSTERED 
 	(
-	[date_id],
-	[quality_quest_id],
-	[acd_login_id]
+	queue
 	)
-
-ALTER TABLE [mart].[fact_quality]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_dim_agent] FOREIGN KEY([acd_login_id])
-REFERENCES [mart].[dim_acd_login] ([acd_login_id])
-
-ALTER TABLE [mart].[fact_quality]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_dim_date] FOREIGN KEY([date_id])
-REFERENCES [mart].[dim_date] ([date_id])
-
-ALTER TABLE [mart].[fact_quality]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_dim_quality_quest] FOREIGN KEY([quality_quest_id])
-REFERENCES [mart].[dim_quality_quest] ([quality_quest_id])
-
---Agg Tables used as agent_info + agent_logg
-CREATE TABLE dbo.quality_info(
-	[quality_id] int IDENTITY(1,1) NOT NULL,
-	[quality_name] nvarchar(200) NOT NULL,
-	[quality_type] nvarchar(200) NOT NULL,
-	[score_weight] real NULL,
-	[log_object_id] int NOT NULL,
-	[original_id] int NOT NULL,
 	
-)
-
-ALTER TABLE dbo.quality_info ADD CONSTRAINT
-	PK_quality_info PRIMARY KEY CLUSTERED 
-	(
-	quality_id ASC
-	)
-
-ALTER TABLE [dbo].[quality_info]  WITH CHECK ADD  CONSTRAINT [FK_fact_quality_quality_info] FOREIGN KEY([log_object_id])
-REFERENCES [dbo].[log_object] ([log_object_id])
-	
+SET IDENTITY_INSERT dbo.Tmp_queues ON
 GO
 
-CREATE TABLE dbo.quality_logg(
-	[quality_id] int NOT NULL,
-	[date_from] smalldatetime NOT NULL,
-	[agent_id] int NOT NULL,
-	[evaluation_id] int NOT NULL,
-	[score] real NULL
-)
+INSERT INTO dbo.Tmp_queues (queue, orig_desc, log_object_id, orig_queue_id, display_desc)
+SELECT queue, orig_desc, log_object_id, orig_queue_id, display_desc FROM dbo.queues WITH (HOLDLOCK, TABLOCKX)
 
-ALTER TABLE dbo.quality_logg ADD CONSTRAINT
-[PK_quality_logg] PRIMARY KEY CLUSTERED 
+SET IDENTITY_INSERT dbo.Tmp_queues OFF
+GO
+
+--swap names
+DROP TABLE dbo.queues
+GO
+EXECUTE sp_rename N'dbo.Tmp_queues', N'queues', 'OBJECT' 
+GO
+
+ALTER TABLE [dbo].[queue_logg]  ADD CONSTRAINT [FK_queue_logg_queues] FOREIGN KEY([queue]) REFERENCES [dbo].[queues] ([queue])
+ALTER TABLE dbo.queues ADD CONSTRAINT FK_queues_log_object FOREIGN KEY (log_object_id) REFERENCES dbo.log_object
+ALTER TABLE dbo.agent_logg ADD CONSTRAINT FK_agent_logg_queues FOREIGN KEY (queue) REFERENCES dbo.queues
+
+------------------------
+--Add IDENTITY column on table [agent_info]
+------------------------
+ALTER TABLE dbo.agent_info DROP CONSTRAINT FK_agent_info_log_object
+ALTER TABLE dbo.quality_logg DROP CONSTRAINT FK_quality_logg_agent_info
+ALTER TABLE dbo.agent_logg DROP CONSTRAINT FK_agent_logg_agent_info
+
+EXEC sp_rename N'[dbo].[agent_info].[PK_agent_info]', N'PK_agent_info_toBeDropped', N'INDEX'
+EXEC sp_rename N'[dbo].[agent_info].[uix_orig_agent_id]', N'uix_orig_agent_id_toBeDropped', N'INDEX'
+
+--move data to tmp table
+CREATE TABLE dbo.Tmp_agent_info
+	(
+	Agent_id int NOT NULL IDENTITY (1, 1),
+	Agent_name nvarchar(50) NOT NULL,
+	is_active bit NULL,
+	log_object_id int NOT NULL,
+	orig_agent_id nvarchar(50) NOT NULL
+	)
+GO
+--re-Add constraints and indexes
+ALTER TABLE dbo.Tmp_agent_info ADD CONSTRAINT PK_agent_info PRIMARY KEY CLUSTERED (Agent_id)
+
+CREATE UNIQUE NONCLUSTERED INDEX uix_orig_agent_id ON dbo.Tmp_agent_info
+	(
+	log_object_id,
+	orig_agent_id
+	)
+GO
+
+SET IDENTITY_INSERT dbo.Tmp_agent_info ON
+GO
+INSERT INTO dbo.Tmp_agent_info (Agent_id, Agent_name, is_active, log_object_id, orig_agent_id)
+SELECT Agent_id, Agent_name, is_active, log_object_id, orig_agent_id FROM dbo.agent_info WITH (HOLDLOCK, TABLOCKX)
+SET IDENTITY_INSERT dbo.Tmp_agent_info OFF
+GO
+
+--swap names
+DROP TABLE dbo.agent_info
+GO
+EXECUTE sp_rename N'dbo.Tmp_agent_info', N'agent_info', 'OBJECT' 
+GO
+
+ALTER TABLE dbo.agent_info ADD CONSTRAINT FK_agent_info_log_object FOREIGN KEY (log_object_id) REFERENCES dbo.log_object (log_object_id)
+ALTER TABLE dbo.agent_logg ADD CONSTRAINT FK_agent_logg_agent_info FOREIGN KEY (agent_id) REFERENCES dbo.agent_info	(Agent_id)
+ALTER TABLE dbo.quality_logg ADD CONSTRAINT	FK_quality_logg_agent_info FOREIGN KEY (agent_id) REFERENCES dbo.agent_info (Agent_id)
+
+------------------------
+--create a better clustered key [agent_logg]
+------------------------
+EXEC sp_rename N'[dbo].[agent_logg].[PK_agent_logg]', N'PK_agent_logg_toBeDropped', N'INDEX'
+
+CREATE TABLE dbo.tmp_agent_logg(
+	[queue] [int] NOT NULL,
+	[date_from] [smalldatetime] NOT NULL,
+	[interval] [int] NOT NULL,
+	[agent_id] [int] NOT NULL,
+	[agent_name] [nvarchar](50) NULL,
+	[avail_dur] [int] NULL,
+	[tot_work_dur] [int] NULL,
+	[talking_call_dur] [int] NULL,
+	[pause_dur] [int] NULL,
+	[wait_dur] [int] NULL,
+	[wrap_up_dur] [int] NULL,
+	[answ_call_cnt] [int] NULL,
+	[direct_out_call_cnt] [int] NULL,
+	[direct_out_call_dur] [int] NULL,
+	[direct_in_call_cnt] [int] NULL,
+	[direct_in_call_dur] [int] NULL,
+	[transfer_out_call_cnt] [int] NULL,
+	[admin_dur] [int] NULL
+	)
+
+--First create the correct order of data
+CREATE CLUSTERED INDEX [CIX_agent_logg] ON [dbo].[tmp_agent_logg]
 (
 	[date_from] ASC,
 	[agent_id] ASC,
-	[quality_id] ASC,
-	[evaluation_id] ASC
+	[queue] ASC,
+	[interval] ASC
 )
 
-ALTER TABLE dbo.quality_logg WITH CHECK ADD CONSTRAINT FK_quality_logg_agent_info FOREIGN KEY(agent_id)
-REFERENCES dbo.agent_info (Agent_id)
+--For, now the PK will be the same as the Clsutered Index, but ordered differently.
+--This a) might be usefull for some queries, and it will help us when/if we at some point need to change the table order (again)
+ALTER TABLE [dbo].[tmp_agent_logg] ADD  CONSTRAINT [PK_agent_logg] PRIMARY KEY NONCLUSTERED
+(
+	[queue] ASC,
+	[date_from] ASC,
+	[interval] ASC,
+	[agent_id] ASC
+)
 
-ALTER TABLE [dbo].[quality_logg]  WITH CHECK ADD  CONSTRAINT [FK_quality_logg_quality_info] FOREIGN KEY([quality_id])
-REFERENCES [dbo].[quality_info] ([quality_id])
+INSERT INTO [dbo].[tmp_agent_logg]
+           ([queue]
+           ,[date_from]
+           ,[interval]
+           ,[agent_id]
+           ,[agent_name]
+           ,[avail_dur]
+           ,[tot_work_dur]
+           ,[talking_call_dur]
+           ,[pause_dur]
+           ,[wait_dur]
+           ,[wrap_up_dur]
+           ,[answ_call_cnt]
+           ,[direct_out_call_cnt]
+           ,[direct_out_call_dur]
+           ,[direct_in_call_cnt]
+           ,[direct_in_call_dur]
+           ,[transfer_out_call_cnt]
+           ,[admin_dur])
+SELECT [queue]
+      ,[date_from]
+      ,[interval]
+      ,[agent_id]
+      ,[agent_name]
+      ,[avail_dur]
+      ,[tot_work_dur]
+      ,[talking_call_dur]
+      ,[pause_dur]
+      ,[wait_dur]
+      ,[wrap_up_dur]
+      ,[answ_call_cnt]
+      ,[direct_out_call_cnt]
+      ,[direct_out_call_dur]
+      ,[direct_in_call_cnt]
+      ,[direct_in_call_dur]
+      ,[transfer_out_call_cnt]
+      ,[admin_dur]
+FROM [dbo].[agent_logg] WITH (HOLDLOCK, TABLOCKX)
+
+--swap names
+DROP TABLE [dbo].[agent_logg]
+GO
+EXECUTE sp_rename N'dbo.Tmp_agent_logg', N'agent_logg', 'OBJECT' 
 GO
 
+ALTER TABLE [dbo].[agent_logg] ADD CONSTRAINT [FK_agent_logg_agent_info] FOREIGN KEY([agent_id]) REFERENCES [dbo].[agent_info] ([Agent_id])
+ALTER TABLE [dbo].[agent_logg] ADD CONSTRAINT [FK_agent_logg_queues] FOREIGN KEY([queue]) REFERENCES [dbo].[queues] ([queue])
+GO
 
--- Prepare for QM log objects
-declare @acd_type_id int
-declare @acd_type_desc varchar(50)
+------------------------
+--create a better clustered key queue_logg
+------------------------
+EXEC sp_rename N'[dbo].[queue_logg].[PK_queue_logg]', N'PK_queue_logg_toBeDropped', N'INDEX'
 
-set @acd_type_id=25
-set @acd_type_desc='Zoom QM'
+CREATE TABLE [dbo].[tmp_queue_logg](
+	[queue] [int] NOT NULL,
+	[date_from] [smalldatetime] NOT NULL,
+	[interval] [int] NOT NULL,
+	[offd_direct_call_cnt] [int] NULL,
+	[overflow_in_call_cnt] [int] NULL,
+	[aband_call_cnt] [int] NULL,
+	[overflow_out_call_cnt] [int] NULL,
+	[answ_call_cnt] [int] NULL,
+	[queued_and_answ_call_dur] [int] NULL,
+	[queued_and_aband_call_dur] [int] NULL,
+	[talking_call_dur] [int] NULL,
+	[wrap_up_dur] [int] NULL,
+	[queued_answ_longest_que_dur] [int] NULL,
+	[queued_aband_longest_que_dur] [int] NULL,
+	[avg_avail_member_cnt] [int] NULL,
+	[ans_servicelevel_cnt] [int] NULL,
+	[wait_dur] [int] NULL,
+	[aband_short_call_cnt] [int] NULL,
+	[aband_within_sl_cnt] [int] NULL
+)
 
-insert into dbo.acd_type
-           (
-           [acd_type_id]
-           ,[acd_type_desc]
-           )
-select @acd_type_id,@acd_type_desc
+--First create the correct order of data
+CREATE CLUSTERED INDEX [CIX_queue_logg] ON [dbo].[tmp_queue_logg]
+(
+	[date_from] ASC,
+	[queue] ASC,
+	[interval] ASC
+)
 
-set @acd_type_id=26
-set @acd_type_desc='Globitel Speechlog'
-insert into dbo.acd_type
-           (
-           [acd_type_id]
-           ,[acd_type_desc]
-           )
-select @acd_type_id,@acd_type_desc
+--For, now the PK will be the same as the Clsutered Index, but ordered differently.
+--This a) might be usefull for some queries, and it will help us when/if we at some point need to change the table order (again)
+ALTER TABLE [dbo].[tmp_queue_logg] ADD  CONSTRAINT [PK_queue_logg] PRIMARY KEY NONCLUSTERED
+(
+	[queue] ASC,
+	[date_from] ASC,
+	[interval] ASC
+)
+
+INSERT INTO [dbo].[tmp_queue_logg]
+           ([queue]
+           ,[date_from]
+           ,[interval]
+           ,[offd_direct_call_cnt]
+           ,[overflow_in_call_cnt]
+           ,[aband_call_cnt]
+           ,[overflow_out_call_cnt]
+           ,[answ_call_cnt]
+           ,[queued_and_answ_call_dur]
+           ,[queued_and_aband_call_dur]
+           ,[talking_call_dur]
+           ,[wrap_up_dur]
+           ,[queued_answ_longest_que_dur]
+           ,[queued_aband_longest_que_dur]
+           ,[avg_avail_member_cnt]
+           ,[ans_servicelevel_cnt]
+           ,[wait_dur]
+           ,[aband_short_call_cnt]
+           ,[aband_within_sl_cnt])
+SELECT [queue]
+      ,[date_from]
+      ,[interval]
+      ,[offd_direct_call_cnt]
+      ,[overflow_in_call_cnt]
+      ,[aband_call_cnt]
+      ,[overflow_out_call_cnt]
+      ,[answ_call_cnt]
+      ,[queued_and_answ_call_dur]
+      ,[queued_and_aband_call_dur]
+      ,[talking_call_dur]
+      ,[wrap_up_dur]
+      ,[queued_answ_longest_que_dur]
+      ,[queued_aband_longest_que_dur]
+      ,[avg_avail_member_cnt]
+      ,[ans_servicelevel_cnt]
+      ,[wait_dur]
+      ,[aband_short_call_cnt]
+      ,[aband_within_sl_cnt]
+FROM [dbo].[queue_logg] WITH (HOLDLOCK, TABLOCKX)
+
+--swap names
+DROP TABLE [dbo].[queue_logg]
+GO
+EXECUTE sp_rename N'dbo.Tmp_queue_logg', N'queue_logg', 'OBJECT' 
+GO
+
+ALTER TABLE [dbo].[queue_logg] ADD CONSTRAINT [FK_queue_logg_queues] FOREIGN KEY([queue]) REFERENCES [dbo].[queues] ([queue])
+GO

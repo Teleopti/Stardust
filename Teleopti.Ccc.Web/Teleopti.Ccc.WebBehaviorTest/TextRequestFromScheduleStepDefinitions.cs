@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.User;
 using WatiN.Core;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -40,8 +32,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheTextRequestFormWithTomorrowAsDefaultDate()
 		{
 			var tomorrow = DateTime.Today.AddDays(1);
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.TextRequestDetailFromDateTextField.Value), Is.EqualTo(tomorrow));
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.TextRequestDetailToDateTextField.Value), Is.EqualTo(tomorrow));
+			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value), Is.EqualTo(tomorrow));
+			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value), Is.EqualTo(tomorrow));
 		}
 
 		[Then(@"I should not see the text request form")]

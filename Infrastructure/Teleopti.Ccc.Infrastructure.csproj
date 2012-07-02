@@ -350,16 +350,16 @@
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidator.cs" />
     <Compile Include="UnitOfWork\DenormalizerContext.cs" />
-    <Compile Include="UnitOfWork\GroupPageDenormalizer.cs" />
+    <Compile Include="UnitOfWork\GroupPageChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\IRunSql.cs" />
     <Compile Include="UnitOfWork\ISaveToDenormalizationQueue.cs" />
     <Compile Include="UnitOfWork\ISqlQuery.cs" />
-    <Compile Include="UnitOfWork\MeetingDenormalizer.cs" />
+    <Compile Include="UnitOfWork\MeetingMessageSender.cs" />
     <Compile Include="UnitOfWork\DataSource.cs" />
     <Compile Include="UnitOfWork\DataSourcesFactory.cs" />
     <Compile Include="UnitOfWork\DisableFilterScope.cs" />
     <Compile Include="UnitOfWork\DisabledFilterCounter.cs" />
-    <Compile Include="UnitOfWork\IDenormalizer.cs" />
+    <Compile Include="UnitOfWork\IMessageSender.cs" />
     <Compile Include="UnitOfWork\ISendDenormalizeNotification.cs" />
     <Compile Include="UnitOfWork\NHibernateFilterManager.cs" />
     <Compile Include="UnitOfWork\IDataSourcesFactory.cs" />
@@ -368,11 +368,12 @@
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWork.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkMatrixFactory.cs" />
-    <Compile Include="UnitOfWork\PersonFinderDenormalizer.cs" />
+    <Compile Include="UnitOfWork\PersonChangedMessageSender.cs" />
+    <Compile Include="UnitOfWork\PersonPeriodChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\QueryFilter.cs" />
     <Compile Include="UnitOfWork\RunSql.cs" />
     <Compile Include="UnitOfWork\SaveToDenormalizationQueue.cs" />
-    <Compile Include="UnitOfWork\ScheduleDenormalizer.cs" />
+    <Compile Include="UnitOfWork\ScheduleMessageSender.cs" />
     <Compile Include="UnitOfWork\SqlQuery.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
   </ItemGroup>

@@ -90,7 +90,6 @@
     <CodeAnalysisDictionary Include="..\..\..\..\CodeAnalysisDictionary.xml">
       <Link>CodeAnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
-    <Content Include="App_Themes\Theme1\images\loading.gif" />
     <Content Include="PerformanceManager\test_login.aspx" />
     <Content Include="PmContainer.aspx" />
     <Content Include="ReportViewer.aspx" />
@@ -229,7 +228,6 @@
       <DependentUpon>Timeout.aspx</DependentUpon>
     </Compile>
     <Compile Include="Utils\AppKeyReader.cs" />
-    <Compile Include="CultureCompare.cs" />
     <Compile Include="Utils\CccReports.cs" />
     <Compile Include="Utils\HelpLinkBuilder.cs" />
     <Compile Include="Utils\ImpersonatedUser.cs" />

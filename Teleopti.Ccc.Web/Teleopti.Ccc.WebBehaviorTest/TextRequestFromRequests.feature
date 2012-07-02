@@ -67,7 +67,7 @@ Scenario: Delete text request
 	Given I am an agent
 	And I have an existing text request
 	And I am viewing requests
-	When I click the request's delete button
+	When I click the text request's delete button
 	Then I should not see the text request in the list
 
 Scenario: Can not edit approved text requests

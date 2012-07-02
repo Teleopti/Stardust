@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
@@ -36,6 +37,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_agentRestrictionsDisplayRow = new AgentRestrictionsDisplayRow(_scheduleMatrixPro);
 		}
 
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullArgument()
+		{
+			_presenter.GridQueryCellInfo(null, null);		
+		}
+
 		[Test]
 		public void ShouldReturnColCountEqual12()
 		{
@@ -67,7 +74,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 					using (var gridStyleInfo = new GridStyleInfo())
 					{
 						var args = new GridQueryCellInfoEventArgs(i, j, gridStyleInfo);
-						_presenter.GridQueryCellInfo(null, args);
+						_presenter.GridQueryCellInfo(null, args);	
 						Assert.AreEqual("TextBox", args.Style.CellType);
 					}
 				}
@@ -158,7 +165,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		}
 
 		[Test]
-		public void ShouldSort()
+		public void ShouldSortAgentName()
 		{
 			using(_mocks.Record())
 			{
@@ -170,6 +177,186 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				_presenter.Sort(0);	
 			}		
+		}
+
+		[Test]
+		public void ShouldSortWarnings()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortWarnings(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(1);
+			}
+		}
+
+		[Test]
+		public void ShouldSortPeriodType()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortPeriodType(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(2);
+			}
+		}
+
+		[Test]
+		public void ShouldSortStartDate()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortStartDate(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(3);
+			}
+		}
+
+		[Test]
+		public void ShouldSortEndDate()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortEndDate(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(4);
+			}
+		}
+
+		[Test]
+		public void ShouldSortContractTargetTime()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortContractTargetTime(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(5);
+			}
+		}
+
+		[Test]
+		public void ShouldSortTargetDaysOff()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortTargetDayOffs(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(6);
+			}
+		}
+
+		[Test]
+		public void ShouldSortContractCurrentTime()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortContractCurrentTime(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(7);
+			}
+		}
+
+		[Test]
+		public void ShouldSortCurrentDaysOff()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortCurrentDayOffs(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(8);
+			}
+		}
+
+		[Test]
+		public void ShouldSortMinimumPossibleTime()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortMinimumPossibleTime(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(9);
+			}
+		}
+
+		[Test]
+		public void ShouldSortMaximumPossibleTime()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortMaximumPossibleTime(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(10);
+			}
+		}
+
+		[Test]
+		public void ShouldSortScheduleAndRestrictionsDayOff()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortScheduledAndRestrictionDayOffs(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(11);
+			}
+		}
+
+		[Test]
+		public void ShouldSortOk()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _model.SortOk(true));
+				_view.RefreshGrid();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.Sort(12);
+			}
 		}
 	}
 }

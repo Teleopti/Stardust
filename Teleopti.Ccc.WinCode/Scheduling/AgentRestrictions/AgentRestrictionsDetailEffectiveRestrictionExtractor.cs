@@ -46,7 +46,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			if (_schedulingOptions.UseScheduling)
 			{
 				if (scheduleDay.SignificantPart().Equals(SchedulePartView.MainShift)) totalRestriction = ExtractOnMainShift(scheduleDay, preferenceCellData);
-				//if (scheduleDay.SignificantPart().Equals(SchedulePartView.DayOff))totalRestriction = ExtractOnDayOff(scheduleDay, preferenceCellData);
+				if (scheduleDay.SignificantPart().Equals(SchedulePartView.DayOff)) totalRestriction = ExtractOnDayOff(scheduleDay, preferenceCellData);
+				if (scheduleDay.SignificantPart().Equals(SchedulePartView.FullDayAbsence)) totalRestriction = ExtractFullDayAbsence(scheduleDay, preferenceCellData);
+				if (scheduleDay.SignificantPart().Equals(SchedulePartView.ContractDayOff)) totalRestriction = ExtractFullDayAbsence(scheduleDay, preferenceCellData);
 			}
 
 			SetTotalRestriction(scheduleDay, totalRestriction, preferenceCellData);
@@ -66,27 +68,56 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			}
 		}
 
-		//private IEffectiveRestriction ExtractOnDayOff(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
-		//{
-		//    var startTimeLimitation = new StartTimeLimitation(null, null);
-		//    var endTimeLimitation = new EndTimeLimitation(null, null);
-		//    var workTimeLimitation = new WorkTimeLimitation(null, null);
-		//    IDayOffTemplate dayOffTemplate = new DayOffTemplate(schedulePart.PersonDayOffCollection()[0].DayOff.Description);
-		//    dayOffTemplate.SetTargetAndFlexibility(schedulePart.PersonDayOffCollection()[0].DayOff.TargetLength, schedulePart.PersonDayOffCollection()[0].DayOff.Flexibility);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private IEffectiveRestriction ExtractFullDayAbsence(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
+		{
+			var projection = scheduleDay.ProjectionService().CreateProjection();
+			var period = projection.Period();
+			if (period == null) return null;
+            var timeSpan = period.Value.ElapsedTime();
+            var startTimeLimitation = new StartTimeLimitation(null, null);
+            var endTimeLimitation = new EndTimeLimitation(null, null);
+			var virtualSchedulePeriod = scheduleDay.Person.VirtualSchedulePeriod(scheduleDay.DateOnlyAsPeriod.DateOnly);
+			var schedulePeriodStart = scheduleDay.Person.SchedulePeriodStartDate(scheduleDay.DateOnlyAsPeriod.DateOnly);
 
-		//    IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-		//                                                                      new WorkTimeLimitation(), null, null, null,
-		//                                                                      new List<IActivityRestriction>());
+			if (virtualSchedulePeriod.IsValid && schedulePeriodStart.HasValue) preferenceCellData.HasAbsenceOnContractDayOff = !virtualSchedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStart.Value, scheduleDay.DateOnlyAsPeriod.DateOnly);
+            
+            WorkTimeLimitation workTimeLimitation;
+			if (preferenceCellData.HasAbsenceOnContractDayOff)workTimeLimitation = new WorkTimeLimitation(TimeSpan.Zero, TimeSpan.Zero);
+            else workTimeLimitation = new WorkTimeLimitation(timeSpan, timeSpan);
 
-		//    totalRestriction =
-		//        totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null,
-		//                                                          dayOffTemplate, null, new List<IActivityRestriction>()));
-		//    cellData.DisplayName = schedulePart.PersonDayOffCollection()[0].DayOff.Description.Name;
-		//    cellData.DisplayShortName = schedulePart.PersonDayOffCollection()[0].DayOff.Description.ShortName;
-		//    cellData.HasDayOff = true;
-		//    cellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(dayOffTemplate.TargetLength, CurrentCultureInfo());
-		//    return totalRestriction;
-		//}
+            IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),new WorkTimeLimitation(), null, null, null,new List<IActivityRestriction>());
+            totalRestriction = totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null,null, null, new List<IActivityRestriction>()));
+
+			preferenceCellData.DisplayName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(scheduleDay.Person).Name;
+			preferenceCellData.DisplayShortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(scheduleDay.Person).ShortName;
+			preferenceCellData.DisplayColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person);
+			preferenceCellData.HasFullDayAbsence = true;
+			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(),TeleoptiPrincipal.Current.Regional.Culture);
+			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
+            
+            return totalRestriction;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		private IEffectiveRestriction ExtractOnDayOff(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
+		{
+			var startTimeLimitation = new StartTimeLimitation(null, null);
+			var endTimeLimitation = new EndTimeLimitation(null, null);
+			var workTimeLimitation = new WorkTimeLimitation(null, null);
+			var dayOffTemplate = new DayOffTemplate(scheduleDay.PersonDayOffCollection()[0].DayOff.Description);
+			dayOffTemplate.SetTargetAndFlexibility(scheduleDay.PersonDayOffCollection()[0].DayOff.TargetLength, scheduleDay.PersonDayOffCollection()[0].DayOff.Flexibility);
+
+			IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),new WorkTimeLimitation(), null, null, null,new List<IActivityRestriction>());
+
+			totalRestriction = totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null, dayOffTemplate, null, new List<IActivityRestriction>()));
+			preferenceCellData.DisplayName = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.Name;
+			preferenceCellData.DisplayShortName = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.ShortName;
+			preferenceCellData.HasDayOff = true;
+			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(dayOffTemplate.TargetLength, TeleoptiPrincipal.Current.Regional.Culture);
+			
+			return totalRestriction;
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private IEffectiveRestriction ExtractOnMainShift(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
@@ -132,30 +163,30 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 				}
 			}
 			preferenceCellData.EffectiveRestriction = totalRestriction;
-			//if (totalRestriction.Absence != null) SetTotalRestrictionForPreferedAbsence(scheduleDay, preferenceCellData);	
+			if (totalRestriction.Absence != null) SetTotalRestrictionForPreferedAbsence(scheduleDay, preferenceCellData);	
 		}
 
-		//[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		//private void SetTotalRestrictionForPreferedAbsence(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
-		//{
-		//    var virtualSchedulePeriod = scheduleDay.Person.VirtualSchedulePeriod(preferenceCellData.TheDate);
-		//    if (!virtualSchedulePeriod.IsValid) return;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		private void SetTotalRestrictionForPreferedAbsence(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
+		{
+			var virtualSchedulePeriod = scheduleDay.Person.VirtualSchedulePeriod(preferenceCellData.TheDate);
+			if (!virtualSchedulePeriod.IsValid) return;
 
-		//    IPersonPeriod personPeriod = scheduleDay.Person.Period(preferenceCellData.TheDate);
-		//    if (personPeriod == null)return;
+			var personPeriod = scheduleDay.Person.Period(preferenceCellData.TheDate);
+			if (personPeriod == null) return;
 
-		//    var schedulePeriodStartDate = scheduleDay.Person.SchedulePeriodStartDate(preferenceCellData.TheDate);
-		//    if(!schedulePeriodStartDate.HasValue)return;
+			var schedulePeriodStartDate = scheduleDay.Person.SchedulePeriodStartDate(preferenceCellData.TheDate);
+			if (!schedulePeriodStartDate.HasValue) return;
 
-		//    preferenceCellData.HasAbsenceOnContractDayOff = !virtualSchedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, preferenceCellData.TheDate);
+			preferenceCellData.HasAbsenceOnContractDayOff = !virtualSchedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, preferenceCellData.TheDate);
 
-		//    var time = TimeSpan.Zero;
-		//    if (!preferenceCellData.HasAbsenceOnContractDayOff && preferenceCellData.EffectiveRestriction.Absence.InContractTime) time = virtualSchedulePeriod.AverageWorkTimePerDay;
+			var time = TimeSpan.Zero;
+			if (!preferenceCellData.HasAbsenceOnContractDayOff && preferenceCellData.EffectiveRestriction.Absence.InContractTime) time = virtualSchedulePeriod.AverageWorkTimePerDay;
 
-		//    preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(time, TeleoptiPrincipal.Current.Regional.Culture);
-		//    var totalRestriction = new EffectiveRestriction(preferenceCellData.EffectiveRestriction.StartTimeLimitation,preferenceCellData.EffectiveRestriction.EndTimeLimitation,new WorkTimeLimitation(time, time),preferenceCellData.EffectiveRestriction.ShiftCategory,preferenceCellData.EffectiveRestriction.DayOffTemplate,preferenceCellData.EffectiveRestriction.Absence, new List<IActivityRestriction>());
-		//    preferenceCellData.EffectiveRestriction = totalRestriction;
-		//}
+			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(time, TeleoptiPrincipal.Current.Regional.Culture);
+			var totalRestriction = new EffectiveRestriction(preferenceCellData.EffectiveRestriction.StartTimeLimitation, preferenceCellData.EffectiveRestriction.EndTimeLimitation, new WorkTimeLimitation(time, time), preferenceCellData.EffectiveRestriction.ShiftCategory, preferenceCellData.EffectiveRestriction.DayOffTemplate, preferenceCellData.EffectiveRestriction.Absence, new List<IActivityRestriction>());
+			preferenceCellData.EffectiveRestriction = totalRestriction;
+		}
 
 		private IWorkTimeMinMax GetMinMaxLength(IScheduleDay scheduleDay, IEffectiveRestriction totalRestriction)
 		{

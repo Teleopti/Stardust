@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Status, o => o.MapFrom(s => s.StatusText))
 				.ForMember(d => d.Text, o => o.MapFrom(s => s.GetMessage(new NoFormatting())))
 				.ForMember(d => d.Type, o => o.MapFrom(s => s.Request.RequestTypeDescription))
+				.ForMember(d => d.TypeEnum, o => o.MapFrom(s => s.Request.RequestType))
 				.ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn.HasValue
 																					? _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.UpdatedOn.Value).ToShortDateTimeString()
 																					: null))
@@ -38,12 +39,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.RawTimeFrom, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime).ToShortTimeString()))
 				.ForMember(d => d.RawTimeTo, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime).ToShortTimeString()))
 				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription.Name))
+				.ForMember(d => d.IsFullDay, o => o.MapFrom(s =>
+				                                            	{
+																	var start = _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime);
+																	var end = _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime);
+																	var allDayEndDateTime = start.AddDays(1).AddMinutes(-1);
+																	return start.TimeOfDay == TimeSpan.Zero && end.TimeOfDay == allDayEndDateTime.TimeOfDay;
+				                                            	}))
 				;
 
 			CreateMap<IPersonRequest, Link>()
 				.ForMember(d => d.rel, o => o.UseValue("self"))
 				.ForMember(d => d.href, o => o.MapFrom(s => s.Id.HasValue ? 
-																			_linkProvider.Invoke().TextRequestLink(s.Id.Value) : 
+																			_linkProvider.Invoke().RequestDetailLink(s.Id.Value) : 
 																			null))
 				.ForMember(d => d.Methods, o => o.MapFrom(s =>
 																			{

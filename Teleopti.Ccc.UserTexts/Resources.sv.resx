@@ -10408,7 +10408,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
     <value>Du ska arbeta {0} till {1} timmar.</value>
   </data>
-  <data name="SendRequest" xml:space="preserve">
+  <data name="SubmitRequest" xml:space="preserve">
     <value>Skicka</value>
   </data>
 </root>

@@ -9,12 +9,11 @@ using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 {
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
+	using Web.Areas.MobileReports.Core.Providers;
 
 	[TestFixture]
 	public class ReportViewModelMappingTest
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 			Mapper.Reset();
 			Mapper.Initialize(
 				c =>
-				c.AddProfile(new ReportViewModelMappingProfile(() => Mapper.Engine, () => userTextTranslator,
+				c.AddProfile(new ReportViewModelMappingProfile(() => userTextTranslator,
 				                                               () => definedReportProvider, () => skillProvider,
 				                                               () => dateBoxGlobalizationViewModelFactory)));
 		}

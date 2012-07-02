@@ -4,6 +4,7 @@
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
@@ -138,20 +139,16 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			listItem.find('.request-data-type').text(request.Type + ' \u2013 ' + request.Payload);
 		} else {
 			listItem.find('.request-data-type').text(request.Type);
-			//just temporary until it possible to modify a absence request a well.
-			//move this outside the if later...
-			connector.connector();
 		}
+		connector.connector();
 
-		var count = 0;
 		if (request.Link.Methods.indexOf("DELETE") != -1) {
 			deleteButton
 				.click(function (event) {
-					count++;
-					if (count > 1) { return false; }
+					$(this).prop('disabled', true);
 					event.stopPropagation();
 					_disconnectAll();
-					Teleopti.MyTimeWeb.Request.TextRequest.HideEditSection();
+					Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
 					_deleteRequest(listItem);
 				})
 				.removeAttr('disabled', 'disabled')
@@ -198,28 +195,25 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	function _showRequest(listItem) {
-		//just temporary until it possible to modify a absence request a well.
-		//remove this if later - just a hack for now
-		if (listItem.find('.request-data-type').text().indexOf("\u2013")<1) {
-			var url = listItem.attr('data-mytime-link');
-			var connector = listItem
+		var url = listItem.attr('data-mytime-link');
+		var connector = listItem
 			.find('.request-connector')
 			;
-			Teleopti.MyTimeWeb.Ajax.Ajax({
-				url: url,
-				dataType: "json",
-				type: 'GET',
-				beforeSend: function () {
-					_disconnectAllOthers(listItem);
-					Teleopti.MyTimeWeb.Request.TextRequest.FadeEditSection();
-					connector.connector("connecting");
-				},
-				success: function (data, textStatus, jqXHR) {
-					Teleopti.MyTimeWeb.Request.TextRequest.ShowRequest(data, listItem.position().top - 30);
-					connector.connector("connect");
-				}
-			});	
-		}
+		Teleopti.MyTimeWeb.Ajax.Ajax({
+			url: url,
+			dataType: "json",
+			type: 'GET',
+			beforeSend: function () {
+				_disconnectAllOthers(listItem);
+				Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
+				connector.connector("connecting");
+			},
+			success: function (data, textStatus, jqXHR) {
+				Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, listItem.position().top - 30);
+				connector.connector("connect");
+			}
+		});
+
 	}
 
 	function _disconnectAll() {

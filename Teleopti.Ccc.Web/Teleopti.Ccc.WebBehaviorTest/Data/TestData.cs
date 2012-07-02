@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using AutoMapper;
@@ -25,7 +26,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public PreferenceDayInputResult Persist(PreferenceDayInput input)
 		{
-			var preferenceDay = _preferenceDayRepository.Find(input.Date, _loggedOnUser.CurrentUser()).SingleOrDefaultNullSafe();
+			var preferenceDays = _preferenceDayRepository.Find(input.Date, _loggedOnUser.CurrentUser());
+			preferenceDays = DeleteOrphanPreferenceDays(preferenceDays);
+			var preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
 			if (preferenceDay == null)
 			{
 				preferenceDay = _mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
@@ -34,22 +37,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			else
 			{
 				_mapper.Map(input, preferenceDay);
-
-				//Clear existing extended preferences and must haves util MyTimeWeb supports them
-				if (preferenceDay.Restriction != null)
-				{
-					preferenceDay.Restriction.StartTimeLimitation = new StartTimeLimitation();
-					preferenceDay.Restriction.EndTimeLimitation = new EndTimeLimitation();
-					preferenceDay.Restriction.WorkTimeLimitation = new WorkTimeLimitation();
-					var activityRestrictionCollection =
-						preferenceDay.Restriction.ActivityRestrictionCollection.CopyEnumerable<IActivityRestriction>();
-					foreach (var activityRestriction in activityRestrictionCollection)
-						preferenceDay.Restriction.RemoveActivityRestriction(activityRestriction);
-					preferenceDay.Restriction.MustHave = false;
-					preferenceDay.TemplateName = null;
-				}
+				ClearExtendedAndMustHaveData(preferenceDay);
 			}
 			return _mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
+		}
+
+		private static void ClearExtendedAndMustHaveData(IPreferenceDay preferenceDay)
+		{
+			if (preferenceDay.Restriction != null)
+			{
+				preferenceDay.Restriction.StartTimeLimitation = new StartTimeLimitation();
+				preferenceDay.Restriction.EndTimeLimitation = new EndTimeLimitation();
+				preferenceDay.Restriction.WorkTimeLimitation = new WorkTimeLimitation();
+				var activityRestrictionCollection =
+					preferenceDay.Restriction.ActivityRestrictionCollection.CopyEnumerable<IActivityRestriction>();
+				foreach (var activityRestriction in activityRestrictionCollection)
+					preferenceDay.Restriction.RemoveActivityRestriction(activityRestriction);
+				preferenceDay.Restriction.MustHave = false;
+				preferenceDay.TemplateName = null;
+			}
+		}
+
+		private IList<IPreferenceDay> DeleteOrphanPreferenceDays(IList<IPreferenceDay> preferenceDays)
+		{
+			preferenceDays = preferenceDays != null
+			                 	? preferenceDays.OrderBy(k => k.UpdatedOn).ToList()
+			                 	: new List<IPreferenceDay>();
+			while (preferenceDays.Count > 1)
+			{
+				_preferenceDayRepository.Remove(preferenceDays.First());
+				preferenceDays.Remove(preferenceDays.First());
+			}
+			return preferenceDays;
 		}
 
 		public PreferenceDayInputResult Delete(DateOnly date)
@@ -58,7 +77,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			if (preferences.IsEmpty())
 				throw new HttpException(404, "Preference not found");
 
-			_preferenceDayRepository.Remove(preferences.Single());
+			foreach (var preferenceDay in preferences)
+			{
+				_preferenceDayRepository.Remove(preferenceDay);
+			}
 			return new PreferenceDayInputResult { Date = date.ToFixedClientDateOnlyFormat(), HexColor = ""};
 		}
 	}

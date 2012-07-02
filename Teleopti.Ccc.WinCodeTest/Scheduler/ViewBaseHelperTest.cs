@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyToolTipDayOff()
         {
-            Assert.AreEqual(_scheduleRange.ScheduledDay(new DateOnly(2001,1,1)).PersonDayOffCollection()[0].DayOff.Description.Name,
+			StringAssert.Contains(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)).PersonDayOffCollection()[0].DayOff.Description.Name,
                 ViewBaseHelper.GetToolTipDayOff(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1))));
         }
 
@@ -940,7 +940,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             person.PermissionInformation.SetDefaultTimeZone(info);
             var schedulePeriod = new SchedulePeriod(new DateOnly(2009, 6, 1), SchedulePeriodType.Week, 1)
                                      {
-                                         AverageWorkTimePerDay = new TimeSpan(0, 7, 0)
+										 AverageWorkTimePerDayOverride = new TimeSpan(0, 7, 0)
                                      };
 
             person.AddSchedulePeriod(schedulePeriod);

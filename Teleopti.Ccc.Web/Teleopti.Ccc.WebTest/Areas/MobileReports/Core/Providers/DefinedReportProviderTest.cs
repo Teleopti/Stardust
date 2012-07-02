@@ -1,14 +1,10 @@
 using System.Linq;
-using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers

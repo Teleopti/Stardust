@@ -10,16 +10,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class TextRequestFormMappingProfile : Profile
 	{
-		private readonly Func<IMappingEngine> _mapper;
-		private readonly Func<ILoggedOnUser> _loggedOnUser;
-		private readonly Func<IUserTimeZone> _userTimeZone;
 		private readonly Func<ITypeConverter<TextRequestForm, IPersonRequest>> _textRequestFormToPersonRequest;
 
-		public TextRequestFormMappingProfile(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser, Func<IUserTimeZone> userTimeZone, Func<ITypeConverter<TextRequestForm, IPersonRequest>> textRequestFormToPersonRequest)
+		public TextRequestFormMappingProfile(Func<ITypeConverter<TextRequestForm, IPersonRequest>> textRequestFormToPersonRequest)
 		{
-			_mapper = mapper;
-			_loggedOnUser = loggedOnUser;
-			_userTimeZone = userTimeZone;
 			_textRequestFormToPersonRequest = textRequestFormToPersonRequest;
 		}
 
