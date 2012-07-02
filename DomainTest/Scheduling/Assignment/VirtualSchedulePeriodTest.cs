@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private VirtualSchedulePeriod _target;
         private MockRepository _mocks;
         private IPerson _person;
-        private DateOnly _dateOnly = new DateOnly(2009, 2, 2);
+        private DateOnly _dateOnly;
         private ISchedulePeriod _schedulePeriod;
         private IPersonPeriod _personPeriod;
         private IList<ISchedulePeriod> _schedulePeriods;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             _mocks = new MockRepository();
             _person = new Person();
-            //_personContract = _mocks.StrictMock<IPersonContract>();
+			_dateOnly = new DateOnly(2009, 2, 2);
             IContract contract = ContractFactory.CreateContract("MyContract");
             IPartTimePercentage partTime = PartTimePercentageFactory.CreatePartTimePercentage("Full time");
             _contractSchedule = ContractScheduleFactory.CreateContractSchedule("Mon-Sat");
@@ -82,7 +82,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(SchedulePeriodType.Week, _target.PeriodType);
             Assert.AreEqual(4, _target.Number);
             Assert.AreEqual(_person, _target.Person);
-            //Assert.AreEqual(_personPeriod, _target.PersonPeriod);
             Assert.IsNotNull(_target.ShiftCategoryLimitationCollection());
             Assert.AreEqual(0, _target.MustHavePreference);
         }
@@ -94,6 +93,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _schedulePeriod.DaysOff = 7;
             Assert.AreEqual(7, _target.DaysOff());
         }
+
+		[Test]
+		public void CanGetNumberOfDaysOffForChineseMonth()
+		{
+			_schedulePeriod.PeriodType = SchedulePeriodType.ChineseMonth;
+			Assert.AreEqual(7, _target.DaysOff());
+		}
 
         [Test]
         public void CanGetNumberOfWorkdays()
