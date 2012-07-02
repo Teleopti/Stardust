@@ -1,3 +1,0 @@
-﻿Demo-klasser för att kunna testa PersonAccount med riktig data + ViewModel
-Skall tas bort. 
-Henrik 2008-11-11
