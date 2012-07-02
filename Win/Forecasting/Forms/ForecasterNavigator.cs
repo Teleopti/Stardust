@@ -800,10 +800,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var repository = _repositoryFactory.CreateWorkloadRepository(unitOfWork);
-                if (workloadModel == null)
-                {
-                    return null;
-                }
 			    var workload = repository.Get(workloadModel.Id);
 			    LazyLoadingManager.Initialize(workload.Skill);
 			    LazyLoadingManager.Initialize(workload.Skill.SkillType);
