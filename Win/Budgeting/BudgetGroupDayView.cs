@@ -231,8 +231,10 @@ namespace Teleopti.Ccc.Win.Budgeting
 			var numericWithTwoDecimalsCell = new NumericCellModel(gridControlDayView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
 			var nullableCellModelWithTwoDecimalsCell = new NullableNumericCellModel(gridControlDayView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
             var nullableNegativeCellModelWithTwoDecimalsCell = new NullableNumericCellModel(gridControlDayView.Model) { NumberOfDecimals = 2, MinValue = -99999999d, MaxValue = 99999999d };
+            var restrictedValueForFte = new NumericCellModel(gridControlDayView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 12d };
 
-			gridControlDayView.CellModels.Add("NumericReadOnlyCellModel", numCell);
+            gridControlDayView.CellModels.Add("RestrictedValueForFTE", restrictedValueForFte);
+            gridControlDayView.CellModels.Add("NumericReadOnlyCellModel", numCell);
 			gridControlDayView.CellModels.Add("PercentReadOnlyCellModel", percentCell);
 			gridControlDayView.CellModels.Add("PercentWithTwoDecimalsCell", percentWithTwoDecimalsCell);
 			gridControlDayView.CellModels.Add("NumericWithTwoDecimalsCell", numericWithTwoDecimalsCell);
@@ -254,7 +256,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 				ValueMember =
 					new ModelProperty<IBudgetGroupDayDetailModel>("FulltimeEquivalentHours"),
 				CellValueType = typeof(double),
-				CellModel = "NumericWithTwoDecimalsCell"
+                CellModel = "RestrictedValueForFTE"
 			});
 			_entityBinder.AddRow(new GridRow<IBudgetGroupDayDetailModel>
 			{

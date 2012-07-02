@@ -283,10 +283,12 @@ namespace Teleopti.Ccc.Win.Budgeting
 			var numCell = new NumericReadOnlyCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2 };
 			var percentCell = new PercentReadOnlyCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2 };
 			var percentWithTwoDecimalsCell = new PercentCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinMax = new MinMax<double>(0, 1) };
+            var restrictedValueForFte = new NumericCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 12d }; 
 			var numericWithTwoDecimalsCell = new NumericCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
 			var nullableCellModelWithTwoCecimal = new NullableNumericCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
             var nullableNegativeCellModelWithTwoDecimalsCell = new NullableNumericCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinValue = -99999999d, MaxValue = 99999999d };
 
+            gridControlMonthView.CellModels.Add("RestrictedValueForFTE", restrictedValueForFte);
 			gridControlMonthView.CellModels.Add("NumericReadOnlyCellModel", numCell);
 			gridControlMonthView.CellModels.Add("PercentReadOnlyCellModel", percentCell);
 			gridControlMonthView.CellModels.Add("PercentWithTwoDecimalsCell", percentWithTwoDecimalsCell);
@@ -307,7 +309,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 				HeaderText = UserTexts.Resources.FulltimeEquivalentHoursPerDay,
 				ValueMember = new ModelProperty<BudgetGroupMonthDetailModel>("FulltimeEquivalentHours"),
 				CellValueType = typeof(double),
-				CellModel = "NumericWithTwoDecimalsCell"
+                CellModel = "RestrictedValueForFTE"
 			});
 			_entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
 			{
