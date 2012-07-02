@@ -29,8 +29,6 @@ namespace Teleopti.Ccc.TestCommon
 					if (IniFileInfo.Create)
 						CreateSchemas(dataSourceFactory, ccc7, analytics);
 
-					//ccc7.Backup();
-
 					return dataSource;
 				}
 			}
@@ -40,8 +38,6 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
 			{
-				//ccc7.DropConnections();
-				//ccc7.Restore();
 				ccc7.CleanByGenericProcedure();
 			}
 		}
@@ -51,6 +47,22 @@ namespace Teleopti.Ccc.TestCommon
 			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
 			{
 				analytics.CleanByAnalyticsProcedure();
+			}
+		}
+
+		public static DatabaseHelper.Backup BackupCcc7DataByFileCopy()
+		{
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			{
+				return ccc7.BackupByFileCopy();
+			}
+		}
+
+		public static void RestoreCcc7DataByFileCopy(DatabaseHelper.Backup backup)
+		{
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			{
+				ccc7.RestoreByFileCopy(backup);
 			}
 		}
 

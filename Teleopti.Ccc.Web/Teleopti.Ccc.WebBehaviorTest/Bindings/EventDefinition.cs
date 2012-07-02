@@ -48,20 +48,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Browser.PrepareForTestRun();
 			if (!Browser.IsStarted())
 				Browser.Start();
-			TestControllerMethods.BeforeTestRun();
 
-			TestSiteConfigurationSetup.Setup();
-
-			log4net.Config.XmlConfigurator.Configure();
-			EventualTimeouts.Set(TimeSpan.FromSeconds(5));
-
-			TestDataSetup.CreateDataSource();
-
-			if (!ExperimentalDataMode.ForEachScenario)
+			try
 			{
+				TestControllerMethods.BeforeTestRun();
+
+				TestSiteConfigurationSetup.Setup();
+
+				log4net.Config.XmlConfigurator.Configure();
+				EventualTimeouts.Set(TimeSpan.FromSeconds(5));
+
+				TestDataSetup.CreateDataSource();
+
 				TestDataSetup.SetupFakeState();
 				TestDataSetup.CreateMinimumTestData();
 				CreateData();
+
+				if (ExperimentalDataMode.ForEachScenario)
+					TestDataSetup.BackupCcc7Data();
+			}
+			finally
+			{
+				Browser.Close();
 			}
 
 			Log.Write("BeforeTestRun took " + DateTime.Now.Subtract(startTime));
@@ -86,12 +94,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			//Task.WaitAll(prepareData, startBrowser);
 
 			if (ExperimentalDataMode.ForEachScenario)
-			{
-				TestDataSetup.SetupFakeState();
-				ClearCcc7Data();
-				TestDataSetup.CreateMinimumTestData();
-				CreateData();
-			}
+				TestDataSetup.RestoreCcc7Data();
 
 			TestDataSetup.ClearAnalyticsData();
 

@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static DataFactory Data()
 		{
-			if (ExperimentalDataMode.ForEachScenario)
-			{
-				if (ScenarioContext.Current.Value<DataFactory>("data") == null)
-					ScenarioContext.Current.Value("data", new DataFactory());
-				return ScenarioContext.Current.Value<DataFactory>("data");
-			}
+			//if (ExperimentalDataMode.ForEachScenario)
+			//{
+			//    if (ScenarioContext.Current.Value<DataFactory>("data") == null)
+			//        ScenarioContext.Current.Value("data", new DataFactory());
+			//    return ScenarioContext.Current.Value<DataFactory>("data");
+			//}
 			return _dataFactory;
 		}
 	}

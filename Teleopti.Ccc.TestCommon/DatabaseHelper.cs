@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.TestCommon
@@ -92,33 +96,54 @@ namespace Teleopti.Ccc.TestCommon
 			schemaCreator.Create(_databaseType);
 		}
 
-		//public void Backup()
-		//{
-		//    using (UseMasterScope())
-		//    {
-		//        ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
-		//        File.Copy(@"C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\RepositoryTest_Data.mdf", @"C:\1.mdf", true);
-		//        File.Copy(@"C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\RepositoryTest_Log.ldf", @"C:\1.ldf", true);
-		//        ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
-		//    }
-		//    //ExecuteNonQuery(@"BACKUP DATABASE [{0}] TO DISK='{0}.bak' WITH INIT, STATS=10", _databaseName);
-		//}
+		public Backup BackupByFileCopy()
+		{
+			var backup = new Backup();
+			using (var reader = ExecuteToReader("select * from sys.sysfiles"))
+			{
+				backup.Files = (from r in reader.Cast<IDataRecord>()
+				                let file = r.GetString(r.GetOrdinal("filename"))
+				                select new BackupFile {Source = file})
+					.ToArray();
+			}
+			using (UseMasterScope())
+			{
+				//ExecuteNonQuery(@"BACKUP DATABASE [{0}] TO DISK='{0}.bak' WITH INIT, STATS=10", _databaseName);
+				ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
+				backup.Files.ForEach(f =>
+				              	{
+				              		f.Backup = Path.GetFileName(f.Source);
+									File.Copy(f.Source, f.Backup, true);
+				              	});
+				ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
+			}
+			return backup;
+		}
 
-		//public void Restore()
-		//{
-		//    using (UseMasterScope())
-		//    {
-		//        using (PerformanceOutput.ForOperation("offline"))
-		//            ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
-		//        using (PerformanceOutput.ForOperation("copy"))
-		//            File.Copy(@"C:\1.mdf", @"C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\RepositoryTest_Data.mdf", true);
-		//        using (PerformanceOutput.ForOperation("copy"))
-		//            File.Copy(@"C:\1.ldf", @"C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\RepositoryTest_Log.ldf", true);
-		//        using (PerformanceOutput.ForOperation("online"))
-		//            ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
-		//        //ExecuteNonQuery(@"RESTORE DATABASE [{0}] FROM DISK='{0}.bak' WITH REPLACE, RECOVERY, STATS=10", _databaseName);
-		//    }
-		//}
+		public void RestoreByFileCopy(Backup backup)
+		{
+			using (UseMasterScope())
+			{
+				//ExecuteNonQuery(@"RESTORE DATABASE [{0}] FROM DISK='{0}.bak' WITH REPLACE, RECOVERY, STATS=10", _databaseName);
+				ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
+				backup.Files.ForEach(f => File.Copy(f.Backup, f.Source, true));
+				ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
+			}
+		}
+
+		public class Backup
+		{
+			public IEnumerable<BackupFile> Files { get; set; }
+		}
+
+		public class BackupFile
+		{
+			public string Source { get; set; }
+			public string Backup { get; set; }
+		}
+
+
+
 
 		public IDisposable UseMasterScope()
 		{
@@ -151,6 +176,16 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+		private SqlDataReader ExecuteToReader(string sql, params object[] args)
+		{
+			using (var command = Connection().CreateCommand())
+			{
+				command.CommandText = string.Format(sql, args);
+				return command.ExecuteReader();
+			}
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 		public void Dispose()
 		{
@@ -160,7 +195,6 @@ namespace Teleopti.Ccc.TestCommon
 
 
 	}
-
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 	public class GenericDisposable : IDisposable

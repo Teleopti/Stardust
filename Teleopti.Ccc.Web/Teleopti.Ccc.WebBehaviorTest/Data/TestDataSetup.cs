@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static NHibernateUnitOfWorkFactory _unitOfWorkFactory;
 		private static TeleoptiPrincipal _principal;
+		private static DatabaseHelper.Backup _Ccc7DataBackup;
 
 		public static void CreateDataSource()
 		{
@@ -85,6 +86,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var startTime = DateTime.Now;
 			DataSourceHelper.ClearAnalyticsData();
 			Log.Write("ClearAnalyticsData took " + DateTime.Now.Subtract(startTime));
+		}
+
+		public static void BackupCcc7Data()
+		{
+			var startTime = DateTime.Now;
+			_Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy();
+			Log.Write("BackupCcc7DataByFileCopy took " + DateTime.Now.Subtract(startTime));
+		}
+
+		public static void RestoreCcc7Data()
+		{
+			var startTime = DateTime.Now;
+			DataSourceHelper.RestoreCcc7DataByFileCopy(_Ccc7DataBackup);
+			Log.Write("RestoreCcc7DataByFileCopy took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void EnsureThreadPrincipal()
