@@ -49,18 +49,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
         public void AddRequiredParticipant(ContactPersonViewModel contactPersonViewModel)
         {
             if (_requiredPersonModels.Contains(contactPersonViewModel)) return;
-            if (_optionalPersonModels.Contains(contactPersonViewModel))
-                _optionalPersonModels.Remove(contactPersonViewModel);
-
+           
             _requiredPersonModels.Add(contactPersonViewModel);
         }
 
         public void AddOptionalParticipant(ContactPersonViewModel contactPersonViewModel)
         {
             if (_optionalPersonModels.Contains(contactPersonViewModel)) return;
-            if (_requiredPersonModels.Contains(contactPersonViewModel))
-                _requiredPersonModels.Remove(contactPersonViewModel);
-
+          
             _optionalPersonModels.Add(contactPersonViewModel);
         }
     }
