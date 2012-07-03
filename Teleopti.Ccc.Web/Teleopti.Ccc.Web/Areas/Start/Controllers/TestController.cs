@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
+using Teleopti.Ccc.Web.Areas.Start.Models.Test;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
@@ -25,21 +26,29 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_businessUnitProvider = businessUnitProvider;
 		}
 
-		public ActionResult AfterScenario()
+		public ViewResult AfterScenario()
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
-			return new FilePathResult(@"~\Areas\Start\Views\Test\AfterScenario.html", "text/html");
+			var viewModel = new TestMessageViewModel
+			                	{
+			                		Title = "After scenario event", 
+									Message = "Resetting database state and clearing cookie and such..."
+			                	};
+			return View("Message", viewModel);
 		}
 
-		// "SignIn.DataSourceName={0}&SignIn.UserName={1}&SignIn.Password={2}&X-Requested-With=XMLHttpRequest";
-		// dataSourceName=TestData&businessUnitName=BusinessUnit&userName=1&password=1
-		public ActionResult Logon(string dataSourceName, string businessUnitName, string userName, string password)
+		public ViewResult Logon(string dataSourceName, string businessUnitName, string userName, string password)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = (from b in businessUnits where b.Name == businessUnitName select b).Single();
 			_logon.LogOn(businessUnit.Id.Value, dataSourceName, result.Person.Id.Value, AuthenticationTypeOption.Application);
-			return Content("Signed in as " + result.Person.Name.ToString(), "text/html");
+			var viewModel = new TestMessageViewModel
+			                	{
+			                		Title = "Quick logon",
+			                		Message = "Signed in as " + result.Person.Name
+			                	};
+			return View("Message", viewModel);
 		}
 
 		public EmptyResult ExpireMyCookie()
@@ -48,18 +57,28 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return new EmptyResult();
 		}
 
-		public EmptyResult CorruptMyCookie()
+		public ViewResult CorruptMyCookie()
 		{
 			var wrong = Convert.ToBase64String(Convert.FromBase64String("Totally wrong"));
 			_sessionSpecificDataProvider.MakeCookie("UserName", DateTime.Now, wrong);
-			return new EmptyResult();
+			var viewModel = new TestMessageViewModel
+			                	{
+			                		Title = "Corrup my cookie",
+			                		Message = "Cookie has been corrupted on your command!"
+			                	};
+			return View("Message", viewModel);
 		}
 
-		public EmptyResult NonExistingDatasourceCookie()
+		public ViewResult NonExistingDatasourceCookie()
 		{
 			var data = new SessionSpecificData(Guid.NewGuid(), "datasource", Guid.NewGuid(), AuthenticationTypeOption.Windows);
 			_sessionSpecificDataProvider.StoreInCookie(data);
-			return new EmptyResult();
+			var viewModel = new TestMessageViewModel
+			                	{
+			                		Title = "Incorrect datasource in my cookie",
+			                		Message = "Cookie has an invalid datasource on your command!"
+			                	};
+			return View("Message", viewModel);
 		}
 	}
 }

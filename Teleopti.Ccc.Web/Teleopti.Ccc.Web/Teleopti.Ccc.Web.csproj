@@ -206,6 +206,7 @@
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceRequestForm.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceRequestPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceRequestPersister.cs" />
+    <Compile Include="Areas\Start\Models\Test\TestMessageViewModel.cs" />
     <Compile Include="Core\RequestContext\CurrentBusinessUnitProvider.cs" />
     <Compile Include="Core\RequestContext\ICurrentBusinessUnitProvider.cs" />
     <Compile Include="Core\ServiceBus\IServiceBusSender.cs" />
@@ -522,9 +523,9 @@
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
-    <Content Include="Areas\Start\Views\Test\AfterScenario.html">
+    <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />

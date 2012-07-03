@@ -1,14 +1,19 @@
-﻿<!doctype html>
+﻿@using Teleopti.Ccc.Web.Areas.Start.Models.Test
+@model TestMessageViewModel
+@{
+	Layout = null;
+}
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Before test run</title>
-    </head>
-    <style>
-        body {
+	<head>
+		<title>@Model.Title</title>
+	</head>
+	<style>
+		body {
 			padding: 30px;
 			text-align: center;        
-        }
-        h1{
+		}
+		h1{
 			padding: 40px;
 			background-color: #333355;
 			border-radius: 10px;
@@ -20,9 +25,9 @@
 			color: #bbbbff;
 			font-family: Verdana;
 			font-size: 20px;
-        }
-    </style>
-    <body>
-        <h1>Resetting database state and clearing my cookie and such...</h1>
-    </body>
+		}
+	</style>
+	<body>
+		<h1>@Model.Message</h1>
+	</body>
 </html>​
