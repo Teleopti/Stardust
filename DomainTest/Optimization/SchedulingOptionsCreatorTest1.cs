@@ -144,10 +144,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationPreferences.General.UseMustHaves = true;
             _optimizationPreferences.General.MustHavesValue = 1;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsTrue(_schedulingOptions.UsePreferencesMustHaveOnly);
-            Assert.IsTrue(_schedulingOptions.UsePreferences);
-            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
 
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+			Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+            Assert.IsTrue(_schedulingOptions.UsePreferences);
 
             _optimizationPreferences.General.UseMustHaves = true;
             _optimizationPreferences.General.MustHavesValue = 0.8;
