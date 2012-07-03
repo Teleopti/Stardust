@@ -97,10 +97,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			//Task.WaitAll(prepareData, startBrowser);
 
 			if (ExperimentalDataMode.ForEachScenario)
-			{
 				TestDataSetup.RestoreCcc7Data();
-				MakeSureUowConnectionWorks();
-			}
 
 			TestDataSetup.ClearAnalyticsData();
 
@@ -108,36 +105,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			_beforeScenarioTimeSpent = _beforeScenarioTimeSpent.Add(spentTime);
 
 			Log.Write("BeforeScenario took " + spentTime);
-		}
-
-		private static void MakeSureUowConnectionWorks()
-		{
-			var tries = 10;
-			var sleep = TimeSpan.FromSeconds(1);
-			while (tries > 0)
-			{
-				try
-				{
-					TestDataSetup.UnitOfWorkAction(uow =>
-					                               	{
-					                               		var repository = new PersonRepository(uow);
-					                               		var person = repository.Get(TestData.PersonThatCreatesTestData.Id.Value);
-					                               		person.Email = Guid.NewGuid().ToString();
-					                               		uow.PersistAll();
-					                               	});
-				}
-				catch (DataSourceException exception)
-				{
-					if (exception.Message != "Cannot start transaction")
-						throw;
-					if (tries == 0)
-						throw;
-					Thread.Sleep(sleep);
-					tries--;
-					continue;
-				}
-				return;
-			}
 		}
 
 		[AfterScenario]
