@@ -102,8 +102,8 @@ namespace Teleopti.Ccc.TestCommon
 			using (var reader = ExecuteToReader("select * from sys.sysfiles"))
 			{
 				backup.Files = (from r in reader.Cast<IDataRecord>()
-				                let file = r.GetString(r.GetOrdinal("filename"))
-				                select new BackupFile {Source = file})
+								let file = r.GetString(r.GetOrdinal("filename"))
+								select new BackupFile { Source = file })
 					.ToArray();
 			}
 			using (UseMasterScope())
@@ -111,10 +111,10 @@ namespace Teleopti.Ccc.TestCommon
 				//ExecuteNonQuery(@"BACKUP DATABASE [{0}] TO DISK='{0}.bak' WITH INIT, STATS=10", _databaseName);
 				ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
 				backup.Files.ForEach(f =>
-				              	{
-				              		f.Backup = Path.GetFileName(f.Source);
-									File.Copy(f.Source, f.Backup, true);
-				              	});
+				                     	{
+				                     		f.Backup = Path.GetFileName(f.Source);
+				                     		File.Copy(f.Source, f.Backup, true);
+				                     	});
 				ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
 			}
 			return backup;
