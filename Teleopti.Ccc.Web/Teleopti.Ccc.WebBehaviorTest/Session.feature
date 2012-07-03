@@ -4,7 +4,7 @@
 	I want the application to handle my login session approprietly
 
 Scenario: Stay signed in after server restart
-	Given I am signed in
+	Given I am viewing an application page
 	Then I should be signed in
 	When I navigate the internet
 	And the server restarts
@@ -12,7 +12,7 @@ Scenario: Stay signed in after server restart
 	Then I should be signed in
 
 Scenario: Signed out when cookie expires while I browse the internet
-	Given I am signed in
+	Given I am viewing an application page
 	Then I should be signed in
 	When my cookie expires
 	And I navigate the internet
@@ -20,7 +20,7 @@ Scenario: Signed out when cookie expires while I browse the internet
 	Then I should be signed out
 
 Scenario: Signed out when cookie expires while I have the browser open
-	Given I am signed in
+	Given I am viewing an application page
 	Then I should be signed in
 	When my cookie expires
 	And I navigate to an application page
@@ -44,7 +44,8 @@ Scenario: Signed out when navigating to next period when cookie is expired
 	Then I should be signed out
 
 Scenario: Corrupt cookie due to upgrade should be overwritten by a logon
-	Given I am signed in
+	Given I am viewing an application page
+	Then I should be signed in
 	When My cookie gets corrupt
 	And I navigate to an application page
 	Then I should be signed out
@@ -52,7 +53,8 @@ Scenario: Corrupt cookie due to upgrade should be overwritten by a logon
 	Then I should be signed in
 
 Scenario: Corrupt cookie due to no longer existing database should be overwritten by a logon
-	Given I am signed in
+	Given I am viewing an application page
+	Then I should be signed in
 	When My cookie gets pointed to non existing database
 	And I navigate to an application page
 	Then I should be signed out

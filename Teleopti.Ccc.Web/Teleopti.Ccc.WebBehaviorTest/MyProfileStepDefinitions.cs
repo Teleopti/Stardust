@@ -18,20 +18,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I view my regional settings")]
 		public void WhenIViewMyRegionalSettings()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			var page = Browser.Current.Page<SignInPage>();
-			page.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoRegionalSettings();
 		}
 
 		[When(@"I view my password")]
 		public void WhenIViewMyPassword()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			var signInpage = Browser.Current.Page<SignInPage>();
-			signInpage.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoPasswordPage();
 		}
 

@@ -22,10 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I view student availability")]
 		public void WhenIViewStudentAvailability()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			var page = Browser.Current.Page<SignInPage>();
-			page.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoStudentAvailability();
 			_page = Browser.Current.Page<StudentAvailabilityPage>();
 		}

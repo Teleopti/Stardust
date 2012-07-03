@@ -20,10 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I view requests")]
 		public void GivenIAmViewingRequests()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			var page = Browser.Current.Page<SignInPage>();
-			page.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 			_page = Browser.Current.Page<RequestsPage>();
 		}

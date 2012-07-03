@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 #line 6
 this.ScenarioSetup(scenarioInfo);
 #line 7
- testRunner.Given("I am signed in");
+ testRunner.Given("I am viewing an application page");
 #line 8
  testRunner.Then("I should be signed in");
 #line 9
@@ -96,7 +96,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 14
 this.ScenarioSetup(scenarioInfo);
 #line 15
- testRunner.Given("I am signed in");
+ testRunner.Given("I am viewing an application page");
 #line 16
  testRunner.Then("I should be signed in");
 #line 17
@@ -119,7 +119,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 22
 this.ScenarioSetup(scenarioInfo);
 #line 23
- testRunner.Given("I am signed in");
+ testRunner.Given("I am viewing an application page");
 #line 24
  testRunner.Then("I should be signed in");
 #line 25
@@ -188,16 +188,18 @@ this.ScenarioSetup(scenarioInfo);
 #line 46
 this.ScenarioSetup(scenarioInfo);
 #line 47
- testRunner.Given("I am signed in");
+ testRunner.Given("I am viewing an application page");
 #line 48
- testRunner.When("My cookie gets corrupt");
+ testRunner.Then("I should be signed in");
 #line 49
- testRunner.And("I navigate to an application page");
+ testRunner.When("My cookie gets corrupt");
 #line 50
- testRunner.Then("I should be signed out");
+ testRunner.And("I navigate to an application page");
 #line 51
- testRunner.When("I sign in again");
+ testRunner.Then("I should be signed out");
 #line 52
+ testRunner.When("I sign in again");
+#line 53
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -210,19 +212,21 @@ this.ScenarioSetup(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Corrupt cookie due to no longer existing database should be overwritten by a logo" +
                     "n", ((string[])(null)));
-#line 54
-this.ScenarioSetup(scenarioInfo);
 #line 55
- testRunner.Given("I am signed in");
+this.ScenarioSetup(scenarioInfo);
 #line 56
- testRunner.When("My cookie gets pointed to non existing database");
+ testRunner.Given("I am viewing an application page");
 #line 57
- testRunner.And("I navigate to an application page");
+ testRunner.Then("I should be signed in");
 #line 58
- testRunner.Then("I should be signed out");
+ testRunner.When("My cookie gets pointed to non existing database");
 #line 59
- testRunner.When("I sign in again");
+ testRunner.And("I navigate to an application page");
 #line 60
+ testRunner.Then("I should be signed out");
+#line 61
+ testRunner.When("I sign in again");
+#line 62
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
