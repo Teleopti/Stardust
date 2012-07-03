@@ -10,9 +10,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof (Browser));
 
-		private static readonly IBrowserHandler<IE> BrowserHandler = new WatiNMultiBrowserIEHandler();
+		private static readonly IBrowserHandler<IE> BrowserHandler = new WatiNParallelBrowserIEHandler();
 
-		//private static IE ScenarioBrowser { get { return ScenarioContext.Current.Value<IE>(); } set { ScenarioContext.Current.Value(value); } }
 		private static IE GlobalBrowser { get; set; }
 
 		public static IE Current

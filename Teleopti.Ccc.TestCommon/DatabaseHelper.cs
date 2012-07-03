@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -108,7 +107,6 @@ namespace Teleopti.Ccc.TestCommon
 			}
 			using (UseMasterScope())
 			{
-				//ExecuteNonQuery(@"BACKUP DATABASE [{0}] TO DISK='{0}.bak' WITH INIT, STATS=10", _databaseName);
 				ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
 				backup.Files.ForEach(f =>
 				                     	{
@@ -124,7 +122,6 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			using (UseMasterScope())
 			{
-				//ExecuteNonQuery(@"RESTORE DATABASE [{0}] FROM DISK='{0}.bak' WITH REPLACE, RECOVERY, STATS=10", _databaseName);
 				ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
 				backup.Files.ForEach(f => File.Copy(f.Backup, f.Source, true));
 				ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);

@@ -1,7 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
-using System.Threading.Tasks;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
 using log4net;
@@ -9,7 +7,7 @@ using log4net;
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
-	public class WatiNMultiBrowserIEHandler : IBrowserHandler<IE>
+	public class WatiNParallelBrowserIEHandler : IBrowserHandler<IE>
 	{
 		private const string ProcessName = "iexplore";
 
@@ -17,6 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 		private IE browser;
 		private IntPtr browserWindowHandle;
+		private int processId;
 
 		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public IE Start()
@@ -31,7 +30,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			browser.ClearCache();
 			browser.ClearCookies();
 			browser.BringToFront();
+			
 			browserWindowHandle = browser.hWnd; // because if the close method is called in AfterTestRun ForceClose or hWnd doesnt work any more
+			processId = BrowserProcessHelpers.ProcessIdForMainWindow(ProcessName, browserWindowHandle);
+
 			return browser;
 		}
 
@@ -40,9 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		public void Close()
 		{
 			var startTime = DateTime.Now;
-			//CloseByWatiNCloseNDispose(browser);
 			BrowserProcessHelpers.CloseByClosingMainWindow(ProcessName, browserWindowHandle);
-			//CloseByWatiNForceClose(browser);
 			Log.Write("Close took " + DateTime.Now.Subtract(startTime));
 		}
 

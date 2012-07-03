@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			get { return Document.RadioButtons.Filter(Find.ByName("signin-sel-businessunit")); }
 		}
 
-		[FindBy(Id = "signout-button")] // Belongs to MobileReports
-			public Link SignoutButton { get; set; }
+		[FindBy(Id = "signout-button")]
+		public Link SignoutButton { get; set; }
 
 		public void SelectApplicationTestDataSource()
 		{
