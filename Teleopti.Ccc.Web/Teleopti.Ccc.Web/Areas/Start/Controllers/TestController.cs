@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		// "SignIn.DataSourceName={0}&SignIn.UserName={1}&SignIn.Password={2}&X-Requested-With=XMLHttpRequest";
 		// dataSourceName=TestData&businessUnitName=BusinessUnit&userName=1&password=1
-		public ActionResult Login(string dataSourceName, string businessUnitName, string userName, string password)
+		public ActionResult Logon(string dataSourceName, string businessUnitName, string userName, string password)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
