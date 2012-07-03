@@ -87,13 +87,6 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
-		public void ClearPool()
-		{
-			SqlConnection.ClearPool(_connection);
-			_connection.Dispose();
-			_connection = null;
-		}
-
 		public void CreateSchemaByDbManager()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
