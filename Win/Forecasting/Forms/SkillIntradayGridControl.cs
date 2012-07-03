@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (!IsChildSkill)
 			{
                 gridDataPeriodRow = new SkillDataGridRow(_rowManagerSkillDataPeriod, "NullableNumericCell",
-				                                               "ManualAgents", UserTexts.Resources.Agents);
+                                                               "ManualAgents", UserTexts.Resources.ManualAgents);
 				gridDataPeriodRow.SaveCellValue += gridRow_SaveCellValue;
 				gridDataPeriodRow.ChartSeriesSettings = ConfigureSetting(gridDataPeriodRow.DisplayMember);
 				GridRows.Add(_rowManagerSkillDataPeriod.AddRow(gridDataPeriodRow));

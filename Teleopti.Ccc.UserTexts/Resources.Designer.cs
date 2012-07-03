@@ -11149,6 +11149,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agents (Manual Override).
+        /// </summary>
+        public static string ManualAgents {
+            get {
+                return ResourceManager.GetString("ManualAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map Destination.
         /// </summary>
         public static string MapDestination {
