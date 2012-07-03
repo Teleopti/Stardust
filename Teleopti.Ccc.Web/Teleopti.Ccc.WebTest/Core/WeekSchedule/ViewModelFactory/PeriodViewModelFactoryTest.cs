@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         private IVisualLayerFactory factory;
         private IActivity activity;
         private IVisualLayer visualActivityLayer;
+    	private TimePeriod minMaxTime;
 
         [SetUp]
         public void Setup()
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             factory = new VisualLayerFactory();
             activity = ActivityFactory.CreateActivity("Phone");
             activity.SetId(Guid.NewGuid());
+			minMaxTime = new TimePeriod(8, 0, 19, 0);
 
             visualActivityLayer = factory.CreateShiftSetupLayer(activity, period);
 
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             }
             using (mocks.Playback())
             {
-                var result = target.CreatePeriodViewModels(visualLayerCollection);
+				var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime);
 
                 var layerDetails = result.Single();
                 layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
@@ -76,6 +78,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.Title.Should().Be.EqualTo("Phone");
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Should().Be.Null();
+				layerDetails.Color.Should().Be.EqualTo("Green");
+				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
+				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
         }
 
@@ -92,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             }
             using (mocks.Playback())
             {
-                var result = target.CreatePeriodViewModels(visualLayerCollection);
+				var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime);
 
                 var layerDetails = result.Single();
                 layerDetails.StyleClassName.Should().Be.EqualTo("color_FF0000");
@@ -100,6 +105,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.Title.Should().Be.EqualTo("Holiday");
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Should().Be.Null();
+				layerDetails.Color.Should().Be.EqualTo("Red");
+				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
+				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
         }
 
@@ -116,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             }
             using (mocks.Playback())
             {
-                var result = target.CreatePeriodViewModels(visualLayerCollection);
+				var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime);
 
                 var layerDetails = result.Single();
                 layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
@@ -124,6 +132,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.Title.Should().Be.EqualTo("Phone");
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Should().Be.Null();
+				layerDetails.Color.Should().Be.EqualTo("Green");
+				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
+				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
         }
 
@@ -142,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             }
             using (mocks.Playback())
             {
-                var result = target.CreatePeriodViewModels(visualLayerCollection);
+				var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime);
 
                 var layerDetails = result.Single();
                 layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
@@ -151,6 +162,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Title.Should().Be.EqualTo("subj");
                 layerDetails.Meeting.Location.Should().Be.EqualTo("loc");
+				layerDetails.Color.Should().Be.EqualTo("Green");
+				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
+				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
         }
 

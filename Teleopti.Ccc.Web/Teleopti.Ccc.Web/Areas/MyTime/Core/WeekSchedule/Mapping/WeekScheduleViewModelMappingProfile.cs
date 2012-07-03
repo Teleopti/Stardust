@@ -44,6 +44,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			CreateMap<WeekScheduleDomainData, WeekScheduleViewModel>()
 				.ForMember(d => d.PeriodSelection, c => c.MapFrom(s => _periodSelectionViewModelFactory.Invoke().CreateModel(s.Date)))
 				.ForMember(d => d.Styles, o => o.MapFrom(s => s.Days == null ? null : _scheduleColorProvider.Invoke().GetColors(s.ColorSource)))
+				.ForMember(d => d.TimeLine, o => o.MapFrom(s =>
+				{
+					var startTime = s.MinMaxTime.StartTime;
+					var endTime = s.MinMaxTime.EndTime;
+					var firstHour = startTime
+						.Subtract(new TimeSpan(0, 0, startTime.Minutes, startTime.Seconds, startTime.Milliseconds))
+						.Add(new TimeSpan(1, 0, 0));
+					var lastHour = endTime
+ 						.Subtract(new TimeSpan(0, 0, endTime.Minutes, endTime.Seconds, endTime.Milliseconds));
+					var times = firstHour
+						.TimeRange(lastHour, TimeSpan.FromHours(1))
+						.Union(new[] { startTime })
+						.Union(new[] { endTime })
+						.Union(new[] { firstHour })
+						.OrderBy(t => t)
+						.Distinct()
+						;
+					return from t in times
+					       select new TimeLineViewModel
+					              	{
+					              		PositionPercentage = (decimal) (t - startTime).Ticks/(endTime - startTime).Ticks,
+					              		Time = t.ToString("h\\:mm")
+					              	};
+				}))
 				.ForMember(d => d.RequestPermission, c => c.MapFrom(s => new RequestPermission
 				{
 					TextRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests),
@@ -54,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			CreateMap<WeekScheduleDayDomainData, DayViewModel>()
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date.ToShortDateString()))
 				.ForMember(d => d.FixedDate, c => c.MapFrom(s => s.Date.ToFixedClientDateOnlyFormat()))
-				.ForMember(d => d.Periods, c => c.MapFrom(s => _periodViewModelFactory.Invoke().CreatePeriodViewModels(s.Projection)))
+				.ForMember(d => d.Periods, c => c.MapFrom(s => _periodViewModelFactory.Invoke().CreatePeriodViewModels(s.Projection, s.MinMaxTime)))
 				.ForMember(d => d.TextRequestCount, o => o.MapFrom(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest))))
 				.ForMember(d => d.State, o => o.MapFrom(s =>
 				                                        	{
@@ -100,6 +124,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Meeting, c => c.Ignore())
 				.ForMember(d => d.TimeSpan, c => c.Ignore())
 				.ForMember(d => d.StyleClassName, c => c.Ignore())
+				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
+				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
+				.ForMember(d => d.Color, c => c.Ignore())
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PersonDayOffPeriodViewModel>()
@@ -108,6 +135,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Meeting, c => c.Ignore())
 				.ForMember(d => d.TimeSpan, c => c.Ignore())
 				.ForMember(d => d.StyleClassName, c => c.UseValue(StyleClasses.DayOff + " " + StyleClasses.Striped))
+				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
+				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
+				.ForMember(d => d.Color, c => c.Ignore())
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>()
@@ -116,6 +146,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Meeting, c => c.Ignore())
 				.ForMember(d => d.TimeSpan, c => c.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString()))
 				.ForMember(d => d.StyleClassName, c => c.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToStyleClass()))
+				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
+				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
+				.ForMember(d => d.Color, c => c.Ignore())
 				;
 
 			CreateMap<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>()
@@ -124,6 +157,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Meeting, c => c.Ignore())
 				.ForMember(d => d.TimeSpan, c => c.Ignore())
 				.ForMember(d => d.StyleClassName, c => c.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToStyleClass()))
+				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
+				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
+				.ForMember(d => d.Color, c => c.Ignore())
 				;
 
 			CreateMap<IAbsence, AbsenceTypeViewModel>()

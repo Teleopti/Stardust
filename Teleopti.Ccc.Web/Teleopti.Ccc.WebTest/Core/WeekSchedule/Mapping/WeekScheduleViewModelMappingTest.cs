@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                 	{Date = DateOnly.Today, Projection = MockRepository.GenerateMock<IVisualLayerCollection>()};
 			var periodViewModels = new PeriodViewModel[] {};
 
-			periodViewModelFactory.Stub(x => x.CreatePeriodViewModels(domainData.Projection)).Return(periodViewModels);
+			periodViewModelFactory.Stub(x => x.CreatePeriodViewModels(domainData.Projection, new TimePeriod())).Return(periodViewModels);
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
@@ -317,6 +317,23 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			result.AbsenceTypes.FirstOrDefault().Name.Should().Be.EqualTo(absence.Description.Name);
 			result.AbsenceTypes.FirstOrDefault().Id.Should().Be.EqualTo(absence.Id);
+		}
+
+		[Test]
+		public void ShouldMapTimeLine()
+		{
+			var domainData = new WeekScheduleDomainData()
+			{
+				MinMaxTime = new TimePeriod(8, 30, 17, 30)
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+
+			result.TimeLine.Count().Should().Be.EqualTo(11);
+			result.TimeLine.First().Time.Should().Be.EqualTo("8:30");
+			result.TimeLine.First().PositionPercentage.Should().Be.EqualTo(0.0);
+			result.TimeLine.ElementAt(1).Time.Should().Be.EqualTo("9:00");
+			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5/(17.5 - 8.5));
 		}
 	}
 }
