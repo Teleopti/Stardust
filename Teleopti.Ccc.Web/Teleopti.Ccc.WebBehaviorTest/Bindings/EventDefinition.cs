@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			catch(Exception)
 			{
 				Browser.Close();
+				throw;
 			}
 
 			Log.Write("BeforeTestRun took " + DateTime.Now.Subtract(startTime));
