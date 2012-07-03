@@ -129,7 +129,6 @@ namespace Teleopti.Ccc.TestCommon
 				backup.Files.ForEach(f => File.Copy(f.Backup, f.Source, true));
 				ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
 			}
-			SqlConnection.ClearPool(Connection());
 		}
 
 		public class Backup
