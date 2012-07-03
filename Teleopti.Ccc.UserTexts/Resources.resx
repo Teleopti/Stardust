@@ -10685,4 +10685,8 @@ These options are activated:
     <value>This Workload {0} window is open. Please close it as it is no longer valid.</value>
     <comment>please close workload window.</comment>
   </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>Agents (Manual Override)</value>
+    <comment>Manually entered number of agents will override the forecasterd number of agents.</comment>
+  </data>
 </root>
