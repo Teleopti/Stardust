@@ -87,7 +87,7 @@
     <Compile Include="Core\BrowserImpl\WatiNSingleBrowserFireFoxHandler.cs" />
     <Compile Include="Core\BrowserImpl\IBrowserHandler.cs" />
     <Compile Include="Core\BrowserImpl\WatiNSingleBrowserIEHandler.cs" />
-    <Compile Include="Core\BrowserImpl\WatiNMultiBrowserIEHandler.cs" />
+    <Compile Include="Core\BrowserImpl\WatiNParallelBrowserIEHandler.cs" />
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Data\User\AgentSecondBusinessUnit.cs" />
     <Compile Include="Data\User\AgentWithAnotherSiteAccess.cs" />
