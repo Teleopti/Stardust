@@ -101,12 +101,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             ExtendReduceTimeDecisionMakerResult daysToBeRescheduled =
                 _decisionMaker.Execute(_matrixConverter, _personalSkillsDataExtractor, _validatorList);
 
-            if (!daysToBeRescheduled.DayToLengthen.HasValue && !daysToBeRescheduled.DayToShorten.HasValue)
+			// bugfix for infinie loop 19889. We need to find both two days to remove AND add day off, otherwise jump out
+            if (!daysToBeRescheduled.DayToLengthen.HasValue || !daysToBeRescheduled.DayToShorten.HasValue)
                 return false;
 
             var oldPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
 
-            if (daysToBeRescheduled.DayToLengthen.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(schedulePeriod))
+            if (!_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(schedulePeriod))
             {
 
                 DateOnly dateOnly = daysToBeRescheduled.DayToLengthen.Value;
@@ -130,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     sourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToLengthen.Value, daysToBeRescheduled.DayToLengthen.Value));
             }
 
-            if (daysToBeRescheduled.DayToShorten.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(schedulePeriod))
+            if (!_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(schedulePeriod))
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToShorten.Value;
                 if (addDayOff(dateOnly, true, schedulingOptions))

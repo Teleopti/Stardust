@@ -1,7 +1,6 @@
 Analytics,Analytics,Analytics
 Client\ClickOnce,Client,Client
 ETL,TeleoptiCCC\Services\ETL,ETL
-MessageBroker,TeleoptiCCC\Services\MessageBroker,MessageBroker
 MyTime\ClickOnce,MyTime,MyTime
 AgentPortalWeb,Web,Web
 RTA,RTA,RTA
