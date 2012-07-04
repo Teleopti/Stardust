@@ -56,7 +56,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExtRequiredParticipant)).BeginInit();
             this.tableLayoutPanelFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvtDate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvtDate.Calendar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExtFilterCriteria)).BeginInit();
             this.tableLayoutPanelConfirmButtons.SuspendLayout();
             this.statusStripExAddressBook.SuspendLayout();
@@ -66,6 +65,7 @@
             // 
             this.ribbonControlForm.CaptionFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ribbonControlForm.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlForm.MenuButtonText = "";
             this.ribbonControlForm.MenuButtonVisible = false;
             this.ribbonControlForm.Name = "ribbonControlForm";
             // 
@@ -74,6 +74,8 @@
             this.ribbonControlForm.OfficeMenu.Name = "OfficeMenu";
             this.ribbonControlForm.OfficeMenu.Size = new System.Drawing.Size(12, 65);
             this.ribbonControlForm.QuickPanelVisible = false;
+            this.ribbonControlForm.SelectedTab = null;
+            this.ribbonControlForm.ShowMinimizeButton = false;
             this.ribbonControlForm.Size = new System.Drawing.Size(574, 33);
             this.ribbonControlForm.SystemText.QuickAccessDialogDropDownName = "xxStart menu";
             this.ribbonControlForm.TabIndex = 3;
@@ -105,11 +107,11 @@
             // gridControlPeople
             // 
             this.gridControlPeople.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.None;
-            this.gridControlPeople.AllowSelection = ((Syncfusion.Windows.Forms.Grid.GridSelectionFlags)((((((Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Row | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Table)
-                        | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Multiple)
-                        | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Shift)
-                        | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Keyboard)
-                        | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.MixRangeType)));
+            this.gridControlPeople.AllowSelection = ((Syncfusion.Windows.Forms.Grid.GridSelectionFlags)((((((Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Row | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Table) 
+            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Multiple) 
+            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Shift) 
+            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Keyboard) 
+            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.MixRangeType)));
             this.gridControlPeople.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.gridControlPeople.ColCount = 1;
             this.gridControlPeople.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
@@ -118,9 +120,12 @@
             new Syncfusion.Windows.Forms.Grid.GridColWidth(2, 225),
             new Syncfusion.Windows.Forms.Grid.GridColWidth(3, 150),
             new Syncfusion.Windows.Forms.Grid.GridColWidth(4, 150)});
+            this.gridControlPeople.DisplayVerticalLines = false;
             this.gridControlPeople.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControlPeople.ExcelLikeCurrentCell = true;
             this.gridControlPeople.ExcelLikeSelectionFrame = true;
+            this.gridControlPeople.GridLineColor = System.Drawing.SystemColors.GrayText;
+            this.gridControlPeople.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
             this.gridControlPeople.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
             this.gridControlPeople.Location = new System.Drawing.Point(11, 40);
             this.gridControlPeople.Name = "gridControlPeople";
@@ -181,8 +186,9 @@
             // 
             // textBoxExtOptionalParticipant
             // 
-            this.textBoxExtOptionalParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxExtOptionalParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxExtOptionalParticipant.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxExtOptionalParticipant.Location = new System.Drawing.Point(84, 36);
             this.textBoxExtOptionalParticipant.Multiline = true;
             this.textBoxExtOptionalParticipant.Name = "textBoxExtOptionalParticipant";
@@ -190,13 +196,15 @@
             this.textBoxExtOptionalParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxExtOptionalParticipant.Size = new System.Drawing.Size(461, 21);
             this.textBoxExtOptionalParticipant.TabIndex = 5;
-            this.textBoxExtOptionalParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtOptionalParticipant_KeyDown);
+            this.textBoxExtOptionalParticipant.Click += new System.EventHandler(this.textBoxExtOptionalParticipant_Click);
             this.textBoxExtOptionalParticipant.TextChanged += new System.EventHandler(this.textBoxExtOptionalParticipant_TextChanged);
+            this.textBoxExtOptionalParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtOptionalParticipant_KeyDown);
             // 
             // textBoxExtRequiredParticipant
             // 
-            this.textBoxExtRequiredParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxExtRequiredParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxExtRequiredParticipant.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxExtRequiredParticipant.Location = new System.Drawing.Point(84, 7);
             this.textBoxExtRequiredParticipant.Multiline = true;
             this.textBoxExtRequiredParticipant.Name = "textBoxExtRequiredParticipant";
@@ -204,8 +212,9 @@
             this.textBoxExtRequiredParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxExtRequiredParticipant.Size = new System.Drawing.Size(461, 21);
             this.textBoxExtRequiredParticipant.TabIndex = 3;
-            this.textBoxExtRequiredParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtRequiredParticipant_KeyDown);
+            this.textBoxExtRequiredParticipant.Click += new System.EventHandler(this.textBoxExtRequiredParticipant_Click);
             this.textBoxExtRequiredParticipant.TextChanged += new System.EventHandler(this.textBoxExtRequiredParticipant_TextChanged);
+            this.textBoxExtRequiredParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtRequiredParticipant_KeyDown);
             // 
             // tableLayoutPanelFilter
             // 
@@ -269,19 +278,19 @@
             this.dateTimePickerAdvtDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
             this.dateTimePickerAdvtDate.Calendar.NoneButton.Text = "None";
             this.dateTimePickerAdvtDate.Calendar.NoneButton.UseVisualStyle = true;
+            this.dateTimePickerAdvtDate.Calendar.NoneButton.Visible = false;
             // 
             // 
             // 
             this.dateTimePickerAdvtDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.dateTimePickerAdvtDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-            this.dateTimePickerAdvtDate.Calendar.TodayButton.Size = new System.Drawing.Size(134, 20);
+            this.dateTimePickerAdvtDate.Calendar.TodayButton.Size = new System.Drawing.Size(206, 20);
             this.dateTimePickerAdvtDate.Calendar.TodayButton.Text = "Today";
             this.dateTimePickerAdvtDate.Calendar.TodayButton.UseVisualStyle = true;
             this.dateTimePickerAdvtDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTimePickerAdvtDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
             this.dateTimePickerAdvtDate.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
             this.dateTimePickerAdvtDate.ClipboardFormat = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTimePickerAdvtDate.Culture = new System.Globalization.CultureInfo("sv-SE");
             this.dateTimePickerAdvtDate.DropDownImage = null;
             this.dateTimePickerAdvtDate.EnableNullDate = false;
             this.dateTimePickerAdvtDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
@@ -312,8 +321,6 @@
             // autoLabelFilterPeople
             // 
             this.autoLabelFilterPeople.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.autoLabelFilterPeople.DX = 0;
-            this.autoLabelFilterPeople.DY = 0;
             this.autoLabelFilterPeople.Location = new System.Drawing.Point(3, 8);
             this.autoLabelFilterPeople.Name = "autoLabelFilterPeople";
             this.autoLabelFilterPeople.Size = new System.Drawing.Size(102, 13);
@@ -323,6 +330,7 @@
             // 
             // textBoxExtFilterCriteria
             // 
+            this.textBoxExtFilterCriteria.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxExtFilterCriteria.Location = new System.Drawing.Point(111, 3);
             this.textBoxExtFilterCriteria.Name = "textBoxExtFilterCriteria";
             this.textBoxExtFilterCriteria.OverflowIndicatorToolTipText = null;
@@ -403,9 +411,9 @@
             this.Controls.Add(this.tableLayoutPanelForm);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(500, 400);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(500, 400);
             this.Name = "AddressBookView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "xxSelectAttendees";
@@ -419,7 +427,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExtRequiredParticipant)).EndInit();
             this.tableLayoutPanelFilter.ResumeLayout(false);
             this.tableLayoutPanelFilter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvtDate.Calendar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvtDate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExtFilterCriteria)).EndInit();
             this.tableLayoutPanelConfirmButtons.ResumeLayout(false);
