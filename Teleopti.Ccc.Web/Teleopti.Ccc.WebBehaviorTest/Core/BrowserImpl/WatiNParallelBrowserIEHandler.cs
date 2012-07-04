@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
 using log4net;
@@ -37,6 +39,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			                              	{
 			                              		try
 			                              		{
+													Log.Write("browserWindowHandle " + browserWindowHandle);
+			                              			var processes = Process.GetProcessesByName(ProcessName).ToList();
+			                              			processes.ForEach(p =>
+			                              			                  	{
+																			Log.Write("p.MainWindowHandle " + p.MainWindowHandle);
+			                              			                  	});
 													processId = ProcessHelpers.ProcessIdForMainWindow(ProcessName, browserWindowHandle);
 			                              			return true;
 			                              		}
