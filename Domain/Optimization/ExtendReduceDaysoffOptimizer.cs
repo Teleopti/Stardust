@@ -123,8 +123,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				if (rescheduleWhiteSpots(new[] { changedDayOff }, illegalDays, sourceMatrix, _originalStateContainerForTagChange, schedulingOptions))
 					success = true;
-					// bugfix for infinie loop 19889. We need to lock the day for avoiding infinitive loop
-					sourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToLengthen.Value, daysToBeRescheduled.DayToLengthen.Value));
+				// bugfix for infinie loop 19889. We need to lock the day for avoiding infinitive loop
+				sourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToLengthen.Value, daysToBeRescheduled.DayToLengthen.Value));
 			}
 
 			if (daysToBeRescheduled.DayToShorten.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(schedulePeriod))
@@ -132,8 +132,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				DateOnly dayToShorten = daysToBeRescheduled.DayToShorten.Value;
 				if (addDayOff(dayToShorten, true, schedulingOptions))
 					success = true;
-					// bugfix for infinie loop 19889. We need to lock the day for avoiding infinitive loop
-					sourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToShorten.Value, daysToBeRescheduled.DayToShorten.Value));
+				// bugfix for infinie loop 19889. We need to lock the day for avoiding infinitive loop
+				sourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToShorten.Value, daysToBeRescheduled.DayToShorten.Value));
 			}
 
 			if (success)
