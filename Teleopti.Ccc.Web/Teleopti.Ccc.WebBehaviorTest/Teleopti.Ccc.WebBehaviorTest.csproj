@@ -83,7 +83,7 @@
     </Compile>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
-    <Compile Include="Core\BrowserImpl\BrowserProcessHelpers.cs" />
+    <Compile Include="Core\BrowserImpl\ProcessHelpers.cs" />
     <Compile Include="Core\BrowserImpl\WatiNSingleBrowserFireFoxHandler.cs" />
     <Compile Include="Core\BrowserImpl\IBrowserHandler.cs" />
     <Compile Include="Core\BrowserImpl\WatiNSingleBrowserIEHandler.cs" />

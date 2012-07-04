@@ -45,14 +45,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 			try
 			{
-				var result = BrowserProcessHelpers.AttemptToCloseProcess(
+				var result = ProcessHelpers.TryToCloseProcess(
 					ProcessName,
-					new Func<bool>[]
+					new Func<string, bool>[]
 						{
-							() => CloseByWatiNCloseNDispose(_browser),
-							() => BrowserProcessHelpers.CloseByClosingMainWindow(ProcessName),
-							() => CloseByWatiNForceClose(_browser),
-							() => BrowserProcessHelpers.CloseByKillingProcesses(ProcessName)
+							n => TryCloseByWatiNCloseNDispose(_browser),
+							ProcessHelpers.TryCloseByClosingMainWindow,
+							n => TryCloseByWatiNForceClose(_browser),
+							ProcessHelpers.TryCloseByKillingProcess
 						});
 				if (!result)
 					throw new ApplicationException("Browser failed to close.");
@@ -75,12 +75,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 			using (MakeBrowserLock())
 			{
-				var result = BrowserProcessHelpers.AttemptToCloseProcess(
+				var result = ProcessHelpers.TryToCloseProcess(
 					ProcessName,
-					new Func<bool>[]
+					new Func<string, bool>[]
 						{
-							() => BrowserProcessHelpers.CloseByClosingMainWindow(ProcessName),
-							() => BrowserProcessHelpers.CloseByKillingProcesses(ProcessName)
+							ProcessHelpers.TryCloseByClosingMainWindow,
+							ProcessHelpers.TryCloseByKillingProcess
 						});
 				if (!result)
 					throw new ApplicationException("Browser failed to close when making sure it isnt running");
@@ -91,13 +91,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 
 
-		private static bool CloseByWatiNForceClose(IE browser)
+		private static bool TryCloseByWatiNForceClose(IE browser)
 		{
 			browser.ForceClose();
 			return true;
 		}
 
-		private static bool CloseByWatiNCloseNDispose(WatiN.Core.Browser browser)
+		private static bool TryCloseByWatiNCloseNDispose(WatiN.Core.Browser browser)
 		{
 			if (_closeByWatiNCloseNDisposeFailed)
 				return false;

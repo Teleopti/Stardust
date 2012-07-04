@@ -31,8 +31,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			browser.ClearCookies();
 			browser.BringToFront();
 			
-			browserWindowHandle = browser.hWnd; // because if the close method is called in AfterTestRun ForceClose or hWnd doesnt work any more
-			processId = BrowserProcessHelpers.ProcessIdForMainWindow(ProcessName, browserWindowHandle);
+			browserWindowHandle = browser.hWnd;
+
+			Func<bool> tryToGetProcessId = () =>
+			                              	{
+			                              		try
+			                              		{
+													processId = ProcessHelpers.ProcessIdForMainWindow(ProcessName, browserWindowHandle);
+			                              			return true;
+			                              		}
+			                              		catch (ProcessNotFoundException)
+			                              		{
+			                              			return false;
+			                              		}
+			                              	};
+			tryToGetProcessId.WaitOrThrow(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
 
 			return browser;
 		}
@@ -41,12 +54,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		{
 			var startTime = DateTime.Now;
 
-			var result = BrowserProcessHelpers.AttemptToCloseProcess(
+			var result = ProcessHelpers.TryToCloseProcess(
 				ProcessName,
-				new Func<bool>[]
+				new Func<string, bool>[]
 					{
-						() => BrowserProcessHelpers.CloseByClosingMainWindow(ProcessName),
-						() => BrowserProcessHelpers.CloseByKillingProcesses(ProcessName)
+						ProcessHelpers.TryCloseByClosingMainWindow,
+						ProcessHelpers.TryCloseByKillingProcess
 					});
 			if (!result)
 				throw new ApplicationException("Browser failed to close when making sure it isnt running");
@@ -57,7 +70,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		public void Close()
 		{
 			var startTime = DateTime.Now;
-			BrowserProcessHelpers.CloseByClosingMainWindow(ProcessName, browserWindowHandle);
+			// because if the close method is called in AfterTestRun ForceClose or hWnd doesnt work any more
+			// same goes for retrieving the window handle at this stage
+			ProcessHelpers.CloseByClosingMainWindow(ProcessName, browserWindowHandle);
 			Log.Write("Close took " + DateTime.Now.Subtract(startTime));
 		}
 

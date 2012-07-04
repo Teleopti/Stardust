@@ -1,0 +1,211 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
+{
+	public class ProcessNotFoundException : Exception
+	{
+		public ProcessNotFoundException(string message)
+			: base(message)
+		{
+		}
+	}
+
+	public static class ProcessHelpers
+	{
+		internal static void CloseByClosingMainWindow(string processName, IntPtr windowHandle)
+		{
+			ProcessByMainWindow(processName, windowHandle).CloseMainWindow();
+		}
+
+		internal static bool TryCloseByClosingMainWindow(string processName, IntPtr windowHandle)
+		{
+			return Try(() => CloseByClosingMainWindow(processName, windowHandle));
+		}
+
+		internal static void CloseByClosingMainWindow(string processName, int processId)
+		{
+			ProcessById(processName, processId).CloseMainWindow();
+		}
+
+		internal static bool TryCloseByClosingMainWindow(string processName, int processId)
+		{
+			return Try(() => CloseByClosingMainWindow(processName, processId));
+		}
+
+		internal static void CloseByClosingMainWindow(string processName)
+		{
+			ProcessByName(processName).ForEach(p => p.CloseMainWindow());
+		}
+
+		internal static bool TryCloseByClosingMainWindow(string processName)
+		{
+			return Try(() => CloseByClosingMainWindow(processName));
+		}
+
+
+
+		internal static void CloseByKillingProcess(string processName, IntPtr windowHandle)
+		{
+			ProcessByMainWindow(processName, windowHandle).Kill();
+		}
+
+		internal static bool TryCloseByKillingProcess(string processName, IntPtr windowHandle)
+		{
+			return Try(() => CloseByKillingProcess(processName, windowHandle));
+		}
+
+		internal static void CloseByKillingProcess(string processName, int processId)
+		{
+			ProcessById(processName, processId).Kill();
+		}
+
+		internal static bool TryCloseByKillingProcess(string processName, int processId)
+		{
+			return Try(() => CloseByKillingProcess(processName, processId));
+		}
+
+		internal static void CloseByKillingProcess(string processName)
+		{
+			ProcessByName(processName).ForEach(p => p.Kill());
+		}
+
+		internal static bool TryCloseByKillingProcess(string processName)
+		{
+			return Try(() => CloseByKillingProcess(processName));
+		}
+
+
+
+
+		internal static int ProcessIdForMainWindow(string processName, IntPtr windowHandle)
+		{
+			return ProcessByMainWindow(processName, windowHandle).Id;
+		}
+
+
+
+
+
+		internal static bool TryToCloseProcess(string processName, IEnumerable<Func<string, bool>> attempts)
+		{
+			Func<bool> verify = () => QueryProcessesByName(processName).Count() == 0;
+			if (verify.Invoke())
+				return true;
+			return attempts.Any(attempt =>
+			                    	{
+										return TryToCloseProcess(verify, () => attempt(processName));
+			                    	});
+		}
+
+		internal static bool TryToCloseProcess(string processName, IntPtr windowHandle, IEnumerable<Func<string, IntPtr, bool>> attempts)
+		{
+			Func<bool> verify = () => QueryProcessesByMainWindow(processName, windowHandle).Count() == 0;
+			if (verify.Invoke())
+				return true;
+			return attempts.Any(attempt =>
+			                    	{
+										return TryToCloseProcess(verify, () => attempt(processName, windowHandle));
+			                    	});
+		}
+
+		internal static bool TryToCloseProcess(string processName, int processId, IEnumerable<Func<string, int, bool>> attempts)
+		{
+			Func<bool> verify = () => QueryProcessesById(processName, processId).Count() == 0;
+			if (verify.Invoke())
+				return true;
+			return attempts.Any(attempt =>
+			                    	{
+			                    		return TryToCloseProcess(verify, () => attempt(processName, processId));
+			                    	});
+		}
+
+		private static bool TryToCloseProcess(Func<bool> verify, Func<bool> attempt)
+		{
+			var attemptSuccessful = false;
+			try
+			{
+				attemptSuccessful = attempt.Invoke();
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+			if (attemptSuccessful)
+			{
+				return verify.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
+			}
+			return false;
+		}
+
+
+
+
+
+		private static Process ProcessByMainWindow(string processName, IntPtr windowHandle)
+		{
+			var processes = QueryProcessesByMainWindow(processName, windowHandle);
+			if (processes.Count() == 1)
+				return processes.Single();
+			throw new ProcessNotFoundException("Single process " + processName + " with window handle " + windowHandle + " not found.");
+		}
+
+		private static Process ProcessById(string processName, int processId)
+		{
+			var processes = QueryProcessesById(processName, processId);
+			if (processes.Count() == 1)
+				return processes.Single();
+			throw new ProcessNotFoundException("Single process " + processName + " with id " + processId + " not found.");
+		}
+
+		private static IEnumerable<Process> ProcessByName(string processName)
+		{
+			var processes = QueryProcessesByName(processName);
+			if (processes.Any())
+				return processes;
+			throw new ProcessNotFoundException("Single process " + processName + " not found.");
+		}
+
+
+
+
+		private static IEnumerable<Process> QueryProcessesByMainWindow(string processName, IntPtr windowHandle)
+		{
+			var processes = Process.GetProcessesByName(processName);
+			return (from p in processes where p.MainWindowHandle == windowHandle select p).ToArray();
+		}
+
+		private static IEnumerable<Process> QueryProcessesById(string processName, int processId)
+		{
+			var processes = Process.GetProcessesByName(processName);
+			return (from p in processes where p.Id == processId select p).ToArray();
+		}
+
+		private static IEnumerable<Process> QueryProcessesByName(string processName)
+		{
+			return Process.GetProcessesByName(processName);
+		}
+
+
+
+
+		private static bool Try(Action action)
+		{
+			try
+			{
+				action.Invoke();
+				return true;
+			}
+			catch (ProcessNotFoundException)
+			{
+				return false;
+			}
+		}
+
+
+	}
+}
