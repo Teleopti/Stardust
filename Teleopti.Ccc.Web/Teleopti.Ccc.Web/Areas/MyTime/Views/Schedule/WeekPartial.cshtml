@@ -1,4 +1,5 @@
-﻿@using Teleopti.Ccc.UserTexts
+﻿@using System.Drawing
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 @using Teleopti.Interfaces.Domain
@@ -11,7 +12,7 @@
 	<style>
 		@foreach (var style in Model.Styles)
 		{
-			@string.Format("li.third.{0} {{background-color: {1};}}\n", style.Name, style.ColorHex)
+			@string.Format("li.third.{0} {{background-color: rgba({1},0.2);}}\n", style.Name, ColorTranslator.FromHtml(style.ColorHex).ToCSV())
 		}
 	</style>
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
