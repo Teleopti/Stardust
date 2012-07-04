@@ -1,3 +1,4 @@
+using System;
 using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
@@ -9,11 +10,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 		public static void Write(this ILog log, string message)
 		{
 			log.Warn(message);
+			Console.WriteLine(message);
 		}
 
 		public static void Write(this ILog log, string message, params object[] args)
 		{
 			log.WarnFormat(message, args);
+			Console.WriteLine(message, args);
 		}
 	}
 }
