@@ -118,9 +118,9 @@ Scenario: Show timeline with schedule
 	When I view my week schedule
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field          | Value |
-	| start timeline | 19:45 |
-	| end timeline   | 4:15  |
-	| timeline count | 11    |
+	| start timeline | 20:00 |
+	| end timeline   | 4:00  |
+	| timeline count | 9     |
 
 Scenario: Show timeline with schedule with different start and end time on different day
 	Given I am an agent
@@ -129,9 +129,9 @@ Scenario: Show timeline with schedule with different start and end time on diffe
 	When I view my week schedule
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field          | Value |
-	| start timeline | 7:45  |
-	| end timeline   | 18:15 |
-	| timeline count | 13    |
+	| start timeline | 8:00  |
+	| end timeline   | 18:00 |
+	| timeline count | 11     |
 
 Scenario: Show activity with correct position, height and color
 	Given I am an agent
@@ -146,5 +146,5 @@ Scenario: Show activity with correct position, height and color
 	When I view my week schedule
 	Then I should see wednesday's activities:
 	| Activity   | Start Position | Height | Color |
-	| Phone      | 80             | 95     | Green |
-	| Shortbreak | 175            | 32     | Red   |
+	| Phone      | 67             | 100    | Green |
+	| Shortbreak | 167            | 33     | Red   |

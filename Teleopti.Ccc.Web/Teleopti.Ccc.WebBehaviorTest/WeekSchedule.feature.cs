@@ -391,13 +391,13 @@ this.ScenarioSetup(scenarioInfo);
                         "Value"});
             table2.AddRow(new string[] {
                         "start timeline",
-                        "19:45"});
+                        "20:00"});
             table2.AddRow(new string[] {
                         "end timeline",
-                        "4:15"});
+                        "4:00"});
             table2.AddRow(new string[] {
                         "timeline count",
-                        "11"});
+                        "9"});
 #line 119
  testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table2);
 #line hidden
@@ -425,13 +425,13 @@ this.ScenarioSetup(scenarioInfo);
                         "Value"});
             table3.AddRow(new string[] {
                         "start timeline",
-                        "7:45"});
+                        "8:00"});
             table3.AddRow(new string[] {
                         "end timeline",
-                        "18:15"});
+                        "18:00"});
             table3.AddRow(new string[] {
                         "timeline count",
-                        "13"});
+                        "11"});
 #line 130
  testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table3);
 #line hidden
@@ -480,13 +480,13 @@ this.ScenarioSetup(scenarioInfo);
                         "Color"});
             table5.AddRow(new string[] {
                         "Phone",
-                        "80",
-                        "95",
+                        "67",
+                        "100",
                         "Green"});
             table5.AddRow(new string[] {
                         "Shortbreak",
-                        "175",
-                        "32",
+                        "167",
+                        "33",
                         "Red"});
 #line 147
  testRunner.Then("I should see wednesday\'s activities:", ((string)(null)), table5);

@@ -77,8 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the public note on tuesday")]
 		public void ThenIShouldSeeThePublicNoteOnTuesday()
 		{
-			var data = UserFactory.User().UserData<PublicNoteOnWednesday>();
-			_page.SecondDayComment.Text.Should().Contain(data.PublicNote);
+			EventualAssert.That(() =>_page.SecondDayComment.Exists, Is.True);
 		}
 
 		[Then(@"I should see the selected week")]
