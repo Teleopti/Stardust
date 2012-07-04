@@ -4,7 +4,7 @@
 @using Teleopti.Interfaces.Domain
 @model WeekScheduleViewModel
 @{
-	const int scheduleHeight = 580;
+	const int scheduleHeight = 668;
 	Layout = null;
 }
 <div id="ScheduleWeek-body" class="body-weekview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
@@ -79,8 +79,11 @@
 						var heightPixel = bottomPixel - topPixel;
 						<div class="week-schedule-layer absolute tooltip" tooltip-title="@period.Title" tooltip-text="@period.TimeSpan"
 							 style="background-color: @(period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
-							<strong class="truncate">@period.Title</strong>
-							<span class="fullwidth displayblock">@period.TimeSpan</span>
+							@if (heightPixel > 32)
+							{
+								<strong class="truncate">@period.Title</strong>
+								<span class="fullwidth displayblock">@period.TimeSpan</span>
+							}
 							@if (period.Meeting != null)
 							{
 								<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>

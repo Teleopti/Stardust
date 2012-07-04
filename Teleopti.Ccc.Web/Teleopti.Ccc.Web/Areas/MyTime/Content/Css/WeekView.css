@@ -250,14 +250,14 @@ select.absence-input
 }
 .weekview-day-schedule {
 	width: 131px;
-	height: 580px;
+	height: 668px;
 }
 .weekview-day-schedule .tooltip {
 	position: absolute;
 }
 .weekview-timeline {
 	width: 32px;
-	height: 580px;
+	height: 668px;
 	background: transparent;
 }
 .weekview-timeline-label {

@@ -99,3 +99,13 @@ Scenario: Can not delete denied text request
 	And I have a denied text request
 	When I am viewing requests
 	Then I should not see a delete button
+
+
+Scenario: Hide absence request tab when view a text request
+	Given I am an agent
+	And I have an existing text request
+	And I am viewing requests
+	When I click on the request
+	Then I should see the text request's details form
+	And I should see the request's values
+	And I should not see the absence request tab (invisible)
