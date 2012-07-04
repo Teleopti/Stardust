@@ -10408,7 +10408,28 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
     <value>Du ska arbeta {0} till {1} timmar.</value>
   </data>
-  <data name="SendRequest" xml:space="preserve">
+  <data name="SubmitRequest" xml:space="preserve">
     <value>Skicka</value>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>Ersätt period</value>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Ersätt timmar per dag</value>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Ersätt fridagar</value>
+  </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>Detta workloadfönster {0} är öppet. Var god stäng det, då det inte längre är giltigt. </value>
+  </data>
+  <data name="LongtermForecast" xml:space="preserve">
+    <value>Långtidsprognos</value>
+  </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>Hantera regeluppsättning</value>
+  </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>Agenter (manuell ersättning)</value>
   </data>
 </root>
