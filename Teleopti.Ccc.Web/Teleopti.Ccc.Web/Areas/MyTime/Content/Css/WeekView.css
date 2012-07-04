@@ -109,7 +109,6 @@
 {
 	background: transparent url(../Images/icon_sprite.png) -163px -4px no-repeat;
 	left: 5px;
-	top: 0;
 	height: 16px;
 }
 
@@ -158,9 +157,9 @@
 	border-left-color: transparent;*/
 }
 .weekview-day li div.meeting {
-	bottom: 10px;
+	bottom: 1px;
 	height: 18px;
-	right: -2px;
+	right: 0px;
 	margin-left: 5px;
 }
 .ie7 .weekview-day li div.meeting{margin-left: 0px;}

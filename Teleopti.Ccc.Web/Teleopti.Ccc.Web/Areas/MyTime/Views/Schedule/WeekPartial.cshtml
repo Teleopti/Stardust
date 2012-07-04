@@ -11,9 +11,6 @@
 	<style>
 		@foreach (var style in Model.Styles)
 		{
-			@*@string.Format(".weekview-day li.{0} div {{border-left-color: {1}; border-right-color: {1};}}\n", style.Name, style.ColorHex)
-			@string.Format("li.third.{0} {{border-left-color: {1}; border-right-color: {1};}}\n", style.Name, style.ColorHex)
-			@string.Format("li.third.{0} {{border-left-width: 8px; border-left-color: {1}; border-right-color: {1};}}\n", style.Name, style.ColorHex)*@
 			@string.Format("li.third.{0} {{border-left-width: 8px; background-color: {1}; border-right-color: {1};}}\n", style.Name, style.ColorHex)
 		}
 	</style>
@@ -61,31 +58,30 @@
 				<li class="weekview-day-schedule relative">
 					@foreach (var period in day.Periods)
 					{
-						@*<li class="@period.StyleClassName">
-							<div>
-								<strong class="fullwidth displayblock">@period.TimeSpan</strong>
-								<div class="truncate">@period.Title</div>
+						var topPixel = (Math.Round(scheduleHeight * period.StartPositionPercentage));
+						var bottomPixel = (Math.Round(scheduleHeight * period.EndPositionPercentage));
+						var heightPixel = bottomPixel - topPixel;
+						if (heightPixel > 32)
+						{
+							<div class="week-schedule-layer absolute" style="background-color: @(period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
+								<strong class="truncate">@period.Title</strong>
+								<span class="fullwidth displayblock">@period.TimeSpan</span>
 								@if (period.Meeting != null)
 								{
 									<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>
 								}
 							</div>
-						</li>*@
-						var topPixel = (Math.Round(scheduleHeight * period.StartPositionPercentage));
-						var bottomPixel = (Math.Round(scheduleHeight * period.EndPositionPercentage));
-						var heightPixel = bottomPixel - topPixel;
-						<div class="week-schedule-layer absolute tooltip" tooltip-title="@period.Title" tooltip-text="@period.TimeSpan"
-							 style="background-color: @(period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
-							@if (heightPixel > 32)
-							{
-								<strong class="truncate">@period.Title</strong>
-								<span class="fullwidth displayblock">@period.TimeSpan</span>
-							}
-							@if (period.Meeting != null)
-							{
-								<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>
-							}
-						</div>
+						}
+						else
+						{
+							<div class="week-schedule-layer absolute tooltip" tooltip-title="@period.Title" tooltip-text="@period.TimeSpan"
+								 style="background-color: @(period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
+								@if (period.Meeting != null)
+								{
+									<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>
+								}
+							</div>
+						}
 					}
 				</li>
 			</ul>

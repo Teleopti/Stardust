@@ -405,8 +405,7 @@ html.full-height #push{
 .icon.toolbar-today {background-position: -155px -26px; width: 24px}
 
 .text-request {
-	bottom: 16px;
-	right: 0;
+	right: 0px;
 }
 .icon-left{padding-left: 25px; border: 0px; background-color: transparent; }
 button.icon-left{padding-left: 35px;}
