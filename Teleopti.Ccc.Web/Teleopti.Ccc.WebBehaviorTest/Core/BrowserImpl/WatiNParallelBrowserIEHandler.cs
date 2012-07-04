@@ -37,7 +37,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			return browser;
 		}
 
-		public void PrepareForTestRun() { }
+		public void PrepareForTestRun()
+		{
+			var startTime = DateTime.Now;
+
+			var result = BrowserProcessHelpers.AttemptToCloseProcess(
+				ProcessName,
+				new Func<bool>[]
+					{
+						() => BrowserProcessHelpers.CloseByClosingMainWindow(ProcessName),
+						() => BrowserProcessHelpers.CloseByKillingProcesses(ProcessName)
+					});
+			if (!result)
+				throw new ApplicationException("Browser failed to close when making sure it isnt running");
+
+			Log.Write("MakeSureBrowserIsNotRunning " + DateTime.Now.Subtract(startTime));
+		}
 
 		public void Close()
 		{
