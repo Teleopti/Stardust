@@ -70,12 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			bool usePreferences = optimizationPreferences.General.UsePreferences;
 			double preferencesValue = optimizationPreferences.General.PreferencesValue;
 			bool usePreferencesAndValueIs1 = usePreferences && preferencesValue == 1d;
-
-			bool useMustHaves = optimizationPreferences.General.UseMustHaves;
-			double mustHaveValue = optimizationPreferences.General.MustHavesValue;
-			bool useMustHavesAndValueIs1 = useMustHaves && mustHaveValue == 1d;
-			
-			schedulingOptions.UsePreferences = usePreferencesAndValueIs1 || useMustHavesAndValueIs1;
+			schedulingOptions.UsePreferences = usePreferencesAndValueIs1;
         }
 
         private static void setRotationsInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
