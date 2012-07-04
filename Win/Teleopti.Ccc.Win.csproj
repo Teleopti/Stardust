@@ -130,93 +130,50 @@
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Syncfusion.Chart.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Chart.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Compression.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Pdf.10.2.75\lib\3.5\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Chart.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Chart.Windows.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Core, Version=10.203.0.75, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Core.10.2.75\lib\3.5\Syncfusion.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Compression.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Compression.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Grid.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Grid.Win.10.2.75\lib\3.5\Syncfusion.Grid.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Core, Version=7.403.0.20, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Grid.Grouping.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Grid.Grouping.Win.10.2.75\lib\3.5\Syncfusion.Grid.Grouping.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Grid.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Grid.Grouping.Windows, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Grid.Grouping.Win.10.2.75\lib\3.5\Syncfusion.Grid.Grouping.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.grouping.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Grid.grouping.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Grid.Windows, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Grid.Win.10.2.75\lib\3.5\Syncfusion.Grid.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Grouping.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Grid.Grouping.Windows.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Grouping.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Grid.Grouping.Win.10.2.75\lib\3.5\Syncfusion.Grouping.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Grid.Windows.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Pdf.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Pdf.10.2.75\lib\3.5\Syncfusion.Pdf.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grouping.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Grouping.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Schedule.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Schedule.Win.10.2.75\lib\3.5\Syncfusion.Schedule.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Pdf.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Schedule.Windows, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Schedule.Win.10.2.75\lib\3.5\Syncfusion.Schedule.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Schedule.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Schedule.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Shared.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Shared.Base.10.2.75\lib\3.5\Syncfusion.Shared.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Schedule.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Schedule.Windows.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Shared.Windows, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Shared.Win.10.2.75\lib\3.5\Syncfusion.Shared.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Scripting.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Scripting.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Shared.Wpf, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Shared.Wpf.10.2.75\lib\3.5\Syncfusion.Shared.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Shared.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Tools.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Tools.Win.10.2.75\lib\3.5\Syncfusion.Tools.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Shared.Windows.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Shared.WPF">
-      <HintPath>..\SyncFusion\Syncfusion.Shared.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.Tools.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Tools.Base.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Tools.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Tools.Windows.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Tools.Windows, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Tools.Win.10.2.75\lib\3.5\Syncfusion.Tools.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -840,9 +797,7 @@
     <Compile Include="Optimization\GeneralPreferencesPanel.Designer.cs">
       <DependentUpon>GeneralPreferencesPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Optimization\OptimizationPreferencesDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Optimization\OptimizationPreferencesDialog.cs" />
     <Compile Include="Optimization\OptimizationPreferencesDialog.Designer.cs">
       <DependentUpon>OptimizationPreferencesDialog.cs</DependentUpon>
     </Compile>
@@ -944,9 +899,7 @@
     <Compile Include="Main\ApplyLicense.Designer.cs">
       <DependentUpon>ApplyLicense.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\About.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Main\About.cs" />
     <Compile Include="Main\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
@@ -1168,9 +1121,7 @@
       <DependentUpon>SchedulerReportsViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Reporting\ViewerFoldingChangedEvent.cs" />
-    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.Designer.cs">
       <DependentUpon>AgentRestrictionGrid.cs</DependentUpon>
     </Compile>
@@ -1834,9 +1785,7 @@
     <Compile Include="Forecasting\Forms\AbstractDetailView.Designer.cs">
       <DependentUpon>AbstractDetailView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\BaseIntradayGridControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\BaseIntradayGridControl.cs" />
     <Compile Include="Forecasting\Forms\ChildSkillDetailView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1865,9 +1814,7 @@
     <Compile Include="Forecasting\Forms\MultisiteDayTemplates.Designer.cs">
       <DependentUpon>MultisiteDayTemplates.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\MultisiteIntradayTemplateGridControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\MultisiteIntradayTemplateGridControl.cs" />
     <Compile Include="Forecasting\Forms\MultisiteSkillDetailView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2193,9 +2140,7 @@
     <Compile Include="Permissions\MyAvailableDataRangePanel.Designer.cs">
       <DependentUpon>MyAvailableDataRangePanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Permissions\PermissionsExplorer.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Permissions\PermissionsExplorer.cs" />
     <Compile Include="Permissions\PermissionsExplorer.Designer.cs">
       <DependentUpon>PermissionsExplorer.cs</DependentUpon>
     </Compile>
@@ -2734,7 +2679,9 @@
       <DependentUpon>SkillGeneral.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

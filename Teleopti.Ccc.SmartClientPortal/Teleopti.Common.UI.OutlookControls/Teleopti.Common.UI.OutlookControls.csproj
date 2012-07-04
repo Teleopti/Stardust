@@ -100,14 +100,13 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Syncfusion.Core, Version=9.203.0.138, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SyncFusion\Syncfusion.Core.dll</HintPath>
+    <Reference Include="Syncfusion.Core, Version=10.203.0.75, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\..\packages\Syncfusion.Core.10.2.75\lib\3.5\Syncfusion.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Base">
-      <HintPath>..\..\SyncFusion\Syncfusion.Shared.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Shared.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\..\packages\Syncfusion.Shared.Base.10.2.75\lib\3.5\Syncfusion.Shared.Base.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -177,6 +176,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\00040.bmp" />
     <None Include="Resources\00038.bmp" />
     <None Include="Resources\admin.png" />
