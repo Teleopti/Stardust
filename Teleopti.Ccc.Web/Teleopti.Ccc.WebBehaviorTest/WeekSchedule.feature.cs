@@ -265,17 +265,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ShowTextRequestSymbol()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show text request symbol", ((string[])(null)));
-#line 77
+#line 75
 this.ScenarioSetup(scenarioInfo);
-#line 78
+#line 76
  testRunner.Given("I am an agent");
-#line 79
+#line 77
  testRunner.And("I have an existing text request");
-#line 80
+#line 78
  testRunner.When("I view my week schedule");
-#line 81
+#line 79
  testRunner.Then("I should see a symbol at the top of the schedule");
-#line 82
+#line 80
  testRunner.And("I should see a number with the request count");
 #line hidden
             this.ScenarioCleanup();
@@ -286,15 +286,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void MultipleDayTextRequestsSymbol()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Multiple day text requests symbol", ((string[])(null)));
-#line 84
+#line 82
 this.ScenarioSetup(scenarioInfo);
-#line 85
+#line 83
  testRunner.Given("I am an agent");
-#line 86
+#line 84
  testRunner.And("I have an existing text request spanning over 2 days");
-#line 87
+#line 85
  testRunner.When("I view my week schedule");
-#line 88
+#line 86
  testRunner.Then("I should see a symbol at the top of the schedule for the first day");
 #line hidden
             this.ScenarioCleanup();
@@ -305,17 +305,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ShowBothTextAndAbsenceRequests()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show both text and absence requests", ((string[])(null)));
-#line 90
+#line 88
 this.ScenarioSetup(scenarioInfo);
-#line 91
+#line 89
  testRunner.Given("I am an agent");
-#line 92
+#line 90
  testRunner.And("I have an existing text request");
-#line 93
+#line 91
  testRunner.And("I have an existing absence request");
-#line 94
+#line 92
  testRunner.When("I view my week schedule");
-#line 95
+#line 93
  testRunner.Then("I should see 2 with the request count");
 #line hidden
             this.ScenarioCleanup();
@@ -326,16 +326,54 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NavigateToCurrentWeek()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to current week", ((string[])(null)));
-#line 98
+#line 97
 this.ScenarioSetup(scenarioInfo);
-#line 99
+#line 98
  testRunner.Given("I am an agent");
-#line 100
+#line 99
  testRunner.And("I view my week schedule one month ago");
-#line 101
+#line 100
  testRunner.When("I click the current week button");
-#line 102
+#line 101
  testRunner.Then("I should see the start and end dates for current week");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show timeline with no schedule")]
+        public virtual void ShowTimelineWithNoSchedule()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show timeline with no schedule", ((string[])(null)));
+#line 105
+this.ScenarioSetup(scenarioInfo);
+#line 106
+ testRunner.Given("I am an agent");
+#line 107
+ testRunner.When("I view my week schedule");
+#line 108
+ testRunner.Then("I should see default start timeline and end timeline");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show timeline with schedule")]
+        public virtual void ShowTimelineWithSchedule()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show timeline with schedule", ((string[])(null)));
+#line 110
+this.ScenarioSetup(scenarioInfo);
+#line 111
+ testRunner.Given("I am an agent");
+#line 112
+ testRunner.And("I have shifts scheduled for two weeks");
+#line 113
+ testRunner.And("My schedule is published");
+#line 114
+ testRunner.When("I view my week schedule");
+#line 115
+ testRunner.Then("I should see start timeline and end timeline according to schedule");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -96,7 +96,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Schedule-addRequest-ok-button")]
 		public Button OkButton { get; set; }
 
-		public Element CancelButton {
+		public Div Timelines
+		{ 
+			get { return Document.Div(Find.ByClass("weekview-timeline", false)); }
+		}
+
+		public Element CancelButton
+		{
 			get { return Document.Element(Find.ByClass("ui-tooltip-close", false)); }
 		}
 

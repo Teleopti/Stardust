@@ -127,6 +127,22 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => iconDay2.DisplayVisible(), Is.False);
 		}
 
+		[Then(@"I should see default start timeline and end timeline")]
+		public void ThenIShouldSeeDefaultStartTimelineAndEndTimeline()
+		{
+			EventualAssert.That(() => _page.Timelines.Divs.Count, Is.EqualTo(25));
+		}
+
+		[Then(@"I should see start timeline and end timeline according to schedule")]
+		public void ThenIShouldSeeStartTimelineAndEndTimelineAccordingToSchedule()
+		{
+			// The expected number is caculated, coming from test data in ShiftsForTwoWeeks
+			var divs = _page.Timelines.Divs;
+			EventualAssert.That(() => divs.Count, Is.EqualTo(11));
+			EventualAssert.That(() => divs[0].InnerHtml, Is.StringContaining("19:45"));
+			EventualAssert.That(() => divs[divs.Count-1].InnerHtml, Is.StringContaining("4:15"));
+		}
+
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, UserFactory.User().Culture);
