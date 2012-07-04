@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	using System.Linq;
 
-	using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
+	using Core.Menu;
 
 	public class MenuController : Controller
     {

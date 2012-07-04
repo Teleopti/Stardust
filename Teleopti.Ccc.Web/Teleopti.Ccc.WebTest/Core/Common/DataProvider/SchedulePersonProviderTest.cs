@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			teamRepository.Stub(x => x.Load(team.Id.Value)).Return(team);
 
-			var target = new SchedulePersonProvider(personRepository, new FakePermissionProvider(), null, teamRepository);
+			var target = new SchedulePersonProvider(personRepository, new FakePermissionProvider(), teamRepository);
 
 			target.GetPermittedPersonsForTeam(DateOnly.Today, team.Id.Value);
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, persons.ElementAt(0))).Return(false);
 			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, persons.ElementAt(1))).Return(true);
 
-			var target = new SchedulePersonProvider(personRepository, permissionProvider, null, teamRepository);
+			var target = new SchedulePersonProvider(personRepository, permissionProvider, teamRepository);
 
 			var result = target.GetPermittedPersonsForTeam(DateOnly.Today, team.Id.Value);
 

@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ITeamRepository _teamRepository;
 
-		public SchedulePersonProvider(IPersonRepository personRepository, IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser, ITeamRepository teamRepository)
+		public SchedulePersonProvider(IPersonRepository personRepository, IPermissionProvider permissionProvider, ITeamRepository teamRepository)
 		{
 			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;

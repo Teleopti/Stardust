@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	public class ScheduleViewModelTestDataFactory : IScheduleViewModelFactory
 	{
 		private readonly IList<Func<DateOnly, DayViewModel>> _dayTypeList;
-		private readonly IList<Func<PeriodViewModel>> _shiftCatTypeList;
 		private readonly IList<Func<PeriodViewModel>> _actCatTypeList;
 		private readonly List<Func<NoteViewModel>> _notesTypeList;
 
@@ -21,11 +20,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 										createShortWeekDayModel,
 										createNormalWeekDayModel
 									};
-			_shiftCatTypeList = new List<Func<PeriodViewModel>>
-										{
-											createEarlyPeriod,
-											createLatePeriod
-										};
 
 			_actCatTypeList = new List<Func<PeriodViewModel>>
 										{
@@ -115,8 +109,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		{
 			var firstDate = findFirstDateOfWeek(dateOnly);
 
-			IList<DayViewModel> dayList = new List<DayViewModel>(count);
-			for (int i = 0; i < count; i++)
+			var dayList = new List<DayViewModel>(count);
+			for (var i = 0; i < count; i++)
 			{
 				dayList.Add(_dayTypeList[i % _dayTypeList.Count](firstDate));
 				firstDate = firstDate.AddDays(1);
@@ -131,12 +125,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return dateOnly.AddDays(-1*((int) dateOnly.DayOfWeek) + 1);
 		}
 
-		private PeriodViewModel createEarlyPeriod()
-		{
-			return new PeriodViewModel {Summary = "08:00", TimeSpan = "6:30 - 14:30", Title = "Early", StyleClassName = "early_id"};
-		}
 
-		private PeriodViewModel createLatePeriod()
+		private static PeriodViewModel createLatePeriod()
 		{
 			return new PeriodViewModel {Summary = "08:00", TimeSpan = "12:30 - 21:30", Title = "Late", StyleClassName = "late_id"};
 		}

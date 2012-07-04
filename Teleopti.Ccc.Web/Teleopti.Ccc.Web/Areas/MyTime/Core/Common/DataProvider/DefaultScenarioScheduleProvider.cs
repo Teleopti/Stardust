@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IStudentAvailabilityRestriction GetStudentAvailabilityForDay(IStudentAvailabilityDay studentAvailabilityDay)
 		{
 			var studentAvailabilityRestrictions =
-				from sr in studentAvailabilityDay.RestrictionCollection
-				select sr;
+				(from sr in studentAvailabilityDay.RestrictionCollection
+				select sr).ToArray();
 			if (!studentAvailabilityRestrictions.Any())
 				return null;
 			if (studentAvailabilityRestrictions.Count() > 1)
