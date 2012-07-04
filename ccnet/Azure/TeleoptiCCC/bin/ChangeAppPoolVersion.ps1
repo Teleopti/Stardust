@@ -7,7 +7,7 @@ $iis = New-Object Microsoft.Web.Administration.ServerManager
 
 $attemptSiteCount = 0;
 $attemptAppCount = 0;
-$MaxAttemptCount = 10;
+$MaxAttemptCount = 20;
 			
 # wait for web site(s) to be created
 do {
