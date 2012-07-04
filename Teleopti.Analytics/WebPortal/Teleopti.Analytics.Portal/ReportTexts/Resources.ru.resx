@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="TechnicalInformation" xml:space="preserve">
-    <value> Техническая информация</value>
+    <value>Техническая информация</value>
   </data>
   <data name="CommonCollapse" xml:space="preserve">
     <value>Свернуть</value>
@@ -133,22 +133,22 @@
     <value>Вы не внесли данные в:</value>
   </data>
   <data name="ResAbandonedCalls" xml:space="preserve">
-    <value>Потерянные Вызовы</value>
+    <value>Несостоявшиеся звонки</value>
   </data>
   <data name="ResAbandonRate" xml:space="preserve">
-    <value>Скорость потерянных вызовов</value>
+    <value>Доля несостоявшихся звонков</value>
   </data>
   <data name="ResAgentName" xml:space="preserve">
     <value>Оператор</value>
   </data>
   <data name="ResAnsweredCalls" xml:space="preserve">
-    <value>Принятые Вызовы</value>
+    <value>Принятые звонки</value>
   </data>
   <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
-    <value>Принятые Вызовы после Уровня Сервиса</value>
+    <value>Звонки, принятые с уровнем сервиса ниже требуемого</value>
   </data>
   <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
-    <value>Принятые Вызовы в рамках Уровня Сервиса</value>
+    <value>Звонки, принятые с соблюдением уровня сервиса</value>
   </data>
   <data name="ResDate" xml:space="preserve">
     <value>Дата</value>
@@ -169,16 +169,16 @@
     <value>Интервал</value>
   </data>
   <data name="ResIntervalColon" xml:space="preserve">
-    <value>Интервал</value>
+    <value>Интервал:</value>
   </data>
   <data name="ResScheduledTime" xml:space="preserve">
-    <value>Время по Графику</value>
+    <value>Запланированное время по графику</value>
   </data>
   <data name="ResServiceLevelPercent" xml:space="preserve">
     <value>Уровень Сервиса (%)</value>
   </data>
   <data name="ResSiteNameColon" xml:space="preserve">
-    <value>Сайт:</value>
+    <value>Узел:</value>
   </data>
   <data name="ResSkillColon" xml:space="preserve">
     <value>Навык:</value>
@@ -187,16 +187,16 @@
     <value>Группа:</value>
   </data>
   <data name="ResWorkloadColon" xml:space="preserve">
-    <value>Рабочая нагрузка</value>
+    <value>Рабочая нагрузка:</value>
   </data>
   <data name="ResShowReport" xml:space="preserve">
-    <value>Показать Отчет</value>
+    <value>Показать отчет</value>
   </data>
   <data name="ResIntervalFromColon" xml:space="preserve">
-    <value>Интервал От:</value>
+    <value>Интервал от:</value>
   </data>
   <data name="ResIntervalToColon" xml:space="preserve">
-    <value>Интервал До:</value>
+    <value>Интервал до:</value>
   </data>
   <data name="ResIntervalType" xml:space="preserve">
     <value>Тип Периода:</value>
@@ -205,31 +205,31 @@
     <value>Невыход на работу (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
-    <value>Соблюдение (%)</value>
+    <value>Соблюдение графика (%)</value>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
-    <value>Принятые Вызовы за час Телефонного Времени по Графику</value>
+    <value>Принятые звонки за час телефонного времени по графику</value>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
-    <value>Среднее время послезвонковой обработки вызова (с)</value>
+    <value>Среднее время работы после звонка (с)</value>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
-    <value>Среднее Время Обработки Вызова (с)</value>
+    <value>Среднее время обработки (с)</value>
   </data>
   <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>Среднее Время Разговора (с)</value>
+    <value>Среднее время разговора (с)</value>
   </data>
   <data name="KpiReadiness" xml:space="preserve">
     <value>Готовность (%)</value>
   </data>
   <data name="ResActual" xml:space="preserve">
-    <value>Действительный</value>
+    <value>Фактический</value>
   </data>
   <data name="ResKpi" xml:space="preserve">
-    <value>Параметры Измерений</value>
+    <value>KPI</value>
   </data>
   <data name="ResPreviousPeriod" xml:space="preserve">
-    <value>Предыдущий Период</value>
+    <value>Предыдущий период</value>
   </data>
   <data name="ResTarget" xml:space="preserve">
     <value>Цель</value>
@@ -238,7 +238,7 @@
     <value>Актуальная Группа</value>
   </data>
   <data name="ResTrend" xml:space="preserve">
-    <value>Тренд</value>
+    <value>Тенденция</value>
   </data>
   <data name="LogInButton" xml:space="preserve">
     <value>Вход</value>
@@ -268,46 +268,46 @@
     <value>Требуется Имя Пользователя.</value>
   </data>
   <data name="ShowReportTooltip" xml:space="preserve">
-    <value>Показать Отчет</value>
+    <value>Показать отчет</value>
   </data>
   <data name="ResScenarioColon" xml:space="preserve">
     <value>Сценарий:</value>
   </data>
   <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
-    <value>Скорость потери Вызовов без учета Коротких Вызывов (%)</value>
+    <value>Доля несостоявшихся звонков без учета коротких вызывов (%)</value>
   </data>
   <data name="ResAbandonRatePercent" xml:space="preserve">
-    <value>Скорость Потери Вызывов (%)</value>
+    <value>Доля несостоявшихся вызовов (%)</value>
   </data>
   <data name="ResAnswerRatePercent" xml:space="preserve">
-    <value>Скорость Принятия Вызывов (%)</value>
+    <value>Доля принятых вызывов (%)</value>
   </data>
   <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
-    <value>Средняя Скорость Ответа (с)</value>
+    <value>Средняя скорость ответа (с)</value>
   </data>
   <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
-    <value>Среднее Время Потери (с)</value>
+    <value>Среднее время потери (с)</value>
   </data>
   <data name="ResDatePeriodColon" xml:space="preserve">
     <value>Период времени:</value>
   </data>
   <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
-    <value>Максимальная Задержка в Очереди. Пропущенные вызовы (с)</value>
+    <value>Максимальная задержка в очереди. Пропущенные вызовы (с)</value>
   </data>
   <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
-    <value>Максимальная Задержка в Очереди. Принятые вызовы (с)</value>
+    <value>Максимальная задержка в очереди. Принятые вызовы (с)</value>
   </data>
   <data name="ResPeriod" xml:space="preserve">
     <value>Период</value>
   </data>
   <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
-    <value>Отбой вызовов и Скорость Ответа</value>
+    <value>Отбой звонков и скорость ответа</value>
   </data>
   <data name="ResSeconds" xml:space="preserve">
     <value>Секунды</value>
   </data>
   <data name="ResTimeToAbandon" xml:space="preserve">
-    <value>Время до Отбоя вызовов</value>
+    <value>Время до отбоя вызовов</value>
   </data>
   <data name="ResTotalsColon" xml:space="preserve">
     <value>Итого:</value>
@@ -316,70 +316,70 @@
     <value>Процент</value>
   </data>
   <data name="ResActualACW" xml:space="preserve">
-    <value>Действительное Время Послезвонковой Обработки Вызова</value>
+    <value>Фактическое время работы после звонка</value>
   </data>
   <data name="ResActualATT" xml:space="preserve">
-    <value>Действительное Среднее Время Разговора</value>
+    <value>Фактическое среднее время разговора</value>
   </data>
   <data name="ResACW" xml:space="preserve">
-    <value>Время Послезвонковой Обработки Вызова (ACW)</value>
+    <value>Время работы после звонка (ACW)</value>
   </data>
   <data name="ResATT" xml:space="preserve">
-    <value>Среднее Время Разговора (ATT)</value>
+    <value>Среднее время разговора (ATT)</value>
   </data>
   <data name="ResCalculatedCalls" xml:space="preserve">
-    <value>Расчитанные Вызовы</value>
+    <value>Расчетные звонки</value>
   </data>
   <data name="ResCalls" xml:space="preserve">
-    <value>Вызовы</value>
+    <value>Звонки</value>
   </data>
   <data name="ResForecastedACW" xml:space="preserve">
-    <value>Спрогнозированное Время Послезвонковой Обработки Вызова </value>
+    <value>Спрогнозированное  время работы после звонка</value>
   </data>
   <data name="ResForecastedATT" xml:space="preserve">
-    <value>Спрогнозированные Среднее Время Разговора</value>
+    <value>Спрогнозированные среднее время разговора</value>
   </data>
   <data name="ResForecastedCalls" xml:space="preserve">
-    <value>Спрогнозированные Вызовы</value>
+    <value>Спрогнозированные звонки</value>
   </data>
   <data name="ResNumberOf" xml:space="preserve">
     <value>Число</value>
   </data>
   <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
-    <value>Прогноз против Фактической Рабочей Нагрузки</value>
+    <value>Прогноз VS Фактическая рабочая нагрузка</value>
   </data>
   <data name="ResAgentsReady" xml:space="preserve">
-    <value>Готовые к Работе Операторы</value>
+    <value>Готовые к работе операторы</value>
   </data>
   <data name="ResAgentsScheduled" xml:space="preserve">
-    <value>Запланированные Операторы</value>
+    <value>Запланированные операторы</value>
   </data>
   <data name="ResRelativeDifferencePercent" xml:space="preserve">
-    <value>Относительная Разница (%)</value>
+    <value>Относительная разница (%)</value>
   </data>
   <data name="ResForecastedTimeH" xml:space="preserve">
-    <value>Спрогнозированное Время (чч:мм)</value>
+    <value>Спрогнозированное время (чч:мм)</value>
   </data>
   <data name="ResOfferedCalls" xml:space="preserve">
-    <value>Поступившие Вызовы</value>
+    <value>Поступившие звонки</value>
   </data>
   <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
-    <value>Поступившие Вызовы / Готовые к Работе Операторы</value>
+    <value>Поступившие звонки / Готовые к работе операторы</value>
   </data>
   <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
-    <value>Поступившие Вызовы / Запланированные Готовые к Работе Операторы</value>
+    <value>Поступившие звонки / Готовые к работе запланированные операторы</value>
   </data>
   <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
-    <value>Прогноз против Запланированных Часов</value>
+    <value>Прогноз VS Запланированные часы по графику</value>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Уровень Сервиса и Готовые к Работе Операторы</value>
+    <value>Уровень Сервиса и готовые к работе операторы</value>
   </data>
   <data name="ResScheduledReadyTime" xml:space="preserve">
-    <value>Запланированное Время Готовности к Работе</value>
+    <value>Запланированное время готовности к работе</value>
   </data>
   <data name="ResScheduledvsReady" xml:space="preserve">
-    <value>Запланированные Операторы против Готовых к Работе Операторов</value>
+    <value>Запланированные операторы VS Готовые к работе операторы</value>
   </data>
   <data name="ResSmoothnessPercent" xml:space="preserve">
     <value>Гладкость (%)</value>
@@ -388,25 +388,25 @@
     <value>День недели / Навык</value>
   </data>
   <data name="ResAgentCategoryColon" xml:space="preserve">
-    <value>Категория Оператора:</value>
+    <value>Категория оператора:</value>
   </data>
   <data name="ResAgentCategoryTypeColon" xml:space="preserve">
-    <value>Тип Категории Оператора:</value>
+    <value>Тип категории оператора:</value>
   </data>
   <data name="ResAgentsColon" xml:space="preserve">
     <value>Операторы:</value>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
-    <value>Метрики Оператора:</value>
+    <value>Метрики оператора:</value>
   </data>
   <data name="ResAdherencePercent" xml:space="preserve">
-    <value>Соблюдение (%)</value>
+    <value>Соблюдение графика (%)</value>
   </data>
   <data name="ResAgentDate" xml:space="preserve">
     <value>Оператор / Дата</value>
   </data>
   <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
-    <value>Принятые Вызовы / Запланированные часы Готовности Оператора</value>
+    <value>Принятые звонки / Запланированные часы готовности оператора</value>
   </data>
   <data name="ResOccupancyPercent" xml:space="preserve">
     <value>Занятость (%)</value>
@@ -415,13 +415,13 @@
     <value>Готовность (%)</value>
   </data>
   <data name="ResReadyTime" xml:space="preserve">
-    <value>Время Готовности</value>
+    <value>Время готовности</value>
   </data>
   <data name="ResAdherenceCalculationColon" xml:space="preserve">
-    <value>Расчет Соблюдения:</value>
+    <value>Расчет соблюдения графика:</value>
   </data>
   <data name="ResOfferedCallsPerAgent" xml:space="preserve">
-    <value>Поступившие Вызовы / Операторы</value>
+    <value>Поступившие звонки / Операторы</value>
   </data>
   <data name="ResServiceLevel" xml:space="preserve">
     <value>Уровень Сервиса</value>
@@ -430,28 +430,28 @@
     <value>Расчет Уровня Сервиса:</value>
   </data>
   <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Оператор - Соблюдение Графика</value>
+    <value>Оператор - Соблюдение графика</value>
   </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>Сортировать по:</value>
   </data>
   <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Время Готовности к работе / Запланированное Время Готовности к работе (%)</value>
+    <value>Время готовности к работе / Запланированное время готовности к работе (%)</value>
   </data>
   <data name="ResScheduledAgentsReady" xml:space="preserve">
-    <value>Запланированные Операторы, Готовые к работе</value>
+    <value>Запланированные, готовые к работе операторы</value>
   </data>
   <data name="ResDeviationMinute" xml:space="preserve">
     <value>Отклонение (м)</value>
   </data>
   <data name="ResNext" xml:space="preserve">
-    <value>Следущие</value>
+    <value>Следующие</value>
   </data>
   <data name="ResPrevious" xml:space="preserve">
     <value>Предыдущие</value>
   </data>
   <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
-    <value>Соответствие / Интервал (%)</value>
+    <value>Соблюдение графика / Интервал (%)</value>
   </data>
   <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
     <value>Отклонение / Интервал (м)</value>
@@ -463,37 +463,37 @@
     <value>Статистика очереди</value>
   </data>
   <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
-    <value>Потерянные вызовы в рамках Уровня Сервиса</value>
+    <value>Несостоявшиеся  с соблюдением уровня сервиса</value>
   </data>
   <data name="ResAbandonedShortCalls" xml:space="preserve">
-    <value>Потерянные кратковременные вызовы </value>
+    <value>Несостоявшиеся кратковременные звонки </value>
   </data>
   <data name="ResHandleTime" xml:space="preserve">
-    <value>Время Обработки Вызова</value>
+    <value>Время обработки</value>
   </data>
   <data name="ResSpeedOfAnswer" xml:space="preserve">
-    <value>Скорость Ответа</value>
+    <value>Скорость ответа</value>
   </data>
   <data name="ResTalkTime" xml:space="preserve">
-    <value>Время Разговора</value>
+    <value>Время разговора</value>
   </data>
   <data name="ResTransferredCalls" xml:space="preserve">
-    <value>Переведенные Вызовы</value>
+    <value>Переведенные звонки</value>
   </data>
   <data name="ResQueue" xml:space="preserve">
     <value>Очередь</value>
   </data>
   <data name="ResTimeZoneColon" xml:space="preserve">
-    <value>Временная зона:</value>
+    <value>Часовой пояс:</value>
   </data>
   <data name="ResLongestTimeToAbandon" xml:space="preserve">
-    <value>Максимальная задержка в очереди, Пропущенные вызовы</value>
+    <value>Максимальная задержка в очереди, Несостоявшиеся вызовы</value>
   </data>
   <data name="ResLongestTimeToAnswer" xml:space="preserve">
     <value>Максимальная задержка в очереди, Принятые вызовы</value>
   </data>
   <data name="ResTimeToAbandonSec" xml:space="preserve">
-    <value>Время до Отбоя вызова(с)</value>
+    <value>Время до отбоя вызова (с)</value>
   </data>
   <data name="ResHelp" xml:space="preserve">
     <value>Помощь</value>
@@ -502,34 +502,34 @@
     <value>Acd Логин</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>Статистика Агента по Очереди</value>
+    <value>Статистика оператора по очереди</value>
   </data>
   <data name="ResReportAgentStatistics" xml:space="preserve">
-    <value>Статистика Агента</value>
+    <value>Статистика оператора</value>
   </data>
   <data name="ResAdminTime" xml:space="preserve">
     <value>Время Администрации </value>
   </data>
   <data name="ResDirectIncomingCalls" xml:space="preserve">
-    <value>Прямые Входящие Вызовы</value>
+    <value>Прямые входящие звонки</value>
   </data>
   <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
-    <value>Прямые Входящие Вызовы, Время Разговора</value>
+    <value>Прямые входящие звонки, Время разговора</value>
   </data>
   <data name="ResDirectOutboundCalls" xml:space="preserve">
-    <value>Прямые Выходящие Вызовы</value>
+    <value>Прямые исходящие звонки</value>
   </data>
   <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
-    <value>Прямые Выходящие Вызовы, Время Разговора</value>
+    <value>Прямые исходящие звонки, Время Разговора</value>
   </data>
   <data name="ResIdleTime" xml:space="preserve">
-    <value>Время Ожидания</value>
+    <value>Время ожидания</value>
   </data>
   <data name="ResLoggedInTime" xml:space="preserve">
-    <value>Время в Системе</value>
+    <value>Время в системе</value>
   </data>
   <data name="ResNotReadyTime" xml:space="preserve">
-    <value>Время Неготовности</value>
+    <value>Время неготовности</value>
   </data>
   <data name="ResDateInterval" xml:space="preserve">
     <value>Дата / Интервал</value>
@@ -538,58 +538,58 @@
     <value>Доступ Закрыт</value>
   </data>
   <data name="ResOverflowInCalls" xml:space="preserve">
-    <value>Вызовы, Переведенные В</value>
+    <value>Звонки, переведенные В</value>
   </data>
   <data name="ResOverflowOutCalls" xml:space="preserve">
-    <value>Вызовы, Переведенные Из</value>
+    <value>Звонки, переведенные Из</value>
   </data>
   <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
-    <value>Спрогнозированне Время, вкл. Запас (чч:мм)</value>
+    <value>Спрогнозированне время, вкл. сокращение (чч:мм)</value>
   </data>
   <data name="ResScheduledTimeH" xml:space="preserve">
-    <value>Время по Графику (чч:мм)</value>
+    <value>Запланированное время по графику (чч:мм)</value>
   </data>
   <data name="ResStandardDeviation" xml:space="preserve">
-    <value>Стандартное Отклонение</value>
+    <value>Стандартное отклонение</value>
   </data>
   <data name="ResWeekColon" xml:space="preserve">
     <value>Неделя:</value>
   </data>
   <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
-    <value>Время по Графику на Оператора</value>
+    <value>Запланированное время по графику на оператора</value>
   </data>
   <data name="ResScheduledAbsenceTime" xml:space="preserve">
-    <value>Время Отсутствия по Графику (чч:мм)</value>
+    <value>Запланированное время отсутствия по графику (чч:мм)</value>
   </data>
   <data name="ResScheduledOverTime" xml:space="preserve">
-    <value>Время Переработки по Графику (чч:мм)</value>
+    <value>Залпнированное сверхурочное время по графику (чч:мм)</value>
   </data>
   <data name="ResAbsenceColon" xml:space="preserve">
     <value>Отсутствие:</value>
   </data>
   <data name="ResActivityColon" xml:space="preserve">
-    <value>Действие:</value>
+    <value>Активность:</value>
   </data>
   <data name="ResForecastedHoursH" xml:space="preserve">
-    <value>Спрогнозированные Часы (чч:мм)</value>
+    <value>Спрогнозированные часы (чч:мм)</value>
   </data>
   <data name="ResScheduledHoursH" xml:space="preserve">
-    <value>Часы по Графику (чч:мм)</value>
+    <value>Запланированные часы по графику (чч:мм)</value>
   </data>
   <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
-    <value>Спрогнозированные Часы (запас) (чч:мм)</value>
+    <value>Спрогнозированные часы (сокращение) (чч:мм)</value>
   </data>
   <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
-    <value>Относительная Разница вкл. Запас (%)</value>
+    <value>Относительная разница вкл. сокращение (%)</value>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
-    <value>Категория смены за День</value>
+    <value>Категория смены за день</value>
   </data>
   <data name="ResShiftCategoryColon" xml:space="preserve">
     <value>Категория смены:</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>Категория смены и Отсутствие на полный день на Оператора</value>
+    <value>Категория смены и отсутствие на полный день по оператору</value>
   </data>
   <data name="ResDayOffColon" xml:space="preserve">
     <value>Выходной:</value>
@@ -598,58 +598,58 @@
     <value>Выбор</value>
   </data>
   <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
-    <value>Время по Графику на Действие</value>
+    <value>Запланированное время по графику на активность</value>
   </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
-    <value>Метрика Группы</value>
+    <value>Метрика группы</value>
   </data>
   <data name="ResTeamDate" xml:space="preserve">
     <value>Группа / Дата</value>
   </data>
   <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
-    <value>Принятые Вызовы / Часы Готовности</value>
+    <value>Принятые звонки / Часы готовности</value>
   </data>
   <data name="ResContractAbsenceTimeH" xml:space="preserve">
-    <value>Время Отсутствия по Контракту (чч:мм)</value>
+    <value>Время отсутствия по контракту (чч:мм)</value>
   </data>
   <data name="ResContractTimeH" xml:space="preserve">
-    <value>Время по Контракту (чч:мм)</value>
+    <value>Время по контракту (чч:мм)</value>
   </data>
   <data name="ResPaidTimeH" xml:space="preserve">
-    <value>Оплачиваемое Время (чч:мм)</value>
+    <value>Оплачиваемое время (чч:мм)</value>
   </data>
   <data name="ResWorkTimeH" xml:space="preserve">
-    <value>Рабочее Время (чч:мм)</value>
+    <value>Рабочее время (чч:мм)</value>
   </data>
   <data name="ResPreferencesAccepted" xml:space="preserve">
-    <value>Предпочтения Удовлетворены</value>
+    <value>Предпочтения удовлетворены</value>
   </data>
   <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
-    <value>Предпочтения Удовлетворены (%)</value>
+    <value>Предпочтения удовлетворены (%)</value>
   </data>
   <data name="ResPreferencesDeclined" xml:space="preserve">
-    <value>Предпочтения Отклонены </value>
+    <value>Предпочтения отклонены </value>
   </data>
   <data name="ResPreferencesRequested" xml:space="preserve">
-    <value>Предпочтения Запрошены</value>
+    <value>Предпочтения запрошены</value>
   </data>
   <data name="ResPreferenceCategory" xml:space="preserve">
-    <value>Категория Предпочтений</value>
+    <value>Категория предпочтений</value>
   </data>
   <data name="ResReportPreferencesPerDay" xml:space="preserve">
-    <value>Предпочтение за День</value>
+    <value>Предпочтение за день</value>
   </data>
   <data name="ResReportPreferencesPerAgent" xml:space="preserve">
-    <value>Предпочтение на Оператора</value>
+    <value>Предпочтение на оператора</value>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>Операторы по Графику на Интервал и Группу</value>
+    <value>Запланированные операторы по графику за интервал и группу</value>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
     <value>УЛУЧШИТЬ</value>
   </data>
   <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
-    <value>Время Обработки / Оплачиваемое Время (%)</value>
+    <value>Время обработки / Оплачиваемое время (%)</value>
   </data>
   <data name="ResDayOfWeekFriday" xml:space="preserve">
     <value>Пятница</value>
@@ -709,16 +709,16 @@
     <value>Сентябрь</value>
   </data>
   <data name="ResReportAgentScorecard" xml:space="preserve">
-    <value>Показатели Оператора</value>
+    <value>Показатели оператора</value>
   </data>
   <data name="ResAbsencePaidTimeH" xml:space="preserve">
-    <value>Оплачиваемое Время (чч:мм)</value>
+    <value>Оплачиваемое время (чч:мм)</value>
   </data>
   <data name="ResAbsenceWorkTimeH" xml:space="preserve">
-    <value>Рабочее Время (чч:мм)</value>
+    <value>Рабочее время (чч:мм)</value>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>Время Отсутствия по Агентам</value>
+    <value>Время отсутствия на оператора</value>
   </data>
   <data name="ResAbsenceDayCount" xml:space="preserve">
     <value>Полный День</value>
@@ -742,7 +742,7 @@
     <value>Убедитесь, что права совпадают с сервисом ETL.</value>
   </data>
   <data name="PossibleSolution2" xml:space="preserve">
-    <value>Выйдите из системы и войдите с Windows паролем или войдите с правами системного администратора и измените веб-идентификацию на Forms.</value>
+    <value>Выйдите из системы и войдите с Windows паролем, или войдите с правами системного администратора и измените веб-идентификацию на Forms.</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
     <value>Неизвестная Ошибка</value>
@@ -751,22 +751,22 @@
     <value>Отсутствие</value>
   </data>
   <data name="ResActivity" xml:space="preserve">
-    <value>Действие</value>
+    <value>Активность</value>
   </data>
   <data name="ResAdherence" xml:space="preserve">
-    <value>Соответствие</value>
+    <value>Соблюдение графика</value>
   </data>
   <data name="ResAll" xml:space="preserve">
     <value>Все</value>
   </data>
   <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
-    <value>Принятые Вызовы в рамках Порогов Уровня Сервиса / Принятые Вызовы</value>
+    <value>Звонки, принятые с соблюдением уровня сервиса / Принятые звонки</value>
   </data>
   <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>Принятые и Пропущенные Вызовы в рамках Порогов Уровня Сервиса / Поступившие Вызовы</value>
+    <value>Принятые и пропущенные звонки с соблюдением уровня сервиса / Поступившие звонки</value>
   </data>
   <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>Принятые Вызовы в рамках Порогов Уровня Сервиса / Поступившие Вызовы</value>
+    <value>Звонки, принятые с соблюдением уровня сервиса / Поступившие звонки</value>
   </data>
   <data name="ResDay" xml:space="preserve">
     <value>День</value>
@@ -775,7 +775,7 @@
     <value>Выходной</value>
   </data>
   <data name="ResExtendedPreference" xml:space="preserve">
-    <value>Расширенные Предпочтения</value>
+    <value>Расширенные предпочтения</value>
   </data>
   <data name="ResFirstName" xml:space="preserve">
     <value>Имя</value>
@@ -799,25 +799,25 @@
     <value>Месяц</value>
   </data>
   <data name="ResNotDefined" xml:space="preserve">
-    <value>Не Определено</value>
+    <value>Не определено</value>
   </data>
   <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Время Готовности против Контрактного Времени по Графику</value>
+    <value>Время готовности VS Запланированное по графику время работы по контакту</value>
   </data>
   <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
-    <value>Время Готовности против Времени Готовности по Графику</value>
+    <value>Время готовности VS Запланированное время готовности по графику</value>
   </data>
   <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>Время Готовности против Времени по Графику(вкл. время до и после начала смены)</value>
+    <value>Время готовности VS Запланированное время по графику (вкл. время до и после начала смены)</value>
   </data>
   <data name="ResSaturday" xml:space="preserve">
     <value>Суббота</value>
   </data>
   <data name="ResShiftCategory" xml:space="preserve">
-    <value>Категория Смены</value>
+    <value>Категория смены</value>
   </data>
   <data name="ResShiftStartTime" xml:space="preserve">
-    <value>Время Начала Смены</value>
+    <value>Время начала смены</value>
   </data>
   <data name="ResSunday" xml:space="preserve">
     <value>Воскресенье</value>
@@ -844,7 +844,7 @@
     <value>Нет доступных показателей</value>
   </data>
   <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
-    <value>Время Отсутствия на Отсутствие</value>
+    <value>Время отсутствия по отсутствию</value>
   </data>
   <data name="Main" xml:space="preserve">
     <value>Бизнес Иерархия</value>
@@ -853,7 +853,8 @@
     <value>Контракты</value>
   </data>
   <data name="ContractSchedule" xml:space="preserve">
-    <value>График Контракта</value>
+    <value>Расписание
+по контракту</value>
   </data>
   <data name="Note" xml:space="preserve">
     <value>Примечание</value>
@@ -865,7 +866,7 @@
     <value>Контейнер смен</value>
   </data>
   <data name="ResGroupPageColon" xml:space="preserve">
-    <value>Страница Группы:</value>
+    <value>Группирование:</value>
   </data>
   <data name="ResGroupPageGroupColon" xml:space="preserve">
     <value>Группа:</value>
@@ -874,36 +875,90 @@
     <value>Навык</value>
   </data>
   <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
-    <value>Переработка по Графику на Оператора</value>
+    <value>Запланированное сверхурочное время по графику на оператора</value>
   </data>
   <data name="ResOvertimeColon" xml:space="preserve">
-    <value>Переработка</value>
+    <value>Сверхурочное время:</value>
   </data>
   <data name="ResOvertimeTypeColon" xml:space="preserve">
-    <value>Тип Переработки:</value>
+    <value>Тип сверхурочного времени:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Среднее Время Послезвонковой Обработки Вызова (с)</value>
+    <value>Среднее время работы после звонка (с)</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Среднее Время Обработки Вызова (с)</value>
+    <value>Среднее время обработки (с)</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Среднее Время Разговора (с)</value>
+    <value>Среднее время разговора (с)</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>Метрика Очереди Оператора</value>
+    <value>Метрики очереди оператора</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>Время Действия на Оператора</value>
+    <value>Время активности на оператора</value>
   </data>
   <data name="ResOvertimeH" xml:space="preserve">
-    <value>Переработка (чч:мм)</value>
+    <value>Сверхурочное время (чч:мм)</value>
   </data>
   <data name="ResShiftEndTime" xml:space="preserve">
-    <value>Время Окончания Смены</value>
+    <value>Время окончания смены</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
-    <value>Категория Смены и Отсутствие на Полный день  в День</value>
+    <value>Категория смены и отсутствие на полный день в день</value>
+  </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>Отсутствие</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>Обмен сменами</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>Запросы на оператора</value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>Одобрен</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>Отклонен</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>В ожидании</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>Тип запроса:</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>Статус:</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>Запрашиваемые дни</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>Запросы</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>Период запроса</value>
+  </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Перейти</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Время сессии истекло</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Время сессии истекло по причине бездействия. Вы будете перенаправлены на страницу аутентификации.</value>
   </data>
 </root>
