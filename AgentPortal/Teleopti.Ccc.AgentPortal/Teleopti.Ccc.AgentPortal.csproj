@@ -88,90 +88,41 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Syncfusion.Chart.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Chart.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Syncfusion.Compression.Base, Version=10.202.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\..\packages\Syncfusion.Pdf.10.2.75\lib\2.0\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Chart.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Chart.Windows.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Syncfusion.Core, Version=10.202.0.75, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\..\packages\Syncfusion.Core.10.2.75\lib\2.0\Syncfusion.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Compression.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Compression.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Grid.Base">
+      <HintPath>..\..\packages\Syncfusion.Grid.Win.10.2.75\lib\2.0\Syncfusion.Grid.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Core, Version=8.202.0.18, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Core.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Grid.Windows">
+      <HintPath>..\..\packages\Syncfusion.Grid.Win.10.2.75\lib\2.0\Syncfusion.Grid.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Grid.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Syncfusion.Pdf.Base, Version=10.202.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\..\packages\Syncfusion.Pdf.10.2.75\lib\2.0\Syncfusion.Pdf.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Grouping.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Grid.Grouping.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Schedule.Base">
+      <HintPath>..\..\packages\Syncfusion.Schedule.Win.10.2.75\lib\2.0\Syncfusion.Schedule.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Grouping.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Grid.Grouping.Windows.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Schedule.Windows">
+      <HintPath>..\..\packages\Syncfusion.Schedule.Win.10.2.75\lib\2.0\Syncfusion.Schedule.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Grid.Windows.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Shared.Base">
+      <HintPath>..\..\packages\Syncfusion.Shared.Base.10.2.75\lib\2.0\Syncfusion.Shared.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grouping.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Grouping.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Shared.Windows">
+      <HintPath>..\..\packages\Syncfusion.Shared.Win.10.2.75\lib\2.0\Syncfusion.Shared.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Pdf.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Tools.Base">
+      <HintPath>..\..\packages\Syncfusion.Tools.Win.10.2.75\lib\2.0\Syncfusion.Tools.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Schedule.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Schedule.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Schedule.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Schedule.Windows.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Scripting.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Scripting.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Shared.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Shared.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Shared.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Shared.Windows.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Tools.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Tools.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Syncfusion.Tools.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Tools.Windows.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Tools.Windows">
+      <HintPath>..\..\packages\Syncfusion.Tools.Win.10.2.75\lib\2.0\Syncfusion.Tools.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -724,6 +675,9 @@
     <Content Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\boll.png" />
     <None Include="Resources\box.png" />
     <None Include="Resources\ccc_Advanced_settings2.png" />
