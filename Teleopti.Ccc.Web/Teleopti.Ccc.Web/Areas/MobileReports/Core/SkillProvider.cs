@@ -6,8 +6,6 @@ using Teleopti.Ccc.Domain.WebReport;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
-	using Models.Domain;
-
 	public class SkillProvider : ISkillProvider
 	{
 		private readonly IWebReportRepository _webReportRepository;
@@ -20,24 +18,17 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 			_webReportRepository = webReportRepository;
 		}
 
-		#region ISkillProvider Members
-
 		public IEnumerable<ReportControlSkillGet> GetAvailableSkills()
 		{
-			WebReportUserInformation webReportUserInformation = _webReportUserInfoProvider.GetUserInformation();
-			Guid reportid = new Guid("8D8544E4-6B24-4C1C-8083-CBE7522DD0E0");
-			IOrderedEnumerable<ReportControlSkillGet> orderedSkills =
+			var webReportUserInformation = _webReportUserInfoProvider.GetUserInformation();
+			var reportid = new Guid("8D8544E4-6B24-4C1C-8083-CBE7522DD0E0");
+			var orderedSkills =
 				_webReportRepository.ReportControlSkillGet(reportid, webReportUserInformation.PersonCode,
 				                                           webReportUserInformation.LanguageId,
 				                                           webReportUserInformation.BusinessUnitCode).OrderBy(s => s.Name);
 
 
 			return orderedSkills;
-
-
-			//return new List<ReportControlSkillGet> { new ReportControlSkillGet() { Id =-1, Name="Dummy"}} ;
 		}
-
-		#endregion
 	}
 }

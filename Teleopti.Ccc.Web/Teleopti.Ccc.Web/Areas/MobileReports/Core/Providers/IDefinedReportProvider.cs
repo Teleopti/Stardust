@@ -2,7 +2,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers
 {
 	using System.Collections.Generic;
 
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Models.Domain;
 
 	public interface IDefinedReportProvider
 	{
