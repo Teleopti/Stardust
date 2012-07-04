@@ -4907,7 +4907,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                     _scheduleOptimizerHelper.ReOptimizeIntradayActivity(_backgroundWorkerOptimization,
                                                                         options.OptimizerActivitiesPreferences,
-                                                                        selectedSchedules, _schedulingOptions);
+                                                                        selectedSchedules, schedulingOptions);
                     break;
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -121,6 +122,30 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
 			target.DomainReferenceId = null;
 			target.Route().Should().Be.EqualTo("datasource/" + target.BusinessUnitId + "/type");
+		}
+
+		[Test]
+		public void ShouldIgnoreBusinessUnitIdButNotDataSourceForStatisticTask()
+		{
+			target.DomainType = typeof(IStatisticTask).Name;
+			target.Route().Should().Be.EqualTo("datasource/" + Subscription.IdToString(Guid.Empty) + "/" + target.DomainType + "/id/" +
+											   domainId);
+		}
+
+		[Test]
+		public void ShouldIgnoreBusinessUnitIdAndDataSourceForBatchEnd()
+		{
+			target.DomainType = typeof(IExternalAgentState).Name;
+			target.DomainId = Subscription.IdToString(Guid.Empty);
+			target.Route().Should().Be.EqualTo("/"+Subscription.IdToString(Guid.Empty)+ "/" + target.DomainType + "/id/" + target.DomainId);
+		}
+
+		[Test]
+		public void ShouldIncludeBusinessUnitIdAndDataSourceForExternalAgentState()
+		{
+			target.DomainType = typeof (IExternalAgentState).Name;
+			target.Route().Should().Be.EqualTo("/" + target.BusinessUnitId + "/" + target.DomainType + "/id/" +
+											   domainId);
 		}
 	}
 }

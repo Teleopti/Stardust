@@ -1,5 +1,5 @@
 Analytics,Analytics,Analytics
-Client\ClickOnce,Client,Client
+Client\ClickOnce,Client,Client\ClickOnce
 ETL,TeleoptiCCC\Services\ETL,ETL
 MyTime\ClickOnce,MyTime,MyTime
 AgentPortalWeb,Web,Web
