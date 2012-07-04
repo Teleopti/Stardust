@@ -53,10 +53,7 @@
 						</div>
 						@if (day.HasNote)
 						{
-							<div class="icon comment-day absolute">
-							</div>
-							<div class="comment-day">
-								@day.Note.Message
+							<div class="icon comment-day ir absolute tooltip" tooltip-text="@day.Note.Message">
 							</div>
 						}
 					</div>

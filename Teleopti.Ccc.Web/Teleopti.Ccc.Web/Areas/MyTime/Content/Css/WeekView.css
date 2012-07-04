@@ -105,17 +105,12 @@
 	}
 }
 
-.weekview-day .comment-day 
-{
-	padding-bottom: 15px;
-}
 .weekview-day .icon.comment-day 
 {
 	background: transparent url(../Images/icon_sprite.png) -163px -4px no-repeat;
-	left: -4px;
-	top: 14px;
+	left: 5px;
+	top: 0;
 	height: 16px;
-	width: 4px;
 }
 
 .weekview-day li:first-child, .weekview-day li.second 
