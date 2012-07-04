@@ -3,8 +3,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Report
 {
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
-
 	/// <summary>
 	/// 	Passed from ReportSettings -> View
 	/// </summary>

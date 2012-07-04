@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core

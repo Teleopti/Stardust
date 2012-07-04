@@ -1,6 +1,4 @@
-﻿using System;
-using TechTalk.SpecFlow.Bindings;
-using Teleopti.Analytics.ReportTexts;
+﻿using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 

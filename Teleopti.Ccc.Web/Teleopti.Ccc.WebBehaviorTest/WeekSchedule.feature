@@ -93,3 +93,10 @@ Scenario: Show both text and absence requests
 	And I have an existing absence request
 	When I view my week schedule
 	Then I should see 2 with the request count
+
+
+Scenario: Navigate to current week
+	Given I am an agent
+	And I view my week schedule one month ago
+	When I click the current week button
+	Then I should see the start and end dates for current week

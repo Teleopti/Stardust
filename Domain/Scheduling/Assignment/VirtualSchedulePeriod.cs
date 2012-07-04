@@ -249,6 +249,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (!IsValid)
                 return 0;
 
+			if (_schedulePeriod.PeriodType == SchedulePeriodType.ChineseMonth)
+				return _schedulePeriod.GetDaysOff(_thePeriodWithTheDateIn.StartDate);
+
             if (_schedulePeriod.DaysOff.HasValue)
                 return _schedulePeriod.DaysOff.Value;
 

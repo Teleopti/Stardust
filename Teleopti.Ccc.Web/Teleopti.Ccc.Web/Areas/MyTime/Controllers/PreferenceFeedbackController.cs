@@ -1,12 +1,6 @@
-using System;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Mvc.Async;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;

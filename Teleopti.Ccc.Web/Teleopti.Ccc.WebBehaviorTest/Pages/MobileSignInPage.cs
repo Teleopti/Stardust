@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;

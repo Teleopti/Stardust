@@ -42,23 +42,6 @@ exec mart.sys_configuration_save @key=N'TimeZoneCode',@value=N'W. Europe Standar
 --Delete All old schedules
 EXEC mart.etl_job_delete_schedule_All
 
---update MsgBroker
-update [msg].configuration
-set configurationValue = 'teleopticcc-demo.cloudapp.net'
-where configurationId = 2
-
-update [msg].address
-set Address='teleopticcc-demo.cloudapp.net'
-where AddressId= 1
-
-update msg.configuration
-set ConfigurationValue='10000'
-where ConfigurationId = 1
-
-update msg.Address
-set Port='10000'
-where AddressId= 1
-
 --Get Agg Data into Analytics
 INSERT [TeleoptiAnalytics_Demo].[dbo].[ccc_system_info]
 SELECT [id]
@@ -82,21 +65,36 @@ SELECT [log_object_id]
       ,[default_short_call_treshold]
   FROM [TeleoptiCCC7Agg_Demo].[dbo].[log_object]
 
+SET IDENTITY_INSERT [TeleoptiAnalytics_Demo].dbo.agent_info ON
 INSERT [TeleoptiAnalytics_Demo].[dbo].[agent_info]
+([Agent_id]
+      ,[Agent_name]
+      ,[is_active]
+      ,[log_object_id]
+      ,[orig_agent_id])
 SELECT [Agent_id]
       ,[Agent_name]
       ,[is_active]
       ,[log_object_id]
       ,[orig_agent_id]
   FROM [TeleoptiCCC7Agg_Demo].[dbo].[agent_info]
+SET IDENTITY_INSERT [TeleoptiAnalytics_Demo].dbo.agent_info OFF
 
+SET IDENTITY_INSERT [TeleoptiAnalytics_Demo].dbo.queues ON
 INSERT [TeleoptiAnalytics_Demo].[dbo].[queues]
+([queue]
+      ,[orig_desc]
+      ,[log_object_id]
+      ,[orig_queue_id]
+      ,[display_desc]
+      )
 SELECT [queue]
       ,[orig_desc]
       ,[log_object_id]
       ,[orig_queue_id]
       ,[display_desc]
   FROM [TeleoptiCCC7Agg_Demo].[dbo].[queues]
+SET IDENTITY_INSERT [TeleoptiAnalytics_Demo].dbo.queues OFF
 
 INSERT [TeleoptiAnalytics_Demo].[dbo].[queue_logg]
 SELECT [queue]

@@ -2,7 +2,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -220,7 +219,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			                   			{
 			                   				NextTitle = Resources.NextPeriod,
 			                   				PrevTitle = Resources.PreviousPeriod
-			                   			}
+			                   			},
+									new ToolBarButtonItem
+										{
+											Title = Resources.Today,
+											ButtonType = "today"
+										}
 			                   	};
 			return new SectionNavigationItem
 					{

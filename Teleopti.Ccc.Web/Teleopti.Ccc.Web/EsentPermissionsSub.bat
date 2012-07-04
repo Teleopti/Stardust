@@ -6,9 +6,10 @@
 :: 
 :: =============================================
 :: Change Log:
-:: Date			By		Description
+:: Date			By			Description
 :: =============================================
-:: 2012-05-14		MattiasE	Copied from SDK and modified	
+:: 2012-05-14	MattiasE	Copied from SDK and modified	
+:: 2012-06-12	DavidJ		New application pool (split from New Broker)
 :: =============================================
 SET WindowsNT=%~1
 SET SPLevel=%~2
@@ -48,7 +49,7 @@ SET WinXP=501
 SET Win2003=502
 SET IIS6=6
 SET IIS7=7
-SET IIS7PoolUser=IIS APPPOOL\Teleopti ASP.NET v4.0
+SET IIS7PoolUser=IIS APPPOOL\Teleopti ASP.NET v4.0 Web
 SET IIS6PoolUser=NT AUTHORITY\Network Service
 SET IIS5PoolUser=IUSR_%COMPUTERNAME%
 

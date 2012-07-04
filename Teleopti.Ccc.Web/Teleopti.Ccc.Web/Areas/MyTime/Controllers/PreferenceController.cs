@@ -1,5 +1,4 @@
 using System.Web.Mvc;
-using AutofacContrib.DynamicProxy2;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;

@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;

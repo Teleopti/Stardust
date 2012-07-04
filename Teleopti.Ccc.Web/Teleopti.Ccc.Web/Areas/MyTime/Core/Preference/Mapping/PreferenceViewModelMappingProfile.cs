@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;

@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;

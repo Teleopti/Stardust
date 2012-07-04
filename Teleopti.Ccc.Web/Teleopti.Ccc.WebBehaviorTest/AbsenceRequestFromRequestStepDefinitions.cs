@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;

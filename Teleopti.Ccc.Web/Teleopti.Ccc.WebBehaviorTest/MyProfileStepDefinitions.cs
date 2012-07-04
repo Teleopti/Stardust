@@ -1,7 +1,5 @@
 ﻿using System.Globalization;
-using System.Threading;
 using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Threading;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
-using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
 using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core

@@ -23,7 +23,6 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
     <Endpoints>
   		<InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="$(SSLCERTNAME)" />
 <!--  		<InputEndpoint name="HttpIn" protocol="http" port="80" /> -->
-      <InputEndpoint name="MessageBroker" protocol="tcp" port="10000" localPort="10000" ignoreRoleInstanceStatus="true" />
     </Endpoints>
     <Imports>
 		<Import moduleName="Diagnostics" />

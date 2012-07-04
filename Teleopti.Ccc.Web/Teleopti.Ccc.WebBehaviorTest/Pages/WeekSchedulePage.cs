@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
@@ -105,9 +104,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public TextField RequestDetailEntityId { get; private set; }
 
 
-		[FindBy(Id = "WeekScheduleDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
+		[FindBy(Id = "ScheduleDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
 		[FindBy(Id = "ScheduleDatePicker")] public DatePicker DatePicker { get; set; }
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }
+
+		[FindBy(Id = "Schedule-today-button")]
+		public Button TodayButton { get; set; }
 	}
 }
