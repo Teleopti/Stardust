@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.Title.Should().Be.EqualTo("Phone");
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Should().Be.Null();
-				layerDetails.Color.Should().Be.EqualTo("Green");
+				layerDetails.Color.Should().Be.EqualTo("0,128,0");
 				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
 				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.Title.Should().Be.EqualTo("Holiday");
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Should().Be.Null();
-				layerDetails.Color.Should().Be.EqualTo("Red");
+				layerDetails.Color.Should().Be.EqualTo("255,0,0");
 				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
 				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.Title.Should().Be.EqualTo("Phone");
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Should().Be.Null();
-				layerDetails.Color.Should().Be.EqualTo("Green");
+				layerDetails.Color.Should().Be.EqualTo("0,128,0");
 				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
 				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Title.Should().Be.EqualTo("subj");
                 layerDetails.Meeting.Location.Should().Be.EqualTo("loc");
-				layerDetails.Color.Should().Be.EqualTo("Green");
+				layerDetails.Color.Should().Be.EqualTo("0,128,0");
 				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
 				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
