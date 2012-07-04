@@ -797,7 +797,9 @@
     <Compile Include="Optimization\GeneralPreferencesPanel.Designer.cs">
       <DependentUpon>GeneralPreferencesPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Optimization\OptimizationPreferencesDialog.cs" />
+    <Compile Include="Optimization\OptimizationPreferencesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Optimization\OptimizationPreferencesDialog.Designer.cs">
       <DependentUpon>OptimizationPreferencesDialog.cs</DependentUpon>
     </Compile>
@@ -899,7 +901,9 @@
     <Compile Include="Main\ApplyLicense.Designer.cs">
       <DependentUpon>ApplyLicense.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\About.cs" />
+    <Compile Include="Main\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Main\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
@@ -1121,7 +1125,9 @@
       <DependentUpon>SchedulerReportsViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Reporting\ViewerFoldingChangedEvent.cs" />
-    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.Designer.cs">
       <DependentUpon>AgentRestrictionGrid.cs</DependentUpon>
     </Compile>
@@ -1785,7 +1791,9 @@
     <Compile Include="Forecasting\Forms\AbstractDetailView.Designer.cs">
       <DependentUpon>AbstractDetailView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\BaseIntradayGridControl.cs" />
+    <Compile Include="Forecasting\Forms\BaseIntradayGridControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forecasting\Forms\ChildSkillDetailView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1814,7 +1822,9 @@
     <Compile Include="Forecasting\Forms\MultisiteDayTemplates.Designer.cs">
       <DependentUpon>MultisiteDayTemplates.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\MultisiteIntradayTemplateGridControl.cs" />
+    <Compile Include="Forecasting\Forms\MultisiteIntradayTemplateGridControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forecasting\Forms\MultisiteSkillDetailView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2140,7 +2150,9 @@
     <Compile Include="Permissions\MyAvailableDataRangePanel.Designer.cs">
       <DependentUpon>MyAvailableDataRangePanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Permissions\PermissionsExplorer.cs" />
+    <Compile Include="Permissions\PermissionsExplorer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Permissions\PermissionsExplorer.Designer.cs">
       <DependentUpon>PermissionsExplorer.cs</DependentUpon>
     </Compile>
