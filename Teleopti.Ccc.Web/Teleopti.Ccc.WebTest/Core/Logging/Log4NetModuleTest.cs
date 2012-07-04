@@ -7,19 +7,18 @@ using log4net;
 
 namespace Teleopti.Ccc.WebTest.Core.Logging
 {
-
 	[TestFixture]
 	public class Log4NetModuleTest
 	{
-
 		[Test]
 		public void ShouldConfigureLog4Net()
 		{
 			var configured = false;
 			var httpApplication = MockRepository.GenerateMock<HttpApplication>();
-			var target = new Log4NetModule(null, () => { configured = true;
-			                                           	return null;
-			}, null);
+			var target = new Log4NetModule(null, () =>
+			                                     	{
+			                                     		configured = true; return null; 
+																}, null);
 
 			target.Init(httpApplication);
 
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 		public void ShouldRegisterEventHandler()
 		{
 			var httpApplication = MockRepository.GenerateMock<HttpApplication>();
-			var target = new Log4NetModule(null, () => { return null; }, null);
+			var target = new Log4NetModule(null, () => null, null);
 
 			target.Init(httpApplication);
 

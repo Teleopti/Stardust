@@ -8,9 +8,9 @@
 
 	using SharpTestsEx;
 
-	using Teleopti.Ccc.Web.Areas.Start.Controllers;
-	using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
-	using Teleopti.Ccc.Web.Areas.Start.Models.Menu;
+	using Web.Areas.Start.Controllers;
+	using Web.Areas.Start.Core.Menu;
+	using Web.Areas.Start.Models.Menu;
 
 	[TestFixture]
 	public class MenuControllerTest
