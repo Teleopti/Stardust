@@ -160,6 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly> { DateOnly.MinValue });
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true));
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(1), true, true));
+				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments().Repeat.AtLeastOnce();
             }
 
             bool ret;
@@ -219,6 +220,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _rollbackService.Rollback());
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_dateOnlyAsDateTimePeriod.DateOnly, true, true));
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_dateOnlyAsDateTimePeriod.DateOnly.AddDays(1), true, true));
+            	Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments();
             }
 
             bool ret;
