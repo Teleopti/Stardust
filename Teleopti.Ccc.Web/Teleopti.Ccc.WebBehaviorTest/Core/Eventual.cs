@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -19,25 +20,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			{
 				return action.Invoke();
 			}
+			// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
+			// if so, lets just try again
+			// maybe this behavior should be placed elsewhere and not only apply to asserts..
 			catch (UnauthorizedAccessException ex)
 			{
-				// sometimes IE api gives these errors when the page is in a state between pages or something
-				// if so, lets just try again
-				// maybe this behavior should be placed elsewhere and not only apply to asserts..
 				return failureCallback.Invoke(ex);
 			}
 			catch (NullReferenceException ex)
 			{
-				// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
-				// if so, lets just try again
-				// maybe this behavior should be placed elsewhere and not only apply to asserts..
 				return failureCallback.Invoke(ex);
 			}
 			catch (ArgumentNullException ex)
 			{
-				// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
-				// if so, lets just try again
-				// maybe this behavior should be placed elsewhere and not only apply to asserts..
+				return failureCallback.Invoke(ex);
+			}
+			catch (COMException ex)
+			{
 				return failureCallback.Invoke(ex);
 			}
 		}
