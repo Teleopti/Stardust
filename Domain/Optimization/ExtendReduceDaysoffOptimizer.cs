@@ -94,10 +94,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             bool success = false;
 
-            var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
-
-            var sourceMatrix = _matrixConverter.SourceMatrix;
-
             ExtendReduceTimeDecisionMakerResult daysToBeRescheduled =
                 _decisionMaker.Execute(_matrixConverter, _personalSkillsDataExtractor, _validatorList);
 
@@ -106,22 +102,23 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
 
             var oldPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
+			var sourceMatrix = _matrixConverter.SourceMatrix;
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 
             if (!_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(schedulePeriod))
             {
 
-                DateOnly dateOnly = daysToBeRescheduled.DayToLengthen.Value;
-
-                changedDay changedDayOff = new changedDay();
-                var currentPart = sourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+                var dayToLengthen = daysToBeRescheduled.DayToLengthen.Value;
+				var schedulePart = sourceMatrix.GetScheduleDayByKey(dayToLengthen).DaySchedulePart();
+				var changedDayOff = new changedDay();
                 
-                changedDayOff.PrevoiousSchedule = currentPart;
-                changedDayOff.DateChanged = dateOnly;
+				changedDayOff.PreviousSchedule = schedulePart;
+                changedDayOff.DateChanged = dayToLengthen;
                
-                currentPart.DeleteDayOff();
-                _rollbackService.Modify(currentPart);
+                schedulePart.DeleteDayOff();
+                _rollbackService.Modify(schedulePart);
 
-                changedDayOff.CurrentSchedule = sourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+                changedDayOff.CurrentSchedule = sourceMatrix.GetScheduleDayByKey(dayToLengthen).DaySchedulePart();
 
                 IEnumerable<DateOnly> illegalDays = removeIllegalWorkTimeDays(sourceMatrix, schedulingOptions);  //resource calculation is done automaticaly
 
@@ -133,8 +130,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(schedulePeriod))
             {
-                DateOnly dateOnly = daysToBeRescheduled.DayToShorten.Value;
-                if (addDayOff(dateOnly, true, schedulingOptions))
+				DateOnly dayToShorten = daysToBeRescheduled.DayToShorten.Value;
+                if (addDayOff(dayToShorten, true, schedulingOptions))
                     success = true;
                 else
                     sourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToShorten.Value, daysToBeRescheduled.DayToShorten.Value));
@@ -261,7 +258,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var currentPart = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
             changedDay changed = new changedDay();
             changed.DateChanged = dateOnly;
-            changed.PrevoiousSchedule = currentPart;
+            changed.PreviousSchedule = currentPart;
 
             currentPart.DeleteMainShift(currentPart);
             currentPart.CreateAndAddDayOff(_dayOffTemplate);
@@ -288,7 +285,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             foreach (changedDay changed in changedDays)
             {
-                IList<DateOnly> days = _decider.DecideDates(changed.CurrentSchedule, changed.PrevoiousSchedule);
+                IList<DateOnly> days = _decider.DecideDates(changed.CurrentSchedule, changed.PreviousSchedule);
                 foreach (var dateOnly in days)
                 {
                     bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
@@ -326,7 +323,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private class changedDay
         {
             public DateOnly DateChanged { get; set; }
-            public IScheduleDay PrevoiousSchedule { get; set; }
+            public IScheduleDay PreviousSchedule { get; set; }
             public IScheduleDay CurrentSchedule { get; set; }
         }
     }
