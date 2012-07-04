@@ -74,6 +74,7 @@
 .rgba .weekview-day
 {
 	margin: 0;
+	float: left;
 	border-left: 1px solid rgba(255, 255, 255, 0.7);
 	border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -82,7 +83,7 @@
 	.rgba .weekview-day
 	{
 		margin: 0;
-		border-left: 1px solid #dfdfdf;
+		border-left: 1px solid #f9f9f9;
 		border-right: 1px solid #dfdfdf;
 	}
 }
@@ -142,8 +143,6 @@
 .weekview-day li.dayoff 
 {
 	height: 60px;
-	border-left-color: beige;
-	border-right-color: beige;
 	background-color: beige;
 	background-image: url(../Images/stripe.png);
 	border-left-width: 8px;
@@ -249,15 +248,16 @@ select.absence-input
 	position: absolute;
 }
 .weekview-timeline {
-	width: 32px;
-	height: 668px;
+	width: 31px;
+	height: 792px;
 	background: transparent;
+	border-right: 1px solid #dfdfdf;
 }
 .weekview-timeline-label {
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	font-size: 6pt;
 	border-radius: 2px;
-	width: 30px;
+	width: 29px;
 	height: 10px;
 	text-align: center;
 }
