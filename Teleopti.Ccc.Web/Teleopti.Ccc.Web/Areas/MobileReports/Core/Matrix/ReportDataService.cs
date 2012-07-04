@@ -7,7 +7,7 @@ using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 {
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Models.Domain;
 
 	public class ReportDataService : IReportDataService
 	{

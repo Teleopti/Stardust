@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Core
 
 			var target = container.Resolve<AspectedClass>();
 
-			Assert.Throws<FileNotFoundException>(() => target.AspectedMethod());
+			Assert.Throws<FileNotFoundException>(target.AspectedMethod);
 		}
 
 		[Test]
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Core
 			var target = container.Resolve<AspectedClass>();
 			target.AspectedMethodCallback = () => { throw new FileNotFoundException(); };
 
-			Assert.Throws<FileNotFoundException>(() => target.AspectedMethod());
+			Assert.Throws<FileNotFoundException>(target.AspectedMethod);
 			afterInvoked.Should().Be.True();
 		}
 

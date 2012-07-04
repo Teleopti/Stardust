@@ -4,7 +4,7 @@
 	using System.Web.Mvc;
 	using System.Web.Routing;
 
-	using Teleopti.Ccc.Web.Core.Startup.Booter;
+	using Booter;
 
 	[TaskPriority(2)]
 	public class RegisterRoutesTask : IBootstrapperTask

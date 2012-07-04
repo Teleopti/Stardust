@@ -2,8 +2,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 {
 	using System.Collections.Generic;
 
-	using Teleopti.Ccc.Domain.Security.AuthorizationData;
-	using Teleopti.Ccc.Web.Areas.Start.Models.Menu;
+	using Domain.Security.AuthorizationData;
+	using Models.Menu;
 
 	public static class DefinedApplicationAreas
 	{

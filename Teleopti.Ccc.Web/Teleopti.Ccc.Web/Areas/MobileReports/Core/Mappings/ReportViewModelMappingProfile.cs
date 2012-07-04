@@ -4,12 +4,12 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 
 	using AutoMapper;
 
-	using Teleopti.Ccc.Domain.Common;
-	using Teleopti.Ccc.Domain.WebReport;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
-	using Teleopti.Interfaces.Domain;
+	using Domain.Common;
+	using Domain.WebReport;
+	using Providers;
+	using Models.Domain;
+	using Models.Layout;
+	using Interfaces.Domain;
 
 	public class ReportViewModelMappingProfile : Profile
 	{
@@ -34,18 +34,18 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 		{
 			base.Configure();
 
-			this.CreateMap<DateOnly, ReportViewModel>().ForMember(
-				d => d.Reports, o => o.MapFrom(s => this._definedReportProvider.Invoke().GetDefinedReports())).ForMember(
-					d => d.Skills, o => o.MapFrom(s => this._skillProvider.Invoke().GetAvailableSkills())).ForMember(
+			CreateMap<DateOnly, ReportViewModel>().ForMember(
+				d => d.Reports, o => o.MapFrom(s => _definedReportProvider.Invoke().GetDefinedReports())).ForMember(
+					d => d.Skills, o => o.MapFrom(s => _skillProvider.Invoke().GetAvailableSkills())).ForMember(
 						d => d.DateBoxGlobalization,
-						o => o.MapFrom(s => this._dateBoxGlobalizationViewModelFactory.Invoke().CreateDateBoxGlobalizationViewModel()));
+						o => o.MapFrom(s => _dateBoxGlobalizationViewModelFactory.Invoke().CreateDateBoxGlobalizationViewModel()));
 
-			this.CreateMap<DefinedReportInformation, ReportSelectionViewModel>().ForMember(
+			CreateMap<DefinedReportInformation, ReportSelectionViewModel>().ForMember(
 				d => d.ReportId, a => a.MapFrom(s => s.ReportId)).ForMember(
-					d => d.ReportName, a => a.MapFrom(s => this._userTextTranslator.Invoke().TranslateText(s.ReportNameResourceKey)));
+					d => d.ReportName, a => a.MapFrom(s => _userTextTranslator.Invoke().TranslateText(s.ReportNameResourceKey)));
 
 			// -2 for all special all skill from Mart
-			this.CreateMap<ReportControlSkillGet, SkillSelectionViewModel>().ForMember(d => d.SkillId, a => a.MapFrom(s => s.Id))
+			CreateMap<ReportControlSkillGet, SkillSelectionViewModel>().ForMember(d => d.SkillId, a => a.MapFrom(s => s.Id))
 				.ForMember(d => d.SkillName, a => a.MapFrom(s => s.Name)).ForMember(
 					d => d.AllSkills, a => a.MapFrom(s => s.Id == -2));
 		}

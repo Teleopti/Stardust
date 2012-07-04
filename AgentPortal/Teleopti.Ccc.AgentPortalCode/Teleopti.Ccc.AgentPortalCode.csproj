@@ -108,30 +108,32 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Syncfusion.Core, Version=8.202.0.18, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Core.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Compression.Base">
+      <HintPath>..\..\packages\Syncfusion.Pdf.10.2.75\lib\2.0\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Pdf.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Core">
+      <HintPath>..\..\packages\Syncfusion.Core.10.2.75\lib\2.0\Syncfusion.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Schedule.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Schedule.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+    <Reference Include="Syncfusion.Grid.Base">
+      <HintPath>..\..\packages\Syncfusion.Grid.Win.10.2.75\lib\2.0\Syncfusion.Grid.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Schedule.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Schedule.Windows.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+    <Reference Include="Syncfusion.Grid.Windows">
+      <HintPath>..\..\packages\Syncfusion.Grid.Win.10.2.75\lib\2.0\Syncfusion.Grid.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\SyncFusion20\Syncfusion.Shared.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+    <Reference Include="Syncfusion.Pdf.Base">
+      <HintPath>..\..\packages\Syncfusion.Pdf.10.2.75\lib\2.0\Syncfusion.Pdf.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Schedule.Base">
+      <HintPath>..\..\packages\Syncfusion.Schedule.Win.10.2.75\lib\2.0\Syncfusion.Schedule.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Schedule.Windows">
+      <HintPath>..\..\packages\Syncfusion.Schedule.Win.10.2.75\lib\2.0\Syncfusion.Schedule.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.Base">
+      <HintPath>..\..\packages\Syncfusion.Shared.Base.10.2.75\lib\2.0\Syncfusion.Shared.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.Windows">
+      <HintPath>..\..\packages\Syncfusion.Shared.Win.10.2.75\lib\2.0\Syncfusion.Shared.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -278,6 +280,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Foundation\StateHandlers\StateImplementation.cd" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

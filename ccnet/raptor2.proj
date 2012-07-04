@@ -118,7 +118,7 @@
     <Target Name="BuildSSASXmla">
 
 		<Message Text="Building dwproj-file ..." Importance="high" />
-		<Exec Command="&quot;$(vs2008ide)&quot; &quot;$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\TeleoptiAnalytics.sln&quot; /rebuild CreateDatabase2005" />
+		<Exec Command="&quot;$(vs2008ide)&quot; &quot;$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\TeleoptiAnalytics.sln&quot; /rebuild CreateDatabase2005 /Log &quot;c:\Temp\devenv_log.txt&quot;" />
 		<Message Text="Building dwproj-file. Done!" Importance="high" />
 
 		<Message Text="Creating XMLA ..." Importance="high" />

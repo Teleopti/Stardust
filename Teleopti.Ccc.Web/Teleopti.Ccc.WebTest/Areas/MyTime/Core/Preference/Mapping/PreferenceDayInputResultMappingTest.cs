@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var preferenceRestriction = new PreferenceRestriction
 			                            	{
-			                            		Absence = new Absence() {DisplayColor = Color.Thistle}
+			                            		Absence = new Absence {DisplayColor = Color.Thistle}
 			                            	};
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
 

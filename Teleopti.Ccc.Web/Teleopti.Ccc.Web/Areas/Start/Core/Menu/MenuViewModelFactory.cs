@@ -3,8 +3,8 @@
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
-	using Teleopti.Ccc.Web.Areas.Start.Models.Menu;
+	using MyTime.Core.Portal;
+	using Models.Menu;
 
 	public class MenuViewModelFactory : IMenuViewModelFactory
 	{

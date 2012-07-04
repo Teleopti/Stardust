@@ -4,7 +4,7 @@ using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC
 {
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
+	using Providers;
 
 	public class MobileReportsAreaModule : Module
 	{
@@ -12,13 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC
 		{
 			registerCommonTypes(builder);
 			registerReportTypes(builder);
-			registerAutoMapperTypes(builder);
 		}
-
-		private void registerAutoMapperTypes(ContainerBuilder builder)
-		{
-		}
-
 
 		private static void registerReportTypes(ContainerBuilder builder)
 		{
