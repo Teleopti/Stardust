@@ -116,7 +116,6 @@
 {
 	border-top: 1px solid  #f9f9f9;
 	border-bottom: 1px solid #dfdfdf;
-    cursor: pointer;
 }
 
 .weekview-day li:first-child div, .weekview-day li.second div{padding: 0; border-left-width: 0; border-right-width: 0;}
@@ -264,6 +263,7 @@ select.absence-input
 }
 .fourth {
 	height: 15px;
+	cursor: pointer;
 }
 .category {
 	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);
