@@ -196,7 +196,6 @@
             this.textBoxExtOptionalParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxExtOptionalParticipant.Size = new System.Drawing.Size(461, 21);
             this.textBoxExtOptionalParticipant.TabIndex = 5;
-            this.textBoxExtOptionalParticipant.Click += new System.EventHandler(this.textBoxExtOptionalParticipant_Click);
             this.textBoxExtOptionalParticipant.TextChanged += new System.EventHandler(this.textBoxExtOptionalParticipant_TextChanged);
             this.textBoxExtOptionalParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtOptionalParticipant_KeyDown);
             // 
@@ -212,7 +211,6 @@
             this.textBoxExtRequiredParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxExtRequiredParticipant.Size = new System.Drawing.Size(461, 21);
             this.textBoxExtRequiredParticipant.TabIndex = 3;
-            this.textBoxExtRequiredParticipant.Click += new System.EventHandler(this.textBoxExtRequiredParticipant_Click);
             this.textBoxExtRequiredParticipant.TextChanged += new System.EventHandler(this.textBoxExtRequiredParticipant_TextChanged);
             this.textBoxExtRequiredParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtRequiredParticipant_KeyDown);
             // 
@@ -411,7 +409,6 @@
             this.Controls.Add(this.tableLayoutPanelForm);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(500, 400);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(174, 38);
