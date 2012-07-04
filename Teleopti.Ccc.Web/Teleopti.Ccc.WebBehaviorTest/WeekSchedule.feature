@@ -105,11 +105,46 @@ Scenario: Navigate to current week
 Scenario: Show timeline with no schedule
 	Given I am an agent
 	When I view my week schedule
-	Then I should see default start timeline and end timeline
+	Then I should see start timeline and end timeline according to schedule with:
+	| Field          | Value |
+	| start timeline | 0:00  |
+	| end timeline   | 23:59 |
+	| timeline count | 25    |
 
 Scenario: Show timeline with schedule
 	Given I am an agent
 	And I have shifts scheduled for two weeks
 	And My schedule is published
 	When I view my week schedule
-	Then I should see start timeline and end timeline according to schedule
+	Then I should see start timeline and end timeline according to schedule with:
+	| Field          | Value |
+	| start timeline | 19:45 |
+	| end timeline   | 4:15  |
+	| timeline count | 11    |
+
+Scenario: Show timeline with schedule with different start and end time on different day
+	Given I am an agent
+	And I have shifts scheduled with different activities for two weeks
+	And My schedule is published
+	When I view my week schedule
+	Then I should see start timeline and end timeline according to schedule with:
+	| Field          | Value |
+	| start timeline | 7:45  |
+	| end timeline   | 18:15 |
+	| timeline count | 13    |
+
+Scenario: Show activity with correct position, height and color
+	Given I am an agent
+	And I have custom shifts scheduled on wednesday for two weeks:
+	| Field      | Value       |
+	| Phone      | 09:00-10:30 |
+	| Shortbreak | 10:30-11:00 |
+	| Phone      | 11:00-12:00 |
+	| Lunch      | 12:00-14:00 |
+	| Phone      | 14:00-18:00 |
+	And My schedule is published
+	When I view my week schedule
+	Then I should see wednesday's activities:
+	| Activity   | Start Position | Height | Color |
+	| Phone      | 80             | 95     | Green |
+	| Shortbreak | 175            | 32     | Red   |

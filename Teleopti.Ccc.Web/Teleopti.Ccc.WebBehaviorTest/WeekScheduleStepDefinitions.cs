@@ -127,21 +127,27 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => iconDay2.DisplayVisible(), Is.False);
 		}
 
-		[Then(@"I should see default start timeline and end timeline")]
-		public void ThenIShouldSeeDefaultStartTimelineAndEndTimeline()
+		[Then(@"I should see start timeline and end timeline according to schedule with:")]
+		public void ThenIShouldSeeStartTimelineAndEndTimelineAccordingToScheduleWith(Table table)
 		{
-			EventualAssert.That(() => _page.Timelines.Divs.Count, Is.EqualTo(25));
+			var divs = _page.Timelines.Divs;
+			EventualAssert.That(() => string.Format("{0}", divs.Count), Is.EqualTo(table.Rows[2][1]));
+			EventualAssert.That(() => divs[0].InnerHtml, Is.StringContaining(table.Rows[0][1]));
+			EventualAssert.That(() => divs[divs.Count - 1].InnerHtml, Is.StringContaining(table.Rows[1][1]));
 		}
 
-		[Then(@"I should see start timeline and end timeline according to schedule")]
-		public void ThenIShouldSeeStartTimelineAndEndTimelineAccordingToSchedule()
+		[Then(@"I should see wednesday's activities:")]
+		public void ThenIShouldSeeWednesdaySActivities(Table table)
 		{
-			// The expected number is caculated, coming from test data in ShiftsForTwoWeeks
-			var divs = _page.Timelines.Divs;
-			EventualAssert.That(() => divs.Count, Is.EqualTo(11));
-			EventualAssert.That(() => divs[0].InnerHtml, Is.StringContaining("19:45"));
-			EventualAssert.That(() => divs[divs.Count-1].InnerHtml, Is.StringContaining("4:15"));
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[0].OuterHtml), Is.StringContaining(table.Rows[0][1]));
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[0].Style.Height), Is.StringContaining(table.Rows[0][2]));
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[0].Style.BackgroundColor), Is.StringContaining(table.Rows[0][3]));
+
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[1].OuterHtml), Is.StringContaining(table.Rows[1][1]));
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[1].Style.Height), Is.StringContaining(table.Rows[1][2]));
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[1].Style.BackgroundColor), Is.StringContaining(table.Rows[1][3]));
 		}
+
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{

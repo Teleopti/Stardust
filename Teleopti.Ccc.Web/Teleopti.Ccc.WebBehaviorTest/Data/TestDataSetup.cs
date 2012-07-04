@@ -334,15 +334,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static void CreateActivities(IUnitOfWork unitOfWork)
 		{
 			TestData.ActivityPhone = ActivityFactory.CreateActivity("Phone", Color.FromKnownColor(KnownColor.Green));
+			TestData.ActivityShortBreak = ActivityFactory.CreateActivity("ShortBreak", Color.FromKnownColor(KnownColor.Red));
 			TestData.ActivityLunch = ActivityFactory.CreateActivity("Lunch", Color.FromKnownColor(KnownColor.Yellow));
 			TestData.ActivityTraining = ActivityFactory.CreateActivity("Training", Color.FromKnownColor(KnownColor.Purple));
 
 			TestData.ActivityPhone.GroupingActivity = TestData.GroupingActivity;
+			TestData.ActivityShortBreak.GroupingActivity = TestData.GroupingActivity;
 			TestData.ActivityLunch.GroupingActivity = TestData.GroupingActivity;
 			TestData.ActivityTraining.GroupingActivity = TestData.GroupingActivity;
 
 			var activityRepository = new ActivityRepository(unitOfWork);
 			activityRepository.Add(TestData.ActivityPhone);
+			activityRepository.Add(TestData.ActivityShortBreak);
 			activityRepository.Add(TestData.ActivityLunch);
 			activityRepository.Add(TestData.ActivityTraining);
 		}
