@@ -130,6 +130,12 @@
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Syncfusion.Chart.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Chart.Win.10.2.75\lib\3.5\Syncfusion.Chart.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Chart.Windows, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Chart.Win.10.2.75\lib\3.5\Syncfusion.Chart.Windows.dll</HintPath>
+    </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\packages\Syncfusion.Pdf.10.2.75\lib\3.5\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
