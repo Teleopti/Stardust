@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			Settings.HighLightElement = true;
 			Settings.MakeNewIe8InstanceNoMerge = true;
 			Settings.MakeNewIeInstanceVisible = true;
-			browser = new IE();
+			browser = new IE(true);
 			browser.ClearCache();
 			browser.ClearCookies();
 			browser.BringToFront();
