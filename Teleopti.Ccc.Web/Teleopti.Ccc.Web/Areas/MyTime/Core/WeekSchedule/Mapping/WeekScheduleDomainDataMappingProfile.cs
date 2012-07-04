@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												});
 									TimePeriod minMaxTime = earliest > latest
 									                        	? new TimePeriod(latest, earliest)
-									                        	: new TimePeriod(earliest.Subtract(new TimeSpan(0, 15, 0)),
-									                        	                 latest.Add(new TimeSpan(0, 15, 0)));
+									                        	: new TimePeriod(earliest, latest);
 
 									var days = (from day in firstDayOfWeek.Date.DateRange(7)
 												let scheduleDay = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day)

@@ -235,8 +235,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 
-			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(7);
-			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
+			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(8);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
+
+			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(17);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(00);
 		}
 
 		[TearDown]
