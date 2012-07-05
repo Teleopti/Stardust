@@ -310,14 +310,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			UserTestData.AgentWindowsUser.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
 			UserTestData.AgentWindowsUser.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo("sv-SE"));
 
-			UserTestData.AgentApplicationUser = PersonFactory.CreatePersonWithBasicPermissionInfo(UserTestData.AgentApplicationUserName, TestData.CommonPassword);
-			UserTestData.AgentApplicationUser.PermissionInformation.AddApplicationRole(TestData.AgentRole);
-			UserTestData.AgentApplicationUser.PermissionInformation.AddApplicationRole(TestData.AgentRoleSecondBusinessUnit);
-
-			UserTestData.AgentApplicationUserSingleBusinessUnit = PersonFactory.CreatePersonWithBasicPermissionInfo(UserTestData.AgentApplicationUserSingleBusinessUnitUserName, TestData.CommonPassword);
-			UserTestData.AgentApplicationUserSingleBusinessUnit.PermissionInformation.AddApplicationRole(TestData.AgentRole);
-			UserTestData.AgentApplicationUserSingleBusinessUnit.WorkflowControlSet = TestData.WorkflowControlSetPublished;
-
 			UserTestData.UserWithNoPermission = new Person();
 		    UserTestData.UserWithNoPermission.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
 		                                                                            {
@@ -329,8 +321,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
             var personRepository = new PersonRepository(uow);
 			personRepository.Add(TestData.PersonThatCreatesTestData);
 			personRepository.Add(UserTestData.AgentWindowsUser);
-			personRepository.Add(UserTestData.AgentApplicationUser);
-			personRepository.Add(UserTestData.AgentApplicationUserSingleBusinessUnit);
 		}
 
 		private static void CreateBusinessUnits(IUnitOfWork uow)
