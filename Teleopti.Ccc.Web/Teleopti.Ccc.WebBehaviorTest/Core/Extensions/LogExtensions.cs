@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 		public static void Write(this ILog log, string message)
 		{
 			log.Warn(message);
-			Console.WriteLine(message);
+			System.IO.File.AppendAllText(@"C:\scenariolog.txt", message + Environment.NewLine);
 		}
 
 		public static void Write(this ILog log, string message, params object[] args)
 		{
 			log.WarnFormat(message, args);
-			Console.WriteLine(message, args);
+			System.IO.File.AppendAllText(@"C:\scenariolog.txt", string.Format(message, args) + Environment.NewLine);
 		}
 	}
 }
