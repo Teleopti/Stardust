@@ -543,7 +543,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             _optionalColumns = columns;
         }
 
-        private static void writeMessage()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
+		private static void writeMessage()
         {
             MessageBox.Show(UserTexts.Resources.PasswordPolicyWarning,
                 UserTexts.Resources.ErrorMessage,
