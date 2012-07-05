@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages;
 using Teleopti.Interfaces.Messages.Requests;
 
@@ -93,6 +95,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now);
 			target.Persist(form);
+			
+			Thread.Sleep(60);
 
 			var usedMessage = (NewAbsenceRequestCreated) serviceBusSender.GetArgumentsForCallsMadeOn(x => x.NotifyServiceBus(message))[0][0];
 			usedMessage.BusinessUnitId.Should().Be.EqualTo(buId);
