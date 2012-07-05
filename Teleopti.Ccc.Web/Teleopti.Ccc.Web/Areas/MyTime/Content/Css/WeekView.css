@@ -262,6 +262,7 @@ select.absence-input
 	width: 29px;
 	height: 10px;
 	text-align: center;
+	overflow: hidden;
 }
 .fourth {
 	height: 15px;
