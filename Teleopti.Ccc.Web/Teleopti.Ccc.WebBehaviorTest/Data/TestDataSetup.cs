@@ -35,17 +35,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void CreateDataSource()
 		{
-			var startTime = DateTime.Now;
-
 			TestData.DataSource = DataSourceHelper.CreateDataSource();
-
-			Log.Write("CreateDataSource took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void SetupFakeState()
 		{
-			var startTime = DateTime.Now;
-
 			TestData.PersonThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", TestData.CommonPassword);
 			TestData.BusinessUnit = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
 			TestData.BusinessUnit.Name = "BusinessUnit";
@@ -54,52 +48,38 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			_principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 			_unitOfWorkFactory = UnitOfWorkFactory.Current as NHibernateUnitOfWorkFactory;
-
-			Log.Write("SetupFakeState took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void CreateMinimumTestData()
 		{
-			var startTime = DateTime.Now;
 			DataSourceHelper.PersistAuditSetting();
 			UnitOfWorkAction(CreatePersonThatCreatesTestData);
 			UnitOfWorkAction(CreateLicense);
-			Log.Write("CreateMinimumTestData took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void CreateLegacyTestData()
 		{
-			var startTime = DateTime.Now;
 			CreateAndPersistTestData();
-			Log.Write("CreateLegacyTestData took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void ClearCcc7Data()
 		{
-			var startTime = DateTime.Now;
 			DataSourceHelper.ClearCcc7Data();
-			Log.Write("ClearCcc7Data took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void ClearAnalyticsData()
 		{
-			var startTime = DateTime.Now;
 			DataSourceHelper.ClearAnalyticsData();
-			Log.Write("ClearAnalyticsData took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void BackupCcc7Data()
 		{
-			var startTime = DateTime.Now;
 			_Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy();
-			Log.Write("BackupCcc7DataByFileCopy took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void RestoreCcc7Data()
 		{
-			var startTime = DateTime.Now;
 			DataSourceHelper.RestoreCcc7DataByFileCopy(_Ccc7DataBackup);
-			Log.Write("RestoreCcc7DataByFileCopy took " + DateTime.Now.Subtract(startTime));
 		}
 
 		public static void EnsureThreadPrincipal()
@@ -110,13 +90,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void UnitOfWorkAction(Action<IUnitOfWork> action)
 		{
-			var startTime = DateTime.Now;
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				action.Invoke(unitOfWork);
 				unitOfWork.PersistAll();
 			}
-			Log.Write(action.Method.Name + " took " + DateTime.Now.Subtract(startTime));
 		}
 
 

@@ -15,25 +15,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EventDefinition));
 
-		private static DateTime _testRunStartTime;
-		private static DateTime _testRunScenariosStartTime;
-		private static TimeSpan _beforeScenarioTimeSpent;
-		private static TimeSpan _afterScenarioTimeSpent;
-		private static TimeSpan _clearDataTimeSpent;
-		private static TimeSpan _createDataTimeSpent;
-		private static int _scenarioCount;
-
 		[BeforeTestRun]
 		public static void BeforeTestRun()
 		{
-			var startTime = DateTime.Now;
-			_testRunStartTime = DateTime.Now;
-			_beforeScenarioTimeSpent = TimeSpan.Zero;
-			_afterScenarioTimeSpent = TimeSpan.Zero;
-			_clearDataTimeSpent = TimeSpan.Zero;
-			_createDataTimeSpent = TimeSpan.Zero;
-			_scenarioCount = 0;
-
 			Browser.PrepareForTestRun();
 
 			try
@@ -61,71 +45,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				Browser.Close();
 				throw;
 			}
-
-			Log.Write("BeforeTestRun took " + DateTime.Now.Subtract(startTime));
-			_testRunScenariosStartTime = DateTime.Now;
 		}
 
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{
-			_scenarioCount++;
-			var startTime = DateTime.Now;
-
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
-
-			var spentTime = DateTime.Now.Subtract(startTime);
-			_beforeScenarioTimeSpent = _beforeScenarioTimeSpent.Add(spentTime);
-
-			Log.Write("BeforeScenario took " + spentTime);
 		}
 
 		[AfterScenario]
 		public void AfterScenario()
 		{
-			var startTime = DateTime.Now;
-
 			HandleScenarioException();
-
 			TestControllerMethods.AfterScenario();
-
-			var spentTime = DateTime.Now.Subtract(startTime);
-			_afterScenarioTimeSpent = _afterScenarioTimeSpent.Add(spentTime);
-
-			Log.Write("AfterScenario took " + spentTime);
-			Log.Write("Run as taken " + DateTime.Now.Subtract(_testRunStartTime));
-
-			Log.Write("Scenario time " + DateTime.Now.Subtract(_testRunScenariosStartTime));
-			Log.Write("BeforeScenario time " + _beforeScenarioTimeSpent);
-			Log.Write("AfterScenario time " + _afterScenarioTimeSpent);
-			Log.Write("ClearData time " + _clearDataTimeSpent);
-			Log.Write("CreateData time " + _createDataTimeSpent);
-
-			Log.Write("BeforeScenario time/scenario " + TimeSpan.FromMilliseconds(_beforeScenarioTimeSpent.TotalMilliseconds / _scenarioCount));
-			Log.Write("AfterScenario time/scenario " + TimeSpan.FromMilliseconds(_afterScenarioTimeSpent.TotalMilliseconds / _scenarioCount));
-			Log.Write("ClearData time/scenario " + TimeSpan.FromMilliseconds(_clearDataTimeSpent.TotalMilliseconds / _scenarioCount));
-			Log.Write("CreateData time/scenario " + TimeSpan.FromMilliseconds(_createDataTimeSpent.TotalMilliseconds / _scenarioCount));
 		}
 
 		[AfterTestRun]
 		public static void AfterTestRun()
 		{
-			var startTime = DateTime.Now;
-
 			if (Browser.IsStarted())
 				Browser.Close();
-
 			TestSiteConfigurationSetup.TearDown();
-
-			Log.Write("AfterTestRun took " + DateTime.Now.Subtract(startTime));
 		}
 
 
 		private static void CreateData()
 		{
-			var startTime = DateTime.Now;
-
 			TestDataSetup.CreateLegacyTestData();
 
 			DataContext.Data().Setup(new CommonContract());
@@ -133,9 +79,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataContext.Data().Setup(new CommonScenario());
 			DataContext.Data().Setup(new SecondScenario());
 			DataContext.Data().Persist();
-
-			var spentTime = DateTime.Now.Subtract(startTime);
-			_createDataTimeSpent = _createDataTimeSpent.Add(spentTime);
 		}
 
 

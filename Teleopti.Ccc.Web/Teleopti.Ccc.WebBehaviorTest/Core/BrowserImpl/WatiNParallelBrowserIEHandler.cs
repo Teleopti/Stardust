@@ -94,13 +94,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 		public void Close()
 		{
-			var startTime = DateTime.Now;
-
 			_browser.Close();
 			_browser.Dispose();
 			_browser = null;
-
-			Log.Write("Close took " + DateTime.Now.Subtract(startTime));
 		}
 
 	}
