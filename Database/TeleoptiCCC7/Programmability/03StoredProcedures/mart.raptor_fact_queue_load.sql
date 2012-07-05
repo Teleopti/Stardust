@@ -1,4 +1,5 @@
-USE [Main_Demoreg_TeleoptiCCC7]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[raptor_fact_queue_load]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[raptor_fact_queue_load]
 GO
 /****** Object:  StoredProcedure [mart].[raptor_fact_queue_load]    Script Date: 07/05/2012 11:11:37 ******/
 SET ANSI_NULLS ON
@@ -16,7 +17,7 @@ GO
 -- when			who		what
 -- 2011-10-26	DavidJ	#16688
 -- =============================================
-ALTER PROCEDURE [mart].[raptor_fact_queue_load] 
+CREATE PROCEDURE [mart].[raptor_fact_queue_load] 
 AS
 BEGIN
 --temp tables
