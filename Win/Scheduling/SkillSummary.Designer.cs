@@ -106,6 +106,7 @@
 			// 
 			this.textBoxSummeryName.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textBoxSummeryName.Location = new System.Drawing.Point(204, 4);
+        	this.textBoxSummeryName.MaxLength = 45;
 			this.textBoxSummeryName.Margin = new System.Windows.Forms.Padding(4);
 			this.textBoxSummeryName.Name = "textBoxSummeryName";
 			this.textBoxSummeryName.Size = new System.Drawing.Size(305, 22);
