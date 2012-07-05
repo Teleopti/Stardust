@@ -5,6 +5,7 @@
 /// <reference path="~/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
+/// <reference path="jquery.ui.connector.js"/>
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 

@@ -89,7 +89,7 @@
 			this._setConnected();
 			this._connector
 				.animate({
-					'right': '+=8',
+					'right': '-7',
 					'border-right': 0
 				})
 				;
