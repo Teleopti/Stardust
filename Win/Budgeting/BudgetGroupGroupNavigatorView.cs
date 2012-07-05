@@ -87,10 +87,12 @@ namespace Teleopti.Ccc.Win.Budgeting
 		public int BudgetingActionPaneHeight
 		{
 			get { return splitContainer1.Height - splitContainer1.SplitterDistance; }
-			set {
-			    splitContainer1.SplitterDistance = splitContainer1.Height - value > 0
-			                                           ? splitContainer1.Height - value
-			                                           : -1*(splitContainer1.Height - value);
+			set 
+            {
+                var calculatedSplitterDistance = splitContainer1.Height - value;
+                splitContainer1.SplitterDistance = calculatedSplitterDistance > 0
+                                                       ? calculatedSplitterDistance
+                                                       : -1 * (calculatedSplitterDistance);
 			}
 		}
 
