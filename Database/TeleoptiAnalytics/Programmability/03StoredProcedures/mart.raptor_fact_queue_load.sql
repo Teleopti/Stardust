@@ -1,6 +1,11 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[raptor_fact_queue_load]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[raptor_fact_queue_load]
+USE [Main_Demoreg_TeleoptiAnalytics]
 GO
+/****** Object:  StoredProcedure [mart].[raptor_fact_queue_load]    Script Date: 07/04/2012 15:28:44 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 -- =============================================
 -- Author:		<KJ
 -- Create date: <2009-02-02>
@@ -11,7 +16,7 @@ GO
 -- when			who		what
 -- 2011-10-26	DavidJ	#16688
 -- =============================================
-CREATE PROCEDURE [mart].[raptor_fact_queue_load] 
+ALTER PROCEDURE [mart].[raptor_fact_queue_load] 
 AS
 BEGIN
 --DECLARE
@@ -31,7 +36,6 @@ DECLARE @min_date smalldatetime
 CREATE TABLE #queues(
 	[queue_id] [int] NOT NULL
 )
-
 CREATE TABLE #stg_queue(
 	[date] [datetime] NOT NULL,
 	[interval] [nvarchar](50) NOT NULL,
@@ -52,61 +56,14 @@ CREATE TABLE #stg_queue(
 	[ans_servicelevel_cnt] [int] NULL,
 	[wait_dur] [int] NULL,
 	[aband_short_call_cnt] [int] NULL,
-	[aband_within_sl_cnt] [int] NULL
+	[aband_within_sl_cnt] [int] NULL,
 )
 
-CREATE TABLE #bridge_time_zone(
-	date_id int,
-	interval_id int,
-	time_zone_id int,
-	local_date_id int,
-	local_interval_id int
-)
-
-SELECT  
-	@min_date= min(date),
-	@max_date= max(date)
-FROM
-	mart.v_stg_queue
- 
-
-SET	@min_date = convert(smalldatetime,floor(convert(decimal(18,4),@min_date )))
-SET @max_date	= convert(smalldatetime,floor(convert(decimal(18,4),@max_date )))
-
-SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @min_date = date_date)
-SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @max_date = date_date)
-
-
-DECLARE @time_zone_id smallint
-SELECT 
-	@time_zone_id = ds.time_zone_id
-FROM
-	mart.sys_datasource ds
-WHERE 
-	ds.datasource_id= @datasource_id
-
---Get date and interval grouped so that we dont get duplicated rows at day light saving switches
-INSERT #bridge_time_zone(date_id,time_zone_id,local_date_id,local_interval_id)
-SELECT	min(date_id),	time_zone_id, 	local_date_id,	local_interval_id
-FROM mart.bridge_time_zone 
-WHERE time_zone_id	= @time_zone_id	
-AND local_date_id BETWEEN @start_date_id AND @end_date_id
-GROUP BY time_zone_id, local_date_id,local_interval_id
-
-UPDATE #bridge_time_zone
-SET interval_id= bt.interval_id
-FROM 
-(SELECT date_id,local_date_id,local_interval_id,interval_id= MIN(interval_id)
-FROM mart.bridge_time_zone
-WHERE time_zone_id=@time_zone_id
-GROUP BY date_id,local_date_id,local_interval_id)bt
-INNER JOIN #bridge_time_zone temp ON temp.local_interval_id=bt.local_interval_id
-AND temp.date_id=bt.date_id
-AND temp.local_date_id=bt.local_date_id
 
 --ANALYZE AND UPDATE DATA IN TEMPORARY TABLE
 INSERT INTO #stg_queue
 SELECT * FROM mart.v_stg_queue
+
 
 UPDATE #stg_queue
 SET queue_code = d.queue_original_id
@@ -117,11 +74,19 @@ AND d.datasource_id = @datasource_id
 WHERE (stg.queue_code is null OR stg.queue_code='')
 
 ALTER TABLE  #stg_queue ADD interval_id smallint
+ALTER TABLE #stg_queue ADD [datetime_utc] [datetime] null
 
 UPDATE #stg_queue
-SET interval_id= i.interval_id
+SET interval_id= i.interval_id,
+	datetime_utc=DATEADD(mi, DATEPART(mi,interval_start)+(DATEPART(hh,interval_start)*60), stg.date)
 FROM mart.dim_interval i
 INNER JOIN #stg_queue stg ON stg.interval collate database_default =LEFT(i.interval_name,5)
+
+SELECT  
+	@min_date= min(stg.datetime_utc) ,
+	@max_date= max(stg.datetime_utc)
+FROM
+	#stg_queue stg
 
 --AF:Speed up the delete by preparing the queues
 INSERT INTO #queues
@@ -132,10 +97,12 @@ INNER JOIN #stg_queue stg
 WHERE dq.datasource_id = @datasource_id 
 
 -- Delete rows for the queues imported from file
-DELETE FROM mart.fact_queue  
-WHERE local_date_id BETWEEN @start_date_id 
-AND @end_date_id AND datasource_id = @datasource_id
-and exists (select 1 from #queues WHERE mart.fact_queue.queue_id = #queues.queue_id)
+DELETE mart.fact_queue FROM mart.fact_queue q 
+		inner join mart.dim_interval i on i.interval_id=q.interval_id 
+		inner join mart.dim_date d on d.date_id=q.date_id
+WHERE DATEADD(mi, DATEPART(mi,interval_start)+(DATEPART(hh,interval_start)*60), d.date_date) BETWEEN  
+@min_date AND @max_date AND q.datasource_id = @datasource_id
+and exists (select 1 from #queues WHERE q.queue_id = #queues.queue_id)
 
 INSERT INTO mart.fact_queue
 	(
@@ -165,8 +132,8 @@ INSERT INTO mart.fact_queue
 	datasource_update_date
 	)
 SELECT
-	date_id						= bridge.date_id, 
-	interval_id					= bridge.interval_id, 
+	date_id						= d.date_id, 
+	interval_id					= stg.interval_id, 
 	queue_id					= q.queue_id, 
 	local_date_id				= d.date_id,
 	local_interval_id			= stg.interval_id, 
@@ -191,20 +158,11 @@ SELECT
 	datasource_update_date		= '1900-01-01'
 
 FROM
-	(SELECT * FROM #stg_queue WHERE date between @min_date and @max_date) stg
+	(SELECT * FROM #stg_queue WHERE datetime_utc between @min_date and @max_date) stg
 JOIN
 	mart.dim_date		d
 ON
 	stg.date	= d.date_date
-JOIN
-	mart.dim_interval i
-ON
-	stg.interval collate database_default = substring(i.interval_name,1,5)
-JOIN
- #bridge_time_zone bridge
-ON
-	d.date_id		= bridge.local_date_id		AND
-	i.interval_id	= bridge.local_interval_id	
 JOIN
 	mart.dim_queue		q
 ON
