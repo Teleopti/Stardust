@@ -7,6 +7,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
 	public class ProcessNotFoundException : Exception
 	{
 		public ProcessNotFoundException(string message)

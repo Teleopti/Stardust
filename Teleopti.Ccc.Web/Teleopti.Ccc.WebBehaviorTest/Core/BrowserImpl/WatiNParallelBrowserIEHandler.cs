@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		//    windowHandle = _browser.hWnd;
 		//}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
 		public void PrepareForTestRun()
 		{
 			using (new SystemLevelLock("TestBrowserCleaningLock"))
