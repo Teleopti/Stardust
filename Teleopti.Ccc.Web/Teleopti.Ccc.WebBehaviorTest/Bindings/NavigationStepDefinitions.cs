@@ -92,9 +92,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I view my week schedule one month ago")]
 		public void GivenIViewMyWeekScheduleOneMonthAgo()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoWeekSchedulePage(DateTime.Now.AddMonths(1));
 		}
 

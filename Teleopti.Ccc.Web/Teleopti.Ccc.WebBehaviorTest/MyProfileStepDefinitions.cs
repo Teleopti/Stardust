@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<PasswordPage>();
 			page.Password.Value = newPassword;
 			page.PasswordValidation.Value = newPassword + "fel";
-			page.OldPassword.TypeText(TestData.CommonPassword);
+			page.OldPassword.Value = TestData.CommonPassword;
 			Browser.Current.Eval("$('input#password').keyup();");
 		}
 
