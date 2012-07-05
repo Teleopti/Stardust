@@ -65,10 +65,11 @@
 						var heightPixel = bottomPixel - topPixel;
 
 						const int pixelToDisplayAll = 32;
-						const int pixelToDisplayTitle = 18;
+						const int pixelToDisplayTitle = 15;
+						var tooltipText = period.Meeting == null ? period.TimeSpan : string.Format("<div>{0}</div><div><dl><dt>Subject: </dt><dd> {1} </dd><dt>Location: </dt><dd> {2} </dd></dl></div>", period.TimeSpan, period.Meeting.Title, period.Meeting.Location);
 
 						<div @(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"week-schedule-layer absolute tooltip\"") : @Html.Raw("class=\"week-schedule-layer absolute\"")) 
-							tooltip-title="@period.Title" tooltip-text="@period.TimeSpan" 
+							tooltip-title="@period.Title" tooltip-text="@tooltipText" 
 							style="background-color: @string.Format("rgba({0},{1})", period.Color, dimmed); height: @(heightPixel)px; top: @(topPixel)px;">
 							
 							<strong @(heightPixel > pixelToDisplayTitle ? @Html.Raw("class=\"truncate\"") : @Html.Raw("class=\"truncate displaynone\""))>@period.Title</strong>
@@ -76,7 +77,7 @@
 
 							@if (period.Meeting != null)
 							{
-								<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>
+								<div class="icon meeting floatright"></div>
 							}
 						</div>
 					}
