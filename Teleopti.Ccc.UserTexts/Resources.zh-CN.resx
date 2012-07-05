@@ -9233,4 +9233,379 @@ Periods</comment>
     <value>起始时间{0}必须早于结束时间{1}.</value>
     <comment>Start time 19:00 should be earlier than end time 18:00.</comment>
   </data>
+  <data name="IncludeTroubleshootingInformation" xml:space="preserve">
+    <value>包含疑难排解信息</value>
+  </data>
+  <data name="RemoveWriteProtection" xml:space="preserve">
+    <value>除去写保护</value>
+  </data>
+  <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
+    <value>{0} 不能被排班的坐席天数.</value>
+  </data>
+  <data name="PreferenceFulfillment" xml:space="preserve">
+    <value>完成的偏好</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>缺席申请 {0} 被批准了.</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>导入</value>
+  </data>
+  <data name="ContractTimeDesc" xml:space="preserve">
+    <value>按合同时间倒序排列</value>
+  </data>
+  <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
+    <value>您的偏好共有 {0} 休息日.</value>
+  </data>
+  <data name="RotationFulfillment" xml:space="preserve">
+    <value>完成的轮转</value>
+  </data>
+  <data name="RequestHistory" xml:space="preserve">
+    <value>申请历史记录</value>
+  </data>
+  <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
+    <value>您应该有 {0} 和 {1} 休息日.</value>
+  </data>
+  <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
+    <value>目前无法访问Teleopti客户页面！</value>
+  </data>
+  <data name="ImportStaffing" xml:space="preserve">
+    <value>导入人员</value>
+  </data>
+  <data name="ImportWorkload" xml:space="preserve">
+    <value>导入工作量</value>
+  </data>
+  <data name="ContractTimeAsc" xml:space="preserve">
+    <value>按合同时间升序排列</value>
+  </data>
+  <data name="TeamSchedule" xml:space="preserve">
+    <value>按组排班</value>
+  </data>
+  <data name="ThePersonsRoles" xml:space="preserve">
+    <value>人员角色</value>
+  </data>
+  <data name="ImportFileNameColon" xml:space="preserve">
+    <value>导入文件名：</value>
+  </data>
+  <data name="Persons" xml:space="preserve">
+    <value>人员</value>
+  </data>
+  <data name="ViewHistory" xml:space="preserve">
+    <value>查看历史</value>
+  </data>
+  <data name="ActualAfterCallWorkTime" xml:space="preserve">
+    <value>实际呼叫后工作时间</value>
+  </data>
+  <data name="PermissionsViewer" xml:space="preserve">
+    <value>权限查看者</value>
+  </data>
+  <data name="PersonFinderFieldAll" xml:space="preserve">
+    <value>所有</value>
+  </data>
+  <data name="FunctionsCap" xml:space="preserve">
+    <value>功能</value>
+  </data>
+  <data name="FromRole" xml:space="preserve">
+    <value>从角色</value>
+  </data>
+  <data name="PersonFinderFieldBudgetGroup" xml:space="preserve">
+    <value>预算组</value>
+  </data>
+  <data name="NoTeamsAvailable" xml:space="preserve">
+    <value>没有可用的组</value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>已经履行的学生可用量</value>
+  </data>
+  <data name="PersonFinderFieldContract" xml:space="preserve">
+    <value>合同</value>
+  </data>
+  <data name="PersonFinderFieldContractSchedule" xml:space="preserve">
+    <value>合同排班</value>
+  </data>
+  <data name="PersonFinderFieldOrganization" xml:space="preserve">
+    <value>组织</value>
+  </data>
+  <data name="MustHaveFulfillment" xml:space="preserve">
+    <value>已经履行的必须拥有班次</value>
+  </data>
+  <data name="YourPreferencesCanResultXHours" xml:space="preserve">
+    <value>您的偏好一共是 {0} 小时.</value>
+  </data>
+  <data name="ImportWorkloadAndStaffing" xml:space="preserve">
+    <value>导入工作量和人员</value>
+  </data>
+  <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
+    <value>新的换班申请 {0}, 请在您的申请列表里面批准或拒绝.</value>
+  </data>
+  <data name="ResourceCalculateEveryColon" xml:space="preserve">
+    <value>计量每个资源:</value>
+  </data>
+  <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
+    <value>您的偏好从 {0} 到 {1} 小时.</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>缺席申请 {0} 已被拒绝.</value>
+  </data>
+  <data name="YouShouldWorkXHours" xml:space="preserve">
+    <value>您应该工作 {0} 小时.</value>
+  </data>
+  <data name="SkillNameColon" xml:space="preserve">
+    <value>技能名称：</value>
+  </data>
+  <data name="ShiftLimits" xml:space="preserve">
+    <value>班次限制</value>
+  </data>
+  <data name="OptimizationSteps" xml:space="preserve">
+    <value>优化步骤</value>
+  </data>
+  <data name="XRequests" xml:space="preserve">
+    <value>{0} 申请(s)</value>
+  </data>
+  <data name="PersonFinderFieldSkill" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="PersonFinderFieldPartTimePercentage" xml:space="preserve">
+    <value>非全职百分比</value>
+  </data>
+  <data name="RowsPerPageFifty" xml:space="preserve">
+    <value>五十</value>
+  </data>
+  <data name="MustHaves" xml:space="preserve">
+    <value>必须有的</value>
+  </data>
+  <data name="MinimumStaffing" xml:space="preserve">
+    <value>最少人员</value>
+  </data>
+  <data name="JobHistoryView" xml:space="preserve">
+    <value>查看工作历史记录</value>
+  </data>
+  <data name="MaximumStaffing" xml:space="preserve">
+    <value>最多员工</value>
+  </data>
+  <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
+    <value>导出每天班次到PDF文件</value>
+  </data>
+  <data name="RowsPerPageThirty" xml:space="preserve">
+    <value>三十</value>
+  </data>
+  <data name="RowsPerPageTwenty" xml:space="preserve">
+    <value>二十</value>
+  </data>
+  <data name="RowsPerPage" xml:space="preserve">
+    <value>每页行数</value>
+  </data>
+  <data name="TogglePinStatus" xml:space="preserve">
+    <value>锁定到最前端</value>
+  </data>
+  <data name="ExtendingAndReducingTime" xml:space="preserve">
+    <value>为灵活时间坐席增减工作时间</value>
+  </data>
+  <data name="ExtendReduceTimeForFlexibleAgents" xml:space="preserve">
+    <value>调整灵活工作时间</value>
+  </data>
+  <data name="MaximumSeats" xml:space="preserve">
+    <value>最大坐席</value>
+  </data>
+  <data name="YouShouldHaveXDaysOff" xml:space="preserve">
+    <value>您应该有 {0} 休息日.</value>
+  </data>
+  <data name="KeepStartEndTimes" xml:space="preserve">
+    <value>保持开始和结束时间</value>
+  </data>
+  <data name="MeetingActivityRequired" xml:space="preserve">
+    <value>选择一个活动！</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
+    <value>换班申请 {0} 对方已接受.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>换班申请 {0} 已被批准.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>换班申请 {0} 已被拒绝.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
+    <value>换班申请 {0} 由于排班变更必须再次被接受.</value>
+  </data>
+  <data name="ExternalResourceInUse" xml:space="preserve">
+    <value>在使用外部资源</value>
+  </data>
+  <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
+    <value>灵活工作时间的班次</value>
+  </data>
+  <data name="KeepShifts" xml:space="preserve">
+    <value>保持班次</value>
+  </data>
+  <data name="KeepShiftCategories" xml:space="preserve">
+    <value>保持班次类型</value>
+  </data>
+  <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
+    <value>另一个程序正在使用外部资源,请稍候再试.</value>
+  </data>
+  <data name="NoShiftsFound" xml:space="preserve">
+    <value>找不到班次</value>
+  </data>
+  <data name="NoAvailableShifts" xml:space="preserve">
+    <value>没有合适的班次</value>
+  </data>
+  <data name="FindThreeDots" xml:space="preserve">
+    <value>发现...</value>
+  </data>
+  <data name="ErrorOccuredWhenSavingSettings" xml:space="preserve">
+    <value>保存设置时出错.</value>
+  </data>
+  <data name="HavePermissionToRestrictedScenariosButNotForSelectedTeams" xml:space="preserve">
+    <value>您拥有一般权限可以查看限制场景，但不适用于选中的组和日期.</value>
+  </data>
+  <data name="ShowPublicNote" xml:space="preserve">
+    <value>显示公开注释</value>
+  </data>
+  <data name="KeepExistingDaysOff" xml:space="preserve">
+    <value>保持现有的休息日</value>
+  </data>
+  <data name="WorkloadNameColon" xml:space="preserve">
+    <value>工作量名称：</value>
+  </data>
+  <data name="NoPermissionToViewRestrictedScenarios" xml:space="preserve">
+    <value>您没有权限查看限制场景，所有场景多已经被限制</value>
+  </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>申请津贴</value>
+  </data>
+  <data name="AvailabilityFulfillment" xml:space="preserve">
+    <value>履行的可用量</value>
+  </data>
+  <data name="DuplicateDaysOffValidationError" xml:space="preserve">
+    <value>在 {0} 有重复休息日</value>
+  </data>
+  <data name="ExportForecastToOtherBusinessUnit" xml:space="preserve">
+    <value>导出预测到其它业务单元</value>
+  </data>
+  <data name="NoAbsenceDefined" xml:space="preserve">
+    <value>您必须创建至少一个缺席来完成它</value>
+  </data>
+  <data name="NoAbsenceDefinedCaption" xml:space="preserve">
+    <value>未拒绝缺席申请</value>
+  </data>
+  <data name="FullWeekEndsOff" xml:space="preserve">
+    <value>周末全休</value>
+  </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>日期格式</value>
+  </data>
+  <data name="Block" xml:space="preserve">
+    <value>阻止</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>已更新</value>
+  </data>
+  <data name="PasswordWrong" xml:space="preserve">
+    <value>密码错误！</value>
+  </data>
+  <data name="PasswordOld" xml:space="preserve">
+    <value>旧密码</value>
+  </data>
+  <data name="BrowserDefault" xml:space="preserve">
+    <value>默认浏览器</value>
+  </data>
+  <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
+    <value>子技能的间隔长度应该和父技能的一样, 是 {0} 分钟.</value>
+  </data>
+  <data name="AbsenceType" xml:space="preserve">
+    <value>缺席类型：</value>
+  </data>
+  <data name="AbsenceRequestsWeb" xml:space="preserve">
+    <value>缺席申请</value>
+  </data>
+  <data name="ConsecutiveDaysOff" xml:space="preserve">
+    <value>连续的休息日</value>
+  </data>
+  <data name="RowsPerPageForty" xml:space="preserve">
+    <value>四十</value>
+  </data>
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+    <value>您应该工作 {0} 到 {1} 小时.</value>
+  </data>
+  <data name="ConsecutiveWorkDays" xml:space="preserve">
+    <value>连续工作日</value>
+  </data>
+  <data name="DaysOffFromFlexibleWorkTime" xml:space="preserve">
+    <value>灵活工作时间的休息日</value>
+  </data>
+  <data name="CustomReports" xml:space="preserve">
+    <value>自定义报表</value>
+  </data>
+  <data name="DoNotBreakMaximumSeats" xml:space="preserve">
+    <value>不要打破最大坐席数</value>
+  </data>
+  <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
+    <value>在制定的排班周期中已经有了缺席</value>
+  </data>
+  <data name="PersonFinderFieldShiftBag" xml:space="preserve">
+    <value>班次集合</value>
+  </data>
+  <data name="ThisIsTheDefaultScenario" xml:space="preserve">
+    <value>这是默认场景</value>
+  </data>
+  <data name="FulfillRestrictions" xml:space="preserve">
+    <value>实现限制条件</value>
+  </data>
+  <data name="FullDay" xml:space="preserve">
+    <value>全天</value>
+  </data>
+  <data name="ShiftSelection" xml:space="preserve">
+    <value>选中班次</value>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>学生可用性</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>组</value>
+  </data>
+  <data name="ExtendReduceDaysoffForFlexibleAgents" xml:space="preserve">
+    <value>调整灵活休息日</value>
+  </data>
+  <data name="FullWeekEndDaysOff" xml:space="preserve">
+    <value>周末休息日</value>
+  </data>
+  <data name="RunningBackgroundJob" xml:space="preserve">
+    <value>正在运行后台任务</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>任何地点</value>
+  </data>
+  <data name="RowsPerPageTen" xml:space="preserve">
+    <value>十</value>
+  </data>
+  <data name="MissingAbsenceType" xml:space="preserve">
+    <value>缺少缺席类型</value>
+  </data>
+  <data name="SendRequest" xml:space="preserve">
+    <value>发送</value>
+  </data>
+  <data name="DayOffTolerancMinus" xml:space="preserve">
+    <value>允许的休息日</value>
+  </data>
+  <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+    <value>未发现人员周期</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>按每个坐席分类的申请</value>
+  </data>
+  <data name="ExtendingAndReducingDaysoff" xml:space="preserve">
+    <value>为灵活坐席增减休息日</value>
+  </data>
+  <data name="DayOffTolerancePlus" xml:space="preserve">
+    <value>允许的休息日 +</value>
+  </data>
+  <data name="TargetValue" xml:space="preserve">
+    <value>目标值</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>您正在使用更多坐席 ({0}) 已经大于了您的许可证允许值 ({1}). 您现在有 {2} 天减少坐席数或者应用新的覆盖更多坐席的许可证</value>
+  </data>
+  <data name="Teleopti" xml:space="preserve">
+    <value>Teleopti</value>
+  </data>
 </root>
