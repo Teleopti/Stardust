@@ -10412,7 +10412,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Skicka</value>
   </data>
   <data name="OverridePeriod" xml:space="preserve">
-    <value>Ersätt period</value>
+    <value>Ersätt periodtid</value>
   </data>
   <data name="OverrideHoursPerDay" xml:space="preserve">
     <value>Ersätt timmar per dag</value>
