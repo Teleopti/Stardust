@@ -41,25 +41,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			{
 				var result = ProcessHelpers.TryToCloseProcess(
 					ProcessName,
-					new Func<string, bool>[]
+					new Func<TryResult>[]
 						{
-							n => TryCloseByWatiNCloseNDispose(_browser),
-							ProcessHelpers.TryCloseByClosingMainWindow,
-							ProcessHelpers.TryCloseByKillingProcess
+							() => TryCloseByWatiNCloseNDispose(),
+							() => ProcessHelpers.TryCloseByClosingMainWindow(ProcessName),
+							() => ProcessHelpers.TryCloseByKillingProcess(ProcessName)
 						});
 				if (!result)
 					throw new ApplicationException("Browser failed to close.");
 			}
 			finally
 			{
+				_browser = null;
 				ReleaseBrowser();
 			}
-
+			
 			Log.Write("Close took " + DateTime.Now.Subtract(startTime));
 		}
-
-
-
 
 
 		private void MakeSureBrowserIsNotRunning()
@@ -70,10 +68,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			{
 				var result = ProcessHelpers.TryToCloseProcess(
 					ProcessName,
-					new Func<string, bool>[]
+					new Func<TryResult>[]
 						{
-							ProcessHelpers.TryCloseByClosingMainWindow,
-							ProcessHelpers.TryCloseByKillingProcess
+							() => ProcessHelpers.TryCloseByClosingMainWindow(ProcessName),
+							() => ProcessHelpers.TryCloseByKillingProcess(ProcessName)
 						});
 				if (!result)
 					throw new ApplicationException("Browser failed to close when making sure it isnt running");
@@ -84,15 +82,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 
 
-		private static bool TryCloseByWatiNCloseNDispose(WatiN.Core.Browser browser)
+		private TryResult TryCloseByWatiNCloseNDispose()
 		{
-			return Task.Factory
+			var result = Task.Factory
 				.StartNew(() =>
 				          	{
-				          		browser.Close();
-				          		browser.Dispose();
+				          		_browser.Close();
+								_browser.Dispose();
 				          	})
 				.Wait(TimeSpan.FromSeconds(2));
+			return result ? TryResult.Passed : TryResult.Failure;
 		}
 
 

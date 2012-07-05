@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			Settings.HighLightElement = true;
 			Settings.MakeNewIe8InstanceNoMerge = true;
 			Settings.MakeNewIeInstanceVisible = true;
-			_browser = new IE();
+			_browser = new IE {AutoClose = true};
 			_browser.ClearCache();
 			_browser.ClearCookies();
 			_browser.BringToFront();
@@ -47,18 +47,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			{
 				var result = ProcessHelpers.TryToCloseProcess(
 					ProcessName,
-					new Func<string, bool>[]
+					new Func<TryResult>[]
 						{
-							n => TryCloseByWatiNCloseNDispose(_browser),
-							ProcessHelpers.TryCloseByClosingMainWindow,
-							n => TryCloseByWatiNForceClose(_browser),
-							ProcessHelpers.TryCloseByKillingProcess
+							() => TryCloseByWatiNCloseNDispose(),
+							() => ProcessHelpers.TryCloseByClosingMainWindow(ProcessName),
+							() => TryCloseByWatiNForceClose(),
+							() => ProcessHelpers.TryCloseByKillingProcess(ProcessName)
 						});
 				if (!result)
 					throw new ApplicationException("Browser failed to close.");
 			}
 			finally
 			{
+				_browser = null;
 				ReleaseBrowser();
 			}
 
@@ -77,10 +78,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			{
 				var result = ProcessHelpers.TryToCloseProcess(
 					ProcessName,
-					new Func<string, bool>[]
+					new Func<TryResult>[]
 						{
-							ProcessHelpers.TryCloseByClosingMainWindow,
-							ProcessHelpers.TryCloseByKillingProcess
+							() => ProcessHelpers.TryCloseByClosingMainWindow(ProcessName),
+							() => ProcessHelpers.TryCloseByKillingProcess(ProcessName)
 						});
 				if (!result)
 					throw new ApplicationException("Browser failed to close when making sure it isnt running");
@@ -91,29 +92,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 
 
-		private static bool TryCloseByWatiNForceClose(IE browser)
+		private TryResult TryCloseByWatiNForceClose()
 		{
-			browser.ForceClose();
-			return true;
+			_browser.ForceClose();
+			return TryResult.Passed;
 		}
 
-		private static bool TryCloseByWatiNCloseNDispose(WatiN.Core.Browser browser)
+		private TryResult TryCloseByWatiNCloseNDispose()
 		{
 			if (_closeByWatiNCloseNDisposeFailed)
-				return false;
+				return TryResult.Failure;
 			var success = Task.Factory
 				.StartNew(() =>
 				          	{
-				          		browser.Close();
-				          		browser.Dispose();
+								_browser.Close();
+								_browser.Dispose();
 				          	})
 				.Wait(TimeSpan.FromSeconds(2));
 			if (!success)
 			{
 				_closeByWatiNCloseNDisposeFailed = true;
-				return false;
+				return TryResult.Failure;
 			}
-			return true;
+			return TryResult.Passed;
 		}
 
 

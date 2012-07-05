@@ -15,6 +15,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		}
 	}
 
+	public enum TryResult
+	{
+		Failure,
+		Passed,
+		NotFound
+	}
+
 	public static class ProcessHelpers
 	{
 		internal static void CloseByClosingMainWindow(string processName, IntPtr windowHandle)
@@ -22,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			ProcessByMainWindow(processName, windowHandle).CloseMainWindow();
 		}
 
-		internal static bool TryCloseByClosingMainWindow(string processName, IntPtr windowHandle)
+		internal static TryResult TryCloseByClosingMainWindow(string processName, IntPtr windowHandle)
 		{
 			return Try(() => CloseByClosingMainWindow(processName, windowHandle));
 		}
@@ -32,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			ProcessById(processName, processId).CloseMainWindow();
 		}
 
-		internal static bool TryCloseByClosingMainWindow(string processName, int processId)
+		internal static TryResult TryCloseByClosingMainWindow(string processName, int processId)
 		{
 			return Try(() => CloseByClosingMainWindow(processName, processId));
 		}
@@ -42,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			ProcessByName(processName).ForEach(p => p.CloseMainWindow());
 		}
 
-		internal static bool TryCloseByClosingMainWindow(string processName)
+		internal static TryResult TryCloseByClosingMainWindow(string processName)
 		{
 			return Try(() => CloseByClosingMainWindow(processName));
 		}
@@ -54,7 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			ProcessByMainWindow(processName, windowHandle).Kill();
 		}
 
-		internal static bool TryCloseByKillingProcess(string processName, IntPtr windowHandle)
+		internal static TryResult TryCloseByKillingProcess(string processName, IntPtr windowHandle)
 		{
 			return Try(() => CloseByKillingProcess(processName, windowHandle));
 		}
@@ -64,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			ProcessById(processName, processId).Kill();
 		}
 
-		internal static bool TryCloseByKillingProcess(string processName, int processId)
+		internal static TryResult TryCloseByKillingProcess(string processName, int processId)
 		{
 			return Try(() => CloseByKillingProcess(processName, processId));
 		}
@@ -74,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			ProcessByName(processName).ForEach(p => p.Kill());
 		}
 
-		internal static bool TryCloseByKillingProcess(string processName)
+		internal static TryResult TryCloseByKillingProcess(string processName)
 		{
 			return Try(() => CloseByKillingProcess(processName));
 		}
@@ -91,57 +98,47 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 
 
-		internal static bool TryToCloseProcess(string processName, IEnumerable<Func<string, bool>> attempts)
+		internal static bool TryToCloseProcess(string processName, params Func<TryResult>[] attempts)
 		{
-			Func<bool> verify = () => QueryProcessesByName(processName).Count() == 0;
-			if (verify.Invoke())
+			Func<bool> isClosed = () => QueryProcessesByName(processName).Count() == 0;
+			if (isClosed.Invoke())
 				return true;
-			return attempts.Any(attempt =>
-			                    	{
-										return TryToCloseProcess(verify, () => attempt(processName));
-			                    	});
+			return attempts.Any(attempt => TryToCloseProcess(isClosed, attempt));
 		}
 
-		internal static bool TryToCloseProcess(string processName, IntPtr windowHandle, IEnumerable<Func<string, IntPtr, bool>> attempts)
+		internal static bool TryToCloseProcess(string processName, IntPtr windowHandle, params Func<TryResult>[] attempts)
 		{
-			Func<bool> verify = () => QueryProcessesByMainWindow(processName, windowHandle).Count() == 0;
-			if (verify.Invoke())
+			Func<bool> isClosed = () => QueryProcessesByMainWindow(processName, windowHandle).Count() == 0;
+			if (isClosed.Invoke())
 				return true;
-			return attempts.Any(attempt =>
-			                    	{
-										return TryToCloseProcess(verify, () => attempt(processName, windowHandle));
-			                    	});
+			return attempts.Any(attempt => TryToCloseProcess(isClosed, attempt));
 		}
 
-		internal static bool TryToCloseProcess(string processName, int processId, IEnumerable<Func<string, int, bool>> attempts)
+		internal static bool TryToCloseProcess(string processName, int processId, params Func<TryResult>[] attempts)
 		{
-			Func<bool> verify = () => QueryProcessesById(processName, processId).Count() == 0;
-			if (verify.Invoke())
+			Func<bool> isClosed = () => QueryProcessesById(processName, processId).Count() == 0;
+			if (isClosed.Invoke())
 				return true;
-			return attempts.Any(attempt =>
-			                    	{
-			                    		return TryToCloseProcess(verify, () => attempt(processName, processId));
-			                    	});
+			return attempts.Any(attempt => TryToCloseProcess(isClosed, attempt));
 		}
 
-		private static bool TryToCloseProcess(Func<bool> verify, Func<bool> attempt)
+		private static bool TryToCloseProcess(Func<bool> isClosed, Func<TryResult> attempt)
 		{
-			var attemptSuccessful = false;
+			TryResult result;
 			try
 			{
-				attemptSuccessful = attempt.Invoke();
+				result = attempt.Invoke();
 			}
 			catch (Exception)
 			{
 				return false;
 			}
-			if (attemptSuccessful)
-			{
-				return verify.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
-			}
+			if (result == TryResult.Passed)
+				return isClosed.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(20));
+			if (result == TryResult.NotFound)
+				return isClosed.Invoke();
 			return false;
 		}
-
 
 
 
@@ -193,16 +190,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 
 
-		private static bool Try(Action action)
+		private static TryResult Try(Action action)
 		{
 			try
 			{
 				action.Invoke();
-				return true;
+				return TryResult.Passed;
 			}
 			catch (ProcessNotFoundException)
 			{
-				return false;
+				return TryResult.NotFound;
+			}
+			catch (Exception)
+			{
+				return TryResult.Failure;
 			}
 		}
 

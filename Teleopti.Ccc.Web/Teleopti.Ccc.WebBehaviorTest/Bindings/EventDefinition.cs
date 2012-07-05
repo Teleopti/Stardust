@@ -35,11 +35,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			_scenarioCount = 0;
 
 			Browser.PrepareForTestRun();
-			if (!Browser.IsStarted())
-				Browser.Start();
 
 			try
 			{
+				if (!Browser.IsStarted())
+					Browser.Start();
+
 				TestControllerMethods.BeforeTestRun();
 
 				TestSiteConfigurationSetup.Setup();
