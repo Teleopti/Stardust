@@ -60,30 +60,25 @@
 				<li class="weekview-day-schedule relative">
 					@foreach (var period in day.Periods)
 					{
-						var topPixel = Math.Round(scheduleHeight * period.StartPositionPercentage);
-						var bottomPixel = Math.Round(scheduleHeight * period.EndPositionPercentage)-1;
+						var topPixel = Math.Round(scheduleHeight*period.StartPositionPercentage);
+						var bottomPixel = Math.Round(scheduleHeight*period.EndPositionPercentage) - 1;
 						var heightPixel = bottomPixel - topPixel;
-						if (heightPixel > 32)
-						{
-							<div class="week-schedule-layer absolute" style="@*border: 1px solid @string.Format("rgba({0},1)", period.Color);*@ background-color: @string.Format("rgba({0},{1})", period.Color, dimmed); height: @(heightPixel)px; top: @(topPixel)px;">
-								<strong class="truncate">@period.Title</strong>
-								<span class="fullwidth displayblock">@period.TimeSpan</span>
-								@if (period.Meeting != null)
-								{
-									<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>
-								}
-							</div>
-						}
-						else
-						{
-							<div class="week-schedule-layer absolute tooltip" tooltip-title="@period.Title" tooltip-text="@period.TimeSpan"
-								 style="@*border: 1px solid @string.Format("rgba({0},1)", period.Color);*@ background-color: @string.Format("rgba({0},{1})", period.Color, dimmed); height: @(heightPixel)px; top: @(topPixel)px;">
-								@if (period.Meeting != null)
-								{
-									<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>
-								}
-							</div>
-						}
+
+						const int pixelToDisplayAll = 32;
+						const int pixelToDisplayTitle = 18;
+
+						<div @(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"week-schedule-layer absolute tooltip\"") : @Html.Raw("class=\"week-schedule-layer absolute\"")) 
+							tooltip-title="@period.Title" tooltip-text="@period.TimeSpan" 
+							style="background-color: @string.Format("rgba({0},{1})", period.Color, dimmed); height: @(heightPixel)px; top: @(topPixel)px;">
+							
+							<strong @(heightPixel > pixelToDisplayTitle ? @Html.Raw("class=\"truncate\"") : @Html.Raw("class=\"truncate displaynone\""))>@period.Title</strong>
+							<span @(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"fullwidth displaynone\"") : @Html.Raw("class=\"fullwidth displayblock\""))>@period.TimeSpan</span>
+
+							@if (period.Meeting != null)
+							{
+								<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>
+							}
+						</div>
 					}
 				</li>
 			</ul>
