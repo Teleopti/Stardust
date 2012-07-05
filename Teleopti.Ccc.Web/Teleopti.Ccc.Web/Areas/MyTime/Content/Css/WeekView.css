@@ -89,19 +89,16 @@
 }
 .weekview-day li
 {
-	border-top: 1px solid  #f9f9f9;
 	border-bottom: 1px solid #dfdfdf;
 }
 .rgba .weekview-day li
 {
-	border-top: 1px solid rgba(255, 255, 255, 0.5);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 /* rgba on many elements makes scrolling very slow in chrome so lets use static */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	.rgba .weekview-day li
 	{
-		border-top: 1px solid  #f9f9f9;
 		border-bottom: 1px solid #dfdfdf;
 	}
 }
@@ -239,8 +236,11 @@ select.absence-input
 	width: 131px;
 	border-radius: 2px;
 	border-left: 0px;
-	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);
+	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00FFFFFF', endColorstr='#99FFFFFF',GradientType=0 );
+	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);*/
 	overflow: hidden;
+	border-top: 1px solid #DFDFDF;
+	border-bottom: 1px solid #DFDFDF;
 }
 .weekview-day-schedule {
 	width: 131px;
@@ -268,6 +268,8 @@ select.absence-input
 	height: 15px;
 	cursor: pointer;
 }
-.category {
-	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);
+.category 
+{
+	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00FFFFFF', endColorstr='#99FFFFFF',GradientType=0 );
+	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);*/
 }

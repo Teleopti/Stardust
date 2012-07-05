@@ -12,7 +12,7 @@
 	<style>
 		@foreach (var style in Model.Styles)
 		{
-			@string.Format("li.third.{0} {{background-color: rgba({1},0.2);}}\n", style.Name, ColorTranslator.FromHtml(style.ColorHex).ToCSV())
+			@string.Format("li.third.{0} {{background-color: rgba({1},0.3);}}\n", style.Name, ColorTranslator.FromHtml(style.ColorHex).ToCSV())
 		}
 	</style>
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
@@ -60,11 +60,11 @@
 					@foreach (var period in day.Periods)
 					{
 						var topPixel = Math.Round(scheduleHeight * period.StartPositionPercentage);
-						var bottomPixel = Math.Round(scheduleHeight * period.EndPositionPercentage);
+						var bottomPixel = Math.Round(scheduleHeight * period.EndPositionPercentage)-1;
 						var heightPixel = bottomPixel - topPixel;
 						if (heightPixel > 32)
 						{
-							<div class="week-schedule-layer absolute" style="@*border: 1px solid @string.Format("rgba({0},1)", period.Color);*@ background-color: @string.Format("rgba({0},0.2)", period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
+							<div class="week-schedule-layer absolute" style="@*border: 1px solid @string.Format("rgba({0},1)", period.Color);*@ background-color: @string.Format("rgba({0},0.3)", period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
 								<strong class="truncate">@period.Title</strong>
 								<span class="fullwidth displayblock">@period.TimeSpan</span>
 								@if (period.Meeting != null)
@@ -76,7 +76,7 @@
 						else
 						{
 							<div class="week-schedule-layer absolute tooltip" tooltip-title="@period.Title" tooltip-text="@period.TimeSpan"
-								 style="@*border: 1px solid @string.Format("rgba({0},1)", period.Color);*@ background-color: @string.Format("rgba({0},0.2)", period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
+								 style="@*border: 1px solid @string.Format("rgba({0},1)", period.Color);*@ background-color: @string.Format("rgba({0},0.3)", period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
 								@if (period.Meeting != null)
 								{
 									<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>
