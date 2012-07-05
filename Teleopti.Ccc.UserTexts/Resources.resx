@@ -10730,8 +10730,8 @@ These options are activated:
     <comment>Submit a text request/absence request...</comment>
   </data>
   <data name="OverridePeriod" xml:space="preserve">
-    <value>Override Period</value>
-    <comment>Overrride period time</comment>
+    <value>Override period time</value>
+    <comment>Override period time</comment>
   </data>
   <data name="OverrideHoursPerDay" xml:space="preserve">
     <value>Override hours per day</value>

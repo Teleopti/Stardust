@@ -545,7 +545,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
 
         private static void writeMessage()
         {
-            MessageBoxAdv.Show(UserTexts.Resources.PasswordPolicyWarning,
+            MessageBox.Show(UserTexts.Resources.PasswordPolicyWarning,
                 UserTexts.Resources.ErrorMessage,
                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
         }

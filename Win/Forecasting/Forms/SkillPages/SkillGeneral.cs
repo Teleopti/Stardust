@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using System.Linq;
-using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
@@ -178,14 +177,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             }
             catch (ArgumentException)
             {
-                MessageBoxAdv.Show(string.Concat(UserTexts.Resources.SkillNameIsInvalid, "  "), "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+                ViewBase.ShowErrorMessage(UserTexts.Resources.SkillNameIsInvalid, UserTexts.Resources.Skill);
                 return false;
             }
             if (!isResolutionValid(thisSkill)) return false;
             var activity = (IActivity)comboBoxSkillActivity.SelectedItem;
             if (activity == null)
             {
-                MessageBoxAdv.Show(UserTexts.Resources.ActivityCanNotBeEmptyDot, "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+                ViewBase.ShowErrorMessage(UserTexts.Resources.ActivityCanNotBeEmptyDot, UserTexts.Resources.Skill);
                 return false;
             }
             thisSkill.Activity = activity;

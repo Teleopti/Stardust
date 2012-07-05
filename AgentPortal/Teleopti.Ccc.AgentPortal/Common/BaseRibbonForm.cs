@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortalCode.Common;
 
 namespace Teleopti.Ccc.AgentPortal.Common
@@ -143,13 +143,7 @@ namespace Teleopti.Ccc.AgentPortal.Common
 
         public void ShowErrorMessage(string text, string caption)
         {
-            Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(text, "  "), caption,
-                                                        MessageBoxButtons.OK, MessageBoxIcon.Error,
-                                                        MessageBoxDefaultButton.Button1,
-                                                        (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
-                                                            ? MessageBoxOptions.RtlReading |
-                                                              MessageBoxOptions.RightAlign
-                                                            : 0);
+            MessageBoxHelper.ShowErrorMessage(text, caption);
         }
     }
 }

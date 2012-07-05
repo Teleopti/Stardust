@@ -4,28 +4,11 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
 {
     public static class MessageDialogs
     {
-        public static void ShowWarning(Control owner, string message, string caption)
-        {
-            alert(owner);
-
-            Syncfusion.Windows.Forms.MessageBoxAdv.Show(
-                owner,
-                message,
-                caption,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning,
-                MessageBoxDefaultButton.Button1,
-                (owner.RightToLeft == RightToLeft.Yes)
-                    ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                    : 0);
-
-        }
-
         public static void ShowError(Control owner, string message, string caption)
         {
             alert(owner);
 
-            Syncfusion.Windows.Forms.MessageBoxAdv.Show(
+            MessageBox.Show(
                 owner,
                 message,
                 caption,

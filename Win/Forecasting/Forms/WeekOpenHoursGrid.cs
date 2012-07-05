@@ -171,13 +171,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 }
                 catch (ArgumentException ex)
                 {
-                    MessageBoxOptions option = new MessageBoxOptions();
-                    if (RightToLeft == RightToLeft.Yes)
-                    {
-                        option = MessageBoxOptions.RtlReading;
-                    }
-                    Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(ex.Message, "  "), UserTexts.Resources.UnknownTimeFormat, MessageBoxButtons.OK,
-                                                                MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, option, false);
+                    ViewBase.ShowErrorMessage(ex.Message, UserTexts.Resources.UnknownTimeFormat);
                 }
             }
         }
