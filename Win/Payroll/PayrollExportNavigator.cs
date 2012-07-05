@@ -8,8 +8,6 @@ using System.Windows.Forms;
 using Autofac;
 using log4net;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.ClientProxies;
@@ -435,7 +433,7 @@ namespace Teleopti.Ccc.Win.Payroll
             
             IPayrollExport payrollExport = (IPayrollExport)_lastNode.Tag;
             string questionString = string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.QuestionDelete, "\"", payrollExport.Name);
-            if (Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(questionString, "  "), UserTexts.Resources.Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0) == DialogResult.Yes)
+            if (ViewBase.ShowYesNoMessage(this, questionString, UserTexts.Resources.Delete) == DialogResult.Yes)
             {
                 removePayrollExport(payrollExport);
             }
@@ -492,25 +490,10 @@ namespace Teleopti.Ccc.Win.Payroll
         {
             if (_payrollBackgroundWorker.IsBusy)
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(UserTexts.Resources.SystemIsBusyWithBackgroundRequest, "  "),
-                                                            UserTexts.Resources.PleaseTryAgainLater,
-                                                            MessageBoxButtons.OK, MessageBoxIcon.Information,
-                                                            MessageBoxDefaultButton.Button1,
-                                                            (RightToLeft == RightToLeft.Yes)
-                                                                ? MessageBoxOptions.RtlReading |
-                                                                  MessageBoxOptions.RightAlign
-                                                                : 0);
+                ViewBase.ShowInformationMessage(this, UserTexts.Resources.SystemIsBusyWithBackgroundRequest, UserTexts.Resources.PleaseTryAgainLater);
                 return;
             }
 
-            //Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(UserTexts.Resources.PayrollExportGenerationWillStartOnServer, "  "),
-            //                                                         UserTexts.Resources.PayrollExport,
-            //                                                         MessageBoxButtons.OK, MessageBoxIcon.Information,
-            //                                                         MessageBoxDefaultButton.Button1,
-            //                                                         (RightToLeft == RightToLeft.Yes)
-            //                                                             ? MessageBoxOptions.RtlReading |
-            //                                                               MessageBoxOptions.RightAlign
-            //                                                             : 0);
             _payrollBackgroundWorker.RunWorkerAsync(payrollExport);
         }
     }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -73,30 +71,20 @@ namespace Teleopti.Ccc.Win.Budgeting
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "UserTexts"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "BudgetGroupNameIsInvalid"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
 		public bool Depopulate(IAggregateRoot aggregateRoot)
 		{
 			IBudgetGroup budgetGroup = aggregateRoot as BudgetGroup;
-			try
+			if (budgetGroup != null)
 			{
-				if (budgetGroup != null)
-				{
-					budgetGroup.Name = textBoxName.Text.Trim();
-					budgetGroup.TrySetDaysPerYear(Convert.ToInt32(textBoxDaysPerYear.Text.Trim(),CurrentCulture));
-					budgetGroup.TimeZone = (ICccTimeZoneInfo) comboBoxAdvTimeZones.SelectedItem;
+				budgetGroup.Name = textBoxName.Text.Trim();
+				budgetGroup.TrySetDaysPerYear((int)textBoxDaysPerYear.IntegerValue);
+				budgetGroup.TimeZone = (ICccTimeZoneInfo) comboBoxAdvTimeZones.SelectedItem;
 
-					budgetGroup.RemoveAllSkills();
-					foreach (var item in listBoxAddedSkills.Items)
-					{
-						budgetGroup.AddSkill((ISkill)item);
-					}
+				budgetGroup.RemoveAllSkills();
+				foreach (var item in listBoxAddedSkills.Items)
+				{
+					budgetGroup.AddSkill((ISkill) item);
 				}
-			}
-			catch (ArgumentException ex)
-			{
-				Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat("UserTexts.Resources.BudgetGroupNameIsInvalid", "  "), "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == System.Windows.Forms.RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
-				Trace.WriteLine(ex.Message);
-				return false;
 			}
 
 			return true;

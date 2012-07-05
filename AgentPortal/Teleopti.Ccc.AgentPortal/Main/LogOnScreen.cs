@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
+using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
@@ -180,14 +181,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             _businessUnitList = resultDto.BusinessUnitCollection;
             if (resultDto.HasMessage)
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(this, string.Concat(resultDto.Message, "  "),
-                                                            UserTexts.Resources.LogOn,
-                                                            MessageBoxButtons.OK, MessageBoxIcon.Asterisk,
-                                                            MessageBoxDefaultButton.Button1,
-                                                            (RightToLeft == RightToLeft.Yes)
-                                                                ? MessageBoxOptions.RtlReading |
-                                                                  MessageBoxOptions.RightAlign
-                                                                : 0);
+                MessageBoxHelper.ShowWarningMessage(this, resultDto.Message, UserTexts.Resources.LogOn);
             }
 
             _dataSourceLogonable = resultDto.Successful;
@@ -361,17 +355,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             // set logon for different scenarios
             if (_logonableWindowsDataSources.Count == 0 && _availableApplicationDataSources.Count == 0)
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(this,
-                                                            string.Concat(
-                                                                UserTexts.Resources.
-                                                                    NoAvailableDataSourcesHasBeenFound, "  "),
-                                                            UserTexts.Resources.AuthenticationError,
-                                                            MessageBoxButtons.OK, MessageBoxIcon.Asterisk,
-                                                            MessageBoxDefaultButton.Button1,
-                                                            (RightToLeft == RightToLeft.Yes)
-                                                                ? MessageBoxOptions.RtlReading |
-                                                                  MessageBoxOptions.RightAlign
-                                                                : 0);
+                MessageBoxHelper.ShowWarningMessage(this, UserTexts.Resources.NoAvailableDataSourcesHasBeenFound, UserTexts.Resources.AuthenticationError);
                 _cancelLogOn = true;
             }
             else if (_logonableWindowsDataSources.Count == 1 && _availableApplicationDataSources.Count == 0)
@@ -500,17 +484,8 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
             if (_businessUnitList.Count == 0)
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(this,
-                                                            string.Concat(
-                                                                UserTexts.Resources.
-                                                                    NoAllowedBusinessUnitFoundInCurrentDatabase, "  "),
-                                                            " ",
-                                                            MessageBoxButtons.OK, MessageBoxIcon.Asterisk,
-                                                            MessageBoxDefaultButton.Button1,
-                                                            (RightToLeft == RightToLeft.Yes)
-                                                                ? MessageBoxOptions.RtlReading |
-                                                                  MessageBoxOptions.RightAlign
-                                                                : 0);
+            	MessageBoxHelper.ShowWarningMessage(this, UserTexts.Resources.NoAllowedBusinessUnitFoundInCurrentDatabase,
+            	                                    UserTexts.Resources.AuthenticationError);
                 _cancelLogOn = true;
                 return;
             }
@@ -579,10 +554,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 }
                 catch (SoapException e)
                 {
-                    Syncfusion.Windows.Forms.MessageBoxAdv.Show(this,
-                    e.Message,
-                    UserTexts.Resources.ErrorMessage, MessageBoxButtons.OK, MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button1, 0);
+                    MessageBoxHelper.ShowWarningMessage(this, e.Message, UserTexts.Resources.ErrorMessage);
                     return false;
                 }
 #else
@@ -608,10 +580,8 @@ namespace Teleopti.Ccc.AgentPortal.Main
         {
             if (!PermissionService.Instance().IsPermitted(ApplicationFunctionHelper.Instance().DefinedApplicationFunctionPaths.OpenAgentPortal))
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(this,
-                    string.Concat(UserTexts.Resources.YouAreNotAuthorizedToRunTheApplication, "  "),
-                    UserTexts.Resources.AuthorizationFailure, MessageBoxButtons.OK, MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button1, 0);
+            	MessageBoxHelper.ShowWarningMessage(this, UserTexts.Resources.YouAreNotAuthorizedToRunTheApplication,
+            	                                    UserTexts.Resources.AuthorizationFailure);
                 return false;
             }
 
@@ -635,13 +605,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 {
                     foreach (FaultDto exception in licenseVerificationResultDto.ExceptionCollection)
                     {
-                        Syncfusion.Windows.Forms.MessageBoxAdv.Show(this,
-                            exception.Message,
-                            UserTexts.Resources.TeleoptiLicenseException,
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error,
-                            MessageBoxDefaultButton.Button1,
-                            (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
+                        MessageBoxHelper.ShowWarningMessage(this, exception.Message, UserTexts.Resources.TeleoptiLicenseException);
                     }
                 }
             }

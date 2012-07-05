@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortal.Main;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
@@ -14,7 +12,7 @@ namespace Teleopti.Ccc.AgentPortal
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        [STAThread]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.AgentPortal.Helper.MessageBoxHelper.ShowErrorMessage(System.String,System.String)"), STAThread]
         private static void Main(string[] args)
         {
             Application.EnableVisualStyles();
@@ -78,14 +76,7 @@ namespace Teleopti.Ccc.AgentPortal
             }
             catch (Exception e)
             {
-                MessageBoxAdv.Show(e.Message,
-                                   string.Concat(UserTexts.Resources.LogOn, " - ", UserTexts.Resources.IllegalInput),
-                                   MessageBoxButtons.OK, MessageBoxIcon.Asterisk,
-                                   MessageBoxDefaultButton.Button1,
-                                   CultureInfo.CurrentCulture.TextInfo.IsRightToLeft
-                                       ? MessageBoxOptions.RtlReading |
-                                         MessageBoxOptions.RightAlign
-                                       : 0);
+                MessageBoxHelper.ShowErrorMessage(e.Message, string.Concat(UserTexts.Resources.LogOn, " - ", UserTexts.Resources.IllegalInput));
             }
             var logOnScreen = new LogOnScreen(logOnDetails,settings);
             if (logOnScreen.ShowDialog() == DialogResult.OK)
