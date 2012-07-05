@@ -488,6 +488,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			_restrictionViewList.AddRange(ScheduleRestrictionBaseView.Parse(SelectedRotation));
 
+			if (_gridHelper!=null)
+			{
+				_gridHelper.Dispose();
+			}
 			_gridHelper = new SFGridColumnGridHelper<RotationRestrictionView>(
 				gridControlRotation,
 				new ReadOnlyCollection<SFGridColumnBase<RotationRestrictionView>>(_gridColumns),
