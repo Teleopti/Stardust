@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now);
 			target.Persist(form);
 			
-			Thread.Sleep(60);
+			Thread.Sleep(80);
 
 			var usedMessage = (NewAbsenceRequestCreated) serviceBusSender.GetArgumentsForCallsMadeOn(x => x.NotifyServiceBus(message))[0][0];
 			usedMessage.BusinessUnitId.Should().Be.EqualTo(buId);
