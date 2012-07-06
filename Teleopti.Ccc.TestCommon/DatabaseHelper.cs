@@ -12,24 +12,25 @@ namespace Teleopti.Ccc.TestCommon
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 	public class DatabaseHelper : IDisposable
 	{
-		private readonly string _connectionString;
 		private readonly string _databaseName;
-		private readonly DatabaseType _databaseType;
 		private SqlConnection _connection;
 
 		public DatabaseHelper(string connectionString, DatabaseType databaseType) : this(connectionString, new SqlConnectionStringBuilder(connectionString).InitialCatalog, databaseType) { }
 		public DatabaseHelper(string connectionString, string databaseName, DatabaseType databaseType)
 		{
-			_connectionString = connectionString;
+			ConnectionString = connectionString;
 			_databaseName = databaseName;
-			_databaseType = databaseType;
+			DatabaseType = databaseType;
 		}
+
+		public string ConnectionString { get; private set; }
+		public DatabaseType DatabaseType { get; private set; }
 
 		private SqlConnection Connection()
 		{
 			if (_connection == null)
 			{
-				var connectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
+				var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString);
 				connectionStringBuilder.InitialCatalog = "master";
 				_connection = new SqlConnection(connectionStringBuilder.ConnectionString);
 				_connection.Open();
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
 			var creator = new DatabaseCreator(databaseFolder, _connection);
-			creator.CreateDatabase(_databaseType, _databaseName);
+			creator.CreateDatabase(DatabaseType, _databaseName);
 			ExecuteNonQuery("USE [{0}]", _databaseName);
 		}
 
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.TestCommon
 				_connection,
 				databaseFolder,
 				new NullLog());
-			schemaCreator.Create(_databaseType);
+			schemaCreator.Create(DatabaseType);
 		}
 
 		public Backup BackupByFileCopy(string name)
@@ -148,11 +149,18 @@ namespace Teleopti.Ccc.TestCommon
 			return versionInfo.GetDatabaseVersion();
 		}
 
+		public int SchemaVersion()
+		{
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
+			var versionInfo = new SchemaVersionInformation(databaseFolder);
+			return versionInfo.GetSchemaVersion(DatabaseType);
+		}
+
 		public int SchemaTrunkHash()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
 			var versionInfo = new SchemaVersionInformation(databaseFolder);
-			return versionInfo.TrunkVersion(_databaseType);
+			return versionInfo.TrunkVersion(DatabaseType);
 		}
 
 

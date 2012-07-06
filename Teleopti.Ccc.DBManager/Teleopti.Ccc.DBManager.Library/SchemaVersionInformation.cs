@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -26,5 +27,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			return trunk.GetHashCode();
 		}
 
+		public int GetSchemaVersion(DatabaseType databaseType)
+		{
+			var releasesPath = _databaseFolder.ReleasePath(databaseType);
+			var scriptsDirectoryInfo = new DirectoryInfo(releasesPath);
+			var scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
+			var versions = from f in scriptFiles select ReleaseNumberOfFile(f);
+			return versions.Max();
+		}
 	}
 }
