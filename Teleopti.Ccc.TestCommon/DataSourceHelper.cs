@@ -17,138 +17,113 @@ namespace Teleopti.Ccc.TestCommon
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static IDataSource CreateDataSource()
 		{
+			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest());
+
 			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
 			{
 				using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
 				{
-					if (IniFileInfo.Create)
-						PrepareDatabases(ccc7, analytics);
 
-					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest());
+					if (IniFileInfo.Create)
+						CreateDatabases(ccc7, analytics);
+
 					var dataSource = CreateDataSource(dataSourceFactory);
 
 					if (IniFileInfo.Create)
 						CreateSchemas(dataSourceFactory, ccc7, analytics);
+
+					BackupDatabases(ccc7, analytics);
 
 					return dataSource;
 				}
 			}
 		}
 
-		public static void ClearCcc7Data()
+		private static void BackupDatabases(DatabaseHelper ccc7, DatabaseHelper analytics)
 		{
-			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
-			{
-				ccc7.CleanByGenericProcedure();
-			}
+			ExceptionToConsole(
+				() =>
+					{
+						var ccc7BackupName = ccc7.DatabaseVersion() + "." + ccc7.SchemaTrunkHash();
+						ccc7.BackupByFileCopy(ccc7BackupName);
+					},
+				"Failed to backup database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				);
+
+			ExceptionToConsole(
+				() =>
+					{
+						var analyticsBackupName = analytics.DatabaseVersion() + "." + analytics.SchemaTrunkHash();
+						analytics.BackupByFileCopy(analyticsBackupName);
+					},
+				"Failed to backup database {0}!", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix
+				);
 		}
 
-		public static void ClearAnalyticsData()
+		private static void CreateDatabases(DatabaseHelper ccc7, DatabaseHelper analytics)
 		{
-			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
-			{
-				analytics.CleanByAnalyticsProcedure();
-			}
-		}
+			ExceptionToConsole(
+				() =>
+					{
+						if (ccc7.Exists())
+						{
+							ccc7.DropConnections();
+							ccc7.Drop();
+						}
+						if (IniFileInfo.CreateByNHib)
+							ccc7.Create();
+						else
+							ccc7.CreateByDbManager();
+					},
+				"Failed to prepare database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				);
 
-		public static DatabaseHelper.Backup BackupCcc7DataByFileCopy()
-		{
-			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
-			{
-				return ccc7.BackupByFileCopy();
-			}
-		}
-
-		public static void RestoreCcc7DataByFileCopy(DatabaseHelper.Backup backup)
-		{
-			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
-			{
-				ccc7.RestoreByFileCopy(backup);
-			}
-		}
-
-		private static void PrepareDatabases(DatabaseHelper ccc7, DatabaseHelper analytics)
-		{
-			try
-			{
-				if (ccc7.Exists())
-				{
-					ccc7.DropConnections();
-					ccc7.Drop();
-				}
-				if (IniFileInfo.CreateByNHib)
-					ccc7.Create();
-				else
-					ccc7.CreateByDbManager();
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Failed to prepare database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests);
-				Console.WriteLine(e.ToString());
-				throw;
-			}
-
-			try
-			{
-				if (analytics.Exists())
-				{
-					analytics.DropConnections();
-					analytics.Drop();
-				}
-				analytics.CreateByDbManager();
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Failed to prepare database {0}!", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-				Console.WriteLine(e.ToString());
-				throw;
-			}
+			ExceptionToConsole(
+				() =>
+					{
+						if (analytics.Exists())
+						{
+							analytics.DropConnections();
+							analytics.Drop();
+						}
+						analytics.CreateByDbManager();
+					},
+				"Failed to prepare database {0}!", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix
+				);
 		}
 
 		private static IDataSource CreateDataSource(DataSourcesFactory dataSourceFactory)
 		{
-			IDataSource dataSource;
-			try
-			{
-				var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null);
-				dataSource = dataSourceFactory.Create(dataSourceSettings, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-			}
-			catch (Exception)
-			{
-				Console.WriteLine("Failed to create datasource {0}!", ConnectionStringHelper.ConnectionStringUsedInTests);
-				throw;
-			}
-			return dataSource;
+			return ExceptionToConsole(
+				() =>
+					{
+						var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null);
+						return dataSourceFactory.Create(dataSourceSettings, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+					},
+				"Failed to create datasource {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				);
 		}
 
 		private static void CreateSchemas(DataSourcesFactory dataSourceFactory, DatabaseHelper ccc7, DatabaseHelper analytics)
 		{
-			try
-			{
-				if (IniFileInfo.CreateByNHib)
-					dataSourceFactory.CreateSchema();
-				else
-					ccc7.CreateSchemaByDbManager();
-				PersistAuditSetting();
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Failed to create database schema {0}!", ConnectionStringHelper.ConnectionStringUsedInTests);
-				Console.WriteLine(e.ToString());
-				throw;
-			}
+			ExceptionToConsole(
+				() =>
+					{
+						if (IniFileInfo.CreateByNHib)
+							dataSourceFactory.CreateSchema();
+						else
+							ccc7.CreateSchemaByDbManager();
+						PersistAuditSetting();
+					},
+				"Failed to create database schema {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				);
 
-			try
-			{
-				analytics.CreateSchemaByDbManager();
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Failed to create database schema {0}!", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-				Console.WriteLine(e.ToString());
-				throw;
-			}
+			ExceptionToConsole(
+				analytics.CreateSchemaByDbManager,
+				"Failed to create database schema {0}!", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix
+				);
 		}
+
 
 		public static void PersistAuditSetting()
 		{
@@ -177,5 +152,79 @@ namespace Teleopti.Ccc.TestCommon
 				dictionary[NHibernate.Cfg.Environment.CommandTimeout] = timeout.Value.ToString(CultureInfo.CurrentCulture);
 			return dictionary;
 		}
+
+
+
+
+
+
+		public static void ClearCcc7Data()
+		{
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			{
+				ccc7.CleanByGenericProcedure();
+			}
+		}
+
+		public static void ClearAnalyticsData()
+		{
+			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
+			{
+				analytics.CleanByAnalyticsProcedure();
+			}
+		}
+
+		public static DatabaseHelper.Backup BackupCcc7DataByFileCopy(string name)
+		{
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			{
+				return ccc7.BackupByFileCopy(name);
+			}
+		}
+
+		public static void RestoreCcc7DataByFileCopy(DatabaseHelper.Backup backup)
+		{
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			{
+				ccc7.RestoreByFileCopy(backup);
+			}
+		}
+
+
+
+
+
+
+
+
+		private static void ExceptionToConsole(Action action, string exceptionMessage, params object[] args)
+		{
+			try
+			{
+				action.Invoke();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(string.Format(exceptionMessage, args));
+				Console.WriteLine(e.ToString());
+				throw;
+			}
+		}
+
+		private static T ExceptionToConsole<T>(Func<T> action, string exceptionMessage, params object[] args)
+		{
+			try
+			{
+				return action.Invoke();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(string.Format(exceptionMessage, args));
+				Console.WriteLine(e.ToString());
+				throw;
+			}
+		}
+
+
 	}
 }

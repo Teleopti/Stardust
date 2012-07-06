@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.DBManager
         private static bool _isAzure;
         private const string AzureEdition = "SQL Azure";
     	private static MyLogger _logger;
-    	private static DatabaseVersionInformation _databaseVersionInformation;
+		private static DatabaseVersionInformation _databaseVersionInformation;
+		private static SchemaVersionInformation _schemaVersionInformation;
 
     	/// <summary>
         /// Mains the specified args.
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.DBManager
 					logWrite("DBManager is running in DEBUG Mode...");
 #endif
 					_databaseFolder = new DatabaseFolder(new DbManagerFolder(_commandLineArgument.PathToDbManager));
+					_schemaVersionInformation = new SchemaVersionInformation(_databaseFolder);
                     logWrite("Running from:" + _databaseFolder.Path());
 
                     //Connect and open db
@@ -209,7 +211,7 @@ namespace Teleopti.Ccc.DBManager
 
         private static void applyReleases(DatabaseType databaseType)
         {
-			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger)
+			new DatabaseSchemaCreator(_databaseVersionInformation, _schemaVersionInformation, _sqlConnection, _databaseFolder, _logger)
 				.ApplyReleases(databaseType);
         }
 
@@ -236,17 +238,17 @@ namespace Teleopti.Ccc.DBManager
 
 		private static void applyTrunk(DatabaseType databaseType)
         {
-			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger)
+			new DatabaseSchemaCreator(_databaseVersionInformation, _schemaVersionInformation, _sqlConnection, _databaseFolder, _logger)
 				.ApplyTrunk(databaseType);
         }
 
 		private static void applyProgrammability(DatabaseType databaseType)
 		{
-			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger)
+			new DatabaseSchemaCreator(_databaseVersionInformation, _schemaVersionInformation, _sqlConnection, _databaseFolder, _logger)
 				.ApplyProgrammability(databaseType);
 		}
 
-        private static int GetDatabaseBuildNumber() { return _databaseVersionInformation.GetDatabaseBuildNumber(); }
+        private static int GetDatabaseBuildNumber() { return _databaseVersionInformation.GetDatabaseVersion(); }
 
         private static bool VersionTableExists()
         {

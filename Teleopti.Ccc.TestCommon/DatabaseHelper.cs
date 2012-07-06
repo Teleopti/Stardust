@@ -79,23 +79,27 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void DropConnections()
 		{
-			using (UseMasterScope())
+			using (OfflineScope())
 			{
-				ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
-				ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
 			}
 		}
 
 		public void CreateSchemaByDbManager()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
-			var versionInfo = new DatabaseVersionInformation(databaseFolder, _connection);
-			versionInfo.CreateTable();
-			var schemaCreator = new DatabaseSchemaCreator(versionInfo, _connection, databaseFolder, new NullLog());
+			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _connection);
+			databaseVersionInformation.CreateTable();
+			var schemaVersionInformation = new SchemaVersionInformation(databaseFolder);
+			var schemaCreator = new DatabaseSchemaCreator(
+				databaseVersionInformation,
+				schemaVersionInformation,
+				_connection,
+				databaseFolder,
+				new NullLog());
 			schemaCreator.Create(_databaseType);
 		}
 
-		public Backup BackupByFileCopy()
+		public Backup BackupByFileCopy(string name)
 		{
 			var backup = new Backup();
 			using (var reader = ExecuteToReader("select * from sys.sysfiles"))
@@ -105,26 +109,22 @@ namespace Teleopti.Ccc.TestCommon
 								select new BackupFile { Source = file })
 					.ToArray();
 			}
-			using (UseMasterScope())
+			using (OfflineScope())
 			{
-				ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
 				backup.Files.ForEach(f =>
 				                     	{
-				                     		f.Backup = Path.GetFileName(f.Source);
+				                     		f.Backup = Path.GetFileName(f.Source) + "." + name;
 				                     		File.Copy(f.Source, f.Backup, true);
 				                     	});
-				ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
 			}
 			return backup;
 		}
 
 		public void RestoreByFileCopy(Backup backup)
 		{
-			using (UseMasterScope())
+			using (OfflineScope())
 			{
-				ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
 				backup.Files.ForEach(f => File.Copy(f.Backup, f.Source, true));
-				ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
 			}
 		}
 
@@ -141,11 +141,32 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
+		public int DatabaseVersion()
+		{
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
+			var versionInfo = new DatabaseVersionInformation(databaseFolder, _connection);
+			return versionInfo.GetDatabaseVersion();
+		}
 
-		public IDisposable UseMasterScope()
+		public int SchemaTrunkHash()
+		{
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
+			var versionInfo = new SchemaVersionInformation(databaseFolder);
+			return versionInfo.TrunkVersion(_databaseType);
+		}
+
+
+
+
+		private IDisposable OfflineScope()
 		{
 			ExecuteNonQuery("USE master");
-			return new GenericDisposable(() => ExecuteNonQuery("USE [{0}]", _databaseName));
+			ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
+			return new GenericDisposable(() =>
+			                             	{
+			                             		ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
+			                             		ExecuteNonQuery("USE [{0}]", _databaseName);
+			                             	});
 		}
 
 
@@ -189,6 +210,5 @@ namespace Teleopti.Ccc.TestCommon
 			if (_connection != null)
 				_connection.Dispose();
 		}
-
 	}
 }

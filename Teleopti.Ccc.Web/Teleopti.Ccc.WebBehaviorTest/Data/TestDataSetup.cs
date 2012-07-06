@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void BackupCcc7Data()
 		{
-			_Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy();
+			_Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Ccc.WebBehaviorTest");
 		}
 
 		public static void RestoreCcc7Data()
