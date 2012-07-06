@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.Win.Shifts
             
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         private bool validateGrid()
         {
             _generalView.ReflectEnteredValues();
@@ -295,16 +295,7 @@ namespace Teleopti.Ccc.Win.Shifts
             if (!status)
             {
                 _generalView.Refresh();
-                MessageBox.Show(
-                    string.Concat(UserTexts.Resources.ShiftCreatorValidationErrorMessage, "  "),
-                                Text,
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning,
-                                MessageBoxDefaultButton.Button1,
-                                (RightToLeft == RightToLeft.Yes)
-                                    ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                                    : 0
-                    );
+                ShowWarningMessage(UserTexts.Resources.ShiftCreatorValidationErrorMessage,Text);
                 
             }
             return status;
@@ -383,11 +374,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
         public bool AskForDelete()
         {
-            DialogResult result = MessageBox.Show(UserTexts.Resources.AreYouSureYouWantToDelete, UserTexts.Resources.Delete,
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1,
-                                (RightToLeft == RightToLeft.Yes)
-                                    ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                                    : 0);
+            DialogResult result = ShowYesNoMessage(UserTexts.Resources.AreYouSureYouWantToDelete, UserTexts.Resources.Delete);
             return (result == DialogResult.Yes) ? true : false;
         }
 
@@ -396,11 +383,7 @@ namespace Teleopti.Ccc.Win.Shifts
         {
             if (Presenter.Model.FilteredRuleSetCollection == null)
             {
-                MessageBox.Show(UserTexts.Resources.YouHaveToSelectAtLeastOneRuleSet,UserTexts.Resources.NoRuleSetSelected,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1,
-                                    (RightToLeft == RightToLeft.Yes)
-                                        ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                                        : 0);
+                ShowInformationMessage(UserTexts.Resources.YouHaveToSelectAtLeastOneRuleSet,UserTexts.Resources.NoRuleSetSelected);
                 return false;
             }
             return true;

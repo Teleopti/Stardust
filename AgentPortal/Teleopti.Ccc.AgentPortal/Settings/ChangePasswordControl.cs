@@ -2,6 +2,7 @@
 using System.Web.Services.Protocols;
 using Teleopti.Ccc.AgentPortal.Common;
 using System.Windows.Forms;
+using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
@@ -110,11 +111,7 @@ namespace Teleopti.Ccc.AgentPortal.Settings
 
                 catch (SoapException ex)
                 {
-                    MessageBox.Show(ex.Message, UserTexts.Resources.AgentPortal, MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error, MessageBoxDefaultButton.Button1,
-                                    (RightToLeft == RightToLeft.Yes)
-                                        ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                                        : 0);
+                    MessageBoxHelper.ShowErrorMessage(ex.Message, UserTexts.Resources.AgentPortal);
                     return false;
                 }
                 finally

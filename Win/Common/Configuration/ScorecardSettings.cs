@@ -360,18 +360,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         /// Created by: Aruna Priyankara Wickrama
         /// Created date: 2008-04-08
         /// </remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
-		private void ShowMyErrorMessage(string message, string caption)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
+		private static void ShowMyErrorMessage(string message, string caption)
         {
-            MessageBox.Show(
-                string.Concat(message, "  "),
-                caption,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error,
-                MessageBoxDefaultButton.Button1,
-                (RightToLeft == RightToLeft.Yes)
-                    ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                    : 0);
+            ViewBase.ShowErrorMessage(message, caption);
         }
         
         public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)

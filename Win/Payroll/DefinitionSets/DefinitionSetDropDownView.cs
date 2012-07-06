@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Payroll.Interfaces;
@@ -102,18 +103,9 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
         /// <returns></returns>
-        private DialogResult ShowMyErrorMessage(string message, string caption)
+        private static DialogResult ShowMyErrorMessage(string message, string caption)
         {
-			//no bloody sunkfusion please
-            return MessageBox.Show(
-                   string.Concat(message, "  "),
-                   caption,
-                   MessageBoxButtons.YesNo,
-                   MessageBoxIcon.Warning,
-                   MessageBoxDefaultButton.Button1,
-                   (RightToLeft == RightToLeft.Yes)
-                                    ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                                    : 0);
+            return ViewBase.ShowYesNoMessage(message, caption);
         }
 
 

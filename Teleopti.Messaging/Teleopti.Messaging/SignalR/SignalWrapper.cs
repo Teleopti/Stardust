@@ -40,7 +40,15 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_hubConnection.State != ConnectionState.Connected)
 				{
-					startHubConnection();
+					try
+					{
+						startHubConnection();
+					}
+					catch (Exception)
+					{
+						//Suppress! Already logged upon startup for general failures.
+						//Add code to only allow a limited number of retries.
+					}
 				}
 			}
 		}

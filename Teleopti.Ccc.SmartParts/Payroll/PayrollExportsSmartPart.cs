@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
+using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.SmartParts.Payroll
                         }
                         catch (IOException)
                         {
-                            MessageBox.Show(this, UserTexts.Resources.TheFileIsLockedByAnotherProgram,
+                            MessageBoxAdv.Show(this, UserTexts.Resources.TheFileIsLockedByAnotherProgram,
                                             UserTexts.Resources.OpenTeleoptiCCC, MessageBoxButtons.OK,
                                             MessageBoxIcon.Error, MessageBoxDefaultButton.Button1,
                                             (((IUnsafePerson) TeleoptiPrincipal.Current).Person.PermissionInformation.

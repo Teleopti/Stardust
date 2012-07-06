@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms;
 
 namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
 {
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
             }
             catch (Exception)
             {
-                MessageBox.Show("Clipboard error", "Could not copy to clipboard", MessageBoxButtons.OK,
+                MessageBoxAdv.Show("Clipboard error", "Could not copy to clipboard", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
         }

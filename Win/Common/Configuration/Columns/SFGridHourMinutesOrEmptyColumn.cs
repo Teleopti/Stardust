@@ -44,12 +44,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 					string message = string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.TheEnteredIsIllegal, HeaderText);
 					string header = UserTexts.Resources.Illegal + HeaderText;
 
-					MessageBox.Show(message, header, MessageBoxButtons.OK,
-					                   MessageBoxIcon.Error,
-					                   MessageBoxDefaultButton.Button1,
-					                   (RightToLeft == RightToLeft.Yes)
-					                   	? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-					                   	: 0);
+					ViewBase.ShowErrorMessage(message, header);
 				}
 			}
         }

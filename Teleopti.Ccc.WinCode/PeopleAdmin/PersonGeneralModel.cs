@@ -546,7 +546,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
 		private static void writeMessage()
         {
-            MessageBox.Show(UserTexts.Resources.PasswordPolicyWarning,
+            MessageBoxAdv.Show(UserTexts.Resources.PasswordPolicyWarning,
                 UserTexts.Resources.ErrorMessage,
                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
         }

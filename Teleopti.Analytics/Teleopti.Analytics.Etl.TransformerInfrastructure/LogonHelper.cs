@@ -114,7 +114,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			_foundDataBases = _logonService.CreateAvailableDataSourcesListForApplicationUser().ToList();
 			if (_foundDataBases.IsEmpty())
 			{
-				//MessageBox.Show("Login failed!", "Hello", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
 				Trace.WriteLine("Login Failed! User '" + _userName +
 								"' could not be found in any database with the given password.");
 				_choosenDb = null;

@@ -563,18 +563,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			LoadRotations();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
-		public DialogResult ShowMyErrorMessage(string message, string caption)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
+		public static DialogResult ShowMyErrorMessage(string message, string caption)
 		{
-			return MessageBox.Show(
-				string.Concat(message, "  "),
-				caption,
-				MessageBoxButtons.YesNo,
-				MessageBoxIcon.Error,
-				MessageBoxDefaultButton.Button1,
-				(RightToLeft == RightToLeft.Yes)
-					? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-					: 0);
+			return ViewBase.ShowYesNoMessage(message, caption);
 		}
 
 		private void SetColors()

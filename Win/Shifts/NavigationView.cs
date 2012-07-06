@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Payroll.DefinitionSets;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Events;
@@ -345,10 +346,9 @@ namespace Teleopti.Ccc.Win.Shifts
         }
 
 
-        private void showMessagebox(string errorMessage,string errorCaption)
+        private static void showMessagebox(string errorMessage,string errorCaption)
         {
-            MessageBox.Show(errorMessage, errorCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1,
-                                        (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
+            ViewBase.ShowWarningMessage(errorMessage, errorCaption);
         }
 
         private void defaultTreeViewAfterSelect(object sender, EventArgs e)

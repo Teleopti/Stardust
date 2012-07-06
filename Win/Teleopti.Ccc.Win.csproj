@@ -551,12 +551,6 @@
     </Compile>
     <Compile Include="Common\VirtualSkill.cs" />
     <Compile Include="Common\VirtualSkillSetting.cs" />
-    <Compile Include="ControlTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ControlTest.Designer.cs">
-      <DependentUpon>ControlTest.cs</DependentUpon>
-    </Compile>
     <Compile Include="DayViewNew.cs" />
     <Compile Include="ExceptionHandling\SimpleExceptionHandlerView.cs">
       <SubType>Form</SubType>
@@ -2143,12 +2137,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Common\Controls\Cells\NumericReadOnlyCell.cs" />
-    <Compile Include="Common\TimedMessageBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\TimedMessageBox.Designer.cs">
-      <DependentUpon>TimedMessageBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="Permissions\PermissionsExplorerStateHolder.cs" />
     <Compile Include="Permissions\MyAvailableDataRangePanel.cs">
       <SubType>UserControl</SubType>
@@ -2555,10 +2543,6 @@
       <DependentUpon>AuthorizationStepResultListScreen.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\TimedMessageBox.resx">
-      <DependentUpon>TimedMessageBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Common\AbstractNavigator.resx">
       <DependentUpon>AbstractNavigator.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -2895,9 +2879,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\SearchPerson.resx">
       <DependentUpon>SearchPerson.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ControlTest.resx">
-      <DependentUpon>ControlTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ExceptionHandling\ExceptionHandlerView.resx">
       <DependentUpon>ExceptionHandlerView.cs</DependentUpon>

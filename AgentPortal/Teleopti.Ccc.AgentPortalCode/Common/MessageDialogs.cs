@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Syncfusion.Windows.Forms;
 
 namespace Teleopti.Ccc.AgentPortalCode.Common
 {
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
         {
             alert(owner);
 
-            MessageBox.Show(
+            MessageBoxAdv.Show(
                 owner,
                 message,
                 caption,
