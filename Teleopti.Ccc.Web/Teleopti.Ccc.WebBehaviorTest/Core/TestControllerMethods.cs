@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void ExpireMyCookieInsidePortal()
 		{
 			// doing this twice because IE fails to grab the cookie after the first one sometimes..
-			// probably depending on how quickly the next request takes places.
+			// probably depending on how quickly the next request takes place.
 			// making a second request seems to enforce the cookie somehow..
 			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Cookie is expired!"));
