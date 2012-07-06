@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.AgentPortal.Helper;
@@ -64,11 +65,13 @@ namespace Teleopti.Ccc.AgentPortal.Common
         {
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-             if (e.KeyCode == Keys.F1)
-             {
-                bool local = true;
+            bool local = keyData != (Keys.F1 | Keys.Shift);
+
+            if (keyData == Keys.F1 || keyData == (Keys.Shift | Keys.F1))
+            {
                 GuiHelper guiHelper = new GuiHelper();
                 Control activeControl = guiHelper.GetActiveControl(this);
                 BaseUserControl userControl = null;
@@ -90,14 +93,11 @@ namespace Teleopti.Ccc.AgentPortal.Common
                     if (userControl != null && userControl.HasHelp) break;
                     activeControl = activeControl.Parent;
                 }
-                if (e.KeyCode == Keys.F1 && e.Modifiers == Keys.Shift)
-                    local = false;//Online
 
                 HelpHelper.GetHelp(this, userControl, local);
-             }
-
-            base.OnKeyDown(e);
-          
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
          public void AddControlHelpContext(Control control)
