@@ -43,6 +43,12 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll.PayrollExportSmartPart
             Assert.IsAssignableFrom<StatusError>(_target.Status);
         }
 
+		[Test]
+		public void ShouldHaveValidProgressFromStart()
+		{
+			_target.Progress.Message.Should().Be.EqualTo(UserTexts.Resources.WaitingThreeDots);
+		}
+
         [Test]
         public void ShouldHandleResultInProgress()
         {

@@ -14807,7 +14807,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Override Period.
+        ///   Looks up a localized string similar to Override period time.
         /// </summary>
         public static string OverridePeriod {
             get {

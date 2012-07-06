@@ -909,4 +909,58 @@
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
     <value>班次类别和每天的全天缺勤</value>
   </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>缺席</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>换班</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>文字</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>按每个坐席分类的申请</value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>已批准</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>已拒绝</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>等待</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>申请类型：</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>状态：</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>申请日期</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>申请</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>申请日期</value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>申请周期</value>
+  </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>现在重定向</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>会话过期</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>您的会话由于未活动超时已经过期. 您会马上被再次重定向至登录页面.</value>
+  </data>
 </root>

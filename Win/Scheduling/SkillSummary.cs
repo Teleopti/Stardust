@@ -94,12 +94,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (textBoxSummeryName.Text.Length == 0)
             {
-                MessageBox.Show(UserTexts.Resources.EnterANameForTheGrouping, UserTexts.Resources.NoNameWasEntered, MessageBoxButtons.OK,
-                   MessageBoxIcon.Exclamation,
-                   MessageBoxDefaultButton.Button1,
-                   (RightToLeft == RightToLeft.Yes)
-                       ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                       : 0);
+                ShowWarningMessage(UserTexts.Resources.EnterANameForTheGrouping, UserTexts.Resources.NoNameWasEntered);
                 return;
             }
 

@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				if (destination == null)
 				{
 					destination = new PersonRequest(_loggedOnUser.Invoke().CurrentUser()) { Subject = source.Subject };
-					destination.Pending();
 				}
 
 				DateTimePeriod period;

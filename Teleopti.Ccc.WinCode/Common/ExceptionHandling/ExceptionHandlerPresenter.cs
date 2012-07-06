@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms;
 
 namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
 {
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
             _view.FormHeaderText(ExceptionHandlerModel.FormHeaderText);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public void CopyToClipboard()
         {
             try
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
             }
             catch (Exception)
             {
-                MessageBox.Show("Clipboard error", "Could not copy to clipboard", MessageBoxButtons.OK,
+                MessageBoxAdv.Show("Clipboard error", "Could not copy to clipboard", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
         }

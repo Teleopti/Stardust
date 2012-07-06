@@ -178,17 +178,9 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
             return (_sourceListCount + gridHeaderCount);
         }
 
-        private DialogResult ShowMyErrorMessage(string message, string caption)
+        private static DialogResult ShowMyErrorMessage(string message, string caption)
         {
-            return MessageBox.Show(
-                   string.Concat(message, DoubleSpace),
-                   caption,
-                   MessageBoxButtons.YesNo,
-                   MessageBoxIcon.Error,
-                   MessageBoxDefaultButton.Button1,
-                   (RightToLeft == RightToLeft.Yes)
-                       ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                       : 0);
+            return ViewBase.ShowYesNoMessage(message, caption);
         }
 
         private void MultiplicatorTypeCollection()

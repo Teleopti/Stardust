@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<SchedulePersonProvider>().As<ISchedulePersonProvider>();
 			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
 			builder.RegisterType<PersonPeriodProvider>().As<IPersonPeriodProvider>();
-			builder.RegisterType<ServiceBusSender>().As<IServiceBusSender>();
+			builder.RegisterType<ServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 		}
 	}
 }

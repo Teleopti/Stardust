@@ -75,16 +75,14 @@ namespace Teleopti.Ccc.Win.Optimization
             return ret;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         private bool validateMinMax(CheckBox checkBoxToUse, NumericUpDown numericUpDownMin, NumericUpDown numericUpDownMax, string message)
         {
             if (checkBoxToUse.Checked)
             {
                 if (numericUpDownMax.Value < numericUpDownMin.Value)
                 {
-                    MessageBox.Show(this, string.Concat(message, " "), UserTexts.Resources.DayOffReoptimizerOptions,
-                                                                MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1,
-                                                                (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
+                    ViewBase.ShowErrorMessage(this, message, UserTexts.Resources.DayOffReoptimizerOptions);
 
                     return false;
                 }

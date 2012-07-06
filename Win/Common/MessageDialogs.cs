@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Syncfusion.Windows.Forms;
 
 namespace Teleopti.Ccc.Win.Common
 {
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Win.Common
         {
             alert(owner);
 
-            MessageBox.Show(
+            MessageBoxAdv.Show(
                 owner,
                 message,
                 caption,
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Win.Common
         {
             alert(owner);
 
-            MessageBox.Show(
+            MessageBoxAdv.Show(
                 owner,
                 message,
                 caption,
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Win.Common
 		{
 			alert(owner);
 
-			MessageBox.Show(
+			MessageBoxAdv.Show(
 				owner,
 				message,
 				caption,
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Win.Common
 		{
 			alert(owner);
 
-			return MessageBox.Show(owner,
+			return MessageBoxAdv.Show(owner,
 				   message,
 				   caption,
 				   MessageBoxButtons.YesNo,

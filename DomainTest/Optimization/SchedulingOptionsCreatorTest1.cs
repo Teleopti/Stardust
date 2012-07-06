@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
 			Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
-            Assert.IsTrue(_schedulingOptions.UsePreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
 
             _optimizationPreferences.General.UseMustHaves = true;
             _optimizationPreferences.General.MustHavesValue = 0.8;

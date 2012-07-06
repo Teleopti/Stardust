@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading;
 using SignalR.Client.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
@@ -165,7 +164,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			if (_wrapper == null) return;
+			if (_wrapper == null || _subscriptionHandlers==null) return;
 
 			var handlersToRemove = new List<string>();
 			var subscriptionWithHandlersToRemove = new List<SubscriptionWithHandler>();

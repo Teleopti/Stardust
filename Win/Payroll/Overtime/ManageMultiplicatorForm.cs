@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
@@ -109,7 +108,6 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
                 {
                     handler.Invoke(this, new MultiplicatorAddedEventArgs(null));
                 }
-                return;
             }
         }
 
@@ -122,25 +120,13 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
             bool returnVal = true;
             if (string.IsNullOrEmpty(textBoxName.Text))
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(UserTexts.Resources.DefinitionSetNameBlank,
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button1,
-                    (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
+                ShowErrorMessage(UserTexts.Resources.DefinitionSetNameBlank, Text);
                 returnVal = false;
-
             }
 
             if (!textBoxMultiplicatorValue.IsValid())
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(UserTexts.Resources.MultiplicatorValueInvalid,
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button1,
-                    (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
-
+                ShowErrorMessage(UserTexts.Resources.MultiplicatorValueInvalid, Text);
                 returnVal = false;
             }
             return returnVal;

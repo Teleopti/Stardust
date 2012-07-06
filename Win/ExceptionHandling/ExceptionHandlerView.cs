@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
 
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.Win.ExceptionHandling
 
         public void ShowMessageBox(string message) 
         {
-            MessageBox.Show(message, UserTexts.Resources.ErrorMessage, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1,
+            MessageBoxAdv.Show(message, UserTexts.Resources.ErrorMessage, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1,
                                     (Rtl == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
         }
 

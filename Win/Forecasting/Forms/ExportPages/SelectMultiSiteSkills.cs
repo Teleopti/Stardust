@@ -157,8 +157,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             {
                 return true;
             }
-            MessageBoxAdv.Show(Resources.YouHaveToSelectAtLeastOneSkill, Resources.Message,
-                               MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            ViewBase.ShowWarningMessage(Resources.YouHaveToSelectAtLeastOneSkill, Resources.Message);
             return false;
         }
 

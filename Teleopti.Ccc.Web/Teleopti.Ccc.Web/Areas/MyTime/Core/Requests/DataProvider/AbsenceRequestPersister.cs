@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			if (_serviceBusSender.EnsureBus())
-			{		
+			{
 				var message = new NewAbsenceRequestCreated
 				              	{
 				              		BusinessUnitId = _businessUnitProvider.CurrentBusinessUnit().Id.GetValueOrDefault(Guid.Empty),
@@ -54,7 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				              		PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 				              		Timestamp = _now.UtcTime
 				              	};
-				_serviceBusSender.NotifyServiceBus(message);
+				var state = new TimerState {Message = message};
+				state.Timer = new Timer(notifyServiceBusAfterASmallDelay,state,TimeSpan.FromMilliseconds(50),TimeSpan.FromMilliseconds(-1));
 			}
 			else
 			{
@@ -62,6 +64,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+		}
+
+		private void notifyServiceBusAfterASmallDelay(object state)
+		{
+			var timerState = (TimerState)state;
+			_serviceBusSender.NotifyServiceBus(timerState.Message);
+			timerState.DisposeTimer();
+		}
+
+		private class TimerState
+		{
+			public Timer Timer { get; set; }
+			public NewAbsenceRequestCreated Message { get; set; }
+			
+			public void DisposeTimer()
+			{
+				if (Timer!=null)
+				{
+					Timer.Dispose();
+					Timer = null;
+				}
+			}
 		}
 	}
 }

@@ -224,6 +224,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void cellShouldContainInputValues(DateTime date)
 		{
+			EventualAssert.WhenElementExists(_page.CalendarCellForDate(date), c => c.ClassName, Is.StringContaining("unvalidated"));
 			EventualAssert.That(() => _page.CalendarCellForDate(date).InnerHtml, Is.StringContaining("05:00"));
 			EventualAssert.That(() => _page.CalendarCellForDate(date).InnerHtml, Is.StringContaining("14:00"));
 		}

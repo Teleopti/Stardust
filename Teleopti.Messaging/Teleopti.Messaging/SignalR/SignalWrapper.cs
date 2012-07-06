@@ -16,6 +16,7 @@ namespace Teleopti.Messaging.SignalR
 		private readonly IHubProxy _hubProxy;
 		private readonly HubConnection _hubConnection;
 		private const string EventName = "OnEventMessage";
+		private int _retryCount = 0;
 		private static readonly object LockObject = new object();
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
@@ -30,19 +31,40 @@ namespace Teleopti.Messaging.SignalR
 
 		public Task<object> NotifyClients(Notification notification)
 		{
-			verifyStillConnected();
-			return _hubProxy.Invoke("NotifyClients", notification);
+			if (verifyStillConnected())
+			{
+				return _hubProxy.Invoke("NotifyClients", notification);
+			}
+			return emptyTask();
 		}
 
-		private void verifyStillConnected()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		private bool verifyStillConnected()
 		{
+			if (_retryCount > 3)
+			{
+				return false;
+			}
+
 			lock (LockObject)
 			{
 				if (_hubConnection.State != ConnectionState.Connected)
 				{
-					startHubConnection();
+					try
+					{
+						startHubConnection();
+						_retryCount = 0;
+						return true;
+					}
+					catch (Exception)
+					{
+						//Suppress! Already logged upon startup for general failures.
+						_retryCount++;
+						return false;
+					}
 				}
 			}
+			return true;
 		}
 
 		public void StartListening()
@@ -96,14 +118,27 @@ namespace Teleopti.Messaging.SignalR
 
 		public Task<object> AddSubscription(Subscription subscription)
 		{
-			verifyStillConnected();
-			return _hubProxy.Invoke("AddSubscription", subscription);
+			if (verifyStillConnected())
+			{
+				return _hubProxy.Invoke("AddSubscription", subscription);
+			}
+			return emptyTask();
+		}
+
+		private static Task<object> emptyTask()
+		{
+			var task = new Task<object>();
+			task.OnFinished(null, null);
+			return task;
 		}
 
 		public Task<object> RemoveSubscription(string route)
 		{
-			verifyStillConnected();
-			return _hubProxy.Invoke("RemoveSubscription", route);
+			if (verifyStillConnected())
+			{
+				return _hubProxy.Invoke("RemoveSubscription", route);
+			}
+			return emptyTask();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]

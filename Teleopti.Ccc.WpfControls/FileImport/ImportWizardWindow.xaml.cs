@@ -1,5 +1,6 @@
 using System.IO;
 using System.Windows;
+using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.WinCode.FileImport;
 using Teleopti.Ccc.WpfControls.FileImport.ViewModels;
 using Teleopti.Interfaces.Domain;
@@ -29,12 +30,10 @@ namespace Teleopti.Ccc.WpfControls.FileImport
                 try
                 {
                     DataContext = ((IModel)DataContext).NextStep();
-
-                 
                 }
                 catch (FileImportException ex)
                 {
-                    MessageBox.Show(ex.Message, UserTexts.Resources.ImportError);
+                    MessageBoxAdv.Show(ex.Message, UserTexts.Resources.ImportError);
                     Close();
                 }
                 if (DataContext == null)
