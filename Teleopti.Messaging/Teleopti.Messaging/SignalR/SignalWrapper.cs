@@ -34,6 +34,7 @@ namespace Teleopti.Messaging.SignalR
 			return _hubProxy.Invoke("NotifyClients", notification);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void verifyStillConnected()
 		{
 			lock (LockObject)
