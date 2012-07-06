@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{
+			TestControllerMethods.BeforeScenario();
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
 		}
@@ -58,7 +59,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void AfterScenario()
 		{
 			HandleScenarioException();
-			TestControllerMethods.AfterScenario();
 		}
 
 		[AfterTestRun]

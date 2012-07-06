@@ -25,14 +25,20 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_businessUnitProvider = businessUnitProvider;
 		}
 
-		public ViewResult AfterScenario()
+		public ViewResult BeforeScenario()
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
 			var viewModel = new TestMessageViewModel
-			                	{
-			                		Title = "After scenario event", 
-									Message = "Resetting database state and clearing cookie and such..."
-			                	};
+								{
+									Title = "Setting up for scenario",
+									Message = "Setting up for scenario",
+									ListItems = new[]
+									            	{
+									            		"Restoring Ccc7 database",
+														"Clearing Analytics database",
+														"Removing browser cookie"
+									            	}
+								};
 			return View("Message", viewModel);
 		}
 

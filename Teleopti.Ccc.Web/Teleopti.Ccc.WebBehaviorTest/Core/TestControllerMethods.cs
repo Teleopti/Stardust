@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Current.GoTo("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"));
 		}
 
-		public static void AfterScenario()
+		public static void BeforeScenario()
 		{
-			Navigation.GoTo("Test/AfterScenario");
+			Navigation.GoTo("Test/BeforeScenario");
 		}
 
 		public static void LogonMobile()
