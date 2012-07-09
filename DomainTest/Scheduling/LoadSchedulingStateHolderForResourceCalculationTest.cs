@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			var accounts = _mocks.Stub<IDictionary<IPerson, IPersonAccountCollection>>();
 
-			Expect.Call(_personAbsenceAccountRepository.LoadAllAccounts()).Return(accounts);
+			Expect.Call(_personAbsenceAccountRepository.FindByUsers(null)).Return(accounts).IgnoreArguments();
 			_schedulingResultStateHolder.AllPersonAccounts = accounts;
 
 			_mocks.ReplayAll();
@@ -70,14 +70,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var skills = new List<ISkill> {SkillFactory.CreateSkill("test")};
 			var requestedPeople = new List<IPerson> {person};
 			var peopleInOrganization = new List<IPerson> {person};
-			var visiblePeople = new List<IPerson>();
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo());
 
 			using (_mocks.Record())
 			{
 				Expect.Call(_workloadRepository.LoadAll()).Return(new List<IWorkload>());
 				Expect.Call(_personRepository.FindPeopleInOrganization(dateOnlyPeriod, true)).Return(peopleInOrganization);
-				Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, visiblePeople)).IgnoreArguments
+				Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null)).IgnoreArguments
 					().Return(scheduleDictionary);
 				Expect.Call(_skillRepository.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
 				_peopleAndSkillLoadDecider.Execute(scenario,period,requestedPeople);

@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     scheduleDictionaryLoadOptions,
 					requestedPersons); //rk - fattar inte, för rörigt. lägger till detta av nån anledning här
 
-			_schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.LoadAllAccounts();
+			_schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
 
 			if (skills != null)
 				skills.ForEach(_schedulingResultStateHolder.Skills.Add);
