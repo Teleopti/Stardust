@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         /// </remarks>
         public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)
         {
-            double maxValue = Convert.ToDouble(TimeSpan.MaxValue.TotalSeconds);
-            double minValue = Convert.ToDouble(TimeSpan.MinValue.TotalSeconds);
+            double maxValue = TimeSpan.MaxValue.TotalSeconds;
+            double minValue = TimeSpan.MinValue.TotalSeconds;
 
             if (string.IsNullOrEmpty(text))
             {

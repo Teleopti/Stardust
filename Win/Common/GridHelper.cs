@@ -177,8 +177,8 @@ namespace Teleopti.Ccc.Win.Common
 
         private static double CheckSecondsRange(double d)
         {
-            double maxValue = Convert.ToDouble(TimeSpan.MaxValue.TotalSeconds);
-            double minValue = Convert.ToDouble(TimeSpan.MinValue.TotalSeconds);
+            double maxValue = TimeSpan.MaxValue.TotalSeconds;
+            double minValue = TimeSpan.MinValue.TotalSeconds;
             if (d < maxValue && d > minValue) return d;
             return 0;
         }
