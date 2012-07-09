@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
 
             if (keyData == Keys.F1 || keyData == (Keys.Shift | Keys.F1))
             {
-                HelpHelper.GetHelp(WebBrowser.Parent, this, local);
+                HelpHelper.GetHelp(WebBrowser.Parent.Parent.Parent.Parent.Parent, this, local);
                 return true;
             }
 
