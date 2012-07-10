@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-    public class ScheduleRange : Schedule, IScheduleRange
+    public class ScheduleRange : Schedule, IScheduleRange, IValidateScheduleRange
     {
         private readonly IList<IScheduleData> _scheduleObjectsWithNoPermissions;
         private ScheduleRange _snapshot;
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return ScheduleDay(dayAndPeriod, PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), AvailableDates);
 		}
 
-        public void ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
+        void IValidateScheduleRange.ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
         {
             var period = Owner.Period.VisiblePeriod.ToDateOnlyPeriod(Person.PermissionInformation.DefaultTimeZone());
 
