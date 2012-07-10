@@ -59,8 +59,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             if (String.IsNullOrEmpty(textBox1.Text)) return false;
             stateObj.ExportSkillToFileCommandModel.FileName = textBox1.Text;
             _saveFileDialog.Dispose();
-
-            
+            GetSelectedCheckbox(stateObj);
 
             return true;
         }
@@ -82,6 +81,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         private void btnChoose_Click(object sender, EventArgs e)
         {
             SaveFile();
+        }
+
+        public void GetSelectedCheckbox(ExportSkillModel stateObj)
+        {
+            if (radioButtonImportStaffing.Checked) stateObj.ExportSkillToFileCommandModel.ExportType = ExportSkillToFileCommandModel.TypeOfExport.Agents;
+            if (radioButtonImportWorkload.Checked) stateObj.ExportSkillToFileCommandModel.ExportType = ExportSkillToFileCommandModel.TypeOfExport.Calls;
+            if (radioButtonImportWLAndStaffing.Checked) stateObj.ExportSkillToFileCommandModel.ExportType = ExportSkillToFileCommandModel.TypeOfExport.AgentsAndCalls;
         }
     }
 }

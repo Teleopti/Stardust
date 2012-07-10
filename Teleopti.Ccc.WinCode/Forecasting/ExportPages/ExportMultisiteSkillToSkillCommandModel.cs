@@ -43,6 +43,14 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 
     public class ExportSkillToFileCommandModel
     {
+        public enum TypeOfExport
+        {
+            Agents,
+            Calls,
+            AgentsAndCalls
+        }
+
+        public TypeOfExport ExportType { get; set; } 
         public string FileName { get; set; }
         public ISkill Skill { get; set; }
         public DateOnlyPeriod Period { get; set; }

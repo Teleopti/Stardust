@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
     public class ForecastToFileCommand
     {
-        private readonly IImportForecastToSkillCommand _importForecastToSkillCommand; // using this will only send it to the servicebus, not needed since we can implement it here
+        private readonly IImportForecastToSkillCommand _importForecastToSkillCommand; // using this will only send it to the servicebus, 
+                                                                                      //not needed since we can implement it here and no logs are required
         private readonly ISkillDayLoadHelper _skillDayLoadHelper; // loads data?
         private readonly IScenarioProvider _scenarioProvider; //Scenario repo?
 
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
             _scenarioProvider = scenarioProvider;
         }
 
-        public void Execute(ISkill skill, IScenario scenario, DateOnlyPeriod period, string filePath)
+                                                                                 // Where to put enum to access it from here? Ugly solve but "should" work
+        public void Execute(ISkill skill, IScenario scenario, DateOnlyPeriod period, string typeOfExport, string filePath)
         {
             // not sure if this will acually get all the data needed
             var loadSkillSchedule = _skillDayLoadHelper.LoadSchedulerSkillDays(period, new[] {skill}, scenario);
@@ -34,19 +36,27 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 
                 foreach (var skillStaffPeriod in skillStaffPeriods.Values)
                 {
-                    result.Add(new ForecastsRow
+                    var row = new ForecastsRow
+                                  {
+                                      LocalDateTimeFrom = skillStaffPeriod.Period.StartDateTimeLocal(skill.TimeZone),
+                                      LocalDateTimeTo = skillStaffPeriod.Period.EndDateTimeLocal(skill.TimeZone),
+                                      UtcDateTimeFrom = skillStaffPeriod.Period.StartDateTime,
+                                      UtcDateTimeTo = skillStaffPeriod.Period.EndDateTime,
+                                      SkillName = skill.Name,                                      
+                                  };
+
+                    if (typeOfExport != "Agents")
                     {
-                        LocalDateTimeFrom = skillStaffPeriod.Period.StartDateTimeLocal(skill.TimeZone),
-                        LocalDateTimeTo = skillStaffPeriod.Period.EndDateTimeLocal(skill.TimeZone),
-                        UtcDateTimeFrom = skillStaffPeriod.Period.StartDateTime,
-                        UtcDateTimeTo = skillStaffPeriod.Period.EndDateTime,
-                        SkillName = skill.Name,
-                        Tasks = (int)skillStaffPeriod.Payload.TaskData.Tasks,
-                        TaskTime = skillStaffPeriod.Payload.TaskData.AverageTaskTime.TotalSeconds,
-                        AfterTaskTime = skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
-                        Agents = skillStaffPeriod.Payload.ForecastedIncomingDemand,
-                        Shrinkage = skillStaffPeriod.Payload.Shrinkage.Value
-                    } + System.Environment.NewLine);
+                        row.Tasks = (int)skillStaffPeriod.Payload.TaskData.Tasks;
+                        row.TaskTime = skillStaffPeriod.Payload.TaskData.AverageTaskTime.TotalSeconds;
+                        row.AfterTaskTime = skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime.TotalSeconds;
+                    }
+
+                    if (typeOfExport != "Calls")
+                    {
+                        row.Agents = skillStaffPeriod.Payload.ForecastedIncomingDemand;
+                    }
+                    result.Add(row + System.Environment.NewLine);
                 }
 
                 File.WriteAllLines(filePath, result.ToArray());
