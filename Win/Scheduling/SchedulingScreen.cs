@@ -1432,9 +1432,47 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_scheduleView.AllSelectedDates().Count == 0)
                     return;
 
+                //getting the activity and resolution
+
+                IOptimizerActivitiesPreferences preferences = new OptimizerActivitiesPreferences();
+                if (_currentSchedulingScreenSettings.OptimizeActivitiesSettings == null)
+                    _currentSchedulingScreenSettings.OptimizeActivitiesSettings = new OptimizeActivitiesSettings();
+
+                //read settings
+                preferences.KeepShiftCategory =
+                    _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepShiftCategory;
+                preferences.KeepStartTime = _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepStartTime;
+                preferences.KeepEndTime = _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepEndTime;
+                preferences.AllowAlterBetween =
+                    _currentSchedulingScreenSettings.OptimizeActivitiesSettings.AllowAlterBetween;
+
+                IList<IActivity> activities = new List<IActivity>();
+                if (_currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids != null)
+                {
+                    foreach (Guid id in _currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids
+                        )
+                    {
+                        foreach (IActivity activity in SchedulerState.CommonStateHolder.Activities)
+                        {
+                            if (activity.Id.Value == id)
+                                activities.Add(activity);
+                        }
+                    }
+                }
+
+                preferences.SetDoNotMoveActivities(activities);
+                preferences.SetActivities(SchedulerState.CommonStateHolder.Activities);
+
+                //remove activities from available activities that are in DoNotMoveActivities
+                foreach (var activity in
+                    preferences.DoNotMoveActivities.Where(activity => preferences.Activities.Contains(activity)))
+                {
+                    preferences.Activities.Remove(activity);
+                }
+                ////////
 
                 using (var optimizationPreferencesDialog =
-                    new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+                    new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, preferences, SchedulerState.DefaultSegmentLength))
                 {
                     if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
                     {

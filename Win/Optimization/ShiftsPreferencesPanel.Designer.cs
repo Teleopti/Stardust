@@ -26,7 +26,7 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGroupings"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxNotBreakMaxStaffing")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxNextDay"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxStartTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyAvailabilityDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxKeepShifts"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxKeepShiftCategories"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAlterBetween"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.Controls.FromToTimePicker.set_WholeDayText(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxKeep"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxEndTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGroupings"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxNotBreakMaxStaffing")]
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShiftsPreferencesPanel));
@@ -37,7 +37,6 @@
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.tabPageGeneral = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.checkBoxKeepShifts = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -55,7 +54,6 @@
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanelTagWith.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
-            this.tabPageGeneral.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -159,17 +157,6 @@
             this.checkBox2.TabIndex = 7;
             this.checkBox2.Text = "xxUseAvailability";
             this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // tabPageGeneral
-            // 
-            this.tabPageGeneral.Controls.Add(this.tableLayoutPanel1);
-            this.tabPageGeneral.Location = new System.Drawing.Point(4, 22);
-            this.tabPageGeneral.Name = "tabPageGeneral";
-            this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGeneral.Size = new System.Drawing.Size(422, 581);
-            this.tabPageGeneral.TabIndex = 0;
-            this.tabPageGeneral.Text = "xxGeneral";
-            this.tabPageGeneral.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel3
             // 
@@ -337,9 +324,9 @@
             this.checkBoxKeepStartTimes.AutoSize = true;
             this.checkBoxKeepStartTimes.Location = new System.Drawing.Point(3, 53);
             this.checkBoxKeepStartTimes.Name = "checkBoxKeepStartTimes";
-            this.checkBoxKeepStartTimes.Size = new System.Drawing.Size(86, 17);
+            this.checkBoxKeepStartTimes.Size = new System.Drawing.Size(81, 17);
             this.checkBoxKeepStartTimes.TabIndex = 23;
-            this.checkBoxKeepStartTimes.Text = "xxStartTimes";
+            this.checkBoxKeepStartTimes.Text = "xxStartTime";
             this.checkBoxKeepStartTimes.UseVisualStyleBackColor = true;
             // 
             // checkBoxKeepEndTimes
@@ -347,9 +334,9 @@
             this.checkBoxKeepEndTimes.AutoSize = true;
             this.checkBoxKeepEndTimes.Location = new System.Drawing.Point(3, 78);
             this.checkBoxKeepEndTimes.Name = "checkBoxKeepEndTimes";
-            this.checkBoxKeepEndTimes.Size = new System.Drawing.Size(83, 17);
+            this.checkBoxKeepEndTimes.Size = new System.Drawing.Size(78, 17);
             this.checkBoxKeepEndTimes.TabIndex = 24;
-            this.checkBoxKeepEndTimes.Text = "xxEndTimes";
+            this.checkBoxKeepEndTimes.Text = "xxEndTime";
             this.checkBoxKeepEndTimes.UseVisualStyleBackColor = true;
             // 
             // ShiftsPreferencesPanel
@@ -365,7 +352,6 @@
             this.tableLayoutPanelTagWith.PerformLayout();
             this.tableLayoutPanel7.ResumeLayout(false);
             this.tableLayoutPanel7.PerformLayout();
-            this.tabPageGeneral.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -383,7 +369,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.TabPage tabPageGeneral;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTagWith;
         private System.Windows.Forms.Label label6;
