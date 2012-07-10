@@ -4,6 +4,8 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -14,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public class AddAbsenceCommand : AddLayerCommand
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public AddAbsenceCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, SchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts)
+		public AddAbsenceCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, ISchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts)
 			: base(schedulerStateHolder, scheduleViewBase, presenter, scheduleParts ?? scheduleViewBase.CurrentColumnSelectedSchedules())
 		{
 		}
@@ -60,7 +62,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			foreach (IPerson selectedPerson in selectedPersons)
 			{
 				IList<IScheduleDay> selectedAbsenceDaysPerPerson = new List<IScheduleDay>();
-
+                
 				var dateOnlyPeriod = absencePeriod.ToDateOnlyPeriod(selectedPerson.PermissionInformation.DefaultTimeZone());
 				foreach (var dateOnly in dateOnlyPeriod.DayCollection())
 				{
@@ -74,17 +76,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				foreach (IList<IScheduleDay> scheduleDays in aggregateList)
 				{
-					IScheduleDay fistDayInList = scheduleDays[0];
+					IScheduleDay firstDayInList = scheduleDays[0];
 					IScheduleDay lastDayInList = scheduleDays[scheduleDays.Count - 1];
 
-					DateTimePeriod aggregateAbsencePeriod = new DateTimePeriod(fistDayInList.Period.StartDateTime, lastDayInList.Period.EndDateTime);
+					DateTimePeriod aggregateAbsencePeriod = new DateTimePeriod(firstDayInList.Period.StartDateTime, lastDayInList.Period.EndDateTime);
 					DateTimePeriod? currentAbsencePeriod = aggregateAbsencePeriod.Intersection(absencePeriod);
 					if (!currentAbsencePeriod.HasValue)
 						continue;
 
 					IAbsenceLayer absLayer = new AbsenceLayer(absence, currentAbsencePeriod.Value);
-					fistDayInList.CreateAndAddAbsence(absLayer);
-					Presenter.ModifySchedulePart(new List<IScheduleDay> { fistDayInList });
+					firstDayInList.CreateAndAddAbsence(absLayer);
+				    var firstDay = new List<IScheduleDay> {firstDayInList};
+
+                    if (!Presenter.ModifySchedulePart(firstDay))
+                    {
+                        var scheduleRange = (IValidateScheduleRange) SchedulerStateHolder.Schedules[selectedPerson];
+                        scheduleRange.ValidateBusinessRules(NewBusinessRuleCollection.MinimumAndPersonAccount(SchedulerStateHolder.SchedulingResultState));
+                        return;
+                    }
+
 				}
 
 				ScheduleViewBase.RefreshRangeForAgentPeriod(selectedPerson, absencePeriod);

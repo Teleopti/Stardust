@@ -482,7 +482,7 @@ namespace Teleopti.Ccc.Domain.Collection
         {
             foreach (IPerson person in people)
             {
-                ScheduleRange range = (ScheduleRange)this[person];
+                var range = (IValidateScheduleRange)this[person];
                 range.ValidateBusinessRules(newBusinessRuleCollection);
             }
         }
@@ -496,7 +496,7 @@ namespace Teleopti.Ccc.Domain.Collection
             // kick off each persons validation in its own thread
             foreach (IPerson person in people)
             {
-                ScheduleRange range = (ScheduleRange)this[person];
+                var range = (IValidateScheduleRange)this[person];
                 ValidateBusinessRulesDelegate toRun = range.ValidateBusinessRules;
                 IAsyncResult result = toRun.BeginInvoke(newBusinessRuleCollection, null, null);
                 runnableList.Add(toRun, result);
