@@ -779,6 +779,12 @@
     <Compile Include="Optimization\AdvancedPreferencesPanel.Designer.cs">
       <DependentUpon>AdvancedPreferencesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Optimization\ShiftsPreferencesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Optimization\ShiftsPreferencesPanel.Designer.cs">
+      <DependentUpon>ShiftsPreferencesPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Optimization\DayOffPreferencesPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2511,6 +2517,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Optimization\AdvancedPreferencesPanel.resx">
       <DependentUpon>AdvancedPreferencesPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Optimization\ShiftsPreferencesPanel.resx">
+      <DependentUpon>ShiftsPreferencesPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Optimization\DayOffPreferencesPanel.resx">
       <DependentUpon>DayOffPreferencesPanel.cs</DependentUpon>

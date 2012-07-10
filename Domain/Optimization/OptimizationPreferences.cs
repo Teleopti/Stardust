@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Extra = new ExtraPreferences();
 			Advanced = new AdvancedPreferences();
 			Rescheduling = new ReschedulingPreferences();
+            Shifts = new ShiftPreferences();
 		}
 
 		public IGeneralPreferences General { get; set; }
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IExtraPreferences Extra { get; set; }
 		public IAdvancedPreferences Advanced { get; set; }
 		public IReschedulingPreferences Rescheduling { get; set; }
+        public IShiftPreferences Shifts { get; set; }
 
 	}
 
@@ -94,6 +96,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public double KeepShiftsValue { get; set; }
 	}
+
+    public class ShiftPreferences : IShiftPreferences
+    {
+
+        public bool KeepShiftCategories { get; set; }
+        public bool KeepEndTimes { get; set; }
+        public bool KeepStartTimes { get; set; }
+        public bool KeepShifts { get; set; }
+
+        public double KeepShiftsValue { get; set; }
+    }
 
 	public class AdvancedPreferences : IAdvancedPreferences
 	{

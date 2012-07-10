@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.Win.Optimization
 		private DaysOffPreferencesPersonalSettings _defaultDaysOffPreferences;
 		private ExtraPreferencesPersonalSettings _defaultExtraPreferences;
 		private AdvancedPreferencesPersonalSettings _defaultAdvancedPreferences;
-
+        private ShiftsPreferencesPersonalSettings _defaultshiftsPreferences;
+        
         private IList<IDataExchange> panels { get; set; }
 
         private readonly IList<IGroupPageLight> _groupPages;
@@ -56,9 +57,10 @@ namespace Teleopti.Ccc.Win.Optimization
 			LoadPersonalSettings();
             generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
             dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
-	    extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _eventAggregator);
+	        extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _eventAggregator);
             advancedPreferencesPanel1.Initialize(Preferences.Advanced);
-            panels = new List<IDataExchange>{generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, advancedPreferencesPanel1};
+            shiftsPreferencesPanel1.Initialize(Preferences.Shifts );
+            panels = new List<IDataExchange>{generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1};
 
             AddToHelpContext();
             SetColor();
@@ -90,6 +92,8 @@ namespace Teleopti.Ccc.Win.Optimization
 					_defaultDaysOffPreferences = settingRepository.FindValueByKey("DaysOffPreferencesPersonalSettings", new DaysOffPreferencesPersonalSettings());
 					_defaultExtraPreferences = settingRepository.FindValueByKey("ExtraPreferencesPersonalSettings", new ExtraPreferencesPersonalSettings());
 					_defaultAdvancedPreferences = settingRepository.FindValueByKey("AdvancedPreferencesPersonalSettings", new AdvancedPreferencesPersonalSettings());
+                    _defaultshiftsPreferences = settingRepository.FindValueByKey("ShiftsPreferencesPersonalSettings",
+				                                                                          new ShiftsPreferencesPersonalSettings());
 				}
 			}
 			catch (DataSourceException)
@@ -101,6 +105,8 @@ namespace Teleopti.Ccc.Win.Optimization
 			_defaultDaysOffPreferences.MapTo(Preferences.DaysOff);
 			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages);
 			_defaultAdvancedPreferences.MapTo(Preferences.Advanced);
+            _defaultshiftsPreferences.MapTo(Preferences.Shifts );
+            
 		}
 
 		private void SavePersonalSettings()
@@ -109,7 +115,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			_defaultDaysOffPreferences.MapFrom(Preferences.DaysOff);
 			_defaultExtraPreferences.MapFrom(Preferences.Extra);
 			_defaultAdvancedPreferences.MapFrom(Preferences.Advanced);
-
+            _defaultshiftsPreferences.MapFrom(Preferences.Shifts );
 			try
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -122,6 +128,8 @@ namespace Teleopti.Ccc.Win.Optimization
 					uow.PersistAll();
 					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultAdvancedPreferences);
 					uow.PersistAll();
+                    new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultshiftsPreferences );
+                    uow.PersistAll();
 				}
 			}
 			catch (DataSourceException)
@@ -146,6 +154,7 @@ namespace Teleopti.Ccc.Win.Optimization
             dayOffPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
             extraPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
             advancedPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
+            shiftsPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)

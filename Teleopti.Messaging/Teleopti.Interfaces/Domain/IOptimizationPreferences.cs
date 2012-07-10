@@ -39,6 +39,11 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The local scheduling options.</value>
         IReschedulingPreferences Rescheduling { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        IShiftPreferences Shifts { get; set; }
     }
 
     /// <summary>
@@ -335,6 +340,48 @@ namespace Teleopti.Interfaces.Domain
         /// 	<c>true</c> if keep start and end times; otherwise, <c>false</c>.
         /// </value>
         bool KeepStartAndEndTimes { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to keep shifts.
+        /// </summary>
+        /// <value><c>true</c> if keep shifts; otherwise, <c>false</c>.</value>
+        bool KeepShifts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the keep shifts value.
+        /// </summary>
+        /// <value>The keep shifts value.</value>
+        double KeepShiftsValue { get; set; }
+
+
+    }
+
+    /// <summary>
+    /// Extra optimization preferences
+    /// </summary>
+    public interface IShiftPreferences
+    {
+        /// <summary>
+        /// Gets or sets a value indicating whether to keep shift categories.
+        /// </summary>
+        /// <value><c>true</c> if [keep shift categories]; otherwise, <c>false</c>.</value>
+        bool KeepShiftCategories { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to keep start and end times.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if keep start and end times; otherwise, <c>false</c>.
+        /// </value>
+        bool KeepStartTimes { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to keep start and end times.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if keep start and end times; otherwise, <c>false</c>.
+        /// </value>
+        bool KeepEndTimes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to keep shifts.
