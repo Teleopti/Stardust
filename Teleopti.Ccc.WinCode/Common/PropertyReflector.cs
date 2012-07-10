@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             var property = GetPropertyInfo(target.GetType(), propertyName);
             if(property.CanWrite)
-                property.SetValue(target, value, NoParams);
+                    property.SetValue(target, value, NoParams);
         }
 
         /// <summary> 
