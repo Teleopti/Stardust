@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return ScheduleDay(dayAndPeriod, PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), AvailableDates);
 		}
 
-        void IValidateScheduleRange.ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
+        public void ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
         {
             var period = Owner.Period.VisiblePeriod.ToDateOnlyPeriod(Person.PermissionInformation.DefaultTimeZone());
 
