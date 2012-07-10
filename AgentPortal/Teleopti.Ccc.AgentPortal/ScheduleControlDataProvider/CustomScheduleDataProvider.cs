@@ -126,6 +126,20 @@ namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
             foreach (ActivityDto dto in arrActivityDto)
             {
                 var color = ColorHelper.CreateColorFromDto(dto.DisplayColor);
+                
+                // check what font is acually used!
+                var font = new Font("Arial", 8, FontStyle.Regular);
+                
+                if (dto.Description.Length > 18) dto.Description = dto.Description.Substring(0, 18);
+
+                Size textSize = System.Windows.Forms.TextRenderer.MeasureText(dto.Description, font);
+                while (textSize.Width > 90)
+                {
+                    dto.Description = dto.Description.Substring(0, dto.Description.Length - 4) +
+                                      UserTexts.Resources.ThreeDots;
+                    textSize = System.Windows.Forms.TextRenderer.MeasureText(dto.Description, font);
+                }
+
                 var label = new ListObject(lableValue++, dto.Description, color);
                 labels.Add(label);
             }
