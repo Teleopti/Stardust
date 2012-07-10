@@ -140,6 +140,10 @@ namespace Teleopti.Ccc.Win.Common
                             grid[top, left + i].CellValue = list[i];
                             break;
                         case "PositiveTimeSpanTotalSecondsCell":
+                            grid[top, left + i].CellValue = list[i] > 0
+                                                                ? TimeSpan.FromSeconds(CheckSecondsRange(list[i]))
+                                                                : TimeSpan.FromSeconds(0);
+                            break;
                         case "TimeSpanTotalSecondsCell":
                             grid[top, left + i].CellValue = TimeSpan.FromSeconds(CheckSecondsRange(list[i]));
                             break;
@@ -154,12 +158,11 @@ namespace Teleopti.Ccc.Win.Common
                             break;
                         case "MultiSitePercentCell":
                         case "ServicePercentCell":
-                            {
-                                Percent result;
-                                var t = Percent.TryParse(list[i].ToString(CultureInfo.CurrentCulture), out result);
-                                if (t && (list[i] <= 100))
-                                    grid[top, left + i].CellValue = result;
-                            }
+                            Percent result;
+                            var t = Percent.TryParse(list[i].ToString(CultureInfo.CurrentCulture), out result);
+                            if (t && (list[i] <= 100))
+                                grid[top, left + i].CellValue = result;
+
                             break;
                         case "TimeSpanLongHourMinuteSecondOnlyPositiveCellModel":
                             if (list[i] >= 0)
@@ -167,8 +170,6 @@ namespace Teleopti.Ccc.Win.Common
                             break; 
                         case "IntegerMinMaxAgentCell":
                             grid[top, left + i].CellValue = (int)list[i];
-                            break;
-                        default:
                             break;
                     }
                 }
