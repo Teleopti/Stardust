@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest
         private MockRepository _mocks;
         private IScenario _scenario;
         private IAbsence _selectedItem;
-        private DateTimePeriod _period;
+       // private DateTimePeriod _period;
         private IGridlockManager _gridlockManager;
         private IAddLayerViewModel<IAbsence> _dialog;
         private IPerson _person;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest
             _viewBase = _mocks.DynamicMock<IScheduleViewBase>();
             _scenario = _mocks.DynamicMock<IScenario>();
             _dialog = _mocks.StrictMock<IAddLayerViewModel<IAbsence>>();
-            _period = new DateTimePeriod(2012, 7, 16, 2012, 7, 16);
+           // _period = new DateTimePeriod(2012, 7, 16, 2012, 7, 16);
             _dateOnlyPeriod = new DateOnlyPeriod(2012, 7, 16, 2012, 7, 16);
             _selectedSchedules = new List<IScheduleDay>();
             _schedulePart = _mocks.DynamicMock<IScheduleDay>();
