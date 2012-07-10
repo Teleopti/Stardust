@@ -59,6 +59,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             if (String.IsNullOrEmpty(textBox1.Text)) return false;
             stateObj.ExportSkillToFileCommandModel.FileName = textBox1.Text;
             _saveFileDialog.Dispose();
+
+            
+
             return true;
         }
 

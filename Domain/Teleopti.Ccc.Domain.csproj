@@ -155,6 +155,7 @@
     <Compile Include="Common\DateOnlyAsDateTimePeriod.cs" />
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="Common\ScenarioProvider.cs" />
+    <Compile Include="Forecasting\Export\ForecastToFileCommand.cs" />
     <Compile Include="Forecasting\Export\IJobResultFeedback.cs" />
     <Compile Include="Forecasting\Export\ImportForecastToSkillCommand.cs" />
     <Compile Include="Forecasting\Export\IMultisiteSkillForExport.cs" />

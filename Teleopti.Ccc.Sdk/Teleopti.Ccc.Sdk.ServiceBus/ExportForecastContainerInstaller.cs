@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<OpenAndSplitSkillCommand>().As<IOpenAndSplitSkillCommand>();
             builder.RegisterType<ImportForecastToSkillCommand>().As<IImportForecastToSkillCommand>();
             builder.RegisterType<SendImportForecastBusMessage>().As<ISendBusMessage>();
+            builder.RegisterType<ForecastToFileCommand>().As<ForecastToFileCommand>();
 		}
     }
 }
