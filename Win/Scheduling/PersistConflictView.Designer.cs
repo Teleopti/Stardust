@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling
+﻿using System.Windows.Forms;
+
+namespace Teleopti.Ccc.Win.Scheduling
 {
     partial class PersistConflictView
     {
@@ -145,6 +147,8 @@
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(871, 454);
+            this.AutoSize = true;
+            this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.btnOverWrite);
 			this.Controls.Add(this.btnUndo);
