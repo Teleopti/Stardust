@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
                 var scheduleDay = scheduleDictionary[person].ScheduledDay(startDate);
                 scheduleDay.DeleteMainShift(scheduleDay);
-                _saveSchedulePartService.Save(uow, scheduleDay);
+                _saveSchedulePartService.Save(scheduleDay,NewBusinessRuleCollection.Minimum());
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();

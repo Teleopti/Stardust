@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -96,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
                 Expect.Call(_shiftCategoryRepository.Load(_newMainShiftCommandDto.ShiftCategoryId)).Return(_shiftCategory);
-                Expect.Call(()=>_saveSchedulePartService.Save(unitOfWork, schedulePart));
+                Expect.Call(()=>_saveSchedulePartService.Save(schedulePart, null)).IgnoreArguments();
             }
             using(_mock.Playback())
             {
@@ -125,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
 				Expect.Call(_shiftCategoryRepository.Load(_newMainShiftCommandDto.ShiftCategoryId)).Return(_shiftCategory);
-				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, schedulePart));
+				Expect.Call(() => _saveSchedulePartService.Save(schedulePart,null)).IgnoreArguments();
 			}
 			using (_mock.Playback())
 			{

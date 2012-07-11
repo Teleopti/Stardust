@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
                 Expect.Call(() => schedulePart.DeleteMainShift(schedulePart));
-                Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, schedulePart));
+                Expect.Call(() => _saveSchedulePartService.Save(schedulePart,null)).IgnoreArguments();
             }
             using(_mock.Playback())
             {
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
 				Expect.Call(() => schedulePart.DeleteMainShift(schedulePart));
-				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, schedulePart));
+				Expect.Call(() => _saveSchedulePartService.Save(schedulePart,null)).IgnoreArguments();
 			}
 			using (_mock.Playback())
 			{

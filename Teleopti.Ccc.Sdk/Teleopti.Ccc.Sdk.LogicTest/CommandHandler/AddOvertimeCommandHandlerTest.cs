@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(()=>scheduleDay.CreateAndAddOvertime(null)).IgnoreArguments();
                 Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);
                 Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
-                Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, scheduleDay));
+                Expect.Call(() => _saveSchedulePartService.Save(scheduleDay,null)).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(() => scheduleDay.CreateAndAddOvertime(null)).IgnoreArguments();
 				Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);
 				Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
-				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, scheduleDay));
+				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay,null)).IgnoreArguments();
 			}
 			using (_mock.Playback())
 			{

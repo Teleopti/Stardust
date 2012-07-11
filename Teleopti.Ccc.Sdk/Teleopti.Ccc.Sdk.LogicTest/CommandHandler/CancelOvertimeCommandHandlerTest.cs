@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IScenario _scenario;
         private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto(new DateOnly(_startDate));
-        private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto()
+        private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto
         {
             UtcStartTime = _startDate,
             UtcEndTime = _startDate.AddDays(1)
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
-                Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, scheduleDay));
+                Expect.Call(() => _saveSchedulePartService.Save(scheduleDay,null)).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
-				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, scheduleDay));
+				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay,null)).IgnoreArguments();
 			}
 			using (_mock.Playback())
 			{
