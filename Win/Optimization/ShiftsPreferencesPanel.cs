@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Win.Common;
 
@@ -11,7 +12,9 @@ namespace Teleopti.Ccc.Win.Optimization
     {
 
         public IShiftPreferences Preferences { get; private set; }
-        private IOptimizerActivitiesPreferences _model;
+        private IList<IActivity> _availableActivity;
+        private IList<IActivity> _selectedActivity;
+        private IList<Guid> _selectedActivitiesGuids; 
         private int _resolution;
 
         public ShiftsPreferencesPanel()
@@ -22,9 +25,10 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Initialize(
-            IShiftPreferences extraPreferences, IOptimizerActivitiesPreferences model, int resolution)
+            IShiftPreferences extraPreferences, IList<IActivity > availableActivity , int resolution)
 		{
-		    _model = model;
+
+		    _availableActivity = availableActivity;
 		    _resolution = resolution;
             Preferences = extraPreferences;
 			ExchangeData(ExchangeDataOption.DataSourceToControls);
@@ -50,8 +54,23 @@ namespace Teleopti.Ccc.Win.Optimization
 
             fromToTimePicker1.WholeDay.Visible = false;
 
+            IList<IActivity> activities = new List<IActivity>();
+            if (_selectedActivitiesGuids  != null)
+            {
+                foreach (Guid id in _selectedActivitiesGuids
+                    )
+                {
+                    foreach (IActivity activity in _availableActivity)
+                    {
+                        if (activity.Id.Value == id)
+                            activities.Add(activity);
+                    }
+                }
+            }
 
-            twoListSelectorActivities.Initiate(_model.Activities , _model.DoNotMoveActivities , "Description", UserTexts.Resources.Activities, UserTexts.Resources.DoNotMove);
+            _selectedActivity = activities;
+
+            twoListSelectorActivities.Initiate(_availableActivity, _selectedActivity, "Description", UserTexts.Resources.Activities, UserTexts.Resources.DoNotMove);
         }
 
         #region IDataExchange Members
@@ -102,13 +121,10 @@ namespace Teleopti.Ccc.Win.Optimization
             numericUpDownKeepShifts.Value = (decimal) Preferences.KeepShiftsValue * 100;
         }
 
-       
-
-        //private void setRadioButtonsStatus()
-        //{
-        //    radioButtonBetweenDayOff.Enabled = checkBoxBlock.Checked;
-        //    radioButtonSchedulePeriod.Enabled = checkBoxBlock.Checked;
-        //}
+        public IList<IActivity> DoNotMoveActivities()
+        {
+            return twoListSelectorActivities.GetSelected<IActivity>();
+        }
 
     }
 
