@@ -395,7 +395,10 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The keep shifts value.</value>
         double KeepShiftsValue { get; set; }
 
-
+        /// <summary>
+        /// Alter between property
+        /// </summary>
+        bool AlterBetween { get; set; }
     }
 
     /// <summary>

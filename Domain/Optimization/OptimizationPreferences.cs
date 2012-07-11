@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public bool KeepEndTimes { get; set; }
         public bool KeepStartTimes { get; set; }
         public bool KeepShifts { get; set; }
+        public bool AlterBetween { get; set; }
 
         public double KeepShiftsValue { get; set; }
     }

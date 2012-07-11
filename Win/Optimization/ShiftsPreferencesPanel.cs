@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Optimization
             Preferences.KeepStartTimes = checkBoxKeepEndTimes.Checked;
             Preferences.KeepEndTimes = checkBoxKeepStartTimes.Checked;
             Preferences.KeepShifts = checkBoxKeepShifts.Checked;
- 
+            Preferences.AlterBetween = checkBoxBetween.Checked ;
             Preferences.KeepShiftsValue = (double)numericUpDownKeepShifts.Value  / 100;
         }
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Win.Optimization
             checkBoxKeepEndTimes.Checked = Preferences.KeepEndTimes;
             checkBoxKeepStartTimes.Checked = Preferences.KeepStartTimes;
             checkBoxKeepShifts.Checked = Preferences.KeepShifts;
-
+            checkBoxBetween.Checked = Preferences.AlterBetween;
             numericUpDownKeepShifts.Value = (decimal) Preferences.KeepShiftsValue * 100;
         }
 
