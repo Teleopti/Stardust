@@ -7982,8 +7982,8 @@ Period</value>
     <comment>Not saved</comment>
   </data>
   <data name="OverWrite" xml:space="preserve">
-    <value>Over write</value>
-    <comment>Over write</comment>
+    <value>Overwrite</value>
+    <comment>Overwrite</comment>
   </data>
   <data name="PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges" xml:space="preserve">
     <value>Please save again when you have reviewed the applied changes!</value>
