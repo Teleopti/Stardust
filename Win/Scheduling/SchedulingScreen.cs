@@ -1469,7 +1469,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     preferences.Activities.Remove(activity);
                 }
-                ////////
+                ////////end of getting the activity and resolution
 
                 using (var optimizationPreferencesDialog =
                     new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, preferences, SchedulerState.DefaultSegmentLength))

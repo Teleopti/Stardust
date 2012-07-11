@@ -36,14 +36,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public void MapFrom(IShiftPreferences source)
 		{
-			
+            if (source != null)
+            {
+                _keepShiftCategories = source.KeepShiftCategories;
+                _keepStartTimes = source.KeepStartTimes;
+                _keepEndTimes = source.KeepEndTimes;
+                _keepShifts = source.KeepShifts;
 
-			_keepShiftCategories = source.KeepShiftCategories;
-            _keepStartTimes = source.KeepStartTimes;
-            _keepEndTimes = source.KeepEndTimes;
-			_keepShifts = source.KeepShifts;
-
-			_keepShiftsValue = source.KeepShiftsValue;
+                _keepShiftsValue = source.KeepShiftsValue;
+            }
 		}
 
 		
