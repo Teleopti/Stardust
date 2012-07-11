@@ -736,7 +736,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
                 drawingRect.Offset(drawingRect.Height / 16, 2);   //rect.Height / 4
                 drawingRect.Width -= drawingRect.Height / 16 * 2; //rect.Height / 4
                 drawingRect.Height -= 2 * 2;
-
+                
                 GridStaticCellRenderer.DrawText(e.Graphics, displayText, e.Style.GdipFont, drawingRect,
                                                 e.Style, e.Style.TextColor, e.Style.RightToLeft == RightToLeft.Yes);
                 e.Cancel = true;

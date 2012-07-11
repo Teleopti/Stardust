@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Syncfusion.Schedule;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
@@ -148,7 +149,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
         public IScheduleAppointmentList ScheduleAppointments(DateTimePeriodDto period, ScheduleAppointmentTypes scheduleItemType)
         {
             IScheduleAppointmentList list = new ScheduleAppointmentList();
-
+            
             foreach (KeyValuePair<DateTime, IScheduleItemList> keyValuePair in _dictionary)
             {
                 foreach (ICustomScheduleAppointment scheduleItem in keyValuePair.Value.ScheduleItemCollection)
@@ -159,7 +160,31 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
                         if ((scheduleItem.StartTime >= period.LocalStartDateTime) &&
                             (scheduleItem.EndTime.AddSeconds(-1).AddMilliseconds(-1) <= period.LocalEndDateTime)) //Hmm... Removed 1 second to fix problem with DST in Jordan Time 
                         {
+                            var defaultFont = new Font("Arial", 8, FontStyle.Regular);
+                            // truncate subject
+                            if (scheduleItem.Subject.Length > 15) scheduleItem.Subject = scheduleItem.Subject.Substring(0, 18);
+                            Size textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.Subject, defaultFont);
+
+                            while (textSize.Width > 90)
+                            {
+                                scheduleItem.Subject = scheduleItem.Subject.Substring(0, scheduleItem.Subject.Length - 4) +
+                                                  UserTexts.Resources.ThreeDots;
+                                textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.Subject, defaultFont);
+                            }
+
+                            // truncate location
+                            if (scheduleItem.LocationValue.Length > 24) scheduleItem.LocationValue = scheduleItem.LocationValue.Substring(0, 24);
+                            textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.LocationValue, defaultFont);
+
+                            while (textSize.Width > 120)
+                            {
+                                scheduleItem.LocationValue = scheduleItem.LocationValue.Substring(0, scheduleItem.LocationValue.Length - 4) +
+                                                  UserTexts.Resources.ThreeDots;
+                                textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.LocationValue, defaultFont);
+                            }
+
                             list.Add(scheduleItem);
+                            defaultFont.Dispose();
                         }
                     }
                 }

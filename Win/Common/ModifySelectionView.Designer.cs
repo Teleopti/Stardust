@@ -207,6 +207,7 @@ namespace Teleopti.Ccc.Win.Common
             this.textBoxExtPercent.Size = new System.Drawing.Size(85, 20);
             this.textBoxExtPercent.TabIndex = 2;
             this.textBoxExtPercent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.textBoxExtPercent.MaxLength = 9;
             this.textBoxExtPercent.TextChanged += new System.EventHandler(this.textBoxExtPercent_TextChanged);
             // 
             // autoLabelPlusMinus
