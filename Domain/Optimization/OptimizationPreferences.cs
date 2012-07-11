@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public bool KeepStartTimes { get; set; }
         public bool KeepShifts { get; set; }
         public bool AlterBetween { get; set; }
-        public IList<Guid> DoNotMoveActivitiesGuids { get; set; }
+        public IList<Guid> SelectedActivitiesGuids { get; set; }
        
 
         public double KeepShiftsValue { get; set; }

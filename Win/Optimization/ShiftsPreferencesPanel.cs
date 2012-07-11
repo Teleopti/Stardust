@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.Win.Optimization
             fromToTimePicker1.WholeDay.Visible = false;
 
             IList<IActivity> activities = new List<IActivity>();
-            if (Preferences.DoNotMoveActivitiesGuids   != null)
+            if (Preferences.SelectedActivitiesGuids   != null)
             {
-                foreach (Guid id in Preferences.DoNotMoveActivitiesGuids
+                foreach (Guid id in Preferences.SelectedActivitiesGuids
                     )
                 {
                     foreach (IActivity activity in _availableActivity)
@@ -116,11 +116,11 @@ namespace Teleopti.Ccc.Win.Optimization
 
             IList<Guid> guidList = new List<Guid>();
 
-            foreach (IActivity activity in DoNotMoveActivities())
+            foreach (IActivity activity in SelectedActivities())
             {
                 guidList.Add(activity.Id.Value);
             }
-            Preferences.DoNotMoveActivitiesGuids = guidList;
+            Preferences.SelectedActivitiesGuids = guidList;
         }
 
         private void setDataToControls()
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Win.Optimization
             numericUpDownKeepShifts.Value = (decimal) Preferences.KeepShiftsValue * 100;
         }
 
-        public IList<IActivity> DoNotMoveActivities()
+        public IList<IActivity> SelectedActivities()
         {
             return twoListSelectorActivities.GetSelected<IActivity>();
         }

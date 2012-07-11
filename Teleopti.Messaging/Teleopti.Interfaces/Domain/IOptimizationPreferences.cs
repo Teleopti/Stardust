@@ -403,7 +403,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// The selected Guids
         /// </summary>
-        IList<Guid> DoNotMoveActivitiesGuids { get; set; }
+        IList<Guid> SelectedActivitiesGuids { get; set; }
     }
 
     /// <summary>
