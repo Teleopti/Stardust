@@ -107,6 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public bool KeepStartTimes { get; set; }
         public bool KeepShifts { get; set; }
         public bool AlterBetween { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public IList<Guid> SelectedActivitiesGuids { get; set; }
        
 
