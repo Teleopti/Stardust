@@ -403,6 +403,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// The selected Guids
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         IList<Guid> SelectedActivitiesGuids { get; set; }
     }
 
