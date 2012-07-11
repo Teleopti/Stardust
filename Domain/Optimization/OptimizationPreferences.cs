@@ -1,4 +1,6 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System;
+using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -105,6 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public bool KeepStartTimes { get; set; }
         public bool KeepShifts { get; set; }
         public bool AlterBetween { get; set; }
+        public IList<Guid> DoNotMoveActivitiesGuids { get; set; } 
 
         public double KeepShiftsValue { get; set; }
     }

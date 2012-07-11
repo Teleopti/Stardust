@@ -399,6 +399,11 @@ namespace Teleopti.Interfaces.Domain
         /// Alter between property
         /// </summary>
         bool AlterBetween { get; set; }
+
+        /// <summary>
+        /// The selected Guids
+        /// </summary>
+        IList<Guid> DoNotMoveActivitiesGuids { get; set; }
     }
 
     /// <summary>

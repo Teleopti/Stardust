@@ -13,8 +13,6 @@ namespace Teleopti.Ccc.Win.Optimization
 
         public IShiftPreferences Preferences { get; private set; }
         private IList<IActivity> _availableActivity;
-        private IList<IActivity> _selectedActivity;
-        private IList<Guid> _selectedActivitiesGuids; 
         private int _resolution;
 
         public ShiftsPreferencesPanel()
@@ -55,9 +53,9 @@ namespace Teleopti.Ccc.Win.Optimization
             fromToTimePicker1.WholeDay.Visible = false;
 
             IList<IActivity> activities = new List<IActivity>();
-            if (_selectedActivitiesGuids  != null)
+            if (Preferences.DoNotMoveActivitiesGuids   != null)
             {
-                foreach (Guid id in _selectedActivitiesGuids
+                foreach (Guid id in Preferences.DoNotMoveActivitiesGuids
                     )
                 {
                     foreach (IActivity activity in _availableActivity)
@@ -68,9 +66,7 @@ namespace Teleopti.Ccc.Win.Optimization
                 }
             }
 
-            _selectedActivity = activities;
-
-            twoListSelectorActivities.Initiate(_availableActivity, _selectedActivity, "Description", UserTexts.Resources.Activities, UserTexts.Resources.DoNotMove);
+            twoListSelectorActivities.Initiate(_availableActivity, activities, "Description", UserTexts.Resources.Activities, UserTexts.Resources.DoNotMove);
         }
 
         #region IDataExchange Members
@@ -106,6 +102,14 @@ namespace Teleopti.Ccc.Win.Optimization
             Preferences.KeepShifts = checkBoxKeepShifts.Checked;
             Preferences.AlterBetween = checkBoxBetween.Checked ;
             Preferences.KeepShiftsValue = (double)numericUpDownKeepShifts.Value  / 100;
+
+            IList<Guid> guidList = new List<Guid>();
+
+            foreach (IActivity activity in DoNotMoveActivities())
+            {
+                guidList.Add(activity.Id.Value);
+            }
+            Preferences.DoNotMoveActivitiesGuids = guidList;
         }
 
         private void setDataToControls()
