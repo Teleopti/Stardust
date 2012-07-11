@@ -68,12 +68,15 @@ namespace Teleopti.Ccc.Win.Optimization
             }
 
             IList<IActivity> availableactivities = _availableActivity ;
-            foreach (var activity in
-                    DoNotMoveActivities().Where(activity => _availableActivity.Contains(activity)))
+            if (activities.Count > 0)
             {
-                availableactivities.Remove(activity);
+                foreach (var activity in
+                    activities.Where(activity => _availableActivity.Contains(activity)))
+                {
+                    availableactivities.Remove(activity);
+                }
             }
-
+            
             twoListSelectorActivities.Initiate(availableactivities, activities, "Description", UserTexts.Resources.Activities, UserTexts.Resources.DoNotMove);
         }
 
