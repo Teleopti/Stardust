@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic
     		_unitOfWorkFactory = unitOfWorkFactory;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection)
         {
             var dic = (IReadOnlyScheduleDictionary)scheduleDay.Owner;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 			if (invalidList != null && invalidList.Any())
 			{
 				throw new FaultException(
-					string.Format("At least one business rule was broken. Messages are: {0}{1}", Environment.NewLine,
+					string.Format(System.Globalization.CultureInfo.InvariantCulture, "At least one business rule was broken. Messages are: {0}{1}", Environment.NewLine,
 					              string.Join(Environment.NewLine,
 					                          invalidList.Select(i => i.Message).Distinct().ToArray())));
 			}

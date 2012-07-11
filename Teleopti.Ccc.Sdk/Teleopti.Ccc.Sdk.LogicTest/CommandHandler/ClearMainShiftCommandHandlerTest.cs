@@ -30,8 +30,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private ClearMainShiftCommandDto _clearMainShiftDto;
         private readonly DateTimePeriod _period = new DateTimePeriod(_startDate, _startDate.AddDays(1));
         private SchedulePartFactoryForDomain _scheduleRange;
+    	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -41,7 +42,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
-            _target = new ClearMainShiftCommandHandler(_scheduleRepository,_personRepository,_scenarioRepository,_unitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory);
+    		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
+
+            _target = new ClearMainShiftCommandHandler(_scheduleRepository,_personRepository,_scenarioRepository,_unitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory,_businessRulesForPersonalAccountUpdate);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var schedulePart = _scheduleRange.CreatePart();
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
             var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+        	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
 
             using (_mock.Record())
             {
@@ -71,7 +75,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
                 Expect.Call(() => schedulePart.DeleteMainShift(schedulePart));
-                Expect.Call(() => _saveSchedulePartService.Save(schedulePart,null)).IgnoreArguments();
+				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
+                Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules));
             }
             using(_mock.Playback())
             {
@@ -79,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ForGiven"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ForGiven"), Test]
 		public void ClearMainShiftFromTheDictionaryForGivenScenarioSuccessfully()
 		{
 			var scenarioId = Guid.NewGuid();
@@ -87,6 +92,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var schedulePart = _scheduleRange.CreatePart();
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
 
 			using (_mock.Record())
 			{
@@ -98,7 +104,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
 				Expect.Call(() => schedulePart.DeleteMainShift(schedulePart));
-				Expect.Call(() => _saveSchedulePartService.Save(schedulePart,null)).IgnoreArguments();
+				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
+				Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules));
 			}
 			using (_mock.Playback())
 			{
