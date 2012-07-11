@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Win.Common;
 
@@ -66,7 +67,14 @@ namespace Teleopti.Ccc.Win.Optimization
                 }
             }
 
-            twoListSelectorActivities.Initiate(_availableActivity, activities, "Description", UserTexts.Resources.Activities, UserTexts.Resources.DoNotMove);
+            IList<IActivity> availableactivities = _availableActivity ;
+            foreach (var activity in
+                    DoNotMoveActivities().Where(activity => _availableActivity.Contains(activity)))
+            {
+                availableactivities.Remove(activity);
+            }
+
+            twoListSelectorActivities.Initiate(availableactivities, activities, "Description", UserTexts.Resources.Activities, UserTexts.Resources.DoNotMove);
         }
 
         #region IDataExchange Members
