@@ -9,21 +9,22 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
     public class ForecastToFileCommand
     {
-        private readonly IImportForecastToSkillCommand _importForecastToSkillCommand; // using this will only send it to the servicebus, 
+        //private readonly IImportForecastToSkillCommand _importForecastToSkillCommand; // using this will only send it to the servicebus, 
                                                                                       //not needed since we can implement it here and no logs are required
         private readonly ISkillDayLoadHelper _skillDayLoadHelper; // loads data?
-        private readonly IScenarioProvider _scenarioProvider; //Scenario repo?
+        // private readonly IScenarioProvider _scenarioProvider; //Scenario repo?
 
-        public ForecastToFileCommand(IImportForecastToSkillCommand importForecastToSkillCommand, ISkillDayLoadHelper skillDayLoadHelper, IScenarioProvider scenarioProvider, IJobResultFeedback feedback)
+        public ForecastToFileCommand(ISkillDayLoadHelper skillDayLoadHelper) //, IImportForecastToSkillCommand importForecastToSkillCommand, IScenarioProvider scenarioProvider, IJobResultFeedback feedback)
         {
-            _importForecastToSkillCommand = importForecastToSkillCommand;
             _skillDayLoadHelper = skillDayLoadHelper;
-            _scenarioProvider = scenarioProvider;
+            // _importForecastToSkillCommand = importForecastToSkillCommand;
+            //_scenarioProvider = scenarioProvider;
         }
 
                                                                                  // Where to put enum to access it from here? Ugly solve but "should" work
         public void Execute(ISkill skill, IScenario scenario, DateOnlyPeriod period, string typeOfExport, string filePath)
         {
+            if (skill == null) return;
             // not sure if this will acually get all the data needed
             var loadSkillSchedule = _skillDayLoadHelper.LoadSchedulerSkillDays(period, new[] {skill}, scenario);
             // this seem to only sort/fix gathered data but is needed to create the dictionary
