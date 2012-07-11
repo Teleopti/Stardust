@@ -1,4 +1,5 @@
 using System;
+using System.Data.SqlTypes;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
@@ -43,8 +44,14 @@ namespace Teleopti.Analytics.Parameters
 			EnsureChildControls();
 			try
 			{
-				
-				Value = Convert.ToDateTime(_textBox.Text);
+				var date = Convert.ToDateTime(_textBox.Text);
+				if (date<SqlDateTime.MinValue || date>SqlDateTime.MaxValue)
+				{
+					_dateValidator.IsValid = false;
+					_valid = false;
+					return;
+				}
+				Value = date;
 				ParameterText = _textBox.Text; //_value.ToString();
 				_valid = true;
 			}
