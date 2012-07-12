@@ -141,8 +141,10 @@
     <Compile Include="DataTransferObject\Commands\AddActivityCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\AddDayOffCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\AddOvertimeCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\AddPersonalActivityCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\CancelAbsenceCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\CancelOvertimeCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\CancelPersonalActivityCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ChildSkillMappingDto.cs" />
     <Compile Include="DataTransferObject\Commands\ChangePersonEmploymentCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ClearMainShiftCommandDto.cs" />
