@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
                         {
                             var defaultFont = new Font("Arial", 8, FontStyle.Regular);
                             // truncate subject
-                            if (scheduleItem.Subject.Length > 15) scheduleItem.Subject = scheduleItem.Subject.Substring(0, 18);
+                            if (scheduleItem.Subject.Length > 15) scheduleItem.Subject = scheduleItem.Subject.Substring(0, 14) + UserTexts.Resources.ThreeDots;
                             Size textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.Subject, defaultFont);
 
                             while (textSize.Width > 90)
@@ -173,10 +173,10 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
                             }
 
                             // truncate location
-                            if (scheduleItem.LocationValue.Length > 24) scheduleItem.LocationValue = scheduleItem.LocationValue.Substring(0, 24);
+                            if (scheduleItem.LocationValue.Length > 24) scheduleItem.LocationValue = scheduleItem.LocationValue.Substring(0, 23) + UserTexts.Resources.ThreeDots;
                             textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.LocationValue, defaultFont);
 
-                            while (textSize.Width > 120)
+                            while (textSize.Width > 140)
                             {
                                 scheduleItem.LocationValue = scheduleItem.LocationValue.Substring(0, scheduleItem.LocationValue.Length - 4) +
                                                   UserTexts.Resources.ThreeDots;
