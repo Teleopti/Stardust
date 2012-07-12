@@ -154,5 +154,4 @@ namespace Teleopti.Ccc.Win.Optimization
     }
 
 
-
 }
