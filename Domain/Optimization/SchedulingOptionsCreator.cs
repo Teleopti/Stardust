@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.Fairness = new Percent(optimizationPreferences.Extra.FairnessValue);
             schedulingOptions.GroupPageForShiftCategoryFairness = optimizationPreferences.Extra.GroupPageOnCompareWith;
 
-            if (optimizationPreferences.Extra.KeepShiftCategories)
+            if (optimizationPreferences.Shifts.KeepShiftCategories)
                 schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
-            else if (optimizationPreferences.Extra.KeepStartAndEndTimes)
-                schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepStartAndEndTime;
+            else if (optimizationPreferences.Shifts.KeepStartTimes || optimizationPreferences.Shifts.KeepEndTimes )
+                schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepStartAndEndTime ;
             else
                 schedulingOptions.RescheduleOptions = OptimizationRestriction.None;
 

@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IList<IScheduleMatrixOriginalStateContainer> workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization =
                     createMatrixContainerList(matrixListForWorkShiftAndIntradayOptimization);
 
-                bool originalKeepShiftCategorySettings = optimizerPreferences.Extra.KeepShiftCategories;
-                optimizerPreferences.Extra.KeepShiftCategories = true;
+                bool originalKeepShiftCategorySettings = optimizerPreferences.Shifts.KeepShiftCategories;
+                optimizerPreferences.Shifts.KeepShiftCategories = true;
 
                 if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
                     _scheduleOptimizerHelper.RunWorkShiftOptimization(
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
                         backgroundWorker);
 
-                optimizerPreferences.Extra.KeepShiftCategories = originalKeepShiftCategorySettings;
+                optimizerPreferences.Shifts.KeepShiftCategories = originalKeepShiftCategorySettings;
             }
             
             

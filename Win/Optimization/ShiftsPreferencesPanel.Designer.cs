@@ -185,6 +185,7 @@
             this.checkBoxKeepShifts.TabIndex = 9;
             this.checkBoxKeepShifts.Text = "xxKeepShifts";
             this.checkBoxKeepShifts.UseVisualStyleBackColor = true;
+            this.checkBoxKeepShifts.CheckedChanged += new System.EventHandler(this.checkBoxKeepShifts_CheckedChanged);
             // 
             // tableLayoutPanel2
             // 

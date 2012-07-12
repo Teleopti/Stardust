@@ -92,11 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IGroupPageLight GroupPageOnCompareWith { get; set; }
 
-		public bool KeepShiftCategories { get; set; }
-		public bool KeepStartAndEndTimes { get; set; }
-		public bool KeepShifts { get; set; }
-
-		public double KeepShiftsValue { get; set; }
+        
 	}
 
     public class ShiftPreferences : IShiftPreferences

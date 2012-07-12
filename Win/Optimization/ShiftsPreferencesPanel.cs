@@ -141,6 +141,16 @@ namespace Teleopti.Ccc.Win.Optimization
             return twoListSelectorActivities.GetSelected<IActivity>();
         }
 
+        private void setNumericUpDownKeepShiftsStatus()
+        {
+            numericUpDownKeepShifts.Enabled = checkBoxKeepShifts.Checked;
+        }
+
+        private void checkBoxKeepShifts_CheckedChanged(object sender, EventArgs e)
+        {
+            setNumericUpDownKeepShiftsStatus();
+        }
+
     }
 
 

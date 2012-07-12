@@ -327,33 +327,7 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The group page on compare with.</value>
         IGroupPageLight GroupPageOnCompareWith { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to keep shift categories.
-        /// </summary>
-        /// <value><c>true</c> if [keep shift categories]; otherwise, <c>false</c>.</value>
-        bool KeepShiftCategories { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to keep start and end times.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if keep start and end times; otherwise, <c>false</c>.
-        /// </value>
-        bool KeepStartAndEndTimes { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to keep shifts.
-        /// </summary>
-        /// <value><c>true</c> if keep shifts; otherwise, <c>false</c>.</value>
-        bool KeepShifts { get; set; }
-
-        /// <summary>
-        /// Gets or sets the keep shifts value.
-        /// </summary>
-        /// <value>The keep shifts value.</value>
-        double KeepShiftsValue { get; set; }
-
-
+        
     }
 
     /// <summary>
