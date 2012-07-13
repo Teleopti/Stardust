@@ -90,10 +90,10 @@ namespace Teleopti.Ccc.Win.Budgeting
 			set 
             {
                 var calculatedSplitterDistance = splitContainer1.Height - value;
-                splitContainer1.SplitterDistance = calculatedSplitterDistance > 0
-                                                       ? calculatedSplitterDistance
-                                                       : -1 * (calculatedSplitterDistance);
-			}
+                
+                if(calculatedSplitterDistance > 0) 
+                    splitContainer1.SplitterDistance = calculatedSplitterDistance;
+            }
 		}
 
 		private void ShowWizard()
