@@ -160,31 +160,36 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
                         if ((scheduleItem.StartTime >= period.LocalStartDateTime) &&
                             (scheduleItem.EndTime.AddSeconds(-1).AddMilliseconds(-1) <= period.LocalEndDateTime)) //Hmm... Removed 1 second to fix problem with DST in Jordan Time 
                         {
-                            var defaultFont = new Font("Arial", 8, FontStyle.Regular);
-                            // truncate subject
-                            if (scheduleItem.Subject.Length > 15) scheduleItem.Subject = scheduleItem.Subject.Substring(0, 14) + UserTexts.Resources.ThreeDots;
-                            Size textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.Subject, defaultFont);
-
-                            while (textSize.Width > 90)
+                            // if not dayView, truncate
+                            if (period.LocalEndDateTime.Subtract(period.LocalStartDateTime) > TimeSpan.FromDays(2))
                             {
-                                scheduleItem.Subject = scheduleItem.Subject.Substring(0, scheduleItem.Subject.Length - 4) +
-                                                  UserTexts.Resources.ThreeDots;
-                                textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.Subject, defaultFont);
-                            }
+                                var defaultFont = new Font("Arial", 8, FontStyle.Regular);
+                                // truncate subject
+                                if (scheduleItem.Subject.Length > 15) scheduleItem.Subject = scheduleItem.Subject.Substring(0, 14) + UserTexts.Resources.ThreeDots;
+                                Size textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.Subject, defaultFont);
 
-                            // truncate location
-                            if (scheduleItem.LocationValue.Length > 24) scheduleItem.LocationValue = scheduleItem.LocationValue.Substring(0, 23) + UserTexts.Resources.ThreeDots;
-                            textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.LocationValue, defaultFont);
+                                while (textSize.Width > 90)
+                                {
+                                    scheduleItem.Subject = scheduleItem.Subject.Substring(0, scheduleItem.Subject.Length - 4) +
+                                                      UserTexts.Resources.ThreeDots;
+                                    textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.Subject, defaultFont);
+                                }
 
-                            while (textSize.Width > 140)
-                            {
-                                scheduleItem.LocationValue = scheduleItem.LocationValue.Substring(0, scheduleItem.LocationValue.Length - 4) +
-                                                  UserTexts.Resources.ThreeDots;
+                                // truncate location
+                                if (scheduleItem.LocationValue.Length > 24) scheduleItem.LocationValue = scheduleItem.LocationValue.Substring(0, 23) + UserTexts.Resources.ThreeDots;
                                 textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.LocationValue, defaultFont);
+
+                                while (textSize.Width > 140)
+                                {
+                                    scheduleItem.LocationValue = scheduleItem.LocationValue.Substring(0, scheduleItem.LocationValue.Length - 4) +
+                                                      UserTexts.Resources.ThreeDots;
+                                    textSize = System.Windows.Forms.TextRenderer.MeasureText(scheduleItem.LocationValue, defaultFont);
+                                }
+
+                                defaultFont.Dispose();
                             }
 
                             list.Add(scheduleItem);
-                            defaultFont.Dispose();
                         }
                     }
                 }
