@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     }
                 }
             }
+
             foreach (var skill in pinnedSkillsCorrectSorted())
             {
                 if(!skill.Id.HasValue)
@@ -96,6 +97,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
             _tabControlAdv.TabPages.Remove(tabPageAdv);
             _tabControlAdv.TabPages.Insert(allSkillsCorrectSorted().IndexOf(skill), tabPageAdv);
+        }
+
+        public TabPageAdv PinnedPage()
+        {
+            if (_tabControlAdv != null && _tabControlAdv.TabPages[0] != null)
+            {
+                return _tabControlAdv.TabPages[0];
+            }
+            return null;
         }
 
 

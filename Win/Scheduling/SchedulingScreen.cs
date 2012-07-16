@@ -3573,6 +3573,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             setupSkillTabs();
 
+            if (schedulerSplitters1.PinnedPage != null)
+                schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
 
 
             toolStripStatusLabelStatus.Text = Resources.ReadyThreeDots;
