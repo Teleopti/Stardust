@@ -58,6 +58,16 @@
 {
 	padding-top: 0.3em;
 }
+.request-edit-section .edit-module-element {
+	position: relative;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+}
+.request-edit-section .date-input
+{
+	width: 8em;
+}
 .request-data-subject {
 	word-wrap: break-word;	
 }
@@ -66,7 +76,7 @@
 }
 .absence-type-input-label 
 {
-	width: 6.5em;
+	width: 8em;
 	padding-top: 4px;
 	padding-right: 2px;
 	height: 16px;
