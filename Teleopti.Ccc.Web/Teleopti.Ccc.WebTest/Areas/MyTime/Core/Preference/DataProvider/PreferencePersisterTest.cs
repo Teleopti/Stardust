@@ -202,8 +202,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var person = new Person();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
-			var preferenceRestriction = new PreferenceRestriction()
-			{
+			var preferenceRestriction = new PreferenceRestriction
+			                            	{
 				MustHave = true
 			};
 			preferenceDay.Stub(x => x.Restriction).Return(preferenceRestriction);

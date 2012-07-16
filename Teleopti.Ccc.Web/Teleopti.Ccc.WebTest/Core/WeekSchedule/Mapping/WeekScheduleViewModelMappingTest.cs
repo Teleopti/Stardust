@@ -275,10 +275,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		{
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).
 				Return(true);
-			var domainData = new WeekScheduleDomainData()
-			{
-				Days = new WeekScheduleDayDomainData[] { }
-			};
+			var domainData = new WeekScheduleDomainData
+			                 	{
+			                 		Days = new WeekScheduleDayDomainData[] {}
+			                 	};
 
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		{
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).
 				Return(true);
-			var domainData = new WeekScheduleDomainData()
+			var domainData = new WeekScheduleDomainData
 			{
 				Days = new WeekScheduleDayDomainData[] { }
 			};
@@ -303,12 +303,12 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapAbsenceTypes()
 		{
-			var absence = new Absence() { Description = new Description("Vacation")};
+			var absence = new Absence { Description = new Description("Vacation")};
 			absence.SetId(Guid.NewGuid());
 
 			var absences = new List<IAbsence> { absence };
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(absences);
-			var domainData = new WeekScheduleDomainData()
+			var domainData = new WeekScheduleDomainData
 			{
 				Days = new WeekScheduleDayDomainData[] { }
 			};

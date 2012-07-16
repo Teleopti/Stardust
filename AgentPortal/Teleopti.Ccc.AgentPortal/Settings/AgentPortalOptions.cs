@@ -1,14 +1,11 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.AgentPortal.Common;
+using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortalCode.Common;
-
-#endregion
 
 namespace Teleopti.Ccc.AgentPortal.Settings
 {
@@ -22,10 +19,7 @@ namespace Teleopti.Ccc.AgentPortal.Settings
     /// </remarks>
     public partial class AgentPortalOptions : BaseRibbonForm
     {
-
-        #region Fileds - Instance Memebers
-
-        /// <summary>
+    	/// <summary>
         /// holds refrence list of all types of setting controls
         /// </summary>
         private readonly IList<IDialogControl> _controlList = new List<IDialogControl>();
@@ -35,13 +29,7 @@ namespace Teleopti.Ccc.AgentPortal.Settings
         /// </summary>
         private readonly List<int> _initializedControls = new List<int>();
 
-        #endregion
-
-        #region Methods - Instance Members 
-
-        #region Methods - Instance Members - BaseRibbonForm Members
-
-        /// <summary>
+    	/// <summary>
         /// Sets the common texts.
         /// </summary>
         /// <remarks>
@@ -54,11 +42,7 @@ namespace Teleopti.Ccc.AgentPortal.Settings
             buttonAdvCancel.Text = UserTexts.Resources.Cancel;
         }
 
-        #endregion
-
-        #region Methods - Instance Members - OptionDialog Members - (constructors)
-
-        /// <summary>
+    	/// <summary>
         /// Initializes a new instance of the <see cref="AgentPortalOptions"/> class.
         /// </summary>
         /// <remarks>
@@ -73,11 +57,7 @@ namespace Teleopti.Ccc.AgentPortal.Settings
             InitializeOptionDialog();
         }
 
-        #endregion
-
-        #region Methods - Instance Members - OptionDialog Members - (event handlers)
-
-        /// <summary>
+    	/// <summary>
         /// Handles the AfterSelect event of the treeViewOptions control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -125,7 +105,8 @@ namespace Teleopti.Ccc.AgentPortal.Settings
         /// Created by: Sachintha Weerasekara
         /// Created date: 4/3/2008
         /// </remarks>
-        private void buttonAdvOK_Click(object sender, EventArgs e)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.AgentPortal.Helper.MessageBoxHelper.ShowErrorMessage(System.String,System.String)")]
+		private void buttonAdvOK_Click(object sender, EventArgs e)
         {
             try
             {
@@ -136,24 +117,16 @@ namespace Teleopti.Ccc.AgentPortal.Settings
             }
             catch (PasswordMismatchException argExp)
             {
-                MessageBox.Show(argExp.Message, UserTexts.Resources.AgentPortal, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1,
-                        (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
-
+                MessageBoxHelper.ShowWarningMessage(argExp.Message, UserTexts.Resources.AgentPortal);
             }
             catch (DataException ex)
             {
                 string dataErrorMessage = string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.ErrorOccuredWhenAccessingTheDataSource + ".\n\nError information: {0}", ex.Message);
-                MessageBox.Show(dataErrorMessage, UserTexts.Resources.AgentPortal, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1,
-                    (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
-
+                MessageBoxHelper.ShowErrorMessage(dataErrorMessage, UserTexts.Resources.AgentPortal);
             }
         }
 
-        #endregion
-
-        #region Methods - Instance Members - OptionDialog Members - (helpers)
-        
-        /// <summary>
+    	/// <summary>
         /// Initializes the option dialog.
         /// </summary>
         /// <remarks>
@@ -231,11 +204,6 @@ namespace Teleopti.Ccc.AgentPortal.Settings
             }
             return result;
         }
-
-        #endregion
-
-        #endregion
-        
     }
 }
 

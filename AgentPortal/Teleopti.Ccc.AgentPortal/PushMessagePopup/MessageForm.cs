@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 
@@ -69,8 +70,7 @@ namespace Teleopti.Ccc.AgentPortal.PushMessagePopup
 
                 if (selected == null)
                 {
-
-                    MessageBox.Show(UserTexts.Resources.SomeoneChangedTheSameDataBeforeYouDot,UserTexts.Resources.WarningMessageTitle,MessageBoxButtons.OK,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button1,MessageBoxOptions.RtlReading);
+                    MessageBoxHelper.ShowWarningMessage(UserTexts.Resources.SomeoneChangedTheSameDataBeforeYouDot,UserTexts.Resources.WarningMessageTitle);
                     if (_presenterObjects.Count > 0) selected = _presenterObjects[0];
                     else Close(); //No messages left....
                 }

@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 
@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 {
     public class PayrollGridViewBase : PayrollBaseUserControl
     {
-
         /// <summary>
         /// Gets the person's selected UI culture.
         /// </summary>
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// </summary>
         public PayrollGridViewBase()
         {
-
         }
 
         /// <summary>
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// <param name="explorerView">The explorer view.</param>
         public PayrollGridViewBase(IExplorerView explorerView): base(explorerView)
         {
-
         }
 
         /// <summary>
@@ -46,13 +43,13 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// <returns>
         /// 	<c>true</c> if [is ready to delete] [the specified grid helper]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsReadyToDelete<T>(SFGridColumnGridHelper<T> gridHelper)
+        protected static bool IsReadyToDelete<T>(SFGridColumnGridHelper<T> gridHelper)
         {
             bool isReady = false;
 
             if (IsDataAvailable(gridHelper))
             {
-                if (ShowMyErrorMessage(UserTexts.Resources.MultiplicatorDefinitionDeleteConfirmation,
+                if (ViewBase.ShowYesNoMessage(UserTexts.Resources.MultiplicatorDefinitionDeleteConfirmation,
                     UserTexts.Resources.Message) == DialogResult.Yes)
                 {
                     isReady = true;
@@ -67,18 +64,9 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
-        public void ShowErrorMessage(string message, string caption)
+        protected static void ShowErrorMessage(string message, string caption)
         {
-
-            Syncfusion.Windows.Forms.MessageBoxAdv.Show(
-                 string.Concat(message, "  "),
-                 caption,
-                 MessageBoxButtons.OK,
-                 MessageBoxIcon.Warning,
-                 MessageBoxDefaultButton.Button1,
-                 (RightToLeft == RightToLeft.Yes)
-                                  ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                                  : 0);
+            ViewBase.ShowErrorMessage(message, caption);
         }
 
         /// <summary>
@@ -92,32 +80,14 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             return (_gridHelper.SourceList != null) && (_gridHelper.SourceList.Count > 0);
         }
 
-        /// <summary>
-        /// Shows my error message.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="caption">The caption.</param>
-        /// <returns></returns>
-        private DialogResult ShowMyErrorMessage(string message, string caption)
-        {
-			// no bloody sunkfusion
-            return MessageBox.Show(
-                   string.Concat(message, "  "),
-                   caption,
-                   MessageBoxButtons.YesNo,
-                   MessageBoxIcon.Warning,
-                   MessageBoxDefaultButton.Button1,
-                   (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
-        }
-
         public override string ToolTipDelete
         {
-            get { return Resources.DeleteMultiplicator; }
+            get { return UserTexts.Resources.DeleteMultiplicator; }
         }
 
         public override string ToolTipAddNew
         {
-            get { return Resources.AddNewMultiplicator; }
+            get { return UserTexts.Resources.AddNewMultiplicator; }
         }
     }
 }

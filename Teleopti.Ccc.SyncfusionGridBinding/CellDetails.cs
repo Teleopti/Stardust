@@ -1,5 +1,4 @@
 ﻿using System;
-using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.SyncfusionGridBinding

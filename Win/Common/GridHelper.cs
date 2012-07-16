@@ -140,43 +140,46 @@ namespace Teleopti.Ccc.Win.Common
                             grid[top, left + i].CellValue = list[i];
                             break;
                         case "PositiveTimeSpanTotalSecondsCell":
+                            if (list[i] >= 0)
+                                grid[top, left + i].CellValue = TimeSpan.FromSeconds(CheckSecondsRange(list[i]));
+                            break;
                         case "TimeSpanTotalSecondsCell":
-                            grid[top, left + i].CellValue = TimeSpan.FromSeconds(list[i]);
+                            grid[top, left + i].CellValue = TimeSpan.FromSeconds(CheckSecondsRange(list[i]));
                             break;
                         case "PercentWithNegativeCell":
                         case "PercentWithTwoDecimalsCell":
                         case "PercentCell":
                         case "PercentShrinkageCell":
-                            {
-                                PercentageValue(grid, i, top, left, list);
-                            }
+                            PercentageValue(grid, i, top, left, list);
                             break;
                         case "PercentEfficiencyCell":
-                            {
-                                PercentageValue(grid, i, top, left, list);
-                            }
+                            PercentageValue(grid, i, top, left, list);
                             break;
                         case "MultiSitePercentCell":
                         case "ServicePercentCell":
-                            {
-                                Percent result;
-                                var t = Percent.TryParse(list[i].ToString(CultureInfo.CurrentCulture), out result);
-                                if (t && (list[i] <= 100))
-                                    grid[top, left + i].CellValue = result;
-                            }
+                            Percent result;
+                            var t = Percent.TryParse(list[i].ToString(CultureInfo.CurrentCulture), out result);
+                            if (t && (list[i] <= 100 && list[i] > 0))
+                                grid[top, left + i].CellValue = result;
                             break;
                         case "TimeSpanLongHourMinuteSecondOnlyPositiveCellModel":
                             if (list[i] >= 0)
-                                grid[top, left + i].CellValue = TimeSpan.FromSeconds(list[i]);
-                            break;
+                                grid[top, left + i].CellValue = TimeSpan.FromSeconds(CheckSecondsRange(list[i]));
+                            break; 
                         case "IntegerMinMaxAgentCell":
                             grid[top, left + i].CellValue = (int)list[i];
-                            break;
-                        default:
                             break;
                     }
                 }
             }
+        }
+
+        private static double CheckSecondsRange(double d)
+        {
+            double maxValue = TimeSpan.MaxValue.TotalSeconds;
+            double minValue = TimeSpan.MinValue.TotalSeconds;
+            if (d < maxValue && d > minValue) return d;
+            return 0;
         }
 
         private static void PercentageValue(GridControl grid, int i, int top, int left, IList<double> list)

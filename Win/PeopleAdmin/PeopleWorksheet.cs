@@ -1223,15 +1223,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 || (StateHolder.ContractScheduleCollection.Count == 0) ||
                 (_filteredPeopleHolder.SiteTeamAdapterCollection.Count == 0))
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(
-                    string.Concat(UserTexts.Resources.PersonPeriodCouldNotLoad
-                                  , "  "),
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button1,
-                    (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0
-                    );
+                ShowWarningMessage(UserTexts.Resources.PersonPeriodCouldNotLoad, Text);
                 return;
             }
 
@@ -1290,17 +1282,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
         private void toolStripButtonPersonRotation_Click(object sender, EventArgs e)
         {
-
             if (StateHolder.AllRotations.Count <= 0)
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(
-                    string.Concat(UserTexts.Resources.RotationsCouldNotBeLoaded, "  "),
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button1,
-                    (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0
-                    );
+                ShowWarningMessage(UserTexts.Resources.RotationsCouldNotBeLoaded,Text);
                 return;
             }
 
@@ -1311,38 +1295,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
         private void toolStripButtonPersonAccounts_Click(object sender, EventArgs e)
         {
-
             if (_filteredPeopleHolder.FilteredAbsenceCollection.Count <= 0)
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(
-                    string.Concat(UserTexts.Resources.AbsenceCouldNotBeLoaded, "  "),
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button1,
-                    (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0
-                    );
+                ShowWarningMessage(UserTexts.Resources.AbsenceCouldNotBeLoaded, Text);
                 return;
             }
             _domainFinder = new PersonAccountDomainFinder(_filteredPeopleHolder);
             SetCorrectView(ViewType.PersonalAccountGridView, ViewType.EmptyView, false, false, 0);
         }
 
-
-
         private void toolStripButtonPersonAvailability_Click(object sender, EventArgs e)
         {
-
             if (StateHolder.AllAvailabilities.Count <= 0)
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(
-                    string.Concat(UserTexts.Resources.AvailabilitiesCouldNotBeLoaded, "  "),
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button1,
-                    (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0
-                    );
+                ShowWarningMessage(UserTexts.Resources.AvailabilitiesCouldNotBeLoaded, Text);
                 return;
             }
 

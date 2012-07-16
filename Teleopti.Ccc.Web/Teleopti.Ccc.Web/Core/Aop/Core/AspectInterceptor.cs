@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Web.Core.Aop.Core
 {
-	public class AspectInterceptor : Castle.DynamicProxy.IInterceptor
+	public class AspectInterceptor : IInterceptor
 	{
 		private readonly IComponentContext _resolver;
 

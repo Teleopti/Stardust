@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IScenario _scenario;
         private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto(new DateOnly(_startDate));
-        private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto()
+        private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto
         {
             UtcStartTime = _startDate,
             UtcEndTime = _startDate.AddDays(1)
@@ -42,9 +42,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private DateTimePeriod _period;
         private SchedulePartFactoryForDomain _schedulePartFactoryForDomain;
         private CancelOvertimeCommandDto _cancelOvertimeCommandDto;
+    	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -55,7 +56,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _saveSchedulePartService = _mock.DynamicMock<ISaveSchedulePartService>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
-            _target = new CancelOvertimeCommandHandler(_dateTimePeriodAssembler,_scheduleRepository,_personRepository,_scenarioRepository,_unitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory);
+    		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
+
+            _target = new CancelOvertimeCommandHandler(_dateTimePeriodAssembler,_scheduleRepository,_personRepository,_scenarioRepository,_unitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory,_businessRulesForPersonalAccountUpdate);
 
             _person = PersonFactory.CreatePerson();
             _person.SetId(Guid.NewGuid());
@@ -86,7 +89,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                                                                          scheduleDay.PersonAssignmentCollection()[0]);
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
             var dictionary = _mock.DynamicMock<IScheduleDictionary>();
-            
+        	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
+
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -97,7 +101,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
-                Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, scheduleDay));
+            	Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
+                Expect.Call(() => _saveSchedulePartService.Save(scheduleDay,rules));
             }
             using (_mock.Playback())
             {
@@ -119,6 +124,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 																		 scheduleDay.PersonAssignmentCollection()[0]);
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
 
 			using (_mock.Record())
 			{
@@ -130,7 +136,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
-				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, scheduleDay));
+				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
+				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay,rules));
 			}
 			using (_mock.Playback())
 			{

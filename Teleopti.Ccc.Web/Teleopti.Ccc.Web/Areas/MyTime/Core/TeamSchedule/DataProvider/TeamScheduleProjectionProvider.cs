@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 		private static ITeamScheduleProjection MakeDayOffProjection(IScheduleDay scheduleDay)
 				       			{
 			var dayOff = scheduleDay.PersonDayOffCollection().First();
-			return new TeamScheduleProjection()
+			return new TeamScheduleProjection
 			       	{
 			       		Layers = new ITeamScheduleLayer[] {},
 			       		DayOff = dayOff,
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 			               	? projection.Period().Value.StartDateTime.AddDays(AbsenceFullDayExtraDays)
 			               	: projection.Period().Value.StartDateTime;
 
-			return new TeamScheduleProjection()
+			return new TeamScheduleProjection
 			       	{
 			       		Layers = layers,
 			       		SortDate = sortDate

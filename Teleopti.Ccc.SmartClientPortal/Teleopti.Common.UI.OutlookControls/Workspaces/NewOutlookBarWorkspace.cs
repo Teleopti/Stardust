@@ -54,7 +54,7 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
 			var item = groupBarModules.PointToItem(e.Location);
 			if (item == null) return;
 
-			var selectedGroupBarItem = groupBarModules.GroupBarItems[groupBarModules.SelectedItem];
+            var selectedGroupBarItem = groupBarModules.VisibleGroupBarItems[groupBarModules.SelectedItem];
 
 			if (selectedGroupBarItem == item)
 				_clientPortalCallback.SelectedModule(selectedGroupBarItem, _startup);
@@ -62,7 +62,7 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
 
         void GroupBarModulesGroupBarItemSelected(object sender, EventArgs e)
         {
-            var selectedGroupBarItem = groupBarModules.GroupBarItems[groupBarModules.SelectedItem];
+            var selectedGroupBarItem = groupBarModules.VisibleGroupBarItems[groupBarModules.SelectedItem];
             LastModule = selectedGroupBarItem.Tag.ToString();
             _clientPortalCallback.SelectedModule(selectedGroupBarItem, _startup);
         }

@@ -1,4 +1,5 @@
 @echo off
+
 ::Depends on outer variable: %version%
 SET /A ERRORLEV=0
 COLOR A

@@ -85,13 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				           o =>
 						   o.MapFrom(s => s.Report.ReportInfo.ChartTypeHint[s.ReportInput.IntervalType.IsTypeWeek() ? 1 : 0]))
 				.ForMember(d => d.Y1DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[0]))
-				.ForMember(d => d.Y2DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[1]));
-
-			/*
-			CreateMap<IEnumerable<ReportDataPeriodEntry>, IEnumerable<ReportTableRowViewModel>>()
-				.ConvertUsing(s => { return new List<ReportTableRowViewModel>( );  });
-*/				
-				
+				.ForMember(d => d.Y2DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[1]));				
 			
 			CreateMap<ReportDataPeriodEntry, ReportTableRowViewModel>()
 				.ForMember(d => d.Period, o => o.ResolveUsing(new PeriodValueResolver(_userTextTranslator)))
@@ -99,11 +93,9 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				.ForMember(d => d.DataColumn2, o => o.MapFrom(s => string.Format(_fixedFormatInfo, "{0:0.00}", s.Y2)));
 
 			CreateMap<ReportGenerationResult, ReportTableRowViewModel[]>().ConvertUsing(
-				s => this._mappingEngine.Invoke().Map<IEnumerable<ReportDataPeriodEntry>, ReportTableRowViewModel[]>(
-					s.ReportInput.IntervalType == ReportIntervalType.Week ? ShiftEntriesToMatchFirstDayOfWeek(s.ReportData, this._cultureProvider.Invoke().GetCulture().DateTimeFormat.FirstDayOfWeek) :
-						s.ReportData));
-					
-
+				s => _mappingEngine.Invoke().Map<IEnumerable<ReportDataPeriodEntry>, ReportTableRowViewModel[]>(
+					s.ReportInput.IntervalType == ReportIntervalType.Week ? ShiftEntriesToMatchFirstDayOfWeek(s.ReportData, _cultureProvider.Invoke().GetCulture().DateTimeFormat.FirstDayOfWeek) :
+						s.ReportData));		
 
 			CreateMap<ReportGenerationResult, ReportResponseModel>()
 				.ForMember(d => d.Report, o => o.MapFrom(s => s));

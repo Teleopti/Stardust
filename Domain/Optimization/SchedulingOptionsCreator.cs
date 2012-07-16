@@ -64,19 +64,13 @@ namespace Teleopti.Ccc.Domain.Optimization
         private static void setPreferencesInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
                                                               ISchedulingOptions schedulingOptions)
         {
-            bool use = optimizationPreferences.General.UsePreferences;
-            double value = optimizationPreferences.General.PreferencesValue;
-
             schedulingOptions.PreferencesDaysOnly = false; // always
-            schedulingOptions.UsePreferences = use && value == 1d;
+			schedulingOptions.UsePreferencesMustHaveOnly = false; // always >>> bugfix 19947: Can't optimize days off with 100% must have-fulfillment 
 
-            use = optimizationPreferences.General.UseMustHaves;
-            if(use)
-            {
-                value = optimizationPreferences.General.MustHavesValue;
-                schedulingOptions.UsePreferences = use && value == 1d; //must be set before UsePreferencesMustHaveOnly
-                schedulingOptions.UsePreferencesMustHaveOnly = use && value == 1d;
-            }
+			bool usePreferences = optimizationPreferences.General.UsePreferences;
+			double preferencesValue = optimizationPreferences.General.PreferencesValue;
+			bool usePreferencesAndValueIs1 = usePreferences && preferencesValue == 1d;
+			schedulingOptions.UsePreferences = usePreferencesAndValueIs1;
         }
 
         private static void setRotationsInSchedulingOptions(IOptimizationPreferences optimizationPreferences,

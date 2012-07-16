@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Report
 {
 	using System;
 
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Domain;
 
 	public class ReportDataParam
 	{

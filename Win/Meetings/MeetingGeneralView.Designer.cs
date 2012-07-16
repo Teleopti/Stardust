@@ -121,6 +121,7 @@
 			this.textBoxExtDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxExtDescription.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textBoxExtDescription.Location = new System.Drawing.Point(3, 63);
+        	this.textBoxExtDescription.MaxLength = 1800;
 			this.textBoxExtDescription.Multiline = true;
 			this.textBoxExtDescription.Name = "textBoxExtDescription";
 			this.textBoxExtDescription.OverflowIndicatorToolTipText = null;
@@ -414,6 +415,7 @@
 			this.textBoxExtLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtLocation.Location = new System.Drawing.Point(94, 58);
+        	this.textBoxExtLocation.MaxLength = 80;
 			this.textBoxExtLocation.Name = "textBoxExtLocation";
 			this.textBoxExtLocation.OverflowIndicatorToolTipText = null;
 			this.textBoxExtLocation.Size = new System.Drawing.Size(741, 20);
@@ -438,6 +440,7 @@
 			this.textBoxExtSubject.Name = "textBoxExtSubject";
 			this.textBoxExtSubject.OverflowIndicatorToolTipText = null;
 			this.textBoxExtSubject.Size = new System.Drawing.Size(741, 20);
+        	this.textBoxExtSubject.MaxLength = 80;
 			this.textBoxExtSubject.TabIndex = 3;
 			this.textBoxExtSubject.TextChanged += new System.EventHandler(this.textBoxExtSubject_TextChanged);
 			// 

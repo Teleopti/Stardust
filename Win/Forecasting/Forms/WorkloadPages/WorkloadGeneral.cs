@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             }
             catch(ArgumentException ex)
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(UserTexts.Resources.WorkloadNameIsInvalid, "  "), "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == System.Windows.Forms.RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+                ViewBase.ShowErrorMessage(UserTexts.Resources.WorkloadNameIsInvalid, UserTexts.Resources.Workload);
                 Trace.WriteLine(ex.Message);
                 return false;
             }

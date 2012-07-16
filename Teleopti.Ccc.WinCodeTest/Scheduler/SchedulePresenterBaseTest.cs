@@ -1099,6 +1099,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mocks.ReplayAll();
 			_schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
 			_target.AddAbsence(_selectedSchedules, period);
+            
 			_mocks.VerifyAll();
 		}
 

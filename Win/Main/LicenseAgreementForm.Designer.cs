@@ -104,10 +104,12 @@
 			// textBoxAgreement
 			// 
 			this.tableLayoutPanel1.SetColumnSpan(this.textBoxAgreement, 3);
+			this.textBoxAgreement.BackColor = System.Drawing.SystemColors.Window;
 			this.textBoxAgreement.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textBoxAgreement.Location = new System.Drawing.Point(3, 45);
 			this.textBoxAgreement.Multiline = true;
 			this.textBoxAgreement.Name = "textBoxAgreement";
+			this.textBoxAgreement.ReadOnly = true;
 			this.textBoxAgreement.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBoxAgreement.Size = new System.Drawing.Size(638, 477);
 			this.textBoxAgreement.TabIndex = 7;

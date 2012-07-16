@@ -242,22 +242,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.OpenPeriod, c => c.MapFrom(s => s.PreferenceInputPeriod))
 				;
 		}
-
-		private static bool IsDayEditable(DayMappingData s)
-		{
-			if (s.WorkflowControlSet != null)
-			{
-				var isInsideSchedulePeriod = s.Period.Contains(s.Date);
-				var isInsidePreferencePeriod = s.WorkflowControlSet.PreferencePeriod.Contains(s.Date);
-				var isInsidePreferenceInputPeriod =
-					s.WorkflowControlSet.PreferenceInputPeriod.Contains(DateOnly.Today);
-
-				if (isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod)
-					return true;
-			}
-
-			return false;
-		}
 	}
-
 }

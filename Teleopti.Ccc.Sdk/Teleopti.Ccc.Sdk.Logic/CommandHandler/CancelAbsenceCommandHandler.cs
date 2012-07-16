@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISaveSchedulePartService _saveSchedulePartService;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
+    	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-    	public CancelAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
+    	public CancelAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
             _scheduleRepository = scheduleRepository;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _unitOfWorkFactory = unitOfWorkFactory;
             _saveSchedulePartService = saveSchedulePartService;
         	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
+    		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -49,7 +51,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						new PersonProvider(new[] {person}), new ScheduleDictionaryLoadOptions(false, false),
 						new DateOnlyPeriod(startDate, endDate).ToDateTimePeriod(timeZone), scenario);
 
-				ExtractedSchedule scheduleDay = scheduleDictionary[person].ScheduledDay(startDate) as ExtractedSchedule;
+				var scheduleRange = scheduleDictionary[person];
+				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+
+				var scheduleDay = scheduleRange.ScheduledDay(startDate) as ExtractedSchedule;
 				if (scheduleDay == null) throw new FaultException("This is not a valid day to perform this action for.");
 				var absences = scheduleDay.PersonAbsenceCollection(true);
 				foreach (var personAbsence in absences)
@@ -65,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					}
 				}
 
-				_saveSchedulePartService.Save(uow, scheduleDay);
+				_saveSchedulePartService.Save(scheduleDay, rules);
 				using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
 				{
 					uow.PersistAll();

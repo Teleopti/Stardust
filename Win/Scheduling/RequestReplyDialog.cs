@@ -60,15 +60,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (errorList.Count >0)
             {
                 string message = UserTexts.Resources.OneOrMoreMessagesWereTooLongPleaseTryAShorterMessage;
-                MessageBox.Show(
-                               message,
-                               UserTexts.Resources.MessageTooLong,
-                               MessageBoxButtons.OK,
-                               MessageBoxIcon.Error,
-                               MessageBoxDefaultButton.Button1,
-                               (RightToLeft == RightToLeft.Yes)
-                                   ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                                   : 0);
+                ShowErrorMessage(message, UserTexts.Resources.MessageTooLong);
                 _requestViewAdapterlist = errorList;
             }
             else

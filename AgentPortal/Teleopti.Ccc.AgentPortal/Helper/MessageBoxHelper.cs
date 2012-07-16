@@ -1,38 +1,16 @@
-#region Imports
-
-using System;
 using System.Globalization;
 using System.Windows.Forms;
-using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
-
-#endregion
+using Syncfusion.Windows.Forms;
 
 namespace Teleopti.Ccc.AgentPortal.Helper
 {
-
-    /// <summary>
-    /// Provides helper functionality for .
-    /// </summary>
     public static class MessageBoxHelper
     {
-
-        #region Constants
-
-        #endregion
-
-        #region Fields - Static Member
-
-        #endregion
-
-        #region Properties - Static Member
-
-        #endregion
-
-        #region Methods - Static Member
+    	private const string DoubleSpaces = "  ";
 
         public static void ShowErrorMessage(string text, string caption)
         {
-            Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(text, "  "), caption,
+            MessageBoxAdv.Show(string.Concat(text, DoubleSpaces), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Error,
                                                         MessageBoxDefaultButton.Button1,
                                                          CultureInfo.CurrentCulture.TextInfo.IsRightToLeft
@@ -41,10 +19,9 @@ namespace Teleopti.Ccc.AgentPortal.Helper
                                                             : 0);
         }
 
-
         public static void ShowWarningMessage(string text, string caption)
         {
-            Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(text, "  "), caption,
+			MessageBoxAdv.Show(string.Concat(text, DoubleSpaces), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Warning,
                                                         MessageBoxDefaultButton.Button1,
                                                          CultureInfo.CurrentCulture.TextInfo.IsRightToLeft
@@ -55,7 +32,7 @@ namespace Teleopti.Ccc.AgentPortal.Helper
 
         public static void ShowWarningMessage(IWin32Window owner, string text, string caption)
         {
-            Syncfusion.Windows.Forms.MessageBoxAdv.Show(owner, string.Concat(text, "  "), caption,
+			MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpaces), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Warning,
                                                         MessageBoxDefaultButton.Button1,
                                                          CultureInfo.CurrentCulture.TextInfo.IsRightToLeft
@@ -66,7 +43,7 @@ namespace Teleopti.Ccc.AgentPortal.Helper
 
         public static void ShowInformationMessage(string text, string caption)
         {
-            Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(text, "  "), caption,
+			MessageBoxAdv.Show(string.Concat(text, DoubleSpaces), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Information,
                                                         MessageBoxDefaultButton.Button1,
                                                         CultureInfo.CurrentCulture.TextInfo.IsRightToLeft
@@ -77,7 +54,7 @@ namespace Teleopti.Ccc.AgentPortal.Helper
 
         public static DialogResult ShowConfirmationMessage(string text, string caption)
         {
-            return Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(text, "  "), caption,
+			return MessageBoxAdv.Show(string.Concat(text, DoubleSpaces), caption,
                                                                MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                                                                MessageBoxDefaultButton.Button1,
                                                                  CultureInfo.CurrentCulture.TextInfo.IsRightToLeft
@@ -85,9 +62,5 @@ namespace Teleopti.Ccc.AgentPortal.Helper
                                                                      MessageBoxOptions.RightAlign
                                                                    : 0);
         }
-
-        #endregion
-
     }
-
 }

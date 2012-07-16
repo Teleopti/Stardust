@@ -1120,19 +1120,12 @@ namespace Teleopti.Ccc.Win.Grouping
             return false;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         private void PerformGroupDeletion(TreeNodeAdv selectedNode)
         {
             if (selectedNode.HasChildren)
             {
-                MessageBox.Show(
-                string.Concat(UserTexts.Resources.TheGroupHasToBeEmptyBeforeDeleted, "  "),
-                UserTexts.Resources.GroupIsNotEmpty,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning,
-                MessageBoxDefaultButton.Button2,
-                (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0
-                );
+                ViewBase.ShowWarningMessage(UserTexts.Resources.TheGroupHasToBeEmptyBeforeDeleted, UserTexts.Resources.GroupIsNotEmpty);
             }
             else
             {

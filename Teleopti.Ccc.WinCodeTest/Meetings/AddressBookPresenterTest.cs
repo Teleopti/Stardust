@@ -76,8 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.AreEqual("required 1", _target.AddressBookViewModel.RequiredParticipants);
             _target.AddRequiredParticipants(new List<ContactPersonViewModel> { _person2 });
             Assert.AreEqual("required 1; optional 2", _target.AddressBookViewModel.RequiredParticipants);
-            Assert.IsTrue(string.IsNullOrEmpty(_target.AddressBookViewModel.OptionalParticipants));
-            _mocks.VerifyAll();
+             _mocks.VerifyAll();
         }
 
         [Test]
@@ -91,8 +90,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.AreEqual("optional 2", _target.AddressBookViewModel.OptionalParticipants);
             _target.AddOptionalParticipants(new List<ContactPersonViewModel> { _person1 });
             Assert.AreEqual("optional 2; required 1", _target.AddressBookViewModel.OptionalParticipants);
-            Assert.IsTrue(string.IsNullOrEmpty(_target.AddressBookViewModel.RequiredParticipants));
-            _mocks.VerifyAll();
+             _mocks.VerifyAll();
         }
 
         [Test]

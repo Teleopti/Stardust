@@ -8,10 +8,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     {
         private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly IScheduleViewBase _scheduleViewBase;
-        private readonly SchedulePresenterBase _presenter;
+        private readonly ISchedulePresenterBase _presenter;
         private readonly IList<IScheduleDay> _scheduleParts;
         
-        protected AddLayerCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, SchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts)
+        protected AddLayerCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, ISchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts)
         {
             _schedulerStateHolder = schedulerStateHolder;
             _scheduleViewBase = scheduleViewBase;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return _scheduleParts; }
         }
 
-        public SchedulePresenterBase Presenter
+        public ISchedulePresenterBase Presenter
         {
             get { return _presenter; }
         }

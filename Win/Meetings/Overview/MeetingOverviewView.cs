@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
         {
             if (theMeeting == null)
                 return false;
-            DialogResult answer = MessageBox.Show(string.Format(CultureInfo.InvariantCulture, Resources.MeetingDeleteConfirmationQuestion, theMeeting.GetSubject(new NoFormatting())), Resources.ConfirmDelete, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+            DialogResult answer = ShowYesNoMessage(string.Format(CultureInfo.CurrentCulture, Resources.MeetingDeleteConfirmationQuestion, theMeeting.GetSubject(new NoFormatting())), Resources.ConfirmDelete);
            if(answer == DialogResult.No)
                 return false;
 
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 
         public void ShowErrorMessage(string message)
         {
-            MessageBox.Show(message, Resources.ErrorMessage, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+            MessageBoxAdv.Show(message, Resources.ErrorMessage, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
         }
 
         public DateOnlyPeriod SelectedWeek

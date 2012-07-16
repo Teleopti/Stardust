@@ -134,34 +134,49 @@
     <Reference Include="SharpTestsEx">
       <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Chart.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\SyncFusion\Syncfusion.Chart.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Syncfusion.Chart.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Chart.Win.10.2.76\lib\3.5\Syncfusion.Chart.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Core, Version=8.203.0.18, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Core.dll</HintPath>
+    <Reference Include="Syncfusion.Chart.Windows, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Chart.Win.10.2.76\lib\3.5\Syncfusion.Chart.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\SyncFusion\Syncfusion.Grid.Windows.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Syncfusion.Compression.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Pdf.10.2.76\lib\3.5\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SyncFusion\Syncfusion.Pdf.Base.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.Shared.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\SyncFusion\Syncfusion.Shared.Base.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Syncfusion.Core, Version=10.203.0.75, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Core.10.2.76\lib\3.5\Syncfusion.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Tools.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\SyncFusion\Syncfusion.Tools.Windows.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Syncfusion.Grid.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Grid.Win.10.2.76\lib\3.5\Syncfusion.Grid.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Grid.Windows, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Grid.Win.10.2.76\lib\3.5\Syncfusion.Grid.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Pdf.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Pdf.10.2.76\lib\3.5\Syncfusion.Pdf.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Shared.Base.10.2.76\lib\3.5\Syncfusion.Shared.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.Windows, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Shared.Win.10.2.76\lib\3.5\Syncfusion.Shared.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Tools.Base, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Tools.Win.10.2.76\lib\3.5\Syncfusion.Tools.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Tools.Windows, Version=10.203.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Tools.Win.10.2.76\lib\3.5\Syncfusion.Tools.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -184,6 +199,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddAbsenceCommandTest.cs" />
     <Compile Include="Budgeting\BudgetPermissionServiceTest.cs" />
     <Compile Include="Budgeting\BudgetDayGapFillerTest.cs" />
     <Compile Include="Budgeting\BudgetDayProviderTest.cs" />
@@ -835,6 +851,10 @@
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Win\Teleopti.Ccc.Win.csproj">
+      <Project>{26C57CBE-E75F-42C9-9747-8016AEB305F2}</Project>
+      <Name>Teleopti.Ccc.Win</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

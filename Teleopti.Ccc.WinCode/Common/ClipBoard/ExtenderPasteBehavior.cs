@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
             IList<T> pasteList = new List<T>();
             T pasteResult;
 
+			gridControl.BeginUpdate();
             if(clipHandler.ClipList.Count > 0)
             {
                 GridRangeInfo gridRange = rangeList.ActiveRange;
@@ -88,6 +89,7 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
                     }
                 }                
             }
+			gridControl.EndUpdate(true);
 
             return pasteList;
         }

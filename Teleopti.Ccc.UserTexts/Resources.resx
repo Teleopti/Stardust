@@ -7982,8 +7982,8 @@ Period</value>
     <comment>Not saved</comment>
   </data>
   <data name="OverWrite" xml:space="preserve">
-    <value>Over write</value>
-    <comment>Over write</comment>
+    <value>Overwrite</value>
+    <comment>Overwrite</comment>
   </data>
   <data name="PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges" xml:space="preserve">
     <value>Please save again when you have reviewed the applied changes!</value>
@@ -10730,8 +10730,8 @@ These options are activated:
     <comment>Submit a text request/absence request...</comment>
   </data>
   <data name="OverridePeriod" xml:space="preserve">
-    <value>Override Period</value>
-    <comment>Overrride period time</comment>
+    <value>Override period time</value>
+    <comment>Override period time</comment>
   </data>
   <data name="OverrideHoursPerDay" xml:space="preserve">
     <value>Override hours per day</value>
@@ -10752,5 +10752,9 @@ These options are activated:
   <data name="ManageRuleSets" xml:space="preserve">
     <value>Manage rule sets</value>
     <comment>Manage rule sets</comment>
+  </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>Agents (Manual Override)</value>
+    <comment>Manually entered number of agents will override the forecasterd number of agents.</comment>
   </data>
 </root>

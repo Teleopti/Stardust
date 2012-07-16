@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart
     /// </remarks>
     public class PayrollResultViewModel : INotifyPropertyChanged, IEquatable<PayrollResultViewModel>
     {
-        IPayrollResult _model;
+        private readonly IPayrollResult _model;
+		private IJobResultProgress _progress = new JobResultProgress{JobResultId = Guid.Empty,Message = UserTexts.Resources.WaitingThreeDots,Percentage = 0,TotalPercentage = 100};
 
         public PayrollResultViewModel(IPayrollResult result)
         {
             InParameter.NotNull("PayrollResult", result);
             _model = result;
-            
         }
 
         public string Owner
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart
             get
             {
                 var message = string.Empty;
-                if(Details.Count() > 0)
+                if(Details.Any())
                 {
                     message = Details.FirstOrDefault().Message;
                 }
@@ -98,8 +98,6 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart
             }
         }
 
-        private IJobResultProgress _progress;
-       
         public IJobResultProgress Progress
         {
             get

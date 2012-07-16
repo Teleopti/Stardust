@@ -157,12 +157,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
         internal virtual void ShowMessage(string message, string caption)
         {
-            Syncfusion.Windows.Forms.MessageBoxAdv.Show(message,
-                               caption,
-                               MessageBoxButtons.OK,
-                               MessageBoxIcon.Error,
-                               MessageBoxDefaultButton.Button2,
-                               (IsRightToLeft) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
+            ViewBase.ShowErrorMessage(message, caption);
         }
 
         internal virtual bool ValidateBeforeSave()

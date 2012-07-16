@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			_page.StartTimeTextField.Value = "05:00";
 			_page.EndTimeTextField.Value = "14:00";
+			_page.NextDay.Checked = false;
 		}
 
 		[When(@"I input invalid student availability values")]
@@ -63,6 +64,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			_page.StartTimeTextField.Value = "not-a";
 			_page.EndTimeTextField.Value = "-time";
+			_page.NextDay.Checked = false;
 		}
 
 		[When(@"I input student availability values with end time on next day")]
@@ -125,6 +127,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheStudentAvailabilityInTheCalendar()
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
+			_page.CalendarCellForDate(date).WaitUntil(p => p.ClassName.Contains("unvalidated"), 500);
 			cellShouldContainInputValues(date);
 			Navigation.GotoStudentAvailability(date);
 			cellShouldContainInputValues(date);

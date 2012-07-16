@@ -505,15 +505,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			InitializeWorkloadCollectionForSkill(skill, skillPropertyPages);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
 		private void InitializeWorkloadCollectionForSkill(ISkill skill, IAbstractPropertyPages skillPropertyPages)
 		{
 			if (!skill.WorkloadCollection.Any())
 			{
-				if (MessageBox.Show(string.Concat(Resources.QuestionWouldYouLikeToCreateWorkloadQuestionMark, "  "),
-					Resources.Skill,
-					MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2,
-					(RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0) == DialogResult.Yes)
+				if (ViewBase.ShowYesNoMessage(Resources.QuestionWouldYouLikeToCreateWorkloadQuestionMark, Resources.Skill) == DialogResult.Yes)
 				{
 					//Hide the other window first
 					if (skillPropertyPages!=null) skillPropertyPages.Owner.Visible = false;
@@ -531,13 +528,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						}
 					} while (
 						result != DialogResult.Cancel &&
-						MessageBox.Show(
-							string.Concat(Resources.QuestionCreateAnotherWorkload, "  "),
-							Resources.SkillWizard,
-							MessageBoxButtons.YesNo,
-							MessageBoxIcon.Question,
-							MessageBoxDefaultButton.Button2,
-						(RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0)
+						ViewBase.ShowYesNoMessage(Resources.QuestionCreateAnotherWorkload, Resources.SkillWizard)
 						== DialogResult.Yes);
 				}
 				TreeNode[] foundNodes = treeViewSkills.Nodes.Find(skill.Id.GetValueOrDefault().ToString(), true);
@@ -804,6 +795,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			    LazyLoadingManager.Initialize(workload.Skill);
 			    LazyLoadingManager.Initialize(workload.Skill.SkillType);
 			    LazyLoadingManager.Initialize(workload.TemplateWeekCollection);
+                LazyLoadingManager.Initialize(workload.QueueSourceCollection);
 			    return workload;
 			}
 		}
@@ -1124,7 +1116,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			InitializeWorkloadCollectionForSkill(skill, null);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
 		private void multisiteSkillSaved(object sender, AfterSavedEventArgs e)
 		{
 			using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -1132,13 +1124,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				IMultisiteSkill skill = new MultisiteSkillRepository(uow).Get(e.SavedAggregateRoot.Id.Value);
 				if (skill.ChildSkills.Count == 0)
 				{
-					if (MessageBox.Show(
-							string.Concat(Resources.QuestionCreateSubSkill, "  "),
-							Resources.MultisiteSkillWizard,
-							MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2,
-							(RightToLeft == RightToLeft.Yes)
-								? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-								: 0) == DialogResult.Yes)
+					if (ViewBase.ShowYesNoMessage(Resources.QuestionCreateSubSkill, Resources.MultisiteSkillWizard) == DialogResult.Yes)
 					{
 						//Hide the other window first
 						var skillPropertyPages = (AbstractPropertyPages<ISkill>) sender;
@@ -1179,15 +1165,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							}
 						} while (
 							result != DialogResult.Cancel &&
-							MessageBox.Show(
-								string.Concat(Resources.QuestionCreateAnotherSubSkill, "  "),
-								Resources.MultisiteSkillWizard,
-								MessageBoxButtons.YesNo,
-								MessageBoxIcon.Question,
-								MessageBoxDefaultButton.Button2,
-								(RightToLeft == RightToLeft.Yes)
-									? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-									: 0)
+							ViewBase.ShowYesNoMessage(Resources.QuestionCreateAnotherSubSkill, Resources.MultisiteSkillWizard)
 							== DialogResult.Yes);
 
 						if (numberOfSkillsAdded > 0)

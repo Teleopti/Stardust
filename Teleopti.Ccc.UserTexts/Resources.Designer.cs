@@ -11149,6 +11149,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agents (Manual Override).
+        /// </summary>
+        public static string ManualAgents {
+            get {
+                return ResourceManager.GetString("ManualAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map Destination.
         /// </summary>
         public static string MapDestination {
@@ -14798,7 +14807,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Override Period.
+        ///   Looks up a localized string similar to Override period time.
         /// </summary>
         public static string OverridePeriod {
             get {
@@ -14852,7 +14861,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Over write.
+        ///   Looks up a localized string similar to Overwrite.
         /// </summary>
         public static string OverWrite {
             get {
