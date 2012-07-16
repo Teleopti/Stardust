@@ -76,7 +76,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
             IWorkShiftCalculationResultHolder result = null;
             if(_shiftList.Count > 0)
-				result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions);
+                result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions);
+                
 
             return result;
         }
@@ -165,7 +166,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private IWorkShiftCalculationResultHolder findBestShift(IEffectiveRestriction effectiveRestriction,
-            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions )
         {
 			using (PerformanceOutput.ForOperation("Filtering shifts before calculating"))
 			{
@@ -175,8 +176,14 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 				}
 
-				_shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList);
-
+                if(schedulingOptions.MainShiftOptimizeActivitySpecification == null)
+                {
+                    _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList, new Domain.Specification.All<IMainShift>());
+                }else
+                {
+                    _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList,schedulingOptions.MainShiftOptimizeActivitySpecification );
+                }
+                
 				_shiftList = _shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(dateOnly,
 				                                                                                         person.
 				                                                                                         	PermissionInformation.

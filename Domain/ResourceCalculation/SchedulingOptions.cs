@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -46,6 +45,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	public int ResourceCalculateFrequency { get; set; }
     	public TimeSpan? UseCustomTargetTime { get; set; }
     	public bool ShowTroubleshot { get; set; }
+
+        public ISpecification<IMainShift>  MainShiftOptimizeActivitySpecification { get;set; }
 
 		public SchedulingOptions()
 		{

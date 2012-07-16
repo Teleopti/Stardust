@@ -51,13 +51,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
              return FilterOnRestrictionMinMaxWorkTime(shiftList, restriction, finderResult);
            }
 
-        public IList<IShiftProjectionCache> FilterOnMainShiftOptimizeActivitiesSpecification(IList<IShiftProjectionCache> shiftList)
+        public IList<IShiftProjectionCache> FilterOnMainShiftOptimizeActivitiesSpecification(IList<IShiftProjectionCache> shiftList, ISpecification< IMainShift > mainShiftOptimizeActivitySpecification )
         {
 
             IList<IShiftProjectionCache> ret = new List<IShiftProjectionCache>();
             foreach (var shiftProjectionCache in shiftList)
             {
-                if(_mainShiftOptimizeActivitiesSpecification.IsSatisfiedBy(shiftProjectionCache.TheMainShift))
+                if (mainShiftOptimizeActivitySpecification.IsSatisfiedBy(shiftProjectionCache.TheMainShift))
                     ret.Add(shiftProjectionCache);
             }
 

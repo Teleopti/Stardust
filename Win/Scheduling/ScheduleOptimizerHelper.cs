@@ -1114,7 +1114,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         #endregion
-
+        
         #region Local
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

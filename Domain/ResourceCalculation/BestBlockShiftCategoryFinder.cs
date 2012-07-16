@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    {
 	        finderResult = new WorkShiftFinderResult(person, dateOnly);
 
-	        shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(shiftList);
+            shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(shiftList, new Domain.Specification.All<IMainShift>());
 	        shiftList = _shiftProjectionCacheFilter.FilterOnShiftCategory(shiftCategory, shiftList, finderResult);
 	        shiftList = _shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(dateOnly, agentTimeZone, shiftList, effectiveRestriction,
 	                                                                                                schedulingOptions.NotAllowedShiftCategories, finderResult);

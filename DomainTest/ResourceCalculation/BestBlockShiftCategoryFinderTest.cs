@@ -142,8 +142,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
-                
-                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(cashes)).IgnoreArguments().Return
+
+                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(cashes, new Domain.Specification.All<IMainShift>())).IgnoreArguments().Return
                     (cashes).Repeat.AtLeastOnce();
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnShiftCategory(null, cashes, null)).Return(cashes)
                     .IgnoreArguments().Repeat.AtLeastOnce();
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnShiftCategory(null, cashes, null)).Return(cashes)
                     .IgnoreArguments().Repeat.AtLeastOnce();
-                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(cashes)).
+                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(cashes, new Domain.Specification.All<IMainShift>())).
                     IgnoreArguments().Return(cashes).Repeat.AtLeastOnce();
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(new DateOnly(), null, cashes, null, null, null)).Return(
                                                                                                                   cashes)

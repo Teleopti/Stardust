@@ -330,5 +330,10 @@ namespace Teleopti.Interfaces.Domain
 		/// The use custom target time.
 		/// </value>
 		TimeSpan? UseCustomTargetTime { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        ISpecification<IMainShift> MainShiftOptimizeActivitySpecification { get; set; }
     }
 }
