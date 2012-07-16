@@ -146,5 +146,5 @@ Scenario: Show activity with correct position, height and color
 	When I view my week schedule
 	Then I should see wednesday's activities:
 	| Activity   | Start Position | Height | Color |
-	| Phone      | 67             | 100    | Green |
-	| Shortbreak | 167            | 33     | Red   |
+	| Phone      | 67             | 99px   | Green |
+	| Shortbreak | 167            | 32px   | Red   |

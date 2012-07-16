@@ -481,12 +481,12 @@ this.ScenarioSetup(scenarioInfo);
             table5.AddRow(new string[] {
                         "Phone",
                         "67",
-                        "100",
+                        "99px",
                         "Green"});
             table5.AddRow(new string[] {
                         "Shortbreak",
                         "167",
-                        "33",
+                        "32px",
                         "Red"});
 #line 147
  testRunner.Then("I should see wednesday\'s activities:", ((string)(null)), table5);
