@@ -12,7 +12,7 @@
 	<style>
 		@foreach (var style in Model.Styles)
 		{
-			@string.Format("li.third.{0} {{background-color: rgba({1},1.0);}}\n", style.Name, ColorTranslator.FromHtml(style.ColorHex).ToCSV())
+			@string.Format("li.third.{0} {{background-color: rgb({1});}}\n", style.Name, ColorTranslator.FromHtml(style.ColorHex).ToCSV())
 		}
 	</style>
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
@@ -69,7 +69,7 @@
 
 						<div class="week-schedule-layer absolute tooltip" @*@(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"week-schedule-layer absolute tooltip\"") : @Html.Raw("class=\"week-schedule-layer absolute\"")) *@
 							tooltip-title="@period.Title" tooltip-text="@tooltipText" 
-							style="background-color: @string.Format("rgba({0},1.0)", period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
+							style="background-color: @string.Format("rgb({0})", period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
 							
 							<strong @(heightPixel > pixelToDisplayTitle ? @Html.Raw("class=\"truncate\"") : @Html.Raw("class=\"truncate displaynone\""))>@period.Title</strong>
 							<span @(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"fullwidth displaynone\"") : @Html.Raw("class=\"fullwidth displayblock\""))>@period.TimeSpan</span>

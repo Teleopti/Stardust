@@ -26,9 +26,12 @@
 .body-weekview{}
 /*.body-weekview-inner{background: transparent url(../Images/view_top_bg.png) top left no-repeat; font-size: 0;}*/
 .body-weekview-inner {
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: 1px solid #dfdfdf;
 	background: #f8f8f8;
 	font-family: Verdana;
+}
+.rgba .body-weekview-inner {
+	border: 1px solid rgba(0, 0, 0, 0.15);
 }
 .body-weekview-inner ul.today{background-position: 0 0; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
 
@@ -68,13 +71,12 @@
 .weekview-day
 {
 	margin: 0;
+	float: left;
 	border-left: 1px solid #f9f9f9;
 	border-right: 1px solid #dfdfdf;
 }
 .rgba .weekview-day
 {
-	margin: 0;
-	float: left;
 	border-left: 1px solid rgba(255, 255, 255, 0.7);
 	border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -122,20 +124,11 @@
 .weekview-day li.third 
 {
 	height: 60px;
-	/*border-top: 0px;
-	border-left-style: solid; 
-	border-left-width: 8px; */
-	border-top: 1px solid  #f9f9f9;
 	border-bottom: 1px solid #dfdfdf;
 	overflow: hidden;
 }
 .rgba .weekview-day li.third 
 {
-	height: 60px;
-	/*border-top: 0px;
-	border-left-style: solid; 
-	border-left-width: 8px;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.15); */
 	border-top: 1px solid rgba(255, 255, 255, 0.5);
 }
 .weekview-day li.dayoff 
@@ -147,10 +140,7 @@
 }
 .weekview-day li.empty{border-top-color: transparent; border-bottom-color: transparent;}
 .weekview-day > li > div {
-	/*padding: 10px 5px; 
-	border-left-style: solid; 
-	border-left-width: 8px; 
-	border-left-color: transparent;*/
+
 }
 .weekview-day li div.meeting {
 	bottom: 1px;
@@ -256,13 +246,16 @@ select.absence-input
 	border-right: 1px solid #dfdfdf;
 }
 .weekview-timeline-label {
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: 1px solid #dfdfdf;
 	font-size: 6pt;
 	border-radius: 2px;
 	width: 29px;
 	height: 10px;
 	text-align: center;
 	overflow: hidden;
+}
+.rgba .weekview-timeline-label {
+	border: 1px solid rgba(0, 0, 0, 0.15);
 }
 .fourth {
 	height: 15px;
