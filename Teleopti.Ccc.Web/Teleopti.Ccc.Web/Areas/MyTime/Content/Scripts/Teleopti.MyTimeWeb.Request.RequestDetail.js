@@ -146,6 +146,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _enableDisableDetailSection(data) {
 		if (data.Link.Methods.indexOf("PUT") == -1) {
 			$('#Request-detail-section input').prop('disabled', true);
+			$('#Request-detail-section button').prop('disabled', true);
 			$('#Request-detail-section textarea').prop('readonly', true);
 			$('#Request-detail-section textarea').css('color', 'gray');
 			$('#Request-detail-ok-button').hide();
