@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private delegate void ExtractShiftCategoryPeriodValueDelegate(IPossibleStartEndCategory possibleStartEndCategory);
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void RunTheList(IList<IPossibleStartEndCategory> possibleStartEndCategories, IList<IShiftProjectionCache> shiftProjectionList,
 			DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, bool useShiftCategoryFairness,
 			IShiftCategoryFairnessFactors shiftCategoryFairnessFactors, IFairnessValueResult totalFairness, IFairnessValueResult agentFairness, 

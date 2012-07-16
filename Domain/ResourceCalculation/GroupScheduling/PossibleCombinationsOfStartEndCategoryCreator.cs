@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 	public class PossibleCombinationsOfStartEndCategoryCreator : IPossibleCombinationsOfStartEndCategoryCreator
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public HashSet<IPossibleStartEndCategory> FindCombinations(IWorkTimeMinMax workTimeMinMax, ISchedulingOptions schedulingOptions)
 		{
 			var ret = new HashSet<IPossibleStartEndCategory>();
-
+			if (workTimeMinMax == null || schedulingOptions == null)
+				return ret;
 			foreach (var poss in workTimeMinMax.PossibleStartEndCategories)
 			{
 				if(schedulingOptions.NotAllowedShiftCategories.Contains(poss.ShiftCategory))

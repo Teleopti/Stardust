@@ -66,8 +66,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_groupPagesFairness = _groupPages.ToList();
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             _dataLoaded = true;
-            
         }
+
+		public override string HelpId
+		{
+			get
+			{
+				return Tag.ToString();
+			}
+		}
 
         public bool UseBlockSchedulingVisible
         {
@@ -181,11 +188,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private void initGroupPages()
 		{
 			comboBoxGrouping.DataSource = _groupPages;
-			comboBoxGrouping.DisplayMember = "Description";
-
+            comboBoxGrouping.DisplayMember = "Name";
+		    comboBoxGrouping.ValueMember  = "Key";
 			if(_localSchedulingOptions.GroupOnGroupPage != null)
 			{
-				comboBoxGrouping.SelectedItem = _localSchedulingOptions.GroupOnGroupPage;
+                comboBoxGrouping.SelectedValue  = _localSchedulingOptions.GroupOnGroupPage.Key ;
 			}
 		}
 
@@ -199,11 +206,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private void initGroupPagesFairness()
 		{
 			comboBoxGroupingFairness.DataSource = _groupPagesFairness;
-			comboBoxGroupingFairness.DisplayMember = "Description";
+			comboBoxGroupingFairness.DisplayMember = "Name";
+            comboBoxGroupingFairness.ValueMember  = "Key";
 
 			if (_localSchedulingOptions.GroupPageForShiftCategoryFairness != null)
 			{
-				comboBoxGroupingFairness.SelectedItem = _localSchedulingOptions.GroupPageForShiftCategoryFairness;
+				comboBoxGroupingFairness.SelectedValue  = _localSchedulingOptions.GroupPageForShiftCategoryFairness.Key  ;
 			}
 		}
 
@@ -590,6 +598,13 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			if (!checkBoxUseMaxSeats.Checked)
 				checkBoxDoNotBreakMaxSeats.Checked = false;
 			checkBoxDoNotBreakMaxSeats.Enabled = checkBoxUseMaxSeats.Checked;
+		}
+
+		private void tabControl1SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (tabControl1.SelectedIndex == 0) Tag = "Main";
+			if (tabControl1.SelectedIndex == 1) Tag = "Extra";
+			if (tabControl1.SelectedIndex == 2) Tag = "Advanced";
 		}
     }
     

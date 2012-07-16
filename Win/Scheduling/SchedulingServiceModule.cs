@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         	builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().
         		InstancePerLifetimeScope();
         	builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupShiftLengthDecider>().As<IGroupShiftLengthDecider>().InstancePerLifetimeScope();
             builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 
             builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>().InstancePerLifetimeScope();

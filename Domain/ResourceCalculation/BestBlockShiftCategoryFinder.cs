@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IPossibleCombinationsOfStartEndCategoryRunner _possibleCombinationsOfStartEndCategoryRunner;
 		private readonly IPossibleCombinationsOfStartEndCategoryCreator _possibleCombinationsOfStartEndCategoryCreator;
 		private readonly IShiftCategoryFairnessCalculator _shiftCategoryFairnessCalculator;
+		private readonly IGroupShiftLengthDecider _groupShiftLengthDecider;
 		private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 
 		public BestBlockShiftCategoryFinder(IWorkShiftWorkTime workShiftWorkTime,
@@ -51,7 +53,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IPossibleCombinationsOfStartEndCategoryRunner possibleCombinationsOfStartEndCategoryRunner,
 			IPossibleCombinationsOfStartEndCategoryCreator possibleCombinationsOfStartEndCategoryCreator,
 			IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator,
-			IShiftCategoryFairnessCalculator shiftCategoryFairnessCalculator)
+			IShiftCategoryFairnessCalculator shiftCategoryFairnessCalculator,
+			IGroupShiftLengthDecider groupShiftLengthDecider)
         {
 			_workShiftWorkTime = workShiftWorkTime;
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
@@ -62,6 +65,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_possibleCombinationsOfStartEndCategoryCreator = possibleCombinationsOfStartEndCategoryCreator;
 			_groupShiftCategoryFairnessCreator = groupShiftCategoryFairnessCreator;
 			_shiftCategoryFairnessCalculator = shiftCategoryFairnessCalculator;
+			_groupShiftLengthDecider = groupShiftLengthDecider;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -140,6 +144,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
 					shiftCategoryFairnessFactors = extractShiftCategoryFairnessFactor(person, dateOnly);
 				}
+				
+				shiftList = _groupShiftLengthDecider.FilterList(shiftList, persons, schedulingOptions, ScheduleDictionary, dateOnly);
 
 				var totalFairness = ScheduleDictionary.FairnessPoints();
 				_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions, 
@@ -156,6 +162,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					finderResult.Successful = true;
 					shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, true);
+					shiftList = _groupShiftLengthDecider.FilterList(shiftList, persons, schedulingOptions, ScheduleDictionary, dateOnly);
+
 					_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person, schedulingOptions,
 						useShiftCategoryFairness, shiftCategoryFairnessFactors, totalFairness, agentFairness, persons, effectiveRestriction);
 					if (!combinations.IsEmpty())
@@ -191,8 +199,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    }
 
 		private IShiftCategoryFairnessFactors extractShiftCategoryFairnessFactor(IPerson person, DateOnly dateOnly)
-		{
-
 			var personCategoryFairness = ScheduleDictionary[person].CachedShiftCategoryFairness();
 			var groupCategoryFairness = _groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(
 																			person, dateOnly);

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IWorkShiftWorkTime _workShiftWorkTime;
     	private IShiftCategoryFairnessCalculator _fairnessCalculator;
 		IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
+		IGroupShiftLengthDecider _groupShiftLengthDecider;
 
     	[SetUp]
         public void Setup()
@@ -79,12 +81,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     		_possibleCombinationsOfStartEndCategoryCreator = _mocks.StrictMock<IPossibleCombinationsOfStartEndCategoryCreator>();
     		_fairnessCalculator = _mocks.StrictMock<IShiftCategoryFairnessCalculator>();
     		_groupShiftCategoryFairnessCreator = _mocks.StrictMock<IGroupShiftCategoryFairnessCreator>();
+    		_groupShiftLengthDecider = _mocks.DynamicMock<IGroupShiftLengthDecider>();
     		_target = new BestBlockShiftCategoryFinder(_workShiftWorkTime, _shiftProjectionCacheManager, _stateHolder,
     		                                           _effectiveRestrictionCreator,
     		                                           _possibleCombinationsOfStartEndCategoryRunner,
     		                                           _possibleCombinationsOfStartEndCategoryCreator, 
 													   _groupShiftCategoryFairnessCreator,
-													   _fairnessCalculator);
+													   _fairnessCalculator, _groupShiftLengthDecider);
 
         }
 
