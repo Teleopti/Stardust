@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 _workShiftFinderResultHolder.Clear(person, dateOnly);
 
-				if (_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), schedulingOptions, true, _resourceCalculateDelayer))
+				if (_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), schedulingOptions, true, _resourceCalculateDelayer, null))
                 {
                     //_schedulePartModifyAndRollbackService.Rollback();
                     success = true;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -446,5 +447,34 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 			return shiftList;
     	}
+
+        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList, IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
+        {
+            if (schedulingOptions == null) return shiftList;
+
+            if (possibleStartEndCategory == null) return shiftList;
+
+			if (!schedulingOptions.UseGroupSchedulingCommonStart && !schedulingOptions.UseGroupSchedulingCommonEnd) return shiftList;
+
+             var finalShiftList = new List< IShiftProjectionCache >();
+
+            if (schedulingOptions.UseGroupSchedulingCommonStart && schedulingOptions.UseGroupSchedulingCommonEnd)
+            {
+                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime && possibleStartEndCategory.EndTime  == shift.WorkShiftEndTime ));
+                
+            }
+            else if (schedulingOptions.UseGroupSchedulingCommonStart)
+            {
+
+				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime));
+            }
+            else if (schedulingOptions.UseGroupSchedulingCommonEnd)
+            {
+				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.EndTime == shift.WorkShiftEndTime));
+            }
+
+            return finalShiftList;
+
+        }      
     }
 }

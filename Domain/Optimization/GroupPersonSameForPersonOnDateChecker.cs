@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupPersonSameForPersonOnDateChecker
     {
-        IGroupPerson FindCommonGroupPersonForPersonOnDates(IPerson person, IList<DateOnly> dateOnlyList, IList<IPerson> allSelectedPersons);
+		IGroupPerson FindCommonGroupPersonForPersonOnDates(IPerson person, IList<DateOnly> dateOnlyList, IList<IPerson> allSelectedPersons, ISchedulingOptions schedulingOptions);
         IGroupPersonsBuilder GroupPersonsBuilder { get; }
     }
 
@@ -22,21 +22,21 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         public IGroupPerson FindCommonGroupPersonForPersonOnDates(IPerson person, IList<DateOnly> dateOnlyList,
-            IList<IPerson> allSelectedPersons)
+            IList<IPerson> allSelectedPersons, ISchedulingOptions schedulingOptions)
         {
             if (person == null || dateOnlyList == null || allSelectedPersons == null) return null;
            
             if (dateOnlyList.Count < 2) return null;
 
             //all groups on selectedpersons on a date
-            var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnlyList[0], allSelectedPersons, false);
+            var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnlyList[0], allSelectedPersons, false, schedulingOptions);
 
             var dateOneGroupPerson = findGroupPersonForPerson(person, groupPersons);
             if (dateOneGroupPerson == null)
                 return null;
             for (int i = 1; i < dateOnlyList.Count; i++)
             {
-                groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnlyList[i], allSelectedPersons, false);
+                groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnlyList[i], allSelectedPersons, false, schedulingOptions);
                 var nextDateGroupPerson = findGroupPersonForPerson(person, groupPersons);
                 if (nextDateGroupPerson == null)
                     return null;

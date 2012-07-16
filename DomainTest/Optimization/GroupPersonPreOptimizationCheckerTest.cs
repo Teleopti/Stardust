@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -15,14 +16,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private GroupPersonPreOptimizationChecker _target;
         private IPerson _person;
         private IGroupPersonSameDayOffsChecker _groupPersonSameDayOffsChecker;
+    	private ISchedulingOptions _schedulingOptions;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             _groupPersonSameForPersonOnDateChecker = _mock.StrictMock<IGroupPersonSameForPersonOnDateChecker>();
             _groupPersonSchedulePeriodChecker = _mock.StrictMock<IGroupPersonSchedulePeriodChecker>();
             _groupPersonSameDayOffsChecker = _mock.StrictMock<IGroupPersonSameDayOffsChecker>();
+        	_schedulingOptions = new SchedulingOptions();
             _person = _mock.StrictMock<IPerson>();
             _target = new GroupPersonPreOptimizationChecker(_groupPersonSameForPersonOnDateChecker, _groupPersonSameDayOffsChecker, _groupPersonSchedulePeriodChecker);
         }
@@ -37,13 +40,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var groupPerson = _mock.StrictMock<IGroupPerson>();
             var dic = new List<IScheduleMatrixPro>();
             Expect.Call(_groupPersonSameForPersonOnDateChecker.FindCommonGroupPersonForPersonOnDates(_person, dates,
-                                                                                                     allSelectedPersons)).Return(groupPerson);
+																									 allSelectedPersons, _schedulingOptions)).Return(groupPerson);
             Expect.Call(_groupPersonSchedulePeriodChecker.AllInSameGroupHasSameSchedulePeriod(groupPerson, dates)).
                 Return(true);
             Expect.Call(_groupPersonSameDayOffsChecker.CheckGroupPerson(dic, groupPerson, daysOffToRemove, daysOffToAdd))
                 .Return(true);
             _mock.ReplayAll();
-            Assert.That(_target.CheckPersonOnDates(dic, _person, daysOffToRemove, daysOffToAdd, allSelectedPersons), Is.Not.Null);
+			Assert.That(_target.CheckPersonOnDates(dic, _person, daysOffToRemove, daysOffToAdd, allSelectedPersons, _schedulingOptions), Is.Not.Null);
             _mock.VerifyAll();
         }
 
@@ -55,10 +58,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var allSelectedPersons = new List<IPerson>();
             var dic = new List<IScheduleMatrixPro>();
 
-            Expect.Call(_groupPersonSameForPersonOnDateChecker.FindCommonGroupPersonForPersonOnDates(_person, new List<DateOnly>(), 
-                                                                                                      allSelectedPersons)).Return(null);
+            Expect.Call(_groupPersonSameForPersonOnDateChecker.FindCommonGroupPersonForPersonOnDates(_person, new List<DateOnly>(),
+																									  allSelectedPersons, _schedulingOptions)).Return(null);
             _mock.ReplayAll();
-            Assert.That(_target.CheckPersonOnDates(dic, _person, daysOffToRemove, daysOffToAdd, allSelectedPersons), Is.Null);
+			Assert.That(_target.CheckPersonOnDates(dic, _person, daysOffToRemove, daysOffToAdd, allSelectedPersons, _schedulingOptions), Is.Null);
 
         }
 
@@ -72,11 +75,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var groupPerson = _mock.StrictMock<IGroupPerson>();
             var dic = new List<IScheduleMatrixPro>();
             Expect.Call(_groupPersonSameForPersonOnDateChecker.FindCommonGroupPersonForPersonOnDates(_person, dates,
-                                                                                                     allSelectedPersons)).Return(groupPerson);
+																									 allSelectedPersons, _schedulingOptions)).Return(groupPerson);
             Expect.Call(_groupPersonSchedulePeriodChecker.AllInSameGroupHasSameSchedulePeriod(groupPerson, dates)).
                 Return(false);
             _mock.ReplayAll();
-            Assert.That(_target.CheckPersonOnDates(dic, _person, daysOffToRemove, daysOffToAdd, allSelectedPersons), Is.Null);
+			Assert.That(_target.CheckPersonOnDates(dic, _person, daysOffToRemove, daysOffToAdd, allSelectedPersons, _schedulingOptions), Is.Null);
             _mock.VerifyAll();
         }
 
@@ -90,13 +93,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var groupPerson = _mock.StrictMock<IGroupPerson>();
             var dic = new List<IScheduleMatrixPro>();
             Expect.Call(_groupPersonSameForPersonOnDateChecker.FindCommonGroupPersonForPersonOnDates(_person, dates,
-                                                                                                     allSelectedPersons)).Return(groupPerson);
+																									 allSelectedPersons, _schedulingOptions)).Return(groupPerson);
             Expect.Call(_groupPersonSchedulePeriodChecker.AllInSameGroupHasSameSchedulePeriod(groupPerson, dates)).
                 Return(true);
             Expect.Call(_groupPersonSameDayOffsChecker.CheckGroupPerson(dic, groupPerson, daysOffToRemove, daysOffToAdd))
                 .Return(false);
             _mock.ReplayAll();
-            Assert.That(_target.CheckPersonOnDates(dic, _person, daysOffToRemove, daysOffToAdd, allSelectedPersons), Is.Null);
+			Assert.That(_target.CheckPersonOnDates(dic, _person, daysOffToRemove, daysOffToAdd, allSelectedPersons, _schedulingOptions), Is.Null);
             _mock.VerifyAll();
         }
 
