@@ -101,7 +101,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public TabPageAdv PinnedPage()
         {
-            if (_tabControlAdv != null && _tabControlAdv.TabPages[0] != null)
+
+            if (_tabControlAdv != null && _tabControlAdv.TabPages.Count > 0)
             {
                 return _tabControlAdv.TabPages[0];
             }
