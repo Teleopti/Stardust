@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -19,8 +20,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISaveSchedulePartService _saveSchedulePartService;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
+    	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-    	public AddAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IAbsenceRepository absenceRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
+    	public AddAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IAbsenceRepository absenceRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
             _absenceRepository = absenceRepository;
@@ -30,31 +32,36 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _unitOfWorkFactory = unitOfWorkFactory;
             _saveSchedulePartService = saveSchedulePartService;
         	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
+    		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public CommandResultDto Handle(AddAbsenceCommandDto command)
         {
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-            {
-                var person = _personRepository.Load(command.PersonId);
-                var scenario = getDesiredScenario(command);
-                var startDate = new DateOnly(command.Date.DateTime);
-                var timeZone = person.PermissionInformation.DefaultTimeZone();
-                var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                    new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-                     new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
-                var scheduleDay = scheduleDictionary[person].ScheduledDay(startDate);
-                var absence = _absenceRepository.Load(command.AbsenceId);
-                var absenceLayer = new AbsenceLayer(absence, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
-                scheduleDay.CreateAndAddAbsence(absenceLayer);
-                _saveSchedulePartService.Save(uow, scheduleDay);
-                using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
-                {
-                    uow.PersistAll();
-                }
-            }
-            return new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
+			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				var person = _personRepository.Load(command.PersonId);
+				var scenario = getDesiredScenario(command);
+				var startDate = new DateOnly(command.Date.DateTime);
+				var timeZone = person.PermissionInformation.DefaultTimeZone();
+				var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
+					new PersonProvider(new[] {person}), new ScheduleDictionaryLoadOptions(false, false),
+					new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
+
+				var scheduleRange = scheduleDictionary[person];
+				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+
+				var scheduleDay = scheduleRange.ScheduledDay(startDate);
+				var absence = _absenceRepository.Load(command.AbsenceId);
+				var absenceLayer = new AbsenceLayer(absence, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
+				scheduleDay.CreateAndAddAbsence(absenceLayer);
+				_saveSchedulePartService.Save(scheduleDay, rules);
+				using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
+				{
+					uow.PersistAll();
+				}
+			}
+			return new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
         }
 
     	private IScenario getDesiredScenario(AddAbsenceCommandDto command)

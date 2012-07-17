@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public IEnumerable<DayViewModel> Days { get; set; }
 		public RequestPermission RequestPermission { get; set; }
 		public IEnumerable<AbsenceTypeViewModel> AbsenceTypes { get; set; }
+		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
 	}
 
 	public class RequestPermission
@@ -25,6 +26,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public string Name { get; set; }
 		public Guid? Id { get; set; }
 	}
+
+	public class TimeLineViewModel
+	{
+		public string Time { get; set; }
+		public decimal PositionPercentage { get; set; }
+ 	}
 
 	[Flags]
 	public enum SpecialDateState
@@ -64,6 +71,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public string Summary { get; set; }
 		public string StyleClassName { get; set; }
 		public MeetingViewModel Meeting { get; set; }
+		public decimal StartPositionPercentage { get; set; }
+		public decimal EndPositionPercentage { get; set; }
+		public string Color { get; set; }
 	}
 
 	public class PersonDayOffPeriodViewModel : PeriodViewModel

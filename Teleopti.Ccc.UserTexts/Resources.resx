@@ -7982,8 +7982,8 @@ Period</value>
     <comment>Not saved</comment>
   </data>
   <data name="OverWrite" xml:space="preserve">
-    <value>Over write</value>
-    <comment>Over write</comment>
+    <value>Overwrite</value>
+    <comment>Overwrite</comment>
   </data>
   <data name="PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges" xml:space="preserve">
     <value>Please save again when you have reviewed the applied changes!</value>
@@ -10756,5 +10756,9 @@ These options are activated:
   <data name="ManualAgents" xml:space="preserve">
     <value>Agents (Manual Override)</value>
     <comment>Manually entered number of agents will override the forecasterd number of agents.</comment>
+  </data>
+  <data name="RequestCannotEdit" xml:space="preserve">
+    <value>Your request state has been changed, you cannot update it.</value>
+    <comment>Your request state has been changed, you cannot update it.</comment>
   </data>
 </root>

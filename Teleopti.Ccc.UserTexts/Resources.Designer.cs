@@ -14861,7 +14861,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Over write.
+        ///   Looks up a localized string similar to Overwrite.
         /// </summary>
         public static string OverWrite {
             get {
@@ -16946,6 +16946,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestAllowances {
             get {
                 return ResourceManager.GetString("RequestAllowances", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your request state has been changed, you cannot update it..
+        /// </summary>
+        public static string RequestCannotEdit {
+            get {
+                return ResourceManager.GetString("RequestCannotEdit", resourceCulture);
             }
         }
         

@@ -1,19 +1,29 @@
-﻿@using Teleopti.Ccc.UserTexts
+﻿@using System.Drawing
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 @using Teleopti.Interfaces.Domain
 @model WeekScheduleViewModel
 @{
+	const int scheduleHeight = 668;
 	Layout = null;
 }
 <div id="ScheduleWeek-body" class="body-weekview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 	<style>
 		@foreach (var style in Model.Styles)
 		{
-			@string.Format(".weekview-day li.{0} div {{border-left-color: {1}; border-right-color: {1};}}\n", style.Name, style.ColorHex)
+			@string.Format("li.third.{0} {{background-color: rgb({1});}}\n", style.Name, ColorTranslator.FromHtml(style.ColorHex).ToCSV())
 		}
 	</style>
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
+		<div class="weekview-timeline floatleft">
+			@foreach (var time in Model.TimeLine)
+			{
+				<div class="weekview-timeline-label absolute" style="top: @(Math.Round(scheduleHeight * time.PositionPercentage) + 198)px;">
+					@time.Time
+				</div>
+			}
+		</div>
 		@foreach (var day in Model.Days)
 		{
 			<ul class="weekview-day" data-mytime-date="@day.FixedDate" data-request-default-date="@day.Date" data-mytime-state="@Html.Schedule().FormatState(day.State)">
@@ -26,14 +36,14 @@
 						<span class="floatright mr5">@day.Header.DayNumber</span>
 					</div>
 				</li>
-				<li class="@Html.AttributeEncode(day.Summary.StyleClassName) third">
-					<div>
-						<span class="fullwidth displayblock">@day.Summary.Title</span>
-						<strong class="fullwidth displayblock">@day.Summary.TimeSpan</strong>
-						@day.Summary.Summary
-					</div>
+				<li class="@Html.AttributeEncode(day.Summary.StyleClassName) third category">
+					
+					<strong class="fullwidth displayblock">@day.Summary.Title</strong>
+					<span class="fullwidth displayblock">@day.Summary.TimeSpan</span>
+					@day.Summary.Summary
+					
 				</li>
-				<li id="day-summary" @(Model.RequestPermission.TextRequestPermission? "class=add-text-request":"")>
+				<li id="day-summary" @(Model.RequestPermission.TextRequestPermission ? @Html.Raw("class=\"add-text-request fourth\"") : @Html.Raw("class=\"fourth\""))>
 					<div class="relative">
 						<div class="text-request absolute" @(day.TextRequestCount > 0 ? "" : "style=display:none") title="@(string.Format(Resources.XRequests, day.TextRequestCount))">
 							<div class="floatright extrasmall">@day.TextRequestCount</div>
@@ -41,28 +51,35 @@
 						</div>
 						@if (day.HasNote)
 						{
-							<div class="icon comment-day absolute">
-							</div>
-							<div class="comment-day">
-								@day.Note.Message
+							<div class="icon comment-day ir absolute tooltip" tooltip-text="@day.Note.Message">
 							</div>
 						}
 					</div>
 				</li>
-				@foreach (var period in day.Periods)
-				{
-					<li class="@period.StyleClassName">
-						<div>
-							<strong class="fullwidth displayblock">@period.TimeSpan</strong>
-							<div class="truncate">@period.Title</div>
+				<li class="weekview-day-schedule relative">
+					@foreach (var period in day.Periods)
+					{
+						var topPixel = Math.Round(scheduleHeight * period.StartPositionPercentage);
+						var bottomPixel = Math.Round(scheduleHeight * period.EndPositionPercentage) - 1;
+						var heightPixel = bottomPixel - topPixel;
+
+						const int pixelToDisplayAll = 32;
+						const int pixelToDisplayTitle = 15;
+						var tooltipText = period.Meeting == null ? period.TimeSpan : string.Format("<div>{0}</div><div><dl><dt>Subject: </dt><dd> {1} </dd><dt>Location: </dt><dd> {2} </dd></dl></div>", period.TimeSpan, period.Meeting.Title, period.Meeting.Location);
+
+						<div class="week-schedule-layer absolute tooltip" @*@(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"week-schedule-layer absolute tooltip\"") : @Html.Raw("class=\"week-schedule-layer absolute\"")) *@
+							tooltip-title="@period.Title" tooltip-text="@tooltipText" 
+							style="background-color: @string.Format("rgb({0})", period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
+							
+							<strong @(heightPixel > pixelToDisplayTitle ? @Html.Raw("class=\"truncate\"") : @Html.Raw("class=\"truncate displaynone\""))>@period.Title</strong>
+							<span @(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"fullwidth displaynone\"") : @Html.Raw("class=\"fullwidth displayblock\""))>@period.TimeSpan</span>
+
 							@if (period.Meeting != null)
 							{
-								<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>
+								<div class="icon meeting floatright"></div>
 							}
 						</div>
-					</li>
-				}
-				<li>
+					}
 				</li>
 			</ul>
 		}
@@ -70,7 +87,7 @@
 </div>
 
 
-<div id="Schedule-addRequest-title"class="displaynone">
+<div id="Schedule-addRequest-title" class="displaynone">
 	<span id="Text-request-tab" class="selectable-tab selected-tab">@Resources.TextRequest</span>
 	@if (Model.RequestPermission.AbsenceRequestPermission)
 	{
@@ -129,9 +146,13 @@
 			}
 		</select>
 	</div>
-	<div class="edit-module-element clearleftfloat floatleft">
-		<input type="checkbox" id="Fullday-check" data-bind="checked:IsFullDay"/>@Resources.FullDay<br />
-	</div>
+	<span class="edit-module-element clearleftfloat floatleft">
+		<input class="clearleftfloat floatleft" type="checkbox" id="Fullday-check" data-bind="checked:IsFullDay"/>
+		<label class="floatleft pdl5" for="Fullday-check">
+			@Resources.FullDay
+		</label>
+	</span>
+	
 	<div class="edit-module-element clearleftfloat">
 		<input id="Schedule-addRequest-ok-button" type="button" class="button mb5 floatright" value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
 	</div>

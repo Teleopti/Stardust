@@ -397,7 +397,7 @@ html.full-height #push{
 .icon.toolbar-edit[disabled]{background-position: 0 -425px;}
 .icon.toolbar-delete{background-position: 0 -394px; width: 26px;}
 .icon.toolbar-delete[disabled]{background-position: 0 -456px;}
-.icon.text-request {background-position: 0px -487px; height: 20px; width: 16px;}
+.icon.text-request {background-position: 0px -487px; height: 16px; width: 16px;}
 .icon.close{background-position: 0 -333px;}
 .icon.validation-req{background-position: -432px 0;}
 .icon.validation-error{background-position: -575px 0;}
@@ -405,8 +405,7 @@ html.full-height #push{
 .icon.toolbar-today {background-position: -155px -26px; width: 24px}
 
 .text-request {
-	bottom: 0;
-	right: 0;
+	right: 0px;
 }
 .icon-left{padding-left: 25px; border: 0px; background-color: transparent; }
 button.icon-left{padding-left: 35px;}
@@ -712,6 +711,10 @@ header {
 .edit-module-element label {
 	margin-bottom: 5px;
 	display: block;
+}
+
+.edit-module-element textarea {
+	resize: none;
 }
 
 .edit-button-bar

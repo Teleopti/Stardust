@@ -38,7 +38,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 			if (personRequest != null)
 			{
-				_mapper.Map(form, personRequest);
+				try
+				{
+					_mapper.Map(form, personRequest);
+				}
+				catch (AutoMapperMappingException e)
+				{
+					if (e.InnerException is InvalidOperationException)
+					{
+						// this catch is intent to catch InvalidOperationException throw from PersonRequest#CheckIfEditable
+						throw e.InnerException;
+					}
+					throw;
+				}
 			}
 			else
 			{

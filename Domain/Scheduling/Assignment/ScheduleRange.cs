@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-    public class ScheduleRange : Schedule, IScheduleRange
+    public class ScheduleRange : Schedule, IScheduleRange, IValidateScheduleRange
     {
         private readonly IList<IScheduleData> _scheduleObjectsWithNoPermissions;
         private ScheduleRange _snapshot;

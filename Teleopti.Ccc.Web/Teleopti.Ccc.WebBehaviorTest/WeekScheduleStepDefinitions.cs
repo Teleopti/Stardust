@@ -77,8 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the public note on tuesday")]
 		public void ThenIShouldSeeThePublicNoteOnTuesday()
 		{
-			var data = UserFactory.User().UserData<PublicNoteOnWednesday>();
-			_page.SecondDayComment.Text.Should().Contain(data.PublicNote);
+			EventualAssert.That(() =>_page.SecondDayComment.Exists, Is.True);
 		}
 
 		[Then(@"I should see the selected week")]
@@ -126,6 +125,28 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => iconDay1.DisplayVisible(), Is.True);
 			EventualAssert.That(() => iconDay2.DisplayVisible(), Is.False);
 		}
+
+		[Then(@"I should see start timeline and end timeline according to schedule with:")]
+		public void ThenIShouldSeeStartTimelineAndEndTimelineAccordingToScheduleWith(Table table)
+		{
+			var divs = _page.Timelines.Divs;
+			EventualAssert.That(() => string.Format("{0}", divs.Count), Is.EqualTo(table.Rows[2][1]));
+			EventualAssert.That(() => divs[0].InnerHtml, Is.StringContaining(table.Rows[0][1]));
+			EventualAssert.That(() => divs[divs.Count - 1].InnerHtml, Is.StringContaining(table.Rows[1][1]));
+		}
+
+		[Then(@"I should see wednesday's activities:")]
+		public void ThenIShouldSeeWednesdaySActivities(Table table)
+		{
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[0].OuterHtml), Is.StringContaining(table.Rows[0][1]));
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[0].Style.Height), Is.StringContaining(table.Rows[0][2]));
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[0].Style.BackgroundColor), Is.StringContaining(table.Rows[0][3]));
+
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[1].OuterHtml), Is.StringContaining(table.Rows[1][1]));
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[1].Style.Height), Is.StringContaining(table.Rows[1][2]));
+			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[1].Style.BackgroundColor), Is.StringContaining(table.Rows[1][3]));
+		}
+
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{

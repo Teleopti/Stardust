@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
     public class PeriodViewModelFactory : IPeriodViewModelFactory
     {
-        public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IVisualLayerCollection visualLayerCollection)
+        public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IVisualLayerCollection visualLayerCollection, TimePeriod minMaxTime)
         {
             foreach (var visualLayer in visualLayerCollection)
             {
@@ -37,7 +37,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                                 visualLayer.Period.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
                                 ToShortTimeString(CultureInfo.CurrentUICulture),
                             StyleClassName = colorToString(visualLayer.DisplayColor()),
-                            Meeting = meetingModel
+                            Meeting = meetingModel,
+                            Color = visualLayer.DisplayColor().ToCSV(),
+                            StartPositionPercentage = (decimal)(visualLayer.Period.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks,
+                            EndPositionPercentage = (decimal)(visualLayer.Period.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks
                         };
             }
         }

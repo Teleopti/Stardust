@@ -44,8 +44,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private DateTimePeriod _period;
         private SchedulePartFactoryForDomain _schedulePartFactory;
         private AddActivityCommandDto _addAbsenceCommandDto;
+    	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -57,6 +58,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
+    		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
 
             _person = PersonFactory.CreatePerson();
             _person.SetId(Guid.NewGuid());
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _period = _dateOnlyPeriod.ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone());
 
             _schedulePartFactory = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
-            _target = new AddActivityCommandHandler(_dateTimePeriodMock,_activityRepository, _scheduleRepository, _personRepository, _scenarioRepository, _unitOfWorkFactory, _saveSchedulePartService, _messageBrokerEnablerFactory);
+            _target = new AddActivityCommandHandler(_dateTimePeriodMock,_activityRepository, _scheduleRepository, _personRepository, _scenarioRepository, _unitOfWorkFactory, _saveSchedulePartService, _messageBrokerEnablerFactory, _businessRulesForPersonalAccountUpdate);
 
             _addAbsenceCommandDto = new AddActivityCommandDto
             {
@@ -87,6 +89,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var schedulePart = _schedulePartFactory.CreatePartWithMainShift();
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
             var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+        	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
             
             using (_mock.Record())
             {
@@ -98,7 +101,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(schedulePart);
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
-                Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, schedulePart));
+            	Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
+                Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules));
             }
             using (_mock.Playback())
             {
@@ -115,6 +119,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var schedulePart = _schedulePartFactory.CreatePartWithMainShift();
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
 
 			using (_mock.Record())
 			{
@@ -126,7 +131,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(schedulePart);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
-				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, schedulePart));
+				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
+				Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules));
 			}
 			using (_mock.Playback())
 			{

@@ -277,15 +277,15 @@ namespace Teleopti.Ccc.Win.Shifts
             }
             _defaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
 
-
-            if (_defaultTreeView.Nodes[0] != null)
-            {
-                _defaultTreeView.SelectedNode = _defaultTreeView.Nodes[0].Nodes[0] ?? _defaultTreeView.Nodes[0];
-            }
-            _defaultTreeView.ContextMenuStrip.Items[3].Text = ContextMenuText;
-
             ExplorerView.AddControlHelpContext(_defaultTreeView);
             ExplorerPresenter.Model.SetSelectedView(_currentView);
+
+            if (_defaultTreeView.SelectedNodes != null && _defaultTreeView.SelectedNodes.Count > 0)
+                _defaultTreeView.ContextMenuStrip.Items[3].Enabled = true;
+            else
+                _defaultTreeView.ContextMenuStrip.Items[3].Enabled = false;
+            OnShowModifyCollection(this, EventArgs.Empty);
+
         }
 
         private void createDefaultContextMenuStrips()
@@ -307,6 +307,7 @@ namespace Teleopti.Ccc.Win.Shifts
             contextMenu.Items.Add(renameMenuItem);
             contextMenu.Items.Add(new ToolStripSeparator());
             contextMenu.Items.Add(item);
+            contextMenu.Items[3].Enabled = false;
 
             _defaultTreeView.ContextMenuStrip = contextMenu;
         }
@@ -357,12 +358,21 @@ namespace Teleopti.Ccc.Win.Shifts
             loadSelectedRuleSets();
             Refresh(this, EventArgs.Empty);
             ExplorerPresenter.Model.SetSelectedView(_currentView);
+            _defaultTreeView.ContextMenuStrip.Items[3].Enabled = true;
+            OnShowModifyCollection(this, EventArgs.Empty);
             Cursor = Cursors.Default;
         }
 
         #region INavigationView Members
 
         public new event EventHandler<EventArgs> Refresh;
+        public event EventHandler<EventArgs> ShowModifyCollection;
+
+        protected virtual void OnShowModifyCollection(object sender, EventArgs e)
+        {
+            if (ShowModifyCollection != null)
+                ShowModifyCollection(this, e);
+        }
 
         public void ChangeGridView(ShiftCreatorViewType viewType)
         {

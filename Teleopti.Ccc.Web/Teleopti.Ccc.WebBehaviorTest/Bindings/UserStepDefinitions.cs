@@ -438,6 +438,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new ShiftsForTwoWeeks());
 		}
 
+		[Given(@"I have custom shifts scheduled on wednesday for two weeks:")]
+		public void GivenIHaveCustomShiftsScheduledOnWednesdayForTwoWeeks(Table table)
+		{
+			UserFactory.User().Setup(new ShiftsForTwoWeeksWithDifferentActivities());
+		}
+
+		[Given(@"I have shifts scheduled with different activities for two weeks")]
+		public void GivenIHaveShiftsScheduledWithDifferentActivitiesForTwoWeeks()
+		{
+			UserFactory.User().Setup(new ShiftsForTwoWeeksWithDifferentActivities());
+		}
+
 		[Given(@"I have a shift today")]
 		public void GivenIHaveAShiftToday()
 		{

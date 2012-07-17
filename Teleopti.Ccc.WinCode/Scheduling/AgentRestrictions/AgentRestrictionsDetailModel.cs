@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			{
 				var data = new PreferenceCellData();
 				effectiveRestrictionExtractor.Extract(scheduleMatrixPro, data, dateOnly, _loadedPeriod, periodTarget);
-				_detailData.Add(counter, data);
+                _detailData.Add(counter, data);
 
 				counter++;
 			}

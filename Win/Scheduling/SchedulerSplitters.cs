@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             chbSchedules.Checked = true;
             _pinnedSkillHelper = new PinnedSkillHelper();
             tabSkillData.TabStyle = typeof(SkillTabRenderer);
-            tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
+            tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);    
         }
 
         public WpfControls.Common.Interop.MultipleHostControl MultipleHostControl3
@@ -92,6 +92,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             get { return grid; }
         }
 
+        public TabPageAdv PinnedPage
+        {
+            get { return _pinnedSkillHelper.PinnedPage(); }
+        }
 		//public IRestrictionSummaryGrid RestrictionSummeryGrid
 		//{
 		//    get { return restrictionSummaryGrid1; }

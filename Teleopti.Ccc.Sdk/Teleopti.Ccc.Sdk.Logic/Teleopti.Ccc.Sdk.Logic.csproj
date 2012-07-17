@@ -166,9 +166,12 @@
     <Compile Include="CommandHandler\AddActivityCommandHandler.cs" />
     <Compile Include="CommandHandler\AddDayOffCommandHandler.cs" />
     <Compile Include="CommandHandler\AddOvertimeCommandHandler.cs" />
+    <Compile Include="CommandHandler\AddPersonalActivityCommandHandler.cs" />
     <Compile Include="CommandHandler\ApproveRequestCommandHandler.cs" />
+    <Compile Include="CommandHandler\BusinessRulesForPersonalAccountUpdate.cs" />
     <Compile Include="CommandHandler\CancelAbsenceCommandHandler.cs" />
     <Compile Include="CommandHandler\CancelOvertimeCommandHandler.cs" />
+    <Compile Include="CommandHandler\CancelPersonalActivityCommandHandler.cs" />
     <Compile Include="CommandHandler\ChangePersonEmploymentCommandHandler.cs" />
     <Compile Include="CommandHandler\ClearMainShiftCommandHandler.cs" />
     <Compile Include="CommandHandler\CreatePayrollExportCommandHandler.cs" />
@@ -178,6 +181,7 @@
     <Compile Include="CommandHandler\DenyRequestCommandHandler.cs" />
     <Compile Include="CommandHandler\EmployPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\ExportMultisiteSkillToSkillCommandHandler.cs" />
+    <Compile Include="CommandHandler\IBusinessRulesForPersonalAccountUpdate.cs" />
     <Compile Include="CommandHandler\IHandleCommand.cs" />
     <Compile Include="CommandHandler\ImportForecastsFileCommandHandler.cs" />
     <Compile Include="CommandHandler\NewMainShiftCommandHandler.cs" />

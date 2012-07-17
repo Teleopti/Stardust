@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Time;
-using Teleopti.Ccc.Infrastructure.Persisters;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,17 +16,19 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     public class ScheduleFactory
     {
         private readonly IScheduleRepository _scheduleRepository;
-        private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
-        private readonly IAssembler<IPerson, PersonDto> _personAssembler;
+    	private readonly ISaveSchedulePartService _saveSchedulePartService;
+    	private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    	private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly IAssembler<IScheduleDay, SchedulePartDto> _scheduleDayAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
         private readonly IScenarioProvider _scenarioProvider;
 
-        public ScheduleFactory(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScenarioProvider scenarioProvider)
+        public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService, IUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScenarioProvider scenarioProvider)
         {
             _scheduleRepository = scheduleRepository;
-            _scheduleDictionarySaver = scheduleDictionarySaver;
-            _personAssembler = personAssembler;
+        	_saveSchedulePartService = saveSchedulePartService;
+        	_unitOfWorkFactory = unitOfWorkFactory;
+        	_personAssembler = personAssembler;
             _scheduleDayAssembler = scheduleDayAssembler;
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
             _scenarioProvider = scenarioProvider;
@@ -45,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
             DateTimePeriod period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
             
-            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
                 IScheduleDictionary scheduleDictonary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(false, false), period, _scenarioProvider.DefaultScenario());
@@ -96,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             DateTimePeriod period = new DateOnlyPeriod(datePeriod.StartDate,datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
 
             ((DateTimePeriodAssembler) _dateTimePeriodAssembler).TimeZone = timeZone;
-            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
 
@@ -120,30 +118,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             return returnList;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         internal void SaveSchedulePart(SchedulePartDto schedulePartDto)
         {
             using (new MessageBrokerSendEnabler())
             {
-                using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
                     IScheduleDay schedulePart = _scheduleDayAssembler.DtoToDomainEntity(schedulePartDto);
-                    var dic = (ReadOnlyScheduleDictionary)schedulePart.Owner;
-                    dic.MakeEditable();
-                    IList<IBusinessRuleResponse> skipList = new List<IBusinessRuleResponse>();
-                    IBusinessRuleResponse toAdd = new BusinessRuleResponse(typeof (OpenHoursRule), "", false, false,
-                                                                           new DateTimePeriod(), schedulePart.Person, new DateOnlyPeriod());
-                    skipList.Add(toAdd);
+                    _saveSchedulePartService.Save(schedulePart,NewBusinessRuleCollection.Minimum());
 
-                    //inga regler för nu
-                    var invalidList = dic.Modify(ScheduleModifier.Scheduler,
-                                                                          schedulePart,
-                                                                          NewBusinessRuleCollection.Minimum(),new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
-
-                    if (invalidList.Count() > 0)
-                        throw new NotImplementedException("FIX THIS LATER" + invalidList.First().Message);
-
-                    _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, dic.DifferenceSinceSnapshot());
                     uow.PersistAll();
                 }
             }

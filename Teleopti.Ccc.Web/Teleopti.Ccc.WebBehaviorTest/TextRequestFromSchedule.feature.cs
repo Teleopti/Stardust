@@ -217,31 +217,6 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Hide absence request tab when view a text request")]
-        public virtual void HideAbsenceRequestTabWhenViewATextRequest()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Hide absence request tab when view a text request", ((string[])(null)));
-#line 58
-this.ScenarioSetup(scenarioInfo);
-#line 59
- testRunner.Given("I am an agent");
-#line 60
- testRunner.And("I have an existing text request");
-#line 61
- testRunner.And("I am viewing requests");
-#line 62
- testRunner.When("I click on the request");
-#line 63
- testRunner.Then("I should see the text request\'s details form");
-#line 64
- testRunner.And("I should see the request\'s values");
-#line 65
- testRunner.And("I should not see the absence request tab (invisible)");
-#line hidden
-            this.ScenarioCleanup();
-        }
     }
 }
 #pragma warning restore

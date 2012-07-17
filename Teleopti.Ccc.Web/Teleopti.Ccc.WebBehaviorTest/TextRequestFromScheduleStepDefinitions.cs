@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click on tomorrows summary")]
 		public void WhenIClickOnTomorrowsSummary()
 		{
-			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today.AddDays(1)).ListItems.First(Find.ByClass("add-text-request")).EventualClick();
+			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today.AddDays(1)).ListItems.First(Find.ById("day-summary")).EventualClick();
 		}
 
 		[Then(@"I should see the text request form")]

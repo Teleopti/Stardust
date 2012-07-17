@@ -84,6 +84,7 @@
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromRequestStepDefinitions.cs" />
+    <Compile Include="Data\User\ShiftsForTwoWeeksWithDifferentActivities.cs" />
     <Compile Include="ManageRequestStepDefinitions.cs" />
     <Compile Include="Data\User\DoNotHavePersonPeriods.cs" />
     <Compile Include="Data\User\DoNotHaveSchedulePeriods.cs" />
