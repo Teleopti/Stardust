@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.Win.Shifts
             tcRename.Size = tcRename.PreferredSize;
             tcViews.Size = tcViews.PreferredSize;
 
-            if (_navigationView.DefaultTreeView.Nodes[0] != null)
-                _navigationView.DefaultTreeView.SelectedNode = _navigationView.DefaultTreeView.Nodes[0];
+            if (_navigationView.DefaultTreeView.Nodes.Count > 0)
+                _navigationView.DefaultTreeView.SelectedNode = _navigationView.DefaultTreeView.Nodes[0]; 
         }
 
         private void createAndAddViews()
