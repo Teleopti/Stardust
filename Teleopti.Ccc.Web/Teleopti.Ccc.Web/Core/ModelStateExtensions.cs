@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -17,6 +18,20 @@ namespace Teleopti.Ccc.Web.Core
 			       		Data = data, 
 			       		JsonRequestBehavior = JsonRequestBehavior.AllowGet
 			       	};
+		}
+
+	}
+
+	public static class ExceptionExtensions
+	{
+		public static JsonResult ExceptionToJson(this Exception instance, string errorMessage)
+		{
+			var data = new ModelStateResult { Errors = new[] { errorMessage } };
+			return new JsonResult
+			{
+				Data = data,
+				JsonRequestBehavior = JsonRequestBehavior.AllowGet
+			};
 		}
 
 	}
