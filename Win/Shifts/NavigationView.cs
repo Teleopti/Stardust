@@ -277,11 +277,10 @@ namespace Teleopti.Ccc.Win.Shifts
             }
             _defaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
 
+            if (_defaultTreeView.Nodes.Count > 0)
+                _defaultTreeView.SelectedNode = _defaultTreeView.Nodes[0];
+            
 
-            if (_defaultTreeView.Nodes[0] != null)
-            {
-                _defaultTreeView.SelectedNode = _defaultTreeView.Nodes[0].Nodes[0] ?? _defaultTreeView.Nodes[0];
-            }
             _defaultTreeView.ContextMenuStrip.Items[3].Text = ContextMenuText;
 
             ExplorerView.AddControlHelpContext(_defaultTreeView);
