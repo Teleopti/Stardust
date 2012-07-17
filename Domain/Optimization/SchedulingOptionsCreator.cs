@@ -58,6 +58,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.ConsiderShortBreaks = optimizationPreferences.Rescheduling.ConsiderShortBreaks;
             schedulingOptions.OnlyShiftsWhenUnderstaffed = optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
 
+           
+
             return schedulingOptions;
         }
 

@@ -220,8 +220,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private enum OptimizationMethod
         {
             BackToLegalState,
-            ReOptimize,
-            IntradayActivityOptimization
+            ReOptimize
         }
 
         #endregion
@@ -1335,92 +1334,92 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void ToolStripMenuItemOptimizeActivities_Click(object sender, EventArgs e)
         {
-            if (_scheduleView == null)
-                return;
+            //if (_scheduleView == null)
+            //    return;
 
-            if (_scheduleView.AllSelectedDates().Count == 0)
-                return;
+            //if (_scheduleView.AllSelectedDates().Count == 0)
+            //    return;
 
-            IOptimizerActivitiesPreferences preferences = new OptimizerActivitiesPreferences();
-            if (_currentSchedulingScreenSettings.OptimizeActivitiesSettings == null)
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings = new OptimizeActivitiesSettings();
+            //IOptimizerActivitiesPreferences preferences = new OptimizerActivitiesPreferences();
+            //if (_currentSchedulingScreenSettings.OptimizeActivitiesSettings == null)
+            //    _currentSchedulingScreenSettings.OptimizeActivitiesSettings = new OptimizeActivitiesSettings();
 
-            //read settings
-            preferences.KeepShiftCategory =
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepShiftCategory;
-            preferences.KeepStartTime = _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepStartTime;
-            preferences.KeepEndTime = _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepEndTime;
-            preferences.AllowAlterBetween =
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.AllowAlterBetween;
+            ////read settings
+            //preferences.KeepShiftCategory =
+            //    _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepShiftCategory;
+            //preferences.KeepStartTime = _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepStartTime;
+            //preferences.KeepEndTime = _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepEndTime;
+            //preferences.AllowAlterBetween =
+            //    _currentSchedulingScreenSettings.OptimizeActivitiesSettings.AllowAlterBetween;
 
-            IList<IActivity> activities = new List<IActivity>();
-            if (_currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids != null)
-            {
-                foreach (Guid id in _currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids
-                    )
-                {
-                    foreach (IActivity activity in SchedulerState.CommonStateHolder.Activities)
-                    {
-                        if (activity.Id.Value == id)
-                            activities.Add(activity);
-                    }
-                }
-            }
+            //IList<IActivity> activities = new List<IActivity>();
+            //if (_currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids != null)
+            //{
+            //    foreach (Guid id in _currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids
+            //        )
+            //    {
+            //        foreach (IActivity activity in SchedulerState.CommonStateHolder.Activities)
+            //        {
+            //            if (activity.Id.Value == id)
+            //                activities.Add(activity);
+            //        }
+            //    }
+            //}
 
-            preferences.SetDoNotMoveActivities(activities);
-            preferences.SetActivities(SchedulerState.CommonStateHolder.Activities);
+            //preferences.SetDoNotMoveActivities(activities);
+            //preferences.SetActivities(SchedulerState.CommonStateHolder.Activities);
 
-            //remove activities from available activities that are in DoNotMoveActivities
-            foreach (var activity in
-                preferences.DoNotMoveActivities.Where(activity => preferences.Activities.Contains(activity)))
-            {
-                preferences.Activities.Remove(activity);
-            }
+            ////remove activities from available activities that are in DoNotMoveActivities
+            //foreach (var activity in
+            //    preferences.DoNotMoveActivities.Where(activity => preferences.Activities.Contains(activity)))
+            //{
+            //    preferences.Activities.Remove(activity);
+            //}
 
-            //open gui
-            var optimizeActivitiesForm = new OptimizeActivities(preferences, SchedulerState.DefaultSegmentLength);
-            //TODO Get resolution from appropriate place....
-            optimizeActivitiesForm.ShowDialog();
+            ////open gui
+            //var optimizeActivitiesForm = new OptimizeActivities(preferences, SchedulerState.DefaultSegmentLength);
+            ////TODO Get resolution from appropriate place....
+            //optimizeActivitiesForm.ShowDialog();
 
-            //_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)
-            //if not canceling
-            if (!optimizeActivitiesForm.IsCanceled())
-            {
+            ////_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)
+            ////if not canceling
+            //if (!optimizeActivitiesForm.IsCanceled())
+            //{
 
-                IList<Guid> guidList = new List<Guid>();
+            //    IList<Guid> guidList = new List<Guid>();
 
-                foreach (IActivity activity in preferences.DoNotMoveActivities)
-                {
-                    guidList.Add(activity.Id.Value);
-                }
+            //    foreach (IActivity activity in preferences.DoNotMoveActivities)
+            //    {
+            //        guidList.Add(activity.Id.Value);
+            //    }
 
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepShiftCategory =
-                    preferences.KeepShiftCategory;
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepStartTime = preferences.KeepStartTime;
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepEndTime = preferences.KeepEndTime;
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.AllowAlterBetween =
-                    preferences.AllowAlterBetween;
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids = guidList;
+            //    _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepShiftCategory =
+            //        preferences.KeepShiftCategory;
+            //    _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepStartTime = preferences.KeepStartTime;
+            //    _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepEndTime = preferences.KeepEndTime;
+            //    _currentSchedulingScreenSettings.OptimizeActivitiesSettings.AllowAlterBetween =
+            //        preferences.AllowAlterBetween;
+            //    _currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids = guidList;
 
-				var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
-                                                  {
-                                                      OptimizationMethod =
-                                                          OptimizationMethod.IntradayActivityOptimization,
-                                                      OptimizerActivitiesPreferences = preferences
-                                                  };
+            //    var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
+            //                                      {
+            //                                          OptimizationMethod =
+            //                                              OptimizationMethod.IntradayActivityOptimization,
+            //                                          OptimizerActivitiesPreferences = preferences
+            //                                      };
 
-                //> added by tamasb 2011-10-19 as fix for #16598: Error on optimize activities
-				_optimizerOriginalPreferences.SchedulingOptions.GroupOnGroupPage = _groupPagesProvider.GetGroups(false)[0];
-                    //_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
-				_optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness = _groupPagesProvider.GetGroups(false)[0];
-                    //_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
-				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
-                //<
+            //    //> added by tamasb 2011-10-19 as fix for #16598: Error on optimize activities
+            //    _optimizerOriginalPreferences.SchedulingOptions.GroupOnGroupPage = _groupPagesProvider.GetGroups(false)[0];
+            //        //_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
+            //    _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness = _groupPagesProvider.GetGroups(false)[0];
+            //        //_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
+            //    _optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
+            //    //<
 
-                startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
-            }
+            //    startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
+            //}
 
-            optimizeActivitiesForm.Close();
+            //optimizeActivitiesForm.Close();
         }
 
         private void toolStripMenuItemReOptimize_Click(object sender, EventArgs e)
@@ -4893,12 +4892,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
                     break;
-                case OptimizationMethod.IntradayActivityOptimization:
 
-                    _scheduleOptimizerHelper.ReOptimizeIntradayActivity(_backgroundWorkerOptimization,
-                                                                        options.OptimizerActivitiesPreferences,
-                                                                        selectedSchedules, schedulingOptions);
-                    break;
             }
 
             _undoRedo.CommitBatch();

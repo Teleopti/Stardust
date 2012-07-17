@@ -8,25 +8,36 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class MainShiftOptimizeActivitiesSpecification : Specification<IMainShift>
     {
         private readonly IOptimizerActivitiesPreferences _optimizerActivitiesPreferences;
-        private readonly IMainShift _originalMainShift;
-        private readonly DateOnly _viewerDate;
-        private readonly ICccTimeZoneInfo _viewerTimeZone;
+        private  IMainShift _originalMainShift;
+        private  DateOnly _viewerDate;
+        private  ICccTimeZoneInfo _viewerTimeZone;
         private readonly IVisualLayerCollection _visualLayerColl;
 
-        public MainShiftOptimizeActivitiesSpecification(IOptimizerActivitiesPreferences optimizerActivitiesPreferences, 
-            IMainShift originalMainShift,
-            DateOnly viewerDate,
-            ICccTimeZoneInfo viewerTimeZone)
+        public MainShiftOptimizeActivitiesSpecification(IOptimizerActivitiesPreferences optimizerActivitiesPreferences)
         {
             _optimizerActivitiesPreferences = optimizerActivitiesPreferences;
-            _originalMainShift = originalMainShift;
-            _viewerDate = viewerDate;
-            _viewerTimeZone = viewerTimeZone;
+            
             _visualLayerColl = _originalMainShift.ProjectionService().CreateProjection();
         }
 
         public override bool IsSatisfiedBy(IMainShift obj)
         {
+            IVisualLayerCollection other = obj.ProjectionService().CreateProjection();
+
+            return (CorrectShiftCategory(obj)
+                && CorrectContractTime(other)
+                && CorrectStart(other)
+                && CorrectEnd(other)
+                && CorrectAlteredBetween(other)
+                && LockedActivityNotMoved(other));
+        }
+
+        public  bool IsSatisfiedBy(IMainShift obj, IMainShift originalMainShift, DateOnly viewerDate,ICccTimeZoneInfo viewerTimeZone)
+        {
+            _originalMainShift = originalMainShift;
+            _viewerDate = viewerDate;
+            _viewerTimeZone = viewerTimeZone;
+
             IVisualLayerCollection other = obj.ProjectionService().CreateProjection();
 
             return (CorrectShiftCategory(obj)
