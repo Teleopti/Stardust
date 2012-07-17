@@ -16950,6 +16950,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your request state has been changed, you cannot update it..
+        /// </summary>
+        public static string RequestCannotEdit {
+            get {
+                return ResourceManager.GetString("RequestCannotEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Request date.
         /// </summary>
         public static string RequestDate {
