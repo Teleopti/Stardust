@@ -1084,35 +1084,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return retList;
         }
 
-
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public void ReOptimizeIntradayActivity(
-            BackgroundWorker backgroundWorker,
-            IOptimizerActivitiesPreferences preferences,
-            IList<IScheduleDay> scheduleDays, ISchedulingOptions schedulingOptions)
-        {
-            if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
-            if (preferences == null) throw new ArgumentNullException("preferences");
-
-            _backgroundWorker = backgroundWorker;
-
-            foreach (IScheduleDay scheduleDay in scheduleDays.GetRandom(scheduleDays.Count, true))
-            {
-                if (_backgroundWorker.CancellationPending)
-                    return;
-
-                GridlockDictionary locks = _gridlockManager.Gridlocks(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly);
-                if (locks != null && locks.Count != 0)
-                    continue;
-                reOptimizeIntradayActivityOnScheduleDay(
-                     scheduleDay, preferences, schedulingOptions);
-            }
-            //reset
-            var shiftProjectionCacheFilter = _container.Resolve<IShiftProjectionCacheFilter>();
-            shiftProjectionCacheFilter.SetMainShiftOptimizeActivitiesSpecification(new Domain.Specification.All<IMainShift>());
-        }
-
         #endregion
         
         #region Local
@@ -1198,44 +1169,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                              originalStateContainer);
             return optimizerContainer;
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ResourceOptimizerProgressEventArgs.#ctor(Teleopti.Interfaces.Domain.IPerson,System.Double,System.Double,System.String)")]
-        private void reOptimizeIntradayActivityOnScheduleDay(
-            IScheduleDay scheduleDay,
-            IOptimizerActivitiesPreferences preferences, ISchedulingOptions schedulingOptions)
-        {
-            if (scheduleDay.SignificantPart() != SchedulePartView.MainShift)
-                return;
-
-            IPersonAssignment personAssignment = scheduleDay.AssignmentHighZOrder();
-
-            if (personAssignment != null && !personAssignment.OvertimeShiftCollection.IsEmpty())
-                return;
-
-            if (scheduleDay.PersonAbsenceCollection().Count > 0)
-                return;
-
-            ISpecification<IMainShift> mainShiftOptimizeActivitiesSpecification =
-                 new MainShiftOptimizeActivitiesSpecification(preferences, scheduleDay.AssignmentHighZOrder().MainShift,
-                                                              scheduleDay.DateOnlyAsPeriod.DateOnly,
-                                                              StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
-
-            var shiftProjectionCacheFilter = _container.Resolve<IShiftProjectionCacheFilter>();
-            shiftProjectionCacheFilter.SetMainShiftOptimizeActivitiesSpecification(mainShiftOptimizeActivitiesSpecification);
-
-            var intradayActivityOptimizerService = _container.Resolve<IIntradayActivityOptimizerService>();
-            bool result = intradayActivityOptimizerService.Optimize(scheduleDay, schedulingOptions);
-            string msg = Resources.Success;
-            if (!result)
-                msg = Resources.Unsuccessful;
-            string message = Resources.OptimizeActivities + ": " +
-                             scheduleDay.Person.Name.ToString(NameOrderOption.FirstNameLastName) + " " + msg;
-            var args = new ResourceOptimizerProgressEventArgs(scheduleDay.Person, 0, 0, message);
-            resourceOptimizerPersonOptimized(this, args);
-            //return result;
-        }
-
-
 
         #endregion
 

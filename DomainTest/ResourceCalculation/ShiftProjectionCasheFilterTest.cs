@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 null, null, null, new List<IActivityRestriction>());
             _finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
             _rules = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
-            _target = new ShiftProjectionCacheFilter(_rules, new All<IMainShift>());
+            _target = new ShiftProjectionCacheFilter(_rules);
             _part = _mocks.StrictMock<IScheduleDay>();
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();

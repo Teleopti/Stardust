@@ -179,11 +179,6 @@ namespace Teleopti.Interfaces.Domain
     	                                                    IScheduleDictionary scheduleDictionary, DateOnly dateOnly,
     	                                                    IList<IShiftProjectionCache> shiftList,
     	                                                    IWorkShiftFinderResult finderResult);
-        /// <summary>
-        /// Sets the main shift optimize activities specification.
-        /// </summary>
-        /// <param name="mainShiftOptimizeActivitiesSpecification">The main shift optimize activities specification.</param>
-        void SetMainShiftOptimizeActivitiesSpecification(
-            ISpecification<IMainShift> mainShiftOptimizeActivitiesSpecification);
+
     }
 }

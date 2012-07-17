@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -82,6 +84,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
+
+			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
+			optimizerActivitiesPreferences.KeepShiftCategory = _optimizerPreferences.Shifts.KeepShiftCategories;
+			optimizerActivitiesPreferences.KeepStartTime = _optimizerPreferences.Shifts.KeepStartTimes;
+			optimizerActivitiesPreferences.KeepEndTime = _optimizerPreferences.Shifts.KeepEndTimes;
+			//throw new NotImplementedException();
+			optimizerActivitiesPreferences.AllowAlterBetween = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36));
+			optimizerActivitiesPreferences.SetDoNotMoveActivities(new List<IActivity>());
+        	IMainShift originalShift =
+        		_workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder().MainShift;
+			schedulingOptions.MainShiftOptimizeActivitySpecification = new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, originalShift, dateToBeRemoved, StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
 
             _rollbackService.ClearModificationCollection();
 

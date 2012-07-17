@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
@@ -87,71 +86,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			}
 
 			Assert.AreEqual(expected.DayOffTemplate, ret.DayOffTemplate);
-		}
-
-		[Test]
-		public void WhenUseKeepShiftCategoryRestrictionShouldHaveCategory()
-		{
-			ISchedulingOptions options = new SchedulingOptions();
-			options.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
-
-			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("xyz");
-			IEffectiveRestriction fromExtractor = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-																	  new WorkTimeLimitation(), null, null, null,
-																	  new List<IActivityRestriction>());
-
-			IEffectiveRestriction expected = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-																	  new WorkTimeLimitation(), shiftCategory, null, null,
-																	  new List<IActivityRestriction>());
-			using (_mocks.Record())
-			{
-				Expect.Call(() => _extractor.Extract(_scheduleDay));
-				Expect.Call(_extractor.CombinedRestriction(options)).Return(fromExtractor);
-				Expect.Call(_keepRestrictionCreator.CreateKeepShiftCategoryRestriction(_scheduleDay)).Return(expected);
-
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-			}
-
-			IEffectiveRestriction ret;
-			using (_mocks.Playback())
-			{
-				ret = _target.GetEffectiveRestriction(_scheduleDay, options);
-			}
-
-			Assert.AreEqual(expected.ShiftCategory, ret.ShiftCategory);
-		}
-
-		[Test]
-		public void WhenUseKeepStartAndEndTimeRestrictionShouldHaveStartAndEndTime()
-		{
-			ISchedulingOptions options = new SchedulingOptions();
-			options.RescheduleOptions = OptimizationRestriction.KeepStartAndEndTime;
-
-			IEffectiveRestriction fromExtractor = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-																	  new WorkTimeLimitation(), null, null, null,
-																	  new List<IActivityRestriction>());
-
-			IEffectiveRestriction expected =
-				new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)),
-				                         new EndTimeLimitation(TimeSpan.FromHours(18), TimeSpan.FromHours(18)),
-				                         new WorkTimeLimitation(), null, null, null,
-				                         new List<IActivityRestriction>());
-			using (_mocks.Record())
-			{
-				Expect.Call(() => _extractor.Extract(_scheduleDay));
-				Expect.Call(_extractor.CombinedRestriction(options)).Return(fromExtractor);
-				Expect.Call(_keepRestrictionCreator.CreateKeepStartAndEndTimeRestriction(_scheduleDay)).Return(expected);
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-			}
-
-			IEffectiveRestriction ret;
-			using (_mocks.Playback())
-			{
-				ret = _target.GetEffectiveRestriction(_scheduleDay, options);
-			}
-
-			Assert.AreEqual(expected.StartTimeLimitation, ret.StartTimeLimitation);
-			Assert.AreEqual(expected.EndTimeLimitation, ret.EndTimeLimitation);
 		}
 
 		[Test]

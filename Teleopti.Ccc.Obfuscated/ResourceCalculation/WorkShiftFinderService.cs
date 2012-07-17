@@ -176,14 +176,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 				}
 
-                if(schedulingOptions.MainShiftOptimizeActivitySpecification == null)
-                {
-                    _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList, new Domain.Specification.All<IMainShift>());
-                }else
-                {
-                    _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList,schedulingOptions.MainShiftOptimizeActivitySpecification );
-                }
-                
+                _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList, schedulingOptions.MainShiftOptimizeActivitySpecification);
+
 				_shiftList = _shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(dateOnly,
 				                                                                                         person.
 				                                                                                         	PermissionInformation.
@@ -212,15 +206,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				                                                FinderResult);
 				if (_shiftList.Count == 0)
 					return null;
-
-				if (schedulingOptions.RescheduleOptions == OptimizationRestriction.KeepStartAndEndTime &&
-				    schedulingOptions.SpecificStartAndEndTime.HasValue)
-				{
-					_shiftList = _shiftProjectionCacheFilter.FilterOnStartAndEndTime(schedulingOptions.SpecificStartAndEndTime.Value,
-					                                                                 _shiftList, _finderResult);
-					if (_shiftList.Count == 0)
-						return null;
-				}
 
 				if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
 				{

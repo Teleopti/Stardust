@@ -107,9 +107,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<WorkShiftBackToLegalStateBitArrayCreator>().As<IWorkShiftBackToLegalStateBitArrayCreator>().InstancePerLifetimeScope();
             builder.RegisterType<WorkShiftBackToLegalStateServicePro>().As<IWorkShiftBackToLegalStateServicePro>().InstancePerLifetimeScope();
             //need some refactoring in ctor
-            //builder.RegisterType<DayOffDecisionMakerExecuter>().As<IDayOffDecisionMakerExecuter>().InstancePerLifetimeScope();
-            
-            builder.RegisterType<IntradayActivityOptimizerService>().As<IIntradayActivityOptimizerService>().InstancePerLifetimeScope();
 
             //groupOpt
             builder.RegisterType<GroupPersonSameForPersonOnDateChecker>().As<IGroupPersonSameForPersonOnDateChecker>().InstancePerLifetimeScope();

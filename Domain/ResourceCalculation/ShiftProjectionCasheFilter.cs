@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
@@ -10,26 +11,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class ShiftProjectionCacheFilter : IShiftProjectionCacheFilter
     {
         private readonly ILongestPeriodForAssignmentCalculator _rules;
-        private ISpecification<IMainShift> _mainShiftOptimizeActivitiesSpecification;
 
         public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules)
-            : this(rules, new All<IMainShift>())
-        {}
-
-        public void SetMainShiftOptimizeActivitiesSpecification(ISpecification<IMainShift> mainShiftOptimizeActivitiesSpecification)
         {
-            _mainShiftOptimizeActivitiesSpecification = mainShiftOptimizeActivitiesSpecification;
+        	_rules = rules;
         }
 
-        public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, 
-            ISpecification<IMainShift> mainShiftOptimizeActivitiesSpecification )
-        {
-            _rules = rules;
-            _mainShiftOptimizeActivitiesSpecification = mainShiftOptimizeActivitiesSpecification;
-        }
-
-        
-        public IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, 
+    	public IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, 
             IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IList<IShiftCategory> notAllowedCategories, IWorkShiftFinderResult finderResult)
         {
             if (restriction == null)
@@ -51,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
              return FilterOnRestrictionMinMaxWorkTime(shiftList, restriction, finderResult);
            }
 
-        public IList<IShiftProjectionCache> FilterOnMainShiftOptimizeActivitiesSpecification(IList<IShiftProjectionCache> shiftList, ISpecification< IMainShift > mainShiftOptimizeActivitySpecification )
+		public IList<IShiftProjectionCache> FilterOnMainShiftOptimizeActivitiesSpecification(IList<IShiftProjectionCache> shiftList, ISpecification<IMainShift> mainShiftOptimizeActivitySpecification)
         {
 
             IList<IShiftProjectionCache> ret = new List<IShiftProjectionCache>();

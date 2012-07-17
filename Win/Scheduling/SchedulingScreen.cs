@@ -4545,7 +4545,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private class SchedulingAndOptimizeArgument
         {
             public IList<IScheduleDay> ScheduleDays { get; private set; }
-            public IOptimizerActivitiesPreferences OptimizerActivitiesPreferences;
             public OptimizationMethod OptimizationMethod { get; set; }
 			public IDaysOffPreferences DaysOffPreferences { get; set; }
 
@@ -7816,9 +7815,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                      rightToLeft, detail, this, singleFile, path);   
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
-            "CA1303:Do not pass literals as localized parameters",
-            MessageId = "System.Windows.Forms.FileDialog.set_Filter(System.String)")]
         private void ToolStripMenuItemExportToPdfMouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;

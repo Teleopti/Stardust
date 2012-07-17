@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -222,7 +221,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.UsePreferences = _localSchedulingOptions.UsePreferences;
             _schedulingOptions.ShiftCategory = _localSchedulingOptions.ShiftCategory;
             _schedulingOptions.RefreshRate = _localSchedulingOptions.RefreshRate;
-            _schedulingOptions.RescheduleOptions = _localSchedulingOptions.RescheduleOptions;
             _schedulingOptions.Fairness = _localSchedulingOptions.Fairness;
             _schedulingOptions.UseShiftCategoryLimitations = _localSchedulingOptions.UseShiftCategoryLimitations;
             _schedulingOptions.UsePreferencesMustHaveOnly = _localSchedulingOptions.UsePreferencesMustHaveOnly;

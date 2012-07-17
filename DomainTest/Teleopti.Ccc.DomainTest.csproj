@@ -270,7 +270,6 @@
     <Compile Include="GroupPageCreator\PersonNoteGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\RuleSetBagGroupPageTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByAllSkillsExtractorTest.cs" />
-    <Compile Include="Optimization\IntradayActivityOptimizerServiceTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecificationTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationServiceTest.cs" />
