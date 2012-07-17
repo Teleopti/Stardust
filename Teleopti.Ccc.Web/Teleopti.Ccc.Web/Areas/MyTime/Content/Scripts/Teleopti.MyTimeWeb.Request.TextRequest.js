@@ -101,9 +101,9 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 			;
 	}
 
-	function _fadeEditSection() {
+	function _fadeEditSection(func) {
 		$('#Request-detail-section')
-			.fadeOut()
+			.fadeOut(400, func)
 			;
 	}
 
@@ -117,7 +117,7 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
 				Teleopti.MyTimeWeb.Request.List.RemoveItem(data);
-				_fadeEditSection();
+				_fadeEditSection(null);
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -179,8 +179,8 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 		HideEditSection: function () {
 			_hideEditSection();
 		},
-		FadeEditSection: function () {
-			_fadeEditSection();
+		FadeEditSection: function (func) {
+			_fadeEditSection(func);
 		},
 		ShowRequest: function (url, position) {
 			_showRequest(url, position);

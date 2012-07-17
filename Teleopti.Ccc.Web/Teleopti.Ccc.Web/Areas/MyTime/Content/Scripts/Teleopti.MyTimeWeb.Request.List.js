@@ -169,6 +169,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			type: "DELETE",
 			beforeSend: function () {
 				Teleopti.MyTimeWeb.Common.LoadingOverlay.Add(listItem);
+
 			},
 			complete: function (jqXHR, textStatus) {
 				Teleopti.MyTimeWeb.Common.LoadingOverlay.Remove(listItem);
@@ -195,13 +196,19 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		var connector = listItem
 			.find('.request-connector')
 			;
+		var bindListItemClick = function _bindClick() {
+			listItem.bind('click', function () {
+				_showRequest($(this));
+			});
+		};
 		$.myTimeAjax({
 			url: url,
 			dataType: "json",
 			type: 'GET',
 			beforeSend: function () {
+				listItem.unbind('click');
 				_disconnectAllOthers(listItem);
-				Teleopti.MyTimeWeb.Request.TextRequest.FadeEditSection();
+				Teleopti.MyTimeWeb.Request.TextRequest.FadeEditSection(bindListItemClick);
 				connector.connector("connecting");
 			},
 			success: function (data, textStatus, jqXHR) {
