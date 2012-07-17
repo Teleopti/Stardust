@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
@@ -32,6 +35,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         public void Initialize()
         {
+            using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                unitOfWork.Reassociate(_model.Workload);
+                if (!LazyLoadingManager.IsInitialized(_model.Workload.TemplateWeekCollection))
+                    LazyLoadingManager.Initialize(_model.Workload.TemplateWeekCollection);
+                
+                for(var i=0; i<_model.Workload.TemplateWeekCollection.Count; i++)
+                {
+                    if(!LazyLoadingManager.IsInitialized(_model.Workload.TemplateWeekCollection[i].OpenForWork))
+                        LazyLoadingManager.Initialize(_model.Workload.TemplateWeekCollection[i].OpenForWork);
+                }
+            }
+            
             _model.InitializeOutliers();   
             _model.InitializeDefaultScenario();
             _view.SetWorkloadName(_model.Workload.Name);
