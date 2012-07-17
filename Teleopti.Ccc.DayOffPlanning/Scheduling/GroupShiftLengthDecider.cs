@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 				if (matrixList.Count == 0)
 					continue;
 				var matrix = matrixList[0];
-
+				_workShiftMinMaxCalculator.ResetCache();
 				var tempShift = _shiftLengthDecider.FilterList(shiftList, _workShiftMinMaxCalculator, matrix, schedulingOptions);
 				foreach (var shiftProjectionCach in tempShift)
 				{
