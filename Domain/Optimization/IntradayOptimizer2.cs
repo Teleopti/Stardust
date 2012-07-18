@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         	IMainShift originalShift =
         		_workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder().MainShift;
 			schedulingOptions.MainShiftOptimizeActivitySpecification = new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, originalShift, dateToBeRemoved, StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
-
+            
             _rollbackService.ClearModificationCollection();
 
 			IScheduleDayPro scheduleDayPro = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved);
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!_workShiftOriginalStateContainer.WorkShiftChanged(day))
             {
-                _rollbackService.Modify(_workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+                _rollbackService.Modify( _workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
             }
 
             return true;

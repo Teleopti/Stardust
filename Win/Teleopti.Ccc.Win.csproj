@@ -1205,7 +1205,6 @@
     <Compile Include="Scheduling\OptimizeActivities.Designer.cs">
       <DependentUpon>OptimizeActivities.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\OptimizeActivitiesSettings.cs" />
     <Compile Include="Scheduling\OptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\PersistConflictView.cs">
       <SubType>Form</SubType>
