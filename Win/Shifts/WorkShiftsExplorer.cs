@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Win.Shifts
             instantiateClipboardControl();
 
             toolStripButtonGeneral.Checked = true;
-
+            toolStripButtonAddRuleSet.Enabled = false;
 
             tsClipboard.Size = tsClipboard.PreferredSize;
             tcEdit.Size = tcEdit.PreferredSize;
@@ -90,8 +90,12 @@ namespace Teleopti.Ccc.Win.Shifts
             tcRename.Size = tcRename.PreferredSize;
             tcViews.Size = tcViews.PreferredSize;
 
-            if (_navigationView.DefaultTreeView.Nodes.Count > 0)
-                _navigationView.DefaultTreeView.SelectedNode = _navigationView.DefaultTreeView.Nodes[0]; 
+            _navigationView.ShowModifyCollection +=
+                delegate
+                    {
+                        if (_navigationView.DefaultTreeView.SelectedNodes != null)
+                            toolStripButtonAddRuleSet.Enabled = _navigationView.DefaultTreeView.SelectedNodes.Count > 0;
+                    };
         }
 
         private void createAndAddViews()
