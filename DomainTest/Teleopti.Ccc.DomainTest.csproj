@@ -232,6 +232,7 @@
     <Compile Include="Optimization\GroupPersonSameDayOffsCheckerTest.cs" />
     <Compile Include="Optimization\GroupPersonSameForPersonOnDateCheckerTest.cs" />
     <Compile Include="Optimization\GroupPersonSchedulePeriodCheckerTest.cs" />
+    <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderTest.cs" />
