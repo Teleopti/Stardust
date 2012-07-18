@@ -29,12 +29,12 @@
 			<textarea id="Request-detail-message-input" />
 		</div>
 		
-		<div id="Absence-type-element" class="floatleft displaynone pdr20">
+		<div id="Absence-type-element" class="floatleft displaynone">
 			<div class="edit-module-element floatleft">
 				<div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
 			</div>
 			<div class="edit-module-element floatleft">
-				<select id="Absence-type" class="floatleft absence-input combobox">
+				<select id="Absence-type" class="absence-input combobox">
 					@foreach (var absenceType in Model.AbsenceTypes)
 					{
 						<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>

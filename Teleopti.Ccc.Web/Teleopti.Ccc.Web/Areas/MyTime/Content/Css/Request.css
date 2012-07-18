@@ -81,3 +81,7 @@
 	padding-right: 2px;
 	height: 16px;
 }
+.rtl .absence-type-input-label 
+{
+	text-align: right;
+}
