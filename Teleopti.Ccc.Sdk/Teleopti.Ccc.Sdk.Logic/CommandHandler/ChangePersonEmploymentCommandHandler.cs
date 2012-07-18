@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _contractRepository = contractRepository;
         }
 
-        public CommandResultDto Handle(ChangePersonEmploymentCommandDto command)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public CommandResultDto Handle(ChangePersonEmploymentCommandDto command)
         {
             Guid? result;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
