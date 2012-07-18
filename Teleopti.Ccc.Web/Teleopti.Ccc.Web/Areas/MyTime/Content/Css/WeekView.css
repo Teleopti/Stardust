@@ -139,9 +139,11 @@
 	border-left-width: 8px;
 }
 .weekview-day li.empty{border-top-color: transparent; border-bottom-color: transparent;}
-.weekview-day > li > div {
 
-}
+.weekview-day > li > div {}
+
+.rtl .weekview-day > li > div{}
+
 .weekview-day li div.meeting {
 	bottom: 1px;
 	height: 18px;
