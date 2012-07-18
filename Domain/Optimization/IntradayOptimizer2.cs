@@ -88,6 +88,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
+			IMainShift originalShift =
+				_workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder().MainShift;
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, dateToBeRemoved);
 
             _rollbackService.ClearModificationCollection();
@@ -151,20 +153,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			lockDay(dateToBeRemoved);
 
             return true;
-        }
-
-        private MainShiftOptimizeActivitiesSpecification createShiftOptimizationActivitiesSpec(DateOnly dateToBeRemoved)
-        {
-            IOptimizerActivitiesPreferences optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
-            optimizerActivitiesPreferences.KeepShiftCategory = _optimizerPreferences.Shifts.KeepShiftCategories;
-            optimizerActivitiesPreferences.KeepStartTime = _optimizerPreferences.Shifts.KeepStartTimes;
-            optimizerActivitiesPreferences.KeepEndTime = _optimizerPreferences.Shifts.KeepEndTimes;
-            //throw new NotImplementedException();
-            optimizerActivitiesPreferences.AllowAlterBetween = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36));
-            optimizerActivitiesPreferences.SetDoNotMoveActivities(new List<IActivity>());
-            IMainShift originalShift =
-                _workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder().MainShift;
-            return new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, originalShift, dateToBeRemoved, StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
         }
 
         private void resourceCalculateMovedDays(changedDay changed)
