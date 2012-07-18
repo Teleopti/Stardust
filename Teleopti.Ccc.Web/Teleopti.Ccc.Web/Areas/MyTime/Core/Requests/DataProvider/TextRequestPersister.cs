@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 
 
-	[Serializable]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly"), Serializable]
 	public class RequestPersistException : HttpException
 	{
 		public string Shortmessage { get; set; }
