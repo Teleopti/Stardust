@@ -474,25 +474,56 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void CanExtractMultipleRestrictionsFromRestrictionOwner()
 		{
-			fullPermission(true);
-			_mocks.ReplayAll();
+			using (_mocks.Record())
+			{
+				fullPermission(true);
+			}
 
-            using (new CustomAuthorizationContext(_principalAuthorization))
-            {
-                var studenrestColl = new List<IStudentAvailabilityRestriction>
-                                         {
-                                             new StudentAvailabilityRestriction(),
-                                             new StudentAvailabilityRestriction()
-                                         };
-                var prefRest = new PreferenceRestriction();
-                var rest1 = new StudentAvailabilityDay(_person, new DateOnly(2000, 1, 1), studenrestColl);
-                var rest2 = new PreferenceDay(_person, new DateOnly(2000, 1, 1), prefRest);
-                _target.Add(rest1);
-                _target.Add(rest2);
+			using (_mocks.Playback())
+			{
+				using (new CustomAuthorizationContext(_principalAuthorization))
+				{
+					var studenrestColl = new List<IStudentAvailabilityRestriction>
+					                     	{
+					                     		new StudentAvailabilityRestriction(),
+					                     		new StudentAvailabilityRestriction()
+					                     	};
+					var prefRest = new PreferenceRestriction();
+					var rest1 = new StudentAvailabilityDay(_person, new DateOnly(2000, 1, 1), studenrestColl);
+					var rest2 = new PreferenceDay(_person, new DateOnly(2000, 1, 1), prefRest);
+					_target.Add(rest1);
+					_target.Add(rest2);
 
-                var coll = _target.ScheduledDay(new DateOnly(2000, 1, 1)).RestrictionCollection();
-                Assert.AreEqual(3, coll.Count());
-            }
+					var coll = _target.ScheduledDay(new DateOnly(2000, 1, 1)).RestrictionCollection();
+					Assert.AreEqual(3, coll.Count());
+				}
+			}
+		}
+
+		[Test]
+		public void ShouldRemoveOtherPreferenceForSameDayIfItIsNotSavedYet()
+		{
+			using (_mocks.Record())
+			{
+				fullPermission(true);
+			}
+
+			using (_mocks.Playback())
+			{
+				using (new CustomAuthorizationContext(_principalAuthorization))
+				{
+					var preferenceDay1 = new PreferenceDay(_person, new DateOnly(2000, 1, 1), new PreferenceRestriction());
+					_target.Add(preferenceDay1);
+
+					var preferenceDay2 = new PreferenceDay(_person, new DateOnly(2000, 1, 1), new PreferenceRestriction());
+					preferenceDay2.SetId(Guid.NewGuid());
+					_target.Add(preferenceDay2);
+
+					var coll = _target.ScheduledDay(new DateOnly(2000, 1, 1)).RestrictionCollection();
+
+					Assert.AreEqual(1, coll.Count());
+				}
+			}
 		}
 
 		[Test]
@@ -515,6 +546,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                                 _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection()[0].
                                     OvertimeShiftCollection.Count);
             }
+			_mocks.VerifyAll();
 		}
 
 
@@ -554,6 +586,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Assert.AreEqual(4, res.Count());
                 Assert.AreEqual(absOk4.Layer.Period, res.First().Layer.Period);
             }
+			_mocks.VerifyAll();
 		}
 
 		private static DateTimePeriod createPeriod(int startHour, int endHour)
@@ -581,6 +614,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Assert.AreEqual(pAssOk2.MainShift.LayerCollection[0].Period, res[0].MainShift.LayerCollection[0].Period);
                 Assert.AreEqual(pAssOk.MainShift.LayerCollection[0].Period, res[1].MainShift.LayerCollection[0].Period);
             }
+			_mocks.VerifyAll();
 		}
 
 		[Test]
@@ -647,6 +681,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Assert.AreEqual(reallyLongPeriod.StartDateTime, longestPeriod.StartDateTime);
                 Assert.AreEqual(reallyLongPeriod.EndDateTime, longestPeriod.EndDateTime);
             }
+			_mocks.VerifyAll();
 		}
 
 		[Test]
@@ -737,6 +772,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Assert.AreEqual(0, range.PersonAssignments.Count);
                 Assert.AreEqual(0, range.Owner.DifferenceSinceSnapshot().Count());
             }
+			_mocks.VerifyAll();
 		}
 
         [Test]

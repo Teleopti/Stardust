@@ -97,12 +97,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
                     var pAss = scheduleData as IPersonAssignment;
                     if (pAss != null)
-                        mightMoveAssignmentToConflictList(sortedAssignmentCollection(), pAss);                    
+                        mightMoveAssignmentToConflictList(sortedAssignmentCollection(), pAss);
+
+                	var preferenceDay = scheduleData as IPreferenceDay;
+					if (preferenceDay != null)
+						removePotentialUnsavedPrefenceForSameDay(preferenceDay);
                 }
             }
         }
 
-        public void AddRange<T>(IEnumerable<T> scheduleDataCollection) where T : IScheduleData
+    	private void removePotentialUnsavedPrefenceForSameDay(IPreferenceDay preferenceDay)
+    	{
+    		var preference =
+    			_scheduleDataCollection.OfType<IPreferenceDay>().FirstOrDefault(
+    				p => p.RestrictionDate == preferenceDay.RestrictionDate);
+			if (preference!=null && preferenceDay!=preference && !preference.Id.HasValue)
+			{
+				_scheduleDataCollection.Remove(preference);
+			}
+    	}
+
+    	public void AddRange<T>(IEnumerable<T> scheduleDataCollection) where T : IScheduleData
         {
             foreach (var scheduleData in scheduleDataCollection)
             {
