@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			optimizerActivitiesPreferences.KeepEndTime = optimizationPreferences.Shifts.KeepEndTimes;
 			//throw new NotImplementedException();
 			optimizerActivitiesPreferences.AllowAlterBetween = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36));
+			if (optimizationPreferences.Shifts.AlterBetween)
+				optimizerActivitiesPreferences.AllowAlterBetween = optimizationPreferences.Shifts.SelectedTimePeriod;
 			optimizerActivitiesPreferences.SetDoNotMoveActivities(new List<IActivity>());
 
 			schedulingOptions.MainShiftOptimizeActivitySpecification = new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, mainShift, viewDate, StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
