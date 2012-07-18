@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Filters
 				{
 					MakeJsonResult(filterContext);
 				}
-				else if (filterContext.HttpContext.IsCustomErrorEnabled && filterContext.Exception.GetType() == typeof(HttpException))
+				else if (filterContext.HttpContext.IsCustomErrorEnabled && filterContext.Exception is HttpException)
 				{
 					MakeJsonResult(filterContext);
 					filterContext.ExceptionHandled = true;

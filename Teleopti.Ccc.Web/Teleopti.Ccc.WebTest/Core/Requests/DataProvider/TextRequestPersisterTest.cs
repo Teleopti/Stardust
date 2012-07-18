@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -56,7 +57,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			personRequestRepository.Stub(x => x.Find(id)).Return(null);
 
-			var exception = Assert.Throws<HttpException>(() => target.Delete(id));
+			var exception = Assert.Throws<RequestPersistException>(() => target.Delete(id));
+			exception.GetHttpCode().Should().Be(404);
+		}
+
+		[Test]
+		public void ShouldThrowHttp404OIfRequestDeniedOrApproved()
+		{
+			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
+			var target = new TextRequestPersister(personRequestRepository, null);
+			var personRequest = new PersonRequest(new Person());
+			personRequest.SetId(Guid.NewGuid());
+
+			personRequestRepository.Stub(x => x.Find(personRequest.Id.Value)).Return(personRequest);
+
+			personRequestRepository.Stub(x => x.Remove(personRequest)).Throw(new DataSourceException());
+
+			var exception = Assert.Throws<RequestPersistException>(() => target.Delete(personRequest.Id.Value));
 			exception.GetHttpCode().Should().Be(404);
 		}
 
