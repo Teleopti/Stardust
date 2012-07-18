@@ -34,8 +34,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+    	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
-        public IntradayOptimizer2(
+    	public IntradayOptimizer2(
             IScheduleResultDailyValueCalculator dailyValueCalculator,
             IScheduleResultDataExtractor personalSkillsDataExtractor, 
             IIntradayDecisionMaker decisionMaker, 
@@ -49,7 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceCalculateDaysDecider decider,
             IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer, 
-            ISchedulingOptionsCreator schedulingOptionsCreator)
+            ISchedulingOptionsCreator schedulingOptionsCreator,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
         {
             _dailyValueCalculator = dailyValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -65,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
             _workShiftOriginalStateContainer = workShiftOriginalStateContainer;
             _schedulingOptionsCreator = schedulingOptionsCreator;
+        	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
         }
 
         public bool Execute()
@@ -85,17 +88,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
-			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
-			optimizerActivitiesPreferences.KeepShiftCategory = _optimizerPreferences.Shifts.KeepShiftCategories;
-			optimizerActivitiesPreferences.KeepStartTime = _optimizerPreferences.Shifts.KeepStartTimes;
-			optimizerActivitiesPreferences.KeepEndTime = _optimizerPreferences.Shifts.KeepEndTimes;
-			//throw new NotImplementedException();
-			optimizerActivitiesPreferences.AllowAlterBetween = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36));
-			optimizerActivitiesPreferences.SetDoNotMoveActivities(new List<IActivity>());
         	IMainShift originalShift =
         		_workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder().MainShift;
-			schedulingOptions.MainShiftOptimizeActivitySpecification = new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, originalShift, dateToBeRemoved, StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
-            
+			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, dateToBeRemoved);
+
             _rollbackService.ClearModificationCollection();
 
 			IScheduleDayPro scheduleDayPro = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved);

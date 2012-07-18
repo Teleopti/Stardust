@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingOptionsCreator _schedulingOptionsCreator;
         private IReschedulingPreferences _reschedulingPreferences;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
+    	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
         [SetUp]
         public void Setup()
@@ -71,6 +72,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationOverLimitDecider = _mockRepository.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
             _schedulingOptionsCreator = _mockRepository.StrictMock<ISchedulingOptionsCreator>();
             _reschedulingPreferences = _mockRepository.StrictMock<IReschedulingPreferences>();
+        	_mainShiftOptimizeActivitySpecificationSetter =
+        		_mockRepository.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
 
 
             _target = new IntradayOptimizer2(
@@ -87,7 +90,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _resourceCalculateDaysDecider,
                 _optimizationOverLimitDecider,
                 _workShiftOriginalStateContainer,
-                _schedulingOptionsCreator
+                _schedulingOptionsCreator,
+				_mainShiftOptimizeActivitySpecificationSetter
                 );
         }
 
