@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -64,6 +65,11 @@ namespace Teleopti.Ccc.WinCode.Shifts.Models
         public virtual TimeSpan? APEndTime { get; set; }
 
         public event EventHandler<ActivityTypeChangedEventArgs> ActivityTypeChanged;
+
+        public bool IsTimeOfDay
+        {
+            get { return ContainedEntity.GetType() == typeof(ActivityAbsoluteStartExtender); }
+        }
 
         public IWorkShiftExtender WorkShiftExtender
         {

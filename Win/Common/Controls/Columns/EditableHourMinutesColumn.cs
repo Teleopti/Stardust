@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Collections.ObjectModel;
-using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Columns
@@ -17,7 +11,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 
         private string _headerText;
         private string _groupHeaderText;
+        private readonly string _bindingCellTypeTimeOfDay;
         private string _bindingProperty;
+        private string _cellTypeLength = "HourMinutes";
+        private string _cellTypeTimeOfDay = "TimeSpanTimeOfDayCellModel";
 
         public EditableHourMinutesColumn(string bindingProperty, string headerText)
         {
@@ -25,11 +22,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             _bindingProperty = bindingProperty;
         }
 
-        public EditableHourMinutesColumn(string bindingProperty, string headerText, string groupHeaderText)
+        public EditableHourMinutesColumn(string bindingProperty, string headerText, string groupHeaderText) : this(bindingProperty,headerText)
         {
-            _headerText = headerText;
-            _bindingProperty = bindingProperty;
             _groupHeaderText = groupHeaderText;
+        }
+
+        public EditableHourMinutesColumn(string bindingProperty, string headerText, string groupHeaderText, string bindingCellTypeTimeOfDay) : this(bindingProperty,headerText,groupHeaderText)
+        {
+            _bindingCellTypeTimeOfDay = bindingCellTypeTimeOfDay;
         }
 
         public override int PreferredWidth
@@ -77,11 +77,44 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             }
             else
             {
-                e.Style.CellType = "HourMinutes";
+                if(dataItems.Count == 0) return;
+
                 T dataItem = dataItems[e.RowIndex - 1];
-                e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
-                InvokeValidate(dataItem, e.Style, e.RowIndex, false);
+                setCellTypeAndValue(e, dataItem);
             }
+        }
+
+        private void setCellTypeAndValue(GridQueryCellInfoEventArgs e, T dataItem)
+        {
+            e.Style.BackColor = System.Drawing.Color.Gray;
+                
+            var cellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+            var cellType = _cellTypeLength;
+            if (cellTypeIsTimeOfDay(dataItem))
+            {
+                cellType = _cellTypeTimeOfDay;
+            }
+            e.Style.CellType = cellType;
+
+            if (cellValue == null)
+                e.Style.CellType = "Static";
+            else
+                e.Style.ResetBackColor();
+
+            e.Style.CellValue = cellValue;
+            
+            InvokeValidate(dataItem, e.Style, e.RowIndex, false);
+        }
+
+        private bool cellTypeIsTimeOfDay(T dataItem)
+        {
+            if (string.IsNullOrEmpty(_bindingCellTypeTimeOfDay))
+            {
+                return false;
+            }
+
+            var value = _propertyReflector.GetValue(dataItem, _bindingCellTypeTimeOfDay);
+            return (value is bool && (bool) value);
         }
 
         /// <summary>
@@ -105,19 +138,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             }
             else
             {
-                e.Style.BackColor = System.Drawing.Color.Gray;
                 if(dataItems.Count == 0)
                     return;
 
                 T dataItem = dataItems[e.RowIndex - 2];
-                object cellValue = _propertyReflector.GetValue(dataItem, _bindingProperty); 
-                e.Style.CellType = "HourMinutes";
-                if (cellValue == null)
-                    e.Style.CellType = "Static";
-                else 
-                    e.Style.ResetBackColor();
-                e.Style.CellValue = cellValue;
-                InvokeValidate(dataItem, e.Style, e.RowIndex, false);
+                setCellTypeAndValue(e,dataItem);
             }
         }
 
@@ -145,8 +170,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 				T dataItem = dataItems[rowIndex];
         		if (e.Style.CellValue != null)
         		{
-        			TimeSpan cellValue;
-        			TimeSpan.TryParse(e.Style.CellValue.ToString(), out cellValue);
+                    TimeSpan cellValue;
+                    if (e.Style.CellValue is TimeSpan)
+                    {
+                        cellValue = (TimeSpan) e.Style.CellValue;
+                    }
+                    else
+                    {
+                        TimeSpan.TryParse(e.Style.CellValue.ToString(), out cellValue);
+                    }
         			_propertyReflector.SetValue(dataItem, _bindingProperty, cellValue);
 				}
 
