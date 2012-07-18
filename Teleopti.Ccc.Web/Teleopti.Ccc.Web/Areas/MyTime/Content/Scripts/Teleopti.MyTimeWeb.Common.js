@@ -78,14 +78,15 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			_settings = settings;
 		},
 		AjaxFailed: function (jqXHR, noIdea, title) {
-			$('#dialog-modal').attr('title', 'Ajax error: ' + title);
+			var msg = $.parseJSON(jqXHR.responseText);
+			$('#dialog-modal').attr('title', 'Error: ' + msg.ShortMessage);
 			$('#dialog-modal').dialog({
 				width: 800,
 				height: 500,
 				position: 'center',
 				modal: true,
 				create: function (event, ui) {
-					var responseText = jqXHR.responseText;
+					var responseText = msg.Message;
 					$(this).html(responseText);
 				}
 			});

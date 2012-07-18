@@ -10757,8 +10757,8 @@ These options are activated:
     <value>Agents (Manual Override)</value>
     <comment>Manually entered number of agents will override the forecasterd number of agents.</comment>
   </data>
-  <data name="RequestCannotEdit" xml:space="preserve">
-    <value>Your request state has been changed, you cannot update it.</value>
-    <comment>Your request state has been changed, you cannot update it.</comment>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>Your request state has been changed, you cannot update/delete it.</value>
+    <comment>Your request state has been changed, you cannot update/delete it.</comment>
   </data>
 </root>

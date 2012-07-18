@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			{
 				Response.TrySkipIisCustomErrors = true;
 				Response.StatusCode = 400;
-				return e.ExceptionToJson(Resources.RequestCannotEdit);
+				return e.ExceptionToJson(Resources.RequestCannotUpdateDelete);
 			}
 		}
 
