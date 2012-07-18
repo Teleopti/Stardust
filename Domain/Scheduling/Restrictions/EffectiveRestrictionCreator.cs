@@ -6,13 +6,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	public class EffectiveRestrictionCreator : IEffectiveRestrictionCreator
 	{
 		private readonly IRestrictionExtractor _extractor; 
-		private readonly IKeepRestrictionCreator _keepRestrictionCreator;
 
-		public EffectiveRestrictionCreator(IRestrictionExtractor extractor, IKeepRestrictionCreator keepRestrictionCreator)
+		public EffectiveRestrictionCreator(IRestrictionExtractor extractor)
 		{
 			_extractor = extractor;
-			_keepRestrictionCreator = keepRestrictionCreator;
-
 		}
 
 		public IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, ISchedulingOptions options)
