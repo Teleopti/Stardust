@@ -402,6 +402,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             {
                 if (modifySelection.ShowDialog(this) != DialogResult.OK) return;
                 receivedValues = modifySelection.ModifiedList;
+
+                for (var i = 0; i < receivedValues.Count; i++)
+                {
+                     if (double.IsNaN(receivedValues[i]) || double.IsInfinity(receivedValues[i]))
+                         receivedValues[i] = 0.0;
+                }
             }
             GridHelper.ModifySelectionInput(this, receivedValues);
         }
