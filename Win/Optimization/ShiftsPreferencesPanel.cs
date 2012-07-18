@@ -60,14 +60,14 @@ namespace Teleopti.Ccc.Win.Optimization
             fromToTimePicker1.WholeDay.Visible = false;
 
             IList<IActivity> activities = new List<IActivity>();
-            if (Preferences.SelectedActivitiesGuids   != null)
+            if (Preferences.SelectedActivities   != null)
             {
-                foreach (Guid id in Preferences.SelectedActivitiesGuids
+                foreach (IActivity  selectedActivity in Preferences.SelectedActivities
                     )
                 {
                     foreach (IActivity activity in _availableActivity)
                     {
-                        if (activity.Id.Value == id)
+                        if (activity.Id.Value == selectedActivity.Id.Value  )
                             activities.Add(activity);
                     }
                 }
@@ -120,13 +120,13 @@ namespace Teleopti.Ccc.Win.Optimization
             Preferences.AlterBetween = checkBoxBetween.Checked ;
             Preferences.SelectedTimePeriod = new TimePeriod(fromToTimePicker1.StartTime.TimeValue(), fromToTimePicker1.EndTime.TimeValue());
 
-            IList<Guid> guidList = new List<Guid>();
+            IList<IActivity> activityList = new List<IActivity>();
 
             foreach (IActivity activity in SelectedActivities())
             {
-                guidList.Add(activity.Id.Value);
+                activityList.Add(activity);
             }
-            Preferences.SelectedActivitiesGuids = guidList;
+            Preferences.SelectedActivities = activityList;
         }
 
         private void setDataToControls()

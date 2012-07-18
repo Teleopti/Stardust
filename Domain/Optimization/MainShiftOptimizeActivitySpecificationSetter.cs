@@ -14,17 +14,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public void SetSpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IMainShift mainShift, DateOnly viewDate)
 		{
-			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
-			optimizerActivitiesPreferences.KeepShiftCategory = optimizationPreferences.Shifts.KeepShiftCategories;
-			optimizerActivitiesPreferences.KeepStartTime = optimizationPreferences.Shifts.KeepStartTimes;
-			optimizerActivitiesPreferences.KeepEndTime = optimizationPreferences.Shifts.KeepEndTimes;
-			//throw new NotImplementedException();
+            if (optimizationPreferences != null)
+            {
+            IOptimizerActivitiesPreferences optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
+		    optimizerActivitiesPreferences.KeepShiftCategory = optimizationPreferences.Shifts.KeepShiftCategories;
+		    optimizerActivitiesPreferences.KeepStartTime = optimizationPreferences.Shifts.KeepStartTimes;
+		    optimizerActivitiesPreferences.KeepEndTime = optimizationPreferences.Shifts.KeepEndTimes;
+		    
+		    //throw new NotImplementedException();
 			optimizerActivitiesPreferences.AllowAlterBetween = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36));
 			if (optimizationPreferences.Shifts.AlterBetween)
 				optimizerActivitiesPreferences.AllowAlterBetween = optimizationPreferences.Shifts.SelectedTimePeriod;
 			optimizerActivitiesPreferences.SetDoNotMoveActivities(new List<IActivity>());
 
-			schedulingOptions.MainShiftOptimizeActivitySpecification = new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, mainShift, viewDate, StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+                if (schedulingOptions != null)
+                    schedulingOptions.MainShiftOptimizeActivitySpecification = new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, mainShift, viewDate, StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+            }
 		}
 	}
 }
