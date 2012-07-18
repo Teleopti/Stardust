@@ -54,6 +54,22 @@
 	font-style: italic;
 	font-size: xx-small;
 }
+.request-body-inner .request-data-type {
+	padding-right: 20px;
+	padding-left: 0px;
+}
+.rtl .request-body-inner .request-data-type {
+	padding-right: 0px;
+	padding-left: 20px;
+}
+.request-body-inner .request-data-date {
+	padding-right: 20px;
+	padding-left: 0px;
+}
+.rtl .request-body-inner .request-data-date {
+	padding-right: 0px;
+	padding-left: 20px;
+}
 .request-body-inner .request-text 
 {
 	padding-top: 0.3em;
