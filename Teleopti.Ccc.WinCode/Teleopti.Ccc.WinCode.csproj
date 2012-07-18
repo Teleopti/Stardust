@@ -892,10 +892,8 @@
     <Compile Include="Scheduling\IAddLayerViewModel.cs" />
     <Compile Include="Scheduling\INotesAltered.cs" />
     <Compile Include="Scheduling\INotesEditorViewModel.cs" />
-    <Compile Include="Scheduling\IOptimizerActivitiesPreferencesView.cs" />
     <Compile Include="Scheduling\IPersonRequestViewModel.cs" />
     <Compile Include="Scheduling\NotesEditorViewModel.cs" />
-    <Compile Include="Scheduling\OptimizerActivitiesPreferencesPresenter.cs" />
     <Compile Include="Scheduling\Panels\LengthToDateCalculator.cs" />
     <Compile Include="Scheduling\RestrictionSummary\IPreferenceCellData.cs" />
     <Compile Include="Scheduling\RestrictionSummary\IRestrictionSummaryGrid.cs" />

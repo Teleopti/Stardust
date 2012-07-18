@@ -1199,12 +1199,6 @@
     <Compile Include="Scheduling\OptimizationProgress.Designer.cs">
       <DependentUpon>OptimizationProgress.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\OptimizeActivities.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\OptimizeActivities.Designer.cs">
-      <DependentUpon>OptimizeActivities.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\OptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\PersistConflictView.cs">
       <SubType>Form</SubType>
@@ -3030,9 +3024,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\OptimizationProgress.resx">
       <DependentUpon>OptimizationProgress.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\OptimizeActivities.resx">
-      <DependentUpon>OptimizeActivities.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersistConflictView.resx">
       <DependentUpon>PersistConflictView.cs</DependentUpon>

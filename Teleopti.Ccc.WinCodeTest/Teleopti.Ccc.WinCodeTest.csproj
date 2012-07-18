@@ -569,7 +569,6 @@
     <Compile Include="Scheduler\IntradayOptimizer2CreatorTest.cs" />
     <Compile Include="Scheduler\MoveTimeOptimizerCreatorTest.cs" />
     <Compile Include="Scheduler\NotesEditorViewModelTest.cs" />
-    <Compile Include="Scheduler\OptimizerActivitiesPreferencesPresenterTest.cs" />
     <Compile Include="Scheduler\Panels\LengthToDateCalculatorTest.cs" />
     <Compile Include="Scheduler\PersistConflictTest.cs" />
     <Compile Include="Scheduler\NotSkillGroupSpecificationTest.cs" />
