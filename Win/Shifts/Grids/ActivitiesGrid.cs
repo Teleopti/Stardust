@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
@@ -37,8 +38,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         private ColumnBase<IActivityViewModel> _alMinTime;
         private ColumnBase<IActivityViewModel> _alMaxTime;
         private ColumnBase<IActivityViewModel> _apSegment;
-        private ColumnBase<IActivityViewModel> _apStartTime;
-        private ColumnBase<IActivityViewModel> _apEndTime;
+        private EditableHourMinutesColumn<IActivityViewModel> _apStartTime;
+        private EditableHourMinutesColumn<IActivityViewModel> _apEndTime;
 
         private ToolStripMenuItem _addNewMenuItem;
         private ToolStripMenuItem _deletemenuItem;
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             _eventAggregator = eventAggregator;
             if (grid == null) return;
 
+            grid.CellModels.Add("TimeSpanTimeOfDayCellModel", new TimeSpanCultureTimeOfDayCellModel(grid.Model));
             if (!grid.CellModels.ContainsKey("ActivityDropDownCell"))
                 grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model));
         }
@@ -137,13 +139,15 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
             _apStartTime = new EditableHourMinutesColumn<IActivityViewModel>("APStartTime",
                                                                         UserTexts.Resources.EarlyStart,
-                                                                        UserTexts.Resources.ActivityPosition);
+                                                                        UserTexts.Resources.ActivityPosition,
+                                                                        "IsTimeOfDay");
             _apStartTime.Validate = ValidateAPStartTime;
             AddColumn(_apStartTime);
 
             _apEndTime = new EditableHourMinutesColumn<IActivityViewModel>("APEndTime",
                                                                       UserTexts.Resources.LateStart,
-                                                                      UserTexts.Resources.ActivityPosition);
+                                                                      UserTexts.Resources.ActivityPosition,
+                                                                      "IsTimeOfDay");
             _apEndTime.Validate = ValidateAPEndTime;
             AddColumn(_apEndTime);
 
@@ -355,7 +359,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             IActivity activity = ActivityNormal.CurrentActivity;// (from p in Presenter.Explorer.Model.ActivityCollection where p.Equals(ActivityNormal.CurrentActivity) select p).First();
             if (e.NewType == typeof(ActivityAbsoluteStartExtender))
             {
-
                 var aasEntender = new ActivityAbsoluteStartExtender(activity, ActivityNormal.ContainedEntity.ActivityLengthWithSegment, ActivityNormal.ContainedEntity.ActivityPositionWithSegment);
                 Presenter.ChangeExtenderType(ActivityNormal, aasEntender);
             }
@@ -371,6 +374,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 var areExtender = new ActivityRelativeEndExtender(activity, ActivityNormal.ContainedEntity.ActivityLengthWithSegment, ActivityNormal.ContainedEntity.ActivityPositionWithSegment);
                 Presenter.ChangeExtenderType(ActivityNormal, areExtender);
             }
+            Grid.Invalidate();
         }
 
         private void RefreshCell(int cell, int row)
