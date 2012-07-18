@@ -79,8 +79,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         		IRestrictionExtractor restrictionExtractor =
 					new RestrictionExtractor(_schedulingResultStateHolder);
 
-				IEffectiveRestrictionCreator effectiveRestrictionCreator = new EffectiveRestrictionCreator(restrictionExtractor,
-        					new KeepRestrictionCreator());
+				IEffectiveRestrictionCreator effectiveRestrictionCreator = new EffectiveRestrictionCreator(restrictionExtractor);
 
                 IScheduleMatrixOriginalStateContainer workShiftContainer = _workShiftContainerList[index];
 

@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 	{
 		private IEffectiveRestrictionCreator _target;
 		private IRestrictionExtractor _extractor;
-		private IKeepRestrictionCreator _keepRestrictionCreator;
 		private MockRepository _mocks;
 		private IScheduleDay _scheduleDay;
 		private ISchedulingOptions _options;
@@ -24,8 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		{
 			_mocks = new MockRepository();
 			_extractor = _mocks.StrictMock<IRestrictionExtractor>();
-			_keepRestrictionCreator = _mocks.StrictMock<IKeepRestrictionCreator>();
-			_target = new EffectiveRestrictionCreator(_extractor, _keepRestrictionCreator);
+			_target = new EffectiveRestrictionCreator(_extractor);
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 		}
 

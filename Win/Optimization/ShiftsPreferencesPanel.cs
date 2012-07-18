@@ -30,11 +30,12 @@ namespace Teleopti.Ccc.Win.Optimization
 		    _availableActivity = availableActivity;
 		    _resolution = resolution;
             Preferences = extraPreferences;
-			ExchangeData(ExchangeDataOption.DataSourceToControls);
+		    SetDefaultTimePeriod();
+            ExchangeData(ExchangeDataOption.DataSourceToControls);
 		    SetInitialValues();
         }
 
-        private void SetInitialValues()
+        private void SetDefaultTimePeriod()
         {
             fromToTimePicker1.StartTime.DefaultResolution = _resolution;
             fromToTimePicker1.EndTime.DefaultResolution = _resolution;
@@ -50,6 +51,11 @@ namespace Teleopti.Ccc.Win.Optimization
 
             fromToTimePicker1.StartTime.SetTimeValue(start);
             fromToTimePicker1.EndTime.SetTimeValue(end);
+        }
+
+        private void SetInitialValues()
+        {
+            
 
             fromToTimePicker1.WholeDay.Visible = false;
 
@@ -112,7 +118,7 @@ namespace Teleopti.Ccc.Win.Optimization
             Preferences.KeepEndTimes = checkBoxKeepStartTimes.Checked;
             Preferences.KeepShifts = checkBoxKeepShifts.Checked;
             Preferences.AlterBetween = checkBoxBetween.Checked ;
-            Preferences.KeepShiftsValue = (double)numericUpDownKeepShifts.Value  / 100;
+            Preferences.SelectedTimePeriod = new TimePeriod(fromToTimePicker1.StartTime.TimeValue(), fromToTimePicker1.EndTime.TimeValue());
 
             IList<Guid> guidList = new List<Guid>();
 
@@ -134,6 +140,8 @@ namespace Teleopti.Ccc.Win.Optimization
             checkBoxKeepShifts.Checked = Preferences.KeepShifts;
             checkBoxBetween.Checked = Preferences.AlterBetween;
             numericUpDownKeepShifts.Value = (decimal) Preferences.KeepShiftsValue * 100;
+            fromToTimePicker1.StartTime .SetTimeValue(Preferences.SelectedTimePeriod.StartTime );
+            fromToTimePicker1.EndTime .SetTimeValue(Preferences.SelectedTimePeriod.EndTime );
         }
 
         public IList<IActivity> SelectedActivities()
