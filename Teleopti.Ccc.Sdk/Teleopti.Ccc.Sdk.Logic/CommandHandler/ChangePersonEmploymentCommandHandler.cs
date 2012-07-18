@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _contractRepository = contractRepository;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CommandResultDto Handle(ChangePersonEmploymentCommandDto command)
         {
             Guid? result;
