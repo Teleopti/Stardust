@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, restrictionChecker, _optimizerPreferences, scheduleMatrixContainer);
 
                 var schedulingOptionsCreator = new SchedulingOptionsCreator();
+				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
         		IMoveTimeOptimizer optimizer =
         			new MoveTimeOptimizer(
@@ -103,7 +104,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         new ResourceCalculateDaysDecider(),
                         workShiftContainer, 
                         optimizerOverLimitDecider, 
-                        schedulingOptionsCreator);
+                        schedulingOptionsCreator,
+						mainShiftOptimizeActivitySpecificationSetter);
 
         		result.Add(optimizer);
         	}
