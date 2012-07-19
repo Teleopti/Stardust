@@ -70,14 +70,12 @@
 						<div class="week-schedule-layer absolute tooltip" @*@(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"week-schedule-layer absolute tooltip\"") : @Html.Raw("class=\"week-schedule-layer absolute\"")) *@
 							tooltip-title="@period.Title" tooltip-text="@tooltipText" 
 							style="background-color: @string.Format("rgb({0})", period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
-							
-							<strong @(heightPixel > pixelToDisplayTitle ? @Html.Raw("class=\"truncate\"") : @Html.Raw("class=\"truncate displaynone\""))>@period.Title</strong>
-							<span @(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"fullwidth displaynone\"") : @Html.Raw("class=\"fullwidth displayblock\""))>@period.TimeSpan</span>
-
 							@if (period.Meeting != null)
 							{
 								<div class="icon meeting floatright"></div>
 							}
+							<strong @(heightPixel > pixelToDisplayTitle ? @Html.Raw("class=\"truncate\"") : @Html.Raw("class=\"truncate displaynone\""))>@period.Title</strong>
+							<span @(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"fullwidth displaynone\"") : @Html.Raw("class=\"fullwidth displayblock\""))>@period.TimeSpan</span>
 						</div>
 					}
 				</li>
