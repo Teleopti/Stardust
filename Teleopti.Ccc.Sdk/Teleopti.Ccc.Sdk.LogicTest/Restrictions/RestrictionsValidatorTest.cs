@@ -6,6 +6,7 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -213,7 +214,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void CanTellIfOnlyPersonalAssignmentExists()
         {
-            var preferenceDay = new PreferenceDay(_person, new DateOnly(2009, 2, 2), new PreferenceRestriction());
+        	var dateOnly = new DateOnly(2009, 2, 2);
+            var preferenceDay = new PreferenceDay(_person, dateOnly, new PreferenceRestriction());
             IEnumerable<IPersistableScheduleData> data = new List<IPersistableScheduleData> { preferenceDay };
             IMeetingPerson meetingPerson = new MeetingPerson(_person, false);
             IPerson organizer = PersonFactory.CreatePerson("Organizer");
@@ -233,6 +235,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             IList<IPersonAssignment> personAssignments = new List<IPersonAssignment> { personAssignment };
             var ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+        	var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly,TimeZoneHelper.CurrentSessionTimeZone);
 
             using (_mocks.Record())
             {
@@ -240,7 +243,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 largePeriod.DayCollection().ForEach(d => Expect.Call(_isEditablePredicate.IsStudentAvailabilityEditable(d, _person)).Return(true));
                 Expect.Call(_stateHolder.Schedules).Return(_dictionary).Repeat.AtLeastOnce();
                 Expect.Call(_dictionary[_person]).Return(_range).Repeat.AtLeastOnce();
-                Expect.Call(_range.ScheduledDay(new DateOnly())).IgnoreArguments().Repeat.AtLeastOnce().Return(_part);
+                Expect.Call(_range.ScheduledDay(dateOnly)).IgnoreArguments().Repeat.AtLeastOnce().Return(_part);
+            	Expect.Call(_part.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersistableScheduleDataCollection()).Return(data).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(personAssignments)).Repeat.AtLeastOnce();
