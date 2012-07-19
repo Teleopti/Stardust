@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         protected ActivityDropDownCellModel(SerializationInfo info, StreamingContext context)
             : base(info, context)
-        { }
+        {
+        }
 
         public override GridCellRendererBase CreateRenderer(GridControlBase control)
         {
@@ -47,7 +48,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         private static IActivity GetActivityFromName(GridStyleInfo style, string text)
         {
-            return ((IEnumerable<IActivity>)style.DataSource).FirstOrDefault(activity => activity.ToString() == text || activity.Name.StartsWith(text,StringComparison.CurrentCultureIgnoreCase));
+            return
+                ((IEnumerable<IActivity>) style.DataSource).FirstOrDefault(
+                    activity =>
+                    activity.ToString() == text ||
+                    activity.Name.StartsWith(text, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public override bool ApplyText(GridStyleInfo style, string text)
@@ -58,36 +63,36 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         public override string GetFormattedText(GridStyleInfo style, object value, int textInfo)
         {
             if (style == null) return "";
-            if(value == null) return "";
+            if (value == null) return "";
             style.CellValue = value;
             var activity = value as IActivity;
-            return activity != null ? activity.Name :  ((IActivity)style.CellValue).Name;
+            return activity != null ? activity.Name : ((IActivity) style.CellValue).Name;
         }
     }
 
     public class ActivityPickerRenderer : GridComboBoxCellRenderer
     {
         private readonly Image _masterImage = Resources.MasterActivity16x16;
-        
+
         public ActivityPickerRenderer(GridControlBase grid, ActivityDropDownCellModel cellModel)
             : base(grid, cellModel)
         {
         }
 
-		protected override ListBox CreateListBoxPart()
-		{
-			var listBox = base.CreateListBoxPart();
-			listBox.DrawMode = DrawMode.OwnerDrawFixed;
-			listBox.ItemHeight = 18;
-			listBox.DrawItem += ListBoxDrawItem;
-			return listBox;
-		}
+        protected override ListBox CreateListBoxPart()
+        {
+            var listBox = base.CreateListBoxPart();
+            listBox.DrawMode = DrawMode.OwnerDrawFixed;
+            listBox.ItemHeight = 18;
+            listBox.DrawItem += ListBoxDrawItem;
+            return listBox;
+        }
 
-		protected override TextBoxBase CreateTextBox()
-		{
-			var textBox = base.CreateTextBox();
-			return textBox;
-		}
+        protected override TextBoxBase CreateTextBox()
+        {
+            var textBox = base.CreateTextBox();
+            return textBox;
+        }
 
         private void ListBoxDrawItem(object sender, DrawItemEventArgs e)
         {
@@ -95,7 +100,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
             e.DrawBackground();
 
-        	var item = ListBoxPart.Items[e.Index];
+            var item = ListBoxPart.Items[e.Index];
             var activity = item as IActivity;
             var masterActivity = item as IMasterActivity;
             var color = Color.Black;
@@ -109,25 +114,28 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             }
             if (activity != null)
             {
-                if(theImage != null)
+                if (theImage != null)
                     e.Graphics.DrawImage(theImage, e.Bounds.Left, e.Bounds.Y, 16, 16);
 
                 var point = new Point(e.Bounds.Left + 20, e.Bounds.Y);
                 var size = new Size(e.Bounds.Size.Width - 20, e.Bounds.Size.Height);
                 var rect = new Rectangle(point, size);
+
+
                 using (var fontNew = new Font(e.Font, style))
+                using (var customBrush = new SolidBrush(color))
+                using (var stringFormat = new StringFormat(StringFormat.GenericDefault))
                 {
-                    using (var customBrush = new SolidBrush(color))
-                    {
-                        e.Graphics.DrawString(activity.Name, fontNew, customBrush, rect,
-                                              StringFormat.GenericDefault);
-                    }
+                    stringFormat.FormatFlags = StringFormatFlags.NoWrap;
+                    e.Graphics.DrawString(activity.Name, fontNew, customBrush, rect,
+                                          stringFormat);
                 }
             }
             e.DrawFocusRectangle();
         }
 
-        protected override void OnDraw(Graphics g, Rectangle clientRectangle, int rowIndex, int colIndex, GridStyleInfo style)
+        protected override void OnDraw(Graphics g, Rectangle clientRectangle, int rowIndex, int colIndex,
+                                       GridStyleInfo style)
         {
             if (g == null) return;
             if (style == null) return;
@@ -147,7 +155,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             }
 
             if (activity == null) return;
-            if(theImage != null)
+            if (theImage != null)
                 g.DrawImage(theImage, clientRectangle.X, clientRectangle.Y, 16, 16);
 
             var point = new Point(clientRectangle.Left + 20, clientRectangle.Y);
@@ -155,10 +163,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             var rect = new Rectangle(point, size);
 
             using (var fontBold = new Font(style.Font.Facename, style.Font.Size, fontStyle))
-            {
-                using (var customBrush = new SolidBrush(color))
-                { g.DrawString(activity.Name, fontBold, customBrush, rect); }
-            }
+            using (var customBrush = new SolidBrush(color))
+                g.DrawString(activity.Name, fontBold, customBrush, rect);
         }
+
     }
 }
