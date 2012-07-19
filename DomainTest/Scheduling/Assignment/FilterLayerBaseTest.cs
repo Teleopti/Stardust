@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
@@ -14,13 +14,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IVisualLayerCollection target;
         private IList<IVisualLayer> internalCollection;
         private IVisualLayerFactory layerFactory;
+    	private IPerson person;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             layerFactory = new VisualLayerFactory();
             internalCollection = new List<IVisualLayer>();
-            target = new VisualLayerCollection(null, internalCollection, new ProjectionPayloadMerger());
+        	person = PersonFactory.CreatePerson();
+            target = new VisualLayerCollection(person, internalCollection, new ProjectionPayloadMerger());
             Optimizer = CreateOptimizer();
             target.PeriodOptimizer = Optimizer;
         }
@@ -96,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
         private IVisualLayer createLayer(int startHour, int endHour)
         {
-            return layerFactory.CreateShiftSetupLayer(new Activity("sdf"), createPeriod(startHour, endHour));
+            return layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("sdf"), createPeriod(startHour, endHour), person);
         }
 
         private static DateTimePeriod createPeriod(int startHour, int endHour)

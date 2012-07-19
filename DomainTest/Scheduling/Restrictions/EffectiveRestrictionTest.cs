@@ -34,16 +34,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		private IWorkShiftProjection _info5;
 
         private IActivity _activity;
+    	private IPerson _person;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _startTimeLimitation = new StartTimeLimitation();
             _endTimeLimitation = new EndTimeLimitation();
             _workTimeLimitation = new WorkTimeLimitation();
-            _shiftCategory = new ShiftCategory("Test");
+        	_person = PersonFactory.CreatePerson();
+            _shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Test");
 			_shiftCategory.SetId(Guid.NewGuid());
-            _activity = new Activity("Test");
+            _activity = ActivityFactory.CreateActivity("Test");
 			_activity.SetId(Guid.NewGuid());
             _activity.InContractTime = true;
             //15h
@@ -127,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyValidateWorkShiftShiftCategory()
         {
-            IShiftCategory notValidCategory = new ShiftCategory("NotValid");
+            IShiftCategory notValidCategory = ShiftCategoryFactory.CreateShiftCategory("NotValid");
 			notValidCategory.SetId(Guid.NewGuid());
 
             _target = new EffectiveRestriction(
@@ -153,9 +155,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Assert.IsFalse(_target.ValidateWorkShiftInfo(_info2));
             Assert.IsFalse(_target.ValidateWorkShiftInfo(_info3));
             Assert.IsFalse(_target.ValidateWorkShiftInfo(_info4));
-
-
-
         }
 
         [Test]
@@ -179,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 _workTimeLimitation,
                 null,
                 null,
-                new Absence(),
+                AbsenceFactory.CreateAbsence("vacation"),
                 new List<IActivityRestriction>());
 
             Assert.IsFalse(_target.ValidateWorkShiftInfo(_info1));
@@ -191,7 +190,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyValidateWorkShiftDayOff()
         {
-
             _target = new EffectiveRestriction(
                 _startTimeLimitation,
                 _endTimeLimitation,
@@ -209,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 _endTimeLimitation,
                 _workTimeLimitation,
                 null,
-                new DayOffTemplate(new Description("öjf")),
+                DayOffFactory.CreateDayOff(new Description("öjf")),
                 null,
                 new List<IActivityRestriction>());
 
@@ -217,9 +215,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Assert.IsFalse(_target.ValidateWorkShiftInfo(_info2));
             Assert.IsFalse(_target.ValidateWorkShiftInfo(_info3));
             Assert.IsFalse(_target.ValidateWorkShiftInfo(_info4));
-
-
-
         }
 
         [Test]
@@ -248,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 _workTimeLimitation,
                 null,
                 null,
-                new Absence(),
+                AbsenceFactory.CreateAbsence("vacation"),
                 new List<IActivityRestriction>());
 
             result = _target.Combine(other);
@@ -256,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             result = other.Combine(_target);
             Assert.IsNotNull(result.Absence);
 
-            IAbsence otherAbsence = new Absence();
+            IAbsence otherAbsence = AbsenceFactory.CreateAbsence("sick leave");
             _target = new EffectiveRestriction(
                 _startTimeLimitation,
                 _endTimeLimitation,
@@ -303,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 _endTimeLimitation,
                 _workTimeLimitation,
                 null,
-                new DayOffTemplate(new Description("öjf")),
+                DayOffFactory.CreateDayOff(new Description("öjf")),
                 null,
                 new List<IActivityRestriction>());
 
@@ -312,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             result = other.Combine(_target);
             Assert.IsNotNull(result.DayOffTemplate);
 
-            IDayOffTemplate otherDayOff = new DayOffTemplate(new Description("öjf"));
+            IDayOffTemplate otherDayOff = DayOffFactory.CreateDayOff(new Description("öjf"));
             _target = new EffectiveRestriction(
                 _startTimeLimitation,
                 _endTimeLimitation,
@@ -358,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 _startTimeLimitation,
                 _endTimeLimitation,
                 _workTimeLimitation,
-                new ShiftCategory("hej"),
+                ShiftCategoryFactory.CreateShiftCategory("hej"),
                 null, null, new List<IActivityRestriction>());
 
             result = _target.Combine(other);
@@ -370,13 +365,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 _startTimeLimitation,
                 _endTimeLimitation,
                 _workTimeLimitation,
-                new ShiftCategory("igen"),
+                ShiftCategoryFactory.CreateShiftCategory("igen"),
                 null, null, new List<IActivityRestriction>());
 
             result = _target.Combine(other);
             Assert.IsNull(result);
 
-            IShiftCategory cat = new ShiftCategory("same");
+            IShiftCategory cat = ShiftCategoryFactory.CreateShiftCategory("same");
             _target = new EffectiveRestriction(
                 _startTimeLimitation,
                 _endTimeLimitation,
@@ -675,10 +670,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void CanCheckIfVisualLayerCollectionSatisfiesActivityRestriction()
         {
-            CccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-            IActivity activity = new Activity("lunch");
+            var cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            IActivity activity = ActivityFactory.CreateActivity("lunch");
 			activity.SetId(Guid.NewGuid());
-            IActivity activity2 = new Activity("another one");
+            IActivity activity2 = ActivityFactory.CreateActivity("another one");
 			activity2.SetId(Guid.NewGuid());
             var activityRestriction = new ActivityRestriction(activity);
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(11, 0, 0), null);
@@ -691,10 +686,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             var factory = new VisualLayerFactory();
             var layer1 = factory.CreateShiftSetupLayer(activity2,
                                          new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc),
-                                                            new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc)));
+                                                            new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc)),_person);
             var layerLunch = factory.CreateShiftSetupLayer(activity,
                                          new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc),
-                                                            new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc)));
+                                                            new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc)),_person);
 
 			var layerCollection = new WorkShiftProjectionLayer[] { };
             Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
@@ -741,7 +736,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyIsLimitedWorkday()
         {
-            IActivity activity = new Activity("lunch");
+            IActivity activity = ActivityFactory.CreateActivity("lunch");
             var activityRestriction = new ActivityRestriction(activity);
             var startTime = TimeSpan.FromHours(8);
             var endTime = TimeSpan.FromHours(9);
@@ -786,11 +781,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyHashCode()
         {
-            IActivity activity = new Activity("lunch");
+            IActivity activity = ActivityFactory.CreateActivity("lunch");
             var activityRestriction = new ActivityRestriction(activity);
             var startTime = TimeSpan.FromHours(8);
             var endTime = TimeSpan.FromHours(9);
-            var cat = new ShiftCategory("katt");
+            var cat = ShiftCategoryFactory.CreateShiftCategory("katt");
             _target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                new WorkTimeLimitation(), cat, null, null,
                                                new List<IActivityRestriction>());

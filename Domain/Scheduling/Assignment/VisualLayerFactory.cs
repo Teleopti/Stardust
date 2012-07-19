@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
@@ -8,14 +7,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	//and instead have multiple objects of IVisualLayerFactory (one for absence, meeting and so forth)
 	public class VisualLayerFactory : IVisualLayerFactory
 	{
-		public virtual IVisualLayer CreateShiftSetupLayer(IActivity activity, DateTimePeriod period)
+		public virtual IVisualLayer CreateShiftSetupLayer(IActivity activity, DateTimePeriod period, IPerson person)
 		{
-			return new VisualLayer(activity, period, activity);
+			return new VisualLayer(activity, period, activity, person);
 		}
 
-		public virtual IVisualLayer CreateShiftSetupLayer(IActivityLayer layer)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public virtual IVisualLayer CreateShiftSetupLayer(IActivityLayer layer, IPerson person)
 		{
-			return new VisualLayer(layer.Payload, layer.Period, layer.Payload)
+			return new VisualLayer(layer.Payload, layer.Period, layer.Payload, person)
 			                          	{
 			                          		DefinitionSet = layer.DefinitionSet
 			                          	};
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IVisualLayer CreateMeetingSetupLayer(IMeetingPayload meetingPayload, IVisualLayer originalLayer, DateTimePeriod period)
 		{
-			return new VisualLayer(meetingPayload, period, meetingPayload.Meeting.Activity)
+			return new VisualLayer(meetingPayload, period, meetingPayload.Meeting.Activity, originalLayer.Person)
 			          	{
 			          		DefinitionSet = originalLayer.DefinitionSet
 			          	};
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IVisualLayer CreateAbsenceSetupLayer(IAbsence absence, IVisualLayer originalLayer, DateTimePeriod period)
 		{
-			return new VisualLayer(absence, period, ((VisualLayer)originalLayer).HighestPriorityActivity)
+			return new VisualLayer(absence, period, ((VisualLayer)originalLayer).HighestPriorityActivity,originalLayer.Person)
 			       	{
 			       		HighestPriorityAbsence = absence,
 							DefinitionSet = originalLayer.DefinitionSet
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IVisualLayer CreateResultLayer(IPayload payload, IVisualLayer originalLayer, DateTimePeriod period)
 		{
 			var castedLayer = ((VisualLayer)originalLayer);
-			return new VisualLayer(payload, period, castedLayer.HighestPriorityActivity)
+			return new VisualLayer(payload, period, castedLayer.HighestPriorityActivity,originalLayer.Person)
 			          	{
 			          		HighestPriorityAbsence = castedLayer.HighestPriorityAbsence, 
 								DefinitionSet = originalLayer.DefinitionSet

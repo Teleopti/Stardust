@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             mocks = new MockRepository();
             payload = mocks.StrictMock<IAlarmType>();
             period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 11, 17, 0, 0, 0, DateTimeKind.Utc), 0);
-            target = new AlarmSituation(payload, period);
+            target = new AlarmSituation(payload, period, PersonFactory.CreatePerson());
         }
 
         [Test]

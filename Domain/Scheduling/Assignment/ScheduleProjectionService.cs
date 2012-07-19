@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			var start = dateAndPeriod.Period().StartDateTime.Add(fakeLayerStart);
 			var end = start.AddTicks(length);
-			return new VisualLayerFactory().CreateShiftSetupLayer(act, new DateTimePeriod(start, end));
+			return new VisualLayerFactory().CreateShiftSetupLayer(act, new DateTimePeriod(start, end), ScheduleDay.Person);
 		}
 
 		private void addMeetingToProjectionService(VisualLayerProjectionService projectionService, IEnumerable<IVisualLayer> assignmentProjection)

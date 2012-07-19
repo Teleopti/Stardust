@@ -171,8 +171,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
             IActivity activity1 = new Activity("act1");
             IActivity activity2 = new Activity("act2");
-            IVisualLayer activityLayer1 = layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(now.AddMinutes(-30), now.AddMinutes(1)));
-            IVisualLayer activityLayer2 = layerFactory.CreateShiftSetupLayer(activity2, new DateTimePeriod(now.AddMinutes(1), now.AddDays(1)));
+            IVisualLayer activityLayer1 = layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(now.AddMinutes(-30), now.AddMinutes(1)),person);
+            IVisualLayer activityLayer2 = layerFactory.CreateShiftSetupLayer(activity2, new DateTimePeriod(now.AddMinutes(1), now.AddDays(1)),person);
             IAgentState agentState = mocks.StrictMock<IAgentState>();
             IDictionary<IPerson, IAgentState> agentStates = new Dictionary<IPerson, IAgentState>();
             agentStates.Add(person, agentState);

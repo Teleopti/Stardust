@@ -38,25 +38,25 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (e.RowIndex > 1 && e.ColIndex > ColHeaders)
             {
-                IScheduleDay scheduleRange = e.Style.CellValue as IScheduleDay;
-                if (scheduleRange != null)
+                IScheduleDay scheduleDay = e.Style.CellValue as IScheduleDay;
+                if (scheduleDay != null)
                 {
-                    var significantPart = scheduleRange.SignificantPartForDisplay();
+                    var significantPart = scheduleDay.SignificantPartForDisplay();
 
                     String symbol = String.Empty;
                     Color color2 = Color.White;
                     
-                    if (scheduleRange.PersonAssignmentCollection().Count > 0)
+                    if (scheduleDay.PersonAssignmentCollection().Count > 0)
                     {
                         if (significantPart == SchedulePartView.MainShift)
                         {
-                            IPersonAssignment pa = scheduleRange.AssignmentHighZOrder();
+                            IPersonAssignment pa = scheduleDay.AssignmentHighZOrder();
 
                             if (pa != null)
                             {
                                 if (pa.MainShift != null)
                                 {
-                                    if (ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleRange) == DisplayMode.BeginsToday || ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleRange) == DisplayMode.BeginsAndEndsToday)
+                                    if (ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleDay) == DisplayMode.BeginsToday || ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleDay) == DisplayMode.BeginsAndEndsToday)
                                     {
                                         color2 = pa.MainShift.ShiftCategory.DisplayColor;
                                         symbol = "|";
@@ -66,17 +66,17 @@ namespace Teleopti.Ccc.Win.Scheduling
                         }
                     }
 
-                    var absenceCollection = scheduleRange.PersonAbsenceCollection();
+                    var absenceCollection = scheduleDay.PersonAbsenceCollection();
                     if (absenceCollection.Count > 0)
                     {
                         if (significantPart == SchedulePartView.FullDayAbsence)
                         {
-                            color2 = absenceCollection[0].Layer.Payload.ConfidentialDisplayColor(scheduleRange.Person);
+                            color2 = absenceCollection[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly);
                             symbol = "X";
                         }
                     }
 
-                    if (scheduleRange.PersonDayOffCollection().Count > 0)
+                    if (scheduleDay.PersonDayOffCollection().Count > 0)
                     {
                         if (significantPart == SchedulePartView.DayOff)
                         {
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         DrawRectangle(e, symbol, color2);
                     }
 
-                    AddMarkersToCell(e, scheduleRange, significantPart);
+                    AddMarkersToCell(e, scheduleDay, significantPart);
                 }
             }
         }

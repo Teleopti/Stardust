@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Security.Principal;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
@@ -16,6 +18,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 	[TestFixture]
 	public class TeamScheduleProjectionProviderTest
 	{
+		private readonly ICccTimeZoneInfo timeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+		private IPrincipal principalBefore;
+		private IPerson person;
+
+		[SetUp]
+		public void Setup()
+		{
+			setPrincipal();
+		}
+
+		private void setPrincipal()
+		{
+			principalBefore = System.Threading.Thread.CurrentPrincipal;
+			person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone(timeZone);
+			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
+					 new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
+		}
+
 		[Test]
 		public void ShouldReturnProjectionLayerColor()
 		{
@@ -135,6 +156,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		[Test]
 		public void ShouldSetCorrectSortDateIfFullDayAbsence()
 		{
+
 			var scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
 			scheduleDay.Add(new PersonAbsence(scheduleDay.Person, scheduleDay.Scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(2001,1,1,2001,1,2))));
 
@@ -165,6 +187,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var result = target.Projection(scheduleDay);
 			result.SortDate.Should().Be.EqualTo(
 				scheduleDay.Period.StartDateTime.AddDays(TeamScheduleProjectionProvider.EmptyExtraDays));
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			System.Threading.Thread.CurrentPrincipal = principalBefore;
 		}
 	}
 }

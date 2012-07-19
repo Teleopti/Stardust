@@ -2,8 +2,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using Syncfusion.Windows.Forms.Grid;
-//using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -13,12 +11,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    /// <summary>
-    /// Period view
-    /// </summary>
     public class PeriodView : ScheduleViewBase
     {
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public PeriodView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
             SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
@@ -63,20 +57,19 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-    	private void DrawAbsenceAndDayOff(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
+    	private void DrawAbsenceAndDayOff(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
     	{
-			IAbsence absence = SignificantAbsence(scheduleRange);
-			String shortName = absence.ConfidentialDescription(scheduleRange.Person).ShortName;
+			IAbsence absence = SignificantAbsence(scheduleDay);
+			String shortName = absence.ConfidentialDescription(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly).ShortName;
 			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
 			Point point = new Point(e.Bounds.X - (int)stringWidth.Width / 2 + e.Bounds.Width / 2, e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
-			using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleRange.Person)))
+			using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly)))
 			{
 				GridHelper.FillRoundedRectangle(e.Graphics, e.Bounds, 1, brush, -4);
 				e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, point);
 			}
     	}
 
-    	//draw assignments
         private void DrawAssignmentFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
             IPersonAssignment pa = scheduleRange.AssignmentHighZOrder();
@@ -105,26 +98,21 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        
-        //draw absences
-		private void DrawAbsenceFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
+		private void DrawAbsenceFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
 		{
-			IAbsence absence = SignificantAbsence(scheduleRange);
-			String shortName = absence.ConfidentialDescription(scheduleRange.Person).ShortName;
+			IAbsence absence = SignificantAbsence(scheduleDay);
+			String shortName = absence.ConfidentialDescription(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly).ShortName;
 			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
 			Point point = new Point(e.Bounds.X - (int) stringWidth.Width/2 + e.Bounds.Width/2,
 			                        e.Bounds.Y - (int) stringWidth.Height/2 + e.Bounds.Height/2);
 
-			using (SolidBrush brush = new SolidBrush(absence.ConfidentialDisplayColor(scheduleRange.Person)))
+			using (SolidBrush brush = new SolidBrush(absence.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly)))
 			{
 				GridHelper.FillRoundedRectangle(e.Graphics, e.Bounds, 1, brush, -4);
 				e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, point);
 			}
-
-
 		}
 
-    	//draw day off
         private void DrawDayOffFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
             var personDayOffs = scheduleRange.PersonDayOffCollection();

@@ -370,7 +370,7 @@
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculator.cs" />
     <Compile Include="Scheduling\Assignment\NewSchedulePeriodTargetCalculatorFactory.cs" />
     <Compile Include="Scheduling\Assignment\RangeProjectionService.cs" />
-    <Compile Include="Scheduling\Assignment\SchedulePartStringVisualizer.cs" />
+    <Compile Include="Scheduling\Assignment\ScheduleDayStringVisualizer.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryFairnessManager.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitChecker.cs" />
     <Compile Include="Scheduling\DayOffTemplateSorter.cs" />

@@ -2,7 +2,6 @@
 using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void ShouldGetAlarmDescription()
         {
             target.AlarmLayer = new AlarmSituation(new AlarmType(new Description("Alarma!"), Color.DimGray, TimeSpan.Zero,
-                                       AlarmTypeMode.UserDefined, 1), period);
+                                       AlarmTypeMode.UserDefined, 1), period, person);
             Assert.AreEqual("Alarma!", target.AlarmDescription);
         }
 
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
             IRtaVisualLayer newRtaVisualLayer = new RtaVisualLayer(g1.StateCollection[0],
                                                                 new DateTimePeriod(timeStamp, timeStamp.AddHours(5)),
-                                                                new Activity("Phone"));
+                                                                new Activity("Phone"), person);
             target.CurrentState = newRtaVisualLayer;
             Assert.AreEqual("sdf1", target.CurrentStateDescription);
         }
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void ShouldGetCurrentActivityDescription()
         {
             var layerFactory = new VisualLayerFactory();
-            target.CurrentActivityLayer = layerFactory.CreateShiftSetupLayer(new Activity("Phone"), period);
+            target.CurrentActivityLayer = layerFactory.CreateShiftSetupLayer(new Activity("Phone"), period,person);
             Assert.AreEqual("Phone", target.CurrentActivityDescription);
         } 
         
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void ShouldGetNextActivityDescription()
         {
             var layerFactory = new VisualLayerFactory();
-            target.NextActivityLayer = layerFactory.CreateShiftSetupLayer(new Activity("Phone1"), period);
+            target.NextActivityLayer = layerFactory.CreateShiftSetupLayer(new Activity("Phone1"), period,person);
             Assert.AreEqual("Phone1", target.NextActivityDescription);
         }
 
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void ShouldGetNextActivityStartTime()
         {
             var layerFactory = new VisualLayerFactory();
-            target.NextActivityLayer = layerFactory.CreateShiftSetupLayer(new Activity("Phone1"), period);
+            target.NextActivityLayer = layerFactory.CreateShiftSetupLayer(new Activity("Phone1"), period, person);
             Assert.AreEqual("00:00", target.NextActivityStartDateTime);
         }
 
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
             target.AlarmLayer =
                 new AlarmSituation(new AlarmType(new Description("Alarma!"), Color.DimGray, TimeSpan.Zero,
-                                                 AlarmTypeMode.UserDefined, 1), period);
+                                                 AlarmTypeMode.UserDefined, 1), period, person);
             Assert.AreEqual(TimeSpan.FromDays(1), target.SortTime);
         }
 

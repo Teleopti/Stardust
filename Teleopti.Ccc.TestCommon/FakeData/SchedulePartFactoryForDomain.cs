@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -39,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         }
 
         public SchedulePartFactoryForDomain()
-            : this(new Person(), ScenarioFactory.CreateScenarioAggregate("For test",true,false), new DateTimePeriod(2001, 1, 1, 2001, 1, 3), SkillFactory.CreateSkill("Skill")) {}
+            : this(PersonFactory.CreatePerson(), ScenarioFactory.CreateScenarioAggregate("For test",true,false), new DateTimePeriod(2001, 1, 1, 2001, 1, 3), SkillFactory.CreateSkill("Skill")) {}
 
 
         private IScheduleDay createPart(DateOnly dateOnly)

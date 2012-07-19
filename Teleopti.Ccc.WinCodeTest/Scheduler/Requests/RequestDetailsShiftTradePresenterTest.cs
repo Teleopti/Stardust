@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void ShouldHandleMultipleLayers()
         {
+        	var person = PersonFactory.CreatePerson();
             const int requestedDays = 3;
             var request = CreateShiftTradeRequestObject(requestedDays);
             var dateTimePeriod = DateTimeFactory.CreateDateTimePeriod(DateTime.UtcNow, 2).ChangeEndTime(TimeSpan.FromSeconds(1));
@@ -87,11 +88,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
                                    {
                                        visualLayerFactory.CreateShiftSetupLayer(activity,
                                            new DateTimePeriod(dateTimePeriod.StartDateTime,
-                                                              dateTimePeriod.StartDateTime.AddHours(1))),
+                                                              dateTimePeriod.StartDateTime.AddHours(1)),person),
                                                               visualLayerFactory.CreateShiftSetupLayer(
                                            activity,
                                            new DateTimePeriod(dateTimePeriod.StartDateTime.AddHours(1),
-                                                              dateTimePeriod.StartDateTime.AddHours(2)))
+                                                              dateTimePeriod.StartDateTime.AddHours(2)),person)
                                    };
             using (_mocks.Record())
             {

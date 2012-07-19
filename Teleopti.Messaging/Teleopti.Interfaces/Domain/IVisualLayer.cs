@@ -49,5 +49,10 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <returns></returns>
 		TimeSpan WorkTime();
+
+		/// <summary>
+		/// Gets the person.
+		/// </summary>
+		IPerson Person { get; }
 	}
 }

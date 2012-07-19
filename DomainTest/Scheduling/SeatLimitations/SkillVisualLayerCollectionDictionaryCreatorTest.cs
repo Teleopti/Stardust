@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -37,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
         {
 			_visualLayerFactory = new VisualLayerFactory();
             _day = new DateOnly(2010, 10, 10);
-			_phone = new Activity("phone");
+			_phone = ActivityFactory.CreateActivity("phone");
             _person1 = PersonFactory.CreatePerson("Person1");
             _person2 = PersonFactory.CreatePerson("Person2");
             _siteWithMaxSeats = SiteFactory.CreateSimpleSite("Site1");
@@ -47,9 +45,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
             _siteSkill = SkillFactory.CreateSiteSkill("SiteSkill");
 			_shiftPeriod = new DateTimePeriod(new DateTime(2010, 10, 10, 9, 30, 0, DateTimeKind.Utc),
 															 new DateTime(2010, 10, 10, 11, 0, 0, DateTimeKind.Utc));
-			_visualLayer1 = _visualLayerFactory.CreateShiftSetupLayer(_phone, _shiftPeriod);
+			_visualLayer1 = _visualLayerFactory.CreateShiftSetupLayer(_phone, _shiftPeriod,_person1);
 			_layerCollection1 = new VisualLayerCollection(_person1, new List<IVisualLayer> { _visualLayer1 }, new ProjectionPayloadMerger());
-			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_phone, _shiftPeriod);
+			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_phone, _shiftPeriod,_person2);
 			_layerCollection2 = new VisualLayerCollection(_person2, new List<IVisualLayer> { _visualLayer2 }, new ProjectionPayloadMerger());
 			_layerCollectionList = new List<IVisualLayerCollection> { _layerCollection1, _layerCollection2 };
 			_target = new SkillVisualLayerCollectionDictionaryCreator();

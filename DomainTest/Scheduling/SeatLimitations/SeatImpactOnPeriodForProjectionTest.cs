@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -36,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		public void Setup()
 		{
 			_target = new SeatImpactOnPeriodForProjection();
-			_lunch = new Activity("lunch");
-			_phone = new Activity("phone");
-			_absence = new Absence();
+			_lunch = ActivityFactory.CreateActivity("lunch");
+			_phone = ActivityFactory.CreateActivity("phone");
+			_absence = AbsenceFactory.CreateAbsence("vacation");
 			_phone.RequiresSeat = true;
 			_skillLondon = SkillFactory.CreateSiteSkill("London");
 			_skillPhone = SkillFactory.CreateSkill("Phone");
@@ -47,9 +46,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			_visualLayerFactory = new VisualLayerFactory();
 			_shiftPeriod = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc),
 															 new DateTime(2010, 1, 1, 11, 0, 0, DateTimeKind.Utc));
-			_visualLayer1 = _visualLayerFactory.CreateShiftSetupLayer(_phone, _shiftPeriod);
+			_visualLayer1 = _visualLayerFactory.CreateShiftSetupLayer(_phone, _shiftPeriod,_person1);
 			_layerCollection1 = new VisualLayerCollection(_person1, new List<IVisualLayer> { _visualLayer1 }, new ProjectionPayloadMerger());
-			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_lunch, _shiftPeriod);
+			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_lunch, _shiftPeriod,_person2);
 			_layerCollection2 = new VisualLayerCollection(_person2, new List<IVisualLayer> { _visualLayer2 }, new ProjectionPayloadMerger());
 
 
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			DateTimePeriod period = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 0, 0, DateTimeKind.Utc),
 															 new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc));
 
-			baseactivityLayer = _visualLayerFactory.CreateShiftSetupLayer(_phone, period);
+			baseactivityLayer = _visualLayerFactory.CreateShiftSetupLayer(_phone, period, _person2);
 			absenceLayer = _visualLayerFactory.CreateAbsenceSetupLayer(_absence, baseactivityLayer, period);
 			_layerCollection3 = new VisualLayerCollection(_person2, new List<IVisualLayer> { absenceLayer, _visualLayer1 }, new ProjectionPayloadMerger());
 			_shiftList = new List<IVisualLayerCollection> {_layerCollection3 };

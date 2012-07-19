@@ -50,10 +50,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private static IVisualLayer cloneLayerWithNewPeriod(VisualLayer orgLayer, DateTimePeriod newPeriod)
 		{
-			var ret = new VisualLayer(orgLayer.Payload, newPeriod, orgLayer.HighestPriorityActivity);
+			var ret = new VisualLayer(orgLayer.Payload, newPeriod, orgLayer.HighestPriorityActivity,orgLayer.Person);
 			ret.HighestPriorityAbsence = orgLayer.HighestPriorityAbsence;
 			ret.DefinitionSet = orgLayer.DefinitionSet;
-            ret.Person = orgLayer.Person;
 
 			return ret;
 		}

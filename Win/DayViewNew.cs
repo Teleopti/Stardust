@@ -108,9 +108,7 @@ namespace Teleopti.Ccc.Win
                         }
                         
                     }
-                        
-                    //if (significantPart == SchedulePartView.FullDayAbsence)
-                    //    DrawAbsenceFromSchedule(e, scheduleRange);
+
                     if (significantPart == SchedulePartView.DayOff)
 
                         drawDayOffFromSchedule(e, scheduleDay);
@@ -195,7 +193,7 @@ namespace Teleopti.Ccc.Win
                 int endPixel = (int)Math.Round(pixelConverter.PositionFromDateTime(local.EndDateTime, IsRightToLeft)) +
                     e.Bounds.X;
 
-                drawRect(e, visualLayer.Payload.ConfidentialDisplayColor(person), startPixel, endPixel);
+                drawRect(e, visualLayer.Payload.ConfidentialDisplayColor(person,dateOnly), startPixel, endPixel);
             }
 
             drawTomorrow(e, person, pixelConverter, tomorrow);
@@ -238,14 +236,13 @@ namespace Teleopti.Ccc.Win
             var pixelConverter = new LengthToTimeCalculator(_presenter.ScalePeriod, e.Bounds.Width);
             IPerson person = scheduleDay.Person;
             DateOnly dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
-            IScheduleDay yesterDay = _presenter.SchedulerState.Schedules[person].ScheduledDay(dateOnly.AddDays(-1));
+            IScheduleDay yesterday = _presenter.SchedulerState.Schedules[person].ScheduledDay(dateOnly.AddDays(-1));
             IScheduleDay tomorrow = _presenter.SchedulerState.Schedules[person].ScheduledDay(dateOnly.AddDays(1));
 
-            drawYesterday(e, person, yesterDay, pixelConverter);
+            drawYesterday(e, person, yesterday, pixelConverter);
 
 
-            var baseDate = new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 0, 0, 0, 0,
-                                                 DateTimeKind.Utc);
+            var baseDate = DateTime.SpecifyKind(dateOnly.Date, DateTimeKind.Utc);
             var local1 = new DateTimePeriod(baseDate.AddHours(8), baseDate.AddHours(16));
             int startPixel1 =
                 (int)Math.Round(pixelConverter.PositionFromDateTime(local1.StartDateTime, IsRightToLeft)) +
@@ -267,7 +264,7 @@ namespace Teleopti.Ccc.Win
 			}
 			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
 			var point = new Point(startPixel1 + ((endPixel1 - startPixel1) / 2), e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
-            drawContractDayOffRect(e, absence.ConfidentialDisplayColor(scheduleDay.Person), startPixel1, endPixel1, shortName, point);
+            drawContractDayOffRect(e, absence.ConfidentialDisplayColor(scheduleDay.Person,dateOnly), startPixel1, endPixel1, shortName, point);
 
             drawTomorrow(e, person, pixelConverter, tomorrow);
         }
@@ -286,14 +283,14 @@ namespace Teleopti.Ccc.Win
                 if (startPixel > e.Bounds.X + e.Bounds.Width)
                     continue;
 
-                Color color = Color.FromArgb(alphaFactor, visualLayer.Payload.ConfidentialDisplayColor(person));
+                Color color = Color.FromArgb(alphaFactor, visualLayer.Payload.ConfidentialDisplayColor(person,tomorrow.DateOnlyAsPeriod.DateOnly));
                 drawRect(e, color, startPixel, endPixel);
             }
         }
 
-        private void drawYesterday(GridDrawCellEventArgs e, IPerson person, IScheduleDay yesterDay, LengthToTimeCalculator pixelConverter)
+        private void drawYesterday(GridDrawCellEventArgs e, IPerson person, IScheduleDay yesterday, LengthToTimeCalculator pixelConverter)
         {
-            foreach (IVisualLayer visualLayer in yesterDay.ProjectionService().CreateProjection())
+            foreach (IVisualLayer visualLayer in yesterday.ProjectionService().CreateProjection())
             {
                 DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period);
                 int startPixel =
@@ -306,7 +303,7 @@ namespace Teleopti.Ccc.Win
                 if (endPixel <= e.Bounds.X)
                     continue;
 
-                Color color = Color.FromArgb(alphaFactor, visualLayer.Payload.ConfidentialDisplayColor(person));
+                Color color = Color.FromArgb(alphaFactor, visualLayer.Payload.ConfidentialDisplayColor(person,yesterday.DateOnlyAsPeriod.DateOnly));
                 drawRect(e, color, startPixel, endPixel);
             }
         }
@@ -355,12 +352,6 @@ namespace Teleopti.Ccc.Win
                 e.Graphics.FillRectangle(brush, rect);
 				e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, startPoint);
             }
-
-            //using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleRange.Person)))
-            //{
-            //    GridHelper.FillRoundedRectangle(e.Graphics, e.Bounds, 1, brush, -4);
-            //    e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, point);
-            //}
         }
 
         static DateTimePeriod toLocalUtcPeriod(DateTimePeriod utcPeriod)
