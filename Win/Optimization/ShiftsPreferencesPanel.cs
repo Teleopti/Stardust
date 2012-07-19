@@ -88,12 +88,12 @@ namespace Teleopti.Ccc.Win.Optimization
            
 
             Preferences.KeepShiftCategories = checkBoxKeepShiftCategories.Checked;
-            Preferences.KeepStartTimes = checkBoxKeepEndTimes.Checked;
-            Preferences.KeepEndTimes = checkBoxKeepStartTimes.Checked;
+            Preferences.KeepStartTimes = checkBoxKeepStartTimes.Checked;
+            Preferences.KeepEndTimes = checkBoxKeepEndTimes.Checked;
             Preferences.KeepShifts = checkBoxKeepShifts.Checked;
             Preferences.AlterBetween = checkBoxBetween.Checked ;
             Preferences.SelectedTimePeriod = new TimePeriod(fromToTimePicker1.StartTime.TimeValue(), fromToTimePicker1.EndTime.TimeValue());
-
+            Preferences.KeepShiftsValue = (double) numericUpDownKeepShifts.Value/100;
             IList<IActivity> activityList = new List<IActivity>();
 
             foreach (IActivity activity in SelectedActivities())

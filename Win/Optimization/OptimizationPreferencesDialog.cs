@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			_defaultDaysOffPreferences.MapTo(Preferences.DaysOff);
 			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages);
 			_defaultAdvancedPreferences.MapTo(Preferences.Advanced);
-            _defaultshiftsPreferences.MapTo(Preferences.Shifts );
+            _defaultshiftsPreferences.MapTo(Preferences.Shifts, _availableActivity);
             
 		}
 
