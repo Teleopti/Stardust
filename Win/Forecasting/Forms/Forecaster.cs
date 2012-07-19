@@ -2266,6 +2266,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             toolStripButtonShowGraph.Checked = !toolStripButtonShowGraph.Checked;
             SplitterManager.ShowGraph = toolStripButtonShowGraph.Checked;
             _showGraph = toolStripButtonShowGraph.Checked;
+            splitContainer2.Panel1.Controls.Remove(_chartControl);
+            addChart();
         }
         private void toolStripButtonShowSkillView_Click(object sender, EventArgs e)
         {
