@@ -120,13 +120,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             var restriction = new PreferenceRestriction();
             var preferenceDay = new PreferenceDay(_person, new DateOnly(rangePeriod.StartDateTime), restriction);
             part.Add(preferenceDay);
-			var preferenceDay2 = new PreferenceDay(_person, new DateOnly(rangePeriod.StartDateTime), restriction);
-			part.Add(preferenceDay2);
 			_target.Load(part);
             
-            Assert.AreEqual(2, _target.RestrictionModels.Count());
-            _target.RestrictionRemoved(_target.RestrictionModels[0]);
             Assert.AreEqual(1, _target.RestrictionModels.Count());
+            _target.RestrictionRemoved(_target.RestrictionModels[0]);
+            Assert.AreEqual(0, _target.RestrictionModels.Count());
         }
 
         [Test]
@@ -154,21 +152,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             IScheduleDay part = createPart(_person, new DateOnly(2000, 1, 1));
             var restriction = new PreferenceRestriction {StartTimeLimitation = startTimeLimitation};
             var preferenceDay1 = new PreferenceDay(_person, new DateOnly(_rangePeriod.StartDateTime),restriction);
-            var preferenceDay2 = new PreferenceDay(_person, new DateOnly(_rangePeriod.StartDateTime), restriction);
 
             part.Add(preferenceDay1);
-            part.Add(preferenceDay2);
             _target.Load(part);
 
             //Do changes (it feels like this would be better off with mocks):
             _target.RestrictionModels[0].StartTimeLimits.StartTime = newStartTime.ToString();
-            _target.RestrictionModels[1].StartTimeLimits.StartTime = newStartTime.ToString();
 
             //Check that the changes arent done to the part:
             var res = (PreferenceDay)part.PersonRestrictionCollection()[0];
             Assert.AreEqual(startTimeLimitation,res.Restriction.StartTimeLimitation);
-            res = (PreferenceDay)part.PersonRestrictionCollection()[1];
-            Assert.AreEqual(startTimeLimitation, res.Restriction.StartTimeLimitation);
 
             //Verify that the UpdateAllCommand can run
             CanExecuteRoutedEventArgs args = _models.CreateCanExecuteRoutedEventArgs();
@@ -183,14 +176,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             res = (PreferenceDay)part.PersonRestrictionCollection()[0];
             Assert.AreNotEqual(startTimeLimitation.StartTime,
                           res.Restriction.StartTimeLimitation.StartTime);
-            res = (PreferenceDay)part.PersonRestrictionCollection()[1];
-            Assert.AreNotEqual(startTimeLimitation.StartTime,
-                           res.Restriction.StartTimeLimitation.StartTime);
 
             //VerifyTexts:
             Assert.AreEqual(UserTexts.Resources.Update,_target.UpdateAllCommand.Text);
             Assert.AreEqual(UserTexts.Resources.Update,_target.UpdateAllCommand.DescriptionText);
-
         }
 
         [Test]

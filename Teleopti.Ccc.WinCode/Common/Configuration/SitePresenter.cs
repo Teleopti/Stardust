@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -10,8 +9,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 	public class SitePresenter
 	{
 		private readonly ISiteRepository _siteRepository;
-		private IList<ISite> _siteCollection = new List<ISite>();
-		private ISiteView _siteView;
+		private readonly List<ISite> _siteCollection = new List<ISite>();
+		private readonly ISiteView _siteView;
 
 		public SitePresenter(ISiteView siteView, ISiteRepository siteRepository)
 		{
@@ -20,49 +19,17 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		}
 
 		public void OnPageLoad()
-		{
-			_siteView.LoadSiteGrid(AllNotDeletedSites);	
-		}
-
-		private IList<ISite> AllNotDeletedSites
-		{
-			get
-			{
-				CheckSitesCollection();
-				var tmp = from site in _siteCollection orderby site.Description.Name select site;
-				return tmp.ToList();
-			}
-		}
-
-		//if site has been added or deleted on another page we must chec this
-		private void CheckSitesCollection()
-		{
-			if (_siteCollection.IsEmpty())
-			{
-				LoadSites();
-				return;
-			}
-
-			var refreshedSites = _siteRepository.LoadAll();
-
-			var notDeletedSites = refreshedSites.Where(site => !((IDeleteTag)site).IsDeleted).ToList();
-			foreach (var notDeletedSite in notDeletedSites.Where(notDeletedSite => !_siteCollection.Contains(notDeletedSite)))
-			{
-				_siteCollection.Add(notDeletedSite);
-			}
-
-			var deletedSites = refreshedSites.Where(site => ((IDeleteTag)site).IsDeleted).ToList();
-			foreach (var deletedSite in deletedSites.Where(deletedSite => _siteCollection.Contains(deletedSite)))
-			{
-				_siteCollection.Remove(deletedSite);
-			}
+        {
+            LoadSites();
+			_siteView.LoadSiteGrid(_siteCollection);	
 		}
 
 		private void LoadSites()
 		{
 			// if we get the deleted ones
 			var tmp = _siteRepository.LoadAll();
-			_siteCollection = tmp.Where(site => !((IDeleteTag)site).IsDeleted).ToList();
+			_siteCollection.Clear();
+            _siteCollection.AddRange(tmp.Where(site => !((IDeleteTag)site).IsDeleted).OrderBy(s => s.Description.Name));
 		}
 	}
 }
