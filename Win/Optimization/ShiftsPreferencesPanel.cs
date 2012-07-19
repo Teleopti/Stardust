@@ -56,34 +56,8 @@ namespace Teleopti.Ccc.Win.Optimization
         private void SetInitialValues()
         {
             
-
             fromToTimePicker1.WholeDay.Visible = false;
 
-            IList<IActivity> activities = new List<IActivity>();
-            if (Preferences.SelectedActivities   != null)
-            {
-                foreach (IActivity  selectedActivity in Preferences.SelectedActivities
-                    )
-                {
-                    foreach (IActivity activity in _availableActivity)
-                    {
-                        if (activity.Id.Value == selectedActivity.Id.Value  )
-                            activities.Add(activity);
-                    }
-                }
-            }
-
-            IList<IActivity> availableactivities = _availableActivity ;
-            if (activities.Count > 0)
-            {
-                foreach (var activity in
-                    activities.Where(activity => _availableActivity.Contains(activity)))
-                {
-                    availableactivities.Remove(activity);
-                }
-            }
-            
-            twoListSelectorActivities.Initiate(availableactivities, activities, "Description", UserTexts.Resources.Activities, UserTexts.Resources.DoNotMove);
         }
 
         #region IDataExchange Members
@@ -132,8 +106,6 @@ namespace Teleopti.Ccc.Win.Optimization
         private void setDataToControls()
         {
             
-
-
             checkBoxKeepShiftCategories.Checked = Preferences.KeepShiftCategories;
             checkBoxKeepEndTimes.Checked = Preferences.KeepEndTimes;
             checkBoxKeepStartTimes.Checked = Preferences.KeepStartTimes;
@@ -142,6 +114,36 @@ namespace Teleopti.Ccc.Win.Optimization
             numericUpDownKeepShifts.Value = (decimal) Preferences.KeepShiftsValue * 100;
             fromToTimePicker1.StartTime .SetTimeValue(Preferences.SelectedTimePeriod.StartTime );
             fromToTimePicker1.EndTime .SetTimeValue(Preferences.SelectedTimePeriod.EndTime );
+
+            IList<IActivity> activities = new List<IActivity>();
+            if (Preferences.SelectedActivities != null)
+            {
+                foreach (IActivity selectedActivity in Preferences.SelectedActivities
+                    )
+                {
+                    foreach (IActivity activity in _availableActivity)
+                    {
+                        if (activity.Id.Value == selectedActivity.Id.Value)
+                            activities.Add(activity);
+                    }
+                }
+                
+            }
+            else
+            {
+                Preferences.SelectedActivities = new List<IActivity>();
+            }
+
+            IList<IActivity> availableactivities = _availableActivity;
+            if (activities.Count > 0)
+            {
+                foreach (var activity in
+                    activities.Where(activity => _availableActivity.Contains(activity)))
+                {
+                    availableactivities.Remove(activity);
+                }
+            }
+            twoListSelectorActivities.Initiate(availableactivities, Preferences.SelectedActivities, "Description", UserTexts.Resources.Activities, UserTexts.Resources.DoNotMove);
         }
 
         public IList<IActivity> SelectedActivities()
