@@ -171,7 +171,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// </summary>
         /// <param name="scheduleDay"></param>
         /// <returns></returns>
-        public static string GetToolTipAssignments(IScheduleDay scheduleDay)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public static string GetToolTipAssignments(IScheduleDay scheduleDay)
         {
             StringBuilder sb = new StringBuilder();
 
