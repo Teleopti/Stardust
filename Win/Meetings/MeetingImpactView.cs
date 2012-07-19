@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Scheduling;
@@ -99,7 +100,10 @@ namespace Teleopti.Ccc.Win.Meetings
 			dateTimePickerAdvEndSlotPeriod.ValueChanged += DateTimePickerAdvEndSlotPeriodValueChanged;
 			dateTimePickerAdvStartSlotPeriod.ValueChanged += DateTimePickerAdvStartSlotPeriodValueChanged;
             Paint += MeetingImpactViewPaint;
-            
+
+            office2007OutlookTimePickerStartSlotPeriod.Text = Resources.ZeroZeroColonZeroZero;
+            office2007OutlookTimePickerEndSlotPeriod.Text = Resources.ZeroZeroColonZeroZero;
+
 		}
 
         void MeetingImpactViewPaint(object sender, EventArgs e)
@@ -517,11 +521,17 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		void Office2007OutlookTimePickerEndSlotPeriodLeave(object sender, EventArgs e)
 		{
+            if (_presenter == null) return;
+            if (office2007OutlookTimePickerEndSlotPeriod.Disposing)
+                return;
             _presenter.OnSlotTimeChange(office2007OutlookTimePickerEndSlotPeriod.Text);
 		}
 
 		void Office2007OutlookTimePickerStartSlotPeriodLeave(object sender, EventArgs e)
 		{
+            if (_presenter == null) return;
+            if (office2007OutlookTimePickerStartSlotPeriod.Disposing)
+                return;
             _presenter.OnSlotTimeChange(office2007OutlookTimePickerStartSlotPeriod.Text);
 		}
 
