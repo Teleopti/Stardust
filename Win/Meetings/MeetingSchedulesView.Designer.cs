@@ -318,6 +318,7 @@ namespace Teleopti.Ccc.Win.Meetings
             this.outlookTimePickerStartTime.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
             this.outlookTimePickerStartTime.Location = new System.Drawing.Point(263, 3);
             this.outlookTimePickerStartTime.MaxValue = System.TimeSpan.Parse("2.00:00:00");
+            this.outlookTimePickerStartTime.MinValue = System.TimeSpan.Parse("00:00:00");
             this.outlookTimePickerStartTime.Name = "outlookTimePickerStartTime";
             this.outlookTimePickerStartTime.Size = new System.Drawing.Size(65, 21);
             this.outlookTimePickerStartTime.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -330,6 +331,7 @@ namespace Teleopti.Ccc.Win.Meetings
             this.outlookTimePickerEndTime.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
             this.outlookTimePickerEndTime.Location = new System.Drawing.Point(263, 28);
             this.outlookTimePickerEndTime.MaxValue = System.TimeSpan.Parse("2.00:00:00");
+            this.outlookTimePickerEndTime.MinValue = System.TimeSpan.Parse("00:00:00");
             this.outlookTimePickerEndTime.Name = "outlookTimePickerEndTime";
             this.outlookTimePickerEndTime.Size = new System.Drawing.Size(65, 21);
             this.outlookTimePickerEndTime.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -376,8 +378,7 @@ namespace Teleopti.Ccc.Win.Meetings
             this.monthCalendarAdvDateSelection.Name = "monthCalendarAdvDateSelection";
             this.monthCalendarAdvDateSelection.ScrollButtonSize = new System.Drawing.Size(24, 24);
             this.monthCalendarAdvDateSelection.SelectedDates = new System.DateTime[] {
-        new System.DateTime(2012, 1, 20, 0, 0, 0, 0),
-        new System.DateTime(2012, 1, 20, 0, 0, 0, 0)};
+        new System.DateTime(2012, 7, 20, 0, 0, 0, 0)};
             this.monthCalendarAdvDateSelection.Size = new System.Drawing.Size(168, 134);
             this.monthCalendarAdvDateSelection.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.monthCalendarAdvDateSelection.TabIndex = 0;
@@ -517,6 +518,7 @@ namespace Teleopti.Ccc.Win.Meetings
             this.office2007OutlookTimePickerStartSpan.BindableTimeValue = System.TimeSpan.Parse("08:00:00");
             this.office2007OutlookTimePickerStartSpan.Location = new System.Drawing.Point(84, 3);
             this.office2007OutlookTimePickerStartSpan.MaxValue = System.TimeSpan.Parse("2.00:00:00");
+            this.office2007OutlookTimePickerStartSpan.MinValue = System.TimeSpan.Parse("00:00:00");
             this.office2007OutlookTimePickerStartSpan.Name = "office2007OutlookTimePickerStartSpan";
             this.office2007OutlookTimePickerStartSpan.Size = new System.Drawing.Size(65, 21);
             this.office2007OutlookTimePickerStartSpan.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -530,6 +532,7 @@ namespace Teleopti.Ccc.Win.Meetings
             this.office2007OutlookTimePickerEndSpan.BindableTimeValue = System.TimeSpan.Parse("17:00:00");
             this.office2007OutlookTimePickerEndSpan.Location = new System.Drawing.Point(84, 32);
             this.office2007OutlookTimePickerEndSpan.MaxValue = System.TimeSpan.Parse("2.00:00:00");
+            this.office2007OutlookTimePickerEndSpan.MinValue = System.TimeSpan.Parse("00:00:00");
             this.office2007OutlookTimePickerEndSpan.Name = "office2007OutlookTimePickerEndSpan";
             this.office2007OutlookTimePickerEndSpan.Size = new System.Drawing.Size(65, 21);
             this.office2007OutlookTimePickerEndSpan.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -545,6 +548,7 @@ namespace Teleopti.Ccc.Win.Meetings
             this.Controls.Add(this.tableLayoutPanelMain);
             this.Name = "MeetingSchedulesView";
             this.Size = new System.Drawing.Size(832, 650);
+            this.Resize += new System.EventHandler(this.MeetingSchedulesView_Resize);
             this.tableLayoutPanelMain.ResumeLayout(false);
             this.tableLayoutPanelGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControlSchedules)).EndInit();
