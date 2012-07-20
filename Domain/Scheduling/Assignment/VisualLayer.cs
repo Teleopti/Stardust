@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// Created by: rogerkr
     /// Created date: 2008-02-22
     /// </remarks>
-    public class VisualLayer : Layer<IPayload>, IVisualLayer
+	public class VisualLayer : Layer<IPayload>, IVisualLayer, IActivityRestrictableVisualLayer
     {
 		public VisualLayer(IPayload payload,
                            DateTimePeriod period,
@@ -111,5 +111,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
             return false;
         }
+
+    	public Guid ActivityId
+    	{
+			get { return HighestPriorityActivity != null ? HighestPriorityActivity.Id.GetValueOrDefault() : Guid.Empty; }
+    	}
     }
 }
