@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
-        private readonly ILogWriter _logWriter;
+    	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+    	private readonly ILogWriter _logWriter;
 
         public DayOffDecisionMakerExecuter(
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
@@ -46,7 +47,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixOriginalStateContainer originalStateContainer,
             IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider,
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService, 
-            ISchedulingOptionsCreator schedulingOptionsCreator
+            ISchedulingOptionsCreator schedulingOptionsCreator,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter
             )
         {
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
@@ -65,8 +67,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
             _nightRestWhiteSpotSolverService = nightRestWhiteSpotSolverService;
             _schedulingOptionsCreator = schedulingOptionsCreator;
+        	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 
-            _logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
+        	_logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
         }
 
         public bool Execute(
@@ -361,16 +364,23 @@ namespace Teleopti.Ccc.Domain.Optimization
                 IShiftCategory originalShiftCategory = null;
                 IScheduleDay originalScheduleDay = originalStateContainer.OldPeriodDaysState[dateOnly];
                 IPersonAssignment originalPersonAssignment = originalScheduleDay.AssignmentHighZOrder();
+            	schedulingOptions.MainShiftOptimizeActivitySpecification = null;
                 if (originalPersonAssignment != null)
                 {
                     IMainShift originalMainShift = originalPersonAssignment.MainShift;
                     if (originalMainShift != null)
-                        originalShiftCategory = originalMainShift.ShiftCategory;
+                    {
+						originalShiftCategory = originalMainShift.ShiftCategory;
+						_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalMainShift, dateOnly);
+                    }
+
                 }
 
                 var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
+
+				
 
                 bool schedulingResult;
                 if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)

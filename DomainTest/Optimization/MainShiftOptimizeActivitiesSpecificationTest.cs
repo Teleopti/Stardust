@@ -45,18 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_interface.IsSatisfiedBy(shift));
         }
 
-        [Test]
-        public void VerifyCorrectContractTime()
-        {
-            IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
-            IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
-            Assert.IsTrue(_target.CorrectContractTime(layers));
-
-            shift.LayerCollection[0].ChangeLayerPeriodStart(TimeSpan.FromMinutes(1));
-            layers = shift.ProjectionService().CreateProjection();
-            Assert.IsFalse(_target.CorrectContractTime(layers));
-        }
-
+        
         [Test]
         public void VerifyCorrectShiftCategory()
         {

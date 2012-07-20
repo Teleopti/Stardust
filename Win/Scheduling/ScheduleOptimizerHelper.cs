@@ -1140,6 +1140,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                     new DeleteSchedulePartService(_stateHolder), rollbackService,
                                                     scheduleService, WorkShiftFinderResultHolder,
 													resourceCalculateDelayer);
+			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,
@@ -1157,7 +1158,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   originalStateContainer,
                                                   optimizerOverLimitDecider,
                                                   nightRestWhiteSpotSolverService,
-                                                  schedulingOptionsSyncronizer);
+                                                  schedulingOptionsSyncronizer,
+												  mainShiftOptimizeActivitySpecificationSetter);
 
             IDayOffOptimizerContainer optimizerContainer =
                 new DayOffOptimizerContainer(scheduleMatrixArrayConverter,

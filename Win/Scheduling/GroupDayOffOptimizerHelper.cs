@@ -334,6 +334,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
+        	var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,
@@ -351,7 +352,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   originalStateContainer,
                                                   optimizerOverLimitDecider,
                                                   null,
-                                                  schedulingOptionsCreator
+                                                  schedulingOptionsCreator,
+												  mainShiftOptimizeActivitySpecificationSetter
                                                   );
 
             var optimizerContainer =
