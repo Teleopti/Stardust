@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -32,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IWorkShiftFinderResult _finderResult;
         private MockRepository _mocks;
         private ICccTimeZoneInfo _cccTimeZoneInfo;
-        //private DateTime _scheduleDayUtc;
         private IScheduleRange _scheduleRange;
         private IScheduleDay _part;
         private IPersonAssignment _personAssignment;
@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks = new MockRepository();
             _dateOnly = new DateOnly(2009,2,2);
             _cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
-            //_scheduleDayUtc = TimeZoneHelper.ConvertToUtc(_dateOnly.Date, _cccTimeZoneInfo);
             _effectiveRestriction = new EffectiveRestriction(
                 new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
                 new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
@@ -94,7 +93,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
-    	[Test] public void ShouldReturnCorrectIfUsePreferenceMustHavesOnly()
+    	[Test]
+		public void ShouldReturnCorrectIfUsePreferenceMustHavesOnly()
     	{
 			ISchedulingOptions schedulingOptions = new SchedulingOptions();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
@@ -177,6 +177,24 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(0,ret.Count);
         }
 
+		[Test]
+		public void ShouldReturnAllShiftsIfNoActivityRestriction()
+		{
+			var shiftProjectionCaches = new List<IShiftProjectionCache>{_mocks.DynamicMock<IShiftProjectionCache>()};
+			
+			IList<IActivityRestriction> activityRestrictions = new List<IActivityRestriction>();
+			var effectiveRestriction = _mocks.DynamicMock<IEffectiveRestriction>();
+			using (_mocks.Record())
+			{
+				Expect.Call(effectiveRestriction.ActivityRestrictionCollection).Return(activityRestrictions);
+			}
+			using (_mocks.Playback())
+			{
+				var ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _cccTimeZoneInfo, shiftProjectionCaches, effectiveRestriction, _finderResult);
+				Assert.AreEqual(1, ret.Count);
+			}
+		}
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void CanFilterOnActivityRestriction()
         {
@@ -184,12 +202,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IActivity breakActivity = ActivityFactory.CreateActivity("lunch");
             var breakPeriod = new DateTimePeriod(new DateTime(1800, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc));
 
-
             IWorkShift ws1 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(8), TimeSpan.FromHours(21), testActivity);
             ws1.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod));
-            IWorkShift ws2 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(9), TimeSpan.FromHours(22), testActivity);
-            ws2.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod.MovePeriod(new TimeSpan(1, 0, 0))));
-            IList<IWorkShift> listOfWorkShifts = new List<IWorkShift> {ws1, ws2};
+            IList<IWorkShift> listOfWorkShifts = new List<IWorkShift> {ws1 };
 
         	_cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var casheList = new List<IShiftProjectionCache>();
@@ -200,27 +215,22 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 casheList.Add(cache);
             }
 
-            IList<IActivityRestriction> activityRestrictions = new List<IActivityRestriction> ();
-            IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
-                                                                                  new EndTimeLimitation(),
-                                                                                  new WorkTimeLimitation(), null, null, null,
-                                                                                  activityRestrictions);
-            var ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _cccTimeZoneInfo, casheList, effectiveRestriction, _finderResult);
-            Assert.AreEqual(2, ret.Count);
-
-            var activityRestriction = new ActivityRestriction(breakActivity)
-                                      	{
-                                      		StartTimeLimitation = new StartTimeLimitation(new TimeSpan(12, 0, 0), null),
-                                      		EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(13, 0, 0))
-                                      	};
-        	activityRestrictions = new List<IActivityRestriction> { activityRestriction };
-            effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
-                                                                                  new EndTimeLimitation(),
-                                                                                  new WorkTimeLimitation(), null, null, null,
-                                                                                  activityRestrictions);
-
-            ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _cccTimeZoneInfo, casheList, effectiveRestriction, _finderResult);
-            Assert.AreEqual(0, ret.Count);
+        	var activityRestrictions = new List<IActivityRestriction> { _mocks.DynamicMock<IActivityRestriction>() };
+			var effectiveRestriction = _mocks.DynamicMock<IEffectiveRestriction>();
+			using (_mocks.Record())
+			{
+				Expect.Call(effectiveRestriction.ActivityRestrictionCollection).Return(activityRestrictions);
+				Expect.Call(effectiveRestriction.VisualLayerCollectionSatisfiesActivityRestriction(_dateOnly, _cccTimeZoneInfo, null))
+					.Constraints(Rhino.Mocks.Constraints.Is.Equal(_dateOnly), Rhino.Mocks.Constraints.Is.Equal(_cccTimeZoneInfo),
+					             new Rhino.Mocks.Constraints.PredicateConstraint<IEnumerable<IActivityRestrictableVisualLayer>>(
+					             	t => t.Any())).Return(true);
+			}
+			using (_mocks.Playback())
+			{
+				var ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _cccTimeZoneInfo, casheList,
+				                                                              effectiveRestriction, _finderResult);
+				Assert.AreEqual(1, ret.Count);
+			}
         }
 
         [Test]
