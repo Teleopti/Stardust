@@ -164,11 +164,16 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
 			if (TimeHelper.TryParse(inputText, out timeSpan))
 			{
-				if (timeSpan.HasValue)
-				{
-					SetStartTime(timeSpan.Value);
-					_view.NotifyMeetingTimeChanged();
-				}
+                if (timeSpan.HasValue)
+                {
+                    if (timeSpan.Value >= TimeSpan.Zero)
+                    {
+                        SetStartTime(timeSpan.Value);
+                        _view.NotifyMeetingTimeChanged();
+                    }
+                    else
+                        _view.SetStartTime(_model.StartTime);
+                }
 			}
 			else
 				_view.SetStartTime(_model.StartTime);
@@ -191,9 +196,15 @@ namespace Teleopti.Ccc.WinCode.Meetings
 			if (TimeHelper.TryParse(inputText, out timeSpan))
 			{
 				if (timeSpan.HasValue)
-				{
-					SetEndTime(timeSpan.Value);
-					_view.NotifyMeetingTimeChanged();
+                {
+                    if (timeSpan.Value >= TimeSpan.Zero)
+                    {
+                        SetEndTime(timeSpan.Value);
+                        _view.NotifyMeetingTimeChanged();
+                    }
+                    else
+                        _view.SetEndTime(_model.EndTime);
+
 				}
 			}
 			else
