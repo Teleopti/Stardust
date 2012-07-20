@@ -288,16 +288,16 @@ namespace Teleopti.Ccc.WinCode.Meetings
             UpdateView();
         }
 
-	    public void UpdateModelFromView()
-		{
-			if(_updatingView) return;
-			_meetingViewModel.StartDate = _meetingImpactView.StartDate;
-			_meetingViewModel.RecurringEndDate = _meetingImpactView.StartDate;
-			_meetingViewModel.StartTime = _meetingImpactView.StartTime;
-			_meetingViewModel.EndTime = _meetingImpactView.EndTime;
-		}
+        public void UpdateModelFromView()
+        {
+            if (_updatingView) return;
+            _meetingViewModel.StartDate = _meetingImpactView.StartDate;
+            _meetingViewModel.RecurringEndDate = _meetingImpactView.StartDate;
+            _meetingViewModel.StartTime = _meetingImpactView.StartTime;
+            _meetingViewModel.EndTime = _meetingImpactView.EndTime;
+        }
 
-		private void UpdateMeetingDatesTimesInViewFromModel()
+	    private void UpdateMeetingDatesTimesInViewFromModel()
 		{
 			//if (!_meetingViewModel.IsRecurring)
 			//{
@@ -336,10 +336,18 @@ namespace Teleopti.Ccc.WinCode.Meetings
             {
                 if (timeSpan.HasValue)
                 {
-                    UpdateModelFromView();
-                    UpdateMeetingControl();
-                    _transparentWindowHandler.ScrollMeetingIntoView();
-               }
+                    if (timeSpan.Value >= TimeSpan.Zero)
+                    {
+                        UpdateModelFromView();
+                        UpdateMeetingControl();
+                        _transparentWindowHandler.ScrollMeetingIntoView();
+                    }
+                    else
+                    {
+                        _meetingImpactView.SetStartTime(_meetingViewModel.StartTime);
+                        _meetingImpactView.SetEndTime(_meetingViewModel.EndTime);
+                    }
+                }
             }
             else
             {
@@ -356,7 +364,13 @@ namespace Teleopti.Ccc.WinCode.Meetings
             {
                 if (timeSpan.HasValue)
                 {
-                    _meetingViewModel.SlotStartTime = timeSpan.Value;
+                    if (timeSpan.Value >= TimeSpan.Zero)
+                        _meetingViewModel.SlotStartTime = timeSpan.Value;
+                    else
+                    {
+                        _meetingImpactView.SetSlotStartTime(_meetingViewModel.SlotStartTime);
+                        _meetingImpactView.SetSlotEndTime(_meetingViewModel.SlotEndTime);
+                    }
                 }
             }
             else
