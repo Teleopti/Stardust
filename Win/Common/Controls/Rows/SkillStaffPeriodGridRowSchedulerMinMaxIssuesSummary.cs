@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             if (skillStaffPeriod == null)
                 return;
 
-            IAggregateSkillStaffPeriod aggregate = (IAggregateSkillStaffPeriod)skillStaffPeriod;
+            var aggregate = (IAggregateSkillStaffPeriod)skillStaffPeriod;
             if(aggregate.AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.Ok)
                 return;
 

@@ -20,10 +20,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
         public override void QueryCellInfo(CellInfo cellInfo)
         {
             base.QueryCellInfo(cellInfo);
-            drawMinMaxIssues(cellInfo);
+            DrawMinMaxIssues(cellInfo);
         }
 
-        private void drawMinMaxIssues(CellInfo cellInfo)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		protected void DrawMinMaxIssues(CellInfo cellInfo)
         {
             var skillStaffPeriods = SkillStaffPeriodList;
             if (skillStaffPeriods==null || !skillStaffPeriods.Any()) return;
