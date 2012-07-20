@@ -447,15 +447,15 @@ namespace Teleopti.Ccc.WinCode.Meetings
 		{
 			TimeSpan? timeSpan;
 
-			if (TimeHelper.TryParse(inputText, out timeSpan))
-			{
-				if (timeSpan.HasValue)
-					SetStartTime(timeSpan.Value);
-				_view.OnMeetingTimeChanged();
-			    _view.NotifyMeetingTimeChanged();
-			}
-			else
-				_view.SetStartTime(GetStartTime);	
+            if (TimeHelper.TryParse(inputText, out timeSpan))
+            {
+                if (timeSpan.HasValue && timeSpan.Value >= TimeSpan.Zero)
+                    SetStartTime(timeSpan.Value);
+                _view.OnMeetingTimeChanged();
+                _view.NotifyMeetingTimeChanged();
+            }
+            else
+                _view.SetStartTime(GetStartTime);	
 		}
 
 		public void OnOutlookTimePickerEndTimeLeave(string inputText)

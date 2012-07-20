@@ -179,10 +179,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Assert.IsFalse(_target.ContainsPerson(PersonFactory.CreatePerson()));
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyStartTimeCannotExceedTwentyFourHours()
         {
             _target.StartTime = TimeSpan.FromDays(1);
+
+            Assert.AreEqual(_target.StartTime, TimeSpan.Zero);
         }
 
         [Test]

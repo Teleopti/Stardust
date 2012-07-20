@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 			get { return _startTime; }
 			set
 			{
-				if (value >= TimeSpan.FromDays(1)) throw new ArgumentOutOfRangeException("value", "The start time cannot be equal to or greater than 24 hours");
+                if (value >= TimeSpan.FromDays(1)) value = TimeSpan.Zero;
 
 				verifyLastKnownStateIsSet();
 				_startTime = value;
