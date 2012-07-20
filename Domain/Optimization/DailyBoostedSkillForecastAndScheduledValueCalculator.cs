@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (forecastValue == 0)
                 forecastValue = 0.001;
             double scheduledValue = BoostedTweakedSkillStaffPeriodValue(skillStaffPeriod, skill, forecastValue);
-            return new ForecastScheduleValuePair() { ForecastValue = forecastValue, ScheduleValue = scheduledValue };
+            return new ForecastScheduleValuePair { ForecastValue = forecastValue, ScheduleValue = scheduledValue };
         }
 
         private static double BoostedTweakedSkillStaffPeriodValue(ISkillStaffPeriod skillStaffPeriod, ISkill skill, double forecastMinutes)

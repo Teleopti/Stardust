@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 
             if (skillStaffPeriodList == null)
                 return null;
-            if (skillStaffPeriodList.Count() == 0)
+            if (!skillStaffPeriodList.Any())
                 return null;
 
             var calculator =

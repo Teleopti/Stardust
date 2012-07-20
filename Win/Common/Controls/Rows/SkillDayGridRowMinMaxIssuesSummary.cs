@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
         private void drawMinMaxIssues(CellInfo cellInfo)
         {
             var skillStaffPeriods = SkillStaffPeriodList;
-            if (skillStaffPeriods==null || skillStaffPeriods.Count() == 0) return;
+            if (skillStaffPeriods==null || !skillStaffPeriods.Any()) return;
 
             StringBuilder toolTip = new StringBuilder();
             
