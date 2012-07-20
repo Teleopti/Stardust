@@ -614,6 +614,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private DayOffDecisionMakerExecuter createTarget()
         {
+			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+
             return new DayOffDecisionMakerExecuter(
                                       _rollbackService,
                                       _smartDayOffBackToLegalStateService,
@@ -630,7 +632,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                       _originalStateContainer, 
                                       _optimizationOverLimitDecider,
                                       _nightRestWhiteSpotSolverService,
-                                      _schedulingOptionsCreator
+                                      _schedulingOptionsCreator,
+									  mainShiftOptimizeActivitySpecificationSetter
                                       );
         }
     }

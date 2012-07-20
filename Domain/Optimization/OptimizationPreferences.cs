@@ -104,10 +104,15 @@ namespace Teleopti.Ccc.Domain.Optimization
         public bool KeepShifts { get; set; }
         public bool AlterBetween { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public IList<IActivity > SelectedActivities { get; set; }
+        public IList<IActivity> SelectedActivities { get; set; }
 
         public TimePeriod SelectedTimePeriod { get; set; }
         public double KeepShiftsValue { get; set; }
+
+		public ShiftPreferences()
+		{
+			SelectedActivities = new List<IActivity>();
+		}
     }
 
 	public class AdvancedPreferences : IAdvancedPreferences

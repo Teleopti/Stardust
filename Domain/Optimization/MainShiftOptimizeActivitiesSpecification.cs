@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             IVisualLayerCollection other = obj.ProjectionService().CreateProjection();
 
             return (CorrectShiftCategory(obj)
-                && CorrectContractTime(other)
                 && CorrectStart(other)
                 && CorrectEnd(other)
                 && CorrectAlteredBetween(other)
@@ -42,11 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             return (compareLockedActivities(_visualLayerColl, other) && compareLockedActivities(other, _visualLayerColl));
 
-        }
-
-        public bool CorrectContractTime(IVisualLayerCollection other)
-        {
-            return _visualLayerColl.ContractTime().Equals(other.ContractTime());
         }
 
         public bool CorrectShiftCategory(IMainShift shift)
