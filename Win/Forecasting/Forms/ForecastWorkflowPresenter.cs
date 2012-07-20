@@ -40,12 +40,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 unitOfWork.Reassociate(_model.Workload);
                 if (!LazyLoadingManager.IsInitialized(_model.Workload.TemplateWeekCollection))
                     LazyLoadingManager.Initialize(_model.Workload.TemplateWeekCollection);
-                
-                for(var i=0; i<_model.Workload.TemplateWeekCollection.Count; i++)
-                {
-                    if(!LazyLoadingManager.IsInitialized(_model.Workload.TemplateWeekCollection[i].OpenForWork))
-                        LazyLoadingManager.Initialize(_model.Workload.TemplateWeekCollection[i].OpenForWork);
-                }
+
+            	foreach (var workloadDayTemplate in _model.Workload.TemplateWeekCollection.Values)
+				{
+					if (!LazyLoadingManager.IsInitialized(workloadDayTemplate.OpenForWork))
+						LazyLoadingManager.Initialize(workloadDayTemplate.OpenForWork);
+            	}
             }
             
             _model.InitializeOutliers();   
