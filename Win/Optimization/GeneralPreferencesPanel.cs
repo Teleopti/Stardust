@@ -176,15 +176,7 @@ namespace Teleopti.Ccc.Win.Optimization
             setNumericUpDownStudentAvailabilitiesStatus();
         }
 
-        private void checkBoxShiftCategoryLimitations_CheckedChanged(object sender, System.EventArgs e)
-        {
-            new ShiftsPreferencesPanelShiftCategoryLimits { UseShiftCategoryLimit = checkBoxShiftCategoryLimitations.Checked }.PublishEvent("ShiftsPreferencesPanelShiftCategoryLimits", _eventAggregator);
-        }
+       
     }
 
-
-    public class ShiftsPreferencesPanelShiftCategoryLimits
-    {
-        public bool UseShiftCategoryLimit { get; set; }
-    }
 }

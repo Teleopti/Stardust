@@ -68,17 +68,10 @@ namespace Teleopti.Ccc.Win.Optimization
             shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
             panels = new List<IDataExchange>{generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1};
 
-            if (_eventAggregator != null)
-                _eventAggregator.GetEvent<GenericEvent<ShiftsPreferencesPanelShiftCategoryLimits>>().Subscribe(EnableDisableShiftTab);
-
             AddToHelpContext();
             SetColor();
         }
 
-        private void EnableDisableShiftTab(EventParameters<ShiftsPreferencesPanelShiftCategoryLimits> obj)
-        {
-            tabPageShifts.Enabled = obj.Value.UseShiftCategoryLimit ;
-        }
 
         #region IDataExchange Members
 

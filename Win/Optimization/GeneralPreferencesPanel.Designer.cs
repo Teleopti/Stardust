@@ -231,7 +231,6 @@
             this.checkBoxShiftCategoryLimitations.TabIndex = 12;
             this.checkBoxShiftCategoryLimitations.Text = "xxShiftCategoryLimitations";
             this.checkBoxShiftCategoryLimitations.UseVisualStyleBackColor = true;
-            this.checkBoxShiftCategoryLimitations.CheckedChanged += new System.EventHandler(this.checkBoxShiftCategoryLimitations_CheckedChanged);
             // 
             // checkBoxStudentAvailabilities
             // 
