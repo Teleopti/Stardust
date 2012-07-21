@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
 		private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
 		public ExtendReduceDaysOffOptimizer(
 			IPeriodValueCalculator periodValueCalculator,
@@ -55,7 +56,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
 			IDayOffOptimizerValidator dayOffOptimizerValidator,
 			IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider,
-			ISchedulingOptionsCreator schedulingOptionsCreator)
+			ISchedulingOptionsCreator schedulingOptionsCreator,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter
+			)
 		{
 			_periodValueCalculator = periodValueCalculator;
 			_personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -77,6 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimizerValidator = dayOffOptimizerValidator;
 			_optimizationOverLimitDecider = optimizationOverLimitDecider;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
+			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		}
 
 		public bool Execute()
@@ -203,11 +207,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 				IShiftCategory originalShiftCategory = null;
 				IScheduleDay originalScheduleDay = originalStateContainer.OldPeriodDaysState[dateOnly];
 				IPersonAssignment originalPersonAssignment = originalScheduleDay.AssignmentHighZOrder();
+				schedulingOptions.MainShiftOptimizeActivitySpecification = null;
 				if (originalPersonAssignment != null)
 				{
 					IMainShift originalMainShift = originalPersonAssignment.MainShift;
 					if (originalMainShift != null)
+					{
 						originalShiftCategory = originalMainShift.ShiftCategory;
+						_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalMainShift, dateOnly);
+					}
+						
 				}
 
 				var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
