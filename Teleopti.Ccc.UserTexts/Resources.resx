@@ -10870,7 +10870,7 @@ These options are activated:
     <comment>Label for retail skill</comment>
   </data>
   <data name="ScheduledEmployees" xml:space="preserve">
-    <value>Scheduled Employess</value>
+    <value>Scheduled Employees</value>
     <comment>Label for retail skill</comment>
   </data>
   <data name="ScheduledEmployeesIncoming" xml:space="preserve">

@@ -18444,7 +18444,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scheduled Employess.
+        ///   Looks up a localized string similar to Scheduled Employees.
         /// </summary>
         public static string ScheduledEmployees {
             get {
