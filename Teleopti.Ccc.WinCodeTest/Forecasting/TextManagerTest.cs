@@ -29,9 +29,12 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
                 Expect.Call(_skillType.ForecastSource).Return(ForecastSource.Time);
                 Expect.Call(_skillType.ForecastSource).Return(ForecastSource.Facsimile);
                 Expect.Call(_skillType.ForecastSource).Return(ForecastSource.InboundTelephony);
+                Expect.Call(_skillType.ForecastSource).Return(ForecastSource.Retail);
             }
             using (mocks.Playback())
             {
+                _target = new TextManager(_skillType);
+                Assert.IsTrue(_target.WordDictionary.ContainsKey("Tasks"));
                 _target = new TextManager(_skillType);
                 Assert.IsTrue(_target.WordDictionary.ContainsKey("Tasks"));
                 _target = new TextManager(_skillType);

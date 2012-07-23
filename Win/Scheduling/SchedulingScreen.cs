@@ -5846,6 +5846,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     return 3;
                 case ForecastSource.MaxSeatSkill:
                     return 5;
+				case ForecastSource.Retail:
+					return 6;
                 default:
                     return 2;
             }

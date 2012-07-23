@@ -556,6 +556,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actual Employees.
+        /// </summary>
+        public static string ActualEmployees {
+            get {
+                return ResourceManager.GetString("ActualEmployees", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual handling time.
         /// </summary>
         public static string ActualHandlingTime {
@@ -1255,6 +1264,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AfterContactWork {
             get {
                 return ResourceManager.GetString("AfterContactWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After customer work time.
+        /// </summary>
+        public static string AfterCustomerWorkTime {
+            get {
+                return ResourceManager.GetString("AfterCustomerWorkTime", resourceCulture);
             }
         }
         
@@ -2541,6 +2559,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average after customer work.
+        /// </summary>
+        public static string AverageAfterCustomerWork {
+            get {
+                return ResourceManager.GetString("AverageAfterCustomerWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average AFW.
         /// </summary>
         public static string AverageAFW {
@@ -2564,6 +2591,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AverageCalls {
             get {
                 return ResourceManager.GetString("AverageCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average Customers.
+        /// </summary>
+        public static string AverageCustomers {
+            get {
+                return ResourceManager.GetString("AverageCustomers", resourceCulture);
             }
         }
         
@@ -3189,6 +3225,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculated customers.
+        /// </summary>
+        public static string CalculatedCustomers {
+            get {
+                return ResourceManager.GetString("CalculatedCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculated e-mails.
         /// </summary>
         public static string CalculatedEmails {
@@ -3320,6 +3365,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CampaignCallsPercentSign {
             get {
                 return ResourceManager.GetString("CampaignCallsPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign customers %.
+        /// </summary>
+        public static string CampaignCustomersPercent {
+            get {
+                return ResourceManager.GetString("CampaignCustomersPercent", resourceCulture);
             }
         }
         
@@ -4969,6 +5023,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customers.
+        /// </summary>
+        public static string Customers {
+            get {
+                return ResourceManager.GetString("Customers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customize Quick Access Toolbar.
         /// </summary>
         public static string CustomizeQuickAccessToolbar {
@@ -6295,6 +6358,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deviation customers:.
+        /// </summary>
+        public static string DeviationCustomersColon {
+            get {
+                return ResourceManager.GetString("DeviationCustomersColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Devaiation e-mails:.
         /// </summary>
         public static string DeviationEmailsColon {
@@ -6772,6 +6844,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Employee.
+        /// </summary>
+        public static string Employee {
+            get {
+                return ResourceManager.GetString("Employee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employee Information.
         /// </summary>
         public static string EmployeeInformation {
@@ -6804,6 +6885,42 @@ namespace Teleopti.Ccc.UserTexts {
         public static string EmployeeNumber {
             get {
                 return ResourceManager.GetString("EmployeeNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employees.
+        /// </summary>
+        public static string Employees {
+            get {
+                return ResourceManager.GetString("Employees", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employees inc.
+        /// </summary>
+        public static string EmployeesInc {
+            get {
+                return ResourceManager.GetString("EmployeesInc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employees inc with shrinkage.
+        /// </summary>
+        public static string EmployeesIncWithShrinkage {
+            get {
+                return ResourceManager.GetString("EmployeesIncWithShrinkage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employees with shrinkage.
+        /// </summary>
+        public static string EmployeesWithShrinkage {
+            get {
+                return ResourceManager.GetString("EmployeesWithShrinkage", resourceCulture);
             }
         }
         
@@ -8204,6 +8321,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forecasted average after customer work.
+        /// </summary>
+        public static string ForecastedAverageAfterCustomerWork {
+            get {
+                return ResourceManager.GetString("ForecastedAverageAfterCustomerWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forecasted average talk time.
         /// </summary>
         public static string ForecastedAverageTalkTime {
@@ -8231,6 +8357,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forecasted customers.
+        /// </summary>
+        public static string ForecastedCustomers {
+            get {
+                return ResourceManager.GetString("ForecastedCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forecasted customers:.
+        /// </summary>
+        public static string ForecastedCustomersColon {
+            get {
+                return ResourceManager.GetString("ForecastedCustomersColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forecasted distributed demand.
         /// </summary>
         public static string ForecastedDistributedDemand {
@@ -8245,6 +8389,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ForecastedEmails {
             get {
                 return ResourceManager.GetString("ForecastedEmails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forecasted Employees.
+        /// </summary>
+        public static string ForecastedEmployees {
+            get {
+                return ResourceManager.GetString("ForecastedEmployees", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forecasted Employees incoming.
+        /// </summary>
+        public static string ForecastedEmployeesIncoming {
+            get {
+                return ResourceManager.GetString("ForecastedEmployeesIncoming", resourceCulture);
             }
         }
         
@@ -9402,6 +9564,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Index after customer work.
+        /// </summary>
+        public static string IndexAfterCustomerWork {
+            get {
+                return ResourceManager.GetString("IndexAfterCustomerWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Index AFW.
         /// </summary>
         public static string IndexAFW {
@@ -9425,6 +9596,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string IndexCalls {
             get {
                 return ResourceManager.GetString("IndexCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Index customers.
+        /// </summary>
+        public static string IndexCustomers {
+            get {
+                return ResourceManager.GetString("IndexCustomers", resourceCulture);
             }
         }
         
@@ -11284,6 +11464,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum Employees.
+        /// </summary>
+        public static string MaximumEmployees {
+            get {
+                return ResourceManager.GetString("MaximumEmployees", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum hours per week cannot be more than 168 hours.
         /// </summary>
         public static string MaximumHoursPerWeekCannotBeMoreThan168Hours {
@@ -11721,6 +11910,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MinimumAgents {
             get {
                 return ResourceManager.GetString("MinimumAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum Employees.
+        /// </summary>
+        public static string MinimumEmployees {
+            get {
+                return ResourceManager.GetString("MinimumEmployees", resourceCulture);
             }
         }
         
@@ -14023,6 +14221,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customers.
+        /// </summary>
+        public static string OfferedCustomers {
+            get {
+                return ResourceManager.GetString("OfferedCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Offered e-mails.
         /// </summary>
         public static string OfferedEmails {
@@ -14609,6 +14816,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Original after customer work.
+        /// </summary>
+        public static string OriginalAfterCustomerWork {
+            get {
+                return ResourceManager.GetString("OriginalAfterCustomerWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original AFW.
         /// </summary>
         public static string OriginalAFW {
@@ -14636,6 +14852,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Original customers.
+        /// </summary>
+        public static string OriginalCustomers {
+            get {
+                return ResourceManager.GetString("OriginalCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original handling time.
         /// </summary>
         public static string OriginalHandlingTime {
@@ -14650,6 +14875,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OriginalOfferedCalls {
             get {
                 return ResourceManager.GetString("OriginalOfferedCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original customers.
+        /// </summary>
+        public static string OriginalOfferedCustomers {
+            get {
+                return ResourceManager.GetString("OriginalOfferedCustomers", resourceCulture);
             }
         }
         
@@ -18210,6 +18444,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduled Employess.
+        /// </summary>
+        public static string ScheduledEmployees {
+            get {
+                return ResourceManager.GetString("ScheduledEmployees", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scheduled Employees incoming.
+        /// </summary>
+        public static string ScheduledEmployeesIncoming {
+            get {
+                return ResourceManager.GetString("ScheduledEmployeesIncoming", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schedule description.
         /// </summary>
         public static string ScheduleDescripton {
@@ -19077,6 +19329,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SeriousUnderstaffing {
             get {
                 return ResourceManager.GetString("SeriousUnderstaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Served Customers.
+        /// </summary>
+        public static string ServedCustomers {
+            get {
+                return ResourceManager.GetString("ServedCustomers", resourceCulture);
             }
         }
         
@@ -20185,6 +20446,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SkillTypeProject {
             get {
                 return ResourceManager.GetString("SkillTypeProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retail.
+        /// </summary>
+        public static string SkillTypeRetail {
+            get {
+                return ResourceManager.GetString("SkillTypeRetail", resourceCulture);
             }
         }
         
@@ -22090,6 +22360,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total customers.
+        /// </summary>
+        public static string TotalCustomers {
+            get {
+                return ResourceManager.GetString("TotalCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total e-mails.
         /// </summary>
         public static string TotalEmails {
@@ -22990,6 +23269,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validated after customer work.
+        /// </summary>
+        public static string ValidatedAfterCustomerWork {
+            get {
+                return ResourceManager.GetString("ValidatedAfterCustomerWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validated AFW.
         /// </summary>
         public static string ValidatedAFW {
@@ -23022,6 +23310,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ValidatedCalls {
             get {
                 return ResourceManager.GetString("ValidatedCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validated customers.
+        /// </summary>
+        public static string ValidatedCustomers {
+            get {
+                return ResourceManager.GetString("ValidatedCustomers", resourceCulture);
             }
         }
         
@@ -23346,6 +23643,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WaitingThreeDots {
             get {
                 return ResourceManager.GetString("WaitingThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Walk Aways.
+        /// </summary>
+        public static string WalkAways {
+            get {
+                return ResourceManager.GetString("WalkAways", resourceCulture);
             }
         }
         

@@ -3059,6 +3059,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.imageListSkillTypeIcons.Images.SetKeyName(3, "ccc_Skill_Backoffice_16x16.png");
 			this.imageListSkillTypeIcons.Images.SetKeyName(4, "ccc_PeopleScehdulePeriodView.png");
 			this.imageListSkillTypeIcons.Images.SetKeyName(5, "desktop.png");
+			this.imageListSkillTypeIcons.Images.SetKeyName(6, "skill_retail.png");
 			// 
 			// contextMenuStripRestrictionView
 			// 
