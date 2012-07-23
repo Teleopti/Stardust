@@ -334,7 +334,7 @@ begin
 		[QueueId] [int] IDENTITY(1,1) NOT NULL,
 		[ParentQueueId] [int] NULL,
 		[Endpoint] [nvarchar](250) NOT NULL,
-	 CONSTRAINT [PK_Queues_1] PRIMARY KEY CLUSTERED 
+	 CONSTRAINT [PK_Queues] PRIMARY KEY CLUSTERED 
 	(
 		[QueueId] ASC
 	)
@@ -349,7 +349,7 @@ begin
 		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[Key] [nvarchar](250) NOT NULL,
 		[Value] [varbinary](max) NOT NULL,
-	 CONSTRAINT [PK_SubscriptionStorage1] PRIMARY KEY CLUSTERED 
+	 CONSTRAINT [PK_SubscriptionStorage] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)
