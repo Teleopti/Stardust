@@ -593,6 +593,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			return currentStartDate.AddDays(number - 1);
 		}
+
+		public DateOnly EvaluateProperInitialStartDate(DateOnly currentStartDate, int number, DateOnly requestedDate)
+		{
+			var difference = (int)requestedDate.Date.Subtract(currentStartDate.Date).TotalDays;
+			var wholeVirtualPeriods = difference / number;
+			return Increase(currentStartDate, number * wholeVirtualPeriods).AddDays(1);
+		}
 	}
 
 	public class IncreaseMonthByOne : IIncreasePeriodByOne
@@ -608,6 +615,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			return new DateOnly(_cultureInfo.Calendar.AddMonths(currentStartDate.Date, number)).AddDays(-1);
 		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "32*number")]
+		public DateOnly EvaluateProperInitialStartDate(DateOnly currentStartDate, int number, DateOnly requestedDate)
+		{
+			var difference = (int)requestedDate.Date.Subtract(currentStartDate.Date).TotalDays;
+			var wholeVirtualPeriods = difference / (32 * number);
+			return Increase(currentStartDate, number * wholeVirtualPeriods).AddDays(1);
+		}
 	}
 
 	public class IncreaseWeekByOne : IIncreasePeriodByOne
@@ -615,6 +630,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public DateOnly Increase(DateOnly currentStartDate, int number)
 		{
 			return currentStartDate.AddDays((number * 7) - 1);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "7*number")]
+		public DateOnly EvaluateProperInitialStartDate(DateOnly currentStartDate, int number, DateOnly requestedDate)
+		{
+			var difference = (int)requestedDate.Date.Subtract(currentStartDate.Date).TotalDays;
+			var wholeVirtualPeriods = difference / (7 * number);
+			return Increase(currentStartDate, number * wholeVirtualPeriods).AddDays(1);
 		}
 	}
 }

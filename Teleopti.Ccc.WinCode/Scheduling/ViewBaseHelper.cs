@@ -611,12 +611,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public static bool CheckOverrideDayOffAndLoadedAndScheduledPeriod(IPerson person, DateOnlyPeriod period)
         {
             IList<ISchedulePeriod> schedulePeriods = person.PersonSchedulePeriods(period);
-            bool isOk = false;
-            foreach (var dateOnly in period.DayCollection())
+            if (period.DayCollection().Select(person.VirtualSchedulePeriod).Any(vPeriod => !vPeriod.IsValid))
             {
-                var vPeriod = person.VirtualSchedulePeriod(dateOnly);
-                if (!vPeriod.IsValid)
-                    return false;
+            	return false;
             }
             foreach (SchedulePeriod schedulePeriod in schedulePeriods)
             {
@@ -624,14 +621,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     return true;
 
                 var startPeriod = schedulePeriod.GetSchedulePeriod(period.StartDate);
-                if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate && !isOk)
+                if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate)
                 {
                     var endPeriod = schedulePeriod.GetSchedulePeriod(period.EndDate);
                     if (endPeriod.HasValue && endPeriod.Value.EndDate == period.EndDate)
-                        isOk = true;
+                        return true;
                 }
             }
-            return isOk;
+            return false;
         }
 
 		public static HashSet<IVirtualSchedulePeriod> ExtractVirtualPeriods(IPerson person, DateOnlyPeriod period)
@@ -686,28 +683,24 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public static bool CheckOverrideTargetTimeLoadedAndScheduledPeriod(IPerson person, DateOnlyPeriod period)
         {
-            IList<ISchedulePeriod> schedulePeriods = person.PersonSchedulePeriods(period);
-            bool isOk = false;
-
-            foreach (var dateOnly in period.DayCollection())
+            var schedulePeriods = person.PersonSchedulePeriods(period);
+            if (period.DayCollection().Select(person.VirtualSchedulePeriod).Any(vPeriod => !vPeriod.IsValid))
             {
-                var vPeriod = person.VirtualSchedulePeriod(dateOnly);
-                if (!vPeriod.IsValid)
-                    return false;
+            	return false;
             }
-            foreach (SchedulePeriod schedulePeriod in schedulePeriods)
+            foreach (ISchedulePeriod schedulePeriod in schedulePeriods)
             {
                 if (!schedulePeriod.IsAverageWorkTimePerDayOverride)
                     return true;
                 var startPeriod = schedulePeriod.GetSchedulePeriod(period.StartDate);
-                if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate && !isOk)
+                if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate)
                 {
                     var endPeriod = schedulePeriod.GetSchedulePeriod(period.EndDate);
                     if (endPeriod.HasValue && endPeriod.Value.EndDate == period.EndDate)
-                        isOk = true;
+                        return true;
                 }
             }
-            return isOk;
+            return false;
         }
 
         #endregion

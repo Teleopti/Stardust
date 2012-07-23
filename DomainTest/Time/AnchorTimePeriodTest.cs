@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         /// <summary>
         /// Verifies flexibility limit (less than one) works.
         /// </summary>
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.Domain.Time.AnchorTimePeriod"), Test]
         [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyFlexibilityLimitLessThanOneWorks()
         {
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         /// <summary>
         /// Verifies flexibility limit (above hundred) works.
         /// </summary>
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.Domain.Time.AnchorTimePeriod"), Test]
         [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyFlexibilityLimitAboveHundredWorks()
         {

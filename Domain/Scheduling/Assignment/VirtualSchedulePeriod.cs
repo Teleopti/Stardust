@@ -7,7 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-
     public class VirtualSchedulePeriod : IVirtualSchedulePeriod
     {
         // the underlying SchedulePeriod
@@ -97,8 +96,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private DateOnlyPeriod getRolledDateOnlyPeriodForSchedulePeriod(DateOnly requestedDateTime, ISchedulePeriod thePeriod, CultureInfo cultureInfo)
         {
-            DateOnly start = thePeriod.DateFrom;
             var periodIncrementor = thePeriod.PeriodIncrementor(thePeriod.PeriodType, cultureInfo);
+			DateOnly start = periodIncrementor.EvaluateProperInitialStartDate(thePeriod.DateFrom, _number, requestedDateTime);
             var currentPeriod = new DateOnlyPeriod(start, periodIncrementor.Increase(start, _number));
             while (!currentPeriod.Contains(requestedDateTime))
             {
@@ -128,11 +127,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 return new ReadOnlyCollection<IShiftCategoryLimitation>(new List<IShiftCategoryLimitation>());
             return _schedulePeriod.ShiftCategoryLimitationCollection();
         }
-
-        //public IPersonPeriod PersonPeriod
-        //{
-        //    get { return _personPeriod; }
-        //}
 
         public int MustHavePreference
         {
@@ -328,16 +322,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 return _schedulePeriod.Seasonality;
             }
         }
-
-        //public ITeam Team
-        //{
-        //    get { return _personPeriod.Team; }
-        //}
-
-        //public ISite Site
-        //{
-        //    get { return _personPeriod.Team.Site; }
-        //}
 
         public virtual TimeSpan BalanceOut
         {
