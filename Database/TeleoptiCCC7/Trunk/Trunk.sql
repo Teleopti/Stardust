@@ -83,6 +83,10 @@ IF NOT EXISTS (SELECT * FROM SkillType WHERE ForecastSource=8)
 	BEGIN
 		DECLARE @creator uniqueidentifier
 		SELECT TOP 1 @creator=CreatedBy FROM SkillType
+		IF @creator IS NULL
+			BEGIN
+				SELECT TOP 1 @creator=Id FROM Person
+			END
 		INSERT INTO SkillType (Id,ForecastType,Version,CreatedBy,UpdatedBy,CreatedOn,UpdatedOn,Name,ShortName,ForecastSource,IsDeleted)
 		VALUES (NEWID(),1,1,@creator,@creator,GETUTCDATE(),GETUTCDATE(),N'SkillTypeRetail',null,8,0)
 	END
