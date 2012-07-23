@@ -153,7 +153,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _showResult = true;
         private bool _showGraph = true;
         private bool _showRibbonTexts = true;
-    	private bool _gridBeginUpdate;
 
         #endregion
 
@@ -298,9 +297,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             _tmpTimer.Interval = 100;
             _tmpTimer.Enabled = false;
             _tmpTimer.Tick += _tmpTimer_Tick;
-
-			contextMenuViews.Closed += ContextMenuViewsClosed;
-
         }
 
         private void _tmpTimer_Tick(object sender, EventArgs e)
@@ -2887,20 +2883,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region Context menu events
 
-		void ContextMenuViewsClosed(object sender, ToolStripDropDownClosedEventArgs e)
-		{
-			_grid.EndUpdate();
-			_gridBeginUpdate = false;
-		}
-
         private void contextMenuViews_Opening(object sender, CancelEventArgs e)
         {
-			if(!_gridBeginUpdate)
-			{
-				_gridBeginUpdate = true;
-				_grid.BeginUpdate();
-			}
-
             if (_scheduleView == null)
                 e.Cancel = true;
 
@@ -7015,7 +6999,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _grid.SupportsPrepareViewStyleInfo = true;
 
-            _grid.Refresh();
+            _grid.Invalidate();
         }
 
         private void replyAndDenyRequestFromRequestDetailsView(
