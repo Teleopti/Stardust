@@ -102,13 +102,34 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             double demand = 10.2;
             typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, demand);
             double shrinkage = target.Shrinkage.Value;
-            double expectedDemandWithShrinkage = (1d + shrinkage)*demand;
+            double expectedDemandWithShrinkage = demand / (1 - shrinkage);
             target.UseShrinkage = true;
 
             Assert.AreEqual(Math.Round(expectedDemandWithShrinkage, 2), Math.Round(target.ForecastedIncomingDemand, 2));
 
             target.UseShrinkage = false;
             Assert.AreEqual(demand, Math.Round(target.ForecastedIncomingDemand, 2));
+        }
+
+        [Test]
+        public void VerifyStaffDemandIfShrinkageIs50Percent()
+        {
+            double currentStaff = 10.0;
+            typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, currentStaff);
+            double shrinkage = target.Shrinkage.Value;
+            double expectedDemandWithShrinkage = currentStaff / (1 - shrinkage);
+            target.UseShrinkage = true;
+
+            Assert.AreEqual(Math.Round(expectedDemandWithShrinkage,2), Math.Round(target.ForecastedIncomingDemand,2));
+        }
+
+        [Test]
+        public void VerifyStaffDemandIfShrinkageIs100Percent()
+        {
+            double currentStaff = 10.0;
+            target.Shrinkage = new Percent(1.0);
+            typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, currentStaff);
+            Assert.AreEqual(0, Math.Round(target.ForecastedIncomingDemand, 2));
         }
     }
 }

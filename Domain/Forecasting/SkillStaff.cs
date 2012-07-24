@@ -307,7 +307,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// </remarks>
 		public double CalculatedTrafficIntensityWithShrinkage
 		{
-			get { return _forecastedIncomingDemand * (1d + _shrinkage.Value); }
+            get
+            {
+                if (_shrinkage.Value >= 1.0)
+                    return 0;
+                return _forecastedIncomingDemand / (1 - _shrinkage.Value);
+            }
+            //get { return _forecastedIncomingDemand * (1d + _shrinkage.Value); }
 		}
 
 		public bool UseShrinkage
