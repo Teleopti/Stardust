@@ -88,5 +88,9 @@ IF NOT EXISTS (SELECT * FROM SkillType WHERE ForecastSource=8)
 				SELECT TOP 1 @creator=Id FROM Person
 			END
 		INSERT INTO SkillType (Id,ForecastType,Version,CreatedBy,UpdatedBy,CreatedOn,UpdatedOn,Name,ShortName,ForecastSource,IsDeleted)
-		VALUES (NEWID(),1,1,@creator,@creator,GETUTCDATE(),GETUTCDATE(),N'SkillTypeRetail',null,8,0)
+		VALUES (NEWID(),0,1,@creator,@creator,GETUTCDATE(),GETUTCDATE(),N'SkillTypeRetail',null,8,0)
+	END
+ELSE
+	BEGIN
+		UPDATE SkillType SET ForecastType = 0 WHERE ForecastSource=8 AND ForecastType=1
 	END
