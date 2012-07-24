@@ -49,6 +49,28 @@ IF NOT EXIST "%ConfigPath%\DummyFolder" mkdir "%ConfigPath%\DummyFolder"
 ::Copy Config (3) to Content foler (2)
 for /f "tokens=2,3 delims=," %%g in (contentMapping.txt) do xcopy /e /d /y "%ConfigPath%\%%h" "%ContentDest%\%%g\" 
 
+::Settings for Sql Queues and Service bus
+
+COPY SqlServiceBusConfig\Teleopti.Ccc.Sdk.ServiceBus.Client.config %ContentDest%\SDK\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config /Y
+COPY SqlServiceBusConfig\Teleopti.Ccc.Sdk.ServiceBus.Client.config %ContentDest%\Web\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config /Y
+COPY SqlServiceBusConfig\RequestQueue.config %ContentDest%\TeleoptiCCC\Services\ServiceBus\RequestQueue.config /Y
+COPY SqlServiceBusConfig\RequestQueue.config %ContentDest%\TeleoptiCCC\Services\ServiceBus\GeneralQueue.config /Y
+COPY SqlServiceBusConfig\RequestQueue.config %ContentDest%\TeleoptiCCC\Services\ServiceBus\DenormalizeQueue.config /Y
+
+cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\SDK\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
+cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\Web\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
+cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\RequestQueue.config"
+cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\GeneralQueue.config"
+cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\DenormalizeQueue.config"
+
+SET /P analyticsconnection=< Customer\%customer%.AnalyticsConnection
+
+cscript replace.vbs $(ANALYTICS_CONNECTION) %analyticsconnection% "%ContentDest%\SDK\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
+cscript replace.vbs $(ANALYTICS_CONNECTION) %analyticsconnection% "%ContentDest%\Web\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
+cscript replace.vbs $(ANALYTICS_CONNECTION) %analyticsconnection% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\RequestQueue.config"
+cscript replace.vbs $(ANALYTICS_CONNECTION) %analyticsconnection% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\GeneralQueue.config"
+cscript replace.vbs $(ANALYTICS_CONNECTION) %analyticsconnection% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\DenormalizeQueue.config"
+
 ::Sign ClickOnce
 SET ClickOnceSignPath=%ContentDest%\TeleoptiCCC\Tools\ClickOnceSign
 SET ClientPath=%ContentDest%\Client
