@@ -38,14 +38,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 unitOfWork.Reassociate(_model.Workload);
-                if (!LazyLoadingManager.IsInitialized(_model.Workload.TemplateWeekCollection))
-                    LazyLoadingManager.Initialize(_model.Workload.TemplateWeekCollection);
-
-            	foreach (var workloadDayTemplate in _model.Workload.TemplateWeekCollection.Values)
-				{
-					if (!LazyLoadingManager.IsInitialized(workloadDayTemplate.OpenForWork))
-						LazyLoadingManager.Initialize(workloadDayTemplate.OpenForWork);
-            	}
+               
+                foreach (var templateDay in _model.Workload.TemplateWeekCollection)
+                {
+                    if (!LazyLoadingManager.IsInitialized(templateDay.Value.OpenForWork))
+                        LazyLoadingManager.Initialize(templateDay.Value.OpenForWork);
+                }
             }
             
             _model.InitializeOutliers();   
