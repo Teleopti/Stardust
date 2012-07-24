@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
            
 
-            if (skill.SkillType.ForecastSource == ForecastSource.Email || skill.SkillType.ForecastSource == ForecastSource.Backoffice || skill.SkillType.ForecastSource == ForecastSource.Time || skill.SkillType.ForecastSource == ForecastSource.Retail)
+            if (skill.SkillType.ForecastSource == ForecastSource.Email || skill.SkillType.ForecastSource == ForecastSource.Backoffice || skill.SkillType.ForecastSource == ForecastSource.Time)
             {
                 gridRow = new SkillDayGridRow(_rowManager, "TimeCell", "ForecastedHoursIncoming", UserTexts.Resources.ForecastedHoursIncoming);
                 gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
