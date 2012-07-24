@@ -17,6 +17,7 @@ ECHO customerFile is: %customerFile%
 
 ::Get base url into variable
 SET /P baseurl=< Customer\%customer%.BaseUrl
+SET /P analyticsconnection=< Customer\%customer%.AnalyticsConnection
 
 ::Replace tempoprary txt-file for Msi configuration
 COPY Customer\%customerFile% MSIInput.txt /Y
@@ -63,12 +64,10 @@ cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Services\Ser
 cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\GeneralQueue.config"
 cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\DenormalizeQueue.config"
 
-SET /P analyticsconnection=< Customer\%customer%.AnalyticsConnection
-
-cscript replace.vbs $(ANALYTICS_CONNECTION) %analyticsconnection% "%ContentDest%\SDK\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
-cscript replace.vbs $(ANALYTICS_CONNECTION) %analyticsconnection% "%ContentDest%\Web\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
-cscript replace.vbs $(ANALYTICS_CONNECTION) %analyticsconnection% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\RequestQueue.config"
-cscript replace.vbs $(ANALYTICS_CONNECTION) %analyticsconnection% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\GeneralQueue.config"
+cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\SDK\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
+cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\Web\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
+cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\TeleoptiCCC\Services\ServiceBus\RequestQueue.config"
+cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\TeleoptiCCC\Services\ServiceBus\GeneralQueue.config"
 cscript replace.vbs $(ANALYTICS_CONNECTION) %analyticsconnection% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\DenormalizeQueue.config"
 
 ::Sign ClickOnce
