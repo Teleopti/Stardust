@@ -12,8 +12,7 @@ ECHO Rootdir is: "%ROOTDIR%" >> Install.log
 ::================
 ECHO Start Service install >> Install.log
 SC QUERY AnalyticsEtlService
-IF NOT ERRORLEVEL 1060
-(
+IF NOT ERRORLEVEL 1060 (
 	SC DELETE AnalyticsEtlService
 	SC QUERY AnalyticsEtlService
 	IF NOT ERRORLEVEL 1060 CALL :ServiceError
@@ -21,8 +20,7 @@ IF NOT ERRORLEVEL 1060
 "%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" "..\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe" >> Install.log
 
 SC QUERY TeleoptiServiceBus
-IF NOT ERRORLEVEL 1060
-(
+IF NOT ERRORLEVEL 1060 (
 	SC DELETE TeleoptiServiceBus
 	SC QUERY TeleoptiServiceBus
 	IF NOT ERRORLEVEL 1060 CALL :ServiceError

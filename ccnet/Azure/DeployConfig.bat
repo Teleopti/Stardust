@@ -53,25 +53,25 @@ for /f "tokens=2,3 delims=," %%g in (contentMapping.txt) do xcopy /e /d /y "%Con
 ::Settings for Sql Queues and Service bus
 
 COPY SqlServiceBusConfig\Teleopti.Ccc.Sdk.ServiceBus.Client.config %ContentDest%\SDK\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config /Y
-COPY SqlServiceBusConfig\Teleopti.Ccc.Sdk.ServiceBus.Client.config %ContentDest%\Web\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config /Y
+COPY SqlServiceBusConfig\Teleopti.Ccc.Sdk.ServiceBus.Client.config %ContentDest%\Web\Bin\Teleopti.Ccc.Web.ServiceBus.Client.config /Y
 COPY SqlServiceBusConfig\Teleopti.Ccc.Sdk.ServiceBus.Client.config %ContentDest%\SDK\Teleopti.Ccc.Sdk.ServiceBus.Client.config /Y
-COPY SqlServiceBusConfig\Teleopti.Ccc.Sdk.ServiceBus.Client.config %ContentDest%\Web\Teleopti.Ccc.Sdk.ServiceBus.Client.config /Y
+COPY SqlServiceBusConfig\Teleopti.Ccc.Sdk.ServiceBus.Client.config %ContentDest%\Web\Teleopti.Ccc.Web.ServiceBus.Client.config /Y
 COPY SqlServiceBusConfig\RequestQueue.config %ContentDest%\TeleoptiCCC\Services\ServiceBus\RequestQueue.config /Y
 COPY SqlServiceBusConfig\GeneralQueue.config %ContentDest%\TeleoptiCCC\Services\ServiceBus\GeneralQueue.config /Y
 COPY SqlServiceBusConfig\DenormalizeQueue.config %ContentDest%\TeleoptiCCC\Services\ServiceBus\DenormalizeQueue.config /Y
 
 cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\SDK\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
-cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\Web\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
+cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\Web\Bin\Teleopti.Ccc.Web.ServiceBus.Client.config"
 cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\SDK\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
-cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\Web\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
+cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\Web\Teleopti.Ccc.Web.ServiceBus.Client.config"
 cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\RequestQueue.config"
 cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\GeneralQueue.config"
 cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Services\ServiceBus\DenormalizeQueue.config"
 
 cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\SDK\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
-cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\Web\Bin\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
+cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\Web\Bin\Teleopti.Ccc.Web.ServiceBus.Client.config"
 cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\SDK\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
-cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\Web\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
+cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\Web\Teleopti.Ccc.Web.ServiceBus.Client.config"
 cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\TeleoptiCCC\Services\ServiceBus\RequestQueue.config"
 cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\TeleoptiCCC\Services\ServiceBus\GeneralQueue.config"
 cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentDest%\TeleoptiCCC\Services\ServiceBus\DenormalizeQueue.config"
