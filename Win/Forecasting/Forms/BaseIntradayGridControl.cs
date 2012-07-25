@@ -451,7 +451,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 if (_owner != null)
                 {
                     _owner.TriggerValuesChanged();
-                    if (_owner.SkillType.ForecastSource != ForecastSource.InboundTelephony)
+                    if (_owner.SkillType.ForecastSource != ForecastSource.InboundTelephony && _owner.SkillType.ForecastSource!=ForecastSource.Retail)
                         range = GridRangeInfo.Table();
                 }
                 RefreshRange(range, true);
