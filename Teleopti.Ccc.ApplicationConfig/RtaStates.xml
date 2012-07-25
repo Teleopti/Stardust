@@ -523,12 +523,13 @@
     <state name="Not Active">14</state>
   </RtaState>
   <RtaState name="CiscoUCCX" platformTypeId="420D26A8-D2B8-4325-81C2-DAA15D211571">
-    <state name="Log In">1</state>
+    <state name="Log In">0</state>
+	<state name="Log Out">1</state>
     <state name="Not Ready">2</state>
     <state name="Ready">3</state>
-    <state name="Reserved">4</state>
-    <state name="Talking">5</state>
-    <state name="Work">6</state>
-    <state name="Log Out">7</state>
+    <state name="Talking">4</state>
+    <state name="Work">5</state>
+    <state name="Busy Other">7</state>
+	<state name="Reserved">8</state>
   </RtaState>
 </Rta>
