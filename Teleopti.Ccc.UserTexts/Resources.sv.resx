@@ -10432,4 +10432,109 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ManualAgents" xml:space="preserve">
     <value>Agenter (manuell ersättning)</value>
   </data>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>Status för din förfrågan har ändrats, du kan inte ändra eller ta bort den.</value>
+  </data>
+  <data name="SkillTypeRetail" xml:space="preserve">
+    <value>Butiker</value>
+  </data>
+  <data name="ActualEmployees" xml:space="preserve">
+    <value>Verkligt antal anställda</value>
+  </data>
+  <data name="AfterCustomerWorkTime" xml:space="preserve">
+    <value>Efterbearbetningstid</value>
+  </data>
+  <data name="AverageAfterCustomerWork" xml:space="preserve">
+    <value>Genomsnittlig efterbearbetning</value>
+  </data>
+  <data name="AverageCustomers" xml:space="preserve">
+    <value>Genomsnittligt antal kunder</value>
+  </data>
+  <data name="CalculatedCustomers" xml:space="preserve">
+    <value>Beräknade kunder</value>
+  </data>
+  <data name="CampaignCustomersPercent" xml:space="preserve">
+    <value>Kampanjkunder %</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Kunder</value>
+  </data>
+  <data name="DeviationCustomersColon" xml:space="preserve">
+    <value>Avvikelse kunder:</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Anställd</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Anställda</value>
+  </data>
+  <data name="EmployeesInc" xml:space="preserve">
+    <value>Anställda ink.</value>
+  </data>
+  <data name="EmployeesIncWithShrinkage" xml:space="preserve">
+    <value>Anställda ink. med shrinkage</value>
+  </data>
+  <data name="EmployeesWithShrinkage" xml:space="preserve">
+    <value>Anställda med shrinkage</value>
+  </data>
+  <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
+    <value>Prognosticerad genomsnittlig efterbearbetning</value>
+  </data>
+  <data name="ForecastedCustomers" xml:space="preserve">
+    <value>Prognosticerade kunder</value>
+  </data>
+  <data name="ForecastedCustomersColon" xml:space="preserve">
+    <value>Prognosticerade kunder:</value>
+  </data>
+  <data name="ForecastedEmployees" xml:space="preserve">
+    <value>Prognosticerade anställda</value>
+  </data>
+  <data name="ForecastedEmployeesIncoming" xml:space="preserve">
+    <value>Prognosticerade anställda ink.</value>
+  </data>
+  <data name="IndexAfterCustomerWork" xml:space="preserve">
+    <value>Index efterbearbetning</value>
+  </data>
+  <data name="IndexCustomers" xml:space="preserve">
+    <value>Kundindex</value>
+  </data>
+  <data name="MaximumEmployees" xml:space="preserve">
+    <value>Max anställda</value>
+  </data>
+  <data name="MinimumEmployees" xml:space="preserve">
+    <value>Min anställda</value>
+  </data>
+  <data name="OfferedCustomers" xml:space="preserve">
+    <value>Kunder</value>
+  </data>
+  <data name="OriginalAfterCustomerWork" xml:space="preserve">
+    <value>Ursprunglig efterbearbetning</value>
+  </data>
+  <data name="OriginalCustomers" xml:space="preserve">
+    <value>Ursprungligt antal kunder</value>
+  </data>
+  <data name="OriginalOfferedCustomers" xml:space="preserve">
+    <value>Ursprungligt antal kunder</value>
+  </data>
+  <data name="ScheduledEmployees" xml:space="preserve">
+    <value>Schemalagda anställda</value>
+  </data>
+  <data name="ScheduledEmployeesIncoming" xml:space="preserve">
+    <value>Schemalagda anställda inkommande</value>
+  </data>
+  <data name="ServedCustomers" xml:space="preserve">
+    <value>Expedierade kunder</value>
+  </data>
+  <data name="TotalCustomers" xml:space="preserve">
+    <value>Totalt antal kunder</value>
+  </data>
+  <data name="ValidatedAfterCustomerWork" xml:space="preserve">
+    <value>Validerad efterbearbetning</value>
+  </data>
+  <data name="ValidatedCustomers" xml:space="preserve">
+    <value>Validerade kunder</value>
+  </data>
+  <data name="WalkAways" xml:space="preserve">
+    <value>Walk aways</value>
+  </data>
 </root>
