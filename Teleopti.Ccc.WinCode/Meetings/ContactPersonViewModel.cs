@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             if (tmp.Contains(" "))
             {
                tmp = Regex.Replace(tmp, @"\s+", " ", RegexOptions.Multiline);
-               fullNameFound = FullName.ToUpper().Equals(tmp);
+               fullNameFound = FullName.ToUpper(CultureInfo.CurrentUICulture).Equals(tmp);
             }
 
             return firstNameFound || lastNameFound || teamFound || siteFound || skillsFound || emailFound || employmentNumberFound || fullNameFound;
