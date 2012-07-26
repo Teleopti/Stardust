@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
 			return null;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "30-minute")]
 		public static int FindRemainsToEvenHalfHour(int minute)
 		{
 			if (minute == 0) return 0;
