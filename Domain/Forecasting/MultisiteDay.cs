@@ -374,6 +374,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             IList<ISkillStaffPeriod> splittedPeriods = new List<ISkillStaffPeriod>(
                 _multisiteSkillDay.SkillStaffPeriodCollection);
+
             splittedPeriods = SkillDayStaffHelper.CombineSkillStaffPeriodsAndMultisitePeriods(
                 splittedPeriods, _multisitePeriodCollection);
 
@@ -394,7 +395,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     foreach (var skillDataPeriod in skillDay.SkillDataPeriodCollection.OrderBy(p => p.Period.StartDateTime))
                     {
                         if (skillDataPeriod.Period.StartDateTime>content.SkillStaffPeriod.Period.EndDateTime) break;
-                        if (skillDataPeriod.Period.EndDateTime<content.SkillStaffPeriod.Period.StartDateTime) continue;
+                        if (skillDataPeriod.Period.EndDateTime<=content.SkillStaffPeriod.Period.StartDateTime) continue;
 
                         period = skillDataPeriod;
                         break;
