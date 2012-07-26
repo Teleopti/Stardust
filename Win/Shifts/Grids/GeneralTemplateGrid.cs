@@ -7,6 +7,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
+using Teleopti.Ccc.Win.Properties;
 using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Events;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             _eventAggregator = eventAggregator;
             grid.CellModels.Add("TimeSpanTimeOfDayCellModel", new TimeSpanCultureTimeOfDayCellModel(grid.Model));
             if (!grid.CellModels.ContainsKey("ActivityDropDownCell"))
-                grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model));
+				grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model, Resources.MasterActivity16x16));
         }
 
         internal override ShiftCreatorViewType Type
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             _baseActivityColumn = new ActivityDropDownColumn<IGeneralTemplateViewModel, IActivity>("BaseActivity",
                                                                                   "Activity",
                                                                                   Presenter.Explorer.Model.ActivityCollection,
-                                                                                  "Name",UserTexts.Resources.BaseActivity);
+																				  "Name", UserTexts.Resources.BaseActivity, Resources.MasterActivity16x16);
             AddColumn(_baseActivityColumn);
 
             _category = new DropDownColumn<IGeneralTemplateViewModel, IShiftCategory>("Category",

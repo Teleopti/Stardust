@@ -5,18 +5,20 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Properties;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
-    [Serializable]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly"), Serializable]
     public class ActivityDropDownCellModel : GridComboBoxCellModel
     {
-        public ActivityDropDownCellModel(GridModel grid)
+    	private readonly Image _masterActivityImage;
+
+    	public ActivityDropDownCellModel(GridModel grid, Image masterActivityImage)
             : base(grid)
         {
-            AllowFloating = false;
+        	_masterActivityImage = masterActivityImage;
+        	AllowFloating = false;
             ButtonBarSize = new Size(0x15, 0);
         }
 
@@ -27,7 +29,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         public override GridCellRendererBase CreateRenderer(GridControlBase control)
         {
-            return new ActivityPickerRenderer(control, this);
+            return new ActivityPickerRenderer(control, this, _masterActivityImage);
         }
 
         public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)
@@ -72,14 +74,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
     public class ActivityPickerRenderer : GridComboBoxCellRenderer
     {
-        private readonly Image _masterImage = Resources.MasterActivity16x16;
+    	private readonly Image _masterActivityImage;
 
-        public ActivityPickerRenderer(GridControlBase grid, ActivityDropDownCellModel cellModel)
+    	public ActivityPickerRenderer(GridControlBase grid, ActivityDropDownCellModel cellModel, Image masterActivityImage)
             : base(grid, cellModel)
         {
+        	_masterActivityImage = masterActivityImage;
         }
 
-        protected override ListBox CreateListBoxPart()
+    	protected override ListBox CreateListBoxPart()
         {
             var listBox = base.CreateListBoxPart();
             listBox.DrawMode = DrawMode.OwnerDrawFixed;
@@ -99,7 +102,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             if (e.Index < 0) return;
 
             e.DrawBackground();
-
+			
             var item = ListBoxPart.Items[e.Index];
             var activity = item as IActivity;
             var masterActivity = item as IMasterActivity;
@@ -110,7 +113,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             {
                 color = Color.Maroon;
                 style = FontStyle.Bold;
-                theImage = _masterImage;
+                theImage = _masterActivityImage;
             }
             if (activity != null)
             {
@@ -137,35 +140,22 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         protected override void OnDraw(Graphics g, Rectangle clientRectangle, int rowIndex, int colIndex,
                                        GridStyleInfo style)
         {
-            if (g == null) return;
-            if (style == null) return;
+        	if (g == null) return;
+        	if (style == null) return;
 
-            var activity = style.CellValue as IActivity;
+        	var color = Color.Black;
+        	var fontStyle = FontStyle.Regular;
 
-            var masterActivity = activity as IMasterActivity;
-            var color = Color.Black;
-            var fontStyle = FontStyle.Regular;
-            Image theImage = null;
+        	if (style.ImageIndex > -1)
+        	{
+        		color = Color.Maroon;
+        		fontStyle = FontStyle.Bold;
+        	}
 
-            if (masterActivity != null)
-            {
-                color = Color.Maroon;
-                fontStyle = FontStyle.Bold;
-                theImage = _masterImage;
-            }
+        	style.Font.Bold = fontStyle == FontStyle.Bold;
+        	style.TextColor = color;
 
-            if (activity == null) return;
-            if (theImage != null)
-                g.DrawImage(theImage, clientRectangle.X, clientRectangle.Y, 16, 16);
-
-            var point = new Point(clientRectangle.Left + 20, clientRectangle.Y);
-            var size = new Size(clientRectangle.Size.Width - 20, clientRectangle.Height);
-            var rect = new Rectangle(point, size);
-
-            using (var fontBold = new Font(style.Font.Facename, style.Font.Size, fontStyle))
-            using (var customBrush = new SolidBrush(color))
-                g.DrawString(activity.Name, fontBold, customBrush, rect);
+        	base.OnDraw(g, clientRectangle, rowIndex, colIndex, style);
         }
-
     }
 }
