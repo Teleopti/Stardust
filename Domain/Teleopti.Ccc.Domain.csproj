@@ -266,6 +266,7 @@
     <Compile Include="Optimization\ScheduleDayEquator.cs" />
     <Compile Include="Optimization\SchedulingOptionsAdvancedPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
+    <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />
@@ -331,7 +332,9 @@
     <Compile Include="Repositories\Paging.cs" />
     <Compile Include="Repositories\PagingDetail.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinder.cs" />
+    <Compile Include="ResourceCalculation\BestGroupValueExtractorThreadFactory.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecification.cs" />
+    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonConsistentChecker.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDate.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateHolder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPerson.cs" />
@@ -343,11 +346,15 @@
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonFactory.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonsBuilder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonShiftCategoryConsistentChecker.cs" />
+    <Compile Include="ResourceCalculation\GroupScheduling\PossibleCombinationsOfStartEndCategoryCreator.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPerson.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyService.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferences.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeople.cs" />
+    <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunner.cs" />
+    <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
+    <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />
     <Compile Include="ResourceCalculation\SwapRawService.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityChecker.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />

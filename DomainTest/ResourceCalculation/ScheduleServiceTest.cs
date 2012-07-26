@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
             Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro>{_scheduleMatrixPro});
-			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction)).Return(null).IgnoreArguments();
+			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction, null)).Return(null).IgnoreArguments();
             Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person,
                                                                                         new DateOnly(2011, 4, 18))).Repeat.Times(3);
             _mocks.ReplayAll();
@@ -142,6 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var mainShift = _mocks.StrictMock<IMainShift>();
             var start = new DateTime(2011, 1, 18, 0, 0, 0, DateTimeKind.Utc);
             var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Hej");
+			var useCategory = new PossibleStartEndCategory { ShiftCategory = shiftCategory };
             var period = new DateTimePeriod(start, start.AddDays(1));
             Expect.Call(_part.IsScheduled()).Return(false);
             Expect.Call(_part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 4, 18),
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
             Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
 
-			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction)).Return(resultHolder).IgnoreArguments();
+			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction, null)).Return(resultHolder).IgnoreArguments();
 				Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person,
 																													  new DateOnly(2011, 4, 18)));
             Expect.Call(resultHolder.ShiftProjection).Return(projCashe).Repeat.Twice();
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             _mocks.ReplayAll();
             Assert.IsNull(_options.ShiftCategory);
-			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, shiftCategory, _resourceCalculateDelayer), Is.True);
+			Assert.That(_target.SchedulePersonOnDay(_part, _options, true,  _resourceCalculateDelayer, useCategory), Is.True);
             Assert.IsNull(_options.ShiftCategory);
             _mocks.VerifyAll();
         }
@@ -194,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
             Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
 
-			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction)).Return(resultHolder).IgnoreArguments();
+			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction, null)).Return(resultHolder).IgnoreArguments();
 				Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person,
 																														new DateOnly(2011, 4, 18)));
             Expect.Call(resultHolder.ShiftProjection).Return(projCashe).Repeat.Twice();
@@ -208,24 +209,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks.ReplayAll();
 			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction, _resourceCalculateDelayer), Is.True);
             _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void ShouldSetCategoryCreateEffectiveRestrictionAndCallSchedule()
-        {
-            var cat = _mocks.StrictMock<IShiftCategory>();
-            Expect.Call(_restrictionCreator.GetEffectiveRestriction(_part, _options)).Return(_effectiveRestriction);
-            Expect.Call(_part.IsScheduled()).Return(false);
-            Expect.Call(_part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 4, 18),
-                                                                                    new CccTimeZoneInfo(
-                                                                                        TimeZoneInfo.
-                                                                                            FindSystemTimeZoneById("Utc"))));
-            Expect.Call(_part.Person).Return(_person);
-            Expect.Call(_effectiveRestriction.NotAvailable).Return(true);
-            _mocks.ReplayAll();
-			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, cat, _resourceCalculateDelayer), Is.False);
-            _mocks.VerifyAll();
-        
         }
     }
 }

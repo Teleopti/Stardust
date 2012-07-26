@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -46,11 +45,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	public int ResourceCalculateFrequency { get; set; }
     	public TimeSpan? UseCustomTargetTime { get; set; }
     	public bool ShowTroubleshot { get; set; }
+		public bool UseGroupSchedulingCommonStart { get; set; }
+		public bool UseGroupSchedulingCommonEnd { get; set; }
+		public bool UseGroupSchedulingCommonCategory { get; set; }
 
 		public SchedulingOptions()
 		{
-			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>());
-			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>(), new List<IGroupPageLight>());
+			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>());
+			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>());
+            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>());
 		}
 
     	public BlockFinderType UseBlockScheduling

@@ -8,21 +8,22 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IWorkShiftFinderService
     {
-		/// <summary>
-		/// Finds the best shift.
-		/// </summary>
-		/// <param name="schedulePart">The schedule part.</param>
-		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <param name="matrix">The matrix.</param>
-		/// <param name="effectiveRestriction">The effective restriction.</param>
-		/// <returns></returns>
-		/// ///
-		/// <remarks>
-		/// Created by: Ola
-		/// Created date: 2008-09-18
-		/// ///
-		/// </remarks>
-        IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction);
+    	/// <summary>
+    	/// Finds the best shift.
+    	/// </summary>
+    	/// <param name="schedulePart">The schedule part.</param>
+    	/// <param name="schedulingOptions">The scheduling options.</param>
+    	/// <param name="matrix">The matrix.</param>
+    	/// <param name="effectiveRestriction">The effective restriction.</param>
+    	/// <param name="possibleStartEndCategory"> </param>
+    	/// <returns></returns>
+    	/// ///
+    	/// <remarks>
+    	/// Created by: Ola
+    	/// Created date: 2008-09-18
+    	/// ///
+    	/// </remarks>
+    	IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction, IPossibleStartEndCategory possibleStartEndCategory);
 
 		/// <summary>
 		/// Gets the finder result.

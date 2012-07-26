@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(daysOffToAdd);
                 Expect.Call(_activeScheduleMatrix.Person)
                     .Return(activePerson);
-                Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd,_selectedPersons))
+				Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons, _schedulingOptions))
                     .Return(groupPerson);
                 Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences))
                     .Return(groupMatrixContainers);
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(daysOffToAdd);
                 Expect.Call(_activeScheduleMatrix.Person)
                     .Return(activePerson);
-                Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons))
+				Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons, _schedulingOptions))
                     .Return(null);
             }
             using (_mocks.Playback())
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(daysOffToAdd);
                 Expect.Call(_activeScheduleMatrix.Person)
                     .Return(activePerson);
-                Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons))
+				Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons, _schedulingOptions))
                     .Return(groupPerson);
                 Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences))
                     .Return(null);
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(daysOffToAdd);
                 Expect.Call(_activeScheduleMatrix.Person)
                     .Return(activePerson);
-                Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons))
+				Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons, _schedulingOptions))
                     .Return(groupPerson);
                 Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences))
                     .Return(groupMatrixContainers);
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(daysOffToAdd);
                 Expect.Call(_activeScheduleMatrix.Person)
                     .Return(activePerson);
-                Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons))
+				Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons, _schedulingOptions))
                     .Return(groupPerson);
                 Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences))
                     .Return(groupMatrixContainers);
@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(daysOffToAdd);
                 Expect.Call(_activeScheduleMatrix.Person)
                     .Return(activePerson);
-                Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons))
+				Expect.Call(_groupPersonPreOptimizationChecker.CheckPersonOnDates(_allScheduleMatrixes, activePerson, daysOffToRemove, daysOffToAdd, _selectedPersons, _schedulingOptions))
                     .Return(groupPerson);
                 Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences))
                     .Return(groupMatrixContainers);

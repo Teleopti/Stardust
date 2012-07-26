@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(part4.DateOnlyAsPeriod).Return(period1).Repeat.AtLeastOnce();
 			Expect.Call(part1.PersonDayOffCollection()).Return(dayOffCollection).Repeat.Any();
 
-			Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments().Repeat.AtLeastOnce()
+			Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments().Repeat.AtLeastOnce()
                 .Return(true);
 
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(part2.Person).Return(person).Repeat.AtLeastOnce();
 			Expect.Call(part1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZoneInfo)).Repeat.AtLeastOnce();
 			Expect.Call(part2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 3), _timeZoneInfo)).Repeat.AtLeastOnce();
-			Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer))
+			Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer, null))
                 .Return(true).IgnoreArguments();
 
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();

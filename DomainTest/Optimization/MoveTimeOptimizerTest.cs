@@ -166,11 +166,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_effectiveRestriction);
             Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions))
                     .Return(_effectiveRestriction);
-			Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+			Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
                      .Return(true);
             Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate))
                 .Return(true);
-			Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+			Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
                 .Return(true);
             Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostOverStaffDate))
                 .Return(false);
@@ -283,11 +283,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_effectiveRestriction);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions))
                     .Return(_effectiveRestriction);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate))
                     .Return(true);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostOverStaffDate))
                     .Return(false);
@@ -370,11 +370,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_effectiveRestriction);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions))
                     .Return(_effectiveRestriction);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate))
                     .Return(true);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostOverStaffDate))
                     .Return(false);
@@ -463,10 +463,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions))
                         .Return(_effectiveRestriction);
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate)).Return(true);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
                     .Return(false);
                 //Expect.Call(_schedulingOptions.ConsiderShortBreaks)
                 //    .Return(true).Repeat.AtLeastOnce();
@@ -544,7 +544,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_effectiveRestriction);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions)).IgnoreArguments()
                     .Return(_effectiveRestriction);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
                     .Return(false);
                 // rollback
                 _rollbackService.ClearModificationCollection();

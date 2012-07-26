@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[0])).Return(day2);
                 Expect.Call(_matrix.Person).Return(_person);
                 Expect.Call(day2.DaySchedulePart()).Return(scheduleDayToFill);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToFill, _schedulingOptions, true, _resourceCalculateDelayer)).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToDelete, _schedulingOptions, true, _resourceCalculateDelayer)).Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToFill, _schedulingOptions, true, _resourceCalculateDelayer, null)).Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToDelete, _schedulingOptions, true, _resourceCalculateDelayer, null)).Return(false);
                 
             }
 
@@ -101,11 +101,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[0])).Return(day2);
                 Expect.Call(_matrix.Person).Return(_person);
                 Expect.Call(day2.DaySchedulePart()).Return(scheduleDayToFill);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToFill, _schedulingOptions, true, _resourceCalculateDelayer)).Return(true);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToFill, _schedulingOptions, true, _resourceCalculateDelayer, null)).Return(true);
 
                 Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[1])).Return(day1);
                 Expect.Call(day1.DaySchedulePart()).Return(scheduleDayToDelete);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToDelete, _schedulingOptions, true, _resourceCalculateDelayer)).Return(true);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToDelete, _schedulingOptions, true, _resourceCalculateDelayer, null)).Return(true);
             }
 
             bool result;

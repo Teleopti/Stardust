@@ -5,15 +5,14 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 {
-    public partial class SchedulingSessionPreferencesPanel : BaseUserControl, IDataExchange
+    public partial class SchedulingSessionPreferencesTabPanel : BaseUserControl, IDataExchange
     {
-        private ISchedulingOptions _localSchedulingOptions;
+         private ISchedulingOptions _localSchedulingOptions;
         private ISchedulingOptions _schedulingOptions;
         private IList<IShiftCategory> _shiftCategories;
         private bool _dataLoaded;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private IList<IScheduleTag> _scheduleTags;
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
 
-    	public SchedulingSessionPreferencesPanel()
+    	public SchedulingSessionPreferencesTabPanel()
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		public void Initialize(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
 			bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider, 
             IList<IScheduleTag> scheduleTags)
-		{
+        {
 			_groupPagesProvider = groupPagesProvider;
             if(!reschedule)
             {
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             }
             if (backToLegal)
             {
-                groupBox3.Visible = false;
+                pnlBlockTeamScheduling .Visible = false;
             }
 
 
@@ -67,8 +66,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_groupPagesFairness = _groupPages.ToList();
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             _dataLoaded = true;
-            
         }
+
+		public override string HelpId
+		{
+			get
+			{
+				return Tag.ToString();
+			}
+		}
 
         public bool UseBlockSchedulingVisible
         {
@@ -114,8 +120,26 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         public bool ShiftCategoryVisible
         {
-            get { return groupBoxShiftCategory.Visible; }
-            set { groupBoxShiftCategory.Visible = value; }
+            get { return pnlShiftCategory .Visible; }
+            set { pnlShiftCategory.Visible = value; }
+        }
+
+        public bool UseGroupSchedulingCommonStart
+        {
+            get { return checkBoxCommonStart.Checked ; }
+            set { checkBoxCommonStart.Checked = value; }
+        }
+
+        public bool UseGroupSchedulingCommonEnd
+        {
+            get { return checkBoxCommonEnd.Checked ; }
+            set { checkBoxCommonEnd.Checked = value; }
+        }
+
+        public bool UseGroupSchedulingCommonCategory
+        {
+            get { return checkBoxCommonCategory.Checked ; }
+            set { checkBoxCommonCategory.Checked = value; }
         }
 
         #region IDataExchange Members
@@ -164,18 +188,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private void initGroupPages()
 		{
 			comboBoxGrouping.DataSource = _groupPages;
-			comboBoxGrouping.DisplayMember = "Name";
-
+            comboBoxGrouping.DisplayMember = "Name";
+		    comboBoxGrouping.ValueMember  = "Key";
 			if(_localSchedulingOptions.GroupOnGroupPage != null)
 			{
-				foreach (var item in comboBoxGrouping.Items)
-				{
-					if (((IGroupPageLight)item).Key.Equals(_localSchedulingOptions.GroupOnGroupPage.Key))
-					{
-						comboBoxGrouping.SelectedItem = item;
-						break;
-					}
-				}
+                comboBoxGrouping.SelectedValue  = _localSchedulingOptions.GroupOnGroupPage.Key ;
 			}
 		}
 
@@ -190,17 +207,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		{
 			comboBoxGroupingFairness.DataSource = _groupPagesFairness;
 			comboBoxGroupingFairness.DisplayMember = "Name";
+            comboBoxGroupingFairness.ValueMember  = "Key";
 
 			if (_localSchedulingOptions.GroupPageForShiftCategoryFairness != null)
 			{
-				foreach (var item in comboBoxGroupingFairness.Items)
-				{
-					if (((IGroupPageLight)item).Key.Equals(_localSchedulingOptions.GroupPageForShiftCategoryFairness.Key))
-					{
-						comboBoxGroupingFairness.SelectedItem = item;
-						break;
-					}
-				}
+				comboBoxGroupingFairness.SelectedValue  = _localSchedulingOptions.GroupPageForShiftCategoryFairness.Key  ;
 			}
 		}
 
@@ -239,6 +250,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
         	_schedulingOptions.ResourceCalculateFrequency = _localSchedulingOptions.ResourceCalculateFrequency;
 			_schedulingOptions.ShowTroubleshot = _localSchedulingOptions.ShowTroubleshot;
+            _schedulingOptions.UseGroupSchedulingCommonCategory =
+                _localSchedulingOptions.UseGroupSchedulingCommonCategory;
+            _schedulingOptions.UseGroupSchedulingCommonEnd = _localSchedulingOptions.UseGroupSchedulingCommonEnd;
+            _schedulingOptions.UseGroupSchedulingCommonStart = _localSchedulingOptions.UseGroupSchedulingCommonStart;
+
         }
 
         private void getDataFromControls()
@@ -284,6 +300,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.UseSameDayOffs = !checkBoxUseGroupScheduling.Checked ? checkBoxUseGroupScheduling.Checked : checkBoxUseSameDayOffs.Checked;
         	_localSchedulingOptions.ResourceCalculateFrequency = (int)numericUpDownResourceCalculateEvery.Value;
 			_localSchedulingOptions.ShowTroubleshot = checkBoxShowTroubleShot.Checked;
+            _localSchedulingOptions.UseGroupSchedulingCommonCategory = checkBoxCommonCategory.Checked;
+            _localSchedulingOptions.UseGroupSchedulingCommonStart = checkBoxCommonStart.Checked;
+            _localSchedulingOptions.UseGroupSchedulingCommonEnd = checkBoxCommonEnd.Checked;
 
         }
 
@@ -367,6 +386,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             checkBoxUseSameDayOffs.Checked = _localSchedulingOptions.UseSameDayOffs;
         	numericUpDownResourceCalculateEvery.Value = _localSchedulingOptions.ResourceCalculateFrequency;
 			checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleshot;
+            if(_localSchedulingOptions.UseGroupScheduling )
+            {
+                checkBoxCommonCategory.Checked = _localSchedulingOptions.UseGroupSchedulingCommonCategory;
+                checkBoxCommonEnd.Checked = _localSchedulingOptions.UseGroupSchedulingCommonEnd;
+                checkBoxCommonStart.Checked = _localSchedulingOptions.UseGroupSchedulingCommonStart;
+            }
         }
 
         private bool mustHaveSetAndOnlyPreferenceDaysVisible()
@@ -465,8 +490,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void checkBoxUseShiftCategoryRestrictionsCheckedChanged(object sender, EventArgs e)
         {
-			if (checkBoxUseBlockScheduling.Checked) checkBoxUseShiftCategoryRestrictions.Checked = false;
-
             if (_dataLoaded)
             {
                 getDataFromControls();
@@ -489,8 +512,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             {
                 checkBoxUseShiftCategory.Checked = false;
                 radioButtonBetweenDayOff.Checked = true;
-
-				checkBoxUseShiftCategoryRestrictions.Checked = false;
             }
 
             checkBoxUseShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
@@ -498,7 +519,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             radioButtonSchedulePeriod.Enabled = checkBoxUseBlockScheduling.Checked;
             radioButtonBetweenDayOff.Enabled = checkBoxUseBlockScheduling.Checked;
 			checkBoxUseGroupScheduling.Enabled = !checkBoxUseBlockScheduling.Checked;
-        	checkBoxUseShiftCategoryRestrictions.Enabled = !checkBoxUseBlockScheduling.Checked;
 			if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
 				checkBoxUseGroupScheduling.Checked = false;
         }
@@ -524,7 +544,30 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
 				checkBoxUseBlockScheduling.Checked = false;
 
+		    ChangeGrpSchedulingCommonOptionState(checkBoxUseGroupScheduling.Checked);
 		}
+
+        private void ChangeGrpSchedulingCommonOptionState(bool value)
+        {
+
+            if (value)
+            {
+                checkBoxCommonCategory.Checked = true;
+            }
+            else
+            {
+                checkBoxCommonCategory.Checked = false;
+            }
+
+            checkBoxCommonEnd.Checked = false;
+            checkBoxCommonStart.Checked = false;
+            
+            checkBoxCommonCategory.Enabled = value;
+            checkBoxCommonEnd.Enabled = value;
+            checkBoxCommonStart.Enabled = value;
+                
+            
+        }
 
     	private void checkBoxUseSameDayOffsCheckedChanged(object sender, EventArgs e)
         {
@@ -546,13 +589,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 
 		private void comboBoxGroupingFairnessSelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (_dataLoaded)
-			{
-				getDataFromControls();
-				setDataInControls();
-			}
-		}
+        {
+
+        }
 
 		private void checkBoxUseMaxSeatsCheckedChanged(object sender, EventArgs e)
 		{
@@ -560,5 +599,13 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				checkBoxDoNotBreakMaxSeats.Checked = false;
 			checkBoxDoNotBreakMaxSeats.Enabled = checkBoxUseMaxSeats.Checked;
 		}
+
+		private void tabControl1SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (tabControl1.SelectedIndex == 0) Tag = "Main";
+			if (tabControl1.SelectedIndex == 1) Tag = "Extra";
+			if (tabControl1.SelectedIndex == 2) Tag = "Advanced";
+		}
     }
+    
 }
