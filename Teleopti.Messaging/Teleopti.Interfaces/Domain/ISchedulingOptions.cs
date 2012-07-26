@@ -330,5 +330,18 @@ namespace Teleopti.Interfaces.Domain
 		/// The use custom target time.
 		/// </value>
 		TimeSpan? UseCustomTargetTime { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		bool UseGroupSchedulingCommonStart { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		bool UseGroupSchedulingCommonEnd { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		bool UseGroupSchedulingCommonCategory { get; set; }
     }
 }

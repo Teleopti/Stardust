@@ -1,5 +1,8 @@
 ﻿
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -7,7 +10,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
     public class WorkTimeMinMax : IWorkTimeMinMax
     {
-
+		private HashSet<IPossibleStartEndCategory> _possibleStartEndCategories = new HashSet<IPossibleStartEndCategory>();
+ 
         public StartTimeLimitation StartTimeLimitation { get; set; }
         public EndTimeLimitation EndTimeLimitation { get; set; }
         public WorkTimeLimitation WorkTimeLimitation { get; set; }
@@ -24,9 +28,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
         	          			maxTimeSpan(EndTimeLimitation.EndTime, workTimeMinMax.EndTimeLimitation.EndTime)),
         	          		WorkTimeLimitation = new WorkTimeLimitation(
         	          			minTimeSpan(WorkTimeLimitation.StartTime, workTimeMinMax.WorkTimeLimitation.StartTime),
-        	          			maxTimeSpan(WorkTimeLimitation.EndTime, workTimeMinMax.WorkTimeLimitation.EndTime))
+        	          			maxTimeSpan(WorkTimeLimitation.EndTime, workTimeMinMax.WorkTimeLimitation.EndTime)),
+        	          		PossibleStartEndCategories =
+        	          			_possibleStartEndCategories.Concat(workTimeMinMax.PossibleStartEndCategories).ToList()
         	          	};
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public IList<IPossibleStartEndCategory> PossibleStartEndCategories
+		{
+		    get { return _possibleStartEndCategories.ToList(); }
+		    set { _possibleStartEndCategories = new HashSet<IPossibleStartEndCategory>(value); }
+		}
 
 
         private static TimeSpan? minTimeSpan(TimeSpan? t1, TimeSpan? t2)

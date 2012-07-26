@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -184,5 +185,19 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="mainShiftOptimizeActivitiesSpecification">The main shift optimize activities specification.</param>
         void SetMainShiftOptimizeActivitiesSpecification(
             ISpecification<IMainShift> mainShiftOptimizeActivitiesSpecification);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shiftList"></param>
+        /// <param name="possibleStartEndCategory"></param>
+        /// <param name="schedulingOptions"></param>
+        /// <returns></returns>
+        IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd(IList<IShiftProjectionCache> shiftList,
+                                                                           IPossibleStartEndCategory
+                                                                               possibleStartEndCategory,
+                                                                           ISchedulingOptions schedulingOptions);
+        
+
     }
 }
