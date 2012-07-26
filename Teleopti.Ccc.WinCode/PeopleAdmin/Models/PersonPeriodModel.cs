@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +13,10 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 {
     public class PersonPeriodModel : IPersonPeriodModel
     {
-        private IPersonPeriod _currentPeriod;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
+		public static IBudgetGroup NullBudgetGroup = new BudgetGroup { Name = String.Empty };
+
+    	private IPersonPeriod _currentPeriod;
         private readonly IPerson _containedEntity;
         private bool _expandState;
         private readonly CommonNameDescriptionSetting _commonNameDescription;
@@ -20,10 +24,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         private readonly IList<SiteTeamModel> _siteTeamAdapterCollection;
         private SiteTeamModel _siteTeamModel;
         private readonly ExternalLogOnParser _externalLogOnParser;
-    	private PersonSkillStringParser _personSkillStringParser;
+    	private readonly PersonSkillStringParser _personSkillStringParser;
 
-    	public PersonPeriodModel(DateOnly selectedDate, IPerson person, IList<IPersonSkill>
-                                           personSkillCollection, IEnumerable<IExternalLogOn> externalLogOnCollection,
+    	public PersonPeriodModel(DateOnly selectedDate, IPerson person, IList<IPersonSkill> personSkillCollection, IEnumerable<IExternalLogOn> externalLogOnCollection,
                                            IList<SiteTeamModel> siteTeamAdapterCollection,CommonNameDescriptionSetting commonNameDescription)
         {
             _containedEntity = person;
@@ -68,12 +71,12 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// </remarks>
         public string FullName
         {
-            get 
+            get
             {
-                if (_commonNameDescription == null)
+            	if (_commonNameDescription == null)
                     return _containedEntity.Name.ToString();
-                else
-                    return _commonNameDescription.BuildCommonNameDescription(_containedEntity); 
+            	
+				return _commonNameDescription.BuildCommonNameDescription(_containedEntity);
             }
         }
 
@@ -109,7 +112,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                         }
                     }
                     _containedEntity.DeletePersonPeriod(_currentPeriod);
-                    _currentPeriod.StartDate = value.Value;
+                    _currentPeriod.StartDate = value.GetValueOrDefault();
                     _containedEntity.AddPersonPeriod(_currentPeriod);
                 }
             }
@@ -342,7 +345,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                     {
                         if (((IDeleteTag)personSkill.Skill).IsDeleted == false)
                         {
-                            if (!string.IsNullOrEmpty(personSkillString.ToString()))
+                            if (!String.IsNullOrEmpty(personSkillString.ToString()))
                                 personSkillString.Append(", " + personSkill.Skill.Name);
                             else 
                                 personSkillString.Append(personSkill.Skill.Name);
@@ -352,7 +355,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                 return personSkillString.ToString();
             }
 
-            return string.Empty;
+            return String.Empty;
         }
 
         /// <summary>
@@ -422,7 +425,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         {
             get
             {
-                if (_currentPeriod == null) return string.Empty;
+                if (_currentPeriod == null) return String.Empty;
 
                 return _externalLogOnParser.GetExternalLogOnsDisplayText(_currentPeriod.ExternalLogOnCollection);
             }
@@ -493,7 +496,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                 {
                     return _currentPeriod.Note;
                 }
-                return string.Empty;
+                return String.Empty;
             }
             set
             {
@@ -515,9 +518,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         {
             if (GridControl != null)
             {
-                IList<PersonPeriodChildModel> childAdapters = GridControl.Tag as
-                    IList<PersonPeriodChildModel>;
-
+                var childAdapters = GridControl.Tag as IList<PersonPeriodChildModel>;
                 if (childAdapters != null)
                 {
                     for (int i = 0; i < childAdapters.Count; i++)
@@ -540,12 +541,18 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				{
 					return _currentPeriod.BudgetGroup;
 				}
-				return null;
+				return NullBudgetGroup;
 			}
 			set
 			{
 				if (_currentPeriod != null)
+				{
+					if (value==NullBudgetGroup)
+					{
+						value = null;
+					}
 					_currentPeriod.BudgetGroup = value;
+				}
 			}
     	}
     }
