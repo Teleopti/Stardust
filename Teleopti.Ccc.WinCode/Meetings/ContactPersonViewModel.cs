@@ -129,16 +129,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
             bool employmentNumberFound = !string.IsNullOrEmpty(EmploymentNumber) && EmploymentNumber.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
 
             //this is the check the full name
-           if (tmp.Contains(" "))
+            bool fullNameFound = false;
+            if (tmp.Contains(" "))
             {
                tmp = Regex.Replace(tmp, @"\s+", " ", RegexOptions.Multiline);
-                var nameArray = tmp.Split(' ');
-               firstNameFound = !string.IsNullOrEmpty(FirstName) && FirstName.ToUpper(CultureInfo.CurrentUICulture).Contains(nameArray[0]);
-                lastNameFound = !string.IsNullOrEmpty(LastName) && LastName.ToUpper(CultureInfo.CurrentUICulture).Contains(nameArray[1]);
-                
+               fullNameFound = FullName.ToUpper().Equals(tmp);
             }
 
-            return firstNameFound || lastNameFound || teamFound || siteFound || skillsFound || emailFound ||employmentNumberFound;
+            return firstNameFound || lastNameFound || teamFound || siteFound || skillsFound || emailFound || employmentNumberFound || fullNameFound;
         }
 
         public bool FilterByPermission(string functionPath, DateOnly? dateOnly)
