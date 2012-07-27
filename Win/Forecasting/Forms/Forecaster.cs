@@ -2388,7 +2388,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void backgroundWorkerSave_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            toolStripProgressBarMain.Value++;
+            var progressBarIncrement = toolStripProgressBarMain.Value;
+            if (progressBarIncrement + 1 >= toolStripProgressBarMain.Minimum && progressBarIncrement + 1 <= toolStripProgressBarMain.Maximum)
+                toolStripProgressBarMain.Value++;
         }
 
         private void backgroundWorkerSave_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
