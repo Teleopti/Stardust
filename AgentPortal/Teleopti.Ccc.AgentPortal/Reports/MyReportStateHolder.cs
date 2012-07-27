@@ -102,72 +102,78 @@ namespace Teleopti.Ccc.AgentPortal.Reports
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void LoadMyReportData()
         {
-            if (SdkServiceHelper.LogOnServiceClient != null)
-            {
-                DateOnlyDto startDateOnly = new DateOnlyDto{DateTime = _selectedDateTimePeriodDto.LocalStartDateTime.Date.AddDays(-1),DateTimeSpecified = true};
-                DateOnlyDto endDateOnly = new DateOnlyDto{DateTime = _selectedDateTimePeriodDto.LocalEndDateTime.Date,DateTimeSpecified = true};
+        	if (SdkServiceHelper.LogOnServiceClient == null) return;
+
+        	DateTime startDate = DateTime.SpecifyKind(_selectedDateTimePeriodDto.LocalStartDateTime.Date,
+        	                                          DateTimeKind.Unspecified);
+			DateOnlyDto startDateOnly = new DateOnlyDto{DateTime = startDate.AddDays(-1),DateTimeSpecified = true};
+                DateOnlyDto endDateOnly = new DateOnlyDto{DateTime = startDate,DateTimeSpecified = true};
                 PersonDto person = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
-                
                 IList<SchedulePartDto> schedulePartDtos = SdkServiceHelper.SchedulingService.GetScheduleParts(person,startDateOnly,endDateOnly,person.TimeZoneId);
                 _myScheduleGridAdapterCollection.Clear();
-                List<ProjectedLayerDto> allProjectedLayers = new List<ProjectedLayerDto>();
-                foreach (SchedulePartDto mySchedulePart in schedulePartDtos)
-                {
-                    allProjectedLayers.AddRange(mySchedulePart.ProjectedLayerCollection);
-                }
-                allProjectedLayers.Sort(delegate(ProjectedLayerDto l1, ProjectedLayerDto l2)
-                {
-                    int result =
-                        l1.Period.LocalStartDateTime.CompareTo(
-                            l2.Period.LocalStartDateTime);
-                    if (result != 0) return result;
-                    return l1.Period.LocalEndDateTime.CompareTo(
-                            l2.Period.LocalEndDateTime);
-                });
-                for(DateTime currentDate = _selectedDateTimePeriodDto.LocalStartDateTime.Date; currentDate<=endDateOnly.DateTime;currentDate = currentDate.AddDays(1))
-                {
-                    DateTime endDateTime = currentDate.AddDays(1);
-                    IList<ActivityVisualLayer> activityVisualLayers = new List<ActivityVisualLayer>();
-                    foreach (ProjectedLayerDto projectedLayerDto in allProjectedLayers)
-                    {
-                        if (projectedLayerDto.Period.LocalStartDateTime>=endDateTime) break;
-                        if (projectedLayerDto.Period.LocalStartDateTime<endDateTime && projectedLayerDto.Period.LocalEndDateTime>currentDate)
-                        {
-                            DateTime layerStart = projectedLayerDto.Period.LocalStartDateTime;
-                            if (layerStart < currentDate) layerStart = currentDate;
+                
+        	_myScheduleGridAdapterCollection.Clear();
+        	List<ProjectedLayerDto> allProjectedLayers = new List<ProjectedLayerDto>();
+        	foreach (SchedulePartDto mySchedulePart in schedulePartDtos)
+        	{
+        		allProjectedLayers.AddRange(mySchedulePart.ProjectedLayerCollection);
+        	}
+        	allProjectedLayers.Sort(delegate(ProjectedLayerDto l1, ProjectedLayerDto l2)
+        	                        	{
+        	                        		int result =
+        	                        			l1.Period.LocalStartDateTime.CompareTo(
+        	                        				l2.Period.LocalStartDateTime);
+        	                        		if (result != 0) return result;
+        	                        		return l1.Period.LocalEndDateTime.CompareTo(
+        	                        			l2.Period.LocalEndDateTime);
+        	                        	});
 
-                            DateTime layerEnd = projectedLayerDto.Period.LocalEndDateTime;
-                            if (layerEnd > endDateTime) layerEnd = endDateTime;
+			for (DateTime currentDate = startDate; currentDate <= endDateOnly.DateTime; currentDate = currentDate.AddDays(1))
+        	{
+        		DateTime endDateTime = currentDate.AddDays(1);
+        		IList<ActivityVisualLayer> activityVisualLayers = new List<ActivityVisualLayer>();
+        		foreach (ProjectedLayerDto projectedLayerDto in allProjectedLayers)
+        		{
+        			if (projectedLayerDto.Period.LocalStartDateTime >= endDateTime) break;
+        			if (projectedLayerDto.Period.LocalStartDateTime < endDateTime &&
+        			    projectedLayerDto.Period.LocalEndDateTime > currentDate)
+        			{
+        				DateTime layerStart = projectedLayerDto.Period.LocalStartDateTime;
+        				if (layerStart < currentDate) layerStart = currentDate;
 
-                            TimeSpan diff = layerEnd.Subtract(layerStart);
-                            int startHour = layerStart.Hour;
-                            int startMinute = layerStart.Minute;
-                            int endHour = startHour + diff.Hours;
-                            int endMinute = startMinute + diff.Minutes;
-                            TimePeriod timePeriod = new TimePeriod(startHour, startMinute, endHour, endMinute);
+        				DateTime layerEnd = projectedLayerDto.Period.LocalEndDateTime;
+        				if (layerEnd > endDateTime) layerEnd = endDateTime;
 
-                            ActivityVisualLayer activityVisualLayer = GetMidnightActivityVisualLayer(projectedLayerDto, timePeriod);
-                            activityVisualLayers.Add(activityVisualLayer);
-                        }
-                    }
+        				TimeSpan diff = layerEnd.Subtract(layerStart);
+        				int startHour = layerStart.Hour;
+        				int startMinute = layerStart.Minute;
+        				int endHour = startHour + diff.Hours;
+        				int endMinute = startMinute + diff.Minutes;
+        				TimePeriod timePeriod = new TimePeriod(startHour, startMinute, endHour, endMinute);
 
-                    _dayAdherence = null;
-                    IList<AdherenceLayer> adherenceLayers = GetAdherenceLayers(person, currentDate);
-                    ScheduleAdherence scheduleAdherence =
-                        new ScheduleAdherence(new VisualProjection(person, activityVisualLayers, string.Empty, false), adherenceLayers);
-                    if (activityVisualLayers.Count == 0) _dayAdherence = 100;
+        				ActivityVisualLayer activityVisualLayer = GetMidnightActivityVisualLayer(projectedLayerDto, timePeriod);
+        				activityVisualLayers.Add(activityVisualLayer);
+        			}
+        		}
 
-                    MyScheduleGridAdapter myScheduleGridAdapter = new MyScheduleGridAdapter();
-                    myScheduleGridAdapter.MyScheduleAdherence = scheduleAdherence;
-                    myScheduleGridAdapter.Adherence = (double?) _dayAdherence;
-                    myScheduleGridAdapter.Date = currentDate;
-                    _myScheduleGridAdapterCollection.Add(myScheduleGridAdapter);
-                }
-                _informationDto = GetAgentAdherenceInfoStat(_selectedDateTimePeriodDto.LocalStartDateTime.Date);
-                _queueDto = GetAgentQueueStatDetails(_selectedDateTimePeriodDto.LocalStartDateTime.Date);
-            }
+        		_dayAdherence = null;
+        		IList<AdherenceLayer> adherenceLayers = GetAdherenceLayers(person, currentDate);
+        		ScheduleAdherence scheduleAdherence =
+        			new ScheduleAdherence(new VisualProjection(person, activityVisualLayers, string.Empty, false),
+        			                      adherenceLayers);
+        		if (activityVisualLayers.Count == 0) _dayAdherence = 100;
+
+        		MyScheduleGridAdapter myScheduleGridAdapter = new MyScheduleGridAdapter();
+        		myScheduleGridAdapter.MyScheduleAdherence = scheduleAdherence;
+        		myScheduleGridAdapter.Adherence = (double?) _dayAdherence;
+        		myScheduleGridAdapter.Date = currentDate;
+        		_myScheduleGridAdapterCollection.Add(myScheduleGridAdapter);
+        	}
+        	_informationDto = GetAgentAdherenceInfoStat(startDate);
+        	_queueDto = GetAgentQueueStatDetails(startDate);
         }
-        public static IList<AgentQueueStatDetailsDto> GetAgentQueueStatDetails(DateTime fromDate)
+
+    	public static IList<AgentQueueStatDetailsDto> GetAgentQueueStatDetails(DateTime fromDate)
         {
             PersonDto personDto = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
             IList<AgentQueueStatDetailsDto> agentQueueStatDetailsDtos = SdkServiceHelper.SchedulingService.GetAgentQueueStatDetails(fromDate, true,
