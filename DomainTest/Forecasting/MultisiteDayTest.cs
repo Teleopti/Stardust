@@ -372,13 +372,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyRedistributeChildsDoesNotChangeTime()
         {
-            Setup();
             var timePeriod1200A = new DateTimePeriod(new DateTime(2012, 07, 25, 12, 00, 00, DateTimeKind.Utc), new DateTime(2012, 07, 25, 12, 15, 00, DateTimeKind.Utc));
             var timePeriod1215A = new DateTimePeriod(new DateTime(2012, 07, 25, 12, 15, 00, DateTimeKind.Utc), new DateTime(2012, 07, 25, 12, 30, 00, DateTimeKind.Utc));
             var timePeriod1200M = new DateTimePeriod(new DateTime(2012, 07, 25, 12, 00, 00, DateTimeKind.Utc), new DateTime(2012, 07, 25, 12, 15, 00, DateTimeKind.Utc));
             var timePeriod1215M = new DateTimePeriod(new DateTime(2012, 07, 25, 12, 15, 00, DateTimeKind.Utc), new DateTime(2012, 07, 25, 12, 30, 00, DateTimeKind.Utc));
 
-            // _childSkillDays
             var serviceAgreement = _childSkillDays[0].SkillDataPeriodCollection[0].ServiceAgreement;
             var skillDataPeriodA = new SkillDataPeriod(serviceAgreement, new SkillPersonData(5,10),timePeriod1200A);
             var skillDataPeriodB = new SkillDataPeriod(serviceAgreement, new SkillPersonData(0,0),timePeriod1215A);
@@ -389,17 +387,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _childSkillDays.Add(SkillDayFactory.CreateSkillDay(_childSkill2, new DateTime(2012, 07, 25)));
             _childSkillDays[1].SetNewSkillDataPeriodCollection(list);
             
-            // _multisitePeriods
             _multisitePeriods.Add(new MultisitePeriod(timePeriod1200M, _multisitePeriods[0].Distribution));
             _multisitePeriods.Add(new MultisitePeriod(timePeriod1215M, _multisitePeriods[0].Distribution));
             
             var workload = WorkloadFactory.CreateWorkload(_skill);
             var multisiteSkilldDay = SkillDayFactory.CreateSkillDay(_skill, timePeriod1200A.StartDateTime.AddHours(-11), workload, workload);
-            var multisiteDay = new MultisiteDay(multisiteSkilldDay.CurrentDate, _skill, _scenario);
-
-            multisiteDay.SetChildSkillDays(_childSkillDays);
-            multisiteDay.SetMultisitePeriodCollection(_multisitePeriods);
-            multisiteDay.MultisiteSkillDay = multisiteSkilldDay;
             multisiteSkilldDay.SetupSkillDay();
 
             multisiteSkilldDay.SkillDayCalculator = calculator;
@@ -412,8 +404,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             
 
             target.RedistributeChilds();
-            Assert.AreEqual(_childSkillDays[0].SkillStaffPeriodCollection[0].Payload.SkillPersonData.MaximumPersons, 10);
-            Assert.AreEqual(_childSkillDays[0].SkillStaffPeriodCollection[1].Payload.SkillPersonData.MaximumPersons, 0);
+            Assert.AreEqual(10, _childSkillDays[0].SkillStaffPeriodCollection[0].Payload.SkillPersonData.MaximumPersons);
+            Assert.AreEqual(0, _childSkillDays[0].SkillStaffPeriodCollection[1].Payload.SkillPersonData.MaximumPersons);
         }
 
         /// <summary>
