@@ -295,3 +295,100 @@ GO
 
 ALTER TABLE [dbo].[queue_logg] ADD CONSTRAINT [FK_queue_logg_queues] FOREIGN KEY([queue]) REFERENCES [dbo].[queues] ([queue])
 GO
+
+
+
+--Robin, Add support for SQL Queues
+if not exists(select * from sys.schemas where Name = N'Queue')
+begin 
+exec('CREATE SCHEMA [Queue] AUTHORIZATION [dbo]')
+end
+GO
+
+/****** Object:  Table [Queue].[Messages]    Script Date: 06/26/2012 08:45:11 ******/
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[Messages]') AND type in (N'U'))
+begin
+	CREATE TABLE [Queue].[Messages](
+		[MessageId] [int] IDENTITY(1,1) NOT NULL,
+		[QueueId] [int] NOT NULL,
+		[CreatedAt] [datetime] NOT NULL,
+		[ProcessingUntil] [datetime] NOT NULL,
+		[ExpiresAt] [datetime] NULL,
+		[Processed] [bit] NOT NULL,
+		[Headers] [nvarchar](2000) NULL,
+		[Payload] [varbinary](max) NULL,
+		[ProcessedCount] [int] NOT NULL,
+	 CONSTRAINT [PK_Messages] PRIMARY KEY CLUSTERED 
+	(
+		[MessageId] ASC
+	)
+	)
+end
+GO
+
+/****** Object:  Table [Queue].[Queues]    Script Date: 06/26/2012 08:45:11 ******/
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[Queues]') AND type in (N'U'))
+begin
+	CREATE TABLE [Queue].[Queues](
+		[QueueName] [nvarchar](50) NOT NULL,
+		[QueueId] [int] IDENTITY(1,1) NOT NULL,
+		[ParentQueueId] [int] NULL,
+		[Endpoint] [nvarchar](250) NOT NULL,
+	 CONSTRAINT [PK_Queues] PRIMARY KEY CLUSTERED 
+	(
+		[QueueId] ASC
+	)
+	)
+end
+GO
+
+/****** Object:  Table [Queue].[SubscriptionStorage]    Script Date: 06/26/2012 08:45:11 ******/
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[SubscriptionStorage]') AND type in (N'U'))
+begin
+	CREATE TABLE [Queue].[SubscriptionStorage](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[Key] [nvarchar](250) NOT NULL,
+		[Value] [varbinary](max) NOT NULL,
+	 CONSTRAINT [PK_SubscriptionStorage] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+end
+GO
+
+
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE name = N'DF_Messages_CreatedAt' AND type = 'D')
+BEGIN
+	exec('ALTER TABLE [Queue].[Messages] ADD  CONSTRAINT [DF_Messages_CreatedAt]  DEFAULT (getdate()) FOR [CreatedAt]')
+END
+
+GO
+
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE name = N'DF_Messages_ProcessingUntil' AND type = 'D')
+BEGIN
+	exec('ALTER TABLE [Queue].[Messages] ADD  CONSTRAINT [DF_Messages_ProcessingUntil]  DEFAULT (getdate()) FOR [ProcessingUntil]')
+END
+
+GO
+
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE name = N'DF_Messages_Processed' AND type = 'D')
+BEGIN
+	exec('ALTER TABLE [Queue].[Messages] ADD  CONSTRAINT [DF_Messages_Processed]  DEFAULT ((0)) FOR [Processed]')
+END
+
+GO
+
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE name = N'DF_Messages_ProcessedCount' AND type = 'D')
+BEGIN
+	exec('ALTER TABLE [Queue].[Messages] ADD  CONSTRAINT [DF_Messages_ProcessedCount]  DEFAULT ((1)) FOR [ProcessedCount]')
+END
+
+GO
+
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE name = N'DF_Queues_Endpoint' AND type = 'D')
+BEGIN
+	exec('ALTER TABLE [Queue].[Queues] ADD  CONSTRAINT [DF_Queues_Endpoint]  DEFAULT ('''') FOR [Endpoint]')
+END
+
+GO

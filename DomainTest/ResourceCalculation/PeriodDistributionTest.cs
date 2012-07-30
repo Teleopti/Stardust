@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             layerFactory = new VisualLayerFactory();
             _start = new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc);
             
-            _activity = new Activity("fån");
+            _activity = ActivityFactory.CreateActivity("fån");
             _period = new DateTimePeriod(_start, _start.AddMinutes(15));
             _demandedTraff = 0.5;
             _skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod();
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period = new DateTimePeriod(_start.AddMinutes(60), _start.AddMinutes(75));
             _target = new PeriodDistribution(_skillStaffPeriod, _activity, period, 5, _demandedTraff);
             IList<IVisualLayer> lst = new List<IVisualLayer>();
-            lst.Add(layerFactory.CreateShiftSetupLayer(_activity, period));
+            lst.Add(layerFactory.CreateShiftSetupLayer(_activity, period, PersonFactory.CreatePerson()));
             IVisualLayerCollection proj = new VisualLayerCollection(null, lst, new ProjectionPayloadMerger());
 
             // create one just 15 minutes long
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period = new DateTimePeriod(_start.AddMinutes(60), _start.AddMinutes(75));
             _target = new PeriodDistribution(_skillStaffPeriod, _activity, period, 5, _demandedTraff);
 
-            IList<IVisualLayer> lst = new List<IVisualLayer> { layerFactory.CreateShiftSetupLayer(_activity, period) };
+            IList<IVisualLayer> lst = new List<IVisualLayer> { layerFactory.CreateShiftSetupLayer(_activity, period, PersonFactory.CreatePerson()) };
             IVisualLayerCollection proj = new VisualLayerCollection(null, lst, new ProjectionPayloadMerger());
 
             // create one just 7 minutes long
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period = new DateTimePeriod(_start.AddMinutes(60),_start.AddMinutes(80));
             _target = new PeriodDistribution(_skillStaffPeriod, _activity, period, 3, _demandedTraff);
             IList<IVisualLayer> lst = new List<IVisualLayer>();
-            lst.Add(layerFactory.CreateShiftSetupLayer(_activity, period));
+            lst.Add(layerFactory.CreateShiftSetupLayer(_activity, period, PersonFactory.CreatePerson()));
             IVisualLayerCollection proj = new VisualLayerCollection(null, lst, new ProjectionPayloadMerger());
 
             // create one just 20 minutes long
@@ -131,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period = new DateTimePeriod(_start.AddMinutes(60), _start.AddMinutes(75));
             _target = new PeriodDistribution(_skillStaffPeriod, _activity, period, 5, _demandedTraff);
 
-            IList<IVisualLayer> lst = new List<IVisualLayer> { layerFactory.CreateShiftSetupLayer(_activity, period) };
+            IList<IVisualLayer> lst = new List<IVisualLayer> { layerFactory.CreateShiftSetupLayer(_activity, period, PersonFactory.CreatePerson()) };
             IVisualLayerCollection proj = new VisualLayerCollection(null, lst, new ProjectionPayloadMerger());
 
             // create one just 7 minutes long
@@ -159,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target = new PeriodDistribution(_skillStaffPeriod, _activity, period, 5, _demandedTraff);
 
             DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(60), _start.AddMinutes(90));
-            IList<IVisualLayer> lst = new List<IVisualLayer> { layerFactory.CreateShiftSetupLayer(_activity, period2) };
+            IList<IVisualLayer> lst = new List<IVisualLayer> { layerFactory.CreateShiftSetupLayer(_activity, period2, PersonFactory.CreatePerson()) };
             IVisualLayerCollection proj = new VisualLayerCollection(null, lst, new ProjectionPayloadMerger());
             _target.ProcessLayers(proj);
             Assert.AreEqual(5, _target.GetSplitPeriodValues()[0]);
@@ -177,10 +176,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(65), _start.AddMinutes(70));
             DateTimePeriod period3 = new DateTimePeriod(_start.AddMinutes(70), _start.AddMinutes(75));
 
-            IActivity activity2 = new Activity("Break");
-            IVisualLayer layer1 =  layerFactory.CreateShiftSetupLayer(_activity, period1);
-            IVisualLayer layer2 = layerFactory.CreateShiftSetupLayer(activity2, period2);
-            IVisualLayer layer3 = layerFactory.CreateShiftSetupLayer(_activity, period3);
+            IActivity activity2 = ActivityFactory.CreateActivity("Break");
+        	IPerson person = PersonFactory.CreatePerson();
+            IVisualLayer layer1 =  layerFactory.CreateShiftSetupLayer(_activity, period1, person);
+            IVisualLayer layer2 = layerFactory.CreateShiftSetupLayer(activity2, period2, person);
+            IVisualLayer layer3 = layerFactory.CreateShiftSetupLayer(_activity, period3, person);
             IList<IVisualLayer> lst = new List<IVisualLayer> { layer1,layer2,layer3 };
             IVisualLayerCollection proj = new VisualLayerCollection(null, lst, new ProjectionPayloadMerger());
             _target.ProcessLayers(proj);
@@ -209,10 +209,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(65), _start.AddMinutes(70));
             DateTimePeriod period3 = new DateTimePeriod(_start.AddMinutes(70), _start.AddMinutes(75));
 
-            IActivity activity2 = new Activity("Break");
-            IVisualLayer layer1 = layerFactory.CreateShiftSetupLayer(_activity, period1);
-            IVisualLayer layer2 = layerFactory.CreateShiftSetupLayer(activity2, period2);
-            IVisualLayer layer3 = layerFactory.CreateShiftSetupLayer(_activity, period3);
+            IActivity activity2 = ActivityFactory.CreateActivity("Break");
+        	IPerson person = PersonFactory.CreatePerson();
+            IVisualLayer layer1 = layerFactory.CreateShiftSetupLayer(_activity, period1,person);
+            IVisualLayer layer2 = layerFactory.CreateShiftSetupLayer(activity2, period2, person);
+            IVisualLayer layer3 = layerFactory.CreateShiftSetupLayer(_activity, period3, person);
             IList<IVisualLayer> lst = new List<IVisualLayer> { layer1, layer2, layer3 };
             IVisualLayerCollection proj = new VisualLayerCollection(null, lst, new ProjectionPayloadMerger());
             _target.ProcessLayers(proj);

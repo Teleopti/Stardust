@@ -194,8 +194,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
                 else
                 {
-                    gridRow = new SkillDayGridRowMinMaxIssuesSummary(_rowManager, "TimeCell", "ScheduledHours",
-                                                                     UserTexts.Resources.ScheduledHours);
+                    gridRow = new SkillDayGridRowScheduleHoursSummary(_rowManager, "TimeCell", "ScheduledHours",
+                                                                     UserTexts.Resources.ScheduledHours, skill);
                     gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                     _gridRows.Add(_rowManager.AddRow(gridRow));
                 }

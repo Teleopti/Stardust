@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                 if ((personMeetingCollection.Count > 0 || personAssignmentCollection.Count > 0) && !(dto.HasShift || dto.HasDayOff || dto.HasAbsence))
                 {
                     dto.HasPersonalAssignmentOnly = true;
-                    dto.TipText = SchedulePartStringVisualizer.GetToolTipPersonalAssignments(scheduleDay, person.PermissionInformation.DefaultTimeZone(), person.PermissionInformation.Culture());
+                    dto.TipText = ScheduleDayStringVisualizer.GetToolTipPersonalAssignments(scheduleDay, person.PermissionInformation.DefaultTimeZone(), person.PermissionInformation.Culture());
                 }
                 result.Add(dto);
             }

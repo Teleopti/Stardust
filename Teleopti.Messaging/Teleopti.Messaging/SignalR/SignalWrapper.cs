@@ -146,22 +146,16 @@ namespace Teleopti.Messaging.SignalR
 		{
 			if (_hubConnection != null && _hubConnection.State==ConnectionState.Connected)
 			{
-				var reset = new ManualResetEvent(false);
-				_hubProxy.Invoke("NotifyClients", new Notification()).ContinueWith(t =>
-				                   	{
-				                   		var proxy = (HubProxy)_hubProxy;
-				                   		var subscriptionList = new List<string>(proxy.GetSubscriptions());
-				                   		if (subscriptionList.Contains(EventName))
-				                   		{
-				                   			var subscription = _hubProxy.Subscribe(EventName);
-				                   			subscription.Data -= subscription_Data;
-				                   		}
-				                   		_hubConnection.Stop();
-				                   		reset.Set();
-				                   	});
 				try
 				{
-					reset.WaitOne(20 * 1000);
+					var proxy = (HubProxy)_hubProxy;
+					var subscriptionList = new List<string>(proxy.GetSubscriptions());
+					if (subscriptionList.Contains(EventName))
+					{
+						var subscription = _hubProxy.Subscribe(EventName);
+						subscription.Data -= subscription_Data;
+					}
+					_hubConnection.Stop();
 				}
 				catch (Exception)
 				{

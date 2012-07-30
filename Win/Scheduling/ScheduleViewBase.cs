@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -506,7 +505,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         IPersonAbsence personAbsence = absenceCollection[absenceCollection.Count - 1];
                         IVisualLayerFactory layerFactory = new VisualLayerFactory();
                         IVisualLayer actLayer = layerFactory.CreateShiftSetupLayer(new Activity("activity"),
-                                                                             personAbsence.Period);
+                                                                             personAbsence.Period, personAbsence.Person);
                         DrawLayer(e, layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, actLayer, personAbsence.Period), timeSpans, scheduleRange.Person);
                     }
                 }
@@ -762,7 +761,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         protected void DrawLayer(GridDrawCellEventArgs e, ILayer<IPayload> layer, DateDateTimePeriodDictionary timeSpans, IPerson person)
         {
-            DateTimePeriod period = timeSpans[(DateOnly)e.Style.Tag];
+        	var dateOnly = (DateOnly) e.Style.Tag;
+            DateTimePeriod period = timeSpans[dateOnly];
             Rectangle projectionRectangle = e.Bounds;
 
             if (e.Bounds.Height > SchedulePresenterBase.ProjectionHeight)
@@ -773,7 +773,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             Rectangle rect = ViewBaseHelper.GetLayerRectangle(period, projectionRectangle, layer.Period, IsRightToLeft);
             if (!rect.IsEmpty)
             {
-                using (LinearGradientBrush lBrush = GridHelper.GetGradientBrush(rect, layer.Payload.ConfidentialDisplayColor(person)))
+                using (LinearGradientBrush lBrush = GridHelper.GetGradientBrush(rect, layer.Payload.ConfidentialDisplayColor(person,dateOnly)))
                 {
                     e.Graphics.FillRectangle(lBrush, rect);
                 }

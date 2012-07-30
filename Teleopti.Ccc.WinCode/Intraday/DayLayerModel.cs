@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         {
             if (layer == null) return string.Empty;
             var payload = layer.Payload as IPayload;
-            return payload.ConfidentialDescription(_person).Name;
+            return payload.ConfidentialDescription(_person,new DateOnly(layer.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone))).Name;
         }
 
         public int HookedEvents()

@@ -385,7 +385,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             if (SkillStaffPeriodCollection.Count==0)
             {
-                if (_skill.SkillType.ForecastSource != ForecastSource.InboundTelephony)
+                if (_skill.SkillType.ForecastSource != ForecastSource.InboundTelephony &&
+					_skill.SkillType.ForecastSource != ForecastSource.Retail)
                 {
                     var nextOpenSkillDay = _skillDayCalculator.FindNextOpenDay(this);
                     if (nextOpenSkillDay != null)

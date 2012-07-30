@@ -216,13 +216,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
 
             gridDataPeriodRow = new SkillDataGridRow(_rowManagerSkillDataPeriod, "IntegerMinMaxAgentCell",
-                                                           "MinimumPersons", UserTexts.Resources.MinimumAgents);
+														   "MinimumPersons", manager.WordDictionary["MinimumAgents"]);
             gridDataPeriodRow.SaveCellValue += gridRow_SaveCellValue;
             gridDataPeriodRow.ChartSeriesSettings = ConfigureSetting(gridDataPeriodRow.DisplayMember);
             GridRows.Add(_rowManagerSkillDataPeriod.AddRow(gridDataPeriodRow));
 
             gridDataPeriodRow = new SkillDataGridRow(_rowManagerSkillDataPeriod, "IntegerMinMaxAgentCell",
-                                                           "MaximumPersons", UserTexts.Resources.MaximumAgents);
+														   "MaximumPersons", manager.WordDictionary["MaximumAgents"]);
             gridDataPeriodRow.SaveCellValue += gridRow_SaveCellValue;
             gridDataPeriodRow.ChartSeriesSettings = ConfigureSetting(gridDataPeriodRow.DisplayMember);
             GridRows.Add(_rowManagerSkillDataPeriod.AddRow(gridDataPeriodRow));
@@ -254,13 +254,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             GridRows.Add(_rowManagerSkillStaffPeriod.AddRow(gridRow));
 
             gridRow = new SkillStaffPeriodGridRow(_rowManagerSkillStaffPeriod, "NumericReadOnlyCell",
-                                                  "ForecastedDistributedDemand", UserTexts.Resources.Agents);
+												  "ForecastedDistributedDemand", manager.WordDictionary["Agents"]);
             gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
             GridRows.Add(_rowManagerSkillStaffPeriod.AddRow(gridRow));
 
             gridRow = new SkillStaffPeriodGridRow(_rowManagerSkillStaffPeriod, "NumericReadOnlyCell",
                                                   "ForecastedDistributedDemandWithShrinkage",
-                                                  UserTexts.Resources.AgentsWithShrinkage);
+												  manager.WordDictionary["AgentsWithShrinkage"]);
             gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
             GridRows.Add(_rowManagerSkillStaffPeriod.AddRow(gridRow));
         }

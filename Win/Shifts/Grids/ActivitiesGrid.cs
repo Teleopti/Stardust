@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
@@ -10,6 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
+using Teleopti.Ccc.Win.Properties;
 using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Events;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
             grid.CellModels.Add("TimeSpanTimeOfDayCellModel", new TimeSpanCultureTimeOfDayCellModel(grid.Model));
             if (!grid.CellModels.ContainsKey("ActivityDropDownCell"))
-                grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model));
+                grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model,Resources.MasterActivity16x16));
         }
 
         internal override ShiftCreatorViewType Type
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                                                                   UserTexts.Resources.Activity,
                                                                   Presenter.Explorer.Model.ActivityCollection,
                                                                   "Name",
-                                                                  UserTexts.Resources.Activity);
+																  UserTexts.Resources.Activity, Resources.MasterActivity16x16);
             _activity.SortCompare = delegate(IActivityViewModel left, IActivityViewModel right)
             {
                 return string.Compare(left.CurrentActivity.Name,

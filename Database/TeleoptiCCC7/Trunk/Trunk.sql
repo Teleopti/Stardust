@@ -71,3 +71,26 @@ IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name=N'uq_preference_day_per_agen
 	END
 	
 GO
+
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2012-07-23
+--Desc: Adding the new skill type Retail to the database.
+----------------  
+
+IF NOT EXISTS (SELECT * FROM SkillType WHERE ForecastSource=8)
+	BEGIN
+		DECLARE @creator uniqueidentifier
+		SELECT TOP 1 @creator=CreatedBy FROM SkillType
+		IF @creator IS NULL
+			BEGIN
+				SELECT TOP 1 @creator=Id FROM Person
+			END
+		INSERT INTO SkillType (Id,ForecastType,Version,CreatedBy,UpdatedBy,CreatedOn,UpdatedOn,Name,ShortName,ForecastSource,IsDeleted)
+		VALUES (NEWID(),0,1,@creator,@creator,GETUTCDATE(),GETUTCDATE(),N'SkillTypeRetail',null,8,0)
+	END
+ELSE
+	BEGIN
+		UPDATE SkillType SET ForecastType = 0 WHERE ForecastSource=8 AND ForecastType=1
+	END

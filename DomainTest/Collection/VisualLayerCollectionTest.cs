@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                          {
                              PeriodOptimizer = new FilterLayerNoOptimizer()
                          };
-            dummyPayload = new Activity("f");
+            dummyPayload = ActivityFactory.CreateActivity("f");
         }
 
         [Test]
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         {
             IVisualLayer vLayer1 = createLayer(new DateTimePeriod(2000, 1, 1, 2001, 1, 1), dummyPayload);
             IVisualLayer vLayer2 = createLayer(new DateTimePeriod(2001, 1, 1, 2002, 1, 1), dummyPayload);
-            IVisualLayer vLayer3 = createLayer(new DateTimePeriod(2003, 1, 1, 2004, 1, 1), new Activity("should not be merged"));
+            IVisualLayer vLayer3 = createLayer(new DateTimePeriod(2003, 1, 1, 2004, 1, 1), ActivityFactory.CreateActivity("should not be merged"));
 
             internalCollection.Add(vLayer1);
             internalCollection.Add(vLayer2);
@@ -78,24 +77,24 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyFilterLayers()
         {
-            IActivity okActivity = new Activity("ok");
-            IActivity okNoActivity = new Activity("nope");
-            internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(okActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)));
-            internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(okNoActivity, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)));
-            internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(okActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1)));
+            IActivity okActivity = ActivityFactory.CreateActivity("ok");
+            IActivity okNoActivity = ActivityFactory.CreateActivity("nope");
+            internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(okActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1),dummyPerson));
+            internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(okNoActivity, new DateTimePeriod(2001, 1, 1, 2002, 1, 1),dummyPerson));
+            internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(okActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1),dummyPerson));
 
             IVisualLayerCollection ret = target.FilterLayers(okActivity);
             Assert.AreEqual(2, ret.Count());
-            Assert.AreEqual(0, target.FilterLayers(new Activity("sdf")).Count());
+            Assert.AreEqual(0, target.FilterLayers(ActivityFactory.CreateActivity("sdf")).Count());
         }
 
         [Test]
         public void VerifyFilterLayersByLayerType()
         {
             IRtaStateGroup stateGroup = new Domain.RealTimeAdherence.RtaStateGroup("test", false, true);
-            internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload, new DateTimePeriod(2001, 1, 1, 2001, 1, 2)));
-            IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(new Activity("sd"),
-                                                                 new DateTimePeriod(2001, 1, 1, 2001, 1, 2).MovePeriod(TimeSpan.FromHours(1)));
+            internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload, new DateTimePeriod(2001, 1, 1, 2001, 1, 2),dummyPerson));
+            IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("sd"),
+                                                                 new DateTimePeriod(2001, 1, 1, 2001, 1, 2).MovePeriod(TimeSpan.FromHours(1)),dummyPerson);
             internalCollection.Add(visualLayerFactory.CreateResultLayer(stateGroup, actLayer, new DateTimePeriod(2001, 1, 1, 2001, 1, 2).MovePeriod(TimeSpan.FromHours(1))));
             
             IVisualLayerCollection ret = target.FilterLayers<IRtaStateGroup>();
@@ -108,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyHasLayers()
         {
-            internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)));
+            internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload, new DateTimePeriod(2000, 1, 1, 2001, 1, 1),dummyPerson));
 			target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
 			{
 				PeriodOptimizer = new FilterLayerNoOptimizer()
@@ -125,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void PersonShouldBeSetOnLayerWhenEnumerating()
         {
             internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload, 
-                                                            new DateTimePeriod(2000, 1, 1, 2001, 1, 1)));
+                                                            new DateTimePeriod(2000, 1, 1, 2001, 1, 1),null));
             Assert.AreNotSame(dummyPerson, ((VisualLayer)internalCollection.First()).Person);
             Assert.AreSame(dummyPerson, ((VisualLayer)target.First()).Person);
         }
@@ -133,11 +132,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyFilterLayersWithAdjacentLayers()
         {
-            IActivity phone = new Activity("phone");
+            IActivity phone = ActivityFactory.CreateActivity("phone");
             internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(phone,
-                                new DateTimePeriod(new DateTime(2006, 1, 1, 18, 0, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 23, 0, 0, DateTimeKind.Utc))));
+                                new DateTimePeriod(new DateTime(2006, 1, 1, 18, 0, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 23, 0, 0, DateTimeKind.Utc)),dummyPerson));
             internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(phone,
-                                new DateTimePeriod(new DateTime(2006, 1, 1, 23, 0, 0, DateTimeKind.Utc), new DateTime(2006, 1, 2, 6, 0, 0, DateTimeKind.Utc))));
+                                new DateTimePeriod(new DateTime(2006, 1, 1, 23, 0, 0, DateTimeKind.Utc), new DateTime(2006, 1, 2, 6, 0, 0, DateTimeKind.Utc)),dummyPerson));
 
             IVisualLayerCollection ret =
                 target.FilterLayers(
@@ -152,14 +151,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyFilterLayers2()
         {
-            IActivity phone = new Activity("phone");
-            IAbsence absence = new Absence();
+            IActivity phone = ActivityFactory.CreateActivity("phone");
+            IAbsence absence = AbsenceFactory.CreateAbsence("vacation");
             internalCollection.Add(
-                visualLayerFactory.CreateShiftSetupLayer(phone, new DateTimePeriod(new DateTime(2006, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 0, 5, 0, DateTimeKind.Utc))));
+                visualLayerFactory.CreateShiftSetupLayer(phone, new DateTimePeriod(new DateTime(2006, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 0, 5, 0, DateTimeKind.Utc)),dummyPerson));
             internalCollection.Add(createAbsenceLayer(absence, new DateTimePeriod(new DateTime(2006, 1, 1, 0, 5, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 0, 9, 0, DateTimeKind.Utc))));
             internalCollection.Add(
                 visualLayerFactory.CreateShiftSetupLayer(phone,
-                                new DateTimePeriod(new DateTime(2006, 1, 1, 0, 9, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 0, 15, 0, DateTimeKind.Utc))));
+                                new DateTimePeriod(new DateTime(2006, 1, 1, 0, 9, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 0, 15, 0, DateTimeKind.Utc)),dummyPerson));
 
             IVisualLayerCollection ret =
                 target.FilterLayers(
@@ -174,21 +173,21 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
         private IVisualLayer createAbsenceLayer(IAbsence absence, DateTimePeriod period)
         {
-            IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(new Activity("for test"), period);
+            IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("for test"), period,dummyPerson);
             return visualLayerFactory.CreateAbsenceSetupLayer(absence, actLayer, period);
         }
 
         [Test]
         public void VerifyFilteredLayersWithNarrowingIndex()
         {
-            IActivity phone = new Activity("phone");
+            IActivity phone = ActivityFactory.CreateActivity("phone");
             DateTimePeriod period = new DateTimePeriod(new DateTime(2006, 1, 1, 1, 0, 0, DateTimeKind.Utc),
                                                        new DateTime(2006, 1, 1, 2, 0, 0, DateTimeKind.Utc));
 
             for (int i = 0; i < 100; i++)
             {
                 period = period.MovePeriod(TimeSpan.FromDays(1));
-                internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(phone, period));
+                internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(phone, period, dummyPerson));
             }
 
             IVisualLayerCollection ret =
@@ -409,59 +408,59 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
         private IVisualLayer createLayer(DateTimePeriod period, IActivity activity)
         {
-            return visualLayerFactory.CreateShiftSetupLayer(activity, period);
+            return visualLayerFactory.CreateShiftSetupLayer(activity, period, dummyPerson);
         }
 
         private IVisualLayer createLayer(DateTimePeriod period, 
                                                 bool activityInContractTime)
         {
-            IActivity activity = new Activity("for test");
+            IActivity activity = ActivityFactory.CreateActivity("for test");
             activity.InContractTime = activityInContractTime;
-            return visualLayerFactory.CreateShiftSetupLayer(activity, period);
+            return visualLayerFactory.CreateShiftSetupLayer(activity, period, dummyPerson);
         }
 
         private IVisualLayer createLayerInWorkTime(bool inWorkTime, DateTimePeriod period)
         {
-            IActivity underActivity = new Activity("for test");
+            IActivity underActivity = ActivityFactory.CreateActivity("for test");
             underActivity.InWorkTime = inWorkTime;
-            IVisualLayer ret = visualLayerFactory.CreateShiftSetupLayer(underActivity, period);
+            IVisualLayer ret = visualLayerFactory.CreateShiftSetupLayer(underActivity, period, dummyPerson);
             return ret;
         }
 
         private IVisualLayer createLayerInWorkTime(bool inWorkTime, bool absInContractTime, DateTimePeriod period)
         {
-            IAbsence absence = new Absence();
+            IAbsence absence = AbsenceFactory.CreateAbsence("vacation");
             absence.InWorkTime = absInContractTime;
-            IActivity underActivity = new Activity("for test");
+            IActivity underActivity = ActivityFactory.CreateActivity("for test");
             underActivity.InWorkTime = inWorkTime;
-            IVisualLayer underLayer = visualLayerFactory.CreateShiftSetupLayer(underActivity, period);
+            IVisualLayer underLayer = visualLayerFactory.CreateShiftSetupLayer(underActivity, period, dummyPerson);
             IVisualLayer ret = visualLayerFactory.CreateAbsenceSetupLayer(absence, underLayer, period);
             return ret;
         }
 
         private IVisualLayer createLayerWithOvertime(IMultiplicatorDefinitionSet multiplicatorDefinitionSet, DateTimePeriod period)
         {
-            IActivity underActivity = new Activity("for test");
-            IVisualLayer ret = visualLayerOvertimeFactory.CreateShiftSetupLayer(underActivity, period);
+            IActivity underActivity = ActivityFactory.CreateActivity("for test");
+            IVisualLayer ret = visualLayerOvertimeFactory.CreateShiftSetupLayer(underActivity, period, dummyPerson);
             ((VisualLayer) ret).DefinitionSet = multiplicatorDefinitionSet;
             return ret;
         }
 
         private IVisualLayer createLayerInPaidTime(bool inPaidTime, DateTimePeriod period)
         {
-            IActivity underActivity = new Activity("for test");
+            IActivity underActivity = ActivityFactory.CreateActivity("for test");
             underActivity.InPaidTime = inPaidTime;
-            IVisualLayer ret = visualLayerFactory.CreateShiftSetupLayer(underActivity, period);
+            IVisualLayer ret = visualLayerFactory.CreateShiftSetupLayer(underActivity, period, dummyPerson);
             return ret;
         }
 
         private IVisualLayer createLayerInPaidTime(bool inPaidTime, bool absInPaidTime, DateTimePeriod period)
         {
-            IAbsence absence = new Absence();
+            IAbsence absence = AbsenceFactory.CreateAbsence("vacation");
             absence.InPaidTime = absInPaidTime;
-            IActivity underActivity = new Activity("for test");
+            IActivity underActivity = ActivityFactory.CreateActivity("for test");
             underActivity.InPaidTime = inPaidTime;
-            IVisualLayer underLayer = visualLayerFactory.CreateShiftSetupLayer(underActivity, period);
+            IVisualLayer underLayer = visualLayerFactory.CreateShiftSetupLayer(underActivity, period, dummyPerson);
             IVisualLayer ret = visualLayerFactory.CreateAbsenceSetupLayer(absence, underLayer, period);
             return ret;
         }
@@ -470,11 +469,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
                                         bool activityInContractTime,
                                         bool absenceInContractTime)
         {
-            IAbsence absence = new Absence();
+            IAbsence absence = AbsenceFactory.CreateAbsence("vacation");
             absence.InContractTime = absenceInContractTime;
-            IActivity underActivity = new Activity("for test");
+            IActivity underActivity = ActivityFactory.CreateActivity("for test");
             underActivity.InContractTime = activityInContractTime;
-            IVisualLayer underLayer = visualLayerFactory.CreateShiftSetupLayer(underActivity, period);
+            IVisualLayer underLayer = visualLayerFactory.CreateShiftSetupLayer(underActivity, period, dummyPerson);
             IVisualLayer ret = visualLayerFactory.CreateAbsenceSetupLayer(absence, underLayer, period);
             return ret;
         }
@@ -483,13 +482,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
                                                 bool activityInReadyTime)
         {
             IActivity payload = createActivity(activityInReadyTime);
-            IVisualLayer ret = visualLayerFactory.CreateShiftSetupLayer(payload, period);
+            IVisualLayer ret = visualLayerFactory.CreateShiftSetupLayer(payload, period, dummyPerson);
             return ret;
         }
 
         private static IActivity createActivity(bool activityInReadyTime)
         {
-            IActivity payload = new Activity("for test");
+            IActivity payload = ActivityFactory.CreateActivity("for test");
             payload.InReadyTime = activityInReadyTime;
             return payload;
         }
@@ -497,8 +496,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
         private IVisualLayer createVisualLayerWithAbsenceForReadyTime(DateTimePeriod period, bool activityInReadyTime)
         {
             IActivity payload = createActivity(activityInReadyTime);
-            IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(payload, period);
-            return visualLayerFactory.CreateAbsenceSetupLayer(new Absence(), actLayer, period);
+            IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(payload, period, dummyPerson);
+            return visualLayerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("vacation"), actLayer, period);
         }
     }
 }

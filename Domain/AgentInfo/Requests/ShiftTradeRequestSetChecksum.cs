@@ -28,10 +28,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                                                           shiftTradeRequest.Period.ChangeEndTime(
                                                               TimeSpan.FromHours(25)).ChangeStartTime(TimeSpan.FromHours(-25)),
                                                           _defaultScenario);
-            //_scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(shiftTradeRequestPersonExtractor.Persons) { LoadNotes = false, LoadRestrictions = false },
-            //                                               shiftTradeRequest.Period.ChangeEndTime(
-            //                                                   TimeSpan.FromHours(25)).ChangeStartTime(TimeSpan.FromHours(-25)),
-            //                                               _defaultScenario);
             SetChecksumToShiftTradeRequest(shiftTradeRequest);
         }
 

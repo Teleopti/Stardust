@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         }
 
         [Test]
-        public void ShouldNotGenerateShiftAllowanceWhenDefinitionSetIsNotDeleted()
+        public void ShouldGenerateShiftAllowanceWhenDefinitionSetIsNotDeleted()
         {
             _multiplicatorLayersPeriods = CreatePeriods(_baseDateTime.AddHours(3), 4);
             _multiplicatorLayers = CreateMultiplicatorLayers(_definitionSet, _multiplicatorLayersPeriods, _obTimeMultiplicator);
@@ -581,7 +581,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
 
             using (_mocker.Record())
             {
-                //Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, _timeZone)).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
@@ -649,83 +648,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Assert.AreEqual(2, projection.Count);
             }
         }
-
-        //[Test]
-        //public void VerifyReturnsBothOBTimeAndOvertimeIfOverlapping()
-        //{
-        //    ///Setup for multiplicator-projection:
-        //    ///Should Create a projection of following layers:
-        //    /// Projected layers      MultiplicatorLayersOBtime   MultilpicatorLayersOvertime        Projected w. OBTime multiplic
-        //    /// OB 04:00-05:00         04:00-05:00 D1
-        //    /// OB 05:00-06:00         05:00-06:00 D1
-        //    ///                        06:00-07:00 D1
-        //    /// OB                     07:00-08:00 D1                                                 07:00-08:00 D1         
-        //    /// OB                     08:00-09:00 D1                                                 08:00-09:00 D1
-        //    /// OB,OT                  09:00-10:00 D1              09:00-10:00 D2                     09:00-10:00 D2
-        //    /// OT                                                 10:00-11:00 D2                     10:00-11:00 D2
-
-        //    IMultiplicatorDefinitionSet definitionSet2 = _mocker.StrictMock<IMultiplicatorDefinitionSet>();
-        //    _multiplicatorLayers = CreateMultiplicatorLayers(_definitionSet, CreatePeriods(_baseDateTime.AddHours(3), 6), _obTimeMultiplicator);
-        //    IList<IMultiplicatorLayer> multiplicatorLayers2 = CreateMultiplicatorLayers(definitionSet2, CreatePeriods(_baseDateTime.AddHours(8), 2), _overtimeMultiplicator);
-
-        //    //Create projection
-        //    var projection = CreateVisualLayerCollection(_layerPeriods, CreatePeriods(_baseDateTime.AddHours(6), 2), _definitionSet);
-
-        //    foreach (DateTimePeriod period in CreatePeriods(_baseDateTime.AddHours(8), 2))
-        //    {
-        //        projection = Add(projection, period, definitionSet2);
-        //    }
-
-        //    _person.Period(_dateOnly).PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(definitionSet2);
-        //    _target = new MultiplicatorProjectionService(_schedulePart, _dateOnly);
-            
-        //    using (_mocker.Record())
-        //    {
-        //        Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, _timeZone)).Repeat.AtLeastOnce();
-        //        Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
-        //        Expect.Call(_projectionService.CreateProjection()).Return(projection);
-        //        Expect.Call(_schedulePart.Person).Return(_person);
-        //        Expect.Call(_schedulePart.TimeZone).Return(_timeZone).Repeat.AtLeastOnce();
-        //        Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
-        //        Expect.Call(definitionSet2.CreateProjectionForPeriod(start, end, _timeZone)).Return(multiplicatorLayers2);
-        //        Expect.Call(definitionSet2.Equals(definitionSet2)).Return(true).Repeat.AtLeastOnce();
-        //        Expect.Call(_definitionSet.Equals(definitionSet2)).Return(false).Repeat.AtLeastOnce();
-        //        Expect.Call(definitionSet2.Equals(_definitionSet)).Return(false).Repeat.AtLeastOnce();
-        //        Expect.Call(definitionSet2.Equals(null)).Return(false).Repeat.AtLeastOnce();
-        //        Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.OBTime).Repeat.AtLeastOnce();
-        //        Expect.Call(definitionSet2.MultiplicatorType).Return(MultiplicatorType.Overtime).Repeat.AtLeastOnce();
-        //    }
-        //    using (_mocker.Playback())
-        //    {
-        //        IList<IMultiplicatorLayer> result = _target.CreateProjection();
-        //        DateTime overtimeStart =
-        //            result.Where(l => l.Payload.MultiplicatorType == MultiplicatorType.Overtime).Min(
-        //                l => l.Period.StartDateTime);
-        //        DateTime overtimeEnd =
-        //           result.Where(l => l.Payload.MultiplicatorType == MultiplicatorType.Overtime).Max(
-        //               l => l.Period.EndDateTime);
-        //        Assert.AreEqual(_baseDateTime.AddHours(9),overtimeStart,"Overtime from 09:00-11:00");
-        //        Assert.AreEqual(_baseDateTime.AddHours(11),overtimeEnd,"Overtime from 09:00-11:00");
-
-        //        DateTime OBmin =
-        //           result.Where(l => l.Payload.MultiplicatorType == MultiplicatorType.OBTime).Min(
-        //               l => l.Period.StartDateTime);
-        //        DateTime OBmax =
-        //           result.Where(l => l.Payload.MultiplicatorType == MultiplicatorType.OBTime).Max(
-        //               l => l.Period.EndDateTime);
-        //        Assert.AreEqual(_baseDateTime.AddHours(4), OBmin, "OB minimum from 04:00");
-        //        Assert.AreEqual(_baseDateTime.AddHours(10), OBmax, "OB max from 10:00");
-
-        //        //No ob between 06:00-07:00
-        //        DateTimePeriod sixToSeven = new DateTimePeriod(_baseDateTime.AddHours(6),_baseDateTime.AddHours(7));
-        //        int numberOfLayersBetweenSixAndSeven = result.Where(l => l.Payload.MultiplicatorType == MultiplicatorType.OBTime).Where(
-        //            l => sixToSeven.Contains(l.Period)).
-        //            Count();
-        //        Assert.AreEqual(0, numberOfLayersBetweenSixAndSeven,"No ob between 06:00-07:00 because mo underlying layers");
-                        
-                
-        //    }
-        //}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "NUnit.Framework.Assert.AreEqual(System.Object,System.Object,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "NUnit.Framework.Assert.AreEqual(System.Int32,System.Int32,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldNotReturnOBWhereWorkingOvertime()
@@ -819,12 +741,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             //Create the normallayers
             foreach (var period in layers)
             {
-                retList.Add(factory.CreateShiftSetupLayer(_activity, period));
+                retList.Add(factory.CreateShiftSetupLayer(_activity, period, _person));
             }
 
             foreach (var period in layersWithMultiplicator)
             {
-                var layer = factory.CreateShiftSetupLayer(_activity, period);
+                var layer = factory.CreateShiftSetupLayer(_activity, period, _person);
                 SetDefinitionSetOnVisualLayer(layer, definitionSet);
                 retList.Add(layer);
             }
@@ -837,7 +759,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             var factory = new VisualLayerFactory();
             foreach (var period in layersWithMultiplicator)
             {
-                var layer = factory.CreateShiftSetupLayer(_activity, period);
+                var layer = factory.CreateShiftSetupLayer(_activity, period, _person);
                 SetDefinitionSetOnVisualLayer(layer, definitionSet);
                 yield return layer;
             }
@@ -872,7 +794,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         private IVisualLayerCollection Add(IVisualLayerCollection collection,DateTimePeriod period,IMultiplicatorDefinitionSet definitionSet)
         {
             var layers = collection.ToList();
-            IVisualLayer layerToAdd = _factory.CreateShiftSetupLayer(_activity, period);
+            IVisualLayer layerToAdd = _factory.CreateShiftSetupLayer(_activity, period, _person);
             SetDefinitionSetOnVisualLayer(layerToAdd, definitionSet);
             layers.Add(layerToAdd);
             return new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());

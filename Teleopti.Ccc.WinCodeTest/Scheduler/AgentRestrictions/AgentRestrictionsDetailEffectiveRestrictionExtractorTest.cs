@@ -146,9 +146,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget);
 			}
 
-			Assert.AreEqual(part.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(_person).Name, _preferenceCellData.DisplayName);
-			Assert.AreEqual(part.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(_person).ShortName, _preferenceCellData.DisplayShortName);
-			Assert.AreEqual(part.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(_person), _preferenceCellData.DisplayColor);
+			var absencePayload = part.PersonAbsenceCollection()[0].Layer.Payload;
+			var absenceDescription = absencePayload.ConfidentialDescription(_person, dateOnly);
+			Assert.AreEqual(absenceDescription.Name, _preferenceCellData.DisplayName);
+			Assert.AreEqual(absenceDescription.ShortName, _preferenceCellData.DisplayShortName);
+			Assert.AreEqual(absencePayload.ConfidentialDisplayColor(_person,dateOnly), _preferenceCellData.DisplayColor);
 			Assert.IsTrue(_preferenceCellData.HasFullDayAbsence);
 			Assert.AreEqual(TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), TeleoptiPrincipal.Current.Regional.Culture), _preferenceCellData.ShiftLengthScheduledShift);
 			

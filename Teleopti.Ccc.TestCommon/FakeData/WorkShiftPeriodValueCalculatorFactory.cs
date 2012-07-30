@@ -55,24 +55,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return period;
         }
 
-        /// <summary>
-        /// Creates the visual layer collection.
-        /// </summary>
-        /// <param name="activitiesAndPeriods">The activities and periods.</param>
-        /// <returns></returns>
-        public static IVisualLayerCollection CreateVisualLayerCollection(IDictionary<IActivity, DateTimePeriod> activitiesAndPeriods)
+        public static IVisualLayerCollection CreateVisualLayerCollection(IPerson person,IDictionary<IActivity, DateTimePeriod> activitiesAndPeriods)
         {
             IList<IVisualLayer> layerList = new List<IVisualLayer>();
             IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
 
             foreach (KeyValuePair<IActivity, DateTimePeriod> activityAndPeriodPair in activitiesAndPeriods)
             {
-                IVisualLayer layer = visualLayerFactory.CreateShiftSetupLayer(activityAndPeriodPair.Key, activityAndPeriodPair.Value);
+                IVisualLayer layer = visualLayerFactory.CreateShiftSetupLayer(activityAndPeriodPair.Key, activityAndPeriodPair.Value, person);
                 layerList.Add(layer);
-
             }
 
-            return new VisualLayerCollection(null, layerList, new ProjectionPayloadMerger());
+            return new VisualLayerCollection(person, layerList, new ProjectionPayloadMerger());
         }
 
     }

@@ -11,10 +11,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	/// </remarks>
 	public class SkillStaff : ISkillStaff
 	{
-
-		#region Fields (8)
-
-		private double _calculatedLoggedOn;   //antal personer - resursberäkning
+	    private double _calculatedLoggedOn;   //antal personer - resursberäkning
 		private double _calculatedOccupancy;  //erlangsnurrar - erlangsnurran
 		private double _calculatedResource;   //antal personer "procent" pga olika - resursberäkning
 		private double _forecastedIncomingDemand; //förrut i "layern" - erlang
@@ -32,11 +29,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private double _calculatedUsedSeats;
 		private int _maxSeats;
 
-	    #endregion Fields
-
-		#region Constructors (1)
-
-		/// <summary>
+	    /// <summary>
 		/// Initializes a new instance of the <see cref="SkillStaff"/> struct.
 		/// </summary>
 		/// <param name="task">The task.</param>
@@ -51,11 +44,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_serviceAgreementData = serviceAgreement;
 		}
 
-		#endregion Constructors
-
-		#region Methods
-
-		public void Reset()
+	    public void Reset()
 		{
 			_isCalculated = false;
 			_taskData = new Task();
@@ -75,11 +64,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		    _maxSeats = 0;
 		}
 
-		#endregion
-
-		#region Properties (8)
-
-		/// <summary>
+	    /// <summary>
 		/// Gets or sets a value indicating whether this instance is calculated.
 		/// </summary>
 		/// <value>
@@ -172,8 +157,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			get
 			{
-				if (_useShrinkage)
-					return _forecastedIncomingDemand * (1d + _shrinkage.Value);
+                if (_useShrinkage)
+                    return CalculatedTrafficIntensityWithShrinkage;
 				return _forecastedIncomingDemand;
 			}
 			internal set
@@ -322,7 +307,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// </remarks>
 		public double CalculatedTrafficIntensityWithShrinkage
 		{
-			get { return _forecastedIncomingDemand * (1d + _shrinkage.Value); }
+            get
+            {
+                if (_shrinkage.Value >= 1.0)
+                    return 0;
+                return _forecastedIncomingDemand / (1 - _shrinkage.Value);
+            }
+            //get { return _forecastedIncomingDemand * (1d + _shrinkage.Value); }
 		}
 
 		public bool UseShrinkage
@@ -357,7 +348,5 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		}
 
 	    public int? NoneBlendDemand { get; set; }
-
-	    #endregion Properties
 	}
 }

@@ -80,10 +80,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 }
 
                 GridRows.Add(_rowManagerTemplateSkillDataPeriod.AddRow(new SkillDataGridRow(_rowManagerTemplateSkillDataPeriod, "IntegerMinMaxAgentCell",
-                    "MinimumPersons", UserTexts.Resources.MinimumAgents)));
+					"MinimumPersons", manager.WordDictionary["MinimumAgents"])));
 
                 GridRows.Add(_rowManagerTemplateSkillDataPeriod.AddRow(new SkillDataGridRow(_rowManagerTemplateSkillDataPeriod, "IntegerMinMaxAgentCell",
-                    "MaximumPersons", UserTexts.Resources.MaximumAgents)));
+                    "MaximumPersons", manager.WordDictionary["MaximumAgents"])));
 
                 if (!IsChildSkill)
                 {
@@ -112,13 +112,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 }
 
                 GridRows.Add(_rowManagerTemplateSkillDataPeriod.AddRow(new SkillDataGridRow(_rowManagerTemplateSkillDataPeriod, "IntegerMinMaxAgentCell",
-                    "MinimumPersons", UserTexts.Resources.MinimumAgents)));
+					"MinimumPersons", manager.WordDictionary["MinimumAgents"])));
 
                 GridRows.Add(_rowManagerTemplateSkillDataPeriod.AddRow(new SkillDataGridRow(_rowManagerTemplateSkillDataPeriod, "IntegerMinMaxAgentCell",
-                    "MaximumPersons", UserTexts.Resources.MaximumAgents)));
+                    "MaximumPersons", manager.WordDictionary["MaximumAgents"])));
 
                 GridRows.Add(_rowManagerTemplateSkillDataPeriod.AddRow(new SkillDataGridRow(_rowManagerTemplateSkillDataPeriod, "NullableNumericCell",
-                    "ManualAgents", UserTexts.Resources.Agents)));
+					"ManualAgents", manager.WordDictionary["Agents"])));
 
                 if (!IsChildSkill)
                 {

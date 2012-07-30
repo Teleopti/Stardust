@@ -2,9 +2,9 @@
 using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
@@ -16,14 +16,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private DateTimePeriod period;
         private Activity activity;
         private IVisualLayerFactory layerFactory;
+    	private IPerson person;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             layerFactory = new VisualLayerFactory();
             period = new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
-            activity = new Activity("df");
-            target = (VisualLayer)layerFactory.CreateShiftSetupLayer(activity, period);
+			activity = ActivityFactory.CreateActivity("df"); 
+			person = PersonFactory.CreatePerson();
+            target = (VisualLayer)layerFactory.CreateShiftSetupLayer(activity, period, person);
         }
 
         [Test]
@@ -31,15 +33,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             MockRepository mocks = new MockRepository();
             var act = mocks.StrictMock<IActivity>();
-            target = (VisualLayer)layerFactory.CreateShiftSetupLayer(act, period);
-            target.Person = new Person();
+            target = (VisualLayer)layerFactory.CreateShiftSetupLayer(act, period, person);
+
             Color c = Color.Red;
             Description d = new Description("sdfsdf");
             using(mocks.Record())
             {
-                Expect.Call(act.ConfidentialDescription(target.Person))
+                Expect.Call(act.ConfidentialDescription(target.Person,new DateOnly(2000,1,1)))
                     .Return(d);
-                Expect.Call(act.ConfidentialDisplayColor(target.Person))
+				Expect.Call(act.ConfidentialDisplayColor(target.Person, new DateOnly(2000, 1, 1)))
                     .Return(c);
             }
             using(mocks.Playback())
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyUnderlyingActivityMustNotBeNull()
         {
-            layerFactory.CreateShiftSetupLayer(null, period);
+            layerFactory.CreateShiftSetupLayer(null, period, person);
         }
     }
 }

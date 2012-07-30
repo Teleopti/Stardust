@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IWorkShift _workShift3;
         private IShiftCategory _category;
     	private ISchedulingOptions _schedulingOptions;
+    	private IShiftCategoryFairnessShiftValueCalculator _shiftCategoryFairnessShiftValueCalculator;
 
         [SetUp]
         public void Setup()
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _calculator = _mocks.StrictMock<IWorkShiftCalculator>();
             _fairnessValueCalculator = _mocks.StrictMock<IFairnessValueCalculator>();
 			_schedulingOptions = new SchedulingOptions();
-            _target = new BlockSchedulingWorkShiftFinderService(_calculator,_fairnessValueCalculator, null);
+        	_shiftCategoryFairnessShiftValueCalculator = _mocks.StrictMock<IShiftCategoryFairnessShiftValueCalculator>();
+			_target = new BlockSchedulingWorkShiftFinderService(_calculator, _fairnessValueCalculator, _shiftCategoryFairnessShiftValueCalculator);
         }
 
         [Test]
@@ -67,6 +69,37 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             
         }
+
+		[Test]
+		public void CanFindHighestShiftValueWithFairness()
+		{
+			DateOnly dateOnly = new DateOnly(2009, 2, 2);
+			var shifts = GetCashes();
+			ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+			foreach (IShiftProjectionCache shiftProjectionCache in shifts)
+			{
+				shiftProjectionCache.SetDate(dateOnly, cccTimeZoneInfo);
+			}
+			IFairnessValueResult fairnessValueResult = new FairnessValueResult();
+			var shiftCategoryFairnessFactors = _mocks.DynamicMock<IShiftCategoryFairnessFactors>();
+			using (_mocks.Record())
+			{
+				Expect.Call(_calculator.CalculateShiftValue(shifts[0].MainShiftProjection, null, 1, true, true)).Return(10);
+				Expect.Call(_calculator.CalculateShiftValue(shifts[1].MainShiftProjection, null, 1, true, true)).Return(5);
+				Expect.Call(_calculator.CalculateShiftValue(shifts[2].MainShiftProjection, null, 1, true, true)).Return(15);
+				
+				Expect.Call(_shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(10, 0, 15, _schedulingOptions)).Return(10);
+				Expect.Call(_shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(5, 0, 15, _schedulingOptions)).Return(5);
+				Expect.Call(_shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(15, 0, 15, _schedulingOptions)).Return(15);
+			}
+
+			using (_mocks.Playback())
+			{
+				var ret = _target.BestShiftValue(dateOnly, shifts, null, fairnessValueResult, fairnessValueResult, 5, TimeSpan.FromHours(48), true, shiftCategoryFairnessFactors, 1, true, true, _schedulingOptions);
+				Assert.AreEqual(15, ret);
+			}
+
+		}
 
         private IList<IShiftProjectionCache> GetCashes()
         {

@@ -1,9 +1,11 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿using System;
+
+namespace Teleopti.Interfaces.Domain
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface IGroupPageLight
+	public interface IGroupPageLight 
 	{
 		/// <summary>
 		/// 
@@ -12,6 +14,8 @@
 		/// <summary>
 		/// 
 		/// </summary>
-		string Key { get; set; } 
+		string Key { get; set; }
+
+        
 	}
 }

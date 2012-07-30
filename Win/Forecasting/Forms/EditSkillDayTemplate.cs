@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
     	private ServiceAgreement InitializeServiceAgreement()
     	{
-    		var serviceAgreement = _skill.SkillType.ForecastSource != ForecastSource.InboundTelephony ? ServiceAgreement.DefaultValuesEmail() : ServiceAgreement.DefaultValues();
+    		var serviceAgreement = _skill.SkillType.ForecastSource != ForecastSource.InboundTelephony && _skill.SkillType.ForecastSource != ForecastSource.Retail ? ServiceAgreement.DefaultValuesEmail() : ServiceAgreement.DefaultValues();
     		return serviceAgreement;
     	}
 

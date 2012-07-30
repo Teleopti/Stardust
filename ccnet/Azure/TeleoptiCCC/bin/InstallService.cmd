@@ -11,9 +11,21 @@ ECHO Rootdir is: "%ROOTDIR%" >> Install.log
 ::Install Services
 ::================
 ECHO Start Service install >> Install.log
-SC QUERY TeleoptiETLService
-IF NOT ERRORLEVEL 1060 CALL :ServiceError
+SC QUERY AnalyticsEtlService
+IF NOT ERRORLEVEL 1060 (
+	SC DELETE AnalyticsEtlService
+	SC QUERY AnalyticsEtlService
+	IF NOT ERRORLEVEL 1060 CALL :ServiceError
+)
 "%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" "..\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe" >> Install.log
+
+SC QUERY TeleoptiServiceBus
+IF NOT ERRORLEVEL 1060 (
+	SC DELETE TeleoptiServiceBus
+	SC QUERY TeleoptiServiceBus
+	IF NOT ERRORLEVEL 1060 CALL :ServiceError
+)
+"%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" "..\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe" >> Install.log
 
 ECHO. >> Install.log
 ECHO Done install! >> Install.log
@@ -35,6 +47,9 @@ ECHO Starting services... >> Install.log
 
 NET START AnalyticsEtlService
 IF %ERRORLEVEL% NEQ 0 ECHO Error: ETL services could not be started!! >> Install.log
+
+NET START TeleoptiServiceBus
+IF %ERRORLEVEL% NEQ 0 ECHO Error: Service bus could not be started!! >> Install.log
 
 ECHO.
 ECHO Done!

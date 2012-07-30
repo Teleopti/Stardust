@@ -399,6 +399,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
 
             //make wide enough
             _commentWindow._editTextBox.Width = Math.Max(_commentWindow.Width - 10, _commentWindow._editTextBox.Width);
+            _commentWindow._editTextBox.MaxLength = 512;
+            _commentWindow._editTextBox.WordWrap = true;
 
             _commentWindow._editTextBox.Show();
             _commentWindow.ActiveControl = _commentWindow._editTextBox;

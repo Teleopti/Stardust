@@ -93,25 +93,28 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
         private string getChartSeriesString()
         {
             string chartString;
-            switch (_skillType.ForecastSource)
-            {
-                case ForecastSource.Email:
-                    chartString = Resources.ValidatedEmails;
-                    break;
-                case ForecastSource.Facsimile:
-                    chartString = Resources.ValidatedFacsimiles;
-                    break;
-                case ForecastSource.Backoffice:
-                    chartString = Resources.ValidatedTasks;
-                    break;
-                case ForecastSource.Time:
-                    chartString = Resources.ValidatedTasks;
-                    break;
-                default:
-                    chartString = Resources.ValidatedCalls;
-                    break;
-            }
-            return chartString;
+			switch (_skillType.ForecastSource)
+			{
+				case ForecastSource.Email:
+					chartString = Resources.ValidatedEmails;
+					break;
+				case ForecastSource.Facsimile:
+					chartString = Resources.ValidatedFacsimiles;
+					break;
+				case ForecastSource.Backoffice:
+					chartString = Resources.ValidatedTasks;
+					break;
+				case ForecastSource.Time:
+					chartString = Resources.ValidatedTasks;
+					break;
+				case ForecastSource.Retail:
+					chartString = Resources.ValidatedCustomers;
+					break;
+				default:
+					chartString = Resources.ValidatedCalls;
+					break;
+			}
+        	return chartString;
         }
 
         #region chart methods

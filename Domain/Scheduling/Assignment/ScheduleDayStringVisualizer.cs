@@ -6,14 +6,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-    public static class SchedulePartStringVisualizer
+    public static class ScheduleDayStringVisualizer
     {
-        public static string GetToolTipPersonalAssignments(ISchedulePart cell, ICccTimeZoneInfo timeZoneInfo, CultureInfo cultureInfo)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public static string GetToolTipPersonalAssignments(IScheduleDay scheduleDay, ICccTimeZoneInfo timeZoneInfo, CultureInfo cultureInfo)
         {
             StringBuilder sb = new StringBuilder();
 
-            IList<IPersonAssignment> asses = cell.PersonAssignmentCollection();
-            IList<IPersonMeeting> meetings = cell.PersonMeetingCollection();
+            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollection();
+            IList<IPersonMeeting> meetings = scheduleDay.PersonMeetingCollection();
             if (asses.Count > 0 || meetings.Count > 0)
             {
                 foreach (IPersonAssignment pa in asses)
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                         {
                             sb.AppendLine();
                             sb.Append("    ");
-                            sb.Append(layer.Payload.ConfidentialDescription(pa.Person).Name); 
+                            sb.Append(layer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name); 
                             sb.Append(": ");
                             sb.Append(ToLocalStartEndTimeString(layer.Period, timeZoneInfo, cultureInfo));
                         }

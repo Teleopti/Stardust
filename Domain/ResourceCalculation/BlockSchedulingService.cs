@@ -148,9 +148,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                             schedulingOptions.NotAllowedShiftCategories.Add(category);
                         }
                     }
-					
-					bestCategory = _blockShiftCategoryFinder.BestShiftCategoryForDays(result, matrix.Person, dictionary.FairnessPoints(), dictionary[matrix.Person].FairnessPoints(), schedulingOptions).BestShiftCategory;
-                    if (bestCategory == null)
+
+                	var best =
+						_blockShiftCategoryFinder.BestShiftCategoryForDays(result, matrix.Person, schedulingOptions, dictionary[matrix.Person].FairnessPoints()).
+                			BestPossible;
+					if (best != null)
+						bestCategory = best.ShiftCategory;
+					else
+						bestCategory = null;
+
+					if (bestCategory == null)
                         return false;
 
                     schedulingOptions.ShiftCategory = bestCategory;
