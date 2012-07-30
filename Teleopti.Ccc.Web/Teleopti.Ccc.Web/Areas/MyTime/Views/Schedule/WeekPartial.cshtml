@@ -62,20 +62,20 @@
 						var topPixel = Math.Round(scheduleHeight * period.StartPositionPercentage);
 						var bottomPixel = Math.Round(scheduleHeight * period.EndPositionPercentage) - 1;
 						var heightPixel = bottomPixel - topPixel;
+						var heightDouble = scheduleHeight * (period.EndPositionPercentage - period.StartPositionPercentage);
 
-						const int pixelToDisplayAll = 32;
-						const int pixelToDisplayTitle = 15;
+						const int pixelToDisplayAll = 33;
+						const int pixelToDisplayTitle = 16;
 						var tooltipText = period.Meeting == null ? period.TimeSpan : string.Format("<div>{0}</div><div><dl><dt>Subject: </dt><dd> {1} </dd><dt>Location: </dt><dd> {2} </dd></dl></div>", period.TimeSpan, period.Meeting.Title, period.Meeting.Location);
 
-						<div class="week-schedule-layer absolute tooltip" @*@(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"week-schedule-layer absolute tooltip\"") : @Html.Raw("class=\"week-schedule-layer absolute\"")) *@
-							tooltip-title="@period.Title" tooltip-text="@tooltipText" 
+						<div class="week-schedule-layer absolute tooltip" tooltip-title="@period.Title" tooltip-text="@tooltipText" 
 							style="background-color: @string.Format("rgb({0})", period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
 							@if (period.Meeting != null)
 							{
 								<div class="icon meeting floatright"></div>
 							}
-							<strong @(heightPixel > pixelToDisplayTitle ? @Html.Raw("class=\"truncate\"") : @Html.Raw("class=\"truncate displaynone\""))>@period.Title</strong>
-							<span @(heightPixel < pixelToDisplayAll ? @Html.Raw("class=\"fullwidth displaynone\"") : @Html.Raw("class=\"fullwidth displayblock\""))>@period.TimeSpan</span>
+							<strong @(heightDouble > pixelToDisplayTitle ? @Html.Raw("class=\"truncate\"") : @Html.Raw("class=\"truncate displaynone\""))>@period.Title</strong>
+							<span @(heightDouble < pixelToDisplayAll ? @Html.Raw("class=\"fullwidth displaynone\"") : @Html.Raw("class=\"fullwidth displayblock\""))>@period.TimeSpan</span>
 						</div>
 					}
 				</li>
