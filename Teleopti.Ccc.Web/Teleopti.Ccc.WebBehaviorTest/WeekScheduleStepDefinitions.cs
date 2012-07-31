@@ -8,6 +8,8 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
+using WatiN.Core;
+using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -27,6 +29,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIClickOnAnyDayOfAWeek()
 		{
 			_page.ClickThirdDayOfOtherWeekInWeekPicker(UserFactory.User().Culture);
+		}
+
+		[When(@"I click the request symbol")]
+		public void WhenIClickTheRequestSymbol()
+		{
+			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today).ListItems.First(Find.ById("day-summary")).Div(
+				Find.ByClass("text-request", false)).EventualClick();
 		}
 
 		[Then(@"I should not see any shifts")]
@@ -147,6 +156,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => string.Format("{0}", _page.ThirdDay.ListItems[4].Divs[1].Style.BackgroundColor), Is.StringContaining(table.Rows[1][3]));
 		}
 
+		[Then(@"I should see request page")]
+		public void ThenIShouldSeeRequestPage()
+		{
+			EventualAssert.That(() => Pages.Pages.Current.Document.Uri.AbsoluteUri, Is.StringContaining("Request"));
+		}
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{
@@ -155,5 +169,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.WhenElementExists(_page.FirstDay, d => d.GetAttributeValue("data-mytime-date"), Is.EqualTo(firstDayOfWeek.ToString("yyyy-MM-dd")));
 			EventualAssert.WhenElementExists(_page.SeventhDay, d => d.GetAttributeValue("data-mytime-date"), Is.EqualTo(lastDayOfWeek.ToString("yyyy-MM-dd")));
 		}
+
 	}
 }
