@@ -44,17 +44,16 @@
 					
 				</li>
 				<li id="day-summary" @(Model.RequestPermission.TextRequestPermission ? @Html.Raw("class=\"add-text-request fourth\"") : @Html.Raw("class=\"fourth\""))>
-					<div class="relative">
-						<div class="text-request absolute" @(day.TextRequestCount > 0 ? "" : "style=display:none") title="@(string.Format(Resources.XRequests, day.TextRequestCount))">
-							<div class="floatright extrasmall">@day.TextRequestCount</div>
-							<div class="icon text-request ir floatright" />
-						</div>
-						@if (day.HasNote)
-						{
-							<div class="icon comment-day ir absolute tooltip" tooltip-text="@day.Note.Message">
-							</div>
-						}
-					</div>
+					<span class="text-request floatright" @(day.TextRequestCount > 0 ? "" : "style=display:none") title="@(string.Format(Resources.XRequests, day.TextRequestCount))">
+						<span class="floatright extrasmall">@day.TextRequestCount</span>
+						<span class="icon text-request ir floatright" />
+					</span>
+					@if (day.HasNote)
+					{
+						<span class="icon comment-day ir tooltip floatright" tooltip-text="@day.Note.Message">
+						</span>
+					}
+					<div class="add-request-space"></div>
 				</li>
 				<li class="weekview-day-schedule relative">
 					@foreach (var period in day.Periods)

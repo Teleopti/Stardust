@@ -406,6 +406,7 @@ html.full-height #push{
 
 .text-request {
 	right: 0px;
+	cursor: pointer;
 }
 .icon-left{padding-left: 25px; border: 0px; background-color: transparent; }
 button.icon-left{padding-left: 35px;}

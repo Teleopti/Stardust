@@ -17,7 +17,7 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _initTooltip() {
-		var addTextRequest = $('.add-text-request');
+		var addTextRequest = $('.add-request-space');
 		$('<div/>').qtip({
 
 			content: {
@@ -168,6 +168,10 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 					_showAbsenceTypes();
 					requestViewModel.IsFullDay(true);
 				}
+			});
+		$('.text-request')
+			.click(function () {
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index");
 			});
 	}
 
