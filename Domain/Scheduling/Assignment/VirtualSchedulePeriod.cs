@@ -178,9 +178,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					if (_schedulePeriod.IsPeriodTimeOverride)
 					{
 						double periodTime = _schedulePeriod.PeriodTime.Value.TotalMinutes;
-						int workDays = Workdays();
-						int minutes = (int)(periodTime / workDays);
-						return TimeSpan.FromMinutes(minutes);
+						int totalWorkDay = WorkdaysForTotalPeriod();
+						int periodMinutes = (int)(periodTime / totalWorkDay);
+						return TimeSpan.FromMinutes(periodMinutes);
+						//TimeSpan adjustedTime = avg
+						//int workDays = Workdays();
+						//int minutes = (int)(periodTime / workDays);
+						//return TimeSpan.FromMinutes(minutes);
 					}
 
 					//Handle override in original schedule period
@@ -196,8 +200,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public TimeSpan PeriodTarget()
 		{
-			if (_schedulePeriod != null && _schedulePeriod.IsPeriodTimeOverride)
-				return _schedulePeriod.PeriodTime.Value;
+			if (_schedulePeriod == null)
+				return TimeSpan.Zero;
 
 			int workDays = Workdays();
 			double minutes = AverageWorkTimePerDay.TotalMinutes * workDays;
@@ -237,6 +241,42 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             return workDays;
         }
+
+
+		public int WorkdaysForTotalPeriod()
+		{
+			if (!IsValid)
+				return 0;
+
+			if (_personContract == null || _personContract.ContractSchedule == null)
+				return 0;
+
+			DateOnly startDate = Person.SchedulePeriodStartDate(_thePeriodWithTheDateIn.StartDate).Value;
+			DateOnlyPeriod dateOnlyPeriod = _schedulePeriod.GetSchedulePeriod(_thePeriodWithTheDateIn.StartDate).Value;
+			
+			DateOnly endDate = dateOnlyPeriod.EndDate;
+
+			DateOnly? periodStart = Person.SchedulePeriodStartDate(_thePeriodWithTheDateIn.StartDate);
+			if (!periodStart.HasValue)
+				return 0;
+
+			int workDays = 0;
+			if (_schedulePeriod.DaysOff.HasValue)
+			{
+				return (int)endDate.Date.Subtract(startDate).TotalDays + 1 - _schedulePeriod.DaysOff.Value;
+			}
+			while (startDate <= endDate)
+			{
+				if (_person != null)
+				{
+					if (_personContract.ContractSchedule.IsWorkday(periodStart.Value, startDate))
+						workDays++;
+				}
+				startDate = startDate.AddDays(1);
+			}
+
+			return workDays;
+		}
 
         public int DaysOff()
         {
