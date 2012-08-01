@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click on today's summary")]
 		public void WhenIClickOnTodaySSummary()
 		{
-			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today).ListItems.First(Find.ById("day-summary")).Div(Find.ByClass("add-request-space")).EventualClick();
+			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today).ListItems.First(Find.ById("day-summary")).Div(Find.ById("add-request-cell")).EventualClick();
 		}
 
 		[When(@"I click on tomorrows summary")]
 		public void WhenIClickOnTomorrowsSummary()
 		{
-			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today.AddDays(1)).ListItems.First(Find.ById("day-summary")).Div(Find.ByClass("add-request-space")).EventualClick();
+			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today.AddDays(1)).ListItems.First(Find.ById("day-summary")).Div(Find.ById("add-request-cell")).EventualClick();
 		}
 
 		[Then(@"I should see the text request form")]

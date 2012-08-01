@@ -53,7 +53,7 @@
 						<div class="icon comment-day ir tooltip floatright" tooltip-text="@day.Note.Message">
 						</div>
 					}
-					<div @(Model.RequestPermission.TextRequestPermission ? @Html.Raw("class=\"add-request-space\"") : @Html.Raw("class=\"\""))></div>
+					<div id="add-request-cell"  @(Model.RequestPermission.TextRequestPermission ? @Html.Raw("class=\"add-request-space\"") : @Html.Raw("class=\"\""))></div>
 				</li>
 				<li class="weekview-day-schedule relative">
 					@foreach (var period in day.Periods)
