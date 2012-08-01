@@ -10913,4 +10913,8 @@ These options are activated:
     <value>Walk Aways</value>
     <comment>Label for retail skill</comment>
   </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>Your preference is out of range.</value>
+    <comment>Used for tooltip of warning icon in mytimeweb when your preference is out of range.</comment>
+  </data>
 </root>
