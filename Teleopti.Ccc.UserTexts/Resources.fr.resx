@@ -832,7 +832,7 @@
     <value>OK</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Ouvert</value>
+    <value>Ouvrir</value>
   </data>
   <data name="OpenHours" xml:space="preserve">
     <value>Horaires d'ouverture</value>
@@ -1018,7 +1018,7 @@
     <value>Règles</value>
   </data>
   <data name="RuleSet" xml:space="preserve">
-    <value>Set de règles</value>
+    <value>Règle d'horaires</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Sauvegarder</value>
@@ -1990,7 +1990,7 @@
     <value>Altérer entre</value>
   </data>
   <data name="CalculatingResourcesDotDotDot" xml:space="preserve">
-    <value>Calculation des données...</value>
+    <value>Calcul des données...</value>
   </data>
   <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
     <value>Temps d'Absence par Absence</value>
@@ -2221,7 +2221,7 @@
     <value>Modèle multisite</value>
   </data>
   <data name="NoRulesetsavailable" xml:space="preserve">
-    <value>Aucun set de règles disponible</value>
+    <value>Aucune règle d'horaires disponible</value>
   </data>
   <data name="OccupancyAdjustment" xml:space="preserve">
     <value>Ajustement du taux d'activité</value>
@@ -2251,10 +2251,10 @@
     <value>Période roulante</value>
   </data>
   <data name="Rulesetavailable" xml:space="preserve">
-    <value>1 set de règles disponible</value>
+    <value>1 règle d'horaires disponible</value>
   </data>
   <data name="Rulesetsavailables" xml:space="preserve">
-    <value>Sets de règles disponibles</value>
+    <value>Règles d'horaires disponibles</value>
   </data>
   <data name="ScheduledHeads" xml:space="preserve">
     <value>Effectif Planifié</value>
@@ -2662,7 +2662,7 @@
     <value>Min</value>
   </data>
   <data name="RuleSets" xml:space="preserve">
-    <value>Set de règles</value>
+    <value>Règle d'horaires</value>
   </data>
   <data name="ShiftBags" xml:space="preserve">
     <value>Banque d'horaires</value>
@@ -2851,13 +2851,13 @@
     <value>Nouvelle Règle</value>
   </data>
   <data name="NewRuleSet" xml:space="preserve">
-    <value>Nouveau Set de Règles</value>
+    <value>Nouvelle règle d'horaires</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
     <value>Horaires - Teleopti CCC</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
-    <value>&lt; Nom set de règles &gt;</value>
+    <value>&lt; Nom règle d'horaires &gt;</value>
   </data>
   <data name="CutActivity" xml:space="preserve">
     <value>Couper Activité</value>
@@ -2869,10 +2869,10 @@
     <value>Couper Limitation</value>
   </data>
   <data name="CutRuleSet" xml:space="preserve">
-    <value>Couper Set de règles</value>
+    <value>Couper règle d'horaires</value>
   </data>
   <data name="CutRuleSetBag" xml:space="preserve">
-    <value>Couper Banque de Set de règles</value>
+    <value>Couper Banque d'horaires</value>
   </data>
   <data name="DeleteDateEx" xml:space="preserve">
     <value>Supprimer Exclusion Date</value>
@@ -2881,10 +2881,10 @@
     <value>Supprimer Limitation</value>
   </data>
   <data name="DeleteRuleSet" xml:space="preserve">
-    <value>Supprimer Sets de règles</value>
+    <value>Supprimer Règle d'horaires</value>
   </data>
   <data name="DeleteRuleSetBag" xml:space="preserve">
-    <value>Supprimer Banque de Sets de règles</value>
+    <value>Supprimer Banque d'horaires</value>
   </data>
   <data name="NewDateExclusion" xml:space="preserve">
     <value>Nouvelle date de disponibilité</value>
@@ -2905,22 +2905,22 @@
     <value>Coller Limitation</value>
   </data>
   <data name="PasteRuleSet" xml:space="preserve">
-    <value>Coller Set de Règles</value>
+    <value>Coller Règle d'horaires</value>
   </data>
   <data name="PasteRuleSetBag" xml:space="preserve">
-    <value>Coller Banque de Sets de Règles</value>
+    <value>Coller Banque d'horaires</value>
   </data>
   <data name="SelectRuleSetBagMessage" xml:space="preserve">
-    <value>Sélectionner le Message Banque de sets de règles</value>
+    <value>Sélectionner le Message Banque d'horaires</value>
   </data>
   <data name="SelectRuleSetMessage" xml:space="preserve">
     <value>Sélectionner le Message Banque de règles</value>
   </data>
   <data name="CopyRuleSet" xml:space="preserve">
-    <value>Copier Set de règles</value>
+    <value>Copier règle d'horaires</value>
   </data>
   <data name="CopyRuleSetBag" xml:space="preserve">
-    <value>Copier Banque de Set de règles</value>
+    <value>Copier Banque d'horaires</value>
   </data>
   <data name="DeleteRole" xml:space="preserve">
     <value>Supprimer Rôle</value>
@@ -3049,10 +3049,10 @@
     <value>Gérer Distributuions multisite</value>
   </data>
   <data name="ListOfValues" xml:space="preserve">
-    <value>Liste de sets de règles</value>
+    <value>Liste de règles d'horaires</value>
   </data>
   <data name="SelectYourListOfValues" xml:space="preserve">
-    <value>Sélectionner votre liste de sets de règles</value>
+    <value>Sélectionner votre liste de règles d'horaires</value>
   </data>
   <data name="Overtime" xml:space="preserve">
     <value>Heures supplémentaires</value>
@@ -3136,7 +3136,7 @@
     <value>Appliquer Standard</value>
   </data>
   <data name="NewTextRequest" xml:space="preserve">
-    <value>Nouvelle demande de texte</value>
+    <value>Nouvelle demande texte</value>
   </data>
   <data name="TextRequest" xml:space="preserve">
     <value>Demande de texte</value>
@@ -3922,7 +3922,7 @@
     <value>Sélectionner banques</value>
   </data>
   <data name="SelectRuleSets" xml:space="preserve">
-    <value>Sélectionner sets de règles</value>
+    <value>Sélectionner règles d'horaires</value>
   </data>
   <data name="NoScenario" xml:space="preserve">
     <value>Aucun Scénario</value>
@@ -4522,7 +4522,7 @@
     <value>Planification par blocs</value>
   </data>
   <data name="Left" xml:space="preserve">
-    <value>Gauche</value>
+    <value>Restant</value>
   </data>
   <data name="TrackerType" xml:space="preserve">
     <value>Type de Tracker</value>
@@ -4531,7 +4531,7 @@
     <value>Effectif réel</value>
   </data>
   <data name="YouHaveToHaveAtLeastOnActivityAndShiftCategoryBeforeCreatingARuleset" xml:space="preserve">
-    <value>Vous devez avoir au moins une activité et catégorie horaires avant de créer un set de règle. </value>
+    <value>Vous devez avoir au moins une activité et catégorie horaires avant de créer une règle d'horaires. </value>
   </data>
   <data name="Validations" xml:space="preserve">
     <value>Validations</value>
@@ -4546,10 +4546,10 @@
     <value>Un autre utilisateur a déjà modifié ces données. Essayer à nouveau svp. </value>
   </data>
   <data name="NoRuleSetSelected" xml:space="preserve">
-    <value>Aucun set de règles sélectionné</value>
+    <value>Aucune règle d'horaires sélectionnée</value>
   </data>
   <data name="YouHaveToSelectAtLeastOneRuleSet" xml:space="preserve">
-    <value>Vous devez sélectioner au moins un set de règles!</value>
+    <value>Vous devez sélectionner au moins une règle d'horaires!</value>
   </data>
   <data name="MessageForm" xml:space="preserve">
     <value>Messages</value>
@@ -5533,13 +5533,13 @@
     <value>Temps entré est invalide ou zero</value>
   </data>
   <data name="DefaultRuleSetBagName" xml:space="preserve">
-    <value>&lt; Nom de banque de sets de règles &gt;</value>
+    <value>&lt; Nom de banque d'horaires &gt;</value>
   </data>
   <data name="InsufficientPermission" xml:space="preserve">
     <value>Vous n'avez pas la permission de faire ces tâches. Veuillez contacter votre administrateur.</value>
   </data>
   <data name="AddRuleSet" xml:space="preserve">
-    <value>Ajouter set de règle</value>
+    <value>Ajouter règle d'horaires</value>
   </data>
   <data name="RelativeEnd" xml:space="preserve">
     <value>Fin relative</value>
@@ -6538,7 +6538,7 @@
     <value>Règle horaire de travail</value>
   </data>
   <data name="Workshiftruleset" xml:space="preserve">
-    <value>set de règles Horaire de travail</value>
+    <value>Règles Horaire de travail</value>
   </data>
   <data name="DuplicatePersonPeriodMessage" xml:space="preserve">
     <value>Aucun doublon de date autorisé dans la Période personne pour</value>
@@ -6562,7 +6562,7 @@
     <value>Vous devez travailler au moins {0} heures. Vous êtes disponible maintenant entre {1} et {2}heures. </value>
   </data>
   <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
-    <value>Le longueur maximum de l'assignation est {0} heures. Longueur courante de l'affectation est {1} heures.</value>
+    <value>Le longueur maximum de l'assignation est {0} heures. Longueur courante de l'assignation est {1} heures.</value>
   </data>
   <data name="DatabaseConnectionLostFormClose" xml:space="preserve">
     <value>Connexion avec base de données perdue. Pour conserver intégrité des données, le formulaire va être fermé. Désolé, vos changements seront perdus.</value>
@@ -7389,7 +7389,7 @@ Ces options sont activés:
     <value>Fait débuter les horaires avec</value>
   </data>
   <data name="NoRuleSetBagDefined" xml:space="preserve">
-    <value>Pas de groupe de set de règles défini</value>
+    <value>Pas de banque d'horaires définie</value>
   </data>
   <data name="NoSchedulePeriodIsDefinedForTheDate" xml:space="preserve">
     <value>Pas de période planning définie à cette date</value>
@@ -7398,7 +7398,7 @@ Ces options sont activés:
     <value>Pas d'horaires de travail disponibles</value>
   </data>
   <data name="RulesetIsNotValidThisDate" xml:space="preserve">
-    <value>Le set de règles {0} n'est pas valide à cette date</value>
+    <value>La banque d'horaires {0} n'est pas valide à cette date</value>
   </data>
   <data name="OnlyShowResultFromLastBatch" xml:space="preserve">
     <value>Seulement montrer un résultat depuis le dernier groupe</value>
@@ -7470,7 +7470,7 @@ Ces options sont activés:
     <value>Visualisateur de multiplicateur</value>
   </data>
   <data name="ConnectedDefinitionSets" xml:space="preserve">
-    <value>Set de définitions connectés:</value>
+    <value>Sets de définitions connectés:</value>
   </data>
   <data name="MeetingErrorMessageWithOneParameter" xml:space="preserve">
     <value>Merci de supprimer {0} du meeting car vous n'avez pas suffisamment de permissions pour cette personne.</value>
@@ -7497,7 +7497,7 @@ Ces options sont activés:
     <value>Protection d'écriture (jours)</value>
   </data>
   <data name="RecentWorkShiftRuleSets" xml:space="preserve">
-    <value>Set de règles d'horaires récents</value>
+    <value>Règles d'horaires récents</value>
   </data>
   <data name="NotRemovable" xml:space="preserve">
     <value>Non supprimable</value>
@@ -8244,5 +8244,38 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="MissingAbsenceType" xml:space="preserve">
     <value>Type d'absence manquant.</value>
+  </data>
+  <data name="YourPreferencesCanResultXHours" xml:space="preserve">
+    <value>Vos préférences peuvent porter sur {0} heures</value>
+  </data>
+  <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
+    <value>Vos préférences peuvent porter sur {0} à {1} heures</value>
+  </data>
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+    <value>Vous devez travailler de {0} à {1} heures.</value>
+  </data>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Soumettre</value>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>Supplanter temps période</value>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Supplanter heures par jour</value>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Supplanter jours libres</value>
+  </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>La fenêtre du flux {0} est ouverte. Merci de la fermer car elle n'est plus actuelle.</value>
+  </data>
+  <data name="LongtermForecast" xml:space="preserve">
+    <value>Prévisions long-terme</value>
+  </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>Gérer les régles d'horaires</value>
+  </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>Agents (Supplantation manuelle)</value>
   </data>
 </root>
