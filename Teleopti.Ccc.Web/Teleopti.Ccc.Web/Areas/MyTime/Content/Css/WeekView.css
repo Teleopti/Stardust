@@ -212,6 +212,11 @@
 	height: 16px;
 	width: 8em;
 }
+.en .absence-input-label 
+{
+	font-size: 12px;
+	width: 80px;
+}
 .rtl .absence-input-label 
 {
 	text-align: right;
