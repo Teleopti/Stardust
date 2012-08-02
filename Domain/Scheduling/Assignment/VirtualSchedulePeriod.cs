@@ -255,15 +255,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
     	public int WorkdaysForTotalPeriod()
 		{
-			//if (!IsValid)
-			//    return 0;
-
-			//if (_personContract == null || _personContract.ContractSchedule == null)
-			//    return 0;
-
-			//DateOnly startDate = Person.SchedulePeriodStartDate(_thePeriodWithTheDateIn.StartDate).Value;
-			//DateOnlyPeriod dateOnlyPeriod = _schedulePeriod.GetSchedulePeriod(_thePeriodWithTheDateIn.StartDate).Value;
-			//DateOnly endDate = dateOnlyPeriod.EndDate;
 
     		DateOnlyPeriod? totalPeriod = TotalPeriod();
 
@@ -280,12 +271,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				return TotalPeriod().Value.DayCount() - totalDaysOff();
 			}
-
-
-    		//if (_schedulePeriod.DaysOff.HasValue )
-			//{
-			//    return (int)periodEnd.Date.Subtract(tempDate).TotalDays + 1 - _schedulePeriod.DaysOff.Value;
-			//}
 			
 			while (tempDate <= periodEnd)
 			{
@@ -324,15 +309,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				int res = (int)(((double) virtualPeriodLength/(double) totalPeriodLength) * totalDayOffs);
 				return res;
 			}
-        	
-			//if (_schedulePeriod.DaysOff.HasValue)
-			//{
-			//    int virtualPeriodLength = _thePeriodWithTheDateIn.DayCount();
-			//    int totalPeriodLength = TotalPeriod().Value.DayCount();
-			//    int totalDayOffs = _schedulePeriod.DaysOff.Value;
-			//    int res = (int)(((double)virtualPeriodLength / (double)totalPeriodLength) * totalDayOffs);
-			//    return res;
-			//}
 
             if (_personContract == null || _personContract.ContractSchedule == null)
                 return 0;
