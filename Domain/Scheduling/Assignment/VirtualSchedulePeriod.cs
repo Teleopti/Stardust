@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             int workDays = 0;
 
-			if (_schedulePeriod.IsPeriodTimeOverride)
+			if (_schedulePeriod.IsDaysOffOverride || _schedulePeriod.PeriodType == SchedulePeriodType.ChineseMonth)
             {
 				return _thePeriodWithTheDateIn.DayCount() - DaysOff();
             }
