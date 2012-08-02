@@ -97,7 +97,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void CanGetNumberOfDaysOffForChineseMonth()
 		{
 			_schedulePeriod.PeriodType = SchedulePeriodType.ChineseMonth;
-			Assert.AreEqual(7, _target.DaysOff());
+			_schedulePeriod.DaysOff = 8;
+			// it will be 1/4-th the day offs as the
+			Assert.AreEqual(2, _target.DaysOff());
 		}
 
         [Test]
