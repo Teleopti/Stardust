@@ -29,8 +29,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return from d in effectivePeriodDays select d.DaySchedulePart();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public TimeSpan DayOff(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
+		{
+			var contract = virtualSchedulePeriod.Contract;
+			var employmentType = contract.EmploymentType;
 
+			if (employmentType == EmploymentType.HourlyStaff)
+				return contract.MinTimeSchedulePeriod;
 
+			var target = PeriodTarget(virtualSchedulePeriod, scheduleDays);
+			target = ApplySeasonality(virtualSchedulePeriod, target);
+			target = ApplyBalance(virtualSchedulePeriod, target);
+			return target;
+		}
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
