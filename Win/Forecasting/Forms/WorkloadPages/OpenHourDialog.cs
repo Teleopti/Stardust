@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             {
                 var startTime = timePicker.StartTime.TimeValue();
                 var endTime = timePicker.EndTime.TimeValue();
-                if(startTime >= endTime)
+                if(!_isClosed && startTime >= endTime)
                 {
                     errorProvider1.SetError(chbClose,
                                             string.Format(TeleoptiPrincipal.Current.Regional.UICulture, UserTexts.Resources.StartTimeShouldBeEarlierThanEndTimeDot,
