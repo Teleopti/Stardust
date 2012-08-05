@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			if (cache == null)
 				throw new InvalidOperationException();
-			Builder = new CacheBuilder(new ProxyFactory(), cache, new TeleoptiCacheKey(), lockObjectGenerator);
+			Builder = new CacheBuilder(new ProxyFactory(), cache, new TeleoptiCacheKey());
+			Builder.SetLockObjectGenerator(lockObjectGenerator);
 		}
 
 		public CacheBuilder Builder { get; private set; }
