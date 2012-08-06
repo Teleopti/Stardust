@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private RequestPreferencesPersonalSettings _target;
         private List<FilterBoxAdvancedFilter> _filterList ;
 
-        [SetUp]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Common.FilterAdvancedTupleItem.#ctor(System.String,System.Object)"), SetUp]
         public void Setup()
         {
             _target = new RequestPreferencesPersonalSettings();
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
         [Test]
-        public void VerifyReqPrefPropertyTest()
+        public void VerifyRequirePreferencesPropertyTest()
         {
             
            var rq = new RequestPreferences();
