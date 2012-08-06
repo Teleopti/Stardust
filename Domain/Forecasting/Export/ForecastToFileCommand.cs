@@ -9,58 +9,65 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
     public class ForecastToFileCommand
     {
-        //private readonly IImportForecastToSkillCommand _importForecastToSkillCommand; // using this will only send it to the servicebus, 
-                                                                                      //not needed since we can implement it here and no logs are required
-        private readonly ISkillDayLoadHelper _skillDayLoadHelper; // loads data?
-        // private readonly IScenarioProvider _scenarioProvider; //Scenario repo?
+        private readonly ISkillDayLoadHelper _skillDayLoadHelper; 
+        private readonly IScenarioProvider _scenarioProvider;
+        private readonly IJobResultFeedback _feedback;
+        private ISkill _skill;
 
-        public ForecastToFileCommand(ISkillDayLoadHelper skillDayLoadHelper) //, IImportForecastToSkillCommand importForecastToSkillCommand, IScenarioProvider scenarioProvider, IJobResultFeedback feedback)
+        public ForecastToFileCommand(ISkillDayLoadHelper skillDayLoadHelper, IScenarioProvider scenarioProvider, IJobResultFeedback feedback)
         {
             _skillDayLoadHelper = skillDayLoadHelper;
-            // _importForecastToSkillCommand = importForecastToSkillCommand;
-            //_scenarioProvider = scenarioProvider;
+            _scenarioProvider = scenarioProvider;
+            _feedback = feedback;
         }
 
-                                                                                 // Where to put enum to access it from here? Ugly solve but "should" work
-        public void Execute(ISkill skill, IScenario scenario, DateOnlyPeriod period, string typeOfExport, string filePath)
+        public void Execute(IForecastExportSelection forecastExportSelection)
         {
-            if (skill == null) return;
-            // not sure if this will acually get all the data needed
-            var loadSkillSchedule = _skillDayLoadHelper.LoadSchedulerSkillDays(period, new[] {skill}, scenario);
-            // this seem to only sort/fix gathered data but is needed to create the dictionary
+            if (forecastExportSelection.ForecastSkillForExport == null) return;
+
+            foreach (var forecastSkill in forecastExportSelection.ForecastSkillForExport)
+            {
+                _skill = forecastSkill;
+            }
+
+            var loadSkillSchedule = _skillDayLoadHelper.LoadSchedulerSkillDays(forecastExportSelection.Period,
+                                                                               forecastExportSelection.
+                                                                                   ForecastSkillForExport,
+                                                                               forecastExportSelection.Scenario);
             var skillStaffPeriodHolder = new SkillStaffPeriodHolder(loadSkillSchedule);
-            
             ISkillStaffPeriodDictionary skillStaffPeriods;
-            if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriods))
+
+            if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(_skill, out skillStaffPeriods))
             {
                 var result = new List<string>();
 
                 foreach (var skillStaffPeriod in skillStaffPeriods.Values)
                 {
                     var row = new ForecastsRow
-                                  {
-                                      LocalDateTimeFrom = skillStaffPeriod.Period.StartDateTimeLocal(skill.TimeZone),
-                                      LocalDateTimeTo = skillStaffPeriod.Period.EndDateTimeLocal(skill.TimeZone),
-                                      UtcDateTimeFrom = skillStaffPeriod.Period.StartDateTime,
-                                      UtcDateTimeTo = skillStaffPeriod.Period.EndDateTime,
-                                      SkillName = skill.Name,                                      
-                                  };
+                    {
+                        LocalDateTimeFrom = skillStaffPeriod.Period.StartDateTimeLocal(_skill.TimeZone),
+                        LocalDateTimeTo = skillStaffPeriod.Period.EndDateTimeLocal(_skill.TimeZone),
+                        UtcDateTimeFrom = skillStaffPeriod.Period.StartDateTime,
+                        UtcDateTimeTo = skillStaffPeriod.Period.EndDateTime,
+                        SkillName = _skill.Name,
+                    };
 
-                    if (typeOfExport != "Agents")
+                    if (forecastExportSelection.TypeOfExport.Equals(ExportForecastsMode.Calls) || forecastExportSelection.TypeOfExport.Equals(ExportForecastsMode.AgentAndCalls))
                     {
                         row.Tasks = (int)skillStaffPeriod.Payload.TaskData.Tasks;
                         row.TaskTime = skillStaffPeriod.Payload.TaskData.AverageTaskTime.TotalSeconds;
                         row.AfterTaskTime = skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime.TotalSeconds;
                     }
 
-                    if (typeOfExport != "Calls")
+                    if (forecastExportSelection.TypeOfExport.Equals(ExportForecastsMode.Agent) || forecastExportSelection.TypeOfExport.Equals(ExportForecastsMode.AgentAndCalls))
                     {
                         row.Agents = skillStaffPeriod.Payload.ForecastedIncomingDemand;
                     }
                     result.Add(row + System.Environment.NewLine);
                 }
 
-                File.WriteAllLines(filePath, result.ToArray());
+                File.WriteAllLines(forecastExportSelection.FilePath + "\\" + forecastExportSelection.FileName, result.ToArray());
+
             }
         }
     }
