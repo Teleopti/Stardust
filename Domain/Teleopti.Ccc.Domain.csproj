@@ -158,7 +158,6 @@
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModel.cs" />
     <Compile Include="Forecasting\Export\ForecastExportSelection.cs" />
     <Compile Include="Forecasting\Export\IForecastExportSelection.cs" />
-    <Compile Include="Forecasting\Export\ForecastToFileCommand.cs" />
     <Compile Include="Forecasting\Export\IJobResultFeedback.cs" />
     <Compile Include="Forecasting\Export\ImportForecastToSkillCommand.cs" />
     <Compile Include="Forecasting\Export\IMultisiteSkillForExport.cs" />

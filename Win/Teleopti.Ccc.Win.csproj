@@ -621,6 +621,7 @@
     <Compile Include="Forecasting\Forms\ExportPages\FileExportDone.Designer.cs">
       <DependentUpon>FileExportDone.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\ForecastToFileCommand.cs" />
     <Compile Include="Forecasting\Forms\ExportPages\SelectFileDestination.cs">
       <SubType>UserControl</SubType>
     </Compile>

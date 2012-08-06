@@ -3,10 +3,11 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Forecasting.Export
+namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
     public class ForecastToFileCommand
     {
