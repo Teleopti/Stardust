@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -14,6 +20,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
     {
         private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
+        private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
         private SaveFileDialog _saveFileDialog; 
 
         public SelectFileDestination()
@@ -57,10 +64,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         public bool Depopulate(ExportSkillModel stateObj)
         {
             if (String.IsNullOrEmpty(textBox1.Text)) return false;
-            stateObj.ExportSkillToFileCommandModel.FileName = textBox1.Text;
+            var commandModel = stateObj.ExportSkillToFileCommandModel;
+            commandModel.FileName = textBox1.Text;
             _saveFileDialog.Dispose();
             GetSelectedCheckbox(stateObj);
-
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                var skill = _repositoryFactory.CreateSkillRepository(uow).LoadSkill(commandModel.Skill);
+                var skillDays = _repositoryFactory.CreateSkillDayRepository(uow).FindRange(commandModel.Period, skill,
+                                                                                           commandModel.Scenario);
+                var command = new ForecastToFileCommand(skill, commandModel, skillDays);
+                command.Execute();
+            }
             return true;
         }
 
@@ -85,9 +100,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public void GetSelectedCheckbox(ExportSkillModel stateObj)
         {
-            if (radioButtonImportStaffing.Checked) stateObj.ExportSkillToFileCommandModel.ExportType = ExportSkillToFileCommandModel.TypeOfExport.Agents;
-            if (radioButtonImportWorkload.Checked) stateObj.ExportSkillToFileCommandModel.ExportType = ExportSkillToFileCommandModel.TypeOfExport.Calls;
-            if (radioButtonImportWLAndStaffing.Checked) stateObj.ExportSkillToFileCommandModel.ExportType = ExportSkillToFileCommandModel.TypeOfExport.AgentsAndCalls;
+            if (radioButtonImportStaffing.Checked) stateObj.ExportSkillToFileCommandModel.ExportType = TypeOfExport.Agents;
+            if (radioButtonImportWorkload.Checked) stateObj.ExportSkillToFileCommandModel.ExportType = TypeOfExport.Calls;
+            if (radioButtonImportWLAndStaffing.Checked) stateObj.ExportSkillToFileCommandModel.ExportType = TypeOfExport.AgentsAndCalls;
         }
     }
 }

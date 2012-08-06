@@ -1,7 +1,8 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
+using System.Linq;
+using System.Text;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -9,65 +10,60 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
     public class ForecastToFileCommand
     {
-        private readonly ISkillDayLoadHelper _skillDayLoadHelper; 
-        private readonly IScenarioProvider _scenarioProvider;
-        private readonly IJobResultFeedback _feedback;
-        private ISkill _skill;
+        private readonly ExportSkillToFileCommandModel _model;
+        private readonly IEnumerable<ISkillDay> _skillDays;
+        private readonly ISkill _skill;
+        private const string dateTimeFormat = "yyyyMMdd HH:mm";
+        private const string seperator = ",";
 
-        public ForecastToFileCommand(ISkillDayLoadHelper skillDayLoadHelper, IScenarioProvider scenarioProvider, IJobResultFeedback feedback)
+        public ForecastToFileCommand(ISkill skill, ExportSkillToFileCommandModel model, IEnumerable<ISkillDay> skillDays)
         {
-            _skillDayLoadHelper = skillDayLoadHelper;
-            _scenarioProvider = scenarioProvider;
-            _feedback = feedback;
+            _skill = skill;
+            _model = model;
+            _skillDays = skillDays;
         }
 
-        public void Execute(IForecastExportSelection forecastExportSelection)
+        public void Execute()
         {
-            if (forecastExportSelection.ForecastSkillForExport == null) return;
-
-            foreach (var forecastSkill in forecastExportSelection.ForecastSkillForExport)
-            {
-                _skill = forecastSkill;
-            }
-
-            var loadSkillSchedule = _skillDayLoadHelper.LoadSchedulerSkillDays(forecastExportSelection.Period,
-                                                                               forecastExportSelection.
-                                                                                   ForecastSkillForExport,
-                                                                               forecastExportSelection.Scenario);
+            var loadSkillSchedule = new Dictionary<ISkill, IList<ISkillDay>> {{_skill, _skillDays.ToList()}};
             var skillStaffPeriodHolder = new SkillStaffPeriodHolder(loadSkillSchedule);
             ISkillStaffPeriodDictionary skillStaffPeriods;
 
             if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(_skill, out skillStaffPeriods))
             {
-                var result = new List<string>();
-
-                foreach (var skillStaffPeriod in skillStaffPeriods.Values)
+                using (var writter = new StreamWriter(_model.FileName))
                 {
-                    var row = new ForecastsRow
+                    foreach (var skillStaffPeriod in skillStaffPeriods.Values)
                     {
-                        LocalDateTimeFrom = skillStaffPeriod.Period.StartDateTimeLocal(_skill.TimeZone),
-                        LocalDateTimeTo = skillStaffPeriod.Period.EndDateTimeLocal(_skill.TimeZone),
-                        UtcDateTimeFrom = skillStaffPeriod.Period.StartDateTime,
-                        UtcDateTimeTo = skillStaffPeriod.Period.EndDateTime,
-                        SkillName = _skill.Name,
-                    };
+                        var row = new StringBuilder();
+                        row.Append(_skill.Name);
+                        row.Append(seperator);
+                        row.Append(skillStaffPeriod.Period.StartDateTimeLocal(_skill.TimeZone).ToString(dateTimeFormat,CultureInfo.InvariantCulture));
+                        row.Append(seperator);
+                        row.Append(skillStaffPeriod.Period.EndDateTimeLocal(_skill.TimeZone).ToString(dateTimeFormat,CultureInfo.InvariantCulture));
+                        row.Append(seperator);
 
-                    if (forecastExportSelection.TypeOfExport.Equals(ExportForecastsMode.Calls) || forecastExportSelection.TypeOfExport.Equals(ExportForecastsMode.AgentAndCalls))
-                    {
-                        row.Tasks = (int)skillStaffPeriod.Payload.TaskData.Tasks;
-                        row.TaskTime = skillStaffPeriod.Payload.TaskData.AverageTaskTime.TotalSeconds;
-                        row.AfterTaskTime = skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime.TotalSeconds;
-                    }
+                        if (_model.ExportType.Equals(TypeOfExport.Calls) ||
+                            _model.ExportType.Equals(TypeOfExport.AgentsAndCalls))
+                        {
+                            row.Append((int) skillStaffPeriod.Payload.TaskData.Tasks);
+                            row.Append(seperator);
+                            row.Append(skillStaffPeriod.Payload.TaskData.AverageTaskTime.TotalSeconds.ToString("F",
+                                                                                                               CultureInfo.InvariantCulture));
+                            row.Append(seperator);
+                            row.Append(skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime.TotalSeconds.ToString(
+                                "F", CultureInfo.InvariantCulture));
+                            row.Append(seperator);
+                        }
 
-                    if (forecastExportSelection.TypeOfExport.Equals(ExportForecastsMode.Agent) || forecastExportSelection.TypeOfExport.Equals(ExportForecastsMode.AgentAndCalls))
-                    {
-                        row.Agents = skillStaffPeriod.Payload.ForecastedIncomingDemand;
+                        if (_model.ExportType.Equals(TypeOfExport.Agents) ||
+                            _model.ExportType.Equals(TypeOfExport.AgentsAndCalls))
+                        {
+                            row.Append(skillStaffPeriod.Payload.ForecastedIncomingDemand.ToString("F",CultureInfo.InvariantCulture));
+                        }
+                        writter.WriteLine(row.ToString());
                     }
-                    result.Add(row + System.Environment.NewLine);
                 }
-
-                File.WriteAllLines(forecastExportSelection.FilePath + "\\" + forecastExportSelection.FileName, result.ToArray());
-
             }
         }
     }
