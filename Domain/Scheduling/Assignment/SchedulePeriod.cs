@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -111,6 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				if (IsPeriodTimeOverride)
 				{
 					double periodTime = PeriodTime.Value.TotalMinutes;
+
 					int workDays = GetWorkdays();
 					int minutes = (int)(periodTime / workDays);
 					return TimeSpan.FromMinutes(minutes);
