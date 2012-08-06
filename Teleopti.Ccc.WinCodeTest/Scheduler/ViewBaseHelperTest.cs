@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _personAbsence = CreatePersonAbsence();
             _personAbsenceCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { _personAbsence });
             _visualLayers = new List<IVisualLayer>();
-            IVisualLayer actLayer = _layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("activity"), _personAbsence.Period);
+            IVisualLayer actLayer = _layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("activity"), _personAbsence.Period, _agent);
             _visualLayer = _layerFactory.CreateAbsenceSetupLayer(_personAbsence.Layer.Payload, actLayer, _personAbsence.Period);
             _visualLayerCollection = new VisualLayerCollection(_agent, _visualLayers, new ProjectionPayloadMerger());
 
@@ -263,6 +263,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var partStartperiod = new DateTimePeriod(startTime.Date, startTime.Date.AddDays(1));
             var partMiddlePeriod = new DateTimePeriod(startTime.Date.AddDays(2), startTime.Date.AddDays(3));
             var partEndPeriod = new DateTimePeriod(endTime.Date, endTime.Date.AddDays(1));
+
             var layer = new AbsenceLayer(_absence, period);
             IPersonAbsence personAbsence = new PersonAbsence(_agent, _scenario, layer);
             var absCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { personAbsence });
@@ -276,8 +277,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             string expectedEnd = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString() + 
                                             " - " + TimeZoneHelper.ConvertFromUtc(endTime).ToShortTimeString();
 
-
-
             using (_mockRep.Record())
             {
                 Expect.Call(part.PersonAbsenceCollection()).Return(absCollection).Repeat.AtLeastOnce();
@@ -285,6 +284,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(part.Period).Return(partStartperiod);
                 Expect.Call(part.Period).Return(partMiddlePeriod);
                 Expect.Call(part.Period).Return(partEndPeriod);
+				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partStartperiod.StartDateTime), TeleoptiPrincipal.Current.Regional.TimeZone));
+				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partMiddlePeriod.StartDateTime), TeleoptiPrincipal.Current.Regional.TimeZone));
+				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partEndPeriod.StartDateTime), TeleoptiPrincipal.Current.Regional.TimeZone));
             }
 
             using (_mockRep.Playback())
@@ -1016,7 +1018,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var period = new DateTimePeriod(2000, 1, 2, 2000, 1, 3);
             IList<IVisualLayer> layerCollectionAbscence = new List<IVisualLayer>();
             IList<IVisualLayer> layerCollectionActivity = new List<IVisualLayer>();
-            IVisualLayer actLayer = _layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("underlying"), period);
+            IVisualLayer actLayer = _layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("underlying"), period, _agent);
             layerCollectionAbscence.Add(_layerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("test"), actLayer, period));
             IVisualLayerCollection visualLayerCollectionAbsence = new VisualLayerCollection(_agent, layerCollectionAbscence, new ProjectionPayloadMerger());
             IVisualLayerCollection visualLayerCollectionActivity = new VisualLayerCollection(_agent, layerCollectionActivity, new ProjectionPayloadMerger());

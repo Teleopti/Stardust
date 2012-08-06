@@ -13,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-
     [TestFixture]
     public class VirtualSchedulePeriodTest
     {
@@ -98,7 +97,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void CanGetNumberOfDaysOffForChineseMonth()
 		{
 			_schedulePeriod.PeriodType = SchedulePeriodType.ChineseMonth;
-			Assert.AreEqual(7, _target.DaysOff());
+			_schedulePeriod.DaysOff = 10;
+			// it will be ca 1/4-th the day offs as the
+			Assert.AreEqual(2, _target.DaysOff());
 		}
 
         [Test]
@@ -213,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             permissions.SetCulture(new CultureInfo("sv-SE"));
 
             _mocks.Record();
-            Expect.Call(person.PermissionInformation).Return(permissions);
+            Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
             Expect.Call(person.Period(new DateOnly(2009, 2, 20))).Return(firstPersonPeriod).Repeat.AtLeastOnce();
             Expect.Call(person.Period(new DateOnly(2009, 02, 16))).Return(firstPersonPeriod).Repeat.AtLeastOnce();
             Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
@@ -250,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var nextPersonPeriod = new PersonPeriod(dateOnly, personContract, new Team());
 
             _mocks.Record();
-            Expect.Call(person.PermissionInformation).Return(permissions);
+            Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
             Expect.Call(person.Period(_dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
             Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
             Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
@@ -298,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             permissions.SetCulture(new CultureInfo("sv-SE"));
 
             _mocks.Record();
-            Expect.Call(person.PermissionInformation).Return(permissions);
+            Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
             Expect.Call(person.Period(_dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
             Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
             Expect.Call(person.TerminalDate).Return(terminalDateOnly).Repeat.AtLeastOnce();
@@ -361,29 +362,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var permissions = new PermissionInformation(person);
             permissions.SetCulture(new CultureInfo("sv-SE"));
 
-            _mocks.Record();
-            Expect.Call(person.PermissionInformation).Return(permissions);
-            Expect.Call(person.Period(requestedDateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-            Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
-            Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
-            Expect.Call(person.NextPeriod(_personPeriod)).Return(null);
-            Expect.Call(person.Period(new DateOnly(2009, 02, 16))).Return(personPeriod);
-            Expect.Call(person.Period(new DateOnly(2009, 02, 20))).Return(personPeriod).Repeat.AtLeastOnce();
-            Expect.Call(personPeriod.StartDate).Return(new DateOnly(2009, 02, 16)).Repeat.AtLeastOnce();
-            Expect.Call(personPeriod.PersonContract).Return(_personContract);
-			Expect.Call(person.SchedulePeriodStartDate(new DateOnly(2009, 02, 20))).Return(_dateOnly).Repeat.AtLeastOnce();
+        	using (_mocks.Record())
+        	{
+        		Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
+        		Expect.Call(person.Period(requestedDateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
+        		Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
+        		Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
+        		Expect.Call(person.NextPeriod(_personPeriod)).Return(null);
+        		Expect.Call(person.Period(new DateOnly(2009, 02, 20))).Return(personPeriod).Repeat.AtLeastOnce();
+        		Expect.Call(personPeriod.PersonContract).Return(_personContract);
+        		Expect.Call(person.SchedulePeriodStartDate(new DateOnly(2009, 02, 20))).Return(_dateOnly).Repeat.AtLeastOnce();
 
-            Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
-
-            _mocks.ReplayAll();
-            var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
-            _target = new VirtualSchedulePeriod(person, requestedDateOnly, splitChecker);
-            Assert.AreEqual(new DateOnly(2009, 2, 20), _target.DateOnlyPeriod.StartDate);
-            Assert.AreEqual(new DateOnly(2009, 2, 28), _target.DateOnlyPeriod.EndDate);
-            Assert.AreEqual(9, _target.Number);
-            Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
-            Assert.AreEqual(3, _target.DaysOff());
-            Assert.AreEqual(6, _target.Workdays());
+        		Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
+        	}
+			using (_mocks.Playback())
+			{
+				var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
+				_target = new VirtualSchedulePeriod(person, requestedDateOnly, splitChecker);
+				Assert.AreEqual(new DateOnly(2009, 2, 20), _target.DateOnlyPeriod.StartDate);
+				Assert.AreEqual(new DateOnly(2009, 2, 28), _target.DateOnlyPeriod.EndDate);
+				Assert.AreEqual(9, _target.Number);
+				Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
+				Assert.AreEqual(3, _target.DaysOff());
+				Assert.AreEqual(6, _target.Workdays());
+			}
         }
 
         [Test]
@@ -402,7 +404,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             permissions.SetCulture(new CultureInfo("sv-SE"));
 
             _mocks.Record();
-            Expect.Call(person.PermissionInformation).Return(permissions);
+            Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
             Expect.Call(person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
             Expect.Call(person.Period(new DateOnly(2009, 02, 15))).Return(_personPeriod).Repeat.AtLeastOnce();
             Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
@@ -559,13 +561,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.That(ret, Is.EqualTo(new Percent(0)));
 
         }
-
-        //[Test]
-        //public void ShouldContainSiteAndTeam()
-        //{
-        //    Assert.That(_target.Team, Is.EqualTo(_team));
-        //    Assert.That(_target.Site, Is.EqualTo(_site));
-        //}
 
         [Test]
         public void ShouldReturnTrueIfPeriodIsFirst()

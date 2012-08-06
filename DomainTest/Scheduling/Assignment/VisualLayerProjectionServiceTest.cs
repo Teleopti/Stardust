@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -17,11 +15,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	{
 		private IShift shift;
 		private IAbsence absence;
+		private IPerson person;
 
 		[SetUp]
 		public void Setup()
 		{
 			shift = new fakeShift();
+			person = PersonFactory.CreatePerson();
 			absence = AbsenceFactory.CreateAbsence("Tandl�karen");
 		}
 
@@ -29,16 +29,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void CannotAddIfNull()
 		{
-			VisualLayerProjectionService proj = new VisualLayerProjectionService(new Person());
+			var proj = new VisualLayerProjectionService(person);
 			proj.Add((Shift)null);
 		}
 
 		[Test]
 		public void VerifyCombineReturnTwoWhenNotIntersecting()
 		{
-			Activity act = ActivityFactory.CreateActivity("test");
-			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			ActivityLayer layer2 = new ActivityLayer(act, new DateTimePeriod(1910, 1, 5, 1911, 1, 6));
+			IActivity act = ActivityFactory.CreateActivity("test");
+			var layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			var layer2 = new ActivityLayer(act, new DateTimePeriod(1910, 1, 5, 1911, 1, 6));
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
 
@@ -55,12 +55,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyNoCombiningWhenTheSameActivityButOneIsOvertime()
 		{
-			IPerson person = new Person();
 			IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(person, defSet);
-			PersonAssignment ass = new PersonAssignment(person, new Scenario("d"));
-			Activity act = new Activity("the one");
-			MainShift main = new MainShift(new ShiftCategory("d"));
+			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, ScenarioFactory.CreateScenarioAggregate());
+			IActivity act = ActivityFactory.CreateActivity("the one");
+			MainShift main = new MainShift(ShiftCategoryFactory.CreateShiftCategory("cat"));
 			main.LayerCollection.Add(new MainShiftActivityLayer(act, createPeriod(10, 19)));
 			ass.SetMainShift(main);
 			OvertimeShift ot = new OvertimeShift();
@@ -76,8 +75,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyCombineReturnTwoWhenIntersectingAndOriginalLayerStarts()
 		{
-			Activity act = ActivityFactory.CreateActivity("test");
-			Activity newActivity = ActivityFactory.CreateActivity("sdfsdf");
+			IActivity act = ActivityFactory.CreateActivity("test");
+			IActivity newActivity = ActivityFactory.CreateActivity("sdfsdf");
 			ActivityLayer layer2 = new ActivityLayer(newActivity, new DateTimePeriod(2000, 1, 5, 2010, 1, 1));
 			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			shift.LayerCollection.Add(layer1);
@@ -97,8 +96,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyCombineReturnTwoWhenIntersectingAndNotOriginalLayerStarts()
 		{
-			Activity act = ActivityFactory.CreateActivity("test");
-			Activity newActivity = ActivityFactory.CreateActivity("sdfsdf");
+			IActivity act = ActivityFactory.CreateActivity("test");
+			IActivity newActivity = ActivityFactory.CreateActivity("sdfsdf");
 			ActivityLayer layer2 = new ActivityLayer(newActivity, new DateTimePeriod(1900, 1, 5, 2000, 1, 5));
 			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			shift.LayerCollection.Add(layer1);
@@ -117,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyCombineReturnOneWhenIntersectingOneActivity()
 		{
-			Activity act = ActivityFactory.CreateActivity("test");
+			IActivity act = ActivityFactory.CreateActivity("test");
 			ActivityLayer layer2 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 5, 2010, 1, 1));
 			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			shift.LayerCollection.Add(layer1);
@@ -134,8 +133,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyCombineReturnThreeWhenInside()
 		{
-			Activity act = ActivityFactory.CreateActivity("test");
-			Activity newActivity = ActivityFactory.CreateActivity("sdfsdf");
+			IActivity act = ActivityFactory.CreateActivity("test");
+			IActivity newActivity = ActivityFactory.CreateActivity("sdfsdf");
 			ActivityLayer layer2 = new ActivityLayer(newActivity, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
 			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			shift.LayerCollection.Add(layer1);
@@ -157,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyCombineReturnOneWhenInsideAndOneActivity()
 		{
-			Activity act = ActivityFactory.CreateActivity("test");
+			IActivity act = ActivityFactory.CreateActivity("test");
 			ActivityLayer layer2 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
 			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			shift.LayerCollection.Add(layer1);
@@ -178,10 +177,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void CanReturnCorrectLayerListWhenNewLayerOverlapsExistingLayers()
 		{
 			LayerCollection<IActivity> orderedListLayerList = new LayerCollection<IActivity>();
-			Activity act1 = ActivityFactory.CreateActivity("Telefon");
-			Activity act2 = ActivityFactory.CreateActivity("Rast");
-			Activity act3 = ActivityFactory.CreateActivity("M�te");
-			Activity act5 = ActivityFactory.CreateActivity("M�lsamtal");
+			IActivity act1 = ActivityFactory.CreateActivity("Telefon");
+			IActivity act2 = ActivityFactory.CreateActivity("Rast");
+			IActivity act3 = ActivityFactory.CreateActivity("M�te");
+			IActivity act5 = ActivityFactory.CreateActivity("M�lsamtal");
 
 			DateTimePeriod period1 =
 				new DateTimePeriod(new DateTime(2001, 1, 1, 10, 00, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 11, 00, 0, DateTimeKind.Utc));
@@ -383,9 +382,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyGetPeriodPayloads()
 		{
-			Activity act1 = ActivityFactory.CreateActivity("test");
-			Activity act2 = ActivityFactory.CreateActivity("sdfsdf");
-			Activity act3 = ActivityFactory.CreateActivity("prr");
+			IActivity act1 = ActivityFactory.CreateActivity("test");
+			IActivity act2 = ActivityFactory.CreateActivity("sdfsdf");
+			IActivity act3 = ActivityFactory.CreateActivity("prr");
 			DateTimePeriod period1 =
 				new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
 								   new DateTime(2001, 1, 1, 16, 50, 0, DateTimeKind.Utc));
@@ -425,10 +424,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyProjectionWithActivitiesAndAbsences()
 		{
-			//LayerCollection<ILayer> orderedListLayerList = new LayerCollection<ILayer>();
-			Activity act1 = ActivityFactory.CreateActivity("Telefon");
-			Activity act2 = ActivityFactory.CreateActivity("Rast");
-			Activity act3 = ActivityFactory.CreateActivity("M�te"); 
+			IActivity act1 = ActivityFactory.CreateActivity("Telefon");
+			IActivity act2 = ActivityFactory.CreateActivity("Rast");
+			IActivity act3 = ActivityFactory.CreateActivity("M�te"); 
 			absence = AbsenceFactory.CreateAbsence("Tandl�karen");
 
 			DateTimePeriod period1 =
@@ -449,21 +447,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			MainShiftActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
 			MainShiftActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
 			PersonalShiftActivityLayer layer3 = new PersonalShiftActivityLayer(act3, period3);
-			AbsenceLayer layer4 = new AbsenceLayer(absence, period4);
 
-			MainShift mainShift = new MainShift(new ShiftCategory("test"));
+			MainShift mainShift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("test"));
 			mainShift.LayerCollection.Add(layer1);
 			mainShift.LayerCollection.Add(layer2);
 
 			PersonalShift personShift = new PersonalShift();
 			personShift.LayerCollection.Add(layer3);
 
-			Person person = new Person();
-			Scenario scenario = new Scenario("test");
-			PersonAssignment personAss = new PersonAssignment(person,scenario);
+			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
+			IPersonAssignment personAss = PersonAssignmentFactory.CreatePersonAssignment(person,scenario);
 			personAss.AddPersonalShift(personShift);
 			personAss.SetMainShift(mainShift);
-			PersonAbsence personAbsence = new PersonAbsence(person, scenario, layer4);
+			IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period4, absence);
 
 			var day =
 				ExtractedSchedule.CreateScheduleDay(
@@ -484,11 +480,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyReferencedActivityLayer()
 		{
 			IVisualLayerFactory layerFactory = new VisualLayerFactory();
-			Activity refAct = new Activity("f");
+			IActivity refAct = ActivityFactory.CreateActivity("f");
 			DateTimePeriod period = new DateTimePeriod(2000,1,1,2001,1,2);
-			IVisualLayer actLayer = layerFactory.CreateShiftSetupLayer(refAct, period);
-			IVisualLayer layer = layerFactory.CreateAbsenceSetupLayer(new Absence(), actLayer, period);
-			VisualLayerProjectionService target = new VisualLayerProjectionService(new Person());
+			IVisualLayer actLayer = layerFactory.CreateShiftSetupLayer(refAct, period, person);
+			IVisualLayer layer = layerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("vacation"), actLayer, period);
+			VisualLayerProjectionService target = new VisualLayerProjectionService(person);
 			target.Add(layer);
 			foreach (VisualLayer vlayer in target.CreateProjection())
 			{
@@ -501,11 +497,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyMainShiftIsOverwrittenByOvertime()
 		{
 			IMultiplicatorDefinitionSet defSet =dummyDefinitionSet();
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("d"),
-																							new Person(),
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioAggregate(),
+																							person,
 																							createPeriod(12, 16));
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
-			IActivity overTimeActivity = new Activity("d");
+			IActivity overTimeActivity = ActivityFactory.CreateActivity("d");
 			IOvertimeShift ot = new OvertimeShift();
 			ass.AddOvertimeShift(ot);
 			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(overTimeActivity, createPeriod(14, 15), defSet));
@@ -527,11 +523,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyOvertimeExistsInProjectionWithoutMainShift()
 		{
 			IMultiplicatorDefinitionSet defSet = dummyDefinitionSet();
-			IPersonAssignment ass = new PersonAssignment(new Person(), new Scenario("s"));
+			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, ScenarioFactory.CreateScenarioAggregate());
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
 			IOvertimeShift ot = new OvertimeShift();
 			ass.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(new Activity("d"), createPeriod(14, 15), defSet));
+			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet));
 
 			IVisualLayerCollection org = ass.ProjectionService().CreateProjection();
 			IList<IVisualLayer> proj = new List<IVisualLayer>(org);
@@ -545,14 +541,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void PersonalShiftNotVisibleIfOnlyOvertimeAndNoMainShift()
 		{
 			IMultiplicatorDefinitionSet defSet = dummyDefinitionSet();
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(new Activity("d"), 
-																				new Person(),
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(ActivityFactory.CreateActivity("d"), 
+																				person,
 																				createPeriod(12,16),
-																				new Scenario("d"));
+																				ScenarioFactory.CreateScenarioAggregate());
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
 			IOvertimeShift ot = new OvertimeShift();
 			ass.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(new Activity("d"), createPeriod(14, 15), defSet));
+			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet));
 
 
 			IList<IVisualLayer> proj = new List<IVisualLayer>(ass.ProjectionService().CreateProjection());

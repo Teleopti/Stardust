@@ -6,6 +6,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
+using Teleopti.Ccc.Win.Properties;
 using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Events;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             if (grid == null) return;
 
             if (!grid.CellModels.ContainsKey("ActivityDropDownCell"))
-                grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model));
+				grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model, Resources.MasterActivity16x16));
         }
 
         internal override ShiftCreatorViewType Type
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             _baseActivityColumn = new ActivityDropDownColumn<IActivityTimeLimiterViewModel, IActivity>("TargetActivity",
                                                                                     UserTexts.Resources.Activity,
                                                                                     Presenter.Explorer.Model.ActivityCollection,
-                                                                                   "Name");
+																				   "Name", Resources.MasterActivity16x16);
             AddColumn(_baseActivityColumn);
             _operatorColumn = new DropDownColumn<IActivityTimeLimiterViewModel, string>("Operator", UserTexts.Resources.Limit, Presenter.Explorer.Model.OperatorLimitCollection, "OperatorLimit");
             AddColumn(_operatorColumn);

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -118,6 +119,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             if (string.IsNullOrEmpty(value)) return true;
 
             var tmp = value.ToUpper(CultureInfo.CurrentUICulture);
+            tmp = tmp.Trim();
             bool firstNameFound = !string.IsNullOrEmpty(FirstName) && FirstName.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
             bool lastNameFound = !string.IsNullOrEmpty(LastName) && LastName.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
             bool teamFound = TeamBelong != null && TeamBelong.Description.Name.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
@@ -126,7 +128,15 @@ namespace Teleopti.Ccc.WinCode.Meetings
             bool emailFound = !string.IsNullOrEmpty(Email) && Email.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
             bool employmentNumberFound = !string.IsNullOrEmpty(EmploymentNumber) && EmploymentNumber.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
 
-            return firstNameFound || lastNameFound || teamFound || siteFound || skillsFound || emailFound ||employmentNumberFound;
+            //this is the check the full name
+            bool fullNameFound = false;
+            if (tmp.Contains(" "))
+            {
+               tmp = Regex.Replace(tmp, @"\s+", " ", RegexOptions.Multiline);
+               fullNameFound = FullName.ToUpper(CultureInfo.CurrentUICulture).Equals(tmp);
+            }
+
+            return firstNameFound || lastNameFound || teamFound || siteFound || skillsFound || emailFound || employmentNumberFound || fullNameFound;
         }
 
         public bool FilterByPermission(string functionPath, DateOnly? dateOnly)

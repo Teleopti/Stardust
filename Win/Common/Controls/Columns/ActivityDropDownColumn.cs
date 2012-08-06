@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Columns
 {
-    public class ActivityDropDownColumn<TData, TItems> : ColumnBase<TData>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
+	public class ActivityDropDownColumn<TData, TItems> : ColumnBase<TData>
     {
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
         private readonly string _headerText;
@@ -15,27 +19,23 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         private readonly IEnumerable<TItems> _comboItems;
         private readonly string _displayMember;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private string _groupHeaderText;
+		private readonly string _groupHeaderText;
+		private readonly ImageList _masterImage = new ImageList();
 
-        public ActivityDropDownColumn(string bindingProperty, string headerText,
-                              IEnumerable<TItems> comboItems,
-                              string displayMember)
+        public ActivityDropDownColumn(string bindingProperty, string headerText, IEnumerable<TItems> comboItems, string displayMember, Image masterActivityImage)
         {
             _headerText = headerText;
             _bindingProperty = bindingProperty;
             _comboItems = comboItems;
             _displayMember = displayMember;
+
+			_masterImage.Images.Add(masterActivityImage);
         }
 
         public ActivityDropDownColumn(string bindingProperty, string headerText,
                               IEnumerable<TItems> comboItems,
-                              string displayMember, string groupHeaderText)
+                              string displayMember, string groupHeaderText, Image masterActivityImage) : this(bindingProperty,headerText,comboItems,displayMember,masterActivityImage)
         {
-            _headerText = headerText;
-            _bindingProperty = bindingProperty;
-            _comboItems = comboItems;
-
-            _displayMember = displayMember;
             _groupHeaderText = groupHeaderText;
         }
 
@@ -58,12 +58,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 			else if (e.RowIndex >= headerRows)
             {
                 TData dataItem = dataItems.ElementAt(e.RowIndex - headerRows);
-                e.Style.CellType = "ActivityDropDownCell";
-                e.Style.DataSource = _comboItems;
+				e.Style.CellType = "ActivityDropDownCell";
+            	e.Style.ImageList = _masterImage;
+            	e.Style.DataSource = _comboItems;
 				e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
                 e.Style.DisplayMember = _displayMember;
                 e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
-                OnCellDisplayChanged(dataItem, e);
+				e.Style.ImageIndex = (e.Style.CellValue is IMasterActivity ? 0 : -1);
+				OnCellDisplayChanged(dataItem, e);
             }
         }
 
@@ -112,6 +114,5 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             comboItem = _comboItems.ElementAtOrDefault(0);
             return false;
         }
-
     }
 }

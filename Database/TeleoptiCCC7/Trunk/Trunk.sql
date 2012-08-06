@@ -44,3 +44,53 @@ begin
 	insert into PurgeSetting values ('Message', 10)
 end
 GO
+
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2012-07-18
+--Desc: Removing duplicate days from Preferences and saves the latest one. Also create a new constraint to avoid future duplicates.
+----------------  
+
+CREATE TABLE #double_preferences (person uniqueidentifier, restrictiondate datetime, lastupdated datetime)
+INSERT INTO  #double_preferences
+SELECT p1.Person,p1.RestrictionDate,MAX(UpdatedOn) FROM PreferenceDay p1 GROUP BY p1.Person,p1.RestrictionDate HAVING COUNT(p1.Person) > 1
+
+DELETE ActivityRestriction FROM ActivityRestriction ar INNER JOIN PreferenceRestriction pr ON ar.Parent=pr.Id INNER JOIN PreferenceDay p ON p.Id=pr.Id INNER JOIN #double_preferences d ON d.person=p.Person AND d.restrictiondate=p.RestrictionDate AND d.lastupdated<>p.UpdatedOn
+DELETE PreferenceRestriction FROM PreferenceRestriction pr INNER JOIN PreferenceDay p ON p.Id=pr.Id INNER JOIN #double_preferences d ON d.person=p.Person AND d.restrictiondate=p.RestrictionDate AND d.lastupdated<>p.UpdatedOn
+DELETE PreferenceDay FROM PreferenceDay p INNER JOIN #double_preferences d ON d.person=p.Person AND d.restrictiondate=p.RestrictionDate AND d.lastupdated<>p.UpdatedOn
+DROP TABLE #double_preferences
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name=N'uq_preference_day_per_agent')
+	BEGIN
+		CREATE UNIQUE NONCLUSTERED INDEX uq_preference_day_per_agent ON dbo.PreferenceDay
+			(
+			person,
+			restrictiondate
+			)
+	END
+	
+GO
+
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2012-07-23
+--Desc: Adding the new skill type Retail to the database.
+----------------  
+
+IF NOT EXISTS (SELECT * FROM SkillType WHERE ForecastSource=8)
+	BEGIN
+		DECLARE @creator uniqueidentifier
+		SELECT TOP 1 @creator=CreatedBy FROM SkillType
+		IF @creator IS NULL
+			BEGIN
+				SELECT TOP 1 @creator=Id FROM Person
+			END
+		INSERT INTO SkillType (Id,ForecastType,Version,CreatedBy,UpdatedBy,CreatedOn,UpdatedOn,Name,ShortName,ForecastSource,IsDeleted)
+		VALUES (NEWID(),0,1,@creator,@creator,GETUTCDATE(),GETUTCDATE(),N'SkillTypeRetail',null,8,0)
+	END
+ELSE
+	BEGIN
+		UPDATE SkillType SET ForecastType = 0 WHERE ForecastSource=8 AND ForecastType=1
+	END

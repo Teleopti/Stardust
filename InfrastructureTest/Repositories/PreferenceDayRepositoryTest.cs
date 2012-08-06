@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override IPreferenceDay CreateAggregateWithCorrectBusinessUnit()
         {
             PreferenceDay preferenceDay = CreatePreferenceDay(_dateOnly,_person,_activity);
-            
+        	_dateOnly = _dateOnly.AddDays(1);
             return preferenceDay;
         }
 
@@ -119,7 +119,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPreferenceDay org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Person, loadedAggregateFromDatabase.Person);
-            Assert.AreEqual(org.RestrictionDate, loadedAggregateFromDatabase.RestrictionDate);
             Assert.AreEqual(1,loadedAggregateFromDatabase.Restriction.ActivityRestrictionCollection.Count);
             Assert.AreEqual(_activity.Name,loadedAggregateFromDatabase.Restriction.ActivityRestrictionCollection[0].Activity.Name);
             Assert.AreEqual(org.TemplateName,loadedAggregateFromDatabase.TemplateName);

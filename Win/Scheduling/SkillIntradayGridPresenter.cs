@@ -145,17 +145,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}
 
+			TextManager manager = new TextManager(_skill.SkillType);
 			if (_skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
 			{
 				gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell", "FStaff",
-				                                               UserTexts.Resources.ForecastedAgents);
+				                                               manager.WordDictionary["ForecastedAgents"]);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
                 if(!isVirtual)
                 {
                     gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell", "CalculatedResource",
-                                                               UserTexts.Resources.ScheduledStaff);
+                                                               manager.WordDictionary["ScheduledStaff"]);
                     gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                     _gridRows.Add(_rowManager.AddRow(gridRow));
                 }
@@ -163,7 +164,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     gridRow = new SkillStaffPeriodGridRowSchedulerMinMaxIssuesSummary(_rowManager, "NumericReadOnlyCell",
                                                                                "CalculatedResource",
-                                                                               UserTexts.Resources.ScheduledStaff);
+                                                                               manager.WordDictionary["ScheduledStaff"]);
                     gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                     _gridRows.Add(_rowManager.AddRow(gridRow));
                 }
@@ -213,13 +214,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "IntegerReadOnlyCell",
                                                                "Payload.SkillPersonData.MinimumPersons",
-                                                               UserTexts.Resources.MinimumAgents);
+                                                               manager.WordDictionary["MinimumAgents"]);
                     gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                     _gridRows.Add(_rowManager.AddRow(gridRow));
 
                     gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "IntegerReadOnlyCell",
                                                                    "Payload.SkillPersonData.MaximumPersons",
-                                                                   UserTexts.Resources.MaximumAgents);
+                                                                   manager.WordDictionary["MaximumAgents"]);
                     gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                     _gridRows.Add(_rowManager.AddRow(gridRow));
                 }
@@ -239,12 +240,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell",
 					                                               "Payload.ForecastedIncomingDemand",
-					                                               UserTexts.Resources.ForecastedAgentsIncoming);
+					                                               manager.WordDictionary["ForecastedAgentsIncoming"]);
 					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 
 					gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell", "ScheduledAgentsIncoming",
-					                                               UserTexts.Resources.ScheduledAgentsIncoming);
+					                                               manager.WordDictionary["ScheduledAgentsIncoming"]);
 					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 
@@ -342,7 +343,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
                 else
                 {
-                    TextManager manager = new TextManager(_skill.SkillType);
                     gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell",
                                                                     "Payload.TaskData.Tasks",
                                                                     manager.WordDictionary["ForecastedTasks"]);
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _gridRows.Add(_rowManager.AddRow(gridRow));
 
                     gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "IntegerReadOnlyCell",
-                                                                    "ActiveAgentCount.ActiveAgents", UserTexts.Resources.ActualAgents);
+																	"ActiveAgentCount.ActiveAgents", manager.WordDictionary["ActualAgents"]);
                     gridRow.ChartSeriesSettings = configureSetting("ActiveAgents");
                     _gridRows.Add(_rowManager.AddRow(gridRow));
 

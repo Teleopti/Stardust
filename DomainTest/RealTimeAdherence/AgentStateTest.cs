@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -68,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         {
             IRtaStateGroup g = new RtaStateGroup("sdf", false, true);
             g.AddState("sd", "sdfsdf", Guid.NewGuid());
-            rtaVisualLayer = new RtaVisualLayer(g.StateCollection[0], DateTimeFactory.CreateDateTimePeriod(timeStamp, 0), new Activity("dsf"));
+            rtaVisualLayer = new RtaVisualLayer(g.StateCollection[0], DateTimeFactory.CreateDateTimePeriod(timeStamp, 0), new Activity("dsf"),person);
 
             mocks.ReplayAll();
             target.AddRtaVisualLayer(rtaVisualLayer);
@@ -132,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             IRtaVisualLayer newRtaVisualLayer = new RtaVisualLayer(g1.StateCollection[0],
                                                                 new DateTimePeriod(timeStamp, timeStamp.AddHours(5)),
-                                                                activity);
+                                                                activity, person);
 
             IExternalAgentState externalAgentState = new ExternalAgentState("007", "AUX2", TimeSpan.Zero, timeStamp.AddHours(4), Guid.Empty, 1, DateTime.Today, false);
 
@@ -157,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             IRtaVisualLayer newRtaVisualLayer = new RtaVisualLayer(g1.StateCollection[0],
                                                                 new DateTimePeriod(timeStamp.AddSeconds(1), timeStamp.AddSeconds(2)),
-                                                                activity);
+                                                                activity, person);
 
             IExternalAgentState externalAgentState = new ExternalAgentState("007", "AUX2", TimeSpan.Zero, timeStamp, Guid.Empty, 1, DateTime.Today, false);
 
@@ -180,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             IRtaVisualLayer newRtaVisualLayer = new RtaVisualLayer(g1.StateCollection[0],
                                                                 new DateTimePeriod(timeStamp.AddSeconds(1), timeStamp.AddSeconds(2)),
-                                                                activity);
+                                                                activity, person);
 
             IExternalAgentState externalAgentState = new ExternalAgentState("007", "AUX2", TimeSpan.FromSeconds(-5), timeStamp, Guid.Empty, 1, DateTime.Today, false);
 
@@ -280,7 +279,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
                 new VisualLayerCollection(null, new List<IVisualLayer>
                                                 	{
                                                 		layerFactory.CreateShiftSetupLayer(activity, 
-                                                		                                   new DateTimePeriod(timeStamp.AddMinutes(5), timeStamp.AddMinutes(60)))
+                                                		                                   new DateTimePeriod(timeStamp.AddMinutes(5), timeStamp.AddMinutes(60)),person)
                                                 	}, new ProjectionPayloadMerger());
 
             IScheduleDictionary scheduleDictionary = GetScheduleDictionary(visualLayerCollection);
@@ -291,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Expect.Call(rtaState.StateGroup).Return(stateGroup);
             
             mocks.ReplayAll();
-            rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)), activity);
+            rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)), activity, person);
             target.AddRtaVisualLayer(rtaVisualLayer);
             Assert.AreEqual(0,target.AlarmSituationCollection.Count);
             target.SetSchedule(scheduleDictionary);
@@ -324,7 +323,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			Expect.Call(meetingLayer.EntityClone()).Return(meetingLayer);
 
 			mocks.ReplayAll();
-			rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)), activity);
+			rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)), activity, person);
 			target.AddRtaVisualLayer(rtaVisualLayer);
 			Assert.AreEqual(0, target.AlarmSituationCollection.Count);
 			target.SetSchedule(scheduleDictionary);
@@ -343,7 +342,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
                 new VisualLayerCollection(null, new List<IVisualLayer>
                                                 	{
                                                 		layerFactory.CreateShiftSetupLayer(activity, 
-                                                		                                   new DateTimePeriod(timeStamp.AddMinutes(5), timeStamp.AddMinutes(60)))
+                                                		                                   new DateTimePeriod(timeStamp.AddMinutes(5), timeStamp.AddMinutes(60)),person)
                                                 	}, new ProjectionPayloadMerger());
 
             IScheduleDictionary scheduleDictionary = GetScheduleDictionary(visualLayerCollection);
@@ -354,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Expect.Call(rtaState.StateGroup).Return(stateGroup);
 
             mocks.ReplayAll();
-            rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)), activity);
+            rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)), activity, person);
             target.AddRtaVisualLayer(rtaVisualLayer);
             Assert.AreEqual(0, target.AlarmSituationCollection.Count);
             target.SetSchedule(scheduleDictionary);
@@ -373,10 +372,10 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             IActivity activity2 = ActivityFactory.CreateActivity("act2");
             IVisualLayer layer1 = layerFactory.CreateShiftSetupLayer(activity1,
                                                                      new DateTimePeriod(timeStamp.AddMinutes(5),
-                                                                                        timeStamp.AddMinutes(60)));
+                                                                                        timeStamp.AddMinutes(60)),person);
             IVisualLayer layer2 = layerFactory.CreateShiftSetupLayer(activity2,
                                                                      new DateTimePeriod(timeStamp.AddMinutes(60),
-                                                                                        timeStamp.AddMinutes(65)));
+                                                                                        timeStamp.AddMinutes(65)),person);
 
             IVisualLayerCollection visualLayerCollection =
                 new VisualLayerCollection(null, new List<IVisualLayer> { layer1, layer2 }, new ProjectionPayloadMerger());
@@ -402,7 +401,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
                                                 	{
                                                 		layerFactory.CreateShiftSetupLayer(activity,
                                                 		                                   new DateTimePeriod(timeStamp.AddMinutes(5),
-                                                		                                                      timeStamp.AddMinutes(55)))
+                                                		                                                      timeStamp.AddMinutes(55)),person)
                                                 	}, new ProjectionPayloadMerger());
 
             IScheduleDictionary scheduleDictionary = GetScheduleDictionary(visualLayerCollection);
@@ -414,7 +413,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Expect.Call(rtaState.StateGroup).Return(stateGroup);
 
             mocks.ReplayAll();
-            rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)),activity);
+            rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)),activity,person);
             target.AddRtaVisualLayer(rtaVisualLayer);
             Assert.AreEqual(0, target.AlarmSituationCollection.Count);
             target.SetSchedule(scheduleDictionary);
@@ -431,7 +430,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
                                                 	{
                                                 		layerFactory.CreateShiftSetupLayer(activity,
                                                 		                                   new DateTimePeriod(timeStamp.AddMinutes(5),
-                                                		                                                      timeStamp.AddMinutes(60)))
+                                                		                                                      timeStamp.AddMinutes(60)), person)
                                                 	}, new ProjectionPayloadMerger());
 
             IScheduleDictionary scheduleDictionary = GetScheduleDictionary(visualLayerCollection);
@@ -453,7 +452,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
                                                 	{
                                                 		layerFactory.CreateShiftSetupLayer(activity,
                                                 		                                   new DateTimePeriod(timeStamp.AddMinutes(5),
-                                                		                                                      timeStamp.AddMinutes(60)))
+                                                		                                                      timeStamp.AddMinutes(60)),person)
                                                 	}, new ProjectionPayloadMerger());
 
             IScheduleDictionary scheduleDictionary = GetScheduleDictionary(visualLayerCollection);
@@ -481,7 +480,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Expect.Call(rtaState.StateGroup).Return(stateGroup);
 
             mocks.ReplayAll();
-            rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)),activity);
+            rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)),activity,person);
             target.AddRtaVisualLayer(rtaVisualLayer);
             Assert.AreEqual(0, target.AlarmSituationCollection.Count);
             target.SetSchedule(scheduleDictionary);
@@ -502,7 +501,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Expect.Call(rtaState.StateGroup).Return(stateGroup);
 
             mocks.ReplayAll();
-            rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)), activity);
+            rtaVisualLayer = new RtaVisualLayer(rtaState, new DateTimePeriod(timeStamp, timeStamp.AddMinutes(60)), activity,person);
             target.AddRtaVisualLayer(rtaVisualLayer);
             Assert.AreEqual(0, target.AlarmSituationCollection.Count);
             target.SetSchedule(scheduleDictionary);
@@ -557,7 +556,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             mocks.VerifyAll();
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyCompleteCaseWithScheduleEightToSeventeen()
         {
             IActivity phoneActivity = ActivityFactory.CreateActivity("Phone");
@@ -565,11 +564,11 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             IActivity shortBreakActivity = ActivityFactory.CreateActivity("Short break");
             VisualLayerFactory visualLayerFactory = new VisualLayerFactory();
             IList<IVisualLayer> visualLayers = new List<IVisualLayer>();
-            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(phoneActivity,new DateTimePeriod(timeStamp.AddHours(8),timeStamp.AddHours(10))));
-            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(shortBreakActivity, new DateTimePeriod(timeStamp.AddHours(10), timeStamp.AddHours(10).AddMinutes(30))));
-            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(phoneActivity, new DateTimePeriod(timeStamp.AddHours(10).AddMinutes(30), timeStamp.AddHours(12))));
-            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(lunchActivity, new DateTimePeriod(timeStamp.AddHours(12), timeStamp.AddHours(13))));
-            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(phoneActivity, new DateTimePeriod(timeStamp.AddHours(13), timeStamp.AddHours(17))));
+			visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(phoneActivity, new DateTimePeriod(timeStamp.AddHours(8), timeStamp.AddHours(10)), person));
+            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(shortBreakActivity, new DateTimePeriod(timeStamp.AddHours(10), timeStamp.AddHours(10).AddMinutes(30)),person));
+            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(phoneActivity, new DateTimePeriod(timeStamp.AddHours(10).AddMinutes(30), timeStamp.AddHours(12)),person));
+            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(lunchActivity, new DateTimePeriod(timeStamp.AddHours(12), timeStamp.AddHours(13)),person));
+            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(phoneActivity, new DateTimePeriod(timeStamp.AddHours(13), timeStamp.AddHours(17)),person));
             IVisualLayerCollection visualLayerCollection =
                 new VisualLayerCollection(null, visualLayers, new ProjectionPayloadMerger());
 
@@ -705,7 +704,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             IActivity phoneActivity = ActivityFactory.CreateActivity("Phone");
             VisualLayerFactory visualLayerFactory = new VisualLayerFactory();
             IList<IVisualLayer> visualLayers = new List<IVisualLayer>();
-            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(phoneActivity, new DateTimePeriod(timeStamp, timeStamp.AddHours(4))));
+            visualLayers.Add(visualLayerFactory.CreateShiftSetupLayer(phoneActivity, new DateTimePeriod(timeStamp, timeStamp.AddHours(4)),person));
             IVisualLayerCollection visualLayerCollection =
                 new VisualLayerCollection(null, visualLayers, new ProjectionPayloadMerger());
 

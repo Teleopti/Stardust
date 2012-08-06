@@ -2,6 +2,9 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceProcess;
 using log4net;
 using log4net.Config;
@@ -55,6 +58,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
             RequestAdditionalTime(60000);
             XmlConfigurator.Configure(new FileInfo("log4net.config"));
 
+			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
+
             _requestBus = new ConfigFileDefaultHost();
 			_requestBus.UseFileBasedBusConfiguration("RequestQueue.config");
             _requestBus.Start<BusBootStrapper>();
@@ -68,7 +73,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
         }
 
-        protected override void OnStop()
+    	private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+    	{
+    		return true;
+    	}
+
+    	protected override void OnStop()
         {
             HostServiceStop();
         }

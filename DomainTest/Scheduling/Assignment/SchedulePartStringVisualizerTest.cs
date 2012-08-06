@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             underlyingDictionary.Clear();
             underlyingDictionary.Add(scheduleRange.Person, scheduleRange);
 
-            Assert.AreEqual(expected, SchedulePartStringVisualizer.GetToolTipPersonalAssignments(scheduleRange.ScheduledDay(new DateOnly(2001,1,1)) , _agent.PermissionInformation.DefaultTimeZone(), new CultureInfo("sv-SE", false)));
+            Assert.AreEqual(expected, ScheduleDayStringVisualizer.GetToolTipPersonalAssignments(scheduleRange.ScheduledDay(new DateOnly(2001,1,1)) , _agent.PermissionInformation.DefaultTimeZone(), new CultureInfo("sv-SE", false)));
         }
 
     }

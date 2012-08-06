@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
 
         Type TypeOfClass { get; }
 
+        bool IsTimeOfDay { get; }
+
         IWorkShiftExtender WorkShiftExtender { get; }
 
         event EventHandler<ActivityTypeChangedEventArgs> ActivityTypeChanged;

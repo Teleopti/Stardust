@@ -840,4 +840,121 @@
   <data name="ResMonthJune" xml:space="preserve">
     <value>Haziran</value>
   </data>
+  <data name="ResNoScorecardAvailable" xml:space="preserve">
+    <value>Skorkart mevcut değil</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
+    <value>Devamsızlık tipi başına devamsızlık zamanı </value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>İş hiyerarşisi</value>
+  </data>
+  <data name="Contracts" xml:space="preserve">
+    <value>Sözleşmeler</value>
+  </data>
+  <data name="ContractSchedule" xml:space="preserve">
+    <value>Kontrat Sözleşmesi</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Not</value>
+  </data>
+  <data name="PartTimepercentages" xml:space="preserve">
+    <value>Yarı zamanlı oranı</value>
+  </data>
+  <data name="RuleSetBag" xml:space="preserve">
+    <value>Vardiya kutusu</value>
+  </data>
+  <data name="ResGroupPageColon" xml:space="preserve">
+    <value>Grup sayfası:</value>
+  </data>
+  <data name="ResGroupPageGroupColon" xml:space="preserve">
+    <value>Grup:</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>Yetenek</value>
+  </data>
+  <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
+    <value>Müşteri temsilcisi başına fazla mesai</value>
+  </data>
+  <data name="ResOvertimeColon" xml:space="preserve">
+    <value>Fazla mesai:</value>
+  </data>
+  <data name="ResOvertimeTypeColon" xml:space="preserve">
+    <value>Fazla mesai tipi:</value>
+  </data>
+  <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
+    <value>Ortalama çağrı sonrası çalışma (s)</value>
+  </data>
+  <data name="ResKpiAverageHandleTime" xml:space="preserve">
+    <value>Ortalama çağrı yönetim süresi (s)</value>
+  </data>
+  <data name="ResKpiAverageTalkTime" xml:space="preserve">
+    <value>Ortalama konuşma süresi (s)</value>
+  </data>
+  <data name="ResReportAgentQueueMetrics" xml:space="preserve">
+    <value>Müşteri temsilcisi kuyruk metrikleri</value>
+  </data>
+  <data name="ResReportActivityTimePerAgent" xml:space="preserve">
+    <value>Müşteri temsilcisi başına aktivite zamanı</value>
+  </data>
+  <data name="ResOvertimeH" xml:space="preserve">
+    <value>Fazla mesai (ss:mm)</value>
+  </data>
+  <data name="ResShiftEndTime" xml:space="preserve">
+    <value>Vardiya bitiş zamanı</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
+    <value>Gün bazında vardiya kategorisi ve tüm gün devamsızlık</value>
+  </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>Devamsızlık</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>Vardiya takası</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>Metin</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>Müşteri temsilcisi başına istekler</value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>Kabul edildi</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>Reddedildi</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>Beklemede</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>İstek tipi:</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>Statü:</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>Statü</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>İstenen günler</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>İstekler</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Uygulama tarihi</value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>İstek periyodu</value>
+  </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Şimdi yeniden yönlendir</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Oturum sona erdi</value>
+  </data>
 </root>

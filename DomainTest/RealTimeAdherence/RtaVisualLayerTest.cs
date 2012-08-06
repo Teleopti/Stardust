@@ -16,19 +16,21 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         private RtaVisualLayer target;
         private IRtaState state;
         private IActivity activity;
+    	private IPerson person;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
             payload = mocks.StrictMock<IRtaStateGroup>();
             state = mocks.StrictMock<IRtaState>();
             activity = mocks.StrictMock<IActivity>();
+        	person = PersonFactory.CreatePerson();
             period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 11, 17, 0, 0, 0, DateTimeKind.Utc), 0);
 
             Expect.Call(state.StateGroup).Return(payload);
             mocks.ReplayAll();
-            target = new RtaVisualLayer(state,period,activity);
+            target = new RtaVisualLayer(state,period,activity,person);
         }
 
         [Test]

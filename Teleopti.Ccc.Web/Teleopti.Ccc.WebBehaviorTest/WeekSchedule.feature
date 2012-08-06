@@ -92,6 +92,12 @@ Scenario: Show both text and absence requests
 	When I view my week schedule
 	Then I should see 2 with the request count
 
+Scenario: Navigate to request page by clicking request symbol
+	Given I am an agent
+	And I have an existing text request
+	When I view my week schedule
+	And I click the request symbol
+	Then I should see request page
 
 
 Scenario: Navigate to current week

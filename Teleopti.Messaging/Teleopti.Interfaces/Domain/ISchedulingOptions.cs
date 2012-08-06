@@ -315,5 +315,17 @@ namespace Teleopti.Interfaces.Domain
         /// 
         /// </summary>
         ISpecification<IMainShift> MainShiftOptimizeActivitySpecification { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		bool UseGroupSchedulingCommonStart { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		bool UseGroupSchedulingCommonEnd { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		bool UseGroupSchedulingCommonCategory { get; set; }
     }
 }

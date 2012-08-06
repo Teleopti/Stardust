@@ -69,7 +69,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             float lunchTop = top;
             float break2Top = top;
 
-            if (part.SignificantPart() == SchedulePartView.FullDayAbsence || part.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
+            if (part.SignificantPart() == SchedulePartView.FullDayAbsence || part.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence
+               || part.SignificantPart() == SchedulePartView.DayOff || part.SignificantPartForDisplay() == SchedulePartView.DayOff)
                 return personTop;
 
             IVisualLayerCollection projection = part.ProjectionService().CreateProjection();

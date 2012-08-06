@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
@@ -46,6 +47,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             percentTextBoxAbandonedShort.DoubleValue = queueAdjustment.AbandonedShort.Value;
             percentTextBoxAbandonedWithinServiceLevel.DoubleValue = queueAdjustment.AbandonedWithinServiceLevel.Value;
             percentTextBoxAbandonedAfterServiceLevel.DoubleValue = queueAdjustment.AbandonedAfterServiceLevel.Value;
+
+			if (workload.Skill == null) return;
+
+        	var textManager = new TextManager(workload.Skill.SkillType);
+        	labelCalculatedCalls.Text = textManager.WordDictionary["OfferedTasks"];
         }
 
         public bool Depopulate(IAggregateRoot aggregateRoot)
@@ -73,7 +79,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 
         public string PageName
         {
-            get { return UserTexts.Resources.Calculations; } //TODO! Change?
+            get { return UserTexts.Resources.Calculations; }
         }
 
         /// <summary>

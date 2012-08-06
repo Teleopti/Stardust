@@ -320,25 +320,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         {
             IActivityRestriction actRestriction = activityRestriction;
             
-            //DateTime earliestStart = layerCollection.Period().Value.StartDateTime;
-            //DateTime latestEnd = layerCollection.Period().Value.EndDateTime;
-
-            //if (actRestriction.StartTimeLimitation.StartTime.HasValue)
-            //    earliestStart = TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(actRestriction.StartTimeLimitation.StartTime.Value), agentTimeZone);
-
-            //if (actRestriction.EndTimeLimitation.EndTime.HasValue)
-            //    latestEnd = TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(actRestriction.EndTimeLimitation.EndTime.Value), agentTimeZone);
-
-            //DateTimePeriod outerPeriod = new DateTimePeriod(earliestStart, latestEnd);
-            //filteredLayers = filteredLayers.FilterLayers(outerPeriod);
-
-
-
-			//var filteredLayers = layerCollection.FilterLayers(activityRestriction.Activity);
-			//if (!filteredLayers.HasLayers)
-			//    return false;
-
-
 			var layers = from l in layerCollection
 			             where l.ActivityId == activityRestriction.Activity.Id
 			             select l;

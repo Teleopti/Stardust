@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
@@ -20,8 +19,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void Setup()
 		{
 			target = new ProjectionIntersectingPeriodMerger();
-			activity = new Activity("f");
-			person = new Person();
+			activity = ActivityFactory.CreateActivity("f");
+			person = PersonFactory.CreatePerson();
 			visualLayerFactory = new VisualLayerFactory();
 		}
 
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		private IVisualLayer createLayer(DateTimePeriod period)
 		{
-			return visualLayerFactory.CreateShiftSetupLayer(activity, period);
+			return visualLayerFactory.CreateShiftSetupLayer(activity, period,person);
 		}
 	}
 }

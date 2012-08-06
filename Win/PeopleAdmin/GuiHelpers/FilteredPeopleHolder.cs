@@ -25,7 +25,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public class FilteredPeopleHolder : IDisposable
     {
@@ -1070,6 +1069,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			IOrderedEnumerable<IBudgetGroup> sorted = list.OrderBy(n2 => n2.Name);
 			list = sorted.ToList();
 
+			_budgetGroupBindingCollection.Add(PersonPeriodModel.NullBudgetGroup);
 			foreach (IBudgetGroup budgetGroup in list)
 			{
 				_budgetGroupBindingCollection.Add(budgetGroup);

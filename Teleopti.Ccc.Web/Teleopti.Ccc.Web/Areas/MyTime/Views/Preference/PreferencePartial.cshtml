@@ -22,6 +22,9 @@
 			<!-- ko if: PossibleResultContractTimeLower() != PossibleResultContractTimeUpper() -->
 			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
 			<!-- /ko -->
+			<!-- ko if: PossibleResultContractTimeUpper() < TargetContractTimeLower() || TargetContractTimeUpper() < PossibleResultContractTimeLower() -->
+			<span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
+			<!-- /ko -->
 		</div>
 		<div>
 			<!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
@@ -31,6 +34,9 @@
 			@Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
 			<!-- /ko -->
 			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
+			<!-- ko if: PossibleResultDaysOff() > TargetDaysOffUpper() || PossibleResultDaysOff() < TargetDaysOffLower()-->
+			<span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
+			<!-- /ko -->
 		</div>
 	</div>
 	<div id="Preference-period">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -179,6 +180,20 @@ namespace Teleopti.Interfaces.Domain
     	                                                    IScheduleDictionary scheduleDictionary, DateOnly dateOnly,
     	                                                    IList<IShiftProjectionCache> shiftList,
     	                                                    IWorkShiftFinderResult finderResult);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shiftList"></param>
+        /// <param name="possibleStartEndCategory"></param>
+        /// <param name="schedulingOptions"></param>
+        /// <returns></returns>
+        IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd(IList<IShiftProjectionCache> shiftList,
+                                                                           IPossibleStartEndCategory
+                                                                               possibleStartEndCategory,
+                                                                           ISchedulingOptions schedulingOptions);
+        
 
     }
 }

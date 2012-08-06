@@ -354,7 +354,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			_target.Payload.UseShrinkage = true;
 			_target.Payload.Shrinkage = new Percent(0.3);
 			_target.CalculateStaff();
-			Assert.AreEqual(Math.Round(150d * 1.3d, 3), _target.Payload.ForecastedIncomingDemand);
+			Assert.AreEqual(150d/(1-_target.Payload.Shrinkage.Value), _target.Payload.ForecastedIncomingDemand);
 		}
 
         [Test]

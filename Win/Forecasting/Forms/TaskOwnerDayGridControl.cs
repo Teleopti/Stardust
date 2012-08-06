@@ -760,7 +760,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 weekendOrWeekday(gridStyleInfo, taskOwner.CurrentDate, true, false);
                 bool readOnly = true;
                 if (workloadDay != null &&
-                    workloadDay.Workload.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony)
+                    workloadDay.Workload.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony &&
+					workloadDay.Workload.Skill.SkillType.ForecastSource != ForecastSource.Retail)
                 {
                     readOnly = false;
                 }

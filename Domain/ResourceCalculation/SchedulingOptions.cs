@@ -45,6 +45,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	public int ResourceCalculateFrequency { get; set; }
     	public TimeSpan? UseCustomTargetTime { get; set; }
     	public bool ShowTroubleshot { get; set; }
+		public bool UseGroupSchedulingCommonStart { get; set; }
+		public bool UseGroupSchedulingCommonEnd { get; set; }
+		public bool UseGroupSchedulingCommonCategory { get; set; }
 
     	
     	public ISpecification<IMainShift> MainShiftOptimizeActivitySpecification
@@ -61,8 +64,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
     	public SchedulingOptions()
 		{
-			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>());
-			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>(), new List<IGroupPageLight>());
+			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>());
+			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>());
+            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>());
 		}
 
     	public BlockFinderType UseBlockScheduling

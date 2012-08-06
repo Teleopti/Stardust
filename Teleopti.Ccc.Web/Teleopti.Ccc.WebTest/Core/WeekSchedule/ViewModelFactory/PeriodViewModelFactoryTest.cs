@@ -28,8 +28,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         private IActivity activity;
         private IVisualLayer visualActivityLayer;
     	private TimePeriod minMaxTime;
+    	private IPerson person;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
@@ -44,9 +45,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             factory = new VisualLayerFactory();
             activity = ActivityFactory.CreateActivity("Phone");
             activity.SetId(Guid.NewGuid());
+
 			minMaxTime = new TimePeriod(8, 0, 19, 0);
 
-            visualActivityLayer = factory.CreateShiftSetupLayer(activity, period);
+            visualActivityLayer = factory.CreateShiftSetupLayer(activity, period, person);
 
             target = new PeriodViewModelFactory();
         }
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         private void setPrincipal()
         {
             principalBefore = System.Threading.Thread.CurrentPrincipal;
-            var person = PersonFactory.CreatePerson();
+            person = PersonFactory.CreatePerson();
             person.PermissionInformation.SetDefaultTimeZone(timeZone);
             System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
 					 new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);

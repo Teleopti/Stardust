@@ -302,7 +302,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
     		}
 			if (includeStatistics) workloadDayTemplate.SetTaskPeriodCollectionWithStatistics(newList);
 			else workloadDayTemplate.SetTaskPeriodCollection(newList);
-    		if (workloadDayTemplate.Workload.Skill.SkillType.ForecastSource!=ForecastSource.InboundTelephony)
+    		if (workloadDayTemplate.Workload.Skill.SkillType.ForecastSource!=ForecastSource.InboundTelephony &&
+				workloadDayTemplate.Workload.Skill.SkillType.ForecastSource!=ForecastSource.Retail)
     		{
     			if (workloadDayTemplate.OpenForWork.IsOpen)
     			{

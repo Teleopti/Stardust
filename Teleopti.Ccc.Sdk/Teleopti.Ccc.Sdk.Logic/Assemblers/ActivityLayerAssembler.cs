@@ -20,15 +20,16 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override ActivityLayerDto DomainEntityToDto(TLayerType entity)
         {
+        	var period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period);
             var activity = _activityAssembler.DomainEntityToDto(entity.Payload);
-            activity.Description = entity.Payload.ConfidentialDescription(_person).Name;
-            activity.DisplayColor = new ColorDto(entity.Payload.ConfidentialDisplayColor(_person));
+            activity.Description = entity.Payload.ConfidentialDescription(_person,new DateOnly(period.LocalStartDateTime)).Name;
+            activity.DisplayColor = new ColorDto(entity.Payload.ConfidentialDisplayColor(_person,new DateOnly(period.LocalStartDateTime)));
 
             return new ActivityLayerDto
                        {
-                           Id = entity.Id.Value,
+                           Id = entity.Id.GetValueOrDefault(),
                            Activity = activity,
-                           Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period)
+                           Period = period
                        };
         }
 

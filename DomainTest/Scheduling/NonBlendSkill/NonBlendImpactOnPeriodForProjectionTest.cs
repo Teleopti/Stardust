@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -36,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		public void Setup()
 		{
             _target = new NonBlendSkillImpactOnPeriodForProjection();
-			_lunch = new Activity("lunch");
-			_mejeriVaror = new Activity("mejeri");
-			_absence = new Absence();
+			_lunch = ActivityFactory.CreateActivity("lunch");
+			_mejeriVaror = ActivityFactory.CreateActivity("mejeri");
+			_absence = AbsenceFactory.CreateAbsence("Vacation");
 			_skillCarnaby = SkillFactory.CreateNonBlendSkill("Carnaby Street");
 		    _skillCarnaby.Activity = _mejeriVaror;
 			_skillPhone = SkillFactory.CreateSkill("The Mall");
@@ -48,9 +47,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			_visualLayerFactory = new VisualLayerFactory();
 			_shiftPeriod = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc),
 															 new DateTime(2010, 1, 1, 11, 0, 0, DateTimeKind.Utc));
-			_visualLayer1 = _visualLayerFactory.CreateShiftSetupLayer(_mejeriVaror, _shiftPeriod);
+			_visualLayer1 = _visualLayerFactory.CreateShiftSetupLayer(_mejeriVaror, _shiftPeriod,_person1);
 			_layerCollection1 = new VisualLayerCollection(_person1, new List<IVisualLayer> { _visualLayer1 }, new ProjectionPayloadMerger());
-			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_lunch, _shiftPeriod);
+			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_lunch, _shiftPeriod, _person1);
 			_layerCollection2 = new VisualLayerCollection(_person2, new List<IVisualLayer> { _visualLayer2 }, new ProjectionPayloadMerger());
 
 			_shiftList = new List<IVisualLayerCollection> { _layerCollection1, _layerCollection2, };
@@ -85,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		    var period = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 0, 0, DateTimeKind.Utc),
 															 new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc));
 
-			IVisualLayer baseactivityLayer = _visualLayerFactory.CreateShiftSetupLayer(_mejeriVaror, period);
+			IVisualLayer baseactivityLayer = _visualLayerFactory.CreateShiftSetupLayer(_mejeriVaror, period, _person2);
 			IVisualLayer absenceLayer = _visualLayerFactory.CreateAbsenceSetupLayer(_absence, baseactivityLayer, period);
 			_layerCollection3 = new VisualLayerCollection(_person2, new List<IVisualLayer> { absenceLayer, _visualLayer1 }, new ProjectionPayloadMerger());
 			_shiftList = new List<IVisualLayerCollection> {_layerCollection3 };

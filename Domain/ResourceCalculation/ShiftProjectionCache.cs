@@ -153,7 +153,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             get { return _mainShift.ShiftCategory.DayOfWeekJusticeValues[_dayOfWeek]; }
         }
 
-        private static bool PeriodIsWorkTimeInProjection(IVisualLayerCollection mainShiftProjection, DateTimePeriod period)
+    	public TimeSpan WorkShiftStartTime
+    	{
+			get { return WorkShiftProjectionPeriod.StartDateTime.TimeOfDay; }
+    	}
+
+		public TimeSpan WorkShiftEndTime
+    	{
+			get { return WorkShiftProjectionPeriod.EndDateTime.TimeOfDay; }
+    	}
+
+    	private static bool PeriodIsWorkTimeInProjection(IVisualLayerCollection mainShiftProjection, DateTimePeriod period)
         {
             foreach (VisualLayer visualLayer in mainShiftProjection)
             {

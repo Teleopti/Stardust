@@ -22,7 +22,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2010-02-09
         /// </remarks>
-        Description ConfidentialDescription(IPerson assignedPerson);
+		Description ConfidentialDescription(IPerson assignedPerson, DateOnly assignedDate);
 
         /// <summary>
         /// Returns the color of the payload or,
@@ -33,7 +33,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2010-02-09
         /// </remarks>
-        Color ConfidentialDisplayColor(IPerson assignedPerson);
+		Color ConfidentialDisplayColor(IPerson assignedPerson, DateOnly assignedDate);
 
         /// <summary>
         /// Gets or sets a value indicating whether this payload is [in contract time].

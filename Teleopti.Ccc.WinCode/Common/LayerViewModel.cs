@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows;
-using System.Windows.Controls;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.Common.Commands;
@@ -126,7 +125,7 @@ namespace Teleopti.Ccc.WinCode.Common
             get
             {
                 var vs = _layer as IVisualLayer;
-                return vs == null ? ((IPayload)_layer.Payload).ConfidentialDisplayColor(SchedulePart.Person) : vs.DisplayColor();
+				return vs == null ? ((IPayload)_layer.Payload).ConfidentialDisplayColor(SchedulePart.Person, SchedulePart.DateOnlyAsPeriod.DateOnly) : vs.DisplayColor();
             }
         }
 
@@ -140,7 +139,7 @@ namespace Teleopti.Ccc.WinCode.Common
             get
             {
                 var vs = _layer as IVisualLayer;
-                return vs == null ? ((IPayload)_layer.Payload).ConfidentialDescription(SchedulePart.Person).Name : vs.DisplayDescription().Name;
+                return vs == null ? ((IPayload)_layer.Payload).ConfidentialDescription(SchedulePart.Person,SchedulePart.DateOnlyAsPeriod.DateOnly).Name : vs.DisplayDescription().Name;
             }
         }
 

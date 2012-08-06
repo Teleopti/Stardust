@@ -10757,8 +10757,164 @@ These options are activated:
     <value>Agents (Manual Override)</value>
     <comment>Manually entered number of agents will override the forecasterd number of agents.</comment>
   </data>
-  <data name="RequestCannotEdit" xml:space="preserve">
-    <value>Your request state has been changed, you cannot update it.</value>
-    <comment>Your request state has been changed, you cannot update it.</comment>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>Your request state has been changed, you cannot update/delete it.</value>
+    <comment>Your request state has been changed, you cannot update/delete it.</comment>
+  </data>
+  <data name="SkillTypeRetail" xml:space="preserve">
+    <value>Retail</value>
+    <comment>Description for skill type Retail</comment>
+  </data>
+  <data name="ActualEmployees" xml:space="preserve">
+    <value>Actual Employees</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="AfterCustomerWorkTime" xml:space="preserve">
+    <value>After customer work time</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="AverageAfterCustomerWork" xml:space="preserve">
+    <value>Average after customer work</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="AverageCustomers" xml:space="preserve">
+    <value>Average Customers</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="CalculatedCustomers" xml:space="preserve">
+    <value>Calculated customers</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="CampaignCustomersPercent" xml:space="preserve">
+    <value>Campaign customers %</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>Same end time</value>
+    <comment>This is to use same end  in scheduling options. When using group scheduling</comment>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>Same shift category</value>
+    <comment>This is to use same shift category in scheduling options. When using group scheduling</comment>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>Same start time</value>
+    <comment>This is to use same start  in scheduling options. When using group scheduling</comment>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>Use Restrictions</value>
+    <comment>Use restrictions option in scheduling options under the General tab</comment>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Customers</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="DeviationCustomersColon" xml:space="preserve">
+    <value>Deviation customers:</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Employee</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Employees</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="EmployeesInc" xml:space="preserve">
+    <value>Employees inc</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="EmployeesIncWithShrinkage" xml:space="preserve">
+    <value>Employees inc with shrinkage</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="EmployeesWithShrinkage" xml:space="preserve">
+    <value>Employees with shrinkage</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
+    <value>Forecasted average after customer work</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="ForecastedCustomers" xml:space="preserve">
+    <value>Forecasted customers</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="ForecastedCustomersColon" xml:space="preserve">
+    <value>Forecasted customers:</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="ForecastedEmployees" xml:space="preserve">
+    <value>Forecasted Employees</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="ForecastedEmployeesIncoming" xml:space="preserve">
+    <value>Forecasted Employees incoming</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="IndexAfterCustomerWork" xml:space="preserve">
+    <value>Index after customer work</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="IndexCustomers" xml:space="preserve">
+    <value>Index customers</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="MaximumEmployees" xml:space="preserve">
+    <value>Maximum Employees</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="MinimumEmployees" xml:space="preserve">
+    <value>Minimum Employees</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="OfferedCustomers" xml:space="preserve">
+    <value>Customers</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="OriginalAfterCustomerWork" xml:space="preserve">
+    <value>Original after customer work</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="OriginalCustomers" xml:space="preserve">
+    <value>Original customers</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="OriginalOfferedCustomers" xml:space="preserve">
+    <value>Original customers</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="ScheduledEmployees" xml:space="preserve">
+    <value>Scheduled Employees</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="ScheduledEmployeesIncoming" xml:space="preserve">
+    <value>Scheduled Employees incoming</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="ServedCustomers" xml:space="preserve">
+    <value>Served Customers</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="TotalCustomers" xml:space="preserve">
+    <value>Total customers</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="ValidatedAfterCustomerWork" xml:space="preserve">
+    <value>Validated after customer work</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="ValidatedCustomers" xml:space="preserve">
+    <value>Validated customers</value>
+    <comment>Chart label in trend view</comment>
+  </data>
+  <data name="WalkAways" xml:space="preserve">
+    <value>Walk Aways</value>
+    <comment>Label for retail skill</comment>
+  </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>Your preference is out of range.</value>
+    <comment>Used for tooltip of warning icon in mytimeweb when your preference is out of range.</comment>
   </data>
 </root>

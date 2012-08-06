@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		private VisualLayer createLayer(DateTimePeriod period)
 		{
-			return (VisualLayer)visualLayerFactory.CreateShiftSetupLayer(activity, period);
+			return (VisualLayer)visualLayerFactory.CreateShiftSetupLayer(activity, period, person);
 		}
 
 	}

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.TestCommon;
@@ -346,10 +348,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IList<ITemplateMultisitePeriod> multisitePeriods = new List<ITemplateMultisitePeriod>();
             DateTimePeriod timePeriod = new DateTimePeriod(
                 _skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
-                _skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), _skill.TimeZone));
+                _skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)),
+                                                 _skill.TimeZone));
 
-            IDictionary<IChildSkill,Percent> distributions = new Dictionary<IChildSkill, Percent>();
-            distributions.Add(_childSkill1,new Percent(0.1));
+            IDictionary<IChildSkill, Percent> distributions = new Dictionary<IChildSkill, Percent>();
+            distributions.Add(_childSkill1, new Percent(0.1));
             distributions.Add(_childSkill2, new Percent(0.9));
             multisitePeriods.Add(new TemplateMultisitePeriod(timePeriod, distributions));
 
@@ -362,8 +365,47 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             double originalAmountChild1 = target.ChildSkillDays[0].TotalTasks;
             double originalAmountChild2 = target.ChildSkillDays[1].TotalTasks;
             target.ApplyTemplate(multisiteDayTemplate);
-            Assert.Less(target.ChildSkillDays[0].TotalTasks,originalAmountChild1);
-            Assert.Greater(target.ChildSkillDays[1].TotalTasks,originalAmountChild2);
+            Assert.Less(target.ChildSkillDays[0].TotalTasks, originalAmountChild1);
+            Assert.Greater(target.ChildSkillDays[1].TotalTasks, originalAmountChild2);
+        }
+
+        [Test]
+        public void VerifyRedistributeChildsDoesNotChangeTime()
+        {
+            var timePeriod1200A = new DateTimePeriod(new DateTime(2012, 07, 25, 12, 00, 00, DateTimeKind.Utc), new DateTime(2012, 07, 25, 12, 15, 00, DateTimeKind.Utc));
+            var timePeriod1215A = new DateTimePeriod(new DateTime(2012, 07, 25, 12, 15, 00, DateTimeKind.Utc), new DateTime(2012, 07, 25, 12, 30, 00, DateTimeKind.Utc));
+            var timePeriod1200M = new DateTimePeriod(new DateTime(2012, 07, 25, 12, 00, 00, DateTimeKind.Utc), new DateTime(2012, 07, 25, 12, 15, 00, DateTimeKind.Utc));
+            var timePeriod1215M = new DateTimePeriod(new DateTime(2012, 07, 25, 12, 15, 00, DateTimeKind.Utc), new DateTime(2012, 07, 25, 12, 30, 00, DateTimeKind.Utc));
+
+            var serviceAgreement = _childSkillDays[0].SkillDataPeriodCollection[0].ServiceAgreement;
+            var skillDataPeriodA = new SkillDataPeriod(serviceAgreement, new SkillPersonData(5,10),timePeriod1200A);
+            var skillDataPeriodB = new SkillDataPeriod(serviceAgreement, new SkillPersonData(0,0),timePeriod1215A);
+            var list = new List<ISkillDataPeriod> { skillDataPeriodA, skillDataPeriodB };
+            _childSkillDays.Clear();
+            _childSkillDays.Add(SkillDayFactory.CreateSkillDay(_childSkill1, new DateTime(2012, 07, 25)));
+            _childSkillDays[0].SetNewSkillDataPeriodCollection(list);
+            _childSkillDays.Add(SkillDayFactory.CreateSkillDay(_childSkill2, new DateTime(2012, 07, 25)));
+            _childSkillDays[1].SetNewSkillDataPeriodCollection(list);
+            
+            _multisitePeriods.Add(new MultisitePeriod(timePeriod1200M, _multisitePeriods[0].Distribution));
+            _multisitePeriods.Add(new MultisitePeriod(timePeriod1215M, _multisitePeriods[0].Distribution));
+            
+            var workload = WorkloadFactory.CreateWorkload(_skill);
+            var multisiteSkilldDay = SkillDayFactory.CreateSkillDay(_skill, timePeriod1200A.StartDateTime.AddHours(-11), workload, workload);
+            multisiteSkilldDay.SetupSkillDay();
+
+            multisiteSkilldDay.SkillDayCalculator = calculator;
+            _childSkillDays[0].SkillDayCalculator = calculator;
+            _childSkillDays[1].SkillDayCalculator = calculator;
+
+            target.MultisiteSkillDay = multisiteSkilldDay;
+            target.SetChildSkillDays(_childSkillDays);
+            target.SetMultisitePeriodCollection(_multisitePeriods);
+            
+
+            target.RedistributeChilds();
+            Assert.AreEqual(10, _childSkillDays[0].SkillStaffPeriodCollection[0].Payload.SkillPersonData.MaximumPersons);
+            Assert.AreEqual(0, _childSkillDays[0].SkillStaffPeriodCollection[1].Payload.SkillPersonData.MaximumPersons);
         }
 
         /// <summary>

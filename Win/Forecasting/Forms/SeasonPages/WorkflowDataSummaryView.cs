@@ -43,18 +43,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             reloadSeasonData();
         }
 
-        private void DecideTaskName()
-        {
-            if (_owner.Presenter.Model.Workload.Skill.SkillType.ForecastSource == ForecastSource.InboundTelephony)
-                _taskTypeName = UserTexts.Resources.Calls;
-            else
-            {
-                var manager = new TextManager(_owner.Presenter.Model.Workload.Skill.SkillType);
-                _taskTypeName = manager.WordDictionary["Tasks"];
-            }
-        }
+		private void DecideTaskName()
+		{
+			var manager = new TextManager(_owner.Presenter.Model.Workload.Skill.SkillType);
+			_taskTypeName = manager.WordDictionary["Tasks"];
+		}
 
-        private void dateSelectionComposite1_DateRangeChanged(object sender, DateRangeChangedEventArgs e)
+    	private void dateSelectionComposite1_DateRangeChanged(object sender, DateRangeChangedEventArgs e)
         {
             IList<DateOnlyPeriod> periodList = new List<DateOnlyPeriod>(e.SelectedDates);
             _owner.ReloadHistoricalDataDepth(periodList);

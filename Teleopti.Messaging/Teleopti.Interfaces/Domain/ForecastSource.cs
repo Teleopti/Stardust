@@ -37,6 +37,11 @@
         /// <summary>
         /// Skill for Stores for example
         /// </summary>
-        NonBlendSkill
+        NonBlendSkill,
+
+		/// <summary>
+		/// Skill for retail stores.
+		/// </summary>
+		Retail
     }
 }

@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private readonly IList<IScheduleTag> _scheduleTags;
     	private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
+        private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
     	
 
         private readonly bool _reschedule;
@@ -65,20 +66,23 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 					var settingRepository = new PersonalSettingDataRepository(uow);
 					_defaultGeneralSettings = settingRepository.FindValueByKey("SchedulingOptionsGeneralSettings", new SchedulingOptionsGeneralPersonalSetting());
 					_defaultAdvancedSettings = settingRepository.FindValueByKey("SchedulingOptionsAdvancedSettings", new SchedulingOptionsAdvancedPersonalSetting());
+                    _defaultExtraSettings = settingRepository.FindValueByKey("SchedulingOptionsExtraSetting", new SchedulingOptionsExtraPersonalSetting());
 				}
 			}
 			catch (DataSourceException)
 			{
 			}
 
-			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages);
-			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories, _groupPages);
+			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags);
+			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories);
+            _defaultExtraSettings.MapTo(_schedulingOptions,_scheduleTags,_groupPages );
 		}
 
 		private void savePersonalSettings()
 		{
 			_defaultGeneralSettings.MapFrom(_schedulingOptions);
 			_defaultAdvancedSettings.MapFrom(_schedulingOptions);
+            _defaultExtraSettings.MapFrom(_schedulingOptions );
 
 			try
 			{
@@ -88,6 +92,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 					uow.PersistAll();
 					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultAdvancedSettings);
 					uow.PersistAll();
+                    new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultExtraSettings );
+                    uow.PersistAll();
 				}
 			}
 			catch (DataSourceException)
@@ -99,7 +105,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
         	loadPersonalSettings();
 
-            schedulingSessionPreferencesPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule,
+			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule,
 				_backToLegal, _groupPagesProvider, _scheduleTags);
             dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
             dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
@@ -110,11 +116,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             // don not use for now in scheduling
             if (!_backToLegal)
                 tabControlTopLevel.TabPages.Remove(tabPageDayOffPlanningOptions);
-            schedulingSessionPreferencesPanel1.ShiftCategoryVisible = true;
-            schedulingSessionPreferencesPanel1.ScheduleOnlyAvailableDaysVisible = true;
-            schedulingSessionPreferencesPanel1.ScheduleOnlyPreferenceDaysVisible = true;
-            schedulingSessionPreferencesPanel1.ScheduleOnlyRotationDaysVisible = true;
-            schedulingSessionPreferencesPanel1.UseSameDayOffsVisible = false;
+            schedulingSessionPreferencesTabPanel1.ShiftCategoryVisible = true;
+            schedulingSessionPreferencesTabPanel1.ScheduleOnlyAvailableDaysVisible = true;
+            schedulingSessionPreferencesTabPanel1.ScheduleOnlyPreferenceDaysVisible = true;
+            schedulingSessionPreferencesTabPanel1.ScheduleOnlyRotationDaysVisible = true;
+            schedulingSessionPreferencesTabPanel1.UseSameDayOffsVisible = false;
         }
 
         private void AddToHelpContext()
@@ -129,7 +135,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             BackColor = ColorHelper.DialogBackColor();
             dayOffPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
-            schedulingSessionPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
+            schedulingSessionPreferencesTabPanel1.BackColor = ColorHelper.DialogBackColor();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -139,7 +145,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            schedulingSessionPreferencesPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
+            schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
 
             if(dayOffPreferencesPanel1.ValidateData(ExchangeDataOption.ClientToServer))
             {

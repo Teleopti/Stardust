@@ -406,6 +406,7 @@ html.full-height #push{
 
 .text-request {
 	right: 0px;
+	cursor: pointer;
 }
 .icon-left{padding-left: 25px; border: 0px; background-color: transparent; }
 button.icon-left{padding-left: 35px;}
@@ -915,10 +916,8 @@ footer p
 
 /*** Views ***/
 .rtl .weekdays{padding-left: 0; padding-right: 40px;}
-.rtl .body-weekview {background: url("../Images/view_repeater_bg.png") repeat-y scroll -966px bottom #F8F8F8;}
 .rtl .body-calendarview{background: url("../Images/view_repeater_wide_bg.png") repeat-y scroll -966px bottom #F8F8F8;}
 
-.rtl .body-weekview-inner { background: url("../Images/view_top_bg.png") no-repeat scroll -966px 0px transparent;}
 .rtl .body-calendarview-inner{background: url("../Images/view_top_wide_bg.png") no-repeat scroll -966px 0px transparent;}
 
 .rtl .calendarview-week { background: url("../Images/calendarview_week_wide_bg.png") no-repeat scroll 874px top transparent; padding-left: 0px;}
@@ -926,7 +925,6 @@ footer p
 .rtl .body-weekview-inner ul:first-child {margin-left: 0px; margin-right: 20px;}
 .rtl .weekview-day .comment-day {background: url("../../Images/icon_sprite.png") no-repeat scroll -36px 9px transparent}
 
-.rtl .weekview-day > li > div{border-left-width: 0px;  border-left-style: none; border-right-width: 8px; border-right-style: solid; border-right-color: transparent;}
 .rtl .weekview-day li div.meeting{ margin-right: 25px; margin-left: 0px; }
 .ie7 .rtl .weekview-day li div.meeting{margin: 0;}
 
