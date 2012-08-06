@@ -56,6 +56,7 @@
             this.gridControlWeekView.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.DblClickOnCell;
             this.gridControlWeekView.BackColor = System.Drawing.Color.White;
             gridBaseStyle1.Name = "Header";
+            gridBaseStyle1.StyleInfo.AutoSize = true;
             gridBaseStyle1.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
             gridBaseStyle1.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
             gridBaseStyle1.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
@@ -65,6 +66,7 @@
             gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
             gridBaseStyle1.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
             gridBaseStyle2.Name = "Standard";
+            gridBaseStyle2.StyleInfo.AutoSize = true;
             gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
             gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
             gridBaseStyle3.Name = "Row Header";
@@ -72,6 +74,7 @@
             gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
             gridBaseStyle3.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
             gridBaseStyle4.Name = "Column Header";
+            gridBaseStyle4.StyleInfo.AutoSize = true;
             gridBaseStyle4.StyleInfo.BaseStyle = "Header";
             gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
             this.gridControlWeekView.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
@@ -82,9 +85,12 @@
             this.gridControlWeekView.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
             this.gridControlWeekView.ContextMenuStrip = this.budgetGroupWeekViewMenu;
+            this.gridControlWeekView.DefaultColWidth = 110;
             this.gridControlWeekView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControlWeekView.ExcelLikeCurrentCell = true;
             this.gridControlWeekView.ExcelLikeSelectionFrame = true;
+            this.gridControlWeekView.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.gridControlWeekView.GridLineColor = System.Drawing.SystemColors.GrayText;
             this.gridControlWeekView.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
             this.gridControlWeekView.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
             this.gridControlWeekView.HorizontalThumbTrack = true;
@@ -94,6 +100,7 @@
             this.gridControlWeekView.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
             this.gridControlWeekView.Properties.BackgroundColor = System.Drawing.Color.White;
             this.gridControlWeekView.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
+            this.gridControlWeekView.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.gridControlWeekView.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
             this.gridControlWeekView.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
@@ -101,7 +108,6 @@
             this.gridControlWeekView.Size = new System.Drawing.Size(685, 194);
             this.gridControlWeekView.SmartSizeBox = false;
             this.gridControlWeekView.TabIndex = 1;
-            this.gridControlWeekView.Text = "gridControl1";
             this.gridControlWeekView.ThemesEnabled = true;
             this.gridControlWeekView.UseRightToLeftCompatibleTextBox = true;
             this.gridControlWeekView.VerticalThumbTrack = true;
@@ -125,7 +131,7 @@
             this.toolStripSeparator3,
             this.toolStripMenuItemModifySelection});
             this.budgetGroupWeekViewMenu.Name = "budgetGroupWeekViewMenu";
-            this.budgetGroupWeekViewMenu.Size = new System.Drawing.Size(249, 242);
+            this.budgetGroupWeekViewMenu.Size = new System.Drawing.Size(249, 220);
             this.budgetGroupWeekViewMenu.Opening += new System.ComponentModel.CancelEventHandler(this.budgetGroupWeekViewMenu_Opening);
             // 
             // toolStripMenuItemAddShrinkageRow
