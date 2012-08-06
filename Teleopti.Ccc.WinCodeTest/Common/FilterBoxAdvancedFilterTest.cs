@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private FilterBoxAdvancedFilter _filterBoxAdvancedFilter;
         FilterAdvancedTupleItem _filterOperand;
         FilterAdvancedTupleItem _criteria;
+        private FilterAdvancedTupleItem _value;
 
         [SetUp]
         public void Setup()
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _filterOperand = new FilterAdvancedTupleItem("=","equals");
             _criteria = new FilterAdvancedTupleItem("criteria", "criteria");
             _filterBoxAdvancedFilter = new FilterBoxAdvancedFilter("filterOn", _filterOperand, _criteria);
+            _value = new FilterAdvancedTupleItem("Equal", "=");
         }
 
         [Test]
@@ -29,6 +31,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.AreEqual("filterOn", _filterBoxAdvancedFilter.FilterOn.ToString());
             Assert.AreEqual(_criteria, _filterBoxAdvancedFilter.FilterCriteria);
             Assert.AreEqual(_filterOperand, _filterBoxAdvancedFilter.FilterOperand);
+        }
+
+        [Test]
+        public void VerifyPropertiesValues()
+        {
+            _filterBoxAdvancedFilter = new FilterBoxAdvancedFilter("filterOn", _filterOperand, _criteria, _value);
+            Assert.AreEqual("filterOn", _filterBoxAdvancedFilter.FilterOn.ToString());
+            Assert.AreEqual(_criteria, _filterBoxAdvancedFilter.FilterCriteria);
+            Assert.AreEqual(_filterOperand, _filterBoxAdvancedFilter.FilterOperand);
+            Assert.AreEqual(_value , _filterBoxAdvancedFilter.FilterValue );
+
         }
     }
 }
