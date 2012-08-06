@@ -542,8 +542,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private void InitializeCellModels()
 		{
 			Grid.CellModels.Add(GridCellModelConstants.CellTypeGridInCell, new GridInCellModel(Grid.Model));
-			Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanLongHourMinutesOrEmptyCellModel(Grid.Model));
-
+			
 			PercentCellModel cellModel = new PercentCellModel(Grid.Model);
 			cellModel.MinMax = new MinMax<double>(-1, 1);
 			Grid.CellModels.Add(GridCellModelConstants.CellTypePercentCell, cellModel);
