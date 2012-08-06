@@ -11,10 +11,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     public class RequestPreferencesPersonalSettingsTest
     {
         private RequestPreferencesPersonalSettings _target;
+        private List<FilterBoxAdvancedFilter> _filterList ;
+
         [SetUp]
         public void Setup()
         {
             _target = new RequestPreferencesPersonalSettings();
+            _filterList = new List<FilterBoxAdvancedFilter>();
+            var f1 = new FilterBoxAdvancedFilter(new object(), new FilterAdvancedTupleItem(" ", " "),
+                                                  new FilterAdvancedTupleItem("Equal", "="));
+            _filterList.Add(f1);
         }
 
         [Test]
@@ -49,6 +55,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var returningList = _target.MapTo();
 
             Assert.AreEqual(returningList.Count, 1);
+        }
+
+        [Test]
+        public void VerifyReqPrefPropertyTest()
+        {
+            
+           var rq = new RequestPreferences();
+            rq.RequestList = _filterList;
+
+            Assert.AreEqual(rq.RequestList , _filterList);
         }
     }
 }
