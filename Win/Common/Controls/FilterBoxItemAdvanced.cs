@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         private string preHeader;
         private IList<FilterAdvancedSetting> _columnList;
         public event EventHandler<EventArgs> RemoveMe;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
             SetTexts();
             _columnList = new List<FilterAdvancedSetting>();
             Load += FilterBoxItemAdvancedLoad;
+            //FilterBoxItemAdvancedLoad();
             timeSpanTextBox1.Visible = false;
             dateTimePickerAdvDate.Visible = false;
             office2007OutlookTimePicker1.Visible = false;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             this.comboBoxAdvColumns.DisplayMember = "Text";
             this.comboBoxAdvColumns.ValueMember = "ValueObject";
-            
+
             foreach (FilterAdvancedSetting item in _columnList)
             {
                 this.comboBoxAdvColumns.Items.Add(item);
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void FilterBoxItemAdvancedLoad(object sender, EventArgs e)
+        //private void FilterBoxItemAdvancedLoad()
         {
             this.labelPreHeader.Text = preHeader;
             if (_columnList.Count != 0)
@@ -74,35 +76,50 @@ namespace Teleopti.Ccc.Win.Common.Controls
             set { preHeader = value; }
         }
 
+        public string SetNumber
+        {
+            get { return textBoxExt1.Text; }
+            set { textBoxExt1.Text = value; }
+        }
+
         /// <summary>
         /// Return selected filters
         /// </summary>
         public FilterBoxAdvancedFilter SelectedFilterSetting()
         {
-                FilterAdvancedSetting setting = ((FilterAdvancedSetting)this.comboBoxAdvColumns.SelectedItem);
-                FilterAdvancedTupleItem filterOn = setting.FilterOn;
-                FilterAdvancedTupleItem operand = (FilterAdvancedTupleItem)((Control)this.comboBoxAdvFilterOperand.SelectedItem).Tag;
-                FilterAdvancedTupleItem criteria = null;
-                int number;
+            FilterAdvancedSetting setting = ((FilterAdvancedSetting)this.comboBoxAdvColumns.SelectedItem);
+            FilterAdvancedTupleItem filterOn = setting.FilterOn;
+            FilterAdvancedTupleItem operand = (FilterAdvancedTupleItem)((Control)this.comboBoxAdvFilterOperand.SelectedItem).Tag;
+            FilterAdvancedTupleItem criteria = null;
+            int number = 0;
 
-                switch(setting.FilterCriteriaType)
-                {
-                    case FilterCriteriaType.Date: criteria = new FilterAdvancedTupleItem("Date", this.dateTimePickerAdvDate.Value); break; //criteria = this.dateTimePickerAdvDate.Value; break;
-                    case FilterCriteriaType.HourMin : criteria = new FilterAdvancedTupleItem("HourMin",this.timeSpanTextBox1.Value); break; //criteria = this.timeSpanTextBox1.Value; break;
-                    case FilterCriteriaType.List: criteria = new FilterAdvancedTupleItem("List", ((FilterAdvancedTupleItem)(((Control)this.comboBoxAdvCriteriaList.SelectedItem).Tag)).Value); break;//criteria = ((Control)this.comboBoxAdvCriteriaList.SelectedItem).Tag ; break;
-                    case FilterCriteriaType.Text: criteria = new FilterAdvancedTupleItem("Text", this.textBoxExt1.Text); break; //criteria = this.textBoxExt1.Text; break;
-                    case FilterCriteriaType.Time: criteria = new FilterAdvancedTupleItem("Time", this.office2007OutlookTimePicker1.TimeValue()); break; //criteria = this.office2007OutlookTimePicker1.TimeValue(); break;
-                    case FilterCriteriaType.Number:
-                        if (textBoxExt1.Text.Length == 0) textBoxExt1.Text = "0";
-                        if (Int32.TryParse(textBoxExt1.Text, out number))
-                            //criteria = number;
-                            criteria = new FilterAdvancedTupleItem("Number", number);
-                        else
-                            throw new FormatException("The provided value could not be formatted to Int32");
-                        break;
-                }
+            switch (setting.FilterCriteriaType)
+            {
+                case FilterCriteriaType.Date: criteria = new FilterAdvancedTupleItem("Date", this.dateTimePickerAdvDate.Value); break; //criteria = this.dateTimePickerAdvDate.Value; break;
+                case FilterCriteriaType.HourMin: criteria = new FilterAdvancedTupleItem("HourMin", this.timeSpanTextBox1.Value); break; //criteria = this.timeSpanTextBox1.Value; break;
+                case FilterCriteriaType.List: criteria = new FilterAdvancedTupleItem("List", ((FilterAdvancedTupleItem)(((Control)this.comboBoxAdvCriteriaList.SelectedItem).Tag)).Value); break;//criteria = ((Control)this.comboBoxAdvCriteriaList.SelectedItem).Tag ; break;
+                case FilterCriteriaType.Text: criteria = new FilterAdvancedTupleItem("Text", this.textBoxExt1.Text); break; //criteria = this.textBoxExt1.Text; break;
+                case FilterCriteriaType.Time: criteria = new FilterAdvancedTupleItem("Time", this.office2007OutlookTimePicker1.TimeValue()); break; //criteria = this.office2007OutlookTimePicker1.TimeValue(); break;
+                case FilterCriteriaType.Number:
+                    if (textBoxExt1.Text.Length == 0) textBoxExt1.Text = "0";
+                    if (Int32.TryParse(textBoxExt1.Text, out number))
+                    {
+                        //criteria = number;
+                        criteria = new FilterAdvancedTupleItem("Number", number);
+                        //filterValue = textBoxExt1.Text;
+                    }
+                    else
+                        throw new FormatException("The provided value could not be formatted to Int32");
+                    break;
+            }
+            if (criteria.Text == "Number")
+                return new FilterBoxAdvancedFilter(filterOn, operand, criteria, number);
+            else
+            {
+                FilterAdvancedTupleItem filterValue = ((FilterAdvancedTupleItem)(((Control)this.comboBoxAdvCriteriaList.SelectedItem).Tag));
+                return new FilterBoxAdvancedFilter(filterOn, operand, criteria, filterValue);
+            }
 
-                return new FilterBoxAdvancedFilter(filterOn, operand, criteria);
         }
 
         public FilterAdvancedSetting Setting
@@ -117,10 +134,10 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// <param name="e"></param>
         private void buttonRemoveClick(object sender, EventArgs e)
         {
-        	var handler = RemoveMe;
+            var handler = RemoveMe;
             if (handler != null)
             {
-            	handler.Invoke(this, null);
+                handler.Invoke(this, null);
             }
         }
 
@@ -130,7 +147,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         }
 
         private void comboBoxAdvColumns_SelectedIndexChanged(object sender, EventArgs e)
-        { 
+        {
             SetCriteriaType();
             FillFilterOperandCombo();
         }
@@ -141,9 +158,9 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
             switch (criteriaType)
             {
-                case FilterCriteriaType.HourMin : ShowCriteriaTypeHourMin(); break;
-                case FilterCriteriaType.Date : ShowCriteriaTypeDate(); break;
-                case FilterCriteriaType.Text : ShowCriteriaTypeText(); break;
+                case FilterCriteriaType.HourMin: ShowCriteriaTypeHourMin(); break;
+                case FilterCriteriaType.Date: ShowCriteriaTypeDate(); break;
+                case FilterCriteriaType.Text: ShowCriteriaTypeText(); break;
                 case FilterCriteriaType.Time: ShowCriteriaTypeTime(); break;
                 case FilterCriteriaType.List: ShowCriteriaTypeList(); break;
                 case FilterCriteriaType.Number: ShowCriteriaTypeText(); break;
@@ -198,6 +215,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
         private void FillCriteriaCombo()
         {
+
             IList<FilterAdvancedTupleItem> criteriaList = ((FilterAdvancedSetting)this.comboBoxAdvColumns.SelectedItem).FilterCriteriaList;
 
             if (criteriaList != null)
@@ -212,7 +230,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
                 }
 
                 this.comboBoxAdvCriteriaList.SelectedIndex = 0;
-            }       
+            }
         }
 
         /// <summary>
@@ -243,6 +261,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar)) e.Handled = true;
         }
-        
+
     }
 }
