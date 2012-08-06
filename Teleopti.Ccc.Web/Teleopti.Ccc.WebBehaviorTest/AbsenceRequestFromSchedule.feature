@@ -22,27 +22,27 @@ Scenario: Can not add absence request if no permission
 Scenario: Default absence request values from week schedule
 	Given I am an agent
 	And I am viewing week schedule
-	When I click on tomorrows summary
+	When I click on last day of current week's summary
 	And I click absence request tab
-	Then I should see the text request form with tomorrow as default date
+	Then I should see the text request form with last day as default date
 	And I should see 00:00 - 23:59 as the default times
 
 Scenario: Default absence request values from week schedule when unchecked Fullday
 	Given I am an agent
 	And I am viewing week schedule
-	When I click on tomorrows summary
+	When I click on last day of current week's summary
 	And I click absence request tab
 	And I unchecked the full day checkbox
-	Then I should see the text request form with tomorrow as default date
+	Then I should see the text request form with last day as default date
 	And I should see 08:00 - 17:00 as the default times
 
 Scenario: Default absence request values from week schedule when checked Fullday
 	Given I am an agent
 	And I am viewing week schedule
-	When I click on tomorrows summary
+	When I click on last day of current week's summary
 	And I click absence request tab
 	And I checked the full day checkbox
-	Then I should see the text request form with tomorrow as default date
+	Then I should see the text request form with last day as default date
 	And I should see 00:00 - 23:59 as the default times
 
 Scenario: Cancel adding absence request
@@ -78,7 +78,7 @@ Scenario: Switch request type
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I am viewing week schedule
-	When I click on tomorrows summary
+	When I click on today's summary
 	And I input text request values
 	And I click absence request tab
 	Then I should see my existing inputs

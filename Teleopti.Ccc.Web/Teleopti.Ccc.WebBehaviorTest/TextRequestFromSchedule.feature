@@ -26,8 +26,8 @@ Scenario: Can not add text request if no permission
 Scenario: Default text request values from week schedule
 	Given I am an agent
 	And I am viewing week schedule
-	When I click on tomorrows summary
-	Then I should see the text request form with tomorrow as default date
+	When I click on last day of current week's summary
+	Then I should see the text request form with last day as default date
 	And I should see 8:00 - 17:00 as the default times
 
 Scenario: Default full day text request values from week schedule

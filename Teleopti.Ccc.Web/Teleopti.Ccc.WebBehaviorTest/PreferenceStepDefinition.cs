@@ -240,16 +240,32 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
 		}
 
-		[Then(@"I should see the contract time boundry (.*) to (.*)")]
+		[Then(@"I should see the contract time boundry (\d+) to (\d+)")]
 		public void ThenIShouldSeeTheContractTimeBoundryTo(string earliest, string latest)
 		{
+			var culture = UserFactory.User().Person.PermissionInformation.Culture();
 			var cell = _page.CalendarCellForDate(DateOnly.Today);
 			var div = cell.Div(Find.ByClass("possible-contract-times", false));
 			TimeSpan earliestTime;
 			TimeSpan latestTime;
 			TimeHelper.TryParse(earliest, out earliestTime);
 			TimeHelper.TryParse(latest, out latestTime);
+			var expected = TimeHelper.GetLongHourMinuteTimeString(earliestTime, culture).ToLower() + "-" +
+						   TimeHelper.GetLongHourMinuteTimeString(latestTime, culture).ToLower();
+			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
+		}
+
+		[Then(@"I should see the contract time boundry (\d+) to (\d+) on weekday (\d)")]
+		public void ThenIShouldSeeTheContractTimeBoundryTo(string earliest, string latest, int weekday)
+		{
 			var culture = UserFactory.User().Person.PermissionInformation.Culture();
+			var date = DateHelper.GetFirstDateInWeek(DateTime.Now.Date, culture).AddDays(weekday - 1);
+			var cell = _page.CalendarCellForDate(date);
+			var div = cell.Div(Find.ByClass("possible-contract-times", false));
+			TimeSpan earliestTime;
+			TimeSpan latestTime;
+			TimeHelper.TryParse(earliest, out earliestTime);
+			TimeHelper.TryParse(latest, out latestTime);
 			var expected = TimeHelper.GetLongHourMinuteTimeString(earliestTime, culture).ToLower() + "-" +
 						   TimeHelper.GetLongHourMinuteTimeString(latestTime, culture).ToLower();
 			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
