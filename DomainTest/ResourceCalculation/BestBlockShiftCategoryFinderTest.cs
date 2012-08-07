@@ -145,11 +145,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 
-            	Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(getCashes(),
-            	                                                                                         new Domain.
-            	                                                                                         	Specification.All
-            	                                                                                         	<IMainShift>())).
-            		IgnoreArguments().Return(getCashes());
+				//Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(getCashes(),
+				//                                                                                         new Domain.
+				//                                                                                            Specification.All
+				//                                                                                            <IMainShift>())).
+				//    IgnoreArguments().Return(getCashes());
             }
             using (_mocks.Playback())
             {
@@ -204,10 +204,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 
-				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(cashes,
-				                                                                                         new Domain.Specification.
-				                                                                                         	All<IMainShift>())).
-					IgnoreArguments().Return(getCashes());
+				//Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(cashes,
+				//                                                                                         new Domain.Specification.
+				//                                                                                            All<IMainShift>())).
+				//    IgnoreArguments().Return(getCashes());
 			}
             using (_mocks.Playback())
             {

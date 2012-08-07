@@ -551,7 +551,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays).Repeat.AtLeastOnce();
             	Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false,
             	                                                 _effectiveRestriction, _resourceCalculateDelayer, null)).
-            		IgnoreArguments().Return(true);
+            		IgnoreArguments().Return(false);
 				Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
 				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
 				//Expect.Call(_mostOverStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
