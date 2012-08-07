@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
             }
             using(_mocks.Playback())
             {
-                _target.TransformToSerilizableModel(new DateOnlyPeriod(new DateOnly(2012,08,06), new DateOnly(2012,08,10)));
+                _target.TransformToSerializableModel(new DateOnlyPeriod(new DateOnly(2012,08,06), new DateOnly(2012,08,10)));
                 Assert.That(_target.ExportForecastToFileSettings.Period, Is.EqualTo(new DateOnlyPeriod(new DateOnly(2012, 08, 06), new DateOnly(2012, 08, 10))));
             }
         }

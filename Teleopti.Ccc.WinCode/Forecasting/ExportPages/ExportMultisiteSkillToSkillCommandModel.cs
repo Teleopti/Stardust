@@ -29,8 +29,17 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 
         public void Dispose()
         {
-            ExportMultisiteSkillToSkillCommandModel = null;
-            ExportSkillToFileCommandModel = null;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                ExportMultisiteSkillToSkillCommandModel = null;
+                ExportSkillToFileCommandModel = null;
+            }
         }
     }
 

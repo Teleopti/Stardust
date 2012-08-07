@@ -10,6 +10,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
     {
         IExportForecastToFileSettings ExportForecastToFileSettings { get; }
         void Save();
-        void TransformToSerilizableModel(DateOnlyPeriod period);
+        void TransformToSerializableModel(DateOnlyPeriod period);
     }
 }

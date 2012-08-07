@@ -1269,7 +1269,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{
                             if (model.ExportToFile)
-                            {
+                            { 
                                 try
                                 {
                                     pages.SaveSettings();

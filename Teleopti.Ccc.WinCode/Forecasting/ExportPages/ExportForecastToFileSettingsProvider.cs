@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
             }
         }
 
-        public void TransformToSerilizableModel(DateOnlyPeriod period)
+        public void TransformToSerializableModel(DateOnlyPeriod period)
         {
             ExportForecastToFileSettings.Period = period;
         }

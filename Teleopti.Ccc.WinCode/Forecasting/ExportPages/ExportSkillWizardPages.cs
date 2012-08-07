@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
         {
             if(_stateObj.ExportSkillToFileCommandModel != null)
             {
-                _exportForecastToFileSettingsProvider.TransformToSerilizableModel( 
+                _exportForecastToFileSettingsProvider.TransformToSerializableModel( 
                     new DateOnlyPeriod(_stateObj.ExportSkillToFileCommandModel.Period.StartDate,_stateObj.ExportSkillToFileCommandModel.Period.EndDate));
                 _exportForecastToFileSettingsProvider.Save();
             }
