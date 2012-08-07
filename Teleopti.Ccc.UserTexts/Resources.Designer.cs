@@ -7546,6 +7546,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Staffing.
+        /// </summary>
+        public static string ExportStaffing {
+            get {
+                return ResourceManager.GetString("ExportStaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to.
         /// </summary>
         public static string ExportTo {
@@ -7641,6 +7650,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ExportValidationWarnings {
             get {
                 return ResourceManager.GetString("ExportValidationWarnings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Workload.
+        /// </summary>
+        public static string ExportWorkload {
+            get {
+                return ResourceManager.GetString("ExportWorkload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Workload and Staffing.
+        /// </summary>
+        public static string ExportWorkloadAndStaffing {
+            get {
+                return ResourceManager.GetString("ExportWorkloadAndStaffing", resourceCulture);
             }
         }
         
