@@ -83,7 +83,7 @@
             this.radioButtonImportStaffing.Name = "radioButtonImportStaffing";
             this.radioButtonImportStaffing.Size = new System.Drawing.Size(100, 17);
             this.radioButtonImportStaffing.TabIndex = 4;
-            this.radioButtonImportStaffing.Text = "xxImportStaffing";
+            this.radioButtonImportStaffing.Text = "xxExportStaffing";
             this.radioButtonImportStaffing.UseVisualStyleBackColor = true;
             // 
             // radioButtonImportWLAndStaffing
@@ -93,7 +93,7 @@
             this.radioButtonImportWLAndStaffing.Name = "radioButtonImportWLAndStaffing";
             this.radioButtonImportWLAndStaffing.Size = new System.Drawing.Size(165, 17);
             this.radioButtonImportWLAndStaffing.TabIndex = 5;
-            this.radioButtonImportWLAndStaffing.Text = "xxImportWorkloadAndStaffing";
+            this.radioButtonImportWLAndStaffing.Text = "xxExportWorkloadAndStaffing";
             this.radioButtonImportWLAndStaffing.UseVisualStyleBackColor = true;
             // 
             // radioButtonImportWorkload
@@ -105,7 +105,7 @@
             this.radioButtonImportWorkload.Size = new System.Drawing.Size(110, 17);
             this.radioButtonImportWorkload.TabIndex = 3;
             this.radioButtonImportWorkload.TabStop = true;
-            this.radioButtonImportWorkload.Text = "xxImportWorkload";
+            this.radioButtonImportWorkload.Text = "xxExportWorkload";
             this.radioButtonImportWorkload.UseVisualStyleBackColor = true;
             // 
             // SelectFileDestination

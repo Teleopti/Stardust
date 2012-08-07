@@ -10754,4 +10754,16 @@ These options are activated:
     <value>CSV files (*.csv)|*.csv</value>
     <comment>CSV files (*.csv)|*.csv</comment>
   </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>Export Staffing</value>
+    <comment>Export Staffing</comment>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>Export Workload</value>
+    <comment>Export Workload</comment>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>Export Workload and Staffing</value>
+    <comment>Export Workload and Staffing</comment>
+  </data>
 </root>
