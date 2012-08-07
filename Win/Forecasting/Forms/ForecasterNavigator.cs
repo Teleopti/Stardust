@@ -1236,9 +1236,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			using (var model = new ExportSkillModel())
 			{
                 var settingProvider = new ExportAcrossBusinessUnitsSettingsProvider(_unitOfWorkFactory, _repositoryFactory);
+			    var forecastExportSettingProvider = new ExportForecastToFileSettingsProvider(_unitOfWorkFactory,
+			                                                                                _repositoryFactory);
 			    _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(
                     () => initializeExportAcrossBusinessUnitsWizard(model, settingProvider));
-                using (var pages = new ExportSkillWizardPages(model, settingProvider))
+
+                _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(
+                    () => initializeExportForecastToFileWizard(model, forecastExportSettingProvider));
+
+                using (var pages = new ExportSkillWizardPages(model, settingProvider,forecastExportSettingProvider))
                 {
                     var firstPage =
                         PropertyPagesHelper.GetExportSkillFirstPage(
@@ -1264,7 +1270,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						{
                             if (model.ExportToFile)
                             {
-                                // FileExport is done, show something here?
+                                try
+                                {
+                                    pages.SaveSettings();
+                                }
+                                catch(DataSourceException exception)
+                                {
+                                    _dataSourceExceptionHandler.DataSourceExceptionOccurred(exception);
+                                }
                             }
                             else
                             {
@@ -1296,7 +1309,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-        private static void initializeExportAcrossBusinessUnitsWizard(ExportSkillModel model, IExportAcrossBusinessUnitsSettingsProvider settingProvider)
+	    private static void initializeExportForecastToFileWizard(ExportSkillModel model, ExportForecastToFileSettingsProvider forecastExportSettingProvider)
+	    {
+            var savedSettings = forecastExportSettingProvider.ExportForecastToFileSettings;
+            if (!savedSettings.Period.Equals(new DateOnlyPeriod()))
+                model.ExportSkillToFileCommandModel.Period = savedSettings.Period;
+	    }
+
+	    private static void initializeExportAcrossBusinessUnitsWizard(ExportSkillModel model, IExportAcrossBusinessUnitsSettingsProvider settingProvider)
         {
             model.ExportMultisiteSkillToSkillCommandModel = new ExportMultisiteSkillToSkillCommandModel();
             var savedSettings = settingProvider.ExportAcrossBusinessUnitsSettings;

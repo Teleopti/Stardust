@@ -7,12 +7,14 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
     {
         private readonly ExportSkillModel _stateObj;
         private readonly IExportAcrossBusinessUnitsSettingsProvider _exportAcrossBusinessUnitsSettingsProvider;
+        private readonly IExportForecastToFileSettingsProvider _exportForecastToFileSettingsProvider;
 
-        public ExportSkillWizardPages(ExportSkillModel stateObj,IExportAcrossBusinessUnitsSettingsProvider exportAcrossBusinessUnitsSettingsProvider)
+        public ExportSkillWizardPages(ExportSkillModel stateObj,IExportAcrossBusinessUnitsSettingsProvider exportAcrossBusinessUnitsSettingsProvider, IExportForecastToFileSettingsProvider exportForecastToFileSettingsProvider)
             : base(stateObj)
         {
             _stateObj = stateObj;
             _exportAcrossBusinessUnitsSettingsProvider = exportAcrossBusinessUnitsSettingsProvider;
+            _exportForecastToFileSettingsProvider = exportForecastToFileSettingsProvider;
         }
 
         public override ExportSkillModel CreateNewSateObj()
@@ -32,6 +34,13 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 
         public void SaveSettings()
         {
+            if(_stateObj.ExportSkillToFileCommandModel != null)
+            {
+                _exportForecastToFileSettingsProvider.TransformToSerilizableModel( 
+                    new DateOnlyPeriod(_stateObj.ExportSkillToFileCommandModel.Period.StartDate,_stateObj.ExportSkillToFileCommandModel.Period.EndDate));
+                _exportForecastToFileSettingsProvider.Save();
+            }
+
             if (_stateObj.ExportMultisiteSkillToSkillCommandModel != null)
             {
                 _exportAcrossBusinessUnitsSettingsProvider.TransformToSerilizableModel(
