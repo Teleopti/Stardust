@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
-using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
