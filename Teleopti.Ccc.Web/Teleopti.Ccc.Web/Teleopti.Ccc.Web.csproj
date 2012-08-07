@@ -521,6 +521,7 @@
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoTeamsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Schedule\WeekRequestPartial.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
