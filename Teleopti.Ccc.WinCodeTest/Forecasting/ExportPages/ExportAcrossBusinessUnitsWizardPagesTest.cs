@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         private MockRepository _mocks;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IExportAcrossBusinessUnitsSettingsProvider _exportAcrossBusinessUnitsSettingsProvider;
+        private IExportForecastToFileSettingsProvider _exportForecastToFileSettingsProvider;
         private IRepositoryFactory _repositoryFactory;
 
         [SetUp]
@@ -24,7 +25,8 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             _exportAcrossBusinessUnitsSettingsProvider = new ExportAcrossBusinessUnitsSettingsProvider(_unitOfWorkFactory, _repositoryFactory);
-            _target = new ExportSkillWizardPages(_exportSkillModel, _exportAcrossBusinessUnitsSettingsProvider);
+            _exportForecastToFileSettingsProvider = new ExportForecastToFileSettingsProvider(_unitOfWorkFactory, _repositoryFactory);
+            _target = new ExportSkillWizardPages(_exportSkillModel, _exportAcrossBusinessUnitsSettingsProvider,_exportForecastToFileSettingsProvider);
         }
 
         [Test]
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         [Test]
         public void ShouldCreateNewAggregateRoot()
         {
-            _target = new ExportSkillWizardPages(_exportSkillModel, _exportAcrossBusinessUnitsSettingsProvider);
+            _target = new ExportSkillWizardPages(_exportSkillModel, _exportAcrossBusinessUnitsSettingsProvider,_exportForecastToFileSettingsProvider);
             Assert.IsNotNull(_target);
         }
 
