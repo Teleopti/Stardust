@@ -364,6 +364,8 @@
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProviderTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsWizardPagesTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportForecastToFileSettingsProviderTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportForecastToFileSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModelTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ImportForecastModelTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ImportForecastPresenterTest.cs" />

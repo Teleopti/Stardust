@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -35,5 +36,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
         string Name { get; }
         
         void Save();
+
+        event EventHandler PageListChanged;
     }
 }

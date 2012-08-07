@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -15,7 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
-    public partial class SelectDestination : BaseUserControl, IPropertyPageNoRoot<ExportMultisiteSkillToSkillCommandModel>
+    public partial class SelectDestination : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
     {
         private readonly ICollection<string> _errorMessages = new List<string>();
 
@@ -25,12 +24,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             setColors();
         }
 
-        public void Populate(ExportMultisiteSkillToSkillCommandModel stateObj)
+        public void Populate(ExportSkillModel stateObj)
         {
             var skills = new List<DestinationSkillModel>();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                foreach (var selection in stateObj.MultisiteSkillSelectionModels)
+                foreach (var selection in stateObj.ExportMultisiteSkillToSkillCommandModel.MultisiteSkillSelectionModels)
                 {
                     var skill = new MultisiteSkillRepository(uow).Get(selection.MultisiteSkillModel.Id);
 					if (((IDeleteTag)skill).IsDeleted) continue;
@@ -96,9 +95,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             }
         }
 
-        public bool Depopulate(ExportMultisiteSkillToSkillCommandModel stateObj)
+        public bool Depopulate(ExportSkillModel stateObj)
         {
-            validate(stateObj);
+            validate(stateObj.ExportMultisiteSkillToSkillCommandModel);
             
             gridControlDestination.CellButtonClicked -= grid_CellButtonClicked;
             return true;

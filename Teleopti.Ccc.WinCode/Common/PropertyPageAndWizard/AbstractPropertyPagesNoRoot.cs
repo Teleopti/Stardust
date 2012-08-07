@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 	public abstract class AbstractPropertyPagesNoRoot<T> : IAbstractPropertyPagesNoRoot<T>, IDisposable
 	{
 		private IPropertyPageNoRoot<T> _currentPage;
-		private IList<IPropertyPageNoRoot<T>> _propertyPages;
+		private List<IPropertyPageNoRoot<T>> _propertyPages;
 		private Form _owningForm;
 		private T _stateObj;
 
@@ -20,6 +20,20 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 			get { return _owningForm; }
 			set { _owningForm = value; }
 		}
+
+        public void ChangePages(IEnumerable<IPropertyPageNoRoot<T>> newPages)
+        {
+            var indexOfPage = _propertyPages.IndexOf(_currentPage);
+            _propertyPages.Clear();
+            _propertyPages.AddRange(newPages);
+            _currentPage = _propertyPages[indexOfPage];
+
+            var pageListChanged = PageListChanged;
+            if (pageListChanged!=null)
+            {
+                pageListChanged(this, EventArgs.Empty);
+            }
+        }
 
 		public virtual Size MinimumSize
 		{
@@ -37,6 +51,8 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
         {
             CurrentPage.Depopulate(_stateObj);
         }
+
+	    public event EventHandler PageListChanged;
 
 	    public abstract string WindowText { get; }
 
