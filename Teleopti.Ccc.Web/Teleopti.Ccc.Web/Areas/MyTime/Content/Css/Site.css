@@ -546,7 +546,6 @@ header {
 .no-rgba #modal-disable{ background: transparent url(../Images/semi_transp_white.png) 0 0 repeat;}
 
 /* Sign in */
-#page-signin{background: transparent url(../Images/body_bg.jpg) top no-repeat; min-height: 400px;}
 #logo{
 	 display: block;
 	 height: 179px;
