@@ -339,6 +339,10 @@
     <Compile Include="Forecasting\CopyToSkillCommand.cs" />
     <Compile Include="Forecasting\CopyToSkillModel.cs" />
     <Compile Include="Forecasting\CopyToSkillPresenter.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportForecastToFileSettings.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportForecastToFileSettingsProvider.cs" />
+    <Compile Include="Forecasting\ExportPages\IExportForecastToFileSettings.cs" />
+    <Compile Include="Forecasting\ExportPages\IExportForecastToFileSettingsProvider.cs" />
     <Compile Include="Forecasting\ImportForecast\ISendCommandToSdk.cs" />
     <Compile Include="Forecasting\ImportForecast\Presenters\ISaveImportForecastFileCommand.cs" />
     <Compile Include="Forecasting\ImportForecast\Presenters\IValidateImportForecastFileCommand.cs" />

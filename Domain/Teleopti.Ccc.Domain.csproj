@@ -156,8 +156,6 @@
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="Common\ScenarioProvider.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModel.cs" />
-    <Compile Include="Forecasting\Export\ForecastExportSelection.cs" />
-    <Compile Include="Forecasting\Export\IForecastExportSelection.cs" />
     <Compile Include="Forecasting\Export\IJobResultFeedback.cs" />
     <Compile Include="Forecasting\Export\ImportForecastToSkillCommand.cs" />
     <Compile Include="Forecasting\Export\IMultisiteSkillForExport.cs" />
