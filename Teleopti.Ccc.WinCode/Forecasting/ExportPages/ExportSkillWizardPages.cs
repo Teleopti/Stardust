@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 
             if (_stateObj.ExportMultisiteSkillToSkillCommandModel != null)
             {
-                _exportAcrossBusinessUnitsSettingsProvider.TransformToSerilizableModel(
+                _exportAcrossBusinessUnitsSettingsProvider.TransformToSerializableModel(
                     _stateObj.ExportMultisiteSkillToSkillCommandModel.MultisiteSkillSelectionModels);
                 _exportAcrossBusinessUnitsSettingsProvider.ExportAcrossBusinessUnitsSettings.Period =
                     new DateOnlyPeriod(new DateOnly(_stateObj.ExportMultisiteSkillToSkillCommandModel.Period.StartDate.DateTime),
