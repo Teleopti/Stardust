@@ -546,7 +546,6 @@ header {
 .no-rgba #modal-disable{ background: transparent url(../Images/semi_transp_white.png) 0 0 repeat;}
 
 /* Sign in */
-#page-signin{background: transparent url(../Images/login_page_bg.png) top left no-repeat; min-height: 400px;}
 #logo{
 	 display: block;
 	 height: 179px;
@@ -745,13 +744,9 @@ select.time-input
 {
 	width: 8.5em;
 }
-select.time-input
-{
-    width: 110px;
-}
 .rtl select.time-input
 {
-    width: 110px;
+    width: 8.5em;
 }
 .rtl .time-input
 {

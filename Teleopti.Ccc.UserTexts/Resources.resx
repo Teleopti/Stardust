@@ -10769,6 +10769,46 @@ These options are activated:
     <value>Actual Employees</value>
     <comment>Label for retail skill</comment>
   </data>
+   <data name="ExportToBU" xml:space="preserve">
+    <value>Export to business unit</value>
+    <comment>Export to business unit</comment>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Export to file</value>
+    <comment>Export to file</comment>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>File export is done</value>
+    <comment>File export is done</comment>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>Select a date and a scenario</value>
+    <comment>Select a date and a scenario</comment>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>Select file destination</value>
+    <comment>Select file destination</comment>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>Select a skill</value>
+    <comment>Select a skill</comment>
+  </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>CSV files (*.csv)|*.csv</value>
+    <comment>CSV files (*.csv)|*.csv</comment>
+  </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>Export Staffing</value>
+    <comment>Export Staffing</comment>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>Export Workload</value>
+    <comment>Export Workload</comment>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>Export Workload and Staffing</value>
+    <comment>Export Workload and Staffing</comment>
+  </data>
   <data name="AfterCustomerWorkTime" xml:space="preserve">
     <value>After customer work time</value>
     <comment>Label for retail skill</comment>

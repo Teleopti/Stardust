@@ -1,49 +1,46 @@
-﻿using System.Collections.Generic;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
-    public partial class SelectDateRange : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
+    public partial class SelectExportType : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
     {
+        private readonly Action<bool> _callbackOnPageChange;
         private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
 
-        public SelectDateRange()
+        protected SelectExportType()
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
                 setColors();
         }
 
+        public SelectExportType(Action<bool> callbackOnPageChange) : this()
+        {
+            _callbackOnPageChange = callbackOnPageChange;
+        }
+
         private void setColors()
         {
             BackColor = ColorHelper.WizardBackgroundColor();
-            label1.BackColor = ColorHelper.WizardPanelBackgroundColor();
         }
 
         public void Populate(ExportSkillModel stateObj)
         {
             _stateObj = stateObj;
-        }
-
-        protected override void OnLoad(System.EventArgs e)
-        {
-            base.OnLoad(e);
-
-            var exportModel = _stateObj.ExportMultisiteSkillToSkillCommandModel;
-            reportDateFromToSelector1.WorkPeriodStart = new DateOnly(exportModel.Period.StartDate.DateTime);
-            reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(exportModel.Period.EndDate.DateTime);
+            rbtExportToFile.Checked = stateObj.ExportToFile;
         }
 
         public bool Depopulate(ExportSkillModel stateObj)
         {
-            stateObj.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto(new DateOnlyPeriod(reportDateFromToSelector1.WorkPeriodStart, reportDateFromToSelector1.WorkPeriodEnd));
+            _callbackOnPageChange(rbtExportToFile.Checked);
+            stateObj.ChangeExportType(rbtExportToFile.Checked);
             return true;
         }
 
@@ -53,7 +50,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public string PageName
         {
-            get { return Resources.SelectDates; }
+            get { return Resources.FileTypeSelection; }
         }
 
         public ICollection<string> ErrorMessages

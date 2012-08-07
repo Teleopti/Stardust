@@ -39,7 +39,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			events: {
 				show: function (event, api) {
 					var date = $(event.originalEvent.target).closest('ul').attr('data-request-default-date');
-					Teleopti.MyTimeWeb.Schedule.TextRequest.ClearFormData(date);
+					Teleopti.MyTimeWeb.Schedule.Request.ClearFormData(date);
 				}
 			},
 			show: {
@@ -79,7 +79,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
 				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/Week', Teleopti.MyTimeWeb.Schedule.PartialInit);
 			}
-			Teleopti.MyTimeWeb.Schedule.TextRequest.Init();
+			Teleopti.MyTimeWeb.Schedule.Request.Init();
 			_initTodayButton();
 		},
 		PartialInit: function () {
@@ -88,7 +88,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_initPeriodSelection();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
-			Teleopti.MyTimeWeb.Schedule.TextRequest.PartialInit();
+			Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 		}
 	};
 
@@ -126,7 +126,7 @@ Teleopti.MyTimeWeb.Schedule.RequestViewModel = (function RequestViewModel() {
 	}
 });
 
-Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
+Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 
 	var requestViewModel = null;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -21,6 +22,7 @@ using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
 using Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast;
+using Teleopti.Ccc.Win.Forecasting.Forms.SkillPages;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -1253,35 +1255,75 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void toolStripMenuItemExport_Click(object sender, EventArgs e)
 		{
-			using (var model = new ExportMultisiteSkillToSkillCommandModel())
+			using (var model = new ExportSkillModel())
 			{
                 var settingProvider = new ExportAcrossBusinessUnitsSettingsProvider(_unitOfWorkFactory, _repositoryFactory);
+			    var forecastExportSettingProvider = new ExportForecastToFileSettingsProvider(_unitOfWorkFactory,
+			                                                                                _repositoryFactory);
 			    _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(
                     () => initializeExportAcrossBusinessUnitsWizard(model, settingProvider));
-                using (var pages = new ExportAcrossBusinessUnitsWizardPages(model, settingProvider))
-				{
-					pages.Initialize(PropertyPagesHelper.GetExportAcrossBusinessUnitsPages());
-					using (var wizard = new WizardNoRoot<ExportMultisiteSkillToSkillCommandModel>(pages))
+
+                _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(
+                    () => initializeExportForecastToFileWizard(model, forecastExportSettingProvider));
+
+                using (var pages = new ExportSkillWizardPages(model, settingProvider,forecastExportSettingProvider))
+                {
+                    var firstPage =
+                        PropertyPagesHelper.GetExportSkillFirstPage(
+                            b =>
+                                {
+                                    var firstPageFromPages = (SelectExportType) pages.FirstPage;
+                                    if (b)
+                                    {
+                                        pages.ChangePages(PropertyPagesHelper.GetExportSkillToFilePages(firstPageFromPages));
+                                    }
+                                    else
+                                    {
+                                        pages.ChangePages(
+                                            PropertyPagesHelper.GetExportAcrossBusinessUnitsPages(firstPageFromPages));
+                                    }
+                                });
+                    var exportToFilePages = PropertyPagesHelper.GetExportSkillToFilePages(firstPage);
+                    
+                    pages.Initialize(exportToFilePages);
+					using (var wizard = new WizardNoRoot<ExportSkillModel>(pages))
 					{
 						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{
-							var dto = model.TransformToDto();
-                            try
-                            {
-                                pages.SaveSettings();
-                                var statusDialog =
-                                    new JobStatusView(new JobStatusModel { JobStatusId = Guid.NewGuid()});
-                                statusDialog.Show(this);
-                                statusDialog.SetJobStatusId(_sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault());
+                            if (model.ExportToFile)
+                            { 
+                                try
+                                {
+                                    pages.SaveSettings();
+                                }
+                                catch(DataSourceException exception)
+                                {
+                                    _dataSourceExceptionHandler.DataSourceExceptionOccurred(exception);
+                                }
                             }
-                            catch (OptimisticLockException)
+                            else
                             {
-                                ViewBase.ShowErrorMessage(string.Concat(Resources.SomeoneChangedTheSameDataBeforeYouDot,
-                                                                        Resources.YourChangesWillBeDiscarded), Resources.PleaseTryAgainLater);
-                            }
-                            catch (DataSourceException exception)
-                            {
-                                _dataSourceExceptionHandler.DataSourceExceptionOccurred(exception);
+                                var dto = model.ExportMultisiteSkillToSkillCommandModel.TransformToDto();
+                                try
+                                {
+                                    pages.SaveSettings();
+                                    var statusDialog =
+                                        new JobStatusView(new JobStatusModel {JobStatusId = Guid.NewGuid()});
+                                    statusDialog.Show(this);
+                                    statusDialog.SetJobStatusId(
+                                        _sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault());
+                                }
+                                catch (OptimisticLockException)
+                                {
+                                    ViewBase.ShowErrorMessage(
+                                        string.Concat(Resources.SomeoneChangedTheSameDataBeforeYouDot,
+                                                      Resources.YourChangesWillBeDiscarded),
+                                        Resources.PleaseTryAgainLater);
+                                }
+                                catch (DataSourceException exception)
+                                {
+                                    _dataSourceExceptionHandler.DataSourceExceptionOccurred(exception);
+                                }
                             }
 						}
 					}
@@ -1289,13 +1331,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-        private static void initializeExportAcrossBusinessUnitsWizard(ExportMultisiteSkillToSkillCommandModel model, IExportAcrossBusinessUnitsSettingsProvider settingProvider)
+	    private static void initializeExportForecastToFileWizard(ExportSkillModel model, ExportForecastToFileSettingsProvider forecastExportSettingProvider)
+	    {
+            var savedSettings = forecastExportSettingProvider.ExportForecastToFileSettings;
+            if (!savedSettings.Period.Equals(new DateOnlyPeriod()))
+                model.ExportSkillToFileCommandModel.Period = savedSettings.Period;
+	    }
+
+	    private static void initializeExportAcrossBusinessUnitsWizard(ExportSkillModel model, IExportAcrossBusinessUnitsSettingsProvider settingProvider)
         {
+            model.ExportMultisiteSkillToSkillCommandModel = new ExportMultisiteSkillToSkillCommandModel();
             var savedSettings = settingProvider.ExportAcrossBusinessUnitsSettings;
             settingProvider.TransformSerializableToSelectionModels().ForEach(
-                model.MultisiteSkillSelectionModels.Add);
+                model.ExportMultisiteSkillToSkillCommandModel.MultisiteSkillSelectionModels.Add);
             if (!savedSettings.Period.Equals(new DateOnlyPeriod()))
-                model.Period = new DateOnlyPeriodDto(savedSettings.Period);
+                model.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto(savedSettings.Period);
         }
 
 	    private void toolStripMenuItemJobHistory_Click(object sender, EventArgs e)
