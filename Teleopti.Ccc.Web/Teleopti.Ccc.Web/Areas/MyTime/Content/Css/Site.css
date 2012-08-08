@@ -744,13 +744,9 @@ select.time-input
 {
 	width: 8.5em;
 }
-select.time-input
-{
-    width: 110px;
-}
 .rtl select.time-input
 {
-    width: 110px;
+    width: 8.5em;
 }
 .rtl .time-input
 {

@@ -4951,6 +4951,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CSV files (*.csv)|*.csv.
+        /// </summary>
+        public static string CSVFile {
+            get {
+                return ResourceManager.GetString("CSVFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Culture settings.
         /// </summary>
         public static string CultureSettings {
@@ -7654,6 +7663,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Staffing.
+        /// </summary>
+        public static string ExportStaffing {
+            get {
+                return ResourceManager.GetString("ExportStaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to.
         /// </summary>
         public static string ExportTo {
@@ -7668,6 +7686,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ExportToAnotherScenario {
             get {
                 return ResourceManager.GetString("ExportToAnotherScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to business unit.
+        /// </summary>
+        public static string ExportToBU {
+            get {
+                return ResourceManager.GetString("ExportToBU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to file.
+        /// </summary>
+        public static string ExportToFile {
+            get {
+                return ResourceManager.GetString("ExportToFile", resourceCulture);
             }
         }
         
@@ -7731,6 +7767,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ExportValidationWarnings {
             get {
                 return ResourceManager.GetString("ExportValidationWarnings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Workload.
+        /// </summary>
+        public static string ExportWorkload {
+            get {
+                return ResourceManager.GetString("ExportWorkload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Workload and Staffing.
+        /// </summary>
+        public static string ExportWorkloadAndStaffing {
+            get {
+                return ResourceManager.GetString("ExportWorkloadAndStaffing", resourceCulture);
             }
         }
         
@@ -7929,6 +7983,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FifteenMinutes {
             get {
                 return ResourceManager.GetString("FifteenMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File export is done.
+        /// </summary>
+        public static string FileExportDone {
+            get {
+                return ResourceManager.GetString("FileExportDone", resourceCulture);
             }
         }
         
@@ -19018,6 +19081,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a date and a scenario.
+        /// </summary>
+        public static string SelectDateAndScenario {
+            get {
+                return ResourceManager.GetString("SelectDateAndScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select dates.
         /// </summary>
         public static string SelectDates {
@@ -19104,6 +19176,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectEmploymentType {
             get {
                 return ResourceManager.GetString("SelectEmploymentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select file destination.
+        /// </summary>
+        public static string SelectFileDestination {
+            get {
+                return ResourceManager.GetString("SelectFileDestination", resourceCulture);
             }
         }
         
@@ -19275,6 +19356,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectSiteColon {
             get {
                 return ResourceManager.GetString("SelectSiteColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a skill.
+        /// </summary>
+        public static string SelectSkill {
+            get {
+                return ResourceManager.GetString("SelectSkill", resourceCulture);
             }
         }
         

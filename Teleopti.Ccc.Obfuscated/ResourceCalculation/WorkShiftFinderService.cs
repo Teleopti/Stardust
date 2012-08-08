@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             IWorkShiftCalculationResultHolder result = null;
             if(_shiftList.Count > 0)
 				result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions, possibleStartEndCategory);
+                
 
             return result;
         }
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 				_shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(_shiftList, possibleStartEndCategory, schedulingOptions);
 
-				_shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList);
+                _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList, schedulingOptions.MainShiftOptimizeActivitySpecification);
 
 				_shiftList = _shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(dateOnly,
 				                                                                                         person.
@@ -212,15 +213,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				                                                FinderResult);
 				if (_shiftList.Count == 0)
 					return null;
-
-				if (schedulingOptions.RescheduleOptions == OptimizationRestriction.KeepStartAndEndTime &&
-				    schedulingOptions.SpecificStartAndEndTime.HasValue)
-				{
-					_shiftList = _shiftProjectionCacheFilter.FilterOnStartAndEndTime(schedulingOptions.SpecificStartAndEndTime.Value,
-					                                                                 _shiftList, _finderResult);
-					if (_shiftList.Count == 0)
-						return null;
-				}
 
 				if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
 				{

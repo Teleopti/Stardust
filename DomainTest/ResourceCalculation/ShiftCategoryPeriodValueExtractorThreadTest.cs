@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Record())
             {
                 Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
-                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftProjectionList)).IgnoreArguments().Return
+                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftProjectionList, new All<IMainShift>())).IgnoreArguments().Return
                         (_shiftProjectionList).Repeat.AtLeastOnce();
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly,
                                                                                                         agentTimeZone,

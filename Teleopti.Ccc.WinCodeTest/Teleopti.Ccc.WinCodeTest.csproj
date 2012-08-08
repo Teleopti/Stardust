@@ -364,7 +364,10 @@
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProviderTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsWizardPagesTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportForecastToFileSettingsProviderTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportForecastToFileSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModelTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportSkillModelTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ImportForecastModelTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ImportForecastPresenterTest.cs" />
     <Compile Include="Forecasting\ImportForecast\SaveImportForecastFileCommandTest.cs" />
@@ -570,7 +573,6 @@
     <Compile Include="Scheduler\IntradayOptimizer2CreatorTest.cs" />
     <Compile Include="Scheduler\MoveTimeOptimizerCreatorTest.cs" />
     <Compile Include="Scheduler\NotesEditorViewModelTest.cs" />
-    <Compile Include="Scheduler\OptimizerActivitiesPreferencesPresenterTest.cs" />
     <Compile Include="Scheduler\Panels\LengthToDateCalculatorTest.cs" />
     <Compile Include="Scheduler\PersistConflictTest.cs" />
     <Compile Include="Scheduler\NotSkillGroupSpecificationTest.cs" />

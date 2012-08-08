@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IOptimizationOverLimitByRestrictionDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i]);
 
                 ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
+				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
                 IExtendReduceTimeOptimizer optimizer = new ExtendReduceTimeOptimizer(
                     personalSkillsPeriodValueCalculator, 
@@ -119,7 +120,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     resourceCalculateDaysDecider, 
                     originalStateListForScheduleTag[i],
                     optimizerOverLimitDecider, 
-                    schedulingOptionsCreator
+                    schedulingOptionsCreator,
+					mainShiftOptimizeActivitySpecificationSetter
                     );
 
                 optimizers.Add(optimizer);

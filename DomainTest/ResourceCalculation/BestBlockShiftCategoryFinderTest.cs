@@ -45,8 +45,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IPossibleCombinationsOfStartEndCategoryCreator _possibleCombinationsOfStartEndCategoryCreator;
     	private IWorkShiftWorkTime _workShiftWorkTime;
     	private IShiftCategoryFairnessCalculator _fairnessCalculator;
-		IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
-		IGroupShiftLengthDecider _groupShiftLengthDecider;
+		private IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
+		private IGroupShiftLengthDecider _groupShiftLengthDecider;
+    	private IShiftProjectionCacheFilter _shiftProjectionCacheFilter;
 
     	[SetUp]
         public void Setup()
@@ -88,6 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     		                                           _possibleCombinationsOfStartEndCategoryCreator, 
 													   _groupShiftCategoryFairnessCreator,
 													   _fairnessCalculator, _groupShiftLengthDecider);
+    		_shiftProjectionCacheFilter = _mocks.StrictMock<IShiftProjectionCacheFilter>();
 
         }
 
@@ -142,6 +144,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
+
+				//Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(getCashes(),
+				//                                                                                         new Domain.
+				//                                                                                            Specification.All
+				//                                                                                            <IMainShift>())).
+				//    IgnoreArguments().Return(getCashes());
             }
             using (_mocks.Playback())
             {
@@ -196,7 +204,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 
-            }
+				//Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(cashes,
+				//                                                                                         new Domain.Specification.
+				//                                                                                            All<IMainShift>())).
+				//    IgnoreArguments().Return(getCashes());
+			}
             using (_mocks.Playback())
             {
                 var ret = _target.BestShiftCategoryForDays(result, _person, _options, null);

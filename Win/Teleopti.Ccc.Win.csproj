@@ -572,6 +572,31 @@
     <Compile Include="Forecasting\Forms\CopyToSkillView.Designer.cs">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\FileExportDone.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\FileExportDone.Designer.cs">
+      <DependentUpon>FileExportDone.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\ForecastToFileCommand.cs" />
+    <Compile Include="Forecasting\Forms\ExportPages\SelectFileDestination.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectFileDestination.Designer.cs">
+      <DependentUpon>SelectFileDestination.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectExportType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectExportType.Designer.cs">
+      <DependentUpon>SelectExportType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.Designer.cs">
+      <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forecasting\Forms\ExportPages\JobStatusView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -601,6 +626,12 @@
     </Compile>
     <Compile Include="Forecasting\Forms\ExportPages\SelectMultiSiteSkills.Designer.cs">
       <DependentUpon>SelectMultiSiteSkills.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectSkills.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectSkills.Designer.cs">
+      <DependentUpon>SelectSkills.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.cs">
       <SubType>Form</SubType>
@@ -778,6 +809,12 @@
     </Compile>
     <Compile Include="Optimization\AdvancedPreferencesPanel.Designer.cs">
       <DependentUpon>AdvancedPreferencesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Optimization\ShiftsPreferencesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Optimization\ShiftsPreferencesPanel.Designer.cs">
+      <DependentUpon>ShiftsPreferencesPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Optimization\DayOffPreferencesPanel.cs">
       <SubType>UserControl</SubType>
@@ -1193,13 +1230,6 @@
     <Compile Include="Scheduling\OptimizationProgress.Designer.cs">
       <DependentUpon>OptimizationProgress.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\OptimizeActivities.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\OptimizeActivities.Designer.cs">
-      <DependentUpon>OptimizeActivities.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Scheduling\OptimizeActivitiesSettings.cs" />
     <Compile Include="Scheduling\OptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\PersistConflictView.cs">
       <SubType>Form</SubType>
@@ -2404,6 +2434,21 @@
     <EmbeddedResource Include="Forecasting\Forms\CopyToSkillView.resx">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\FileExportDone.resx">
+      <DependentUpon>FileExportDone.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectFileDestination.resx">
+      <DependentUpon>SelectFileDestination.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectExportType.resx">
+      <DependentUpon>SelectExportType.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.resx">
+      <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\JobStatusView.resx">
       <DependentUpon>JobStatusView.cs</DependentUpon>
     </EmbeddedResource>
@@ -2419,6 +2464,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectMultiSiteSkills.resx">
       <DependentUpon>SelectMultiSiteSkills.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectSkills.resx">
+      <DependentUpon>SelectSkills.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ImportForecast\ImportForecastView.resx">
       <DependentUpon>ImportForecastView.cs</DependentUpon>
@@ -2511,6 +2559,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Optimization\AdvancedPreferencesPanel.resx">
       <DependentUpon>AdvancedPreferencesPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Optimization\ShiftsPreferencesPanel.resx">
+      <DependentUpon>ShiftsPreferencesPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Optimization\DayOffPreferencesPanel.resx">
       <DependentUpon>DayOffPreferencesPanel.cs</DependentUpon>
@@ -3022,9 +3073,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\OptimizationProgress.resx">
       <DependentUpon>OptimizationProgress.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\OptimizeActivities.resx">
-      <DependentUpon>OptimizeActivities.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersistConflictView.resx">
       <DependentUpon>PersistConflictView.cs</DependentUpon>

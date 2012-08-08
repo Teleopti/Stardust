@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingOptions _schedulingOptions;
         private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
+    	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -76,6 +77,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
             _schedulingOptions = new SchedulingOptions();
             _optimizationOverLimitDecider = _mocks.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
+        	_mainShiftOptimizeActivitySpecificationSetter =
+        		_mocks.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
 
             _target = new ExtendReduceDaysOffOptimizer(_personalSkillPeriodValueCalculator,
                                                        _personalScheduleResultDataExtractor, _decisionMaker,
@@ -89,7 +92,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                        _dayOffOptimizerConflictHandler, 
                                                        _dayOffOptimizerValidator,
                                                        _optimizationOverLimitDecider,
-                                                       _schedulingOptionsCreator);
+                                                       _schedulingOptionsCreator,
+													   _mainShiftOptimizeActivitySpecificationSetter);
 
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
@@ -333,6 +337,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(_scheduleDayPro).Repeat.Any();
             Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).IgnoreArguments()
                 .Return(_effectiveRestriction).Repeat.Any();
+        	Expect.Call(
+        		() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).
+        		IgnoreArguments().Repeat.Any();
         }
     }
 }

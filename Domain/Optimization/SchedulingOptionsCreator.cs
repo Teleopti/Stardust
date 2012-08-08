@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.ResourceCalculation;
+﻿using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -42,12 +44,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.Fairness = new Percent(optimizationPreferences.Extra.FairnessValue);
             schedulingOptions.GroupPageForShiftCategoryFairness = optimizationPreferences.Extra.GroupPageOnCompareWith;
 
-            if (optimizationPreferences.Extra.KeepShiftCategories)
-                schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
-            else if (optimizationPreferences.Extra.KeepStartAndEndTimes)
-                schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepStartAndEndTime;
-            else
-                schedulingOptions.RescheduleOptions = OptimizationRestriction.None;
+			//if (optimizationPreferences.Shifts.KeepShiftCategories)
+			//    schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
+			//else if (optimizationPreferences.Shifts.KeepStartTimes || optimizationPreferences.Shifts.KeepEndTimes )
+			//    schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepStartAndEndTime ;
+			//else
+			//    schedulingOptions.RescheduleOptions = OptimizationRestriction.None;
 
             schedulingOptions.UseMinimumPersons = optimizationPreferences.Advanced.UseMinimumStaffing;
             schedulingOptions.UseMaximumPersons = optimizationPreferences.Advanced.UseMaximumStaffing;
@@ -57,6 +59,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             // extra properties
             schedulingOptions.ConsiderShortBreaks = optimizationPreferences.Rescheduling.ConsiderShortBreaks;
             schedulingOptions.OnlyShiftsWhenUnderstaffed = optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
+
+           
 
             return schedulingOptions;
         }

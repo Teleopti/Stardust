@@ -9,9 +9,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
-    public partial class SelectDateRange : BaseUserControl, IPropertyPageNoRoot<ExportMultisiteSkillToSkillCommandModel>
+    public partial class SelectDateRange : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
     {
-        private ExportMultisiteSkillToSkillCommandModel _stateObj;
+        private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
 
         public SelectDateRange()
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             label1.BackColor = ColorHelper.WizardPanelBackgroundColor();
         }
 
-        public void Populate(ExportMultisiteSkillToSkillCommandModel stateObj)
+        public void Populate(ExportSkillModel stateObj)
         {
             _stateObj = stateObj;
         }
@@ -36,13 +36,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         {
             base.OnLoad(e);
 
-            reportDateFromToSelector1.WorkPeriodStart = new DateOnly(_stateObj.Period.StartDate.DateTime);
-            reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(_stateObj.Period.EndDate.DateTime);
+            var exportModel = _stateObj.ExportMultisiteSkillToSkillCommandModel;
+            reportDateFromToSelector1.WorkPeriodStart = new DateOnly(exportModel.Period.StartDate.DateTime);
+            reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(exportModel.Period.EndDate.DateTime);
         }
 
-        public bool Depopulate(ExportMultisiteSkillToSkillCommandModel stateObj)
+        public bool Depopulate(ExportSkillModel stateObj)
         {
-            stateObj.Period = new DateOnlyPeriodDto(new DateOnlyPeriod(reportDateFromToSelector1.WorkPeriodStart, reportDateFromToSelector1.WorkPeriodEnd));
+            stateObj.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto(new DateOnlyPeriod(reportDateFromToSelector1.WorkPeriodStart, reportDateFromToSelector1.WorkPeriodEnd));
             return true;
         }
 
