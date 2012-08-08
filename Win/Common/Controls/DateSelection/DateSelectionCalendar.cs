@@ -12,9 +12,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 	{
 		public event EventHandler<DateRangeChangedEventArgs> DateRangeChanged;
 
-		private List<DateTime> _datesVisibleInCalendar = new List<DateTime>();
+		private readonly List<DateTime> _datesVisibleInCalendar = new List<DateTime>();
 		private bool _gatherDatesVisibleInCalendar;
-		private IList<DateTime> _selectedDates;
 
 		public DateSelectionCalendar()
 		{
@@ -35,33 +34,33 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			}
 		}
 
-		private void RemoveSelectedDatesOutsideCalendarView()
+		private void RemoveSelectedDatesOutsideCalendarView(IList<DateTime> selectedDates)
 		{
 			_gatherDatesVisibleInCalendar = true;
 			_datesVisibleInCalendar.Clear();
 			monthCalendarAdv1.RefreshCalendar(true);
 			_gatherDatesVisibleInCalendar = false;
 			var datesToRemove = new List<DateTime>();
-			datesToRemove.AddRange(_selectedDates.Where(selectedDate => !_datesVisibleInCalendar.Contains(selectedDate)));
+			datesToRemove.AddRange(selectedDates.Where(selectedDate => !_datesVisibleInCalendar.Contains(selectedDate)));
 
 			foreach (DateTime selectedDate in datesToRemove)
 			{
-				_selectedDates.Remove(selectedDate);
+				selectedDates.Remove(selectedDate);
 			}
 		}
 
-		private void RemoveSelectedDateDuplicates()
+		private void RemoveSelectedDateDuplicates(List<DateTime> selectedDates)
 		{
-			var duplicates = FindDuplicates();
+			var duplicates = FindDuplicates(selectedDates);
 			foreach (IGrouping<DateTime, DateTime> duplicateDate in duplicates)
 			{
-				_selectedDates.Remove(duplicateDate.Key);
+				selectedDates.Remove(duplicateDate.Key);
 			}
 		}
 
-		private IEnumerable<IGrouping<DateTime, DateTime>> FindDuplicates()
+		private IEnumerable<IGrouping<DateTime, DateTime>> FindDuplicates(IEnumerable<DateTime> selectedDates)
 		{
-			return _selectedDates.GroupBy(g => g)
+			return selectedDates.GroupBy(g => g)
 				.Where(c => c.Count() > 1)
 				.ToList();
 		}
@@ -70,11 +69,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 		{
 			get
 			{
-				_selectedDates = new List<DateTime>(monthCalendarAdv1.SelectedDates);
-				RemoveSelectedDatesOutsideCalendarView();
-				RemoveSelectedDateDuplicates();
+				var selectedDates = new List<DateTime>(monthCalendarAdv1.SelectedDates);
+				RemoveSelectedDatesOutsideCalendarView(selectedDates);
+				RemoveSelectedDateDuplicates(selectedDates);
 
-				return _selectedDates;
+				return selectedDates;
 			}
 		}
 
