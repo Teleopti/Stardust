@@ -92,5 +92,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             get { return ViewType.ManageAlarmSituations; }
 		}
+
+		private void buttonAdvDelete_Click(object sender, System.EventArgs e)
+		{
+
+		}
     }
 }

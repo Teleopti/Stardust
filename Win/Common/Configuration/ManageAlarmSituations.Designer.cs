@@ -38,7 +38,6 @@
 			this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
 			this.labelSubHeader1 = new System.Windows.Forms.Label();
-			this.buttonAdvDelete = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.teleoptiGridControl1 = new Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
@@ -116,7 +115,6 @@
 			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelSubHeader1.Controls.Add(this.labelSubHeader1, 0, 0);
-			this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonAdvDelete, 1, 0);
 			this.tableLayoutPanelSubHeader1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelSubHeader1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanelSubHeader1.Name = "tableLayoutPanelSubHeader1";
@@ -132,24 +130,13 @@
 			this.labelSubHeader1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
 			this.labelSubHeader1.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelSubHeader1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.labelSubHeader1.Location = new System.Drawing.Point(3, 6);
+			this.labelSubHeader1.Location = new System.Drawing.Point(3, 5);
 			this.labelSubHeader1.Name = "labelSubHeader1";
 			this.labelSubHeader1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
 			this.labelSubHeader1.Size = new System.Drawing.Size(61, 16);
 			this.labelSubHeader1.TabIndex = 0;
 			this.labelSubHeader1.Text = "xxAlarms";
 			this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// buttonAdvDelete
-			// 
-			this.buttonAdvDelete.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonAdvDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
-			this.buttonAdvDelete.Location = new System.Drawing.Point(606, 1);
-			this.buttonAdvDelete.Margin = new System.Windows.Forms.Padding(3, 1, 0, 3);
-			this.buttonAdvDelete.Name = "buttonAdvDelete";
-			this.buttonAdvDelete.Size = new System.Drawing.Size(24, 24);
-			this.buttonAdvDelete.TabIndex = 7;
-			this.buttonAdvDelete.TabStop = false;
 			// 
 			// teleoptiGridControl1
 			// 
@@ -158,6 +145,8 @@
 			this.teleoptiGridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.teleoptiGridControl1.ExcelLikeCurrentCell = true;
 			this.teleoptiGridControl1.ExcelLikeSelectionFrame = true;
+			this.teleoptiGridControl1.GridLineColor = System.Drawing.SystemColors.GrayText;
+			this.teleoptiGridControl1.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.teleoptiGridControl1.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.teleoptiGridControl1.HorizontalThumbTrack = true;
 			this.teleoptiGridControl1.Location = new System.Drawing.Point(3, 36);
@@ -203,8 +192,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelHeader;
         private System.Windows.Forms.Label labelHeader;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBody;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvDelete;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
         private System.Windows.Forms.Label labelSubHeader1;
         private Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl teleoptiGridControl1;
     }
