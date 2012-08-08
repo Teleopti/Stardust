@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private readonly bool _backToLegal;
     	private readonly IList<IGroupPage> _groupPages;
         private readonly IList<IScheduleTag> _scheduleTags;
-    	private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
+        private readonly string _settingValue;
+        private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
     	
 
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDaysOffPreferences daysOffPreferences, IList<IShiftCategory> shiftCategories,
             bool reschedule, bool backToLegal, IList<IGroupPage> groupPages,
-            IList<IScheduleTag> scheduleTags)
+            IList<IScheduleTag> scheduleTags, string settingValue)
             : this()
         {
             _schedulingOptions = schedulingOptions;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _backToLegal = backToLegal;
         	_groupPages = groupPages;
             _scheduleTags = scheduleTags;
+            _settingValue = settingValue;
         }
 
         private SchedulingSessionPreferencesDialog()
@@ -60,8 +62,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					var settingRepository = new PersonalSettingDataRepository(uow);
-					_defaultGeneralSettings = settingRepository.FindValueByKey("SchedulingOptionsGeneralSettings", new SchedulingOptionsGeneralPersonalSetting());
-					_defaultAdvancedSettings = settingRepository.FindValueByKey("SchedulingOptionsAdvancedSettings", new SchedulingOptionsAdvancedPersonalSetting());
+					_defaultGeneralSettings = settingRepository.FindValueByKey(_settingValue + "GeneralSettings", new SchedulingOptionsGeneralPersonalSetting());
+					_defaultAdvancedSettings = settingRepository.FindValueByKey(_settingValue + "AdvancedSettings", new SchedulingOptionsAdvancedPersonalSetting());
+                    //SchedulingOptions
 				}
 			}
 			catch (DataSourceException)
@@ -81,9 +84,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultGeneralSettings);
+					new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "GeneralSettings",_defaultGeneralSettings);
 					uow.PersistAll();
-					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultAdvancedSettings);
+					new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "AdvancedSettings",_defaultAdvancedSettings);
 					uow.PersistAll();
 				}
 			}
