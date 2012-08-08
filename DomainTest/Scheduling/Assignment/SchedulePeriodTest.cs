@@ -375,8 +375,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _person3.AddPersonPeriod(personPeriod1);
 
             _periodMonth.ResetAverageWorkTimePerDay();
-            //Assert.AreEqual(personPeriod1.PersonContract.AverageWorkTimePerDay,
-            //    _periodMonth.AverageWorkTimePerDay);
+            Assert.AreEqual(personPeriod1.PersonContract.AverageWorkTimePerDay, _periodMonth.AverageWorkTimePerDay);
             //Assert.AreEqual(personPeriod1.PersonContract.PartTimePercentage.);
         }
 
@@ -393,8 +392,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             TimeSpan originalValue = _periodMonth.AverageWorkTimePerDay; //From contract time = 8 hours
 			_periodMonth.AverageWorkTimePerDayOverride = TimeSpan.FromHours(5d);
             Assert.AreEqual(TimeSpan.FromHours(5d),_periodMonth.AverageWorkTimePerDay);
+			Assert.IsTrue(_periodMonth.IsAverageWorkTimePerDayOverride);
             _periodMonth.ResetAverageWorkTimePerDay();
             Assert.AreEqual(originalValue,_periodMonth.AverageWorkTimePerDay);
+			Assert.IsFalse(_periodMonth.IsAverageWorkTimePerDayOverride);
+			Assert.AreEqual(TimeSpan.MinValue, _periodMonth.AverageWorkTimePerDayOverride);
         }
 
         /// <summary>
@@ -409,11 +411,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             int originalValue = _periodMonth.GetDaysOff(_from); //From contract = 8
             _periodMonth.SetDaysOff(5);
+			Assert.IsTrue(_periodMonth.DaysOff.HasValue);
             Assert.AreEqual(5, _periodMonth.GetDaysOff(_from));
             Assert.AreEqual(5, _periodMonth.GetDaysOff(new DateOnly(_from.Date.AddYears(1))));
             _periodMonth.ResetDaysOff();
             Assert.AreEqual(originalValue, _periodMonth.GetDaysOff(_from));
+			Assert.IsFalse(_periodMonth.DaysOff.HasValue);
         }
+
+		[Test]
+		public void VerifyCanResetPeriodTime()
+		{
+			_periodMonth.PeriodTime = new TimeSpan(1000);
+			Assert.IsTrue(_periodMonth.PeriodTime.HasValue);
+			_periodMonth.ResetPeriodTime();
+			Assert.IsFalse(_periodMonth.PeriodTime.HasValue);
+		}
 
         /// <summary>
         /// Verifies the number of days off cannot be less than one.
