@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IShiftCategoryFairnessCalculator _fairnessCalculator;
 		private IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 		private IGroupShiftLengthDecider _groupShiftLengthDecider;
-    	private IShiftProjectionCacheFilter _shiftProjectionCacheFilter;
+    	
 
     	[SetUp]
         public void Setup()
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     		                                           _possibleCombinationsOfStartEndCategoryCreator, 
 													   _groupShiftCategoryFairnessCreator,
 													   _fairnessCalculator, _groupShiftLengthDecider);
-    		_shiftProjectionCacheFilter = _mocks.StrictMock<IShiftProjectionCacheFilter>();
+    		
 
         }
 
