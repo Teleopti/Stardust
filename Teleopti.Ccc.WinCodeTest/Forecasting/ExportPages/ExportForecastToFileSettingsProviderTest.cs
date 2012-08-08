@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         {
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             var settings = new ExportForecastToFileSettings();
-
+            
             using(_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);

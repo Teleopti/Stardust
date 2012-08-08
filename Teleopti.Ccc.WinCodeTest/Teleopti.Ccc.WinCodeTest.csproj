@@ -368,11 +368,13 @@
     <Compile Include="Forecasting\ExportPages\ExportForecastToFileSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModelTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportSkillModelTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportSkillWizardPagesTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ImportForecastModelTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ImportForecastPresenterTest.cs" />
     <Compile Include="Forecasting\ImportForecast\SaveImportForecastFileCommandTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ValidateImportForecastFileCommandTest.cs" />
     <Compile Include="Forecasting\JobHistoryPresenterTest.cs" />
+    <Compile Include="Forecasting\JobResultProviderTest.cs" />
     <Compile Include="Forecasting\SkillPages\SkillGeneralPresenterTest.cs" />
     <Compile Include="Grouping\CommandProviderTest.cs" />
     <Compile Include="Grouping\Commands\AddGroupPageCommandTest.cs" />
