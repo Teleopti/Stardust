@@ -145,6 +145,7 @@
 			this.teleoptiGridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.teleoptiGridControl1.ExcelLikeCurrentCell = true;
 			this.teleoptiGridControl1.ExcelLikeSelectionFrame = true;
+			this.teleoptiGridControl1.GridLineColor = System.Drawing.SystemColors.GrayText;
 			this.teleoptiGridControl1.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.teleoptiGridControl1.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.teleoptiGridControl1.HorizontalThumbTrack = true;
