@@ -140,6 +140,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 effectiveRestriction = ExtractPreferences(effectiveRestriction);
                 if (effectiveRestriction == null) return effectiveRestriction;
             }
+			// if it IsLimitedWorkday at this point we shall not add a dayoff 
+			if (effectiveRestriction.IsLimitedWorkday)
+				effectiveRestriction.NotAllowedForDayOffs = true;
 
             if (_schedulingOptions.UseAvailability)
             {

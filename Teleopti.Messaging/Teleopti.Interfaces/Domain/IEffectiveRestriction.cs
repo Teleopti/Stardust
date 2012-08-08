@@ -127,6 +127,11 @@ namespace Teleopti.Interfaces.Domain
         /// 	<c>true</c> if this instance is restriction; otherwise, <c>false</c>.
         /// </value>
         bool IsRestriction { get; }
+
+    	/// <summary>
+    	/// If true we should not add a contract day off
+    	/// </summary>
+    	bool NotAllowedForDayOffs { get; set; }
     }
 
 
