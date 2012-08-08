@@ -14,5 +14,13 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// <param name="value">The value.</param>
         /// <returns></returns>
         ISettingData PersistSettingValue(ISettingValue value);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entityName"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        ISettingData PersistSettingValue(string entityName, ISettingValue value);
     }
 }
