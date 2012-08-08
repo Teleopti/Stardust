@@ -1309,8 +1309,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var options =
 					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, 
                                                            _schedulerState.CommonStateHolder.ShiftCategories, false,
-														   true, _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState), 
-														   _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+														   true, _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState),
+                                                           _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions"))
             {
                 if (options.ShowDialog(this) == DialogResult.OK)
                 {
@@ -4463,7 +4463,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
 				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences,
                                                                             _schedulerState.CommonStateHolder.ShiftCategories,
-																			 false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+                                                                             false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions"))
                 {
                     if (options.ShowDialog(this) == DialogResult.OK)
                     {
@@ -4510,7 +4510,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
                 using (var options =
 					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ShiftCategories,
-						false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+                        false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptionsActivities"))
                 {
                     if (options.ShowDialog(this) == DialogResult.OK)
                     {
