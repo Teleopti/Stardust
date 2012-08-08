@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			if (gridRangeInfo.Left == 1 && gridRangeInfo.Right == 1)
 				return UserTexts.Resources.Template;
 			var currentCellDate = _dateTimes[gridRangeInfo.Left - 1];
-			return _timeZone.ConvertTimeFromUtc(currentCellDate).ToShortDateString();
+            return currentCellDate.ToShortDateString();
 		}
 
 		private object GetRowHeaderName(int rowIndex)

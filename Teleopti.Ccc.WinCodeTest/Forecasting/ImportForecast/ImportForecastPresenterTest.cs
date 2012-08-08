@@ -9,6 +9,7 @@ using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 {
@@ -131,6 +132,13 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
             {
                 _target.StartImport(fileName);
             }
+        }
+
+        [Test]
+        public void ShouldSetImportType()
+        {
+            _target.SetImportType(ImportForecastsMode.ImportWorkloadAndStaffing);
+            Assert.IsNotNull(_model.ImportMode);
         }
     }
 }

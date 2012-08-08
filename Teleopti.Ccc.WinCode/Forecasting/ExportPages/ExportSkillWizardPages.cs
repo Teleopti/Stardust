@@ -34,14 +34,13 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 
         public void SaveSettings()
         {
-            if(_stateObj.ExportSkillToFileCommandModel != null)
+            if(_stateObj.ExportToFile)
             {
                 _exportForecastToFileSettingsProvider.TransformToSerializableModel( 
                     new DateOnlyPeriod(_stateObj.ExportSkillToFileCommandModel.Period.StartDate,_stateObj.ExportSkillToFileCommandModel.Period.EndDate));
                 _exportForecastToFileSettingsProvider.Save();
             }
-
-            if (_stateObj.ExportMultisiteSkillToSkillCommandModel != null)
+            else
             {
                 _exportAcrossBusinessUnitsSettingsProvider.TransformToSerializableModel(
                     _stateObj.ExportMultisiteSkillToSkillCommandModel.MultisiteSkillSelectionModels);

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			}
 		}
 
-		private void RemoveSelectedDateDuplicates(List<DateTime> selectedDates)
+		private static void RemoveSelectedDateDuplicates(List<DateTime> selectedDates)
 		{
 			var duplicates = FindDuplicates(selectedDates);
 			foreach (IGrouping<DateTime, DateTime> duplicateDate in duplicates)
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			}
 		}
 
-		private IEnumerable<IGrouping<DateTime, DateTime>> FindDuplicates(IEnumerable<DateTime> selectedDates)
+		private static IEnumerable<IGrouping<DateTime, DateTime>> FindDuplicates(IEnumerable<DateTime> selectedDates)
 		{
 			return selectedDates.GroupBy(g => g)
 				.Where(c => c.Count() > 1)

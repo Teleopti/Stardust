@@ -390,5 +390,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         {
             return restriction.GetHashCode() == GetHashCode();
         }
+
+		public bool NotAllowedForDayOffs { get; set; }
     }
 }

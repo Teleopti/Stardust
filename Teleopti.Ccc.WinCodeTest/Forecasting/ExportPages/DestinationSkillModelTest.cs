@@ -29,11 +29,32 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
                                                                     selected.Id.GetValueOrDefault(),
                                                                     "Bu", selected.Name);
             _target = new DestinationSkillModel(childSkill, new[] { childSkillMappingModel });
-
+            
             Assert.That(_target.Skill, Is.EqualTo(childSkill));
             Assert.That(_target.ChildSkill, Is.EqualTo(childName));
             Assert.That(_target.ChildSkillMapping.ToArray()[0], Is.EqualTo(childSkillMappingModel));
             Assert.That(_target.ParentSkill, Is.EqualTo(multisiteName));
+        }
+
+        [Test]
+        public void ChildSkillMappingIsNotEmpty()
+        {
+            const string childName = "child";
+            const string multisiteName = "MultisiteSkill";
+            var guid = Guid.NewGuid();
+            IChildSkill childSkill = new ChildSkill(childName, "desc", Color.Beige, 15, null);
+            childSkill.SetId(guid);
+            IMultisiteSkill multisiteSkill = SkillFactory.CreateMultisiteSkill(multisiteName);
+            childSkill.SetParentSkill(multisiteSkill);
+            ISkill selected = new Skill("source", "desc", Color.Beige, 15, null);
+            selected.SetId(Guid.NewGuid());
+            var childSkillMappingModel = new ChildSkillMappingModel(guid,
+                                                                    selected.Id.GetValueOrDefault(),
+                                                                    "Bu", selected.Name);
+
+            _target = new DestinationSkillModel(childSkill, new[] { childSkillMappingModel });
+            Assert.That(_target.TargetBu, Is.EqualTo("Bu"));
+            Assert.That(_target.TargetSkill, Is.EqualTo(selected.Name));
         }
 
     }
