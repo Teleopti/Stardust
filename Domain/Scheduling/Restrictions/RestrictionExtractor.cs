@@ -171,6 +171,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 effectiveRestriction = ExtractPreferences(effectiveRestriction);
                 if (effectiveRestriction == null) return effectiveRestriction;
             }
+			// if it IsLimitedWorkday at this point we shall not add a dayoff 
+			if (isLimitedWorkday(effectiveRestriction))
+				effectiveRestriction.NotAllowedForDayOffs = true;
 
             if (_schedulingOptions.UseAvailability)
             {
@@ -185,6 +188,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             }
 
             return effectiveRestriction;
+        }
+
+		private bool isLimitedWorkday(IEffectiveRestriction effectiveRestriction)
+        {            
+            if (effectiveRestriction.ShiftCategory != null)
+                return true;
+            if (effectiveRestriction.ActivityRestrictionCollection.Count > 0)
+                return true;
+
+			return (effectiveRestriction.StartTimeLimitation.HasValue() || effectiveRestriction.EndTimeLimitation.HasValue() || effectiveRestriction.WorkTimeLimitation.HasValue());  
         }
 
         private IEffectiveRestriction ExtractStudentAvailabilities(IEffectiveRestriction effectiveRestriction)

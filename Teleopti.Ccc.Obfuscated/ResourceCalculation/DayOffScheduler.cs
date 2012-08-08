@@ -121,9 +121,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         continue;
 
 					IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
-
-                    if (isRestrictionLimitedWorkDay(effectiveRestriction))
-                        continue;
+					if (effectiveRestriction != null && effectiveRestriction.NotAllowedForDayOffs)
+						continue;
 
                     try
                     {
@@ -141,21 +140,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         return;
                 }
             }
-        }
-
-        /// <summary>
-        /// this is to check if its a limited work day or not.
-        /// </summary>
-        /// <param name="effectiveRestriction"></param>
-        /// <returns></returns>
-        private static bool isRestrictionLimitedWorkDay(IEffectiveRestriction effectiveRestriction)
-        {
-            if (effectiveRestriction != null)
-            {
-                if (effectiveRestriction.ShiftCategory != null || effectiveRestriction.NotAvailable)
-                    return true;
-            }
-            return false;
         }
 
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
