@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return effectiveRestriction;
         }
 
-		private bool isLimitedWorkday(IEffectiveRestriction effectiveRestriction)
+		private static bool isLimitedWorkday(IEffectiveRestriction effectiveRestriction)
         {            
             if (effectiveRestriction.ShiftCategory != null)
                 return true;
