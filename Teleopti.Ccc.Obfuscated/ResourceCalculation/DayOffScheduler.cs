@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         continue;
 
 					IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
-
+					if (effectiveRestriction != null && effectiveRestriction.NotAllowedForDayOffs)
                     if (isRestrictionLimitedWorkDay(effectiveRestriction))
                         continue;
 
