@@ -5,24 +5,22 @@ using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public class MainShiftOptimizeActivitiesSpecification : Specification<IMainShift>
-    {
+	public class MainShiftOptimizeActivitiesSpecification : Specification<IMainShift>
+	{
         private readonly IOptimizerActivitiesPreferences _optimizerActivitiesPreferences;
-        private readonly IMainShift _originalMainShift;
-        private readonly DateOnly _viewerDate;
+		private readonly IMainShift _originalMainShift;
+		private readonly DateOnly _viewerDate;
         private readonly ICccTimeZoneInfo _viewerTimeZone;
         private readonly IVisualLayerCollection _visualLayerColl;
 
-        public MainShiftOptimizeActivitiesSpecification(IOptimizerActivitiesPreferences optimizerActivitiesPreferences, 
-            IMainShift originalMainShift,
-            DateOnly viewerDate,
-            ICccTimeZoneInfo viewerTimeZone)
+		public MainShiftOptimizeActivitiesSpecification(IOptimizerActivitiesPreferences optimizerActivitiesPreferences, IMainShift originalMainShift, DateOnly viewerDate, ICccTimeZoneInfo viewerTimeZone)
         {
             _optimizerActivitiesPreferences = optimizerActivitiesPreferences;
-            _originalMainShift = originalMainShift;
-            _viewerDate = viewerDate;
-            _viewerTimeZone = viewerTimeZone;
-            _visualLayerColl = _originalMainShift.ProjectionService().CreateProjection();
+			_originalMainShift = originalMainShift;
+			_viewerDate = viewerDate;
+			_viewerTimeZone = viewerTimeZone;
+
+			_visualLayerColl = _originalMainShift.ProjectionService().CreateProjection();
         }
 
         public override bool IsSatisfiedBy(IMainShift obj)
@@ -30,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             IVisualLayerCollection other = obj.ProjectionService().CreateProjection();
 
             return (CorrectShiftCategory(obj)
-                && CorrectContractTime(other)
                 && CorrectStart(other)
                 && CorrectEnd(other)
                 && CorrectAlteredBetween(other)
@@ -44,11 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             return (compareLockedActivities(_visualLayerColl, other) && compareLockedActivities(other, _visualLayerColl));
 
-        }
-
-        public bool CorrectContractTime(IVisualLayerCollection other)
-        {
-            return _visualLayerColl.ContractTime().Equals(other.ContractTime());
         }
 
         public bool CorrectShiftCategory(IMainShift shift)

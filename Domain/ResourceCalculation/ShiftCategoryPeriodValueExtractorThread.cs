@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             var dictionary = ScheduleDictionary;
             _shiftProjectionList = _shiftProjectionCacheFilter.
-                FilterOnMainShiftOptimizeActivitiesSpecification(_shiftProjectionList);
+                FilterOnMainShiftOptimizeActivitiesSpecification(_shiftProjectionList, new All<IMainShift>());
             
             _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, agentTimeZone, _shiftProjectionList,

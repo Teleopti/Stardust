@@ -13,5 +13,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or the shift category
         /// </summary>
         IShiftCategory ShiftCategory { get; set; }
+
+        
     }
 }

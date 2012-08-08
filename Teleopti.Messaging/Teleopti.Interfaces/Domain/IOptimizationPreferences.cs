@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -39,6 +38,11 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The local scheduling options.</value>
         IReschedulingPreferences Rescheduling { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        IShiftPreferences Shifts { get; set; }
     }
 
     /// <summary>
@@ -322,6 +326,14 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The group page on compare with.</value>
         IGroupPageLight GroupPageOnCompareWith { get; set; }
 
+        
+    }
+
+    /// <summary>
+    /// Extra optimization preferences
+    /// </summary>
+    public interface IShiftPreferences
+    {
         /// <summary>
         /// Gets or sets a value indicating whether to keep shift categories.
         /// </summary>
@@ -334,7 +346,15 @@ namespace Teleopti.Interfaces.Domain
         /// <value>
         /// 	<c>true</c> if keep start and end times; otherwise, <c>false</c>.
         /// </value>
-        bool KeepStartAndEndTimes { get; set; }
+        bool KeepStartTimes { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to keep start and end times.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if keep start and end times; otherwise, <c>false</c>.
+        /// </value>
+        bool KeepEndTimes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to keep shifts.
@@ -348,7 +368,21 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The keep shifts value.</value>
         double KeepShiftsValue { get; set; }
 
+        /// <summary>
+        /// Alter between property
+        /// </summary>
+        bool AlterBetween { get; set; }
 
+        /// <summary>
+        /// The selected Guids
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        IList<IActivity > SelectedActivities { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        TimePeriod SelectedTimePeriod { get; set; }
     }
 
     /// <summary>

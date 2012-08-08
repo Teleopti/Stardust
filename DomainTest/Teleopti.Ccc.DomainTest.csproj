@@ -233,6 +233,7 @@
     <Compile Include="Optimization\GroupPersonSameDayOffsCheckerTest.cs" />
     <Compile Include="Optimization\GroupPersonSameForPersonOnDateCheckerTest.cs" />
     <Compile Include="Optimization\GroupPersonSchedulePeriodCheckerTest.cs" />
+    <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderTest.cs" />
@@ -273,7 +274,6 @@
     <Compile Include="GroupPageCreator\PersonNoteGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\RuleSetBagGroupPageTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByAllSkillsExtractorTest.cs" />
-    <Compile Include="Optimization\IntradayActivityOptimizerServiceTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecificationTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationServiceTest.cs" />

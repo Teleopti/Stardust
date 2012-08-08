@@ -7,13 +7,6 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IScheduleDayService
     {
-		/// <summary>
-		/// Reschedule one day for a person.
-		/// </summary>
-		/// <param name="schedulePart">The schedule part.</param>
-		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <returns></returns>
-		bool RescheduleDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions);
 
 		/// <summary>
 		/// Schedules the day.

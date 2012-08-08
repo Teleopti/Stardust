@@ -16,12 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool _useBlockScheduling;
 		private bool _useTeams;
 		private bool _useSameDaysOffForTeams;
-		private bool _keepShiftCategories;
-		private bool _keepStartAndEndTimes;
-		private bool _keepShifts;
-
-		private double _keepShiftsValue;
-		private double _fairnessValue;
+       	private double _fairnessValue;
 
 		public ExtraPreferencesPersonalSettings()
 		{
@@ -46,11 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			target.UseTeams = _useTeams;
 			target.KeepSameDaysOffInTeam = _useSameDaysOffForTeams;
 
-			target.KeepShiftCategories = _keepShiftCategories;
-			target.KeepStartAndEndTimes = _keepStartAndEndTimes;
-			target.KeepShifts = _keepShifts;
-
-			target.KeepShiftsValue = _keepShiftsValue;
+           
 			target.FairnessValue = _fairnessValue;
 		}
 
@@ -66,11 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_useTeams = source.UseTeams;
 			_useSameDaysOffForTeams = source.KeepSameDaysOffInTeam;
 
-			_keepShiftCategories = source.KeepShiftCategories;
-			_keepStartAndEndTimes = source.KeepStartAndEndTimes;
-			_keepShifts = source.KeepShifts;
-
-			_keepShiftsValue = source.KeepShiftsValue;
+            
 			_fairnessValue = source.FairnessValue;
 		}
 
@@ -97,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private void SetDefaultValues()
 		{
 			_blockFinderTypeValue = BlockFinderType.BetweenDayOff;
-			_keepShiftsValue = 0.8d;
+			
 		}
 
 	}

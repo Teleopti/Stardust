@@ -229,6 +229,7 @@
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
     <Compile Include="Optimization\PersonalSettings.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
+    <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />
     <Compile Include="Optimization\ITimePeriodCanHaveShortBreak.cs" />
@@ -298,7 +300,6 @@
     <Compile Include="Optimization\DayOffOptimizerContainer.cs" />
     <Compile Include="Optimization\MoveTimeOptimizer.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByAllSkillsExtractor.cs" />
-    <Compile Include="Optimization\IntradayActivityOptimizerService.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecification.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractor.cs" />
     <Compile Include="Collection\AbstractDictionary.cs" />

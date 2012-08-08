@@ -30,16 +30,6 @@ namespace Teleopti.Interfaces.Domain
     {
 
         /// <summary>
-        /// Gets or sets the reschedule options.
-        /// </summary>
-        /// <value>The reschedule options.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-06-25
-        /// </remarks>
-        OptimizationRestriction RescheduleOptions { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether [add contract schedule days off].
         /// </summary>
         /// <value>
@@ -211,16 +201,6 @@ namespace Teleopti.Interfaces.Domain
         bool UseStudentAvailability { get; set; }
 
         /// <summary>
-        /// Gets or sets the specific start and end time.
-        /// </summary>
-        /// <value>The specific start and end time.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-06-26
-        /// </remarks>
-        DateTimePeriod? SpecificStartAndEndTime { get; set; }
-
-        /// <summary>
         /// Gets or sets the fairness.
         /// </summary>
         /// <value>The fairness.</value>
@@ -331,6 +311,10 @@ namespace Teleopti.Interfaces.Domain
 		/// </value>
 		TimeSpan? UseCustomTargetTime { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        ISpecification<IMainShift> MainShiftOptimizeActivitySpecification { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>

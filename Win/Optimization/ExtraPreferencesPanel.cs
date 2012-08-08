@@ -8,10 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Optimization
 {
-	public class ExtraPreferencesPanelUseBlockScheduling
-	{
-		public bool Use { get; set; }
-	}
+	
 
     public partial class ExtraPreferencesPanel : BaseUserControl, IDataExchange
     {
@@ -94,11 +91,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
             Preferences.GroupPageOnCompareWith = (IGroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
 
-            Preferences.KeepShiftCategories = checkBoxKeepShiftCategories.Checked;
-            Preferences.KeepStartAndEndTimes = checkBoxKeepStartEndTimes.Checked;
-            Preferences.KeepShifts = checkBoxKeepShifts.Checked;
- 
-            Preferences.KeepShiftsValue = (double)numericUpDownKeepShifts.Value  / 100;
+            
         }
 
         private void setDataToControls()
@@ -133,11 +126,7 @@ namespace Teleopti.Ccc.Win.Optimization
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
 
 
-            checkBoxKeepShiftCategories.Checked = Preferences.KeepShiftCategories;
-            checkBoxKeepStartEndTimes.Checked = Preferences.KeepStartAndEndTimes;
-            checkBoxKeepShifts.Checked = Preferences.KeepShifts;
-
-            numericUpDownKeepShifts.Value = (decimal) Preferences.KeepShiftsValue * 100;
+           
         }
 
         private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
@@ -165,21 +154,16 @@ namespace Teleopti.Ccc.Win.Optimization
 			checkBoxKeepWeekEndsTogether.Enabled = checkBoxTeams.Checked;
         }
 
-        private void checkBoxKeepShifts_CheckedChanged(object sender, System.EventArgs e)
-        {
-            setNumericUpDownKeepShiftsStatus();
-        }
-
-        private void setNumericUpDownKeepShiftsStatus()
-        {
-            numericUpDownKeepShifts.Enabled = checkBoxKeepShifts.Checked;
-        }
+      
 
         private void setInitialControlStatus()
         {
             setRadioButtonsStatus();
             setSubItemsOnTeamOptimizationStatus();
-            setNumericUpDownKeepShiftsStatus();
         }
+    }
+    public class ExtraPreferencesPanelUseBlockScheduling
+    {
+        public bool Use { get; set; }
     }
 }

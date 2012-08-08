@@ -202,8 +202,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (optimizerPreferences.General.OptimizationStepDaysOff)
                     runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod);
 
-                var originalKeepShiftCategories = optimizerPreferences.Extra.KeepShiftCategories;
-                optimizerPreferences.Extra.KeepShiftCategories = true;
+                var originalKeepShiftCategories = optimizerPreferences.Shifts.KeepShiftCategories;
+                optimizerPreferences.Shifts.KeepShiftCategories = true;
 
                 IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
                 IList<IScheduleMatrixOriginalStateContainer> workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization =
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
                         backgroundWorker);
 
-                optimizerPreferences.Extra.KeepShiftCategories = originalKeepShiftCategories;
+                optimizerPreferences.Shifts.KeepShiftCategories = originalKeepShiftCategories;
             }
 
 
@@ -406,6 +406,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizerPreferences, originalStateContainer);
 
             var schedulingOptionsSyncronizer = new SchedulingOptionsCreator();
+			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,
@@ -423,7 +424,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   originalStateContainer,
                                                   optimizerOverLimitDecider,
                                                   null, 
-                                                  schedulingOptionsSyncronizer
+                                                  schedulingOptionsSyncronizer,
+												  mainShiftOptimizeActivitySpecificationSetter
                                                   );
 
             var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();

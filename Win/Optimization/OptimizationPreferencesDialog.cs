@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
@@ -24,25 +25,31 @@ namespace Teleopti.Ccc.Win.Optimization
 		private DaysOffPreferencesPersonalSettings _defaultDaysOffPreferences;
 		private ExtraPreferencesPersonalSettings _defaultExtraPreferences;
 		private AdvancedPreferencesPersonalSettings _defaultAdvancedPreferences;
-
+        private ShiftsPreferencesPersonalSettings _defaultshiftsPreferences;
+        
         private IList<IDataExchange> panels { get; set; }
 
         private readonly IList<IGroupPageLight> _groupPages;
     	private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
     	private readonly IList<IScheduleTag> _scheduleTags;
+        private readonly IList<IActivity> _availableActivity;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        private readonly int _resolution;
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public OptimizationPreferencesDialog(
             IOptimizationPreferences preferences, 
-            ISchedulerGroupPagesProvider  groupPagesProvider, 
-            IList<IScheduleTag> scheduleTags)
+            ISchedulerGroupPagesProvider  groupPagesProvider,
+            IList<IScheduleTag> scheduleTags, IList< IActivity > availableActivity, int resolution)
             : this()
         {
             Preferences = preferences;
 			_groupPagesProvider = groupPagesProvider;
 			_groupPages = _groupPagesProvider.GetGroups(true);
         	_scheduleTags = scheduleTags;
-			_eventAggregator = new EventAggregator();
+            _availableActivity = availableActivity;
+            _resolution = resolution;
+            _eventAggregator = new EventAggregator();
         }
 
         private OptimizationPreferencesDialog()
@@ -56,13 +63,15 @@ namespace Teleopti.Ccc.Win.Optimization
 			LoadPersonalSettings();
             generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
             dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
-	    extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _eventAggregator);
+	        extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _eventAggregator);
             advancedPreferencesPanel1.Initialize(Preferences.Advanced);
-            panels = new List<IDataExchange>{generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, advancedPreferencesPanel1};
+            shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
+            panels = new List<IDataExchange>{generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1};
 
             AddToHelpContext();
             SetColor();
         }
+
 
         #region IDataExchange Members
 
@@ -90,6 +99,8 @@ namespace Teleopti.Ccc.Win.Optimization
 					_defaultDaysOffPreferences = settingRepository.FindValueByKey("DaysOffPreferencesPersonalSettings", new DaysOffPreferencesPersonalSettings());
 					_defaultExtraPreferences = settingRepository.FindValueByKey("ExtraPreferencesPersonalSettings", new ExtraPreferencesPersonalSettings());
 					_defaultAdvancedPreferences = settingRepository.FindValueByKey("AdvancedPreferencesPersonalSettings", new AdvancedPreferencesPersonalSettings());
+                    _defaultshiftsPreferences = settingRepository.FindValueByKey("ShiftsPreferencesPersonalSettings",
+				                                                                          new ShiftsPreferencesPersonalSettings());
 				}
 			}
 			catch (DataSourceException)
@@ -101,6 +112,8 @@ namespace Teleopti.Ccc.Win.Optimization
 			_defaultDaysOffPreferences.MapTo(Preferences.DaysOff);
 			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages);
 			_defaultAdvancedPreferences.MapTo(Preferences.Advanced);
+            _defaultshiftsPreferences.MapTo(Preferences.Shifts, _availableActivity);
+            
 		}
 
 		private void SavePersonalSettings()
@@ -109,7 +122,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			_defaultDaysOffPreferences.MapFrom(Preferences.DaysOff);
 			_defaultExtraPreferences.MapFrom(Preferences.Extra);
 			_defaultAdvancedPreferences.MapFrom(Preferences.Advanced);
-
+            _defaultshiftsPreferences.MapFrom(Preferences.Shifts );
 			try
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -122,6 +135,8 @@ namespace Teleopti.Ccc.Win.Optimization
 					uow.PersistAll();
 					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultAdvancedPreferences);
 					uow.PersistAll();
+                    new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultshiftsPreferences );
+                    uow.PersistAll();
 				}
 			}
 			catch (DataSourceException)
@@ -146,6 +161,7 @@ namespace Teleopti.Ccc.Win.Optimization
             dayOffPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
             extraPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
             advancedPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
+            shiftsPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)

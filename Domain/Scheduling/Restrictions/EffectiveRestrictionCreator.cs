@@ -6,13 +6,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	public class EffectiveRestrictionCreator : IEffectiveRestrictionCreator
 	{
 		private readonly IRestrictionExtractor _extractor; 
-		private readonly IKeepRestrictionCreator _keepRestrictionCreator;
 
-		public EffectiveRestrictionCreator(IRestrictionExtractor extractor, IKeepRestrictionCreator keepRestrictionCreator)
+		public EffectiveRestrictionCreator(IRestrictionExtractor extractor)
 		{
 			_extractor = extractor;
-			_keepRestrictionCreator = keepRestrictionCreator;
-
 		}
 
 		public IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, ISchedulingOptions options)
@@ -31,18 +28,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (part != null && part.SignificantPart() != SchedulePartView.MainShift)
 				return ret;
 
-			if (options.RescheduleOptions == OptimizationRestriction.KeepShiftCategory)
-			{
-				IEffectiveRestriction keepShiftCatRestriction = _keepRestrictionCreator.CreateKeepShiftCategoryRestriction(part);
-				ret = ret.Combine(keepShiftCatRestriction);
-			}
+			//if (options.RescheduleOptions == OptimizationRestriction.KeepShiftCategory)
+			//{
+			//    IEffectiveRestriction keepShiftCatRestriction = _keepRestrictionCreator.CreateKeepShiftCategoryRestriction(part);
+			//    ret = ret.Combine(keepShiftCatRestriction);
+			//}
 
-			if (options.RescheduleOptions == OptimizationRestriction.KeepStartAndEndTime)
-			{
-				IEffectiveRestriction keepStartAndEndTimeRestriction =
-					_keepRestrictionCreator.CreateKeepStartAndEndTimeRestriction(part);
-				ret = ret.Combine(keepStartAndEndTimeRestriction);
-			}
+			//if (options.RescheduleOptions == OptimizationRestriction.KeepStartAndEndTime)
+			//{
+			//    IEffectiveRestriction keepStartAndEndTimeRestriction =
+			//        _keepRestrictionCreator.CreateKeepStartAndEndTimeRestriction(part);
+			//    ret = ret.Combine(keepStartAndEndTimeRestriction);
+			//}
 
 		    return ret;
 		}

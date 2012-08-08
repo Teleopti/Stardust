@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IList<IScheduleMatrixOriginalStateContainer> workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization =
                     createMatrixContainerList(matrixListForWorkShiftAndIntradayOptimization);
 
-                bool originalKeepShiftCategorySettings = optimizerPreferences.Extra.KeepShiftCategories;
-                optimizerPreferences.Extra.KeepShiftCategories = true;
+                bool originalKeepShiftCategorySettings = optimizerPreferences.Shifts.KeepShiftCategories;
+                optimizerPreferences.Shifts.KeepShiftCategories = true;
 
                 if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
                     _scheduleOptimizerHelper.RunWorkShiftOptimization(
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
                         backgroundWorker);
 
-                optimizerPreferences.Extra.KeepShiftCategories = originalKeepShiftCategorySettings;
+                optimizerPreferences.Shifts.KeepShiftCategories = originalKeepShiftCategorySettings;
             }
             
             
@@ -334,6 +334,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
+        	var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,
@@ -351,7 +352,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   originalStateContainer,
                                                   optimizerOverLimitDecider,
                                                   null,
-                                                  schedulingOptionsCreator
+                                                  schedulingOptionsCreator,
+												  mainShiftOptimizeActivitySpecificationSetter
                                                   );
 
             var optimizerContainer =

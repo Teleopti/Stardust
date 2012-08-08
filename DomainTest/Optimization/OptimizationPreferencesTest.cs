@@ -24,12 +24,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.IsNotNull(_target.Extra);
 			Assert.IsNotNull(_target.Advanced);
 			Assert.IsNotNull(_target.Rescheduling);
+			Assert.IsNotNull(_target.Shifts);
 		}
 
 		[Test]
 		public void VerifyLocalSchedulingOptionsDefaultValues()
 		{
 			Assert.IsTrue(_target.Rescheduling.ConsiderShortBreaks);
+		}
+
+		[Test]
+		public void ActivityListInExtraMustNotBeNull()
+		{
+			Assert.IsNotNull(_target.Shifts.SelectedActivities);
 		}
 	}
 }
