@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     var dateToCheck = day.DateOnlyAsPeriod.DateOnly;
                     var daysToCheck = currentSchedules.ScheduledDayCollection(new DateOnlyPeriod(dateToCheck.AddDays(-1), dateToCheck.AddDays(1)));
 
-                    var periodToValidate = new DateOnlyPeriod(dateToCheck, dateToCheck)
-                                        .ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+                    var periodToValidate = new DateOnlyPeriod(dateToCheck.AddDays(-1), dateToCheck.AddDays(1))
+                        .ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
                     foreach (var scheduleDay in daysToCheck)
                     {
                         foreach (var conflict in scheduleDay.PersonAssignmentConflictCollection)
