@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 
             _target = new ScheduleTargetTimeCalculator(_schedulerStateHolder, _person, _dateOnlyPeriod);
+			_schedulePeriod.AverageWorkTimePerDayOverride = new TimeSpan(8, 0, 0);
 
 			using (_mockRepository.Record())
 			{
@@ -92,8 +93,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 				Expect.Call(_contractSchedule.IsWorkday(new DateOnly(2011, 1, 1), new DateOnly(2011, 1, 1))).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_partTimePercentage.Percentage).Return(new Percent(1.0));
-				Expect.Call(_contract.WorkTime).Return(new WorkTime(TimeSpan.FromHours(8)));
 			    Expect.Call(_person.PreviousPeriod(_personPeriod)).Return(null);
 				Expect.Call(_person.SchedulePeriodStartDate(new DateOnly(2011, 1, 1))).Return(new DateOnly(2011, 1, 1)).Repeat.AtLeastOnce();
 			}
