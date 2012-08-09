@@ -252,14 +252,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return dateOnlyPeriod;
 		}
 
-		private int totalDaysOff()
-		{
-			if (_schedulePeriod.DaysOff.HasValue)
-			{
-				return _schedulePeriod.DaysOff.Value;
-			}
-			return _schedulePeriod.GetDaysOff(_thePeriodWithTheDateIn.StartDate);
-		}
+		//private int totalDaysOff()
+		//{
+		//    if (_schedulePeriod.DaysOff.HasValue)
+		//    {
+		//        return _schedulePeriod.DaysOff.Value;
+		//    }
+		//    return _schedulePeriod.GetDaysOff(_thePeriodWithTheDateIn.StartDate);
+		//}
 
     	public int DaysOff()
         {
