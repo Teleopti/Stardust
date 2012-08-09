@@ -186,12 +186,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 var size = new Size(e.Bounds.Size.Width - 20, e.Bounds.Size.Height);
                 var rect = new Rectangle(point, size);
                 using (var fontNew = new Font(e.Font, style))
+                using (var customBrush = new SolidBrush(color))
+                using (var stringFormat = new StringFormat(StringFormat.GenericDefault))
                 {
-                    using (var customBrush = new SolidBrush(color))
-                    {
-                        e.Graphics.DrawString(activity.Name, fontNew, customBrush, rect,
-                                              StringFormat.GenericDefault);
-                    }
+                    stringFormat.FormatFlags = StringFormatFlags.NoWrap;
+                    e.Graphics.DrawString(activity.Name, fontNew, customBrush, rect,
+                                          stringFormat);
                 }
             }
             e.DrawFocusRectangle();
