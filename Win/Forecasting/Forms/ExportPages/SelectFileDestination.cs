@@ -44,8 +44,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         {
             _saveFileDialog = new SaveFileDialog();
             _saveFileDialog.Title = Resources.SelectFileDestination;
-            _saveFileDialog.FileName = _stateObj.ExportSkillToFileCommandModel.Period.ToString();
+            _saveFileDialog.FileName = _stateObj.ExportSkillToFileCommandModel.Skill.Name + " - " +
+                                       _stateObj.ExportSkillToFileCommandModel.Period;
             _saveFileDialog.Filter = Resources.CSVFile;
+                                  
 
             if (_saveFileDialog.ShowDialog() == DialogResult.OK) textBox1.Text = _saveFileDialog.FileName;
         }

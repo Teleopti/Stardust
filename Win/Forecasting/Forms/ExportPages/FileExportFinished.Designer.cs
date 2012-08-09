@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
-    partial class FileExportDone
+    partial class FileExportFinished
     {
         /// <summary> 
         /// Required designer variable.
@@ -58,16 +58,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             this.label1.Location = new System.Drawing.Point(10, 50);
             this.label1.Margin = new System.Windows.Forms.Padding(10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 13);
+            this.label1.Size = new System.Drawing.Size(0, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "xxFileExportDone";
             // 
-            // FileExportDone
+            // FileExportFinished
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Name = "FileExportDone";
+            this.Name = "FileExportFinished";
             this.Size = new System.Drawing.Size(489, 338);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

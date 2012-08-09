@@ -54,11 +54,11 @@
             this.listViewSkills.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewSkills.FullRowSelect = true;
             this.listViewSkills.Location = new System.Drawing.Point(5, 30);
-            this.listViewSkills.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.listViewSkills.Margin = new System.Windows.Forms.Padding(5, 0, 5, 5);
             this.listViewSkills.MultiSelect = false;
             this.listViewSkills.Name = "listViewSkills";
             this.listViewSkills.ShowGroups = false;
-            this.listViewSkills.Size = new System.Drawing.Size(347, 323);
+            this.listViewSkills.Size = new System.Drawing.Size(347, 220);
             this.listViewSkills.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewSkills.TabIndex = 6;
             this.listViewSkills.TileSize = new System.Drawing.Size(100, 100);
@@ -77,7 +77,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(357, 353);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(357, 250);
             this.tableLayoutPanel1.TabIndex = 8;
             // 
             // tableLayoutPanel2
@@ -111,7 +111,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "SelectSkills";
-            this.Size = new System.Drawing.Size(357, 353);
+            this.Size = new System.Drawing.Size(357, 250);
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExFilter)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);

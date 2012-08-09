@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Win.Common
                            new SelectSkills(),
                            new SelectDateAndScenario(),
                            new SelectFileDestination(),
-                           new FileExportDone()
+                           new FileExportFinished()
                        };
         }
     }
