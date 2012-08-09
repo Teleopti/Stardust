@@ -68,9 +68,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyCanGetSetOverrideDaysOff()
         {
-            //henrika 080824: adding tests for coverage:
-            Assert.AreEqual(0, _target.OverrideDaysOff);
+            Assert.IsFalse(_target.IsDaysOffOverride);
             _target.OverrideDaysOff = 2;
+			Assert.IsTrue(_target.IsDaysOffOverride);
             Assert.AreEqual(2, _target.OverrideDaysOff);
         }
 
