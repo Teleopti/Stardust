@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 					{
 						try
 						{
+							exception = null;
 							return SignoutButton.Exists || SignInBusinessUnits.Any(e => e.Style.Display != "none");
 							/*|| ErrorSpans.Any(e => e.Style != null && e.Style.Display != "none");*/
 						}
@@ -74,7 +75,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 					};
 			if (!signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5)))
 			{
-				throw exception;
+				if (exception != null)
+				{
+					throw exception;
+				}
 			}
 		}
 
