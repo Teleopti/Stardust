@@ -399,6 +399,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(TimeSpan.MinValue, _periodMonth.AverageWorkTimePerDayOverride);
         }
 
+		/// <summary>
+		/// Verifies the can reset average work time per day.
+		/// </summary>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-06-23
+		/// </remarks>
+		[Test]
+		public void VerifyAverageWorkTimePerDayWhenPeriodTimeIsOverriden()
+		{
+			Assert.AreEqual(TimeSpan.FromHours(8d), _periodMonth.AverageWorkTimePerDay); // original value
+			int originalPeriodTime = 176;
+			int workdays = 22;
+			_periodMonth.PeriodTime = new TimeSpan(originalPeriodTime + workdays, 0, 0);
+			Assert.IsTrue(_periodMonth.IsPeriodTimeOverride);
+			Assert.AreEqual(TimeSpan.FromHours(9d), _periodMonth.AverageWorkTimePerDay);
+		}
+
         /// <summary>
         /// Verifies the can reset days off.
         /// </summary>
