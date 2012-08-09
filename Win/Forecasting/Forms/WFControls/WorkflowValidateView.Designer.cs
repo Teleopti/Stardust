@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             // 
             // xpTaskBar1
             // 
+            this.xpTaskBar1.AutoSize = true;
             this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxSelectPeriod);
             this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxDeviations);
             this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxSpecialEvents);
@@ -108,6 +109,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             // 
             // gradientPanelSelectPeriod
             // 
+            this.gradientPanelSelectPeriod.AutoSize = true;
             this.gradientPanelSelectPeriod.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gradientPanelSelectPeriod.Controls.Add(this.buttonAdvCancelLoad);
             this.gradientPanelSelectPeriod.Controls.Add(this.dateSelectionFromToHistorical);
@@ -166,6 +168,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             this.dateSelectionFromToTarget.LabelDateSelectionText = "xxValidationPeriod";
             this.dateSelectionFromToTarget.LabelDateSelectionToText = "xxTo";
             this.dateSelectionFromToTarget.Location = new System.Drawing.Point(0, 0);
+            this.dateSelectionFromToTarget.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dateSelectionFromToTarget.Name = "dateSelectionFromToTarget";
             this.dateSelectionFromToTarget.NoneButtonText = "xxNone";
             this.dateSelectionFromToTarget.NullString = "xxNoDateIsSelected";
@@ -195,6 +198,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             // 
             // gradientPanelDeviations
             // 
+            this.gradientPanelDeviations.AutoSize = true;
             this.gradientPanelDeviations.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gradientPanelDeviations.Controls.Add(this.tableLayoutPanel1);
             this.gradientPanelDeviations.Location = new System.Drawing.Point(2, 28);
@@ -323,6 +327,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             // 
             // gradientPanelSpecialEvents
             // 
+            this.gradientPanelSpecialEvents.AutoSize = true;
             this.gradientPanelSpecialEvents.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gradientPanelSpecialEvents.Controls.Add(this.outlierBoxControl);
             this.gradientPanelSpecialEvents.Location = new System.Drawing.Point(2, 28);
@@ -349,6 +354,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             // 
             // splitContainerAdv2.Panel1
             // 
+            this.splitContainerAdv2.Panel1.AutoSize = true;
             this.splitContainerAdv2.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
             // 
             // splitContainerAdv2.Panel2
@@ -396,9 +402,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             ((System.ComponentModel.ISupportInitialize)(this.xpTaskBar1)).EndInit();
             this.xpTaskBar1.ResumeLayout(false);
             this.xpTaskBarBoxSelectPeriod.ResumeLayout(false);
+            this.xpTaskBarBoxSelectPeriod.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelSelectPeriod)).EndInit();
             this.gradientPanelSelectPeriod.ResumeLayout(false);
             this.xpTaskBarBoxDeviations.ResumeLayout(false);
+            this.xpTaskBarBoxDeviations.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelDeviations)).EndInit();
             this.gradientPanelDeviations.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -407,11 +415,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             ((System.ComponentModel.ISupportInitialize)(this.percentTextBoxDeviationTaskTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.percentTextBoxDeviationAfterTaskTime)).EndInit();
             this.xpTaskBarBoxSpecialEvents.ResumeLayout(false);
+            this.xpTaskBarBoxSpecialEvents.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelSpecialEvents)).EndInit();
             this.gradientPanelSpecialEvents.ResumeLayout(false);
             this.splitContainerAdv2.Panel2.ResumeLayout(false);
+            this.splitContainerAdv2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv2)).EndInit();
             this.splitContainerAdv2.ResumeLayout(false);
+            this.splitContainerAdv2.PerformLayout();
             this.ResumeLayout(false);
 
         }
