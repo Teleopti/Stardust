@@ -206,7 +206,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                     {
                         // Sets the cell value
                         //e.Style.CellValue = bindingProperty;
-                        e.Style.CellValue = _propertyReflector.GetValue(bindingProperty, _displayMember);
+                        var text = _propertyReflector.GetValue(bindingProperty, _displayMember);
+                        e.Style.CellValue = text;
+                        e.Style.ApplyText(text.ToString());
+                        e.Style.ApplyFormattedText(text.ToString());
                     }
                 }
                 else
@@ -251,8 +254,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                     {
                         OnTypeChanged(dataItem, ((TItem)e.Style.CellValue));
                         OnCellChanged(dataItem, e);
-                    }
-
+                    }                    
                     // Sets the cell value
                     //e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
                     e.Handled = true;
@@ -263,6 +265,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 if (e.ColIndex > 0 && e.RowIndex > 0)
                 {
                     TData dataItem = dataItems[e.RowIndex - 2];
+                    object bindingProperty = _propertyReflector.GetValue(dataItem, _bindingProperty);
 
                     if (e.Style.CellValue is TItem)
                     {
@@ -272,6 +275,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 
                     // Sets the cell value
                     //e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                    e.Style.CellValue = _propertyReflector.GetValue(bindingProperty, _displayMember);
                     e.Handled = true;
                 }
             }
