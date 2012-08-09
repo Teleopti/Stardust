@@ -50,7 +50,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         TimeSpan AverageWorkTimePerDay { get; }
 
-
 		/// <summary>
 		/// Gets or sets the average work time per day for display.
 		/// </summary>
