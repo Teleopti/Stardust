@@ -57,10 +57,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		private void WaitUntilSignInOrBusinessUnitListOrErrorAppears()
 		{
+			Exception exception = null;
 			Func<bool> signedInOrBusinessUnitListExists =
-				() => SignoutButton.Exists || SignInBusinessUnits.Any(e => e.Style.Display != "none");
-					  /*|| ErrorSpans.Any(e => e.Style != null && e.Style.Display != "none");*/
-			signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
+				() =>
+					{
+						try
+						{
+							return SignoutButton.Exists || SignInBusinessUnits.Any(e => e.Style.Display != "none");
+							/*|| ErrorSpans.Any(e => e.Style != null && e.Style.Display != "none");*/
+						}
+						catch (UnauthorizedAccessException ex)
+						{
+							exception = ex;
+							return false;
+						}
+					};
+			if (!signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5)))
+			{
+				throw exception;
+			}
 		}
 
 		public void SelectFirstBusinessUnit()
