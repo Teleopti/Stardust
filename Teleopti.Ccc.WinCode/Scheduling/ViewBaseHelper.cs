@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
 
             if (!end.HasValue) end = selectedPeriod.LocalEndDateTime;
-            //if (!start.HasValue) start = selectedPeriod.LocalStartDateTime;
+            if (!start.HasValue) start = selectedPeriod.LocalStartDateTime;
 
             return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start.Value, end.Value);
 
