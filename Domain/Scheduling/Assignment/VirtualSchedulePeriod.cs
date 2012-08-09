@@ -173,23 +173,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				if (!IsValid)
 					return new TimeSpan();
 
-				if (_schedulePeriod != null)
-				{
-					if (_schedulePeriod.IsPeriodTimeOverride)
-					{
-						double periodTime = _schedulePeriod.PeriodTime.Value.TotalMinutes;
-						int totalWorkDay = WorkdaysForTotalPeriod();
-						double periodMinutes = periodTime / totalWorkDay;
-						return TimeSpan.FromMinutes(periodMinutes);
-					}
-					//Handle override in original schedule period
-					if (_schedulePeriod != null && _schedulePeriod.IsAverageWorkTimePerDayOverride)
-						return _schedulePeriod.AverageWorkTimePerDay;
-				}
-
-				if (_personContract == null)
-					return new TimeSpan();
-				return _personContract.AverageWorkTimePerDay;
+				return _schedulePeriod.AverageWorkTimePerDay;
+				//{
+					
+				//    if (_schedulePeriod.IsPeriodTimeOverride)
+				//    {
+				//        double periodTime = _schedulePeriod.PeriodTime.Value.TotalMinutes;
+				//        int totalWorkDay = WorkdaysForTotalPeriod();
+				//        double periodMinutes = periodTime / totalWorkDay;
+				//        return TimeSpan.FromMinutes(periodMinutes);
+				//    }
+				//    //Handle override in original schedule period
+				//    if (_schedulePeriod != null && _schedulePeriod.IsAverageWorkTimePerDayOverride)
+				//        return _schedulePeriod.AverageWorkTimePerDay;
+				//}
+				//if (_personContract == null)
+				//    return new TimeSpan();
+				//return _personContract.AverageWorkTimePerDay;
 			}
 		}
 
@@ -202,7 +202,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			double minutes = AverageWorkTimePerDay.TotalMinutes * workDays;
 			return TimeSpan.FromMinutes(minutes);
 		}
-
 
         public int Workdays()
         {
@@ -253,49 +252,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return dateOnlyPeriod;
 		}
 
-    	public int WorkdaysForTotalPeriod()
-		{
-
-    		DateOnlyPeriod? totalPeriod = TotalPeriod();
-
-			if (!totalPeriod.HasValue)
-				return 0;
-
-			DateOnly periodStart = totalPeriod.Value.StartDate;
-			DateOnly periodEnd = totalPeriod.Value.EndDate;
-
-			int workDays = 0;
-			DateOnly tempDate = periodStart;
-
-			if (_schedulePeriod.IsDaysOffOverride || _schedulePeriod.PeriodType == SchedulePeriodType.ChineseMonth)
-			{
-				return TotalPeriod().Value.DayCount() - totalDaysOff();
-			}
-			
-			while (tempDate <= periodEnd)
-			{
-				if (_person != null)
-				{
-					if (_personContract.ContractSchedule.IsWorkday(periodStart, tempDate))
-						workDays++;
-				}
-				tempDate = tempDate.AddDays(1);
-			}
-
-			return workDays;
-		}
-
-		private int totalDaysOff()
-		{
-			if (_schedulePeriod.DaysOff.HasValue)
-			{
-				return _schedulePeriod.DaysOff.Value;
-			}
-			return _schedulePeriod.GetDaysOff(_thePeriodWithTheDateIn.StartDate);
-		}
+		//private int totalDaysOff()
+		//{
+		//    if (_schedulePeriod.DaysOff.HasValue)
+		//    {
+		//        return _schedulePeriod.DaysOff.Value;
+		//    }
+		//    return _schedulePeriod.GetDaysOff(_thePeriodWithTheDateIn.StartDate);
+		//}
 
     	public int DaysOff()
         {
+			if (!IsValid)
+			    return 0;
+			//return _schedulePeriod.GetDaysOff(_thePeriodWithTheDateIn.StartDate);
 
 			DateOnlyPeriod? totalPeriod = TotalPeriod();
 			if (!totalPeriod.HasValue)
@@ -303,32 +273,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			if (_schedulePeriod.IsDaysOffOverride || _schedulePeriod.PeriodType == SchedulePeriodType.ChineseMonth)
 			{
-				int virtualPeriodLength = _thePeriodWithTheDateIn.DayCount();
-				int totalPeriodLength = TotalPeriod().Value.DayCount();
-				int totalDayOffs = totalDaysOff();
-				int res = (int)(((double) virtualPeriodLength/(double) totalPeriodLength) * totalDayOffs);
-				return res;
+				return _schedulePeriod.GetDaysOff(_thePeriodWithTheDateIn.StartDate);
 			}
 
-            if (_personContract == null || _personContract.ContractSchedule == null)
-                return 0;
+			if (_personContract.ContractSchedule == null)
+				return 0;
 
-            DateOnly? periodStart = Person.SchedulePeriodStartDate(_thePeriodWithTheDateIn.StartDate);
+			DateOnly? periodStart = Person.SchedulePeriodStartDate(_thePeriodWithTheDateIn.StartDate);
 			if (!periodStart.HasValue)
 				return 0;
 
-            DateOnly startDate = _thePeriodWithTheDateIn.StartDate;
-            DateOnly endDate = _thePeriodWithTheDateIn.EndDate;
-            int daysOff = 0;
-            while (startDate <= endDate)
-            {
+			DateOnly startDate = _thePeriodWithTheDateIn.StartDate;
+			DateOnly endDate = _thePeriodWithTheDateIn.EndDate;
+			int daysOff = 0;
+			while (startDate <= endDate)
+			{
 				if (!_personContract.ContractSchedule.IsWorkday(periodStart.Value, startDate))
-                    daysOff++;
+					daysOff++;
 
-                startDate = startDate.AddDays(1);
-            }
+				startDate = startDate.AddDays(1);
+			}
 
-            return daysOff;
+			return daysOff;
         }
 
         public static DateOnlyPeriod GetOriginalStartPeriodForType(ISchedulePeriod schedulePeriod, CultureInfo cultureInfo)
