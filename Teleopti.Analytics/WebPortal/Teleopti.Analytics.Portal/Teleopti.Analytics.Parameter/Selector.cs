@@ -346,8 +346,7 @@ namespace Teleopti.Analytics.Parameters
             {
                 //Permission granted
 
-                ParameterBase ctrl;
-                int flag = 0;
+            	int flag = 0;
 
                 _groupPageCode = (Guid) Context.Session["GroupPageCode"];
                 DataSet repCtrlsData = DataReader.LoadReportControls(_reportId, _groupPageCode);
@@ -356,20 +355,19 @@ namespace Teleopti.Analytics.Parameters
                 {
                     IList<ParameterBase> dependent = new List<ParameterBase>();
 
-                    var dbId = (Guid)row.ItemArray[0];
-                    var name = (string)row.ItemArray[1];
-                    var resourceKey = (string)row.ItemArray[2];
+                    var dbId = (Guid)row["Id"];
+                    var name = (string)row["control_name"];
+                    var resourceKey = (string)row["control_name_resource_key"];
                     string text = ReportTexts.Resources.ResourceManager.GetString(resourceKey);
                     if (string.IsNullOrEmpty(text))
                         text = resourceKey;
-                    var defaultValue = (string)row.ItemArray[3];
-                    var procName = (string)row.ItemArray[4];
-                    var procParam = (string)row.ItemArray[9];
-                    var paramName = (string)row.ItemArray[10];
-                    var display = (bool) row.ItemArray[12];
-                    ctrl = getControl(name);
+                    var defaultValue = (string)row["default_value"];
+                    var procName = (string)row["fill_proc_name"];
+                    var procParam = (string)row["fill_proc_param"];
+                    var paramName = (string)row["param_name"];
+                    var display = (bool) row["display"];
+                    ParameterBase ctrl = getControl(name);
 
-                    //ctrl.UserID = _UserID;
                     ctrl.Component = _reportId;
 
                     ctrl.DBID = dbId;
@@ -380,6 +378,7 @@ namespace Teleopti.Analytics.Parameters
                     ctrl.ProcParam = procParam;
                     ctrl.ParamName = paramName;
                     ctrl.Display = display;
+                	ctrl.IntervalLength = (int)row["interval_length_minutes"];
 
                     // bara första kontrollen ska ha startparametrar
                     if (flag == 0)
@@ -468,6 +467,10 @@ namespace Teleopti.Analytics.Parameters
             {
                 return new ParameterDate();
             }
+			if (name.IndexOf("time") >= 0)
+			{
+				return new ParameterTime();
+			}
             throw new Exception("The control type is not recognized");
         }
 
