@@ -18,29 +18,16 @@ uppdaterad: 20090211 Nytt mart schema KJ
 @report_id uniqueidentifier,
 @group_page_code uniqueidentifier
 AS
-/*
-DBID = (int) row.ItemArray[0];
-Name = (string) row.ItemArray[1];
-Text = (string) row.ItemArray[2];
-DefaultValue = (string) row.ItemArray[3];
-ProcName = (string) row.ItemArray[4];
-
-ProcParam = (int) row.ItemArray[8];
-ParamName = (string) row.ItemArray[9];
-
-*/
---select @group_page_code
---return
 
 DECLARE @display BIT
 DECLARE @dont_display BIT
+DECLARE @interval_length int
 
 SET @display = 1
 SET @dont_display = 0
+SELECT @interval_length = value FROM mart.sys_configuration WHERE [key] = 'IntervalLengthMinutes'
 
 CREATE TABLE #grouppagecontrols (id uniqueidentifier)
-
-
 
 IF EXISTS (SELECT distinct group_page_code FROM mart.dim_group_page WHERE group_page_code = @group_page_code)
 	BEGIN
@@ -67,7 +54,8 @@ IF EXISTS (SELECT distinct group_page_code FROM mart.dim_group_page WHERE group_
 				ISNULL(fill_proc_param, -1000) as fill_proc_param,
 				param_name,
 				print_order,
-				@display AS display
+				@display AS display,
+				@interval_length AS interval_length_minutes
 			FROM mart.v_report r
 				INNER JOIN mart.v_report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
 				INNER JOIN mart.v_report_control c ON cc.ControlId = c.Id
@@ -88,7 +76,8 @@ IF EXISTS (SELECT distinct group_page_code FROM mart.dim_group_page WHERE group_
 				ISNULL(fill_proc_param, -1000) as fill_proc_param,
 				param_name,
 				print_order,
-				@dont_display AS display
+				@dont_display AS display,
+				@interval_length AS interval_length_minutes
 			FROM mart.v_report r
 				INNER JOIN mart.v_report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
 				INNER JOIN mart.v_report_control c ON cc.ControlId = c.Id
@@ -122,7 +111,8 @@ ELSE
 				ISNULL(fill_proc_param, -1000) as fill_proc_param,
 				param_name,
 				print_order,
-				@display AS Display
+				@display AS Display,
+				@interval_length AS interval_length_minutes
 			FROM mart.v_report r
 				INNER JOIN mart.v_report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
 				INNER JOIN mart.v_report_control c ON cc.ControlId = c.Id
@@ -143,7 +133,8 @@ ELSE
 				ISNULL(fill_proc_param, -1000) as fill_proc_param,
 				param_name,
 				print_order,
-				@dont_display AS Display
+				@dont_display AS Display,
+				@interval_length AS interval_length_minutes
 			FROM mart.v_report r
 				INNER JOIN mart.v_report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
 				INNER JOIN mart.v_report_control c ON cc.ControlId = c.Id
