@@ -66,7 +66,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _presenter.SetDataSource(skillStaffPeriods, skill, includeStatistics, stateHolder);
         }
-
+    	public SkillIntradayGridPresenter Presenter
+    	{
+			get { return _presenter; }
+    	}
         public void SetRowsAndCols()
         {
             RowCount = _presenter.GridRows.Count - 1;

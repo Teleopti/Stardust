@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
 
             if (!end.HasValue) end = selectedPeriod.EndDate;
-            //if (!start.HasValue) start = selectedPeriod.StartDate;
+            if (!start.HasValue) start = selectedPeriod.StartDate;
             
             return new DateOnlyPeriod(start.Value,end.Value);
 
