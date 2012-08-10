@@ -319,7 +319,9 @@ namespace Teleopti.Ccc.Win.Intraday
 
             try
             {
-                _settingManager.Persist(e.Value.Text);
+                var newSetting = _settingManager.DefaultSetting();
+                newSetting.Name = e.Value.Text;
+                _settingManager.Persist(newSetting.Name);
                 //_intradayViewContent.Settings.SaveIntradaySetting(intradaySetting);
             }
             catch (DataSourceException dataSourceException)
