@@ -6238,9 +6238,9 @@ Meeting</value>
     <value>Scheduled Time per Agent</value>
     <comment>Scheduled Time per Agent</comment>
   </data>
-  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Service Level  and Agents Ready</value>
-    <comment>Service Level  and Agents Ready</comment>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>Scheduled and Actual Agents</value>
+    <comment>Scheduled and Actual Agents</comment>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
     <value>Shift Category and Full Day Absence per Agent</value>

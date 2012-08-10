@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 		public static string FunctionCodeResReportForecastvsActualWorkload = "ResReportForecastvsActualWorkload";
 		public static Guid ReportForeignIdResReportForecastvsActualWorkload = new Guid("8D8544E4-6B24-4C1C-8083-CBE7522DD0E0");
 
-		public static string FunctionCodeResReportServiceLevelAndAgentsReady = "ResReportServiceLevelAndAgentsReady";
-		public static Guid ReportForeignIdResReportServiceLevelAndAgentsReady = new Guid("AE758403-C16B-40B0-B6B2-E8F6043B6E04");
+		public static string FunctionCodeResReportScheduledAndActualAgents = "ResReportScheduledAndActualAgents";
+		public static Guid ReportForeignIdResReportScheduledAndActualAgents = new Guid("AE758403-C16B-40B0-B6B2-E8F6043B6E04");
 
 		public static readonly IList<DefinedReportInformation> ReportInformations =
 			new[]
@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 					new DefinedReportInformation
 						{
 							ReportId = "GetScheduledAndActual",
-							ForeignId = ReportForeignIdResReportServiceLevelAndAgentsReady,
-							ReportNameResourceKey = "ResReportServiceLevelAndAgentsReady",
-							FunctionCode = FunctionCodeResReportServiceLevelAndAgentsReady,
+							ForeignId = ReportForeignIdResReportScheduledAndActualAgents,
+							ReportNameResourceKey = "ResReportScheduledAndActualAgents",
+							FunctionCode = FunctionCodeResReportScheduledAndActualAgents,
 							GenerateReport = (service, input) => service.GetScheduledAndActual(input),
 							ReportInfo =
 								new ReportMetaInfo
@@ -66,9 +66,9 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 					new DefinedReportInformation
 						{
 							ReportId = "GetServiceLevelAgent",
-							ForeignId = ReportForeignIdResReportServiceLevelAndAgentsReady,
+							ForeignId = ReportForeignIdResReportScheduledAndActualAgents,
 							ReportNameResourceKey = "ServiceLevelParenthesisPercentSign",
-							FunctionCode = FunctionCodeResReportServiceLevelAndAgentsReady,
+							FunctionCode = FunctionCodeResReportScheduledAndActualAgents,
 							GenerateReport = (service, input) => service.GetServiceLevelAgent(input),
 							ReportInfo =
 								new ReportMetaInfo
