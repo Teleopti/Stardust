@@ -23,8 +23,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    
-    public class SkillDayGridControl : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	public class SkillDayGridControl : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext
     {
         private AbstractDetailView _owner;
         private const int RowHeaderWidth = 200;
