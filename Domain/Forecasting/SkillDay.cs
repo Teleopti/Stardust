@@ -1417,25 +1417,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private void setupSkillDay()
         {
-            TimeSpan interval = TimeSpan.FromMinutes(_skill.DefaultResolution);
-            DateTime startTimeLocal = CurrentDate.Date.Add(_skill.MidnightBreakOffset);
-            if (_skill.TimeZone.IsInvalidTime(startTimeLocal))
-            {
-                do
-                {
-                    startTimeLocal = startTimeLocal.AddMinutes(_skill.DefaultResolution);
-                } while (_skill.TimeZone.IsInvalidTime(startTimeLocal));
-            }
-            DateTime endTimeLocal = startTimeLocal.AddDays(1);
-            if (_skill.TimeZone.IsInvalidTime(endTimeLocal))
-            {
-                do
-                {
-                    endTimeLocal = endTimeLocal.AddMinutes(_skill.DefaultResolution);
-                } while (_skill.TimeZone.IsInvalidTime(endTimeLocal));
-            }
-            DateTime startDay = _skill.TimeZone.ConvertTimeToUtc(startTimeLocal, _skill.TimeZone);
-            DateTime nextDay = _skill.TimeZone.ConvertTimeToUtc(endTimeLocal, _skill.TimeZone);
+            var interval = TimeSpan.FromMinutes(_skill.DefaultResolution);
+            var startTimeLocal = CurrentDate.Date.Add(_skill.MidnightBreakOffset);
+            var startDay = DaylightSavingTimeHelper.GetUtcStartTimeOfOneDay(startTimeLocal, _skill.TimeZone);
+            var nextDay = DaylightSavingTimeHelper.GetUtcEndTimeOfOneDay(startTimeLocal, _skill.TimeZone);
 
             if (_skillDataPeriodCollection.Count == 0)
             {
