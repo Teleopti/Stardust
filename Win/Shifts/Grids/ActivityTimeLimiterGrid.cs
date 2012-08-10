@@ -255,6 +255,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         {
             AddNewLimiter();
             RefreshGrid();
+            _eventAggregator.GetEvent<RuleSetChanged>().Publish(Presenter.Explorer.Model.FilteredRuleSetCollection);
         }
 
         /// <summary>
@@ -263,6 +264,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         public override void Delete()
         {
             DeleteSelectedLimiter();
+            _eventAggregator.GetEvent<RuleSetChanged>().Publish(Presenter.Explorer.Model.FilteredRuleSetCollection);
         }
 
         /// <summary>
