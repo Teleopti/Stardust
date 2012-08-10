@@ -135,6 +135,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ParameterTime.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ParameterListBoxOptional.cs" />
     <Compile Include="ParameterBase.cs">

@@ -11,7 +11,6 @@ CREATE Proc [mart].[report_control_interval_get]
 @person_code uniqueidentifier,
 @language_id int,
 @bu_id uniqueidentifier
---@interval_type int =3--DEFAULT TIMME OM INGET ANNAT ANGES KJ
 as
 /*
 Last modfied:20080528
@@ -19,77 +18,27 @@ Last modfied:20080528
 20080528 KJ Added parameter 6,7,8
 20080910 Added parameter @bu_id KJ
 2012-02-15 Changed to uniqueidentifier as report_id - Ola
+2012-08-10 JN Just return interval_id and bit for if the target is a "from" or a "to" interval control.
 */
-/*
-IF @interval_type IN(3,6,7,8)--'Hour' + 'Day', 'Week', 'Month'
-BEGIN
-	IF  @param = 1
-	BEGIN
-		SELECT 
-			id		= MIN(interval_id),
-			name	= left(hour_name,5)
-		FROM
-			dim_interval 
-		GROUP BY hour_name
-	END
-	ELSE
-	BEGIN
-		SELECT 
-			id		= MAX(interval_id),
-			name	= RIGHT(hour_name,5)
-		FROM
-			dim_interval 
-		GROUP BY hour_name
-	END
-END
+DECLARE @is_interval_to bit
+IF  @param = 1
+	SET @is_interval_to = 0
+ELSE
+	SET @is_interval_to = 1
 
+CREATE TABLE #result (id int, is_interval_to bit)
 
-IF @interval_type = 4--'Half Hour'
-BEGIN
-	IF  @param = 1
-	BEGIN
-		SELECT 
-			id		= MIN(interval_id),
-			name	= left(halfhour_name,5)
-		FROM
-			dim_interval 
-		GROUP BY halfhour_name
-	END
-	ELSE
-	BEGIN
-		SELECT 
-			id		= MAX(interval_id),
-			name	= RIGHT(halfhour_name,5)
-		FROM
-			dim_interval 
-		GROUP BY halfhour_name
-	END
+INSERT INTO #result
+	SELECT 
+		MIN(interval_id),
+		@is_interval_to
+	FROM
+		mart.dim_interval 
+	GROUP BY interval_name
 
-END
-
-*/
-
---IF @interval_type = 5--'Interval'
---BEGIN
-	IF  @param = 1
-	BEGIN
-		SELECT 
-			id		= MIN(interval_id),
-			name	= left(interval_name,5)
-		FROM
-			mart.dim_interval 
-		GROUP BY interval_name
-	END
-	ELSE
-	BEGIN
-		SELECT 
-			id		= MAX(interval_id),
-			name	= RIGHT(interval_name,5)
-		FROM
-			mart.dim_interval 
-		GROUP BY interval_name
-	END
---END
+SELECT * 
+FROM #result 
+ORDER BY id
 
 GO
 
