@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Win.Intraday
     [Serializable]
     public class IntradaySetting
     {
-        private readonly string _name;
+        private string _name;
         private ChartSettings _chartSetting;
         private string _dockingState;
 
@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Win.Intraday
         public virtual string Name
         {
             get { return _name; }
+            set { _name = value; }
         }
 
         public virtual string DockingState
