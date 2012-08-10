@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                 if (_rowManager.DataSource.Count == 0) return;
 
                 cellInfo.Style.CellType = CellType;
-                cellInfo.Style.CellValue = getValue(cellInfo);
+                cellInfo.Style.CellValue = GetValue(cellInfo);
                 cellInfo.Style.ReadOnly = true;
             }
         }
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
         }
 
 
-        private object getValue(CellInfo cellInfo)
+        protected object GetValue(CellInfo cellInfo)
         {
             _skillStaffPeriodList = getSkillStaffPeriodsForColumn(cellInfo);
 
