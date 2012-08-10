@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    class SkillIntradayGridPresenter
+    public class SkillIntradayGridPresenter
     {
         private readonly IList<IGridRow> _gridRows = new List<IGridRow>();
         private readonly TeleoptiGridControl _gridControl;
@@ -81,6 +81,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             get { return _chartSettings; }
         }
+
+		public RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod> RowManager
+		{
+			get {return _rowManager;}
+		}
 
         public void SetDataSource(IList<ISkillStaffPeriod> skillStaffPeriods, ISkill skill, bool includeStatistics, ISchedulerStateHolder stateHolder)
         {
