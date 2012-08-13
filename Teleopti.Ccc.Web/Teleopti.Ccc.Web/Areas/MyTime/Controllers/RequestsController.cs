@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
@@ -69,7 +70,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				Response.StatusCode = 400;
 				return ModelState.ToJson();
 			}
-			return Json(_absenceRequestPersister.Persist(form));
+			try
+			{
+				return Json(_absenceRequestPersister.Persist(form));
+			}
+			catch (InvalidOperationException e)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return e.ExceptionToJson(Resources.RequestCannotUpdateDelete);
+			}
 		}
 
 		[UnitOfWorkAction]

@@ -354,7 +354,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ISkillDay parent = (ISkillDay)Parent;
             
             //Never over 100%, if demand = 0 then 100 if Email etc
-            if (parent != null && parent.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony)
+            if (parent != null && parent.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony && parent.Skill.SkillType.ForecastSource!=ForecastSource.Retail)
             {
                 if (Payload.ForecastedIncomingDemand == 0)
                 {

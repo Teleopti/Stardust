@@ -89,7 +89,7 @@
 			this._setConnected();
 			this._connector
 				.animate({
-					'right': '+=8',
+					'right': '-7',
 					'border-right': 0
 				})
 				;
@@ -104,7 +104,7 @@
 			this._setConnected(false);
 			this._arrow
 				.show()
-				.css('border-right', '1px solid rgba(0, 0, 0, 0.15)')
+				.addClass('ui-arrow-border-right')
 				;
 			this._fadeConnector();
 		},

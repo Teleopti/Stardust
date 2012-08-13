@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
                 }
                 rtaVisualLayer = new RtaVisualLayer(rtaState,
                                                     new DateTimePeriod(timestamp, endTimeForLayer),
-                                                    dummyActivityForState);
+                                                    dummyActivityForState, Person);
                 AddRtaVisualLayer(rtaVisualLayer);
             }
             else
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
                 }
                 else
                 {
-                    currentLayer = new AlarmSituation(alarmType, new DateTimePeriod(periodStartDateTime, alarmTimeEnd));
+                    currentLayer = new AlarmSituation(alarmType, new DateTimePeriod(periodStartDateTime, alarmTimeEnd), Person);
                     _alarmSituationCollection.Add(currentLayer);
                 }
             }

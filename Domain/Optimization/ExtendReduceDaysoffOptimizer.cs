@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
 		private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
 		public ExtendReduceDaysOffOptimizer(
 			IPeriodValueCalculator periodValueCalculator,
@@ -55,7 +57,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
 			IDayOffOptimizerValidator dayOffOptimizerValidator,
 			IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider,
-			ISchedulingOptionsCreator schedulingOptionsCreator)
+			ISchedulingOptionsCreator schedulingOptionsCreator,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter
+			)
 		{
 			_periodValueCalculator = periodValueCalculator;
 			_personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -77,6 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimizerValidator = dayOffOptimizerValidator;
 			_optimizationOverLimitDecider = optimizationOverLimitDecider;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
+			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		}
 
 		public bool Execute()
@@ -203,11 +208,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 				IShiftCategory originalShiftCategory = null;
 				IScheduleDay originalScheduleDay = originalStateContainer.OldPeriodDaysState[dateOnly];
 				IPersonAssignment originalPersonAssignment = originalScheduleDay.AssignmentHighZOrder();
+				schedulingOptions.MainShiftOptimizeActivitySpecification = null;
 				if (originalPersonAssignment != null)
 				{
 					IMainShift originalMainShift = originalPersonAssignment.MainShift;
 					if (originalMainShift != null)
+					{
 						originalShiftCategory = originalMainShift.ShiftCategory;
+						_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalMainShift, dateOnly);
+					}
+						
 				}
 
 				var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
@@ -217,12 +227,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 				bool schedulingResult;
 				if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)
 				{
-					schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, originalShiftCategory, resourceCalculateDelayer);
+                	var possibleShiftOption = new PossibleStartEndCategory {ShiftCategory = originalShiftCategory};
+					schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, resourceCalculateDelayer, possibleShiftOption);
 					if (!schedulingResult)
-						schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer);
+						schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer, null);
 				}
 				else
-					schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer);
+					schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer, null);
 
 				if (!schedulingResult)
 				{

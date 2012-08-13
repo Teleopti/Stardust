@@ -155,6 +155,8 @@
     <Compile Include="Common\DateOnlyAsDateTimePeriod.cs" />
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="Common\ScenarioProvider.cs" />
+    <Compile Include="Forecasting\DaylightSavingTimeHelper.cs" />
+    <Compile Include="Forecasting\Export\ExportSkillToFileCommandModel.cs" />
     <Compile Include="Forecasting\Export\IJobResultFeedback.cs" />
     <Compile Include="Forecasting\Export\ImportForecastToSkillCommand.cs" />
     <Compile Include="Forecasting\Export\IMultisiteSkillForExport.cs" />
@@ -228,6 +230,7 @@
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
     <Compile Include="Optimization\PersonalSettings.cs" />
@@ -266,7 +269,9 @@
     <Compile Include="Optimization\ScheduleDayEquator.cs" />
     <Compile Include="Optimization\SchedulingOptionsAdvancedPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
+    <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
+    <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />
     <Compile Include="Optimization\ITimePeriodCanHaveShortBreak.cs" />
@@ -296,7 +301,6 @@
     <Compile Include="Optimization\DayOffOptimizerContainer.cs" />
     <Compile Include="Optimization\MoveTimeOptimizer.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByAllSkillsExtractor.cs" />
-    <Compile Include="Optimization\IntradayActivityOptimizerService.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecification.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractor.cs" />
     <Compile Include="Collection\AbstractDictionary.cs" />
@@ -331,7 +335,9 @@
     <Compile Include="Repositories\Paging.cs" />
     <Compile Include="Repositories\PagingDetail.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinder.cs" />
+    <Compile Include="ResourceCalculation\BestGroupValueExtractorThreadFactory.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecification.cs" />
+    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonConsistentChecker.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDate.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateHolder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPerson.cs" />
@@ -343,17 +349,22 @@
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonFactory.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonsBuilder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonShiftCategoryConsistentChecker.cs" />
+    <Compile Include="ResourceCalculation\GroupScheduling\PossibleCombinationsOfStartEndCategoryCreator.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPerson.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyService.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferences.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeople.cs" />
+    <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunner.cs" />
+    <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
+    <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />
     <Compile Include="ResourceCalculation\SwapRawService.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityChecker.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecification.cs" />
+    <Compile Include="Scheduling\Assignment\IValidateScheduleRange.cs" />
     <Compile Include="Scheduling\Assignment\PeriodOffsetCalculator.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionIntersectingPeriodMerger.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionMerger.cs" />
@@ -369,7 +380,7 @@
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculator.cs" />
     <Compile Include="Scheduling\Assignment\NewSchedulePeriodTargetCalculatorFactory.cs" />
     <Compile Include="Scheduling\Assignment\RangeProjectionService.cs" />
-    <Compile Include="Scheduling\Assignment\SchedulePartStringVisualizer.cs" />
+    <Compile Include="Scheduling\Assignment\ScheduleDayStringVisualizer.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryFairnessManager.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitChecker.cs" />
     <Compile Include="Scheduling\DayOffTemplateSorter.cs" />

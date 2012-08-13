@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
     public class AlarmSituation : VisualLayer
     {
-        public AlarmSituation(IAlarmType alarmType, DateTimePeriod period) : base(alarmType,period,new Activity("Dummy"))
+        public AlarmSituation(IAlarmType alarmType, DateTimePeriod period, IPerson person) : base(alarmType,period,new Activity("Dummy"),person)
         {
         }
     }

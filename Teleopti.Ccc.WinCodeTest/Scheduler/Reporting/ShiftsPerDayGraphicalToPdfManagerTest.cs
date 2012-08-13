@@ -271,15 +271,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			Expect.Call(_layer2.Period).Return(new DateTimePeriod(dateTime1, dateTime3)).Repeat.AtLeastOnce();
 			Expect.Call(_layer1.Payload).Return(_payload);
 			Expect.Call(_layer2.Payload).Return(_payload);
-			Expect.Call(_payload.ConfidentialDisplayColor(_person1)).Return(Color.Blue);
-			Expect.Call(_payload.ConfidentialDisplayColor(_person2)).Return(Color.Blue);
+			Expect.Call(_payload.ConfidentialDisplayColor(_person1,day1)).Return(Color.Blue);
+			Expect.Call(_payload.ConfidentialDisplayColor(_person2,day2)).Return(Color.Blue);
 
-            Expect.Call(_day1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1),
-                                                                                              TeleoptiPrincipal.Current.Regional.TimeZone));
+			var dateOnlyAsPeriod1 = new DateOnlyAsDateTimePeriod(day1, TeleoptiPrincipal.Current.Regional.TimeZone);
+			var dateOnlyAsPeriod2 = new DateOnlyAsDateTimePeriod(day2, TeleoptiPrincipal.Current.Regional.TimeZone);
 
-            Expect.Call(_day2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1),
-                                                                                             TeleoptiPrincipal.Current.Regional.TimeZone));
-			
+            Expect.Call(_day1.DateOnlyAsPeriod).Return(dateOnlyAsPeriod1).Repeat.AtLeastOnce();
+            Expect.Call(_day2.DateOnlyAsPeriod).Return(dateOnlyAsPeriod2).Repeat.AtLeastOnce();
 		}
 	}
 }

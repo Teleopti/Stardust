@@ -114,13 +114,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
             }
         }
 
-        public virtual Description ConfidentialDescription(IPerson assignedPerson)
+        public virtual Description ConfidentialDescription(IPerson assignedPerson, DateOnly assignedDate)
         {
             return isPermittedToSeePayloadInfo(assignedPerson) 
                     ? Description : ConfidentialPayloadValues.Description;
         }
 
-        public virtual Color ConfidentialDisplayColor(IPerson assignedPerson)
+		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson, DateOnly assignedDate)
         {
             return isPermittedToSeePayloadInfo(assignedPerson)
                        ? DisplayColor : ConfidentialPayloadValues.DisplayColor;

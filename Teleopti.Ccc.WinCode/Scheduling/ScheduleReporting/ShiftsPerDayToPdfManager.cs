@@ -56,6 +56,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             return doc;
         }
 
+        private static bool GetSchedulePartView(IScheduleDay part)
+        {
+            var significantPart = part.SignificantPart();
+		    var significantPartForDisplay = part.SignificantPartForDisplay();
+
+            return (significantPart == SchedulePartView.FullDayAbsence ||
+                    significantPartForDisplay == SchedulePartView.FullDayAbsence
+                    || significantPart == SchedulePartView.DayOff ||
+                    significantPartForDisplay == SchedulePartView.DayOff
+                    || significantPart == SchedulePartView.ContractDayOff ||
+                    significantPartForDisplay == SchedulePartView.ContractDayOff);
+
+        }
+
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ShiftsPerDayToPdfManager.DrawColumnData(System.Single,System.Single,System.String,System.Single,System.Boolean,System.Globalization.CultureInfo)")]
 		private float DrawPersonSchedule(ICccTimeZoneInfo timeZoneInfo, float top, IScheduleDay part, ScheduleReportDetail details, bool publicNote, CultureInfo culture, float pageWidth, IDictionary<IPerson, string> persons)
 		{
@@ -69,7 +84,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             float lunchTop = top;
             float break2Top = top;
 
-            if (part.SignificantPart() == SchedulePartView.FullDayAbsence || part.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
+            if(GetSchedulePartView(part))
                 return personTop;
 
             IVisualLayerCollection projection = part.ProjectionService().CreateProjection();

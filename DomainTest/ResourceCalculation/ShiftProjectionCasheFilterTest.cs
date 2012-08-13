@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void Setup()
         {
             _mocks = new MockRepository();
-            _dateOnly = new DateOnly(2009,2,2);
+            _dateOnly = new DateOnly(2009, 2, 2);
             _cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
             //_scheduleDayUtc = TimeZoneHelper.ConvertToUtc(_dateOnly.Date, _cccTimeZoneInfo);
             _effectiveRestriction = new EffectiveRestriction(
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 null, null, null, new List<IActivityRestriction>());
             _finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
             _rules = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
-            _target = new ShiftProjectionCacheFilter(_rules, new All<IMainShift>());
+            _target = new ShiftProjectionCacheFilter(_rules);
             _part = _mocks.StrictMock<IScheduleDay>();
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ISchedulingOptions schedulingOptions = new SchedulingOptions();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
             var result = _mocks.StrictMock<IWorkShiftFinderResult>();
-            
+
             using (_mocks.Record())
             {
                 Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(effectiveRestriction.IsAvailabilityDay).Return(false);
                 Expect.Call(effectiveRestriction.IsPreferenceDay).Return(false);
                 Expect.Call(effectiveRestriction.IsStudentAvailabilityDay).Return(false);
-				Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
+                Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
             }
 
             schedulingOptions.UseRotations = true;
@@ -94,34 +94,35 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
-    	[Test] public void ShouldReturnCorrectIfUsePreferenceMustHavesOnly()
-    	{
-			ISchedulingOptions schedulingOptions = new SchedulingOptions();
-			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			var result = _mocks.StrictMock<IWorkShiftFinderResult>();
+        [Test]
+        public void ShouldReturnCorrectIfUsePreferenceMustHavesOnly()
+        {
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+            var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+            var result = _mocks.StrictMock<IWorkShiftFinderResult>();
 
-			using (_mocks.Record())
-			{
-				Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
-				Expect.Call(effectiveRestriction.IsPreferenceDay).Return(false);
-				Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
-			}
+            using (_mocks.Record())
+            {
+                Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
+                Expect.Call(effectiveRestriction.IsPreferenceDay).Return(false);
+                Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
+            }
 
-			schedulingOptions.UseRotations = false;
-			schedulingOptions.RotationDaysOnly = false;
-			schedulingOptions.UsePreferences = true;
-			schedulingOptions.PreferencesDaysOnly = false;
-			schedulingOptions.UseAvailability = false;
-			schedulingOptions.AvailabilityDaysOnly = false;
-			schedulingOptions.UseStudentAvailability = false;
-    		schedulingOptions.UsePreferencesMustHaveOnly = true;
+            schedulingOptions.UseRotations = false;
+            schedulingOptions.RotationDaysOnly = false;
+            schedulingOptions.UsePreferences = true;
+            schedulingOptions.PreferencesDaysOnly = false;
+            schedulingOptions.UseAvailability = false;
+            schedulingOptions.AvailabilityDaysOnly = false;
+            schedulingOptions.UseStudentAvailability = false;
+            schedulingOptions.UsePreferencesMustHaveOnly = true;
 
-			using (_mocks.Playback())
-			{
-				bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
-				Assert.IsFalse(ret);
-			}
-    	}
+            using (_mocks.Playback())
+            {
+                bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
+                Assert.IsFalse(ret);
+            }
+        }
 
         [Test]
         public void VerifyRestrictionCheckWhenTrue()
@@ -158,23 +159,23 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ISchedulingOptions schedulingOptions = new SchedulingOptions();
             IEffectiveRestriction effectiveRestriction = null;
             var result = _mocks.StrictMock<IWorkShiftFinderResult>();
-            
+
             using (_mocks.Record())
             {
-            	Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
+                Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
             }
             using (_mocks.Playback())
             {
                 bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
                 Assert.IsFalse(ret);
-            }   
+            }
         }
 
         [Test]
         public void CanFilterOnEffectiveRestrictionAndNotAllowedShiftCategories()
         {
             var ret = _target.FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, _cccTimeZoneInfo, GetCashes(), _effectiveRestriction, new List<IShiftCategory>(), _finderResult);
-            Assert.AreEqual(0,ret.Count);
+            Assert.AreEqual(0, ret.Count);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -189,9 +190,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ws1.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod));
             IWorkShift ws2 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(9), TimeSpan.FromHours(22), testActivity);
             ws2.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod.MovePeriod(new TimeSpan(1, 0, 0))));
-            IList<IWorkShift> listOfWorkShifts = new List<IWorkShift> {ws1, ws2};
+            IList<IWorkShift> listOfWorkShifts = new List<IWorkShift> { ws1, ws2 };
 
-        	_cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var casheList = new List<IShiftProjectionCache>();
             foreach (IWorkShift shift in listOfWorkShifts)
             {
@@ -200,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 casheList.Add(cache);
             }
 
-            IList<IActivityRestriction> activityRestrictions = new List<IActivityRestriction> ();
+            IList<IActivityRestriction> activityRestrictions = new List<IActivityRestriction>();
             IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
                                                                                   new EndTimeLimitation(),
                                                                                   new WorkTimeLimitation(), null, null, null,
@@ -209,11 +210,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(2, ret.Count);
 
             var activityRestriction = new ActivityRestriction(breakActivity)
-                                      	{
-                                      		StartTimeLimitation = new StartTimeLimitation(new TimeSpan(12, 0, 0), null),
-                                      		EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(13, 0, 0))
-                                      	};
-        	activityRestrictions = new List<IActivityRestriction> { activityRestriction };
+                                        {
+                                            StartTimeLimitation = new StartTimeLimitation(new TimeSpan(12, 0, 0), null),
+                                            EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(13, 0, 0))
+                                        };
+            activityRestrictions = new List<IActivityRestriction> { activityRestriction };
             effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
                                                                                   new EndTimeLimitation(),
                                                                                   new WorkTimeLimitation(), null, null, null,
@@ -235,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _cccTimeZoneInfo, new List<IShiftProjectionCache>(), _effectiveRestriction, _finderResult);
             Assert.IsNotNull(ret);
         }
-        
+
         [Test]
         public void CanFilterOnRestrictionMinMaxWorkTimeWithEmptyList()
         {
@@ -251,13 +252,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 new WorkTimeLimitation(null, null),
                 null, null, null, new List<IActivityRestriction>());
             var ret = _target.FilterOnRestrictionMinMaxWorkTime(GetCashes(), effectiveRestriction, _finderResult);
-            Assert.AreEqual(3,ret.Count);
+            Assert.AreEqual(3, ret.Count);
         }
 
         [Test]
         public void CanFilterOnCategoryWithEmptyList()
         {
-            var ret = _target.FilterOnShiftCategory(_category ,new List<IShiftProjectionCache>(), _finderResult);
+            var ret = _target.FilterOnShiftCategory(_category, new List<IShiftProjectionCache>(), _finderResult);
             Assert.IsNotNull(ret);
         }
 
@@ -265,13 +266,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void CanFilterOnCategoryWithCategoryIsNull()
         {
             var ret = _target.FilterOnShiftCategory(null, GetCashes(), _finderResult);
-            Assert.AreEqual(3,ret.Count);
+            Assert.AreEqual(3, ret.Count);
         }
 
         [Test]
         public void CanFilterOnNotAllowedCategoriesWithEmptyList()
         {
-            var ret = _target.FilterOnNotAllowedShiftCategories(new List<IShiftCategory>{_category}, new List<IShiftProjectionCache>(), _finderResult);
+            var ret = _target.FilterOnNotAllowedShiftCategories(new List<IShiftCategory> { _category }, new List<IShiftProjectionCache>(), _finderResult);
             Assert.IsNotNull(ret);
         }
 
@@ -454,7 +455,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
                 var ret = _target.FilterOnBusinessRules(_scheduleRange, GetCashes(), _dateOnly, _finderResult);
-                Assert.AreEqual(0,ret.Count);
+                Assert.AreEqual(0, ret.Count);
             }
         }
 
@@ -481,8 +482,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var person1 = new Person();
             var person2 = new Person();
-            var persons = new List<IPerson> {person1, person2};
-            
+            var persons = new List<IPerson> { person1, person2 };
+
             var startTime = new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc);
             var endTime = new DateTime(2009, 2, 2, 21, 0, 0, DateTimeKind.Utc);
 
@@ -490,10 +491,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             Expect.Call(_scheduleDictionary[person1]).Return(_scheduleRange);
             Expect.Call(_scheduleDictionary[person2]).Return(_scheduleRange);
-            
+
             Expect.Call(_rules.PossiblePeriod(_scheduleRange, _dateOnly)).Return(scheduleDayPeriod).Repeat.Twice();
             _mocks.ReplayAll();
-			var ret = _target.FilterOnBusinessRules(persons, _scheduleDictionary, _dateOnly, GetCashes(), _finderResult);
+            var ret = _target.FilterOnBusinessRules(persons, _scheduleDictionary, _dateOnly, GetCashes(), _finderResult);
             Assert.AreEqual(2, ret.Count);
             _mocks.VerifyAll();
         }
@@ -560,7 +561,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_personAssignment.PersonalShiftCollection).Return( new ReadOnlyCollection<IPersonalShift>(personalShifts)).Repeat.AtLeastOnce();
+                Expect.Call(_personAssignment.PersonalShiftCollection).Return(new ReadOnlyCollection<IPersonalShift>(personalShifts)).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignmentCollection()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
             }
@@ -660,62 +661,62 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void CanFilterOnPersonalShiftAndMeetingsThroughListOfPersons()
-		{
-			var person1 = new Person();
-			var person2 = new Person();
-			var persons = new List<IPerson> { person1, person2 };
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void CanFilterOnPersonalShiftAndMeetingsThroughListOfPersons()
+        {
+            var person1 = new Person();
+            var person2 = new Person();
+            var persons = new List<IPerson> { person1, person2 };
 
-			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_personAssignments = new List<IPersonAssignment> { _personAssignment };
-			var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(_personAssignments);
+            _personAssignment = _mocks.StrictMock<IPersonAssignment>();
+            _personAssignments = new List<IPersonAssignment> { _personAssignment };
+            var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(_personAssignments);
 
-			var personalShift = _mocks.StrictMock<IPersonalShift>();
-			var personalShifts = new List<IPersonalShift> { personalShift };
-			var readOnlyPersonalShifts = new ReadOnlyCollection<IPersonalShift>(personalShifts);
+            var personalShift = _mocks.StrictMock<IPersonalShift>();
+            var personalShifts = new List<IPersonalShift> { personalShift };
+            var readOnlyPersonalShifts = new ReadOnlyCollection<IPersonalShift>(personalShifts);
 
-			var layerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
+            var layerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
 
-			var layers = _mocks.StrictMock<ILayerCollection<IActivity>>();
+            var layers = _mocks.StrictMock<ILayerCollection<IActivity>>();
 
-			var start = new DateTime(2009, 1, 10, 8, 0, 0, DateTimeKind.Utc);
-			var end = new DateTime(2009, 1, 10, 17, 0, 0, DateTimeKind.Utc);
-			var periodToContainAdjacentTo = new DateTimePeriod(start, end);
+            var start = new DateTime(2009, 1, 10, 8, 0, 0, DateTimeKind.Utc);
+            var end = new DateTime(2009, 1, 10, 17, 0, 0, DateTimeKind.Utc);
+            var periodToContainAdjacentTo = new DateTimePeriod(start, end);
 
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+            IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
 
-			var meetings = new List<IPersonMeeting>();
-			var readOnlymeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
+            var meetings = new List<IPersonMeeting>();
+            var readOnlymeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
 
-			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
-			var c2 = _mocks.StrictMock<IShiftProjectionCache>();
+            var c1 = _mocks.StrictMock<IShiftProjectionCache>();
+            var c2 = _mocks.StrictMock<IShiftProjectionCache>();
 
-			shifts.Add(c1);
-			shifts.Add(c2);
+            shifts.Add(c1);
+            shifts.Add(c2);
 
-			Expect.Call(_scheduleDictionary[person1]).Return(_scheduleRange);
-			Expect.Call(_scheduleDictionary[person2]).Return(_scheduleRange);
-			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part).Repeat.Twice();
-			//PersonalShifts & meetings
-			Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
-			Expect.Call(c2.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
-			Expect.Call(layerCollection1.Period()).Return(periodToContainAdjacentTo).Repeat.Any();
-			Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
-			Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
-			Expect.Call(_personAssignment.PersonalShiftCollection).Return(readOnlyPersonalShifts).Repeat.AtLeastOnce();
-			Expect.Call(personalShift.LayerCollection).Return(layers).Repeat.AtLeastOnce();
-			Expect.Call(layers.Period()).Return(periodToContainAdjacentTo).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDictionary[person1]).Return(_scheduleRange);
+            Expect.Call(_scheduleDictionary[person2]).Return(_scheduleRange);
+            Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part).Repeat.Twice();
+            //PersonalShifts & meetings
+            Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
+            Expect.Call(c2.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
+            Expect.Call(layerCollection1.Period()).Return(periodToContainAdjacentTo).Repeat.Any();
+            Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+            Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
+            Expect.Call(_personAssignment.PersonalShiftCollection).Return(readOnlyPersonalShifts).Repeat.AtLeastOnce();
+            Expect.Call(personalShift.LayerCollection).Return(layers).Repeat.AtLeastOnce();
+            Expect.Call(layers.Period()).Return(periodToContainAdjacentTo).Repeat.AtLeastOnce();
 
-			Expect.Call(c1.PersonalShiftsAndMeetingsAreInWorkTime(readOnlymeetings, readOnlyAssignments)).Return(false).IgnoreArguments().Repeat.AtLeastOnce();
-			Expect.Call(c2.PersonalShiftsAndMeetingsAreInWorkTime(readOnlymeetings, readOnlyAssignments)).Return(true).IgnoreArguments().Repeat.AtLeastOnce();
+            Expect.Call(c1.PersonalShiftsAndMeetingsAreInWorkTime(readOnlymeetings, readOnlyAssignments)).Return(false).IgnoreArguments().Repeat.AtLeastOnce();
+            Expect.Call(c2.PersonalShiftsAndMeetingsAreInWorkTime(readOnlymeetings, readOnlyAssignments)).Return(true).IgnoreArguments().Repeat.AtLeastOnce();
 
-			_mocks.ReplayAll();
-			IList<IShiftProjectionCache> retShifts = _target.FilterOnPersonalShifts(persons, _scheduleDictionary,_dateOnly, shifts, new WorkShiftFinderResultForTest());
-			
-			retShifts.Count.Should().Be.EqualTo(1);
-			_mocks.VerifyAll();
-		}
+            _mocks.ReplayAll();
+            IList<IShiftProjectionCache> retShifts = _target.FilterOnPersonalShifts(persons, _scheduleDictionary, _dateOnly, shifts, new WorkShiftFinderResultForTest());
+
+            retShifts.Count.Should().Be.EqualTo(1);
+            _mocks.VerifyAll();
+        }
 
         [Test]
         public void GetMaximumPeriodForPersonalShiftsAndMeetingsReturnsNullWhenEmpty()
@@ -752,8 +753,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                var ret = _target.FilterOnPersonalShifts(shifts, _part,_finderResult);
-                Assert.AreEqual(3,ret.Count);
+                var ret = _target.FilterOnPersonalShifts(shifts, _part, _finderResult);
+                Assert.AreEqual(3, ret.Count);
             }
         }
 
@@ -777,12 +778,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var periodToContainAdjacentTo = new DateTimePeriod(start, end);
 
             IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
-            
+
             var meetings = new List<IPersonMeeting>();
             var readOnlymeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
 
             IList<IShiftProjectionCache> retShifts;
-        	var c1 = _mocks.StrictMock<IShiftProjectionCache>();
+            var c1 = _mocks.StrictMock<IShiftProjectionCache>();
             var c2 = _mocks.StrictMock<IShiftProjectionCache>();
 
             shifts.Add(c1);
@@ -805,9 +806,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             using (_mocks.Playback())
             {
-                retShifts = _target.FilterOnPersonalShifts( shifts, _part, new WorkShiftFinderResultForTest());
+                retShifts = _target.FilterOnPersonalShifts(shifts, _part, new WorkShiftFinderResultForTest());
             }
-            
+
             retShifts.Count.Should().Be.EqualTo(1);
         }
 
@@ -817,8 +818,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var minMaxcontractTime = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
             IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
             var ret = _target.Filter(minMaxcontractTime, shifts, _dateOnly, _scheduleRange, new WorkShiftFinderResultForTest());
-            Assert.AreEqual(0,ret.Count);
-            
+            Assert.AreEqual(0, ret.Count);
+
         }
 
         [Test]
@@ -836,8 +837,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             _mocks.ReplayAll();
             var ret = _target.CheckRestrictions(options, effective, _finderResult);
-            Assert.That(ret,Is.False);
-            Assert.That(_finderResult.FilterResults.Count,Is.GreaterThan(0));
+            Assert.That(ret, Is.False);
+            Assert.That(_finderResult.FilterResults.Count, Is.GreaterThan(0));
             _mocks.VerifyAll();
 
         }
@@ -866,7 +867,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             foreach (IWorkShift shift in tmpList)
             {
                 var cache = new ShiftProjectionCache(shift);
-                cache.SetDate(_dateOnly,_cccTimeZoneInfo);
+                cache.SetDate(_dateOnly, _cccTimeZoneInfo);
                 retList.Add(cache);
             }
             return retList;
@@ -885,7 +886,101 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             return new List<IWorkShift> { _workShift1, _workShift2, _workShift3 };
         }
-    
-        
+
+        private IShiftProjectionCache _cashe1;
+        private IShiftProjectionCache _cashe2;
+        private IShiftProjectionCache _cashe3;
+        private IShiftProjectionCache _cashe4;
+
+        readonly TimeSpan _start1 = TimeSpan.FromHours(8);
+		readonly TimeSpan _start2 = TimeSpan.FromHours(7);
+		readonly TimeSpan _start3 = TimeSpan.FromHours(8);
+		readonly TimeSpan _start4 = TimeSpan.FromHours(10);
+
+		readonly TimeSpan _end1 = TimeSpan.FromHours(15);
+		readonly TimeSpan _end2 = TimeSpan.FromHours(16);
+		readonly TimeSpan _end3 = TimeSpan.FromHours(17);
+		readonly TimeSpan _end4 = TimeSpan.FromHours(16);
+
+        private IList<IShiftProjectionCache> getCashes()
+        {
+            _cashe1 = _mocks.DynamicMock<IShiftProjectionCache>();
+            _cashe2 = _mocks.DynamicMock<IShiftProjectionCache>();
+            _cashe3 = _mocks.DynamicMock<IShiftProjectionCache>();
+            _cashe4 = _mocks.DynamicMock<IShiftProjectionCache>();
+            return new List<IShiftProjectionCache> { _cashe1, _cashe2, _cashe3, _cashe4 };
+        }
+
+        [Test]
+        public void CanFilterOnGroupSchedulingCommonStart()
+        {
+
+
+            var shiftList = getCashes();
+			Expect.Call(_cashe1.WorkShiftStartTime).Return(_start1);
+			Expect.Call(_cashe2.WorkShiftStartTime).Return(_start2);
+			Expect.Call(_cashe3.WorkShiftStartTime).Return(_start3);
+			Expect.Call(_cashe4.WorkShiftStartTime).Return(_start4);
+            _mocks.ReplayAll();
+            var possibleStartEndCategory = new PossibleStartEndCategory { StartTime = new TimeSpan(8,0,0) };
+            var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonStart = true };
+
+            var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
+                                                                                                   possibleStartEndCategory,
+                                                                                                   schedulingOptions);
+
+            retShifts.Count.Should().Be.EqualTo(2);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void CanFilterOnGroupSchedulingCommonEnd()
+        {
+
+
+            var shiftList = getCashes();
+            Expect.Call(_cashe1.WorkShiftEndTime ).Return(_end1 );
+			Expect.Call(_cashe2.WorkShiftEndTime).Return(_end2);
+			Expect.Call(_cashe3.WorkShiftEndTime).Return(_end3);
+			Expect.Call(_cashe4.WorkShiftEndTime).Return(_end4);
+            _mocks.ReplayAll();
+            var possibleStartEndCategory = new PossibleStartEndCategory { EndTime  = TimeSpan.FromHours(15) };
+            var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true };
+
+            var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
+                                                                                                   possibleStartEndCategory,
+                                                                                                   schedulingOptions);
+
+            retShifts.Count.Should().Be.EqualTo(1);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void CanFilterOnGroupSchedulingCommonStartEnd()
+        {
+
+
+            var shiftList = getCashes();
+			Expect.Call(_cashe1.WorkShiftStartTime).Return(_start1);
+			Expect.Call(_cashe2.WorkShiftStartTime).Return(_start2);
+			Expect.Call(_cashe3.WorkShiftStartTime).Return(_start3);
+			Expect.Call(_cashe4.WorkShiftStartTime).Return(_start4);
+			Expect.Call(_cashe1.WorkShiftEndTime).Return(_end1);
+			Expect.Call(_cashe2.WorkShiftEndTime).Return(_end2).Repeat.Any();
+			Expect.Call(_cashe3.WorkShiftEndTime).Return(_end3).Repeat.Any();
+			Expect.Call(_cashe4.WorkShiftEndTime).Return(_end4).Repeat.Any();
+            _mocks.ReplayAll();
+			var possibleStartEndCategory = new PossibleStartEndCategory { EndTime = TimeSpan.FromHours(15), StartTime = TimeSpan.FromHours(8) };
+            var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true, UseGroupSchedulingCommonStart = true };
+
+            var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
+                                                                                                   possibleStartEndCategory,
+                                                                                                   schedulingOptions);
+
+            retShifts.Count.Should().Be.EqualTo(1);
+            _mocks.VerifyAll();
+        }
+
+
     }
 }

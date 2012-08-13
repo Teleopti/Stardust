@@ -169,13 +169,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <summary>
         /// Get tooltip for assignments
         /// </summary>
-        /// <param name="cell"></param>
+        /// <param name="scheduleDay"></param>
         /// <returns></returns>
-        public static string GetToolTipAssignments(ISchedulePart cell)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public static string GetToolTipAssignments(IScheduleDay scheduleDay)
         {
             StringBuilder sb = new StringBuilder();
 
-            IList<IPersonAssignment> asses = cell.PersonAssignmentCollection();
+            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollection();
             if (asses.Count > 0)
             {
                 foreach (IPersonAssignment pa in asses)
@@ -184,7 +185,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     if(pa.MainShift != null)
                         sb.Append(pa.MainShift.ShiftCategory.Description.Name);             //name
                     sb.Append("  ");
-                    sb.Append(ToLocalStartEndTimeString(pa.Period,cell.TimeZone));      //time
+                    sb.Append(ToLocalStartEndTimeString(pa.Period,scheduleDay.TimeZone));      //time
 
                     foreach(PersonalShift ps in pa.PersonalShiftCollection) 
                     {
@@ -194,9 +195,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         {
                             sb.AppendLine();
                             sb.Append("    ");
-                            sb.Append(layer.Payload.ConfidentialDescription(pa.Person).Name);                                  //name
+                            sb.Append(layer.Payload.ConfidentialDescription(pa.Person,scheduleDay.DateOnlyAsPeriod.DateOnly).Name);                                  //name
                             sb.Append(": ");
-                            sb.Append(ToLocalStartEndTimeString(layer.Period, cell.TimeZone));             //time
+                            sb.Append(ToLocalStartEndTimeString(layer.Period, scheduleDay.TimeZone));             //time
                         }
                     }
                 }
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 {
                     if (sb.Length > 0) sb.AppendLine();
 
-                    sb.Append(pa.Layer.Payload.ConfidentialDescription(pa.Person).Name); //name
+                    sb.Append(pa.Layer.Payload.ConfidentialDescription(pa.Person,cell.DateOnlyAsPeriod.DateOnly).Name); //name
                     sb.Append(": ");
                     sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, cell.TimeZone));
                 }
@@ -272,7 +273,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (sb.Length > 0) sb.AppendLine();
                 sb.Append(layer.DefinitionSet.Name);
                 sb.Append(": ");
-                sb.Append(layer.Payload.ConfidentialDescription(cell.Person).Name);
+                sb.Append(layer.Payload.ConfidentialDescription(cell.Person,cell.DateOnlyAsPeriod.DateOnly).Name);
                 sb.Append(": ");
                 sb.Append(ToLocalStartEndTimeString(layer.Period, cell.TimeZone));
             }
@@ -402,6 +403,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
 
             if (!end.HasValue) end = selectedPeriod.EndDate;
+            if (!start.HasValue) start = selectedPeriod.StartDate;
             
             return new DateOnlyPeriod(start.Value,end.Value);
 
@@ -610,12 +612,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public static bool CheckOverrideDayOffAndLoadedAndScheduledPeriod(IPerson person, DateOnlyPeriod period)
         {
             IList<ISchedulePeriod> schedulePeriods = person.PersonSchedulePeriods(period);
-            bool isOk = false;
-            foreach (var dateOnly in period.DayCollection())
+            if (period.DayCollection().Select(person.VirtualSchedulePeriod).Any(vPeriod => !vPeriod.IsValid))
             {
-                var vPeriod = person.VirtualSchedulePeriod(dateOnly);
-                if (!vPeriod.IsValid)
-                    return false;
+            	return false;
             }
             foreach (SchedulePeriod schedulePeriod in schedulePeriods)
             {
@@ -623,14 +622,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     return true;
 
                 var startPeriod = schedulePeriod.GetSchedulePeriod(period.StartDate);
-                if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate && !isOk)
+                if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate)
                 {
                     var endPeriod = schedulePeriod.GetSchedulePeriod(period.EndDate);
                     if (endPeriod.HasValue && endPeriod.Value.EndDate == period.EndDate)
-                        isOk = true;
+                        return true;
                 }
             }
-            return isOk;
+            return false;
         }
 
 		public static HashSet<IVirtualSchedulePeriod> ExtractVirtualPeriods(IPerson person, DateOnlyPeriod period)
@@ -685,28 +684,24 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public static bool CheckOverrideTargetTimeLoadedAndScheduledPeriod(IPerson person, DateOnlyPeriod period)
         {
-            IList<ISchedulePeriod> schedulePeriods = person.PersonSchedulePeriods(period);
-            bool isOk = false;
-
-            foreach (var dateOnly in period.DayCollection())
+            var schedulePeriods = person.PersonSchedulePeriods(period);
+            if (period.DayCollection().Select(person.VirtualSchedulePeriod).Any(vPeriod => !vPeriod.IsValid))
             {
-                var vPeriod = person.VirtualSchedulePeriod(dateOnly);
-                if (!vPeriod.IsValid)
-                    return false;
+            	return false;
             }
-            foreach (SchedulePeriod schedulePeriod in schedulePeriods)
+            foreach (ISchedulePeriod schedulePeriod in schedulePeriods)
             {
                 if (!schedulePeriod.IsAverageWorkTimePerDayOverride)
                     return true;
                 var startPeriod = schedulePeriod.GetSchedulePeriod(period.StartDate);
-                if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate && !isOk)
+                if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate)
                 {
                     var endPeriod = schedulePeriod.GetSchedulePeriod(period.EndDate);
                     if (endPeriod.HasValue && endPeriod.Value.EndDate == period.EndDate)
-                        isOk = true;
+                        return true;
                 }
             }
-            return isOk;
+            return false;
         }
 
         #endregion

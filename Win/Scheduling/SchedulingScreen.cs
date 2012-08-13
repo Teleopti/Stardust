@@ -152,7 +152,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _showResult = true;
         private bool _showGraph = true;
         private bool _showRibbonTexts = true;
-    	private bool _gridBeginUpdate;
 
         #endregion
 
@@ -220,8 +219,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private enum OptimizationMethod
         {
             BackToLegalState,
-            ReOptimize,
-            IntradayActivityOptimization
+            ReOptimize
         }
 
         #endregion
@@ -295,9 +293,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             _tmpTimer.Interval = 100;
             _tmpTimer.Enabled = false;
             _tmpTimer.Tick += _tmpTimer_Tick;
-
-			contextMenuViews.Closed += ContextMenuViewsClosed;
-
         }
 
         private void _tmpTimer_Tick(object sender, EventArgs e)
@@ -1313,7 +1308,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, 
                                                            _schedulerState.CommonStateHolder.ShiftCategories, false,
 														   true, _groupPagesProvider, 
-														   _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+                                                           _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions"))
             {
                 if (options.ShowDialog(this) == DialogResult.OK)
                 {
@@ -1333,96 +1328,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         }
 
-        private void ToolStripMenuItemOptimizeActivities_Click(object sender, EventArgs e)
-        {
-            if (_scheduleView == null)
-                return;
-
-            if (_scheduleView.AllSelectedDates().Count == 0)
-                return;
-
-            IOptimizerActivitiesPreferences preferences = new OptimizerActivitiesPreferences();
-            if (_currentSchedulingScreenSettings.OptimizeActivitiesSettings == null)
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings = new OptimizeActivitiesSettings();
-
-            //read settings
-            preferences.KeepShiftCategory =
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepShiftCategory;
-            preferences.KeepStartTime = _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepStartTime;
-            preferences.KeepEndTime = _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepEndTime;
-            preferences.AllowAlterBetween =
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.AllowAlterBetween;
-
-            IList<IActivity> activities = new List<IActivity>();
-            if (_currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids != null)
-            {
-                foreach (Guid id in _currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids
-                    )
-                {
-                    foreach (IActivity activity in SchedulerState.CommonStateHolder.Activities)
-                    {
-                        if (activity.Id.Value == id)
-                            activities.Add(activity);
-                    }
-                }
-            }
-
-            preferences.SetDoNotMoveActivities(activities);
-            preferences.SetActivities(SchedulerState.CommonStateHolder.Activities);
-
-            //remove activities from available activities that are in DoNotMoveActivities
-            foreach (var activity in
-                preferences.DoNotMoveActivities.Where(activity => preferences.Activities.Contains(activity)))
-            {
-                preferences.Activities.Remove(activity);
-            }
-
-            //open gui
-            var optimizeActivitiesForm = new OptimizeActivities(preferences, SchedulerState.DefaultSegmentLength);
-            //TODO Get resolution from appropriate place....
-            optimizeActivitiesForm.ShowDialog();
-
-            //_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)
-            //if not canceling
-            if (!optimizeActivitiesForm.IsCanceled())
-            {
-
-                IList<Guid> guidList = new List<Guid>();
-
-                foreach (IActivity activity in preferences.DoNotMoveActivities)
-                {
-                    guidList.Add(activity.Id.Value);
-                }
-
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepShiftCategory =
-                    preferences.KeepShiftCategory;
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepStartTime = preferences.KeepStartTime;
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.KeepEndTime = preferences.KeepEndTime;
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.AllowAlterBetween =
-                    preferences.AllowAlterBetween;
-                _currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids = guidList;
-
-				var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
-                                                  {
-                                                      OptimizationMethod =
-                                                          OptimizationMethod.IntradayActivityOptimization,
-                                                      OptimizerActivitiesPreferences = preferences
-                                                  };
-
-                //> added by tamasb 2011-10-19 as fix for #16598: Error on optimize activities
-				_optimizerOriginalPreferences.SchedulingOptions.GroupOnGroupPage = _groupPagesProvider.GetGroups(false)[0];
-                    //_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
-				_optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness = _groupPagesProvider.GetGroups(false)[0];
-                    //_scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState)[0];
-				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
-                //<
-
-                startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
-            }
-
-            optimizeActivitiesForm.Close();
-        }
-
         private void toolStripMenuItemReOptimize_Click(object sender, EventArgs e)
         {
             if (_backgroundWorkerRunning) return;
@@ -1432,9 +1337,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_scheduleView.AllSelectedDates().Count == 0)
                     return;
 
-
                 using (var optimizationPreferencesDialog =
-                    new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+                    new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, SchedulerState.CommonStateHolder.Activities, SchedulerState.DefaultSegmentLength))
                 {
                     if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
                     {
@@ -1447,16 +1351,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
                     }
                 }
-                //using (var optimizerOptionsDialog =
-                //    new ResourceOptimizerPreferencesDialog(_optimizerOriginalPreferences,
-                //                                       _schedulerState.CommonStateHolder.ShiftCategories, groupPages,
-                //                                       _currentSchedulingScreenSettings, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
-                //{
-                //    if (optimizerOptionsDialog.ShowDialog(this) == DialogResult.OK)
-                //    {
-                //        startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
-                //    }
-                //}
+               
             }
         }
 
@@ -2856,20 +2751,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region Context menu events
 
-		void ContextMenuViewsClosed(object sender, ToolStripDropDownClosedEventArgs e)
-		{
-			_grid.EndUpdate();
-			_gridBeginUpdate = false;
-		}
-
         private void contextMenuViews_Opening(object sender, CancelEventArgs e)
         {
-			if(!_gridBeginUpdate)
-			{
-				_gridBeginUpdate = true;
-				_grid.BeginUpdate();
-			}
-
             if (_scheduleView == null)
                 e.Cancel = true;
 
@@ -3573,6 +3456,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             setupSkillTabs();
 
+            if (schedulerSplitters1.PinnedPage != null)
+                schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
 
 
             toolStripStatusLabelStatus.Text = Resources.ReadyThreeDots;
@@ -4432,7 +4317,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             	{
 					using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences,
 																			_schedulerState.CommonStateHolder.ShiftCategories,
-																			 false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+																			 false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions"))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
@@ -4471,7 +4356,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
                 using (var options =
 					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ShiftCategories,
-						false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+						false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptionsActivities"))
                 {
                     if (options.ShowDialog(this) == DialogResult.OK)
                     {
@@ -4547,7 +4432,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private class SchedulingAndOptimizeArgument
         {
             public IList<IScheduleDay> ScheduleDays { get; private set; }
-            public IOptimizerActivitiesPreferences OptimizerActivitiesPreferences;
             public OptimizationMethod OptimizationMethod { get; set; }
 			public IDaysOffPreferences DaysOffPreferences { get; set; }
 
@@ -4715,11 +4599,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             string statusText = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingProgress, _totalScheduled, 0);
             toolStripStatusLabelStatus.Text = statusText;
             _grid.Invalidate();
+			refreshSummarySkillIfActive();
             _skillIntradayGridControl.RefreshGrid();
             _skillDayGridControl.RefreshGrid();
 			refreshChart();
             statusStrip1.Refresh();
-
             Application.DoEvents();
 
             _inUpdate = false;
@@ -4837,7 +4721,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		    IGroupPageLight selectedGroupPage = null;
             // ***** temporary cope
-            if(options.OptimizationMethod == OptimizationMethod.BackToLegalState || options.OptimizationMethod == OptimizationMethod.IntradayActivityOptimization)
+            if(options.OptimizationMethod == OptimizationMethod.BackToLegalState )
             {
                 selectedGroupPage = _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness;
             }
@@ -4894,12 +4778,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
                     break;
-                case OptimizationMethod.IntradayActivityOptimization:
 
-                    _scheduleOptimizerHelper.ReOptimizeIntradayActivity(_backgroundWorkerOptimization,
-                                                                        options.OptimizerActivitiesPreferences,
-                                                                        selectedSchedules, schedulingOptions);
-                    break;
             }
 
             _undoRedo.CommitBatch();
@@ -5860,6 +5739,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     return 3;
                 case ForecastSource.MaxSeatSkill:
                     return 5;
+				case ForecastSource.Retail:
+					return 6;
                 default:
                     return 2;
             }
@@ -6658,6 +6539,28 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
+		private void refreshSummarySkillIfActive()
+		{
+			var tab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
+            var skill = (ISkill) tab.Tag;
+            IAggregateSkill aggregateSkillSkill = skill;
+			if(!aggregateSkillSkill.IsVirtual)
+				return;
+			if (_intradayMode)
+			{
+				var skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
+					aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate,
+																							  _currentIntraDayDate.
+																								  AddDays(1),
+																							  _schedulerState.
+																								  TimeZoneInfo));
+				if (_skillIntradayGridControl.Presenter.RowManager != null)
+					_skillIntradayGridControl.Presenter.RowManager.SetDataSource(skillStaffPeriods);
+			}
+			else
+				_skillDayGridControl.SetDataSource(_schedulerState, skill);	
+		}
+
         private void drawIntraday(ISkill skill, IAggregateSkill aggregateSkillSkill)
         {
             IList<ISkillStaffPeriod> skillStaffPeriods;
@@ -6960,7 +6863,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _grid.SupportsPrepareViewStyleInfo = true;
 
-            _grid.Refresh();
+            _grid.Invalidate();
         }
 
         private void replyAndDenyRequestFromRequestDetailsView(
@@ -7823,9 +7726,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                      rightToLeft, detail, this, singleFile, path);   
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
-            "CA1303:Do not pass literals as localized parameters",
-            MessageId = "System.Windows.Forms.FileDialog.set_Filter(System.String)")]
         private void ToolStripMenuItemExportToPdfMouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;

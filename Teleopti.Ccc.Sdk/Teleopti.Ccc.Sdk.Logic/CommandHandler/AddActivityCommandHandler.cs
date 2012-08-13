@@ -21,8 +21,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISaveSchedulePartService _saveSchedulePartService;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
+    	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-    	public AddActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
+    	public AddActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
             _activityRepository = activityRepository;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _unitOfWorkFactory = unitOfWorkFactory;
             _saveSchedulePartService = saveSchedulePartService;
         	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
+    		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -46,7 +48,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
                     new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
-                var scheduleDay = scheduleDictionary[person].ScheduledDay(startDate);
+				
+				var scheduleRange = scheduleDictionary[person];
+				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+				var scheduleDay = scheduleRange.ScheduledDay(startDate);
                 
                 IShiftCategory shiftCategory;
                 var personAssignment = scheduleDay.PersonAssignmentCollection().FirstOrDefault();
@@ -62,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                                                       _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
 
                 scheduleDay.CreateAndAddActivity(activityLayer, shiftCategory);
-                _saveSchedulePartService.Save(uow, scheduleDay);
+				_saveSchedulePartService.Save(scheduleDay, rules);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();

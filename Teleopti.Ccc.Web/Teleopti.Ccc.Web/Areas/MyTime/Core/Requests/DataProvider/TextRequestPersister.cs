@@ -2,6 +2,8 @@ using System;
 using System.Web;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -42,8 +44,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			var personRequest = _personRequestRepository.Find(id);
 			if (personRequest == null)
-				throw new HttpException(404, "PersonRequest not found");
-			_personRequestRepository.Remove(personRequest);
+				throw new RequestPersistException(404, "PersonRequest not found", Resources.Request);
+			try
+			{
+				_personRequestRepository.Remove(personRequest);
+			}
+			catch (DataSourceException)
+			{
+				throw new RequestPersistException(404, Resources.RequestCannotUpdateDelete, Resources.Request);
+			}
+		}
+	}
+
+
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly"), Serializable]
+	public class RequestPersistException : HttpException
+	{
+		public string Shortmessage { get; set; }
+
+		public RequestPersistException(int httpCode, string message, string shortmessage)
+			: base(httpCode, message)
+		{
+			Shortmessage = shortmessage;
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -30,14 +31,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             if (skillStaffPeriod == null)
                 return;
 
-            IAggregateSkillStaffPeriod aggregate = (IAggregateSkillStaffPeriod)skillStaffPeriod;
+            var aggregate = (IAggregateSkillStaffPeriod)skillStaffPeriod;
             if(aggregate.AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.Ok)
                 return;
 
             if(aggregate.AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.BothBroken)
             {
                 cellInfo.Style.Interior = ColorHelper.SeriousOverstaffingBrush;
-                cellInfo.Style.CellTipText = UserTexts.Resources.MaximumAgents + "/r/n" + UserTexts.Resources.MinimumAgents;
+                cellInfo.Style.CellTipText = UserTexts.Resources.MaximumAgents + Environment.NewLine + UserTexts.Resources.MinimumAgents;
             }
 
             if(aggregate.AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.MinStaffBroken)

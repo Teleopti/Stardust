@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -147,9 +148,10 @@ namespace Teleopti.Interfaces.Domain
         /// Filters on main shift optimize activities specification.
         /// </summary>
         /// <param name="shiftList">The shift list.</param>
+        /// <param name="mainShiftActivitiesOptimizeSpecification"> </param>
         /// <returns></returns>
         IList<IShiftProjectionCache> FilterOnMainShiftOptimizeActivitiesSpecification(
-            IList<IShiftProjectionCache> shiftList);
+            IList<IShiftProjectionCache> shiftList,ISpecification< IMainShift > mainShiftActivitiesOptimizeSpecification );
 
     	///<summary>
     	/// Filter on Business Rules on all Persons in List
@@ -178,11 +180,20 @@ namespace Teleopti.Interfaces.Domain
     	                                                    IScheduleDictionary scheduleDictionary, DateOnly dateOnly,
     	                                                    IList<IShiftProjectionCache> shiftList,
     	                                                    IWorkShiftFinderResult finderResult);
+
+
         /// <summary>
-        /// Sets the main shift optimize activities specification.
+        /// 
         /// </summary>
-        /// <param name="mainShiftOptimizeActivitiesSpecification">The main shift optimize activities specification.</param>
-        void SetMainShiftOptimizeActivitiesSpecification(
-            ISpecification<IMainShift> mainShiftOptimizeActivitiesSpecification);
+        /// <param name="shiftList"></param>
+        /// <param name="possibleStartEndCategory"></param>
+        /// <param name="schedulingOptions"></param>
+        /// <returns></returns>
+        IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd(IList<IShiftProjectionCache> shiftList,
+                                                                           IPossibleStartEndCategory
+                                                                               possibleStartEndCategory,
+                                                                           ISchedulingOptions schedulingOptions);
+        
+
     }
 }

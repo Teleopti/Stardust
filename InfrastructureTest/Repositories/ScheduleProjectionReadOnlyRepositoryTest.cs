@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var period =
 				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			target.AddProjectedLayer(DateOnly.Today, scenario, person.Id.GetValueOrDefault(),
-			                         new VisualLayerFactory().CreateShiftSetupLayer(activity,period));
+			                         new VisualLayerFactory().CreateShiftSetupLayer(activity,period,person));
 			
 			using (NHibernateUnitOfWork unitOfWork = (NHibernateUnitOfWork) UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var period =
 				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			target.AddProjectedLayer(DateOnly.Today, scenario, person.Id.GetValueOrDefault(),
-									 layerFactory.CreateAbsenceSetupLayer(absence,layerFactory.CreateShiftSetupLayer(activity,period),period));
+									 layerFactory.CreateAbsenceSetupLayer(absence,layerFactory.CreateShiftSetupLayer(activity,period,person),period));
 
 			using (NHibernateUnitOfWork unitOfWork = (NHibernateUnitOfWork)UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{

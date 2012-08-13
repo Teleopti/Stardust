@@ -485,14 +485,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldNotAddContractDayOffWhenRestrictionWorkday()
+		public void ShouldNotAddContractDayOffWhenNotAllowedForDayOffs()
 		{
 			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 																				 new EndTimeLimitation(),
 																				 new WorkTimeLimitation(TimeSpan.FromHours(5), TimeSpan.FromHours(9))
 																				 , null, null, null,
 																				 new List<IActivityRestriction>());
-
+			effectiveRestriction.NotAllowedForDayOffs = true;
             effectiveRestriction.NotAvailable = true;
 
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };

@@ -562,5 +562,10 @@ namespace Teleopti.Ccc.Win.Meetings
         {
             DateIsChanged();
         }
+
+        private void MeetingSchedulesView_Resize(object sender, EventArgs e)
+        {
+            gridControlSchedules.Refresh();
+        }
     }
 }

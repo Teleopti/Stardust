@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -40,8 +37,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private SchedulePartFactoryForDomain _scheduleRange;
         private Collection<ActivityLayerDto> _activityLayerDtoCollection;
         private Collection<IMainShiftActivityLayer> _mainShiftActivityLayerCollection;
+    	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -53,7 +51,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _personRepository = _mock.StrictMock<IPersonRepository>();
             _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
-            _target = new NewMainShiftCommandHandler(_unitOfWorkFactory,_shiftCategoryRepository,_mainActivityLayerAssembler,_scheduleRepository,_scenarioRepository,_personRepository,_saveSchedulePartService,_messageBrokerEnablerFactory);
+    		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
+
+            _target = new NewMainShiftCommandHandler(_unitOfWorkFactory,_shiftCategoryRepository,_mainActivityLayerAssembler,_scheduleRepository,_scenarioRepository,_personRepository,_saveSchedulePartService,_messageBrokerEnablerFactory, _businessRulesForPersonalAccountUpdate);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
@@ -83,7 +83,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var schedulePart = _scheduleRange.CreatePart();
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
             var dictionary = _mock.DynamicMock<IScheduleDictionary>();
-            
+        	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
+
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -96,7 +97,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
                 Expect.Call(_shiftCategoryRepository.Load(_newMainShiftCommandDto.ShiftCategoryId)).Return(_shiftCategory);
-                Expect.Call(()=>_saveSchedulePartService.Save(unitOfWork, schedulePart));
+				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
+                Expect.Call(()=>_saveSchedulePartService.Save(schedulePart, rules));
             }
             using(_mock.Playback())
             {
@@ -112,6 +114,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var schedulePart = _scheduleRange.CreatePart();
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
 
 			using (_mock.Record())
 			{
@@ -125,7 +128,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
 				Expect.Call(_shiftCategoryRepository.Load(_newMainShiftCommandDto.ShiftCategoryId)).Return(_shiftCategory);
-				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, schedulePart));
+				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
+				Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules));
 			}
 			using (_mock.Playback())
 			{

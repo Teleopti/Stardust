@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Collection
@@ -14,19 +15,21 @@ namespace Teleopti.Ccc.DomainTest.Collection
         private ISpecification<IVisualLayerCollection> target;
         private IActivity payload;
         private IVisualLayerFactory visualLayerFactory;
+    	private IPerson person;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             visualLayerFactory = new VisualLayerFactory();
-            payload = new Activity("sdfsdf");
+            payload = ActivityFactory.CreateActivity("sdfsdf");
+        	person = PersonFactory.CreatePerson();
             target = VisualLayerCollectionSpecification.OneSpecificLayer(payload);
         }
 
         [Test]
         public void VerifyEmptyReturnFalse()
         {
-            VisualLayerCollection coll = new VisualLayerCollection(null, new List<IVisualLayer>(), new ProjectionPayloadMerger());
+            VisualLayerCollection coll = new VisualLayerCollection(person, new List<IVisualLayer>(), new ProjectionPayloadMerger());
             Assert.IsFalse(target.IsSatisfiedBy(coll));
         }
 
@@ -34,21 +37,21 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void VerifyMoreThanOneReturnFalse()
         {
             IList<IVisualLayer> vList = new List<IVisualLayer> { createLayer(payload), createLayer(payload) };
-            Assert.IsFalse(target.IsSatisfiedBy(new VisualLayerCollection(null, vList, new ProjectionPayloadMerger())));
+            Assert.IsFalse(target.IsSatisfiedBy(new VisualLayerCollection(person, vList, new ProjectionPayloadMerger())));
         }
 
         [Test]
         public void VerifyWrongPayload()
         {
             IList<IVisualLayer> vList = new List<IVisualLayer> { createLayer(payload), createAbseLayer(new Absence()) };
-            Assert.IsFalse(target.IsSatisfiedBy(new VisualLayerCollection(null, vList, new ProjectionPayloadMerger())));
+            Assert.IsFalse(target.IsSatisfiedBy(new VisualLayerCollection(person, vList, new ProjectionPayloadMerger())));
         }
 
         [Test]
         public void VerifyCorrectPayload()
         {
             IList<IVisualLayer> vList = new List<IVisualLayer> { createLayer(payload) };
-            Assert.IsTrue(target.IsSatisfiedBy(new VisualLayerCollection(null, vList, new ProjectionPayloadMerger())));
+            Assert.IsTrue(target.IsSatisfiedBy(new VisualLayerCollection(person, vList, new ProjectionPayloadMerger())));
         }
 
         [Test]
@@ -60,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
         private IVisualLayer createLayer(IActivity activity)
         {
-            return visualLayerFactory.CreateShiftSetupLayer(activity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+            return visualLayerFactory.CreateShiftSetupLayer(activity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1), person);
         }
 
         private IVisualLayer createAbseLayer(IAbsence abs)

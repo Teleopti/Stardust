@@ -100,6 +100,7 @@
       <DependentUpon>PreferencesExtended.feature</DependentUpon>
     </Compile>
     <Compile Include="AbsenceRequestFromRequestStepDefinitions.cs" />
+    <Compile Include="Data\User\ShiftsForTwoWeeksWithDifferentActivities.cs" />
     <Compile Include="ManageRequestStepDefinitions.cs" />
     <Compile Include="Data\User\DoNotHavePersonPeriods.cs" />
     <Compile Include="Data\User\DoNotHaveSchedulePeriods.cs" />
@@ -140,7 +141,7 @@
     <Compile Include="Data\User\RuleSetBag.cs" />
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\User\BaseShiftCategory.cs" />
-    <Compile Include="Data\User\UserWithoutResReportServiceLevelAndAgentsReadyAccess.cs" />
+    <Compile Include="Data\User\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
     <Compile Include="MobileSignInStepDefinitions.cs" />
     <Compile Include="Data\User\AbsenceToday.cs" />
     <Compile Include="Data\User\AgentWithoutTeamDataAccess.cs" />

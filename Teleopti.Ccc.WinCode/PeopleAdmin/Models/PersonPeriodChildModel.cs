@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -447,14 +446,19 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				{
 					return ContainedEntity.BudgetGroup;
 				}
-				return null;
+				return PersonPeriodModel.NullBudgetGroup;
 			}
 			set
 			{
 				if (ContainedEntity != null)
+				{
+					if (value == PersonPeriodModel.NullBudgetGroup)
+					{
+						value = null;
+					}
 					ContainedEntity.BudgetGroup = value;
+				}
 			}
 		}
-
     }
 }

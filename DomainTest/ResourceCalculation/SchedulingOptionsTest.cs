@@ -45,13 +45,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IDayOffTemplate template = new DayOffTemplate(new Description("template"));
             _target.DayOffTemplate = template;
             Assert.AreEqual(template, _target.DayOffTemplate);
-            Assert.AreEqual(OptimizationRestriction.None, _target.RescheduleOptions);
-            _target.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
-            Assert.AreEqual(OptimizationRestriction.KeepShiftCategory, _target.RescheduleOptions);
-            _target.SpecificStartAndEndTime = new DateTimePeriod();
-            Assert.IsNull(_target.SpecificStartAndEndTime);
-            _target.RescheduleOptions = OptimizationRestriction.KeepStartAndEndTime;
-            Assert.AreEqual(new DateTimePeriod(), _target.SpecificStartAndEndTime);
             _target.ShiftCategory = category;
             _target.UseBlockScheduling = BlockFinderType.BetweenDayOff;
             Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.UseBlockScheduling);

@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             List<ITemplateTaskPeriod> result = new List<ITemplateTaskPeriod>();
 
-            if (_skill.SkillType.ForecastSource == ForecastSource.InboundTelephony)
+            if (_skill.SkillType.ForecastSource == ForecastSource.InboundTelephony ||_skill.SkillType.ForecastSource==ForecastSource.Retail)
             {
                 var unsortedOpenTaskPeriods = new List<ITemplateTaskPeriod>();
                 foreach (var workloadDay in skillDay.WorkloadDayCollection)

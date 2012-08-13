@@ -194,9 +194,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
                 else
                 {
-                    gridRow = new SkillDayGridRowMinMaxIssuesSummary(_rowManager, "TimeCell", "ScheduledHours",
-                                                                     UserTexts.Resources.ScheduledHours);
-                    gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+					gridRow = new SkillDayGridRowMinMaxIssuesSummary(_rowManager, "TimeCell", "ScheduledHours",
+					UserTexts.Resources.ScheduledHours);
+                    
+					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                     _gridRows.Add(_rowManager.AddRow(gridRow));
                 }
 
@@ -262,6 +263,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             this.Rows.HeaderCount = 1;
         }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void SetDataSource(ISchedulerStateHolder stateHolder,ISkill skill)
+		{
+			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection();
+			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
+
+			// in ViewPoint
+			var timeZone = stateHolder.TimeZoneInfo;
+			// user timeZone
+			var userTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			var diff = userTimeZone.BaseUtcOffset - timeZone.BaseUtcOffset;
+			var viewPointPeriod = stateHolder.RequestedPeriod.Period().MovePeriod(diff);
+
+			dateTimePeriods = viewPointPeriod.WholeDayCollection();
+			var dataSource = createDataSourceDictionary(dateTimePeriods, stateHolder, skill);
+
+			_rowManager.SetDataSource(new List<IDictionary<DateTime, IList<ISkillStaffPeriod>>> { dataSource });
+		}
 
         public void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
         {
@@ -276,18 +295,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection();
                 _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
                 createGridRows(skill, _dates, stateHolder);
-
-                // in ViewPoint
-                var timeZone = stateHolder.TimeZoneInfo;
-                // user timeZone
-                var userTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-                var diff = userTimeZone.BaseUtcOffset - timeZone.BaseUtcOffset;
-                var viewPointPeriod = stateHolder.RequestedPeriod.Period().MovePeriod(diff);
-
-                dateTimePeriods = viewPointPeriod.WholeDayCollection();
-                var dataSource = createDataSourceDictionary(dateTimePeriods, stateHolder, skill);
-
-                _rowManager.SetDataSource(new List<IDictionary<DateTime, IList<ISkillStaffPeriod>>> {dataSource});
+            	SetDataSource(stateHolder, skill);
                 ColCount = _dates.Count;
                 RowCount = _gridRows.Count - 1;
                 ColWidths[0] = RowHeaderWidth;

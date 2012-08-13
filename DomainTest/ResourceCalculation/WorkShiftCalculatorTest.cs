@@ -4,9 +4,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -18,11 +18,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IVisualLayerFactory _layerFactory;
         private MockRepository _mocks;
     	private IWorkShiftCalculator _target;
+    	private IPerson _person;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
+        	_person = PersonFactory.CreatePerson();
             _layerFactory = new VisualLayerFactory();
             _mocks = new MockRepository();
 			_target = new WorkShiftCalculator();
@@ -37,14 +39,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45));
             DateTimePeriod period4 = new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60));
 
-            IActivity activity1 = new Activity("ittan") { RequiresSkill = false };
+        	IActivity activity1 = ActivityFactory.CreateActivity("ittan");
+			activity1.RequiresSkill = false;
 
-            IActivity activity2 = new Activity("tvåan") { RequiresSkill = false };
+        	IActivity activity2 = ActivityFactory.CreateActivity("tvåan");
+			activity2.RequiresSkill = false;
 
-            IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, period1);
-            IVisualLayer layer2 = _layerFactory.CreateShiftSetupLayer(activity2, period2);
-            IVisualLayer layer3 = _layerFactory.CreateShiftSetupLayer(activity1, period3);
-            IVisualLayer layer4 = _layerFactory.CreateShiftSetupLayer(activity1, period4);
+            IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, period1,_person);
+            IVisualLayer layer2 = _layerFactory.CreateShiftSetupLayer(activity2, period2,_person);
+            IVisualLayer layer3 = _layerFactory.CreateShiftSetupLayer(activity1, period3,_person);
+            IVisualLayer layer4 = _layerFactory.CreateShiftSetupLayer(activity1, period4, _person);
 
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1, layer2, layer3, layer4 };
@@ -70,14 +74,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             WorkShiftCalculator calculator = new WorkShiftCalculator();
             calculator.CalculateShiftValue(layerCollection, skillStaffPeriods,4, true, true);
-
         }
-
 
         [Test]
         public void VerifyThatFindLongerShiftForUnderstaffingSituation()
         {
-
             int resolution = 15;
             double lengthFactor = 8;
 
@@ -96,37 +97,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsTrue(result2 > result1);
             Assert.IsTrue(result3 > result2);
         }
-
-        //[Test]
-        //public void VerifyThatChosenShiftShiftDifferentWithDifferentLengthFactorInUnderstaffingSituation()
-        //{
-
-        //    int resolution = 15;
-
-        //    //starting test: all are equal if length factor is normal
-        //    double lengthFactor = 4; 
-        //    double oldPeriodValue1 = -70d;
-        //    double oldPeriodValue2 = -80d;
-        //    double oldPeriodValue3 = -90d;
-        //    int resourceInMinutes1 = 420;
-        //    int resourceInMinutes2 = 480;
-        //    int resourceInMinutes3 = 540;
-            
-        //    double result1 = _target.CalculateShiftValueForPeriod(oldPeriodValue1, resourceInMinutes1, lengthFactor, resolution);
-        //    double result2 = _target.CalculateShiftValueForPeriod(oldPeriodValue2, resourceInMinutes2, lengthFactor, resolution);
-        //    double result3 = _target.CalculateShiftValueForPeriod(oldPeriodValue3, resourceInMinutes3, lengthFactor, resolution);
-
-        //    Assert.IsTrue(result1 == result2);
-        //    Assert.IsTrue(result2 == result3);
-
-        //    //different length factors
-        //    result1 = _target.CalculateShiftValueForPeriod(oldPeriodValue1, resourceInMinutes1, 1, resolution);
-        //    result2 = _target.CalculateShiftValueForPeriod(oldPeriodValue2, resourceInMinutes2, 4, resolution);
-        //    result3 = _target.CalculateShiftValueForPeriod(oldPeriodValue3, resourceInMinutes3, 8, resolution);
-
-        //    Assert.IsTrue(result2 > result1);
-        //    Assert.IsTrue(result3 > result2);
-        //}
 
         [Test]
         public void VerifyCalculateShiftValueCalculationIsExact()
@@ -359,10 +329,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
             DateTimePeriod period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
 
-            IActivity activity1 = new Activity("ittan");
+            IActivity activity1 = ActivityFactory.CreateActivity("ittan");
             activity1.RequiresSkill = true;
 
-            IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(_date, _date.AddMinutes(60)));
+            IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(_date, _date.AddMinutes(60)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
@@ -386,11 +356,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
             DateTimePeriod period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
             
-            IActivity activity1 = new Activity("ittan");
-            IActivity activity2 = new Activity("tvåan");
+            IActivity activity1 = ActivityFactory.CreateActivity("ittan");
+            IActivity activity2 = ActivityFactory.CreateActivity("tvåan");
             activity1.RequiresSkill = true;
 
-            IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(_date, _date.AddMinutes(60)));
+            IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(_date, _date.AddMinutes(60)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
@@ -414,11 +384,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
             DateTimePeriod period4 = new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60));
 
-            IActivity activity1 = new Activity("ittan");
+            IActivity activity1 = ActivityFactory.CreateActivity("ittan");
             activity1.RequiresSkill = false;
 
 
-            IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(_date, _date.AddMinutes(60)));
+            IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(_date, _date.AddMinutes(60)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
@@ -443,19 +413,18 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyCalculateWhenPeriodOnLayerNotTheSameAsDataHolder()
         {
-
             DateTimePeriod period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
             DateTimePeriod oddPeriod1 = new DateTimePeriod(_date.AddMinutes(5), _date.AddMinutes(10));
             DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45));
             DateTimePeriod period4 = new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60));
 
-            IActivity activity1 = new Activity("ittan") { RequiresSkill = false };
+        	IActivity activity1 = ActivityFactory.CreateActivity("ittan");
+			activity1.RequiresSkill = false;
 
-
-            IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, oddPeriod1);
+            IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, oddPeriod1, _person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
 
             SkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, null);
 
@@ -489,16 +458,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(90));
             DateTimePeriod period4 = new DateTimePeriod(_date.AddMinutes(90), _date.AddMinutes(120));
 
-            IActivity activityPhone = new Activity("phone");
+            IActivity activityPhone = ActivityFactory.CreateActivity("phone");
             activityPhone.RequiresSkill = true;
 
-            IActivity activityBreak = new Activity("ShortBreak");
+            IActivity activityBreak = ActivityFactory.CreateActivity("ShortBreak");
             activityBreak.RequiresSkill = false;
 
-            IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)));
+            IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
             // only 15 minutes
-            IVisualLayer layerBreak = _layerFactory.CreateShiftSetupLayer(activityBreak, new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(75)));
-            IVisualLayer layerBreak2 = _layerFactory.CreateShiftSetupLayer(activityBreak, new DateTimePeriod(_date.AddMinutes(75), _date.AddMinutes(90)));
+            IVisualLayer layerBreak = _layerFactory.CreateShiftSetupLayer(activityBreak, new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(75)),_person);
+            IVisualLayer layerBreak2 = _layerFactory.CreateShiftSetupLayer(activityBreak, new DateTimePeriod(_date.AddMinutes(75), _date.AddMinutes(90)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone, layerBreak };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
@@ -514,7 +483,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             dataHolders.Add(period3.StartDateTime, dataHolder3);
             dataHolders.Add(period4.StartDateTime, dataHolder4);
 
-            
             Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activityPhone, dataHolders);
 
@@ -528,10 +496,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var result2 = calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, 4, true, true);
 
-            
             Assert.AreEqual(-1890, result);
             Assert.AreEqual(result, result2);
-
         }
 
         [Test]
@@ -542,9 +508,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
             DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(450));
 
-            IActivity activityPhone = new Activity("phone") {RequiresSkill = true};
+        	IActivity activityPhone = ActivityFactory.CreateActivity("phone");
+			activityPhone.RequiresSkill = true;
 
-            IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)));
+            IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
             
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
@@ -593,14 +560,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
             DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(450));
 
-            IActivity activityPhone = new Activity("phone") { RequiresSkill = true };
+        	IActivity activityPhone = ActivityFactory.CreateActivity("phone");
+			activityPhone.RequiresSkill = true;
 
-            IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)));
+            IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            IVisualLayer layerPhone2 = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)));
+            IVisualLayer layerPhone2 = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
 
             IList<IVisualLayer> layers2 = new List<IVisualLayer> { layerPhone2 };
             IVisualLayerCollection layerCollection2 = new VisualLayerCollection(null, layers2, new ProjectionPayloadMerger());
@@ -662,16 +630,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
             DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45));
 
-            IActivity activityPhone = new Activity("phone") { RequiresSkill = true };
+        	IActivity activityPhone = ActivityFactory.CreateActivity("phone");
+			activityPhone.RequiresSkill = true;
 
-            IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)));
+            IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
-
-            //IPeriodDistribution distr1 = _mocks.StrictMock<IPeriodDistribution>();
-            //IPeriodDistribution distr2 = _mocks.StrictMock<IPeriodDistribution>();
-            //IPeriodDistribution distr3 = _mocks.StrictMock<IPeriodDistribution>();
 
             SkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, null);
             SkillStaffPeriodDataHolder dataHolder2 = new SkillStaffPeriodDataHolder(5, 80, period2, 1, 5, 0, null);

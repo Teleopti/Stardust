@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.WinCode.Common
     /// <summary>
     /// Class to help when filtering
     /// </summary>
+    [Serializable]
     public class FilterAdvancedTupleItem
     {
         private string _text;

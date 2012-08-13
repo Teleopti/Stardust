@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_groupPage1Key = "Key1";
 			_groupPage2Key = "Key2";
 			_groupPage1 = new GroupPageLight{Key =_groupPage1Key};
-			//_groupPage2 = new GroupPage(_groupPage2Key);
-
+			
 			_groupPages = new List<IGroupPageLight> { _groupPage1 };
 			_target = new ExtraPreferencesPersonalSettings();
 			_extraPreferencesSource = new ExtraPreferences();
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.MapTo(_extraPreferencesTarget, _groupPages);
 			Assert.AreEqual(BlockFinderType.BetweenDayOff, _extraPreferencesTarget.BlockFinderTypeValue);
-			Assert.AreEqual(0.8d, _extraPreferencesTarget.KeepShiftsValue);
+			
 		}
 
 		[Test]
@@ -47,12 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_extraPreferencesSource.UseBlockScheduling = !_extraPreferencesSource.UseBlockScheduling;
 			_extraPreferencesSource.UseTeams = !_extraPreferencesSource.UseTeams;
 
-			_extraPreferencesSource.KeepShiftCategories = !_extraPreferencesSource.KeepShiftCategories;
-			_extraPreferencesSource.KeepStartAndEndTimes = !_extraPreferencesSource.KeepStartAndEndTimes;
-			_extraPreferencesSource.KeepShifts = !_extraPreferencesSource.KeepShifts;
-
-			_extraPreferencesSource.KeepShiftsValue = 101d;
-			_extraPreferencesSource.FairnessValue = 102d;
+            _extraPreferencesSource.FairnessValue = 102d;
 
 			_target.MapFrom(_extraPreferencesSource);
 			_target.MapTo(_extraPreferencesTarget, _groupPages);
@@ -61,12 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(_extraPreferencesSource.UseBlockScheduling, _extraPreferencesTarget.UseBlockScheduling);
 			Assert.AreEqual(_extraPreferencesSource.UseTeams, _extraPreferencesTarget.UseTeams);
 
-			Assert.AreEqual(_extraPreferencesSource.KeepShiftCategories, _extraPreferencesTarget.KeepShiftCategories);
-			Assert.AreEqual(_extraPreferencesSource.KeepStartAndEndTimes, _extraPreferencesTarget.KeepStartAndEndTimes);
-			Assert.AreEqual(_extraPreferencesSource.KeepShifts, _extraPreferencesTarget.KeepShifts);
-
-			Assert.AreEqual(_extraPreferencesSource.KeepShiftsValue, _extraPreferencesTarget.KeepShiftsValue);
-			Assert.AreEqual(_extraPreferencesSource.FairnessValue, _extraPreferencesTarget.FairnessValue);
+            Assert.AreEqual(_extraPreferencesSource.FairnessValue, _extraPreferencesTarget.FairnessValue);
 		}
 
 		[Test]

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IApplicationRole SupervisorRole;
 		public static IApplicationRole SupervisorRoleSecondBusinessUnit;
 
-		public static IApplicationRole AgentRoleWithoutResReportServiceLevelAndAgentsReady;
+		public static IApplicationRole AgentRoleWithoutResReportScheduledAndActualAgents;
 		
 		public static IApplicationRole AgentRoleOnlyWithOwnData;
 		public static IApplicationRole AgentRoleWithSiteData;
@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IApplicationRole AdministratorRoleWithEveryoneData;
 
 		public static IActivity ActivityPhone;
+		public static IActivity ActivityShortBreak;
 		public static IActivity ActivityLunch;
 		public static IActivity ActivityTraining;
 

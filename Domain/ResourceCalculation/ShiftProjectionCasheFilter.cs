@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -10,26 +12,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class ShiftProjectionCacheFilter : IShiftProjectionCacheFilter
     {
         private readonly ILongestPeriodForAssignmentCalculator _rules;
-        private ISpecification<IMainShift> _mainShiftOptimizeActivitiesSpecification;
 
         public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules)
-            : this(rules, new All<IMainShift>())
-        {}
-
-        public void SetMainShiftOptimizeActivitiesSpecification(ISpecification<IMainShift> mainShiftOptimizeActivitiesSpecification)
         {
-            _mainShiftOptimizeActivitiesSpecification = mainShiftOptimizeActivitiesSpecification;
+        	_rules = rules;
         }
 
-        public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, 
-            ISpecification<IMainShift> mainShiftOptimizeActivitiesSpecification )
-        {
-            _rules = rules;
-            _mainShiftOptimizeActivitiesSpecification = mainShiftOptimizeActivitiesSpecification;
-        }
-
-        
-        public IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, 
+    	public IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, 
             IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IList<IShiftCategory> notAllowedCategories, IWorkShiftFinderResult finderResult)
         {
             if (restriction == null)
@@ -51,17 +40,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
              return FilterOnRestrictionMinMaxWorkTime(shiftList, restriction, finderResult);
            }
 
-        public IList<IShiftProjectionCache> FilterOnMainShiftOptimizeActivitiesSpecification(IList<IShiftProjectionCache> shiftList)
+        public IList<IShiftProjectionCache> FilterOnMainShiftOptimizeActivitiesSpecification(IList<IShiftProjectionCache> shiftList, ISpecification<IMainShift> mainShiftActivitiesOptimizeSpecification)
         {
 
             IList<IShiftProjectionCache> ret = new List<IShiftProjectionCache>();
-            foreach (var shiftProjectionCache in shiftList)
-            {
-                if(_mainShiftOptimizeActivitiesSpecification.IsSatisfiedBy(shiftProjectionCache.TheMainShift))
-                    ret.Add(shiftProjectionCache);
-            }
+		    if (shiftList != null)
+		        foreach (var shiftProjectionCache in shiftList)
+		        {
+                    if (mainShiftActivitiesOptimizeSpecification != null && mainShiftActivitiesOptimizeSpecification.IsSatisfiedBy(shiftProjectionCache.TheMainShift))
+		                ret.Add(shiftProjectionCache);
+		        }
 
-            return ret;
+		    return ret;
         }
 
 
@@ -446,5 +436,34 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 			return shiftList;
     	}
+
+        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList, IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
+        {
+            if (schedulingOptions == null) return shiftList;
+
+            if (possibleStartEndCategory == null) return shiftList;
+
+			if (!schedulingOptions.UseGroupSchedulingCommonStart && !schedulingOptions.UseGroupSchedulingCommonEnd) return shiftList;
+
+             var finalShiftList = new List< IShiftProjectionCache >();
+
+            if (schedulingOptions.UseGroupSchedulingCommonStart && schedulingOptions.UseGroupSchedulingCommonEnd)
+            {
+                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime && possibleStartEndCategory.EndTime  == shift.WorkShiftEndTime ));
+                
+            }
+            else if (schedulingOptions.UseGroupSchedulingCommonStart)
+            {
+
+				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime));
+            }
+            else if (schedulingOptions.UseGroupSchedulingCommonEnd)
+            {
+				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.EndTime == shift.WorkShiftEndTime));
+            }
+
+            return finalShiftList;
+
+        }      
     }
 }

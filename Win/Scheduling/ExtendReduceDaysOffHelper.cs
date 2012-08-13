@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private readonly ILifetimeScope _container;
         private BackgroundWorker _backgroundWorker;
-        private IWorkShiftFinderResultHolder _allResults;
+        private readonly IWorkShiftFinderResultHolder _allResults;
 
         public ExtendReduceDaysOffHelper(ILifetimeScope container)
         {
@@ -144,6 +144,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
                 ICheckerRestriction checkerRestriction = new RestrictionChecker();
                 IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, checkerRestriction, optimizerPreferences, originalStateListForScheduleTag[i]);
+				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
                 IExtendReduceDaysOffOptimizer optimizer = new ExtendReduceDaysOffOptimizer(
                     personalSkillsPeriodValueCalculator, 
@@ -165,7 +166,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     conflictHandler, 
                     dayOffOptimizerValidator,
                     optimizationOverLimitDecider,
-                    schedulingOptionsCreator);
+                    schedulingOptionsCreator,
+					mainShiftOptimizeActivitySpecificationSetter);
 
                 optimizers.Add(optimizer);
             }

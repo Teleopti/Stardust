@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
 using Teleopti.Ccc.Win.Forecasting.Forms.SkillPages;
 using Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages;
 using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages;
@@ -188,19 +190,40 @@ namespace Teleopti.Ccc.Win.Common
         /// </remarks>
         public static IList<IPropertyPage> GetMultisiteSkillDistributionPages()
         {
-            return new List<IPropertyPage>()
+            return new List<IPropertyPage>
                             {
                                 new MultisiteDistributions()
                             };
         }
 
-        public static IList<IPropertyPageNoRoot<ExportMultisiteSkillToSkillCommandModel>> GetExportAcrossBusinessUnitsPages()
+        public static SelectExportType GetExportSkillFirstPage(Action<bool> pageChange)
         {
-            return new List<IPropertyPageNoRoot<ExportMultisiteSkillToSkillCommandModel>>{
-                                                                                               new SelectMultisiteSkills(),
-                                                                                               new SelectDestination(),
-                                                                                               new SelectDateRange()
-                                                                                           };
+            return new SelectExportType(pageChange);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage ("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        public static IList<IPropertyPageNoRoot<ExportSkillModel>> GetExportAcrossBusinessUnitsPages(SelectExportType firstPage)
+        {
+            return new List<IPropertyPageNoRoot<ExportSkillModel>>
+                       {
+                           firstPage,
+                           new SelectMultisiteSkills(),
+                           new SelectDestination(),
+                           new SelectDateRange()
+                       };
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage ("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        public static IList<IPropertyPageNoRoot<ExportSkillModel>> GetExportSkillToFilePages(SelectExportType firstPage)
+        {
+            return new List<IPropertyPageNoRoot<ExportSkillModel>>
+                       {
+                           firstPage,
+                           new SelectSkills(),
+                           new SelectDateAndScenario(),
+                           new SelectFileDestination(),
+                           new FileExportFinished()
+                       };
         }
     }
 }

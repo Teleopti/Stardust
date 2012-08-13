@@ -150,10 +150,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
             string timeAsText;
             if (!GetTimeInformation(out timeAsText, out timeOfDay))
             {
-                if (!DesignMode)
-                {
-                    throw new ArgumentException(UserTexts.Resources.MustSpecifyValidTime);
-                }
+                return TimeSpan.Zero;
             }
             return timeOfDay;
         }

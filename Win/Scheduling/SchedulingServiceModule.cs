@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         	builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().
         		InstancePerLifetimeScope();
         	builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupShiftLengthDecider>().As<IGroupShiftLengthDecider>().InstancePerLifetimeScope();
             builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 
             builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>().InstancePerLifetimeScope();
@@ -97,7 +98,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<GroupSchedulingService>().As<IGroupSchedulingService>().InstancePerLifetimeScope();
             builder.RegisterType<GroupPersonsBuilder>().As<IGroupPersonsBuilder>().InstancePerLifetimeScope();
             builder.RegisterType<GroupPersonFactory>().As<IGroupPersonFactory>().InstancePerLifetimeScope();
-            builder.RegisterType<GroupPersonShiftCategoryConsistentChecker>().As<IGroupPersonShiftCategoryConsistentChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupPersonConsistentChecker>().As<IGroupPersonConsistentChecker>().InstancePerLifetimeScope();
             builder.RegisterType<WorkShiftFinderResultHolder>().As<IWorkShiftFinderResultHolder>().InstancePerLifetimeScope();
 
             builder.RegisterType<WorkShiftWeekMinMaxCalculator>().As<IWorkShiftWeekMinMaxCalculator>().InstancePerLifetimeScope();
@@ -107,9 +108,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<WorkShiftBackToLegalStateBitArrayCreator>().As<IWorkShiftBackToLegalStateBitArrayCreator>().InstancePerLifetimeScope();
             builder.RegisterType<WorkShiftBackToLegalStateServicePro>().As<IWorkShiftBackToLegalStateServicePro>().InstancePerLifetimeScope();
             //need some refactoring in ctor
-            //builder.RegisterType<DayOffDecisionMakerExecuter>().As<IDayOffDecisionMakerExecuter>().InstancePerLifetimeScope();
-            
-            builder.RegisterType<IntradayActivityOptimizerService>().As<IIntradayActivityOptimizerService>().InstancePerLifetimeScope();
 
             //groupOpt
             builder.RegisterType<GroupPersonSameForPersonOnDateChecker>().As<IGroupPersonSameForPersonOnDateChecker>().InstancePerLifetimeScope();
@@ -143,12 +141,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<GroupScheduleGroupPageDataProvider>().InstancePerLifetimeScope();
 
             builder.RegisterType<GroupMatrixContainerCreator>().As<IGroupMatrixContainerCreator>().InstancePerLifetimeScope();
+			
 
             builder.RegisterType<BlockOptimizerBlockCleaner>().As<IBlockOptimizerBlockCleaner>().InstancePerLifetimeScope();
             builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().InstancePerLifetimeScope();
 
 			builder.RegisterType<SchedulerGroupPagesProvider>().As<ISchedulerGroupPagesProvider>().InstancePerLifetimeScope();
 
+			builder.RegisterType<BestGroupValueExtractorThreadFactory>().As<IBestGroupValueExtractorThreadFactory>().InstancePerLifetimeScope();
+			builder.RegisterType<PossibleCombinationsOfStartEndCategoryCreator>().As<IPossibleCombinationsOfStartEndCategoryCreator>().InstancePerLifetimeScope();
+			builder.RegisterType<PossibleCombinationsOfStartEndCategoryRunner>().As<IPossibleCombinationsOfStartEndCategoryRunner>().InstancePerLifetimeScope();
         }
 
     }

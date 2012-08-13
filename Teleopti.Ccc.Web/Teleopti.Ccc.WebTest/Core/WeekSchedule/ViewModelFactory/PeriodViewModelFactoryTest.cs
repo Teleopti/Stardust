@@ -27,8 +27,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         private IVisualLayerFactory factory;
         private IActivity activity;
         private IVisualLayer visualActivityLayer;
+    	private TimePeriod minMaxTime;
+    	private IPerson person;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
@@ -44,7 +46,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             activity = ActivityFactory.CreateActivity("Phone");
             activity.SetId(Guid.NewGuid());
 
-            visualActivityLayer = factory.CreateShiftSetupLayer(activity, period);
+			minMaxTime = new TimePeriod(8, 0, 19, 0);
+
+            visualActivityLayer = factory.CreateShiftSetupLayer(activity, period, person);
 
             target = new PeriodViewModelFactory();
         }
@@ -52,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         private void setPrincipal()
         {
             principalBefore = System.Threading.Thread.CurrentPrincipal;
-            var person = PersonFactory.CreatePerson();
+            person = PersonFactory.CreatePerson();
             person.PermissionInformation.SetDefaultTimeZone(timeZone);
             System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
 					 new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
@@ -68,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             }
             using (mocks.Playback())
             {
-                var result = target.CreatePeriodViewModels(visualLayerCollection);
+				var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime);
 
                 var layerDetails = result.Single();
                 layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
@@ -76,6 +80,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.Title.Should().Be.EqualTo("Phone");
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Should().Be.Null();
+				layerDetails.Color.Should().Be.EqualTo("0,128,0");
+				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
+				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
         }
 
@@ -92,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             }
             using (mocks.Playback())
             {
-                var result = target.CreatePeriodViewModels(visualLayerCollection);
+				var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime);
 
                 var layerDetails = result.Single();
                 layerDetails.StyleClassName.Should().Be.EqualTo("color_FF0000");
@@ -100,6 +107,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.Title.Should().Be.EqualTo("Holiday");
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Should().Be.Null();
+				layerDetails.Color.Should().Be.EqualTo("255,0,0");
+				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
+				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
         }
 
@@ -116,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             }
             using (mocks.Playback())
             {
-                var result = target.CreatePeriodViewModels(visualLayerCollection);
+				var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime);
 
                 var layerDetails = result.Single();
                 layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
@@ -124,6 +134,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.Title.Should().Be.EqualTo("Phone");
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Should().Be.Null();
+				layerDetails.Color.Should().Be.EqualTo("0,128,0");
+				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
+				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
         }
 
@@ -142,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             }
             using (mocks.Playback())
             {
-                var result = target.CreatePeriodViewModels(visualLayerCollection);
+				var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime);
 
                 var layerDetails = result.Single();
                 layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
@@ -151,6 +164,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Title.Should().Be.EqualTo("subj");
                 layerDetails.Meeting.Location.Should().Be.EqualTo("loc");
+				layerDetails.Color.Should().Be.EqualTo("0,128,0");
+				layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
+				layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
             }
         }
 

@@ -3,7 +3,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Forecasting
 {
-
     /// <summary>
     /// Handles word replacement for non Telephony skills
     /// </summary>
@@ -24,28 +23,30 @@ namespace Teleopti.Ccc.WinCode.Forecasting
         {
             get { return _wordDictionary; }
         }
+
         private void GetWords(ISkillType skillType)
         {
             BaseSetUp();
 
-            switch (skillType.ForecastSource)
-            {
-                case ForecastSource.Email:
-                    EmailSetUp();
-                    break;
-                case ForecastSource.Facsimile:
-                    FacsimileSetUp();
-                    break;
-                case ForecastSource.Backoffice:
-                    BackofficeSetUp();
-                    break;
-                case ForecastSource.Time:
-                    BackofficeSetUp();
-                    break;
-                default:
-                    PhoneSetUp();
-                    break;
-            }
+			switch (skillType.ForecastSource)
+			{
+				case ForecastSource.Email:
+					EmailSetUp();
+					break;
+				case ForecastSource.Facsimile:
+					FacsimileSetUp();
+					break;
+				case ForecastSource.Backoffice:
+				case ForecastSource.Time:
+					BackofficeSetUp();
+					break;
+				case ForecastSource.Retail:
+					RetailSetUp();
+					break;
+				default:
+					PhoneSetUp();
+					break;
+			}
         }
 
         private void BaseSetUp()
@@ -65,6 +66,16 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.HandlingTime);
             _wordDictionary.Add("ForecastedHandlingTime", UserTexts.Resources.ForecastedHandlingTime);//
             _wordDictionary.Add("ActualHandlingTime", UserTexts.Resources.ActualHandlingTime);//
+
+			_wordDictionary.Add("MinimumAgents", UserTexts.Resources.MinimumAgents);
+			_wordDictionary.Add("MaximumAgents", UserTexts.Resources.MaximumAgents);
+			_wordDictionary.Add("Agents", UserTexts.Resources.Agents);
+			_wordDictionary.Add("AgentsWithShrinkage", UserTexts.Resources.AgentsWithShrinkage);
+			_wordDictionary.Add("ActualAgents", UserTexts.Resources.ActualAgents);
+			_wordDictionary.Add("ForecastedAgents", UserTexts.Resources.ForecastedAgents);
+			_wordDictionary.Add("ScheduledStaff", UserTexts.Resources.ScheduledStaff);
+			_wordDictionary.Add("ForecastedAgentsIncoming", UserTexts.Resources.ForecastedAgentsIncoming);
+			_wordDictionary.Add("ScheduledAgentsIncoming", UserTexts.Resources.ScheduledAgentsIncoming);
         }
 
         private void EmailSetUp()
@@ -94,8 +105,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("DeviationCallsColon", UserTexts.Resources.DeviationEmailsColon);
             _wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationHandlingTimeColon);
             _wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationAEWColon);
-
         }
+
         private void BackofficeSetUp()
         {
             _wordDictionary.Add("Tasks", UserTexts.Resources.Tasks);
@@ -124,6 +135,48 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationHandlingTimeColon);
             _wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationATWColon);
         }
+
+		private void RetailSetUp()
+		{
+			_wordDictionary.Add("Tasks", UserTexts.Resources.Customers);
+			_wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalCustomers);
+			_wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW);
+			_wordDictionary.Add("AverageAfterTaskTime", UserTexts.Resources.ACW);
+			_wordDictionary.Add("CampaignTaskTime", UserTexts.Resources.CampaignTalkTimePercentSign);
+			_wordDictionary.Add("CampaignAfterTaskTime", UserTexts.Resources.CampaignACWPercentSign);
+			_wordDictionary.Add("CampaignTasks", UserTexts.Resources.CampaignCustomersPercent);
+			_wordDictionary.Add("TotalStatisticCalculatedTasks", UserTexts.Resources.CalculatedCustomers);
+			_wordDictionary.Add("TotalStatisticAbandonedTasks", UserTexts.Resources.WalkAways);
+			_wordDictionary.Add("TotalStatisticAnsweredTasks", UserTexts.Resources.ServedCustomers);
+			_wordDictionary.Add("TotalStatisticAverageAfterTaskTime", UserTexts.Resources.ACW);
+			_wordDictionary.Add("TaskIndex", UserTexts.Resources.IndexCustomers);
+			_wordDictionary.Add("TalkTimeIndex", UserTexts.Resources.IndexTalkTime);
+			_wordDictionary.Add("AfterTalkTimeIndex", UserTexts.Resources.IndexAfterCustomerWork);
+			_wordDictionary.Add("OriginalTasks", UserTexts.Resources.OriginalOfferedCustomers);
+			_wordDictionary.Add("AverageTasks", UserTexts.Resources.AverageCustomers);
+			_wordDictionary.Add("OriginalAverageAfterTaskTime", UserTexts.Resources.OriginalAfterCustomerWork);
+			_wordDictionary.Add("AverageAfterWorkTime", UserTexts.Resources.AverageAfterCustomerWork);
+			_wordDictionary.Add("ValidatedAverageAfterTaskTime", UserTexts.Resources.ValidatedAfterCustomerWork);
+			_wordDictionary.Add("ValidatedTasks", UserTexts.Resources.ValidatedCustomers);
+			_wordDictionary.Add("ForecastedTasks", UserTexts.Resources.ForecastedCustomers);
+			_wordDictionary.Add("OfferedTasks", UserTexts.Resources.OfferedCustomers);
+			_wordDictionary.Add("DeviationCallsColon", UserTexts.Resources.DeviationCustomersColon);
+			_wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationTalkTimeColon);
+			_wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationACWColon);
+
+			_wordDictionary["MinimumAgents"]=UserTexts.Resources.MinimumEmployees;
+			_wordDictionary["MaximumAgents"] = UserTexts.Resources.MaximumEmployees;
+			_wordDictionary["Agents"]=UserTexts.Resources.Employees;
+			_wordDictionary["AgentsWithShrinkage"] = UserTexts.Resources.EmployeesWithShrinkage;
+			_wordDictionary["AgentsInc"] = UserTexts.Resources.EmployeesInc;
+			_wordDictionary["AgentsIncWithShrinkage"] = UserTexts.Resources.EmployeesIncWithShrinkage;
+			_wordDictionary["ActualAgents"] = UserTexts.Resources.ActualEmployees;
+			_wordDictionary["ForecastedAgents"] = UserTexts.Resources.ForecastedEmployees;
+			_wordDictionary["ScheduledStaff"] = UserTexts.Resources.ScheduledEmployees;
+			_wordDictionary["ForecastedAgentsIncoming"] = UserTexts.Resources.ForecastedEmployeesIncoming;
+			_wordDictionary["ScheduledAgentsIncoming"] = UserTexts.Resources.ScheduledEmployeesIncoming;
+		}
+
         private void FacsimileSetUp()
         {
             _wordDictionary.Add("Tasks", UserTexts.Resources.Facsimiles);
@@ -152,6 +205,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationHandlingTimeColon);
             _wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationAFWColon);
         }
+
         private void PhoneSetUp()
         {
             _wordDictionary.Add("Tasks", UserTexts.Resources.Calls);
@@ -180,7 +234,5 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationHandlingTimeColon);
             _wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationACWColon);
         }
-
-    
     }
 }

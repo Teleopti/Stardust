@@ -58,7 +58,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Session.Flush();
             Session.Clear();
             Assert.AreEqual(45, rep.FindValueByKey(key, dummyValue()).Data);
+            
         }
+
+        
 
         [Test]
         public void IncorrectVersionShouldSilentlyReturnDefaultValue()
@@ -75,6 +78,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(result.GetType().Equals(typeof(testData2)));
             Assert.AreEqual(14, result.Data);
         }
+
+
+        //keeplaests
+        [Test]
+        public void VerifyPersistSettingKeyValueWhenOld()
+        {
+            const string key = "theOne";
+            testData aNewOne = rep.FindValueByKey(key, dummyValue());
+
+            aNewOne.Data = 45;
+            rep.PersistSettingValue(key, aNewOne);
+            Session.Flush();
+            Session.Clear();
+            Assert.AreEqual(45, rep.FindValueByKey(key, dummyValue()).Data);
+
+        }
+
+        [Test]
+        public void IncorrectVersionShouldSilentlyReturnDefaultKeyValue()
+        {
+            const string key = "theOne";
+            testData aNewOne = rep.FindValueByKey(key, dummyValue());
+            aNewOne.Data = 45;
+            rep.PersistSettingValue(key, aNewOne);
+
+            rep.PersistSettingValue(key, aNewOne);
+            Session.Flush();
+            Session.Clear();
+
+            testData2 secondDefault = new testData2 { Data = 14 };
+            testData2 result = rep.FindValueByKey(key, secondDefault);
+            Assert.IsTrue(result.GetType().Equals(typeof(testData2)));
+            Assert.AreEqual(14, result.Data);
+        }
+        
 
         private static testData dummyValue()
         {

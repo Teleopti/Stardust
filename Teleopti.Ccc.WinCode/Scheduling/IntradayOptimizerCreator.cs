@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 IRestrictionExtractor restrictionExtractor =
 					new RestrictionExtractor(_schedulingResultStateHolder);
                 IEffectiveRestrictionCreator effectiveRestrictionCreator =
-                    new EffectiveRestrictionCreator(restrictionExtractor, new KeepRestrictionCreator());
+                    new EffectiveRestrictionCreator(restrictionExtractor);
 
                 IScheduleMatrixOriginalStateContainer workShiftStateContainer = _workShiftStateContainerList[index];
 
@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, _optimizerPreferences, originalStateContainer);
 
                 ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
+				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
                 IIntradayOptimizer2 optimizer =
                     new IntradayOptimizer2(
@@ -95,7 +96,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         new ResourceCalculateDaysDecider(),  
                         optimizerOverLimitDecider,
                         workShiftStateContainer,
-                        schedulingOptionsCreator);
+                        schedulingOptionsCreator,
+						mainShiftOptimizeActivitySpecificationSetter);
 
                 result.Add(optimizer);
             }

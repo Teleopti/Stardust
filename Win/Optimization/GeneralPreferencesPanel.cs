@@ -175,5 +175,8 @@ namespace Teleopti.Ccc.Win.Optimization
             setNumericUpDownAvailabilitiesStatus();
             setNumericUpDownStudentAvailabilitiesStatus();
         }
+
+       
     }
+
 }

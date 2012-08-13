@@ -103,13 +103,13 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=1.5.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.1.5\lib\Net35\MbCache.dll</HintPath>
+      <HintPath>..\packages\MbCache.1.6\lib\Net35\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.5.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.1.5\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\packages\MbCache.1.6\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -199,6 +199,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddAbsenceCommandTest.cs" />
     <Compile Include="Budgeting\BudgetPermissionServiceTest.cs" />
     <Compile Include="Budgeting\BudgetDayGapFillerTest.cs" />
     <Compile Include="Budgeting\BudgetDayProviderTest.cs" />
@@ -295,6 +296,7 @@
     <Compile Include="Common\PersonPicker\SelectablePersonViewModelTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesNoRootTest.cs" />
     <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
+    <Compile Include="Common\RequestPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Common\RestoreFocusWhenCompletedTest.cs" />
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
     <Compile Include="Common\ScheduleContractTimeCalculatorTest.cs" />
@@ -362,12 +364,17 @@
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProviderTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsWizardPagesTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportForecastToFileSettingsProviderTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportForecastToFileSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModelTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportSkillModelTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportSkillWizardPagesTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ImportForecastModelTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ImportForecastPresenterTest.cs" />
     <Compile Include="Forecasting\ImportForecast\SaveImportForecastFileCommandTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ValidateImportForecastFileCommandTest.cs" />
     <Compile Include="Forecasting\JobHistoryPresenterTest.cs" />
+    <Compile Include="Forecasting\JobResultProviderTest.cs" />
     <Compile Include="Forecasting\SkillPages\SkillGeneralPresenterTest.cs" />
     <Compile Include="Grouping\CommandProviderTest.cs" />
     <Compile Include="Grouping\Commands\AddGroupPageCommandTest.cs" />
@@ -568,7 +575,6 @@
     <Compile Include="Scheduler\IntradayOptimizer2CreatorTest.cs" />
     <Compile Include="Scheduler\MoveTimeOptimizerCreatorTest.cs" />
     <Compile Include="Scheduler\NotesEditorViewModelTest.cs" />
-    <Compile Include="Scheduler\OptimizerActivitiesPreferencesPresenterTest.cs" />
     <Compile Include="Scheduler\Panels\LengthToDateCalculatorTest.cs" />
     <Compile Include="Scheduler\PersistConflictTest.cs" />
     <Compile Include="Scheduler\NotSkillGroupSpecificationTest.cs" />
@@ -850,6 +856,10 @@
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Win\Teleopti.Ccc.Win.csproj">
+      <Project>{26C57CBE-E75F-42C9-9747-8016AEB305F2}</Project>
+      <Name>Teleopti.Ccc.Win</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

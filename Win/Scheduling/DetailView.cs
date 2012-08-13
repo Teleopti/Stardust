@@ -107,18 +107,18 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         //draw absences
-        private static void drawAbsenceFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
+        private static void drawAbsenceFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
         {
-            IVisualLayerCollection layerCollection = scheduleRange.ProjectionService().CreateProjection();
+            IVisualLayerCollection layerCollection = scheduleDay.ProjectionService().CreateProjection();
 
-            var absenceCollection = scheduleRange.PersonAbsenceCollection();
+            var absenceCollection = scheduleDay.PersonAbsenceCollection();
             for (int i = 0; i < absenceCollection.Count; i++)
             {
                 IPersonAbsence pa = absenceCollection[i];
-                Rectangle absRect = DetailViewHelper.GetAbsRect(e.Bounds, ViewBaseHelper.GetAbsenceDisplayMode(pa, scheduleRange, layerCollection));
+                Rectangle absRect = DetailViewHelper.GetAbsRect(e.Bounds, ViewBaseHelper.GetAbsenceDisplayMode(pa, scheduleDay, layerCollection));
                 absRect.Offset(0, e.Bounds.Y + e.Bounds.Height - ((ABSENCEHEIGHT + ABSENCESPACE) * (absenceCollection.Count - i)));
 
-                using (var brush = new SolidBrush(pa.Layer.Payload.ConfidentialDisplayColor(scheduleRange.Person)))
+                using (var brush = new SolidBrush(pa.Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly)))
                 {
                     e.Graphics.FillRectangle(brush, absRect);
                 }

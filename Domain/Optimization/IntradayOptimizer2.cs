@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -32,8 +34,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+    	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
-        public IntradayOptimizer2(
+    	public IntradayOptimizer2(
             IScheduleResultDailyValueCalculator dailyValueCalculator,
             IScheduleResultDataExtractor personalSkillsDataExtractor, 
             IIntradayDecisionMaker decisionMaker, 
@@ -47,7 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceCalculateDaysDecider decider,
             IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer, 
-            ISchedulingOptionsCreator schedulingOptionsCreator)
+            ISchedulingOptionsCreator schedulingOptionsCreator,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
         {
             _dailyValueCalculator = dailyValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -63,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
             _workShiftOriginalStateContainer = workShiftOriginalStateContainer;
             _schedulingOptionsCreator = schedulingOptionsCreator;
+        	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
         }
 
         public bool Execute()
@@ -82,6 +87,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
+
+			IMainShift originalShift =
+				_workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder().MainShift;
+			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, dateToBeRemoved);
 
             _rollbackService.ClearModificationCollection();
 
@@ -185,7 +194,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
 
-			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer))
+			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer, null))
             {
 				var days = _rollbackService.ModificationCollection;
                 _rollbackService.Rollback();
@@ -202,7 +211,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!_workShiftOriginalStateContainer.WorkShiftChanged(day))
             {
-                _rollbackService.Modify(_workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+                _rollbackService.Modify( _workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
             }
 
             return true;

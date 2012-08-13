@@ -12,16 +12,6 @@ namespace Teleopti.Interfaces.Domain
     public interface IRequestApprovalService
     {
         /// <summary>
-        /// Gets the scenario.
-        /// </summary>
-        /// <value>The scenario.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-07-01
-        /// </remarks>
-        IScenario Scenario { get; }
-
-        /// <summary>
         /// Approves the absence.
         /// </summary>
         /// <param name="absence">The absence.</param>

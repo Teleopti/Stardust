@@ -24,7 +24,17 @@
             <ColumnDefinition Width="15"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <ComboBox IsEditable="True" ItemsSource="{Binding Path=SelectableEndTimes}"  Grid.ColumnSpan="2" KeyboardNavigation.ControlTabNavigation="Continue"
-                  KeyboardNavigation.TabIndex="0"/>
+                  KeyboardNavigation.TabIndex="0">
+            <ComboBox.SelectedItem>
+                <MultiBinding Converter="{StaticResource startDateTimeToLocalStringConverter}" ConverterParameter="{StaticResource TimeMode}" Mode="TwoWay">
+                    <MultiBinding.Bindings>
+                        <Binding Path="End"/>
+                        <Binding RelativeSource="{RelativeSource Self}" Path="(GuiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </ComboBox.SelectedItem>
+        </ComboBox>
+        
         <TextBox Grid.Column="0" KeyboardNavigation.IsTabStop="True">
             <TextBox.Text>
                 <MultiBinding Converter="{StaticResource startDateTimeToLocalStringConverter}" 

@@ -58,6 +58,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(44, rep.FindValueByKey("roger", defaultValue).Data);
         }
 
+
+        [Test]
+        public void VerifyFindKeyValueByKeyWhenNew()
+        {
+            setupFields();
+
+            testData s = rep.FindValueByKey("roger", defaultValue);
+            s.Data = 44;
+            Assert.AreEqual(((ISettingValue)s).BelongsTo, rep.PersistSettingValue(s));
+            Session.Flush();
+            Session.Clear();
+            Assert.AreEqual(44, rep.FindValueByKey("roger", defaultValue).Data);
+        }
+
         [Test]
         public void VerifyPersistSettingValueWhenOld()
         {
@@ -68,6 +82,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Session.Clear();
             Assert.AreEqual(45, rep.FindValueByKey(personalForPerson.Key, defaultValue).Data);
         }
+
+
 
         [Test]
         public void ShouldCreateRepositoryWithFactory()
@@ -118,6 +134,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
+        public void SimulateTwoThreadsCreatingNewPersonalSettingLastShouldWinKey()
+        {
+            defaultValue = new testData();
+            SkipRollback();
+            rep = new PersonalSettingDataRepository(UnitOfWork);
+            testData looser = rep.FindValueByKey("roger", defaultValue);
+            looser.Data = -100;
+            testData winner = rep.FindValueByKey("roger", defaultValue);
+            winner.Data = 100;
+            try
+            {
+                rep.PersistSettingValue("roger",looser);
+                UnitOfWork.PersistAll();
+
+                using (IUnitOfWork secondUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    rep = new PersonalSettingDataRepository(secondUow);
+                    rep.PersistSettingValue("roger",winner);
+                    secondUow.PersistAll();
+                }
+                using (IUnitOfWork readUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    rep = new PersonalSettingDataRepository(readUow);
+                    testData read = rep.FindValueByKey("roger", defaultValue);
+                    Assert.AreEqual(winner.Data, read.Data);
+                    Assert.AreEqual(((ISettingValue)winner).BelongsTo, ((ISettingValue)read).BelongsTo);
+                }
+
+            }
+            finally
+            {
+                using (IUnitOfWork cleanUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    new Repository(cleanUow).Remove(((ISettingValue)winner).BelongsTo);
+                    cleanUow.PersistAll();
+                }
+            }
+
+        }
+
+        [Test]
         public void VerifyLargeDataAmountPersonalData()
         {
             var data = new largeData(20000);
@@ -130,6 +187,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(20000, loaded.ByteSize());
             Assert.IsTrue(loaded.LastByte());
         }
+
+       
 
         [Serializable]
         private class largeData : SettingValue

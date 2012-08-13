@@ -5,6 +5,17 @@
 	height: 100%; 
 	position: absolute; 
 	top: -1px; 
+	border-top: 1px solid #dfdfdf;
+	border-right: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
+}
+.rgba .ui-connector
+{
+	background: #f8f8f8;
+	width: 20px; 
+	height: 100%; 
+	position: absolute; 
+	top: -1px; 
 	border-top: 1px solid rgba(0, 0, 0, 0.15);
 	border-right: 1px solid rgba(0, 0, 0, 0.15);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
@@ -27,4 +38,12 @@
 	background-image: url(../Images/ajax-loader-small.gif);
 	background-repeat: no-repeat;
 	background-position: center
+}
+.ui-arrow-border-right 
+{
+	border-right: 1px solid #dfdfdf;
+}
+.rbga .ui-arrow-border-right 
+{
+	border-right: 1px solid rgba(0, 0, 0, 0.15);
 }

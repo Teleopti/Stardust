@@ -65,3 +65,11 @@
 	line-height: 1em;
 	font-size: 0.8em;
 }
+
+.icon.preference-warning 
+{
+	background: transparent url(../Images/icon_sprite.png) -159px -54px no-repeat;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+}

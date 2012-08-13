@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -20,9 +20,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private bool _usePreferences;
         private bool _preferencesDaysOnly;
         private bool _addContractScheduleDaysOff = true;
-        private DateTimePeriod? _specificStartAndEndTime;
-        private OptimizationRestriction _rescheduleOptions = OptimizationRestriction.None;
         private BlockFinderType _blockFinderType;
+		private ISpecification<IMainShift> _mainShiftOptimizeActivitySpecification;
         public bool UseMinimumPersons { get; set; }
         public bool UseMaximumPersons { get; set; }
         public bool OnlyShiftsWhenUnderstaffed { get; set; }
@@ -46,11 +45,28 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	public int ResourceCalculateFrequency { get; set; }
     	public TimeSpan? UseCustomTargetTime { get; set; }
     	public bool ShowTroubleshot { get; set; }
+		public bool UseGroupSchedulingCommonStart { get; set; }
+		public bool UseGroupSchedulingCommonEnd { get; set; }
+		public bool UseGroupSchedulingCommonCategory { get; set; }
 
-		public SchedulingOptions()
+    	
+    	public ISpecification<IMainShift> MainShiftOptimizeActivitySpecification
+    	{
+    		get
+    		{
+				if(_mainShiftOptimizeActivitySpecification == null)
+					return  new All<IMainShift>();
+
+    			return _mainShiftOptimizeActivitySpecification;
+    		}
+    		set { _mainShiftOptimizeActivitySpecification = value; }
+    	}
+
+    	public SchedulingOptions()
 		{
-			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>());
-			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>(), new List<IGroupPageLight>());
+			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>());
+			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>());
+            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>());
 		}
 
     	public BlockFinderType UseBlockScheduling
@@ -62,12 +78,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 if(_blockFinderType != BlockFinderType.None)
                     ShiftCategory = null;
             }
-        }
-
-        public OptimizationRestriction RescheduleOptions
-        {
-            get { return _rescheduleOptions; }
-            set { _rescheduleOptions = value; }
         }
 
         public bool AddContractScheduleDaysOff
@@ -167,17 +177,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return _availabilityDaysOnly;
             }
             set { _availabilityDaysOnly = value; }
-        }
-
-        public DateTimePeriod? SpecificStartAndEndTime
-        {
-            get { 
-                if(RescheduleOptions != OptimizationRestriction.KeepStartAndEndTime)
-                    return null;
-
-                return _specificStartAndEndTime;
-            }
-            set { _specificStartAndEndTime = value; }
         }
 
         /// <summary>

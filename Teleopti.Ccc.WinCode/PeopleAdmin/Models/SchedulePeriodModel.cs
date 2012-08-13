@@ -342,7 +342,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             {
                 if (_currentSchedulePeriod == null)
                     return -1;
-                return _currentSchedulePeriod.GetDaysOff(_currentSchedulePeriod.DateFrom);
+				if (!_currentSchedulePeriod.DaysOff.HasValue)
+					return -1;
+				return _currentSchedulePeriod.DaysOff.Value;
             }
             set
             {

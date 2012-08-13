@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am user with partial access to reports")]
 		public void GivenIAmUserWithPartialAccessToReports()
 		{
-			UserFactory.User().Setup(new UserWithoutResReportServiceLevelAndAgentsReadyAccess());
+			UserFactory.User().Setup(new UserWithoutResReportScheduledAndActualAgentsAccess());
 		}
 		
 		[Given(@"I am an agent in a team with access to the whole site")]
@@ -436,6 +436,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIHaveAScheduleForTwoWeeks()
 		{
 			UserFactory.User().Setup(new ShiftsForTwoWeeks());
+		}
+
+		[Given(@"I have custom shifts scheduled on wednesday for two weeks:")]
+		public void GivenIHaveCustomShiftsScheduledOnWednesdayForTwoWeeks(Table table)
+		{
+			UserFactory.User().Setup(new ShiftsForTwoWeeksWithDifferentActivities());
+		}
+
+		[Given(@"I have shifts scheduled with different activities for two weeks")]
+		public void GivenIHaveShiftsScheduledWithDifferentActivitiesForTwoWeeks()
+		{
+			UserFactory.User().Setup(new ShiftsForTwoWeeksWithDifferentActivities());
 		}
 
 		[Given(@"I have a shift today")]

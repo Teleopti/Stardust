@@ -2266,6 +2266,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             toolStripButtonShowGraph.Checked = !toolStripButtonShowGraph.Checked;
             SplitterManager.ShowGraph = toolStripButtonShowGraph.Checked;
             _showGraph = toolStripButtonShowGraph.Checked;
+            splitContainer2.Panel1.Controls.Remove(_chartControl);
+            addChart();
         }
         private void toolStripButtonShowSkillView_Click(object sender, EventArgs e)
         {
@@ -2408,7 +2410,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void backgroundWorkerSave_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            toolStripProgressBarMain.Value++;
+            var progressBarIncrement = toolStripProgressBarMain.Value;
+            if (progressBarIncrement + 1 >= toolStripProgressBarMain.Minimum && progressBarIncrement + 1 <= toolStripProgressBarMain.Maximum)
+                toolStripProgressBarMain.Value++;
         }
 
         private void backgroundWorkerSave_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

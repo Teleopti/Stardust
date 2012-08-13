@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -242,14 +243,11 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             {
                 _target.LoadModelCollection();
 
-                Assert.AreEqual(typeof (ActivityAbsoluteStartExtender),
-                                _target.ModelCollection[1].WorkShiftExtender.GetType());
+                _target.ModelCollection[1].IsTimeOfDay.Should().Be.True();
                 _target.ChangeExtenderType((AbsolutePositionViewModel) _target.ModelCollection[1],
                                            new ActivityRelativeStartExtender(_activity, _activityLengthWithSegment,
-                                                                             _activityPositionWithSegment)
-                    );
-                Assert.AreEqual(typeof (ActivityRelativeStartExtender),
-                                _target.ModelCollection[1].WorkShiftExtender.GetType());
+                                                                             _activityPositionWithSegment));
+                _target.ModelCollection[1].IsTimeOfDay.Should().Be.False();
             }
         }
     }

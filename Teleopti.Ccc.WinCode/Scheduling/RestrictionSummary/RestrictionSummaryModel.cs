@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -216,16 +215,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             cellData.EffectiveRestriction = totalRestriction;
         }
 
-        private IEffectiveRestriction CellDataForFullDayAbsence(AgentInfoHelper agentInfoHelper, IPreferenceCellData cellData, IScheduleDay schedulePart)
+        private IEffectiveRestriction CellDataForFullDayAbsence(AgentInfoHelper agentInfoHelper, IPreferenceCellData cellData, IScheduleDay scheduleDay)
         {
-        	var projection = schedulePart.ProjectionService().CreateProjection();
+        	var projection = scheduleDay.ProjectionService().CreateProjection();
             TimeSpan timeSpan = projection.Period().Value.ElapsedTime();
             var startTimeLimitation = new StartTimeLimitation(null, null);
             var endTimeLimitation = new EndTimeLimitation(null, null);
-            IVirtualSchedulePeriod virtualSchedulePeriod =
-                agentInfoHelper.Person.VirtualSchedulePeriod(cellData.TheDate);
         	DateOnly cellDate = cellData.TheDate;
 
+			IVirtualSchedulePeriod virtualSchedulePeriod =
+				agentInfoHelper.Person.VirtualSchedulePeriod(cellDate);
 			DateOnly? schedulePeriodStart = agentInfoHelper.Person.SchedulePeriodStartDate(cellDate);
 			if (virtualSchedulePeriod.IsValid && schedulePeriodStart.HasValue)
             {
@@ -249,9 +248,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             totalRestriction =
                 totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null,
                                                                   null, null, new List<IActivityRestriction>()));
-            cellData.DisplayName = schedulePart.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(agentInfoHelper.Person).Name;
-            cellData.DisplayShortName = schedulePart.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(agentInfoHelper.Person).ShortName;
-            cellData.DisplayColor = schedulePart.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(agentInfoHelper.Person);
+
+        	var description =
+        		scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(scheduleDay.Person,cellDate);
+            cellData.DisplayName = description.Name;
+            cellData.DisplayShortName = description.ShortName;
+            cellData.DisplayColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person,cellDate);
             cellData.HasFullDayAbsence = true;
             cellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), CurrentCultureInfo());
             cellData.StartEndScheduledShift = projection.Period().Value.TimePeriod(_schedulerState.TimeZoneInfo).ToShortTimeString(CurrentCultureInfo());

@@ -127,6 +127,8 @@ namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
             {
                 var color = ColorHelper.CreateColorFromDto(dto.DisplayColor);
                 var label = new ListObject(lableValue++, dto.Description, color);
+
+
                 labels.Add(label);
             }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _periodDistributionService = new PeriodDistributionService(new List<IVisualLayerCollection>(), 5);
             _start = new DateTime(2009, 2, 10, 8, 0, 0, DateTimeKind.Utc);
             _end = _start.AddHours(9);
-            _person = new Person();
+            _person = PersonFactory.CreatePerson();
         }
 
         [Test]
@@ -70,11 +69,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IVisualLayerFactory layerFactory = new VisualLayerFactory();
             DateTimePeriod period = new DateTimePeriod(_start, _end);
             VisualLayerProjectionService projectionService = new VisualLayerProjectionService(_person);
-            IVisualLayer layer = layerFactory.CreateShiftSetupLayer(_activity, period);
+            IVisualLayer layer = layerFactory.CreateShiftSetupLayer(_activity, period, _person);
             projectionService.Add(layer);
 
             DateTimePeriod breakPeriod = new DateTimePeriod(_start.AddHours(2), _start.AddHours(2).AddMinutes(7));
-            IVisualLayer layer2 = layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("l"), breakPeriod);
+            IVisualLayer layer2 = layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("l"), breakPeriod, _person);
             projectionService.Add(layer2);
 
             var lst = new List<IVisualLayerCollection> { projectionService.CreateProjection() };

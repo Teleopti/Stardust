@@ -17,7 +17,7 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _initTooltip() {
-		var addTextRequest = $('.add-text-request');
+		var addTextRequest = $('.add-request-space');
 		$('<div/>').qtip({
 
 			content: {
@@ -39,7 +39,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			events: {
 				show: function (event, api) {
 					var date = $(event.originalEvent.target).closest('ul').attr('data-request-default-date');
-					Teleopti.MyTimeWeb.Schedule.TextRequest.ClearFormData(date);
+					Teleopti.MyTimeWeb.Schedule.Request.ClearFormData(date);
 				}
 			},
 			show: {
@@ -79,17 +79,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
 				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/Week', Teleopti.MyTimeWeb.Schedule.PartialInit);
 			}
-			Teleopti.MyTimeWeb.Schedule.TextRequest.Init();
+			Teleopti.MyTimeWeb.Schedule.Request.Init();
 			_initTodayButton();
 		},
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 			_initTooltip();
-			Teleopti.MyTimeWeb.Schedule.Layout.SetSchemaItemsHeights();
 			_initPeriodSelection();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
-			Teleopti.MyTimeWeb.Schedule.TextRequest.PartialInit();
+			Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 		}
 	};
 
@@ -127,7 +126,7 @@ Teleopti.MyTimeWeb.Schedule.RequestViewModel = (function RequestViewModel() {
 	}
 });
 
-Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
+Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 
 	var requestViewModel = null;
 
@@ -169,6 +168,10 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 					_showAbsenceTypes();
 					requestViewModel.IsFullDay(true);
 				}
+			});
+		$('.text-request')
+			.click(function () {
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index");
 			});
 	}
 

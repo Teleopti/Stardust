@@ -230,7 +230,14 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// </remarks>
         public int OverrideDaysOff
         {
-            get { return ContainedEntity.GetDaysOff(ContainedEntity.DateFrom); }
+            get
+            {
+				if (ContainedEntity == null)
+					return -1;
+				if (!ContainedEntity.DaysOff.HasValue)
+					return -1;
+				return ContainedEntity.DaysOff.Value;
+            }
             set { ContainedEntity.SetDaysOff(value); }
         }
 

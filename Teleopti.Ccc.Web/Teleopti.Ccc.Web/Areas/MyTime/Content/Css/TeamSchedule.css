@@ -14,12 +14,16 @@
 }
 .teamschedule 
 {
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: 1px solid #dfdfdf;
 	background: #f8f8f8;
 	font-family: Verdana;
 	width: 100%;
 	padding-top: 20px;
 	padding-bottom: 15px;
+}
+.rgba .teamschedule 
+{
+	border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .teamschedule-timeline 
@@ -42,10 +46,16 @@
 .teamschedule-timeline-time {
 	height: 100%;
 	font-size: 8px;
+	border-left: 1px solid #dfdfdf;
+}
+.rgba .teamschedule-timeline-time {
 	border-left: 1px solid rgba(0, 0, 0, 0.15);
 }
 .rtl .teamschedule-timeline-time {
 	border-left: none;
+	border-right: 1px solid #dfdfdf;
+}
+.rgba .rtl .teamschedule-timeline-time {
 	border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 .teamschedule-timeline-label 
@@ -57,6 +67,10 @@
 	background: white;
 	left: -10px;
 	position: relative;
+}
+.rgba .teamschedule-timeline-label 
+{
+	border: 1px solid #dfdfdf;
 }
 .rtl .teamschedule-timeline-label {
 	left: auto;
@@ -77,9 +91,13 @@
 	padding-top: 8px;
 	height: 19px;
 	width: 100%;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+	border-bottom: 1px solid #dfdfdf;
 	vertical-align: bottom;
 	z-index: 99;
+}
+.rgba .teamschedule-agent 
+{
+	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 .teamschedule-agent-name 
 {
@@ -129,10 +147,14 @@
 	margin-left: 5px;
 	width: 824px;
 	vertical-align: bottom;
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: 1px solid #dfdfdf;
 	text-align: center;
 	height: 18px;
 	border-radius: 2px;
+}
+.rgba .teamschedule .dayoff 
+{
+	border: 1px solid rgba(0, 0, 0, 0.15);
 }
 .rtl .teamschedule .dayoff
 {

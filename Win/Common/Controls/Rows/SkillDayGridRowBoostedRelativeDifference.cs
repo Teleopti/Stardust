@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                 if (_rowManager.DataSource.Count == 0) return;
 
                 cellInfo.Style.CellType = CellType;
-                cellInfo.Style.CellValue = getValue(cellInfo);
+                cellInfo.Style.CellValue = getDoubleValue(cellInfo);
                 cellInfo.Style.ReadOnly = true;
             }
         }
@@ -46,13 +46,13 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             return new List<ISkillStaffPeriod>();
         }
 
-        private double? getValue(CellInfo cellInfo)
+        private double? getDoubleValue(CellInfo cellInfo)
         {
             IEnumerable<ISkillStaffPeriod> skillStaffPeriodList = getSkillStaffPeriodsForColumn(cellInfo);
 
             if (skillStaffPeriodList == null)
                 return null;
-            if (skillStaffPeriodList.Count() == 0)
+            if (!skillStaffPeriodList.Any())
                 return null;
 
             var calculator =
@@ -78,6 +78,5 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                 return null;
             return (ret.ScheduleValue/ret.ForecastValue) * 100;
         }
-
     }
 }

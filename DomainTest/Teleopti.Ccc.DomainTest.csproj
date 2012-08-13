@@ -160,6 +160,8 @@
     <Compile Include="Common\DateOnlyAsDateTimePeriodTest.cs" />
     <Compile Include="Common\PersonsInOrganizationProviderTest.cs" />
     <Compile Include="Common\ScenarioProviderTest.cs" />
+    <Compile Include="Forecasting\DaylightSavingTimeHelperTest.cs" />
+    <Compile Include="Forecasting\Export\ExportSkillToFileCommandModelTest.cs" />
     <Compile Include="Forecasting\Export\ImportForecastToSkillCommandTest.cs" />
     <Compile Include="Forecasting\Export\MultisiteForecastToSkillCommandTest.cs" />
     <Compile Include="Forecasting\Export\OpenAndSplitSkillCommandTest.cs" />
@@ -232,6 +234,7 @@
     <Compile Include="Optimization\GroupPersonSameDayOffsCheckerTest.cs" />
     <Compile Include="Optimization\GroupPersonSameForPersonOnDateCheckerTest.cs" />
     <Compile Include="Optimization\GroupPersonSchedulePeriodCheckerTest.cs" />
+    <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderTest.cs" />
@@ -240,7 +243,9 @@
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoaderTest.cs" />
     <Compile Include="Optimization\ScheduleResultDataExtractorProviderTest.cs" />
     <Compile Include="Optimization\ScheduleDayEquatorTest.cs" />
+    <Compile Include="Optimization\SchedulingOptionsAdvancePersonalSettingTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsCreatorTest1.cs" />
+    <Compile Include="Optimization\SchedulingOptionsExtraPersonalSettingTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSettingTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
@@ -270,7 +275,6 @@
     <Compile Include="GroupPageCreator\PersonNoteGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\RuleSetBagGroupPageTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByAllSkillsExtractorTest.cs" />
-    <Compile Include="Optimization\IntradayActivityOptimizerServiceTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecificationTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationServiceTest.cs" />
@@ -290,6 +294,7 @@
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManagerTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet3.cs" />
+    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonConsistentCheckerTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonsBuilderTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonShiftCategoryConsistentCheckerTest.cs" />
@@ -298,6 +303,8 @@
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPersonTest.cs" />
     <Compile Include="ResourceCalculation\LegalStateCheckerOptionsTest.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferencesTest.cs" />
+    <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryCreatorTest.cs" />
+    <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunnerTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculateDaysDeciderTest.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityCheckerTest.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryCheckerTest.cs" />
@@ -906,6 +913,7 @@
     <Compile Include="Security\RegExpSpecificationTest.cs" />
     <Compile Include="Security\UserDetailTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
+    <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThreadTest.cs" />
     <Compile Include="Specification\AllTest.cs" />
     <Compile Include="Specification\SpecificationTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSettingTest.cs" />

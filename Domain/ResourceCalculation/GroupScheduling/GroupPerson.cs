@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
@@ -26,8 +27,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			Name = new Name(name,"");
         }
 
-		public IShiftCategory CommonShiftCategory { get; set; }
- 
 		private void setGroupMembers(IList<IPerson> persons)
         {
             if(persons.IsEmpty())
@@ -83,7 +82,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             get { return new ReadOnlyCollection<IPerson>(_groupMembers); }
         }
 
-        private void setPersonSkillsOnDate()
+		public IPossibleStartEndCategory CommonPossibleStartEndCategory { get ; set ; }
+
+		private void setPersonSkillsOnDate()
         {
             var listOfPersonSkills = new List<IPersonSkill>();
 

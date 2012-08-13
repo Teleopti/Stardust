@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		/// <summary>
-		/// gets date from
+		/// gets or sets date from
 		/// </summary>
 		/// <remarks>
 		/// Created by: cs 
@@ -108,16 +108,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
+				if (IsAverageWorkTimePerDayOverride)
+					return _averageWorkTimePerDay.Value;
+
 				if (IsPeriodTimeOverride)
 				{
 					double periodTime = PeriodTime.Value.TotalMinutes;
-					int workDays = GetWorkdays();
-					int minutes = (int)(periodTime / workDays);
-					return TimeSpan.FromMinutes(minutes);
+					int totalWorkDay = workdaysForTotalPeriod();
+					double periodMinutes = periodTime / totalWorkDay;
+					return TimeSpan.FromMinutes(periodMinutes);
 				}
-
-				if (IsAverageWorkTimePerDayOverride)
-					return _averageWorkTimePerDay.Value;
 
 				IPersonPeriod period = GetPersonPeriod();
 				if (period == null) return TimeSpan.Zero;
@@ -125,6 +125,42 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				TimeSpan retTimeSpan = period.PersonContract.AverageWorkTimePerDay;
 				return retTimeSpan;
 			}
+		}
+
+		private int workdaysForTotalPeriod()
+		{
+
+			DateOnlyPeriod? totalPeriod = GetSchedulePeriod(_dateFrom);
+			if (!totalPeriod.HasValue)
+				return 0;
+
+			DateOnly periodStart = totalPeriod.Value.StartDate;
+			DateOnly periodEnd = totalPeriod.Value.EndDate;
+
+			if (IsDaysOffOverride)
+			{
+				int ret = totalPeriod.Value.DayCount() - DaysOff.Value;
+				return ret;
+			}
+
+			if (PeriodType == SchedulePeriodType.ChineseMonth)
+			{
+				int ret = totalPeriod.Value.DayCount() - getDaysOffForChineseMonth(_dateFrom);
+				return ret;
+			}
+
+			IPersonPeriod period = GetPersonPeriod();
+			int workDays = 0;
+			DateOnly tempDate = periodStart;
+
+			while (tempDate <= periodEnd)
+			{
+					if (period.PersonContract.ContractSchedule.IsWorkday(periodStart, tempDate))
+						workDays++;
+				tempDate = tempDate.AddDays(1);
+			}
+
+			return workDays;
 		}
 
 		/// <summary>
@@ -157,11 +193,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual int GetDaysOff(DateOnly dateFrom)
 		{
-			if (PeriodType == SchedulePeriodType.ChineseMonth)
-				return getDaysOffForChineseMonth(dateFrom);
-
 			if (_daysOff.HasValue) // if days off overriden
-				return _daysOff.Value;
+				return (int)(_daysOff.Value * notFullSchedulePeriodFactor(dateFrom));
+
+			if (PeriodType == SchedulePeriodType.ChineseMonth)
+				return (int)(getDaysOffForChineseMonth(dateFrom) * notFullSchedulePeriodFactor(dateFrom));
 
 			DateOnlyPeriod? period = GetSchedulePeriod(dateFrom);
 			if (!period.HasValue)
@@ -170,6 +206,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			DateOnly startDate = period.Value.StartDate;
 			DateOnly endDate = period.Value.EndDate;
 			int daysOff = 0;
+
 			while (startDate <= endDate)
 			{
 				if (CurrentPerson != null)
@@ -193,6 +230,48 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			return daysOff;
 		}
+
+		private double notFullSchedulePeriodFactor(DateOnly dateFrom)
+		{
+			DateOnlyPeriod totalPeriod = getPeriodForType(dateFrom);
+			int totalPeriodLength = totalPeriod.DayCount();
+			int periodLength = contractPeriod(dateFrom);
+
+			return (double)periodLength/(double)totalPeriodLength;
+
+		}
+
+		private int contractPeriod(DateOnly dateFrom)
+		{
+			DateOnlyPeriod totalPeriod = getPeriodForType(dateFrom);
+
+			DateOnly startDate = totalPeriod.StartDate;
+			DateOnly endDate = totalPeriod.EndDate;
+
+			int days = 0;
+			while (startDate <= endDate)
+			{
+				if (CurrentPerson != null)
+				{
+					IPersonPeriod personPeriod = CurrentPerson.Period(startDate);
+					if (personPeriod != null)
+					{
+						if (personPeriod.PersonContract != null)
+						{
+							if (personPeriod.PersonContract.ContractSchedule != null)
+							{
+								days++;
+							}
+						}
+					}
+				}
+				startDate = startDate.AddDays(1);
+			}
+
+			return days;
+		}
+
+
 
 		public virtual DateOnly RealDateTo()
 		{
@@ -593,6 +672,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			return currentStartDate.AddDays(number - 1);
 		}
+
+		public DateOnly EvaluateProperInitialStartDate(DateOnly currentStartDate, int number, DateOnly requestedDate)
+		{
+			var difference = (int)requestedDate.Date.Subtract(currentStartDate.Date).TotalDays;
+			var wholeVirtualPeriods = difference / number;
+			return Increase(currentStartDate, number * wholeVirtualPeriods).AddDays(1);
+		}
 	}
 
 	public class IncreaseMonthByOne : IIncreasePeriodByOne
@@ -608,6 +694,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			return new DateOnly(_cultureInfo.Calendar.AddMonths(currentStartDate.Date, number)).AddDays(-1);
 		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "32*number")]
+		public DateOnly EvaluateProperInitialStartDate(DateOnly currentStartDate, int number, DateOnly requestedDate)
+		{
+			var difference = (int)requestedDate.Date.Subtract(currentStartDate.Date).TotalDays;
+			var wholeVirtualPeriods = difference / (32 * number);
+			return Increase(currentStartDate, number * wholeVirtualPeriods).AddDays(1);
+		}
 	}
 
 	public class IncreaseWeekByOne : IIncreasePeriodByOne
@@ -615,6 +709,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public DateOnly Increase(DateOnly currentStartDate, int number)
 		{
 			return currentStartDate.AddDays((number * 7) - 1);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "7*number")]
+		public DateOnly EvaluateProperInitialStartDate(DateOnly currentStartDate, int number, DateOnly requestedDate)
+		{
+			var difference = (int)requestedDate.Date.Subtract(currentStartDate.Date).TotalDays;
+			var wholeVirtualPeriods = difference / (7 * number);
+			return Increase(currentStartDate, number * wholeVirtualPeriods).AddDays(1);
 		}
 	}
 }

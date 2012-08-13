@@ -7,6 +7,7 @@
         public const string CellTypePushButton = "PushButton";
         public const string CellTypeTimeSpanLongHourMinutesCell = "TimeSpanLongHourMinutesCell";
         public const string CellTypeTimeSpanLongHourMinutesOrEmptyCell = "TimeSpanLongHourMinutesOrEmptyCell";
+		public const string CellTypeTimeSpanHourMinutesOrEmptyCell = "HourMinutes";
         public const string CellTypeDatePickerCell = "DatePickerCell";
         public const string CellTypeNumericCell = "NumericCell";
         public const string CellTypePercentCell = "PercentCell"; 

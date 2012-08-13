@@ -29,12 +29,12 @@
 			<textarea id="Request-detail-message-input" />
 		</div>
 		
-		<div id="Absence-type-element" class="floatleft displaynone pdr20">
+		<div id="Absence-type-element" class="floatleft displaynone">
 			<div class="edit-module-element floatleft">
 				<div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
 			</div>
 			<div class="edit-module-element floatleft">
-				<select id="Absence-type" class="floatleft absence-input combobox">
+				<select id="Absence-type" class="absence-input combobox">
 					@foreach (var absenceType in Model.AbsenceTypes)
 					{
 						<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
@@ -73,11 +73,11 @@
 		<span class="edit-module-element clearleftfloat floatleft">
 			<input type="checkbox" id="Fullday-check" data-bind="checked:IsFullDay"/>
 		</span>
-		<label class="floatleft pdl5" for="Fullday-check">
+		<label class="floatleft" for="Fullday-check">
 			@Resources.FullDay
 		</label>
 		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
-		<div id="Request-detail-error" class="error clearleftfloat"></div>
+		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat"></div>
 	</div>
 	<div class="request-list">
 		<div id="friendly-message" class="friendly-message ui-corner-all floatleft" style="display: none;">
@@ -93,12 +93,12 @@
 				<div class="request-details">
 					<div>
 						<span class="request-caption">@Resources.Type: </span>
-						<span class="request-data-type pdr20"></span>
+						<span class="request-data-type"></span>
 						<span class="request-caption">@Resources.Status: </span>
 						<span class="request-data-status"></span>
 					</div>
 					<span class="request-caption">@Resources.Date: </span>
-					<span class="request-data-date pdr20"></span>
+					<span class="request-data-date"></span>
 					<span class="request-caption">@Resources.UpdatedOn: </span>
 					<span class="request-data-updatedon"></span>
 				</div>

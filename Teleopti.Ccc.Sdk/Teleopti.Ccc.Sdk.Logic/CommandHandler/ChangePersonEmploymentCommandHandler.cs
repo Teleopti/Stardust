@@ -38,15 +38,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _contractRepository = contractRepository;
         }
 
-        public CommandResultDto Handle(ChangePersonEmploymentCommandDto command)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public CommandResultDto Handle(ChangePersonEmploymentCommandDto command)
         {
             Guid? result;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
+            	var startDate = new DateOnly(command.Period.StartDate.DateTime);
                 var person = _personRepository.Get(command.Person.Id.GetValueOrDefault());
                 var existPersonPeriod =
-                    person.PersonPeriodCollection.Where(pp => pp.StartDate.Equals(new DateOnly(command.Period.StartDate.DateTime))).
-                        FirstOrDefault();
+					person.PersonPeriodCollection.FirstOrDefault(pp => pp.StartDate == startDate);
 
                 IPersonPeriod newPersonPeriod = null;
 
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     var lastPersonPeriod = person.PersonPeriodCollection.OrderBy(pp => pp.Period.StartDate).LastOrDefault();
                     if (lastPersonPeriod != null)
                     {
-                        newPersonPeriod = new PersonPeriod(new DateOnly(command.Period.StartDate.DateTime),
+                        newPersonPeriod = new PersonPeriod(startDate,
                                                            command.PersonContract == null
                                                                ? lastPersonPeriod.PersonContract
                                                                : createPersonContract(command.PersonContract),

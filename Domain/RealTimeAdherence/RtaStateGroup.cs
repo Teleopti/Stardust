@@ -82,12 +82,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             internalAdd.AddStateInternal(state);
         }
 
-        public virtual Description ConfidentialDescription(IPerson assignedPerson)
+		public virtual Description ConfidentialDescription(IPerson assignedPerson, DateOnly assignedDate)
         {
             return new Description(_name);
         }
 
-        public virtual Color ConfidentialDisplayColor(IPerson assignedPerson)
+		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson, DateOnly assignedDate)
         {
             return Color.Empty;
         }

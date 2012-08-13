@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			if (e.ColIndex == 1 && e.RowIndex == 0)
 			{
 				e.Style.CellValue = UserTexts.Resources.Template;
-				e.Handled = true;
+                e.Handled = true;
 				return;
 			}
 			if (e.ColIndex > 1)
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		{
 			base.OnSaveCellInfo(e);
 
-			if (e.ColIndex < 0 || e.RowIndex < 0) return;
+			if (e.ColIndex <= 1 || e.RowIndex < 0) return;
 			_gridRows[e.RowIndex].SaveCellInfo(GetCellInfo(e.Style, e.ColIndex, e.RowIndex));
 			RefreshRange(GridRangeInfo.Col(e.ColIndex), true);
 
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			if (gridRangeInfo.Left == 1 && gridRangeInfo.Right == 1)
 				return UserTexts.Resources.Template;
 			var currentCellDate = _dateTimes[gridRangeInfo.Left - 1];
-			return _timeZone.ConvertTimeFromUtc(currentCellDate).ToShortDateString();
+            return currentCellDate.ToShortDateString();
 		}
 
 		private object GetRowHeaderName(int rowIndex)

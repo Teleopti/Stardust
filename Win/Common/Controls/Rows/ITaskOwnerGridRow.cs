@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 
             IWorkloadDay workloadDay = taskOwner as IWorkloadDay;
             if (taskOwner.OpenForWork.IsOpen ||
-                (workloadDay!=null && workloadDay.Workload.Skill.SkillType.ForecastSource!=ForecastSource.InboundTelephony))
+                (workloadDay!=null && workloadDay.Workload.Skill.SkillType.ForecastSource!=ForecastSource.InboundTelephony && workloadDay.Workload.Skill.SkillType.ForecastSource!= ForecastSource.Retail))
             {
                 if (String.IsNullOrEmpty(value.ToString()))
                 {

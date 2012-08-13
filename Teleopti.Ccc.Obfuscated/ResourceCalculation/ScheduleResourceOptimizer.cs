@@ -185,7 +185,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         {
             foreach (ISkillStaffPeriodDictionary skillStaffDic in _skillStaffPeriods.Values)
             {
-                if (((ISkill)skillStaffDic.Skill).SkillType.ForecastSource == ForecastSource.InboundTelephony)
+                if (((ISkill)skillStaffDic.Skill).SkillType.ForecastSource == ForecastSource.InboundTelephony ||
+					((ISkill)skillStaffDic.Skill).SkillType.ForecastSource == ForecastSource.Retail)
                 {
                     foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffDic.Values)
                     {

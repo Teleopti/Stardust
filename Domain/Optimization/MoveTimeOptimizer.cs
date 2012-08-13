@@ -31,8 +31,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
         private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+    	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
-        public MoveTimeOptimizer(
+    	public MoveTimeOptimizer(
             IPeriodValueCalculator periodValueCalculator,
             IScheduleResultDataExtractor personalSkillsDataExtractor,
             IMoveTimeDecisionMaker decisionMaker,
@@ -46,7 +47,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceCalculateDaysDecider decider,
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer,
             IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
-            ISchedulingOptionsCreator schedulingOptionsCreator)
+            ISchedulingOptionsCreator schedulingOptionsCreator,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
         {
             _periodValueCalculator = periodValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _workShiftOriginalStateContainer = workShiftOriginalStateContainer;
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
             _schedulingOptionsCreator = schedulingOptionsCreator;
+        	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -267,7 +270,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
 
-			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer))
+        	IScheduleDay originalScheduleDay = _workShiftOriginalStateContainer.OldPeriodDaysState[day];
+        	IPersonAssignment personAssignment = originalScheduleDay.AssignmentHighZOrder();
+			IMainShift originalShift = personAssignment.MainShift;
+			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, day);
+
+			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer, null))
             {
                 _rollbackService.Rollback();
                 lockDay(day);

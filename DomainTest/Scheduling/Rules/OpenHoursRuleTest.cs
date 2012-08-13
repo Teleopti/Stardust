@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
@@ -82,18 +79,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyValidateCompleteAssignmentWithinOpenHours()
         {
-            IActivity activity = new Activity("adf") {RequiresSkill = true};
+        	IActivity activity = ActivityFactory.CreateActivity("adf");
+			activity.RequiresSkill = true;
             var type = _mocks.StrictMock<ISkillType>();
-            ISkill skill = new Skill("aslfm", "sl", Color.DarkSlateBlue, 15, type) {Activity = activity};
+        	ISkill skill = SkillFactory.CreateSkill("aslfm", type, 15);
+			skill.Activity = activity;
 
-			IPersonSkill personSkill = new PersonSkill(skill, new Percent(1)) { Active = true };
+        	IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
             IList<IPersonSkill> personSkills = new List<IPersonSkill>{personSkill};
             var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 
             var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
+            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
-        	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+        	IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
             
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
@@ -123,20 +122,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyValidateActivityStartingBeforeOpenHours()
         {
-            IActivity activity = new Activity("adf") {RequiresSkill = true};
+        	IActivity activity = ActivityFactory.CreateActivity("adf");
+			activity.RequiresSkill = true;
             var type = _mocks.StrictMock<ISkillType>();
-            ISkill skill = new Skill("aslfm", "sl", Color.DarkSlateBlue, 15, type) {Activity = activity};
-            ISkill skill1 = new Skill("aslfm", "sl", Color.DarkSlateBlue, 15, type) {Activity = activity};
+        	ISkill skill = SkillFactory.CreateSkill("aslfm", type, 15);
+			skill.Activity = activity;
+        	ISkill skill1 = SkillFactory.CreateSkill("aslfm", type, 15);
+			skill1.Activity = activity;
 
-			IPersonSkill personSkill = new PersonSkill(skill, new Percent(1)) { Active = true };
-			IPersonSkill personSkill1 = new PersonSkill(skill1, new Percent(1)) { Active = true };
-            IList<IPersonSkill> personSkills = new List<IPersonSkill> { personSkill, personSkill1 };
+			IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
+			IPersonSkill personSkill1 = PersonSkillFactory.CreatePersonSkill(skill1, 1);
+			
+			IList<IPersonSkill> personSkills = new List<IPersonSkill> { personSkill, personSkill1 };
             var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 
             var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
+            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
+        	
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
-        	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+        	IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
 
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
@@ -180,12 +184,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyValidateNotRequiresSkillActivityStartingBeforeOpenHours()
         {
-            IActivity activity = new Activity("adf") {RequiresSkill = false};
+        	IActivity activity = ActivityFactory.CreateActivity("adf");
+			activity.RequiresSkill = false;
               
             var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
+            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period,_person);
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
-        	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+        	IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
             
             var projectionService = _mocks.StrictMock<IProjectionService>();
                   
@@ -203,20 +208,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyValidateActivityWithNoSkill()
         {
-            IActivity activity = new Activity("Activity1") { RequiresSkill = true };
+        	IActivity activity = ActivityFactory.CreateActivity("Activity1");
+			activity.RequiresSkill = true;
             var type = _mocks.StrictMock<ISkillType>();
 
-            IActivity activity2 = new Activity("Activity2") { RequiresSkill = false };
-            ISkill skill = new Skill("Skill1", "sl", Color.DarkSlateBlue, 15, type) { Activity = activity2 };
+        	IActivity activity2 = ActivityFactory.CreateActivity("Activity2");
+			activity2.RequiresSkill = false;
+        	ISkill skill = SkillFactory.CreateSkill("Skill1", type, 15);
+			skill.Activity = activity2;
 
-            IPersonSkill personSkill = new PersonSkill(skill, new Percent(1)) { Active = true };
+            IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
             IList<IPersonSkill> personSkills = new List<IPersonSkill> { personSkill };
             var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 
             var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
+            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
 
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
@@ -242,7 +250,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void WhenLayerCollectionIsNullOrEmptyRuleSaysOk()
         {
             IList<IVisualLayer> layers = new List<IVisualLayer>();
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
             
             var projectionService = _mocks.StrictMock<IProjectionService>();
             
@@ -259,13 +267,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void WhenAgentHasNoSkillsRuleReportsError()
         {
-            IActivity activity = new Activity("adf") { RequiresSkill = true };
+        	IActivity activity = ActivityFactory.CreateActivity("adf");
+			activity.RequiresSkill = true;
            IList<IPersonSkill> personSkills = new List<IPersonSkill> ();
 
             var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
+            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
-        	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+        	IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
 
             var projectionService = _mocks.StrictMock<IProjectionService>();
 
@@ -285,18 +294,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void WhenNoSkillStaffPeriodsRuleReportsError()
         {
-            IActivity activity = new Activity("adf") { RequiresSkill = true };
+        	IActivity activity = ActivityFactory.CreateActivity("adf");
+			activity.RequiresSkill = true;
             var type = _mocks.StrictMock<ISkillType>();
-            ISkill skill = new Skill("aslfm", "sl", Color.DarkSlateBlue, 15, type) { Activity = activity };
+        	ISkill skill = SkillFactory.CreateSkill("aslfm", type, 15);
+			skill.Activity = activity;
 
-            IPersonSkill personSkill = new PersonSkill(skill, new Percent(1)){Active = true};
+        	IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
+			personSkill.Active = true;
             IList<IPersonSkill> personSkills = new List<IPersonSkill>{personSkill};
             var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 
             var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
+            IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
-        	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+        	IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
 
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();

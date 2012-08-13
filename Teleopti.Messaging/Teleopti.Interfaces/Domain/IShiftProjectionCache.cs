@@ -80,5 +80,14 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <returns>The Justice Value for the ShiftCategory</returns>
         int ShiftCategoryDayOfWeekJusticeValue { get; }
+
+    	/// <summary>
+    	/// 
+    	/// </summary>
+    	TimeSpan WorkShiftStartTime { get; }
+    	/// <summary>
+    	/// 
+    	/// </summary>
+		TimeSpan WorkShiftEndTime { get; }
     }
 }

@@ -22,9 +22,9 @@ Scenario: Feedback for a day with absence preference
 	Given I am an agent
 	And I should work 8 hours per day according to my contract
 	And I have a shift bag
-	And I have a absence preference today
+	And I have a contract time absence preference on weekday 3
 	When I view preferences
-	Then I should see the contract time boundry 8 to 8
+	Then I should see the contract time boundry 8 to 8 on weekday 3
 
 Scenario: Feedback for a day with shift category preference
 	Given I am an agent

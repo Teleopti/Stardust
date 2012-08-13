@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var contract = _contractRepository.Load(command.PersonContract.ContractId.GetValueOrDefault());
 
                 var personContract = new PersonContract(contract, partTimePercentage, contractSchedule);
-                personPeriod = new PersonPeriod(new DateOnly(start.Year, start.Month, start.Day), personContract, team);
+                personPeriod = new PersonPeriod(new DateOnly(start), personContract, team);
                 person.AddPersonPeriod(personPeriod);
                 _personRepository.Add(person);
                 uow.PersistAll();

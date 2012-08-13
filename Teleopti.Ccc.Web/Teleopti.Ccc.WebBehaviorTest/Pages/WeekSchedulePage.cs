@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public List DayElementForDate(string formattedDate) { return Document.List(Find.By("data-mytime-date", v => v == formattedDate)).EventualGet(); }
 		public List DayElementForDate(DateTime date) { return DayElementForDate(date.ToString("yyyy-MM-dd")); }
 
-		public Div SecondDayComment { get { return SecondDay.Div(Find.ByClass("comment-day")); } }
+		public Div SecondDayComment { get { return SecondDay.Div(Find.ByClass("icon comment-day", false)); } }
 
 		public void ClickThirdDayOfOtherWeekInWeekPicker(CultureInfo culture)
 		{
@@ -96,7 +96,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Schedule-addRequest-ok-button")]
 		public Button OkButton { get; set; }
 
-		public Element CancelButton {
+		public Div Timelines
+		{ 
+			get { return Document.Div(Find.ByClass("weekview-timeline", false)); }
+		}
+
+		public Element CancelButton
+		{
 			get { return Document.Element(Find.ByClass("ui-tooltip-close", false)); }
 		}
 

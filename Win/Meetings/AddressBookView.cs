@@ -265,8 +265,10 @@ namespace Teleopti.Ccc.Win.Meetings
         private void RefreshGrid()
         {
             int count = _gridHelper.SourceList.Count;
-            gridControlPeople.RowCount = count + gridControlPeople.Rows.HeaderCount; // Add number of headers, 1 header = 0, 2 headers = 1 ...
-
+            //removed the assingment in the gridControlPeople.RowCount to do this either the grid.QueryRowCount event should be extended and e.Size is provided
+            //or grid.refresh is called.
+            gridControlPeople.Refresh();
+           
             // Displays filterred count on the status.
             switch (count)
             {

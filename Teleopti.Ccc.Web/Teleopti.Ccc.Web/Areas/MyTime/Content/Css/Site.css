@@ -397,7 +397,7 @@ html.full-height #push{
 .icon.toolbar-edit[disabled]{background-position: 0 -425px;}
 .icon.toolbar-delete{background-position: 0 -394px; width: 26px;}
 .icon.toolbar-delete[disabled]{background-position: 0 -456px;}
-.icon.text-request {background-position: 0px -487px; height: 20px; width: 16px;}
+.icon.text-request {background-position: 0px -487px; height: 16px; width: 16px;}
 .icon.close{background-position: 0 -333px;}
 .icon.validation-req{background-position: -432px 0;}
 .icon.validation-error{background-position: -575px 0;}
@@ -405,8 +405,8 @@ html.full-height #push{
 .icon.toolbar-today {background-position: -155px -26px; width: 24px}
 
 .text-request {
-	bottom: 0;
-	right: 0;
+	right: 0px;
+	cursor: pointer;
 }
 .icon-left{padding-left: 25px; border: 0px; background-color: transparent; }
 button.icon-left{padding-left: 35px;}
@@ -546,7 +546,6 @@ header {
 .no-rgba #modal-disable{ background: transparent url(../Images/semi_transp_white.png) 0 0 repeat;}
 
 /* Sign in */
-#page-signin{background: transparent url(../Images/login_page_bg.png) top left no-repeat; min-height: 400px;}
 #logo{
 	 display: block;
 	 height: 179px;
@@ -714,6 +713,10 @@ header {
 	display: block;
 }
 
+.edit-module-element textarea {
+	resize: none;
+}
+
 .edit-button-bar
 {
 	padding: 10px;
@@ -741,13 +744,9 @@ select.time-input
 {
 	width: 8.5em;
 }
-select.time-input
-{
-    width: 110px;
-}
 .rtl select.time-input
 {
-    width: 110px;
+    width: 8.5em;
 }
 .rtl .time-input
 {
@@ -912,10 +911,8 @@ footer p
 
 /*** Views ***/
 .rtl .weekdays{padding-left: 0; padding-right: 40px;}
-.rtl .body-weekview {background: url("../Images/view_repeater_bg.png") repeat-y scroll -966px bottom #F8F8F8;}
 .rtl .body-calendarview{background: url("../Images/view_repeater_wide_bg.png") repeat-y scroll -966px bottom #F8F8F8;}
 
-.rtl .body-weekview-inner { background: url("../Images/view_top_bg.png") no-repeat scroll -966px 0px transparent;}
 .rtl .body-calendarview-inner{background: url("../Images/view_top_wide_bg.png") no-repeat scroll -966px 0px transparent;}
 
 .rtl .calendarview-week { background: url("../Images/calendarview_week_wide_bg.png") no-repeat scroll 874px top transparent; padding-left: 0px;}
@@ -923,7 +920,6 @@ footer p
 .rtl .body-weekview-inner ul:first-child {margin-left: 0px; margin-right: 20px;}
 .rtl .weekview-day .comment-day {background: url("../../Images/icon_sprite.png") no-repeat scroll -36px 9px transparent}
 
-.rtl .weekview-day > li > div{border-left-width: 0px;  border-left-style: none; border-right-width: 8px; border-right-style: solid; border-right-color: transparent;}
 .rtl .weekview-day li div.meeting{ margin-right: 25px; margin-left: 0px; }
 .ie7 .rtl .weekview-day li div.meeting{margin: 0;}
 

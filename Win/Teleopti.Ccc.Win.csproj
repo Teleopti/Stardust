@@ -102,13 +102,13 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=1.5.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.1.5\lib\Net35\MbCache.dll</HintPath>
+      <HintPath>..\packages\MbCache.1.6\lib\Net35\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.5.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.1.5\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\packages\MbCache.1.6\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -572,6 +572,31 @@
     <Compile Include="Forecasting\Forms\CopyToSkillView.Designer.cs">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\FileExportFinished.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\FileExportFinished.Designer.cs">
+      <DependentUpon>FileExportFinished.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\ForecastToFileCommand.cs" />
+    <Compile Include="Forecasting\Forms\ExportPages\SelectFileDestination.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectFileDestination.Designer.cs">
+      <DependentUpon>SelectFileDestination.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectExportType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectExportType.Designer.cs">
+      <DependentUpon>SelectExportType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.Designer.cs">
+      <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forecasting\Forms\ExportPages\JobStatusView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -601,6 +626,12 @@
     </Compile>
     <Compile Include="Forecasting\Forms\ExportPages\SelectMultiSiteSkills.Designer.cs">
       <DependentUpon>SelectMultiSiteSkills.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectSkills.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectSkills.Designer.cs">
+      <DependentUpon>SelectSkills.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.cs">
       <SubType>Form</SubType>
@@ -778,6 +809,12 @@
     </Compile>
     <Compile Include="Optimization\AdvancedPreferencesPanel.Designer.cs">
       <DependentUpon>AdvancedPreferencesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Optimization\ShiftsPreferencesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Optimization\ShiftsPreferencesPanel.Designer.cs">
+      <DependentUpon>ShiftsPreferencesPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Optimization\DayOffPreferencesPanel.cs">
       <SubType>UserControl</SubType>
@@ -1193,13 +1230,6 @@
     <Compile Include="Scheduling\OptimizationProgress.Designer.cs">
       <DependentUpon>OptimizationProgress.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\OptimizeActivities.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\OptimizeActivities.Designer.cs">
-      <DependentUpon>OptimizeActivities.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Scheduling\OptimizeActivitiesSettings.cs" />
     <Compile Include="Scheduling\OptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\PersistConflictView.cs">
       <SubType>Form</SubType>
@@ -1250,6 +1280,12 @@
       <DependentUpon>SchedulerSplitters.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\SchedulingServiceModule.cs" />
+    <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.Designer.cs">
+      <DependentUpon>SchedulingSessionPreferencesTabPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\SchedulingSessionPreferences\TempNonBlendSchedulingPreferences.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1329,12 +1365,6 @@
     </Compile>
     <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesDialog.Designer.cs">
       <DependentUpon>SchedulingSessionPreferencesDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesPanel.Designer.cs">
-      <DependentUpon>SchedulingSessionPreferencesPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\SingleAgentRestriction\RestrictionSummaryViewCellModel.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\RestrictionWeekHeaderViewCellModel.cs" />
@@ -2404,6 +2434,21 @@
     <EmbeddedResource Include="Forecasting\Forms\CopyToSkillView.resx">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\FileExportFinished.resx">
+      <DependentUpon>FileExportFinished.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectFileDestination.resx">
+      <DependentUpon>SelectFileDestination.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectExportType.resx">
+      <DependentUpon>SelectExportType.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.resx">
+      <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\JobStatusView.resx">
       <DependentUpon>JobStatusView.cs</DependentUpon>
     </EmbeddedResource>
@@ -2419,6 +2464,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectMultiSiteSkills.resx">
       <DependentUpon>SelectMultiSiteSkills.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectSkills.resx">
+      <DependentUpon>SelectSkills.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ImportForecast\ImportForecastView.resx">
       <DependentUpon>ImportForecastView.cs</DependentUpon>
@@ -2511,6 +2559,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Optimization\AdvancedPreferencesPanel.resx">
       <DependentUpon>AdvancedPreferencesPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Optimization\ShiftsPreferencesPanel.resx">
+      <DependentUpon>ShiftsPreferencesPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Optimization\DayOffPreferencesPanel.resx">
       <DependentUpon>DayOffPreferencesPanel.cs</DependentUpon>
@@ -3023,9 +3074,6 @@
     <EmbeddedResource Include="Scheduling\OptimizationProgress.resx">
       <DependentUpon>OptimizationProgress.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\OptimizeActivities.resx">
-      <DependentUpon>OptimizeActivities.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersistConflictView.resx">
       <DependentUpon>PersistConflictView.cs</DependentUpon>
     </EmbeddedResource>
@@ -3051,9 +3099,8 @@
       <DependentUpon>SchedulingSessionPreferencesDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesPanel.resx">
-      <DependentUpon>SchedulingSessionPreferencesPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.resx">
+      <DependentUpon>SchedulingSessionPreferencesTabPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\TempNonBlendSchedulingPreferences.resx">
       <DependentUpon>TempNonBlendSchedulingPreferences.cs</DependentUpon>

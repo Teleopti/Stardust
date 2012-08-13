@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -14,19 +15,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// Created by: rogerkr
     /// Created date: 2008-02-22
     /// </remarks>
-    public class VisualLayer : Layer<IPayload>, IVisualLayer
+	public class VisualLayer : Layer<IPayload>, IVisualLayer, IActivityRestrictableVisualLayer
     {
 		public VisualLayer(IPayload payload,
                            DateTimePeriod period,
-                           IActivity highestPriorityActivity)
+                           IActivity highestPriorityActivity,
+						IPerson person)
             : base(payload, period)
         {
             InParameter.NotNull("highestPriorityActivity", highestPriorityActivity);
+			
             HighestPriorityActivity = highestPriorityActivity;
+			Person = person;
         }
 
         public IMultiplicatorDefinitionSet DefinitionSet { get; set; }
-        public IPerson Person { get; set; }
+		public IPerson Person { get; internal set; }
 
         public IAbsence HighestPriorityAbsence { get; set; }
 
@@ -34,12 +38,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public Color DisplayColor()
         {
-            return Payload.ConfidentialDisplayColor(Person);
+			return Payload.ConfidentialDisplayColor(Person, new DateOnly(Period.StartDateTimeLocal(TeleoptiPrincipal.Current.Regional.TimeZone)));
         }
 
         public Description DisplayDescription()
         {
-            return Payload.ConfidentialDescription(Person);
+			return Payload.ConfidentialDescription(Person, new DateOnly(Period.StartDateTimeLocal(TeleoptiPrincipal.Current.Regional.TimeZone)));
         }
 
         public TimeSpan ContractTime()
@@ -107,5 +111,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
             return false;
         }
+
+    	public Guid ActivityId
+    	{
+			get { return HighestPriorityActivity != null ? HighestPriorityActivity.Id.GetValueOrDefault() : Guid.Empty; }
+    	}
     }
 }

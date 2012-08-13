@@ -2049,6 +2049,11 @@ namespace Teleopti.Ccc.Win.Permissions
         private void toolStripButtonExitSystemClick(object sender, EventArgs e)
         {
             Close();
+
+            ////this canceled
+            if (Visible)
+                return;
+            Application.Exit();
         }
 
         private void permissionsExplorerFormClosing(object sender, FormClosingEventArgs e)

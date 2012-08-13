@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _hideResult;
         private bool _hideRibbonTexts;
         private Guid? _defaultScheduleTag;
-        private OptimizeActivitiesSettings _optimizeActivitiesSettings = new OptimizeActivitiesSettings();
+        
 
         private IList<Guid> _pinnedSkills;
 
@@ -25,12 +25,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             get { return _defaultScheduleTag; }
             set { _defaultScheduleTag = value; }
-        }
-
-        public OptimizeActivitiesSettings OptimizeActivitiesSettings
-        {
-            get { return _optimizeActivitiesSettings; }
-            set { _optimizeActivitiesSettings = value; }
         }
 
         public SchedulingScreenSettings()
