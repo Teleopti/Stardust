@@ -329,5 +329,6 @@ namespace Teleopti.Analytics.Parameters
 			}
 		}
 
+		public int IntervalLength { get; set; }
 	}
 }

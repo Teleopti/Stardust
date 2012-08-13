@@ -24,6 +24,10 @@
 				stackedline: [
 					null,
 					function (id, gd) {
+						if (gd.Y1.length == 0) {
+							gd.Y1 = [0];
+							gd.Y2 = [0];
+						};
 						var g = new RGraph.Line(id, gd.Y1, gd.Y2 || undefined);
 						g.Set('chart.filled', true);
 						g.Set('chart.filled.accumulative', true);
@@ -57,7 +61,7 @@
 					console.log('ChartType: ' + o.chartType + ' not defined!');
 				var graph = graphFn(id, gd);
 				if (!(graph.context != null && $.isFunction(graph.context.clearRect)))
-					return; 
+					return;
 				graph.context.clearRect(0, 0, o.width, o.height);
 				var shortSeries = gd.Y1.length < 10;
 				graph.Set('chart.hmargin', shortSeries ? 30 : 5);

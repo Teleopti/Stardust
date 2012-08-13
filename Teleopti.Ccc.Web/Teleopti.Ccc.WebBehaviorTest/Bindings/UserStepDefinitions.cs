@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am user with partial access to reports")]
 		public void GivenIAmUserWithPartialAccessToReports()
 		{
-			UserFactory.User().Setup(new UserWithoutResReportServiceLevelAndAgentsReadyAccess());
+			UserFactory.User().Setup(new UserWithoutResReportScheduledAndActualAgentsAccess());
 		}
 		
 		[Given(@"I am an agent in a team with access to the whole site")]

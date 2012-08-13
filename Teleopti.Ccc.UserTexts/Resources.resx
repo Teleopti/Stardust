@@ -6238,9 +6238,9 @@ Meeting</value>
     <value>Scheduled Time per Agent</value>
     <comment>Scheduled Time per Agent</comment>
   </data>
-  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Service Level  and Agents Ready</value>
-    <comment>Service Level  and Agents Ready</comment>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>Scheduled and Actual Agents</value>
+    <comment>Scheduled and Actual Agents</comment>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
     <value>Shift Category and Full Day Absence per Agent</value>
@@ -10769,7 +10769,7 @@ These options are activated:
     <value>Actual Employees</value>
     <comment>Label for retail skill</comment>
   </data>
-   <data name="ExportToBU" xml:space="preserve">
+  <data name="ExportToBU" xml:space="preserve">
     <value>Export to business unit</value>
     <comment>Export to business unit</comment>
   </data>
@@ -10956,5 +10956,13 @@ These options are activated:
   <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
     <value>Your preference is out of range.</value>
     <comment>Used for tooltip of warning icon in mytimeweb when your preference is out of range.</comment>
+  </data>
+  <data name="FileExportFailed" xml:space="preserve">
+    <value>File export failed</value>
+    <comment>File export failed</comment>
+  </data>
+  <data name="FileExportFinished" xml:space="preserve">
+    <value>File export finished</value>
+    <comment>File export finished</comment>
   </data>
 </root>

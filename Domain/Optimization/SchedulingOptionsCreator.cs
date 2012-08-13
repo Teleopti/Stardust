@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+﻿using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -24,7 +22,12 @@ namespace Teleopti.Ccc.Domain.Optimization
                 ? optimizationPreferences.Extra.BlockFinderTypeValue 
                 : BlockFinderType.None;
 
-            schedulingOptions.UseGroupOptimizing = optimizationPreferences.Extra.UseTeams;
+            schedulingOptions.UseGroupScheduling = optimizationPreferences.Extra.UseTeams;
+        	schedulingOptions.UseGroupSchedulingCommonCategory =
+        		optimizationPreferences.Extra.UseGroupSchedulingCommonCategory;
+        	schedulingOptions.UseGroupSchedulingCommonStart = optimizationPreferences.Extra.UseGroupSchedulingCommonStart;
+        	schedulingOptions.UseGroupSchedulingCommonEnd = optimizationPreferences.Extra.UseGroupSchedulingCommonEnd;
+
             schedulingOptions.GroupOnGroupPage = optimizationPreferences.Extra.GroupPageOnTeam;
 
 

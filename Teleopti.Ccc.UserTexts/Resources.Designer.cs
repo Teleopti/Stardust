@@ -7996,6 +7996,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File export failed.
+        /// </summary>
+        public static string FileExportFailed {
+            get {
+                return ResourceManager.GetString("FileExportFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File export finished.
+        /// </summary>
+        public static string FileExportFinished {
+            get {
+                return ResourceManager.GetString("FileExportFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File import.
         /// </summary>
         public static string FileImport {
@@ -17823,6 +17841,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduled and Actual Agents.
+        /// </summary>
+        public static string ResReportScheduledAndActualAgents {
+            get {
+                return ResourceManager.GetString("ResReportScheduledAndActualAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scheduled Overtime per Agent.
         /// </summary>
         public static string resReportScheduledOvertimePerAgent {
@@ -17846,15 +17873,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResReportScheduledTimePerAgent {
             get {
                 return ResourceManager.GetString("ResReportScheduledTimePerAgent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Service Level  and Agents Ready.
-        /// </summary>
-        public static string ResReportServiceLevelAndAgentsReady {
-            get {
-                return ResourceManager.GetString("ResReportServiceLevelAndAgentsReady", resourceCulture);
             }
         }
         

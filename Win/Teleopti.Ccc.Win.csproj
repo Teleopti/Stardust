@@ -572,11 +572,11 @@
     <Compile Include="Forecasting\Forms\CopyToSkillView.Designer.cs">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\ExportPages\FileExportDone.cs">
+    <Compile Include="Forecasting\Forms\ExportPages\FileExportFinished.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\ExportPages\FileExportDone.Designer.cs">
-      <DependentUpon>FileExportDone.cs</DependentUpon>
+    <Compile Include="Forecasting\Forms\ExportPages\FileExportFinished.Designer.cs">
+      <DependentUpon>FileExportFinished.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\Forms\ExportPages\ForecastToFileCommand.cs" />
     <Compile Include="Forecasting\Forms\ExportPages\SelectFileDestination.cs">
@@ -2434,8 +2434,8 @@
     <EmbeddedResource Include="Forecasting\Forms\CopyToSkillView.resx">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forecasting\Forms\ExportPages\FileExportDone.resx">
-      <DependentUpon>FileExportDone.cs</DependentUpon>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\FileExportFinished.resx">
+      <DependentUpon>FileExportFinished.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectFileDestination.resx">

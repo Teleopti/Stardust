@@ -4599,11 +4599,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             string statusText = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingProgress, _totalScheduled, 0);
             toolStripStatusLabelStatus.Text = statusText;
             _grid.Invalidate();
+			refreshSummarySkillIfActive();
             _skillIntradayGridControl.RefreshGrid();
             _skillDayGridControl.RefreshGrid();
 			refreshChart();
             statusStrip1.Refresh();
-
             Application.DoEvents();
 
             _inUpdate = false;
@@ -4618,6 +4618,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_scheduleCounter >= _optimizerOriginalPreferences.SchedulingOptions.RefreshRate)
                 {
                     _grid.Invalidate();
+					refreshSummarySkillIfActive();
                     _skillIntradayGridControl.RefreshGrid();
                     _skillDayGridControl.RefreshGrid();
 					refreshChart();
@@ -6538,6 +6539,28 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
         }
+
+		private void refreshSummarySkillIfActive()
+		{
+			var tab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
+            var skill = (ISkill) tab.Tag;
+            IAggregateSkill aggregateSkillSkill = skill;
+			if(!aggregateSkillSkill.IsVirtual)
+				return;
+			if (_intradayMode)
+			{
+				var skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
+					aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate,
+																							  _currentIntraDayDate.
+																								  AddDays(1),
+																							  _schedulerState.
+																								  TimeZoneInfo));
+				if (_skillIntradayGridControl.Presenter.RowManager != null)
+					_skillIntradayGridControl.Presenter.RowManager.SetDataSource(skillStaffPeriods);
+			}
+			else
+				_skillDayGridControl.SetDataSource(_schedulerState, skill);	
+		}
 
         private void drawIntraday(ISkill skill, IAggregateSkill aggregateSkillSkill)
         {

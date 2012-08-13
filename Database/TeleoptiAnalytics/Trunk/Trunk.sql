@@ -392,3 +392,13 @@ BEGIN
 END
 
 GO
+
+----------------  
+--Name: Jonas
+--Date: 2012-08-10
+--Desc: #20062 Standard reports. Change report control type for interval from and to.
+----------------
+IF EXISTS (select 1 from mart.report_control where control_id = 12 and control_name like 'cbo%')
+	UPDATE mart.report_control SET control_name = REPLACE(control_name, 'cbo', 'time') WHERE control_id = 12
+IF EXISTS (select 1 from mart.report_control where control_id = 13 and control_name like 'cbo%')
+	UPDATE mart.report_control SET control_name = REPLACE(control_name, 'cbo', 'time') WHERE control_id = 13

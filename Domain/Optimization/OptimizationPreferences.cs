@@ -91,7 +91,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public double FairnessValue { get; set; }
 
 		public IGroupPageLight GroupPageOnCompareWith { get; set; }
-
+		public bool UseGroupSchedulingCommonStart { get; set; }
+		public bool UseGroupSchedulingCommonEnd { get; set; }
+		public bool UseGroupSchedulingCommonCategory { get; set; }
         
 	}
 

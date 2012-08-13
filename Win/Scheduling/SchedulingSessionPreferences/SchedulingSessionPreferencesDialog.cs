@@ -122,7 +122,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             schedulingSessionPreferencesTabPanel1.ScheduleOnlyAvailableDaysVisible = true;
             schedulingSessionPreferencesTabPanel1.ScheduleOnlyPreferenceDaysVisible = true;
             schedulingSessionPreferencesTabPanel1.ScheduleOnlyRotationDaysVisible = true;
-            schedulingSessionPreferencesTabPanel1.UseSameDayOffsVisible = false;
         }
 
         private void AddToHelpContext()
