@@ -4,6 +4,7 @@ GO
 
 
 create PROCEDURE [stage].[etl_stg_agent_skill_delete]
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;

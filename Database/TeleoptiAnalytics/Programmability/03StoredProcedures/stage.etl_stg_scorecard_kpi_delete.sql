@@ -4,6 +4,7 @@ GO
 
 
 CREATE PROCEDURE [stage].[etl_stg_scorecard_kpi_delete]
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;
