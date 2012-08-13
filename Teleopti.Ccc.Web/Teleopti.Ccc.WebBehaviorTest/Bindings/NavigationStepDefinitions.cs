@@ -3,6 +3,7 @@ using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.User;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
@@ -11,12 +12,37 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	public class NavigationStepDefinitions
 	{
 		[When(@"I sign in")]
+		[When(@"I sign in by user name")]
 		public void WhenISignIn()
 		{
 			var userName = UserFactory.User().MakeUser();
 			if (!(Browser.Current.Url.Contains("/SignIn") || Browser.Current.Url.Contains("/MobileSignIn")))
 				Navigation.GotoGlobalSignInPage();
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+		}
+
+		[When(@"I sign in again")]
+		public void WhenISignInAgain()
+		{
+			Navigation.GotoGlobalSignInPage();
+			Pages.Pages.CurrentSignInPage.SignInApplication(UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName, TestData.CommonPassword);
+		}
+
+		[Given(@"I am signed in")]
+		public void IAmSignedIn()
+		{
+			if (!UserFactory.User().HasSetup<IUserRoleSetup>())
+				UserFactory.User().Setup(new Agent());
+			TestControllerMethods.Logon();
+		}
+
+		[Given(@"I am viewing an application page")]
+		public void WhenIAmViewingAnApplicationPage()
+		{
+			if (!UserFactory.User().HasSetup<IUserRoleSetup>())
+				UserFactory.User().Setup(new Agent());
+			TestControllerMethods.Logon();
+			Navigation.GotoAnApplicationPage();
 		}
 
 		[When(@"I view my week schedule")]
@@ -26,9 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am viewing schedule")]
 		public void WhenIViewMyWeekSchedule()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoWeekSchedulePage();
 		}
 
@@ -36,9 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view preferences")]
 		public void GivenIAmViewingPreferences()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoPreference();
 		}
 
@@ -54,34 +76,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view team schedule")]
 		public void WhenIViewTeamSchedule()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			var page = Browser.Current.Page<SignInPage>();
-			page.SignInApplication(userName, TestData.CommonPassword);
-			if (page.BusinessUnitList.Exists)
-			{
-				page.SelectFirstBusinessUnit();
-				page.ClickBusinessUnitOkButton();
-			}
+			//var userName = UserFactory.User().MakeUser();
+			//Navigation.GotoGlobalSignInPage();
+			//var page = Browser.Current.Page<SignInPage>();
+			//page.SignInApplication(userName, TestData.CommonPassword);
+			//if (page.BusinessUnitList.Exists)
+			//{
+			//    page.SelectFirstBusinessUnit();
+			//    page.ClickBusinessUnitOkButton();
+			//}
+			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule();
 		}
 
 		[Given(@"I view my week schedule one month ago")]
 		public void GivenIViewMyWeekScheduleOneMonthAgo()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoWeekSchedulePage(DateTime.Now.AddMonths(1));
 		}
 
 		[Given(@"I am viewing team schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			var page = Browser.Current.Page<SignInPage>();
-			page.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule(DateTime.Today.AddDays(1));
 		}
 

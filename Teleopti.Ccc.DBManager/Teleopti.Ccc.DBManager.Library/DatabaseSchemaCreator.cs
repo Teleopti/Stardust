@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
@@ -11,13 +10,15 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class DatabaseSchemaCreator
 	{
 		private readonly DatabaseVersionInformation _versionInformation;
+		private readonly SchemaVersionInformation _schemaVersionInformation;
 		private readonly SqlConnection _sqlConnection;
 		private readonly DatabaseFolder _databaseFolder;
 		private readonly ILog _logger;
 
-		public DatabaseSchemaCreator(DatabaseVersionInformation versionInformation, SqlConnection sqlConnection, DatabaseFolder databaseFolder, ILog logger)
+		public DatabaseSchemaCreator(DatabaseVersionInformation versionInformation, SchemaVersionInformation schemaVersionInformation, SqlConnection sqlConnection, DatabaseFolder databaseFolder, ILog logger)
 		{
 			_versionInformation = versionInformation;
+			_schemaVersionInformation = schemaVersionInformation;
 			_sqlConnection = sqlConnection;
 			_databaseFolder = databaseFolder;
 			_logger = logger;
@@ -30,9 +31,11 @@ namespace Teleopti.Ccc.DBManager.Library
 			ApplyProgrammability(databaseType);
 		}
 
+
+
 		public void ApplyReleases(DatabaseType databaseType)
 		{
-			var currentDatabaseBuildNumber = _versionInformation.GetDatabaseBuildNumber();
+			var currentDatabaseBuildNumber = _versionInformation.GetDatabaseVersion();
 			var releasesPath = _databaseFolder.ReleasePath(databaseType);
 			
 			if (!Directory.Exists(releasesPath)) return;
@@ -41,20 +44,20 @@ namespace Teleopti.Ccc.DBManager.Library
 			var scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
 
 			var applicableScriptFiles = from f in scriptFiles
-			                            let name = f.Name.Replace(".sql", "")
-			                            let number = Convert.ToInt32(name)
+										let number = _schemaVersionInformation.ReleaseNumberOfFile(f)
 			                            where number > currentDatabaseBuildNumber
 										orderby number
-			                            select new {file = f, name};
+			                            select new {file = f, number};
 
 			foreach (var scriptFile in applicableScriptFiles)
 			{
-				_logger.Write("Applying Release " + scriptFile.name + "...");
+				_logger.Write("Applying Release " + scriptFile.number + "...");
 				var sql = File.ReadAllText(scriptFile.file.FullName);
 				new SqlBatchExecutor(_sqlConnection, _logger)
 					.ExecuteBatchSql(sql);
 			}
 		}
+
 
 		public void ApplyTrunk(DatabaseType databaseType)
 		{
@@ -69,6 +72,8 @@ namespace Teleopti.Ccc.DBManager.Library
 			new SqlBatchExecutor(_sqlConnection, _logger)
 				.ExecuteBatchSql(sql);
 		}
+
+
 
 		public void ApplyProgrammability(DatabaseType databaseType)
 		{

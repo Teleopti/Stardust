@@ -80,7 +80,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoAnApplicationPageOutsidePortal()
 		{
 			GoTo("MyTime/Schedule/Week");
-			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
+		}
+
+		public static void GotoAnApplicationPage()
+		{
+			GotoWeekSchedulePage();
 		}
 
 		public static void GotoWeekSchedulePage()
@@ -154,6 +159,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		}
 
 		public static void GotoTheInternet()
+		{
+			Browser.Current.GoTo("about:blank");
+		}
+
+		public static void GotoBlank()
 		{
 			Browser.Current.GoTo("about:blank");
 		}

@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
+    <Compile Include="Foundation\ThreadPrincipalContext.cs" />
     <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactory.cs" />
     <Compile Include="Foundation\IMakeOrganisationMembershipFromPerson.cs" />
     <Compile Include="Foundation\IMakeRegionalFromPerson.cs" />

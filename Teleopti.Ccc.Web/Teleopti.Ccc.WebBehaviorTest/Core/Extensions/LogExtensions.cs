@@ -1,3 +1,4 @@
+using System;
 using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions

@@ -1,54 +1,79 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.User;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
 	[Binding]
 	public class SharedSignInStepDefinitions
 	{
-		private bool _hasPermission = true;
-		private bool _singleBusinessUnit = false;
+		[When(@"I open the sign in page")]
+		[Given(@"I am viewing the sign in page")]
+		public void GivenIAmAtTheSignInPage()
+		{
+			Navigation.GotoGlobalSignInPage();
+		}
+
+		[Given(@"I am viewing the mobile sign in page")]
+		public void GivenIAmAtTheMobileSignInPage()
+		{
+			Navigation.GotoMobileReportsSignInPage(string.Empty);
+		}
 
 		[Given(@"I dont have permission to sign in")]
 		public void GivenIDontHavePermissionToSignIn()
 		{
-			_hasPermission = false;
+			UserFactory.User().Setup(new UserNoPermission());
 		}
 
-		[When(@"I sign in by user name")]
-		public void WhenISignInByApplicationAuthentication()
+		[Given(@"I am a (.*)user with multiple business units")]
+		public void GivenIAmAUserWithMultipleBusinessUnits(string mobile)
 		{
-			Navigation.GotoGlobalSignInPage();
-			string userName;
-			if (_hasPermission)
+			if (mobile.Contains("mobile"))
 			{
-				userName = _singleBusinessUnit
-				           	? UserTestData.PersonApplicationUserSingleBusinessUnitUserName
-				           	: UserTestData.PersonApplicationUserName;
+				UserFactory.User().Setup(new Supervisor());
+				UserFactory.User().Setup(new SupervisorSecondBusinessUnit());
 			}
 			else
 			{
-				userName = UserTestData.PersonWithNoPermissionUserName;
+				UserFactory.User().Setup(new Agent());
+				UserFactory.User().Setup(new AgentSecondBusinessUnit());
 			}
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
 		}
 
-		[Given(@"I am a (?:mobileuser|user) with multiple business units")]
-		public void GivenIAmAUserWithMultipleBusinessUnits()
+		[Given(@"I am a (.*)user with a single business unit")]
+		public void GivenIAmAUserWithASingleBusinessUnit(string mobile)
 		{
-			_singleBusinessUnit = false;
-			_hasPermission = true;
+			if (mobile.Contains("mobile"))
+				UserFactory.User().Setup(new Supervisor());
+			else
+				UserFactory.User().Setup(new Agent());
 		}
 
-		[Given(@"I am a mobileuser with a single business unit")]
-		[Given(@"I am a user with a single business unit")]
-		public void GivenIAmAUserWithASingleBusinessUnit()
+		[When(@"I sign in by windows credentials")]
+		public void WhenISignInByWindowsAuthentication()
 		{
-			_singleBusinessUnit = true;
-			_hasPermission = true;
+			if (!UserFactory.User().HasSetup<AgentSecondBusinessUnit>())
+			{
+				ScenarioContext.Current.Pending();
+				return;
+			}
+			Pages.Pages.CurrentSignInPage.SignInWindows();
+		}
+
+		[When(@"I sign in by user name and wrong password")]
+		public void WhenISignInByUserNameAndWrongPassword()
+		{
+			var userName = UserFactory.User().MakeUser();
+			Pages.Pages.CurrentSignInPage.SignInApplication(userName, "wrong password");
 		}
 
 		[When(@"I select a business unit")]
@@ -64,37 +89,51 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			EventualAssert.That(() => Browser.Current.Link("signout").Exists || Browser.Current.Link("signout-button").Exists, Is.True);
 		}
 
-		[When(@"I sign in by user name and wrong password")]
-		public void WhenISignInByUserNameAndWrongPassword()
-		{
-			Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.SignInApplication(UserTestData.PersonApplicationUserSingleBusinessUnitUserName, "wrong password");
-		}
-
 		[Then(@"I should see an log on error")]
 		public void ThenIShouldSeeAnLogOnError()
 		{
-			Browser.Current.ContainsText(Resources.LogOnFailedInvalidUserNameOrPassword);
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
 		}
 
 		[Then(@"I should not be signed in")]
+		[Then(@"I should be signed out")]
+		[Then(@"I should see the login page")]
 		public void ThenIAmNotSignedIn()
 		{
-			EventualAssert.That(() => Browser.Current.Link("signout").Exists, Is.False);
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
 		}
 
-		[When(@"I sign in by Windows credentials")]
-		public void WhenISignInByWindowsAuthentication()
+	}
+
+
+	public class StringContainsAnyLanguageResourceContraint : Constraint
+	{
+		private readonly List<string> _texts = new List<string>();
+
+		public StringContainsAnyLanguageResourceContraint(string resource)
 		{
-			Navigation.GotoGlobalSignInPage();
-			if (_singleBusinessUnit)
-			{
-				ScenarioContext.Current.Pending();
-				return;
-			}
-			Pages.Pages.CurrentSignInPage.SignInWindows();
+			// add any browser language in which tests need to run on here
+			_texts.Add(Resources.ResourceManager.GetString(resource, new CultureInfo("en-US")));
+			_texts.Add(Resources.ResourceManager.GetString(resource, new CultureInfo("sv-SE")));
 		}
 
+		public override bool Matches(object actual)
+		{
+			if (actual == null)
+				return false;
+			this.actual = actual;
+			var actualString = (string)actual;
+			return _texts.Any(actualString.Contains);
+		}
+
+		public override void WriteDescriptionTo(MessageWriter writer)
+		{
+			writer.WriteMessageLine("Should contain a string in any language: ");
+			_texts.ForEach(s =>
+			               	{
+								writer.WriteMessageLine("");
+			               		writer.WriteExpectedValue(s);
+			               	});
+		}
 	}
 }

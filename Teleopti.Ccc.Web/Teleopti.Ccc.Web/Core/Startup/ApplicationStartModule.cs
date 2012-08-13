@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Web;
 using System.Web.Mvc;
 using Autofac;
@@ -73,14 +74,16 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			//todo: mem leak? how to unhook this eventhandler?
 			application.PostAuthenticateRequest += delegate
 			                                       	{
-			                                       		if (!HasStartupError)
-			                                       		{
-			                                       			var requestContextInitializer = DependencyResolver
-																.Current
-			                                       				.GetService<IRequestContextInitializer>()
-																;
-															requestContextInitializer.SetupPrincipalAndCulture();
-			                                       		}
+			                                       		if (HasStartupError) return;
+
+														// exclude TestController from principal stuff
+			                                       		if (HttpContext.Current.Request.Url.AbsolutePath.Contains("/Test/")) return;
+
+			                                       		var requestContextInitializer = DependencyResolver
+			                                       			.Current
+			                                       			.GetService<IRequestContextInitializer>()
+			                                       			;
+			                                       		requestContextInitializer.SetupPrincipalAndCulture();
 			                                       	};
 
 		}

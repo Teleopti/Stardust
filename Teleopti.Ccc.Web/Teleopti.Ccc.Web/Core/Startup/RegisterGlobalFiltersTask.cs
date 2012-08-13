@@ -26,7 +26,11 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private static void registerGlobalFilters(GlobalFilterCollection filters)
 		{
 			filters.Add(new AjaxHandleErrorAttribute(_errorMessageProvider));
-			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(new List<Type> {typeof(AuthenticationController)}));
+			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(new List<Type>
+			                                                    	{
+			                                                    		typeof(AuthenticationController),
+																		typeof(TestController)
+			                                                    	}));
 			filters.Add(new CheckStartupExceptionAttribute());
 		}
 	}

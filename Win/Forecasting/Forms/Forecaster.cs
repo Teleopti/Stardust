@@ -1471,6 +1471,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         //--------------------
 
+
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {

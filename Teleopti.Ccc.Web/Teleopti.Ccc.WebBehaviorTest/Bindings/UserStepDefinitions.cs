@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am a user with access only to MyTime")]
 		public void GivenIAmAUserWithAccessOnlyToMyTime()
 		{
-			UserFactory.User().Setup(new UserWithoutMobileReportsAccess());
+			UserFactory.User().Setup(new Agent());
 		}
 
 		[Given(@"I am a user with access only to Mobile Reports")]
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am an agent")]
 		public void GivenIAmAnAgent()
 		{
-			UserFactory.User().Setup(new UserWithoutMobileReportsAccess());
+			UserFactory.User().Setup(new Agent());
 			UserFactory.User().Setup(new SchedulePeriod());
 			UserFactory.User().Setup(new PersonPeriod());
 			UserFactory.User().Setup(new ScheduleIsPublished());
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am user without permission to MobileReports")]
 		public void GivenIAmUserWithoutPermissionToMobileReports()
 		{
-			UserFactory.User().Setup(new UserWithoutMobileReportsAccess());
+			UserFactory.User().Setup(new Agent());
 		}
 
 
@@ -601,10 +601,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"the other site has 2 teams")]
 		public void GivenTheOtherSiteHas2Teams()
 		{
-			UserFactory.User().Setup(new AnotherSitesTeam());
+			if (!UserFactory.User().HasSetup<AnotherSitesTeam>())
+				UserFactory.User().Setup(new AnotherSitesTeam());
 			UserFactory.User().Setup(new AnotherSitesSecondTeam());
 		}
-	
+		
 		[Given(@"I belong to another site's team tomorrow")]
 		public void GivenIBelongToAnotherSiteSTeamTomorrow()
 		{
@@ -666,14 +667,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I should work (.*) hours per day according to my contract")]
 		public void GivenIShouldWorkHoursPerDayAccordingToMyContract(int hoursPerDay)
 		{
-			var contract = new Contract("Kontraktet") { WorkTime = new WorkTime(new TimeSpan(hoursPerDay, 0, 0)) };
-			var partTimePercentage = new PartTimePercentage("Procent") { Percentage = new Percent(1) };
-
-			UserFactory.User().Setup(
-				new PersonPeriod()
-					{
-						PersonContract = new PersonContract(contract, partTimePercentage, DataContext.Data().Data<ContractScheduleWith2DaysOff>().ContractSchedule)
-					});
+			var contractSchedule = new ContractScheduleFromTable
+			                       	{
+			                       		MondayWorkDay = true,
+			                       		TuesdayWorkDay = true,
+			                       		WednesdayWorkDay = true,
+			                       		ThursdayWorkDay = true,
+			                       		FridayWorkDay = true,
+			                       		SaturdayWorkDay = true,
+			                       		SundayWorkDay = true
+			                       	};
+			var contract = new ContractFromTable
+			               	{
+			               		AverageWorkTimePerDay = 8
+			               	};
+			UserFactory.User().Setup(contract);
+			UserFactory.User().Setup(contractSchedule);
+			UserFactory.User().UserData<PersonPeriod>().Contract = contract;
+			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
 		}
 
 	}

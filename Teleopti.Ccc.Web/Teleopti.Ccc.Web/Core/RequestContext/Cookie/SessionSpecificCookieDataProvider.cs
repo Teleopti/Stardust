@@ -52,12 +52,19 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			return _dataStringSerializer.Deserialize(userData);
 		}
 
-		public void ExpireCookie()
+		public void ExpireTicket()
 		{
 			var cookie = getCookie();
 			var ticket = decryptCookie(cookie);
-			ticket = makeTicket(ticket.Name, _now.Time, ticket.UserData, DateTime.Now.AddSeconds(-1));
+			ticket = makeTicket(ticket.Name, _now.Time, ticket.UserData, DateTime.Now.AddHours(-1));
 			cookie.Value = encryptTicket(ticket);
+			setCookie(cookie);
+		}
+
+		public void RemoveCookie()
+		{
+			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName);
+			cookie.Expires = DateTime.Now.AddYears(-2);
 			setCookie(cookie);
 		}
 

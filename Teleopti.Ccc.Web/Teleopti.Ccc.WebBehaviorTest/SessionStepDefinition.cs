@@ -18,20 +18,22 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenMyCookieExpires()
 		{
 			if (Pages.Pages.Current is PreferencePage)
-				TestMethods.WaitForPreferenceFeedbackToLoad();
-			TestMethods.ExpireMyCookie();
+			{
+				TestControllerMethods.WaitForPreferenceFeedbackToLoad();
+			}
+			TestControllerMethods.ExpireMyCookieInsidePortal();
 		}
 
 		[When(@"My cookie gets corrupt")]
 		public void WhenMyCookieIsCorrupt()
 		{
-			TestMethods.CreateCorruptCookie();
+			TestControllerMethods.CreateCorruptCookie();
 		}
 
 		[When(@"My cookie gets pointed to non existing database")]
 		public void WhenMyCookieGetsPointedToNonExistingDatabase()
 		{
-			TestMethods.CreateNonExistingDatabaseCookie();
+			TestControllerMethods.CreateNonExistingDatabaseCookie();
 		}		
 	}
 }

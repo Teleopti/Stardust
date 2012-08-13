@@ -24,15 +24,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 			catch (NHibernate.ObjectNotFoundException exception)
 			{
-				throw new PersonNotFoundException("Person not found", exception);
+				throw new PersonNotFoundException("Person not found lazy loading the name", exception);
 			}
 		}
-	}
-
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"), 
-	System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
-	public class PersonNotFoundException : Exception
-	{
-		public PersonNotFoundException(string message, Exception innerException) : base(message, innerException) { }
 	}
 }

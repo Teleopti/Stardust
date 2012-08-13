@@ -487,6 +487,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             }
 		}
 
+
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {

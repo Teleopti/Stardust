@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public void Select(string text)
 		{
-			Log.Write("Selecting selectbox item " + text);
 			Button.EventualClick();
 			EventualAssert.That(() => AutoComplete.Exists, Is.True);
 			EventualAssert.That(() => AutoComplete.DisplayVisible(), Is.True);

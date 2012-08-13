@@ -6,6 +6,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 	{
 		TextField UserNameTextField { get; }
 
+		Element ValidationSummary { get; }
+
 		void SelectApplicationTestDataSource();
 		void SignInApplication(string username, string password);
 		void SignInWindows();

@@ -22,8 +22,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
 		public static void Setup()
 		{
-			var startTime = DateTime.Now;
-
 			if (IniFileInfo.CassiniDev)
 			{
 				Url = new Uri("http://localhost:57567/");
@@ -35,9 +33,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				Url = new Uri(IniFileInfo.Url);
 			}
 			GenerateAndWriteTestDataNHibFileFromTemplate();
-
-			var setupTime = DateTime.Now.Subtract(startTime);
-			Log.Write("Test site setup took " + setupTime);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]

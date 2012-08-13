@@ -15,13 +15,6 @@ using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	public class DataContext
-	{
-		private static readonly DataFactory _dataFactory = new DataFactory();
-
-		public static DataFactory Data() { return _dataFactory; }
-	}
-
 	public class UserFactory
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(UserFactory));
