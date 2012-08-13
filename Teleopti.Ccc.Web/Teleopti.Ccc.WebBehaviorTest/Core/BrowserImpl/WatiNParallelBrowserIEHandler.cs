@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			CloseAllBrowsersIfIAmTheOnlyTestRun();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
 		private static void CloseAllBrowsersIfIAmTheOnlyTestRun()
 		{
 			using (new SystemLevelLock("TestBrowserCleaningLock"))
