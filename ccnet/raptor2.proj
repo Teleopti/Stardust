@@ -25,7 +25,7 @@
 		
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
 		<!-- rk: how can we make this smarter? We will forget to remove old ones here.... -->
-		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'RaptorMain'">false</RunWebBehaviorTests>
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'RaptorMain'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI15494'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI30000'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI18357'">true</RunWebBehaviorTests>
