@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -47,10 +46,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldUseGroupingChangesSetInSchedulingOptions()
         {
-            Assert.IsFalse(_schedulingOptions.UseGroupOptimizing);
+            Assert.IsFalse(_schedulingOptions.UseGroupScheduling);
             _optimizationPreferences.Extra.UseTeams = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsTrue(_schedulingOptions.UseGroupOptimizing);
+			Assert.IsTrue(_schedulingOptions.UseGroupScheduling);
         }
 
         [Test]
