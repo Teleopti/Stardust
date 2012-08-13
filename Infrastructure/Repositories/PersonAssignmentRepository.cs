@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             var ret = new[] { assWithMain, assWithPers, persWithLayers, assWithOvertime, overWithLayers };
             ret.ForEach(crit => addScenarioAndFilterClauses(crit, scenario, period));
-            ret.ForEach(crit => addBuClauseToNonRootQuery(crit));
+            ret.ForEach(addBuClauseToNonRootQuery);
             return ret;
         }
 

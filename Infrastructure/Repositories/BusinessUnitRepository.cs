@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             return skillTimeZoneId
                 .Concat(personTimeZoneId)
-                .Distinct().Select(t => TimeZoneInfo.FindSystemTimeZoneById(t)).ToList();
+                .Distinct().Select(TimeZoneInfo.FindSystemTimeZoneById).ToList();
         }
 
         public override bool ValidateUserLoggedOn
