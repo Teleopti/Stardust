@@ -54,14 +54,25 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
                             row.Append(seperator);
                             row.Append(skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime.TotalSeconds.ToString(
                                 "F", CultureInfo.InvariantCulture));
-                            row.Append(seperator);
+
+                            if (_model.ExportType.Equals(TypeOfExport.AgentsAndCalls))
+                            {
+                                row.Append(seperator);
+                                row.Append(skillStaffPeriod.Payload.ForecastedIncomingDemand.ToString("F", CultureInfo.InvariantCulture));
+                            }
                         }
 
-                        if (_model.ExportType.Equals(TypeOfExport.Agents) ||
-                            _model.ExportType.Equals(TypeOfExport.AgentsAndCalls))
+                        if (_model.ExportType.Equals(TypeOfExport.Agents))
                         {
+                            row.Append(0);
+                            row.Append(seperator);
+                            row.Append(0D);
+                            row.Append(seperator);
+                            row.Append(0D);
+                            row.Append(seperator);
                             row.Append(skillStaffPeriod.Payload.ForecastedIncomingDemand.ToString("F",CultureInfo.InvariantCulture));
                         }
+
                         writter.WriteLine(row.ToString());
                     }
                 }
