@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Win.Common
 
         private void buttonAdvOK_Click(object sender, EventArgs e)
         {
-            _presenter.Accept();
+            _presenter.Accept();    
         }
 
         private void buttonAdvCancel_Click(object sender, EventArgs e)
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Win.Common
                 }
                 else
                 {
-                    if ((1 + value/100)*Sum > maxValue || (1+value/100)*Sum < minValue)
+                    if ((1 + value / 100) * Sum > maxValue || (1 + value / 100) * Sum < minValue)
                         textBoxExtPercent.Text = _percentage;
                     else
                         _percentage = textBoxExtPercent.Text;
