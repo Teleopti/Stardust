@@ -94,11 +94,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             set { radioButtonSchedulePeriod.Visible = value; }
         }
 
-        public bool UseSameDayOffsVisible
-        {
-            get { return checkBoxUseSameDayOffs.Visible; }
-            set { checkBoxUseSameDayOffs.Visible = value; }
-        }
 
         public bool ScheduleOnlyRotationDaysVisible
         {
@@ -243,7 +238,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_schedulingOptions.GroupPageForShiftCategoryFairness = _localSchedulingOptions.GroupPageForShiftCategoryFairness;
         	_schedulingOptions.UseMaxSeats = _localSchedulingOptions.UseMaxSeats;
         	_schedulingOptions.DoNotBreakMaxSeats = _localSchedulingOptions.DoNotBreakMaxSeats;
-            _schedulingOptions.UseGroupOptimizing = _localSchedulingOptions.UseGroupOptimizing;
             _schedulingOptions.UseSameDayOffs = _localSchedulingOptions.UseSameDayOffs;
             _schedulingOptions.UseBlockOptimizing = _localSchedulingOptions.UseBlockScheduling;
             _schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
@@ -296,8 +290,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         	_localSchedulingOptions.UseMaxSeats = checkBoxUseMaxSeats.Checked;
         	_localSchedulingOptions.DoNotBreakMaxSeats = checkBoxDoNotBreakMaxSeats.Checked;
             _localSchedulingOptions.TagToUseOnScheduling = (IScheduleTag)comboBoxAdvTag.SelectedItem;
-            _localSchedulingOptions.UseSameDayOffs = !checkBoxUseGroupScheduling.Checked ? checkBoxUseGroupScheduling.Checked : checkBoxUseSameDayOffs.Checked;
-        	_localSchedulingOptions.ResourceCalculateFrequency = (int)numericUpDownResourceCalculateEvery.Value;
+            _localSchedulingOptions.ResourceCalculateFrequency = (int)numericUpDownResourceCalculateEvery.Value;
 			_localSchedulingOptions.ShowTroubleshot = checkBoxShowTroubleShot.Checked;
             _localSchedulingOptions.UseGroupSchedulingCommonCategory = checkBoxCommonCategory.Checked;
             _localSchedulingOptions.UseGroupSchedulingCommonStart = checkBoxCommonStart.Checked;
@@ -381,8 +374,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         	checkBoxUseMaxSeats.Checked = _localSchedulingOptions.UseMaxSeats;
         	checkBoxDoNotBreakMaxSeats.Enabled = checkBoxUseMaxSeats.Checked;
         	checkBoxDoNotBreakMaxSeats.Checked = _localSchedulingOptions.DoNotBreakMaxSeats;
-            checkBoxUseSameDayOffs.Enabled = checkBoxUseGroupScheduling.Checked;
-            checkBoxUseSameDayOffs.Checked = _localSchedulingOptions.UseSameDayOffs;
         	numericUpDownResourceCalculateEvery.Value = _localSchedulingOptions.ResourceCalculateFrequency;
 			checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleshot;
             if(_localSchedulingOptions.UseGroupScheduling )
@@ -566,15 +557,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             checkBoxCommonStart.Enabled = value;
                 
             
-        }
-
-    	private void checkBoxUseSameDayOffsCheckedChanged(object sender, EventArgs e)
-        {
-            if (_dataLoaded)
-            {
-                getDataFromControls();
-                setDataInControls();
-            }
         }
 
 		private void comboBoxGroupingSelectedIndexChanged(object sender, EventArgs e)

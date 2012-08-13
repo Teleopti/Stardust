@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool UseMaxSeats { get; set; }
 		public bool DoNotBreakMaxSeats { get; set; }
         public bool UseSameDayOffs { get; set; }
-        public bool UseGroupOptimizing { get; set; }
         public BlockFinderType UseBlockOptimizing { get; set; }
         public IScheduleTag TagToUseOnScheduling { get; set; }
     	public int ResourceCalculateFrequency { get; set; }
