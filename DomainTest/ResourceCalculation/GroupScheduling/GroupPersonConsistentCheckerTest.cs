@@ -229,6 +229,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Assert.That(_target.CommonPossibleStartEndCategory,Is.Null);
 			_mocks.VerifyAll();
 		}
+
+		[Test]
+		public void PropertyCommonPossibleStartEndCategoryBackingFieldMayNotBeNull()
+		{
+			Assert.IsNull(_target.CommonPossibleStartEndCategory);
+		}
 	}
 
 	
