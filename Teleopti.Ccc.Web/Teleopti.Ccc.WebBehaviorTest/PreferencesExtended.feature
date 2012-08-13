@@ -15,10 +15,14 @@ Background:
 	| Field                    | Value            |
 	| Name                     | Access to mytime |
 	| Access to mobile reports | false            |
+	And there is a role with
+	| Field                          | Value                             |
+	| Name                           | No access to extended preferences |
+	| Access to extended preferences | false                             |
 
-Scenario: See extended preference Alternative
+Scenario: See indication of an extended preference NEW
 	Given I am a user
-	And I have a role named 'Access to mytime'
+	And I have the role 'Access to mytime'
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -27,11 +31,46 @@ Scenario: See extended preference Alternative
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
-	And I have a workflow control set named 'Published schedule'
+	And I have the workflow control set 'Published schedule'
+	And I have an extended preference on '2012-06-20'
+	When I view preferences for date '2012-06-20'
+	And I click the extended preference indication on '2012-06-20'
+	Then I should see that I have an extended preference on '2012-06-20'
+
+Scenario: See extended preference NEW
+	Given I am a user
+	And I have the role 'Access to mytime'
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have the workflow control set 'Published schedule'
 	And I have an extended preference on '2012-06-20'
 	When I view preferences for date '2012-06-20'
 	And I click the extended preference indication on '2012-06-20'
 	Then I should see the extended preference on '2012-06-20'
+
+Scenario: See extended preference without permission NEW
+	Given I am a user
+	And I have the role 'No access to extended preferences'
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have the workflow control set 'Published schedule'
+	And I have an extended preference on '2012-06-20'
+	When I view preferences for date '2012-06-20'
+	And I click the extended preference indication on '2012-06-20'
+	Then I should see the extended preference on '2012-06-20'
+
 
 
 

@@ -93,36 +93,33 @@ namespace Teleopti.Ccc.WebBehaviorTest
 #line 14
  testRunner.And("there is a role with", ((string)(null)), table2);
 #line hidden
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("See extended preference Alternative")]
-        public virtual void SeeExtendedPreferenceAlternative()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended preference Alternative", ((string[])(null)));
-#line 19
-this.ScenarioSetup(scenarioInfo);
-#line 9
-this.FeatureBackground();
-#line 20
- testRunner.Given("I am a user");
-#line 21
- testRunner.And("I have a role named \'Access to mytime\'");
-#line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table3.AddRow(new string[] {
-                        "Start date",
-                        "2012-06-18"});
+                        "Name",
+                        "No access to extended preferences"});
             table3.AddRow(new string[] {
-                        "Type",
-                        "Week"});
-            table3.AddRow(new string[] {
-                        "Length",
-                        "1"});
-#line 22
- testRunner.And("I have a schedule period with", ((string)(null)), table3);
+                        "Access to extended preferences",
+                        "false"});
+#line 18
+ testRunner.And("there is a role with", ((string)(null)), table3);
+#line hidden
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("See indication of an extended preference NEW")]
+        public virtual void SeeIndicationOfAnExtendedPreferenceNEW()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See indication of an extended preference NEW", ((string[])(null)));
+#line 23
+this.ScenarioSetup(scenarioInfo);
+#line 9
+this.FeatureBackground();
+#line 24
+ testRunner.Given("I am a user");
+#line 25
+ testRunner.And("I have the role \'Access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -130,17 +127,134 @@ this.FeatureBackground();
             table4.AddRow(new string[] {
                         "Start date",
                         "2012-06-18"});
-#line 27
- testRunner.And("I have a person period with", ((string)(null)), table4);
-#line 30
- testRunner.And("I have a workflow control set named \'Published schedule\'");
+            table4.AddRow(new string[] {
+                        "Type",
+                        "Week"});
+            table4.AddRow(new string[] {
+                        "Length",
+                        "1"});
+#line 26
+ testRunner.And("I have a schedule period with", ((string)(null)), table4);
+#line hidden
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table5.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
 #line 31
- testRunner.And("I have an extended preference on \'2012-06-20\'");
-#line 32
- testRunner.When("I view preferences for date \'2012-06-20\'");
-#line 33
- testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+ testRunner.And("I have a person period with", ((string)(null)), table5);
 #line 34
+ testRunner.And("I have the workflow control set \'Published schedule\'");
+#line 35
+ testRunner.And("I have an extended preference on \'2012-06-20\'");
+#line 36
+ testRunner.When("I view preferences for date \'2012-06-20\'");
+#line 37
+ testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+#line 38
+ testRunner.Then("I should see that I have an extended preference on \'2012-06-20\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("See extended preference NEW")]
+        public virtual void SeeExtendedPreferenceNEW()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended preference NEW", ((string[])(null)));
+#line 40
+this.ScenarioSetup(scenarioInfo);
+#line 9
+this.FeatureBackground();
+#line 41
+ testRunner.Given("I am a user");
+#line 42
+ testRunner.And("I have the role \'Access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table6.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+            table6.AddRow(new string[] {
+                        "Type",
+                        "Week"});
+            table6.AddRow(new string[] {
+                        "Length",
+                        "1"});
+#line 43
+ testRunner.And("I have a schedule period with", ((string)(null)), table6);
+#line hidden
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table7.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+#line 48
+ testRunner.And("I have a person period with", ((string)(null)), table7);
+#line 51
+ testRunner.And("I have the workflow control set \'Published schedule\'");
+#line 52
+ testRunner.And("I have an extended preference on \'2012-06-20\'");
+#line 53
+ testRunner.When("I view preferences for date \'2012-06-20\'");
+#line 54
+ testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+#line 55
+ testRunner.Then("I should see the extended preference on \'2012-06-20\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("See extended preference without permission NEW")]
+        public virtual void SeeExtendedPreferenceWithoutPermissionNEW()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended preference without permission NEW", ((string[])(null)));
+#line 57
+this.ScenarioSetup(scenarioInfo);
+#line 9
+this.FeatureBackground();
+#line 58
+ testRunner.Given("I am a user");
+#line 59
+ testRunner.And("I have the role \'No access to extended preferences\'");
+#line hidden
+            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table8.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+            table8.AddRow(new string[] {
+                        "Type",
+                        "Week"});
+            table8.AddRow(new string[] {
+                        "Length",
+                        "1"});
+#line 60
+ testRunner.And("I have a schedule period with", ((string)(null)), table8);
+#line hidden
+            TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table9.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+#line 65
+ testRunner.And("I have a person period with", ((string)(null)), table9);
+#line 68
+ testRunner.And("I have the workflow control set \'Published schedule\'");
+#line 69
+ testRunner.And("I have an extended preference on \'2012-06-20\'");
+#line 70
+ testRunner.When("I view preferences for date \'2012-06-20\'");
+#line 71
+ testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+#line 72
  testRunner.Then("I should see the extended preference on \'2012-06-20\'");
 #line hidden
             this.ScenarioCleanup();
@@ -151,17 +265,17 @@ this.FeatureBackground();
         public virtual void SeeIndicationOfAnExtendedPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See indication of an extended preference", ((string[])(null)));
-#line 39
+#line 78
 this.ScenarioSetup(scenarioInfo);
 #line 9
 this.FeatureBackground();
-#line 40
+#line 79
  testRunner.Given("I am an agent");
-#line 41
+#line 80
  testRunner.And("I have an existing extended preference");
-#line 42
+#line 81
  testRunner.When("I view preferences");
-#line 43
+#line 82
  testRunner.Then("I should see that I have an existing extended preference");
 #line hidden
             this.ScenarioCleanup();
@@ -172,19 +286,19 @@ this.FeatureBackground();
         public virtual void SeeExtendedPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended preference", ((string[])(null)));
-#line 45
+#line 84
 this.ScenarioSetup(scenarioInfo);
 #line 9
 this.FeatureBackground();
-#line 46
+#line 85
  testRunner.Given("I am an agent");
-#line 47
+#line 86
  testRunner.And("I have an existing extended preference");
-#line 48
+#line 87
  testRunner.When("I view preferences");
-#line 49
+#line 88
  testRunner.And("I click the extended preference indication");
-#line 50
+#line 89
  testRunner.Then("I should see my existing extended preference");
 #line hidden
             this.ScenarioCleanup();
@@ -195,19 +309,19 @@ this.FeatureBackground();
         public virtual void SeeExtendedPreferenceWithoutPermission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended preference without permission", ((string[])(null)));
-#line 52
+#line 91
 this.ScenarioSetup(scenarioInfo);
 #line 9
 this.FeatureBackground();
-#line 53
+#line 92
  testRunner.Given("I am an agent without access to extended preferences");
-#line 54
+#line 93
  testRunner.And("I have an existing extended preference");
-#line 55
+#line 94
  testRunner.When("I view preferences");
-#line 56
+#line 95
  testRunner.And("I click the extended preference indication");
-#line 57
+#line 96
  testRunner.Then("I should see my existing extended preference");
 #line hidden
             this.ScenarioCleanup();
