@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Infrastructure.Config
 
         private string _path = string.Empty;
         private XDocument _file;
-        private readonly int _defaultMaxNumberOfAttempts = 3;
-        private readonly int _defaultInvalidAttemptWindow = 0;
-        private readonly int _defaultPasswordValidForDayCount = int.MaxValue;
-        private readonly int _defaultPasswordExpireWarningDayCount = 0;
-        private readonly ILog _logger = LogManager.GetLogger(typeof(LoadPasswordPolicyService));
+    	private const int _defaultMaxNumberOfAttempts = 3;
+    	private const int _defaultInvalidAttemptWindow = 0;
+    	private const int _defaultPasswordValidForDayCount = int.MaxValue;
+    	private const int _defaultPasswordExpireWarningDayCount = 0;
+    	private readonly ILog _logger = LogManager.GetLogger(typeof(LoadPasswordPolicyService));
         public XDocument File
         {
             get { return LoadFile(); }

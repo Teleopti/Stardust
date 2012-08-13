@@ -101,8 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence)
         {
-            string q =
-                        @"select pa.Layer.Period
+            const string q = @"select pa.Layer.Period
                             from PersonAbsence pa
                             where pa.Person=:person 
                                 and pa.Layer.Period.period.Maximum > :startTime
