@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading;
 using CassiniDev;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
