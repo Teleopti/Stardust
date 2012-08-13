@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Win.Common
         private readonly ModifySelectionPresenter _presenter;
         private string _percentage;
         private const double maxValue = 999999999d;
+        private const double minValue = -999999999d;
 
         public ModifySelectionView(ModifyCalculator model)
         {
@@ -135,7 +136,7 @@ namespace Teleopti.Ccc.Win.Common
 
         private void buttonAdvOK_Click(object sender, EventArgs e)
         {
-            _presenter.Accept();
+            _presenter.Accept();    
         }
 
         private void buttonAdvCancel_Click(object sender, EventArgs e)
@@ -150,14 +151,14 @@ namespace Teleopti.Ccc.Win.Common
             {
                 if (InputType == "0")
                 {
-                    if (value > maxValue)
+                    if (value > maxValue || value < minValue)
                         textBoxExtPercent.Text = _percentage;
                     else
                         _percentage = textBoxExtPercent.Text;
                 }
                 else
                 {
-                    if ((1 + value/100)*Sum > maxValue)
+                    if ((1 + value / 100) * Sum > maxValue || (1 + value / 100) * Sum < minValue)
                         textBoxExtPercent.Text = _percentage;
                     else
                         _percentage = textBoxExtPercent.Text;
