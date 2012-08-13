@@ -134,14 +134,14 @@ namespace Teleopti.Ccc.Infrastructure.Config
                 catch (Exception e)
                 {
                     _logger.Info("Default password policy will be used:  " + e.Message);
-                    return DefaultXDocument();
+                    return defaultXDocument();
                 }
 
             }
             return _file;
         }
 
-        private XDocument DefaultXDocument()
+        private static XDocument defaultXDocument()
         {
             return new XDocument(
              new XDeclaration("1.0", "utf-8", "yes"),
