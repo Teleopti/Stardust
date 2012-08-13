@@ -15,7 +15,7 @@ GO
 CREATE PROCEDURE [mart].[etl_data_mart_delete]
 @DeleteAll BIT = 0, --Delete initial load too 
 @DeleteFrom smalldatetime = NULL --Only from a certain UTC-date. Make sure you start ETL from one day earlier than this UTC-date to cover any time zone related gaps.
-
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 Declare @Date_Id int

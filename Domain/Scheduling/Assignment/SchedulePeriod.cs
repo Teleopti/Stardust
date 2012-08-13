@@ -108,8 +108,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
-				if (IsAverageWorkTimePerDayOverride)
-					return _averageWorkTimePerDay.Value;
 
 				if (IsPeriodTimeOverride)
 				{
@@ -118,6 +116,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					double periodMinutes = periodTime / totalWorkDay;
 					return TimeSpan.FromMinutes(periodMinutes);
 				}
+
+				if (IsAverageWorkTimePerDayOverride)
+					return _averageWorkTimePerDay.Value;
 
 				IPersonPeriod period = GetPersonPeriod();
 				if (period == null) return TimeSpan.Zero;

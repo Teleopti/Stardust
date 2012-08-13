@@ -13,7 +13,7 @@ GO
 -- 2010-11-05 Created a new stage table for Skills ROBINK
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_skill_load] 
-	
+WITH EXECUTE AS OWNER
 AS
 --------------------------------------------------------------------------
 -- Not Defined skill

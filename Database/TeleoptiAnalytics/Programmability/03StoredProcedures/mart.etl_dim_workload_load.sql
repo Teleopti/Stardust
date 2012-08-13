@@ -13,7 +13,7 @@ GO
 -- 2010-07-05 Added percentages for calculated calls
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_workload_load] 
-	
+WITH EXECUTE AS OWNER	
 AS
 --------------------------------------------------------------------------
 -- Not Defined workload

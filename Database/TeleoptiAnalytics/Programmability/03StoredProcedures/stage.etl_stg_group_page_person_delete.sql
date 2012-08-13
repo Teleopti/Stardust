@@ -4,6 +4,7 @@ GO
 
 
 CREATE PROCEDURE [stage].[etl_stg_group_page_person_delete]
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;
