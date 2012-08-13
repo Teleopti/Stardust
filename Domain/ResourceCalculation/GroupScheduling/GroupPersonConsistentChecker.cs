@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 	public class GroupPersonConsistentChecker : IGroupPersonConsistentChecker
 	{
-		private HashSet<PossibleStartEndCategory> _possible;
+		private HashSet<PossibleStartEndCategory> _possible= new HashSet<PossibleStartEndCategory>();
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
 		public bool AllPersonsHasSameOrNoneScheduled(IScheduleDictionary scheduleDictionary, IList<IPerson> persons, 
 			DateOnly dateOnly, ISchedulingOptions schedulingOptions)
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			InParameter.NotNull("schedulingOptions", schedulingOptions);
 			InParameter.NotNull("persons",persons);
 			InParameter.NotNull("scheduleDictionary", scheduleDictionary);
-			_possible = new HashSet<PossibleStartEndCategory>(); 
+
 			foreach (var person in persons)
 			{
                 if(!person.VirtualSchedulePeriod(dateOnly).IsValid)
