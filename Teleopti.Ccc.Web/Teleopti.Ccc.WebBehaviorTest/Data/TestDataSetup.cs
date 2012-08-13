@@ -20,14 +20,11 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestDataSetup
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(TestDataSetup));
-
 		private static NHibernateUnitOfWorkFactory _unitOfWorkFactory;
 		private static TeleoptiPrincipal _principal;
 		private static DatabaseHelper.Backup _Ccc7DataBackup;
