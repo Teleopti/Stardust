@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

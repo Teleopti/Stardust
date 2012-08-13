@@ -1,7 +1,6 @@
 #region Imports
 
 using System.Collections.Generic;
-using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
