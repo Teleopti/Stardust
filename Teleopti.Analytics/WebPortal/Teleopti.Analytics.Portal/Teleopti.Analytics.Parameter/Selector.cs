@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -378,7 +379,16 @@ namespace Teleopti.Analytics.Parameters
                     ctrl.ProcParam = procParam;
                     ctrl.ParamName = paramName;
                     ctrl.Display = display;
-                	ctrl.IntervalLength = (int)row["interval_length_minutes"];
+                	if (row["interval_length_minutes"] == DBNull.Value)
+                		throw new ConfigurationErrorsException("Could not find configuration for 'interval_length_minutes'. Is the ETL Tool correctly configured?");
+                	int intervalLength;
+                	if (!int.TryParse(row["interval_length_minutes"].ToString(), out intervalLength))
+                	{
+                		throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture,
+                		                                             "Could not cast interval_length_minutes value '{0}' to int. Check the ETL Tool configuration.",
+                		                                             row["interval_length_minutes"]));
+                	}
+                	ctrl.IntervalLength = intervalLength;
 
                     // bara första kontrollen ska ha startparametrar
                     if (flag == 0)
