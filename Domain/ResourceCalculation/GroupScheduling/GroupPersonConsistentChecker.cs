@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			InParameter.NotNull("schedulingOptions", schedulingOptions);
 			InParameter.NotNull("persons",persons);
 			InParameter.NotNull("scheduleDictionary", scheduleDictionary);
+			_possible = new HashSet<PossibleStartEndCategory>();
 
 			foreach (var person in persons)
 			{
