@@ -1455,9 +1455,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             SelectTemplateInToolstrip(GetTemplateToolStripGallery(e.TemplateTarget), e.TemplateName);
         }
-
-
-
         #region date navigation
         private void _timeNavigationControl_SelectedDateChanged(object sender, CustomEventArgs<DateOnly> e)
         {
@@ -1474,6 +1471,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         //--------------------
 
+
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -1485,7 +1483,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 switch (keyData)
                 {
                     case Keys.Control | Keys.S:
-                        btnSave_click(this, null);
+                        btnSave_click(this, EventArgs.Empty);
                         break;
                 }
             }

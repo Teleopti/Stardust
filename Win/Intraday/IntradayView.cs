@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Security.Permissions;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
@@ -622,6 +623,26 @@ namespace Teleopti.Ccc.Win.Intraday
             statusStripButtonServerUnavailable.Enabled = false;
             Presenter.RetryHandlingMessages();
             statusStripButtonServerUnavailable.Enabled = true;
+        }
+
+
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            const int WM_KEYDOWN = 0x100;
+            const int WM_SYSKEYDOWN = 0x104;
+
+            if ((msg.Msg == WM_KEYDOWN) || msg.Msg == WM_SYSKEYDOWN)
+            {
+                switch (keyData)
+                {
+                    case Keys.Control | Keys.S:
+                        toolStripButtonQuickAccessSave_Click(this, EventArgs.Empty);
+                        break;
+                }
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }

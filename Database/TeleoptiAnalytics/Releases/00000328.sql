@@ -11,9 +11,6 @@ On TELEOPTI565
 --Desc: Because ...  
 ----------------  
  
-
-EXEC mart.sys_crossdatabaseview_load  
-GO  
  
 PRINT 'Adding build number to database' 
 INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (328,'7.1.328') 

@@ -497,6 +497,7 @@ namespace Teleopti.Ccc.Win.Shifts
             _navigationView.UpdateTreeIcons();
         }
 
+
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -508,7 +509,23 @@ namespace Teleopti.Ccc.Win.Shifts
                 switch (keyData)
                 {
                     case Keys.Control | Keys.S:
-                        toolStripButtonSaveClick(this, null);
+                        toolStripButtonSaveClick(this, EventArgs.Empty);
+                        break;
+                    case Keys.Control | Keys.C:
+                        clipboardControlCopyClicked(this, EventArgs.Empty);
+                        break;
+                    case Keys.Control | Keys.V:
+                        clipboardControlPasteClicked(this, EventArgs.Empty);
+                        break;
+                    case Keys.Control | Keys.N:
+                        editControlNewClicked(this, EventArgs.Empty);
+                        break;
+                    case Keys.Control | Keys.R:
+                    case Keys.F5:
+                        toolStripButtonRefreshClick(this, EventArgs.Empty);
+                        break;
+                    case Keys.F2:
+                        toolStripButtonRenameClick(this, EventArgs.Empty);
                         break;
                 }
             }
