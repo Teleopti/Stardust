@@ -4618,6 +4618,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_scheduleCounter >= _optimizerOriginalPreferences.SchedulingOptions.RefreshRate)
                 {
                     _grid.Invalidate();
+					refreshSummarySkillIfActive();
                     _skillIntradayGridControl.RefreshGrid();
                     _skillDayGridControl.RefreshGrid();
 					refreshChart();
