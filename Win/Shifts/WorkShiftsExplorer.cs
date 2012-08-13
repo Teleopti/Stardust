@@ -524,5 +524,39 @@ namespace Teleopti.Ccc.Win.Shifts
         {
             _navigationView.UpdateTreeIcons();
         }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            const int WM_KEYDOWN = 0x100;
+            const int WM_SYSKEYDOWN = 0x104;
+
+            if ((msg.Msg == WM_KEYDOWN) || (msg.Msg == WM_SYSKEYDOWN))
+            {
+                switch (keyData)
+                {
+                    case Keys.Control | Keys.S:
+                        toolStripButtonSaveClick(this, EventArgs.Empty);
+                        break;
+                    case Keys.Control | Keys.C:
+                        clipboardControlCopyClicked(this, EventArgs.Empty);
+                        break;
+                    case Keys.Control | Keys.V:
+                        clipboardControlPasteClicked(this, EventArgs.Empty);
+                        break;
+                    case Keys.Control | Keys.N:
+                        editControlNewClicked(this, EventArgs.Empty);
+                        break;
+                    case Keys.Control | Keys.R:
+                    case Keys.F5:
+                        toolStripButtonRefreshClick(this, EventArgs.Empty);
+                        break;
+                    case Keys.F2:
+                        toolStripButtonRenameClick(this, EventArgs.Empty);
+                        break;
+                }
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
     }
 }
