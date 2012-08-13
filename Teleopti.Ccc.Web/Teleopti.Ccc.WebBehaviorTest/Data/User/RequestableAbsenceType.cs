@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			new AbsenceRepository(uow).Add(new Absence()
+			new AbsenceRepository(uow).Add(new Absence
 			                               	{
 			                               		Description = new Description(_name),
 			                               		Requestable = true
