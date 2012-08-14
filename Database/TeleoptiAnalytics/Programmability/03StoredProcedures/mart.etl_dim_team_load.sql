@@ -14,7 +14,7 @@ GO
 -- 2010-07-07 Added scorecard to team level RK
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_team_load] 
-WITH EXECUTE AS OWNER
+	
 AS
 
 

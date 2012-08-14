@@ -20,8 +20,7 @@ GO
 --Exec [mart].[etl_dim_queue_load] -2
 CREATE PROCEDURE [mart].[etl_dim_queue_load]
 @datasource_id smallint
-
-WITH EXECUTE AS OWNER
+	
 AS
 DECLARE @internal bit
 DECLARE @sqlstring nvarchar(4000)

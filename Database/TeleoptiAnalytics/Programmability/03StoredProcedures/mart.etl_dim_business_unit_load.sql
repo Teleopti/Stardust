@@ -14,8 +14,7 @@ GO
 
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_business_unit_load] 
-@business_unit_code uniqueidentifier
-WITH EXECUTE AS OWNER	
+@business_unit_code uniqueidentifier		
 AS
 
 --------------------------------------------------------------------------

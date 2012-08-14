@@ -14,7 +14,7 @@ GO
 -- 20010726 Adding is_deleted DJ
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_scenario_load] 
-WITH EXECUTE AS OWNER
+	
 AS
 --------------------------------------------------------------------------
 -- Not Defined Activity

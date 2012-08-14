@@ -3,7 +3,6 @@ DROP PROCEDURE [stage].[etl_stg_overtime_delete]
 GO
 
 CREATE PROCEDURE [stage].[etl_stg_overtime_delete]
-WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;
