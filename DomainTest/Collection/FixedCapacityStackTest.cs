@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         }
 
         [Test]
-        public void VerifyToList()
+        public void VerifyEnumerator()
         {
             target.Push(1);
             target.Push(2);
