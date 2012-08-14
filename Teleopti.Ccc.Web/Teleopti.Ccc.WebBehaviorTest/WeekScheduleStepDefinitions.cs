@@ -162,6 +162,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.Current.Document.Uri.AbsoluteUri, Is.StringContaining("Request"));
 		}
 
+		[When(@"I click the current week button")]
+		public void WhenIClickTheCurrentWeekButton()
+		{
+			Pages.Pages.WeekSchedulePage.TodayButton.EventualClick();
+		}
+
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, UserFactory.User().Culture);

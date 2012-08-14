@@ -64,6 +64,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoPreference();
 		}
 
+		[When(@"I view preferences for date '(.*)'")]
+		public void WhenIViewPreferencesForDate(DateTime date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoPreference(date);
+		}
+
 		[When(@"I navigate to the preferences page")]
 		public void WhenINavigateToThePreferencesPage()
 		{
@@ -76,15 +83,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view team schedule")]
 		public void WhenIViewTeamSchedule()
 		{
-			//var userName = UserFactory.User().MakeUser();
-			//Navigation.GotoGlobalSignInPage();
-			//var page = Browser.Current.Page<SignInPage>();
-			//page.SignInApplication(userName, TestData.CommonPassword);
-			//if (page.BusinessUnitList.Exists)
-			//{
-			//    page.SelectFirstBusinessUnit();
-			//    page.ClickBusinessUnitOkButton();
-			//}
 			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule();
 		}
@@ -125,12 +123,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIBrowseToTheSiteHomePage()
 		{
 			Navigation.GotoSiteHomePage();
-		}
-
-		[When(@"I click the current week button")]
-		public void WhenIClickTheCurrentWeekButton()
-		{
-			Pages.Pages.WeekSchedulePage.TodayButton.EventualClick();
 		}
 	}
 }
