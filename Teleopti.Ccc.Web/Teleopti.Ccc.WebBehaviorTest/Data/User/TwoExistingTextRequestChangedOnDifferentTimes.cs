@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		public void Apply(IPerson user, CultureInfo cultureInfo)
 		{
 
-			TestDataSetup.UnitOfWorkAction(
+			ScenarioUnitOfWorkState.UnitOfWorkAction(
 				uow =>
 					{
 						var textRequest1 = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5)));
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 
 			Thread.Sleep(1010);
 
-			TestDataSetup.UnitOfWorkAction(
+			ScenarioUnitOfWorkState.UnitOfWorkAction(
 				uow =>
 					{
 						var textRequest2 = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5)));

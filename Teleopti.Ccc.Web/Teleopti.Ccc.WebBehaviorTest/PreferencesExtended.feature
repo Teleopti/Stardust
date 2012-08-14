@@ -12,9 +12,9 @@ Background:
 	| Name                       | Published schedule |
 	| Schedule published to date | 2012-06-24         |
 	And there is a role with
-	| Field                    | Value            |
-	| Name                     | Access to mytime |
-	| Access to mobile reports | false            |
+	| Field                    | Value             |
+	| Name                     | Access to mytime  |
+	| Access to mobile reports | false             |
 	And there is a role with
 	| Field                          | Value                             |
 	| Name                           | No access to extended preferences |
@@ -34,7 +34,6 @@ Scenario: See indication of an extended preference NEW
 	And I have the workflow control set 'Published schedule'
 	And I have an extended preference on '2012-06-20'
 	When I view preferences for date '2012-06-20'
-	And I click the extended preference indication on '2012-06-20'
 	Then I should see that I have an extended preference on '2012-06-20'
 
 Scenario: See extended preference NEW

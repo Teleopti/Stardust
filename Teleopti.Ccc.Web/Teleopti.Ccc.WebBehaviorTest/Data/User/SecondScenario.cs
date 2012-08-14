@@ -12,8 +12,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 
 		public void Apply(IUnitOfWork uow)
 		{
+			var businessUnit = GlobalDataContext.Data().Data<SecondBusinessUnit>().BusinessUnit;
+
 			Scenario = ScenarioFactory.CreateScenarioAggregate("Second scenario", true, false);
-			Scenario.SetBusinessUnit(TestData.SecondBusinessUnit);
+			Scenario.SetBusinessUnit(businessUnit);
 			new ScenarioRepository(uow).Add(Scenario);
 		}
 	}

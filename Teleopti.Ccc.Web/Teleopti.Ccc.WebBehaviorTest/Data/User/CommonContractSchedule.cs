@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
-	public class ContractScheduleWith2DaysOff : IDataSetup, IContractScheduleSetup
+	public class CommonContractSchedule : IDataSetup, IContractScheduleSetup
 	{
 		public IContractSchedule ContractSchedule { get; set; }
 

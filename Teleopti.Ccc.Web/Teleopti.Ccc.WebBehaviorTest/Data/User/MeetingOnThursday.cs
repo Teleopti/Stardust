@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		public string MeetingLocation = "ADB-rummet";
 		public string MeetingSubject = "Utbildning";
 
-		public IScenario Scenario = DataContext.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{

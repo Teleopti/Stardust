@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 			VirtualSchedulePeriodWeeks = virtualSchedulePeriodWeeks;
 		}
 
-		public void Apply(IPerson user, CultureInfo cultureInfo)
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			_person = user;
 			_cultureInfo = cultureInfo;

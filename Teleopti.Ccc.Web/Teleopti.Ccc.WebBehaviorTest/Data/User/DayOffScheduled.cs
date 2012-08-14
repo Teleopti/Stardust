@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		private readonly int _weekday;
 		public IDayOffTemplate DayOffTemplate = TestData.DayOffTemplate;
 
-		public IScenario Scenario = DataContext.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
 		public DayOffScheduled(int weekday)
 		{

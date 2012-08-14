@@ -81,6 +81,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="Bindings\BackgroundStepDefinitions.cs" />
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="Core\BrowserImpl\ProcessHelpers.cs" />
@@ -88,9 +89,13 @@
     <Compile Include="Core\BrowserImpl\IBrowserHandler.cs" />
     <Compile Include="Core\BrowserImpl\WatiNSingleBrowserIEHandler.cs" />
     <Compile Include="Core\BrowserImpl\WatiNParallelBrowserIEHandler.cs" />
-    <Compile Include="Data\DataContext.cs" />
+    <Compile Include="Data\GlobalDataContext.cs" />
+    <Compile Include="Data\GlobalPrincipalState.cs" />
+    <Compile Include="Data\GlobalUnitOfWorkState.cs" />
+    <Compile Include="Data\ScenarioUnitOfWorkState.cs" />
     <Compile Include="Data\User\AgentSecondBusinessUnit.cs" />
     <Compile Include="Data\User\AgentWithAnotherSiteAccess.cs" />
+    <Compile Include="Data\User\CommonPartTimePercentage.cs" />
     <Compile Include="Data\User\IUserRoleSetup.cs" />
     <Compile Include="Data\User\SupervisorSecondBusinessUnit.cs" />
     <Compile Include="Data\User\UserNoPermission.cs" />
@@ -116,7 +121,7 @@
     <Compile Include="Data\DataFactory.cs" />
     <Compile Include="Data\User\CommonContract.cs" />
     <Compile Include="Data\User\ContractFromTable.cs" />
-    <Compile Include="Data\User\ContractScheduleWith2DaysOff.cs" />
+    <Compile Include="Data\User\CommonContractSchedule.cs" />
     <Compile Include="Data\User\DayOffScheduled.cs" />
     <Compile Include="Data\User\IContractSetup.cs" />
     <Compile Include="Data\User\ShiftCategoryPreferenceOnWeekday.cs" />

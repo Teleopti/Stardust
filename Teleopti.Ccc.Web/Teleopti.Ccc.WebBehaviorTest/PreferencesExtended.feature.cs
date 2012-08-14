@@ -151,8 +151,6 @@ this.FeatureBackground();
 #line 36
  testRunner.When("I view preferences for date \'2012-06-20\'");
 #line 37
- testRunner.And("I click the extended preference indication on \'2012-06-20\'");
-#line 38
  testRunner.Then("I should see that I have an extended preference on \'2012-06-20\'");
 #line hidden
             this.ScenarioCleanup();
@@ -163,13 +161,13 @@ this.FeatureBackground();
         public virtual void SeeExtendedPreferenceNEW()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended preference NEW", ((string[])(null)));
-#line 40
+#line 39
 this.ScenarioSetup(scenarioInfo);
 #line 9
 this.FeatureBackground();
-#line 41
+#line 40
  testRunner.Given("I am a user");
-#line 42
+#line 41
  testRunner.And("I have the role \'Access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -184,7 +182,7 @@ this.FeatureBackground();
             table6.AddRow(new string[] {
                         "Length",
                         "1"});
-#line 43
+#line 42
  testRunner.And("I have a schedule period with", ((string)(null)), table6);
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -193,17 +191,17 @@ this.FeatureBackground();
             table7.AddRow(new string[] {
                         "Start date",
                         "2012-06-18"});
-#line 48
+#line 47
  testRunner.And("I have a person period with", ((string)(null)), table7);
-#line 51
+#line 50
  testRunner.And("I have the workflow control set \'Published schedule\'");
-#line 52
+#line 51
  testRunner.And("I have an extended preference on \'2012-06-20\'");
-#line 53
+#line 52
  testRunner.When("I view preferences for date \'2012-06-20\'");
-#line 54
+#line 53
  testRunner.And("I click the extended preference indication on \'2012-06-20\'");
-#line 55
+#line 54
  testRunner.Then("I should see the extended preference on \'2012-06-20\'");
 #line hidden
             this.ScenarioCleanup();
@@ -214,13 +212,13 @@ this.FeatureBackground();
         public virtual void SeeExtendedPreferenceWithoutPermissionNEW()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended preference without permission NEW", ((string[])(null)));
-#line 57
+#line 56
 this.ScenarioSetup(scenarioInfo);
 #line 9
 this.FeatureBackground();
-#line 58
+#line 57
  testRunner.Given("I am a user");
-#line 59
+#line 58
  testRunner.And("I have the role \'No access to extended preferences\'");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
@@ -235,7 +233,7 @@ this.FeatureBackground();
             table8.AddRow(new string[] {
                         "Length",
                         "1"});
-#line 60
+#line 59
  testRunner.And("I have a schedule period with", ((string)(null)), table8);
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
@@ -244,17 +242,17 @@ this.FeatureBackground();
             table9.AddRow(new string[] {
                         "Start date",
                         "2012-06-18"});
-#line 65
+#line 64
  testRunner.And("I have a person period with", ((string)(null)), table9);
-#line 68
+#line 67
  testRunner.And("I have the workflow control set \'Published schedule\'");
-#line 69
+#line 68
  testRunner.And("I have an extended preference on \'2012-06-20\'");
-#line 70
+#line 69
  testRunner.When("I view preferences for date \'2012-06-20\'");
-#line 71
+#line 70
  testRunner.And("I click the extended preference indication on \'2012-06-20\'");
-#line 72
+#line 71
  testRunner.Then("I should see the extended preference on \'2012-06-20\'");
 #line hidden
             this.ScenarioCleanup();
@@ -265,17 +263,17 @@ this.FeatureBackground();
         public virtual void SeeIndicationOfAnExtendedPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See indication of an extended preference", ((string[])(null)));
-#line 78
+#line 77
 this.ScenarioSetup(scenarioInfo);
 #line 9
 this.FeatureBackground();
-#line 79
+#line 78
  testRunner.Given("I am an agent");
-#line 80
+#line 79
  testRunner.And("I have an existing extended preference");
-#line 81
+#line 80
  testRunner.When("I view preferences");
-#line 82
+#line 81
  testRunner.Then("I should see that I have an existing extended preference");
 #line hidden
             this.ScenarioCleanup();
@@ -286,19 +284,19 @@ this.FeatureBackground();
         public virtual void SeeExtendedPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended preference", ((string[])(null)));
-#line 84
+#line 83
 this.ScenarioSetup(scenarioInfo);
 #line 9
 this.FeatureBackground();
-#line 85
+#line 84
  testRunner.Given("I am an agent");
-#line 86
+#line 85
  testRunner.And("I have an existing extended preference");
-#line 87
+#line 86
  testRunner.When("I view preferences");
-#line 88
+#line 87
  testRunner.And("I click the extended preference indication");
-#line 89
+#line 88
  testRunner.Then("I should see my existing extended preference");
 #line hidden
             this.ScenarioCleanup();
@@ -309,19 +307,19 @@ this.FeatureBackground();
         public virtual void SeeExtendedPreferenceWithoutPermission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended preference without permission", ((string[])(null)));
-#line 91
+#line 90
 this.ScenarioSetup(scenarioInfo);
 #line 9
 this.FeatureBackground();
-#line 92
+#line 91
  testRunner.Given("I am an agent without access to extended preferences");
-#line 93
+#line 92
  testRunner.And("I have an existing extended preference");
-#line 94
+#line 93
  testRunner.When("I view preferences");
-#line 95
+#line 94
  testRunner.And("I click the extended preference indication");
-#line 96
+#line 95
  testRunner.Then("I should see my existing extended preference");
 #line hidden
             this.ScenarioCleanup();

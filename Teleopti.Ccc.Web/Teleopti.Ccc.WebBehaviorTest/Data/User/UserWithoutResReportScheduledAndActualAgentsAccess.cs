@@ -1,3 +1,5 @@
+using Teleopti.Interfaces.Infrastructure;
+
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	using System.Globalization;
@@ -7,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 
 	public class UserWithoutResReportScheduledAndActualAgentsAccess : IUserSetup
 	{
-		public void Apply(IPerson user, CultureInfo cultureInfo)
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			user.PermissionInformation.AddApplicationRole(TestData.AgentRoleWithoutResReportScheduledAndActualAgents);
 		}

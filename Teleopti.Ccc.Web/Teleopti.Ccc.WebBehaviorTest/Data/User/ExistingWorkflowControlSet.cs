@@ -1,6 +1,7 @@
 using System.Globalization;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		public DateOnlyPeriod PreferencePeriod;
 		public DateOnlyPeriod PreferenceInputPeriod;
 
-		public void Apply(IPerson user, CultureInfo cultureInfo)
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			StudentAvailabilityPeriod = TestData.WorkflowControlSetExisting.StudentAvailabilityPeriod;
 			StudentAvailabilityInputPeriod = TestData.WorkflowControlSetExisting.StudentAvailabilityInputPeriod;

@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		public IDayOffTemplate DayOffTemplate;
 		public IAbsence Absence;
 
-		public void Apply(IPerson user, CultureInfo cultureInfo)
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			ShiftCategory = TestData.WorkflowControlSetPreferenceOpenWithAllowedPreferences.AllowedPreferenceShiftCategories.First();
 			DayOffTemplate = TestData.WorkflowControlSetPreferenceOpenWithAllowedPreferences.AllowedPreferenceDayOffs.First();

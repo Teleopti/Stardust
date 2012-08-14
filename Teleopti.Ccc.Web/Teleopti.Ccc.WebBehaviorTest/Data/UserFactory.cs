@@ -124,8 +124,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public string MakeUser()
 		{
-			TestDataSetup.EnsureThreadPrincipal();
-
 			var userName = NextUserName();
 			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(userName.LogOnName, TestData.CommonPassword);
 			Person.Name = new Name("Agent", userName.LastName);
@@ -149,15 +147,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private void MakePerson(IPerson person)
 		{
-			_dataFactory.Persist();
+			CultureInfo culture = null;
 
-			_cultureSetup.Apply(person, null);
-			var culture = person.PermissionInformation.Culture();
-			_userSetups.ForEach(s => s.Apply(person, culture));
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _dataFactory.Apply(uow));
 
-			TestDataSetup.UnitOfWorkAction(uow => new PersonRepository(uow).Add(person));
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
+			                                         	{
+															_cultureSetup.Apply(uow, person, null);
+															culture = person.PermissionInformation.Culture();
+															_userSetups.ForEach(s => s.Apply(uow, person, culture));
+															new PersonRepository(uow).Add(person);
+														});
 
-			TestDataSetup.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, culture)));
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, culture) ));
 
 			_postSetups.ForEach(s => s.Apply(person, culture));
 

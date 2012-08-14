@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have a contract schedule with 2 days off")]
 		public void GivenIHaveAContractScheduleWith2DaysOff()
 		{
-			var contractSchedule = DataContext.Data().Data<ContractScheduleWith2DaysOff>();
+			var contractSchedule = GlobalDataContext.Data().Data<CommonContractSchedule>();
 			UserFactory.User().Setup(new UserContractSchedule(contractSchedule.ContractSchedule));
 		}
 

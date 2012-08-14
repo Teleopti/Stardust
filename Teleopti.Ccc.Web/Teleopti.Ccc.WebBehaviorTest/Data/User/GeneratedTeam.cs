@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 	{
 		public readonly ITeam TheTeam;
 
-		protected GeneratedTeam() : this(TestData.CommonSite) { }
+		protected GeneratedTeam() : this(GlobalDataContext.Data().Data<CommonSite>().Site) { }
 
 		protected GeneratedTeam(ISite site)
 		{

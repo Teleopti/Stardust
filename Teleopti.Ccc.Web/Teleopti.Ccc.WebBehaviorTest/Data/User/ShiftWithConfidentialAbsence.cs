@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	public class ShiftWithConfidentialAbsence : IUserDataSetup
 	{
-		public IScenario Scenario = DataContext.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{

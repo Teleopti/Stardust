@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 	{
 		public DateOnly Date = DateOnly.Today;
 		public IAbsence Absence = TestData.Absence;
-		public IScenario Scenario = DataContext.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{

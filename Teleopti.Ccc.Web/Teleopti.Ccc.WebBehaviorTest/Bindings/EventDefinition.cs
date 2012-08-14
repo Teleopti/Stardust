@@ -50,13 +50,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public static void BeforeScenario()
 		{
 			TestControllerMethods.BeforeScenario();
+			
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
+
+			GlobalPrincipalState.EnsureThreadPrincipal();
+			ScenarioUnitOfWorkState.OpenUnitOfWork();
 		}
 
 		[AfterScenario]
 		public void AfterScenario()
 		{
+			ScenarioUnitOfWorkState.DisposeUnitOfWork();
 			HandleScenarioException();
 		}
 
@@ -71,13 +76,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		private static void CreateData()
 		{
-			TestDataSetup.CreateLegacyTestData();
+			GlobalDataContext.Data().Setup(new CommonBusinessUnit());
+			GlobalDataContext.Data().Setup(new CommonSite());
+			GlobalDataContext.Data().Setup(new CommonTeam());
+			GlobalDataContext.Data().Setup(new CommonScenario());
 
-			DataContext.Data().Setup(new CommonContract());
-			DataContext.Data().Setup(new ContractScheduleWith2DaysOff());
-			DataContext.Data().Setup(new CommonScenario());
-			DataContext.Data().Setup(new SecondScenario());
-			DataContext.Data().Persist();
+			GlobalDataContext.Data().Setup(new CommonPartTimePercentage());
+			GlobalDataContext.Data().Setup(new CommonContract());
+			GlobalDataContext.Data().Setup(new CommonContractSchedule());
+
+			GlobalDataContext.Data().Setup(new SecondBusinessUnit());
+			GlobalDataContext.Data().Setup(new AnotherSite());
+			GlobalDataContext.Data().Setup(new SecondScenario());
+
+			GlobalDataContext.Persist();
+
+			TestDataSetup.CreateLegacyTestData();
 		}
 
 

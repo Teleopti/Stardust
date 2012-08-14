@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
@@ -14,9 +15,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_dataSetups.Add(dataSetup);
 		}
 
-		public void Persist()
+		public void Apply(IUnitOfWork unitOfWork)
 		{
-			TestDataSetup.UnitOfWorkAction(uow => _dataSetups.ForEach(s => s.Apply(uow)));
+			_dataSetups.ForEach(s => s.Apply(unitOfWork));
 		}
 
 		public void Clear()
