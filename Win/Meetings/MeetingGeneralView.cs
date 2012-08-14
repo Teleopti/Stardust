@@ -282,5 +282,40 @@ namespace Teleopti.Ccc.Win.Meetings
             _presenter.SetStartDate(new DateOnly(dateTimePickerAdvStartDate.Value));
             NotifyMeetingDatesChanged();
         }
+
+        private void textBoxExtParticipant_MouseUp(object sender, MouseEventArgs e)
+        {
+
+            var index = textBoxExtParticipant.SelectionStart;
+            var selectedTextList =
+                textBoxExtParticipant.SelectedText.Split(new[] { MeetingViewModel.ParticipantSeparator },
+                                                                 StringSplitOptions.None);
+            var participantsFromText = textBoxExtParticipant.Text.Split(new[] { MeetingViewModel.ParticipantSeparator },
+                                                 StringSplitOptions.None);
+
+            var counter = 0;
+            var selectedText = "";
+            var s = "";
+            for (var i = 0; i < participantsFromText.Length; i++)
+            {
+                if (index < counter) break;
+                if (index == textBoxExtParticipant.Text.Length) return;
+
+                s = participantsFromText[i];
+                selectedText = s;
+
+                if (i == 0)
+                    counter += s.Length + 1;
+                else
+                    counter += s.Length + 2;
+
+                if (selectedTextList.Length <= 1) continue;
+                for (var j = 1; j < selectedTextList.Length; j++)
+                    selectedText += "; " + participantsFromText[i + j];
+            }
+
+            var start = counter - s.Length - 1 > 0 ? counter - s.Length - 1 : 0;
+            textBoxExtParticipant.Select(start, selectedText.Length);
+        }
     }
 }

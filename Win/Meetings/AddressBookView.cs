@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
@@ -343,11 +344,13 @@ namespace Teleopti.Ccc.Win.Meetings
         public void SetRequiredParticipants(string requiredParticipants)
         {
             textBoxExtRequiredParticipant.Text = requiredParticipants;
+            textBoxExtRequiredParticipant.SelectionStart = textBoxExtRequiredParticipant.Text.Length;
         }
 
         public void SetOptionalParticipants(string optionalParticipants)
         {
             textBoxExtOptionalParticipant.Text = optionalParticipants;
+            textBoxExtOptionalParticipant.SelectionStart = textBoxExtOptionalParticipant.Text.Length;
         }
 
         public void PerformSearch()
@@ -357,15 +360,15 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void textBoxExtRequiredParticipant_TextChanged(object sender, EventArgs e)
         {
-            int caretPositon = textBoxExtRequiredParticipant.SelectionStart;
             _presenter.ParseRequiredParticipants(textBoxExtRequiredParticipant.Text);
+            int caretPositon = textBoxExtRequiredParticipant.SelectionStart;
             textBoxExtRequiredParticipant.Select(Math.Min(textBoxExtRequiredParticipant.Text.Length, caretPositon), 0);
         }
 
         private void textBoxExtOptionalParticipant_TextChanged(object sender, EventArgs e)
         {
-            int caretPositon = textBoxExtRequiredParticipant.SelectionStart;
             _presenter.ParseOptionalParticipants(textBoxExtOptionalParticipant.Text);
+            int caretPositon = textBoxExtRequiredParticipant.SelectionStart;
             textBoxExtRequiredParticipant.Select(Math.Min(textBoxExtRequiredParticipant.Text.Length, caretPositon), 0);
         }
 
@@ -382,10 +385,27 @@ namespace Teleopti.Ccc.Win.Meetings
             }
         }
 
-        private void textBoxExtRequiredParticipant_KeyDown(object sender, KeyEventArgs e)
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (!IsValidKey(e.KeyCode,e.Modifiers))
-                e.SuppressKeyPress = true;
+            const int WM_KEYDOWN = 0x100;
+            const int WM_SYSKEYDOWN = 0x104;
+
+            if ((msg.Msg == WM_KEYDOWN) || (msg.Msg == WM_SYSKEYDOWN))
+            {
+                switch (keyData)
+                {
+                    case Keys.Control | Keys.V:
+                        var clipboardCopy = Clipboard.GetData(DataFormats.Text).ToString();
+                        if (clipboardCopy.Substring(0, 2) != "; ")
+                        {
+                            clipboardCopy = clipboardCopy.Insert(0, "; ");
+                            Clipboard.SetData(DataFormats.Text, clipboardCopy);
+                        }
+                        break;
+                }
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private static bool IsValidKey(Keys key, Keys modifiers)
@@ -412,13 +432,54 @@ namespace Teleopti.Ccc.Win.Meetings
         private void textBoxExtRequiredParticipant_Click(object sender, EventArgs e)
         {
             _IsRequired = true;
+            GetSelected(textBoxExtRequiredParticipant);   
         }
 
         private void textBoxExtOptionalParticipant_Click(object sender, EventArgs e)
         {
             _IsRequired = false;
+            GetSelected(textBoxExtOptionalParticipant);
         }
 
-        
+        private void textBoxExtRequiredParticipant_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            textBoxExtRequiredParticipant_Click(this, EventArgs.Empty);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+        private void GetSelected(TextBoxBase textBox)
+        {
+            var index = textBox.SelectionStart;
+            var selectedTextList =
+                textBox.SelectedText.Split(new[] { MeetingViewModel.ParticipantSeparator },
+                                                                 StringSplitOptions.None);
+            var participantsFromText = textBox.Text.Split(new[] { MeetingViewModel.ParticipantSeparator },
+                                                 StringSplitOptions.None);
+
+            var counter = 0;
+            var selectedText = "";
+            var s = "";
+            for (var i = 0; i < participantsFromText.Length; i++)
+            {
+                if (index < counter) break;
+                if (index == textBox.Text.Length) return;
+
+                s = participantsFromText[i];
+                selectedText = s;
+
+                if (i == 0)
+                    counter += s.Length + 1;
+                else
+                    counter += s.Length + 2;
+
+                if (selectedTextList.Count() <= 1) continue;
+                for (var j = 1; j < selectedTextList.Count(); j++)
+                    selectedText += "; " + participantsFromText[i + j];
+            }
+
+            var start = counter - s.Length - 1 > 0 ? counter - s.Length - 1 : 0;
+            textBox.Select(start, selectedText.Length);
+        }
+
     }
 }

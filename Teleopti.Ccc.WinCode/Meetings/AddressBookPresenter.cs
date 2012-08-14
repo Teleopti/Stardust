@@ -93,25 +93,11 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             var participantsFromText = participantText.Split(new[] { MeetingViewModel.ParticipantSeparator },
                                                  StringSplitOptions.RemoveEmptyEntries);
-            foreach (ContactPersonViewModel viewModel in _model.RequiredParticipantList.ToList()) //To avoid modifications to enumerating list
-            {
-                var foundName = false;
-                if (participantsFromText.Contains(viewModel.FullName)) continue;
-                for (var j = 0; j < participantsFromText.Length; j++)
-                {
-                    if (participantsFromText[j].Length <= viewModel.FullName.Trim().Length) continue;
-                    var itemEnding = participantsFromText[j].Substring(
-                        0, viewModel.FullName.Trim().Length);
-                    if (viewModel.FullName.Trim() == itemEnding)
-                    {
-                        foundName = true;
-                    }
-                }
-                if (!foundName)
-                {
-                    _model.RequiredParticipantList.Remove(viewModel);
-                }
-            }
+
+            _model.RequiredParticipantList.Clear();
+            foreach (var foundName in participantsFromText.Select(s => _model.PersonModels.First(conP => conP.FullName == s)).Where(foundName => foundName != null))
+                _model.RequiredParticipantList.Add(foundName);
+
             _view.SetRequiredParticipants(_model.RequiredParticipants);
         }
 
@@ -119,25 +105,11 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             var participantsFromText = participantText.Split(new[] { MeetingViewModel.ParticipantSeparator },
                                                  StringSplitOptions.RemoveEmptyEntries);
-            foreach (ContactPersonViewModel viewModel in _model.OptionalParticipantList.ToList()) //To avoid modifications to enumerating list
-            {
-                var foundName = false;
-                if (participantsFromText.Contains(viewModel.FullName.Trim())) continue;
-                for (var j = 0; j < participantsFromText.Length; j++)
-                {
-                    if (participantsFromText[j].Length <= viewModel.FullName.Trim().Length) continue;
-                    var itemEnding = participantsFromText[j].Substring(
-                        0, viewModel.FullName.Trim().Length);
-                    if (viewModel.FullName.Trim() == itemEnding)
-                    {
-                        foundName = true;
-                    }
-                }
-                if (!foundName)
-                {
-                    _model.OptionalParticipantList.Remove(viewModel);
-                } 
-            }
+
+            _model.OptionalParticipantList.Clear();
+            foreach (var foundName in participantsFromText.Select(s => _model.PersonModels.First(conP => conP.FullName == s)).Where(foundName => foundName != null))
+                _model.OptionalParticipantList.Add(foundName);
+
             _view.SetOptionalParticipants(_model.OptionalParticipants);
         }
     }

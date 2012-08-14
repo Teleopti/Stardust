@@ -75,7 +75,6 @@
             this.ribbonControlForm.OfficeMenu.Size = new System.Drawing.Size(12, 65);
             this.ribbonControlForm.QuickPanelVisible = false;
             this.ribbonControlForm.SelectedTab = null;
-            this.ribbonControlForm.ShowMinimizeButton = false;
             this.ribbonControlForm.Size = new System.Drawing.Size(574, 33);
             this.ribbonControlForm.SystemText.QuickAccessDialogDropDownName = "xxStart menu";
             this.ribbonControlForm.TabIndex = 3;
@@ -120,11 +119,9 @@
             new Syncfusion.Windows.Forms.Grid.GridColWidth(2, 225),
             new Syncfusion.Windows.Forms.Grid.GridColWidth(3, 150),
             new Syncfusion.Windows.Forms.Grid.GridColWidth(4, 150)});
-            this.gridControlPeople.DisplayVerticalLines = false;
             this.gridControlPeople.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControlPeople.ExcelLikeCurrentCell = true;
             this.gridControlPeople.ExcelLikeSelectionFrame = true;
-            this.gridControlPeople.GridLineColor = System.Drawing.SystemColors.GrayText;
             this.gridControlPeople.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
             this.gridControlPeople.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
             this.gridControlPeople.Location = new System.Drawing.Point(11, 40);
@@ -199,6 +196,7 @@
             this.textBoxExtOptionalParticipant.Click += new System.EventHandler(this.textBoxExtOptionalParticipant_Click);
             this.textBoxExtOptionalParticipant.TextChanged += new System.EventHandler(this.textBoxExtOptionalParticipant_TextChanged);
             this.textBoxExtOptionalParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtOptionalParticipant_KeyDown);
+            this.textBoxExtOptionalParticipant.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBoxExtOptionalParticipant_Click);
             // 
             // textBoxExtRequiredParticipant
             // 
@@ -212,9 +210,9 @@
             this.textBoxExtRequiredParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxExtRequiredParticipant.Size = new System.Drawing.Size(461, 21);
             this.textBoxExtRequiredParticipant.TabIndex = 3;
-            this.textBoxExtRequiredParticipant.Click += new System.EventHandler(this.textBoxExtRequiredParticipant_Click);
             this.textBoxExtRequiredParticipant.TextChanged += new System.EventHandler(this.textBoxExtRequiredParticipant_TextChanged);
-            this.textBoxExtRequiredParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtRequiredParticipant_KeyDown);
+            this.textBoxExtRequiredParticipant.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.textBoxExtRequiredParticipant_MouseDoubleClick);
+            this.textBoxExtRequiredParticipant.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBoxExtRequiredParticipant_Click);
             // 
             // tableLayoutPanelFilter
             // 
