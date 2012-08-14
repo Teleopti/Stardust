@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -56,7 +57,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-10-30
         /// </remarks>
-        ReadOnlyCollection<IScheduleDay> ModificationCollection { get; }
+        IEnumerable<IScheduleDay> ModificationCollection { get; }
 
         /// <summary>
         /// Clears the modification collection.

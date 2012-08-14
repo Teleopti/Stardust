@@ -13,7 +13,7 @@ GO
 
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_scorecard_load] 
-WITH EXECUTE AS OWNER	
+	
 AS
 
 --select * from dim_scorecard
