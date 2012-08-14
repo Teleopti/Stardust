@@ -4,7 +4,8 @@ using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings

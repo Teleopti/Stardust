@@ -4,10 +4,10 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
-using PersonPeriod = Teleopti.Ccc.WebBehaviorTest.Data.User.PersonPeriod;
-using Team = Teleopti.Ccc.WebBehaviorTest.Data.User.Team;
+using PersonPeriod = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific.PersonPeriod;
+using Team = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific.Team;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
