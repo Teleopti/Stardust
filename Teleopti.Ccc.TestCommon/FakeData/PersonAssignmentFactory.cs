@@ -494,5 +494,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 			return ret;
 		}
+
+		public IList<IFilteredVisualLayerCollection> TestFilteredVisualLayerCollectionWithSamePerson()
+		{
+			IPerson person = TestData[0].CreateProjection().Person;
+
+			return TestData
+				   .Select(projectionService => projectionService.CreateProjection())
+				   .Select(projection => new FilteredVisualLayerCollection(person, projection.ToList(), new ProjectionIntersectingPeriodMerger(), projection))
+				   .Take(2)
+				   .Cast<IFilteredVisualLayerCollection>().ToList();
+		}
     }
 }
