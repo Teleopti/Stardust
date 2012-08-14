@@ -3,6 +3,7 @@ DROP PROCEDURE [stage].[etl_stg_skill_delete]
 GO
 
 CREATE PROCEDURE [stage].[etl_stg_skill_delete]
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;

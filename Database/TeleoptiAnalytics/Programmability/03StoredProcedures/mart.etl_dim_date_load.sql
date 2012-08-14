@@ -13,7 +13,7 @@ GO
 -- 2009-04-27 Change min/maxdate format DaJo
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_date_load] 
-	
+WITH EXECUTE AS OWNER
 AS
 --Create min and max date
 DECLARE @mindate as smalldatetime, @maxdate as smalldatetime

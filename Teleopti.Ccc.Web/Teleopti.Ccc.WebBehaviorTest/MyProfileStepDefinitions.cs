@@ -16,20 +16,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I view my regional settings")]
 		public void WhenIViewMyRegionalSettings()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			var page = Browser.Current.Page<SignInPage>();
-			page.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoRegionalSettings();
 		}
 
 		[When(@"I view my password")]
 		public void WhenIViewMyPassword()
 		{
-			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-			var signInpage = Browser.Current.Page<SignInPage>();
-			signInpage.SignInApplication(userName, TestData.CommonPassword);
+			TestControllerMethods.Logon();
 			Navigation.GotoPasswordPage();
 		}
 
@@ -61,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<PasswordPage>();
 			page.Password.Value = newPassword;
 			page.PasswordValidation.Value = newPassword + "fel";
-			page.OldPassword.TypeText(TestData.CommonPassword);
+			page.OldPassword.Value = TestData.CommonPassword;
 			Browser.Current.Eval("$('input#password').keyup();");
 		}
 
@@ -169,7 +163,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		private static void ChangeCulture(string culture)
 		{
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			TestMethods.PageLog("Page have not refreshed");
+			TestControllerMethods.PageLog("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
 			page.CultureSelect.Select(culture);
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
@@ -178,7 +172,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		private static void ChangeUiCulture(string culture)
 		{
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			TestMethods.PageLog("Page have not refreshed");
+			TestControllerMethods.PageLog("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
 			page.CultureUiSelect.Select(culture);
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));

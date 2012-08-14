@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
-using NHibernate.Envers;
-using NHibernate.Envers.Query;
-using NHibernate.Envers.Query.Order;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Collection;
@@ -99,7 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             var ret = new[] { assWithMain, assWithPers, persWithLayers, assWithOvertime, overWithLayers };
             ret.ForEach(crit => addScenarioAndFilterClauses(crit, scenario, period));
-            ret.ForEach(crit => addBuClauseToNonRootQuery(crit));
+            ret.ForEach(addBuClauseToNonRootQuery);
             return ret;
         }
 

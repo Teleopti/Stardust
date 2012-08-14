@@ -5,28 +5,91 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
 	[Binding]
 	public class EventDefinition
 	{
+		private static readonly ILog Log = LogManager.GetLogger(typeof(EventDefinition));
+
+		[BeforeTestRun]
+		public static void BeforeTestRun()
+		{
+			Browser.PrepareForTestRun();
+
+			try
+			{
+				if (!Browser.IsStarted())
+					Browser.Start();
+
+				TestControllerMethods.BeforeTestRun();
+
+				TestSiteConfigurationSetup.Setup();
+
+				log4net.Config.XmlConfigurator.Configure();
+				EventualTimeouts.Set(TimeSpan.FromSeconds(5));
+
+				TestDataSetup.CreateDataSource();
+
+				TestDataSetup.SetupFakeState();
+				TestDataSetup.CreateMinimumTestData();
+				CreateData();
+
+				TestDataSetup.BackupCcc7Data();
+			}
+			catch(Exception)
+			{
+				Browser.Close();
+				throw;
+			}
+		}
+
+		[BeforeScenario]
+		public static void BeforeScenario()
+		{
+			TestControllerMethods.BeforeScenario();
+			TestDataSetup.RestoreCcc7Data();
+			TestDataSetup.ClearAnalyticsData();
+		}
+
 		[AfterScenario]
 		public void AfterScenario()
 		{
+			HandleScenarioException();
+		}
+
+		[AfterTestRun]
+		public static void AfterTestRun()
+		{
+			if (Browser.IsStarted())
+				Browser.Close();
+			TestSiteConfigurationSetup.TearDown();
+		}
+
+
+		private static void CreateData()
+		{
+			TestDataSetup.CreateLegacyTestData();
+
+			DataContext.Data().Setup(new CommonContract());
+			DataContext.Data().Setup(new ContractScheduleWith2DaysOff());
+			DataContext.Data().Setup(new CommonScenario());
+			DataContext.Data().Setup(new SecondScenario());
+			DataContext.Data().Persist();
+		}
+
+
+
+		private void HandleScenarioException()
+		{
 			if (!Browser.IsStarted()) return;
-			try
+			if (ScenarioContext.Current.TestError != null)
 			{
-				if (ScenarioContext.Current.TestError != null)
-				{
-					var artifactFileName = GetCommonArtifactFileNameForScenario();
-					SaveScreenshot(artifactFileName);
-					throw MakeScenarioException(artifactFileName);
-				}
-			}
-			finally
-			{
-				Browser.ForciblyClose();
+				var artifactFileName = GetCommonArtifactFileNameForScenario();
+				SaveScreenshot(artifactFileName);
+				throw MakeScenarioException(artifactFileName);
 			}
 		}
 
@@ -50,30 +113,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Browser.Current.CaptureWebPageToFile(artifactFileName + ".jpg");
 		}
 
-		[BeforeTestRun]
-		public static void BeforeTestRun()
-		{
-			log4net.Config.XmlConfigurator.Configure();
-			TestDataSetup.Setup();
-			TestSiteConfigurationSetup.Setup();
-			Browser.MakeSureBrowserIsNotRunning();
-			EventualTimeouts.Set(TimeSpan.FromSeconds(5));
-
-			DataContext.Data().Setup(new CommonContract());
-			DataContext.Data().Setup(new ContractScheduleWith2DaysOff());
-			DataContext.Data().Setup(new CommonScenario());
-			DataContext.Data().Setup(new SecondScenario());
-			DataContext.Data().Persist();
-		}
-
-		[BeforeScenario]
-		public static void BeforeScenario()
-		{
-			TestDataSetup.ClearAnalyticsData();
-		}
-
-		[AfterTestRun]
-		public static void AfterTestRun() { TestSiteConfigurationSetup.TearDown(); }
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]

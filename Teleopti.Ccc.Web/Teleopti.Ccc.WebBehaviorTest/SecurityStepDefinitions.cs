@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -14,17 +11,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void GivenIAmNotSignedIn()
 		{
 			Browser.Current.ClearCookies();
-		}
-
-		[Given(@"I am signed in")]
-		public void GivenIAmSignedIn()
-		{
-			Navigation.GotoGlobalSignInPage();
-			var page = Browser.Current.Page<SignInPage>();
-			page.SignInWindows();
-			page.SelectFirstBusinessUnit();
-			page.BusinessUnitOkButton.EventualClick();
-			Resources.Culture = UserTestData.PersonWindowsUser.PermissionInformation.Culture();
 		}
 
 		[Then(@"I should see an application page")]

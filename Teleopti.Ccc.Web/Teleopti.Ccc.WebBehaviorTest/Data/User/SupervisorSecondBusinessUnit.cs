@@ -4,11 +4,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
-	public class UserWithoutMobileReportsAccess : IUserSetup
+	public class SupervisorSecondBusinessUnit : IUserSetup, IUserRoleSetup
 	{
 		public void Apply(IPerson user, CultureInfo cultureInfo)
 		{
-			user.PermissionInformation.AddApplicationRole(TestData.AgentRoleWithoutMobileReports);
+			user.PermissionInformation.AddApplicationRole(TestData.SupervisorRoleSecondBusinessUnit);
 		}
 	}
 }

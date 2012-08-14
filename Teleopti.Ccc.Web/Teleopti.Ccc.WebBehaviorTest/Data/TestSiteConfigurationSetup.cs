@@ -3,15 +3,11 @@ using System.IO;
 using System.Threading;
 using CassiniDev;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestSiteConfigurationSetup
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(TestSiteConfigurationSetup));
-
 		private static readonly string AgentPortalWebNhibConfPath = Path.Combine(IniFileInfo.SitePath, "bin");
 		private static readonly string TargetTestDataNHibFile = Path.Combine(AgentPortalWebNhibConfPath, "TestData.nhib.xml");
 
@@ -22,8 +18,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
 		public static void Setup()
 		{
-			var startTime = DateTime.Now;
-
 			if (IniFileInfo.CassiniDev)
 			{
 				Url = new Uri("http://localhost:57567/");
@@ -35,9 +29,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				Url = new Uri(IniFileInfo.Url);
 			}
 			GenerateAndWriteTestDataNHibFileFromTemplate();
-
-			var setupTime = DateTime.Now.Subtract(startTime);
-			Log.Write("Test site setup took " + setupTime);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]

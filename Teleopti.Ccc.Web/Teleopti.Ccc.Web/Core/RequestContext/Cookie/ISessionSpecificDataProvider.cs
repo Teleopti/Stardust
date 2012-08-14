@@ -6,7 +6,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 	{
 		void StoreInCookie(SessionSpecificData data);
 		SessionSpecificData GrabFromCookie();
-		void ExpireCookie();
+		void ExpireTicket();
 		void MakeCookie(string userName, DateTime now, string userData);
+		void RemoveCookie();
 	}
 }

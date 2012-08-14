@@ -28,15 +28,24 @@ namespace Teleopti.Ccc.TestCommon
     /// </summary>
     public static class StateHolderProxyHelper
     {
+		public static WindowsAppDomainPrincipalContext DefaultPrincipalContext { get; set; }
 
-		public static void SetupFakeState(IDataSource dataSource, IPerson person, IBusinessUnit businessUnit)
+		static StateHolderProxyHelper() { DefaultPrincipalContext = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()); }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		public static void SetupFakeState(
+			IDataSource dataSource, 
+			IPerson person, 
+			IBusinessUnit businessUnit,
+			ICurrentPrincipalContext principalContext
+			)
 		{
 			var appSettings = new Dictionary<string, string>();
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
 			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, MessageBrokerImplementation.GetInstance(), null);
-			var sessionData = CreateSessionData(person, applicationData, businessUnit);
+			var sessionData = CreateSessionData(person, applicationData, businessUnit, principalContext);
 
 			var state = new FakeState { ApplicationScopeData = applicationData, SessionScopeData = sessionData, IsLoggedIn = true };
 			ClearAndSetStateHolder(state);
@@ -88,38 +97,49 @@ namespace Teleopti.Ccc.TestCommon
             mocks.Replay(sessData);
         }
 
+		public static void ClearAndSetStateHolder(MockRepository mocks,
+										  IPerson loggedOnPerson,
+										  IBusinessUnit businessUnit,
+										  IApplicationData appData,
+										  IState stateMock)
+		{
+			ClearAndSetStateHolder(mocks, loggedOnPerson, businessUnit, appData, new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()), stateMock);
+		}
 
-        /// <summary>
-        /// Clears the and set state holder.
-        /// </summary>
-        /// <param name="mocks">The mocks.</param>
-        /// <param name="loggedOnPerson">The logged on person.</param>
-        /// <param name="businessUnit">The bu.</param>
-        /// <param name="appData">The app data.</param>
-        /// <param name="stateMock">The state mock.</param>
-        public static void ClearAndSetStateHolder(MockRepository mocks,
-                                                  IPerson loggedOnPerson,
-                                                  IBusinessUnit businessUnit,
-                                                  IApplicationData appData,
-                                                  IState stateMock)
+    	public static void ClearAndSetStateHolder(MockRepository mocks,
+												  IPerson loggedOnPerson,
+												  IBusinessUnit businessUnit,
+												  IApplicationData appData,
+													ICurrentPrincipalContext principalContext,
+												  IState stateMock)
         {
-            ISessionData sessData = CreateSessionData(loggedOnPerson, appData, businessUnit);
-            if (appData == null)
-                appData = mocks.StrictMock<IApplicationData>();
-            SetStateReaderExpectations(stateMock, appData, sessData);
-            ClearAndSetStateHolder(stateMock);
-            mocks.Replay(stateMock);
+        	ISessionData sessData = CreateSessionData(loggedOnPerson, appData, businessUnit, principalContext);
+        	if (appData == null)
+        		appData = mocks.StrictMock<IApplicationData>();
+        	SetStateReaderExpectations(stateMock, appData, sessData);
+        	ClearAndSetStateHolder(stateMock);
+        	mocks.Replay(stateMock);
         }
 
-		 public static void ClearAndSetStateHolder(IPerson loggedOnPerson,
-                                                  IBusinessUnit businessUnit,
-                                                  IApplicationData appData)
-		 {
-		 	var mocks = new MockRepository();
-			 ClearAndSetStateHolder(mocks, loggedOnPerson, businessUnit, appData, mocks.DynamicMock<IState>());
-		 }
+    	public static void ClearAndSetStateHolder(IPerson loggedOnPerson,
+												 IBusinessUnit businessUnit,
+												 IApplicationData appData
+			)
+    	{
+    		ClearAndSetStateHolder(loggedOnPerson, businessUnit, appData, DefaultPrincipalContext);
+		}
 
-        public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData, ISessionData sessionData)
+    	public static void ClearAndSetStateHolder(IPerson loggedOnPerson,
+												 IBusinessUnit businessUnit,
+												 IApplicationData appData,
+												   ICurrentPrincipalContext principalContext
+			)
+		{
+			var mocks = new MockRepository();
+			ClearAndSetStateHolder(mocks, loggedOnPerson, businessUnit, appData, principalContext, mocks.DynamicMock<IState>());
+		}
+
+    	public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData, ISessionData sessionData)
         {
             Expect.Call(stateMock.IsLoggedIn)
                 .Return(true)
@@ -156,31 +176,44 @@ namespace Teleopti.Ccc.TestCommon
             return applicationData;
         }
 
-        public static ISessionData CreateSessionData(
-            IPerson loggedOnPerson, IApplicationData applicationData, IBusinessUnit businessUnit)
+		public static ISessionData CreateSessionData(
+			IPerson loggedOnPerson,
+			IApplicationData applicationData,
+			IBusinessUnit businessUnit
+			)
+		{
+			return CreateSessionData(loggedOnPerson, applicationData, businessUnit, new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
+		}
+
+    	public static ISessionData CreateSessionData(
+            IPerson loggedOnPerson, 
+			IApplicationData applicationData, 
+			IBusinessUnit businessUnit,
+			ICurrentPrincipalContext principalContext
+			)
         {
             IDataSource dataSource = null;
             if (applicationData != null)
-            {
                 dataSource = applicationData.RegisteredDataSourceCollection.First();
-            }
 
-            var principal = new TeleoptiPrincipal(new TeleoptiIdentity("test user", dataSource,
-                                                                                  businessUnit,
-                                                                                  WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application),
-                                                             loggedOnPerson);
+			principalContext.SetCurrentPrincipal(loggedOnPerson, dataSource, businessUnit, AuthenticationTypeOption.Application);
+		
+			//var principal = new TeleoptiPrincipal(new TeleoptiIdentity("test user", dataSource,
+			//                                                                      businessUnit,
+			//                                                                      WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application),
+			//                                                 loggedOnPerson);
 			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
 
-            var currentPrincipal = Thread.CurrentPrincipal as TeleoptiPrincipal;
-            if (currentPrincipal==null)
-            {
-                AppDomain.CurrentDomain.SetThreadPrincipal(principal);
-                Thread.CurrentPrincipal = principal;
-            }
-            else
-            {
-                currentPrincipal.ChangePrincipal(principal);
-            }
+			//var currentPrincipal = Thread.CurrentPrincipal as TeleoptiPrincipal;
+			//if (currentPrincipal==null)
+			//{
+			//    AppDomain.CurrentDomain.SetThreadPrincipal(principal);
+			//    Thread.CurrentPrincipal = principal;
+			//}
+			//else
+			//{
+			//    currentPrincipal.ChangePrincipal(principal);
+			//}
             ISessionData sessData = new SessionData();
             sessData.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             return sessData;

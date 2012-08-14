@@ -402,3 +402,12 @@ IF EXISTS (select 1 from mart.report_control where control_id = 12 and control_n
 	UPDATE mart.report_control SET control_name = REPLACE(control_name, 'cbo', 'time') WHERE control_id = 12
 IF EXISTS (select 1 from mart.report_control where control_id = 13 and control_name like 'cbo%')
 	UPDATE mart.report_control SET control_name = REPLACE(control_name, 'cbo', 'time') WHERE control_id = 13
+
+----------------  
+--Name: Jonas
+--Date: 2012-08-13
+--Desc: #15302 Standard reports. Set default value for time zone control to be able to preselect the deafult time zone in selection.
+----------------
+UPDATE mart.report_control_collection 
+SET default_value = '-95'
+WHERE control_id = 22

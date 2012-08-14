@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using NHibernate;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using System.IO;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {

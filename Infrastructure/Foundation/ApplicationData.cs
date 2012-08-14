@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			InParameter.NotNull("appSettings", appSettings);
 			InParameter.NotNull("registeredDataSources", registeredDataSources);
 			AppSettings = appSettings;
-			if (registeredDataSources.Count() == 0)
+			if (!registeredDataSources.Any())
 				throw new DataSourceException("Can not find any registered data source");
 			checkNoDuplicateDataSourceExists(registeredDataSources);
 			_registeredDataSourceCollection = new List<IDataSource>(registeredDataSources);

@@ -382,11 +382,6 @@ ALTER TABLE [dbo].[queue_logg] CHECK CONSTRAINT [FK_queue_logg_queues]
 GO 
  
 
-GO
 
-  
-EXEC mart.sys_crossdatabaseview_load  
-GO  
- 
 PRINT 'Adding build number to database' 
 INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (329,'7.1.329') 

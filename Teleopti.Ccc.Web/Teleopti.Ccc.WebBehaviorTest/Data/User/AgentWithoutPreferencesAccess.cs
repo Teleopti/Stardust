@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
-	public class AgentWithoutPreferencesAccess : IUserSetup
+	public class AgentWithoutPreferencesAccess : IUserSetup, IUserRoleSetup
 	{
 		public void Apply(IPerson user, CultureInfo cultureInfo)
 		{

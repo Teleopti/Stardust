@@ -4,6 +4,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 {
@@ -51,27 +52,24 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 				var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
 				var businessUnit = businessUnitRepository.Load(sessionData.BusinessUnitId);
 
-				principal = MakePrincipalAndHandleThatPersonMightNotExist(sessionData, dataSource, businessUnit, person);
-				if (principal == null) return null;
-
-				_roleToPrincipalCommand.Execute(principal, uow, personRepository);
+				principal = MakePrincipalAndHandleThatPersonMightNotExist(uow, personRepository, sessionData, dataSource, businessUnit, person);
 			}
 
 			return principal;
 		}
 
-		private ITeleoptiPrincipal MakePrincipalAndHandleThatPersonMightNotExist(SessionSpecificData sessionData, IDataSource dataSource, IBusinessUnit businessUnit, IPerson person)
+		private ITeleoptiPrincipal MakePrincipalAndHandleThatPersonMightNotExist(IUnitOfWork uow, IPersonRepository personRepository, SessionSpecificData sessionData, IDataSource dataSource, IBusinessUnit businessUnit, IPerson person)
 		{
-			ITeleoptiPrincipal principal;
 			try
 			{
-				principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, sessionData.AuthenticationType);
+				var principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, sessionData.AuthenticationType);
+				_roleToPrincipalCommand.Execute(principal, uow, personRepository);
+				return principal;
 			}
 			catch (PersonNotFoundException)
 			{
 				return null;
 			}
-			return principal;
 		}
 	}
 }

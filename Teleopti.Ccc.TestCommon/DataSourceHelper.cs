@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Threading;
+using Newtonsoft.Json;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -15,113 +18,128 @@ namespace Teleopti.Ccc.TestCommon
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static IDataSource CreateDataSource()
 		{
-			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest());
+
+			if (IniFileInfo.Create)
 			{
+				using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+					SetupCcc7(dataSourceFactory, ccc7);
+
 				using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
-				{
-					if (IniFileInfo.Create)
-						PrepareDatabases(ccc7, analytics);
-
-					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest());
-					var dataSource = CreateDataSource(dataSourceFactory);
-
-					if (IniFileInfo.Create)
-						CreateSchemas(dataSourceFactory, ccc7, analytics);
-
-					return dataSource;
-				}
+					SetupAnalytics(dataSourceFactory, analytics);
 			}
+
+			return CreateDataSource(dataSourceFactory);
 		}
 
-		public static void ClearAnalyticsData()
+		private static void SetupCcc7(DataSourcesFactory dataSourceFactory, DatabaseHelper ccc7)
 		{
-			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
-			{
-				analytics.CleanAnalytics();
-			}
+			if (TryRestoreDatabase(ccc7))
+				return;
+
+			CreateDatabase(ccc7, true);
+			CreateSchema(dataSourceFactory, ccc7, true);
+			PersistAuditSetting();
+			BackupDatabase(ccc7);
 		}
 
-		private static void PrepareDatabases(DatabaseHelper ccc7, DatabaseHelper analytics)
+		private static void SetupAnalytics(DataSourcesFactory dataSourceFactory, DatabaseHelper analytics)
 		{
-			try
-			{
-				if (ccc7.Exists())
-				{
-					ccc7.DropConnections();
-					ccc7.Drop();
-				}
-				if (IniFileInfo.CreateByNHib)
-					ccc7.Create();
-				else
-					ccc7.CreateByDbManager();
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Failed to prepare database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests);
-				Console.WriteLine(e.ToString());
-				throw;
-			}
+			if (TryRestoreDatabase(analytics))
+				return;
 
-			try
-			{
-				if (analytics.Exists())
-				{
-					analytics.DropConnections();
-					analytics.Drop();
-				}
-				analytics.CreateByDbManager();
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Failed to prepare database {0}!", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-				Console.WriteLine(e.ToString());
-				throw;
-			}
+			CreateDatabase(analytics, false);
+			CreateSchema(dataSourceFactory, analytics, false);
+			BackupDatabase(analytics);
 		}
+
+		private static void CreateDatabase(DatabaseHelper database, bool allowCreateByNHib)
+		{
+			ExceptionToConsole(
+				() =>
+					{
+						if (database.Exists())
+						{
+							database.DropConnections();
+							database.Drop();
+						}
+						if (allowCreateByNHib && IniFileInfo.CreateByNHib)
+							database.Create();
+						else
+							database.CreateByDbManager();
+					},
+				"Failed to prepare database {0}!", database.ConnectionString
+				);
+		}
+
+		private static void CreateSchema(DataSourcesFactory dataSourceFactory, DatabaseHelper database, bool allowCreateByNHib)
+		{
+			ExceptionToConsole(
+				() =>
+					{
+						if (allowCreateByNHib && IniFileInfo.CreateByNHib)
+							dataSourceFactory.CreateSchema();
+						else
+							database.CreateSchemaByDbManager();
+					},
+				"Failed to create database schema {0}!", database.ConnectionString
+				);
+		}
+
+		private static bool TryRestoreDatabase(DatabaseHelper database)
+		{
+			return ExceptionToConsole(
+				() =>
+				{
+					// maybe it would be possible to attach it if a file exists but the database doesnt. but wth..
+					if (!database.Exists())
+						return false;
+
+					var backupName = BackupName(database.DatabaseType, database.SchemaVersion(), database.SchemaTrunkHash());
+					var fileName = backupName + ".backup";
+					if (!System.IO.File.Exists(fileName))
+						return false;
+
+					var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(System.IO.File.ReadAllText(fileName));
+					database.RestoreByFileCopy(backup);
+					return true;
+				},
+				"Failed to backup database {0}!", database.ConnectionString
+				);
+
+		}
+
+		private static void BackupDatabase(DatabaseHelper database)
+		{
+			ExceptionToConsole(
+				() =>
+				{
+					var backupName = BackupName(database.DatabaseType, database.DatabaseVersion(), database.SchemaTrunkHash());
+					var backup = database.BackupByFileCopy(backupName);
+					var fileName = backupName + ".backup";
+					System.IO.File.WriteAllText(fileName, JsonConvert.SerializeObject(backup, Formatting.Indented));
+				},
+				"Failed to backup database {0}!", database.ConnectionString
+				);
+		}
+
+		private static string BackupName(DatabaseType databaseType, int databaseVersion, int trunkHash)
+		{
+			return databaseType + "." + databaseVersion + "." + trunkHash;
+		}
+
+
 
 		private static IDataSource CreateDataSource(DataSourcesFactory dataSourceFactory)
 		{
-			IDataSource dataSource;
-			try
-			{
-				var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null);
-				dataSource = dataSourceFactory.Create(dataSourceSettings, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-			}
-			catch (Exception)
-			{
-				Console.WriteLine("Failed to create datasource {0}!", ConnectionStringHelper.ConnectionStringUsedInTests);
-				throw;
-			}
-			return dataSource;
-		}
-
-		private static void CreateSchemas(DataSourcesFactory dataSourceFactory, DatabaseHelper ccc7, DatabaseHelper analytics)
-		{
-			try
-			{
-				if (IniFileInfo.CreateByNHib)
-					dataSourceFactory.CreateSchema();
-				else
-					ccc7.CreateSchemaByDbManager();
-				PersistAuditSetting();
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Failed to create database schema {0}!", ConnectionStringHelper.ConnectionStringUsedInTests);
-				Console.WriteLine(e.ToString());
-				throw;
-			}
-
-			try
-			{
-				analytics.CreateSchemaByDbManager();
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Failed to create database schema {0}!", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-				Console.WriteLine(e.ToString());
-				throw;
-			}
+			return ExceptionToConsole(
+				() =>
+				{
+					var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null);
+					return dataSourceFactory.Create(dataSourceSettings, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+				},
+				"Failed to create datasource {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				);
 		}
 
 		public static void PersistAuditSetting()
@@ -151,5 +169,79 @@ namespace Teleopti.Ccc.TestCommon
 				dictionary[NHibernate.Cfg.Environment.CommandTimeout] = timeout.Value.ToString(CultureInfo.CurrentCulture);
 			return dictionary;
 		}
+
+
+
+
+
+
+		public static void ClearCcc7Data()
+		{
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			{
+				ccc7.CleanByGenericProcedure();
+			}
+		}
+
+		public static void ClearAnalyticsData()
+		{
+			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
+			{
+				analytics.CleanByAnalyticsProcedure();
+			}
+		}
+
+		public static DatabaseHelper.Backup BackupCcc7DataByFileCopy(string name)
+		{
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			{
+				return ccc7.BackupByFileCopy(name);
+			}
+		}
+
+		public static void RestoreCcc7DataByFileCopy(DatabaseHelper.Backup backup)
+		{
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			{
+				ccc7.RestoreByFileCopy(backup);
+			}
+		}
+
+
+
+
+
+
+
+
+		private static void ExceptionToConsole(Action action, string exceptionMessage, params object[] args)
+		{
+			try
+			{
+				action.Invoke();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(string.Format(exceptionMessage, args));
+				Console.WriteLine(e.ToString());
+				throw;
+			}
+		}
+
+		private static T ExceptionToConsole<T>(Func<T> action, string exceptionMessage, params object[] args)
+		{
+			try
+			{
+				return action.Invoke();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(string.Format(exceptionMessage, args));
+				Console.WriteLine(e.ToString());
+				throw;
+			}
+		}
+
+
 	}
 }

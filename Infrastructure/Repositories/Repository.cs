@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// <returns></returns>
         public virtual T Load(Guid id)
         {
-            return (T)Session.Load<T>(id);
+            return Session.Load<T>(id);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public virtual T Get(Guid id)
         {
-            return (T)Session.Get<T>(id);
+            return Session.Get<T>(id);
         }
 
         /// <summary>

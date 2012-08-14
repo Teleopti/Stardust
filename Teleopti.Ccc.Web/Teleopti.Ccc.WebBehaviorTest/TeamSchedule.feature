@@ -198,6 +198,7 @@ Scenario: Keep selected date when changing team
 Scenario: Show team-picker with teams for my site for another day
 	Given I am an agent in a team with access to the whole site
 	And I belong to another site's team tomorrow
+	And the other site has 2 teams
 	And I am viewing team schedule for today
 	When I click the next day button
 	Then I should see the team-picker with the other site's team
@@ -205,6 +206,7 @@ Scenario: Show team-picker with teams for my site for another day
 Scenario: Show default team when no access to a team on a date
 	Given I am an agent in a team with access to the whole site
 	And I belong to another site's team tomorrow
+	And the other site has 2 teams
 	And I am viewing team schedule for today
 	When I click the next day button
 	Then I should see the other site's team

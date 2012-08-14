@@ -1,4 +1,3 @@
-using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Infrastructure;
 

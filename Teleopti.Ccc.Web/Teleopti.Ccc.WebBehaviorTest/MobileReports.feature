@@ -2,9 +2,6 @@
  In order to keep track on my CC
  As a Supervisor on the move
  I want to see reports on my mobile
-
-Background:
-	Given I browse with a mobile
 	
 Scenario: Enter Application 
 	Given I am a supervisor

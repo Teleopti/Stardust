@@ -1,5 +1,3 @@
-using System;
-using System.ComponentModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

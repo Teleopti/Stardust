@@ -19,6 +19,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "BusinessUnitOkButton")] public Button BusinessUnitOkButton;
 
 		[FindBy(Id = "SignIn_UserName")] public TextField UserNameTextField { get; set; }
+
+		public Element ValidationSummary { get { return Document.Div(Find.ByClass("validation-summary-errors", false)); } }
+
 		[FindBy(Id = "SignIn_Password")] public TextField PasswordTextField;
 
 		[FindBy(Id = "BusinessUnitList")] public List BusinessUnitList;
@@ -59,13 +62,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SignInApplication(string username, string password)
 		{
-			ApplicationTabLink.Click();
+			ApplicationTabLink.EventualClick();
 			SelectApplicationTestDataSource();
 			UserNameTextField.Value = username;
 			PasswordTextField.Value = password;
-			ApplicationOkButton.Click();
+			ApplicationOkButton.EventualClick();
 
-			WaitUntilSignInOrBusinessUnitListOrErrorOrMenuAppears();
+			WaitForSigninResult();
 		}
 
 		public void SignInWindows()
@@ -75,10 +78,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			WindowsOkButton.EventualClick();
 		}
 
-		private void WaitUntilSignInOrBusinessUnitListOrErrorOrMenuAppears()
+		private void WaitForSigninResult()
 		{
-			Func<bool> SignedInOrBusinessUnitListExists = () => SignOutLink.Exists || BusinessUnitList.Exists || GlobalMenuList.Exists;
-			SignedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(10), TimeSpan.FromSeconds(10));
+			// move this to the actual navigation, which is the one that actually acts too early?
+			Func<bool> signedInOrBusinessUnitListExists = () =>
+			                                              	{
+																return SignOutLink.IESafeExists() ||
+																	   BusinessUnitList.IESafeExists() ||
+																	   GlobalMenuList.IESafeExists() ||
+																	   ValidationSummary.IESafeExists();
+			                                              	};
+			var found = signedInOrBusinessUnitListExists.WaitUntil(EventualTimeouts.Poll, EventualTimeouts.Timeout);
+			if (!found)
+				throw new ApplicationException("Waiting for signin result failed!");
 		}
 	}
 }

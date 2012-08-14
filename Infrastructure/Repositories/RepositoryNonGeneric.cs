@@ -1,5 +1,4 @@
 using NHibernate;
-using NHibernate.Context;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;

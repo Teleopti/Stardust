@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             if (entityCollection.Count() > 1)
                 throw new DataSourceException("Attempted to add more than one status");
-            if (entityCollection.Count() > 0)
+            if (entityCollection.Any())
             {
                 foreach (ILicenseStatus licenseStat in entityCollection)
                 {

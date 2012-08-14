@@ -19,6 +19,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestDataSetup.UnitOfWorkAction(uow => _dataSetups.ForEach(s => s.Apply(uow)));
 		}
 
+		public void Clear()
+		{
+			_dataSetups.Clear();
+		}
+
 		private IEnumerable<T> QueryData<T>() { return from s in _dataSetups where typeof(T).IsAssignableFrom(s.GetType()) select (T)s; }
 
 		public IEnumerable<IDataSetup> Setups { get { return _dataSetups; } }

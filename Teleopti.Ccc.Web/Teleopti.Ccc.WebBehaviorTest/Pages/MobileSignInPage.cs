@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
@@ -7,12 +7,14 @@ using WatiN.Core;
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class MobileSignInPage : Page, ISignInPage
-
 	{
 		[FindBy(Id = "ApplicationSignIn_SignIn_Password")] public TextField PasswordTextField;
 
 		[FindBy(Id = "application-signin-button")] public Button SignInButton;
 		[FindBy(Id = "ApplicationSignIn_SignIn_UserName")] public TextField UserNameTextField { get; set; }
+
+		public Element ValidationSummary { get { return Document.Span(Find.ByClass("error")); } }
+
 		[FindBy(Id = "businessunit-ok-button")]public Button SignInBusinessInitsOkButton;
 
 		[FindBy(Id = "application-signin")]
@@ -22,13 +24,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get { return Document.RadioButtons.Filter(Find.ByName("signin-sel-datasource")); }
 		}
+
 		public RadioButtonCollection SignInBusinessUnits
 		{
 			get { return Document.RadioButtons.Filter(Find.ByName("signin-sel-businessunit")); }
 		}
 
-		[FindBy(Id = "signout-button")] // Belongs to MobileReports
-			public Link SignoutButton { get; set; }
+		[FindBy(Id = "signout-button")]
+		public Link SignoutButton { get; set; }
 
 		public void SelectApplicationTestDataSource()
 		{
@@ -50,36 +53,40 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			SigninDataSources.Filter(Find.ByValue("TestData")).First().Click();
 			UserNameTextField.Value = userName;
 			PasswordTextField.Value = password;
-			SignInButton.Click();
+			SignInButton.EventualClick();
 
-			WaitUntilSignInOrBusinessUnitListOrErrorAppears();
+			WaitForSigninResult();
 		}
 
-		private void WaitUntilSignInOrBusinessUnitListOrErrorAppears()
+		private void WaitForSigninResult()
 		{
-			Exception exception = null;
-			Func<bool> signedInOrBusinessUnitListExists =
-				() =>
-					{
-						try
-						{
-							exception = null;
-							return SignoutButton.Exists || SignInBusinessUnits.Any(e => e.Style.Display != "none");
-							/*|| ErrorSpans.Any(e => e.Style != null && e.Style.Display != "none");*/
-						}
-						catch (UnauthorizedAccessException ex)
-						{
-							exception = ex;
-							return false;
-						}
-					};
-			if (!signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5)))
+			Func<bool> signedInOrBusinessUnitListExists = () =>
+			                                              	{
+																return SignoutButton.IESafeExists() ||
+																	ErrorDisplayed() ||
+																	BusinessUnitsDisplayed()
+			                                              			;
+			                                              	};
+			var found = signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
+			if (!found)
+				throw new ApplicationException("Waiting for signin result failed!");
+		}
+
+		private bool BusinessUnitsDisplayed()
+		{
+			return Document.RadioButton(Find.ByName("signin-sel-businessunit")).IESafeExists();
+		}
+
+		private bool ErrorDisplayed()
+		{
+			var span = Document.Span(Find.ByClass("error", false));
+			if (span.IESafeExists())
 			{
-				if (exception != null)
-				{
-					throw exception;
-				}
+				if (span.Text == null)
+					return false;
+				return span.Text.Trim().Length > 0;
 			}
+			return false;
 		}
 
 		public void SelectFirstBusinessUnit()
