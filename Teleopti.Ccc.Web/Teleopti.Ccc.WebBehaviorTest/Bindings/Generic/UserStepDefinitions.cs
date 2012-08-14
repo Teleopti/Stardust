@@ -3,30 +3,11 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Bindings
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
 	[Binding]
-	public class ConfigurableUserStepDefinitions
+	public class UserStepDefinitions
 	{
-		[Given(@"I am a user")]
-		public void GivenIAmAUser()
-		{
-		}
-
-		[Given(@"I have the role '(.*)'")]
-		public void GivenIHaveTheRoleAccessToMytime(string name)
-		{
-			var userRole = new RoleForUser { Name = name };
-			UserFactory.User().Setup(userRole);
-		}
-
-		[Given(@"I have the workflow control set '(.*)'")]
-		public void GivenIHaveTheWorkflowControlSetPublishedSchedule(string name)
-		{
-			var userWorkflowControlSet = new WorkflowControlSetForUser { Name = name };
-			UserFactory.User().Setup(userWorkflowControlSet);
-		}
-
 		[Given(@"I have a schedule period with")]
 		public void GivenIHaveASchedulePeriodWith(Table table)
 		{
@@ -40,7 +21,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var personPeriod = table.CreateInstance<PersonPeriodConfigurable>();
 			UserFactory.User().Setup(personPeriod);
 		}
-
 
 	}
 }

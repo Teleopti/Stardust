@@ -4,10 +4,8 @@ using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
-using PersonPeriod = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific.PersonPeriod;
-using Team = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific.Team;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Bindings
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 {
 	[Binding]
 	public class UserStepDefinitions

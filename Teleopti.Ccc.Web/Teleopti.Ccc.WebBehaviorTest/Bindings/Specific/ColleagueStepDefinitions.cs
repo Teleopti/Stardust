@@ -3,7 +3,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Bindings
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 {
 	[Binding]
 	public class ColleagueStepDefinitions

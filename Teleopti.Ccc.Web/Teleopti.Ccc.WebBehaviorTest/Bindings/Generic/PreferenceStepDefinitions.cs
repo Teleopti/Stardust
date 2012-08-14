@@ -4,10 +4,10 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Bindings
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
 	[Binding]
-	public class ConfigurableUserDataStepDefinitions
+	public class PreferenceStepDefinitions
 	{
 		[Given(@"I have a preference with")]
 		public void GivenIHaveAPreferenceWith(Table table)

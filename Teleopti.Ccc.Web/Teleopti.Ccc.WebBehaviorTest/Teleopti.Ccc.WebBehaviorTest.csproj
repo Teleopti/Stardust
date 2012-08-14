@@ -81,9 +81,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Bindings\ConfigurableDataStepDefinitions.cs" />
-    <Compile Include="Bindings\ConfigurableUserDataStepDefinitions.cs" />
-    <Compile Include="Bindings\ConfigurableUserStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="PreferencesExtendedStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AnotherSite.cs" />
     <Compile Include="Data\Setups\Common\CommonBusinessUnit.cs" />
@@ -94,7 +96,7 @@
     <Compile Include="Data\Setups\Generic\RoleForUser.cs" />
     <Compile Include="Data\Setups\Generic\WorkflowControlSetForUser.cs" />
     <Compile Include="Data\Setups\Generic\BusinessUnitConfigurable.cs" />
-    <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
+    <Compile Include="Bindings\Specific\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\WorkflowControlSetConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\RoleConfigurable.cs" />
@@ -377,7 +379,7 @@
     <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Core\WatiNWaitForCompleteTimeout.cs" />
     <Compile Include="Data\UserFactory.cs" />
-    <Compile Include="Bindings\UserStepDefinitions.cs" />
+    <Compile Include="Bindings\Specific\UserStepDefinitions.cs" />
     <Compile Include="TextRequestFromSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
