@@ -4,7 +4,6 @@ GO
 
 
 CREATE PROCEDURE [stage].[etl_stg_time_zone_bridge_delete]
-WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;

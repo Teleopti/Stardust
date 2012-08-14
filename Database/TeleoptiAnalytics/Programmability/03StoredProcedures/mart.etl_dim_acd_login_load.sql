@@ -16,7 +16,6 @@ GO
 --mart.etl_dim_acd_login_load 1
 CREATE PROCEDURE [mart].[etl_dim_acd_login_load]
 @datasource_id smallint
-WITH EXECUTE AS OWNER
 AS
 DECLARE @internal bit
 DECLARE @sqlstring nvarchar(4000)

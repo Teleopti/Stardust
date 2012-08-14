@@ -11,7 +11,7 @@ GO
 -- 2009-02-09 Stage moved to mart db, removed view KJ
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_skillset_load] 
-WITH EXECUTE AS OWNER
+	
 AS
 SET NOCOUNT ON 
 --------------------------------------------------------------------------

@@ -4,7 +4,6 @@ GO
 
 
 create PROCEDURE [stage].[etl_stg_forecast_workload_delete]
-WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;
