@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 
@@ -29,6 +30,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 				PreferenceButton.SelectWait(text);
 			else
 				PreferenceButton.Select(text);
+		}
+
+
+		public Div ExtendedPreferenceIndicationForDate(DateTime date)
+		{
+			return CalendarCellForDate(date).Div(Find.ByClass("Extended-preference-indication", false));
+		}
+		
+		public Div ExtendedPreferenceForDate(DateTime date)
+		{
+			return CalendarCellForDate(date).Div(Find.ByClass("Extended-preference", false));
 		}
 	}
 }

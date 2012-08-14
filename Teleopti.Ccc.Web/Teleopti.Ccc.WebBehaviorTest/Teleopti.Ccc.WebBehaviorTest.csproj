@@ -84,6 +84,7 @@
     <Compile Include="Bindings\ConfigurableDataStepDefinitions.cs" />
     <Compile Include="Bindings\ConfigurableUserDataStepDefinitions.cs" />
     <Compile Include="Bindings\ConfigurableUserStepDefinitions.cs" />
+    <Compile Include="PreferencesExtendedStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AnotherSite.cs" />
     <Compile Include="Data\Setups\Common\CommonBusinessUnit.cs" />
     <Compile Include="Data\Setups\Common\CommonSite.cs" />
