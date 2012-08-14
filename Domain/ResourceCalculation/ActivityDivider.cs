@@ -86,18 +86,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
                     }
 
-                	bool toContinue = true;
-                	try
-                	{
+					if (!dividedActivity.PersonSkillEfficiencies.ContainsKey(currentPerson))
+					{
 						dividedActivity.PersonSkillEfficiencies.Add(currentPerson, personSkillEfficiencyRow);
-                	}
-					catch (ArgumentException ex)
-					{
-						toContinue = false;
-					}
-
-					if(toContinue)
-					{
 						dividedActivity.WeightedRelativePersonSkillResources.Add(currentPerson, personSkillResourceRow);
 						dividedActivity.RelativePersonSkillResources.Add(currentPerson, relativePersonSkillResourceRow);
 						dividedActivity.RelativePersonResources.Add(currentPerson, traff);
@@ -105,7 +96,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						double targetResourceValue = elapsedToCalculate.TotalMinutes * traff;
 						dividedActivity.PersonResources.Add(currentPerson, targetResourceValue);
 					}
-                    
                 }
             }
 
