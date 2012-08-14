@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -100,7 +101,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(2, result.TargetDemands.Count);
         }
 
-        private void VerifyTargetDemandsData(IDividedActivityData dividedActivity)
+		/// <summary>
+		/// Shoulds the handle overlapping skills.
+		/// </summary>
+		/// <remarks>
+		/// This happens if visual layer collection has the same person
+		/// </remarks>
+		[Test]
+		public void ShouldHandleOverlappingSkills()
+		{
+			DateOnlyPeriod datePeriod = new DateOnlyPeriod(new DateOnly(_inPeriod.StartDateTime), new DateOnly(_inPeriod.EndDateTime));
+			ISkillStaffPeriodDictionary dictionary = _skillStaffPeriods[_testContainer.AllSkills[0]];
+			dictionary.Clear();
+			_target = new ActivityDivider();
+
+			IList<IFilteredVisualLayerCollection> layerCollection = _testContainer.TestFilteredVisualLayerCollectionWithSamePerson();
+			Assert.AreSame(layerCollection[0].Person, layerCollection[1].Person); // check that the two collection has the same person
+
+			IDividedActivityData result =
+				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], layerCollection, _inPeriod);
+			Assert.AreEqual(2, result.TargetDemands.Count);
+		}
+
+    	private void VerifyTargetDemandsData(IDividedActivityData dividedActivity)
         {
             IDictionary<ISkill, double> targetDemands = dividedActivity.TargetDemands;
             Assert.IsNotNull(targetDemands);
