@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                                                  StringSplitOptions.RemoveEmptyEntries);
 
             _model.RequiredParticipantList.Clear();
-            foreach (var foundName in participantsFromText.Select(s => _model.PersonModels.First(conP => conP.FullName == s)).Where(foundName => foundName != null))
+            foreach (var foundName in participantsFromText.Select(s => _model.PersonModels.FirstOrDefault(conP => conP.FullName == s)).Where(foundName => foundName != null))
                 _model.RequiredParticipantList.Add(foundName);
 
             _view.SetRequiredParticipants(_model.RequiredParticipants);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                                                  StringSplitOptions.RemoveEmptyEntries);
 
             _model.OptionalParticipantList.Clear();
-            foreach (var foundName in participantsFromText.Select(s => _model.PersonModels.First(conP => conP.FullName == s)).Where(foundName => foundName != null))
+            foreach (var foundName in participantsFromText.Select(s => _model.PersonModels.FirstOrDefault(conP => conP.FullName == s)).Where(foundName => foundName != null))
                 _model.OptionalParticipantList.Add(foundName);
 
             _view.SetOptionalParticipants(_model.OptionalParticipants);
