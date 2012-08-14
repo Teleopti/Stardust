@@ -35,7 +35,7 @@ item: Global
   Variable Default3=C:\WINDOWS
   Variable Flags3=00001000
   Variable Name4=_WISE_
-  Variable Default4=C:\Program Files\Altiris\Wise\WiseScript Package Editor
+  Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
   Variable Flags4=00001000
   Requested Execution Level=asInvoker
 end
@@ -208,7 +208,7 @@ item: Remark
 end
 item: Execute Program
   Pathname=DBManager.exe
-  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7
+  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 -T
   Default Directory=%DIR%
   Flags=00000010
 end

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -85,13 +86,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
                     }
 
-                    dividedActivity.PersonSkillEfficiencies.Add(currentPerson, personSkillEfficiencyRow);
-                    dividedActivity.WeightedRelativePersonSkillResources.Add(currentPerson, personSkillResourceRow);
-                    dividedActivity.RelativePersonSkillResources.Add(currentPerson, relativePersonSkillResourceRow);
-                    dividedActivity.RelativePersonResources.Add(currentPerson, traff);
+					if (!dividedActivity.PersonSkillEfficiencies.ContainsKey(currentPerson))
+					{
+						dividedActivity.PersonSkillEfficiencies.Add(currentPerson, personSkillEfficiencyRow);
+						dividedActivity.WeightedRelativePersonSkillResources.Add(currentPerson, personSkillResourceRow);
+						dividedActivity.RelativePersonSkillResources.Add(currentPerson, relativePersonSkillResourceRow);
+						dividedActivity.RelativePersonResources.Add(currentPerson, traff);
 
-                    double targetResourceValue = elapsedToCalculate.TotalMinutes * traff;
-                    dividedActivity.PersonResources.Add(currentPerson, targetResourceValue);
+						double targetResourceValue = elapsedToCalculate.TotalMinutes * traff;
+						dividedActivity.PersonResources.Add(currentPerson, targetResourceValue);
+					}
                 }
             }
 
