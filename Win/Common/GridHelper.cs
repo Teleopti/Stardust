@@ -127,7 +127,9 @@ namespace Teleopti.Ccc.Win.Common
 
                 for (var i = 0; i <= width; i++)
                 {
-                    switch (grid[top, left + i].CellType)
+                    var currentCell = grid[top, left + i];
+                    var cellStyleInfo = grid.Model[top, left + i];
+                    switch (currentCell.CellType)
                     {
                         case "NumericServiceTargetLimitedCell":
                         case "NumericCell":
@@ -137,14 +139,14 @@ namespace Teleopti.Ccc.Win.Common
                         case "NumericWorkloadIntradayTaskLimitedCell":
                         case "NumericWithTwoDecimalsCell":
                         case "NumericTwoDecimalCell":
-                            grid[top, left + i].CellValue = list[i];
+                            currentCell.CellModel.ApplyFormattedText(cellStyleInfo, list[i].ToString(CultureInfo.CurrentCulture), -1);
                             break;
                         case "PositiveTimeSpanTotalSecondsCell":
                             if (list[i] >= 0)
-                                grid[top, left + i].CellValue = TimeSpan.FromSeconds(CheckSecondsRange(list[i]));
+                                currentCell.CellModel.ApplyFormattedText(cellStyleInfo, TimeSpan.FromSeconds(CheckSecondsRange(list[i])).ToString(), -1);
                             break;
                         case "TimeSpanTotalSecondsCell":
-                            grid[top, left + i].CellValue = TimeSpan.FromSeconds(CheckSecondsRange(list[i]));
+                            currentCell.CellModel.ApplyFormattedText(cellStyleInfo, TimeSpan.FromSeconds(CheckSecondsRange(list[i])).ToString(), -1);
                             break;
                         case "PercentWithNegativeCell":
                         case "PercentWithTwoDecimalsCell":
@@ -160,14 +162,14 @@ namespace Teleopti.Ccc.Win.Common
                             Percent result;
                             var t = Percent.TryParse(list[i].ToString(CultureInfo.CurrentCulture), out result);
                             if (t && (list[i] <= 100 && list[i] > 0))
-                                grid[top, left + i].CellValue = result;
+                                currentCell.CellModel.ApplyFormattedText(cellStyleInfo, list[i].ToString(CultureInfo.CurrentCulture), -1);
                             break;
                         case "TimeSpanLongHourMinuteSecondOnlyPositiveCellModel":
                             if (list[i] >= 0)
-                                grid[top, left + i].CellValue = TimeSpan.FromSeconds(CheckSecondsRange(list[i]));
+                                currentCell.CellModel.ApplyFormattedText(cellStyleInfo, TimeSpan.FromSeconds(CheckSecondsRange(list[i])).ToString(), -1);
                             break; 
                         case "IntegerMinMaxAgentCell":
-                            grid[top, left + i].CellValue = (int)list[i];
+                            currentCell.CellModel.ApplyFormattedText(cellStyleInfo, list[i].ToString(CultureInfo.CurrentCulture), -1);
                             break;
                     }
                 }
@@ -182,12 +184,25 @@ namespace Teleopti.Ccc.Win.Common
             return 0;
         }
 
+
+        private static double CheckSecondsRange(double d)
+        {
+            double maxValue = TimeSpan.MaxValue.TotalSeconds;
+            double minValue = TimeSpan.MinValue.TotalSeconds;
+            if (d < maxValue && d > minValue) return d;
+            return 0;
+        }
+
+
         private static void PercentageValue(GridControl grid, int i, int top, int left, IList<double> list)
         {
+            var currentCell = grid[top, left + i];
+            var cellStyleInfo = grid.Model[top, left + i];
             Percent result;
             var t = Percent.TryParse(list[i].ToString(CultureInfo.CurrentCulture), out result);
             if (t)
-                grid[top, left + i].CellValue = result;
+                currentCell.CellModel.ApplyFormattedText(cellStyleInfo, list[i].ToString(CultureInfo.CurrentCulture), -1);
+
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#")]
