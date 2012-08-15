@@ -280,6 +280,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.ContractTimeMinutes = 0;
 	this.HasFeedback = true;
 	this.Preference = ko.observable();
+	this.Extended = ko.observable();
 	this.Color = ko.observable();
 
 	this.ReadElement = function (element) {
@@ -287,7 +288,8 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		self.Date = item.attr('data-mytime-date');
 		self.ContractTimeMinutes = parseInt($('[data-mytime-contract-time]', item).attr('data-mytime-contract-time')) || 0;
 		self.HasFeedback = item.hasClass("feedback");
-		self.Preference($('.preference', element).text());
+		self.Preference($('.preference-text', element).text());
+		self.Extended($('.extended-indication', element).data('mytime-visible'));
 		self.Color($('.day-content', element).css("border-left-color"));
 	};
 

@@ -110,6 +110,20 @@
 					equal(viewModelDay.PossibleContractTimes(), "7:00-12:00");
 				});
 
+				test("should bind extended", function () {
+
+					var element = $("#qunit-fixture")
+						.append("<div class='extended-indication' data-bind='visible: Extended' style='display: none' data-mytime-visible='true'></div>")
+						[0];
+					
+					var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+					dayViewModel.ReadElement(element);
+					ko.applyBindings(dayViewModel, element);
+
+					equal(dayViewModel.Extended(), true);
+					equal($(element).is(':visible'), true);
+				});
+
 				module("Teleopti.MyTimeWeb.Preference initializer");
 
 				test("should load day feedback and bind", function () {
@@ -213,7 +227,7 @@
 				});
 
 				test("should clear day view models on init", function () {
-					
+
 					$("#qunit-fixture")
 						.html("<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>")
 						.append("<li data-mytime-date='2012-06-19' class='inperiod feedback' />");
@@ -236,7 +250,7 @@
 					$("#qunit-fixture")
 						.html("<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>")
 						.append("<li data-mytime-date='2012-06-20' class='inperiod feedback' />");
-					
+
 					target.InitViewModels();
 
 					equal($('#Preference-period-feedback-view').text(), "6:00", "day sum after reinit same instance");

@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 	public class PreferenceDayViewModel
 	{
 		public string Preference { get; set; }
+		public bool Extended { get; set; }
 	}
 
 	public class PersonAssignmentDayViewModel
