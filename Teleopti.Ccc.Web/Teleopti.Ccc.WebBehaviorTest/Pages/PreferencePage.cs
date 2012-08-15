@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Div ExtendedPreferenceIndicationForDate(DateTime date)
 		{
-			return CalendarCellForDate(date).Div(Find.ByClass("Extended-preference-indication", false));
+			return CalendarCellForDate(date).Div(Find.ByClass("extended-indication", false));
 		}
 		
 		public Div ExtendedPreferenceForDate(DateTime date)
 		{
-			return CalendarCellForDate(date).Div(Find.ByClass("Extended-preference", false));
+			return CalendarCellForDate(date).Div(Find.ByClass("preference-extended", false));
 		}
 	}
 }

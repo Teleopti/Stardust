@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see that I have an extended preference on '(.*)'")]
 		public void ThenIShouldSeeThatIHaveAnExtendedPreferenceOn(DateTime date)
 		{
-			ScenarioContext.Current.Pending();
 			var indication = Pages.Pages.PreferencePage.ExtendedPreferenceIndicationForDate(date);
 			EventualAssert.That(() => indication.Exists, Is.True);
 		}
