@@ -134,15 +134,16 @@ namespace Teleopti.Ccc.Win.Optimization
                 Preferences.SelectedActivities = new List<IActivity>();
             }
 
-            IList<IActivity> availableactivities = _availableActivity;
-            if (activities.Count > 0)
+
+            IList<IActivity> availableactivities = new List<IActivity>();
+            foreach(var currActivity in _availableActivity  )
             {
-                foreach (var activity in
-                    activities.Where(activity => _availableActivity.Contains(activity)))
+                if(!Preferences.SelectedActivities.Contains( currActivity ))
                 {
-                    availableactivities.Remove(activity);
+                    availableactivities.Add(currActivity);
                 }
             }
+
             twoListSelectorActivities.Initiate(availableactivities, Preferences.SelectedActivities, "Description", UserTexts.Resources.Activities, UserTexts.Resources.DoNotMove);
         }
 
