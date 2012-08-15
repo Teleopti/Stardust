@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			//Make parallel
 
-			bool failed = _groupOptimizationValidatorRunner.Run(matrix, daysOffToRemove, schedulingOptions);
-			if (failed)
+			bool success = _groupOptimizationValidatorRunner.Run(matrix, daysOffToRemove, schedulingOptions);
+			if (!success)
 			{
 				return false;
 			}

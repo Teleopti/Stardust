@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IGroupDayOffOptimizerValidateDayOffToRemove
 	{
-		bool Validate(IScheduleMatrixPro matrix, DateOnly dateOnly, ISchedulingOptions schedulingOptions);
+		bool Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions);
 	}
 
 	public class GroupDayOffOptimizerValidateDayOffToRemove : IGroupDayOffOptimizerValidateDayOffToRemove
@@ -20,58 +20,61 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_allMatrixes = allMatrixes;
 		}
 
-		public bool Validate(IScheduleMatrixPro matrix, DateOnly dateOnly, ISchedulingOptions schedulingOptions)
+		public bool Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions)
 		{
-			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, dateOnly);
-			if (groupPerson == null)
+			foreach (var dateOnly in dates)
 			{
-				//report that the person does not belong to any group and return false when broken out
-				return false;
-			}
-
-			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro>();
-			foreach (var person in groupPerson.GroupMembers)
-			{
-				foreach (var matrixPro in _allMatrixes)
+				IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, dateOnly);
+				if (groupPerson == null)
 				{
-					if (matrixPro.Person.Equals(person))
+					//report that the person does not belong to any group and return false when broken out
+					return false;
+				}
+
+				IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro>();
+				foreach (var person in groupPerson.GroupMembers)
+				{
+					foreach (var matrixPro in _allMatrixes)
 					{
-						if (matrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
+						if (matrixPro.Person.Equals(person))
 						{
-							matrixList.Add(matrixPro);
+							if (matrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
+							{
+								matrixList.Add(matrixPro);
+							}
 						}
 					}
 				}
-			}
 
-			if (schedulingOptions.UseSameDayOffs)
-			{
-				bool fail = false;
-				foreach (var matrixPro in matrixList)
+				if (schedulingOptions.UseSameDayOffs)
 				{
-					IScheduleDayPro scheduleDayPro = matrixPro.GetScheduleDayByKey(dateOnly);
-					if (!matrixPro.UnlockedDays.Contains(scheduleDayPro))
-					{
-						fail = true;
-					}
-
-					if (scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff && scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.ContractDayOff)
-					{
-						fail = true;
-					}
-				}
-
-				if (fail)
-				{
+					bool fail = false;
 					foreach (var matrixPro in matrixList)
 					{
-						matrixPro.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+						IScheduleDayPro scheduleDayPro = matrixPro.GetScheduleDayByKey(dateOnly);
+						if (!matrixPro.UnlockedDays.Contains(scheduleDayPro))
+						{
+							fail = true;
+						}
+
+						if (scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff &&
+						    scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.ContractDayOff)
+						{
+							fail = true;
+						}
 					}
 
-					return true;
+					if (fail)
+					{
+						foreach (var matrixPro in matrixList)
+						{
+							matrixPro.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+						}
+
+						return true;
+					}
 				}
 			}
-
 			return true;
 		}
 	}
