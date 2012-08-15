@@ -334,10 +334,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         	IGroupPagePerDateHolder groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
         	IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
         		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
-			IGroupDayOffOptimizerValidateDayOffToRemove groupDayOffOptimizerValidateDayOffToRemove = new GroupDayOffOptimizerValidateDayOffToRemove(groupPersonBuilderForOptimization, allMatrixes);
-			IGroupDayOffOptimizerValidateDayOffToAdd groupDayOffOptimizerValidateDayOffToAdd = new GroupDayOffOptimizerValidateDayOffToAdd(groupPersonBuilderForOptimization, allMatrixes);
+			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrixes);
+			IGroupDayOffOptimizerValidateDayOffToRemove groupDayOffOptimizerValidateDayOffToRemove = new GroupDayOffOptimizerValidateDayOffToRemove(groupOptimizerFindMatrixesForGroup);
+			IGroupDayOffOptimizerValidateDayOffToAdd groupDayOffOptimizerValidateDayOffToAdd = new GroupDayOffOptimizerValidateDayOffToAdd(groupOptimizerFindMatrixesForGroup);
+			IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix = new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup);
 			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner = new GroupOptimizationValidatorRunner(groupDayOffOptimizerValidateDayOffToRemove,
-				groupDayOffOptimizerValidateDayOffToAdd);
+				groupDayOffOptimizerValidateDayOffToAdd, groupOptimizerValidateProposedDatesInSameMatrix);
         	IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator =
         		new GroupDayOffOptimizerCreator(scheduleResultDataExtractorProvider, lockableBitArrayChangesTracker,
         		                                rollbackService, groupSchedulingService, groupPersonPreOptimizationChecker,

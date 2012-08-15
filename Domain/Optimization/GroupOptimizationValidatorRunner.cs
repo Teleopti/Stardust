@@ -7,36 +7,41 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IGroupOptimizationValidatorRunner
 	{
-		bool Run(IScheduleMatrixPro matrix, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd, ISchedulingOptions schedulingOptions);
+		bool Run(IPerson person, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd, bool useSameDaysOff);
 	}
 
 	public class GroupOptimizationValidatorRunner : IGroupOptimizationValidatorRunner
 	{
 		private readonly IGroupDayOffOptimizerValidateDayOffToRemove _groupDayOffOptimizerValidateDayOffToRemove;
 		private readonly IGroupDayOffOptimizerValidateDayOffToAdd _groupDayOffOptimizerValidateDayOffToAdd;
+		private readonly IGroupOptimizerValidateProposedDatesInSameMatrix _groupOptimizerValidateProposedDatesInSameMatrix;
 
 		public GroupOptimizationValidatorRunner(IGroupDayOffOptimizerValidateDayOffToRemove groupDayOffOptimizerValidateDayOffToRemove, 
-			IGroupDayOffOptimizerValidateDayOffToAdd groupDayOffOptimizerValidateDayOffToAdd)
+			IGroupDayOffOptimizerValidateDayOffToAdd groupDayOffOptimizerValidateDayOffToAdd,
+			IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix)
 		{
 			_groupDayOffOptimizerValidateDayOffToRemove = groupDayOffOptimizerValidateDayOffToRemove;
 			_groupDayOffOptimizerValidateDayOffToAdd = groupDayOffOptimizerValidateDayOffToAdd;
+			_groupOptimizerValidateProposedDatesInSameMatrix = groupOptimizerValidateProposedDatesInSameMatrix;
 		}
 
-		private delegate ValidatorResult ValidateDaysOffMoveDelegate(IScheduleMatrixPro matrix, IList<DateOnly> datesToCheck, ISchedulingOptions schedulingOptions);
+		private delegate ValidatorResult ValidateDaysOffMoveDelegate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
 
-		public bool Run(IScheduleMatrixPro matrix, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd, ISchedulingOptions schedulingOptions)
+		public bool Run(IPerson person, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd, bool useSameDaysOff)
 		{
 			IDictionary<ValidateDaysOffMoveDelegate, IAsyncResult> runnableList = new Dictionary<ValidateDaysOffMoveDelegate, IAsyncResult>();
 
 			ValidateDaysOffMoveDelegate toRun = _groupDayOffOptimizerValidateDayOffToRemove.Validate;
-			IAsyncResult result = toRun.BeginInvoke(matrix, daysOffToRemove, schedulingOptions, null, null);
+			IAsyncResult result = toRun.BeginInvoke(person, daysOffToRemove, useSameDaysOff, null, null);
 			runnableList.Add(toRun, result);
 
 			toRun = _groupDayOffOptimizerValidateDayOffToAdd.Validate;
-			result = toRun.BeginInvoke(matrix, daysOffToAdd, schedulingOptions, null, null);
+			result = toRun.BeginInvoke(person, daysOffToAdd, useSameDaysOff, null, null);
 			runnableList.Add(toRun, result);
 
-			toRun = 
+			toRun = _groupOptimizerValidateProposedDatesInSameMatrix.Validate;
+			result = toRun.BeginInvoke(person, daysOffToAdd, useSameDaysOff, null, null);
+			runnableList.Add(toRun, result);
 
 			//Sync all threads
 			IList<ValidatorResult> results = new List<ValidatorResult>();

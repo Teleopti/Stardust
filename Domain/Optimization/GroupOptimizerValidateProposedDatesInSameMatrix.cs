@@ -5,49 +5,34 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IGroupOptimizerValidateProposedDatesInSameMatrix
 	{
-		ValidatorResult Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions);
+		ValidatorResult Validate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
 	}
 
 	public class GroupOptimizerValidateProposedDatesInSameMatrix : IGroupOptimizerValidateProposedDatesInSameMatrix
 	{
-		private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
-		private readonly IList<IScheduleMatrixPro> _allMatrixes;
+		private readonly IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
 
-		public GroupOptimizerValidateProposedDatesInSameMatrix(IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, 
-			IList<IScheduleMatrixPro> allMatrixes)
+		public GroupOptimizerValidateProposedDatesInSameMatrix(IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
 		{
-			_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
-			_allMatrixes = allMatrixes;
+			_groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
 		}
 
-		public ValidatorResult Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions)
+		public ValidatorResult Validate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff)
 		{
 			ValidatorResult result = new ValidatorResult();
-			HashSet<IScheduleMatrixPro> matrixList = new HashSet<IScheduleMatrixPro>();
-
+			
+			List<IScheduleMatrixPro> all = new List<IScheduleMatrixPro>();
 			foreach (var dateOnly in dates)
 			{
-				IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, dateOnly);
-				if (groupPerson == null)
-				{
-					//report that the person does not belong to any group and return false when broken out
-					result = new ValidatorResult();
-					return result;
-				}
+				all.AddRange(_groupOptimizerFindMatrixesForGroup.Find(person, dateOnly));
+			}
 
-				foreach (var person in groupPerson.GroupMembers)
-				{
-					foreach (var matrixPro in _allMatrixes)
-					{
-						if (matrixPro.Person.Equals(person))
-						{
-							if (matrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
-							{
-								matrixList.Add(matrixPro);
-							}
-						}
-					}
-				}
+			HashSet<IScheduleMatrixPro> matrixList = new HashSet<IScheduleMatrixPro>(all);
+
+			if (matrixList.Count == 0)
+			{
+				result = new ValidatorResult();
+				return result;
 			}
 
 			foreach (var matrixPro in matrixList)
