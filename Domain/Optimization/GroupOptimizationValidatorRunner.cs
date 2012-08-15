@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			result = toRun.BeginInvoke(matrix, daysOffToAdd, schedulingOptions, null, null);
 			runnableList.Add(toRun, result);
 
+			toRun = 
+
 			//Sync all threads
 			IList<ValidatorResult> results = new List<ValidatorResult>();
 			try

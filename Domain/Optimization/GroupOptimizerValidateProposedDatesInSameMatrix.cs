@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IGroupOptimizerValidateProposedDatesInSameMatrix
 	{
-		ValidatorResult Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates);
+		ValidatorResult Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions);
 	}
 
 	public class GroupOptimizerValidateProposedDatesInSameMatrix : IGroupOptimizerValidateProposedDatesInSameMatrix
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_allMatrixes = allMatrixes;
 		}
 
-		public ValidatorResult Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates)
+		public ValidatorResult Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions)
 		{
 			ValidatorResult result = new ValidatorResult();
 			HashSet<IScheduleMatrixPro> matrixList = new HashSet<IScheduleMatrixPro>();
