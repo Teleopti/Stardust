@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Mvc;
 using Autofac;
 using Teleopti.Ccc.Domain.Repositories;
@@ -96,9 +97,13 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		public T Invoke()
 		{
+			T result;
 			if (HttpContext.Current == null)
-				return _resolver.Resolve<T>();
-			return DependencyResolver.Current.GetService<T>();
+				result = _resolver.Resolve<T>();
+			result = DependencyResolver.Current.GetService<T>();
+			if (result == null)
+				throw new Exception("Failed to resolve " + typeof(T).Name);
+			return result;
 		}
 	}
 }
