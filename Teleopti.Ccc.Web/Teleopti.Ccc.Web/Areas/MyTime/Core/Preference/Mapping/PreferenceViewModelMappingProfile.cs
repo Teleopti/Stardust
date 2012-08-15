@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
@@ -14,10 +15,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceViewModelMappingProfile : Profile
 	{
 		private readonly IResolve<IScheduleColorProvider> _scheduleColorProvider;
+		private readonly IResolve<IExtendedPreferencePredicate> _extendedPreferencePredicate;
 
-		public PreferenceViewModelMappingProfile(IResolve<IScheduleColorProvider> scheduleColorProvider)
+		public PreferenceViewModelMappingProfile(IResolve<IScheduleColorProvider> scheduleColorProvider, IResolve<IExtendedPreferencePredicate> extendedPreferencePredicate)
 		{
 			_scheduleColorProvider = scheduleColorProvider;
+			_extendedPreferencePredicate = extendedPreferencePredicate;
 		}
 
 		private class PreferenceWeekMappingData

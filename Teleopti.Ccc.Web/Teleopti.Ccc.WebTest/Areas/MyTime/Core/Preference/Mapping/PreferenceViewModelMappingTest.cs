@@ -29,11 +29,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	{
 		private PreferenceDomainData data;
 		private IScheduleColorProvider scheduleColorProvider;
+		private IExtendedPreferencePredicate extendedPreferencePredicate;
 
 		[SetUp]
 		public void Setup()
 		{
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
+			extendedPreferencePredicate = MockRepository.GenerateMock<IExtendedPreferencePredicate>();
 
 			data = new PreferenceDomainData
 			       	{
@@ -52,13 +54,45 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			Mapper.Initialize(c =>
 			                  	{
 			                  		c.AddProfile(new PreferenceViewModelMappingProfile(
-			                  		             	Depend.On(scheduleColorProvider)));
+			                  		             	Depend.On(scheduleColorProvider),
+													Depend.On(extendedPreferencePredicate)));
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
 		}
 
 		[Test]
 		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
+
+
+		[Test]
+		public void ShouldMapPreferenceExtendedWhenExtended()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+
+			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Extended.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotMapPreferenceExtendedWhenNotExtended()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Extended.Should().Be.True();
+		}
+
+
+
+
 
 		[Test]
 		public void ShouldMapPeriodSelectionDate()
@@ -457,6 +491,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.DayViewModel(data.SelectedDate)
 				.Preference.Preference.Should().Be.Null();
 		}
+
 
 		[Test]
 		public void ShouldOnlyMapPreferenceWhenPreference()
