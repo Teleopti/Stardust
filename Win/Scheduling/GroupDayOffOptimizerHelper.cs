@@ -335,7 +335,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         	IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
         		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
 			IGroupDayOffOptimizerValidateDayOffToRemove groupDayOffOptimizerValidateDayOffToRemove = new GroupDayOffOptimizerValidateDayOffToRemove(groupPersonBuilderForOptimization, allMatrixes);
-			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner = new GroupOptimizationValidatorRunner(groupDayOffOptimizerValidateDayOffToRemove);
+			IGroupDayOffOptimizerValidateDayOffToAdd groupDayOffOptimizerValidateDayOffToAdd = new GroupDayOffOptimizerValidateDayOffToAdd(groupPersonBuilderForOptimization, allMatrixes);
+			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner = new GroupOptimizationValidatorRunner(groupDayOffOptimizerValidateDayOffToRemove,
+				groupDayOffOptimizerValidateDayOffToAdd);
         	IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator =
         		new GroupDayOffOptimizerCreator(scheduleResultDataExtractorProvider, lockableBitArrayChangesTracker,
         		                                rollbackService, groupSchedulingService, groupPersonPreOptimizationChecker,
