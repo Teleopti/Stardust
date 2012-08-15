@@ -97,10 +97,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		public T Invoke()
 		{
-			T result;
-			if (HttpContext.Current == null)
-				result = _resolver.Resolve<T>();
-			result = DependencyResolver.Current.GetService<T>();
+			T result = HttpContext.Current == null ? 
+				_resolver.Resolve<T>() : 
+				DependencyResolver.Current.GetService<T>();
 			if (result == null)
 				throw new Exception("Failed to resolve " + typeof(T).Name);
 			return result;
