@@ -176,15 +176,7 @@ namespace Teleopti.Ccc.Win.Common
             }
         }
 
-        private static double CheckSecondsRange(double d)
-        {
-            double maxValue = TimeSpan.MaxValue.TotalSeconds;
-            double minValue = TimeSpan.MinValue.TotalSeconds;
-            if (d < maxValue && d > minValue) return d;
-            return 0;
-        }
-
-
+       
         private static double CheckSecondsRange(double d)
         {
             double maxValue = TimeSpan.MaxValue.TotalSeconds;
