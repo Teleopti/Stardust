@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Security.Permissions;
+using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
@@ -525,7 +526,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 return;
             }
 
-
             //Clear validate user credential collection.
             _filteredPeopleHolder.ValidateUserCredentialsCollection.Clear();
 
@@ -544,12 +544,19 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
         private void notifySaveChanges()
         {
-            var handler = PeopleWorksheetSaved;
+        	var handler = PeopleWorksheetSaved;
             if (handler != null)
                 handler(this, EventArgs.Empty);
 
             _globalEventAggregator.GetEvent<PeopleSaved>().Publish("");
         }
+
+		private void notifyOnOtherThread()
+		{
+			var oThread = new Thread(notifySaveChanges);
+			// Start the thread
+			oThread.Start();
+		}
 
         private void notifyForceClose()
         {
@@ -567,7 +574,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 //Reset Add new records nold behaviour.
                 _filteredPeopleHolder.ResetBoldProperty();
 
-                notifySaveChanges();
+				notifyOnOtherThread();
             }
             catch (TooManyActiveAgentsException e)
             {
