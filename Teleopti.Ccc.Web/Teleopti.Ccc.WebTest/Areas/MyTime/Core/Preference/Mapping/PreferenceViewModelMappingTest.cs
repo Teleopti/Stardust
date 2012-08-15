@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -62,37 +63,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 		[Test]
 		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
-
-		[Test]
-		public void ShouldMapPreferenceExtendedWhenExtended()
-		{
-			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
-
-			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Extended.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldNotMapPreferenceExtendedWhenNotExtended()
-		{
-			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Extended.Should().Be.False();
-		}
-
-
-
-
 
 		[Test]
 		public void ShouldMapPeriodSelectionDate()
@@ -491,6 +461,119 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.DayViewModel(data.SelectedDate)
 				.Preference.Preference.Should().Be.Null();
 		}
+
+		[Test]
+		public void ShouldMapPreferenceExtendedWhenExtended()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+
+			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Extended.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotMapPreferenceExtendedWhenNotExtended()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Extended.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMapPreferenceExtendedIfNoShiftCategoryLikeStuffAndExtended()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+
+			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Preference.Should().Be(Resources.Extended);
+		}
+
+		[Test]
+		public void ShouldNotMapPreferenceExtendedIfShiftCategoryAndExtended()
+		{
+			var preferenceDay = new PreferenceDay(
+				new Person(), DateOnly.Today,
+				new PreferenceRestriction
+					{
+						ShiftCategory = new ShiftCategory(" ")
+					});
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+
+			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Preference.Should().Not.Be(Resources.Extended);
+		}
+
+		[Test]
+		public void ShouldNotMapPreferenceExtendedIfAbsenceAndExtended()
+		{
+			var preferenceDay = new PreferenceDay(
+				new Person(), DateOnly.Today,
+				new PreferenceRestriction
+				{
+					Absence = new Absence()
+				});
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+
+			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Preference.Should().Not.Be(Resources.Extended);
+		}
+
+		[Test]
+		public void ShouldNotMapPreferenceExtendedIfDayOffAndExtended()
+		{
+			var preferenceDay = new PreferenceDay(
+				new Person(), DateOnly.Today,
+				new PreferenceRestriction
+				{
+					DayOffTemplate = new DayOffTemplate(new Description())
+				});
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+
+			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Preference.Should().Not.Be(Resources.Extended);
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 		[Test]

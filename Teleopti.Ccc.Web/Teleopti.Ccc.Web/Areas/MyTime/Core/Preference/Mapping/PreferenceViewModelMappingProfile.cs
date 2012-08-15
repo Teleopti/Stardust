@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
@@ -227,6 +227,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                             			return s.Absence.Description.Name;
 				                                             		if (s.ShiftCategory != null)
 				                                             			return s.ShiftCategory.Description.Name;
+																	if (_extendedPreferencePredicate.Invoke().IsExtended(s.PreferenceDay))
+				                                             			return Resources.Extended;
 				                                             		return null;
 				                                             	}))
 				.ForMember(d => d.Extended, o => o.MapFrom(s => _extendedPreferencePredicate.Invoke().IsExtended(s.PreferenceDay)))
