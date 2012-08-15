@@ -258,12 +258,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			Assert.AreEqual(_personPeriod2, currentPeriod);
 			Assert.AreEqual(ExternalLogOn2, currentPeriod.ExternalLogOnCollection[0]);
-			Assert.AreEqual("Login name (2)", _target.ExternalLogOnNames);
+			Assert.AreEqual("Login name (DS)", _target.ExternalLogOnNames);
 
 			Assert.AreEqual(1, currentPeriod.ExternalLogOnCollection.Count);
-			_target.ExternalLogOnNames = "Login name (3)";
-			Assert.AreEqual(1, currentPeriod.ExternalLogOnCollection.Count);
-			Assert.AreEqual("Login name (3)", _target.ExternalLogOnNames);
+			_target.ExternalLogOnNames = "Login name (DS)";
+			Assert.AreEqual(3, currentPeriod.ExternalLogOnCollection.Count);
+            Assert.AreEqual("Login name (DS), Login name (DS), Login name (DS)", _target.ExternalLogOnNames);
 		}
 
 		[Test]

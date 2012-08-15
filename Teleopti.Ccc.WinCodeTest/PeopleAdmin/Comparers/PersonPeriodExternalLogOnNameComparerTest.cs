@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         [Test]
         public void VerifyCompareMethodWithFirstNull()
         {
-            _personPeriodModel.ExternalLogOnNames = "Login name (3)";
+            _personPeriodModel.ExternalLogOnNames = "Login name (DS)";
 
             // Calls the compares method
             personPeriodExternalLogOnNameComparer = new PersonPeriodExternalLogOnNameComparer();
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         public void VerifyCompareMethodWithSecondNull()
         {
             // Sets the current person cotnract
-            _target.ExternalLogOnNames = "Login name (3)";
+            _target.ExternalLogOnNames = "Login name (DS)";
 
             // Calls the compares method
             personPeriodExternalLogOnNameComparer = new PersonPeriodExternalLogOnNameComparer();
