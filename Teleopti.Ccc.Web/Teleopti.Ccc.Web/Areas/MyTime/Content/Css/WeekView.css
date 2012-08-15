@@ -152,50 +152,6 @@
 }
 .ie7 .weekview-day li div.meeting{margin-left: 0px;}
 
-/*** ToolTip input ***/
-.tooltip{position: relative;}
-
-.ui-tooltip-input .ui-tooltip-titlebar,
-.ui-tooltip-input .ui-tooltip-content{
-	border-color: rgb(200, 200, 200);
-	background-color: rgb(241,241,241);
-	color: #010101;
-	font-size: 10px;
-	line-height: 12px;
-	padding: 5px 5px;
-	text-align: left;
-	word-wrap: break-word;
-}
-
-.ui-tooltip-input .edit-module-element {
-	padding-left: 10px;
-	padding-right: 10px;
-}
-
-.ui-tooltip-input .ui-labeled-input {
-	width: 100%;
-}
-
-.ui-tooltip-input .date-input {
-	width: 8em;
-	padding-left: 1px !important;
-	padding-right: 1px !important;
-}
-
-.ui-tooltip-input button.ui-button-icon-only {
-	height: 20px; 
-	width: 1.7em; 
-	margin-left: -18px;
-	float: left;
-	background-position: -12px -90px;
-	border: 0;
-}
-
-.ui-tooltip-input .ui-autocomplete-input {
-	height: 16px;
-	float: left;
-}
-
 .selectable-tab {
 	cursor: pointer;
 	font-weight: normal;

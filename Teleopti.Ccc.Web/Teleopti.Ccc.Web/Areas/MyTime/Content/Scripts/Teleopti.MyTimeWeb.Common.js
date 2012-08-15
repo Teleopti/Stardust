@@ -140,44 +140,42 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		//Activating tooltip where available
 		ActivateTooltip: function () {
 
-			$('.tooltip').each(function () {
-				$(this).qtip({
-					content: {
+			$('.tooltip')
+				.add('[title]')
+				.each(function () {
+
+					var content = {
 						title: $(this).attr('tooltip-title'),
 						text: $(this).attr('tooltip-text')
-					},
-					title: "test",
-					style: {
-						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-						tip: true
-					},
-					position: {
-						my: 'bottom left',
-						at: 'top right',
-						target: 'mouse'
+					};
+					
+					var attr = $(this).attr('title');
+					if (typeof attr !== 'undefined' && attr !== false) {
+						content = {
+							text: function() {
+								return $(this).attr('title');
+							}
+						};
 					}
-				});
-			});
-
-			$('[title]').each(function () {
-				$(this).qtip({
-					content: {
-						text: function (api) {
-							return $(this).attr('title');
+					
+					$(this).qtip({
+						content: content,
+						style: {
+							def: false,
+							classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+							tip: true
+						},
+						position: {
+							my: 'bottom left',
+							at: 'top right',
+							target: 'mouse',
+							adjust: {
+								x: 10,
+								y: -13
+							}
 						}
-					},
-					title: "test",
-					style: {
-						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-						tip: true
-					},
-					position: {
-						my: 'bottom left',
-						at: 'top right',
-						target: 'mouse'
-					}
+					});
 				});
-			});
 
 		}
 	};

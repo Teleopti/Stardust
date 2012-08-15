@@ -455,68 +455,6 @@ button.icon-left{padding-left: 35px;}
 .custom-checkbox label.focus, 
 .custom-radio label.focus { outline: 1px dotted #ccc; }
 
-/*** ToolTip ***/
-.tooltip{position: relative;}
-
-.ui-tooltip-custom .ui-tooltip-titlebar,
-.ui-tooltip-custom .ui-tooltip-content{
-	border-color: rgb(241,241,241);
-	background-color: rgba(241,241,241,0.9);
-	color: #010101;
-	font-size: 10px;
-	line-height: 12px;
-	padding: 1px 4px;
-	text-align: left;
-	word-wrap: break-word;
-}
-
-.ui-tooltip-custom .ui-tooltip-titlebar{
-	background-color: rgba(241,241,241,0.9);
-}
-
-.ie7 .ui-tooltip-custom .ui-tooltip-titlebar,
-.ie7 .ui-tooltip-custom .ui-tooltip-content,
-.ie8 .ui-tooltip-custom .ui-tooltip-titlebar,
-.ie8 .ui-tooltip-custom .ui-tooltip-content{
-	border-color: rgb(241,241,241);
-	background-color: rgb(241,241,241);
-	color: #010101;
-	font-size: 10px;
-	line-height: 12px;
-	padding: 1px 4px;
-	text-align: left;
-	word-wrap: break-word;
-}
-
-.ie7 .ui-tooltip-custom .ui-tooltip-titlebar,
-.ie8 .ui-tooltip-custom .ui-tooltip-titlebar{
-	background-color: rgb(241,241,241);
-}
-
-.ui-tooltip-custom .ui-tooltip-icon{
-	border-color: #CCC;
-	background: #F1F1F1;
-	color: #777;
-}
-	
-.ui-tooltip-custom .ui-tooltip-titlebar .ui-state-hover{
-	border-color: #AAA;
-	color: #111;
-}
-	
-.ui-tooltip-custom dl dt{
-	clear: left;
-	color: #010101;
-	font-weight: bold;
-	float:left;
-	margin-bottom: 5px;	
-}
-
-.ui-tooltip-custom dl dd {
-	float: left;
-	margin-bottom: 5px;
-	margin-left: 4px;
-}
 
 /* Page elements */
 body{background: #fbfdfd url(../Images/body_bg.jpg) top center fixed no-repeat;}
