@@ -233,6 +233,7 @@
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToAdd.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemove.cs" />
     <Compile Include="Optimization\GroupOptimizationValidatorRunner.cs" />
+    <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameMatrix.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimization.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
