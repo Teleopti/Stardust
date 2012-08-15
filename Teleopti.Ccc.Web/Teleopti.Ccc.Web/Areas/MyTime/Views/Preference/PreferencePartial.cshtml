@@ -87,6 +87,20 @@
 										<span class="displayinline-block">
 											<div class="preference-text" data-bind="text: Preference">@preference.Preference</div>
 											<div class="extended-indication" style="display: none" data-mytime-visible="@preference.Extended.ToString().ToLower()" data-bind="visible: Extended">&raquo;</div>
+											<div class="extended-panel" style="display: none">
+												<div class="extended-part">
+													<div class="extended-part-title">Extended</div>
+													<div class="possible-start-times icon leftarrow truncate">10:00 am-10:30 am</div>
+													<div class="possible-end-times icon rightarrow truncate">5:00 pm-6:00pm</div>
+													<div class="possible-contract-times icon doublearrow-blue truncate">6:30-8:00</div>
+												</div>
+												<div class="extended-part">
+													<div class="extended-part-title">Lunch</div>
+													<div class="possible-start-times icon leftarrow truncate">11:00 am-12:00 am</div>
+													<div class="possible-end-times icon rightarrow truncate">13:00 pm-14:00pm</div>
+													<div class="possible-contract-times icon doublearrow-blue truncate">1:00-3:00</div>
+												</div>
+											</div>
 										</span>
 									</div>
 									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>

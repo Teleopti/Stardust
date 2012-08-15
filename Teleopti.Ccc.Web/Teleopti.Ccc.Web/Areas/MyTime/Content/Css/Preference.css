@@ -2,7 +2,6 @@
 .preference 
 {
     height: 20px;
-	xwidth: 106px;
 }
 .preference-text 
 {
@@ -27,6 +26,20 @@
 	cursor: pointer;
 
 }
+.extended-panel {
+	line-height: 14px;
+}
+.extended-part {
+	text-align: center;
+	margin-bottom: 10px;
+	margin-top: 3px;
+}
+.extended-part-title {
+	font-weight: bold;
+	padding-bottom: 10px;
+}
+
+
 
 .calendarview-week li.modified div.day-content
 {

@@ -71,7 +71,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			dayViewModels[dayViewModel.Date] = dayViewModel;
 			ko.applyBindings(dayViewModel, element);
 		});
-		
+
 		var date = portal ? portal.CurrentFixedDate() : null;
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModels, date);
 
@@ -100,6 +100,35 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		setTimeout(function () { call(); }, 300);
 	}
 
+	function _initExtendedPanels() {
+		$('.preference .extended-indication')
+			.each(function () {
+				$(this)
+					.qtip(
+						{
+							content: {
+								text: $(this).next('.extended-panel')
+							},
+							position: {
+								my: "top left",
+								at: "top right",
+								adjust: {
+									x: 4,
+									y: 5
+								}
+							},
+							style: {
+								def: false,
+								classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+								tip: {
+									corner: "left top"
+								}
+							}
+						});
+			});
+
+	}
+
 	return {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Preference/Index', Teleopti.MyTimeWeb.Preference.PreferencePartialInit);
@@ -115,6 +144,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initPeriodSelection();
 			_initViewModels(_soon);
 			_activateSelectable();
+			_initExtendedPanels();
 		},
 		CallWhenFeedbackIsLoaded: function (callback) {
 			_callWhenFeedbackIsLoaded(callback);
