@@ -89,7 +89,9 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
                 var layers = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet);
                 list.AddRange(layers);
             }
-            StateHolderReader.Instance.StateReader.SessionScopeData.Clip = list[rowIndex - 1].WorkShift.Clone();
+
+            if (list.Count > 0)
+                StateHolderReader.Instance.StateReader.SessionScopeData.Clip = list[rowIndex - 1].WorkShift.Clone();
         }
 
         private IList<ReadOnlyCollection<VisualPayloadInfo>> getVisualLayers(IEnumerable<IWorkShiftVisualLayerInfo> projections)
