@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 	[TestFixture]
 	public class ExtendedPreferencePredicateTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldNotSayExtendedOfNewEntity()
 		{
 			var target = new ExtendedPreferencePredicate();
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			target.IsExtended(preferenceDay).Should().Be.False();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldNotSayExtendedOfAbsence()
 		{
 			var target = new ExtendedPreferencePredicate();
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			target.IsExtended(preferenceDay).Should().Be.False();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldNotSayExtendedOfDayOff()
 		{
 			var target = new ExtendedPreferencePredicate();
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			target.IsExtended(preferenceDay).Should().Be.False();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldNotSayExtendedOfShiftCategory()
 		{
 			var target = new ExtendedPreferencePredicate();
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			target.IsExtended(preferenceDay).Should().Be.False();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSayExtendedOfWorkTimeLimitation()
 		{
 			var target = new ExtendedPreferencePredicate();
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			target.IsExtended(preferenceDay).Should().Be.True();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSayExtendedOfStartTimeLimitation()
 		{
 			var target = new ExtendedPreferencePredicate();
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			target.IsExtended(preferenceDay).Should().Be.True();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSayExtendedOfEndTimeLimitation()
 		{
 			var target = new ExtendedPreferencePredicate();
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			target.IsExtended(preferenceDay).Should().Be.True();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSayExtendedOfActivityRestrictions()
 		{
 			var target = new ExtendedPreferencePredicate();
