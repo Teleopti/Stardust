@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IGroupDayOffOptimizerValidateDayOffToRemove
 	{
-		bool Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions);
+		ValidatorResult Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions);
 	}
 
 	public class GroupDayOffOptimizerValidateDayOffToRemove : IGroupDayOffOptimizerValidateDayOffToRemove
@@ -20,18 +20,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_allMatrixes = allMatrixes;
 		}
 
-		public bool Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions)
+		public ValidatorResult Validate(IScheduleMatrixPro matrix, IList<DateOnly> dates, ISchedulingOptions schedulingOptions)
 		{
+			ValidatorResult result = new ValidatorResult();
+
 			foreach (var dateOnly in dates)
 			{
 				IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, dateOnly);
 				if (groupPerson == null)
 				{
 					//report that the person does not belong to any group and return false when broken out
-					return false;
+					result = new ValidatorResult();
+					return result;
 				}
 
-				IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro>();
+				IList<IScheduleMatrixPro> matrixList = result.MatrixList;
 				foreach (var person in groupPerson.GroupMembers)
 				{
 					foreach (var matrixPro in _allMatrixes)
@@ -66,16 +69,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 					if (fail)
 					{
-						foreach (var matrixPro in matrixList)
-						{
-							matrixPro.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
-						}
-
-						return true;
+						result.Success = true;
+						result.DaysToLock = new DateOnlyPeriod(dateOnly, dateOnly);
+						return result;
 					}
 				}
 			}
-			return true;
+			result.Success = true;
+			return result;
 		}
 	}
 }
