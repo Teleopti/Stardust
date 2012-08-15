@@ -26,15 +26,17 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IGroupSchedulingService _groupSchedulingService;
         private readonly IGroupPersonPreOptimizationChecker _groupPersonPreOptimizationChecker;
         private readonly IGroupMatrixHelper _groupMatrixHelper;
+    	private readonly IGroupOptimizationValidatorRunner _groupOptimizationValidatorRunner;
 
-        public GroupDayOffOptimizerCreator(
+    	public GroupDayOffOptimizerCreator(
             //IOptimizationPreferences optimizerPreferences, 
             IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
             ILockableBitArrayChangesTracker changesTracker, 
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
             IGroupSchedulingService groupSchedulingService, 
             IGroupPersonPreOptimizationChecker groupPersonPreOptimizationChecker, 
-            IGroupMatrixHelper groupMatrixHelper)
+            IGroupMatrixHelper groupMatrixHelper,
+			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner)
         {
             //_optimizerPreferences = optimizerPreferences;
             _scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupSchedulingService = groupSchedulingService;
             _groupPersonPreOptimizationChecker = groupPersonPreOptimizationChecker;
             _groupMatrixHelper = groupMatrixHelper;
+        	_groupOptimizationValidatorRunner = groupOptimizationValidatorRunner;
         }
 
         public IGroupDayOffOptimizer CreateDayOffOptimizer(
@@ -66,7 +69,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 									validatorList,
 									allSelectedPersons,
 									_groupPersonPreOptimizationChecker,
-									_groupMatrixHelper);
+									_groupMatrixHelper,
+									_groupOptimizationValidatorRunner);
 
             return new GroupDayOffSingleOptimizer(converter,
                                     decisionMaker,

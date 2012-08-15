@@ -330,7 +330,16 @@ namespace Teleopti.Ccc.Win.Scheduling
         	IGroupPersonPreOptimizationChecker groupPersonPreOptimizationChecker =
         		_container.Resolve<IGroupPersonPreOptimizationChecker>();
         	IGroupMatrixHelper groupMatrixHelper = _container.Resolve<IGroupMatrixHelper>();
-			IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator = new GroupDayOffOptimizerCreator(scheduleResultDataExtractorProvider, lockableBitArrayChangesTracker, rollbackService, groupSchedulingService, groupPersonPreOptimizationChecker, groupMatrixHelper);
+			IGroupPersonFactory groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
+        	IGroupPagePerDateHolder groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+        	IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+        		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
+			IGroupDayOffOptimizerValidateDayOffToRemove groupDayOffOptimizerValidateDayOffToRemove = new GroupDayOffOptimizerValidateDayOffToRemove(groupPersonBuilderForOptimization, allMatrixes);
+			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner = new GroupOptimizationValidatorRunner(groupDayOffOptimizerValidateDayOffToRemove);
+        	IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator =
+        		new GroupDayOffOptimizerCreator(scheduleResultDataExtractorProvider, lockableBitArrayChangesTracker,
+        		                                rollbackService, groupSchedulingService, groupPersonPreOptimizationChecker,
+        		                                groupMatrixHelper, groupOptimizationValidatorRunner);
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
