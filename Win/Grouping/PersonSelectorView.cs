@@ -112,19 +112,27 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		public bool ExpandSelected { get; set; }
 
-        public void ResetTreeView(TreeNodeAdv[] treeNodeAdvs)
+        public void ResetTreeView(object treeNodeAdvs)
         {
-            treeViewAdvMainTabTree.AfterCheck-= treeViewAdvMainTabTreeAfterCheck;
-            treeViewAdvMainTabTree.BeginUpdate();
-			if (!KeepInteractiveOnDuringLoad)
-				treeViewAdvMainTabTree.InteractiveCheckBoxes = false;
-            treeViewAdvMainTabTree.Nodes.Clear();
-            treeViewAdvMainTabTree.Nodes.AddRange(treeNodeAdvs);
-			if(ShowCheckBoxes)
-			    treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
-			treeViewAdvMainTabTree.Root.Sort();
-			treeViewAdvMainTabTree.EndUpdate();
-            treeViewAdvMainTabTree.AfterCheck += treeViewAdvMainTabTreeAfterCheck;
+			if(InvokeRequired)
+			{
+				BeginInvoke(new Action<object>(ResetTreeView), treeNodeAdvs);
+			}
+			else
+			{
+				treeViewAdvMainTabTree.AfterCheck -= treeViewAdvMainTabTreeAfterCheck;
+				treeViewAdvMainTabTree.BeginUpdate();
+				if (!KeepInteractiveOnDuringLoad)
+					treeViewAdvMainTabTree.InteractiveCheckBoxes = false;
+				treeViewAdvMainTabTree.Nodes.Clear();
+				treeViewAdvMainTabTree.Nodes.AddRange((TreeNodeAdv[])treeNodeAdvs);
+				if (ShowCheckBoxes)
+					treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
+				treeViewAdvMainTabTree.Root.Sort();
+				treeViewAdvMainTabTree.EndUpdate();
+				treeViewAdvMainTabTree.AfterCheck += treeViewAdvMainTabTreeAfterCheck;
+			}
+            
         }
 
         public void ModifyGroupPage(Guid id)

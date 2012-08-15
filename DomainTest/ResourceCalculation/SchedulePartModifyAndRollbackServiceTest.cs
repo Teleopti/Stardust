@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
 
             Assert.AreEqual(1, _target.StackLength);
-            Assert.AreEqual(1, _target.ModificationCollection.Count);
+            Assert.AreEqual(1, _target.ModificationCollection.Count());
 
         }
 
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
 
             Assert.AreEqual(0, _target.StackLength);
-            Assert.AreEqual(0, _target.ModificationCollection.Count);
+            Assert.AreEqual(0, _target.ModificationCollection.Count());
 
         }
 
@@ -144,14 +145,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
 
             Assert.AreEqual(1, _target.StackLength);
-            Assert.AreEqual(1, _target.ModificationCollection.Count);
+            Assert.AreEqual(1, _target.ModificationCollection.Count());
             //check twice to ensure getting modifictioncollection does not empty the list
             Assert.AreEqual(1, _target.StackLength);
-            Assert.AreEqual(1, _target.ModificationCollection.Count);
+            Assert.AreEqual(1, _target.ModificationCollection.Count());
 
             _target.ClearModificationCollection();
             Assert.AreEqual(0, _target.StackLength);
-            Assert.AreEqual(0, _target.ModificationCollection.Count);
+            Assert.AreEqual(0, _target.ModificationCollection.Count());
         }
     }
 }

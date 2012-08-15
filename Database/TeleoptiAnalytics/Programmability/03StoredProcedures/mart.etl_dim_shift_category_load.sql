@@ -13,7 +13,7 @@ GO
 -- 2009-04-27 Change mindate format DJ
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_shift_category_load]
-WITH EXECUTE AS OWNER	
+	
 AS
 
 --Create mindate

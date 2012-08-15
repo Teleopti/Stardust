@@ -121,11 +121,11 @@ AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType =
 UPDATE [ReadModel].[FindPerson] SET [TeamId] = t.Id,
 	[SiteId] = s.Id,[BusinessUnitId] = s.BusinessUnit 
 FROM [ReadModel].[FindPerson] p
-LEFT JOIN [PersonPeriodWithEndDate] pp ON p.PersonId = pp.Parent
+LEFT JOIN [PersonPeriodWithEndDate] pp ON p.PersonId = pp.Parent and pp.Parent in (SELECT * FROM #ids)
 INNER JOIN Team t ON pp.Team = t.Id
 INNER JOIN Site s ON s.Id = t.Site
 -- the 
 WHERE pp.StartDate < GETDATE() AND pp.EndDate > GETDATE()
 AND t.IsDeleted = 0 AND s.IsDeleted = 0
-AND p.PersonId IN(SELECT * FROM #ids)
+
 

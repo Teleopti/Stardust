@@ -9,7 +9,7 @@ GO
 -- Update date: 2011-03-02 Added -1, 'Not Defined' Mattias E
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_overtime_load] 
-WITH EXECUTE AS OWNER	
+	
 AS
 ----------------------------------------------------------------------------
 -- Not Defined overtime

@@ -4,7 +4,6 @@ GO
 
 
 CREATE PROCEDURE [stage].[etl_stg_date_delete]
-WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;
