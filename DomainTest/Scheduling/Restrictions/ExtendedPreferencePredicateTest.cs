@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				new Person(), DateOnly.Today,
 				new PreferenceRestriction
 					{
-						WorkTimeLimitation = new WorkTimeLimitation()
+						WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(2))
 					});
 
 			target.IsExtended(preferenceDay).Should().Be.True();
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				new Person(), DateOnly.Today,
 				new PreferenceRestriction
 					{
-						StartTimeLimitation = new StartTimeLimitation()
+						StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(2))
 					});
 
 			target.IsExtended(preferenceDay).Should().Be.True();
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				new Person(), DateOnly.Today,
 				new PreferenceRestriction
 					{
-						EndTimeLimitation = new EndTimeLimitation()
+						EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(2))
 					});
 
 			target.IsExtended(preferenceDay).Should().Be.True();

@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			public IShiftCategory ShiftCategory { get; set; }
 			public IDayOffTemplate DayOffTemplate { get; set; }
 			public IAbsence Absence { get; set; }
+			public IPreferenceDay PreferenceDay { get; set; }
 		}
 
 		protected override void Configure()
@@ -136,6 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                       		       				DayOffTemplate = dayOffTemplate,
 				                                       		       				Absence = absence,
 				                                       		       				WorkflowControlSet = s.WorkflowControlSet,
+																				PreferenceDay = preferenceDay
 				                                       		       			}
 				                                       		       ).ToArray();
 				                                       	}))
@@ -227,6 +229,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                             			return s.ShiftCategory.Description.Name;
 				                                             		return null;
 				                                             	}))
+				.ForMember(d => d.Extended, o => o.MapFrom(s => _extendedPreferencePredicate.Invoke().IsExtended(s.PreferenceDay)))
 				;
 
 			CreateMap<DayMappingData, HeaderViewModel>()

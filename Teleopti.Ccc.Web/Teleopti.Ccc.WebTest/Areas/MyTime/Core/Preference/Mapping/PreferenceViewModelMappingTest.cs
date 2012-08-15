@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.DayViewModel(data.SelectedDate)
-				.Preference.Extended.Should().Be.True();
+				.Preference.Extended.Should().Be.False();
 		}
 
 
