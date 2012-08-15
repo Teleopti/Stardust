@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
     {
         public string Description(IExternalLogOn externalLogOn)
         {
-			return string.Format(CultureInfo.CurrentCulture, "{0} ({1})", externalLogOn.AcdLogOnName, externalLogOn.DataSourceId);
+			return string.Format(CultureInfo.CurrentCulture, "{0} ({1})", externalLogOn.AcdLogOnName, externalLogOn.DataSourceName );
         }
 		
     }
