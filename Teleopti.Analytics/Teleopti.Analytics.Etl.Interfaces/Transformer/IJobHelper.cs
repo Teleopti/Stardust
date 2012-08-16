@@ -10,7 +10,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<IBusinessUnit> BusinessUnitCollection { get; }
         IRaptorRepository Repository { get; }
         IMessageSender MessageSender { get; }
-        void LogOnTeleoptiCccDomain(IBusinessUnit businessUnit);
+        bool LogOnTeleoptiCccDomain(IBusinessUnit businessUnit);
         void LogOffTeleoptiCccDomain();
     }
 }
