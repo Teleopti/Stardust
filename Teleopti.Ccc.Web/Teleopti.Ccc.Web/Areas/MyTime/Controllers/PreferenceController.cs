@@ -42,6 +42,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork]
+		[HttpGet]
+		[ActionName("Preference")]
+		public virtual JsonResult GetPreference(DateOnly date)
+		{
+			return Json(_viewModelFactory.CreateDayViewModel(date), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWork]
 		[HttpPostOrPut]
 		public virtual JsonResult Preference(PreferenceDayInput input)
 		{

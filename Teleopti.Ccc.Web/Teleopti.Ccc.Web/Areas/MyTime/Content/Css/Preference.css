@@ -62,23 +62,10 @@
 	padding-bottom: 2px;
 }
 
-.possible-start-times {
+.time-limitation {
 	font-size: 12px;
 	height: 13px;
 	padding-bottom: 1px;
-	font-variant: small-caps;
-}
-
-.possible-end-times {
-	font-size: 12px;
-	height: 13px;
-	padding-bottom: 1px;
-	font-variant: small-caps;
-}
-
-.possible-contract-times {
-	font-size: 12px;
-	height: 13px;
 	font-variant: small-caps;
 }
 

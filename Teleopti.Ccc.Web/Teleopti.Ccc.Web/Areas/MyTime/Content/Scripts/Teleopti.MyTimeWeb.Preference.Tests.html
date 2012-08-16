@@ -69,8 +69,106 @@
 					equal(viewModel.TargetContractTimeUpper(), "45:00");
 				});
 
+
+
+
+
 				module("Teleopti.MyTimeWeb.Preference day view model");
 
+				test("should load preference", function () {
+
+					var ajax = {
+						Ajax: function (options) {
+							equal(options.url, "Preference/Preference");
+							equal(options.data.Date, "2012-06-11");
+							options.success({
+								Preference: "a shift category",
+								Color: "black",
+								Extended: true
+							});
+						}
+					};
+
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+					viewModelDay.Date = "2012-06-11";
+
+					expect(5);
+
+					viewModelDay.LoadPreference();
+
+					equal(viewModelDay.Preference(), "a shift category");
+					equal(viewModelDay.Color(), "black");
+					equal(viewModelDay.Extended(), true);
+				});
+
+				test("should bind extended", function () {
+
+					var element = $("#qunit-fixture")
+						.append("<div class='extended-indication' data-bind='visible: Extended' style='display: none'></div>")
+						[0];
+
+					var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+					ko.applyBindings(dayViewModel, element);
+
+					dayViewModel.Extended(true);
+					
+					equal($(element).is(':visible'), true);
+				});
+
+				test("should set preference", function () {
+
+					var ajax = {
+						Ajax: function (options) {
+							equal(options.url, "Preference/Preference");
+							equal(options.data.Date, "2012-06-11");
+							equal(options.data.Id, "id");
+							options.success({
+								Preference: "a shift category",
+								Color: "black",
+								Extended: true
+							});
+						}
+					};
+
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+					viewModelDay.Date = "2012-06-11";
+
+					expect(6);
+
+					viewModelDay.SetPreference("id");
+
+					equal(viewModelDay.Preference(), "a shift category");
+					equal(viewModelDay.Color(), "black");
+					equal(viewModelDay.Extended(), true);
+				});
+
+
+				test("should delete preference", function () {
+
+					var ajax = {
+						Ajax: function (options) {
+							equal(options.url, "Preference/Preference");
+							equal(options.data.Date, "2012-06-11");
+							options.success({
+								Preference: "deleted!",
+								Color: "deleted!",
+								Extended: "deleted!"
+							});
+						}
+					};
+
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+					viewModelDay.Date = "2012-06-11";
+
+					expect(5);
+
+					viewModelDay.DeletePreference();
+
+					equal(viewModelDay.Preference(), "deleted!");
+					equal(viewModelDay.Color(), "deleted!");
+					equal(viewModelDay.Extended(), "deleted!");
+				});
+				
 				test("should format possible contract time", function () {
 					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 					viewModelDay.PossibleContractTimeMinutesLower(6 * 60 + 30);
@@ -85,7 +183,6 @@
 
 					var ajax = {
 						Ajax: function (options) {
-							equal(options.data.Date, "2012-06-11");
 							options.success({
 								FeedbackError: "an error",
 								PossibleStartTimes: "6:00-9:00",
@@ -99,9 +196,6 @@
 					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 					viewModelDay.Date = "2012-06-11";
 
-
-					expect(5);
-
 					viewModelDay.LoadFeedback();
 
 					equal(viewModelDay.FeedbackError(), "an error");
@@ -110,21 +204,60 @@
 					equal(viewModelDay.PossibleContractTimes(), "7:00-12:00");
 				});
 
-				test("should bind extended", function () {
 
-					var element = $("#qunit-fixture")
-						.append("<div class='extended-indication' data-bind='visible: Extended' style='display: none' data-mytime-visible='true'></div>")
-						[0];
-					
-					var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel();
-					dayViewModel.ReadElement(element);
-					ko.applyBindings(dayViewModel, element);
 
-					equal(dayViewModel.Extended(), true);
-					equal($(element).is(':visible'), true);
-				});
 
 				module("Teleopti.MyTimeWeb.Preference initializer");
+
+				test("should load preferences", function () {
+
+					$("#qunit-fixture")
+						.append("<li data-mytime-date='2012-06-11' class='inperiod preference' />")
+						.append("<li data-mytime-date='2012-06-12' class='inperiod preference' />");
+
+					var ajax = {
+						Ajax: function (options) {
+							if (options.url != "Preference/Preference")
+								return;
+							if (options.data.Date == '2012-06-11')
+								equal(true, true);
+							if (options.data.Date == '2012-06-12')
+								equal(true, true);
+						}
+					};
+
+					expect(2);
+
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
+
+					target.InitViewModels();
+				});
+
+				test("should only load preference for days with class preference", function () {
+
+					$("#qunit-fixture")
+						.append("<li data-mytime-date='2012-06-11' class='inperiod' ><div><div class='preference'></div></div><li>")
+						.append("<li data-mytime-date='2012-06-12' class='inperiod' />");
+
+					var ajax = {
+						Ajax: function (options) {
+							if (options.url != "Preference/Preference")
+								return;
+							if (options.data.Date == '2012-06-11')
+								return equal(true, true, "preference loaded");
+							equal(false, true, "preference loaded for " + options.data.Date);
+						}
+					};
+
+					expect(1);
+
+					var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
+
+					target.InitViewModels();
+
+				});
+				
+
 
 				test("should load day feedback and bind", function () {
 
@@ -206,7 +339,7 @@
 					equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeUpper"]').text(), "3:00", "upper contract time");
 				});
 
-				test("should load feedback", function () {
+				test("should load period feedback", function () {
 
 					var ajax = {
 						Ajax: function (options) {

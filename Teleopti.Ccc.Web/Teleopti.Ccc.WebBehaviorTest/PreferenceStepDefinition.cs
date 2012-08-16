@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I select a standard preference")]
 		public void WhenIChangeStandardPreference()
 		{
-			TestControllerMethods.WaitForPreferenceFeedbackToLoad();
+			TestControllerMethods.WaitForPreferencesToLoad();
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
 			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, true);
 		}
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I try to select a standard preference")]
 		public void WhenITryToSelectStandardPreference()
 		{
-			TestControllerMethods.WaitForPreferenceFeedbackToLoad();
+			TestControllerMethods.WaitForPreferencesToLoad();
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
 			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, false);
 		}

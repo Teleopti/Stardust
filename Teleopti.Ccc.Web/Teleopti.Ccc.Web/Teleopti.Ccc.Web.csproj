@@ -371,7 +371,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainDataMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputResultMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferenceViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferenceViewModelFactory.cs" />
@@ -391,7 +391,7 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityRestrictionExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\TimeOfDayModelBinder.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInput.cs" />
-    <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputResult.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\RequestsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\DateTimePeriodFormValidator.cs" />

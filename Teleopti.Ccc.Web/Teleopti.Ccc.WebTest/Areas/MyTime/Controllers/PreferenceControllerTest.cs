@@ -74,18 +74,32 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldGetPreference()
+		{
+			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
+			var target = new PreferenceController(viewModelFactory, null, null);
+
+			viewModelFactory.Stub(x => x.CreateDayViewModel(DateOnly.Today)).Return(new PreferenceDayViewModel());
+
+			var result = target.GetPreference(DateOnly.Today);
+			var model = result.Data as PreferenceDayViewModel;
+
+			model.Should().Not.Be.Null();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPersistPreferenceInput()
 		{
 			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
 			var input = new PreferenceDayInput();
-			var resultData = new PreferenceDayInputResult();
+			var resultData = new PreferenceDayViewModel();
 
 			var target = new PreferenceController(null, null, preferencePersister);
 
 			preferencePersister.Stub(x => x.Persist(input)).Return(resultData);
 
 			var result = target.Preference(input);
-			var data = result.Data as PreferenceDayInputResult;
+			var data = result.Data as PreferenceDayViewModel;
 
 			data.Should().Be.SameInstanceAs(resultData);
 		}
@@ -95,12 +109,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
 			var target = new PreferenceController(null, null, preferencePersister);
-			var resultData = new PreferenceDayInputResult();
+			var resultData = new PreferenceDayViewModel();
 
 			preferencePersister.Stub(x => x.Delete(DateOnly.Today)).Return(resultData);
 
 			var result = target.PreferenceDelete(DateOnly.Today);
-			var data = result.Data as PreferenceDayInputResult;
+			var data = result.Data as PreferenceDayViewModel;
 
 			data.Should().Be.SameInstanceAs(resultData);
 		}

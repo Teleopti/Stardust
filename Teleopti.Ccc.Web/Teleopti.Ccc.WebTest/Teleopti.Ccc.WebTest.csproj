@@ -118,6 +118,7 @@
     <Compile Include="Areas\MobileReports\TestData\DefinedReportsApplicationFunctionsFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactoryTest.cs" />
+    <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryScheduleTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
     <Compile Include="Core\Settings\PersonPersisterTest.cs" />
@@ -220,7 +221,7 @@
     <Compile Include="Core\Portal\PortalViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceOptionsProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePersisterTest.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputResultMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainDataMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputMappingTest.cs" />

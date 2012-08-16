@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceDayDomainData
 	{
 		public DateOnly Date { get; set; }
-		public IPreferenceDay PreferenceDay { get; set; }
 		public IScheduleDay ScheduleDay { get; set; }
 		public IVisualLayerCollection Projection { get; set; }
 	}

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			if (Pages.Pages.Current is PreferencePage)
 			{
-				TestControllerMethods.WaitForPreferenceFeedbackToLoad();
+				TestControllerMethods.WaitForPreferencesToLoad();
 			}
 			TestControllerMethods.ExpireMyCookieInsidePortal();
 		}

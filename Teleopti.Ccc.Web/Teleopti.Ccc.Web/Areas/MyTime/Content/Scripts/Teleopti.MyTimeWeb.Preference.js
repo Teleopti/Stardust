@@ -14,7 +14,7 @@ if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
 
 Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
-	var feedbackLoadingStarted = false;
+	var loadingStarted = false;
 	var periodFeedbackViewModel = null;
 	var dayViewModels = {};
 
@@ -62,7 +62,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		$('#Preference-body-inner').calendarselectable();
 	}
 
-	function _initViewModels(feedbackLoader) {
+	function _initViewModels(loader) {
 
 		dayViewModels = {};
 		$('li[data-mytime-date].inperiod').each(function (index, element) {
@@ -79,21 +79,23 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		if (element)
 			ko.applyBindings(periodFeedbackViewModel, element);
 
-		feedbackLoader = feedbackLoader || function (call) { call(); };
-		feedbackLoader(function () {
+		loader = loader || function (call) { call(); };
+		loader(function () {
 			periodFeedbackViewModel.LoadFeedback();
 			$.each(dayViewModels, function (index, element) {
-				element.LoadFeedback();
-				feedbackLoadingStarted = true;
+				element.LoadPreference(function () {
+					element.LoadFeedback();
+				});
+				loadingStarted = true;
 			});
 		});
 	}
 
-	function _callWhenFeedbackIsLoaded(callback) {
-		if (feedbackLoadingStarted && !ajax.IsRequesting())
+	function _callWhenLoaded(callback) {
+		if (loadingStarted && !ajax.IsRequesting())
 			callback();
 		else
-			setTimeout(function () { _callWhenFeedbackIsLoaded(callback); }, 100);
+			setTimeout(function () { _callWhenLoaded(callback); }, 100);
 	}
 
 	function _soon(call) {
@@ -146,8 +148,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_activateSelectable();
 			_initExtendedPanels();
 		},
-		CallWhenFeedbackIsLoaded: function (callback) {
-			_callWhenFeedbackIsLoaded(callback);
+		CallWhenLoaded: function (callback) {
+			_callWhenLoaded(callback);
 		}
 	};
 
@@ -309,6 +311,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.Date = "";
 	this.ContractTimeMinutes = 0;
 	this.HasFeedback = true;
+	this.HasPreference = true;
 	this.Preference = ko.observable();
 	this.Extended = ko.observable();
 	this.Color = ko.observable();
@@ -318,9 +321,28 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		self.Date = item.attr('data-mytime-date');
 		self.ContractTimeMinutes = parseInt($('[data-mytime-contract-time]', item).attr('data-mytime-contract-time')) || 0;
 		self.HasFeedback = item.hasClass("feedback");
-		self.Preference($('.preference-text', element).text());
-		self.Extended($('.extended-indication', element).data('mytime-visible'));
+		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
 		self.Color($('.day-content', element).css("border-left-color"));
+	};
+
+	this.ReadPreference = function (data) {
+		self.Color(data.Color);
+		self.Preference(data.Preference);
+		self.Extended(data.Extended);
+	};
+
+	this.LoadPreference = function (complete) {
+		if (!self.HasPreference)
+			return null;
+		return ajaxForDate({
+			url: "Preference/Preference",
+			type: 'GET',
+			data: { Date: self.Date },
+			date: self.Date,
+			success: this.ReadPreference,
+			complete: complete,
+			statusCode404: function () { }
+		});
 	};
 
 	this.LoadFeedback = function () {
@@ -350,10 +372,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 				Id: value
 			},
 			date: self.Date,
-			success: function (data) {
-				self.Color(data.HexColor);
-				self.Preference(data.PreferenceRestriction);
-			},
+			success: this.ReadPreference,
 			complete: function () {
 				deferred.resolve();
 				self.LoadFeedback();
@@ -369,10 +388,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			data: { Date: self.Date },
 			date: self.Date,
 			statusCode404: function () { },
-			success: function (data) {
-				self.Color(data.HexColor);
-				self.Preference(data.PreferenceRestriction);
-			},
+			success: this.ReadPreference,
 			complete: function () {
 				deferred.resolve();
 				self.LoadFeedback();

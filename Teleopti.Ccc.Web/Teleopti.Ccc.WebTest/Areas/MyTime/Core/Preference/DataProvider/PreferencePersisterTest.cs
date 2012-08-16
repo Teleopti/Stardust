@@ -44,10 +44,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
 			var target = new PreferencePersister(MockRepository.GenerateMock<IPreferenceDayRepository>(), mapper, MockRepository.GenerateMock<ILoggedOnUser>());
 			var input = new PreferenceDayInput();
-			var inputResult = new PreferenceDayInputResult();
+			var inputResult = new PreferenceDayViewModel();
 
 			mapper.Stub(x => x.Map<PreferenceDayInput, IPreferenceDay>(input)).Return(preferenceDay);
-			mapper.Stub(x => x.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay)).Return(inputResult);
+			mapper.Stub(x => x.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay)).Return(inputResult);
 
 			var result = target.Persist(input);
 
@@ -101,11 +101,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
 			var input = new PreferenceDayInput { Date = DateOnly.Today };
 			var target = new PreferencePersister(preferenceDayRepository, mapper, MockRepository.GenerateMock<ILoggedOnUser>());
-			var viewModel = new PreferenceDayInputResult();
+			var viewModel = new PreferenceDayViewModel();
 
 			preferenceDayRepository.Stub(x => x.Find(input.Date, null)).Return(new List<IPreferenceDay> { preferenceDay });
 			mapper.Stub(x => x.Map(input, preferenceDay)).Return(preferenceDay);
-			mapper.Stub(x => x.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay)).Return(viewModel);
+			mapper.Stub(x => x.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay)).Return(viewModel);
 
 			var result = target.Persist(input);
 
@@ -139,8 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			var result = target.Delete(DateOnly.Today);
 
-			result.Date.Should().Be(DateOnly.Today.ToFixedClientDateOnlyFormat());
-			result.PreferenceRestriction.Should().Be.Null();
+			result.Preference.Should().Be.Null();
 		}
 
 		[Test]
