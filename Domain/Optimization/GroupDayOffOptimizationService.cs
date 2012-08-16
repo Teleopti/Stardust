@@ -33,14 +33,16 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-        private bool _cancelMe;
+    	private readonly IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
+    	private bool _cancelMe;
 
         public GroupDayOffOptimizationService(IPeriodValueCalculator periodValueCalculator, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-            IResourceOptimizationHelper resourceOptimizationHelper)
+            IResourceOptimizationHelper resourceOptimizationHelper, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
         {
             _periodValueCalculatorForAllSkills = periodValueCalculator;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _resourceOptimizationHelper = resourceOptimizationHelper;
+        	_groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
         }
 
         public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -107,7 +109,6 @@ namespace Teleopti.Ccc.Domain.Optimization
                 executes++;
                 if (!result)
                 {
-                    retList.Add(optimizer);
                     using(PerformanceOutput.ForOperation("Period value for all skills was not better, resetting schedules"))
                     {
                         HashSet<DateOnly> dates = new HashSet<DateOnly>();
@@ -119,6 +120,17 @@ namespace Teleopti.Ccc.Domain.Optimization
                         // recalculate
                         foreach (var dateOnly in dates)
                         {
+                        	IList<IScheduleMatrixPro> matrixesToRemove =
+                        		_groupOptimizerFindMatrixesForGroup.Find(optimizer.Owner, dateOnly);
+                        	foreach (var scheduleMatrixPro in matrixesToRemove)
+                        	{
+								foreach (var groupDayOffOptimizerContainer in activeOptimizers)
+								{
+									if(scheduleMatrixPro.SchedulePeriod.Equals(groupDayOffOptimizerContainer.Matrix.SchedulePeriod))
+										retList.Add(groupDayOffOptimizerContainer);
+								}
+                        	}
+                        	
                             _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, false, false);
                         }
                     }

@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IGroupPersonPreOptimizationChecker _groupPersonPreOptimizationChecker;
         private readonly IGroupMatrixHelper _groupMatrixHelper;
     	private readonly IGroupOptimizationValidatorRunner _groupOptimizationValidatorRunner;
+    	private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
     	public GroupDayOffOptimizerCreator(
             //IOptimizationPreferences optimizerPreferences, 
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IGroupSchedulingService groupSchedulingService, 
             IGroupPersonPreOptimizationChecker groupPersonPreOptimizationChecker, 
             IGroupMatrixHelper groupMatrixHelper,
-			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner)
+			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner,
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
             //_optimizerPreferences = optimizerPreferences;
             _scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupPersonPreOptimizationChecker = groupPersonPreOptimizationChecker;
             _groupMatrixHelper = groupMatrixHelper;
         	_groupOptimizationValidatorRunner = groupOptimizationValidatorRunner;
+    		_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
         }
 
         public IGroupDayOffOptimizer CreateDayOffOptimizer(
@@ -70,7 +73,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 									allSelectedPersons,
 									_groupPersonPreOptimizationChecker,
 									_groupMatrixHelper,
-									_groupOptimizationValidatorRunner);
+									_groupOptimizationValidatorRunner,
+									_groupPersonBuilderForOptimization);
 
             return new GroupDayOffSingleOptimizer(converter,
                                     decisionMaker,

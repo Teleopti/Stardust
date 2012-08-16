@@ -340,10 +340,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix = new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup);
 			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner = new GroupOptimizationValidatorRunner(groupDayOffOptimizerValidateDayOffToRemove,
 				groupDayOffOptimizerValidateDayOffToAdd, groupOptimizerValidateProposedDatesInSameMatrix);
+
         	IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator =
         		new GroupDayOffOptimizerCreator(scheduleResultDataExtractorProvider, lockableBitArrayChangesTracker,
         		                                rollbackService, groupSchedulingService, groupPersonPreOptimizationChecker,
-        		                                groupMatrixHelper, groupOptimizationValidatorRunner);
+												groupMatrixHelper, groupOptimizationValidatorRunner, groupPersonBuilderForOptimization);
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();

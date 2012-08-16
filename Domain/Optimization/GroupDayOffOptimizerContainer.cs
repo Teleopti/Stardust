@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         bool Execute();
         IPerson Owner { get; }
+    	IScheduleMatrixPro Matrix { get; }
     }
 
     public class GroupDayOffOptimizerContainer : IGroupDayOffOptimizerContainer
@@ -80,6 +81,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             get { return _matrix.Person; }
         }
+
+    	public IScheduleMatrixPro Matrix
+    	{
+			get { return _matrix; }
+    	}
 
     }
 }
