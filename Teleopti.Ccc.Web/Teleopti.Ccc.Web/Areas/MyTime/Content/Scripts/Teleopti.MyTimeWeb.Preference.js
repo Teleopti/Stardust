@@ -332,8 +332,10 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	};
 
 	this.LoadPreference = function (complete) {
-		if (!self.HasPreference)
+		if (!self.HasPreference) {
+			complete();
 			return null;
+		}
 		return ajaxForDate({
 			url: "Preference/Preference",
 			type: 'GET',
