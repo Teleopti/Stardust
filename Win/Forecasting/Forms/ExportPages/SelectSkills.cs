@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         {
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                _skills = new SkillRepository(uow).LoadAll();
+                _skills = new SkillRepository(uow).LoadAll().Where(x=>!(x is IChildSkill)).ToList();
             }
         }
 
