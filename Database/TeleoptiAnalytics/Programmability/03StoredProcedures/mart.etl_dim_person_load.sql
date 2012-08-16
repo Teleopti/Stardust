@@ -47,11 +47,6 @@ DECLARE @maxdate as smalldatetime
 SELECT @maxdateid = max(date_id),@maxdate = max(date_date) FROM mart.dim_date
 WHERE date_id >= 0 --exclude the special ones < 0
 
---If the current BU-code is not i stage, something is fishy, Abort!
---ETL Service and ETL Tool conflict
-if not exists (select 1 from stage.stg_person where business_unit_code=@current_business_unit_code)
-RETURN 0
-
 -----------------------
 -- Not Defined Person
 -----------------------
@@ -151,6 +146,13 @@ WHERE
 	NOT EXISTS (SELECT d.person_id FROM mart.dim_person d WHERE d.person_id=-1)
 
 SET IDENTITY_INSERT mart.dim_person OFF
+
+
+--If the current BU-code is not i stage, something is fishy, Abort!
+--ETL Service and ETL Tool conflict
+if not exists (select 1 from stage.stg_person where business_unit_code=@current_business_unit_code)
+RETURN 0
+
 
 --<Todo>
 --This section should be removed when InitialLoad dynamicly loads dim_date from => max(max_date_of_all_objects_in_raptor)
