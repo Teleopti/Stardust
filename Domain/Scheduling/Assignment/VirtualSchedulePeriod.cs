@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return new TimeSpan();
 
 			int workDays = Workdays();
-			double minutes = AverageWorkTimePerDay.TotalMinutes * workDays;
+			double minutes = Math.Round(AverageWorkTimePerDay.TotalMinutes * workDays, 0);
 			return TimeSpan.FromMinutes(minutes);
 		}
 
