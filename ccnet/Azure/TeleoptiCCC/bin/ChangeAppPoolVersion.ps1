@@ -1,14 +1,6 @@
 param ([string] $applicationName = $(throw "applicationName is required"))
 [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.Web.Administration")
 
-$iis = New-Object Microsoft.Web.Administration.ServerManager 
-$attemptSiteCount = 0;
-$attemptAppCount = 0;
-$attemptPathCount = 0;
-$attemptSuccess = 0;
-$MaxAttemptCount = 10;
-$sleep = 30
-
 #----------
 # functions
 #----------
@@ -69,13 +61,35 @@ function fnLoopSiteApplication {
 #----------
 # Main
 #----------
+$attemptSiteCount = 0;
+$attemptAppCount = 0;
+$attemptPathCount = 0;
+$attemptSuccess = 0;
+$MaxAttemptCount = 20;
+$sleep = 30
+
 do {
-    If (fnLoopSiteApplication) {
-        write-host "Success!"
-        break
-    }else{
-    write-host "Could not find the correct application. Trying again ... $attemptSuccess"
-    $attemptSuccess++
+
+    try {
+        $iis = New-Object Microsoft.Web.Administration.ServerManager 
+        If (fnLoopSiteApplication) {
+            write-host "Success!"
+            break
+        }else{
+        write-host "Could not find the correct application. Trying again ... $attemptSuccess"
+        $attemptSuccess++
+        }
+    }
+
+    Catch {
+     "Caught in a catch"
+     $err=$Error[0]
+     $err
+     $err |Format-List *
+     }
+ 
+   finally {
+    $iis.Dispose()
     }
 }
 while ($attemptSuccess -le $MaxAttemptCount)
