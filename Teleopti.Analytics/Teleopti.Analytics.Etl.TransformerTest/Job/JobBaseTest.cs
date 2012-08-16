@@ -6,6 +6,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Ccc.Domain.Common;
 using Rhino.Mocks;
 using Teleopti.Interfaces.Domain;
@@ -61,7 +62,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 			_jobBase1 = new JobBase(_jobParameters, _jobStepList1, _jobName1, false, false);
 
 			// Log on to bu 1
-			_jobHelper.LogOnTeleoptiCccDomain(_bu1);
+			Expect.Call(_jobHelper.LogOnTeleoptiCccDomain(_bu1)).Return(true);
 			_jobHelper.LogOffTeleoptiCccDomain();
 			Expect.Call(_jobParameters.StateHolder).PropertyBehavior();
 			_mocks.ReplayAll();
@@ -168,7 +169,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 			using (_mocks.Record())
 			{
 				// Log on to bu 2
-				_jobHelper.LogOnTeleoptiCccDomain(_bu2);
+				Expect.Call(_jobHelper.LogOnTeleoptiCccDomain(_bu2)).Return(true);
 				_jobHelper.LogOffTeleoptiCccDomain();
 				Expect.Call(_jobParameters.StateHolder).PropertyBehavior();
 			}
@@ -196,6 +197,25 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 		{
 			IJobParameters jobParameters = _jobBase1.StepList[0].JobParameters;
 			Assert.IsNotNull(jobParameters);
+		}
+
+		[Test]
+		public void ShouldReturnNullResultWhenLogOntoRaptorFails()
+		{
+			IBusinessUnit bu = BusinessUnitFactory.CreateSimpleBusinessUnit("myBu");
+			var jobParameters = _mocks.StrictMock<IJobParameters>();
+			var jobHelper = _mocks.StrictMock<IJobHelper>();
+			var job = new JobBase(jobParameters, new List<IJobStep>(), "myJob", false, false);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(job.JobParameters.Helper).Return(jobHelper);
+				Expect.Call(jobHelper.LogOnTeleoptiCccDomain(bu)).Return(false);
+			}
+			using (_mocks.Playback())
+			{
+				Assert.IsNull(job.Run(bu, null, null, true, true));
+			}
 		}
 	}
 

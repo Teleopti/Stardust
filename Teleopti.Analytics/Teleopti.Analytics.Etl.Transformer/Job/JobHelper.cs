@@ -50,13 +50,17 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
             get { return _messageSender; }
         }
 
-        public void LogOnTeleoptiCccDomain(IBusinessUnit businessUnit)
+        public bool LogOnTeleoptiCccDomain(IBusinessUnit businessUnit)
         {
-            _logHelp.LogOn(businessUnit);
+			if (!_logHelp.LogOn(businessUnit))
+			{
+				return false;
+			}
 
             //Create repository when logged in to raptor domain
             _repository = new RaptorRepository(ConfigurationManager.AppSettings["datamartConnectionString"],
                                                ConfigurationManager.AppSettings["isolationLevel"]);
+        	return true;
         }
 
         public void LogOffTeleoptiCccDomain()
