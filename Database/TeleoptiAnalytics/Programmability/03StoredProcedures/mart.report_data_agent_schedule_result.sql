@@ -120,7 +120,7 @@ ELSE
 		INSERT INTO #agents
 		SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@agent_set, @date_from, @date_to, @site_id, @team_set)
 	END
-	
+
 --Join the ResultSets above as:
 --a) allowed to see = #rights_agents
 --b) selected		= #agents
@@ -129,9 +129,8 @@ SELECT b.id, acd.acd_login_id
 FROM #rights_agents a
 INNER JOIN #agents b
 	ON a.right_id = b.id
-INNER JOIN mart.bridge_acd_login_person acd
+LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = b.id
-
 
 --This SP will insert data into #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]
@@ -145,6 +144,7 @@ EXEC [mart].[report_data_schedule_result_subSP]
 	@report_id		= @report_id,
 	@scenario_id	= @scenario_id,
 	@language_id	= @language_id
+
 
 --Delete ACD-logins that have been logged on without being a agent in CCC7
 DELETE FROM #pre_result_subSP
