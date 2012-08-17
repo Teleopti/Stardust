@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Web.Filters
 			filterContext.Result = new JsonResult
 			                       	{
 			                       		Data = MakeErrorViewModel(handleErrorInfo),
-			                       		ContentType = "application/json"
+			                       		ContentType = "application/json",
+										JsonRequestBehavior = JsonRequestBehavior.AllowGet
 			                       	};
 		}
 
