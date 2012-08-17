@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 				PreferenceButton.Select(text);
 		}
 
-
 		public Div ExtendedPreferenceIndicationForDate(DateTime date)
 		{
 			return CalendarCellForDate(date).Div(Find.ByClass("extended-indication", false));
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		
 		public Div ExtendedPreferenceForDate(DateTime date)
 		{
-			return CalendarCellForDate(date).Div(Find.ByClass("preference-extended", false));
+			return Document.Div("ui-tooltip-extended-" + date.ToString("yyyy-MM-dd"));
 		}
 	}
 }

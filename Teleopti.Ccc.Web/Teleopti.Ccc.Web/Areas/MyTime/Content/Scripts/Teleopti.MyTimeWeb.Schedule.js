@@ -47,9 +47,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				event: 'click'
 			},
 			hide: {
-				target: $(document.body).children().not('#ui-datepicker-div').not($(self)),
+				target: $("#page"),
 				event: 'mousedown'
-
 			},
 			style: {
 				classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow',

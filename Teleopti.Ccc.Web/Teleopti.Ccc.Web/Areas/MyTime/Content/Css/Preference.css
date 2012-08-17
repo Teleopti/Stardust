@@ -33,10 +33,11 @@
 	text-align: center;
 	margin-bottom: 10px;
 	margin-top: 3px;
+	width: 110px;
 }
 .extended-part-title {
 	font-weight: bold;
-	padding-bottom: 10px;
+	height: 24px;
 }
 
 
@@ -68,12 +69,15 @@
 	padding-bottom: 1px;
 	font-variant: small-caps;
 }
-
-.feedback-detail 
+.time-limitation.icon.leftarrow,
+.time-limitation.icon.rightarrow,
+.time-limitation.icon.doublearrow-blue
 {
-	color: black;
-	font-size: 1.15em;
+	width: 110px;
+	height: 13px;
+	padding-bottom: 2px;
 }
+
 
 #Preference-period-feedback-view 
 {
@@ -82,16 +86,13 @@
 	padding-bottom: 0.6em;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
+.feedback-detail 
+{
+	color: black;
+	font-size: 1.15em;
+}
 #Preference-period 
 {
 	line-height: 1em;
 	font-size: 0.8em;
-}
-
-.icon.preference-warning 
-{
-	background: transparent url(../Images/icon_sprite.png) -159px -54px no-repeat;
-	width: 16px;
-	height: 16px;
-	display: inline-block;
 }

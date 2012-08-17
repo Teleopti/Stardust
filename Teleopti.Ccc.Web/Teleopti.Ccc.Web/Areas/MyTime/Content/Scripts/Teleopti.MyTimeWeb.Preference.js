@@ -105,9 +105,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _initExtendedPanels() {
 		$('.preference .extended-indication')
 			.each(function () {
+				var date = $(this).closest("li[data-mytime-date]").attr("data-mytime-date");
 				$(this)
 					.qtip(
 						{
+							id: "extended-" + date,
 							content: {
 								text: $(this).next('.extended-panel')
 							},
@@ -118,6 +120,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 									x: 4,
 									y: 5
 								}
+							},
+							show: {
+								event: 'click'
+							},
+							hide: {
+								target: $("#page"),
+								event: 'mousedown'
 							},
 							style: {
 								def: false,

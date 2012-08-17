@@ -166,10 +166,12 @@ this.FeatureBackground();
 #line 40
  testRunner.And("I have an extended preference on \'2012-06-20\'");
 #line 41
- testRunner.When("I view preferences for date \'2012-06-20\'");
+ testRunner.And("I have an extended preference on \'2012-06-19\'");
 #line 42
- testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+ testRunner.When("I view preferences for date \'2012-06-20\'");
 #line 43
+ testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+#line 44
  testRunner.Then("I should see the extended preference on \'2012-06-20\'");
 #line hidden
             this.ScenarioCleanup();
@@ -180,19 +182,19 @@ this.FeatureBackground();
         public virtual void SeeExtendedPreferenceWithoutPermission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended preference without permission", ((string[])(null)));
-#line 45
+#line 46
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 46
- testRunner.Given("I have the role \'No access to extended preferences\'");
 #line 47
- testRunner.And("I have an extended preference on \'2012-06-20\'");
+ testRunner.Given("I have the role \'No access to extended preferences\'");
 #line 48
- testRunner.When("I view preferences for date \'2012-06-20\'");
+ testRunner.And("I have an extended preference on \'2012-06-20\'");
 #line 49
- testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+ testRunner.When("I view preferences for date \'2012-06-20\'");
 #line 50
+ testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+#line 51
  testRunner.Then("I should see the extended preference on \'2012-06-20\'");
 #line hidden
             this.ScenarioCleanup();

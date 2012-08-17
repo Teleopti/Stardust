@@ -377,7 +377,7 @@ html.full-height #push{
  .seperator{border-right: 1px solid #d2d2d2; border-left: 1px solid #fff; float: left; height: 95%; margin:0 12px;}
  
  /* Icons */
-.icon {background-image:url(../Images/icon_sprite.png); background-repeat: no-repeat; background-color: transparent; border: 0px; display: block; height: 28px; width: 21px;}
+.icon {background-image:url(../Images/icon_sprite.png); background-repeat: no-repeat; background-color: transparent; border: 0px; display: inline-block; height: 28px; width: 21px;}
 .icon.comment{background-position: 0px 0px;}
 .icon.logout{background-position: 0px -26px;}
 .icon.mail{background-position: 0px -53px;}
@@ -389,9 +389,9 @@ html.full-height #push{
 .icon.copy{background-position: 0px -168px;}
 .icon.paste{background-position: 0px -197px;}
 .icon.doublearrow-white{background-position: 13px -227px; height: 13px; width: 39px;} /* Only ment to be used in left-column in calendar-view */
-.icon.leftarrow{background-position: 0 -246px; height: auto; margin-left: 0px; padding-left: 9px; width: 110px;}
-.icon.rightarrow{background-position: 0 -266px; height: auto; margin-left: 0px; padding-left: 9px; width: 110px;}
-.icon.doublearrow-blue{background-position: 0 -286px; height: auto; margin-left: 0px; padding-left: 9px; width: 110px;}
+.icon.leftarrow{background-position: 0 -246px; width: 9px;}
+.icon.rightarrow{background-position: 0 -266px; width: 9px;}
+.icon.doublearrow-blue{background-position: 0 -286px; width: 9px;}
 .icon.edit{background-position: 0 -308px; height: 15px; margin-top: -3px; margin-bottom: 3px;}
 .icon.toolbar-edit{background-position: 0 -363px; width: 21px;}
 .icon.toolbar-edit[disabled]{background-position: 0 -425px;}
@@ -403,6 +403,7 @@ html.full-height #push{
 .icon.validation-error{background-position: -575px 0;}
 .icon.toolbar-addTextRequest {background-position: 0px -511px; width: 24px}
 .icon.toolbar-today {background-position: -155px -26px; width: 24px}
+.icon.preference-warning {	background-position: -159px -54px; width: 16px;	height: 16px; }
 
 .text-request {
 	right: 0px;

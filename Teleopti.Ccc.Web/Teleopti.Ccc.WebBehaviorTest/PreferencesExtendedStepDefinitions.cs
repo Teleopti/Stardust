@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the extended preference indication on '(.*)'")]
 		public void WhenIClickTheExtendedPreferenceIndicationOn(DateTime date)
 		{
-			ScenarioContext.Current.Pending();
 			var indication = Pages.Pages.PreferencePage.ExtendedPreferenceIndicationForDate(date);
 			indication.EventualClick();
 		}
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the extended preference on '(.*)'")]
 		public void ThenIShouldSeeTheExtendedPreferenceOn(DateTime date)
 		{
-			ScenarioContext.Current.Pending();
 			var extendedPreference = Pages.Pages.PreferencePage.ExtendedPreferenceForDate(date);
 			EventualAssert.That(() => extendedPreference.Exists, Is.True);
 			EventualAssert.That(() => extendedPreference.JQueryVisible(), Is.True);
