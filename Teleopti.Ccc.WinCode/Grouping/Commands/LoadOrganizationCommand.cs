@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Tools;
@@ -184,23 +183,4 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
         }
     }
 
-
-    // Create a node sorter that implements the IComparer interface. 
-public class NodeSorter : IComparer
-{
-    // Compare the length of the strings, or the strings 
-    // themselves, if they are the same length. 
-    public int Compare(object x, object y)
-    {
-        TreeNodeAdv tx = x as TreeNodeAdv;
-        TreeNodeAdv ty = y as TreeNodeAdv;
-
-        // Compare the length of the strings, returning the difference. 
-        if (tx.Text.Length != ty.Text.Length)
-            return tx.Text.Length - ty.Text.Length;
-
-        // If they are the same length, call Compare. 
-        return string.Compare(tx.Text, ty.Text);
-    }
-}
 }
