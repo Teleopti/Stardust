@@ -128,12 +128,12 @@ namespace Teleopti.Ccc.Win.Grouping
 				treeViewAdvMainTabTree.Nodes.AddRange((TreeNodeAdv[])treeNodeAdv);
 				if (ShowCheckBoxes)
 					treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
-				treeViewAdvMainTabTree.Root.Sort();
 				treeViewAdvMainTabTree.EndUpdate();
 				treeViewAdvMainTabTree.AfterCheck += treeViewAdvMainTabTreeAfterCheck;
 			}
             
         }
+
 
         public void ModifyGroupPage(Guid id)
         {
