@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Teleopti.Ccc.TestCommon
@@ -21,7 +23,8 @@ namespace Teleopti.Ccc.TestCommon
         public string ReadIniValue(string Section, string Key)
         {
             StringBuilder temp = new StringBuilder(255);
-            int retLength = NativeMethods.GetPrivateProfileString(Section, Key, "", temp, 255, _path);
+        	var file = new FileInfo(_path);
+			int retLength = NativeMethods.GetPrivateProfileString(Section, Key, "", temp, 255, file.FullName);
             if (retLength == 0)
                 return string.Empty; //skjuta fel här?
             else
