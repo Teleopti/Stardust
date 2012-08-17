@@ -21,33 +21,37 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			ValidatorResult result = new ValidatorResult();
 			
-			List<IScheduleMatrixPro> all = new List<IScheduleMatrixPro>();
-			foreach (var dateOnly in dates)
+			if(useSameDaysOff)
 			{
-				all.AddRange(_groupOptimizerFindMatrixesForGroup.Find(person, dateOnly));
-			}
-
-			HashSet<IScheduleMatrixPro> matrixList = new HashSet<IScheduleMatrixPro>(all);
-
-			if (matrixList.Count == 0)
-			{
-				result = new ValidatorResult();
-				return result;
-			}
-
-			foreach (var matrixPro in matrixList)
-			{
+				List<IScheduleMatrixPro> all = new List<IScheduleMatrixPro>();
 				foreach (var dateOnly in dates)
 				{
-					if (!matrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
+					all.AddRange(_groupOptimizerFindMatrixesForGroup.Find(person, dateOnly));
+				}
+
+				HashSet<IScheduleMatrixPro> matrixList = new HashSet<IScheduleMatrixPro>(all);
+
+				if (matrixList.Count == 0)
+				{
+					result = new ValidatorResult();
+					return result;
+				}
+
+				foreach (var matrixPro in matrixList)
+				{
+					foreach (var dateOnly in dates)
 					{
-						result.Success = true;
-						result.MatrixList = new List<IScheduleMatrixPro>(matrixList);
-						result.DaysToLock = new DateOnlyPeriod(dateOnly, dateOnly);
+						if (!matrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
+						{
+							result.Success = true;
+							result.MatrixList = new List<IScheduleMatrixPro>(matrixList);
+							result.DaysToLock = new DateOnlyPeriod(dateOnly, dateOnly);
+							return result;
+						}
 					}
 				}
 			}
-
+			
 			result.Success = true;
 			return result;
 		}

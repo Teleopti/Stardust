@@ -15,11 +15,12 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// </summary>
         event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-        /// <summary>
-        /// Executes this service.
-        /// </summary>
-        /// <param name="optimizers">The optimizers.</param>
-        void Execute(IEnumerable<IGroupDayOffOptimizerContainer> optimizers);
+		/// <summary>
+		/// Executes this service.
+		/// </summary>
+		/// <param name="optimizers">The optimizers.</param>
+		/// <param name="useSameDaysOff">if set to <c>true</c> [use same days off].</param>
+		void Execute(IEnumerable<IGroupDayOffOptimizerContainer> optimizers, bool useSameDaysOff);
 
         /// <summary>
         /// Called when [report progress].
@@ -47,14 +48,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-        public void Execute(IEnumerable<IGroupDayOffOptimizerContainer> optimizers)
+        public void Execute(IEnumerable<IGroupDayOffOptimizerContainer> optimizers, bool useSameDaysOff)
         {
             using (PerformanceOutput.ForOperation("Optimizing days off for " + optimizers.Count() + " agents"))
             {
-                executeOptimizersWhileActiveFound(optimizers);
+				executeOptimizersWhileActiveFound(optimizers, useSameDaysOff);
                 if (_cancelMe)
                     return;
-                executeOptimizersWhileActiveFound(optimizers);
+				executeOptimizersWhileActiveFound(optimizers, useSameDaysOff);
             }
         }
 
@@ -70,17 +71,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
   
-        /// <summary>
-        /// Runs the active optimizers while at least one is active and can do more optimization.
-        /// </summary>
-        /// <param name="optimizers">All optimizer containers.</param>
-        private void executeOptimizersWhileActiveFound(IEnumerable<IGroupDayOffOptimizerContainer> optimizers)
+        private void executeOptimizersWhileActiveFound(IEnumerable<IGroupDayOffOptimizerContainer> optimizers, bool useSameDaysOff)
         {
             var successfulContainers = new List<IGroupDayOffOptimizerContainer>(optimizers);
 
             while (successfulContainers.Count > 0)
             {
-                var unSuccessfulContainers = shuffleAndExecuteOptimizersInList(successfulContainers);
+				var unSuccessfulContainers = shuffleAndExecuteOptimizersInList(successfulContainers, useSameDaysOff);
 
                 if (_cancelMe)
                     break;
@@ -93,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.GroupDayOffOptimizationService.OnReportProgress(System.String)")]
-        private IEnumerable<IGroupDayOffOptimizerContainer> shuffleAndExecuteOptimizersInList(ICollection<IGroupDayOffOptimizerContainer> activeOptimizers)
+        private IEnumerable<IGroupDayOffOptimizerContainer> shuffleAndExecuteOptimizersInList(ICollection<IGroupDayOffOptimizerContainer> activeOptimizers, bool useSameDaysOff)
         {
             var retList = new List<IGroupDayOffOptimizerContainer>();
             int executes = 0;
@@ -101,6 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             double newPeriodValue = lastPeriodValue;
             foreach (var optimizer in activeOptimizers.GetRandom(activeOptimizers.Count, true))
             {
+				executes++;
 				if (retList.Contains(optimizer))
 					continue;
 
@@ -109,34 +107,12 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var tmpPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
                 if (tmpPeriodValue > lastPeriodValue)
                     result = false;
-                executes++;
+                
                 if (!result)
                 {
                     using(PerformanceOutput.ForOperation("Period value for all skills was not better or optimization failed, resetting schedules"))
                     {
-						retList.Add(optimizer);
-                        HashSet<DateOnly> dates = new HashSet<DateOnly>();
-                        foreach (var scheduleDay in _schedulePartModifyAndRollbackService.ModificationCollection)
-                        {
-                            dates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
-                        }
-                        _schedulePartModifyAndRollbackService.Rollback();
-                        // recalculate
-                        foreach (var dateOnly in dates)
-                        {
-                        	IList<IScheduleMatrixPro> matrixesToRemove =
-                        		_groupOptimizerFindMatrixesForGroup.Find(optimizer.Owner, dateOnly);
-                        	foreach (var scheduleMatrixPro in matrixesToRemove)
-                        	{
-								foreach (var groupDayOffOptimizerContainer in activeOptimizers)
-								{
-									if(scheduleMatrixPro.SchedulePeriod.Equals(groupDayOffOptimizerContainer.Matrix.SchedulePeriod))
-										retList.Add(groupDayOffOptimizerContainer);
-								}
-                        	}
-                        	
-                            _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, false, false);
-                        }
+						retList.AddRange(containersToRemove(activeOptimizers, optimizer, useSameDaysOff));
                     }
                 }
                 else
@@ -164,5 +140,39 @@ namespace Teleopti.Ccc.Domain.Optimization
             _schedulePartModifyAndRollbackService.ClearModificationCollection();
             return retList;
         }
+
+		private IList<IGroupDayOffOptimizerContainer> containersToRemove(ICollection<IGroupDayOffOptimizerContainer> activeOptimizers, IGroupDayOffOptimizerContainer optimizer, 
+			bool useSameDaysOff)
+		{
+			var retList = new List<IGroupDayOffOptimizerContainer>();
+			retList.Add(optimizer);
+			HashSet<DateOnly> dates = new HashSet<DateOnly>();
+			foreach (var scheduleDay in _schedulePartModifyAndRollbackService.ModificationCollection)
+			{
+				dates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
+			}
+			_schedulePartModifyAndRollbackService.Rollback();
+
+			foreach (var dateOnly in dates)
+			{
+				if (useSameDaysOff)
+				{
+					IList<IScheduleMatrixPro> matrixesToRemove =
+					_groupOptimizerFindMatrixesForGroup.Find(optimizer.Owner, dateOnly);
+					foreach (var scheduleMatrixPro in matrixesToRemove)
+					{
+						foreach (var groupDayOffOptimizerContainer in activeOptimizers)
+						{
+							if (scheduleMatrixPro.SchedulePeriod.Equals(groupDayOffOptimizerContainer.Matrix.SchedulePeriod))
+								retList.Add(groupDayOffOptimizerContainer);
+						}
+					}
+				}
+				
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, false, false);
+			}
+
+			return retList;
+		}
     }
 }

@@ -79,24 +79,29 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IList<DateOnly> daysOffToAdd = _changesTracker.DaysOffAdded(workingBitArray, originalArray, matrix,
 			                                                            _daysOffPreferences.ConsiderWeekBefore);
 
-			bool success = _groupOptimizationValidatorRunner.Run(matrix.Person, daysOffToRemove, daysOffToAdd, schedulingOptions.UseSameDayOffs);
-			if (!success)
+			
+
+			IList<GroupMatrixContainer> containers = null;
+			IGroupPerson groupPerson;
+			if(schedulingOptions.UseSameDayOffs)
 			{
-				return false;
+				//Will always return true IFairnessValueCalculator not using GroupOptimizerValidateProposedDatesInSameMatrix daysoff
+				bool success = _groupOptimizationValidatorRunner.Run(matrix.Person, daysOffToRemove, daysOffToAdd, schedulingOptions.UseSameDayOffs);
+				if (!success)
+				{
+					return false;
+				}
+				groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, daysOffToRemove[0]);
+				containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences);
 			}
-
-			//IGroupPerson groupPerson = _groupPersonPreOptimizationChecker.CheckPersonOnDates(allMatrixes, matrix.Person, daysOffToRemove, daysOffToAdd, _allSelectedPersons, schedulingOptions);
-			//if (groupPerson == null)
-			//    return false;
-
-			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, daysOffToRemove[0]);
-
-			IList<GroupMatrixContainer> containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences);
+			else
+			{
+				groupPerson = _groupPersonBuilderForOptimization.BuildGroupPersonWithOneMember(matrix.Person, daysOffToRemove[0]);
+				containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, matrix.Person, _daysOffPreferences);
+			}
+			
 			if (containers == null || containers.Count() == 0)
 				return false;
-
-			//if (!_groupMatrixHelper.ValidateDayOffMoves(containers, _validatorList))
-			//    return false;
 
 			if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
 				return false;

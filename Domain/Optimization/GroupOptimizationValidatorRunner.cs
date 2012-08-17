@@ -66,7 +66,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					foreach (var matrixPro in validatorResult.MatrixList)
 					{
-						matrixPro.LockPeriod(validatorResult.DaysToLock.Value);
+						if (matrixPro.SelectedPeriod.Contains(validatorResult.DaysToLock.Value))
+							matrixPro.LockPeriod(validatorResult.DaysToLock.Value);
 					}
 				}
 			}

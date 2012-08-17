@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper, groupOptimizerFindMatrixesForGroup);
             service.ReportProgress += resourceOptimizerPersonOptimized;
             //another service too
-            service.Execute(optimizerContainers);
+            service.Execute(optimizerContainers, optimizerPreferences.Extra.KeepSameDaysOffInTeam);
             service.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 

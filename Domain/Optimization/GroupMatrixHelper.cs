@@ -67,6 +67,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToAdd,
             IGroupPerson groupPerson,
             IDaysOffPreferences daysOffPreferences);
+
+		IList<GroupMatrixContainer> CreateGroupMatrixContainers(
+			IList<IScheduleMatrixPro> allMatrixes,
+			IList<DateOnly> daysOffToRemove,
+			IList<DateOnly> daysOffToAdd,
+			IPerson person,
+			IDaysOffPreferences daysOffPreferences);
     }
 
     public class GroupMatrixHelper : IGroupMatrixHelper
@@ -118,7 +125,33 @@ namespace Teleopti.Ccc.Domain.Optimization
             return containers;
         }
 
-        public IGroupMatrixContainerCreator GroupMatrixContainerCreator
+		public IList<GroupMatrixContainer> CreateGroupMatrixContainers(
+		   IList<IScheduleMatrixPro> allMatrixes,
+		   IList<DateOnly> daysOffToRemove,
+		   IList<DateOnly> daysOffToAdd,
+		   IPerson person,
+		   IDaysOffPreferences daysOffPreferences
+		   )
+		{
+			IList<GroupMatrixContainer> containers = new List<GroupMatrixContainer>();
+
+			IScheduleMatrixPro scheduleMatrix = findGroupMatrix(allMatrixes, person, daysOffToRemove[0]);
+			if (scheduleMatrix == null)
+				return null;
+
+			_allMatrixes = allMatrixes;
+
+			GroupMatrixContainer matrixContainer =
+				_groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, scheduleMatrix,
+				                                                        daysOffPreferences);
+			if (matrixContainer == null)
+				return null;
+			containers.Add(matrixContainer);
+
+			return containers;
+		}
+
+    	public IGroupMatrixContainerCreator GroupMatrixContainerCreator
         {
             get { return _groupMatrixContainerCreator; }
         }
