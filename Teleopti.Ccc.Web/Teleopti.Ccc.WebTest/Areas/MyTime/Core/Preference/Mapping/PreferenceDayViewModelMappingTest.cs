@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -20,19 +21,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceDayViewModelMappingTest
 	{
 		private IExtendedPreferencePredicate extendedPreferencePredicate;
-		private IPreferenceProvider preferenceDayProvider;
 
 		[SetUp]
 		public void Setup()
 		{
-			preferenceDayProvider = MockRepository.GenerateMock<IPreferenceProvider>();
 			extendedPreferencePredicate = MockRepository.GenerateMock<IExtendedPreferencePredicate>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new PreferenceDayViewModelMappingProfile(
-				Depend.On(Mapper.Engine),
-				Depend.On(extendedPreferencePredicate),
-				Depend.On(preferenceDayProvider)
+				Depend.On(extendedPreferencePredicate)
 				)));
 		}
 
@@ -211,17 +208,168 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.Preference.Should().Not.Be(Resources.Extended);
 		}
 
-		//[Test]
-		//public void ShouldMapPreferenceExtendedTitle()
-		//{
-		//    var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
-		//    data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+		[Test]
+		public void ShouldMapExtendedTitle()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
 
-		//    var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 
-		//    result.DayViewModel(data.SelectedDate)
-		//        .Preference.ExtendedTitle.Should().Be(Resources.Extended);
-		//}
+			result.ExtendedTitle.Should().Be(Resources.Extended);
+		}
+
+		[Test]
+		public void ShouldMapExtendedTitleFromShiftCategory()
+		{
+			var preferenceDay = new PreferenceDay(
+				new Person(), DateOnly.Today,
+				new PreferenceRestriction
+				{
+					ShiftCategory = new ShiftCategory("Late")
+				});
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.ExtendedTitle.Should().Be("Late");
+		}
+
+		[Test]
+		public void ShouldMapExtendedTitleFromAbsence()
+		{
+			var preferenceDay = new PreferenceDay(
+				new Person(), DateOnly.Today,
+				new PreferenceRestriction
+				{
+					Absence = new Absence() { Description = new Description("Absence")}
+				});
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.ExtendedTitle.Should().Be("Absence");
+		}
+
+		[Test]
+		public void ShouldMapExtendedTitleFromDayOff()
+		{
+			var preferenceDay = new PreferenceDay(
+				new Person(), DateOnly.Today,
+				new PreferenceRestriction
+				{
+					DayOffTemplate = new DayOffTemplate(new Description("DayOff"))
+				});
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.ExtendedTitle.Should().Be("DayOff");
+		}
+
+		[Test]
+		public void ShouldMapStartTimeLimitation()
+		{
+			var preferenceDay = new PreferenceDay(
+				new Person(), DateOnly.Today,
+				new PreferenceRestriction
+				{
+					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9)) 
+				});
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.StartTimeLimitation.Should().Be(
+				preferenceDay.Restriction.StartTimeLimitation.StartTimeString + "-" + preferenceDay.Restriction.StartTimeLimitation.EndTimeString
+				);
+		}
+
+		[Test]
+		public void ShouldMapEndTimeLimitation()
+		{
+			var preferenceDay = new PreferenceDay(
+				new Person(), DateOnly.Today,
+				new PreferenceRestriction
+				{
+					EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9))
+				});
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.EndTimeLimitation.Should().Be(
+				preferenceDay.Restriction.EndTimeLimitation.StartTimeString + "-" + preferenceDay.Restriction.EndTimeLimitation.EndTimeString
+				);
+		}
+
+		[Test]
+		public void ShouldMapWorkTimeLimitation()
+		{
+			var preferenceDay = new PreferenceDay(
+				new Person(), DateOnly.Today,
+				new PreferenceRestriction
+				{
+					WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10))
+				});
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.WorkTimeLimitation.Should().Be(
+				preferenceDay.Restriction.WorkTimeLimitation.StartTimeString + "-" + preferenceDay.Restriction.WorkTimeLimitation.EndTimeString
+				);
+		}
+
+		[Test]
+		public void ShouldMapActivity()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+			preferenceDay.Restriction.AddActivityRestriction(new ActivityRestriction(new Activity("Lunch")));
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.Activity.Should().Be("Lunch");
+		}
+
+		[Test]
+		public void ShouldMapActivityStartTimeLimitation()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+			var activityRestriction = new ActivityRestriction(new Activity(" "))
+			                          	{
+			                          		StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9))
+			                          	};
+			preferenceDay.Restriction.AddActivityRestriction(activityRestriction);
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.ActivityStartTimeLimitation.Should().Be(activityRestriction.StartTimeLimitation.StartTimeString + "-" + activityRestriction.StartTimeLimitation.EndTimeString);
+		}
+
+		[Test]
+		public void ShouldMapActivityEndTimeLimitation()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+			var activityRestriction = new ActivityRestriction(new Activity(" "))
+			{
+				EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9))
+			};
+			preferenceDay.Restriction.AddActivityRestriction(activityRestriction);
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.ActivityEndTimeLimitation.Should().Be(activityRestriction.EndTimeLimitation.StartTimeString + "-" + activityRestriction.EndTimeLimitation.EndTimeString);
+		}
+
+		[Test]
+		public void ShouldMapActivityWorkTimeLimitation()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+			var activityRestriction = new ActivityRestriction(new Activity(" "))
+			{
+				WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10))
+			};
+			preferenceDay.Restriction.AddActivityRestriction(activityRestriction);
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.ActivityTimeLimitation.Should().Be(activityRestriction.WorkTimeLimitation.StartTimeString + "-" + activityRestriction.WorkTimeLimitation.EndTimeString);
+		}
+
 
 	}
 }

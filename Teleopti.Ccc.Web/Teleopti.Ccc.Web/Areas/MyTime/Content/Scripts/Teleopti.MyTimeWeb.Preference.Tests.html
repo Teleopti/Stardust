@@ -84,7 +84,15 @@
 							options.success({
 								Preference: "a shift category",
 								Color: "black",
-								Extended: true
+								Extended: true,
+								ExtendedTitle: "ExtendedTitle",
+							    StartTimeLimitation : "8:00 am-9:00 am",
+							    EndTimeLimitation : "5:00 pm-6:00 pm",
+							    WorkTimeLimitation : "8:00-9:00",
+							    Activity : "Lunch",
+							    ActivityStartTimeLimitation : "8:00 am-9:00 am",
+							    ActivityEndTimeLimitation : "5:00 pm-6:00 pm",
+							    ActivityTimeLimitation : "1:00-2:00"
 							});
 						}
 					};
@@ -92,13 +100,21 @@
 					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 					viewModelDay.Date = "2012-06-11";
 
-					expect(5);
+					expect(13);
 
 					viewModelDay.LoadPreference();
 
 					equal(viewModelDay.Preference(), "a shift category");
 					equal(viewModelDay.Color(), "black");
 					equal(viewModelDay.Extended(), true);
+					equal(viewModelDay.ExtendedTitle(), "ExtendedTitle");
+					equal(viewModelDay.StartTimeLimitation(), "8:00 am-9:00 am");
+					equal(viewModelDay.EndTimeLimitation(), "5:00 pm-6:00 pm");
+					equal(viewModelDay.WorkTimeLimitation(), "8:00-9:00");
+					equal(viewModelDay.Activity(), "Lunch");
+					equal(viewModelDay.ActivityStartTimeLimitation(), "8:00 am-9:00 am");
+					equal(viewModelDay.ActivityEndTimeLimitation(), "5:00 pm-6:00 pm");
+					equal(viewModelDay.ActivityTimeLimitation(), "1:00-2:00");
 				});
 
 				test("should bind extended", function () {

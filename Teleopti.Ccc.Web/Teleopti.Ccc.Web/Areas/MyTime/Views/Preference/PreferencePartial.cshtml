@@ -88,16 +88,16 @@
 											<div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
 											<div class="extended-panel" style="display: none">
 												<div class="extended-part">
-													<div class="extended-part-title">Extended</div>
-													<div class="time-limitation icon leftarrow truncate">10:00 am-10:30 am</div>
-													<div class="time-limitation icon rightarrow truncate">5:00 pm-6:00 pm</div>
-													<div class="time-limitation icon doublearrow-blue truncate">6:30-8:00</div>
+													<div class="extended-part-title" data-bind="text: ExtendedTitle">Extended</div>
+													<div class="time-limitation icon leftarrow truncate" data-bind="text: StartTimeLimitation"></div>
+													<div class="time-limitation icon rightarrow truncate" data-bind="text: EndTimeLimitation"></div>
+													<div class="time-limitation icon doublearrow-blue truncate" data-bind="text: WorkTimeLimitation"></div>
 												</div>
 												<div class="extended-part">
-													<div class="extended-part-title">Lunch</div>
-													<div class="time-limitation icon leftarrow truncate">11:00 am-12:00 am</div>
-													<div class="time-limitation icon rightarrow truncate">13:00 pm-14:00 pm</div>
-													<div class="time-limitation icon doublearrow-blue truncate">1:00-3:00</div>
+													<div class="extended-part-title" data-bind="text: Activity">Lunch</div>
+													<div class="time-limitation icon leftarrow truncate" data-bind="text: ActivityStartTimeLimitation"></div>
+													<div class="time-limitation icon rightarrow truncate" data-bind="text: ActivityEndTimeLimitation"></div>
+													<div class="time-limitation icon doublearrow-blue truncate" data-bind="text: ActivityTimeLimitation"></div>
 												</div>
 											</div>
 										</span>

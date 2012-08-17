@@ -314,6 +314,14 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.HasPreference = true;
 	this.Preference = ko.observable();
 	this.Extended = ko.observable();
+	this.ExtendedTitle = ko.observable();
+	this.StartTimeLimitation = ko.observable();
+	this.EndTimeLimitation = ko.observable();
+	this.WorkTimeLimitation = ko.observable();
+	this.Activity = ko.observable();
+	this.ActivityStartTimeLimitation = ko.observable();
+	this.ActivityEndTimeLimitation = ko.observable();
+	this.ActivityTimeLimitation = ko.observable();
 	this.Color = ko.observable();
 
 	this.ReadElement = function (element) {
@@ -329,6 +337,14 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		self.Color(data.Color);
 		self.Preference(data.Preference);
 		self.Extended(data.Extended);
+		self.ExtendedTitle(data.ExtendedTitle);
+		self.StartTimeLimitation(data.StartTimeLimitation);
+		self.EndTimeLimitation(data.EndTimeLimitation);
+		self.WorkTimeLimitation(data.WorkTimeLimitation);
+		self.Activity(data.Activity);
+		self.ActivityStartTimeLimitation(data.ActivityStartTimeLimitation);
+		self.ActivityEndTimeLimitation(data.ActivityEndTimeLimitation);
+		self.ActivityTimeLimitation(data.ActivityTimeLimitation);
 	};
 
 	this.LoadPreference = function (complete) {
