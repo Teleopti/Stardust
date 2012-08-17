@@ -38,7 +38,6 @@ Scenario: See indication of an extended preference
 Scenario: See extended preference
 	Given I have the role 'Access to mytime'
 	And I have an extended preference on '2012-06-20'
-	And I have an extended preference on '2012-06-19'
 	When I view preferences for date '2012-06-20'
 	And I click the extended preference indication on '2012-06-20'
 	Then I should see the extended preference on '2012-06-20'
