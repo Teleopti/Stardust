@@ -848,6 +848,7 @@
     <Compile Include="Security\AuthorizationEntities\BusinessUnitAuthorizationEntityConverterTest.cs" />
     <Compile Include="Security\EncryptionTest.cs" />
     <Compile Include="Security\AuthorizationEntities\LicenseActivatorTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseTest.cs" />
     <Compile Include="Security\Matrix\ApplicationFunctionResolverTest.cs" />
     <Compile Include="Security\Matrix\MatrixPermissionsResolverTest.cs" />

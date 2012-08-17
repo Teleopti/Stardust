@@ -31,5 +31,7 @@
         public const string TeleoptiCccMyTimeWeb = "Teleopti CCC7 MyTimeWeb";
 
 		public const string TeleoptiCccAnywhere = "Teleopti CCC7 Anywhere";
+
+		public const string TeleoptiCccSmsLink = "Teleopti CCC7 SMS Link";
     }
 }

@@ -1,0 +1,122 @@
+﻿using System;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.Denormalize;
+
+namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
+{
+	[TestFixture]
+	public class SmsReadModelHandlerTest
+	{
+		private MockRepository _mocks;
+		private ISignificantChangeChecker _significantChangeChecker;
+		private ISmsSender _smsSender;
+		private SmsReadModelHandler _target;
+		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private IScenarioRepository _scenarioRepository;
+		private IPersonRepository _personRepository;
+		private ISmsLinkChecker _smsLinkChecker;
+
+		[SetUp]
+		public void Setup()
+		{
+			_mocks = new MockRepository();
+			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
+			_scenarioRepository = _mocks.StrictMock<IScenarioRepository>();
+			_personRepository = _mocks.StrictMock<IPersonRepository>();
+			_significantChangeChecker = _mocks.StrictMock<ISignificantChangeChecker>();
+			_smsLinkChecker = _mocks.StrictMock<ISmsLinkChecker>();
+			_smsSender = _mocks.StrictMock<ISmsSender>();
+			_target = new SmsReadModelHandler(_unitOfWorkFactory, _scenarioRepository, _personRepository, _significantChangeChecker, _smsLinkChecker, _smsSender);
+			DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator("", DateTime.Now.AddDays(100), 1000, 1000,
+			                                                                  LicenseType.Agent, new Percent(.10), null, null);
+			
+		}
+
+		[Test]
+		public void ShouldSkipOutIfNotDefaultScenario()
+		{
+			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			scenario.SetId(Guid.NewGuid());
+			scenario.DefaultScenario = false;
+
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			var period = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddDays(2));
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.Date.AddDays(1)));
+			var uow = _mocks.StrictMock<IUnitOfWork>();
+
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			Expect.Call(_scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
+			
+			Expect.Call(uow.Dispose);
+
+			_mocks.ReplayAll();
+			_target.Consume(new DenormalizeScheduleProjection
+			{
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime
+			});
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldSkipOutIfNoLicense()
+		{
+			_mocks.ReplayAll();
+			_target.Consume(new DenormalizeScheduleProjection
+			{
+				ScenarioId = Guid.NewGuid(),
+				PersonId = Guid.NewGuid(),
+				StartDateTime = DateTime.UtcNow.Date,
+				EndDateTime = DateTime.UtcNow.Date
+			});
+			_mocks.VerifyAll();
+		}
+		[Test]
+		public void ShouldCheckSignificantChangeAndSendIfTrue()
+		{
+			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			scenario.SetId(Guid.NewGuid());
+			scenario.DefaultScenario = true;
+
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			var period = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddDays(2));
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.Date.AddDays(1)));
+			var uow = _mocks.StrictMock<IUnitOfWork>();
+
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			Expect.Call(_scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
+			Expect.Call(_personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
+			Expect.Call(_significantChangeChecker.IsSignificantChange(dateOnlyPeriod, person)).Return(true);
+			Expect.Call(_smsLinkChecker.SmsMobileNumber(person)).Return("124578");
+			Expect.Call(() => _smsSender.SendSms(dateOnlyPeriod, "124578"));
+			Expect.Call(uow.Dispose);
+
+			_mocks.ReplayAll();
+			_target.Consume(new DenormalizeScheduleProjection
+			{
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime
+			});
+			_mocks.VerifyAll();
+		}
+	}
+
+}

@@ -25,6 +25,7 @@
         public const string TeleoptiCccPayrollIntegration = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/PayrollIntegration";
         public const string TeleoptiCccMyTimeWeb = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/MyTimeWeb";
 		public const string TeleoptiCccAnywhere = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/Anywhere";
+		public const string TeleoptiCccSmsLink = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/SMSLink";
         /// <summary>
         /// Constant string for Freemium base option
         /// </summary>
