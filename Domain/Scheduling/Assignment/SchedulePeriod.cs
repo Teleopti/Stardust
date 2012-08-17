@@ -239,7 +239,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			int periodLength = contractPeriod(dateFrom);
 
 			return (double)periodLength/(double)totalPeriodLength;
-
 		}
 
 		private int contractPeriod(DateOnly dateFrom)
@@ -272,8 +271,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return days;
 		}
 
-
-
 		public virtual DateOnly RealDateTo()
 		{
 			if (PeriodType == SchedulePeriodType.Day)
@@ -295,39 +292,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return getWorkDaysForPeriod(period.StartDate, period.EndDate);
 		}
 
-		public virtual int GetWorkdays(DateOnly dateFrom)
-		{
-			DateOnlyPeriod? period = GetSchedulePeriod(dateFrom);
-			if (!period.HasValue)
-				return 0;
-
-			DateOnly startDate = period.Value.StartDate;
-			DateOnly endDate = period.Value.EndDate;
-
-			return getWorkDaysForPeriod(startDate, endDate);
-		}
-
 		public virtual ReadOnlyCollection<IShiftCategoryLimitation> ShiftCategoryLimitationCollection()
 		{
 			return new ReadOnlyCollection<IShiftCategoryLimitation>(shiftCategoryLimitation);
 		}
-
-		///// <summary>
-		///// Gets the target time of the schedule period identified by the dateOnly parameter.
-		///// </summary>
-		///// <returns></returns>
-		///// <remarks>
-		///// Created by: cs 
-		///// Created date: 2008-03-10
-		///// </remarks>
-		//public virtual TimeSpan PeriodTarget(DateOnly dateOnly)
-		//{
-		//    int workDays = GetWorkdays(dateOnly);
-		//    double minutes = AverageWorkTimePerDay.TotalMinutes * workDays;
-
-		//    return TimeSpan.FromMinutes(minutes);
-		//}
-
 
 		public virtual bool IsPeriodTimeOverride
 		{

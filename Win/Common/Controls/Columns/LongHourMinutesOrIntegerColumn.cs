@@ -152,25 +152,36 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             if ((e.Style.CellType != "Test") && (!_readOnly))// If cell is grayed
             {
                 Type type;
+                var isValidValue = true;
                 if (e.Style.CellType == "NumericCell")
                 {
-                    type = typeof (int);
+                    type = typeof(int);
+                    int outInt;
+                    if (!int.TryParse(e.Style.CellValue.ToString(), out outInt))
+                        isValidValue = false;
                 }
                 else
                 {
-                    type = typeof (TimeSpan);
+                    type = typeof(TimeSpan);
+                    TimeSpan outTimeSpan;
+                    if (!TimeSpan.TryParse(e.Style.CellValue.ToString(), out outTimeSpan))
+                        isValidValue = false;
                 }
 
                 if (string.IsNullOrEmpty(_groupHeaderText))
                 {
-                    if (e.ColIndex > 0 && e.RowIndex > 0)
+                    if (isValidValue)
                     {
-                        T dataItem = dataItems[e.RowIndex - 1];
-                        _propertyReflector.SetValue(dataItem, _bindingProperty,
-                                                    Convert.ChangeType(e.Style.CellValue, type,
-                                                                       CultureInfo.InvariantCulture));
-                        OnCellChanged(dataItem, e);
+                        if (e.ColIndex > 0 && e.RowIndex > 0)
+                        {
+                            T dataItem = dataItems[e.RowIndex - 1];
+                            _propertyReflector.SetValue(dataItem, _bindingProperty,
+                                                        Convert.ChangeType(e.Style.CellValue, type,
+                                                                           CultureInfo.InvariantCulture));
+                            OnCellChanged(dataItem, e);
+                        }
                     }
+                    
                 }
                 else
                 {

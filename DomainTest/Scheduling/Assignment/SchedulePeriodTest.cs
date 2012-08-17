@@ -556,28 +556,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(8, _periodChineseMonth.GetDaysOff(_from));
 		}
 
-        [Test]
-        public void VerifyTargetTimeWhenPersonPeriodStartsInSchedulePeriod()
-        {
-            _normalPerson.RemoveAllPersonPeriods();
-            _normalPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2009, 2, 9),
-                                     _personContract, TeamFactory.CreateSimpleTeam()));
+		//[Test]
+		//public void VerifyTargetTimeWhenPersonPeriodStartsInSchedulePeriod()
+		//{
+		//    _normalPerson.RemoveAllPersonPeriods();
+		//    _normalPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2009, 2, 9),
+		//                             _personContract, TeamFactory.CreateSimpleTeam()));
 
-            _from = new DateOnly(2009,2,2);
-            _periodMonth = new SchedulePeriod(_from, SchedulePeriodType.Month, 1);
-            _normalPerson.AddSchedulePeriod(_periodMonth);
+		//    _from = new DateOnly(2009,2,2);
+		//    _periodMonth = new SchedulePeriod(_from, SchedulePeriodType.Month, 1);
+		//    _normalPerson.AddSchedulePeriod(_periodMonth);
 
-            int daysOffs = _periodMonth.GetDaysOff(_from);
-            Assert.AreEqual(6, daysOffs);
+		//    int daysOffs = _periodMonth.GetDaysOff(_from);
+		//    Assert.AreEqual(6, daysOffs);
 
-            DateOnlyPeriod? period = _periodMonth.GetSchedulePeriod(_from);
-            int daysInPeriod = period.Value.DayCount();
-            Assert.AreEqual(28, daysInPeriod);
+		//    DateOnlyPeriod? period = _periodMonth.GetSchedulePeriod(_from);
+		//    int daysInPeriod = period.Value.DayCount();
+		//    Assert.AreEqual(28, daysInPeriod);
 
-            int workDays = _periodMonth.GetWorkdays(_from);
+		//    int workDays = _periodMonth.GetWorkdays(_from);
 
-            Assert.AreEqual(21 - daysOffs, workDays);
-        }
+		//    Assert.AreEqual(21 - daysOffs, workDays);
+		//}
 
         [Test]
         public void CanAddShiftCategoryLimitation()

@@ -133,12 +133,12 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="value"></param>
         void SetDaysOff(int value);
 
-        /// <summary>
-        /// Gets the number of workdays in the specified period.
-        /// </summary>
-        /// <param name="dateFrom">The date from.</param>
-        /// <returns></returns>
-        int GetWorkdays(DateOnly dateFrom);
+		///// <summary>
+		///// Gets the number of workdays in the specified period.
+		///// </summary>
+		///// <param name="dateFrom">The date from.</param>
+		///// <returns></returns>
+		//int GetWorkdays(DateOnly dateFrom);
 
         /// <summary>
         /// Shift category limitation collection.
