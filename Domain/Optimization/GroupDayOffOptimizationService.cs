@@ -101,6 +101,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             double newPeriodValue = lastPeriodValue;
             foreach (var optimizer in activeOptimizers.GetRandom(activeOptimizers.Count, true))
             {
+				if (retList.Contains(optimizer))
+					continue;
+
                 _schedulePartModifyAndRollbackService.ClearModificationCollection();
                 bool result = optimizer.Execute();
                 var tmpPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
@@ -109,8 +112,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 executes++;
                 if (!result)
                 {
-                    using(PerformanceOutput.ForOperation("Period value for all skills was not better, resetting schedules"))
+                    using(PerformanceOutput.ForOperation("Period value for all skills was not better or optimization failed, resetting schedules"))
                     {
+						retList.Add(optimizer);
                         HashSet<DateOnly> dates = new HashSet<DateOnly>();
                         foreach (var scheduleDay in _schedulePartModifyAndRollbackService.ModificationCollection)
                         {

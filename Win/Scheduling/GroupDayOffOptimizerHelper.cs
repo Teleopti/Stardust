@@ -243,7 +243,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             IScheduleResultDataExtractor allSkillsDataExtractor =
                 OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizerPreferences.Advanced, selectedPeriod, _stateHolder);
             IPeriodValueCalculator periodValueCalculator = OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
-            var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper);
+			IGroupPersonFactory groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
+			IGroupPagePerDateHolder groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+        		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
+			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
+			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper, groupOptimizerFindMatrixesForGroup);
             service.ReportProgress += resourceOptimizerPersonOptimized;
             //another service too
             service.Execute(optimizerContainers);
