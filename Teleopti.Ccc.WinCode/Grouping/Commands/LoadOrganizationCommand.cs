@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Tools;
@@ -150,8 +151,20 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             if (usersNode.Nodes.Count == 0)
                 root.Nodes.Remove(usersNode);
 
-            
+            foreach (TreeNodeAdv nodeLevel1 in nodes)
+            {
+                nodeLevel1.Nodes.Sort();
+                foreach (TreeNodeAdv nodeLevel2 in nodeLevel1.Nodes)
+                {
+                    nodeLevel2.Nodes.Sort();
+                    foreach (TreeNodeAdv nodeLevel3 in nodeLevel2.Nodes)
+                    {
+                        nodeLevel3.Nodes.Sort();
+                    }
+                }
+            }
             _view.ResetTreeView(nodes.ToArray());
+
         }
 
     	private static IList<IPersonSelectorOrganization> removeDuplicates(IEnumerable<IPersonSelectorOrganization> toNodes)
@@ -170,4 +183,24 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             get { return "Organization"; }
         }
     }
+
+
+    // Create a node sorter that implements the IComparer interface. 
+public class NodeSorter : IComparer
+{
+    // Compare the length of the strings, or the strings 
+    // themselves, if they are the same length. 
+    public int Compare(object x, object y)
+    {
+        TreeNodeAdv tx = x as TreeNodeAdv;
+        TreeNodeAdv ty = y as TreeNodeAdv;
+
+        // Compare the length of the strings, returning the difference. 
+        if (tx.Text.Length != ty.Text.Length)
+            return tx.Text.Length - ty.Text.Length;
+
+        // If they are the same length, call Compare. 
+        return string.Compare(tx.Text, ty.Text);
+    }
+}
 }
