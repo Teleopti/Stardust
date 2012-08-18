@@ -437,30 +437,34 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return shiftList;
     	}
 
-        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd( IList<IShiftProjectionCache> shiftList, IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions )
+		public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd(IList<IShiftProjectionCache> shiftList, IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
         {
             if (schedulingOptions == null) return shiftList;
 
-            if (possibleStartEndCategory == null) return shiftList;
+            if (possibleStartEndCategory == null) 
+				return shiftList;
 
-			if (!schedulingOptions.UseGroupSchedulingCommonStart && !schedulingOptions.UseGroupSchedulingCommonEnd) return shiftList;
+			if (!schedulingOptions.UseGroupSchedulingCommonStart && !schedulingOptions.UseGroupSchedulingCommonEnd) 
+				return shiftList;
 
-             var finalShiftList = new List< IShiftProjectionCache >();
+            var finalShiftList = new List< IShiftProjectionCache >();
+
+			int cnt = shiftList.Count;
 
             if (schedulingOptions.UseGroupSchedulingCommonStart && schedulingOptions.UseGroupSchedulingCommonEnd)
             {
-                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime && possibleStartEndCategory.EndTime  == shift.WorkShiftEndTime ));
-                
+                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime && possibleStartEndCategory.EndTime  == shift.WorkShiftEndTime ));   
             }
             else if (schedulingOptions.UseGroupSchedulingCommonStart)
             {
-
 				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime));
             }
             else if (schedulingOptions.UseGroupSchedulingCommonEnd)
             {
 				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.EndTime == shift.WorkShiftEndTime));
             }
+
+			finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstKeepStartAndEndTime, cnt, finalShiftList.Count));
 
             return finalShiftList;
 
