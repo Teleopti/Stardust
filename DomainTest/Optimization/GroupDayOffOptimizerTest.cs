@@ -22,9 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
         private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private IGroupSchedulingService _groupSchedulingService;
-        readonly IList<IDayOffLegalStateValidator> _dayOffLegalStateValidators = new List<IDayOffLegalStateValidator>();
-        private readonly IList<IPerson> _selectedPersons = new List<IPerson>();
-        private IGroupPersonPreOptimizationChecker _groupPersonPreOptimizationChecker;
         private IGroupMatrixHelper _groupMatrixHelper;
         private IScheduleMatrixPro _activeScheduleMatrix;
         private readonly IList<IScheduleMatrixPro> _allScheduleMatrixes = new List<IScheduleMatrixPro>();
@@ -46,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _lockableBitArrayChangesTracker = _mocks.StrictMock<ILockableBitArrayChangesTracker>();
             _schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
-            _groupPersonPreOptimizationChecker = _mocks.StrictMock<IGroupPersonPreOptimizationChecker>();
             _groupMatrixHelper = _mocks.StrictMock<IGroupMatrixHelper>();
             _activeScheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _scheduleMatrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -68,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsNotNull(_target);
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifySuccessfulExecuteWithOnePerson()
         {
             var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
@@ -302,7 +298,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                //_schedulePartModifyAndRollbackService.ClearModificationCollection();
                 Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
                     .Return(scheduleResultDataExtractor);
                 Expect.Call(_converter.Convert(false, false))
@@ -338,7 +333,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyUnsuccessfulExecuteReschedulingFail()
         {
             var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
@@ -365,7 +360,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                //_schedulePartModifyAndRollbackService.ClearModificationCollection();
                 Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
                     .Return(scheduleResultDataExtractor);
                 Expect.Call(_converter.Convert(false, false))
@@ -414,9 +408,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                       _lockableBitArrayChangesTracker, 
                                       _schedulePartModifyAndRollbackService, 
                                       _groupSchedulingService, 
-                                      _dayOffLegalStateValidators,
-                                      _selectedPersons, 
-                                      _groupPersonPreOptimizationChecker, 
                                       _groupMatrixHelper,
 									  _groupOptimizationValidatorRunner,
 									  _groupPersonBuilderForOptimization);

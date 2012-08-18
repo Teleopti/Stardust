@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IGroupPersonFactory _groupPersonFactory;
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 
-		public GroupPersonBuilderForOptimization(ISchedulingResultStateHolder resultStateHolder, IGroupPersonFactory groupPersonFactory, IGroupPagePerDateHolder groupPagePerDateHolder)
+		public GroupPersonBuilderForOptimization(ISchedulingResultStateHolder resultStateHolder, IGroupPersonFactory groupPersonFactory, 
+			IGroupPagePerDateHolder groupPagePerDateHolder)
 		{
 			_resultStateHolder = resultStateHolder;
 			_groupPersonFactory = groupPersonFactory;
@@ -43,10 +44,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var personsInGroup = curentPersonsInGroup(personGroup);
 			var groupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name);
-
+			
 			return groupPerson;
 		}
 
+		//remove this?
 		public IGroupPerson BuildGroupPersonWithOneMember(IPerson person, DateOnly dateOnly)
 		{
 			var personsInGroup = new List<IPerson>{person};

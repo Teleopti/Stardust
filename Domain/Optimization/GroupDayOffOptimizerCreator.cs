@@ -11,83 +11,55 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixLockableBitArrayConverter converter, 
             IDayOffDecisionMaker decisionMaker, 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
-            IDaysOffPreferences daysOffPreferences, 
-            IList<IDayOffLegalStateValidator> validatorList, 
-            IList<IPerson> allSelectedPersons,
-			bool useSameDaysOff);
+            IDaysOffPreferences daysOffPreferences);
     }
 
     public class GroupDayOffOptimizerCreator : IGroupDayOffOptimizerCreator
     {
-		//private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
         private readonly ILockableBitArrayChangesTracker _changesTracker;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly IGroupSchedulingService _groupSchedulingService;
-        private readonly IGroupPersonPreOptimizationChecker _groupPersonPreOptimizationChecker;
         private readonly IGroupMatrixHelper _groupMatrixHelper;
     	private readonly IGroupOptimizationValidatorRunner _groupOptimizationValidatorRunner;
     	private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
     	public GroupDayOffOptimizerCreator(
-            //IOptimizationPreferences optimizerPreferences, 
             IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
             ILockableBitArrayChangesTracker changesTracker, 
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
             IGroupSchedulingService groupSchedulingService, 
-            IGroupPersonPreOptimizationChecker groupPersonPreOptimizationChecker, 
             IGroupMatrixHelper groupMatrixHelper,
 			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
-            //_optimizerPreferences = optimizerPreferences;
             _scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
             _changesTracker = changesTracker;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _groupSchedulingService = groupSchedulingService;
-            _groupPersonPreOptimizationChecker = groupPersonPreOptimizationChecker;
             _groupMatrixHelper = groupMatrixHelper;
         	_groupOptimizationValidatorRunner = groupOptimizationValidatorRunner;
     		_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
         }
 
-        public IGroupDayOffOptimizer CreateDayOffOptimizer(
-            IScheduleMatrixLockableBitArrayConverter converter, 
-            IDayOffDecisionMaker decisionMaker,
-            IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter, 
-            IDaysOffPreferences daysOffPreferences, 
-            IList<IDayOffLegalStateValidator> validatorList, 
-            IList<IPerson> allSelectedPersons,
-			bool useSameDaysOff)
-        {
-			if (useSameDaysOff)
-				return new GroupDayOffOptimizer(converter,
-									decisionMaker,
-									_scheduleResultDataExtractorProvider,
-									daysOffPreferences,
-									dayOffDecisionMakerExecuter,
-									_changesTracker,
-									_schedulePartModifyAndRollbackService,
-									_groupSchedulingService,
-									validatorList,
-									allSelectedPersons,
-									_groupPersonPreOptimizationChecker,
-									_groupMatrixHelper,
-									_groupOptimizationValidatorRunner,
-									_groupPersonBuilderForOptimization);
+		public IGroupDayOffOptimizer CreateDayOffOptimizer(
+			IScheduleMatrixLockableBitArrayConverter converter,
+			IDayOffDecisionMaker decisionMaker,
+			IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
+			IDaysOffPreferences daysOffPreferences)
+		{
+			return new GroupDayOffOptimizer(converter,
+			                                decisionMaker,
+			                                _scheduleResultDataExtractorProvider,
+			                                daysOffPreferences,
+			                                dayOffDecisionMakerExecuter,
+			                                _changesTracker,
+			                                _schedulePartModifyAndRollbackService,
+			                                _groupSchedulingService,
+			                                _groupMatrixHelper,
+			                                _groupOptimizationValidatorRunner,
+			                                _groupPersonBuilderForOptimization);
 
-            return new GroupDayOffSingleOptimizer(converter,
-                                    decisionMaker,
-                                    _scheduleResultDataExtractorProvider,
-                                    daysOffPreferences,
-                                    dayOffDecisionMakerExecuter,
-                                    _changesTracker,
-                                    _schedulePartModifyAndRollbackService,
-                                    _groupSchedulingService,
-                                    validatorList,
-                                    allSelectedPersons,
-                                    _groupPersonPreOptimizationChecker.GroupPersonBuilder,
-                                    _groupMatrixHelper);
-        }
+		}
     }
 }

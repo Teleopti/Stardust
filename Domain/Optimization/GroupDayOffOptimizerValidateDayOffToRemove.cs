@@ -21,13 +21,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			ValidatorResult result = new ValidatorResult();
 
-			foreach (var dateOnly in dates)
+			if(useSameDaysOff)
 			{
-				List<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro>();
-				matrixList.AddRange(_groupOptimizerFindMatrixesForGroup.Find(person, dateOnly));
-
-				if (useSameDaysOff)
+				foreach (var dateOnly in dates)
 				{
+					List<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro>();
+					matrixList.AddRange(_groupOptimizerFindMatrixesForGroup.Find(person, dateOnly));
+
+
 					bool fail = false;
 					foreach (var matrixPro in matrixList)
 					{
@@ -38,20 +39,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 						}
 
 						if (scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff &&
-						    scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.ContractDayOff)
+							scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.ContractDayOff)
 						{
 							fail = true;
 						}
-					}
 
-					if (fail)
-					{
-						result.Success = true;
-						result.DaysToLock = new DateOnlyPeriod(dateOnly, dateOnly);
-						return result;
+						if (fail)
+						{
+							result.Success = true;
+							result.DaysToLock = new DateOnlyPeriod(dateOnly, dateOnly);
+							return result;
+						}
 					}
 				}
 			}
+			
 			result.Success = true;
 			return result;
 		}

@@ -79,14 +79,16 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class GroupMatrixHelper : IGroupMatrixHelper
     {
         private readonly IGroupMatrixContainerCreator _groupMatrixContainerCreator;
-        private IList<IScheduleMatrixPro> _allMatrixes;
+    	private readonly IGroupPersonConsistentChecker _groupPersonConsistentChecker;
+    	private IList<IScheduleMatrixPro> _allMatrixes;
 
-        public GroupMatrixHelper(IGroupMatrixContainerCreator groupMatrixContainerCreator)
+        public GroupMatrixHelper(IGroupMatrixContainerCreator groupMatrixContainerCreator, IGroupPersonConsistentChecker groupPersonConsistentChecker)
         {
-            _groupMatrixContainerCreator = groupMatrixContainerCreator;
+        	_groupMatrixContainerCreator = groupMatrixContainerCreator;
+        	_groupPersonConsistentChecker = groupPersonConsistentChecker;
         }
 
-        /// <summary>
+    	/// <summary>
         /// Creates the group matrix containers.
         /// </summary>
         /// <param name="allMatrixes">All matrixes.</param>
@@ -176,10 +178,13 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public bool ScheduleRemovedDayOffDays(IList<DateOnly> daysOffToRemove, IGroupPerson groupPerson, IGroupSchedulingService groupSchedulingService, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions)
+        public bool ScheduleRemovedDayOffDays(IList<DateOnly> daysOffToRemove, IGroupPerson groupPerson, IGroupSchedulingService groupSchedulingService, 
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions)
         {
             foreach (var dateOnly in daysOffToRemove)
             {
+				_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson,
+																		   dateOnly, schedulingOptions);
                 if (!groupSchedulingService.ScheduleOneDay(dateOnly, schedulingOptions, groupPerson, _allMatrixes))
                 {
                     schedulePartModifyAndRollbackService.Rollback();

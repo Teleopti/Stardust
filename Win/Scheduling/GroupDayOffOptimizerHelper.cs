@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             using (PerformanceOutput.ForOperation("Optimizing " + matrixListForWorkShiftOptimization.Count + " matrixes"))
             {
                 if (optimizerPreferences.General.OptimizationStepDaysOff)
-                    runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod, selectedPersons);
+                    runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod);
 
 
                 IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void runDayOffOptimization(IOptimizationPreferences optimizerPreferences,
-            IList<IScheduleMatrixOriginalStateContainer> matrixContainerList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
+            IList<IScheduleMatrixOriginalStateContainer> matrixContainerList, DateOnlyPeriod selectedPeriod)
         {
 
             if (_backgroundWorker.CancellationPending)
@@ -197,8 +197,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                             optimizerPreferences,
                             displayList[0],
                             selectedPeriod,
-                            scheduleService,
-                            selectedPersons);
+                            scheduleService);
 
 
             // we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
@@ -215,8 +214,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IOptimizationPreferences optimizerPreferences, 
             IDayOffTemplate dayOffTemplate,
             DateOnlyPeriod selectedPeriod, 
-            IScheduleService scheduleService,
-            IList<IPerson> selectedPersons)
+            IScheduleService scheduleService)
         {
             var rollbackService = _container.Resolve<ISchedulePartModifyAndRollbackService>();
             ISchedulePartModifyAndRollbackService rollbackServiceDayOffConflict =
@@ -236,7 +234,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IGroupDayOffOptimizerContainer optimizerContainer =
                     createOptimizer(matrixContainer, optimizerPreferences.DaysOff, optimizerPreferences,
                     rollbackService, dayOffTemplate, scheduleService, localPeriodValueCalculator,
-					rollbackServiceDayOffConflict, allMatrix, selectedPersons);
+					rollbackServiceDayOffConflict, allMatrix);
                 optimizerContainers.Add(optimizerContainer);
             }
 
@@ -289,8 +287,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IScheduleService scheduleService,
             IPeriodValueCalculator periodValueCalculatorForAllSkills,
             ISchedulePartModifyAndRollbackService rollbackServiceDayOffConflict,
-            IList<IScheduleMatrixPro> allMatrixes,
-            IList<IPerson> selectedPersons)
+            IList<IScheduleMatrixPro> allMatrixes)
         {
             IScheduleMatrixPro scheduleMatrix = originalStateContainer.ScheduleMatrix;
 
@@ -305,9 +302,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             IPerson person = scheduleMatrix.Person;
             // create decisionmakers
             CultureInfo culture = person.PermissionInformation.Culture();
-
-            IList<IDayOffLegalStateValidator> legalStateValidators =
-                OptimizerHelperHelper.CreateLegalStateValidators(person, scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
 
             IEnumerable<IDayOffDecisionMaker> decisionMakers =
                 OptimizerHelperHelper.CreateDecisionMakers(culture, person, scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
@@ -329,14 +323,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             var restrictionChecker = new RestrictionChecker();
             var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
         	IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider = new ScheduleResultDataExtractorProvider(optimizerPreferences.Advanced);
-        	ILockableBitArrayChangesTracker lockableBitArrayChangesTracker =
+        	var lockableBitArrayChangesTracker =
         		_container.Resolve<ILockableBitArrayChangesTracker>();
-        	IGroupSchedulingService groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-        	IGroupPersonPreOptimizationChecker groupPersonPreOptimizationChecker =
-        		_container.Resolve<IGroupPersonPreOptimizationChecker>();
-        	IGroupMatrixHelper groupMatrixHelper = _container.Resolve<IGroupMatrixHelper>();
-			IGroupPersonFactory groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
-        	IGroupPagePerDateHolder groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+			var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
+        	var groupMatrixHelper = _container.Resolve<IGroupMatrixHelper>();
+			var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
+        	var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
         	IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
         		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
 			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrixes);
@@ -348,7 +340,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         	IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator =
         		new GroupDayOffOptimizerCreator(scheduleResultDataExtractorProvider, lockableBitArrayChangesTracker,
-        		                                rollbackService, groupSchedulingService, groupPersonPreOptimizationChecker,
+        		                                rollbackService, groupSchedulingService,
 												groupMatrixHelper, groupOptimizationValidatorRunner, groupPersonBuilderForOptimization);
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
 
@@ -381,8 +373,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                              optimizerPreferences,
                                              scheduleMatrix,
                                              dayOffDecisionMakerExecuter,
-                                             legalStateValidators,
-                                             selectedPersons,
                                              allMatrixes,
                                              groupDayOffOptimizerCreator, 
                                              schedulingOptionsCreator);

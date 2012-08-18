@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleMatrixPro _activeScheduleMatrix;
         private IList<IScheduleMatrixPro> _allScheduleMatrixes;
         private IGroupMatrixContainerCreator _groupMatrixContainerCreator;
+    	private IGroupPersonConsistentChecker _groupPersonConsistentChecker;
 
         [SetUp]
         public void Setup()
@@ -31,8 +32,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _allScheduleMatrixes.Add(_activeScheduleMatrix);
 
             _groupMatrixContainerCreator = _mocks.StrictMock<IGroupMatrixContainerCreator>();
+        	_groupPersonConsistentChecker = _mocks.StrictMock<IGroupPersonConsistentChecker>();
 
-            _target = new GroupMatrixHelper(_groupMatrixContainerCreator);
+			_target = new GroupMatrixHelper(_groupMatrixContainerCreator, _groupPersonConsistentChecker);
 
         }
 

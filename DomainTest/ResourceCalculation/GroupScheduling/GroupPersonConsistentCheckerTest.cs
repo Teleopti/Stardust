@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		private IList<IPerson> _persons;
 		private MockRepository _mocks;
 	    private IVirtualSchedulePeriod _virtualPeriod;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 	    [SetUp]
 		public void Setup()
@@ -40,7 +41,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		    _virtualPeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_persons = new List<IPerson> { _person1, _person2 };
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			_target = new GroupPersonConsistentChecker();
+	    	_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_target = new GroupPersonConsistentChecker(_schedulingResultStateHolder);
+	    	//Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 			_rangeUnscheduled = _mocks.StrictMock<IScheduleRange>();
 			_rangeScheduled = _mocks.StrictMock<IScheduleRange>();
 			_rangeScheduledOther = _mocks.StrictMock<IScheduleRange>();

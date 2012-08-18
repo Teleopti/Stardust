@@ -21,13 +21,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly ILockableBitArrayChangesTracker _changesTracker;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly IGroupSchedulingService _groupSchedulingService;
-        private readonly IList<IDayOffLegalStateValidator> _validatorList;
-        private readonly IList<IPerson> _allSelectedPersons;
-        private readonly IGroupPersonPreOptimizationChecker _groupPersonPreOptimizationChecker;
         private readonly IGroupMatrixHelper _groupMatrixHelper;
     	private readonly IGroupOptimizationValidatorRunner _groupOptimizationValidatorRunner;
     	private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
-
 
     	public GroupDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
             IDayOffDecisionMaker decisionMaker,
@@ -37,9 +33,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             ILockableBitArrayChangesTracker changesTracker,
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
             IGroupSchedulingService groupSchedulingService,
-            IList<IDayOffLegalStateValidator> validatorList,
-            IList<IPerson> allSelectedPersons,
-            IGroupPersonPreOptimizationChecker groupPersonPreOptimizationChecker, 
             IGroupMatrixHelper groupMatrixHelper,
 			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
@@ -52,9 +45,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             _changesTracker = changesTracker;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _groupSchedulingService = groupSchedulingService;
-            _validatorList = validatorList;
-            _allSelectedPersons = allSelectedPersons;
-            _groupPersonPreOptimizationChecker = groupPersonPreOptimizationChecker;
             _groupMatrixHelper = groupMatrixHelper;
     		_groupOptimizationValidatorRunner = groupOptimizationValidatorRunner;
     		_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
@@ -81,8 +71,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			
 
-			IList<GroupMatrixContainer> containers = null;
+			IList<GroupMatrixContainer> containers;
 			IGroupPerson groupPerson;
+			groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, daysOffToRemove[0]);
+			
 			if(schedulingOptions.UseSameDayOffs)
 			{
 				//Will always return true IFairnessValueCalculator not using GroupOptimizerValidateProposedDatesInSameMatrix daysoff
@@ -91,12 +83,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					return false;
 				}
-				groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, daysOffToRemove[0]);
+				
 				containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences);
 			}
 			else
 			{
-				groupPerson = _groupPersonBuilderForOptimization.BuildGroupPersonWithOneMember(matrix.Person, daysOffToRemove[0]);
 				containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, matrix.Person, _daysOffPreferences);
 			}
 			
