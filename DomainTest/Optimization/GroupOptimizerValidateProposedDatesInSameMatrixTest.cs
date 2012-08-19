@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShoulSuccessAndLockIfDateNotFoundInMatrix()
+		public void ShouldSuccessAndLockIfDateNotFoundInMatrix()
 		{
 			using (_mock.Record())
 			{

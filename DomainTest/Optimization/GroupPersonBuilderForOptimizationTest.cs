@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IGroupPage _groupPage;
 		private IPerson _person;
 		private IRootPersonGroup _rootPersonGroup;
-		private IPersonGroup _personGroup;
 		private IChildPersonGroup _childPersonGroup;
 		private IScheduleDictionary _scheduleDictionary;
 
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_groupPage = _mock.StrictMock<IGroupPage>();
 			_person = PersonFactory.CreatePerson();
 			_rootPersonGroup = _mock.StrictMock<IRootPersonGroup>();
-			_personGroup = _mock.StrictMock<IPersonGroup>();
 			_childPersonGroup = _mock.StrictMock<IChildPersonGroup>();
 			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
 		}
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldReturnGroupPersonIfFounInAGroup()
+		public void ShouldReturnGroupPersonIfFoundInAGroup()
 		{
 			using (_mock.Record())
 			{

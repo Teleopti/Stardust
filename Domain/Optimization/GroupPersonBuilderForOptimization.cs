@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IGroupPersonBuilderForOptimization
 	{
 		IGroupPerson BuildGroupPerson(IPerson person, DateOnly dateOnly);
-		IGroupPerson BuildGroupPersonWithOneMember(IPerson person, DateOnly dateOnly);
 	}
 
 	public class GroupPersonBuilderForOptimization : IGroupPersonBuilderForOptimization
@@ -45,16 +44,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var personsInGroup = curentPersonsInGroup(personGroup);
 			var groupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name);
 			
-			return groupPerson;
-		}
-
-		//remove this?
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IGroupPerson BuildGroupPersonWithOneMember(IPerson person, DateOnly dateOnly)
-		{
-			var personsInGroup = new List<IPerson>{person};
-			var groupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, person.Name.ToString(NameOrderOption.LastNameFirstName));
-
 			return groupPerson;
 		}
 
