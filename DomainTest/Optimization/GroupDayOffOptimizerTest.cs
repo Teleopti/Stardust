@@ -259,7 +259,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
                     .Return(daysOffToAdd);
                 Expect.Call(_activeScheduleMatrix.Person)
-                    .Return(activePerson);
+                    .Return(activePerson).Repeat.AtLeastOnce();
+            	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove));
             	Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, false)).IgnoreArguments().Return
             		(false);
             }

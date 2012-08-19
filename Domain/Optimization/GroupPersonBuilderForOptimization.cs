@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		//remove this?
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IGroupPerson BuildGroupPersonWithOneMember(IPerson person, DateOnly dateOnly)
 		{
 			var personsInGroup = new List<IPerson>{person};

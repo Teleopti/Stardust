@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public bool Success { get; set; }
 		public DateOnlyPeriod? DaysToLock { get; set; }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public IList<IScheduleMatrixPro> MatrixList { get; set; }
 
 		public ValidatorResult()

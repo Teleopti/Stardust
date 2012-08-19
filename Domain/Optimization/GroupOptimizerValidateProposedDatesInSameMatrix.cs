@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public ValidatorResult Validate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff)
 		{
 			ValidatorResult result = new ValidatorResult();
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					foreach (var dateOnly in dates)
 					{
-						if (!matrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
+						if (!matrixPro.SelectedPeriod.Contains(dateOnly))
 						{
 							result.Success = true;
 							result.MatrixList = new List<IScheduleMatrixPro>(matrixList);

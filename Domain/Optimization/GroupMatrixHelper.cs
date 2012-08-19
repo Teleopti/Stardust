@@ -127,6 +127,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return containers;
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IList<GroupMatrixContainer> CreateGroupMatrixContainers(
 		   IList<IScheduleMatrixPro> allMatrixes,
 		   IList<DateOnly> daysOffToRemove,

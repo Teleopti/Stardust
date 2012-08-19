@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public ValidatorResult Validate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff)
 		{
 			ValidatorResult result = new ValidatorResult();
@@ -28,23 +29,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 					List<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro>();
 					matrixList.AddRange(_groupOptimizerFindMatrixesForGroup.Find(person, dateOnly));
 
-
-					bool fail = false;
 					foreach (var matrixPro in matrixList)
 					{
 						IScheduleDayPro scheduleDayPro = matrixPro.GetScheduleDayByKey(dateOnly);
 						if (!matrixPro.UnlockedDays.Contains(scheduleDayPro))
 						{
-							fail = true;
+							result.Success = true;
+							result.DaysToLock = new DateOnlyPeriod(dateOnly, dateOnly);
+							return result;
 						}
 
-						if (scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff &&
-							scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.ContractDayOff)
-						{
-							fail = true;
-						}
-
-						if (fail)
+						SchedulePartView significant = scheduleDayPro.DaySchedulePart().SignificantPart();
+						if (significant != SchedulePartView.DayOff &&
+							significant != SchedulePartView.ContractDayOff)
 						{
 							result.Success = true;
 							result.DaysToLock = new DateOnlyPeriod(dateOnly, dateOnly);
