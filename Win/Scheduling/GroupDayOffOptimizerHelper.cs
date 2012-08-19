@@ -209,7 +209,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        private void optimizeDaysOff(
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void optimizeDaysOff(
             IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
             IOptimizationPreferences optimizerPreferences, 
             IDayOffTemplate dayOffTemplate,
