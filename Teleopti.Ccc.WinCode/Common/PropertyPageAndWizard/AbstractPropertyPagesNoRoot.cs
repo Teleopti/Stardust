@@ -94,16 +94,14 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 		}
 
         public IPropertyPageNoRoot<T> PreviousPage()
-		{
-            if (CurrentPage.Depopulate(StateObj))
-			{
-				CurrentPage = FindMyPreviousPage(CurrentPage);
-                CurrentPage.Populate(StateObj);
-			}
-			return CurrentPage;
-		}
+        {
+            CurrentPage = FindMyPreviousPage(CurrentPage);
+            CurrentPage.Populate(StateObj);
 
-        public IPropertyPageNoRoot<T> NextPage()
+            return CurrentPage;
+        }
+
+	    public IPropertyPageNoRoot<T> NextPage()
 		{
 			if (CurrentPage.Depopulate(StateObj))
 			{
