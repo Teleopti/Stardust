@@ -462,7 +462,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TeamSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="Testing\TestRunParallel.App.config" />
+    <None Include="Testing\TestRunParallel.appconfig" />
     <None Include="Testing\TestRunParallel.bat" />
     <None Include="Testing\TestRun.bat" />
     <None Include="TextRequestFromRequests.feature">
