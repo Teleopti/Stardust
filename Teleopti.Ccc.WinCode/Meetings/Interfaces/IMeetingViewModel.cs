@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
 		IActivity Activity { get; set; }
 		ICccTimeZoneInfo TimeZone { get; set; }
 		string Participants { get; }
-		ReadOnlyCollection<ContactPersonViewModel> RequiredParticipants { get; }
-		ReadOnlyCollection<ContactPersonViewModel> OptionalParticipants { get; }
+        IList<ContactPersonViewModel> RequiredParticipants { get; }
+        IList<ContactPersonViewModel> OptionalParticipants { get; }
 		RecurrentMeetingOptionViewModel RecurringOption { get; set; }
 		bool IsRecurring { get; }
 		event PropertyChangedEventHandler PropertyChanged;

@@ -549,6 +549,7 @@
     <Compile Include="Common\SearchPerson.Designer.cs">
       <DependentUpon>SearchPerson.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\TextBoxNameExtender.cs" />
     <Compile Include="Common\VirtualSkill.cs" />
     <Compile Include="Common\VirtualSkillSetting.cs" />
     <Compile Include="DayViewNew.cs" />

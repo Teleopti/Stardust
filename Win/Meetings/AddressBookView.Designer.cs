@@ -29,6 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddressBookView));
             this.ribbonControlForm = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
             this.tableLayoutPanelForm = new System.Windows.Forms.TableLayoutPanel();
@@ -37,6 +38,12 @@
             this.buttonAdvOptional = new Syncfusion.Windows.Forms.ButtonAdv();
             this.buttonAdvRequired = new Syncfusion.Windows.Forms.ButtonAdv();
             this.textBoxExtOptionalParticipant = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
+            this.contextMenuStripEx1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBoxExtRequiredParticipant = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
             this.tableLayoutPanelFilter = new System.Windows.Forms.TableLayoutPanel();
             this.dateTimePickerAdvtDate = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
@@ -53,6 +60,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridControlPeople)).BeginInit();
             this.tableLayoutPanelSelection.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExtOptionalParticipant)).BeginInit();
+            this.contextMenuStripEx1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExtRequiredParticipant)).BeginInit();
             this.tableLayoutPanelFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvtDate)).BeginInit();
@@ -65,8 +73,10 @@
             // 
             this.ribbonControlForm.CaptionFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ribbonControlForm.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlForm.MaximizeToolTip = "Maximize Ribbon";
             this.ribbonControlForm.MenuButtonText = "";
             this.ribbonControlForm.MenuButtonVisible = false;
+            this.ribbonControlForm.MinimizeToolTip = "Minimize Ribbon";
             this.ribbonControlForm.Name = "ribbonControlForm";
             // 
             // ribbonControlForm.OfficeMenu
@@ -157,7 +167,7 @@
             this.tableLayoutPanelSelection.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelSelection.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelSelection.Size = new System.Drawing.Size(548, 62);
-            this.tableLayoutPanelSelection.TabIndex = 9;
+            this.tableLayoutPanelSelection.TabIndex = 1;
             // 
             // buttonAdvOptional
             // 
@@ -165,7 +175,7 @@
             this.buttonAdvOptional.Location = new System.Drawing.Point(3, 36);
             this.buttonAdvOptional.Name = "buttonAdvOptional";
             this.buttonAdvOptional.Size = new System.Drawing.Size(75, 23);
-            this.buttonAdvOptional.TabIndex = 7;
+            this.buttonAdvOptional.TabIndex = 1;
             this.buttonAdvOptional.Text = "xxOptional";
             this.buttonAdvOptional.UseVisualStyle = true;
             this.buttonAdvOptional.Click += new System.EventHandler(this.buttonAdvOptional_Click);
@@ -176,7 +186,7 @@
             this.buttonAdvRequired.Location = new System.Drawing.Point(3, 7);
             this.buttonAdvRequired.Name = "buttonAdvRequired";
             this.buttonAdvRequired.Size = new System.Drawing.Size(75, 23);
-            this.buttonAdvRequired.TabIndex = 6;
+            this.buttonAdvRequired.TabIndex = 0;
             this.buttonAdvRequired.Text = "xxRequired";
             this.buttonAdvRequired.UseVisualStyle = true;
             this.buttonAdvRequired.Click += new System.EventHandler(this.buttonAdvRequired_Click);
@@ -185,6 +195,7 @@
             // 
             this.textBoxExtOptionalParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxExtOptionalParticipant.ContextMenuStrip = this.contextMenuStripEx1;
             this.textBoxExtOptionalParticipant.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxExtOptionalParticipant.Location = new System.Drawing.Point(84, 36);
             this.textBoxExtOptionalParticipant.Multiline = true;
@@ -192,16 +203,67 @@
             this.textBoxExtOptionalParticipant.OverflowIndicatorToolTipText = null;
             this.textBoxExtOptionalParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxExtOptionalParticipant.Size = new System.Drawing.Size(461, 21);
-            this.textBoxExtOptionalParticipant.TabIndex = 5;
-            this.textBoxExtOptionalParticipant.Click += new System.EventHandler(this.textBoxExtOptionalParticipant_Click);
+            this.textBoxExtOptionalParticipant.TabIndex = 3;
             this.textBoxExtOptionalParticipant.TextChanged += new System.EventHandler(this.textBoxExtOptionalParticipant_TextChanged);
             this.textBoxExtOptionalParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtOptionalParticipant_KeyDown);
-            this.textBoxExtOptionalParticipant.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBoxExtOptionalParticipant_Click);
+            this.textBoxExtOptionalParticipant.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBoxExtOptionalParticipant_MouseUp);
+            this.textBoxExtOptionalParticipant.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.textBoxExtOptionalParticipant_MouseUp);
+            // 
+            // contextMenuStripEx1
+            // 
+            this.contextMenuStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cutToolStripMenuItem,
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.deleteToolStripMenuItem});
+            this.contextMenuStripEx1.Name = "contextMenuStripEx1";
+            this.contextMenuStripEx1.Size = new System.Drawing.Size(108, 98);
+            this.contextMenuStripEx1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripEx1_Opening);
+            // 
+            // cutToolStripMenuItem
+            // 
+            this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
+            this.SetShortcut(this.cutToolStripMenuItem, System.Windows.Forms.Keys.None);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.cutToolStripMenuItem.Text = "Cut";
+            this.cutToolStripMenuItem.Click += new System.EventHandler(this.cutToolStripMenuItem_Click);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.SetShortcut(this.copyToolStripMenuItem, System.Windows.Forms.Keys.None);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.SetShortcut(this.pasteToolStripMenuItem, System.Windows.Forms.Keys.None);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.SetShortcut(this.toolStripSeparator1, System.Windows.Forms.Keys.None);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(104, 6);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.SetShortcut(this.deleteToolStripMenuItem, System.Windows.Forms.Keys.None);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // textBoxExtRequiredParticipant
             // 
             this.textBoxExtRequiredParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxExtRequiredParticipant.ContextMenuStrip = this.contextMenuStripEx1;
             this.textBoxExtRequiredParticipant.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxExtRequiredParticipant.Location = new System.Drawing.Point(84, 7);
             this.textBoxExtRequiredParticipant.Multiline = true;
@@ -209,10 +271,11 @@
             this.textBoxExtRequiredParticipant.OverflowIndicatorToolTipText = null;
             this.textBoxExtRequiredParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxExtRequiredParticipant.Size = new System.Drawing.Size(461, 21);
-            this.textBoxExtRequiredParticipant.TabIndex = 3;
+            this.textBoxExtRequiredParticipant.TabIndex = 2;
             this.textBoxExtRequiredParticipant.TextChanged += new System.EventHandler(this.textBoxExtRequiredParticipant_TextChanged);
-            this.textBoxExtRequiredParticipant.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.textBoxExtRequiredParticipant_MouseDoubleClick);
-            this.textBoxExtRequiredParticipant.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBoxExtRequiredParticipant_Click);
+            this.textBoxExtRequiredParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtRequiredParticipant_KeyDown);
+            this.textBoxExtRequiredParticipant.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.textBoxExtRequiredParticipant_MouseUp);
+            this.textBoxExtRequiredParticipant.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBoxExtRequiredParticipant_MouseUp);
             // 
             // tableLayoutPanelFilter
             // 
@@ -328,6 +391,7 @@
             // 
             // textBoxExtFilterCriteria
             // 
+            this.textBoxExtFilterCriteria.ContextMenuStrip = this.contextMenuStripEx1;
             this.textBoxExtFilterCriteria.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxExtFilterCriteria.Location = new System.Drawing.Point(111, 3);
             this.textBoxExtFilterCriteria.Name = "textBoxExtFilterCriteria";
@@ -354,7 +418,7 @@
             this.tableLayoutPanelConfirmButtons.RowCount = 1;
             this.tableLayoutPanelConfirmButtons.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelConfirmButtons.Size = new System.Drawing.Size(166, 33);
-            this.tableLayoutPanelConfirmButtons.TabIndex = 8;
+            this.tableLayoutPanelConfirmButtons.TabIndex = 2;
             // 
             // buttonAdvCancel
             // 
@@ -422,6 +486,7 @@
             this.tableLayoutPanelSelection.ResumeLayout(false);
             this.tableLayoutPanelSelection.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExtOptionalParticipant)).EndInit();
+            this.contextMenuStripEx1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExtRequiredParticipant)).EndInit();
             this.tableLayoutPanelFilter.ResumeLayout(false);
             this.tableLayoutPanelFilter.PerformLayout();
@@ -454,6 +519,12 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvGo;
         private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvtDate;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripEx1;
+        private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }
 
