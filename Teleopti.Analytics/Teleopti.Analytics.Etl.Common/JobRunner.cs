@@ -18,6 +18,8 @@ namespace Teleopti.Analytics.Etl.Common
 			{
 				var startTime = DateTime.Now;
 				var jobResult = job.Run(businessUnit, jobStepsNotToRun, jobResultCollection, counter == 0, counter == businessUnitCollection.Count - 1);
+				if (jobResult == null)
+					return null;
 				jobResult.EndTime = DateTime.Now;
 				jobResult.StartTime = startTime;
 				

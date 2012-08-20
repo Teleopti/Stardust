@@ -141,7 +141,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(
                     _shiftProjectionList,
                     possibleStartEndCategory,
-                    _schedulingOptions);
+                    _schedulingOptions,
+					finderResult);
 
             if (_schedulingOptions.UseGroupSchedulingCommonCategory)
             {

@@ -4596,7 +4596,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	            if (_totalScheduled <= toolStripProgressBar1.Maximum) toolStripProgressBar1.Value = _totalScheduled;
 	        }
 
-            string statusText = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingProgress, _totalScheduled, 0);
+            string statusText = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingProgress, _totalScheduled, toolStripProgressBar1.Maximum);
             toolStripStatusLabelStatus.Text = statusText;
             _grid.Invalidate();
 			refreshSummarySkillIfActive();

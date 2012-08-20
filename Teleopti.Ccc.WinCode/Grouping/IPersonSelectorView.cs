@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
     {
         void ResetTabs(TabPageAdv[] tabs, IExecutableCommand mainTabLoadCommand);
         DateOnly SelectedDate { get; }
-        void ResetTreeView(TreeNodeAdv[] treeNodeAdv);
+        void ResetTreeView(object treeNodeAdv);
         IList<TreeNodeAdv> SelectedNodes { get; }
         IList<TreeNodeAdv> AllNodes { get; }
         TabPageAdv SelectedTab { get; }

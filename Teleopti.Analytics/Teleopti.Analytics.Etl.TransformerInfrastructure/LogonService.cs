@@ -40,7 +40,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         /// </summary>
         /// <param name="selectedDataSource">The selected data source.</param>
         /// <param name="businessUnit">The bu.</param>
-        internal void LogOn(DataSourceContainer selectedDataSource, IBusinessUnit businessUnit)
+        /// <returns>False if any form of license exception, otherwise true.</returns>
+		internal bool LogOn(DataSourceContainer selectedDataSource, IBusinessUnit businessUnit)
         {
             selectedDataSource.AvailableBusinessUnitProvider.LoadHierarchyInformation(businessUnit);
 
@@ -49,7 +50,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             var unitOfWorkFactory = selectedDataSource.DataSource.Application;
             var licenseVerifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(unitOfWorkFactory));
             var licenseService = licenseVerifier.LoadAndVerifyLicense();
-            if (licenseService == null) return;
+            if (licenseService == null) 
+				return false;
 
             LicenseProvider.ProvideLicenseActivator(licenseService);
 
@@ -66,6 +68,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			{
                 roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, uow, new PersonRepository(uow));
 			}
+        	return true;
         }
 
         internal void  LogOff()

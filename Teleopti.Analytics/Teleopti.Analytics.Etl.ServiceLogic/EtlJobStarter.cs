@@ -87,7 +87,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 																		configHandler.BaseConfiguration.TimeZoneCode,
 																		configHandler.BaseConfiguration.IntervalLength.Value, _cube,
 																		_pmInstallation);
-					RunJob(jobToRun, scheduleToRun.ScheduleId, rep, _jobHelper.BusinessUnitCollection);
+					isStopping = !RunJob(jobToRun, scheduleToRun.ScheduleId, rep, _jobHelper.BusinessUnitCollection);
 				}
 			}
 			catch (Exception ex)
@@ -101,7 +101,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			}
 		}
 
-		private void RunJob(IJob jobToRun, int scheduleId, IJobLogRepository repository, IList<IBusinessUnit> businessUnitCollection)
+		private bool RunJob(IJob jobToRun, int scheduleId, IJobLogRepository repository, IList<IBusinessUnit> businessUnitCollection)
 		{
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
@@ -116,16 +116,35 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 					IJobRunner jobRunner = new JobRunner();
 					IList<IBusinessUnit> businessUnits = businessUnitCollection;
 					IList<IJobResult> jobResults = jobRunner.Run(jobToRun, businessUnits, jobResultCollection, jobStepsNotToRun);
-					jobRunner.SaveResult(jobResults, repository, scheduleId);	
+					if (jobResults == null)
+					{
+						// No license applied - stop service
+						LogInvalidLicense();
+						NeedToStopService(this, null);
+						return false;
+					}
+					jobRunner.SaveResult(jobResults, repository, scheduleId);
 				}
 			}
 			else
 			{
-				Log.WarnFormat(CultureInfo.InvariantCulture,
+				LogConflictingEtlRun(jobToRun, etlRunningInformation);
+			}
+
+			return true;
+		}
+
+		private static void LogConflictingEtlRun(IJob jobToRun, IEtlRunningInformation etlRunningInformation)
+		{
+			Log.WarnFormat(CultureInfo.InvariantCulture,
 							   "Scheduled job '{0}' could not start due to another job is running at the moment. (ServerName: {1}; JobName: {2}; StartTime: {3}; IsStartByService: {4})",
 							   jobToRun.Name, etlRunningInformation.ComputerName, etlRunningInformation.JobName,
 							   etlRunningInformation.StartTime, etlRunningInformation.IsStartedByService);
-			}
+		}
+
+		private static void LogInvalidLicense()
+		{
+			Log.Warn("ETL Service was stopped due to invalid license. Please apply a license in the main client and then start the service again.");
 		}
 
 		private static void LogInvalidConfiguration(ConfigurationHandler configHandler)

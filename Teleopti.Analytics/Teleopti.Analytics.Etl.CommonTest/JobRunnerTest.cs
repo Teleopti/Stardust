@@ -117,5 +117,19 @@ namespace Teleopti.Analytics.Etl.CommonTest
 
 			repository.VerifyAllExpectations();
 		}
+
+		[Test]
+		public void ShouldReturnNullWhenJobRunReturnsNull()
+		{
+			var job = MockRepository.GenerateMock<IJob>();
+			IBusinessUnit businessUnit = new BusinessUnit("myBU");
+
+			job.Stub(x => x.Run(businessUnit, new List<IJobStep>(), new List<IJobResult>(), true, true)).Return(null);
+
+			_target = new JobRunner();
+			var expectedJobResultCollection = _target.Run(job, new List<IBusinessUnit> { businessUnit }, new List<IJobResult>(), new List<IJobStep>());
+
+			expectedJobResultCollection.Should().Be.Null();
+		}
 	}
 }

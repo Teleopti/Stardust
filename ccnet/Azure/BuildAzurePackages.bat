@@ -18,7 +18,6 @@ ECHO AZUREDIR is: %AZUREDIR%
 
 SET buildServerRoot=%DriveLetter%\installation
 SET OUTDIR=%buildServerRoot%\AzurePackage
-SET DEPLOYSHARE=%buildServerRoot%\PreviousBuilds
 
 SET AzureWork=%AZUREDIR%\Temp
 SET ConfigPath=%AzureWork%
@@ -52,6 +51,7 @@ Echo Getting Previous build ...
 for /f "tokens=1,2 delims=," %%g in (contentMapping.txt) do ECHO ROBOCOPY "%ContentSource%\%%g" "%ContentDest%\%%h" /mir /XF *.pdb*
 for /f "tokens=1,2 delims=," %%g in (contentMapping.txt) do ROBOCOPY "%ContentSource%\%%g" "%ContentDest%\%%h" /mir /XF *.pdb*
 Echo Getting Previous build. Done
+ECHO copy done
 
 ::Get ReportViewer
 XCOPY /d /y "%Dependencies%\ReportViewer2010.exe" "%ContentDest%\TeleoptiCCC\bin"
