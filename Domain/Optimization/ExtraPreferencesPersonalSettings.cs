@@ -18,6 +18,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool _useSameDaysOffForTeams;
        	private double _fairnessValue;
 
+	    private bool _useGroupSchedulingCommonStart;
+	    private bool _useGroupSchedulingCommonEnd;
+	    private bool _useGroupSchedulingCommonCategory;
+
 		public ExtraPreferencesPersonalSettings()
 		{
 			SetDefaultValues();
@@ -43,6 +47,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
            
 			target.FairnessValue = _fairnessValue;
+
+		    target.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
+		    target.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
+		    target.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
 		}
 
 		public void MapFrom(IExtraPreferences source)
@@ -57,8 +65,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_useTeams = source.UseTeams;
 			_useSameDaysOffForTeams = source.KeepSameDaysOffInTeam;
 
-            
-			_fairnessValue = source.FairnessValue;
+            _fairnessValue = source.FairnessValue;
+
+		    _useGroupSchedulingCommonCategory = source.UseGroupSchedulingCommonCategory;
+		    _useGroupSchedulingCommonEnd = source.UseGroupSchedulingCommonEnd;
+		    _useGroupSchedulingCommonStart = source.UseGroupSchedulingCommonStart;
 		}
 
 		/// <summary>
