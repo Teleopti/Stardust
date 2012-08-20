@@ -389,9 +389,9 @@ html.full-height #push{
 .icon.copy{background-position: 0px -168px;}
 .icon.paste{background-position: 0px -197px;}
 .icon.doublearrow-white{background-position: 13px -227px; height: 13px; width: 39px;} /* Only ment to be used in left-column in calendar-view */
-.icon.leftarrow{background-position: 0 -246px; width: 9px;}
-.icon.rightarrow{background-position: 0 -266px; width: 9px;}
-.icon.doublearrow-blue{background-position: 0 -286px; width: 9px;}
+.icon.leftarrow{background-position: 0 -246px; width: 9px; display: block}
+.icon.rightarrow{background-position: 0 -266px; width: 9px; display: block}
+.icon.doublearrow-blue{background-position: 0 -286px; width: 9px; display: block}
 .icon.edit{background-position: 0 -308px; height: 15px; margin-top: -3px; margin-bottom: 3px;}
 .icon.toolbar-edit{background-position: 0 -363px; width: 21px;}
 .icon.toolbar-edit[disabled]{background-position: 0 -425px;}
