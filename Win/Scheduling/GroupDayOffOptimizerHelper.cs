@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                                           optimizerPreferences.Extra.GroupPageOnTeam);
 
             OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container);
-            IScheduleTagSetter tagSetter = _container.Resolve<IScheduleTagSetter>();
+            var tagSetter = _container.Resolve<IScheduleTagSetter>();
             tagSetter.ChangeTagToSet(optimizerPreferences.General.ScheduleTag);
 
             using (PerformanceOutput.ForOperation("Optimizing " + matrixListForWorkShiftOptimization.Count + " matrixes"))
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
 
-        private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IList<IScheduleMatrixPro> matrixList)
+        private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
         {
             IScheduleDayEquator scheduleDayEquator = new ScheduleDayEquator();
             IList<IScheduleMatrixOriginalStateContainer> result =
@@ -242,8 +242,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             IScheduleResultDataExtractor allSkillsDataExtractor =
                 OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizerPreferences.Advanced, selectedPeriod, _stateHolder);
             IPeriodValueCalculator periodValueCalculator = OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
-			IGroupPersonFactory groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
-			IGroupPagePerDateHolder groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+			var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
+			var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
         		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
 			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);

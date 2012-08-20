@@ -926,8 +926,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonStart = true };
 
             var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
-                                                                                                   possibleStartEndCategory,
-                                                                                                   schedulingOptions);
+                                                                          possibleStartEndCategory,
+                                                                          schedulingOptions,
+																		  _finderResult);
 
             retShifts.Count.Should().Be.EqualTo(2);
             _mocks.VerifyAll();
@@ -948,8 +949,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true };
 
             var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
-                                                                                                   possibleStartEndCategory,
-                                                                                                   schedulingOptions);
+                                                                          possibleStartEndCategory,
+                                                                          schedulingOptions,
+																		  _finderResult);
 
             retShifts.Count.Should().Be.EqualTo(1);
             _mocks.VerifyAll();
@@ -974,13 +976,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true, UseGroupSchedulingCommonStart = true };
 
             var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
-                                                                                                   possibleStartEndCategory,
-                                                                                                   schedulingOptions);
+                                                                          possibleStartEndCategory,
+                                                                          schedulingOptions,
+																		  _finderResult);
 
             retShifts.Count.Should().Be.EqualTo(1);
             _mocks.VerifyAll();
         }
-
-
     }
 }

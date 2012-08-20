@@ -214,7 +214,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
 
             Expect.Call(target.CreateNewSateObj()).Return(obj).Repeat.Once();
 
-            Expect.Call(pages[1].Depopulate(obj)).Return(true).Repeat.Once();
             pages[0].Populate(obj);
 
             mocks.ReplayAll();

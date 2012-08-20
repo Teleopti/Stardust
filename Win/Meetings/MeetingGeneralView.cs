@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Win.Meetings
     {
     	private readonly INotifyComposerMeetingChanged _composer;
     	private MeetingGeneralPresenter _presenter;
+        private LastSelectionWas _lastSelectionWas;
 
         public event EventHandler ParticipantSelectionRequested;
 		
@@ -94,9 +95,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void meetingPersonTextBoxParticipant_TextChanged(object sender, EventArgs e)
         {
-            int currentPos = textBoxExtParticipant.SelectionStart;
             _presenter.ParseParticipants(textBoxExtParticipant.Text);
-            textBoxExtParticipant.Select(Math.Min(currentPos,textBoxExtParticipant.Text.Length),0);
         }
 
         public void SetOrganizer(string organizer)
@@ -203,26 +202,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			get { return _presenter; }
     	}
 
-    	private static bool IsValidKey(Keys key, Keys modifiers)
-        {
-            return (key == Keys.Down ||
-                    key == Keys.Up ||
-                    key == Keys.Left ||
-                    key == Keys.Right ||
-                    key == Keys.Return ||
-                    key == Keys.Back ||
-                    key == Keys.Delete ||
-                    key == Keys.Home ||
-                    key == Keys.End ||
-                    key == Keys.Tab ||
-                    modifiers == Keys.Control);
-        }
-
-        private void textBoxExtParticipant_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (!IsValidKey(e.KeyCode, e.Modifiers))
-                e.SuppressKeyPress = true;
-        }
 		public string GetStartTimeText
 		{
 			get { return outlookTimePickerStartTime.Text; }
@@ -285,37 +264,15 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void textBoxExtParticipant_MouseUp(object sender, MouseEventArgs e)
         {
+            TextBoxNameExtender.GetSelected(textBoxExtParticipant);
+        }
 
-            var index = textBoxExtParticipant.SelectionStart;
-            var selectedTextList =
-                textBoxExtParticipant.SelectedText.Split(new[] { MeetingViewModel.ParticipantSeparator },
-                                                                 StringSplitOptions.None);
-            var participantsFromText = textBoxExtParticipant.Text.Split(new[] { MeetingViewModel.ParticipantSeparator },
-                                                 StringSplitOptions.None);
-
-            var counter = 0;
-            var selectedText = "";
-            var s = "";
-            for (var i = 0; i < participantsFromText.Length; i++)
-            {
-                if (index < counter) break;
-                if (index == textBoxExtParticipant.Text.Length) return;
-
-                s = participantsFromText[i];
-                selectedText = s;
-
-                if (i == 0)
-                    counter += s.Length + 1;
-                else
-                    counter += s.Length + 2;
-
-                if (selectedTextList.Length <= 1) continue;
-                for (var j = 1; j < selectedTextList.Length; j++)
-                    selectedText += "; " + participantsFromText[i + j];
-            }
-
-            var start = counter - s.Length - 1 > 0 ? counter - s.Length - 1 : 0;
-            textBoxExtParticipant.Select(start, selectedText.Length);
+        private void textBoxExtParticipant_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers != Keys.Control)
+                _lastSelectionWas = TextBoxNameExtender.KeyDown(textBoxExtParticipant, e, _lastSelectionWas);
+            
+            e.SuppressKeyPress = true;
         }
     }
 }

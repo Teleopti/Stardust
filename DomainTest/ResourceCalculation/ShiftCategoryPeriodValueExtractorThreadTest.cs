@@ -91,7 +91,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(_shiftProjectionList,
                                                                                               _possibleStartEndCategory,
-                                                                                              _schedulingOptions)).
+                                                                                              _schedulingOptions,
+																							  finderResult)).
                     IgnoreArguments().Return(_shiftProjectionList).Repeat.AtLeastOnce();
             }
 
