@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
+using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer.SMS;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -12,7 +13,7 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 {
-	[TestFixture]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), TestFixture]
 	public class SmsReadModelHandlerTest
 	{
 		private MockRepository _mocks;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			person.SetId(Guid.NewGuid());
 
 			var period = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddDays(2));
-			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.Date.AddDays(1)));
+			//var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.Date.AddDays(1)));
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			});
 			_mocks.VerifyAll();
 		}
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldCheckSignificantChangeAndSendIfTrue()
 		{
 			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);

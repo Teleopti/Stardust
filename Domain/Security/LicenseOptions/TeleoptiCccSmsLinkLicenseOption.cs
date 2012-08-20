@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
 namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public class TeleoptiCccSmsLinkLicenseOption : LicenseOption
 	{
 		public TeleoptiCccSmsLinkLicenseOption()
