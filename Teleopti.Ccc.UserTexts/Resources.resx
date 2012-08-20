@@ -10965,4 +10965,10 @@ These options are activated:
     <value>File export finished</value>
     <comment>File export finished</comment>
   </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>Scheduling Options</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>Please select atleast one option from Team Scheduling.</value>
+  </data>
 </root>
