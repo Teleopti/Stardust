@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Meetings
+﻿using System;
+
+namespace Teleopti.Ccc.Win.Meetings
 {
     partial class MeetingGeneralView
     {
@@ -484,7 +486,8 @@
             this.textBoxExtParticipant.TabIndex = 2;
             this.textBoxExtParticipant.TextChanged += new System.EventHandler(this.meetingPersonTextBoxParticipant_TextChanged);
             this.textBoxExtParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtParticipant_KeyDown);
-            this.textBoxExtParticipant.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBoxExtParticipant_MouseUp);
+            this.textBoxExtParticipant.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(textBoxExtParticipant_MouseUp);
+            this.textBoxExtParticipant.MouseUp +=new System.Windows.Forms.MouseEventHandler(textBoxExtParticipant_MouseUp);
             // 
             // MeetingGeneralView
             // 

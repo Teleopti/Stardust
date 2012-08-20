@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
@@ -36,7 +35,8 @@ namespace Teleopti.Ccc.Win.Meetings
             new List<SFGridColumnBase<ContactPersonViewModel>>();
 
         private readonly AddressBookPresenter _presenter;
-        private bool _IsRequired = true;
+        private bool _isRequired = true;
+        private LastSelectionWas _lastSelectionWas;
 
         public event EventHandler<AddressBookParticipantSelectionEventArgs> ParticipantsSelected;
 
@@ -344,13 +344,11 @@ namespace Teleopti.Ccc.Win.Meetings
         public void SetRequiredParticipants(string requiredParticipants)
         {
             textBoxExtRequiredParticipant.Text = requiredParticipants;
-            textBoxExtRequiredParticipant.SelectionStart = textBoxExtRequiredParticipant.Text.Length;
         }
 
         public void SetOptionalParticipants(string optionalParticipants)
         {
             textBoxExtOptionalParticipant.Text = optionalParticipants;
-            textBoxExtOptionalParticipant.SelectionStart = textBoxExtOptionalParticipant.Text.Length;
         }
 
         public void PerformSearch()
@@ -361,20 +359,16 @@ namespace Teleopti.Ccc.Win.Meetings
         private void textBoxExtRequiredParticipant_TextChanged(object sender, EventArgs e)
         {
             _presenter.ParseRequiredParticipants(textBoxExtRequiredParticipant.Text);
-            int caretPositon = textBoxExtRequiredParticipant.SelectionStart;
-            textBoxExtRequiredParticipant.Select(Math.Min(textBoxExtRequiredParticipant.Text.Length, caretPositon), 0);
         }
 
         private void textBoxExtOptionalParticipant_TextChanged(object sender, EventArgs e)
         {
             _presenter.ParseOptionalParticipants(textBoxExtOptionalParticipant.Text);
-            int caretPositon = textBoxExtRequiredParticipant.SelectionStart;
-            textBoxExtRequiredParticipant.Select(Math.Min(textBoxExtRequiredParticipant.Text.Length, caretPositon), 0);
         }
 
         private void gridControlPeople_CellDoubleClick(object sender, GridCellClickEventArgs e)
         {
-            if (_IsRequired)
+            if (_isRequired)
             {
                 _presenter.AddRequiredParticipants(_gridHelper.FindSelectedItems());
 
@@ -385,101 +379,56 @@ namespace Teleopti.Ccc.Win.Meetings
             }
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        private void textBoxExtRequiredParticipant_MouseUp(object sender, EventArgs e)
         {
-            const int WM_KEYDOWN = 0x100;
-            const int WM_SYSKEYDOWN = 0x104;
-
-            if ((msg.Msg == WM_KEYDOWN) || (msg.Msg == WM_SYSKEYDOWN))
-            {
-                switch (keyData)
-                {
-                    case Keys.Control | Keys.V:
-                        var clipboardCopy = Clipboard.GetData(DataFormats.Text).ToString();
-                        if (clipboardCopy.Substring(0, 2) != "; ")
-                        {
-                            clipboardCopy = clipboardCopy.Insert(0, "; ");
-                            Clipboard.SetData(DataFormats.Text, clipboardCopy);
-                        }
-                        break;
-                }
-            }
-            return base.ProcessCmdKey(ref msg, keyData);
+            _isRequired = true;
+            TextBoxNameExtender.GetSelected(textBoxExtRequiredParticipant);   
         }
 
-        private static bool IsValidKey(Keys key, Keys modifiers)
+        private void textBoxExtOptionalParticipant_MouseUp(object sender, EventArgs e)
         {
-            return (key == Keys.Down ||
-                    key == Keys.Up ||
-                    key == Keys.Left ||
-                    key == Keys.Right ||
-                    key == Keys.Return ||
-                    key == Keys.Back ||
-                    key == Keys.Delete ||
-                    key == Keys.Home ||
-                    key == Keys.End ||
-                    key == Keys.Tab ||
-                    modifiers == Keys.Control);
+            _isRequired = false;
+            TextBoxNameExtender.GetSelected(textBoxExtOptionalParticipant);
+        }
+        
+        private void textBoxExtRequiredParticipant_KeyDown(object sender, KeyEventArgs e)
+        {
+            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase) ActiveControl, e, _lastSelectionWas);
+            e.SuppressKeyPress = true;
         }
 
         private void textBoxExtOptionalParticipant_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!IsValidKey(e.KeyCode, e.Modifiers))
-                e.SuppressKeyPress = true;
+            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase)ActiveControl, e, _lastSelectionWas);
+            e.SuppressKeyPress = true;
         }
 
-        private void textBoxExtRequiredParticipant_Click(object sender, EventArgs e)
+        private void contextMenuStripEx1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            _IsRequired = true;
-            GetSelected(textBoxExtRequiredParticipant);   
+            if (ActiveControl.GetType() == typeof(TextBoxBase))
+                TextBoxNameExtender.UpdateContextMenu((TextBoxBase)ActiveControl, contextMenuStripEx1);
+            else
+                contextMenuStripEx1.Close();
         }
 
-        private void textBoxExtOptionalParticipant_Click(object sender, EventArgs e)
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _IsRequired = false;
-            GetSelected(textBoxExtOptionalParticipant);
+            TextBoxNameExtender.CutItem((TextBoxBase)ActiveControl);
         }
 
-        private void textBoxExtRequiredParticipant_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            textBoxExtRequiredParticipant_Click(this, EventArgs.Empty);
+            TextBoxNameExtender.CopyItem((TextBoxBase)ActiveControl);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        private void GetSelected(TextBoxBase textBox)
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var index = textBox.SelectionStart;
-            var selectedTextList =
-                textBox.SelectedText.Split(new[] { MeetingViewModel.ParticipantSeparator },
-                                                                 StringSplitOptions.None);
-            var participantsFromText = textBox.Text.Split(new[] { MeetingViewModel.ParticipantSeparator },
-                                                 StringSplitOptions.None);
-
-            var counter = 0;
-            var selectedText = "";
-            var s = "";
-            for (var i = 0; i < participantsFromText.Length; i++)
-            {
-                if (index < counter) break;
-                if (index == textBox.Text.Length) return;
-
-                s = participantsFromText[i];
-                selectedText = s;
-
-                if (i == 0)
-                    counter += s.Length + 1;
-                else
-                    counter += s.Length + 2;
-
-                if (selectedTextList.Count() <= 1) continue;
-                for (var j = 1; j < selectedTextList.Count(); j++)
-                    selectedText += "; " + participantsFromText[i + j];
-            }
-
-            var start = counter - s.Length - 1 > 0 ? counter - s.Length - 1 : 0;
-            textBox.Select(start, selectedText.Length);
+            TextBoxNameExtender.PasteItem((TextBoxBase)ActiveControl);
         }
 
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TextBoxNameExtender.DeleteItem((TextBoxBase)ActiveControl);
+        }
     }
 }

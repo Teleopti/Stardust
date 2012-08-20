@@ -182,17 +182,19 @@ namespace Teleopti.Interfaces.Domain
     	                                                    IWorkShiftFinderResult finderResult);
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="shiftList"></param>
-        /// <param name="possibleStartEndCategory"></param>
-        /// <param name="schedulingOptions"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Filters the on group scheduling common start end.
+		/// </summary>
+		/// <param name="shiftList">The shift list.</param>
+		/// <param name="possibleStartEndCategory">The possible start end category.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <param name="finderResult">The finder result.</param>
+		/// <returns></returns>
         IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd(IList<IShiftProjectionCache> shiftList,
                                                                            IPossibleStartEndCategory
-                                                                               possibleStartEndCategory,
-                                                                           ISchedulingOptions schedulingOptions);
+                                                                           possibleStartEndCategory,
+                                                                           ISchedulingOptions schedulingOptions,
+																		   IWorkShiftFinderResult finderResult);
         
 
     }

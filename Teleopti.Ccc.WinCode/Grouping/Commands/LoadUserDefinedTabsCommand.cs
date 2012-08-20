@@ -125,21 +125,13 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                 if (personSelectorUserDefined.Show && !personSelectorUserDefined.PersonId.Equals(new Guid()))
                 {
                     //always show persons in these grouping
-                    //if (_showPersons)
-                    //{
                         var personNode = new TreeNodeAdv(_commonAgentNameSettings.BuildCommonNameDescription(personSelectorUserDefined))
                         {
                             Tag = new List<Guid> { personSelectorUserDefined.PersonId },
                             LeftImageIndices = new[] { 3 }
                         };
                         
-                        //if (personSelectorUserDefined.ParentId == null)
-                        //{
-                        //    notGroupedNode.Nodes.Add(personNode);
-                        //    ((IList<Guid>)root.Tag).Add(personSelectorUserDefined.PersonId);
-                        //}
-                        //else
-                        //{
+                       
                             currNode.Nodes.Add(personNode);
                             if (_personSelectorView.PreselectedPersonIds.Contains(personSelectorUserDefined.PersonId))
                             {
@@ -147,17 +139,25 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 								if (_personSelectorView.ExpandSelected)
 									currNode.Expanded = true;
                             }
-                        //}
-                        
-                    //}
+
                     if (personSelectorUserDefined.ParentId != null)
                         ((IList<Guid>)currNode.Tag).Add(personSelectorUserDefined.PersonId);
                 }
                     
             }
-            //if (notGroupedNode.Nodes.Count == 0)
-            //    root.Nodes.Remove(notGroupedNode);
-
+           
+            foreach (TreeNodeAdv nodeLevel1 in nodes)
+            {
+                nodeLevel1.Nodes.Sort();
+                foreach (TreeNodeAdv nodeLevel2 in nodeLevel1.Nodes)
+                {
+                    nodeLevel2.Nodes.Sort();
+                    foreach (TreeNodeAdv nodeLevel3 in nodeLevel2.Nodes)
+                    {
+                        nodeLevel3.Nodes.Sort();
+                    }
+                }
+            }
             _personSelectorView.ResetTreeView(nodes.ToArray());
         }
 

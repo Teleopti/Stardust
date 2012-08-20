@@ -150,8 +150,20 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             if (usersNode.Nodes.Count == 0)
                 root.Nodes.Remove(usersNode);
 
-            
+            foreach (TreeNodeAdv nodeLevel1 in nodes)
+            {
+                nodeLevel1.Nodes.Sort();
+                foreach (TreeNodeAdv nodeLevel2 in nodeLevel1.Nodes)
+                {
+                    nodeLevel2.Nodes.Sort();
+                    foreach (TreeNodeAdv nodeLevel3 in nodeLevel2.Nodes)
+                    {
+                        nodeLevel3.Nodes.Sort();
+                    }
+                }
+            }
             _view.ResetTreeView(nodes.ToArray());
+
         }
 
     	private static IList<IPersonSelectorOrganization> removeDuplicates(IEnumerable<IPersonSelectorOrganization> toNodes)
@@ -170,4 +182,5 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             get { return "Organization"; }
         }
     }
+
 }

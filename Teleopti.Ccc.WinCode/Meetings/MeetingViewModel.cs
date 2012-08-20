@@ -232,14 +232,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 return String.Join(ParticipantSeparator, _requiredParticipants.Concat(_optionalParticipants).Select(p => p.FullName).ToArray()); }
         }
 
-        public ReadOnlyCollection<ContactPersonViewModel> RequiredParticipants
+        public IList<ContactPersonViewModel> RequiredParticipants
         {
-            get { return new ReadOnlyCollection<ContactPersonViewModel>(_requiredParticipants); }
+            get { return new List<ContactPersonViewModel>(_requiredParticipants); }
         }
 
-        public ReadOnlyCollection<ContactPersonViewModel> OptionalParticipants
+        public IList<ContactPersonViewModel> OptionalParticipants
         {
-            get { return new ReadOnlyCollection<ContactPersonViewModel>(_optionalParticipants); }
+            get { return new List<ContactPersonViewModel>(_optionalParticipants); }
         }
 
         public RecurrentMeetingOptionViewModel RecurringOption
