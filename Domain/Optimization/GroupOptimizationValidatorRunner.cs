@@ -15,14 +15,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IGroupDayOffOptimizerValidateDayOffToRemove _groupDayOffOptimizerValidateDayOffToRemove;
 		private readonly IGroupDayOffOptimizerValidateDayOffToAdd _groupDayOffOptimizerValidateDayOffToAdd;
 		private readonly IGroupOptimizerValidateProposedDatesInSameMatrix _groupOptimizerValidateProposedDatesInSameMatrix;
+		private readonly IGroupOptimizerValidateProposedDatesInSameGroup _groupOptimizerValidateProposedDatesInSameGroup;
 
 		public GroupOptimizationValidatorRunner(IGroupDayOffOptimizerValidateDayOffToRemove groupDayOffOptimizerValidateDayOffToRemove, 
 			IGroupDayOffOptimizerValidateDayOffToAdd groupDayOffOptimizerValidateDayOffToAdd,
-			IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix)
+			IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix,
+			IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup)
 		{
 			_groupDayOffOptimizerValidateDayOffToRemove = groupDayOffOptimizerValidateDayOffToRemove;
 			_groupDayOffOptimizerValidateDayOffToAdd = groupDayOffOptimizerValidateDayOffToAdd;
 			_groupOptimizerValidateProposedDatesInSameMatrix = groupOptimizerValidateProposedDatesInSameMatrix;
+			_groupOptimizerValidateProposedDatesInSameGroup = groupOptimizerValidateProposedDatesInSameGroup;
 		}
 
 		private delegate ValidatorResult ValidateDaysOffMoveDelegate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
@@ -40,6 +43,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			runnableList.Add(toRun, result);
 
 			toRun = _groupOptimizerValidateProposedDatesInSameMatrix.Validate;
+			result = toRun.BeginInvoke(person, daysOffToAdd, useSameDaysOff, null, null);
+			runnableList.Add(toRun, result);
+
+			toRun = _groupOptimizerValidateProposedDatesInSameGroup.Validate;
 			result = toRun.BeginInvoke(person, daysOffToAdd, useSameDaysOff, null, null);
 			runnableList.Add(toRun, result);
 

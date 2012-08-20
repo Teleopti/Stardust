@@ -234,6 +234,7 @@
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemove.cs" />
     <Compile Include="Optimization\GroupOptimizationValidatorRunner.cs" />
     <Compile Include="Optimization\GroupOptimizerFindMatrixesForGroup.cs" />
+    <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroup.cs" />
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameMatrix.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimization.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
