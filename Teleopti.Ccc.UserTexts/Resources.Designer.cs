@@ -19063,7 +19063,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select atleast one option from Team Optimization. .
+        ///   Looks up a localized string similar to Please select at least one option from Team Optimization. .
         /// </summary>
         public static string SelectAtleastOneOptimizationOption {
             get {

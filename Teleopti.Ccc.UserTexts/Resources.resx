@@ -10970,7 +10970,7 @@ These options are activated:
     <comment>Name of the message box</comment>
   </data>
   <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
-    <value>Please select atleast one option from Team Optimization. </value>
+    <value>Please select at least one option from Team Optimization. </value>
     <comment>The Team Optimization options</comment>
   </data>
 </root>
