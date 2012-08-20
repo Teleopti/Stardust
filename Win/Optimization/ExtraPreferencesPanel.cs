@@ -132,8 +132,6 @@ namespace Teleopti.Ccc.Win.Optimization
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
 
 
-            //checkDefaultValuesForTeam();
-
         }
 
         private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
@@ -149,22 +147,21 @@ namespace Teleopti.Ccc.Win.Optimization
             radioButtonSchedulePeriod.Enabled = checkBoxBlock.Checked;
         }
 
-        //private void checkDefaultValuesForTeam()
-        //{
-        //    if (checkBoxTeams.Checked)
-        //        //check if none of the options are not checked. Set the default values
-        //        if (!(checkBoxCommonCategory.Checked && checkBoxCommonStart.Checked && checkBoxCommonEnd.Checked && checkBoxKeepWeekEndsTogether.Checked))
-        //        {
-        //            checkBoxCommonCategory.Checked = true;
-        //            checkBoxKeepWeekEndsTogether.Checked = true;
-        //        }
-        //}
+        public bool  ValidateDefaultValuesForTeam()
+        {
+            if (checkBoxTeams.Checked)
+                //check if none of the options are not checked. Set the default values
+                if (!(checkBoxCommonCategory.Checked || checkBoxCommonStart.Checked || checkBoxCommonEnd.Checked ))
+                {
+                    return false ;
+                }
+            return true;
+        }
 
         private void checkBoxTeams_CheckedChanged(object sender, System.EventArgs e)
         {
         	checkBoxBlock.Enabled = !checkBoxTeams.Checked;
             setSubItemsOnTeamOptimizationStatus();
-            //checkDefaultValuesForTeam();
         }
 
         private void setSubItemsOnTeamOptimizationStatus()
