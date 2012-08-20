@@ -46,10 +46,25 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
             using (_mocks.Playback())
             {
                 Assert.IsNull(_target.Repository);
-                _target.LogOnTeleoptiCccDomain(null);
+				Assert.IsTrue(_target.LogOnTeleoptiCccDomain(null));
                 Assert.IsNotNull(_target.Repository);
             }
         }
+
+		[Test]
+		public void VerifyLogOnRaptorFailure()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_logOnHelper.LogOn(null)).Return(false);
+			}
+			using (_mocks.Playback())
+			{
+				Assert.IsNull(_target.Repository);
+				Assert.IsFalse(_target.LogOnTeleoptiCccDomain(null));
+				Assert.IsNull(_target.Repository);
+			}
+		}
 
         [Test]
         public void VerifyLogOffRaptorAndDispose()

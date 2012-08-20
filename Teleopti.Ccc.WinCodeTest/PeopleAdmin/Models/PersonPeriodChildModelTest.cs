@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.IsNotNull(_target.Period);
             Assert.IsNotEmpty(_target.ExternalLogOnNames);
             Assert.IsNull(_target.Note);
-            Assert.AreEqual("Login name (1), Login name (2), Login name (3)", _target.ExternalLogOnNames);
+            Assert.AreEqual("Login name (DS), Login name (DS), Login name (DS)", _target.ExternalLogOnNames);
             Assert.IsNotNull(_target.Parent);
         }
 
@@ -220,9 +220,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(ExternalLogOn1, currentPeriod.ExternalLogOnCollection[0]);
 
             Assert.AreEqual(3, currentPeriod.ExternalLogOnCollection.Count);
-            _target.ExternalLogOnNames = "Login name (3)";
-            Assert.AreEqual(1, currentPeriod.ExternalLogOnCollection.Count);
-            Assert.AreEqual("Login name (3)", _target.ExternalLogOnNames);
+            _target.ExternalLogOnNames = "Login name (DS)";
+            Assert.AreEqual(3, currentPeriod.ExternalLogOnCollection.Count);
+            Assert.AreEqual("Login name (DS), Login name (DS), Login name (DS)", _target.ExternalLogOnNames);
         }
 
         [Test]

@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		                                                    		"The Quaint Gazelles",
 		                                                    		"The Comfortable Kangaroos",
 		                                                    		"The Pointless Larks",
-		                                                    		"The Goofy Mooses",
+		                                                    		"The Goofy Mooses"
 		                                                    	};
 
 	}

@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Diagnostics;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -103,6 +104,21 @@ namespace Teleopti.Analytics.Parameters
 		        myItem.Selected = true;
                 return;
 		    }
+			if (DefaultValue == "-95")
+			{
+				//Change the default value from the control data
+				foreach (DataRow row in MyData.Tables[0].Rows)
+				{
+					if ((bool) row["default_value"])
+					{
+						DefaultValue = row["id"].ToString();
+						break;
+					}
+				}
+			}
+			{
+            	
+            }
 		    foreach( ListItem myItem in _dropDown.Items)
 			{
 				if (myItem.Value ==  DefaultValue)

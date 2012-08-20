@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Text;
 using NHibernate;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;

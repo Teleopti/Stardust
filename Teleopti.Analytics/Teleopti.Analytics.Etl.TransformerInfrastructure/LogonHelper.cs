@@ -68,9 +68,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			_logonService.LogOff();
 			if (_choosenDb != null)
 			{
-				_logonService.LogOn(_choosenDb, businessUnit);
-				LicenseActivator.ProvideLicenseActivator();
-				return true;
+				if (_logonService.LogOn(_choosenDb, businessUnit))
+				{
+					LicenseActivator.ProvideLicenseActivator();
+					return true;
+				}
 			}
 			return false;
 		}

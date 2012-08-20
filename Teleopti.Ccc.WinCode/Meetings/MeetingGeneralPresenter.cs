@@ -97,9 +97,11 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         public void ParseParticipants(string participantText)
         {
-            var allParticipants = _model.RequiredParticipants.Concat(_model.OptionalParticipants).ToList();
             var participantsFromText = participantText.Split(new[] { MeetingViewModel.ParticipantSeparator },
                                                              StringSplitOptions.RemoveEmptyEntries);
+
+            var allParticipants = _model.RequiredParticipants.Concat(_model.OptionalParticipants).ToList();
+            
             for (var i = 0; i < participantsFromText.Length; i++)
             {
                 participantsFromText[i] = participantsFromText[i].Trim();

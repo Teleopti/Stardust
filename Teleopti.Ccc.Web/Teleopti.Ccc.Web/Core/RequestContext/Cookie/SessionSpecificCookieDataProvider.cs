@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public void RemoveCookie()
 		{
-			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName);
-			cookie.Expires = DateTime.Now.AddYears(-2);
+			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName)
+			             	{Expires = DateTime.Now.AddYears(-2)};
 			setCookie(cookie);
 		}
 

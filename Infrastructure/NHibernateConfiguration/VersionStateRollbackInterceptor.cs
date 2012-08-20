@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
                 return;
             }
             RollbackEntityState();
-            return;
         }
 
         public override bool OnFlushDirty(object entity, object id, object[] currentState, object[] previousState, string[] propertyNames, IType[] types)

@@ -57,6 +57,13 @@ BEGIN
 	CREATE TABLE #otherBUpersons(
 		[Parent] [uniqueidentifier] NOT NULL
 	)
+	
+	CREATE TABLE #TempPersonPeriodWithEndDate (id uniqueidentifier , FirstName varchar(600), LastName varchar(600), EmploymentNumber varchar(600),Team varchar(600))
+	INSERT INTO #TempPersonPeriodWithEndDate 
+		SELECT Person.Id, FirstName, LastName, EmploymentNumber,Team  
+		FROM PersonPeriodWithEndDate pp
+		INNER JOIN Person ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
+		and ISNULL(TerminalDate, '2100-01-01') >= @ondate
 
 	--declare
 	DECLARE @dynamicSQL nvarchar(4000)
@@ -77,12 +84,10 @@ BEGIN
 	IF @type = 'Organization'
 	BEGIN
 		INSERT #result
-		SELECT Person.Id, Team.Id, Site.Id, BusinessUnit, Team.Name, Site.Name, FirstName, LastName, EmploymentNumber
-		FROM PersonPeriodWithEndDate pp
-		INNER JOIN Person ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
-		INNER JOIN Team ON Team.Id = pp.Team AND Team.IsDeleted = 0  
-		INNER JOIN Site ON Site.id = Site AND Site.IsDeleted = 0 AND BusinessUnit = @bu
+		SELECT sub.Id, Team.Id, Site.Id, BusinessUnit, Team.Name, Site.Name, FirstName, LastName, EmploymentNumber
+	from #TempPersonPeriodWithEndDate sub
+		INNER JOIN Team ON Team.Id = sub.Team AND Team.IsDeleted = 0  
+		INNER JOIN Site ON Site.id = Site AND Site.IsDeleted = 0 AND BusinessUnit = @bu	
 		
 		IF @users = 1
 		BEGIN

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -57,11 +58,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             get { return _rollbackStack.Count; }
         }
 
-        public ReadOnlyCollection<IScheduleDay> ModificationCollection
+        public IEnumerable<IScheduleDay> ModificationCollection
         {
             get
             {
-                return new ReadOnlyCollection<IScheduleDay>(_rollbackStack.ToList());
+                return _rollbackStack;
             }
         }
 

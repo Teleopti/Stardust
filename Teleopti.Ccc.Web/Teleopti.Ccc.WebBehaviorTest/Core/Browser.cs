@@ -1,5 +1,4 @@
-﻿using TechTalk.SpecFlow;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl;
+﻿using Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
 using log4net;

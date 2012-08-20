@@ -253,6 +253,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("Developer")) chkDeveloper.Checked = true;
 						if (options.Contains("MyTimeWeb")) chkMyTimeWeb.Checked = true;
 						if (options.Contains("Anywhere")) chkAnywhere.Checked = true;
+						if (options.Contains("SMSLink")) checkBoxSMS.Checked = true;
 
 						//Freemium
 						if (options.Contains("Forecasts")) chkFreemium.Checked = true;
@@ -319,6 +320,7 @@ namespace Teleopti.Support.LicTool
 				if (chkShiftTrades.Checked) elmOptions.AppendChild(xdoc.CreateElement("ShiftTrades")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkMyTimeWeb.Checked) elmOptions.AppendChild(xdoc.CreateElement("MyTimeWeb")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkAnywhere.Checked) elmOptions.AppendChild(xdoc.CreateElement("Anywhere")).AppendChild(xdoc.CreateTextNode("true"));
+				if (checkBoxSMS.Checked) elmOptions.AppendChild(xdoc.CreateElement("SMSLink")).AppendChild(xdoc.CreateTextNode("true"));
 
 				rootNode.AppendChild(elmOptions);
 			}

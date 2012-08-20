@@ -61,19 +61,26 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         {
             clearJobStepResults(isFirstBusinessUnitRun);
 
-            Result = new JobResult(businessUnit, jobResultCollection); // Inject list of BUs
-            Result.Name = Name;
-            Result.Status = string.Format(CultureInfo.CurrentCulture, "Running ({0})", businessUnit.Name);
-            Result.Success = true;
-            update();
+        	Result = new JobResult(businessUnit, jobResultCollection)
+        	         	{
+        	         		Name = Name,
+        	         		Status = string.Format(CultureInfo.CurrentCulture, "Running ({0})", businessUnit.Name),
+        	         		Success = true
+        	         	}; // Inject list of BUs
+        	update();
 
             if (JobParameters != null)
             {
                 //Log onto Raptor domain
-                JobParameters.Helper.LogOnTeleoptiCccDomain(businessUnit);
+				if (!JobParameters.Helper.LogOnTeleoptiCccDomain(businessUnit))
+				{
+					Result.Status = string.Empty;
+					Result.Success = true;
+					update();
+					return null;
+				}
 
-                //StepList[0].JobParameters.StateHolder = new CommonStateHolder(JobParameters);
-                JobParameters.StateHolder = new CommonStateHolder(JobParameters);
+            	JobParameters.StateHolder = new CommonStateHolder(JobParameters);
             }
 
             foreach (IJobStep step in StepList)

@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			var firstCat = UserFactory.User().UserData<FirstShiftCategory>();
 			var firstCategory = firstCat.ShiftCategory;
 
-			UserFactory.User().Setup(new ShiftCategoryPreferenceToday() {ShiftCategory = firstCategory});
+			UserFactory.User().Setup(new ShiftCategoryPreferenceToday {ShiftCategory = firstCategory});
 		}
 
 		[Given(@"I have a preference with lunch length limitation of 1 hour today")]

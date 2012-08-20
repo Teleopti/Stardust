@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
-using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
@@ -12,8 +11,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 	public class WatiNSingleBrowserIEHandler : IBrowserHandler<IE>
 	{
 		private const string ProcessName = "iexplore";
-
-		private static readonly ILog Log = LogManager.GetLogger(typeof(WatiNSingleBrowserIEHandler));
 
 		private static IDisposable BrowserLock { get { return ScenarioContext.Current.Value<SystemLevelLock>(); } set { ScenarioContext.Current.Value((SystemLevelLock)value); } }
 

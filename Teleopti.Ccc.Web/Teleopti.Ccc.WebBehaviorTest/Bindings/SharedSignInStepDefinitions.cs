@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;

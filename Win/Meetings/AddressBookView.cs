@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Win.Meetings
             new List<SFGridColumnBase<ContactPersonViewModel>>();
 
         private readonly AddressBookPresenter _presenter;
-        private bool _IsRequired = true;
+        private bool _isRequired = true;
+        private LastSelectionWas _lastSelectionWas;
 
         public event EventHandler<AddressBookParticipantSelectionEventArgs> ParticipantsSelected;
 
@@ -357,21 +358,17 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void textBoxExtRequiredParticipant_TextChanged(object sender, EventArgs e)
         {
-            int caretPositon = textBoxExtRequiredParticipant.SelectionStart;
             _presenter.ParseRequiredParticipants(textBoxExtRequiredParticipant.Text);
-            textBoxExtRequiredParticipant.Select(Math.Min(textBoxExtRequiredParticipant.Text.Length, caretPositon), 0);
         }
 
         private void textBoxExtOptionalParticipant_TextChanged(object sender, EventArgs e)
         {
-            int caretPositon = textBoxExtRequiredParticipant.SelectionStart;
             _presenter.ParseOptionalParticipants(textBoxExtOptionalParticipant.Text);
-            textBoxExtRequiredParticipant.Select(Math.Min(textBoxExtRequiredParticipant.Text.Length, caretPositon), 0);
         }
 
         private void gridControlPeople_CellDoubleClick(object sender, GridCellClickEventArgs e)
         {
-            if (_IsRequired)
+            if (_isRequired)
             {
                 _presenter.AddRequiredParticipants(_gridHelper.FindSelectedItems());
 
@@ -382,43 +379,56 @@ namespace Teleopti.Ccc.Win.Meetings
             }
         }
 
-        private void textBoxExtRequiredParticipant_KeyDown(object sender, KeyEventArgs e)
+        private void textBoxExtRequiredParticipant_MouseUp(object sender, EventArgs e)
         {
-            if (!IsValidKey(e.KeyCode,e.Modifiers))
-                e.SuppressKeyPress = true;
+            _isRequired = true;
+            TextBoxNameExtender.GetSelected(textBoxExtRequiredParticipant);   
         }
 
-        private static bool IsValidKey(Keys key, Keys modifiers)
+        private void textBoxExtOptionalParticipant_MouseUp(object sender, EventArgs e)
         {
-            return (key == Keys.Down ||
-                    key == Keys.Up ||
-                    key == Keys.Left ||
-                    key == Keys.Right ||
-                    key == Keys.Return ||
-                    key == Keys.Back ||
-                    key == Keys.Delete ||
-                    key == Keys.Home ||
-                    key == Keys.End ||
-                    key == Keys.Tab ||
-                    modifiers == Keys.Control);
+            _isRequired = false;
+            TextBoxNameExtender.GetSelected(textBoxExtOptionalParticipant);
+        }
+        
+        private void textBoxExtRequiredParticipant_KeyDown(object sender, KeyEventArgs e)
+        {
+            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase) ActiveControl, e, _lastSelectionWas);
+            e.SuppressKeyPress = true;
         }
 
         private void textBoxExtOptionalParticipant_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!IsValidKey(e.KeyCode, e.Modifiers))
-                e.SuppressKeyPress = true;
+            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase)ActiveControl, e, _lastSelectionWas);
+            e.SuppressKeyPress = true;
         }
 
-        private void textBoxExtRequiredParticipant_Click(object sender, EventArgs e)
+        private void contextMenuStripEx1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            _IsRequired = true;
+            if (ActiveControl.GetType() == typeof(TextBoxBase))
+                TextBoxNameExtender.UpdateContextMenu((TextBoxBase)ActiveControl, contextMenuStripEx1);
+            else
+                contextMenuStripEx1.Close();
         }
 
-        private void textBoxExtOptionalParticipant_Click(object sender, EventArgs e)
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _IsRequired = false;
+            TextBoxNameExtender.CutItem((TextBoxBase)ActiveControl);
         }
 
-        
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TextBoxNameExtender.CopyItem((TextBoxBase)ActiveControl);
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TextBoxNameExtender.PasteItem((TextBoxBase)ActiveControl);
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TextBoxNameExtender.DeleteItem((TextBoxBase)ActiveControl);
+        }
     }
 }

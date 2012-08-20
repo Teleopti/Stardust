@@ -111,7 +111,19 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                 
                 ((IList<Guid>)currNode.Tag).Add(personSelectorBuiltin.PersonId);
             }
-            
+
+            foreach (TreeNodeAdv nodeLevel1 in nodes)
+            {
+                nodeLevel1.Nodes.Sort();
+                foreach (TreeNodeAdv nodeLevel2 in nodeLevel1.Nodes)
+                {
+                    nodeLevel2.Nodes.Sort();
+                    foreach (TreeNodeAdv nodeLevel3 in nodeLevel2.Nodes)
+                    {
+                        nodeLevel3.Nodes.Sort();
+                    }
+                }
+            }
             _personSelectorView.ResetTreeView(nodes.ToArray());
         }
 

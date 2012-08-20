@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Security.Policy;
-using System.Security.Principal;
 using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;

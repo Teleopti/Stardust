@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.Infrastructure.Persisters
+﻿namespace Teleopti.Ccc.Infrastructure.Persisters
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
 	public interface IOwnMessageQueue

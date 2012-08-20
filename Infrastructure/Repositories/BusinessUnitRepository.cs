@@ -7,7 +7,6 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             return skillTimeZoneId
                 .Concat(personTimeZoneId)
-                .Distinct().Select(t => TimeZoneInfo.FindSystemTimeZoneById(t)).ToList();
+                .Distinct().Select(TimeZoneInfo.FindSystemTimeZoneById).ToList();
         }
 
         public override bool ValidateUserLoggedOn

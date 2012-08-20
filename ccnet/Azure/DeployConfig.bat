@@ -78,15 +78,20 @@ cscript replace.vbs "$(ANALYTICS_CONNECTION)" "%analyticsconnection%" "%ContentD
 
 ::Sign ClickOnce
 SET ClickOnceSignPath=%ContentDest%\TeleoptiCCC\Tools\ClickOnceSign
+ECHO ClickOnceSignPath: %ClickOnceSignPath%
 SET ClientPath=%ContentDest%\Client
 SET MyTimePath=%ContentDest%\MyTime
+
 CD "%ClickOnceSignPath%"
-"%ClickOnceSignPath%\ClickOnceSign.exe" -s -a Teleopti.Ccc.SmartClientPortal.Shell.application -m "Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest" -u "https://%baseurl%/Client/" -c "%ClickOnceSignPath%\TemporaryKey.pfx" -p "" -dir "%ClientPath%"
+ECHO ClickOnceSign.exe -s -a Teleopti.Ccc.SmartClientPortal.Shell.application -m "Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest" -u "https://%baseurl%/Client/" -c "%ClickOnceSignPath%\TemporaryKey.pfx" -p "" -dir "%ClientPath%"
+ClickOnceSign.exe -s -a Teleopti.Ccc.SmartClientPortal.Shell.application -m "Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest" -u "https://%baseurl%/Client/" -c "%ClickOnceSignPath%\TemporaryKey.pfx" -p "" -dir "%ClientPath%"
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=203
 GOTO :Error
 )
-"%ClickOnceSignPath%\ClickOnceSign.exe" -s -a Teleopti.Ccc.AgentPortal.application -m "Teleopti.Ccc.AgentPortal.exe.manifest" -u "https://%baseurl%/MyTime/" -c "%ClickOnceSignPath%\TemporaryKey.pfx" -p "" -dir "%MyTimePath%"
+
+ECHO ClickOnceSign.exe -s -a Teleopti.Ccc.AgentPortal.application -m "Teleopti.Ccc.AgentPortal.exe.manifest" -u "https://%baseurl%/MyTime/" -c "%ClickOnceSignPath%\TemporaryKey.pfx" -p "" -dir "%MyTimePath%"
+ClickOnceSign.exe -s -a Teleopti.Ccc.AgentPortal.application -m "Teleopti.Ccc.AgentPortal.exe.manifest" -u "https://%baseurl%/MyTime/" -c "%ClickOnceSignPath%\TemporaryKey.pfx" -p "" -dir "%MyTimePath%"
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=204
 GOTO :Error

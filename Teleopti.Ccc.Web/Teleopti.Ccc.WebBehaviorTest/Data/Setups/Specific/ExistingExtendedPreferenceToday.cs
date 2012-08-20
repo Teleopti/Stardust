@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		protected override PreferenceRestriction ApplyRestriction()
 		{
-			return new PreferenceRestriction()
+			return new PreferenceRestriction
 			                            	{
 			                            		StartTimeLimitation = _startTimeLimitation,
 												EndTimeLimitation = _endTimeLimitation,
