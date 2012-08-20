@@ -63,7 +63,7 @@
 .feedback-error {
 	font-size: 12px;
 	height: 13px;
-	padding-bottom: 2px;
+	padding-bottom: 1px;
 }
 
 .time-limitation {
@@ -78,7 +78,6 @@
 {
 	width: 110px;
 	height: 13px;
-	padding-bottom: 2px;
 }
 
 
