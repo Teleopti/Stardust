@@ -128,6 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(10).Repeat.AtLeastOnce();
                 Expect.Call(_container1.Owner)
                     .Return(owner).Repeat.AtLeastOnce();
+            	Expect.Call(_schedulePartModifyAndRollbackService.ModificationCollection).Return(new List<IScheduleDay>());
                 Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
             }
 
