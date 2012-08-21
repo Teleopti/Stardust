@@ -1501,17 +1501,35 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void toolStripButtonForecastWorkflow_Click(object sender, EventArgs e)
         {
-            Workload workload = GetRefreshedAggregateRoot(TemplateTarget.Workload, false) as Workload;
+            IWorkload workload = GetRefreshedAggregateRoot(TemplateTarget.Workload, false) as Workload;
             if (workload == null) return;
-
             if (CheckToClose())
             {
-                using (ForecastWorkflow workflow = new ForecastWorkflow(workload, _scenario, _dateTimePeriod,
+                workload = getWorkload(workload);
+                using (var workflow = new ForecastWorkflow(workload, _scenario, _dateTimePeriod,
                                                                  _skillDayCalculator.SkillDays.ToList(), this))
                 {
                     workflow.ShowDialog(this);
                 }
             }
+        }
+
+        private static IWorkload getWorkload(IWorkload workload)
+        {
+            using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                var repository = new RepositoryFactory().CreateWorkloadRepository(unitOfWork);
+                workload = repository.Get(workload.Id.GetValueOrDefault());
+                LazyLoadingManager.Initialize(workload.Skill);
+                LazyLoadingManager.Initialize(workload.Skill.SkillType);
+                LazyLoadingManager.Initialize(workload.TemplateWeekCollection);
+                foreach (var template in workload.TemplateWeekCollection.Values)
+                {
+                    LazyLoadingManager.Initialize(template.OpenHourList);
+                }
+                LazyLoadingManager.Initialize(workload.QueueSourceCollection);
+            }
+            return workload;
         }
 
         private void toolStripButtonIncreaseDecimals_Click(object sender, EventArgs e)
@@ -2211,13 +2229,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private bool CheckToClose()
         {
-			if (!IsDirtyListEmpty())
+            if (!IsDirtyListEmpty())
 			{
 				switch (AskToCommitChanges())
 				{
 					case DialogResult.Yes:
 						if (!ValidateForm()) //Validation is only done if the user would like to save and something is dirty
-							return false;
+                            return false;
 				        showProgressBar();
 				        try
 				        {
@@ -2230,7 +2248,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                             return false;
 				        }
                         InformUserOfUnsavedData();
-                        if (_unsavedSkillDays.Count > 0) return false;
+                        if (_unsavedSkillDays.Count > 0)
+                            return false;
 				        break;
 				    case DialogResult.No:
 						break;
