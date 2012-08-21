@@ -93,6 +93,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private IEnumerable<IGroupDayOffOptimizerContainer> shuffleAndExecuteOptimizersInList(ICollection<IGroupDayOffOptimizerContainer> activeOptimizers, bool useSameDaysOff)
         {
             var retList = new List<IGroupDayOffOptimizerContainer>();
+			var skipList = new List<IGroupDayOffOptimizerContainer>();
             int executes = 0;
             double lastPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
             double newPeriodValue = lastPeriodValue;
@@ -100,6 +101,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
 				executes++;
 				if (retList.Contains(optimizer))
+					continue;
+				if (skipList.Contains(optimizer))
 					continue;
 
                 _schedulePartModifyAndRollbackService.ClearModificationCollection();
@@ -118,6 +121,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 else
                 {
                     newPeriodValue = tmpPeriodValue;
+					skipList.AddRange(containersToSkip(activeOptimizers, optimizer, useSameDaysOff));
                 }
 
                 string who = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
@@ -170,6 +174,38 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 				
 				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, false, false);
+			}
+
+			return retList;
+		}
+
+		private IList<IGroupDayOffOptimizerContainer> containersToSkip(ICollection<IGroupDayOffOptimizerContainer> activeOptimizers, IGroupDayOffOptimizerContainer optimizer,
+			bool useSameDaysOff)
+		{
+			var retList = new List<IGroupDayOffOptimizerContainer>();
+			retList.Add(optimizer);
+			HashSet<DateOnly> dates = new HashSet<DateOnly>();
+			foreach (var scheduleDay in _schedulePartModifyAndRollbackService.ModificationCollection)
+			{
+				dates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
+			}
+
+			foreach (var dateOnly in dates)
+			{
+				if (useSameDaysOff)
+				{
+					IList<IScheduleMatrixPro> matrixesToRemove =
+					_groupOptimizerFindMatrixesForGroup.Find(optimizer.Owner, dateOnly);
+					foreach (var scheduleMatrixPro in matrixesToRemove)
+					{
+						foreach (var groupDayOffOptimizerContainer in activeOptimizers)
+						{
+							if (scheduleMatrixPro.SchedulePeriod.Equals(groupDayOffOptimizerContainer.Matrix.SchedulePeriod))
+								retList.Add(groupDayOffOptimizerContainer);
+						}
+					}
+				}
+
 			}
 
 			return retList;

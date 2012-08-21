@@ -248,7 +248,6 @@
     <Compile Include="Optimization\ExtendReduceTimeOptimizer.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizerService.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerCreator.cs" />
-    <Compile Include="Optimization\GroupDayOffSingleOptimizer.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationService.cs" />
     <Compile Include="Optimization\DayOffOptimizerConflictHandler.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidator.cs" />
@@ -256,10 +255,6 @@
     <Compile Include="Optimization\GroupDayOffOptimizerContainer.cs" />
     <Compile Include="Optimization\GroupMatrixContainerCreator.cs" />
     <Compile Include="Optimization\GroupMatrixHelper.cs" />
-    <Compile Include="Optimization\GroupPersonPreOptimizationChecker.cs" />
-    <Compile Include="Optimization\GroupPersonSameDayOffsChecker.cs" />
-    <Compile Include="Optimization\GroupPersonSameForPersonOnDateChecker.cs" />
-    <Compile Include="Optimization\GroupPersonSchedulePeriodChecker.cs" />
     <Compile Include="Optimization\IPersonExtractor.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />

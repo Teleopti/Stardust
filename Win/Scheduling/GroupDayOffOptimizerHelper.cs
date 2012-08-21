@@ -24,17 +24,15 @@ namespace Teleopti.Ccc.Win.Scheduling
     public class GroupDayOffOptimizerHelper
     {
         private readonly ILifetimeScope _container;
-        private readonly ScheduleOptimizerHelper _scheduleOptimizerHelper;
         private readonly ISchedulingResultStateHolder _stateHolder;
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private BackgroundWorker _backgroundWorker;
         private readonly ISchedulerStateHolder _schedulerState;
 
-        public GroupDayOffOptimizerHelper(ILifetimeScope container, ScheduleOptimizerHelper scheduleOptimizerHelper)
+        public GroupDayOffOptimizerHelper(ILifetimeScope container)
         {
             _container = container;
-            _scheduleOptimizerHelper = scheduleOptimizerHelper;
             _schedulerState = _container.Resolve<ISchedulerStateHolder>();
             _stateHolder = _schedulerState.SchedulingResultState;
             _resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
@@ -51,11 +49,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
             IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
             IList<IScheduleMatrixPro> matrixListForDayOffOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
-            IList<IScheduleMatrixPro> matrixListForIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
+			//IList<IScheduleMatrixPro> matrixListForIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
 
-            IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization = createMatrixContainerList(matrixListForWorkShiftOptimization);
+			//IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization = createMatrixContainerList(matrixListForWorkShiftOptimization);
             IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization = createMatrixContainerList(matrixListForDayOffOptimization);
-            IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForIntradayOptimization = createMatrixContainerList(matrixListForIntradayOptimization);
+			//IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForIntradayOptimization = createMatrixContainerList(matrixListForIntradayOptimization);
 
             var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
             var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
@@ -77,36 +75,36 @@ namespace Teleopti.Ccc.Win.Scheduling
                     runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod);
 
 
-                IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
-                IList<IScheduleMatrixOriginalStateContainer> workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization =
-                    createMatrixContainerList(matrixListForWorkShiftAndIntradayOptimization);
+				//IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
+				//IList<IScheduleMatrixOriginalStateContainer> workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization =
+				//    createMatrixContainerList(matrixListForWorkShiftAndIntradayOptimization);
 
                 bool originalKeepShiftCategorySettings = optimizerPreferences.Shifts.KeepShiftCategories;
                 optimizerPreferences.Shifts.KeepShiftCategories = true;
 
-                if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
-                    _scheduleOptimizerHelper.RunWorkShiftOptimization(
-                        optimizerPreferences, 
-                        matrixOriginalStateContainerListForWorkShiftOptimization, 
-                        workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
-                        selectedPeriod, 
-                        _backgroundWorker);
+				//if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
+				//    _scheduleOptimizerHelper.RunWorkShiftOptimization(
+				//        optimizerPreferences, 
+				//        matrixOriginalStateContainerListForWorkShiftOptimization, 
+				//        workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
+				//        selectedPeriod, 
+				//        _backgroundWorker);
 
-                if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
-                    _scheduleOptimizerHelper.RunIntradayOptimization(
-                        optimizerPreferences, 
-                        matrixOriginalStateContainerListForIntradayOptimization, 
-                        workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
-                        backgroundWorker);
+				//if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
+				//    _scheduleOptimizerHelper.RunIntradayOptimization(
+				//        optimizerPreferences,
+				//        matrixOriginalStateContainerListForIntradayOptimization,
+				//        workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
+				//        backgroundWorker);
 
                 optimizerPreferences.Shifts.KeepShiftCategories = originalKeepShiftCategorySettings;
             }
             
             
-            if (optimizerPreferences.General.UseShiftCategoryLimitations)
-            {
-                removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker, schedulingOptions, optimizerPreferences);
-            }
+			//if (optimizerPreferences.General.UseShiftCategoryLimitations)
+			//{
+			//    removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker, schedulingOptions, optimizerPreferences);
+			//}
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
@@ -120,21 +118,21 @@ namespace Teleopti.Ccc.Win.Scheduling
             return result;
         }
 
-        private void removeShiftCategoryBackToLegalState(
-            IList<IScheduleMatrixPro> matrixList,
-            BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
-        {
-            using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
-            {
-                var backToLegalStateServicePro =
-                    _container.Resolve<ISchedulePeriodListShiftCategoryBackToLegalStateService>();
+		//private void removeShiftCategoryBackToLegalState(
+		//    IList<IScheduleMatrixPro> matrixList,
+		//    BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
+		//{
+		//    using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
+		//    {
+		//        var backToLegalStateServicePro =
+		//            _container.Resolve<ISchedulePeriodListShiftCategoryBackToLegalStateService>();
 
-                if (backgroundWorker.CancellationPending)
-                    return;
+		//        if (backgroundWorker.CancellationPending)
+		//            return;
 
-                backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
-            }
-        }
+		//        backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+		//    }
+		//}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void runDayOffOptimization(IOptimizationPreferences optimizerPreferences,

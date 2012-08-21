@@ -4919,7 +4919,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState);
             _scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 
-            _groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container, _scheduleOptimizerHelper);
+            _groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);
             _blockOptimizerHelper = new BlockOptimizerHelper(_container, _scheduleOptimizerHelper);
 
             SchedulerState.SchedulingResultState.ResourcesChanged += _optimizationHelper_ResourcesChanged;
