@@ -414,6 +414,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="dateOnly"></param>
         /// <returns>work time</returns>
-        TimeSpan WorkTime(DateOnly dateOnly);
+        TimeSpan AverageWorkTimeOfDay(DateOnly dateOnly);
     }
 }

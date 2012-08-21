@@ -735,7 +735,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void ShouldCheckPersonHasPersonPeriodBeforeGetContractTime()
         {
             var dateOnly = new DateOnly(2012, 12, 1);
-            Assert.That(_target.WorkTime(dateOnly), Is.EqualTo(TimeSpan.Zero));
+            Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(TimeSpan.Zero));
         }
 
         [Test]
@@ -749,7 +749,7 @@ namespace Teleopti.Ccc.DomainTest.Common
                     new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
             _target.AddPersonPeriod(personPeriod);
-            Assert.That(_target.WorkTime(dateOnly), Is.EqualTo(WorkTime.DefaultWorkTime.AvgWorkTimePerDay));
+            Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(WorkTime.DefaultWorkTime.AvgWorkTimePerDay));
         }
 
         [Test]
@@ -767,7 +767,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(dateOnly);
             schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(6);
             _target.AddSchedulePeriod(schedulePeriod);
-            Assert.That(_target.WorkTime(dateOnly), Is.EqualTo(TimeSpan.FromHours(6)));
+            Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(TimeSpan.FromHours(6)));
         }
     }
 }

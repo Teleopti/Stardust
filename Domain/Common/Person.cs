@@ -796,7 +796,7 @@ namespace Teleopti.Ccc.Domain.Common
 			return result;
 		}
 
-        public TimeSpan WorkTime(DateOnly dateOnly)
+        public virtual TimeSpan AverageWorkTimeOfDay(DateOnly dateOnly)
         {
             var personPeriod = Period(dateOnly);
             if(personPeriod == null) return TimeSpan.Zero;
