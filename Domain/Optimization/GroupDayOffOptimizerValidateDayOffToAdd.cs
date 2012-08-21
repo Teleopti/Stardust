@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					List<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro>();
 					matrixList.AddRange(_groupOptimizerFindMatrixesForGroup.Find(person, dateOnly));
-
+					result.MatrixList = matrixList;
 					foreach (var matrixPro in matrixList)
 					{
 						IScheduleDayPro scheduleDayPro = matrixPro.GetScheduleDayByKey(dateOnly);

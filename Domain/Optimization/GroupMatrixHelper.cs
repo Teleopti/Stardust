@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDaysOffPreferences daysOffPreferences);
     }
 
-    public class GroupMatrixHelper : IGroupMatrixHelper
+	public class GroupMatrixHelper : IGroupMatrixHelper
     {
         private readonly IGroupMatrixContainerCreator _groupMatrixContainerCreator;
     	private readonly IGroupPersonConsistentChecker _groupPersonConsistentChecker;

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IGroupOptimizationValidatorRunner
 	{
-		bool Run(IPerson person, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd, bool useSameDaysOff);
+		ValidatorResult Run(IPerson person, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd, bool useSameDaysOff);
 	}
 
 	public class GroupOptimizationValidatorRunner : IGroupOptimizationValidatorRunner
@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private delegate ValidatorResult ValidateDaysOffMoveDelegate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
 
-		public bool Run(IPerson person, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd, bool useSameDaysOff)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public ValidatorResult Run(IPerson person, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd, bool useSameDaysOff)
 		{
 			IDictionary<ValidateDaysOffMoveDelegate, IAsyncResult> runnableList = new Dictionary<ValidateDaysOffMoveDelegate, IAsyncResult>();
 
@@ -42,12 +43,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 			result = toRun.BeginInvoke(person, daysOffToAdd, useSameDaysOff, null, null);
 			runnableList.Add(toRun, result);
 
+			IList<DateOnly> allDays = new List<DateOnly>(daysOffToRemove);
+			foreach (var dateOnly in daysOffToAdd)
+			{
+				allDays.Add(dateOnly);
+			}
+				
 			toRun = _groupOptimizerValidateProposedDatesInSameMatrix.Validate;
-			result = toRun.BeginInvoke(person, daysOffToAdd, useSameDaysOff, null, null);
+			result = toRun.BeginInvoke(person, allDays, useSameDaysOff, null, null);
 			runnableList.Add(toRun, result);
 
 			toRun = _groupOptimizerValidateProposedDatesInSameGroup.Validate;
-			result = toRun.BeginInvoke(person, daysOffToAdd, useSameDaysOff, null, null);
+			result = toRun.BeginInvoke(person, allDays, useSameDaysOff, null, null);
 			runnableList.Add(toRun, result);
 
 			//Sync all threads
@@ -65,21 +72,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 				throw;
 			}
 
+			ValidatorResult myResult = new ValidatorResult();
+			myResult.Success = true;
 			foreach (var validatorResult in results)
 			{
 				if (!validatorResult.Success)
-					return false;
+					return new ValidatorResult();
 				if (validatorResult.DaysToLock.HasValue)
 				{
 					foreach (var matrixPro in validatorResult.MatrixList)
 					{
+						myResult.MatrixList.Add(matrixPro);
 						if (matrixPro.SelectedPeriod.Contains(validatorResult.DaysToLock.Value))
 							matrixPro.LockPeriod(validatorResult.DaysToLock.Value);
 					}
 				}
 			}
 
-			return true;
+			return myResult;
 		}
 	}
 

@@ -72,14 +72,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 
 			IList<GroupMatrixContainer> containers;
-			IGroupPerson groupPerson;
-			groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, daysOffToRemove[0]);
-			
+			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, daysOffToRemove[0]);
+			if (groupPerson == null)
+				return false;
+
+			ValidatorResult result = new ValidatorResult();
+			result.Success = true;
+
 			if(schedulingOptions.UseSameDayOffs)
 			{
 				//Will always return true IFairnessValueCalculator not using GroupOptimizerValidateProposedDatesInSameMatrix daysoff
-				bool success = _groupOptimizationValidatorRunner.Run(matrix.Person, daysOffToRemove, daysOffToAdd, schedulingOptions.UseSameDayOffs);
-				if (!success)
+				result = _groupOptimizationValidatorRunner.Run(matrix.Person, daysOffToRemove, daysOffToAdd, schedulingOptions.UseSameDayOffs);
+				if (!result.Success)
 				{
 					return false;
 				}
@@ -94,12 +98,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (containers == null || containers.Count() == 0)
 				return false;
 
-			if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
-				return false;
+			if(result.MatrixList.Count == 0)
+			{
+				if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
+					return false;
 
-			if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions))
-				return false;
-
+				if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions))
+					return false;
+			}
+			
 			return true;
 		}
 

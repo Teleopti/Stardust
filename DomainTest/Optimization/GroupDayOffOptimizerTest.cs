@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IGroupOptimizationValidatorRunner _groupOptimizationValidatorRunner;
 		private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
     	private IGroupPerson _groupPerson;
+    	private ValidatorResult _validatorResult;
 
         [SetUp]
         public void Setup()
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _allScheduleMatrixes.Add(_activeScheduleMatrix);
             _allScheduleMatrixes.Add(_scheduleMatrix2);
-
+        	_validatorResult = new ValidatorResult();
         }
 
         [Test]
@@ -88,6 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<double?> dataExtractorValues = new List<double?>();
 
             _target = createTarget();
+			_validatorResult.Success = true;
 
             using (_mocks.Record())
             {
@@ -112,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(groupMatrixContainers);
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove)).Return(
 					_groupPerson);
-				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(true);
+				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(	_validatorResult);
                 Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter,_schedulePartModifyAndRollbackService)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions)).IgnoreArguments()
@@ -204,12 +206,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
                     .Return(daysOffToAdd);
                 Expect.Call(_activeScheduleMatrix.Person)
-                    .Return(activePerson).Repeat.Twice();
-				Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, _groupPerson, _daysOffPreferences)).IgnoreArguments()
-					.Return(new List<GroupMatrixContainer>());
+                    .Return(activePerson);
+				//Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, _groupPerson, _daysOffPreferences)).IgnoreArguments()
+				//    .Return(new List<GroupMatrixContainer>());
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove)).Return(
 					null);
-            	Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(true);
+				//Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(_validatorResult);
+	//            Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove,
+	//                                                       daysOffToAdd, groupPerson, _daysOffPreferences))
+	//.Return(groupMatrixContainers);
             }
             using (_mocks.Playback())
             {
@@ -262,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(activePerson).Repeat.AtLeastOnce();
             	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove));
             	Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, false)).IgnoreArguments().Return
-            		(false);
+            		(_validatorResult);
             }
             using (_mocks.Playback())
             {
@@ -273,7 +278,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyUnsuccessfulExecuteDayOffsFail()
         {
             var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
@@ -296,6 +301,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<double?> dataExtractorValues = new List<double?>();
 
             _target = createTarget();
+        	_validatorResult.Success = true;
 
             using (_mocks.Record())
             {
@@ -318,7 +324,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, _groupPerson, _daysOffPreferences))
 					.Return(groupMatrixContainers);
 				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, false)).IgnoreArguments().Return
-					(true);
+					(_validatorResult);
             	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove)).Return(
             		_groupPerson);
                 Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
@@ -358,6 +364,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<double?> dataExtractorValues = new List<double?>();
 
             _target = createTarget();
+			_validatorResult.Success = true;
 
             using (_mocks.Record())
             {
@@ -380,10 +387,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove)).Return(
             		groupPerson);
 				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, false)).IgnoreArguments().Return
-					(true);
-            	Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove,
-            	                                                           daysOffToAdd, groupPerson, _daysOffPreferences))
-            		.Return(groupMatrixContainers);
+					(_validatorResult);
+				Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, _groupPerson, _daysOffPreferences)).IgnoreArguments()
+					.Return(groupMatrixContainers);
                 Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions)).IgnoreArguments()
