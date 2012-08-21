@@ -843,6 +843,7 @@
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingCalculationMethod.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSettingScheduleExport.cs" />
     <Compile Include="SystemSetting\GlobalSetting\DefaultSegment.cs" />
+    <Compile Include="SystemSetting\GlobalSetting\SmsSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\StringSetting.cs" />
     <Compile Include="SystemSetting\PersonalSettingData.cs" />
     <Compile Include="SystemSetting\SettingData.cs" />

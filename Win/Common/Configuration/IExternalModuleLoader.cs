@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         SetScorecard,
         ChangeYourPassword,
         AuditTrailSetting, 
-        ScheduleTag
+        ScheduleTag,
+		SmsSettings
     } ;
 }
