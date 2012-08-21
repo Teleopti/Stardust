@@ -157,6 +157,7 @@
     <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSagaTest.cs" />
     <Compile Include="SimpleBootStrapper.cs" />
+    <Compile Include="Sms\SmsLinkCheckerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

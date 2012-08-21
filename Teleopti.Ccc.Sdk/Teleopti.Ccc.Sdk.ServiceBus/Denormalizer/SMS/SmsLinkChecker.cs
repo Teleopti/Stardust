@@ -1,7 +1,8 @@
-﻿using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
+﻿using System;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer.SMS
 {
@@ -15,18 +16,31 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer.SMS
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public class SmsLinkChecker : ISmsLinkChecker
 	{
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IRepositoryFactory _repositoryFactory;
+
+		public SmsLinkChecker(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
+		{
+			_unitOfWorkFactory = unitOfWorkFactory;
+			_repositoryFactory = repositoryFactory;
+		}
+
 		public string SmsMobileNumber(IPerson person)
 		{
 			// get wich optional column to use
-			//using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			//{
-			//    _smsSettingsSetting = new GlobalSettingDataRepository(uow).FindValueByKey("SmsSettings", new SmsSettings());
-			//}
-			// get a value if one
-			//foreach (var optionalColumnValue in person.OptionalColumnValueCollection)
-			//{
-				
-			//}
+			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				var smsSettingsSetting = _repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey("SmsSettings", new SmsSettings());
+				if (smsSettingsSetting.OptionalColumnId.Equals(Guid.Empty))
+					return "";
+				// get a value if one
+				foreach (var optionalColumnValue in person.OptionalColumnValueCollection)
+				{
+					if (optionalColumnValue.Parent.Id.Equals(smsSettingsSetting.OptionalColumnId))
+						return optionalColumnValue.Description;
+				}
+			}
+
 			//no value
 			return "";
 		}
