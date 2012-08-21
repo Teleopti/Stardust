@@ -130,6 +130,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<DayMappingData, DayViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
+				.ForMember(d => d.Header, o => o.MapFrom(s => s))
+				.ForMember(d => d.StyleClassName, o => o.MapFrom(s =>
+				                                                 	{
+				                                                 		if (s.ScheduleDay != null)
+				                                                 		{
+				                                                 			if (s.SignificantPart == SchedulePartView.ContractDayOff)
+				                                                 				return StyleClasses.Striped;
+				                                                 			if (s.SignificantPart == SchedulePartView.DayOff)
+				                                                 				return StyleClasses.DayOff + " " + StyleClasses.Striped;
+				                                                 		}
+				                                                 		return null;
+				                                                 	}))
+				.ForMember(d => d.BorderColor, o => o.MapFrom(s =>
+				                                              	{
+				                                              		if (s.ScheduleDay != null)
+				                                              		{
+				                                              			if (s.HasDayOffUnderAbsence)
+				                                              				return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
+				                                              			if (s.SignificantPart == SchedulePartView.FullDayAbsence)
+				                                              				return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
+				                                              			if (s.SignificantPart == SchedulePartView.MainShift)
+				                                              				return s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToHtml();
+				                                              			if (s.SignificantPart == SchedulePartView.DayOff)
+				                                              				return null;
+				                                              		}
+				                                              		return null;
+				                                              	}))
 				.ForMember(d => d.Editable, o => o.MapFrom(s =>
 				                                           	{
 				                                           		if (s.ScheduleDay != null)
@@ -144,42 +171,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                           		return isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod;
 				                                           	}))
 				.ForMember(d => d.InPeriod, o => o.MapFrom(s => s.Period.Contains(s.Date)))
-				.ForMember(d => d.Header, o => o.MapFrom(s => s))
-				.ForMember(d => d.StyleClassName, o => o.MapFrom(s =>
-				                                                 	{
-																		if (s.ScheduleDay != null)
-																		{
-																			if (s.SignificantPart == SchedulePartView.ContractDayOff)
-																				return StyleClasses.Striped;
-																			if (s.SignificantPart == SchedulePartView.DayOff)
-																				return StyleClasses.DayOff + " " + StyleClasses.Striped;
-																		}
-				                                                 		return null;
-				                                                 	}))
-				.ForMember(d=>d.BorderColor,o=>o.MapFrom(s=>
-															{
-																if (s.ScheduleDay != null)
-																{
-																	if (s.HasDayOffUnderAbsence)
-																		return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
-																	if (s.SignificantPart == SchedulePartView.FullDayAbsence)
-																		return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
-																	if (s.SignificantPart == SchedulePartView.MainShift)
-																		return s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToHtml();
-																	if (s.SignificantPart == SchedulePartView.DayOff)
-																		return null;
-																}
-																return null;
-															}))
-				.ForMember(d => d.Preference, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.None))
-				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
-				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))
-				.ForMember(d => d.Absence, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.FullDayAbsence || s.SignificantPart == SchedulePartView.ContractDayOff ? s : null))
+				.ForMember(d => d.Preference, o => o.MapFrom(s =>
+				                                             	{
+				                                             		var isScheduled = s.ScheduleDay != null && s.ScheduleDay.IsScheduled();
+				                                             		return !isScheduled;
+				                                             	}))
 				.ForMember(d => d.Feedback, o => o.MapFrom(s =>
 				                                           	{
 				                                           		var isScheduled = s.ScheduleDay != null && s.ScheduleDay.IsScheduled();
-																return !isScheduled && s.Period.Contains(s.Date);
+				                                           		return !isScheduled && s.Period.Contains(s.Date);
 				                                           	}))
+				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
+				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))
+				.ForMember(d => d.Absence, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.FullDayAbsence || s.SignificantPart == SchedulePartView.ContractDayOff ? s : null))
 				;
 			
 			CreateMap<DayMappingData, PersonAssignmentDayViewModel>()

@@ -1,6 +1,5 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
-@using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 @model Teleopti.Ccc.Web.Areas.MyTime.Models.Preference.PreferenceViewModel
 @{
 	Layout = null;
@@ -102,6 +101,9 @@
 											</div>
 										</span>
 									</div>
+								}
+								@if (day.Feedback)
+								{
 									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
 									<div class="possible-start-times time-limitation icon leftarrow truncate" data-bind="text: PossibleStartTimes"></div>
 									<div class="possible-end-times time-limitation icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
