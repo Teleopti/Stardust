@@ -10965,4 +10965,12 @@ These options are activated:
     <value>File export finished</value>
     <comment>File export finished</comment>
   </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>From Contract</value>
+    <comment>Contract time is from contract</comment>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>From Schedule Period</value>
+    <comment>Contract Time is from schedule period</comment>
+  </data>
 </root>
