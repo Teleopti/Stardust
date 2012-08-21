@@ -22,13 +22,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	{
 		private IScheduleDay scheduleDay;
 		private ScheduleProjectionService target;
+	    private ScheduleDictionary dic;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
-			var dic = new ScheduleDictionary(new Scenario("sd"), new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)));
+			dic = new ScheduleDictionary(new Scenario("sd"), new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)));
 			scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2000, 1, 1));
 			target = new ScheduleProjectionService(scheduleDay, new ProjectionPayloadMerger());
 		}
@@ -641,6 +642,32 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			proj.ContractTime().TotalMinutes.Should().Be.EqualTo(0);
 		}
 
+        [Test]
+        public void ShouldGetContractTimeFromSchedulePeriodForProjection()
+        {
+            var dateOnly = new DateOnly(2012, 12, 1);
+            var person = PersonFactory.CreatePerson();
+            var team = TeamFactory.CreateSimpleTeam("Team");
+            var personContract = new PersonContract(new Contract("contract") { IsWorkTimeFromContract = false, IsWorkTimeFromSchedulePeriod = true },
+                    new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
+            var personPeriod = new PersonPeriod(dateOnly, personContract, team);
+            person.AddPersonPeriod(personPeriod);
+            var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(dateOnly);
+            schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(6);
+            person.AddSchedulePeriod(schedulePeriod);
+
+            var scheduleday = ExtractedSchedule.CreateScheduleDay(dic, person, dateOnly);
+            target = new ScheduleProjectionService(scheduleday, new ProjectionPayloadMerger());
+            var abs = PersonAbsenceFactory.CreatePersonAbsence(person, scheduleday.Scenario,
+                                                               new DateTimePeriod(
+                                                                   new DateTime(2012, 11, 29, 0, 0, 0, DateTimeKind.Utc),
+                                                                   new DateTime(2012, 12, 2, 0, 0, 0, DateTimeKind.Utc)));
+            abs.Layer.Payload.InContractTime = true;
+            scheduleday.Add(abs);
+            var proj = target.CreateProjection();
+
+            proj.ContractTime().TotalHours.Should().Be.EqualTo(6);
+        }
 
 		private static DateTimePeriod createPeriod(int startHour, int endHour)
 		{
