@@ -14,6 +14,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer.SMS
 	{
 		public string SmsMobileNumber(IPerson person)
 		{
+			// get wich optional column to use
+
+			// get a value if one
+			//foreach (var optionalColumnValue in person.OptionalColumnValueCollection)
+			//{
+				
+			//}
+			//no value
 			return "";
 		}
 	}

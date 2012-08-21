@@ -16,20 +16,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IPersonRepository _personRepository;
 		private readonly ISignificantChangeChecker _significantChangeChecker;
 		private readonly ISmsLinkChecker _smsLinkChecker;
-		private readonly ISmsSender _smsSender;
+		private readonly ISmsSenderFactory _smsSenderFactory;
+		
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
 		public SmsReadModelHandler(IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository,
 		                           IPersonRepository personRepository,
-		                           ISignificantChangeChecker significantChangeChecker, ISmsLinkChecker smsLinkChecker,
-		                           ISmsSender smsSender)
+		                           ISignificantChangeChecker significantChangeChecker, 
+								   ISmsLinkChecker smsLinkChecker,
+								   ISmsSenderFactory smsSenderFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_significantChangeChecker = significantChangeChecker;
 			_smsLinkChecker = smsLinkChecker;
-			_smsSender = smsSender;
+			_smsSenderFactory = smsSenderFactory;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -51,7 +53,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				{
 					var number = _smsLinkChecker.SmsMobileNumber(person);
 					if (!string.IsNullOrEmpty(number))
-						_smsSender.SendSms(dateOnlyPeriod, number);
+					{
+						var smsSender = _smsSenderFactory.Sender;
+						smsSender.SendSms(dateOnlyPeriod, number);
+					}
 				}
 
 				//if (message.SkipDelete)

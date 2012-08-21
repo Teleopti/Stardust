@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
+using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer.SMS;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -37,6 +38,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<UpdateScheduleProjectionReadModel>().As<IUpdateScheduleProjectionReadModel>();
 			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>();
 			builder.RegisterType<LoadSchedulingStateHolderForResourceCalculation>().As<ILoadSchedulingStateHolderForResourceCalculation>();
+			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
+			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
+			builder.RegisterType<SmsLinkChecker>().As<ISmsLinkChecker>();
+			builder.RegisterType<SmsSenderFactory>().As<ISmsSenderFactory>();
             //builder.RegisterType<UpdatePersonFinderReadModel>().As<IUpdatePersonFinderReadModel>();
 			//builder.RegisterType<UpdateGroupingReadModel>().As<IUpdateGroupingReadModel>();
 		}

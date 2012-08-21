@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private IScenarioRepository _scenarioRepository;
 		private IPersonRepository _personRepository;
 		private ISmsLinkChecker _smsLinkChecker;
+		private ISmsSenderFactory _smsSenderFactory;
 
 		[SetUp]
 		public void Setup()
@@ -34,8 +35,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_personRepository = _mocks.StrictMock<IPersonRepository>();
 			_significantChangeChecker = _mocks.StrictMock<ISignificantChangeChecker>();
 			_smsLinkChecker = _mocks.StrictMock<ISmsLinkChecker>();
+			_smsSenderFactory = _mocks.StrictMock<ISmsSenderFactory>();
 			_smsSender = _mocks.StrictMock<ISmsSender>();
-			_target = new SmsReadModelHandler(_unitOfWorkFactory, _scenarioRepository, _personRepository, _significantChangeChecker, _smsLinkChecker, _smsSender);
+			_target = new SmsReadModelHandler(_unitOfWorkFactory, _scenarioRepository, _personRepository, _significantChangeChecker, _smsLinkChecker, _smsSenderFactory);
 			DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator("", DateTime.Now.AddDays(100), 1000, 1000,
 			                                                                  LicenseType.Agent, new Percent(.10), null, null);
 			
@@ -105,6 +107,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			Expect.Call(_personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
 			Expect.Call(_significantChangeChecker.IsSignificantChange(dateOnlyPeriod, person)).Return(true);
 			Expect.Call(_smsLinkChecker.SmsMobileNumber(person)).Return("124578");
+			Expect.Call(_smsSenderFactory.Sender).Return(_smsSender);
 			Expect.Call(() => _smsSender.SendSms(dateOnlyPeriod, "124578"));
 			Expect.Call(uow.Dispose);
 
