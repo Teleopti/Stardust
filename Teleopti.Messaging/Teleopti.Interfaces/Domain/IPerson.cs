@@ -408,5 +408,12 @@ namespace Teleopti.Interfaces.Domain
     	/// <param name="column"></param>
     	/// <returns></returns>
     	IOptionalColumnValue GetColumnValue(IOptionalColumn column);
+
+        /// <summary>
+        /// Worktime from contract or from schedule period
+        /// </summary>
+        /// <param name="dateOnly"></param>
+        /// <returns>work time</returns>
+        TimeSpan WorkTime(DateOnly dateOnly);
     }
 }
