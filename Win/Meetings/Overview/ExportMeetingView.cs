@@ -101,7 +101,10 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 
         private void buttonExportClick(object sender, EventArgs e)
         {
-            _eventAggregator.GetEvent<ExportMeetingClicked>().Publish(string.Empty);
+            if(comboBoxScenario.SelectedItem == null)
+                MessageDialogs.ShowWarning(this, Resources.PleaseSelectAScenario, Resources.NoScenarioSelected);
+            else
+                _eventAggregator.GetEvent<ExportMeetingClicked>().Publish(string.Empty);
         }
 
        
