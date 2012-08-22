@@ -524,7 +524,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void addNewContract()
 		{
-			_contractList.Add(createContract());
+		    var newContract = createContract();
+		    newContract.IsWorkTimeFromContract = false;
+		    newContract.IsWorkTimeFromSchedulePeriod = true;
+            _contractList.Add(newContract);
 
 			loadContracts();
 			comboBoxAdvContracts.SelectedIndex = LastItemIndex;

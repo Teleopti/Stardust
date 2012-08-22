@@ -768,6 +768,21 @@ namespace Teleopti.Ccc.DomainTest.Common
             schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(6);
             _target.AddSchedulePeriod(schedulePeriod);
             Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(TimeSpan.FromHours(6)));
+        } 
+        
+        [Test]
+        public void ShouldGetContractTimeFromNoSchedulePeriod()
+        {
+            var dateOnly = new DateOnly(2012, 12, 1);
+            Assert.IsTrue(_target.IsOkToAddPersonPeriod(dateOnly));
+            Assert.IsTrue(_target.IsOkToAddSchedulePeriod(dateOnly));
+            var team = TeamFactory.CreateSimpleTeam("Team");
+            var personContract =
+                new PersonContract(new Contract("contract") { IsWorkTimeFromContract = false, IsWorkTimeFromSchedulePeriod = true },
+                    new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
+            var personPeriod = new PersonPeriod(dateOnly, personContract, team);
+            _target.AddPersonPeriod(personPeriod);
+            Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(WorkTime.DefaultWorkTime.AvgWorkTimePerDay));
         }
     }
 }
