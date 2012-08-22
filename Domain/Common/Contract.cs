@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Common
         {
             _employmentType = EmploymentType.FixedStaffNormalWorkTime;
             _description = new Description(name);
+            _isWorkTimeFromSchedulePeriod = true;
         }
 
         /// <summary>
