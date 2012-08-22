@@ -2,6 +2,7 @@
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
+	[Binding]
     public class AsmStepDefinition
     {
         [When(@"I am viewing asm gant")]
@@ -15,6 +16,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             ScenarioContext.Current.Pending();
         }
-
     }
 }
