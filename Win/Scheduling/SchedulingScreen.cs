@@ -96,6 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private readonly ILifetimeScope _container;
         private IScheduleScreenPersister _persister;
+		private readonly ISchedulingOptions _schedulingOptions;
         private static readonly ILog Log = LogManager.GetLogger(typeof (SchedulingScreen));
         private ISchedulerStateHolder _schedulerState;
         private readonly ClipHandler<IScheduleDay> _clipHandlerSchedule;
