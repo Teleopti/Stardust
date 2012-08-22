@@ -326,6 +326,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapNoneWhenNoActivity()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.Activity.Should().Be("(" + Resources.NoActivity + ")");
+		}
+
+		[Test]
 		public void ShouldMapActivityStartTimeLimitation()
 		{
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());

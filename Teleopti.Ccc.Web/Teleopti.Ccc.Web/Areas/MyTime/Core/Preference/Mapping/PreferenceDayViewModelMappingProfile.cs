@@ -61,7 +61,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.StartTimeString + "-" + s.Restriction.StartTimeLimitation.EndTimeString))
 				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.StartTimeString + "-" + s.Restriction.EndTimeLimitation.EndTimeString))
 				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(s => s.Restriction.WorkTimeLimitation.StartTimeString + "-" + s.Restriction.WorkTimeLimitation.EndTimeString))
-				.ForMember(d => d.Activity, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.Activity.Name)))
+				.ForMember(d => d.Activity, o => o.MapFrom(s =>
+				                                           	{
+				                                           		var activityName = GetActivityRestrictionValue(s, r => r.Activity.Name);
+				                                           		return string.IsNullOrEmpty(activityName) ? "(" + Resources.NoActivity + ")" : activityName;
+				                                           	}))
 				.ForMember(d => d.ActivityStartTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.StartTimeLimitation.StartTimeString + "-" + r.StartTimeLimitation.EndTimeString)))
 				.ForMember(d => d.ActivityEndTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.EndTimeLimitation.StartTimeString + "-" + r.EndTimeLimitation.EndTimeString)))
 				.ForMember(d => d.ActivityTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.WorkTimeLimitation.StartTimeString + "-" + r.WorkTimeLimitation.EndTimeString)))

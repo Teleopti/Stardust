@@ -10965,4 +10965,8 @@ These options are activated:
     <value>File export finished</value>
     <comment>File export finished</comment>
   </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>No activity</value>
+    <comment>No activity</comment>
+  </data>
 </root>
