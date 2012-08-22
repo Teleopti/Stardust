@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Autofac;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
@@ -11,13 +13,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	public class TestController : Controller
 	{
+		private readonly IContainer _container;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
 
-		public TestController(ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
+		public TestController(IContainer container, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
 		{
+			_container = container;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
 			_logon = logon;
@@ -27,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public ViewResult BeforeScenario()
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
+			updateIocNow(new Now());
 			var viewModel = new TestMessageViewModel
 								{
 									Title = "Setting up for scenario",
@@ -83,6 +88,27 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			                		Message = "Cookie has an invalid datasource on your command!"
 			                	};
 			return View("Message", viewModel);
+		}
+
+		public EmptyResult SetCurrentTime(DateTime dateSet)
+		{
+			var newTime = new ModifiedNow {UtcTime = dateSet};
+			updateIocNow(newTime);
+
+			return new EmptyResult();
+		}
+
+		private void updateIocNow(INow newTime)
+		{
+			var updater = new ContainerBuilder();
+			updater.Register(c => newTime).As<INow>();
+			updater.Update(_container);
+		}
+
+		private class ModifiedNow : INow
+		{
+			public DateTime Time { get; set; }
+			public DateTime UtcTime { get; set; }
 		}
 	}
 }
