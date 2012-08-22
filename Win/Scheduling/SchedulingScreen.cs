@@ -4764,6 +4764,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if (optimizerPreferences.Extra.UseTeams)
                     {
                         _groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
+						break;
                     }
 
 					if (optimizerPreferences.Extra.UseBlockScheduling)

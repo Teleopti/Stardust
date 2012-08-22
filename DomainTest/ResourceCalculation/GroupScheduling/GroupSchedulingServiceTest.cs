@@ -137,6 +137,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
                 Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.AtLeastOnce();
+            	Expect.Call(_scheduleMatrixPro.SelectedPeriod).Return(new DateOnlyPeriod(_date1, _date1)).Repeat.
+            		AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
             }
 
@@ -191,6 +193,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
                 Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro.SelectedPeriod).Return(new DateOnlyPeriod(_date1, _date1)).Repeat.
+					AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
             }
 
@@ -229,6 +233,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
                 Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro.SelectedPeriod).Return(new DateOnlyPeriod(_date1, _date2)).Repeat.
+					AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
 
             }

@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                         //AddResult(groupPerson, dateOnly, "XXCan't Schedule Team");
                         _rollbackService.Rollback();
                         _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
-                        continue;
 				    }
 				}
 			}
@@ -116,31 +115,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				{
 					if (scheduleMatrixPro.Person == scheduleDay.Person)
 					{
-						if (!scheduleMatrixPro.UnlockedDays.Contains(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)))
+						if (scheduleMatrixPro.SelectedPeriod.Contains(dateOnly))
 						{
-							locked = true;
+							if (!scheduleMatrixPro.UnlockedDays.Contains(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)))
+							{
+								locked = true;
+							}
 						}
-						//foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
-						//{
-						//    if(scheduleDayPro.Day == scheduleDay.DateOnlyAsPeriod.DateOnly)
-						//    {
-						//        locked = false;
-						//        break;
-						//    }
-						//}
-
-						//if(locked == false) break;
 					}
-					
 				}
 				if (locked)
 				{
 					continue;
 				}
-
-
-
-				
 
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 				                                                            schedulingOptions.ConsiderShortBreaks);
