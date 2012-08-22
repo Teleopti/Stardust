@@ -4750,7 +4750,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 																	 displayList[0], false, _optimizerOriginalPreferences.SchedulingOptions, options.DaysOffPreferences);
 
                     _optimizationHelperWin.ResourceCalculateMarkedDays(e, null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
-					//_optimizationHelperWin.ResourceCalculateMarkedDays(e, null, optimizerPreferences.Rescheduling.ConsiderShortBreaks, true);
 
 					IList<IScheduleMatrixPro> matrixList =
                         OptimizerHelperHelper.CreateMatrixList(selectedSchedules, _schedulerState.SchedulingResultState, _container);
@@ -4765,8 +4764,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					
 					if (optimizerPreferences.Extra.UseTeams)
                     {
-                        _groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions);
-                        break;
+                        _groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
+						break;
                     }
 
 					if (optimizerPreferences.Extra.UseBlockScheduling)
@@ -4777,10 +4776,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     {
                         _scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
                     }
-
-
                     break;
-
             }
 
             _undoRedo.CommitBatch();
@@ -4920,7 +4916,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState);
             _scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 
-            _groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container, _scheduleOptimizerHelper);
+            _groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);
             _blockOptimizerHelper = new BlockOptimizerHelper(_container, _scheduleOptimizerHelper);
 
             SchedulerState.SchedulingResultState.ResourcesChanged += _optimizationHelper_ResourcesChanged;

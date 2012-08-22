@@ -84,6 +84,9 @@ namespace Teleopti.Ccc.Win.Optimization
 
             Preferences.UseTeams = checkBoxTeams.Checked;
         	Preferences.KeepSameDaysOffInTeam = checkBoxKeepWeekEndsTogether.Checked;
+			Preferences.UseGroupSchedulingCommonCategory = checkBoxCommonCategory.Checked;
+			Preferences.UseGroupSchedulingCommonStart = checkBoxCommonStart.Checked;
+			Preferences.UseGroupSchedulingCommonEnd = checkBoxCommonEnd.Checked;
 
             Preferences.GroupPageOnTeam = (IGroupPageLight)comboBoxGroupPageOnTeams.SelectedItem;
 
@@ -111,6 +114,9 @@ namespace Teleopti.Ccc.Win.Optimization
 			if (checkBoxBlock.Checked) Preferences.UseTeams = false;
 			checkBoxTeams.Checked = Preferences.UseTeams;
         	checkBoxKeepWeekEndsTogether.Checked = Preferences.KeepSameDaysOffInTeam;
+        	checkBoxCommonCategory.Checked = Preferences.UseGroupSchedulingCommonCategory;
+        	checkBoxCommonStart.Checked = Preferences.UseGroupSchedulingCommonStart;
+        	checkBoxCommonEnd.Checked = Preferences.UseGroupSchedulingCommonEnd;
 
             if (Preferences.GroupPageOnTeam != null)
                 comboBoxGroupPageOnTeams.SelectedValue = Preferences.GroupPageOnTeam.Key;
@@ -126,7 +132,6 @@ namespace Teleopti.Ccc.Win.Optimization
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
 
 
-           
         }
 
         private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
@@ -142,6 +147,17 @@ namespace Teleopti.Ccc.Win.Optimization
             radioButtonSchedulePeriod.Enabled = checkBoxBlock.Checked;
         }
 
+        public bool  ValidateDefaultValuesForTeam()
+        {
+            if (checkBoxTeams.Checked)
+                //check if none of the options are not checked. Set the default values
+                if (!(checkBoxCommonCategory.Checked || checkBoxCommonStart.Checked || checkBoxCommonEnd.Checked ))
+                {
+                    return false ;
+                }
+            return true;
+        }
+
         private void checkBoxTeams_CheckedChanged(object sender, System.EventArgs e)
         {
         	checkBoxBlock.Enabled = !checkBoxTeams.Checked;
@@ -152,6 +168,9 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             comboBoxGroupPageOnTeams.Enabled = checkBoxTeams.Checked;
 			checkBoxKeepWeekEndsTogether.Enabled = checkBoxTeams.Checked;
+			checkBoxCommonCategory.Enabled = checkBoxTeams.Checked;
+			checkBoxCommonStart.Enabled = checkBoxTeams.Checked;
+			checkBoxCommonEnd.Enabled = checkBoxTeams.Checked;
         }
 
       

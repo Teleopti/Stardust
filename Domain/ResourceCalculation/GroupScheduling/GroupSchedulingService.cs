@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                         //AddResult(groupPerson, dateOnly, "XXCan't Schedule Team");
                         _rollbackService.Rollback();
                         _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
-                        continue;
 				    }
 				}
 			}
@@ -104,49 +103,52 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                 return false;
             }
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(members, dateOnly, schedulingOptions, scheduleDictionary);
-            foreach (var person in members.GetRandom(members.Count, true))
-            {
-                IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
+			foreach (var person in members.GetRandom(members.Count, true))
+			{
+				IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
 
-                bool locked = true;
-                foreach (var scheduleMatrixPro in matrixList)
-                {
-                    if (scheduleMatrixPro.Person == scheduleDay.Person)
-                    {
-                        foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
-                        {
-                            if(scheduleDayPro.Day == scheduleDay.DateOnlyAsPeriod.DateOnly)
-                            {
-                                locked = false;
-                                break;
-                            }
-                        }
+				if (scheduleDay.IsScheduled())
+					continue;
 
-                        if(locked == false) break;
-                    }
-                }
+				bool locked = false;
+				foreach (var scheduleMatrixPro in matrixList)
+				{
+					if (scheduleMatrixPro.Person == scheduleDay.Person)
+					{
+						if (scheduleMatrixPro.SelectedPeriod.Contains(dateOnly))
+						{
+							if (!scheduleMatrixPro.UnlockedDays.Contains(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)))
+							{
+								locked = true;
+							}
+						}
+					}
+				}
+				if (locked)
+				{
+					continue;
+				}
 
-                if (!locked && !scheduleDay.IsScheduled())
-                {
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-																		schedulingOptions.ConsiderShortBreaks);
-					
-					bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true,effectiveRestriction, resourceCalculateDelayer, best);
-                    if (!sucess)
-                    {
-                        return false;
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+				                                                            schedulingOptions.ConsiderShortBreaks);
 
-                    }
-                    OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
-                    if (_cancelMe)
-                    {
-                        _rollbackService.Rollback();
-                        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
-                        return false;
-                    }
-                }
-            }
-            return true;
+				bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, effectiveRestriction,
+				                                                   resourceCalculateDelayer, best);
+				if (!sucess)
+				{
+					return false;
+
+				}
+				OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
+				if (_cancelMe)
+				{
+					_rollbackService.Rollback();
+					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+					return false;
+				}
+
+			}
+			return true;
         }
 
         protected void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)

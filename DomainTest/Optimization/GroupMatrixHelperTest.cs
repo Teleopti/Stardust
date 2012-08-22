@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -19,6 +20,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleMatrixPro _activeScheduleMatrix;
         private IList<IScheduleMatrixPro> _allScheduleMatrixes;
         private IGroupMatrixContainerCreator _groupMatrixContainerCreator;
+    	private IGroupPersonConsistentChecker _groupPersonConsistentChecker;
+    	private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -31,8 +34,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _allScheduleMatrixes.Add(_activeScheduleMatrix);
 
             _groupMatrixContainerCreator = _mocks.StrictMock<IGroupMatrixContainerCreator>();
+        	_groupPersonConsistentChecker = _mocks.StrictMock<IGroupPersonConsistentChecker>();
 
-            _target = new GroupMatrixHelper(_groupMatrixContainerCreator);
+			_target = new GroupMatrixHelper(_groupMatrixContainerCreator, _groupPersonConsistentChecker);
+
+			_schedulingOptions = new SchedulingOptions();
 
         }
 
@@ -144,40 +150,42 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         }
 
-        [Test]
-        public void VerifyGroupMatrixContainerReturnsNullBecauseMatrixContainerCreatorReturnsNull()
-        {
-                       IVirtualSchedulePeriod schedulePeriodActivePerson = _mocks.StrictMock<IVirtualSchedulePeriod>();
+		[Test]
+		public void VerifyGroupMatrixContainerReturnsNullBecauseMatrixContainerCreatorReturnsNull()
+		{
+			IVirtualSchedulePeriod schedulePeriodActivePerson = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
-            IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
+			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
 
-            IPerson activePerson = _mocks.StrictMock<IPerson>();
-            IList<IPerson> persons = new List<IPerson>{ activePerson };
+			IPerson activePerson = _mocks.StrictMock<IPerson>();
+			IList<IPerson> persons = new List<IPerson> {activePerson};
 
-            DateOnly dayOffToRemove = new DateOnly(2001, 02, 01);
-            IList<DateOnly> daysOffToRemove = new List<DateOnly>{ dayOffToRemove };
-            
-            DateOnly dayOffToAdd = new DateOnly(2001, 02, 05);
-            IList<DateOnly> daysOffToAdd = new List<DateOnly> { dayOffToAdd };
+			DateOnly dayOffToRemove = new DateOnly(2001, 02, 01);
+			IList<DateOnly> daysOffToRemove = new List<DateOnly> {dayOffToRemove};
 
-            using(_mocks.Record())
-            {
-                Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(persons));
-                Expect.Call(_activeScheduleMatrix.Person).Return(activePerson);
-                Expect.Call(_activeScheduleMatrix.SchedulePeriod).Return(schedulePeriodActivePerson);
-                Expect.Call(schedulePeriodActivePerson.DateOnlyPeriod).Return(new DateOnlyPeriod(2001, 01, 01, 2001, 12, 31));
-                Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences))
-                    .Return(null);
-            }
-            using(_mocks.Playback())
-            {
-                IList<GroupMatrixContainer> result =
-                    _target.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences);
-                Assert.IsNull(result);
-            }
-        }
+			DateOnly dayOffToAdd = new DateOnly(2001, 02, 05);
+			IList<DateOnly> daysOffToAdd = new List<DateOnly> {dayOffToAdd};
 
-        [Test]
+			using (_mocks.Record())
+			{
+				Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(persons));
+				Expect.Call(_activeScheduleMatrix.Person).Return(activePerson);
+				Expect.Call(_activeScheduleMatrix.SchedulePeriod).Return(schedulePeriodActivePerson);
+				Expect.Call(schedulePeriodActivePerson.DateOnlyPeriod).Return(new DateOnlyPeriod(2001, 01, 01, 2001, 12, 31));
+				Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd,
+				                                                                    _activeScheduleMatrix, _daysOffPreferences))
+					.Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				IList<GroupMatrixContainer> result =
+					_target.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson,
+					                                    _daysOffPreferences);
+				Assert.IsNull(result);
+			}
+		}
+
+    	[Test]
         public void VerifyValidateDayOffMoves()
         {
 
@@ -302,15 +310,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
             IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
             ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-            ISchedulingOptions schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
+
 
             using (_mocks.Record())
             {
-            	Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson, _allScheduleMatrixes)).IgnoreArguments().Return(true);
+            	Expect.Call(groupSchedulingService.ScheduleOneDay(date1, _schedulingOptions, groupPerson, _allScheduleMatrixes)).IgnoreArguments().Return(true);
+            	Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, date1,
+            	                                                                           _schedulingOptions)).Return(true);
             }
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, schedulingOptions));
+                Assert.IsTrue(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions));
             }
         }
 
@@ -325,19 +335,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
             IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
             ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-            ISchedulingOptions schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
 
             using (_mocks.Record())
             {
-            	Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson,
+            	Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, date1,
+            	                                                                           _schedulingOptions)).IgnoreArguments().Return(true).Repeat.Twice();
+            	Expect.Call(groupSchedulingService.ScheduleOneDay(date1, _schedulingOptions, groupPerson,
             	                                                  _allScheduleMatrixes)).IgnoreArguments().Return(true);
-				Expect.Call(groupSchedulingService.ScheduleOneDay(date2, schedulingOptions, groupPerson,
+				Expect.Call(groupSchedulingService.ScheduleOneDay(date2, _schedulingOptions, groupPerson,
 																  _allScheduleMatrixes)).IgnoreArguments().Return(false);
                 rollbackService.Rollback();
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, schedulingOptions));
+                Assert.IsFalse(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions));
             }
         }
     }

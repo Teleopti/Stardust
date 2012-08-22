@@ -50,16 +50,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 _adherenceReportSetting = new GlobalSettingDataRepository(uow).FindValueByKey("AdherenceReportSetting", new AdherenceReportSetting());
                 _supportEmailSetting = new GlobalSettingDataRepository(uow).FindValueByKey("SupportEmailSetting", new StringSetting());
             }
-            IList<KeyValuePair<AdherenceReportSettingCalculationMethod, string>> calculatorTypeCollection 
-                = LanguageResourceHelper.TranslateEnumToList<AdherenceReportSettingCalculationMethod>();
+            var calculatorTypeCollection = LanguageResourceHelper.TranslateEnumToList<AdherenceReportSettingCalculationMethod>();
+            var adherenceSetting = _adherenceReportSetting.CalculationMethod;
             comboBoxAdvAdherencReportCalculation.DataSource = calculatorTypeCollection;
             comboBoxAdvAdherencReportCalculation.DisplayMember = "Value";
             comboBoxAdvAdherencReportCalculation.ValueMember = "Key";
-            foreach (KeyValuePair<AdherenceReportSettingCalculationMethod, string> pair in calculatorTypeCollection)
-            {
-                if (pair.Key == _adherenceReportSetting.CalculationMethod)
-                    comboBoxAdvAdherencReportCalculation.SelectedValue = pair.Key;
-            }
+
+            foreach (var pair in calculatorTypeCollection.Where(pair => pair.Key == adherenceSetting))
+                comboBoxAdvAdherencReportCalculation.SelectedValue = pair.Key;
+
+
             comboBoxAdvAdherencReportCalculation.SelectedIndexChanged += ComboBoxAdvAdherencReportCalculationSelectedIndexChanged;
             textBoxSuportEmail.Text = _supportEmailSetting.StringValue;
             initIntervalLengthComboBox(_defaultSegmentSetting.SegmentLength);

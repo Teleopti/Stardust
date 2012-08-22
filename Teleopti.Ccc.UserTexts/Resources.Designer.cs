@@ -14761,6 +14761,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Optimization Options.
+        /// </summary>
+        public static string OptimizationOptionMessageBox {
+            get {
+                return ResourceManager.GetString("OptimizationOptionMessageBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optimization steps.
         /// </summary>
         public static string OptimizationSteps {
@@ -19090,6 +19099,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select at least one option from Team Optimization. .
+        /// </summary>
+        public static string SelectAtleastOneOptimizationOption {
+            get {
+                return ResourceManager.GetString("SelectAtleastOneOptimizationOption", resourceCulture);
+            }
+        }
+        
+         /// <summary>
         ///   Looks up a localized string similar to Please select at least one option from Team Scheduling..
         /// </summary>
         public static string SelectAtleastOneSchedulingOption {
@@ -19097,6 +19115,7 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("SelectAtleastOneSchedulingOption", resourceCulture);
             }
         }
+
         
         /// <summary>
         ///   Looks up a localized string similar to Select attendees.

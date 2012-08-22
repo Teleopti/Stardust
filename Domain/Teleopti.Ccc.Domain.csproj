@@ -230,6 +230,13 @@
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToAdd.cs" />
+    <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemove.cs" />
+    <Compile Include="Optimization\GroupOptimizationValidatorRunner.cs" />
+    <Compile Include="Optimization\GroupOptimizerFindMatrixesForGroup.cs" />
+    <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroup.cs" />
+    <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameMatrix.cs" />
+    <Compile Include="Optimization\GroupPersonBuilderForOptimization.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
@@ -241,7 +248,6 @@
     <Compile Include="Optimization\ExtendReduceTimeOptimizer.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizerService.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerCreator.cs" />
-    <Compile Include="Optimization\GroupDayOffSingleOptimizer.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationService.cs" />
     <Compile Include="Optimization\DayOffOptimizerConflictHandler.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidator.cs" />
@@ -249,10 +255,6 @@
     <Compile Include="Optimization\GroupDayOffOptimizerContainer.cs" />
     <Compile Include="Optimization\GroupMatrixContainerCreator.cs" />
     <Compile Include="Optimization\GroupMatrixHelper.cs" />
-    <Compile Include="Optimization\GroupPersonPreOptimizationChecker.cs" />
-    <Compile Include="Optimization\GroupPersonSameDayOffsChecker.cs" />
-    <Compile Include="Optimization\GroupPersonSameForPersonOnDateChecker.cs" />
-    <Compile Include="Optimization\GroupPersonSchedulePeriodChecker.cs" />
     <Compile Include="Optimization\IPersonExtractor.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />
