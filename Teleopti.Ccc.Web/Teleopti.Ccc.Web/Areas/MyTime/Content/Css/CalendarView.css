@@ -49,7 +49,7 @@
 .calendarview-week li{
 	font-size: 12px;
 	display: inline-block;
-	min-height: 115px;
+	height: 117px;
 	vertical-align: top;
 	width: 130px;
 }

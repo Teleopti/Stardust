@@ -76,7 +76,7 @@
 .time-limitation.icon.rightarrow,
 .time-limitation.icon.doublearrow-blue
 {
-	display: block;
+	display: block; /* required because chrome will display a different height without content otherwise */
 	width: 110px;
 	height: 13px;
 }
