@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private int _loadedCounter;
 		private IList<IPerson> _persons;
 		private IPerson _selectedPerson;
+		//private bool _useSchedule;
 
 		private delegate void GridDelegate();
 
@@ -153,8 +154,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_persons = persons;
 			_selectedPerson = selectedPerson;
 			_loadedCounter = 0;
-
-			_model.DisplayRows.Clear();
+			//_useSchedule = useSchedule;
 
 			var scheduleMatrixListCreator = new ScheduleMatrixListCreator(stateHolder.SchedulingResultState);
 			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, scheduleMatrixListCreator);
@@ -165,6 +165,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		public void LoadData(RestrictionSchedulingOptions schedulingOptions)
 		{
 			_loadedCounter = 0;
+			//_useSchedule = useSchedule;
 			_schedulingOptions = schedulingOptions;
 
 			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)

@@ -64,18 +64,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowExceptionOnNoMatrixPro()
-		{
-			_effectiveRestrictionExtractor.Extract(null, _preferenceCellData, null, _dateTimePeriod, _periodTarget);	
-		}
-
-		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowExceptionOnNoPreferenceCellData()
-		{
-			_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, null, null, _dateTimePeriod, _periodTarget);
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSetTotalRestrictionForPreferredAbsence()
 		{
@@ -110,7 +98,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Playback())
 			{
-				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget);	
+				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget);
 			}	
 		}
 
