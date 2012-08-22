@@ -6,7 +6,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIClickTheDeleteButton()
 		{
 			if (Pages.Pages.Current is PreferencePage)
-				TestControllerMethods.WaitForPreferenceFeedbackToLoad();
+				TestControllerMethods.WaitForPreferencesToLoad();
 			Pages.Pages.CurrentDeleteButton.DeleteButton.EventualClick();
 		}
 

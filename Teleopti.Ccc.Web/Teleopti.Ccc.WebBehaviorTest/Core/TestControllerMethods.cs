@@ -79,12 +79,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PageLog('" + message + "');");
 		}
 
-		public static void WaitForPreferenceFeedbackToLoad()
+		public static void WaitForPreferencesToLoad()
 		{
-			if (Browser.Current.Text.Contains("Preference feedback loaded!"))
+			if (Browser.Current.Text.Contains("Preference loaded!"))
 				return;
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.InformWhenPreferenceFeedbackIsLoaded('Preference feedback loaded!');");
-			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Preference feedback loaded!"));
+			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.InformWhenPreferenceLoaded('Preference loaded!');");
+			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Preference loaded!"));
 		}
 	}
 }

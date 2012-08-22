@@ -1,18 +1,25 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
+	public static class UserTestData
+	{
+		public static IPerson AgentWindowsUser;
+
+		public static IPerson UserWithNoPermission;
+		public static string UserWithNoPermissionUserName = "noPermission";
+	}
+
 	public static class TestData
 	{
 
 		public static IDataSource DataSource;
+		public static IBusinessUnit BusinessUnit { get { return CommonBusinessUnit.BusinessUnitFromFakeState; } }
 
 		public static IPerson PersonThatCreatesTestData;
 
 		public static string CommonPassword = "1";
-
-		public static IBusinessUnit BusinessUnit;
-		public static IBusinessUnit SecondBusinessUnit;
 
 		public static IApplicationRole AdministratorRole;
 		public static IApplicationRole AgentRole;
@@ -60,12 +67,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IAbsence Absence;
 		public static IAbsence ConfidentialAbsence;
 		public static IAbsence AbsenceInContractTime;
-
-
-		public static ITeam CommonTeam;
-		public static ISite CommonSite;
-		public static ISite AnotherSite;
-
-		public static IPartTimePercentage PartTimePercentageOne;
 	}
 }

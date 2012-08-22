@@ -7,7 +7,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
@@ -166,27 +165,5 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			Assert.Throws<MoreThanOneStudentAvailabilityFoundException>(() => _target.GetStudentAvailabilityForDate(scheduleDays, date));
 		}
 
-	}
-
-	[TestFixture]
-	public class PreferenceProviderTest
-	{
-		
-		[Test]
-		public void ShouldGetPreferencesForPeriod()
-		{
-			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			var target = new PreferenceProvider(scheduleProvider);
-			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
-			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
-
-			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new[] {preferenceDay, MockRepository.GenerateMock<IScheduleData>()}));
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] {scheduleDay});
-
-			var result = target.GetPreferencesForPeriod(period);
-
-			result.Single().Should().Be.SameInstanceAs(preferenceDay);
-		}
 	}
 }

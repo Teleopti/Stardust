@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 using Find = WatiN.Core.Find;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I select a standard preference")]
 		public void WhenIChangeStandardPreference()
 		{
-			TestControllerMethods.WaitForPreferenceFeedbackToLoad();
+			TestControllerMethods.WaitForPreferencesToLoad();
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
 			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, true);
 		}
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I try to select a standard preference")]
 		public void WhenITryToSelectStandardPreference()
 		{
-			TestControllerMethods.WaitForPreferenceFeedbackToLoad();
+			TestControllerMethods.WaitForPreferencesToLoad();
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
 			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, false);
 		}

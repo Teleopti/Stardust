@@ -81,84 +81,107 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
+    <Compile Include="PreferencesExtendedStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Specific\AnotherSite.cs" />
+    <Compile Include="Data\Setups\Common\CommonBusinessUnit.cs" />
+    <Compile Include="Data\Setups\Common\CommonSite.cs" />
+    <Compile Include="Data\Setups\Common\CommonTeam.cs" />
+    <Compile Include="Data\Setups\Specific\SecondBusinessUnit.cs" />
+    <Compile Include="Data\Setups\Generic\SchedulePeriodConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\RoleForUser.cs" />
+    <Compile Include="Data\Setups\Generic\WorkflowControlSetForUser.cs" />
+    <Compile Include="Data\Setups\Generic\BusinessUnitConfigurable.cs" />
+    <Compile Include="Bindings\Specific\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\WorkflowControlSetConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\RoleConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\PersonPeriodConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\PreferenceConfigurable.cs" />
     <Compile Include="Core\BrowserImpl\ProcessHelpers.cs" />
     <Compile Include="Core\BrowserImpl\WatiNSingleBrowserFireFoxHandler.cs" />
     <Compile Include="Core\BrowserImpl\IBrowserHandler.cs" />
     <Compile Include="Core\BrowserImpl\WatiNSingleBrowserIEHandler.cs" />
     <Compile Include="Core\BrowserImpl\WatiNParallelBrowserIEHandler.cs" />
-    <Compile Include="Data\DataContext.cs" />
-    <Compile Include="Data\User\AgentSecondBusinessUnit.cs" />
-    <Compile Include="Data\User\AgentWithAnotherSiteAccess.cs" />
-    <Compile Include="Data\User\IUserRoleSetup.cs" />
-    <Compile Include="Data\User\SupervisorSecondBusinessUnit.cs" />
-    <Compile Include="Data\User\UserNoPermission.cs" />
+    <Compile Include="Data\GlobalDataContext.cs" />
+    <Compile Include="Data\GlobalPrincipalState.cs" />
+    <Compile Include="Data\GlobalUnitOfWorkState.cs" />
+    <Compile Include="Data\ScenarioUnitOfWorkState.cs" />
+    <Compile Include="Data\Setups\Specific\AgentSecondBusinessUnit.cs" />
+    <Compile Include="Data\Setups\Specific\AgentWithAnotherSiteAccess.cs" />
+    <Compile Include="Data\Setups\Common\CommonPartTimePercentage.cs" />
+    <Compile Include="Data\Setups\Specific\IUserRoleSetup.cs" />
+    <Compile Include="Data\Setups\Specific\SupervisorSecondBusinessUnit.cs" />
+    <Compile Include="Data\Setups\Specific\UserNoPermission.cs" />
     <Compile Include="PreferencesExtended.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesExtended.feature</DependentUpon>
     </Compile>
     <Compile Include="AbsenceRequestFromRequestStepDefinitions.cs" />
-    <Compile Include="Data\User\ShiftsForTwoWeeksWithDifferentActivities.cs" />
+    <Compile Include="Data\Setups\Specific\ShiftsForTwoWeeksWithDifferentActivities.cs" />
     <Compile Include="ManageRequestStepDefinitions.cs" />
-    <Compile Include="Data\User\DoNotHavePersonPeriods.cs" />
-    <Compile Include="Data\User\DoNotHaveSchedulePeriods.cs" />
+    <Compile Include="Data\Setups\Specific\DoNotHavePersonPeriods.cs" />
+    <Compile Include="Data\Setups\Specific\DoNotHaveSchedulePeriods.cs" />
     <Compile Include="QUnitTestsStepDefinition.cs" />
-    <Compile Include="Data\User\AbsencePreferenceInContractTimeOnWeekday.cs" />
-    <Compile Include="Data\User\AbsencePreferenceOnWeekday.cs" />
-    <Compile Include="Data\User\CommonScenario.cs" />
-    <Compile Include="Data\User\ContractScheduleFromTable.cs" />
-    <Compile Include="Data\User\DayOffPreferenceOnWeekday.cs" />
-    <Compile Include="Data\User\IContractScheduleSetup.cs" />
-    <Compile Include="Data\User\ShiftOnWeekday.cs" />
-    <Compile Include="Data\User\SecondScenario.cs" />
+    <Compile Include="Data\Setups\Specific\AbsencePreferenceInContractTimeOnWeekday.cs" />
+    <Compile Include="Data\Setups\Specific\AbsencePreferenceOnWeekday.cs" />
+    <Compile Include="Data\Setups\Common\CommonScenario.cs" />
+    <Compile Include="Data\Setups\Specific\ContractScheduleFromTable.cs" />
+    <Compile Include="Data\Setups\Specific\DayOffPreferenceOnWeekday.cs" />
+    <Compile Include="Data\Setups\Specific\IContractScheduleSetup.cs" />
+    <Compile Include="Data\Setups\Specific\ShiftOnWeekday.cs" />
+    <Compile Include="Data\Setups\Specific\SecondScenario.cs" />
     <Compile Include="Data\DataFactory.cs" />
-    <Compile Include="Data\User\CommonContract.cs" />
-    <Compile Include="Data\User\ContractFromTable.cs" />
-    <Compile Include="Data\User\ContractScheduleWith2DaysOff.cs" />
-    <Compile Include="Data\User\DayOffScheduled.cs" />
-    <Compile Include="Data\User\IContractSetup.cs" />
-    <Compile Include="Data\User\ShiftCategoryPreferenceOnWeekday.cs" />
-    <Compile Include="Data\User\UserContractSchedule.cs" />
+    <Compile Include="Data\Setups\Common\CommonContract.cs" />
+    <Compile Include="Data\Setups\Specific\ContractFromTable.cs" />
+    <Compile Include="Data\Setups\Common\CommonContractSchedule.cs" />
+    <Compile Include="Data\Setups\Specific\DayOffScheduled.cs" />
+    <Compile Include="Data\Setups\Specific\IContractSetup.cs" />
+    <Compile Include="Data\Setups\Specific\ShiftCategoryPreferenceOnWeekday.cs" />
+    <Compile Include="Data\Setups\Specific\UserContractSchedule.cs" />
     <Compile Include="PreferencesPeriodFeedbackStepDefinition.cs" />
     <Compile Include="Core\TestControllerMethods.cs" />
-    <Compile Include="Data\User\AgentWithoutAbsenceRequestsAccess.cs" />
-    <Compile Include="Data\User\AbsencePreferenceToday.cs" />
-    <Compile Include="Data\User\ExistingAbsenceRequest.cs" />
-    <Compile Include="Data\User\ExistingAvailability.cs" />
-    <Compile Include="Data\User\ExistingLunchPreferenceToday.cs" />
-    <Compile Include="Data\User\RuleSetBagWithTwoShiftsAndLunch.cs" />
-    <Compile Include="Data\User\AdministratorRoleWithEveryoneData.cs" />
-    <Compile Include="Data\User\AgentThatLeavesTomorrow.cs" />
-    <Compile Include="Data\User\ShiftCategoryPreferenceToday.cs" />
-    <Compile Include="Data\User\SecondShiftCategory.cs" />
-    <Compile Include="Data\User\FirstShiftCategory.cs" />
-    <Compile Include="Data\User\RuleSetBagWithTwoCategories.cs" />
-    <Compile Include="Data\User\ExistingExtendedPreferenceToday.cs" />
-    <Compile Include="Data\User\ExistingPreference.cs" />
-    <Compile Include="Data\User\ExistingPreferenceToday.cs" />
-    <Compile Include="Data\User\RuleSetBag.cs" />
+    <Compile Include="Data\Setups\Specific\AgentWithoutAbsenceRequestsAccess.cs" />
+    <Compile Include="Data\Setups\Specific\AbsencePreferenceToday.cs" />
+    <Compile Include="Data\Setups\Specific\ExistingAbsenceRequest.cs" />
+    <Compile Include="Data\Setups\Specific\ExistingAvailability.cs" />
+    <Compile Include="Data\Setups\Specific\ExistingLunchPreferenceToday.cs" />
+    <Compile Include="Data\Setups\Specific\RuleSetBagWithTwoShiftsAndLunch.cs" />
+    <Compile Include="Data\Setups\Specific\AdministratorRoleWithEveryoneData.cs" />
+    <Compile Include="Data\Setups\Specific\AgentThatLeavesTomorrow.cs" />
+    <Compile Include="Data\Setups\Specific\ShiftCategoryPreferenceToday.cs" />
+    <Compile Include="Data\Setups\Specific\SecondShiftCategory.cs" />
+    <Compile Include="Data\Setups\Specific\FirstShiftCategory.cs" />
+    <Compile Include="Data\Setups\Specific\RuleSetBagWithTwoCategories.cs" />
+    <Compile Include="Data\Setups\Specific\ExistingExtendedPreferenceToday.cs" />
+    <Compile Include="Data\Setups\Specific\ExistingPreference.cs" />
+    <Compile Include="Data\Setups\Specific\ExistingPreferenceToday.cs" />
+    <Compile Include="Data\Setups\Specific\RuleSetBag.cs" />
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
-    <Compile Include="Data\User\BaseShiftCategory.cs" />
-    <Compile Include="Data\User\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
+    <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
+    <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
     <Compile Include="MobileSignInStepDefinitions.cs" />
-    <Compile Include="Data\User\AbsenceToday.cs" />
-    <Compile Include="Data\User\AgentWithoutTeamDataAccess.cs" />
-    <Compile Include="Data\User\AgentWithSiteAccess.cs" />
-    <Compile Include="Data\User\AnotherSitesSecondTeam.cs" />
-    <Compile Include="Data\User\AnotherSitesTeam.cs" />
-    <Compile Include="Data\User\AnotherTeam.cs" />
-    <Compile Include="Data\User\GeneratedTeam.cs" />
-    <Compile Include="Data\User\HawaiiTimeZone.cs" />
-    <Compile Include="Data\User\Interfaces\IDataSetup.cs" />
-    <Compile Include="Data\User\NoVirtualSchedulePeriod.cs" />
-    <Compile Include="Data\User\DayOffToday.cs" />
-    <Compile Include="Data\User\SchedulePeriod.cs" />
-    <Compile Include="Data\User\ShiftToday.cs" />
-    <Compile Include="Data\User\ShiftWithConfidentialAbsence.cs" />
-    <Compile Include="Data\User\Team.cs" />
-    <Compile Include="Data\User\TwoWeeksAbsence.cs" />
+    <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />
+    <Compile Include="Data\Setups\Specific\AgentWithoutTeamDataAccess.cs" />
+    <Compile Include="Data\Setups\Specific\AgentWithSiteAccess.cs" />
+    <Compile Include="Data\Setups\Specific\AnotherSitesSecondTeam.cs" />
+    <Compile Include="Data\Setups\Specific\AnotherSitesTeam.cs" />
+    <Compile Include="Data\Setups\Specific\AnotherTeam.cs" />
+    <Compile Include="Data\Setups\Specific\GeneratedTeam.cs" />
+    <Compile Include="Data\Setups\Specific\HawaiiTimeZone.cs" />
+    <Compile Include="Data\IDataSetup.cs" />
+    <Compile Include="Data\Setups\Specific\NoVirtualSchedulePeriod.cs" />
+    <Compile Include="Data\Setups\Specific\DayOffToday.cs" />
+    <Compile Include="Data\Setups\Specific\SchedulePeriod.cs" />
+    <Compile Include="Data\Setups\Specific\ShiftToday.cs" />
+    <Compile Include="Data\Setups\Specific\ShiftWithConfidentialAbsence.cs" />
+    <Compile Include="Data\Setups\Specific\Team.cs" />
+    <Compile Include="Data\Setups\Specific\TwoWeeksAbsence.cs" />
     <Compile Include="MobileSignIn.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -177,10 +200,10 @@
     <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />
     <Compile Include="Pages\TeamSchedulePage.cs" />
-    <Compile Include="Data\User\AgentWithoutTeamScheduleAccess.cs" />
+    <Compile Include="Data\Setups\Specific\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
-    <Compile Include="Data\User\Administrator.cs" />
-    <Compile Include="Data\User\Supervisor.cs" />
+    <Compile Include="Data\Setups\Specific\Administrator.cs" />
+    <Compile Include="Data\Setups\Specific\Supervisor.cs" />
     <Compile Include="MobileReports.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -205,7 +228,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Data\User\RequestableAbsenceType.cs" />
+    <Compile Include="Data\Setups\Specific\RequestableAbsenceType.cs" />
     <Compile Include="QUnitTests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -234,58 +257,57 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Data\User\AgentWithoutRequestsAccess.cs" />
-    <Compile Include="Data\User\AgentWithoutTextRequestsAccess.cs" />
-    <Compile Include="Data\User\ExistingTextRequest.cs" />
-    <Compile Include="Data\User\AgentWithoutPreferencesAccess.cs" />
+    <Compile Include="Data\Setups\Specific\AgentWithoutRequestsAccess.cs" />
+    <Compile Include="Data\Setups\Specific\AgentWithoutTextRequestsAccess.cs" />
+    <Compile Include="Data\Setups\Specific\ExistingTextRequest.cs" />
+    <Compile Include="Data\Setups\Specific\AgentWithoutPreferencesAccess.cs" />
     <Compile Include="Core\Eventual.cs" />
     <Compile Include="Core\Extensions\LogExtensions.cs" />
-    <Compile Include="Data\User\Agent.cs" />
-    <Compile Include="Data\User\AgentWithoutStudentAvailabilityAccess.cs" />
+    <Compile Include="Data\Setups\Specific\Agent.cs" />
+    <Compile Include="Data\Setups\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
     <Compile Include="ApplicationStartRecovery.feature.cs">
       <DependentUpon>ApplicationStartRecovery.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\TestData.cs" />
-    <Compile Include="Data\UserTestData.cs" />
-    <Compile Include="Data\User\AnotherStandardPreference.cs" />
-    <Compile Include="Data\User\BasePreference.cs" />
-    <Compile Include="Data\User\ExistingTextRequestOver2Days.cs" />
-    <Compile Include="Data\User\Interfaces\IPostSetup.cs" />
-    <Compile Include="Data\User\MoreThanOnePageOfRequests.cs" />
-    <Compile Include="Data\User\PreferenceClosedWorkflowControlSet.cs" />
-    <Compile Include="Data\User\PreferenceOpenNextMonthWorkflowControlSet.cs" />
-    <Compile Include="Data\User\ExistingWorkflowControlSet.cs" />
-    <Compile Include="Data\User\PreferenceOpenWorkflowControlSet.cs" />
-    <Compile Include="Data\User\DayOffPreference.cs" />
-    <Compile Include="Data\User\AbsencePreference.cs" />
-    <Compile Include="Data\User\DoNotHaveVirtualSchedulePeriods.cs" />
-    <Compile Include="Data\User\NoWorkflowControlSet.cs" />
-    <Compile Include="Data\User\PreferenceOpenWithAllowedPreferencesWorkflowControlSet.cs" />
-    <Compile Include="Data\User\ScheduleIsNotPublished.cs" />
-    <Compile Include="Data\User\ScheduleIsPublishedUntilWednesday.cs" />
-    <Compile Include="Data\User\ShiftCategoryPreference.cs" />
-    <Compile Include="Data\User\StandardPreference.cs" />
-    <Compile Include="Data\User\StudentAvailabilityClosedWorkflowControlSet.cs" />
-    <Compile Include="Data\User\StudentAvailabilityOpenNextMonthWorkflowControlSet.cs" />
-    <Compile Include="Data\User\StudentAvailabilityOpenWorkflowControlSet.cs" />
-    <Compile Include="Data\User\StudentAvailability.cs" />
-    <Compile Include="Data\User\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
-    <Compile Include="Data\User\USCulture.cs" />
-    <Compile Include="Data\User\PersonPeriod.cs" />
-    <Compile Include="Data\User\Interfaces\IUserDataSetup.cs" />
-    <Compile Include="Data\User\Interfaces\IUserSetup.cs" />
+    <Compile Include="Data\Setups\Specific\AnotherStandardPreference.cs" />
+    <Compile Include="Data\Setups\Specific\BasePreference.cs" />
+    <Compile Include="Data\Setups\Specific\ExistingTextRequestOver2Days.cs" />
+    <Compile Include="Data\IPostSetup.cs" />
+    <Compile Include="Data\Setups\Specific\MoreThanOnePageOfRequests.cs" />
+    <Compile Include="Data\Setups\Specific\PreferenceClosedWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Specific\PreferenceOpenNextMonthWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Specific\ExistingWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Specific\PreferenceOpenWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Specific\DayOffPreference.cs" />
+    <Compile Include="Data\Setups\Specific\AbsencePreference.cs" />
+    <Compile Include="Data\Setups\Specific\DoNotHaveVirtualSchedulePeriods.cs" />
+    <Compile Include="Data\Setups\Specific\NoWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Specific\PreferenceOpenWithAllowedPreferencesWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Specific\ScheduleIsNotPublished.cs" />
+    <Compile Include="Data\Setups\Specific\ScheduleIsPublishedUntilWednesday.cs" />
+    <Compile Include="Data\Setups\Specific\ShiftCategoryPreference.cs" />
+    <Compile Include="Data\Setups\Specific\StandardPreference.cs" />
+    <Compile Include="Data\Setups\Specific\StudentAvailabilityClosedWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Specific\StudentAvailabilityOpenNextMonthWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Specific\StudentAvailabilityOpenWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Specific\StudentAvailability.cs" />
+    <Compile Include="Data\Setups\Specific\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
+    <Compile Include="Data\Setups\Specific\USCulture.cs" />
+    <Compile Include="Data\Setups\Specific\PersonPeriod.cs" />
+    <Compile Include="Data\IUserDataSetup.cs" />
+    <Compile Include="Data\IUserSetup.cs" />
     <Compile Include="LicenseStepDefinitions.cs" />
-    <Compile Include="Data\User\MeetingOnThursday.cs" />
-    <Compile Include="Data\User\NightShiftOnMonday.cs" />
+    <Compile Include="Data\Setups\Specific\MeetingOnThursday.cs" />
+    <Compile Include="Data\Setups\Specific\NightShiftOnMonday.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
     <Compile Include="Pages\Common\CalendarCellsPage.cs" />
     <Compile Include="Pages\Common\DatePicker.cs" />
-    <Compile Include="Data\User\ScheduleIsPublished.cs" />
-    <Compile Include="Data\User\StudentAgent.cs" />
+    <Compile Include="Data\Setups\Specific\ScheduleIsPublished.cs" />
+    <Compile Include="Data\Setups\Specific\StudentAgent.cs" />
     <Compile Include="Pages\Common\IDeleteButton.cs" />
     <Compile Include="Pages\Common\IDateRangeSelector.cs" />
     <Compile Include="Core\Extensions\ElementExtensions.cs" />
@@ -304,10 +326,10 @@
     <Compile Include="PreferenceStepDefinition.cs" />
     <Compile Include="Core\Extensions\ScenarioContextExtensions.cs" />
     <Compile Include="Bindings\SharedStepDefinitions.cs" />
-    <Compile Include="Data\User\PublicNoteOnWednesday.cs" />
-    <Compile Include="Data\User\ShiftForDate.cs" />
-    <Compile Include="Data\User\ShiftOnThursday.cs" />
-    <Compile Include="Data\User\ShiftsForTwoWeeks.cs" />
+    <Compile Include="Data\Setups\Specific\PublicNoteOnWednesday.cs" />
+    <Compile Include="Data\Setups\Specific\ShiftForDate.cs" />
+    <Compile Include="Data\Setups\Specific\ShiftOnThursday.cs" />
+    <Compile Include="Data\Setups\Specific\ShiftsForTwoWeeks.cs" />
     <Compile Include="Requests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -347,7 +369,7 @@
     <Compile Include="Pages\StudentAvailabilityPage.cs" />
     <Compile Include="StudentAvailabilityStepDefinitions.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
-    <Compile Include="Data\User\SwedishCulture.cs" />
+    <Compile Include="Data\Setups\Specific\SwedishCulture.cs" />
     <Compile Include="Core\SystemLevelLock.cs" />
     <Compile Include="Data\TestSiteConfigurationSetup.cs" />
     <Compile Include="Core\Browser.cs" />
@@ -357,7 +379,7 @@
     <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Core\WatiNWaitForCompleteTimeout.cs" />
     <Compile Include="Data\UserFactory.cs" />
-    <Compile Include="Bindings\UserStepDefinitions.cs" />
+    <Compile Include="Bindings\Specific\UserStepDefinitions.cs" />
     <Compile Include="TextRequestFromSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -440,6 +462,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TeamSchedule.feature.cs</LastGenOutput>
     </None>
+    <None Include="Testing\TestRunParallel.appconfig" />
+    <None Include="Testing\TestRunParallel.bat" />
+    <None Include="Testing\TestRun.bat" />
     <None Include="TextRequestFromRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TextRequestFromRequests.feature.cs</LastGenOutput>
@@ -511,6 +536,7 @@
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>::tasklist /fi "imagename eq iexplore.exe*" | FIND "INFO: No tasks" &gt; NUL

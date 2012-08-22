@@ -371,7 +371,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainDataMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputResultMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferenceViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferenceViewModelFactory.cs" />
@@ -391,7 +391,7 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityRestrictionExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\TimeOfDayModelBinder.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInput.cs" />
-    <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputResult.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\RequestsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\DateTimePeriodFormValidator.cs" />
@@ -481,8 +481,10 @@
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\CalendarView.css" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
+    <Content Include="Areas\MyTime\Content\Css\TooltipCustom.css" />
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
+    <Content Include="Areas\MyTime\Content\Css\TooltipInput.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Init.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Test.js" />
@@ -612,7 +614,7 @@
     <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\jquery.qtip.css" />
+    <Content Include="Content\Scripts\jquery.qtip.css" />
     <Content Include="Content\themes\base\jquery.ui.accordion.css" />
     <Content Include="Content\themes\base\jquery.ui.all.css" />
     <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />

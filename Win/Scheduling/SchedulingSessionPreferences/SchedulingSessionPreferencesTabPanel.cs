@@ -587,6 +587,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			if (tabControl1.SelectedIndex == 1) Tag = "Extra";
 			if (tabControl1.SelectedIndex == 2) Tag = "Advanced";
 		}
+
+        public bool ValidateTeamSchedulingOption()
+        {
+            if(checkBoxUseGroupScheduling.Checked )
+            {
+                if (!(checkBoxCommonCategory.Checked || checkBoxCommonStart.Checked || checkBoxCommonEnd.Checked))
+                    return false;
+            }
+            return true;
+        }
     }
     
 }

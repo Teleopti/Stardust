@@ -41,8 +41,8 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 		});
 	}
 
-	function _informWhenPreferenceFeedbackIsLoaded(message) {
-		Teleopti.MyTimeWeb.Preference.CallWhenFeedbackIsLoaded(function() {
+	function _informWhenPreferenceLoaded(message) {
+		Teleopti.MyTimeWeb.Preference.CallWhenLoaded(function() {
 			_pageLog(message);
 		});
 	}
@@ -57,8 +57,8 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 		ExpireMyCookie: function (message) {
 			_expireMyCookie(message);
 		},
-		InformWhenPreferenceFeedbackIsLoaded: function (message) {
-			_informWhenPreferenceFeedbackIsLoaded(message);
+		InformWhenPreferenceLoaded: function (message) {
+			_informWhenPreferenceLoaded(message);
 		}
 	};
 

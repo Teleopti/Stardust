@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -52,7 +53,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			Mapper.Initialize(c =>
 			                  	{
 			                  		c.AddProfile(new PreferenceViewModelMappingProfile(
-			                  		             	Depend.On(scheduleColorProvider)));
+			                  		             	Depend.On(scheduleColorProvider)
+													));
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
 		}
@@ -217,56 +219,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldFlagFeedbackIfInsidePeriodAndNotScheduled()
-		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Feedback.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldFlagFeedbackIfInsidePeriodAndNoScheduleDay()
-		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Feedback.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldNotFlagFeedbackIfOutsidePeriodAndNotScheduled()
-		{
-			data.SelectedDate = DateOnly.Today.AddDays(-1);
-			data.Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Feedback.Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldNotFlagFeedbackIfScheduled()
-		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Feedback.Should().Be.False();
-		}
-
-		[Test]
 		public void ShouldNotSetEditableWhenScheduled()
 		{
 			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
@@ -328,6 +280,79 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldFlagPreferenceIfNoScheduleDay()
+		{
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldFlagPreferenceIfNotScheduled()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldFlagFeedbackIfInsidePeriodAndNotScheduled()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Feedback.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldFlagFeedbackIfInsidePeriodAndNoScheduleDay()
+		{
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Feedback.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotFlagFeedbackIfOutsidePeriodAndNotScheduled()
+		{
+			data.SelectedDate = DateOnly.Today.AddDays(-1);
+			data.Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Feedback.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotFlagFeedbackIfScheduled()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Feedback.Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldFlagInPeriodWhenInsideSchedulePeriod()
 		{
 			data.SelectedDate = data.Period.StartDate;
@@ -348,134 +373,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			result.DayViewModel(data.SelectedDate)
 				.InPeriod.Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldMapPreferenceShiftCategory()
-		{
-			var shiftCategory = new ShiftCategory("PM");
-			var preferenceRestriction = new PreferenceRestriction { ShiftCategory = shiftCategory };
-			var preferenceDay = new PreferenceDay(null, data.SelectedDate, preferenceRestriction);
-			data.Days = new[] { new PreferenceDayDomainData {Date = data.SelectedDate, PreferenceDay = preferenceDay} };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Preference.Should().Be(shiftCategory.Description.Name);
-		}
-
-		[Test]
-		public void ShouldMapPreferenceShiftCategoryStyleClassNameFromDisplayColor()
-		{
-			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today,
-			                                      new PreferenceRestriction
-			                                      	{
-			                                      		ShiftCategory = new ShiftCategory(" ")
-			                                      		                	{
-			                                      		                		DisplayColor = Color.PapayaWhip
-			                                      		                	}
-			                                      	});
-			data.Days = new[] {new PreferenceDayDomainData {Date = data.SelectedDate, PreferenceDay = preferenceDay}};
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.BorderColor.Should().Be(Color.PapayaWhip.ToHtml());
-		}
-
-		[Test]
-		public void ShouldMapPreferenceDayOff()
-		{
-			var dayOffTemplate = new DayOffTemplate(new Description("Day off", "DO"));
-			var preferenceRestriction = new PreferenceRestriction { DayOffTemplate = dayOffTemplate };
-			var preferenceDay = new PreferenceDay(null, data.SelectedDate, preferenceRestriction);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Preference.Should().Be(dayOffTemplate.Description.Name);
-		}
-
-		[Test]
-		public void ShouldMapPreferenceDayOffStyleClassNameFromDisplayColor()
-		{
-			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today,
-												  new PreferenceRestriction
-												  {
-													  DayOffTemplate = new DayOffTemplate(new Description())
-													  {
-														  DisplayColor = Color.SpringGreen
-													  }
-												  });
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.BorderColor.Should().Be(Color.SpringGreen.ToHtml());
-		}
-
-		[Test]
-		public void ShouldMapPreferenceAbsence()
-		{
-			var absence = new Absence { Description = new Description("Ill") };
-			var preferenceRestriction = new PreferenceRestriction { Absence = absence };
-			var preferenceDay = new PreferenceDay(null, data.SelectedDate, preferenceRestriction);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Preference.Should().Be(absence.Description.Name);
-		}
-
-		[Test]
-		public void ShouldMapPreferenceAbsenceStyleClassNameFromDisplayColor()
-		{
-			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today,
-			                                      new PreferenceRestriction
-			                                      	{
-			                                      		Absence = new Absence
-			                                      		          	{
-			                                      		          		DisplayColor = Color.SaddleBrown
-			                                      		          	}
-			                                      	});
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.BorderColor.Should().Be(Color.SaddleBrown.ToHtml());
-		}
-
-		[Test]
-		public void ShouldMapEmptyPreferenceShiftCategoryViewModelWhenNoShiftCategory()
-		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Preference.Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldOnlyMapPreferenceWhenPreference()
-		{
-			var shiftCategory = new ShiftCategory("PM");
-			var preferenceRestriction = new PreferenceRestriction { ShiftCategory = shiftCategory };
-			var preferenceDay = new PreferenceDay(null, data.SelectedDate, preferenceRestriction);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Should().Not.Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.PersonAssignment.Should().Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.DayOff.Should().Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.Absence.Should().Be.Null();
 		}
 
 		[Test]
@@ -568,8 +465,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.DayViewModel(data.SelectedDate)
 				.PersonAssignment.Should().Not.Be.Null();
 			result.DayViewModel(data.SelectedDate)
-				.Preference.Should().Be.Null();
-			result.DayViewModel(data.SelectedDate)
 				.DayOff.Should().Be.Null();
 			result.DayViewModel(data.SelectedDate)
 				.Absence.Should().Be.Null();
@@ -618,8 +513,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				.DayOff.Should().Not.Be.Null();
 			result.DayViewModel(data.SelectedDate)
 				.PersonAssignment.Should().Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Should().Be.Null();
 			result.DayViewModel(data.SelectedDate)
 				.Absence.Should().Be.Null();
 		}
@@ -681,8 +574,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				.DayOff.Should().Be.Null();
 			result.DayViewModel(data.SelectedDate)
 				.PersonAssignment.Should().Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Should().Be.Null();
 		}
 
 

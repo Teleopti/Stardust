@@ -35,17 +35,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         public void Initialize()
         {
-            using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                unitOfWork.Reassociate(_model.Workload);
-               
-                foreach (var templateDay in _model.Workload.TemplateWeekCollection)
-                {
-                    if (!LazyLoadingManager.IsInitialized(templateDay.Value.OpenForWork))
-                        LazyLoadingManager.Initialize(templateDay.Value.OpenForWork);
-                }
-            }
-            
             _model.InitializeOutliers();   
             _model.InitializeDefaultScenario();
             _view.SetWorkloadName(_model.Workload.Name);

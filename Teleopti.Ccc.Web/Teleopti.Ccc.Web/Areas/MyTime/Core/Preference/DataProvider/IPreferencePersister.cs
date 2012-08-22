@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
 	public interface IPreferencePersister
 	{
-		PreferenceDayInputResult Persist(PreferenceDayInput input);
-		PreferenceDayInputResult Delete(DateOnly date);
+		PreferenceDayViewModel Persist(PreferenceDayInput input);
+		PreferenceDayViewModel Delete(DateOnly date);
 	}
 }

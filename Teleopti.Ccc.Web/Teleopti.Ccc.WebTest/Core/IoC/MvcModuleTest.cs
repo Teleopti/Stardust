@@ -464,5 +464,15 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 		}
 
+
+		[Test]
+		public void ShouldResolveExtendedPreferencePredicate()
+		{
+			var result = requestContainer.Resolve<IExtendedPreferencePredicate>();
+			result.Should().Not.Be.Null();
+		}
+
+
+
 	}
 }

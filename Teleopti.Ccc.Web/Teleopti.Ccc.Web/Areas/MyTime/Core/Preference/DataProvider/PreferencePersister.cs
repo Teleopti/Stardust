@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public PreferenceDayInputResult Persist(PreferenceDayInput input)
+		public PreferenceDayViewModel Persist(PreferenceDayInput input)
 		{
 			var preferenceDays = _preferenceDayRepository.Find(input.Date, _loggedOnUser.CurrentUser());
 			preferenceDays = DeleteOrphanPreferenceDays(preferenceDays);
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				_mapper.Map(input, preferenceDay);
 				ClearExtendedAndMustHaveData(preferenceDay);
 			}
-			return _mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
+			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 		}
 
 		private static void ClearExtendedAndMustHaveData(IPreferenceDay preferenceDay)
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return preferenceDays;
 		}
 
-		public PreferenceDayInputResult Delete(DateOnly date)
+		public PreferenceDayViewModel Delete(DateOnly date)
 		{
 			var preferences = _preferenceDayRepository.Find(date, _loggedOnUser.CurrentUser());
 			if (preferences.IsEmpty())
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			{
 				_preferenceDayRepository.Remove(preferenceDay);
 			}
-			return new PreferenceDayInputResult { Date = date.ToFixedClientDateOnlyFormat(), HexColor = ""};
+			return new PreferenceDayViewModel { Color = ""};
 		}
 	}
 }

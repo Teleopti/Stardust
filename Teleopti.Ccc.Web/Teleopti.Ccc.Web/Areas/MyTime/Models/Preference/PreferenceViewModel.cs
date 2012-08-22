@@ -36,10 +36,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public bool InPeriod { get; set; }
 		public bool Editable { get; set; }
 		public bool Feedback { get; set; }
+		public bool Preference { get; set; }
+
 		public HeaderViewModel Header { get; set; }
 		public string StyleClassName { get; set; }
 		public string BorderColor { get; set; }
-		public PreferenceDayViewModel Preference { get; set; }
+
 		public PersonAssignmentDayViewModel PersonAssignment { get; set; }
 		public DayOffDayViewModel DayOff { get; set; }
 		public AbsenceDayViewModel Absence { get; set; }
@@ -49,11 +51,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 	{
 		public string DayDescription { get; set; }
 		public string DayNumber { get; set; }
-	}
-
-	public class PreferenceDayViewModel
-	{
-		public string Preference { get; set; }
 	}
 
 	public class PersonAssignmentDayViewModel

@@ -14,7 +14,7 @@ if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
 
 Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
-	var feedbackLoadingStarted = false;
+	var loadingStarted = false;
 	var periodFeedbackViewModel = null;
 	var dayViewModels = {};
 
@@ -62,7 +62,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		$('#Preference-body-inner').calendarselectable();
 	}
 
-	function _initViewModels(feedbackLoader) {
+	function _initViewModels(loader) {
 
 		dayViewModels = {};
 		$('li[data-mytime-date].inperiod').each(function (index, element) {
@@ -71,7 +71,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			dayViewModels[dayViewModel.Date] = dayViewModel;
 			ko.applyBindings(dayViewModel, element);
 		});
-		
+
 		var date = portal ? portal.CurrentFixedDate() : null;
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModels, date);
 
@@ -79,25 +79,65 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		if (element)
 			ko.applyBindings(periodFeedbackViewModel, element);
 
-		feedbackLoader = feedbackLoader || function (call) { call(); };
-		feedbackLoader(function () {
+		loader = loader || function (call) { call(); };
+		loader(function () {
 			periodFeedbackViewModel.LoadFeedback();
 			$.each(dayViewModels, function (index, element) {
-				element.LoadFeedback();
-				feedbackLoadingStarted = true;
+				element.LoadPreference(function () {
+					element.LoadFeedback();
+				});
+				loadingStarted = true;
 			});
 		});
 	}
 
-	function _callWhenFeedbackIsLoaded(callback) {
-		if (feedbackLoadingStarted && !ajax.IsRequesting())
+	function _callWhenLoaded(callback) {
+		if (loadingStarted && !ajax.IsRequesting())
 			callback();
 		else
-			setTimeout(function () { _callWhenFeedbackIsLoaded(callback); }, 100);
+			setTimeout(function () { _callWhenLoaded(callback); }, 100);
 	}
 
 	function _soon(call) {
 		setTimeout(function () { call(); }, 300);
+	}
+
+	function _initExtendedPanels() {
+		$('.preference .extended-indication')
+			.each(function () {
+				var date = $(this).closest("li[data-mytime-date]").attr("data-mytime-date");
+				$(this)
+					.qtip(
+						{
+							id: "extended-" + date,
+							content: {
+								text: $(this).next('.extended-panel')
+							},
+							position: {
+								my: "top left",
+								at: "top right",
+								adjust: {
+									x: 4,
+									y: 5
+								}
+							},
+							show: {
+								event: 'click'
+							},
+							hide: {
+								target: $("#page"),
+								event: 'mousedown'
+							},
+							style: {
+								def: false,
+								classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+								tip: {
+									corner: "left top"
+								}
+							}
+						});
+			});
+
 	}
 
 	return {
@@ -115,9 +155,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initPeriodSelection();
 			_initViewModels(_soon);
 			_activateSelectable();
+			_initExtendedPanels();
 		},
-		CallWhenFeedbackIsLoaded: function (callback) {
-			_callWhenFeedbackIsLoaded(callback);
+		CallWhenLoaded: function (callback) {
+			_callWhenLoaded(callback);
 		}
 	};
 
@@ -279,7 +320,17 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.Date = "";
 	this.ContractTimeMinutes = 0;
 	this.HasFeedback = true;
+	this.HasPreference = true;
 	this.Preference = ko.observable();
+	this.Extended = ko.observable();
+	this.ExtendedTitle = ko.observable();
+	this.StartTimeLimitation = ko.observable();
+	this.EndTimeLimitation = ko.observable();
+	this.WorkTimeLimitation = ko.observable();
+	this.Activity = ko.observable();
+	this.ActivityStartTimeLimitation = ko.observable();
+	this.ActivityEndTimeLimitation = ko.observable();
+	this.ActivityTimeLimitation = ko.observable();
 	this.Color = ko.observable();
 
 	this.ReadElement = function (element) {
@@ -287,8 +338,38 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		self.Date = item.attr('data-mytime-date');
 		self.ContractTimeMinutes = parseInt($('[data-mytime-contract-time]', item).attr('data-mytime-contract-time')) || 0;
 		self.HasFeedback = item.hasClass("feedback");
-		self.Preference($('.preference', element).text());
+		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
 		self.Color($('.day-content', element).css("border-left-color"));
+	};
+
+	this.ReadPreference = function (data) {
+		self.Color(data.Color);
+		self.Preference(data.Preference);
+		self.Extended(data.Extended);
+		self.ExtendedTitle(data.ExtendedTitle);
+		self.StartTimeLimitation(data.StartTimeLimitation);
+		self.EndTimeLimitation(data.EndTimeLimitation);
+		self.WorkTimeLimitation(data.WorkTimeLimitation);
+		self.Activity(data.Activity);
+		self.ActivityStartTimeLimitation(data.ActivityStartTimeLimitation);
+		self.ActivityEndTimeLimitation(data.ActivityEndTimeLimitation);
+		self.ActivityTimeLimitation(data.ActivityTimeLimitation);
+	};
+
+	this.LoadPreference = function (complete) {
+		if (!self.HasPreference) {
+			complete();
+			return null;
+		}
+		return ajaxForDate({
+			url: "Preference/Preference",
+			type: 'GET',
+			data: { Date: self.Date },
+			date: self.Date,
+			success: this.ReadPreference,
+			complete: complete,
+			statusCode404: function () { }
+		});
 	};
 
 	this.LoadFeedback = function () {
@@ -318,10 +399,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 				Id: value
 			},
 			date: self.Date,
-			success: function (data) {
-				self.Color(data.HexColor);
-				self.Preference(data.PreferenceRestriction);
-			},
+			success: this.ReadPreference,
 			complete: function () {
 				deferred.resolve();
 				self.LoadFeedback();
@@ -337,10 +415,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			data: { Date: self.Date },
 			date: self.Date,
 			statusCode404: function () { },
-			success: function (data) {
-				self.Color(data.HexColor);
-				self.Preference(data.PreferenceRestriction);
-			},
+			success: this.ReadPreference,
 			complete: function () {
 				deferred.resolve();
 				self.LoadFeedback();
@@ -350,6 +425,11 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	};
 
 	this.FeedbackError = ko.observable();
+	this.HasFeedbackError = ko.computed(function () {
+		var feedbackError = self.FeedbackError();
+		return typeof(feedbackError) == 'string' && feedbackError.length > 0;
+	});
+
 	this.PossibleStartTimes = ko.observable();
 	this.PossibleEndTimes = ko.observable();
 

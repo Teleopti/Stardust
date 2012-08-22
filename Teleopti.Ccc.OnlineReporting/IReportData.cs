@@ -3,8 +3,7 @@ using System;
 
 namespace Teleopti.Ccc.OnlineReporting
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
-    public interface IReportData : IComparable<IReportData>
+    public interface IReportData
     {
         string ActivityName { get; set; }
         double ScheduledTime { get; set; }

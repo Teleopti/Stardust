@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Principal;
 using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -18,6 +17,9 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -25,8 +27,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestDataSetup
 	{
-		private static NHibernateUnitOfWorkFactory _unitOfWorkFactory;
-		private static TeleoptiPrincipal _principal;
 		private static DatabaseHelper.Backup _Ccc7DataBackup;
 
 		public static void CreateDataSource()
@@ -37,20 +37,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static void SetupFakeState()
 		{
 			TestData.PersonThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", TestData.CommonPassword);
-			TestData.BusinessUnit = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
-			TestData.BusinessUnit.Name = "BusinessUnit";
+			CommonBusinessUnit.BusinessUnitFromFakeState = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
+			CommonBusinessUnit.BusinessUnitFromFakeState.Name = "BusinessUnit";
 
-			StateHolderProxyHelper.SetupFakeState(TestData.DataSource, TestData.PersonThatCreatesTestData, TestData.BusinessUnit, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+			StateHolderProxyHelper.SetupFakeState(TestData.DataSource, TestData.PersonThatCreatesTestData, CommonBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
-			_principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
-			_unitOfWorkFactory = UnitOfWorkFactory.Current as NHibernateUnitOfWorkFactory;
+			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
+			GlobalUnitOfWorkState.UnitOfWorkFactory = UnitOfWorkFactory.Current as NHibernateUnitOfWorkFactory;
 		}
+
 
 		public static void CreateMinimumTestData()
 		{
 			DataSourceHelper.PersistAuditSetting();
-			UnitOfWorkAction(CreatePersonThatCreatesTestData);
-			UnitOfWorkAction(CreateLicense);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreatePersonThatCreatesTestData);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateLicense);
 		}
 
 		public static void CreateLegacyTestData()
@@ -78,21 +79,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			DataSourceHelper.RestoreCcc7DataByFileCopy(_Ccc7DataBackup);
 		}
 
-		public static void EnsureThreadPrincipal()
-		{
-			if (Thread.CurrentPrincipal.GetType() == typeof(GenericPrincipal))
-				Thread.CurrentPrincipal = _principal;
-		}
-
-		public static void UnitOfWorkAction(Action<IUnitOfWork> action)
-		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-			{
-				action.Invoke(unitOfWork);
-				unitOfWork.PersistAll();
-			}
-		}
-
 
 
 
@@ -101,20 +87,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateAndPersistTestData()
 		{
-			UnitOfWorkAction(CreateBusinessUnits);
-			UnitOfWorkAction(CreateAllRaptorApplicationFunctions);
-			UnitOfWorkAction(CreateMatrixApplicationFunctions);
-			UnitOfWorkAction(CreateSites);
-			UnitOfWorkAction(CreateApplicationRoles);
-			UnitOfWorkAction(CreateShiftCategory);
-			UnitOfWorkAction(CreateDayOffTemplate);
-			UnitOfWorkAction(CreateAbsence);
-			UnitOfWorkAction(CreateWorkflowControlSet);
-			UnitOfWorkAction(CreateTeams);
-			UnitOfWorkAction(CreateContractStuff);
-			UnitOfWorkAction(CreateAgentPersons);
-			UnitOfWorkAction(CreateGroupingActivity);
-			UnitOfWorkAction(CreateActivities);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAllRaptorApplicationFunctions);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateMatrixApplicationFunctions);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateApplicationRoles);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateShiftCategory);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateDayOffTemplate);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAbsence);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateWorkflowControlSet);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAgentPersons);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateGroupingActivity);
+			GlobalUnitOfWorkState.UnitOfWorkAction(CreateActivities);
 		}
 
 	    private static void CreateLicense(IUnitOfWork uow)
@@ -203,8 +185,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				where
 					!(r.FunctionCode == "ResReportScheduledAndActualAgents" && r.ForeignSource == DefinedForeignSourceNames.SourceMatrix)
 				select r;
-			
-			
+
+
+			var secondBusinessUnit = GlobalDataContext.Data().Data<SecondBusinessUnit>().BusinessUnit;
+			var anotherSite = GlobalDataContext.Data().Data<AnotherSite>().Site;
 
 			var shippedRoles = ApplicationRoleFactory.CreateShippedRoles(out TestData.AdministratorRole, out TestData.AgentRole, out TestData.UnitRole, out TestData.SiteRole, out TestData.TeamRole);
 			var shippedRolesWithFunctions = from role in shippedRoles
@@ -216,7 +200,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 											let businessUnit = TestData.BusinessUnit
 											select new { role, functions, businessUnit, availableData };
 			TestData.AgentRoleSecondBusinessUnit = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "SecondBusinessUnit", null);
-			TestData.AgentRoleSecondBusinessUnit.SetBusinessUnit(TestData.SecondBusinessUnit);
+			TestData.AgentRoleSecondBusinessUnit.SetBusinessUnit(secondBusinessUnit);
 			TestData.AgentRoleWithoutStudentAvailability = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoStudentAvailability", null);
 			TestData.AgentRoleWithoutPreferences = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoPreferences", null);
 			TestData.AgentRoleWithoutRequests = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoRequests", null);
@@ -231,14 +215,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.AdministratorRoleWithEveryoneData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AdministratorRole + "WithEveryoneData", null);
 			TestData.SupervisorRole = ApplicationRoleFactory.CreateRole("SupervisorRole", null);
 			TestData.SupervisorRoleSecondBusinessUnit = ApplicationRoleFactory.CreateRole("SupervisorRole", null);
-			TestData.SupervisorRoleSecondBusinessUnit.SetBusinessUnit(TestData.SecondBusinessUnit);
+			TestData.SupervisorRoleSecondBusinessUnit.SetBusinessUnit(secondBusinessUnit);
 
-			var test = new AvailableData();
-			test.AddAvailableSite(TestData.AnotherSite);
+			var availableDataAnotherSite = new AvailableData();
+			availableDataAnotherSite.AddAvailableSite(anotherSite);
 
 			var customTestRoles = new[]
 			                 	{
-			                 		new { role = TestData.AgentRoleSecondBusinessUnit, functions = agentRoleApplicationFunctions, businessUnit = TestData.SecondBusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}}, 
+			                 		new { role = TestData.AgentRoleSecondBusinessUnit, functions = agentRoleApplicationFunctions, businessUnit = secondBusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}}, 
 									new { role = TestData.AgentRoleWithoutStudentAvailability, functions = agentRoleWithoutStudentAvailabilityApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutPreferences, functions = agentRoleWithoutPreferencesApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutRequests, functions = agentRoleWithoutRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
@@ -249,10 +233,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 									new { role = TestData.AgentRoleWithoutResReportScheduledAndActualAgents, functions = agentRoleWithoutAgentRoleWithoutResReportScheduledAndActualAgentsMatrixFunction, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleOnlyWithOwnData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyOwn}},
 									new { role = TestData.AgentRoleWithSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MySite}},
-									new { role = TestData.AgentRoleWithAnotherSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = test},
+									new { role = TestData.AgentRoleWithAnotherSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = availableDataAnotherSite},
 									new { role = TestData.AdministratorRoleWithEveryoneData, functions = allApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.Everyone}},
 									new { role = TestData.SupervisorRole, functions = supervisorRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
-									new { role = TestData.SupervisorRoleSecondBusinessUnit, functions = supervisorRoleApplicationFunctions, businessUnit = TestData.SecondBusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}}
+									new { role = TestData.SupervisorRoleSecondBusinessUnit, functions = supervisorRoleApplicationFunctions, businessUnit = secondBusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 			                 	};
 
 			var allRoles = customTestRoles.Union(shippedRolesWithFunctions);
@@ -295,43 +279,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
             var personRepository = new PersonRepository(uow);
 			personRepository.Add(TestData.PersonThatCreatesTestData);
 			personRepository.Add(UserTestData.AgentWindowsUser);
-		}
-
-		private static void CreateBusinessUnits(IUnitOfWork uow)
-		{
-			TestData.SecondBusinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("SecondBusinessUnit");
-
-			var businessUnitRepository = new BusinessUnitRepository(uow);
-			businessUnitRepository.Add(TestData.BusinessUnit);
-			businessUnitRepository.Add(TestData.SecondBusinessUnit);
-		}
-
-		private static void CreateSites(IUnitOfWork uow)
-		{
-			TestData.CommonSite = SiteFactory.CreateSimpleSite("Common Site");
-			TestData.AnotherSite = SiteFactory.CreateSimpleSite("Another Site");
-			TestData.BusinessUnit.AddSite(TestData.CommonSite);
-			TestData.BusinessUnit.AddSite(TestData.AnotherSite);
-
-			var siteRepository = new SiteRepository(uow);
-			siteRepository.Add(TestData.CommonSite);
-			siteRepository.Add(TestData.AnotherSite);
-		}
-
-		private static void CreateTeams(IUnitOfWork uow)
-		{
-			TestData.CommonTeam = TeamFactory.CreateSimpleTeam("Common Team");
-			TestData.CommonSite.AddTeam(TestData.CommonTeam);
-
-			var teamRepository = new TeamRepository(uow);
-			teamRepository.Add(TestData.CommonTeam);
-		}
-
-		private static void CreateContractStuff(IUnitOfWork uow)
-		{
-			TestData.PartTimePercentageOne = PartTimePercentageFactory.CreatePartTimePercentage("PartTimePercentage One");
-			var repository = new Repository(uow);
-			repository.Add(TestData.PartTimePercentageOne);
 		}
 
 		private static void CreateActivities(IUnitOfWork unitOfWork)

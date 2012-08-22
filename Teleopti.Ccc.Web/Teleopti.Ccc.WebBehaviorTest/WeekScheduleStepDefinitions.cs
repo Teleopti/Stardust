@@ -5,7 +5,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
@@ -160,6 +160,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeRequestPage()
 		{
 			EventualAssert.That(() => Pages.Pages.Current.Document.Uri.AbsoluteUri, Is.StringContaining("Request"));
+		}
+
+		[When(@"I click the current week button")]
+		public void WhenIClickTheCurrentWeekButton()
+		{
+			Pages.Pages.WeekSchedulePage.TodayButton.EventualClick();
 		}
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)

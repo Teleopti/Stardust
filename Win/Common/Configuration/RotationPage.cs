@@ -108,13 +108,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SaveChanges()
 		{
+			if (_gridHelper == null)
+				return;
+
 			if (_gridHelper.ValidateGridData())
 			{
-                foreach (RotationRestrictionView rotationRestrictionView in _restrictionViewList)
-			    {
-			        // Connect each rotation view row to its corresponding domain object.
-                    rotationRestrictionView.AssignValuesToDomainObject();
-			    }
+				foreach (RotationRestrictionView rotationRestrictionView in _restrictionViewList)
+				{
+					// Connect each rotation view row to its corresponding domain object.
+					rotationRestrictionView.AssignValuesToDomainObject();
+				}
 			}
 			else
 			{
@@ -381,6 +384,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			numericUpDownWeek.Value =
 				ScheduleRestrictionBaseView.GetWeek(SelectedRotation.RotationDays.Count - ItemDiffernce);
 			textBoxDescription.Text = SelectedRotation.Name;
+			SaveChanges();
 			PrepareGridView();
 		}
 
@@ -506,6 +510,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var weekCount = ScheduleRestrictionBaseView.GetWeek(SelectedRotation.DaysCount - ItemDiffernce);
 			var value = numericUpDownWeek.Value;
 
+			SaveChanges();
+
 			if (value > weekCount)
 			{
 				// Add days to collection.
@@ -514,7 +520,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 				PrepareGridView();
 			}
-			else if (numericUpDownWeek.Value < weekCount)
+			else if (value < weekCount)
 			{
 				// Remove days from collection.
 				var daysToRemove = (weekCount - (int) value)*(int) ScheduleRestrictionBaseView.DaysPerWeek;
@@ -526,6 +532,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void AddNewRotation()
 		{
+			SaveChanges();
 			_rotationList.Add(CreateRotation());
 			LoadRotations();
 			comboBoxAdvRotations.SelectedIndex = LastItemIndex;
@@ -559,7 +566,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void ChangeRotationDescription()
 		{
 			SelectedRotation.Name = textBoxDescription.Text;
-
+			SaveChanges();
 			LoadRotations();
 		}
 
