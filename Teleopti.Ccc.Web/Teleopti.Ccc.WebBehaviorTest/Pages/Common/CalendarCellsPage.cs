@@ -22,6 +22,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public ListItem CalendarCellForDate(string formattedDate) { return Document.ListItem(Find.By("data-mytime-date", v => v == formattedDate)).EventualGet(); }
 		public ListItem CalendarCellForDate(DateTime date) { return CalendarCellForDate(date.ToString("yyyy-MM-dd")); }
 
+		public Div CalendarCellDataForDate(DateTime date, string className)
+		{
+			var selector = "[data-mytime-date='" + date.ToString("yyyy-MM-dd") + "'] ." + className;
+			return Document.Div(Find.BySelector(selector));
+		}
+
 		public string FirstCalendarCellDate
 		{
 			get
