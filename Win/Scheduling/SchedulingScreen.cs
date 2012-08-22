@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private readonly ILifetimeScope _container;
         private IScheduleScreenPersister _persister;
-		private readonly ISchedulingOptions _schedulingOptions;
+		//private readonly ISchedulingOptions _schedulingOptions;
         private static readonly ILog Log = LogManager.GetLogger(typeof (SchedulingScreen));
         private ISchedulerStateHolder _schedulerState;
         private readonly ClipHandler<IScheduleDay> _clipHandlerSchedule;
@@ -460,14 +460,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//                                            _workShiftWorkTime);
 			//_singleAgentRestrictionPresenter =
 			//    new SingleAgentRestrictionPresenter(schedulerSplitters1.RestrictionSummeryGrid, model);
-			_schedulingOptions = new RestrictionSchedulingOptions
-									 {
-										 UseAvailability = true,
-										 UsePreferences = true,
-										 UseStudentAvailability = true,
-										 UseRotations = true,
-										 UseScheduling = true
-									 };
+			//_schedulingOptions = new RestrictionSchedulingOptions
+			//                         {
+			//                             UseAvailability = true,
+			//                             UsePreferences = true,
+			//                             UseStudentAvailability = true,
+			//                             UseRotations = true,
+			//                             UseScheduling = true
+			//                         };
 
             toolStripProgressBar1.Visible = true;
             toolStripProgressBar1.Maximum = loadingPeriod.DayCount() + 5;

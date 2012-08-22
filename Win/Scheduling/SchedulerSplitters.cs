@@ -92,6 +92,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             get { return grid; }
         }
 
+		public TabPageAdv PinnedPage
+		{
+			get { return _pinnedSkillHelper.PinnedPage(); }
+		}
+
 		//public IRestrictionSummaryGrid RestrictionSummeryGrid
 		//{
 		//    get { return restrictionSummaryGrid1; }
