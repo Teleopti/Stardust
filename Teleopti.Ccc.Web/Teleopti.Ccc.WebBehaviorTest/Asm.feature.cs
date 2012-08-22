@@ -75,6 +75,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table1.AddRow(new string[] {
                         "Name",
                         "Access to mytime"});
+            table1.AddRow(new string[] {
+                        "Access to mobile reports",
+                        "false"});
 #line 8
  testRunner.Given("there is a role with", ((string)(null)), table1);
 #line hidden
@@ -84,7 +87,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table2.AddRow(new string[] {
                         "Time",
                         "2001-01-01 12:00"});
-#line 11
+#line 12
     testRunner.And("Current time is", ((string)(null)), table2);
 #line hidden
         }
@@ -94,15 +97,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void NoPermissionToASMModule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No permission to ASM module", ((string[])(null)));
-#line 15
+#line 16
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 16
- testRunner.Given("I am an agent without access to ASM");
 #line 17
- testRunner.When("I am viewing week schedule");
+ testRunner.Given("I have the role \'No access to ASM\'");
 #line 18
+ testRunner.When("I am viewing week schedule");
+#line 19
  testRunner.Then("ASM link should not be visible");
 #line hidden
             this.ScenarioCleanup();
@@ -113,17 +116,17 @@ this.FeatureBackground();
         public virtual void ShowAgentSScheduleInPopup()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show agent\'s schedule in popup", ((string[])(null)));
-#line 20
+#line 21
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 21
- testRunner.Given("I am an agent");
 #line 22
- testRunner.And("I have a schededule today between \'8\' and \'17\'");
+ testRunner.Given("I have the role \'Access to mytime\'");
 #line 23
- testRunner.When("I am viewing asm gant");
+ testRunner.And("I have a schededule today between \'8\' and \'17\'");
 #line 24
+ testRunner.When("I am viewing asm gant");
+#line 25
  testRunner.Then("I should see a schedule between \'8\' and \'17\'");
 #line hidden
             this.ScenarioCleanup();
