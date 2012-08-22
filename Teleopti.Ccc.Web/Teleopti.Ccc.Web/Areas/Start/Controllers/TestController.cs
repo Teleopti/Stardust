@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	public class TestController : Controller
 	{
-		private readonly IContainer _container;
+		private readonly IComponentContext _container;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
 
-		public TestController(IContainer container, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
+		public TestController(IComponentContext container, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
 		{
 			_container = container;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public ViewResult BeforeScenario()
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
-			updateIocNow(new Now());
+			//updateIocNow(new Now());
 			var viewModel = new TestMessageViewModel
 								{
 									Title = "Setting up for scenario",
@@ -90,19 +90,24 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return View("Message", viewModel);
 		}
 
-		public EmptyResult SetCurrentTime(DateTime dateSet)
+		public ViewResult SetCurrentTime(DateTime dateSet)
 		{
 			var newTime = new ModifiedNow {UtcTime = dateSet};
 			updateIocNow(newTime);
 
-			return new EmptyResult();
+			var viewModel = new TestMessageViewModel
+			{
+				Title = "Time changed on server!",
+				Message = "INow component now thinks time is " + dateSet
+			};
+			return View("Message", viewModel);
 		}
 
 		private void updateIocNow(INow newTime)
 		{
 			var updater = new ContainerBuilder();
 			updater.Register(c => newTime).As<INow>();
-			updater.Update(_container);
+			updater.Update(_container.ComponentRegistry);
 		}
 
 		private class ModifiedNow : INow

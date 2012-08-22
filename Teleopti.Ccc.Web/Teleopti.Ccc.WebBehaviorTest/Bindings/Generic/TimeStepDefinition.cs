@@ -1,5 +1,6 @@
 ﻿using System;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -9,8 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"Current time is '(.*)'")]
 		public void GivenCurrentTimeIs(DateTime time)
 		{
-
-			ScenarioContext.Current.Pending();
+			Navigation.GoTo("Test/SetCurrentTime?" + time);
 		}
 
 	}
