@@ -54,6 +54,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _contract.PlanningTimeBankMin = TimeSpan.FromHours(-2);
             _contract.NegativeDayOffTolerance = -5;
             _contract.PositiveDayOffTolerance = 5;
+            _contract.IsWorkTimeFromContract = true;
+            _contract.IsWorkTimeFromSchedulePeriod = false;
 
             PersistAndRemoveFromUnitOfWork(_contract);
             IList<IContract> loadedContracts = new ContractRepository(UnitOfWork).LoadAll();
@@ -66,6 +68,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(loadedContracts[0].PlanningTimeBankMin,Is.EqualTo(TimeSpan.FromHours(-2)));
             Assert.That(loadedContracts[0].NegativeDayOffTolerance,Is.EqualTo(-5));
             Assert.That(loadedContracts[0].PositiveDayOffTolerance,Is.EqualTo(5));
+            Assert.IsTrue(loadedContracts[0].IsWorkTimeFromContract );
+            Assert.IsFalse( loadedContracts[0].IsWorkTimeFromSchedulePeriod  );
+
         }
 
         [Test]
