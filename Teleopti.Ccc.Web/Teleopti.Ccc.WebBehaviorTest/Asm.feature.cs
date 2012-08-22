@@ -85,10 +85,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Field",
                         "Value"});
             table2.AddRow(new string[] {
-                        "Time",
-                        "2001-01-01 12:00"});
+                        "StartTime",
+                        "2001-01-01 08:00"});
+            table2.AddRow(new string[] {
+                        "EndTime",
+                        "2001-01-01 17:00"});
+            table2.AddRow(new string[] {
+                        "ShiftCategoryName",
+                        "ForTest"});
 #line 12
-    testRunner.And("Current time is", ((string)(null)), table2);
+ testRunner.And("there is a shift with", ((string)(null)), table2);
 #line hidden
         }
         
@@ -97,37 +103,37 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void NoPermissionToASMModule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No permission to ASM module", ((string[])(null)));
-#line 16
+#line 18
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 17
- testRunner.Given("I have the role \'No access to ASM\'");
-#line 18
- testRunner.When("I am viewing week schedule");
 #line 19
+ testRunner.Given("I have the role \'No access to ASM\'");
+#line 20
+ testRunner.When("I am viewing week schedule");
+#line 21
  testRunner.Then("ASM link should not be visible");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Show agent\'s schedule in popup")]
-        public virtual void ShowAgentSScheduleInPopup()
+        [NUnit.Framework.DescriptionAttribute("Show part of agent\'s schedule in popup")]
+        public virtual void ShowPartOfAgentSScheduleInPopup()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show agent\'s schedule in popup", ((string[])(null)));
-#line 21
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show part of agent\'s schedule in popup", ((string[])(null)));
+#line 23
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 22
- testRunner.Given("I have the role \'Access to mytime\'");
-#line 23
- testRunner.And("I have a schededule today between \'8\' and \'17\'");
 #line 24
- testRunner.When("I am viewing asm gant");
+ testRunner.Given("I have the role \'Access to mytime\'");
 #line 25
- testRunner.Then("I should see a schedule between \'8\' and \'17\'");
+ testRunner.And("Current time is \'2001-01-01\'");
+#line 26
+ testRunner.When("I am viewing asm gant");
+#line 27
+ testRunner.Then("I should see a schedule in popup");
 #line hidden
             this.ScenarioCleanup();
         }

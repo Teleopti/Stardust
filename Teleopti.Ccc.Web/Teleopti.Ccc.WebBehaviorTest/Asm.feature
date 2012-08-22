@@ -9,17 +9,19 @@ Background:
 	| Field                    | Value             |
 	| Name                     | Access to mytime  |
 	| Access to mobile reports | false             |
-    And Current time is
-	| Field | Value            |
-	| Time  | 2001-01-01 12:00 |
+	And there is a shift with
+	| Field             | Value   |
+	| StartTime         | 2001-01-01 08:00   |
+	| EndTime           | 2001-01-01 17:00   |
+	| ShiftCategoryName | ForTest |
 
 Scenario: No permission to ASM module
 	Given I have the role 'No access to ASM'
 	When I am viewing week schedule
 	Then ASM link should not be visible 
 
-Scenario: Show agent's schedule in popup
+Scenario: Show part of agent's schedule in popup
 	Given I have the role 'Access to mytime'
-	And I have a schededule today between '8' and '17'
+	And Current time is '2001-01-01'	
 	When I am viewing asm gant
-	Then I should see a schedule between '8' and '17'
+	Then I should see a schedule in popup

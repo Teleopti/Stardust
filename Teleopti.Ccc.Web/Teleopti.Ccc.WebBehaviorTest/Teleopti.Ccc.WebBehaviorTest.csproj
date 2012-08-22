@@ -81,8 +81,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\TimeStepDefinition.cs" />
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
@@ -91,6 +93,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Asm.feature</DependentUpon>
     </Compile>
+    <Compile Include="Data\Setups\Generic\ShiftConfigurable.cs" />
     <Compile Include="PreferencesExtendedStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AnotherSite.cs" />
     <Compile Include="Data\Setups\Common\CommonBusinessUnit.cs" />
