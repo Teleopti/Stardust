@@ -65,19 +65,66 @@ namespace Teleopti.Ccc.WebBehaviorTest
             testRunner.CollectScenarioErrors();
         }
         
+        public virtual void FeatureBackground()
+        {
+#line 7
+#line hidden
+            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table1.AddRow(new string[] {
+                        "Name",
+                        "Access to mytime"});
+#line 8
+ testRunner.Given("there is a role with", ((string)(null)), table1);
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table2.AddRow(new string[] {
+                        "Time",
+                        "2001-01-01 12:00"});
+#line 11
+    testRunner.And("Current time is", ((string)(null)), table2);
+#line hidden
+        }
+        
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("No permission to ASM module")]
         public virtual void NoPermissionToASMModule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No permission to ASM module", ((string[])(null)));
-#line 7
+#line 15
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 7
+this.FeatureBackground();
+#line 16
  testRunner.Given("I am an agent without access to ASM");
-#line 9
+#line 17
  testRunner.When("I am viewing week schedule");
-#line 10
+#line 18
  testRunner.Then("ASM link should not be visible");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show agent\'s schedule in popup")]
+        public virtual void ShowAgentSScheduleInPopup()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show agent\'s schedule in popup", ((string[])(null)));
+#line 20
+this.ScenarioSetup(scenarioInfo);
+#line 7
+this.FeatureBackground();
+#line 21
+ testRunner.Given("I am an agent");
+#line 22
+ testRunner.And("I have a schededule today between \'8\' and \'17\'");
+#line 23
+ testRunner.When("I am viewing asm gant");
+#line 24
+ testRunner.Then("I should see a schedule between \'8\' and \'17\'");
 #line hidden
             this.ScenarioCleanup();
         }
