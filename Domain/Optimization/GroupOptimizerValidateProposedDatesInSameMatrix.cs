@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					foreach (var dateOnly in dates)
 					{
-						if (!matrixPro.SelectedPeriod.Contains(dateOnly))
+						if (!matrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
 						{
 							result.Success = true;
 							result.MatrixList = new List<IScheduleMatrixPro>(matrixList);
