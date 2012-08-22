@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer.SMS
+namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 {
 	public interface ISignificantChangeChecker
 	{

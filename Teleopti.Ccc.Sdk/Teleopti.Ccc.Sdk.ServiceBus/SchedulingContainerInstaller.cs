@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
-using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer.SMS;
+using Teleopti.Ccc.Sdk.ServiceBus.SMS;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

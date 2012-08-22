@@ -1,7 +1,7 @@
 ﻿using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer.SMS;
+using Teleopti.Ccc.Sdk.ServiceBus.SMS;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer.SMS
+﻿namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public interface ISmsSenderFactory

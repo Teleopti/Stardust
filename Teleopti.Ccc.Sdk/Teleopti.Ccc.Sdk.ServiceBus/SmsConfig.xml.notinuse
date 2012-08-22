@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+	<class>Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender</class>
+	<url>http://api.clickatell.com/xml/xml?data=</url>
+	<user>username</user>
+	<password>pwd</password>
+	<api_id>3388480</api_id>
+	<data>
+		<![CDATA[
+		<clickAPI>
+		<sendMsg><api_id>3388480</api_id><user>username</user>
+		<password>pwd</password><to>{0}</to><text>{1}</text>
+		</sendMsg>
+		</clickAPI>]]>
+	</data>
+</Config>
+
