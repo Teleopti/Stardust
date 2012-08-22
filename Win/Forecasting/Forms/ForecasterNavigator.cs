@@ -797,6 +797,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			    LazyLoadingManager.Initialize(workload.Skill);
 			    LazyLoadingManager.Initialize(workload.Skill.SkillType);
 			    LazyLoadingManager.Initialize(workload.TemplateWeekCollection);
+			    foreach (var template in workload.TemplateWeekCollection.Values)
+			    {
+			        LazyLoadingManager.Initialize(template.OpenHourList);
+			    }
                 LazyLoadingManager.Initialize(workload.QueueSourceCollection);
 			    return workload;
 			}

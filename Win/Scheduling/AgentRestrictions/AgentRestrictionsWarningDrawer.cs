@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (e.RowIndex > 1 && e.ColIndex > 0)
 			{
 				var agentRestrictionsDisplayRow = model.DisplayRowFromRowIndex(e.RowIndex);
-				if (agentRestrictionsDisplayRow == null) return;
 				var warning = agentRestrictionsDisplayRow.Warning(e.ColIndex);
 
 				if (warning != null)

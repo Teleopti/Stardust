@@ -10969,4 +10969,18 @@ These options are activated:
     <value>No activity</value>
     <comment>No activity</comment>
   </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>Scheduling Options</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>Please select at least one option from Team Scheduling.</value>
+  </data>
+  <data name="NoScenarioSelected" xml:space="preserve">
+    <value>No scenario selected</value>
+    <comment>No scenario selected</comment>
+  </data>
+  <data name="PleaseSelectAScenario" xml:space="preserve">
+    <value>Please select a scenario.</value>
+    <comment>Please select a scenario.</comment>
+  </data>
 </root>

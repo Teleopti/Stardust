@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 textBoxTemplateName.Text = nameEmptyText;
                 textBoxTemplateName.SelectAll();
             }
-            if (textBoxTemplateName.Text == nameEmptyText) return false;
+            if (textBoxTemplateName.Text == nameEmptyText || textBoxTemplateName.Text.Length >= 50) return false;
 
             IWorkloadDayTemplate workloadDayTemplate;
             workloadDayTemplate = _workload.TryFindTemplateByName(TemplateTarget.Workload, textBoxTemplateName.Text) as IWorkloadDayTemplate;
@@ -258,9 +258,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             else
             {
                 buttonAdvOK.Enabled = false;
-                if (textBoxTemplateName.Text != nameEmptyText)
+                textBoxTemplateName.ForeColor = Color.Red;
+                _toolTip.Hide(textBoxTemplateName);
+                if (textBoxTemplateName.Text.Length >= 50)
                 {
-                    textBoxTemplateName.ForeColor = Color.Red;
+                    _toolTip.Show(UserTexts.Resources.TheNameIsTooLong, textBoxTemplateName, new Point(textBoxTemplateName.Width - 30, -70), 5000);
+                }
+                else 
+                    if (textBoxTemplateName.Text != nameEmptyText)
+                {
                     _toolTip.Show(UserTexts.Resources.NameAlreadyExists, textBoxTemplateName, new Point(textBoxTemplateName.Width - 30, -70), 5000);
                 }
             }

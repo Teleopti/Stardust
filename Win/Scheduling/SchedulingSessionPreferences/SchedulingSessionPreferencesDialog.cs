@@ -8,6 +8,7 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
+using System.Windows.Forms;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
@@ -145,18 +146,28 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             Close();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
-
-            if(dayOffPreferencesPanel1.ValidateData(ExchangeDataOption.ClientToServer))
+            if(schedulingSessionPreferencesTabPanel1.ValidateTeamSchedulingOption() )
             {
-                dayOffPreferencesPanel1.ExchangeData(ExchangeDataOption.ClientToServer);
-                DialogResult = System.Windows.Forms.DialogResult.OK;
-            	savePersonalSettings();
-            }
+                schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
 
-            Close();
+                if (dayOffPreferencesPanel1.ValidateData(ExchangeDataOption.ClientToServer))
+                {
+                    dayOffPreferencesPanel1.ExchangeData(ExchangeDataOption.ClientToServer);
+                    DialogResult = System.Windows.Forms.DialogResult.OK;
+                    savePersonalSettings();
+                }
+
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(UserTexts.Resources.SelectAtleastOneSchedulingOption, UserTexts.Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
+                DialogResult = DialogResult.None;
+            }
+            
         }
 
         private void tabControlTopLevel_Click(object sender, EventArgs e)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -46,12 +45,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_scheduleMatrixPros = new List<IScheduleMatrixPro>{_scheduleMatrixPro};
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowExceptionOnNullPersons()
-		{
-			_agentRestrictionsDisplayRowCreator.Create(null);		
-		}
-
 		[Test]
 		public void ShouldCreateDisplayRows()
 		{
@@ -76,7 +69,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Playback())
 			{
-				var rows = _agentRestrictionsDisplayRowCreator.Create(_persons);	
+				var rows = _agentRestrictionsDisplayRowCreator.Create(_persons);
 				Assert.AreEqual(1, rows.Count);
 			}
 		}
