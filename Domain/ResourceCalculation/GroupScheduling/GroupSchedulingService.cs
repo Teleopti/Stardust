@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				{
 					if (scheduleMatrixPro.Person == scheduleDay.Person)
 					{
-						if (scheduleMatrixPro.SelectedPeriod.Contains(dateOnly))
+						if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
 						{
 							if (!scheduleMatrixPro.UnlockedDays.Contains(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)))
 							{

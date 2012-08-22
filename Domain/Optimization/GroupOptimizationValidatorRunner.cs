@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					foreach (var matrixPro in validatorResult.MatrixList)
 					{
 						myResult.MatrixList.Add(matrixPro);
-						if (matrixPro.SelectedPeriod.Contains(validatorResult.DaysToLock.Value))
+						if (matrixPro.SchedulePeriod.DateOnlyPeriod.Contains(validatorResult.DaysToLock.Value))
 							matrixPro.LockPeriod(validatorResult.DaysToLock.Value);
 					}
 				}
