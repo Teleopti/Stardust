@@ -425,6 +425,11 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	};
 
 	this.FeedbackError = ko.observable();
+	this.HasFeedbackError = ko.computed(function () {
+		var feedbackError = self.FeedbackError();
+		return typeof(feedbackError) == 'string' && feedbackError.length > 0;
+	});
+
 	this.PossibleStartTimes = ko.observable();
 	this.PossibleEndTimes = ko.observable();
 

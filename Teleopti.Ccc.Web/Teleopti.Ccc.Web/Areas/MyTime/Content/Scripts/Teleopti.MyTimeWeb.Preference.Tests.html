@@ -86,13 +86,13 @@
 								Color: "black",
 								Extended: true,
 								ExtendedTitle: "ExtendedTitle",
-							    StartTimeLimitation : "8:00 am-9:00 am",
-							    EndTimeLimitation : "5:00 pm-6:00 pm",
-							    WorkTimeLimitation : "8:00-9:00",
-							    Activity : "Lunch",
-							    ActivityStartTimeLimitation : "8:00 am-9:00 am",
-							    ActivityEndTimeLimitation : "5:00 pm-6:00 pm",
-							    ActivityTimeLimitation : "1:00-2:00"
+								StartTimeLimitation: "8:00 am-9:00 am",
+								EndTimeLimitation: "5:00 pm-6:00 pm",
+								WorkTimeLimitation: "8:00-9:00",
+								Activity: "Lunch",
+								ActivityStartTimeLimitation: "8:00 am-9:00 am",
+								ActivityEndTimeLimitation: "5:00 pm-6:00 pm",
+								ActivityTimeLimitation: "1:00-2:00"
 							});
 						}
 					};
@@ -127,7 +127,7 @@
 					ko.applyBindings(dayViewModel, element);
 
 					dayViewModel.Extended(true);
-					
+
 					equal($(element).is(':visible'), true);
 				});
 
@@ -158,7 +158,6 @@
 					equal(viewModelDay.Extended(), true);
 				});
 
-
 				test("should delete preference", function () {
 
 					var ajax = {
@@ -184,7 +183,7 @@
 					equal(viewModelDay.Color(), "deleted!");
 					equal(viewModelDay.Extended(), "deleted!");
 				});
-				
+
 				test("should format possible contract time", function () {
 					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 					viewModelDay.PossibleContractTimeMinutesLower(6 * 60 + 30);
@@ -220,6 +219,25 @@
 					equal(viewModelDay.PossibleContractTimes(), "7:00-12:00");
 				});
 
+				test("should compute HasFeedbackError", function () {
+
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+
+					equal(viewModelDay.HasFeedbackError(), false, "handle not initialized");
+
+					viewModelDay.FeedbackError(null);
+					equal(viewModelDay.HasFeedbackError(), false, "handle null");
+
+					viewModelDay.FeedbackError(undefined);
+					equal(viewModelDay.HasFeedbackError(), false, "handle undefined");
+
+					viewModelDay.FeedbackError("");
+					equal(viewModelDay.HasFeedbackError(), false, "handle empty string");
+
+					viewModelDay.FeedbackError("an error");
+					equal(viewModelDay.HasFeedbackError(), true, "handle string");
+
+				});
 
 
 
@@ -272,7 +290,7 @@
 					target.InitViewModels();
 
 				});
-				
+
 
 
 				test("should load day feedback and bind", function () {
