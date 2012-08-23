@@ -165,12 +165,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(dateOnlyAsPeriod.DateOnly).Return(dateOnly);
                 Expect.Call(person.Period(dateOnly)).IgnoreArguments().Return(personPeriod);
                 Expect.Call(personPeriod.PersonContract).Return(personContract);
-                Expect.Call(personContract.Contract).Return(contract);
-                Expect.Call(contract.WorkTime).Return(workTime);
                 Expect.Call(personContract.ContractSchedule).Return(contractSchedule);
                 Expect.Call(contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(true);
                 Expect.Call(personPeriod.StartDate).Return(dateOnly);
                 Expect.Call(personContract.PartTimePercentage).Return(new PartTimePercentage("Hej"));
+                Expect.Call(person.AverageWorkTimeOfDay(new DateOnly())).IgnoreArguments().Return(new TimeSpan(0, 8, 0, 0));
             }
 
             using(_mocks.Playback())
@@ -204,12 +203,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(dateOnlyAsPeriod.DateOnly).Return(dateOnly);
                 Expect.Call(person.Period(dateOnly)).IgnoreArguments().Return(personPeriod);
                 Expect.Call(personPeriod.PersonContract).Return(personContract);
-                Expect.Call(personContract.Contract).Return(contract);
-                Expect.Call(contract.WorkTime).Return(workTime);
                 Expect.Call(personContract.ContractSchedule).Return(contractSchedule);
                 Expect.Call(contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(true);
                 Expect.Call(personPeriod.StartDate).Return(dateOnly);
                 Expect.Call(personContract.PartTimePercentage).Return(new PartTimePercentage("Hej"));
+                Expect.Call(person.AverageWorkTimeOfDay(new DateOnly())).IgnoreArguments().Return(new TimeSpan(0, 8, 0, 0));
             }
 
             using (_mocks.Playback())
@@ -243,12 +241,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(dateOnlyAsPeriod.DateOnly).Return(dateOnly);
                 Expect.Call(person.Period(dateOnly)).IgnoreArguments().Return(personPeriod);
                 Expect.Call(personPeriod.PersonContract).Return(personContract);
-                Expect.Call(personContract.Contract).Return(contract);
-                Expect.Call(contract.WorkTime).Return(workTime);
                 Expect.Call(personContract.ContractSchedule).Return(contractSchedule);
                 Expect.Call(contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(false);
                 Expect.Call(personPeriod.StartDate).Return(dateOnly);
                 Expect.Call(personContract.PartTimePercentage).Return(new PartTimePercentage("Hej"));
+                Expect.Call(person.AverageWorkTimeOfDay(new DateOnly())).IgnoreArguments().Return(new TimeSpan(0, 8, 0,
+                                                                                                               0));
             }
 
             using (_mocks.Playback())
@@ -351,6 +349,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
                 Expect.Call(dateOnlyAsPeriod.DateOnly).Return(onDate);
                 Expect.Call(person.Period(new DateOnly())).IgnoreArguments().Return(personPeriod);
+                Expect.Call(person.AverageWorkTimeOfDay(new DateOnly())).IgnoreArguments().Return(new TimeSpan(0,8,0,0) );
             }
 
             IWorkTimeMinMax result;
