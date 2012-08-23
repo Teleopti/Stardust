@@ -109,6 +109,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		} else {
 			$(window).trigger('hashchange');
 		}
+
+		$('#asm-button').click(function (ev) {
+			window.open('Test/SetCurrentTime?dateSet=2010-1-1', 'AsmWindow', 'width=200,height=100');
+			ev.preventDefault();
+			return false;
+		});
 	}
 
 	// Bind an event to window.onhashchange that, when the history state changes,
@@ -226,7 +232,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			currentFixedDate = null;
 			if (typeof (periodData) !== 'undefined') {
 				currentFixedDate = periodData.Date;
-				
+
 				var dp = range.find('.datepicker').datepicker({
 					minDate: common.ParseToDate(periodData.SelectableDateRange.MinDate),
 					maxDate: common.ParseToDate(periodData.SelectableDateRange.MaxDate),
