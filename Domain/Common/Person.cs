@@ -795,5 +795,22 @@ namespace Teleopti.Ccc.Domain.Common
 			IOptionalColumnValue result = _optionalColumnValueCollection.FirstOrDefault(v => v.Parent.Equals(column));
 			return result;
 		}
+
+        public virtual TimeSpan AverageWorkTimeOfDay(DateOnly dateOnly)
+        {
+            var personPeriod = Period(dateOnly);
+            if (personPeriod == null) return TimeSpan.Zero;
+            var contract = personPeriod.PersonContract.Contract;
+            if (contract.IsWorkTimeFromContract)
+                return contract.WorkTime.AvgWorkTimePerDay;
+            if (contract.IsWorkTimeFromSchedulePeriod)
+            {
+                var schedulePeriod = SchedulePeriod(dateOnly);
+                return schedulePeriod == null
+                           ? WorkTime.DefaultWorkTime.AvgWorkTimePerDay
+                           : schedulePeriod.AverageWorkTimePerDay;
+            }
+            return TimeSpan.Zero;
+        }
     }
 }

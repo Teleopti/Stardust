@@ -483,6 +483,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             timeSpanTextBoxPlanningMax.SetInitialResolution(SelectedContract.PlanningTimeBankMax);
             checkBoxAdjustTimeBankWithSeasonality.Checked = SelectedContract.AdjustTimeBankWithSeasonality;
             checkBoxAdjustTimeBankWithPartTimePercentage.Checked = SelectedContract.AdjustTimeBankWithPartTimePercentage;
+            radioButtonFromContract.Checked = SelectedContract.IsWorkTimeFromContract;
+            radioButtonFromSchedule.Checked = SelectedContract.IsWorkTimeFromSchedulePeriod;
             loadMultiplicatorCheckbox();
         }
 
@@ -522,7 +524,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void addNewContract()
 		{
-			_contractList.Add(createContract());
+		    var newContract = createContract();
+		    newContract.IsWorkTimeFromContract = false;
+		    newContract.IsWorkTimeFromSchedulePeriod = true;
+            _contractList.Add(newContract);
 
 			loadContracts();
 			comboBoxAdvContracts.SelectedIndex = LastItemIndex;
@@ -667,6 +672,24 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private void numericUpDownNegativeDayOff_ValueChanged(object sender, EventArgs e)
         {
             SelectedContract.NegativeDayOffTolerance = (int)numericUpDownNegativeDayOff.Value;
+        }
+
+        private void radioButtonFromContract_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonFromContract.Checked)
+            {
+                SelectedContract.IsWorkTimeFromContract  = true;
+                SelectedContract.IsWorkTimeFromSchedulePeriod = false;
+            }
+        }
+
+        private void radioButtonFromSchedule_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonFromSchedule .Checked)
+            {
+                SelectedContract.IsWorkTimeFromContract = false;
+                SelectedContract.IsWorkTimeFromSchedulePeriod = true;
+            }
         }
     }
 }

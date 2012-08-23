@@ -136,6 +136,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                 dto.TargetTimeNegativeToleranceInMinutes = periodNegativeTolerance;
                 dto.TargetTimePositiveToleranceInMinutes = periodPositiveTolerance;
 
+
                IWorkTimeMinMax minMaxLength = _minMaxWorkTimeChecker.MinMaxWorkTime(scheduleDay, ruleSetBag, effectiveRestriction);
 
                 AddMinMaxToDto(dto, minMaxLength);
