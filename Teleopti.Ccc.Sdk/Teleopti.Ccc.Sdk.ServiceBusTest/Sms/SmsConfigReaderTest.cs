@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 	{
 		private SmsConfigReader _target;
 		private string _emptyDoc = "";
+		
+
 		[SetUp]
 		public void Setup()
 		{
@@ -34,6 +36,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			Assert.That(_target.Password, Is.EqualTo(""));
 			Assert.That(_target.Url, Is.EqualTo(""));
 			Assert.That(_target.Api, Is.EqualTo(""));
+			Assert.That(_target.From, Is.EqualTo(""));
+			Assert.That(_target.Data, Is.EqualTo(""));
 		}
 
 		[Test]
@@ -84,6 +88,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		public void ShouldHaveAClassProperty()
 		{
 			Assert.That(_target.Class, Is.EqualTo("Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender"));
+		}
+
+		[Test]
+		public void ShouldHaveAFromProperty()
+		{
+			Assert.That(_target.From, Is.EqualTo("from"));
+		}
+
+		[Test]
+		public void ShouldHaveADataProperty()
+		{
+			Assert.That(_target.Data, Is.Not.Empty);
 		}
 	}
 

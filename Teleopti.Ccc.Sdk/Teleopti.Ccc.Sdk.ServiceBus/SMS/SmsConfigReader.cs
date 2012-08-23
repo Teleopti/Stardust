@@ -9,8 +9,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 		string Url { get; }
 		string User { get; }
 		string Password { get; }
+		string From { get; }
 		string Class { get; }
 		string Api { get; }
+		string Data { get; }
 	}
 
 	public class SmsConfigReader : ISmsConfigReader
@@ -92,6 +94,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 			}
 		}
 
+		public string From
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				if (_configXml.GetElementsByTagName("from").Count > 0)
+					return _configXml.GetElementsByTagName("from")[0].InnerText;
+				return "";
+			}
+		}
+
 		public string Class
 		{
 			get
@@ -112,6 +126,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 					return "";
 				if (_configXml.GetElementsByTagName("api_id").Count > 0)
 					return _configXml.GetElementsByTagName("api_id")[0].InnerText;
+				return "";
+			}
+		}
+
+		public string Data
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				if (_configXml.GetElementsByTagName("data").Count > 0)
+					return _configXml.GetElementsByTagName("data")[0].InnerText;
 				return "";
 			}
 		}

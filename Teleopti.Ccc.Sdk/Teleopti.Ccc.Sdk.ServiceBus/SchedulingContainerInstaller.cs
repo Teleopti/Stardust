@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
 			builder.RegisterType<SmsLinkChecker>().As<ISmsLinkChecker>();
 			builder.RegisterType<SmsSenderFactory>().As<ISmsSenderFactory>();
+			builder.RegisterType<SmsConfigReader>().As<ISmsConfigReader>();
             //builder.RegisterType<UpdatePersonFinderReadModel>().As<IUpdatePersonFinderReadModel>();
 			//builder.RegisterType<UpdateGroupingReadModel>().As<IUpdateGroupingReadModel>();
 		}
