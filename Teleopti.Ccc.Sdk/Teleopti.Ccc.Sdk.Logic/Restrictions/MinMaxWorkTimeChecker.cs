@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
             var personPeriod = person.Period(scheduleDate);
             var personContract = personPeriod.PersonContract;
-            var avgWorkTime = new TimeSpan((long)(personContract.Contract.WorkTime.AvgWorkTimePerDay.Ticks * personContract.PartTimePercentage.Percentage.Value));
+            var avgWorkTime = new TimeSpan((long)(person.AverageWorkTimeOfDay(scheduleDate).Ticks  * personContract.PartTimePercentage.Percentage.Value));
 
 			// there is no real schedule period so we use person period's start date
             if (!personContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate))
