@@ -86,6 +86,11 @@
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
+    <Compile Include="WeekScheduleTimeIndicator.feature.cs">
+      <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="PreferencesExtendedStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AnotherSite.cs" />
     <Compile Include="Data\Setups\Common\CommonBusinessUnit.cs" />
@@ -420,6 +425,10 @@
     <None Include="ApplicationStartRecovery.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ApplicationStartRecovery.feature.cs</LastGenOutput>
+    </None>
+    <None Include="WeekScheduleTimeIndicator.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WeekScheduleTimeIndicator.feature.cs</LastGenOutput>
     </None>
     <None Include="MobileReports.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
