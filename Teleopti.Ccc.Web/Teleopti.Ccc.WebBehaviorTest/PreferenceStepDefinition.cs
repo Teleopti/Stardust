@@ -251,9 +251,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "feedback-error").Exists, Is.False);
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-start-times").InnerHtml, Is.Null.Or.Empty);
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-end-times").InnerHtml, Is.Null.Or.Empty);
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-contract-times").InnerHtml, Is.Null.Or.Empty);
+			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-start-times").Exists, Is.False);
+			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-end-times").Exists, Is.False);
+			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-contract-times").Exists, Is.False);
 		}
 
 		[Then(@"I should see that there are no available shifts")]
