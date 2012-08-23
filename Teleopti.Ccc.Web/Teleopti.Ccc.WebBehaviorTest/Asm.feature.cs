@@ -32,8 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "ASM", "In order to improve adherence\r\nAs an agent\r\nI want to be to see my current activi" +
-                    "ties", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "ASM", "In order to improve adherence\r\nAs an agent\r\nI want to see my current activities", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -74,10 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Value"});
             table1.AddRow(new string[] {
                         "Name",
-                        "Access to mytime"});
-            table1.AddRow(new string[] {
-                        "Access to mobile reports",
-                        "false"});
+                        "Full access to mytime"});
 #line 8
  testRunner.Given("there is a role with", ((string)(null)), table1);
 #line hidden
@@ -93,7 +89,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table2.AddRow(new string[] {
                         "ShiftCategoryName",
                         "ForTest"});
-#line 12
+#line 11
  testRunner.And("there is a shift with", ((string)(null)), table2);
 #line hidden
         }
@@ -103,15 +99,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void NoPermissionToASMModule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No permission to ASM module", ((string[])(null)));
-#line 18
+#line 17
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 19
+#line 18
  testRunner.Given("I have the role \'No access to ASM\'");
-#line 20
+#line 19
  testRunner.When("I am viewing week schedule");
-#line 21
+#line 20
  testRunner.Then("ASM link should not be visible");
 #line hidden
             this.ScenarioCleanup();
@@ -122,19 +118,19 @@ this.FeatureBackground();
         public virtual void ShowPartOfAgentSScheduleInPopup()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show part of agent\'s schedule in popup", ((string[])(null)));
-#line 23
+#line 22
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
+#line 23
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 24
- testRunner.Given("I have the role \'Access to mytime\'");
-#line 25
  testRunner.And("Current time is \'2001-01-01\'");
-#line 26
+#line 25
  testRunner.When("I view my week schedule");
-#line 27
+#line 26
  testRunner.And("I click ASM link");
-#line 28
+#line 27
  testRunner.Then("I should see a schedule in popup");
 #line hidden
             this.ScenarioCleanup();
