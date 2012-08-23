@@ -111,7 +111,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		}
 
 		$('#asm-button').click(function (ev) {
-			window.open('MyTime/Asm', 'AsmWindow', 'width=200,height=100');
+			window.open('MyTime/Asm', 'AsmWindow', 'width=1000,height=100');
 			ev.preventDefault();
 			return false;
 		});
