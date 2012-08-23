@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"Current time is '(.*)'")]
 		public void GivenCurrentTimeIs(DateTime time)
 		{
-			Navigation.GoTo("Test/SetCurrentTime?" + time);
+			Navigation.GoTo("Test/SetCurrentTime?dateSet=" + time);
 		}
 
 	}
