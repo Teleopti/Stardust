@@ -13,8 +13,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             var approximateTime = DateTime.SpecifyKind(dateToCheck.Date.AddHours(12), DateTimeKind.Unspecified);
             DateTime approxUtc = TimeZoneHelper.ConvertToUtc(approximateTime, timeZone);
 
-            var schedules = current.ScheduledDayCollection(current.Period.ToDateOnlyPeriod(timeZone));
-            foreach (IScheduleDay scheduleDay in schedules)
+            //var schedules = current.ScheduledDayCollection(current.Period.ToDateOnlyPeriod(timeZone));
+			var partCollection = current.ScheduledDayCollection(new DateOnlyPeriod(dateToCheck.AddDays(-3),
+																				dateToCheck.AddDays(3)));
+			foreach (IScheduleDay scheduleDay in partCollection)
             {
                 foreach (IPersonAssignment ass in scheduleDay.PersonAssignmentCollection())
                 {
