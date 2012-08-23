@@ -23,5 +23,6 @@ Scenario: No permission to ASM module
 Scenario: Show part of agent's schedule in popup
 	Given I have the role 'Access to mytime'
 	And Current time is '2001-01-01'	
-	When I am viewing asm gant
+	When I view my week schedule
+	And I click ASM link
 	Then I should see a schedule in popup

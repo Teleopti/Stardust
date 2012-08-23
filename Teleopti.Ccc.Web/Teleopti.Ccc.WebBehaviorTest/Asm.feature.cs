@@ -131,8 +131,10 @@ this.FeatureBackground();
 #line 25
  testRunner.And("Current time is \'2001-01-01\'");
 #line 26
- testRunner.When("I am viewing asm gant");
+ testRunner.When("I view my week schedule");
 #line 27
+ testRunner.And("I click ASM link");
+#line 28
  testRunner.Then("I should see a schedule in popup");
 #line hidden
             this.ScenarioCleanup();

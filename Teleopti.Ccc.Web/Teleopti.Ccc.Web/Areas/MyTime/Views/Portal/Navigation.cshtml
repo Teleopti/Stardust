@@ -69,20 +69,21 @@
 			
 	<section id="toolbar-right" class="col-main floatright">
 		<div class="toolbar-inner">
-				<dl class="dropdown">
-						<dt><span class="icon employee icon-left" id="username">@User.Identity.Name</span></dt>
-						<dd>
-							<ul class="ui-widget-content ui-corner-all ui-menu">
-								<li class="ui-menu-item"><a href="#Settings/Index" class="ui-corner-all">@Resources.Settings</a></li>
-								@if (Model.ShowChangePassword)
-		  { 
-									<li class="ui-menu-item"><a href="#Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
-		  }
-								<li>&nbsp;</li>
-								<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout", @class = "ui-corner-all" })</li>
-							</ul>
-						</dd>
-				</dl>
+			<dl class="dropdown">
+				<dt><span class="icon employee icon-left" id="username">@User.Identity.Name</span></dt>
+				<dd>
+					<ul class="ui-widget-content ui-corner-all ui-menu">
+						<li class="ui-menu-item"><a href="#Settings/Index" class="ui-corner-all">@Resources.Settings</a></li>
+						@if (Model.ShowChangePassword)
+						{ 
+							<li class="ui-menu-item"><a href="#Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
+						}
+						<li>&nbsp;</li>
+						<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout", @class = "ui-corner-all" })</li>
+					</ul>
+				</dd>
+			</dl>
+			<input type="button" id="asm-button" value="ASM"/>
 		</div>
 	</section>
 				
