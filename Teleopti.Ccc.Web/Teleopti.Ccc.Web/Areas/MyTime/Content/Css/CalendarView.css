@@ -55,8 +55,11 @@
 }
 .ie7 .calendarview-week li{zoom: 1; display: inline;} /* IE7 inline-block fix */
 
-.calendarview-week li div.day-content {
-	padding: 10px 3px; 
+.calendarview-week li div.day-content 
+{
+	padding-bottom: 10px;
+	padding-top: 10px;
+	padding-left: 2px;
 	border-left-style: solid; 
 	border-left-width: 8px; 
 	border-left-color: transparent;
