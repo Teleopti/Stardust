@@ -1,4 +1,10 @@
-﻿using TechTalk.SpecFlow;
+﻿using System;
+using NUnit.Framework;
+using TechTalk.SpecFlow;
+using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Data;
+using WatiN.Core;
+using Browser = WatiN.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -14,7 +20,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a schedule in popup")]
 		public void ThenIShouldSeeAScheduleInPopup()
 		{
-			ScenarioContext.Current.Pending();
+			var uri =new Uri(TestSiteConfigurationSetup.Url,"MyTime/Asm");
+			var asmPopup = Browser.AttachTo<IE>(Find.ByUrl(uri));
+			var layers = asmPopup.Divs.Filter(Find.ByClass("asm-layer",false));
+			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
+
 		}
 	}
 }

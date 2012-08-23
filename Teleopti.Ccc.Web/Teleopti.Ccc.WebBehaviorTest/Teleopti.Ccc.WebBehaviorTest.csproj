@@ -94,6 +94,7 @@
       <DependentUpon>Asm.feature</DependentUpon>
     </Compile>
     <Compile Include="Data\Setups\Generic\ShiftConfigurable.cs" />
+    <Compile Include="Pages\AsmPage.cs" />
     <Compile Include="PreferencesExtendedStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AnotherSite.cs" />
     <Compile Include="Data\Setups\Common\CommonBusinessUnit.cs" />

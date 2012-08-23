@@ -2,14 +2,20 @@
 @model AsmViewModel
 @{
 }
-
-<div style="position:absolute">​
+<style>
+	div.asm-layer
+	{
+		height: 50px;
+	}
+</style>
+<div style="position: absolute">
+	​
 	@foreach (var layer in Model.Layers)
  {
-	<div style="position:absolute;
-									left:@(layer.RelativeStartInMinutes)px;
-									width:@(layer.LengthInMinutes)px;
-									height:50px;
-									background-color: @(layer.Color)"></div>
+		<div class="absolute asm-layer" style=" 
+										left:@(layer.RelativeStartInMinutes)px;
+										width:@(layer.LengthInMinutes)px;
+										background-color: @(layer.Color)">
+		</div>
  }
 </div>
