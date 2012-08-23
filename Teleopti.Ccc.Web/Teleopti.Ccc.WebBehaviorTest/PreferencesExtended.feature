@@ -7,9 +7,8 @@
 	
 Background:
 	Given there is a role with
-	| Field                    | Value             |
-	| Name                     | Access to mytime  |
-	| Access to mobile reports | false             |
+	| Field                    | Value				   |
+	| Name                     | Full access to mytime |
 	And there is a role with
 	| Field                          | Value                             |
 	| Name                           | No access to extended preferences |
@@ -30,13 +29,13 @@ Background:
 
 
 Scenario: See indication of an extended preference
-	Given I have the role 'Access to mytime'
+	Given I have the role 'Full access to mytime'
 	And I have an extended preference on '2012-06-20'
 	When I view preferences for date '2012-06-20'
 	Then I should see that I have an extended preference on '2012-06-20'
 
 Scenario: See extended preference
-	Given I have the role 'Access to mytime'
+	Given I have the role 'Full access to mytime'
 	And I have an extended preference on '2012-06-20'
 	When I view preferences for date '2012-06-20'
 	And I click the extended preference indication on '2012-06-20'

@@ -22,5 +22,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(personPeriod);
 		}
 
+		[Given(@"there is a shift with")]
+		public void GivenThereIsAShiftWith(Table table)
+		{
+			var schedule = table.CreateInstance<ShiftConfigurable>();
+			UserFactory.User().Setup(schedule);
+		}
+
 	}
 }
