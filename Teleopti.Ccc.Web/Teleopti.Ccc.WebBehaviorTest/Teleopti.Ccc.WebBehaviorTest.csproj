@@ -81,8 +81,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\TimeStepDefinition.cs" />
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
@@ -91,6 +93,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+     <Compile Include="Asm.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Asm.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Setups\Generic\ShiftConfigurable.cs" />
     <Compile Include="PreferencesExtendedStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AnotherSite.cs" />
     <Compile Include="Data\Setups\Common\CommonBusinessUnit.cs" />
@@ -430,6 +438,11 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleTimeIndicator.feature.cs</LastGenOutput>
     </None>
+    <None Include="Asm.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Asm.feature.cs</LastGenOutput>
+    </None>
+
     <None Include="MobileReports.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MobileReports.feature.cs</LastGenOutput>
