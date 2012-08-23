@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Time indicator in week schedule", "In order to get better control of my weekly schedule \r\nAs an agent\r\nI want to see" +
-                    " an indication of the current time in the week schedule", ProgrammingLanguage.CSharp, ((string[])(null)));
+                    " an indication of the current and passed time in the week schedule", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -74,10 +74,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Value"});
             table1.AddRow(new string[] {
                         "Name",
-                        "Access to mytime"});
-            table1.AddRow(new string[] {
-                        "Access to mobile reports",
-                        "false"});
+                        "Full access to mytime"});
 #line 7
  testRunner.Given("there is a role with", ((string)(null)), table1);
 #line hidden
@@ -90,7 +87,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table2.AddRow(new string[] {
                         "Access to Agent Schedule Messenger",
                         "false"});
-#line 11
+#line 10
  testRunner.And("there is a role with", ((string)(null)), table2);
 #line hidden
         }
@@ -100,17 +97,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void DoNotShowTimeIndicatorIfNoPermission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show time indicator if no permission", ((string[])(null)));
-#line 16
+#line 15
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 17
+#line 16
  testRunner.Given("I have the role \'No access to ASM\'");
-#line 18
+#line 17
  testRunner.And("Current time is \'2001-01-01 12:00\'");
-#line 19
+#line 18
  testRunner.When("I view my week schedule for date \'2001-01-01\'");
-#line 20
+#line 19
  testRunner.Then("I should not see the time indicator");
 #line hidden
             this.ScenarioCleanup();
@@ -121,17 +118,17 @@ this.FeatureBackground();
         public virtual void ShowTheEndOfTimeIndicatorAtCorrectTime()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show the end of time indicator at correct time", ((string[])(null)));
-#line 22
+#line 21
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
+#line 22
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 23
- testRunner.Given("I have the role \'Access to mytime\'");
-#line 24
  testRunner.And("Current time is \'2001-01-01 12:00\'");
-#line 25
+#line 24
  testRunner.When("I view my week schedule for date \'2001-01-01\'");
-#line 26
+#line 25
  testRunner.Then("I should see the end of time indicator at time \'2001-01-01 12:00\'");
 #line hidden
             this.ScenarioCleanup();
@@ -142,17 +139,17 @@ this.FeatureBackground();
         public virtual void DoNotShowTimeIndicatorWhenIViewAFutureWeek()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show time indicator when I view a future week", ((string[])(null)));
-#line 28
+#line 27
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
+#line 28
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 29
- testRunner.Given("I have the role \'Access to mytime\'");
-#line 30
  testRunner.And("Current time is \'2001-01-01 12:00\'");
-#line 31
+#line 30
  testRunner.When("I view my week schedule for date \'2001-01-08\'");
-#line 32
+#line 31
  testRunner.Then("I should not see the time indicator");
 #line hidden
             this.ScenarioCleanup();
@@ -163,17 +160,17 @@ this.FeatureBackground();
         public virtual void ShowTimeIndicatorWhenIViewAPassedWeek()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show time indicator when I view a passed week", ((string[])(null)));
-#line 34
+#line 33
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
+#line 34
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 35
- testRunner.Given("I have the role \'Access to mytime\'");
-#line 36
  testRunner.And("Current time is \'2001-01-01 12:00\'");
-#line 37
+#line 36
  testRunner.When("I view my week schedule for date \'2000-12-20\'");
-#line 38
+#line 37
  testRunner.Then("I should see the time indicator over the whole week");
 #line hidden
             this.ScenarioCleanup();
@@ -184,18 +181,19 @@ this.FeatureBackground();
         public virtual void ShowTimeIndicatorForThePartOfTheWeekThatHasPassed()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show time indicator for the part of the week that has passed", ((string[])(null)));
-#line 40
+#line 39
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
+#line 40
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 41
- testRunner.Given("I have the role \'Access to mytime\'");
-#line 42
  testRunner.And("Current time is \'2001-01-03 12:00\'");
-#line 43
+#line 42
  testRunner.When("I view my week schedule for date \'2001-01-03\'");
-#line 44
- testRunner.Then("I should see the time indicator over the whole week");
+#line 43
+ testRunner.Then("I should see the time indicator from the start of the week up until the time \'200" +
+                    "1-01-03 12:00\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -205,19 +203,19 @@ this.FeatureBackground();
         public virtual void ShowTimeIndicatorMovement()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show time indicator movement", ((string[])(null)));
-#line 46
+#line 45
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
+#line 46
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 47
- testRunner.Given("I have the role \'Access to mytime\'");
-#line 48
  testRunner.And("Current time is \'2001-01-03 12:00\'");
-#line 49
+#line 48
  testRunner.And("I should see the end of time indicator at time \'2001-01-03 12:00\'");
-#line 50
+#line 49
  testRunner.When("Time has passed with \'1\' minutes");
-#line 51
+#line 50
  testRunner.Then("I should see the end of time indicator at time \'2001-01-03 12:01\'");
 #line hidden
             this.ScenarioCleanup();
@@ -228,19 +226,19 @@ this.FeatureBackground();
         public virtual void ShowTimeIndicatorMovementAtMidnight()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show time indicator movement at midnight", ((string[])(null)));
-#line 53
+#line 52
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
+#line 53
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 54
- testRunner.Given("I have the role \'Access to mytime\'");
-#line 55
  testRunner.And("Current time is \'2001-01-01 23:59\'");
-#line 56
+#line 55
  testRunner.And("I should see the end of time indicator at time \'2001-01-01 23:59\'");
-#line 57
+#line 56
  testRunner.When("Time has passed with \'1\' minutes");
-#line 58
+#line 57
  testRunner.Then("I should see the end of time indicator at time \'2001-01-02 00:00\'");
 #line hidden
             this.ScenarioCleanup();
