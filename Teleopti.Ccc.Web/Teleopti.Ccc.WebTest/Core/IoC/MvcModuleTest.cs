@@ -85,6 +85,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
+		public void ShouldRegisterAsmController()
+		{
+			requestContainer.Resolve<AsmController>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldRegisterAppConfigSettings()
 		{
 			requestContainer.Resolve<ISettings>()

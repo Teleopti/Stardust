@@ -1,20 +1,18 @@
 ﻿@using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
-
 @model AsmViewModel
-
 @{
 	//ViewBag.Title = "title";
 	Layout = null;
 }
 
-<h2>title</h2>
-
-asdfasdfasd
-f
-a
-
-asdf
-a
-sdf
-asd
-f
+<div style="position:absolute">
+	@foreach (var layer in Model.Layers)
+ {
+	<div style="position:absolute;
+									left:@layer.RelativeStartInMinutes px;
+									width:@layer.LengthInMinutes;
+									height:50px;
+									background-color: @layer.Color"></div>
+ }
+</div>
+​

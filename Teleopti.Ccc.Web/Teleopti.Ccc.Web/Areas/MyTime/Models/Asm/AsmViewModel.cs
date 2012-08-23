@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
@@ -10,5 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
 		}
 
 		public IList<AsmLayer> Layers { get; private set; }
+		public DateTime StartDate { get; set; }
 	}
 }

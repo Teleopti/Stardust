@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Web;
 using System.Web.Mvc;
 using Autofac;
@@ -7,10 +8,12 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
@@ -27,6 +30,35 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			registerPortalTypes(builder);
 			registerRequestContextTypes(builder);
 			registerReportTypes(builder);
+			registerAsmTypes(builder);
+		}
+
+		private static void registerAsmTypes(ContainerBuilder builder)
+		{
+			builder.RegisterType<TempAsmModelFactory>().As<IAsmViewModelFactory>();
+		}
+
+		public class TempAsmModelFactory : IAsmViewModelFactory
+		{
+			public AsmViewModel CreateViewModel()
+			{
+				var model = new AsmViewModel {StartDate = new DateTime(2012, 8,22)};
+				model.Layers.Add(new AsmLayer
+				                 	{
+				                 		Payload = "phone",
+				                 		RelativeStartInMinutes = 1600,
+				                 		LengthInMinutes = 120,
+				                 		Color = ColorTranslator.ToHtml(Color.Red)
+				                 	});
+				model.Layers.Add(new AsmLayer
+				                 	{
+				                 		Payload = "pruttibangng",
+				                 		RelativeStartInMinutes = 1700,
+				                 		LengthInMinutes = 150,
+				                 		Color = ColorTranslator.ToHtml(Color.Blue)
+				                 	});
+				return model;
+			}
 		}
 
 		private static void registerReportTypes(ContainerBuilder builder)
