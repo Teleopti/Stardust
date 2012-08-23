@@ -194,6 +194,10 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
+    <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
+    <Compile Include="Areas\MyTime\Core\Asm\IAsmViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\Asm\AsmLayer.cs" />
+    <Compile Include="Areas\MyTime\Models\Asm\AsmViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferencePeriodFeedbackViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePeriodFeedbackProvider.cs" />
@@ -525,6 +529,7 @@
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\WeekRequestPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
     <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

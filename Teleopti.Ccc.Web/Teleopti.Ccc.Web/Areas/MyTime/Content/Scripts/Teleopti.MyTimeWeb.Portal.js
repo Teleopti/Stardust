@@ -111,7 +111,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		}
 
 		$('#asm-button').click(function (ev) {
-			window.open('Test/SetCurrentTime?dateSet=2010-1-1', 'AsmWindow', 'width=200,height=100');
+			window.open('Asm', 'AsmWindow', 'width=200,height=100');
 			ev.preventDefault();
 			return false;
 		});

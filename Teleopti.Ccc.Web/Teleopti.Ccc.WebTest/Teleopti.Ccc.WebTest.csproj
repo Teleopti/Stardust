@@ -116,6 +116,7 @@
     <Compile Include="Areas\MobileReports\TestData\CurrentThreadUserCulture.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportProviderForTest.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportsApplicationFunctionsFactory.cs" />
+    <Compile Include="Areas\MyTime\Controllers\AsmControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactoryTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
