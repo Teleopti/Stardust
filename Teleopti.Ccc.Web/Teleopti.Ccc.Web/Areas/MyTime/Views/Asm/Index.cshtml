@@ -1,11 +1,13 @@
 ﻿@using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
 @model AsmViewModel
 @{
+	double pixelsPerMinute = 1;
 }
 <style>
 	div.asm-layer
 	{
-		height: 50px;
+		height: 30px;
+		top: 50px;
 	}
 </style>
 <div style="position: absolute">
@@ -13,9 +15,19 @@
 	@foreach (var layer in Model.Layers)
  {
 		<div class="absolute asm-layer" style=" 
-										left:@(layer.RelativeStartInMinutes)px;
-										width:@(layer.LengthInMinutes)px;
+										left:@(layer.RelativeStartInMinutes * pixelsPerMinute)px;
+										width:@(layer.LengthInMinutes* pixelsPerMinute)px;
 										background-color: @(layer.Color)">
 		</div>
+ }
+	@for (var day = 0; day <= 2; day++)
+ {
+	 for (var hour = 1; hour <= 24; hour++)
+	 {
+	 	<div class="absolute" style="left:@(pixelsPerMinute*day*24*60 + pixelsPerMinute*hour*60)px;
+										                                   	border-left: 1px solid rgba(0, 0, 0, 0.15);
+											top: 10px;
+											height: 100px;">@(hour)</div>
+	 }
  }
 </div>
