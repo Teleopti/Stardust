@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			var userData = _dataStringSerializer.Serialize(data);
 			var userName = data.PersonId.ToString();
 
-			MakeCookie(userName, _now.Time, userData);
+			MakeCookie(userName, _now.LocalTime(), userData);
 		}
 
 		public SessionSpecificData GrabFromCookie()
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		{
 			var cookie = getCookie();
 			var ticket = decryptCookie(cookie);
-			ticket = makeTicket(ticket.Name, _now.Time, ticket.UserData, DateTime.Now.AddHours(-1));
+			ticket = makeTicket(ticket.Name, _now.LocalTime(), ticket.UserData, DateTime.Now.AddHours(-1));
 			cookie.Value = encryptTicket(ticket);
 			setCookie(cookie);
 		}

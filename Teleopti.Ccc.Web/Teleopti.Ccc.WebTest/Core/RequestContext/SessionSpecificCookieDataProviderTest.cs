@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			// Need to remove dependecies to FormsAuthentication.It uses DataTime.Now to check for expiration - test fails with past dates
 			fictiveNow = DateTime.Now; //new DateTime(2000,1,1,1,1,1);
 			now = MockRepository.GenerateStub<INow>();
-			now.Stub(x => x.Time).Return(fictiveNow);
+			now.Stub(x => x.LocalTime()).Return(fictiveNow);
 
 			_sessionSpecificCookieDataProviderSettings = new DefaultSessionSpecificCookieDataProviderSettings();
 			target = new SessionSpecificCookieDataProvider(new FakeCurrentHttpContext(httpContext), _sessionSpecificCookieDataProviderSettings, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));

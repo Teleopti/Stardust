@@ -122,6 +122,7 @@
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
+    <Compile Include="Core\IoC\ModifiedNowTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryScheduleTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
     <Compile Include="Core\Settings\PersonPersisterTest.cs" />

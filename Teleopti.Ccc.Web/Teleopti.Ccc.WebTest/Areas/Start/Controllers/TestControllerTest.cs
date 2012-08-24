@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				{
 					target.SetCurrentTime(dateSet);
 				}
-				container.Resolve<INow>().UtcTime
+				container.Resolve<INow>().UtcTime()
 					.Should().Be.EqualTo(dateSet);
 			}
 		}

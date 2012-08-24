@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			datasource.Stub(x => x.DataSourceName).Return("Data Source");
 			currentDataSourceProvider.Stub(x => x.CurrentDataSource()).Return(datasource);
 
-			now.Stub(x => x.Time).Return(time);
+			now.Stub(x => x.LocalTime()).Return(time);
 
 			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var currentDataSourceProvider = MockRepository.GenerateMock<IDataSourceProvider>();
 			var now = MockRepository.GenerateMock<INow>();
 			var time = new DateTime(2012, 05, 08, 12, 01, 01);
-			now.Stub(x => x.UtcTime).Return(time);
+			now.Stub(x => x.UtcTime()).Return(time);
 
 			var form = new AbsenceRequestForm();
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var currentDataSourceProvider = MockRepository.GenerateMock<IDataSourceProvider>();
 			var now = MockRepository.GenerateMock<INow>();
 			var time = new DateTime(2012, 05, 08, 12, 01, 01);
-			now.Stub(x => x.UtcTime).Return(time);
+			now.Stub(x => x.UtcTime()).Return(time);
 
 			var form = new AbsenceRequestForm();
 

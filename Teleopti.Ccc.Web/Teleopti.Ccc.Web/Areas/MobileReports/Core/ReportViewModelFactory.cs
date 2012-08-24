@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 
 		public ReportViewModel CreateReportViewModel()
 		{
-			var dateOnly = new DateOnly(_now.Time);
+			var dateOnly = new DateOnly(_now.LocalTime());
 			return _mappingEngine.Map<DateOnly, ReportViewModel>(dateOnly);
 		}
 

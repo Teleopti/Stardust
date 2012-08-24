@@ -5,19 +5,19 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class Now : INow
 	{
-		public DateTime Time
+		public DateTime LocalTime()
 		{
-			get { return DateTime.Now; }
+			return DateTime.Now;
 		}
 
-		public DateTime UtcTime
+		public DateTime UtcTime()
 		{
-			get { return DateTime.UtcNow; }
+			return DateTime.UtcNow;
 		}
 
 		public DateOnly Date()
 		{
-			return new DateOnly(Time);
+			return new DateOnly(LocalTime());
 		}
 	}
 }

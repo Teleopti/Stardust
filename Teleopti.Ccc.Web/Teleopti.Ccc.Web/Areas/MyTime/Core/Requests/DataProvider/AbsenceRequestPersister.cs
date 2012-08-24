@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				              		BusinessUnitId = _businessUnitProvider.CurrentBusinessUnit().Id.GetValueOrDefault(Guid.Empty),
 				              		Datasource = _dataSourceProvider.CurrentDataSource().DataSourceName,
 				              		PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
-				              		Timestamp = _now.UtcTime
+				              		Timestamp = _now.UtcTime()
 				              	};
 				var state = new TimerState {Message = message};
 				state.Timer = new Timer(notifyServiceBusAfterASmallDelay,state,TimeSpan.FromMilliseconds(50),TimeSpan.FromMilliseconds(-1));

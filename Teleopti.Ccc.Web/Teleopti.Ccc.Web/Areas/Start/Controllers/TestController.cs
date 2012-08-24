@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ViewResult SetCurrentTime(DateTime dateSet)
 		{
-			var newTime = new ModifiedNow {UtcTime = dateSet};
+			var newTime = new ModifiedNow(dateSet);
 			updateIocNow(newTime);
 
 			var viewModel = new TestMessageViewModel
@@ -108,16 +109,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var updater = new ContainerBuilder();
 			updater.Register(c => newTime).As<INow>();
 			updater.Update(_container.ComponentRegistry);
-		}
-
-		private class ModifiedNow : INow
-		{
-			public DateTime Time { get; set; }
-			public DateTime UtcTime { get; set; }
-			public DateOnly Date()
-			{
-				return new DateOnly();
-			}
 		}
 	}
 }
