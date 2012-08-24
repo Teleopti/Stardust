@@ -14,5 +14,10 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return DateTime.UtcNow; }
 		}
+
+		public DateOnly Date()
+		{
+			return new DateOnly();
+		}
 	}
 }

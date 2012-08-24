@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers

@@ -114,6 +114,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			public DateTime Time { get; set; }
 			public DateTime UtcTime { get; set; }
+			public DateOnly Date()
+			{
+				return new DateOnly();
+			}
 		}
 	}
 }
