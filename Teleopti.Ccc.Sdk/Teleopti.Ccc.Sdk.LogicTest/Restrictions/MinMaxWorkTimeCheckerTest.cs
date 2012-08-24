@@ -150,8 +150,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             var personPeriod = _mocks.StrictMock<IPersonPeriod>();
             var dateOnly = new DateOnly(2011, 1, 1);
             var personContract = _mocks.StrictMock<IPersonContract>();
-            var contract = _mocks.StrictMock<IContract>();
-            var workTime = new WorkTime(TimeSpan.FromHours(8));
             var person = _mocks.StrictMock<IPerson>();
             var contractSchedule = _mocks.StrictMock<IContractSchedule>();
 
@@ -188,8 +186,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             var personPeriod = _mocks.StrictMock<IPersonPeriod>();
             var dateOnly = new DateOnly(2011, 1, 1);
             var personContract = _mocks.StrictMock<IPersonContract>();
-            var contract = _mocks.StrictMock<IContract>();
-            var workTime = new WorkTime(TimeSpan.FromHours(8));
             var person = _mocks.StrictMock<IPerson>();
             var contractSchedule = _mocks.StrictMock<IContractSchedule>();
 
@@ -226,8 +222,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             var personPeriod = _mocks.StrictMock<IPersonPeriod>();
             var dateOnly = new DateOnly(2011, 1, 1);
             var personContract = _mocks.StrictMock<IPersonContract>();
-            var contract = _mocks.StrictMock<IContract>();
-            var workTime = new WorkTime(TimeSpan.FromHours(8));
             var person = _mocks.StrictMock<IPerson>();
             var contractSchedule = _mocks.StrictMock<IContractSchedule>();
 
