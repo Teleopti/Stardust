@@ -49,13 +49,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				var timeZone = person.PermissionInformation.DefaultTimeZone();
 				var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
 
-				if (_significantChangeChecker.IsSignificantChange(dateOnlyPeriod, person))
+				if (_significantChangeChecker.SignificantChangeMessages(dateOnlyPeriod, person).Count != 0)
 				{
 					var number = _smsLinkChecker.SmsMobileNumber(person);
 					if (!string.IsNullOrEmpty(number))
 					{
 						var smsSender = _smsSenderFactory.Sender;
-						smsSender.SendSms(dateOnlyPeriod, number);
+						smsSender.SendSms("Schedule changed", number);
 					}
 				}
 

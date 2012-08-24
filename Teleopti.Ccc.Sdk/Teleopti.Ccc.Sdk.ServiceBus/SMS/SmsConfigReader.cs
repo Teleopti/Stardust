@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 {
@@ -6,11 +7,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 	{
 		bool HasLoadedConfig { get; }
 		XmlDocument XmlDocument { get; }
-		string Url { get; }
+		Uri Url { get; }
 		string User { get; }
 		string Password { get; }
 		string From { get; }
-		string Class { get; }
+		string ClassName { get; }
 		string Api { get; }
 		string Data { get; }
 	}
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 			_configXml = new XmlDocument();
 			try
 			{
-				_configXml.Load(_configFile);
+				_configXml.Load(AppDomain.CurrentDomain.BaseDirectory + _configFile);
 			}
 			catch (System.IO.FileNotFoundException)
 			{
@@ -58,15 +59,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 			get { return _configXml; }
 		}
 
-		public string Url
+		public Uri Url
 		{
 			get
 			{
 				if (!HasLoadedConfig)
-					return "";
+					return new Uri("");
 				if (_configXml.GetElementsByTagName("url").Count > 0)
-					return _configXml.GetElementsByTagName("url")[0].InnerText;
-				return "";
+					return new Uri(_configXml.GetElementsByTagName("url")[0].InnerText);
+				return new Uri("");
 			}
 		}
 
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 			}
 		}
 
-		public string Class
+		public string ClassName
 		{
 			get
 			{

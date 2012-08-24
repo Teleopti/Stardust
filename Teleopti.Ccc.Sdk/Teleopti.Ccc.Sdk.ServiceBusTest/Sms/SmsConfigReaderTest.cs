@@ -4,7 +4,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.SMS;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 {
-	[TestFixture]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), TestFixture]
 	public class SmsConfigReaderTest
 	{
 		private SmsConfigReader _target;
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		[Test]
 		public void ShouldHaveAClassProperty()
 		{
-			Assert.That(_target.Class, Is.EqualTo("Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender"));
+			Assert.That(_target.ClassName, Is.EqualTo("Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender"));
 		}
 
 		[Test]

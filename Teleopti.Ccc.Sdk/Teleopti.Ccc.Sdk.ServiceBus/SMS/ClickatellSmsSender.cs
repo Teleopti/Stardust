@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Xml;
-using Teleopti.Interfaces.Domain;
 using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
@@ -10,7 +9,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public class ClickatellSmsSender : ISmsSender
 	{
-		private readonly ISmsConfigReader _smsConfigReader;
+		private ISmsConfigReader _smsConfigReader;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellSmsSender));
 
 //        private const string smsString = @"<clickAPI>
@@ -20,52 +19,50 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 //				</sendMsg>
 //			</clickAPI>";
 
-		public ClickatellSmsSender(ISmsConfigReader smsConfigReader)
-		{
-			_smsConfigReader = smsConfigReader;
-		}
-
-		public void SendSms(DateOnlyPeriod dateOnlyPeriod, string mobileNumber)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		public void SendSms(string message, string mobileNumber)
 		{
 			if(!_smsConfigReader.HasLoadedConfig)
 				return;
-			//if (args == null || args.Length == 0)
-			//{
-			//    throw new ApplicationException("Specify the URI of the resource to retrieve.");
-			//}
 
-			var client = new WebClient();
-
-			// Add a user agent header in case the 
-			// requested URI contains a query.
-			var smsString = _smsConfigReader.Data;
-
-			client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-			var msgData = string.Format(smsString, _smsConfigReader.User, _smsConfigReader.Password, mobileNumber, _smsConfigReader.From,
-			                         "ditt schema har ändrats");
-			try
+			using (var client = new WebClient())
 			{
-				var data = client.OpenRead(_smsConfigReader.Url + msgData);
-				if (data != null)
+				// Add a user agent header in case the 
+				// requested URI contains a query.
+				var smsString = _smsConfigReader.Data;
+
+				client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+				var msgData = string.Format(smsString, _smsConfigReader.User, _smsConfigReader.Password, mobileNumber, _smsConfigReader.From,
+										 message);
+				try
 				{
-					var reader = new StreamReader(data);
-					var s = reader.ReadToEnd();
-					var doc = new XmlDocument();
-					doc.LoadXml(s);
-					data.Close();
-					reader.Close();
-					if(doc.GetElementsByTagName("fault").Count > 0)
+					var data = client.OpenRead(_smsConfigReader.Url + msgData);
+					if (data != null)
 					{
-						Logger.Error("Error occurred sending SMS: " + s);
+						var reader = new StreamReader(data);
+						var s = reader.ReadToEnd();
+						data.Close();				
+						reader.Close();
+						var doc = new XmlDocument();
+						doc.LoadXml(s);
+						if(doc.GetElementsByTagName("fault").Count > 0)
+						{
+							Logger.Error("Error occurred sending SMS: " + s);
+						}
 					}
 				}
-			}
-			catch (Exception exception)
-			{
-				Logger.Error("Error occurred trying to access: " + _smsConfigReader.Url + msgData, exception);
+				catch (Exception exception)
+				{
+					Logger.Error("Error occurred trying to access: " + _smsConfigReader.Url + msgData, exception);
+				
+				}
 			}
 			
-			//logga om fel
+		}
+
+		public void SetConfigReader(ISmsConfigReader smsConfigReader)
+		{
+			_smsConfigReader = smsConfigReader;
 		}
 	}
 }

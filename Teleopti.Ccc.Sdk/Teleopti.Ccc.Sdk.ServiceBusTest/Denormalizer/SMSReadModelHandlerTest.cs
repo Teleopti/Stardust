@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
@@ -105,10 +106,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
 			Expect.Call(_scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
 			Expect.Call(_personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
-			Expect.Call(_significantChangeChecker.IsSignificantChange(dateOnlyPeriod, person)).Return(true);
+			Expect.Call(_significantChangeChecker.SignificantChangeMessages(dateOnlyPeriod, person)).Return(new List<string>{"ändrats!"});
 			Expect.Call(_smsLinkChecker.SmsMobileNumber(person)).Return("124578");
 			Expect.Call(_smsSenderFactory.Sender).Return(_smsSender);
-			Expect.Call(() => _smsSender.SendSms(dateOnlyPeriod, "124578"));
+			Expect.Call(() => _smsSender.SendSms("ändrats!", "124578"));
 			Expect.Call(uow.Dispose);
 
 			_mocks.ReplayAll();

@@ -25,14 +25,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 		{
 			get
 			{
+				ISmsSender sender = null;
 				if(_smsConfigReader.HasLoadedConfig)
 				{
 					//TODO Add error handling and logging of errors
-					var type = Assembly.GetExecutingAssembly().GetType(_smsConfigReader.Class);
-					return (ISmsSender)Activator.CreateInstance(type);
+					var type = Assembly.GetExecutingAssembly().GetType(_smsConfigReader.ClassName);
+					sender =  (ISmsSender)Activator.CreateInstance(type);
 				}
 				// default
-				return new ClickatellSmsSender(_smsConfigReader);
+				if(sender == null)
+					sender =  new ClickatellSmsSender();
+
+				sender.SetConfigReader(_smsConfigReader);
+				return sender;
 			}
 		}
 	}

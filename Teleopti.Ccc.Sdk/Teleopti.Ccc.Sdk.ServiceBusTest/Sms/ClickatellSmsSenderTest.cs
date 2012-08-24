@@ -1,13 +1,11 @@
-﻿using System;
-using System.Xml;
+﻿using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Sdk.ServiceBus.SMS;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 {
-	[TestFixture]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), TestFixture]
 	public class ClickatellSmsSenderTest
 	{
 		// the send will not work in thia test because of the password is wrong
@@ -17,8 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		private ISmsConfigReader _smsConfigReader;
 		private ClickatellSmsSender _target;
 
-		private string _xml =
-			@"<?xml version='1.0' encoding='utf-8' ?>
+		private const string xml = @"<?xml version='1.0' encoding='utf-8' ?>
 <Config>
 	<class>Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
@@ -43,7 +40,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		{
 			_mocks = new MockRepository();
 			_smsConfigReader = _mocks.StrictMock<ISmsConfigReader>();
-			_target = new ClickatellSmsSender(_smsConfigReader);
+			_target = new ClickatellSmsSender();
+			_target.SetConfigReader(_smsConfigReader);
 		}
 
 		[Test]
@@ -51,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		{
 			Expect.Call(_smsConfigReader.HasLoadedConfig).Return(false);
 			_mocks.ReplayAll();
-			_target.SendSms(new DateOnlyPeriod(),"" );
+			_target.SendSms("schemat har ändrats","" );
 			_mocks.VerifyAll();
 		}
 
@@ -59,18 +57,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		public void ShouldTryToSendIfConfig()
 		{
 			var doc = new XmlDocument();
-			doc.LoadXml(_xml);
+			doc.LoadXml(xml);
 
 			_smsConfigReader = new SmsConfigReader(doc);
-			_target = new ClickatellSmsSender(_smsConfigReader);
-
-			_target.SendSms(new DateOnlyPeriod(),"46709218108" );
+			_target.SetConfigReader(_smsConfigReader);
+			_target.SendSms("schemat har ändrats","46709218108" );
 		}
 
 		[Test]
-		public void ShouldLogifUrlIsIncorrect()
+		public void ShouldLogIfUrlIsIncorrect()
 		{
-			var xml = @"<?xml version='1.0' encoding='utf-8' ?><Config>
+			const string incorrectXml = @"<?xml version='1.0' encoding='utf-8' ?><Config>
 	<class>Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender</class>
 	<url>http://api.sticktohell.com/xml/xml?data=</url>
 	<user>ola.hakansson@teleopti.com</user>
@@ -89,12 +86,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 	</data>
 </Config>";
 			var doc = new XmlDocument();
-			doc.LoadXml(xml);
+			doc.LoadXml(incorrectXml);
 
 			_smsConfigReader = new SmsConfigReader(doc);
-			_target = new ClickatellSmsSender(_smsConfigReader);
-
-			_target.SendSms(new DateOnlyPeriod(), "46709218108");
+			_target.SetConfigReader(_smsConfigReader);
+			_target.SendSms("schemat har ändrats", "46709218108");
 		}
 	}
 }

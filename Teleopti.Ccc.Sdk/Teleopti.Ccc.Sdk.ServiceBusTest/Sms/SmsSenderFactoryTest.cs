@@ -1,11 +1,10 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Sdk.ServiceBus.SMS;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 {
-	[TestFixture]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), TestFixture]
 	public class SmsSenderFactoryTest
 	{
 		private MockRepository _mocks;
@@ -20,11 +19,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			_target = new SmsSenderFactory(_smsConfigReader);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), Test]
 		public void ShouldReturnClickatell()
 		{
 			Expect.Call(_smsConfigReader.HasLoadedConfig).Return(true);
-			Expect.Call(_smsConfigReader.Class).Return("Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender");
+			Expect.Call(_smsConfigReader.ClassName).Return("Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender");
 			_mocks.ReplayAll();
 			var sender = _target.Sender;
 			Assert.That(sender, Is.Not.Null);
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			_mocks.VerifyAll();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), Test]
 		public void ShouldReturnClickatellIfNoConfig()
 		{
 			Expect.Call(_smsConfigReader.HasLoadedConfig).Return(false);

@@ -22,39 +22,39 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		}
 
 		[Test]
-		public void ShouldReturnFalseIfPeriodAfterWithingFourteenDays()
+		public void ShouldReturnFalseIfPeriodAfterWithinFourteenDays()
 		{
 			var date = DateTime.Now.Date;
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(20)), new DateOnly(date.AddDays(30)) );
 
-			Assert.That(_target.IsSignificantChange(period, _person), Is.False);
+			Assert.That(_target.SignificantChangeMessages(period, _person).Count, Is.EqualTo(0));
 		}
 
 		[Test]
-		public void ShouldReturnFalseIfPeriodBeforeWithingFourteenDays()
+		public void ShouldReturnFalseIfPeriodBeforeWithinFourteenDays()
 		{
 			var date = DateTime.Now.Date;
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(-20)), new DateOnly(date.AddDays(-1)));
 
-			Assert.That(_target.IsSignificantChange(period, _person), Is.False);
+			Assert.That(_target.SignificantChangeMessages(period, _person).Count, Is.EqualTo(0));
 		}
 
 		[Test]
-		public void ShouldReturnTrueIfPeriodEndsWithingFourteenDays()
+		public void ShouldReturnTrueIfPeriodEndsWithinFourteenDays()
 		{
 			var date = DateTime.Now.Date;
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(-20)), new DateOnly(date.AddDays(1)));
 
-			Assert.That(_target.IsSignificantChange(period, _person), Is.True);
+			Assert.That(_target.SignificantChangeMessages(period, _person).Count, Is.GreaterThan(0));
 		}
 
 		[Test]
-		public void ShouldReturnTrueIfPeriodStartsWithingFourteenDays()
+		public void ShouldReturnTrueIfPeriodStartsWithinFourteenDays()
 		{
 			var date = DateTime.Now.Date;
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(5)), new DateOnly(date.AddDays(20)));
 
-			Assert.That(_target.IsSignificantChange(period, _person), Is.True);
+			Assert.That(_target.SignificantChangeMessages(period, _person).Count, Is.GreaterThan(0));
 		}
 	}
 
