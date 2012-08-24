@@ -158,6 +158,13 @@
     <Compile Include="BusStartup.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
+    <Compile Include="Denormalizer\SmsReadModelHandler.cs" />
+    <Compile Include="SMS\ISmsSender.cs" />
+    <Compile Include="SMS\SignificantChangeChecker.cs" />
+    <Compile Include="SMS\SmsConfigReader.cs" />
+    <Compile Include="SMS\SmsLinkChecker.cs" />
+    <Compile Include="SMS\ClickatellSmsSender.cs" />
+    <Compile Include="SMS\SmsSenderFactory.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumer.cs" />
@@ -252,6 +259,9 @@
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="SmsConfig.xml.notinuse">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
