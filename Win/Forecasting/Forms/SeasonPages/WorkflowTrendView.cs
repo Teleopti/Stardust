@@ -80,16 +80,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             _chartControl.Name = "Trend";
         }
 
-        private double getTotalTaskIndex(ITaskOwner taskOwner)
-        {
-            double totalTaskIndex = 1;
-            foreach (IVolumeYear year in _volumes)
-            {
-                totalTaskIndex *= year.TaskIndex(taskOwner.CurrentDate);
-            }
-            return totalTaskIndex;
-        }
-
         private string getChartSeriesString()
         {
             string chartString;
@@ -177,9 +167,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 
             foreach (ITaskOwner taskOwner in _currentHistoricPeriod.TaskOwnerDayCollection)
             {
-                double totalTaskIndex = getTotalTaskIndex(taskOwner);
                 ChartPoint chartPoint =
-                    new ChartPoint(taskOwner.CurrentDate, totalTaskIndex<0.00001d ? 0 : (taskOwner.TotalStatisticCalculatedTasks / totalTaskIndex));
+                    new ChartPoint(taskOwner.CurrentDate, taskOwner.TotalStatisticCalculatedTasks);
                 
                 if (currentDate.AddDays(2) < taskOwner.CurrentDate)
                 {
