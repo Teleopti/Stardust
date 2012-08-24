@@ -195,6 +195,7 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
+    <Compile Include="Areas\MyTime\Core\Asm\Mapping\AsmViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\ViewModelFactory\AsmViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\ViewModelFactory\IAsmViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Asm\AsmLayer.cs" />

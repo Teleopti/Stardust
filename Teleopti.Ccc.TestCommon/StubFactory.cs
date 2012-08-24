@@ -237,6 +237,13 @@ namespace Teleopti.Ccc.TestCommon
 			return visualLayer;
 		}
 
+		public IVisualLayer VisualLayerStub(DateTimePeriod period)
+		{
+			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
+			visualLayer.Stub(x => x.Period).Return(period);
+			return visualLayer;
+		}
+
 		public IPublicNote PublicNoteStub()
 		{
 			var publicNote = MockRepository.GenerateStub<IPublicNote>();
