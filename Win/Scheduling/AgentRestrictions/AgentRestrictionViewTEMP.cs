@@ -61,8 +61,11 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			else
 			{
 				label1.Text = displayRow.AgentName + " is ready";
-				IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
-				_detailView.LoadDetails(displayRow.Matrix, restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
+				//IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
+				//_detailView.LoadDetails(displayRow.Matrix, restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
+
+				_detailView.TheGrid.Refresh();
+				_detailView.InitializeGrid();
 			}
 			
 		}
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private void AgentRestrictionViewTempLoad(object sender, System.EventArgs e)
 		{
 			agentRestrictionGrid.MergeHeaders();
-			agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _workShiftWorkTime, _selectedPerson);
+			//agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _workShiftWorkTime, _selectedPerson, _detailView);
 			agentRestrictionGrid.Refresh();	
 		}
 
