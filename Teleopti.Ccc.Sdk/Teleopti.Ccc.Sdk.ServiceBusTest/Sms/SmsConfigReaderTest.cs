@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		[Test]
 		public void ShouldHaveAnApiProperty()
 		{
-			Assert.That(_target.Api, Is.EqualTo("3388480"));
+			Assert.That(_target.Api, Is.EqualTo("3388822"));
 		}
 
 		[Test]
