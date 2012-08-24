@@ -37,6 +37,11 @@ namespace Teleopti.Ccc.TestCommon
 			return dataSource;
 		}
 
+		public IScheduleDay ScheduleDayStub()
+		{
+			return ScheduleDayStub(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+		}
+
 		public IScheduleDay ScheduleDayStub(DateTime date)
 		{
 			return ScheduleDayStub(date, SchedulePartView.None, null, null, null, null);

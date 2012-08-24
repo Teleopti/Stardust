@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
 using Teleopti.Interfaces.Domain;
@@ -39,8 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 				               	{
 				               		Payload = visualLayer.DisplayDescription().Name,
 											RelativeStartInMinutes = (int) visualLayer.Period.StartDateTime.Subtract(earliest).TotalMinutes,
-											LengthInMinutes = (int) visualLayer.Period.ElapsedTime().TotalMinutes
-											
+											LengthInMinutes = (int) visualLayer.Period.ElapsedTime().TotalMinutes,
+											Color = ColorTranslator.ToHtml(visualLayer.DisplayColor())
 				               	});
 			}
 			return ret;

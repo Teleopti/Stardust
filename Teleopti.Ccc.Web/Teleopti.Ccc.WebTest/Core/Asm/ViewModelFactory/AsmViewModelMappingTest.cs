@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -27,9 +28,9 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.ViewModelFactory
 		[Test]
 		public void ShouldReturnALayerForEachlayerInProjection()
 		{
-			var scheduleDay1 = MockRepository.GenerateMock<IScheduleDay>();
-			var scheduleDay2 = MockRepository.GenerateMock<IScheduleDay>();
-			var scheduleDay3 = MockRepository.GenerateMock<IScheduleDay>();
+			var scheduleDay1 = scheduleFactory.ScheduleDayStub();
+			var scheduleDay2 = scheduleFactory.ScheduleDayStub();
+			var scheduleDay3 = scheduleFactory.ScheduleDayStub();
 
 			projectionProvider.Expect(p => p.Projection(scheduleDay1))
 				.Return(scheduleFactory.ProjectionStub(new[] { scheduleFactory.VisualLayerStub("1") }));
@@ -89,6 +90,21 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.ViewModelFactory
 				                                       	}));
 			var res = target.Map(new[] {scheduleDay});
 			res.Layers.First().LengthInMinutes.Should().Be.EqualTo(length);
+		}
+
+		[Test]
+		public void ShouldSetLayerColor()
+		{
+			var color = Color.BlanchedAlmond;
+			var scheduleDay = scheduleFactory.ScheduleDayStub(new DateTime());
+			projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(scheduleFactory.ProjectionStub(new[]
+				                                       	{
+				                                       		scheduleFactory.VisualLayerStub(color)
+				                                       	}));
+			var res = target.Map(new[] { scheduleDay });
+
+			res.Layers.First().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(color));
+
 		}
 	}
 }
