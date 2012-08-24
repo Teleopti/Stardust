@@ -4,7 +4,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Times(1);
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(true).Repeat.Any();
                 Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
-                Expect.Call(_dayOffDecisionMakerExecuter.Execute(bitArrayBeforeMove, bitArrayBeforeMove, _matrix, _originalStateContainer, true, true))
+                Expect.Call(_dayOffDecisionMakerExecuter.Execute(bitArrayBeforeMove, bitArrayBeforeMove, _matrix, _originalStateContainer, true, true, false))
                     .Return(true)
                     .Repeat.AtLeastOnce();
             }
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(false).Repeat.Once();
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(true).Repeat.Once();
                 Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
-                Expect.Call(_dayOffDecisionMakerExecuter.Execute(bitArrayBeforeMove, bitArrayBeforeMove, _matrix, _originalStateContainer, true, true))
+                Expect.Call(_dayOffDecisionMakerExecuter.Execute(bitArrayBeforeMove, bitArrayBeforeMove, _matrix, _originalStateContainer, true, true, false))
                     .Return(true)
                     .Repeat.AtLeastOnce();
             }

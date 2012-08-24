@@ -79,7 +79,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixPro currentScheduleMatrix, 
             IScheduleMatrixOriginalStateContainer originalStateContainer, 
             bool doReschedule, 
-            bool handleDayOffConflict)
+            bool handleDayOffConflict,
+			bool goBackToLegalState)
         {
             if (workingBitArray == null)
                 throw new ArgumentNullException("workingBitArray");
@@ -115,11 +116,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (doReschedule)
                 _schedulePartModifyAndRollbackService.ClearModificationCollection();
 
-            IList<DateOnly> removedIllegalWorkTimeDays = new List<DateOnly>();
-
             var result = 
                 executeDayOffMovesInMatrix(workingBitArray, originalBitArray, currentScheduleMatrix, schedulingOptions, daysOffPreferences, handleDayOffConflict);
             IEnumerable<changedDay> movedDates = result.MovedDays;
+
+			IList<DateOnly> removedIllegalWorkTimeDays = new List<DateOnly>();
 
             if (!result.Result)
             {
@@ -130,11 +131,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             resourceCalculateMovedDays(movedDates);
 
-            removedIllegalWorkTimeDays = removeIllegalWorkTimeDays(currentScheduleMatrix, schedulingOptions);
-            if (removedIllegalWorkTimeDays.Count > 0)
-                writeToLogWorkShiftBackToLegalStateRemovedDays(removedIllegalWorkTimeDays);
+			if (goBackToLegalState)
+			{
+				removedIllegalWorkTimeDays = removeIllegalWorkTimeDays(currentScheduleMatrix, schedulingOptions);
+				if (removedIllegalWorkTimeDays == null)
+					return false;
 
-            if (!doReschedule)
+				if (removedIllegalWorkTimeDays.Count > 0)
+					writeToLogWorkShiftBackToLegalStateRemovedDays(removedIllegalWorkTimeDays);
+			}
+
+        	if (!doReschedule)
                 return true;
 
             if (!rescheduleWhiteSpots(movedDates, removedIllegalWorkTimeDays, schedulingOptions, currentScheduleMatrix, originalStateContainer))
@@ -435,7 +442,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private IList<DateOnly> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
-            _workTimeBackToLegalStateService.Execute(matrix, schedulingOptions);
+			if (!_workTimeBackToLegalStateService.Execute(matrix, schedulingOptions))
+				return null;
+
             IList<DateOnly> removedIllegalDates = _workTimeBackToLegalStateService.RemovedDays;
             //resource calculate removed days
             foreach (DateOnly dateOnly in removedIllegalDates)

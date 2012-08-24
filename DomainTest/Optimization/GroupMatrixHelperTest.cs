@@ -22,6 +22,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IGroupMatrixContainerCreator _groupMatrixContainerCreator;
     	private IGroupPersonConsistentChecker _groupPersonConsistentChecker;
     	private ISchedulingOptions _schedulingOptions;
+    	private IWorkShiftBackToLegalStateServicePro _workShiftBackToLegalStateServicePro;
+    	private IResourceOptimizationHelper _resourceOptimizationHelper;
+    	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
         [SetUp]
         public void Setup()
@@ -35,8 +38,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _groupMatrixContainerCreator = _mocks.StrictMock<IGroupMatrixContainerCreator>();
         	_groupPersonConsistentChecker = _mocks.StrictMock<IGroupPersonConsistentChecker>();
+        	_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
+        	_workShiftBackToLegalStateServicePro = _mocks.StrictMock<IWorkShiftBackToLegalStateServicePro>();
+        	_groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
 
-			_target = new GroupMatrixHelper(_groupMatrixContainerCreator, _groupPersonConsistentChecker);
+			_target = new GroupMatrixHelper(_groupMatrixContainerCreator, _groupPersonConsistentChecker, _workShiftBackToLegalStateServicePro, _resourceOptimizationHelper);
 
 			_schedulingOptions = new SchedulingOptions();
 
@@ -185,69 +191,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 		}
 
-    	[Test]
-        public void VerifyValidateDayOffMoves()
-        {
-
-            LockableBitArray lockableBitArrayToValidate = new LockableBitArray(7, false, false, null);
-            lockableBitArrayToValidate.Set(0, true);
-
-            IScheduleMatrixPro scheduleMatrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
-
-            GroupMatrixContainer groupMatrix1 = new GroupMatrixContainer { Matrix = _activeScheduleMatrix, WorkingArray = lockableBitArrayToValidate };
-            GroupMatrixContainer groupMatrix2 = new GroupMatrixContainer { Matrix = scheduleMatrix2, WorkingArray = lockableBitArrayToValidate };
-
-            
-            IDayOffLegalStateValidator validator = _mocks.StrictMock<IDayOffLegalStateValidator>();
-            IList<IDayOffLegalStateValidator> validators = new List<IDayOffLegalStateValidator>{ validator };
-
-            IList<GroupMatrixContainer> containers = new List<GroupMatrixContainer>{ groupMatrix1, groupMatrix2 };
-
-            using(_mocks.Record())
-            {
-                Expect.Call(validator.IsValid(null, 0)).IgnoreArguments()
-                    .Return(true)
-                    .Repeat.Times(2);
-            }
-            using(_mocks.Playback())
-            {
-                Assert.IsTrue(_target.ValidateDayOffMoves(containers, validators));
-            }
-
-        }
-
-        [Test]
-        public void VerifyValidateDayOffMovesReturnFalseBecauseValidationOfSecondMatrixFail()
-        {
-
-            LockableBitArray lockableBitArrayToValidate = new LockableBitArray(7, false, false, null);
-            lockableBitArrayToValidate.Set(0, true);
-
-            IScheduleMatrixPro scheduleMatrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
-
-            GroupMatrixContainer groupMatrix1 = new GroupMatrixContainer { Matrix = _activeScheduleMatrix, WorkingArray = lockableBitArrayToValidate };
-            GroupMatrixContainer groupMatrix2 = new GroupMatrixContainer { Matrix = scheduleMatrix2, WorkingArray = lockableBitArrayToValidate };
-
-
-            IDayOffLegalStateValidator validator = _mocks.StrictMock<IDayOffLegalStateValidator>();
-            IList<IDayOffLegalStateValidator> validators = new List<IDayOffLegalStateValidator> { validator };
-
-            IList<GroupMatrixContainer> containers = new List<GroupMatrixContainer> { groupMatrix1, groupMatrix2 };
-
-            using (_mocks.Record())
-            {
-                Expect.Call(validator.IsValid(null, 0)).IgnoreArguments()
-                    .Return(true);
-                Expect.Call(validator.IsValid(null, 0)).IgnoreArguments()
-                    .Return(false);
-            }
-            using (_mocks.Playback())
-            {
-                Assert.IsFalse(_target.ValidateDayOffMoves(containers, validators));
-            }
-
-        }
-
         [Test]
         public void VerifyExecuteDayOffMovesSuccessful()
         {
@@ -263,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using(_mocks.Record())
             {
-                Expect.Call(dayOffDecisionMakerExecuter.Execute(lockableBitArray, lockableBitArray,_activeScheduleMatrix, null, false, false))
+                Expect.Call(dayOffDecisionMakerExecuter.Execute(lockableBitArray, lockableBitArray,_activeScheduleMatrix, null, false, false,false))
                     .Return(true)
                     .Repeat.Times(numberOfMatrixContainers);
             }
@@ -287,9 +230,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using(_mocks.Record())
             {
-                Expect.Call(dayOffDecisionMakerExecuter.Execute(lockableBitArray, lockableBitArray, _activeScheduleMatrix, null, false, false))
+                Expect.Call(dayOffDecisionMakerExecuter.Execute(lockableBitArray, lockableBitArray, _activeScheduleMatrix, null, false, false, false))
                     .Return(true);
-                Expect.Call(dayOffDecisionMakerExecuter.Execute(lockableBitArray, lockableBitArray, _activeScheduleMatrix, null, false, false))
+                Expect.Call(dayOffDecisionMakerExecuter.Execute(lockableBitArray, lockableBitArray, _activeScheduleMatrix, null, false, false, false))
                     .Return(false);
                 rollbackService.Rollback();
             }
@@ -320,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions));
+                Assert.IsTrue(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization));
             }
         }
 
@@ -348,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions));
+                Assert.IsFalse(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization));
             }
         }
     }

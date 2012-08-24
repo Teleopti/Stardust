@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = createTarget();
-                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true);
+                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
             }
 
             Assert.IsTrue(result);
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = createTarget();
-				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true);
+				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
 			}
 
 			Assert.IsFalse(result);
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = createTarget();
-                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true);
+                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
             }
 
             Assert.IsFalse(result);
@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = createTarget();
-                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true);
+                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
             }
 
             Assert.IsTrue(result);
@@ -606,7 +606,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = createTarget();
-                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true);
+                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
             }
 
             Assert.IsTrue(result);

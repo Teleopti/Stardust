@@ -370,7 +370,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             ISchedulePartModifyAndRollbackService rollbackService, ILifetimeScope container)
         {
             var workShiftMinMaxCalculator = container.Resolve<IWorkShiftMinMaxCalculator>();
-            var bitArrayCreator = container.Resolve<IWorkShiftBackToLegalStateBitArrayCreator>();
+            //var bitArrayCreator = container.Resolve<IWorkShiftBackToLegalStateBitArrayCreator>();
+			var bitArrayCreator = new WorkShiftBackToLegalStateBitArrayCreator();
             var period = new DateOnlyPeriod(scheduleMatrix.FullWeeksPeriodDays[0].Day, scheduleMatrix.FullWeeksPeriodDays[scheduleMatrix.FullWeeksPeriodDays.Count - 1].Day);
 
             var dailySkillForecastAndScheduledValueCalculator =
@@ -379,7 +380,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             ISkillExtractor allSkillExtractor = container.Resolve<SchedulingStateHolderAllSkillExtractor>();
 
             // when we move the period to the method we can have all this in autofac
-            IScheduleResultDataExtractor dataExtractor = new RelativeDailyDifferencesByAllSkillsExtractor(period, dailySkillForecastAndScheduledValueCalculator, allSkillExtractor);
+			IRelativeDailyDifferencesByAllSkillsExtractor dataExtractor = new RelativeDailyDifferencesByAllSkillsExtractor(dailySkillForecastAndScheduledValueCalculator, allSkillExtractor);
 
             var dayIndexCalculator = container.Resolve<IWorkShiftLegalStateDayIndexCalculator>();
             IWorkShiftBackToLegalStateDecisionMaker decisionMaker = new WorkShiftBackToLegalStateDecisionMaker(dataExtractor, dayIndexCalculator);

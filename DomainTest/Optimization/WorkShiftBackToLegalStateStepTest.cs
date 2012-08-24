@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using(_mockRepository.Record())
             {
                 Expect.Call(_bitArrayCreator.CreateWeeklyBitArray(_weekIndex, _scheduleMatrix)).Return(_lockableBitArray);
-                Expect.Call(_decisionMaker.Execute(_lockableBitArray, false)).Return(0);
+                Expect.Call(_decisionMaker.Execute(_lockableBitArray, false, new DateOnlyPeriod(_day1.Day, _day1.Day))).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_day1}));
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mockRepository.Record())
             {
                 Expect.Call(_bitArrayCreator.CreatePeriodBitArray(raise, _scheduleMatrix)).Return(_lockableBitArray);
-                Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise)).Return(0);
+				Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise, new DateOnlyPeriod(_day1.Day, _day1.Day))).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _day1 }));
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mockRepository.Record())
             {
                 Expect.Call(_bitArrayCreator.CreatePeriodBitArray(raise, _scheduleMatrix)).Return(_lockableBitArray);
-                Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise)).Return(0);
+				Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise, new DateOnlyPeriod(_day1.Day, _day1.Day))).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _day1 }));
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);

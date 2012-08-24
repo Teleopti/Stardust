@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public DateOnly? ExecuteWeekStep(int weekIndex, IScheduleMatrixPro scheduleMatrix)
         {
             ILockableBitArray weeklyBitArray = _bitArrayCreator.CreateWeeklyBitArray(weekIndex,  scheduleMatrix);
-            int? indexToRemove = _decisionMaker.Execute(weeklyBitArray, false);
+			int? indexToRemove = _decisionMaker.Execute(weeklyBitArray, false, scheduleMatrix.SchedulePeriod.DateOnlyPeriod);
             if (!indexToRemove.HasValue)
                 return null;
             IScheduleDayPro foundDay = scheduleMatrix.FullWeeksPeriodDays[indexToRemove.Value];
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public DateOnly? ExecutePeriodStep(bool raise, IScheduleMatrixPro scheduleMatrix)
         {
             ILockableBitArray periodBitArray = _bitArrayCreator.CreatePeriodBitArray(raise, scheduleMatrix);
-            int? indexToRemove = _decisionMaker.Execute(periodBitArray, raise);
+			int? indexToRemove = _decisionMaker.Execute(periodBitArray, raise, new DateOnlyPeriod(scheduleMatrix.FullWeeksPeriodDays[0].Day, scheduleMatrix.FullWeeksPeriodDays[scheduleMatrix.FullWeeksPeriodDays.Count - 1].Day));
             if (!indexToRemove.HasValue)
                 return null;
             IScheduleDayPro foundDay = scheduleMatrix.FullWeeksPeriodDays[indexToRemove.Value];

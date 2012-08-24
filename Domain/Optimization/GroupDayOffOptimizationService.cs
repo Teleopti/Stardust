@@ -99,6 +99,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             double newPeriodValue = lastPeriodValue;
             foreach (var optimizer in activeOptimizers.GetRandom(activeOptimizers.Count, true))
             {
+            	
+
 				executes++;
 				if (retList.Contains(optimizer))
 					continue;
@@ -205,7 +207,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 						}
 					}
 				}
-
 			}
 
 			return retList;

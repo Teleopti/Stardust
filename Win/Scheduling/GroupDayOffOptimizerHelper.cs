@@ -325,7 +325,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         	var lockableBitArrayChangesTracker =
         		_container.Resolve<ILockableBitArrayChangesTracker>();
 			var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-        	var groupMatrixHelper = _container.Resolve<IGroupMatrixHelper>();
+        	//var groupMatrixHelper = _container.Resolve<IGroupMatrixHelper>();
+        	IGroupMatrixContainerCreator groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+        	IGroupPersonConsistentChecker groupPersonConsistentChecker =
+        		_container.Resolve<IGroupPersonConsistentChecker>();
+        	IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+			IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator, groupPersonConsistentChecker, workShiftBackToLegalStateService, resourceOptimizationHelper);
 			var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
         	var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
         	IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =

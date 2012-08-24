@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.DayOffPlanning
 {
     public class WorkShiftBackToLegalStateDecisionMaker : IWorkShiftBackToLegalStateDecisionMaker
     {
-        private readonly IScheduleResultDataExtractor _dataExtractor;
+		private readonly IRelativeDailyDifferencesByAllSkillsExtractor _dataExtractor;
         private readonly IWorkShiftLegalStateDayIndexCalculator _dayIndexCalculator;
 
         public WorkShiftBackToLegalStateDecisionMaker(
-            IScheduleResultDataExtractor dataExtractor,
+			IRelativeDailyDifferencesByAllSkillsExtractor dataExtractor,
             IWorkShiftLegalStateDayIndexCalculator dayIndexCalculator)
         {
             _dataExtractor = dataExtractor;
@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.DayOffPlanning
         /// <param name="lockableBitArray">The lockable bit array.</param>
         /// <param name="raise">if set to <c>true</c> [raise].</param>
         /// <returns></returns>
-        public int? Execute(ILockableBitArray lockableBitArray,  bool raise)
+        public int? Execute(ILockableBitArray lockableBitArray,  bool raise, DateOnlyPeriod period)
         {
-            IList<double?> values = _dataExtractor.Values();
+            IList<double?> values = _dataExtractor.Values(period);
 
             ReadOnlyCollection<double?> normalizedValues = 
                 raise ? _dayIndexCalculator.CalculateIndexForRaising(values) 
