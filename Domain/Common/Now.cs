@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public DateOnly Date()
 		{
-			return new DateOnly();
+			return new DateOnly(Time);
 		}
 	}
 }

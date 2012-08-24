@@ -32,5 +32,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 			target.UtcTime.Should().Be.GreaterThan(nu.AddSeconds(-1));
 			target.UtcTime.Should().Be.LessThan(nu.AddSeconds(1));
 		}
+
+		[Test]
+		public void ShouldReturnCurrentDateAsDateOnly()
+		{
+			target.Date().Date.Should().Be.EqualTo(DateTime.Now.Date);
+		}
 	}
 }
