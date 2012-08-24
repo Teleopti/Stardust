@@ -24829,6 +24829,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your working hours have changed.
+        /// </summary>
+        public static string YourWorkingHoursHaveChanged {
+            get {
+                return ResourceManager.GetString("YourWorkingHoursHaveChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You should have between {0} and {1} days off..
         /// </summary>
         public static string YouShouldHaveBetweenXAndYDaysOff {
