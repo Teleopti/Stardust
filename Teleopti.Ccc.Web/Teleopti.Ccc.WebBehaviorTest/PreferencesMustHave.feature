@@ -1,12 +1,12 @@
 ﻿Feature: Preferences must-haves
-	In order to view and submit when I prefer to work
+	In order to get scheduled according specific preferences
 	As an agent
-	I want to view and submit my work preferences
+	I want to stress which of my preferences are most important
 
 Background:
-	Given there is a role with
-	| Field                    | Value             |
-	| Name                     | Access to mytime  |
+	Given I have a role with
+	| Field | Value                 |
+	| Name  | Full access to mytime |
     And there is a shift category with
     | Field | Value |
     | Name  | Late  |
@@ -25,8 +25,7 @@ Background:
 	| Start date | 2012-08-20 |
 
 Scenario: See must have preference
-	Given I have the role 'Access to mytime'
-	And I have a preference with
+	Given I have a preference with
 	| Field          | Value      |
 	| Date           | 2012-08-23 |
 	| Must have      | true       |
@@ -34,12 +33,11 @@ Scenario: See must have preference
 	When I view preferences for date '2012-08-23'
 	Then I should see preference
 	| Field     | Value      |
-	| Date      | 2012-08-12 |
+	| Date      | 2012-08-23 |
 	| Must have | true       |
 
 Scenario: Set must have on preference
-	Given I have the role 'Access to mytime'
-	And I have a preference with
+	Given I have a preference with
 	| Field          | Value      |
 	| Date           | 2012-08-23 |
 	| Must have      | false      |
@@ -53,7 +51,6 @@ Scenario: Set must have on preference
 	| Must have | true       |
 
 Scenario: Set must have on empty day should do nothing
-	Given I have the role 'Access to mytime'
 	When I view preferences for date '2012-08-23'
 	And I select day '2012-08-23'
 	And I click set must have button
@@ -63,8 +60,7 @@ Scenario: Set must have on empty day should do nothing
 	| Must have | false      |
 
 Scenario: Remove must have from preference
-	Given I have the role 'Access to mytime'
-	And I have a preference with
+	Given I have a preference with
 	| Field          | Value      |
 	| Date           | 2012-08-23 |
 	| Must have      | true       |
@@ -78,13 +74,11 @@ Scenario: Remove must have from preference
 	| Must have | false      |
 
 Scenario: See available must haves
-	Given I have the role 'Access to mytime'
 	When I view preferences for date '2012-08-23'
-	Then I should see I have '1' available must have
+	Then I should see I have '1' available must haves
 
 Scenario: Decrement available must haves on set
-	Given I have the role 'Access to mytime'
-	And I have a preference with
+	Given I have a preference with
 	| Field          | Value      |
 	| Date           | 2012-08-23 |
 	| Must have      | false      |
@@ -92,11 +86,10 @@ Scenario: Decrement available must haves on set
 	When I view preferences for date '2012-08-23'
 	And I select day '2012-08-23'
 	And I click set must have button
-	Then I should see I have '0' available must have
+	Then I should see I have '0' available must haves
 
 Scenario: Increment available must haves on remove
-	Given I have the role 'Access to mytime'
-	And I have a preference with
+	Given I have a preference with
 	| Field          | Value      |
 	| Date           | 2012-08-23 |
 	| Must have      | true      |
@@ -104,11 +97,10 @@ Scenario: Increment available must haves on remove
 	When I view preferences for date '2012-08-23'
 	And I select day '2012-08-23'
 	And I click remove must have button
-	Then I should see I have '1' available must have
+	Then I should see I have '1' available must haves
 
 Scenario: Disallow setting too many must haves
-	Given I have the role 'Access to mytime'
-	And I have a preference with
+	Given I have a preference with
 	| Field          | Value      |
 	| Date           | 2012-08-23 |
 	| Must have      | true       |
@@ -121,7 +113,7 @@ Scenario: Disallow setting too many must haves
 	When I view preferences for date '2012-08-23'
 	And I select day '2012-08-24'
 	And I click set must have button
-	Then I should see I have '0' available must have
+	Then I should see I have '0' available must haves
 	And I should see preference
 	| Field     | Value      |
 	| Date      | 2012-08-36 |
