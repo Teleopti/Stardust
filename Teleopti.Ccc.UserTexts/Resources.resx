@@ -10995,6 +10995,10 @@ These options are activated:
     <value>SMS Settings</value>
     <comment>Caption 2 in SMS settings page</comment>
   </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>Your working hours have changed</value>
+    <comment>text in sms message (later - Your working hours have changed these days:)</comment>
+  </data>
   <data name="GraphLOC" xml:space="preserve">
     <value>Graph (loc)</value>
     <comment>Graph used in anywhere report</comment>

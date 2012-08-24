@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Preferences must-haves", "In order to view and submit when I prefer to work\r\nAs an agent\r\nI want to view an" +
-                    "d submit my work preferences", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Preferences must-haves", "In order to get scheduled according specific preferences\r\nAs an agent\r\nI want to " +
+                    "stress which of my preferences are most important", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Value"});
             table1.AddRow(new string[] {
                         "Name",
-                        "Access to mytime"});
+                        "Full access to mytime"});
 #line 7
- testRunner.Given("there is a role with", ((string)(null)), table1);
+ testRunner.Given("I have a role with", ((string)(null)), table1);
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -137,8 +137,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 28
- testRunner.Given("I have the role \'Access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -152,9 +150,9 @@ this.FeatureBackground();
             table6.AddRow(new string[] {
                         "Shift category",
                         "Late"});
-#line 29
- testRunner.And("I have a preference with", ((string)(null)), table6);
-#line 34
+#line 28
+ testRunner.Given("I have a preference with", ((string)(null)), table6);
+#line 33
  testRunner.When("I view preferences for date \'2012-08-23\'");
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -162,11 +160,11 @@ this.FeatureBackground();
                         "Value"});
             table7.AddRow(new string[] {
                         "Date",
-                        "2012-08-12"});
+                        "2012-08-23"});
             table7.AddRow(new string[] {
                         "Must have",
                         "true"});
-#line 35
+#line 34
  testRunner.Then("I should see preference", ((string)(null)), table7);
 #line hidden
             this.ScenarioCleanup();
@@ -177,12 +175,10 @@ this.FeatureBackground();
         public virtual void SetMustHaveOnPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Set must have on preference", ((string[])(null)));
-#line 40
+#line 39
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 41
- testRunner.Given("I have the role \'Access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -196,13 +192,13 @@ this.FeatureBackground();
             table8.AddRow(new string[] {
                         "Shift category",
                         "Late"});
-#line 42
- testRunner.And("I have a preference with", ((string)(null)), table8);
-#line 47
+#line 40
+ testRunner.Given("I have a preference with", ((string)(null)), table8);
+#line 45
  testRunner.When("I view preferences for date \'2012-08-23\'");
-#line 48
+#line 46
  testRunner.And("I select day \'2012-08-23\'");
-#line 49
+#line 47
  testRunner.And("I click set must have button");
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
@@ -214,7 +210,7 @@ this.FeatureBackground();
             table9.AddRow(new string[] {
                         "Must have",
                         "true"});
-#line 50
+#line 48
  testRunner.Then("I should see preference", ((string)(null)), table9);
 #line hidden
             this.ScenarioCleanup();
@@ -225,17 +221,15 @@ this.FeatureBackground();
         public virtual void SetMustHaveOnEmptyDayShouldDoNothing()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Set must have on empty day should do nothing", ((string[])(null)));
-#line 55
+#line 53
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 56
- testRunner.Given("I have the role \'Access to mytime\'");
-#line 57
+#line 54
  testRunner.When("I view preferences for date \'2012-08-23\'");
-#line 58
+#line 55
  testRunner.And("I select day \'2012-08-23\'");
-#line 59
+#line 56
  testRunner.And("I click set must have button");
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -247,7 +241,7 @@ this.FeatureBackground();
             table10.AddRow(new string[] {
                         "Must have",
                         "false"});
-#line 60
+#line 57
  testRunner.Then("I should see preference", ((string)(null)), table10);
 #line hidden
             this.ScenarioCleanup();
@@ -258,12 +252,10 @@ this.FeatureBackground();
         public virtual void RemoveMustHaveFromPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove must have from preference", ((string[])(null)));
-#line 65
+#line 62
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 66
- testRunner.Given("I have the role \'Access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -277,13 +269,13 @@ this.FeatureBackground();
             table11.AddRow(new string[] {
                         "Shift category",
                         "Late"});
-#line 67
- testRunner.And("I have a preference with", ((string)(null)), table11);
-#line 72
+#line 63
+ testRunner.Given("I have a preference with", ((string)(null)), table11);
+#line 68
  testRunner.When("I view preferences for date \'2012-08-23\'");
-#line 73
+#line 69
  testRunner.And("I select day \'2012-08-23\'");
-#line 74
+#line 70
  testRunner.And("I click remove must have button");
 #line hidden
             TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
@@ -295,7 +287,7 @@ this.FeatureBackground();
             table12.AddRow(new string[] {
                         "Must have",
                         "false"});
-#line 75
+#line 71
  testRunner.Then("I should see preference", ((string)(null)), table12);
 #line hidden
             this.ScenarioCleanup();
@@ -306,16 +298,14 @@ this.FeatureBackground();
         public virtual void SeeAvailableMustHaves()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See available must haves", ((string[])(null)));
-#line 80
+#line 76
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 81
- testRunner.Given("I have the role \'Access to mytime\'");
-#line 82
+#line 77
  testRunner.When("I view preferences for date \'2012-08-23\'");
-#line 83
- testRunner.Then("I should see I have \'1\' available must have");
+#line 78
+ testRunner.Then("I should see I have \'1\' available must haves");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -325,12 +315,10 @@ this.FeatureBackground();
         public virtual void DecrementAvailableMustHavesOnSet()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Decrement available must haves on set", ((string[])(null)));
-#line 85
+#line 80
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 86
- testRunner.Given("I have the role \'Access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -344,16 +332,16 @@ this.FeatureBackground();
             table13.AddRow(new string[] {
                         "Shift category",
                         "Late"});
-#line 87
- testRunner.And("I have a preference with", ((string)(null)), table13);
-#line 92
+#line 81
+ testRunner.Given("I have a preference with", ((string)(null)), table13);
+#line 86
  testRunner.When("I view preferences for date \'2012-08-23\'");
-#line 93
+#line 87
  testRunner.And("I select day \'2012-08-23\'");
-#line 94
+#line 88
  testRunner.And("I click set must have button");
-#line 95
- testRunner.Then("I should see I have \'0\' available must have");
+#line 89
+ testRunner.Then("I should see I have \'0\' available must haves");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -363,12 +351,10 @@ this.FeatureBackground();
         public virtual void IncrementAvailableMustHavesOnRemove()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Increment available must haves on remove", ((string[])(null)));
-#line 97
+#line 91
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 98
- testRunner.Given("I have the role \'Access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -382,16 +368,16 @@ this.FeatureBackground();
             table14.AddRow(new string[] {
                         "Shift category",
                         "Late"});
-#line 99
- testRunner.And("I have a preference with", ((string)(null)), table14);
-#line 104
+#line 92
+ testRunner.Given("I have a preference with", ((string)(null)), table14);
+#line 97
  testRunner.When("I view preferences for date \'2012-08-23\'");
-#line 105
+#line 98
  testRunner.And("I select day \'2012-08-23\'");
-#line 106
+#line 99
  testRunner.And("I click remove must have button");
-#line 107
- testRunner.Then("I should see I have \'1\' available must have");
+#line 100
+ testRunner.Then("I should see I have \'1\' available must haves");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -401,12 +387,10 @@ this.FeatureBackground();
         public virtual void DisallowSettingTooManyMustHaves()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Disallow setting too many must haves", ((string[])(null)));
-#line 109
+#line 102
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 110
- testRunner.Given("I have the role \'Access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -420,8 +404,8 @@ this.FeatureBackground();
             table15.AddRow(new string[] {
                         "Shift category",
                         "Late"});
-#line 111
- testRunner.And("I have a preference with", ((string)(null)), table15);
+#line 103
+ testRunner.Given("I have a preference with", ((string)(null)), table15);
 #line hidden
             TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -435,16 +419,16 @@ this.FeatureBackground();
             table16.AddRow(new string[] {
                         "Shift category",
                         "Late"});
-#line 116
+#line 108
  testRunner.And("I have a preference with", ((string)(null)), table16);
-#line 121
+#line 113
  testRunner.When("I view preferences for date \'2012-08-23\'");
-#line 122
+#line 114
  testRunner.And("I select day \'2012-08-24\'");
-#line 123
+#line 115
  testRunner.And("I click set must have button");
-#line 124
- testRunner.Then("I should see I have \'0\' available must have");
+#line 116
+ testRunner.Then("I should see I have \'0\' available must haves");
 #line hidden
             TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -455,7 +439,7 @@ this.FeatureBackground();
             table17.AddRow(new string[] {
                         "Must have",
                         "true"});
-#line 125
+#line 117
  testRunner.And("I should see preference", ((string)(null)), table17);
 #line hidden
             TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
@@ -467,7 +451,7 @@ this.FeatureBackground();
             table18.AddRow(new string[] {
                         "Must have",
                         "false"});
-#line 129
+#line 121
  testRunner.And("I should see preference", ((string)(null)), table18);
 #line hidden
             this.ScenarioCleanup();
