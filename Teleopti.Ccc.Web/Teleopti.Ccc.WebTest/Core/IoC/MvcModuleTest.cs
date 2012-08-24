@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
@@ -96,6 +97,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			requestContainer.Resolve<ISettings>()
 				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldRegisterAsmMapper()
+		{
+			requestContainer.Resolve<IAsmViewModelFactory>().Should().Not.Be.Null();
 		}
 
 		[Test]

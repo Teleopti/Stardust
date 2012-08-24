@@ -13,7 +13,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
@@ -30,12 +29,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			registerPortalTypes(builder);
 			registerRequestContextTypes(builder);
 			registerReportTypes(builder);
-			registerAsmTypes(builder);
-		}
-
-		private static void registerAsmTypes(ContainerBuilder builder)
-		{
-			builder.RegisterType<AsmViewModelFactory>().As<IAsmViewModelFactory>();
 		}
 
 		private static void registerReportTypes(ContainerBuilder builder)
