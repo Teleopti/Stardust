@@ -127,6 +127,11 @@
     <Compile Include="ManageRequestStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\DoNotHavePersonPeriods.cs" />
     <Compile Include="Data\Setups\Specific\DoNotHaveSchedulePeriods.cs" />
+    <Compile Include="PreferencesMustHave.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesMustHave.feature</DependentUpon>
+    </Compile>
     <Compile Include="QUnitTestsStepDefinition.cs" />
     <Compile Include="Data\Setups\Specific\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\Setups\Specific\AbsencePreferenceOnWeekday.cs" />
@@ -437,6 +442,10 @@
     <None Include="PreferencesExtended.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesExtended.feature.cs</LastGenOutput>
+    </None>
+    <None Include="PreferencesMustHave.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesMustHave.feature.cs</LastGenOutput>
     </None>
     <None Include="PreferencesPeriodFeedback.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

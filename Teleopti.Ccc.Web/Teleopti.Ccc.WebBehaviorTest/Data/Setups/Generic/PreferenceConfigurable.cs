@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public DateTime Date { get; set; }
 		public bool IsExtended { get; set; }
+		public bool MustHave { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -18,7 +19,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			if (IsExtended)
 				restriction.WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(8));
-			
+
+			restriction.MustHave = MustHave;
+
 			var preferenceDay = new PreferenceDay(user, new DateOnly(Date), restriction);
 
 			var preferenceDayRepository = new PreferenceDayRepository(uow);
