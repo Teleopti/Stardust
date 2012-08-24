@@ -771,6 +771,7 @@
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
     <Compile Include="Security\ISystemUserPasswordSpecification.cs" />
     <Compile Include="Security\InsufficientPrivilegeException.cs" />
@@ -845,6 +846,7 @@
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingCalculationMethod.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSettingScheduleExport.cs" />
     <Compile Include="SystemSetting\GlobalSetting\DefaultSegment.cs" />
+    <Compile Include="SystemSetting\GlobalSetting\SmsSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\StringSetting.cs" />
     <Compile Include="SystemSetting\PersonalSettingData.cs" />
     <Compile Include="SystemSetting\SettingData.cs" />
