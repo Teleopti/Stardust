@@ -13978,15 +13978,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No scenario selected.
-        /// </summary>
-        public static string NoScenarioSelected {
-            get {
-                return ResourceManager.GetString("NoScenarioSelected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No scheduled activity.
         /// </summary>
         public static string NoScheduledActivity {
@@ -16346,15 +16337,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PleaseSelectANodeExclamation {
             get {
                 return ResourceManager.GetString("PleaseSelectANodeExclamation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please select a scenario..
-        /// </summary>
-        public static string PleaseSelectAScenario {
-            get {
-                return ResourceManager.GetString("PleaseSelectAScenario", resourceCulture);
             }
         }
         
@@ -19107,7 +19089,7 @@ namespace Teleopti.Ccc.UserTexts {
             }
         }
         
-         /// <summary>
+        /// <summary>
         ///   Looks up a localized string similar to Please select at least one option from Team Scheduling..
         /// </summary>
         public static string SelectAtleastOneSchedulingOption {
@@ -19115,7 +19097,6 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("SelectAtleastOneSchedulingOption", resourceCulture);
             }
         }
-
         
         /// <summary>
         ///   Looks up a localized string similar to Select attendees.

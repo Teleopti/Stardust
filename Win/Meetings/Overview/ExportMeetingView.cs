@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             InitializeComponent();
             SetTexts();
             comboBoxScenario.DisplayMember = "Description";
-            comboBoxScenario.DropDownStyle = ComboBoxStyle.DropDown;
+            comboBoxScenario.DropDownStyle = ComboBoxStyle.DropDownList;
 
 			dateSelectionFromTo1.SetCulture(CultureInfo.CurrentCulture);
             dateSelectionFromTo1.ValueChanged += dateSelectionFromTo1ValueChanged;
@@ -101,10 +101,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 
         private void buttonExportClick(object sender, EventArgs e)
         {
-            if(comboBoxScenario.SelectedItem == null)
-                MessageDialogs.ShowWarning(this, Resources.PleaseSelectAScenario, Resources.NoScenarioSelected);
-            else
-                _eventAggregator.GetEvent<ExportMeetingClicked>().Publish(string.Empty);
+            _eventAggregator.GetEvent<ExportMeetingClicked>().Publish(string.Empty);
         }
 
        
