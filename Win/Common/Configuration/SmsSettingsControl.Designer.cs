@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
 			this.labelSubHeader1 = new System.Windows.Forms.Label();
@@ -215,7 +214,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel5;
 		private System.Windows.Forms.Label labelSubHeader1;
-		private System.Windows.Forms.ToolTip toolTip1;
 
     }
 }

@@ -13,12 +13,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
-    public partial class SmsSettingsControl : BaseUserControl, ISettingPage
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
+	public partial class SmsSettingsControl : BaseUserControl, ISettingPage
     {
         private List<IOptionalColumn> _optionalColumnList;
         public OptionalColumnRepository Repository { get; private set; }
         public IUnitOfWork UnitOfWork { get; private set; }
-        private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
     	private SmsSettings _smsSettingsSetting;
 
     	public IOptionalColumn SelectedOptionalColumn
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         	comboBoxOptionalColumns.SelectedIndex = getIndex(_optionalColumnList, _smsSettingsSetting.OptionalColumnId);
         }
 
-    	private int getIndex(List<IOptionalColumn> optionalColumnList, Guid id)
+    	private static int getIndex(List<IOptionalColumn> optionalColumnList, Guid id)
     	{
     		foreach (var optionalColumn in optionalColumnList.Where(optionalColumn => optionalColumn.Id.Equals(id)))
     		{
