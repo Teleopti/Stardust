@@ -10995,4 +10995,20 @@ These options are activated:
     <value>SMS Settings</value>
     <comment>Caption 2 in SMS settings page</comment>
   </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>Graph (loc)</value>
+    <comment>Graph used in anywhere report</comment>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Interval (loc)</value>
+    <comment>Interval used in anywhere report</comment>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Table (loc)</value>
+    <comment>Table used in anywhere report</comment>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Type (loc)</value>
+    <comment>Type used in anywhere report</comment>
+  </data>
 </root>
