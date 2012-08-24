@@ -175,7 +175,7 @@
     <value>statusStripEx1</value>
   </data>
   <data name="&gt;&gt;statusStripEx1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.StatusStripEx, Syncfusion.Tools.Windows, Version=9.203.0.138, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.StatusStripEx, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;statusStripEx1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -199,7 +199,7 @@
     <value>gradientPanelMain</value>
   </data>
   <data name="&gt;&gt;gradientPanelMain.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=9.203.0.138, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;gradientPanelMain.Parent" xml:space="preserve">
     <value>$this</value>
@@ -306,7 +306,7 @@
     <value>toolStripTabItem1</value>
   </data>
   <data name="&gt;&gt;toolStripTabItem1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=9.203.0.138, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;toolStripButtonLoadForecastedHours.Name" xml:space="preserve">
     <value>toolStripButtonLoadForecastedHours</value>
@@ -477,7 +477,7 @@
     <value>ribbonControlAdv1.OfficeMenu</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.OfficeMenu.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=9.203.0.138, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <metadata name="toolStripTabItem1.TabGroup" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value />
@@ -507,7 +507,7 @@
     <value>toolStripEx1</value>
   </data>
   <data name="&gt;&gt;toolStripEx1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=9.203.0.138, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;toolStripEx1.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -529,6 +529,9 @@
   </data>
   <data name="toolStripButtonLoadForecastedHours.Text" xml:space="preserve">
     <value>xxForecastedHours</value>
+  </data>
+  <data name="toolStripButtonStaffEmployed.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="toolStripButtonStaffEmployed.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
@@ -555,7 +558,7 @@
     <value>toolStripExLoad</value>
   </data>
   <data name="&gt;&gt;toolStripExLoad.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=9.203.0.138, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;toolStripExLoad.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -630,7 +633,7 @@
     <value>toolStripExViews</value>
   </data>
   <data name="&gt;&gt;toolStripExViews.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=9.203.0.138, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;toolStripExViews.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -648,7 +651,7 @@
     <value>ribbonControlAdv1.ribbonPanel1</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=9.203.0.138, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Parent" xml:space="preserve">
     <value>ribbonControlAdv1</value>
@@ -675,7 +678,7 @@
     <value>ribbonControlAdv1</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdv, Syncfusion.Tools.Windows, Version=9.203.0.138, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdv, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.Parent" xml:space="preserve">
     <value>$this</value>

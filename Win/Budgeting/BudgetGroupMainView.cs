@@ -40,6 +40,9 @@ namespace Teleopti.Ccc.Win.Budgeting
 	    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 	    private readonly IRepositoryFactory _repositoryFactory;
 	    private readonly IEventAggregator _globalEventAggregator;
+	    private bool _dayHasSelectedCell;
+	    private bool _weekHasSelectedCell;
+        private bool _monthHasSelectedCell;
 
 	    public BudgetGroupMainView(IBudgetGroupTabView budgetGroupTabView, IEventAggregatorLocator eventAggregatorLocator, IGracefulDataSourceExceptionHandler dataSourceExceptionHandler, IBudgetPermissionService budgetPermissionService, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
 		{
@@ -60,7 +63,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			tabView.Dock = DockStyle.Fill;
 			tabView.VisibleChanged += _budgetGroupTabView_VisibleChanged;
 			ribbonControlAdv1.Height = 160;
-			toolStripEx1.AutoSize = true;
+            toolStripEx1.AutoSize = true;
 		}
 
 		void _budgetGroupTabView_VisibleChanged(object sender, EventArgs e)
@@ -110,6 +113,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			_localEventAggregator.GetEvent<AddEfficiencyShrinkageRow>().Subscribe(AddEfficiencyShrinkageRow);
 			_localEventAggregator.GetEvent<DeleteCustomShrinkages>().Subscribe(DeleteCustomShrinkages);
 			_localEventAggregator.GetEvent<DeleteCustomEfficiencyShrinkages>().Subscribe(DeleteCustomEfficiencyShrinkages);
+		    _localEventAggregator.GetEvent<GridSelectionChanged>().Subscribe(GridSelectionChanged);
 			_localEventAggregator.GetEvent<LoadDataStarted>().Subscribe(LoadDataStarted);
 			_localEventAggregator.GetEvent<LoadDataFinished>().Subscribe(LoadDataFinished);
 			_localEventAggregator.GetEvent<UpdateClipboardStatus>().Subscribe(UpdateClipboardStatus);
@@ -158,11 +162,13 @@ namespace Teleopti.Ccc.Win.Budgeting
 				Cursor = Cursors.Default;
 				toolStripStatusLabelBudgetGroupMainView.Visible = false;
 				toolStripSpinningProgressControlStatus.Visible = false;
-				toolStripButtonLoadForecastedHours.Enabled = true;
-				toolStripButtonStaffEmployed.Enabled = true;
+                toolStripButtonLoadForecastedHours.Enabled = true; 
+                toolStripButtonStaffEmployed.Enabled = false;
 				toolStripExViews.Enabled = true;
 				toolStripButtonSave.Enabled = true;
 				_clipboardControl.Enabled = true;
+
+			    
 			}
 		}
 
@@ -248,7 +254,34 @@ namespace Teleopti.Ccc.Win.Budgeting
             });
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        public void GridSelectionChanged(bool isSelected)
+        {
+            if (isSelected)
+            {
+                switch (SelectedView)
+                {
+                    case ViewType.Day:
+                        _dayHasSelectedCell = true;
+                        break;
+                    case ViewType.Week:
+                        _weekHasSelectedCell = true;
+                        break;
+                    case ViewType.Month:
+                        _monthHasSelectedCell = true;
+                        break;
+                }
+                toolStripButtonStaffEmployed.Enabled = true;
+            }
+            else
+            {
+                _dayHasSelectedCell = false;
+                _weekHasSelectedCell = false;
+                _monthHasSelectedCell = false;
+                toolStripButtonStaffEmployed.Enabled = false;
+            }
+        }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void AddEfficiencyShrinkageRow(string obj)
         {
             using (var efficiencyShrinkageForm = new SetEfficiencyShrinkageForm())
@@ -327,7 +360,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 
 		public void OnAddShrinkageRow(ICustomShrinkage customShrinkage)
 		{
-			_localEventAggregator.GetEvent<ShrinkageRowAdded>().Publish(customShrinkage);
+            _localEventAggregator.GetEvent<ShrinkageRowAdded>().Publish(customShrinkage);
+            _localEventAggregator.GetEvent<GridSelectionChanged>().Publish(false);
 		}
 
 		public void NotifyCustomShrinkageUpdatedByOthers()
@@ -337,17 +371,20 @@ namespace Teleopti.Ccc.Win.Budgeting
 
 		public void OnAddEfficiencyShrinkageRow(ICustomEfficiencyShrinkage customEfficiencyShrinkage)
 		{
-			_localEventAggregator.GetEvent<EfficiencyShrinkageRowAdded>().Publish(customEfficiencyShrinkage);
+            _localEventAggregator.GetEvent<EfficiencyShrinkageRowAdded>().Publish(customEfficiencyShrinkage);
+            _localEventAggregator.GetEvent<GridSelectionChanged>().Publish(false);
 		}
 
 		public void OnDeleteShrinkageRows(IEnumerable<ICustomShrinkage> customShrinkages)
 		{
-			_localEventAggregator.GetEvent<ShrinkageRowsDeleted>().Publish(customShrinkages);
+            _localEventAggregator.GetEvent<ShrinkageRowsDeleted>().Publish(customShrinkages);
+            _localEventAggregator.GetEvent<GridSelectionChanged>().Publish(false);
 		}
 
 		public void OnDeleteEfficiencyShrinkageRows(IEnumerable<ICustomEfficiencyShrinkage> customEfficiencyShrinkages)
 		{
-			_localEventAggregator.GetEvent<EfficiencyShrinkageRowsDeleted>().Publish(customEfficiencyShrinkages);
+            _localEventAggregator.GetEvent<EfficiencyShrinkageRowsDeleted>().Publish(customEfficiencyShrinkages);
+            _localEventAggregator.GetEvent<GridSelectionChanged>().Publish(false);
 		}
 
 		public void SetText(string windowTitle)
@@ -413,16 +450,19 @@ namespace Teleopti.Ccc.Win.Budgeting
 	    public void ShowMonthView()
 		{
 			_budgetGroupTabView.ShowMonthView();
+	        toolStripButtonStaffEmployed.Enabled = _monthHasSelectedCell;
 		}
 
 		public void ShowWeekView()
 		{
-			_budgetGroupTabView.ShowWeekView();
+            _budgetGroupTabView.ShowWeekView(); 
+            toolStripButtonStaffEmployed.Enabled = _weekHasSelectedCell;
 		}
 
 		public void ShowDayView()
 		{
-			_budgetGroupTabView.ShowDayView();
+            _budgetGroupTabView.ShowDayView(); 
+            toolStripButtonStaffEmployed.Enabled = _dayHasSelectedCell;
 		}
 
 		public bool MonthView

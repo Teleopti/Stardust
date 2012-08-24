@@ -10983,4 +10983,16 @@ These options are activated:
   <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
     <value>Please select at least one option from Team Scheduling.</value>
   </data>
+  <data name="ManageSmsSettings" xml:space="preserve">
+    <value>Manage SMS Settings</value>
+    <comment>Caption 1 in SMS settings page</comment>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
+    <value>Set which column to get SMS phone number from</value>
+    <comment>First option to set</comment>
+  </data>
+  <data name="SmsSettings" xml:space="preserve">
+    <value>SMS Settings</value>
+    <comment>Caption 2 in SMS settings page</comment>
+  </data>
 </root>
