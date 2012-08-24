@@ -10,7 +10,6 @@
 	 min-height: 19px;
 	 padding: 0; 
 }
-/*.weekview-day li.second, .calendarview-week li .day-header{color: #2b90b3; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}*/
 .weekview-day li.second, .calendarview-week li .day-header {
 	border-top: 1px solid  #f9f9f9;
 	border-bottom: 1px solid #dfdfdf;
@@ -36,7 +35,6 @@
 
 .body-weekview-inner ul.today{background-position: 0 0; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
 .body-weekview-inner ul.ui-selected{background-position: 0 -2000px;}
-/*.body-weekview-inner ul:first-child{margin-left: 19px;}*/
 .body-weekview-inner ul:first-child{}
 
 .weekview-day
