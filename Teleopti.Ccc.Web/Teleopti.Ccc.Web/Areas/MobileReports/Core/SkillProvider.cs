@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WebReport;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
@@ -25,8 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 			var orderedSkills =
 				_webReportRepository.ReportControlSkillGet(reportid, webReportUserInformation.PersonCode,
 				                                           webReportUserInformation.LanguageId,
-				                                           webReportUserInformation.BusinessUnitCode).OrderBy(s => s.Name);
-
+				                                           webReportUserInformation.BusinessUnitCode).OrderBy(s => s.Id);
+			orderedSkills.First().Name = Resources.All;
 
 			return orderedSkills;
 		}

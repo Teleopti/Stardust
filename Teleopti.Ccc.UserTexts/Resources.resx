@@ -10969,11 +10969,10 @@ These options are activated:
     <value>Optimization Options</value>
     <comment>Name of the message box</comment>
   </data>
-    <data name="NoActivity" xml:space="preserve">
+  <data name="NoActivity" xml:space="preserve">
     <value>No activity</value>
     <comment>No activity</comment>
   </data>
-
   <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
     <value>Please select at least one option from Team Optimization. </value>
     <comment>The Team Optimization options</comment>
@@ -10991,5 +10990,21 @@ These options are activated:
   <data name="PleaseSelectAScenario" xml:space="preserve">
     <value>Please select a scenario.</value>
     <comment>Please select a scenario.</comment>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>Graph (loc)</value>
+    <comment>Graph used in anywhere report</comment>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Interval (loc)</value>
+    <comment>Interval used in anywhere report</comment>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Table (loc)</value>
+    <comment>Table used in anywhere report</comment>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Type (loc)</value>
+    <comment>Type used in anywhere report</comment>
   </data>
 </root>
