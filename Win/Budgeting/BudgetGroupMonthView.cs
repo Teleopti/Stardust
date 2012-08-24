@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             }
             
             SetGridSizes();
+            budgetGroupMonthViewMenu.Items[9].Enabled = false;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
@@ -73,7 +74,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			_localEventAggregator.GetEvent<ShrinkageRowAdded>().Subscribe(ShrinkageRowAdded);
 			_localEventAggregator.GetEvent<EfficiencyShrinkageRowAdded>().Subscribe(EfficiencyShrinkageRowAdded);
 			_localEventAggregator.GetEvent<ShrinkageRowsDeleted>().Subscribe(ShrinkageRowsDeleted);
-			_localEventAggregator.GetEvent<EfficiencyShrinkageRowsDeleted>().Subscribe(EfficiencyShrinkageRowsDeleted);
+            _localEventAggregator.GetEvent<EfficiencyShrinkageRowsDeleted>().Subscribe(EfficiencyShrinkageRowsDeleted); 
+            _localEventAggregator.GetEvent<GridSelectionChanged>().Subscribe(GridUpdated);
 			_localEventAggregator.GetEvent<LoadDataStarted>().Subscribe(LoadDataStarted);
 			_localEventAggregator.GetEvent<LoadDataFinished>().Subscribe(LoadDataFinished);
 			_localEventAggregator.GetEvent<ExitEditMode>().Subscribe(OnExitEditMode);
@@ -581,6 +583,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 		{
 			_shrinkageSection.IsInsideSection(e.Range);
 			_efficiencyShrinkageSection.IsInsideSection(e.Range);
+            _localEventAggregator.GetEvent<GridSelectionChanged>().Publish(true);
+            budgetGroupMonthViewMenu.Items[9].Enabled = true;
 		}
 
 		public IEnumerable<IBudgetGroupDayDetailModel> Find()
@@ -658,5 +662,11 @@ namespace Teleopti.Ccc.Win.Budgeting
                 }
             }
 	    }
+
+        private void GridUpdated(bool b)
+        {
+            if (!b)
+                budgetGroupMonthViewMenu.Items[9].Enabled = false;
+        }
 	}
 }
