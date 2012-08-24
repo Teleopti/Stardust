@@ -8,21 +8,21 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Asm.ViewModelFactory
+namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 {
 	[TestFixture]
-	public class AsmViewModelMappingTest
+	public class AsmViewModelMapperTest
 	{
 		private StubFactory scheduleFactory;
 		private IProjectionProvider projectionProvider;
-		private IAsmViewModelMapping target;
+		private IAsmViewModelMapper target;
 
 		[SetUp]
 		public void Setup()
 		{
 			projectionProvider = MockRepository.GenerateStub<IProjectionProvider>();
 			scheduleFactory = new StubFactory();
-			target = new AsmViewModelMapping(projectionProvider);
+			target = new AsmViewModelMapper(projectionProvider);
 		}
 
 		[Test]

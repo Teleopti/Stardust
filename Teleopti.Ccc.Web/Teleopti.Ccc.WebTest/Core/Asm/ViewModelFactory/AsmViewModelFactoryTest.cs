@@ -3,6 +3,7 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
@@ -22,12 +23,12 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.ViewModelFactory
 			var viewModel = new AsmViewModel();
 
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var mapper = MockRepository.GenerateMock<IAsmViewModelMapper>();
 			var nowProvider = MockRepository.GenerateMock<INow>();
 
 			nowProvider.Expect(n => n.Date()).Return(today);
 			scheduleProvider.Expect(s => s.GetScheduleForPeriod(expectedPeriod)).Return(scheduleDays);
-			mapper.Expect(m => m.Map<IEnumerable<IScheduleDay>, AsmViewModel>(scheduleDays)).Return(viewModel);
+			mapper.Expect(m => m.Map(scheduleDays)).Return(viewModel);
 			var target = new AsmViewModelFactory(nowProvider,scheduleProvider, mapper);
 
 			var result = target.CreateViewModel();

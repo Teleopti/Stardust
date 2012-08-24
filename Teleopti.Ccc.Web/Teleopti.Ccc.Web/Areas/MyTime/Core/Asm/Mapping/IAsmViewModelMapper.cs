@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 {
-	public interface IAsmViewModelMapping
+	public interface IAsmViewModelMapper
 	{
 		AsmViewModel Map(IEnumerable<IScheduleDay> scheduleDays);
 	}

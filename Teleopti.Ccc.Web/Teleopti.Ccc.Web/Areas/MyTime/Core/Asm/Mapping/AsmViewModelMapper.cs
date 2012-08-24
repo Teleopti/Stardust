@@ -7,11 +7,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 {
-	public class AsmViewModelMapping : IAsmViewModelMapping
+	public class AsmViewModelMapper : IAsmViewModelMapper
 	{
 		private readonly IProjectionProvider _projectionProvider;
 
-		public AsmViewModelMapping(IProjectionProvider projectionProvider)
+		public AsmViewModelMapper(IProjectionProvider projectionProvider)
 		{
 			_projectionProvider = projectionProvider;
 		}
