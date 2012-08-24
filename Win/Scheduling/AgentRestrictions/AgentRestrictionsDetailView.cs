@@ -146,17 +146,21 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		public override DateOnly SelectedDateLocal()
 		{
-			DateOnly tag;
-			if (ViewGrid.CurrentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
-			{
-				tag = (DateOnly)ViewGrid.Model[1, ViewGrid.CurrentCell.ColIndex].Tag;
-			}
-			else
-			{
-				tag = Presenter.SelectedPeriod.DateOnlyPeriod.StartDate;
-			}
+			//DateOnly tag;
+			var tag = TheGrid[ViewGrid.CurrentCell.RowIndex, ViewGrid.CurrentCell.ColIndex].Tag;
+			if ((tag is DateOnly)) return (DateOnly)tag;
+			return Presenter.SelectedPeriod.DateOnlyPeriod.StartDate;
 
-			return tag;
+			//if (ViewGrid.CurrentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
+			//{
+			//    tag = (DateOnly)ViewGrid.Model[1, ViewGrid.CurrentCell.ColIndex].Tag;
+			//}
+			//else
+			//{
+			//    tag = Presenter.SelectedPeriod.DateOnlyPeriod.StartDate;
+			//}
+
+			//return tag;
 		}
 
 		public override void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules)
