@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 
 	public class SignificantChangeChecker : ISignificantChangeChecker
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IList<string> SignificantChangeMessages(DateOnlyPeriod dateOnlyPeriod, IPerson person)
 		{
 			var ret = new List<string>();
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 			var lang = person.PermissionInformation.UICulture();
 			var mess = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged",lang);
 			if (string.IsNullOrEmpty(mess))
-				mess = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged", CultureInfo.GetCultureInfo("en"));
+				mess = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged");
 
 			ret.Add(mess);
 			return ret;

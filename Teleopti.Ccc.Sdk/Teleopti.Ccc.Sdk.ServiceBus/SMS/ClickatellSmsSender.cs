@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Xml;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 				var smsString = _smsConfigReader.Data;
 
 				client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-				var msgData = string.Format(smsString, _smsConfigReader.User, _smsConfigReader.Password, mobileNumber, //_smsConfigReader.From,
+				var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _smsConfigReader.User, _smsConfigReader.Password, mobileNumber, _smsConfigReader.From,
 										 message);
 				try
 				{

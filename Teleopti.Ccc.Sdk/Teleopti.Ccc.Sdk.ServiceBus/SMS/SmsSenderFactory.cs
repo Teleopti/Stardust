@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 	{
 		private readonly ISmsConfigReader _smsConfigReader;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
 		public SmsSenderFactory(ISmsConfigReader smsConfigReader)
 		{
 			_smsConfigReader = smsConfigReader;

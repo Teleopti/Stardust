@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 	<class>Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
 	<user>ola.hakansson@teleopti.com</user>
-	<password>cadadi01</password>
+	<password>cadadi02</password>
 	<api_id>3388822</api_id>
 	<from>TeleoptiCCC</from>
 	<data>
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		<user>{0}</user>
 		<password>{1}</password>
 		<to>{2}</to>
-		
-		<text>{3}</text>
+		<from>{3}</from>
+		<text>{4}</text>
 		</sendMsg></clickAPI>]]>
 	</data>
 </Config>";

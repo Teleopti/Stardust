@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 			_repositoryFactory = repositoryFactory;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public string SmsMobileNumber(IPerson person)
 		{
 			// get wich optional column to use

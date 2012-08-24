@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 		void SendSms(string message, string mobileNumber);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
 		void SetConfigReader(ISmsConfigReader smsConfigReader);
 	}
 }

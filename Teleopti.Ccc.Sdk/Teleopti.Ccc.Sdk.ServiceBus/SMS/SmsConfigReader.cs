@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Xml;
+using System.Xml.XPath;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public interface ISmsConfigReader
 	{
 		bool HasLoadedConfig { get; }
-		XmlDocument XmlDocument { get; }
+		IXPathNavigable XmlDocument { get; }
 		Uri Url { get; }
 		string User { get; }
 		string Password { get; }
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 		string Data { get; }
 	}
 
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public class SmsConfigReader : ISmsConfigReader
 	{
 		private readonly string _configFile;
@@ -31,6 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 			loadFile();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode")]
 		public SmsConfigReader(XmlDocument xmlDocument)
 		{
 			_configXml = xmlDocument;
@@ -43,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 			try
 			{
 				var dir = AppDomain.CurrentDomain.BaseDirectory;
-				if (!dir.EndsWith("\\"))
+				if (!dir.EndsWith("\\", StringComparison.OrdinalIgnoreCase))
 					dir = dir + "\\";
 				_configXml.Load(dir + _configFile);
 			}
@@ -57,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 
 		public bool HasLoadedConfig { get; private set; }
 
-		public XmlDocument XmlDocument
+		public IXPathNavigable XmlDocument
 		{
 			get { return _configXml; }
 		}
