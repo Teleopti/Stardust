@@ -1,6 +1,6 @@
-﻿using Teleopti.Analytics.ReportTexts;
-using Teleopti.Ccc.TestCommon;
+﻿using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -264,6 +264,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.SelectSkillByName(UserFactory.User().UserData<ThreeSkills>().Skill2Name);
 		}
 
+		[When(@"I select the all skills item")]
+		public void WhenISelectTheAllSkillsItem()
+		{
+			// Default operation is select all.
+		}
+
+
 		[When(@"I view ReportSettings")]
 		public void WhenIViewReportSettings()
 		{
@@ -275,8 +282,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see sunday as the first day of week in tabledata")]
 		public void ThenIShouldSeeSundayAsTheFirstDayOfWeekInTabledata()
 		{
-			EventualAssert.That(() => _page.ReportTableFirstDataCell.Text.Trim(), Is.EqualTo(Resources.ResDayOfWeekSunday));
+			EventualAssert.That(() => _page.ReportTableFirstDataCell.Text.Trim(), Is.EqualTo(Resources.DayOfWeekSunday));
 		}
+
+		[Then(@"I should see the all skill item selected")]
+		public void ThenIShouldSeeTheAllSkillItemSelected()
+		{
+			EventualAssert.That(() => _page.ReportSkillSelectionOpener.Text.Trim(), Is.StringContaining(Resources.All));
+		}
+
+
 
 	}
 }
