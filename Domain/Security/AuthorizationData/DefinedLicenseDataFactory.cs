@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             licenseOptions.Add(new TeleoptiCccPayrollIntegrationLicenseOption());
             licenseOptions.Add(new TeleoptiCccMyTimeWebLicenseOption());
 			licenseOptions.Add(new TeleoptiCccAnywhereLicenseOption());
+			licenseOptions.Add(new TeleoptiCccSmsLinkLicenseOption());
             
             licenseOptions.Add(new TeleoptiCccFreemiumForecastsLicenseOption());
 
