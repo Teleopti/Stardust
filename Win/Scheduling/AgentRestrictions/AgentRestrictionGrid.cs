@@ -20,15 +20,29 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	public class AgentDisplayRowEventArgs : EventArgs
 	{
 		private readonly AgentRestrictionsDisplayRow _agentDisplayRow;
-			
-		public AgentDisplayRowEventArgs(AgentRestrictionsDisplayRow agentRestrictionsDisplayRow)
+		private readonly bool _moveToDate;
+		private readonly bool _updateShiftEditor;
+
+		public AgentDisplayRowEventArgs(AgentRestrictionsDisplayRow agentRestrictionsDisplayRow, bool moveToDate, bool updateShiftEditor)
 		{
 			_agentDisplayRow = agentRestrictionsDisplayRow;
+			_moveToDate = moveToDate;
+			_updateShiftEditor = updateShiftEditor;
 		}
 
 		public AgentRestrictionsDisplayRow AgentRestrictionsDisplayRow
 		{
 			get { return _agentDisplayRow; }
+		}
+
+		public bool MoveTodate
+		{
+			get { return _moveToDate; }
+		}
+
+		public bool UpdateShiftEditor
+		{
+			get { return _updateShiftEditor; }
 		}
 	}
 
@@ -67,6 +81,10 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private IList<IPerson> _persons;
 		private IPerson _selectedPerson;
 		private AgentRestrictionsDetailView _detailView;
+		private IAgentRestrictionsDisplayRow _showInDetailView;
+		private IScheduleDay _selectedDay;
+		private bool _moveToDate;
+		private bool _clearSelection;
 
 		private delegate void GridDelegate();
 
@@ -124,8 +142,17 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (e.RowIndex <= 1) return;
 			var displayRow = this[e.RowIndex, 0].Tag as AgentRestrictionsDisplayRow;
 			if (displayRow == null) return;
+			//_selectedPerson = displayRow.Matrix.Person;
+			if (displayRow.State != AgentRestrictionDisplayRowState.Available)
+			{
+				e.Cancel = true;
+				return;
+			}
+
 			_selectedPerson = displayRow.Matrix.Person;
-			if (displayRow.State != AgentRestrictionDisplayRowState.Available) return;
+			if (!_showInDetailView.Equals(displayRow))
+				_clearSelection = true;
+			_showInDetailView = displayRow;
 
 			ThreadPool.QueueUserWorkItem(LoadDetails, displayRow);	
 		}
@@ -138,7 +165,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
 			_detailView.LoadDetails(displayRow.Matrix, restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
 
-			var displayRowArgs = new AgentDisplayRowEventArgs(displayRow);
+			var displayRowArgs = new AgentDisplayRowEventArgs(displayRow, false, _clearSelection);
+			_clearSelection = false;
 			OnSelectedAgentIsReady(displayRowArgs);
 		}
 
@@ -178,7 +206,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 9, 0, 12));	
 		}
 
-		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, RestrictionSchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson, AgentRestrictionsDetailView detailView)
+		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, RestrictionSchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson, AgentRestrictionsDetailView detailView, IScheduleDay scheduleDay)
 		{
 			if (stateHolder == null) throw new ArgumentNullException("stateHolder");
 
@@ -189,6 +217,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_selectedPerson = selectedPerson;
 			_loadedCounter = 0;
 			_detailView = detailView;
+			_selectedDay = scheduleDay;
+			_moveToDate = true;
 
 			_model.DisplayRows.Clear();
 
@@ -253,6 +283,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				_model.LoadDisplayRows(agentRestrictionsDisplayRowCreator, _persons);
 
+				_showInDetailView = ShowRow(_model.DisplayRows);
+
 				if (!IsHandleCreated) return;
 
 				Invoke(new GridDelegate(RefreshGrid));
@@ -262,13 +294,39 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
 			{
-				if (agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson)) ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+				if (agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson))
+				{
+					ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+				}
 			}
 
 			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
 			{
 				if (!agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson)) ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
 			}		
+		}
+
+		IAgentRestrictionsDisplayRow ShowRow(IList<AgentRestrictionsDisplayRow> displayRows)
+		{
+			if(displayRows.Count == 0) return null;
+
+			foreach (var agentRestrictionsDisplayRow in displayRows)
+			{
+				if (agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson) && _selectedDay != null)
+				{
+					if (agentRestrictionsDisplayRow.Matrix.SchedulePeriod.DateOnlyPeriod.Contains(_selectedDay.DateOnlyAsPeriod.DateOnly))
+					{
+						return agentRestrictionsDisplayRow;
+					}
+				}
+			}
+
+			foreach (var agentRestrictionsDisplayRow in displayRows)
+			{
+				if (agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson)) return agentRestrictionsDisplayRow;
+			}
+
+			return displayRows[0];
 		}
 
 		void DoWork(object workObject)
@@ -292,10 +350,13 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (!IsHandleCreated) return;
 
 			
-			if (displayRow.Matrix.Person.Equals(_selectedPerson))
+			//if (displayRow.Matrix.Person.Equals(_selectedPerson))
+			if(displayRow.Equals(_showInDetailView))
 			{
+				//_showInDetailView = null;
 				_detailView.LoadDetails(displayRow.Matrix, restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
-				var displayRowArgs = new AgentDisplayRowEventArgs(displayRow);
+				var displayRowArgs = new AgentDisplayRowEventArgs(displayRow, _moveToDate, false);
+				_moveToDate = false;
 				OnSelectedAgentIsReady(displayRowArgs);
 			}
 
@@ -321,7 +382,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				var displayRow = Model[i, 0].Tag as AgentRestrictionsDisplayRow;
 				if (displayRow == null) continue;
-				if (!displayRow.Matrix.Person.Equals(_selectedPerson)) continue;
+				//if (!displayRow.Matrix.Person.Equals(_selectedPerson)) continue;
+				if (!displayRow.Equals(_showInDetailView)) continue;
 				row = i;
 				break;
 			}

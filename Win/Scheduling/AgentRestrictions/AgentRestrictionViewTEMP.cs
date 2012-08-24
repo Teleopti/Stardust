@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private void AgentRestrictionViewTempLoad(object sender, System.EventArgs e)
 		{
 			agentRestrictionGrid.MergeHeaders();
-			agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _workShiftWorkTime, _selectedPerson, _detailView);
+			//agentRestrictionGrid.LoadData(_stateHolder, _persons, _schedulingOptions, _workShiftWorkTime, _selectedPerson, _detailView);
 			agentRestrictionGrid.Refresh();	
 		}
 

@@ -5847,7 +5847,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var view = (AgentRestrictionsDetailView)detailView;
 
 			schedulerSplitters1.AgentRestrictionGrid.MergeHeaders();
-			schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, _workShiftWorkTime, selectedPerson, view);
+			schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, _workShiftWorkTime, selectedPerson, view, schedulePart);
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability",
@@ -6053,6 +6053,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				_scheduleView.TheGrid.Refresh();
 				((AgentRestrictionsDetailView)_scheduleView).InitializeGrid();
+				var args = e as AgentDisplayRowEventArgs;
+				if (args == null) return;
+				if(args.MoveTodate) ((AgentRestrictionsDetailView)_scheduleView).SelectDateIfExists(_dateNavigateControl.SelectedDate);
+				if(args.UpdateShiftEditor) updateShiftEditor();		
 			}
 		}
 
