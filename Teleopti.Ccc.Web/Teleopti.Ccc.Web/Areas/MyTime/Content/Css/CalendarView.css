@@ -44,7 +44,12 @@
 }
 .ie7 .weekdays li{zoom: 1; display: inline;} /* IE7 inline-block fix */
 
-.calendarview-week{ background: transparent url(../Images/calendarview_week_wide_bg.png) top left no-repeat; padding-left: 0px; font-size: 0; }
+.calendarview-week {
+	background: transparent url(../Images/calendarview_week_wide_bg.png) top left no-repeat;
+	padding-left: 0px;
+	font-size: 0;
+	white-space: nowrap;
+}
 .body-calendarview-inner ul:nth-child(2){background-image: none;}
 .calendarview-week li{
 	font-size: 12px;
