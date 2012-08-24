@@ -219,23 +219,60 @@
 					equal(viewModelDay.PossibleContractTimes(), "7:00-12:00");
 				});
 
-				test("should compute HasFeedbackError", function () {
+				test("should compute DisplayFeedbackError", function () {
 
 					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 
-					equal(viewModelDay.HasFeedbackError(), false, "handle not initialized");
+					equal(viewModelDay.DisplayFeedbackError(), false, "compute not initialized");
 
 					viewModelDay.FeedbackError(null);
-					equal(viewModelDay.HasFeedbackError(), false, "handle null");
+					equal(viewModelDay.DisplayFeedbackError(), false, "compute with null");
 
 					viewModelDay.FeedbackError(undefined);
-					equal(viewModelDay.HasFeedbackError(), false, "handle undefined");
+					equal(viewModelDay.DisplayFeedbackError(), false, "compute with undefined");
 
 					viewModelDay.FeedbackError("");
-					equal(viewModelDay.HasFeedbackError(), false, "handle empty string");
+					equal(viewModelDay.DisplayFeedbackError(), false, "compute with empty string");
 
 					viewModelDay.FeedbackError("an error");
-					equal(viewModelDay.HasFeedbackError(), true, "handle string");
+					equal(viewModelDay.DisplayFeedbackError(), true, "compute with string");
+
+				});
+
+				test("should compute DisplayFeedback", function () {
+
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+
+					equal(viewModelDay.DisplayFeedback(), false, "compute not initialized");
+
+					var resetViewModel = function () {
+						viewModelDay.PossibleStartTimes(undefined);
+						viewModelDay.PossibleEndTimes(undefined);
+						viewModelDay.PossibleContractTimeMinutesLower(undefined);
+						viewModelDay.PossibleContractTimeMinutesUpper(undefined);
+						viewModelDay.FeedbackError(undefined);
+					};
+
+					resetViewModel();
+					viewModelDay.PossibleStartTimes("a value");
+					viewModelDay.FeedbackError("an error");
+					equal(viewModelDay.DisplayFeedback(), false, "compute with FeedbackError");
+
+					resetViewModel();
+					viewModelDay.PossibleStartTimes("a value");
+					equal(viewModelDay.DisplayFeedback(), true, "compute with PossibleStartTimes");
+
+					resetViewModel();
+					viewModelDay.PossibleEndTimes("a value");
+					equal(viewModelDay.DisplayFeedback(), true, "compute with PossibleEndTimes");
+
+					resetViewModel();
+					viewModelDay.PossibleContractTimeMinutesLower("a value");
+					equal(viewModelDay.DisplayFeedback(), true, "compute with PossibleContractTimeMinutesLower");
+
+					resetViewModel();
+					viewModelDay.PossibleContractTimeMinutesUpper("a value");
+					equal(viewModelDay.DisplayFeedback(), true, "compute with PossibleContractTimeMinutesUpper");
 
 				});
 

@@ -21,9 +21,6 @@
 	{
 		border-left: 1px solid #f9f9f9;
 		border-right: 1px solid #dfdfdf;
-		/*Safari inline-block fix*/
-		display: block;
-		float: left;
 	}
 	.rtl .weekdays li, 
 	.rtl .calendarview-week li
@@ -44,7 +41,12 @@
 }
 .ie7 .weekdays li{zoom: 1; display: inline;} /* IE7 inline-block fix */
 
-.calendarview-week{ background: transparent url(../Images/calendarview_week_wide_bg.png) top left no-repeat; padding-left: 0px; font-size: 0; }
+.calendarview-week {
+	background: transparent url(../Images/calendarview_week_wide_bg.png) top left no-repeat;
+	padding-left: 0px;
+	font-size: 0;
+	white-space: nowrap;
+}
 .body-calendarview-inner ul:nth-child(2){background-image: none;}
 .calendarview-week li{
 	font-size: 12px;
@@ -55,8 +57,11 @@
 }
 .ie7 .calendarview-week li{zoom: 1; display: inline;} /* IE7 inline-block fix */
 
-.calendarview-week li div.day-content {
-	padding: 10px 3px; 
+.calendarview-week li div.day-content 
+{
+	padding-bottom: 10px;
+	padding-top: 10px;
+	padding-left: 2px;
 	border-left-style: solid; 
 	border-left-width: 8px; 
 	border-left-color: transparent;

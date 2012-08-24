@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private IScheduleMatrixPro _matrix1;
 		private IList<IScheduleMatrixPro> _matrixes;
+		private IVirtualSchedulePeriod _schedulePeriod;
 
 		[SetUp]
 		public void Setup()
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_date1 = new DateOnly(2012, 1, 1);
 			_matrix1 = _mock.StrictMock<IScheduleMatrixPro>();
 			_matrixes = new List<IScheduleMatrixPro> { _matrix1 };
+			_schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
 		}
 
 		[Test]
@@ -56,7 +58,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mock.Record())
 			{
 				Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person1, _date1)).Return(_matrixes);
-				Expect.Call(_matrix1.SelectedPeriod).Return(new DateOnlyPeriod(new DateOnly(), new DateOnly()));
+				Expect.Call(_matrix1.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(), new DateOnly()));
 			}
 
 			ValidatorResult result;
