@@ -28,6 +28,7 @@
 	background: #f8f8f8;
 	font-family: Verdana;
 	white-space: nowrap;
+	font-size: 0;
 }
 .rgba .body-weekview-inner {
 	border: 1px solid rgba(0, 0, 0, 0.15);
@@ -51,15 +52,10 @@
 	width: 131px;
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-.weekview-day /* Safari inline-block fix */
-{
-	display: block; 
-	float: left;
-}
-.rtl .weekview-day
-{
-	float: right;
-}
+	.rtl .weekview-day
+	{
+		float: right;
+	}
 }
 .ie7 .weekview-day /* IE7 inline-block fix */
 {
@@ -70,7 +66,6 @@
 .weekview-day
 {
 	margin: 0;
-	float: left;
 	border-left: 1px solid #f9f9f9;
 	border-right: 1px solid #dfdfdf;
 }
