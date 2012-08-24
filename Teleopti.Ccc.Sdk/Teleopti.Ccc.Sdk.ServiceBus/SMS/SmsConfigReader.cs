@@ -42,7 +42,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 			_configXml = new XmlDocument();
 			try
 			{
-				_configXml.Load(AppDomain.CurrentDomain.BaseDirectory + _configFile);
+				var dir = AppDomain.CurrentDomain.BaseDirectory;
+				if (!dir.EndsWith("\\"))
+					dir = dir + "\\";
+				_configXml.Load(dir + _configFile);
 			}
 			catch (System.IO.FileNotFoundException)
 			{
@@ -64,10 +67,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 			get
 			{
 				if (!HasLoadedConfig)
-					return new Uri("");
+					return null;
 				if (_configXml.GetElementsByTagName("url").Count > 0)
 					return new Uri(_configXml.GetElementsByTagName("url")[0].InnerText);
-				return new Uri("");
+				return null;
 			}
 		}
 

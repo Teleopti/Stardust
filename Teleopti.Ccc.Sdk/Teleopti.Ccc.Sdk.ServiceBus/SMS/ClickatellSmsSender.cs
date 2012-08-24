@@ -12,13 +12,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 		private ISmsConfigReader _smsConfigReader;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellSmsSender));
 
-//        private const string smsString = @"<clickAPI>
-//				<sendMsg><api_id>3388480</api_id><user>{0}</user>
-//				<password>{1}</password><to>{2}</to><from>Teleopti CCC</from>
-//				<text>{3}</text>
-//				</sendMsg>
-//			</clickAPI>";
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void SendSms(string message, string mobileNumber)
 		{
@@ -32,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 				var smsString = _smsConfigReader.Data;
 
 				client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-				var msgData = string.Format(smsString, _smsConfigReader.User, _smsConfigReader.Password, mobileNumber, _smsConfigReader.From,
+				var msgData = string.Format(smsString, _smsConfigReader.User, _smsConfigReader.Password, mobileNumber, //_smsConfigReader.From,
 										 message);
 				try
 				{

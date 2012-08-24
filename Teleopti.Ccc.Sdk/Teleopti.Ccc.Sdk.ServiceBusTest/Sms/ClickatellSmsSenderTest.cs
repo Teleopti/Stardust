@@ -10,27 +10,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 	{
 		// the send will not work in thia test because of the password is wrong
 		// we don't want to send a lot of messages all the time :-) 
-		// if you want to try change to <password>cadadi01</password> (works as long as we have credits)
+		// if you want to try change to <password>cadadi01</password> (works as long as we have credits) <from>{3}</from>
 		private MockRepository _mocks;
 		private ISmsConfigReader _smsConfigReader;
 		private ClickatellSmsSender _target;
+		private const string smsMessage = "Schedule has changed";
 
 		private const string xml = @"<?xml version='1.0' encoding='utf-8' ?>
 <Config>
 	<class>Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
 	<user>ola.hakansson@teleopti.com</user>
-	<password>cadadi02</password>
-	<api_id>3388480</api_id>
-	<from>Teleopti CCC</from>
+	<password>cadadi01</password>
+	<api_id>3388822</api_id>
+	<from>TeleoptiCCC</from>
 	<data>
 		<![CDATA[ <clickAPI><sendMsg>
-		<api_id>3388480</api_id>
+		<api_id>3388822</api_id>
 		<user>{0}</user>
 		<password>{1}</password>
 		<to>{2}</to>
-		<from>{3}</from>
-		<text>{4}</text>
+		
+		<text>{3}</text>
 		</sendMsg></clickAPI>]]>
 	</data>
 </Config>";
@@ -44,16 +45,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			_target.SetConfigReader(_smsConfigReader);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender.SendSms(System.String,System.String)"), Test]
 		public void ShouldNotSendIfNoConfig()
 		{
 			Expect.Call(_smsConfigReader.HasLoadedConfig).Return(false);
 			_mocks.ReplayAll();
-			_target.SendSms("schemat har ändrats","" );
+			_target.SendSms(smsMessage,"" );
 			_mocks.VerifyAll();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender.SendSms(System.String,System.String)"), Test]
 		public void ShouldTryToSendIfConfig()
 		{
 			var doc = new XmlDocument();
@@ -61,10 +62,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 
 			_smsConfigReader = new SmsConfigReader(doc);
 			_target.SetConfigReader(_smsConfigReader);
-			_target.SendSms("schemat har ändrats","46709218108" );
+			_target.SendSms(smsMessage, "46709218108");
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender.SendSms(System.String,System.String)"), Test]
 		public void ShouldLogIfUrlIsIncorrect()
 		{
 			const string incorrectXml = @"<?xml version='1.0' encoding='utf-8' ?><Config>
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 
 			_smsConfigReader = new SmsConfigReader(doc);
 			_target.SetConfigReader(_smsConfigReader);
-			_target.SendSms("schemat har ändrats", "46709218108");
+			_target.SendSms(smsMessage, "46709218108");
 		}
 	}
 }

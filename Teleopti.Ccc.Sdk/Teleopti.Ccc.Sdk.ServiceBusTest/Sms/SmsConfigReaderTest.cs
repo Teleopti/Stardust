@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using NUnit.Framework;
 using Teleopti.Ccc.Sdk.ServiceBus.SMS;
 
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			Assert.That(_target.XmlDocument, Is.Null);
 			Assert.That(_target.User, Is.EqualTo(""));
 			Assert.That(_target.Password, Is.EqualTo(""));
-			Assert.That(_target.Url, Is.EqualTo(""));
+			Assert.That(_target.Url, Is.Null);
 			Assert.That(_target.Api, Is.EqualTo(""));
 			Assert.That(_target.From, Is.EqualTo(""));
 			Assert.That(_target.Data, Is.EqualTo(""));
@@ -51,7 +52,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			Assert.That(_target.XmlDocument, Is.Not.Null);
 			Assert.That(_target.User, Is.EqualTo(""));
 			Assert.That(_target.Password, Is.EqualTo(""));
-			Assert.That(_target.Url, Is.EqualTo(""));
+			Assert.That(_target.Url, Is.Null);
+			Assert.That(_target.Api, Is.EqualTo(""));
+			Assert.That(_target.From, Is.EqualTo(""));
+			Assert.That(_target.Data, Is.EqualTo(""));
 		}
 
 		[Test]
@@ -63,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		[Test]
 		public void ShouldHaveAnUrlProperty()
 		{
-			Assert.That(_target.Url, Is.EqualTo("http://api.clickatell.com/xml/xml?data="));
+			Assert.That(_target.Url, Is.EqualTo(new Uri("http://api.clickatell.com/xml/xml?data=")));
 		}
 
 		[Test]

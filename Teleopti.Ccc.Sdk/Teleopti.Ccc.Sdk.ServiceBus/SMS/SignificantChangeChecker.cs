@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Resources;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
@@ -21,8 +24,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 				return ret;
 
 			//NEXT PBI check against readmodel and split messages if too long
-			//TODO get string from resource and language from person
-			ret.Add("Your schedule has changed!");
+			var lang = person.PermissionInformation.UICulture();
+			var mess = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged",lang);
+			if (string.IsNullOrEmpty(mess))
+				mess = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged", CultureInfo.GetCultureInfo("en"));
+
+			ret.Add(mess);
 			return ret;
 		}
 	}

@@ -118,9 +118,9 @@
 			this.autoLabel5.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabel5.Location = new System.Drawing.Point(3, 7);
 			this.autoLabel5.Name = "autoLabel5";
-			this.autoLabel5.Size = new System.Drawing.Size(232, 13);
+			this.autoLabel5.Size = new System.Drawing.Size(238, 13);
 			this.autoLabel5.TabIndex = 8;
-			this.autoLabel5.Text = "xxSetWichColumnToGetSmsPhoneNumberFrom";
+			this.autoLabel5.Text = "xxSetWhichColumnToGetSmsPhoneNumberFrom";
 			this.autoLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// comboBoxOptionalColumns

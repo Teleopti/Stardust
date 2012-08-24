@@ -48,14 +48,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				var person = _personRepository.Get(message.PersonId);
 				var timeZone = person.PermissionInformation.DefaultTimeZone();
 				var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
-
-				if (_significantChangeChecker.SignificantChangeMessages(dateOnlyPeriod, person).Count != 0)
+				var smsMessages = _significantChangeChecker.SignificantChangeMessages(dateOnlyPeriod, person);
+				if (smsMessages.Count != 0)
 				{
 					var number = _smsLinkChecker.SmsMobileNumber(person);
 					if (!string.IsNullOrEmpty(number))
 					{
 						var smsSender = _smsSenderFactory.Sender;
-						smsSender.SendSms("Schedule changed", number);
+						foreach (var smsMessage in smsMessages)
+						{
+							smsSender.SendSms(smsMessage, number);
+						}
+						
 					}
 				}
 
