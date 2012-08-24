@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
@@ -36,30 +35,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerAsmTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<TempAsmModelFactory>().As<IAsmViewModelFactory>();
-		}
-
-		public class TempAsmModelFactory : IAsmViewModelFactory
-		{
-			public AsmViewModel CreateViewModel()
-			{
-				var model = new AsmViewModel {StartDate = new DateTime(2012, 8,22)};
-				model.Layers.Add(new AsmLayer
-				                 	{
-				                 		Payload = "phone",
-				                 		RelativeStartInMinutes = 1600,
-				                 		LengthInMinutes = 120,
-				                 		Color = ColorTranslator.ToHtml(Color.Red)
-				                 	});
-				model.Layers.Add(new AsmLayer
-				                 	{
-				                 		Payload = "pruttibangng",
-				                 		RelativeStartInMinutes = 1700,
-				                 		LengthInMinutes = 150,
-				                 		Color = ColorTranslator.ToHtml(Color.Blue)
-				                 	});
-				return model;
-			}
+			builder.RegisterType<AsmViewModelFactory>().As<IAsmViewModelFactory>();
 		}
 
 		private static void registerReportTypes(ContainerBuilder builder)
