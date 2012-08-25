@@ -2,6 +2,10 @@
 
 namespace Teleopti.Interfaces.Domain
 {
+
+	/// <summary>
+	/// Specific interface for this class
+	/// </summary>
 	public interface IRelativeDailyDifferencesByAllSkillsExtractor
 	{
 		/// <summary>
