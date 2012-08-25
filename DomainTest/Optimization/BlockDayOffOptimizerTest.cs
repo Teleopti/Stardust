@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleResultDataExtractor.Values()).Return(_values);
                 Expect.Call(_decisionMaker.Execute(_workingArray, _values)).Return(true);
                 Expect.Call(_dayOffDecisionMakerExecuter.Execute(_workingArray, _originalArray, _matrix,
-                                                                 _originalStateContainer, false, false, false)).Return(false);
+                                                                 _originalStateContainer, false, false, true)).Return(false);
             }
 
             using (_mocks.Playback())
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_decisionMaker.Execute(_workingArray, _values)).Return(true);
                 
                 Expect.Call(_dayOffDecisionMakerExecuter.Execute(_workingArray, _originalArray, _matrix,
-                                                                 _originalStateContainer, false, false, false)).Return(true);
+                                                                 _originalStateContainer, false, false, false)).IgnoreArguments().Return(true);
 				Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { _matrix }, _schedulingOptions)).Return(false);
                 Expect.Call(_changesTracker.DaysOffRemoved(_workingArray, _originalArray, _matrix,
                                                            _daysOffPreferences.ConsiderWeekBefore)).Return(dates);

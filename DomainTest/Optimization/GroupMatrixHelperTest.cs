@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -25,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IWorkShiftBackToLegalStateServicePro _workShiftBackToLegalStateServicePro;
     	private IResourceOptimizationHelper _resourceOptimizationHelper;
     	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+    	private IPerson _person;
 
         [SetUp]
         public void Setup()
@@ -45,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_target = new GroupMatrixHelper(_groupMatrixContainerCreator, _groupPersonConsistentChecker, _workShiftBackToLegalStateServicePro, _resourceOptimizationHelper);
 
 			_schedulingOptions = new SchedulingOptions();
+        	_person = _mocks.StrictMock<IPerson>();
 
         }
 
@@ -260,7 +264,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             	Expect.Call(groupSchedulingService.ScheduleOneDay(date1, _schedulingOptions, groupPerson, _allScheduleMatrixes)).IgnoreArguments().Return(true);
             	Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, date1,
             	                                                                           _schedulingOptions)).Return(true);
+            	Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
+            	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, date1)).Return(groupPerson);
             }
+	
             using (_mocks.Playback())
             {
                 Assert.IsTrue(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization));
@@ -276,6 +283,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<DateOnly> dates = new List<DateOnly> { date1, date2 };
 
             IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
+        	IList<IPerson> members = new List<IPerson> {_person};
             IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
             ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 
@@ -287,6 +295,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             	                                                  _allScheduleMatrixes)).IgnoreArguments().Return(true);
 				Expect.Call(groupSchedulingService.ScheduleOneDay(date2, _schedulingOptions, groupPerson,
 																  _allScheduleMatrixes)).IgnoreArguments().Return(false);
+            	Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members)).Repeat.AtLeastOnce();
+            	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, date1)).Return(groupPerson).Repeat.Any();
+				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, date2)).Return(groupPerson).Repeat.Any();
                 rollbackService.Rollback();
             }
             using (_mocks.Playback())

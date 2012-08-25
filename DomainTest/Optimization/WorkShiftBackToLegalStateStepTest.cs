@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _scheduleDay;
         private IList<IScheduleDay> _scheduleDayList;
         private ISchedulePartModifyAndRollbackService _modifyAndRollbackService;
+    	private DateOnlyPeriod _period;
 
         [SetUp]
         public void Setup()
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
             _scheduleDayList = new List<IScheduleDay>{_scheduleDay};
             _modifyAndRollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
+			_period = new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MaxValue);
             _target = new WorkShiftBackToLegalStateStep(_bitArrayCreator, _decisionMaker, _deleteService, _modifyAndRollbackService);
         }
 
@@ -49,11 +51,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using(_mockRepository.Record())
             {
                 Expect.Call(_bitArrayCreator.CreateWeeklyBitArray(_weekIndex, _scheduleMatrix)).Return(_lockableBitArray);
-                Expect.Call(_decisionMaker.Execute(_lockableBitArray, false, new DateOnlyPeriod(_day1.Day, _day1.Day))).Return(0);
+				Expect.Call(_decisionMaker.Execute(_lockableBitArray, false, _period)).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_day1}));
+                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_day1})).Repeat.AtLeastOnce();
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
-                Expect.Call(_day1.Day).Return(DateOnly.MaxValue);
+                Expect.Call(_day1.Day).Return(DateOnly.MaxValue).Repeat.AtLeastOnce();
                 _deleteService.Delete(_scheduleDayList, _modifyAndRollbackService);
             }
             using(_mockRepository.Playback())
@@ -70,11 +72,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mockRepository.Record())
             {
                 Expect.Call(_bitArrayCreator.CreatePeriodBitArray(raise, _scheduleMatrix)).Return(_lockableBitArray);
-				Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise, new DateOnlyPeriod(_day1.Day, _day1.Day))).Return(0);
+				Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise, _period)).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _day1 }));
+                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _day1 })).Repeat.AtLeastOnce();
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
-                Expect.Call(_day1.Day).Return(DateOnly.MaxValue);
+                Expect.Call(_day1.Day).Return(DateOnly.MaxValue).Repeat.AtLeastOnce();
                 _deleteService.Delete(_scheduleDayList, _modifyAndRollbackService);
             }
             using (_mockRepository.Playback())
@@ -91,11 +93,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mockRepository.Record())
             {
                 Expect.Call(_bitArrayCreator.CreatePeriodBitArray(raise, _scheduleMatrix)).Return(_lockableBitArray);
-				Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise, new DateOnlyPeriod(_day1.Day, _day1.Day))).Return(0);
+				Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise, _period)).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _day1 }));
+                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _day1 })).Repeat.AtLeastOnce();
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
-                Expect.Call(_day1.Day).Return(DateOnly.MaxValue);
+            	Expect.Call(_day1.Day).Return(DateOnly.MaxValue).Repeat.AtLeastOnce();
                 _deleteService.Delete(_scheduleDayList, _modifyAndRollbackService);
             }
             using (_mockRepository.Playback())

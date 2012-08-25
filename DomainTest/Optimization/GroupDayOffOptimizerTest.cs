@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_groupOptimizationValidatorRunner = _mocks.StrictMock<IGroupOptimizationValidatorRunner>();
 			_groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
         	_groupPerson = _mocks.StrictMock<IGroupPerson>();
+        	_workShiftBackToLegalStateServicePro = _mocks.StrictMock<IWorkShiftBackToLegalStateServicePro>();
 
             _allScheduleMatrixes.Add(_activeScheduleMatrix);
             _allScheduleMatrixes.Add(_scheduleMatrix2);
@@ -117,6 +118,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(	_validatorResult);
                 Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter,_schedulePartModifyAndRollbackService)).IgnoreArguments()
                     .Return(true);
+            	Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions)).IgnoreArguments().Return
+            		(new List<DateOnly>());
                 Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization)).IgnoreArguments()
                     .Return(true);
 
@@ -392,6 +395,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(groupMatrixContainers);
                 Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
                     .Return(true);
+				Expect.Call(_groupMatrixHelper.GoBackToLegalState(new List<DateOnly> { dayOffToRemove }, groupPerson, _schedulingOptions)).Return(
+            		new List<DateOnly>());
                 Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization)).IgnoreArguments()
                     .Return(false);
 
