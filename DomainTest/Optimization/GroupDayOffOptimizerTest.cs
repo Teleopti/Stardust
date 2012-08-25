@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_groupOptimizationValidatorRunner = _mocks.StrictMock<IGroupOptimizationValidatorRunner>();
 			_groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
         	_groupPerson = _mocks.StrictMock<IGroupPerson>();
-        	_workShiftBackToLegalStateServicePro = _mocks.StrictMock<IWorkShiftBackToLegalStateServicePro>();
+        	//_workShiftBackToLegalStateServicePro = _mocks.StrictMock<IWorkShiftBackToLegalStateServicePro>();
 
             _allScheduleMatrixes.Add(_activeScheduleMatrix);
             _allScheduleMatrixes.Add(_scheduleMatrix2);

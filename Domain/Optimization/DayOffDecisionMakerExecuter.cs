@@ -73,7 +73,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         	_logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
         }
 
-        public bool Execute(
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public bool Execute(
             ILockableBitArray workingBitArray, 
             ILockableBitArray originalBitArray, 
             IScheduleMatrixPro currentScheduleMatrix, 
