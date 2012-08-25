@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Win.Budgeting
         private GridRowSection<IBudgetGroupDayDetailModel> _efficiencyShrinkageSection;
         private IList<double> _modifiedItems;
 	    private readonly IEventAggregator _globalEventAggregator;
-
+        
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reassociator")]
 		public BudgetGroupDayView(IEventAggregatorLocator eventAggregatorLocator, BudgetDayReassociator budgetDayReassociator, IBudgetPermissionService budgetPermissionService)
 		{
@@ -67,6 +67,8 @@ namespace Teleopti.Ccc.Win.Budgeting
             }
             
             SetupGridControl();
+
+		    budgetGroupDayViewMenu.Items[9].Enabled = false;
         }
 
 		private void EventSubscription()
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			_localEventAggregator.GetEvent<EfficiencyShrinkageRowAdded>().Subscribe(EfficiencyShrinkageRowAdded);
 			_localEventAggregator.GetEvent<ShrinkageRowsDeleted>().Subscribe(ShrinkageRowsDeleted);
 			_localEventAggregator.GetEvent<EfficiencyShrinkageRowsDeleted>().Subscribe(EfficiencyShrinkageRowsDeleted);
+		    _localEventAggregator.GetEvent<GridSelectionChanged>().Subscribe(GridUpdated);
 			_localEventAggregator.GetEvent<LoadDataStarted>().Subscribe(LoadDataStarted);
 			_localEventAggregator.GetEvent<LoadDataFinished>().Subscribe(LoadDataFinished);
 			_localEventAggregator.GetEvent<BeginBudgetDaysUpdate>().Subscribe(OnBeginBudgetDaysUpdate);
@@ -192,7 +195,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			{
 				toolStripMenuItemDeleteShrinkageRow.Enabled = false;
 				toolStripMenuItemUpdateShrinkageRow.Enabled = false;
-			}
+            }
 		}
 
 		private void EfficiencyShrinkageRowAdded(ICustomEfficiencyShrinkage customEfficiencyShrinkage)
@@ -536,6 +539,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 		{
 			_shrinkageSection.IsInsideSection(e.Range);
 			_efficiencyShrinkageSection.IsInsideSection(e.Range);
+            _localEventAggregator.GetEvent<GridSelectionChanged>().Publish(true); 
+            budgetGroupDayViewMenu.Items[9].Enabled = true;
 		}
 
 		private void toolStripMenuItemDeleteShrinkageRow_Click(object sender, EventArgs e)
@@ -617,6 +622,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 		private void gridControlDayView_Layout(object sender, LayoutEventArgs e)
 		{
 			gridControlDayView.Invalidate();
+            budgetGroupDayViewMenu.Items[9].Enabled = false;
 		}
 
 		private void gridControlDayView_ClipboardCopy(object sender, GridCutPasteEventArgs e)
@@ -694,5 +700,11 @@ namespace Teleopti.Ccc.Win.Budgeting
             }
 
 	    }
+
+        private void GridUpdated(bool b)
+        {
+            if (!b)
+                budgetGroupDayViewMenu.Items[9].Enabled = false;
+        }
 	}
 }

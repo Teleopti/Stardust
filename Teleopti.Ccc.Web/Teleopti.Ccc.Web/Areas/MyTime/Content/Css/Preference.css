@@ -66,8 +66,9 @@
 	padding-bottom: 1px;
 }
 
-.time-limitation {
-	font-size: 12px;
+.time-limitation 
+{
+	font-size: 11px;
 	height: 13px;
 	padding-bottom: 1px;
 	font-variant: small-caps;
@@ -77,8 +78,9 @@
 .time-limitation.icon.doublearrow-blue
 {
 	display: block; /* required because chrome will display a different height without content otherwise */
-	width: 110px;
+	width: 115px;
 	height: 13px;
+	padding-left: 6px;
 }
 
 

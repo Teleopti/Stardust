@@ -58,7 +58,14 @@ BEGIN
 		[Parent] [uniqueidentifier] NOT NULL
 	)
 	
-	CREATE TABLE #TempPersonPeriodWithEndDate (id uniqueidentifier , FirstName varchar(600), LastName varchar(600), EmploymentNumber varchar(600),Team varchar(600))
+	CREATE TABLE #TempPersonPeriodWithEndDate (
+		id uniqueidentifier,
+		FirstName [nvarchar](50),
+		LastName [nvarchar](50),
+		EmploymentNumber [nvarchar](50),
+		Team [nvarchar](50)
+	)
+	
 	INSERT INTO #TempPersonPeriodWithEndDate 
 		SELECT Person.Id, FirstName, LastName, EmploymentNumber,Team  
 		FROM PersonPeriodWithEndDate pp

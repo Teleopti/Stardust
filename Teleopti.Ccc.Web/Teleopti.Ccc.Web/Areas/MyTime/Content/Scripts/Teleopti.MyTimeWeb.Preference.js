@@ -227,6 +227,10 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	var self = this;
 
+	var hasStringValue = function (value) {
+		return typeof (value) == 'string' && value.length > 0;
+	};
+
 	// legacy.
 	// should be refactored into using the viewmodel to update the ui etc
 	// would result in less text...
@@ -425,9 +429,8 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	};
 
 	this.FeedbackError = ko.observable();
-	this.HasFeedbackError = ko.computed(function () {
-		var feedbackError = self.FeedbackError();
-		return typeof(feedbackError) == 'string' && feedbackError.length > 0;
+	this.DisplayFeedbackError = ko.computed(function () {
+		return hasStringValue(self.FeedbackError());
 	});
 
 	this.PossibleStartTimes = ko.observable();
@@ -456,6 +459,20 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		if (lower != "")
 			return lower + "-" + upper;
 		return "";
+	});
+
+	this.DisplayFeedback = ko.computed(function () {
+		if (self.DisplayFeedbackError())
+			return false;
+		if (hasStringValue(self.PossibleStartTimes()))
+			return true;
+		if (hasStringValue(self.PossibleEndTimes()))
+			return true;
+		if (hasStringValue(self.PossibleContractTimeMinutesLower()))
+			return true;
+		if (hasStringValue(self.PossibleContractTimeMinutesUpper()))
+			return true;
+		return false;
 	});
 
 
