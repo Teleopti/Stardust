@@ -9,6 +9,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <param name="period">The period.</param>
 		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		IList<double?> Values(DateOnlyPeriod period);
 	}
 }
