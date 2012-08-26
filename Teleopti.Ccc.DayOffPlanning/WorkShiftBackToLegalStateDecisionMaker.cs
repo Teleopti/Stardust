@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.DayOffPlanning
         /// <param name="lockableBitArray">The lockable bit array.</param>
         /// <param name="raise">if set to <c>true</c> [raise].</param>
         /// <returns></returns>
-        public int? Execute(ILockableBitArray lockableBitArray,  bool raise, DateOnlyPeriod period)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public int? Execute(ILockableBitArray lockableBitArray,  bool raise, DateOnlyPeriod period)
         {
             IList<double?> values = _dataExtractor.Values(period);
 
