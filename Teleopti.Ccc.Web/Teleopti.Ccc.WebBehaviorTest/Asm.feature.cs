@@ -74,6 +74,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table1.AddRow(new string[] {
                         "Name",
                         "Full access to mytime"});
+            table1.AddRow(new string[] {
+                        "ViewUnpublishedSchedules",
+                        "true"});
 #line 8
  testRunner.Given("there is a role with", ((string)(null)), table1);
 #line hidden
@@ -89,7 +92,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table2.AddRow(new string[] {
                         "ShiftCategoryName",
                         "ForTest"});
-#line 11
+#line 12
  testRunner.And("there is a shift with", ((string)(null)), table2);
 #line hidden
         }
@@ -99,15 +102,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void NoPermissionToASMModule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No permission to ASM module", ((string[])(null)));
-#line 17
+#line 18
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 18
- testRunner.Given("I have the role \'No access to ASM\'");
 #line 19
- testRunner.When("I am viewing week schedule");
+ testRunner.Given("I have the role \'No access to ASM\'");
 #line 20
+ testRunner.When("I am viewing week schedule");
+#line 21
  testRunner.Then("ASM link should not be visible");
 #line hidden
             this.ScenarioCleanup();
@@ -118,19 +121,19 @@ this.FeatureBackground();
         public virtual void ShowPartOfAgentSScheduleInPopup()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show part of agent\'s schedule in popup", ((string[])(null)));
-#line 22
+#line 23
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 23
- testRunner.Given("I have the role \'Full access to mytime\'");
 #line 24
- testRunner.And("Current time is \'2030-01-01\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 25
- testRunner.When("I view my week schedule");
+ testRunner.And("Current time is \'2030-01-01\'");
 #line 26
- testRunner.And("I click ASM link");
+ testRunner.When("I view my week schedule");
 #line 27
+ testRunner.And("I click ASM link");
+#line 28
  testRunner.Then("I should see a schedule in popup");
 #line hidden
             this.ScenarioCleanup();

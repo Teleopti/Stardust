@@ -6,8 +6,9 @@
 
 Background:
 	Given there is a role with
-	| Field                    | Value             |
-	| Name                     | Full access to mytime  |
+	| Field                    | Value                 |
+	| Name                     | Full access to mytime |
+	| ViewUnpublishedSchedules | true                  |
 	And there is a shift with
 	| Field             | Value   |
 	| StartTime         | 2030-01-01 08:00   |
