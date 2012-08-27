@@ -192,7 +192,12 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 				AddMarkersToCell(e, cellValue, cellValue.SignificantPart());
 		}
 
-
+		internal override void CellClick(object sender, GridCellClickEventArgs e)
+		{
+			//handle selection when click on col header
+			if (e.RowIndex == 0)
+				e.Cancel = true;
+		}
 
 		public void SelectDateIfExists(DateOnly dateOnly)
 		{
