@@ -10,8 +10,8 @@ Background:
 	| Name                     | Full access to mytime  |
 	And there is a shift with
 	| Field             | Value   |
-	| StartTime         | 2001-01-01 08:00   |
-	| EndTime           | 2001-01-01 17:00   |
+	| StartTime         | 2030-01-01 08:00   |
+	| EndTime           | 2030-01-01 17:00   |
 	| ShiftCategoryName | ForTest |
 
 Scenario: No permission to ASM module
@@ -21,7 +21,7 @@ Scenario: No permission to ASM module
 
 Scenario: Show part of agent's schedule in popup
 	Given I have the role 'Full access to mytime'
-	And Current time is '2001-01-01'	
+	And Current time is '2030-01-01'	
 	When I view my week schedule
 	And I click ASM link
 	Then I should see a schedule in popup

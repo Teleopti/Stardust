@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			containerBuilder.RegisterModule(new DateAndTimeModule());
 			using(var container = containerBuilder.Build())
 			{
-				using (var target = new TestController(container, null, null, null, null))
+				using (var target = new TestController(container.Resolve<IModifyNow>(), null, null, null, null))
 				{
 					target.SetCurrentTime(dateSet);
 				}
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void PlainStupid()
 		{
 			var sessionSpecificDataProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
-			using (var target = new TestController(null, sessionSpecificDataProvider, null, null, null))
+			using (var target = new TestController(new Now(), sessionSpecificDataProvider, null, null, null))
 			{
 				target.BeforeScenario();
 				target.CorruptMyCookie();

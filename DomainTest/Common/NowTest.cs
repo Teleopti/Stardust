@@ -6,6 +6,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
+	/// <summary>
+	/// "Modified now" part is tested in ModifyNowTest
+	/// </summary>
 	[TestFixture]
 	public class NowTest
 	{

@@ -82,10 +82,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Value"});
             table2.AddRow(new string[] {
                         "StartTime",
-                        "2001-01-01 08:00"});
+                        "2030-01-01 08:00"});
             table2.AddRow(new string[] {
                         "EndTime",
-                        "2001-01-01 17:00"});
+                        "2030-01-01 17:00"});
             table2.AddRow(new string[] {
                         "ShiftCategoryName",
                         "ForTest"});
@@ -125,7 +125,7 @@ this.FeatureBackground();
 #line 23
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 24
- testRunner.And("Current time is \'2001-01-01\'");
+ testRunner.And("Current time is \'2030-01-01\'");
 #line 25
  testRunner.When("I view my week schedule");
 #line 26
