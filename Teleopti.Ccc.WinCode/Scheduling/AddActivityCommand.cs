@@ -79,19 +79,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				foreach (IPersonAssignment assignment in part.PersonAssignmentCollection())
 					assignment.CheckRestrictions();
 
-				
 			}
 
 
 			Presenter.ModifySchedulePart(filteredScheduleParts);
-
-			//mark period to be recalculated
-			foreach (IScheduleDay part in filteredScheduleParts)
-			{
-				IPerson person = part.Person;
-				var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
-				MarkPeriodToBeRecalculated(dateOnlyPeriod);
-			}
 			
 			//modify only refresh date for SchedulePart, we need to refresh whole absence period
 			foreach (IScheduleDay part in filteredScheduleParts)
