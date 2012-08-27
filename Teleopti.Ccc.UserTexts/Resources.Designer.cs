@@ -9906,6 +9906,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have permission to access the web portal..
+        /// </summary>
+        public static string InsufficientPermissionForWeb {
+            get {
+                return ResourceManager.GetString("InsufficientPermissionForWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Internal Note:.
         /// </summary>
         public static string InternalNoteColon {

@@ -11015,4 +11015,8 @@ These options are activated:
     <value>Type (loc)</value>
     <comment>Type used in anywhere report</comment>
   </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>You don't have permission to access the web portal.</value>
+    <comment>no permission for mytimeweb or anywhere report</comment>
+  </data>
 </root>

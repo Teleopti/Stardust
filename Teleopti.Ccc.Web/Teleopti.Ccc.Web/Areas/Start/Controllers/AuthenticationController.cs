@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					return PartialView(winView, signInModel.Value);
 
 			var authenticationResult = _authenticator.AuthenticateWindowsUser(model.DataSourceName);
-			return tryLogon(winView, signInModel, authenticationResult, AuthenticationTypeOption.Windows);
+			return tryLogon(winView, signInModel, authenticationResult, AuthenticationTypeOption.Windows, false);
 		}
 
 		[HttpPost]
@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			var authenticationResult = _authenticator.AuthenticateApplicationUser(model.DataSourceName, model.UserName,
 			                                                                      model.Password);
-			return tryLogon(appView, signInModel, authenticationResult, AuthenticationTypeOption.Application);
+			return tryLogon(appView, signInModel, authenticationResult, AuthenticationTypeOption.Application, model.IsAnywhereReport);
 		}
 
-		private ActionResult tryLogon(string currentView, Lazy<object> signInModel, AuthenticateResult authenticationResult, AuthenticationTypeOption authenticationType)
+		private ActionResult tryLogon(string currentView, Lazy<object> signInModel, AuthenticateResult authenticationResult, AuthenticationTypeOption authenticationType, bool isAnywhereReport)
 		{
 			if (!authenticationResult.Successful)
 			{
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					var businessUnitId = businessUnitViewModel.BusinessUnits.First().Id;
 					var persionId = authenticationResult.Person.Id.Value;
 					var dataSourceName = authenticationResult.DataSource.DataSourceName;
-					return tryLogOnAndReturnResult(businessUnitId, dataSourceName, persionId, authenticationType);
+					return tryLogOnAndReturnResult(businessUnitId, dataSourceName, persionId, authenticationType, isAnywhereReport);
 				default:
 					if (IsJsonRequest())
 					{
@@ -133,20 +133,20 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpPost]
 		public ActionResult Logon([Bind(Prefix = "SignIn")] SignInBusinessUnitModel model)
 		{
-			return tryLogOnAndReturnResult(model.BusinessUnitId, model.DataSourceName, model.PersonId, (AuthenticationTypeOption)model.AuthenticationType);
+			return tryLogOnAndReturnResult(model.BusinessUnitId, model.DataSourceName, model.PersonId, (AuthenticationTypeOption)model.AuthenticationType, false);
 		}
 
-		private ActionResult tryLogOnAndReturnResult(Guid buisinessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType)
+		private ActionResult tryLogOnAndReturnResult(Guid buisinessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType, bool isAnywhereReport)
 		{
 			try
 			{
-				_logon.LogOn(buisinessUnitId, dataSourceName, personId, authenticationType);
+				_logon.LogOn(buisinessUnitId, dataSourceName, personId, authenticationType, isAnywhereReport);
 
 				return _redirector.SignInRedirect();
 			}
 			catch (PermissionException)
 			{
-				var errorViewModel = new ErrorViewModel {Message = "You don't have permission to access the web portal."};
+				var errorViewModel = new ErrorViewModel { Message = Resources.InsufficientPermissionForWeb };
 				if (IsJsonRequest())
 				{
 					return PrepareAndReturnJsonError(new JsonResult {Data = errorViewModel});

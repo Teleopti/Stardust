@@ -19,5 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 		[Display(Name = "Password", Prompt = "Password", ResourceType = typeof (Resources))]
 		public string Password { get; set; }
 
+		public bool IsAnywhereReport { get; set; }
+
 	}
 }

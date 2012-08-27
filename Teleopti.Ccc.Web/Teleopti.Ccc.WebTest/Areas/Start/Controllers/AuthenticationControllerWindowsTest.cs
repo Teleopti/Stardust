@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 					new AuthenticateResult { HasMessage = false, Person = person, Successful = true, DataSource = dataSource });
 				Expect.Call(_businessUnitProvider.RetrieveBusinessUnitsForPerson(dataSource, person)).Return(new[] { businessUnit });
 
-				Expect.Call(() => _logOn.LogOn(businessUnit.Id.Value, dataSource.DataSourceName, person.Id.Value, AuthenticationTypeOption.Windows)).Throw(
+				Expect.Call(() => _logOn.LogOn(businessUnit.Id.Value, dataSource.DataSourceName, person.Id.Value, AuthenticationTypeOption.Windows, false)).Throw(
 					new PermissionException("Permission Exception"));
 
 			}
