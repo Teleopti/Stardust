@@ -104,10 +104,10 @@
 								}
 								@if (day.Feedback)
 								{
-									<!-- ko if: HasFeedbackError -->
+									<!-- ko if: DisplayFeedbackError -->
 									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
 									<!-- /ko -->
-									<!-- ko if: !HasFeedbackError() -->
+									<!-- ko if: DisplayFeedback -->
 									<div class="possible-start-times time-limitation icon leftarrow truncate" data-bind="text: PossibleStartTimes"></div>
 									<div class="possible-end-times time-limitation icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
 									<div class="possible-contract-times time-limitation icon doublearrow-blue truncate" data-bind="text: PossibleContractTimes"></div>

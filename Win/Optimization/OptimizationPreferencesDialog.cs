@@ -169,15 +169,25 @@ namespace Teleopti.Ccc.Win.Optimization
             Close();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            if (ValidateData(ExchangeDataOption.ControlsToDataSource))
+            if(extraPreferencesPanel1.ValidateDefaultValuesForTeam())
             {
-                ExchangeData(ExchangeDataOption.ControlsToDataSource);
-				SavePersonalSettings();
-				DialogResult = DialogResult.OK;
-                Close();
+                if (ValidateData(ExchangeDataOption.ControlsToDataSource))
+                {
+                    ExchangeData(ExchangeDataOption.ControlsToDataSource);
+                    SavePersonalSettings();
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
             }
+            else
+            {
+                MessageBox.Show(UserTexts.Resources.SelectAtleastOneOptimizationOption,UserTexts.Resources.OptimizationOptionMessageBox , MessageBoxButtons.OK);
+                DialogResult = DialogResult.None ;
+            }
+            
         }
 
 		private void tabControlTopLevel_SelectedIndexChanged(object sender, EventArgs e)

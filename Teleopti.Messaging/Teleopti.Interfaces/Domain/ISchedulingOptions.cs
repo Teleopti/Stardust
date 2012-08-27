@@ -278,11 +278,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         bool UseSameDayOffs { get; set; }
 
-        /// <summary>
-        /// Gets or sets value indicating if optimize should use Teams
-        /// </summary>
-        bool UseGroupOptimizing { get; set; }
-
         ///<summary>
         ///</summary>
         BlockFinderType UseBlockOptimizing { get; set; }

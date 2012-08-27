@@ -179,8 +179,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click next date")]
 		public void WhenIClickNextDate()
 		{
-			ScenarioContext.Current.Pending();
-			// this doesnt always work for because of some bug
 			_page.ReportViewNextDateNavigation.EventualClick();
 		}
 

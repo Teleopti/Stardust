@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private IDictionary<DateOnly, IScheduleDayPro> _weekAfterOuterPeriodDays;
         private readonly IDictionary<DateOnly, IScheduleDayPro> _unLockedDays = new Dictionary<DateOnly, IScheduleDayPro>();
         private readonly IScheduleRange _activeScheduleRange;
-        //private IList<DateOnly> _userLockedDates = new List<DateOnly>();
+		private DateOnlyPeriod _selectedPeriod;
 
         #endregion
 
@@ -195,7 +195,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             get { return _activeScheduleRange; }
         }
 
-		public DateOnlyPeriod SelectedPeriod { get; set; }
+    	[Obsolete("Do not use this as it can return any period, not just the period in this matrix")]
+		public DateOnlyPeriod SelectedPeriod
+    	{
+    		get { return _selectedPeriod; }
+    		set { _selectedPeriod = value; }
+    	}
 
     	#endregion
 

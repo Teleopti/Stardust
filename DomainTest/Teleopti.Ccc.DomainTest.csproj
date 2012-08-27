@@ -224,17 +224,19 @@
     </Compile>
     <Compile Include="Optimization\GroupDayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerCreatorTest.cs" />
-    <Compile Include="Optimization\GroupDayOffSingleOptimizerTest.cs" />
+    <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToAddTest.cs" />
+    <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemoveTest.cs" />
     <Compile Include="Optimization\DailyBoostedSkillForecastAndScheduledValueCalculatorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerConflictHandlerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidatorTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerTest.cs" />
     <Compile Include="Optimization\GroupMatrixContainerCreatorTest.cs" />
     <Compile Include="Optimization\GroupMatrixHelperTest.cs" />
-    <Compile Include="Optimization\GroupPersonPreOptimizationCheckerTest.cs" />
-    <Compile Include="Optimization\GroupPersonSameDayOffsCheckerTest.cs" />
-    <Compile Include="Optimization\GroupPersonSameForPersonOnDateCheckerTest.cs" />
-    <Compile Include="Optimization\GroupPersonSchedulePeriodCheckerTest.cs" />
+    <Compile Include="Optimization\GroupOptimizationValidatorRunnerTest.cs" />
+    <Compile Include="Optimization\GroupOptimizerFindMatrixesForGroupTest.cs" />
+    <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroupTest.cs" />
+    <Compile Include="Optimization\GroupPersonBuilderForOptimizationTest.cs" />
+    <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameMatrixTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
@@ -248,6 +250,7 @@
     <Compile Include="Optimization\SchedulingOptionsCreatorTest1.cs" />
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSettingTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSettingTest.cs" />
+    <Compile Include="Optimization\ShiftsPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />

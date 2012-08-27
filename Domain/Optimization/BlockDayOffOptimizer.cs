@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
 
             if (!_dayOffDecisionMakerExecuter.Execute(_workingBitArray, originalArray, matrix, originalStateContainer,
-                                                      false, false))
+                                                      false, false, true))
                 return false;
 
             

@@ -10,6 +10,7 @@ ECHO Rootdir is: "%ROOTDIR%" >> Install.log
 ::================
 ::Install Services
 ::================
+ECHO --------------------- >> Install.log
 ECHO Start Service install >> Install.log
 SC QUERY AnalyticsEtlService
 IF NOT ERRORLEVEL 1060 (
@@ -33,13 +34,29 @@ ECHO Done install! >> Install.log
 ::================
 ::Install Report Viewer
 ::================
+ECHO --------------------- >> Install.log
 ECHO installing Report Viewer  >> Install.log
 CALL "ReportViewer2010.exe" /norestart /log "%ROOTDIR%\ReportViewer2010-installlog.htm" /install /q
 ECHO installing Report Viewer. Done  >> Install.log
 
+
+::================
+::Install Powershell ISE
+::================
+ECHO --------------------- >> Install.log
+ECHO Set unrestricted Powershell scripting
+powershell set-executionpolicy unrestricted >> Install.log
+ECHO Set unrestricted Powershell scripting. Done >> Install.log
+
+ECHO Install Powershel ISE >> Install.log
+PowerShell .\InstallPowershell-ISE.ps1 >> Install.log
+ECHO Install Powershel ISE. Done >> Install.log
+
+
 ::================
 ::Start Services
 ::================
+ECHO --------------------- >> Install.log
 ping 127.0.0.1 -n 5 > nul
 
 ECHO. >> Install.log
@@ -53,6 +70,7 @@ IF %ERRORLEVEL% NEQ 0 ECHO Error: Service bus could not be started!! >> Install.
 
 ECHO.
 ECHO Done!
+ECHO --------------------- >> Install.log
 
 GOTO :eof
 

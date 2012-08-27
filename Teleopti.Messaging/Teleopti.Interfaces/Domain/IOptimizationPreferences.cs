@@ -326,7 +326,18 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The group page on compare with.</value>
         IGroupPageLight GroupPageOnCompareWith { get; set; }
 
-        
+		/// <summary>
+		/// 
+		/// </summary>
+		bool UseGroupSchedulingCommonStart { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		bool UseGroupSchedulingCommonEnd { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		bool UseGroupSchedulingCommonCategory { get; set; }
     }
 
     /// <summary>

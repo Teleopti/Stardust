@@ -62,7 +62,6 @@
 			this.checkBoxUseGroupScheduling = new System.Windows.Forms.CheckBox();
 			this.checkBoxUseBlockScheduling = new System.Windows.Forms.CheckBox();
 			this.radioButtonBetweenDayOff = new System.Windows.Forms.RadioButton();
-			this.checkBoxUseSameDayOffs = new System.Windows.Forms.CheckBox();
 			this.radioButtonSchedulePeriod = new System.Windows.Forms.RadioButton();
 			this.comboBoxGrouping = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.checkBoxCommonStart = new System.Windows.Forms.CheckBox();
@@ -336,7 +335,7 @@
 			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvTag.Location = new System.Drawing.Point(136, 3);
 			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
-			this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 21);
+			this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 19);
 			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvTag.TabIndex = 11;
 			// 
@@ -372,9 +371,9 @@
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 4;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 47.45763F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 46.51087F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 52.54237F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 53.48913F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(432, 496);
 			this.tableLayoutPanel2.TabIndex = 0;
@@ -382,7 +381,7 @@
 			// lblFairness
 			// 
 			this.lblFairness.AutoSize = true;
-			this.lblFairness.Location = new System.Drawing.Point(3, 217);
+			this.lblFairness.Location = new System.Drawing.Point(3, 213);
 			this.lblFairness.Margin = new System.Windows.Forms.Padding(3);
 			this.lblFairness.Name = "lblFairness";
 			this.lblFairness.Size = new System.Drawing.Size(56, 13);
@@ -392,21 +391,21 @@
 			// tableLayoutPanel5
 			// 
 			this.tableLayoutPanel5.ColumnCount = 3;
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 134F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 162F));
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 72F));
 			this.tableLayoutPanel5.Controls.Add(this.panel1, 0, 0);
 			this.tableLayoutPanel5.Controls.Add(this.label5, 0, 1);
 			this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupingFairness, 1, 1);
 			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 237);
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 233);
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 4;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(426, 232);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(426, 236);
 			this.tableLayoutPanel5.TabIndex = 25;
 			// 
 			// panel1
@@ -470,7 +469,7 @@
 			this.comboBoxGroupingFairness.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxGroupingFairness.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(137, 94);
+			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(165, 94);
 			this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
 			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 21);
 			this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -483,7 +482,7 @@
 			this.pnlBlockTeamScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.pnlBlockTeamScheduling.Location = new System.Drawing.Point(3, 3);
 			this.pnlBlockTeamScheduling.Name = "pnlBlockTeamScheduling";
-			this.pnlBlockTeamScheduling.Size = new System.Drawing.Size(426, 208);
+			this.pnlBlockTeamScheduling.Size = new System.Drawing.Size(426, 204);
 			this.pnlBlockTeamScheduling.TabIndex = 24;
 			// 
 			// tableLayoutPanel4
@@ -491,12 +490,11 @@
 			this.tableLayoutPanel4.ColumnCount = 4;
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 147F));
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 184F));
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 123F));
 			this.tableLayoutPanel4.Controls.Add(this.checkBoxUseGroupScheduling, 0, 3);
 			this.tableLayoutPanel4.Controls.Add(this.checkBoxUseBlockScheduling, 0, 0);
 			this.tableLayoutPanel4.Controls.Add(this.radioButtonBetweenDayOff, 1, 1);
-			this.tableLayoutPanel4.Controls.Add(this.checkBoxUseSameDayOffs, 1, 7);
 			this.tableLayoutPanel4.Controls.Add(this.radioButtonSchedulePeriod, 1, 2);
 			this.tableLayoutPanel4.Controls.Add(this.comboBoxGrouping, 2, 3);
 			this.tableLayoutPanel4.Controls.Add(this.checkBoxCommonStart, 1, 5);
@@ -513,9 +511,8 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(426, 208);
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(426, 204);
 			this.tableLayoutPanel4.TabIndex = 1;
 			// 
 			// checkBoxUseGroupScheduling
@@ -557,19 +554,6 @@
 			this.radioButtonBetweenDayOff.UseVisualStyleBackColor = true;
 			this.radioButtonBetweenDayOff.CheckedChanged += new System.EventHandler(this.radioButtonBetweenDayOffCheckedChanged);
 			// 
-			// checkBoxUseSameDayOffs
-			// 
-			this.checkBoxUseSameDayOffs.AutoSize = true;
-			this.tableLayoutPanel4.SetColumnSpan(this.checkBoxUseSameDayOffs, 3);
-			this.checkBoxUseSameDayOffs.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.checkBoxUseSameDayOffs.Location = new System.Drawing.Point(33, 192);
-			this.checkBoxUseSameDayOffs.Name = "checkBoxUseSameDayOffs";
-			this.checkBoxUseSameDayOffs.Size = new System.Drawing.Size(433, 13);
-			this.checkBoxUseSameDayOffs.TabIndex = 70;
-			this.checkBoxUseSameDayOffs.Text = "xxUseSameDayOffs";
-			this.checkBoxUseSameDayOffs.UseVisualStyleBackColor = true;
-			this.checkBoxUseSameDayOffs.CheckedChanged += new System.EventHandler(this.checkBoxUseSameDayOffsCheckedChanged);
-			// 
 			// radioButtonSchedulePeriod
 			// 
 			this.radioButtonSchedulePeriod.AutoSize = true;
@@ -589,7 +573,7 @@
 			this.comboBoxGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxGrouping.Location = new System.Drawing.Point(165, 78);
 			this.comboBoxGrouping.Name = "comboBoxGrouping";
-			this.comboBoxGrouping.Size = new System.Drawing.Size(151, 21);
+			this.comboBoxGrouping.Size = new System.Drawing.Size(173, 21);
 			this.comboBoxGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxGrouping.TabIndex = 35;
 			this.comboBoxGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);
@@ -963,8 +947,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.CheckBox checkBoxUseGroupScheduling;
         private System.Windows.Forms.CheckBox checkBoxUseBlockScheduling;
-        private System.Windows.Forms.RadioButton radioButtonBetweenDayOff;
-        private System.Windows.Forms.CheckBox checkBoxUseSameDayOffs;
+		private System.Windows.Forms.RadioButton radioButtonBetweenDayOff;
         private System.Windows.Forms.CheckBox checkBoxCommonCategory;
         private System.Windows.Forms.RadioButton radioButtonSchedulePeriod;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGrouping;
