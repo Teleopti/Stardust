@@ -11015,4 +11015,12 @@ These options are activated:
     <value>Type (loc)</value>
     <comment>Type used in anywhere report</comment>
   </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>From Contract</value>
+    <comment>Contract time is from contract</comment>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>From Schedule Period</value>
+    <comment>Contract Time is from schedule period</comment>
+  </data>
 </root>
