@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory
 
 		public AsmViewModel CreateViewModel()
 		{
-			var today = _now.Date();
+			var today = _now.DateOnly();
 			var loadPeriod = new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1));
 			var schedules = _scheduleProvider.GetScheduleForPeriod(loadPeriod);
 			return _mapper.Map(schedules);

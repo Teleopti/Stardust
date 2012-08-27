@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.ViewModelFactory
 			var mapper = MockRepository.GenerateMock<IAsmViewModelMapper>();
 			var nowProvider = MockRepository.GenerateMock<INow>();
 
-			nowProvider.Expect(n => n.Date()).Return(today);
+			nowProvider.Expect(n => n.DateOnly()).Return(today);
 			scheduleProvider.Expect(s => s.GetScheduleForPeriod(expectedPeriod)).Return(scheduleDays);
 			mapper.Expect(m => m.Map(scheduleDays)).Return(viewModel);
 			var target = new AsmViewModelFactory(nowProvider,scheduleProvider, mapper);

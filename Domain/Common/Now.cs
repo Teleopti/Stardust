@@ -7,23 +7,23 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		private DateTime? _fixedDateTime;
 
-		public DateTime LocalTime()
+		public DateTime LocalDateTime()
 		{
 			return _fixedDateTime.HasValue ? 
 					_fixedDateTime.Value.ToLocalTime() : 
 					DateTime.Now;
 		}
 
-		public DateTime UtcTime()
+		public DateTime UtcDateTime()
 		{
 			return _fixedDateTime.HasValue ? 
 				_fixedDateTime.Value : 
 				DateTime.UtcNow;
 		}
 
-		public DateOnly Date()
+		public DateOnly DateOnly()
 		{
-			return new DateOnly(LocalTime());
+			return new DateOnly(LocalDateTime());
 		}
 
 		void IModifyNow.SetNow(DateTime? dateTime)

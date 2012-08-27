@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldReturnFixedDate()
 		{
-			target.Date().Should().Be.EqualTo(new DateOnly(dateSet));
-			target.LocalTime().Should().Be.EqualTo(dateSet.ToLocalTime());
-			target.UtcTime().Should().Be.EqualTo(dateSet);
+			target.DateOnly().Should().Be.EqualTo(new DateOnly(dateSet));
+			target.LocalDateTime().Should().Be.EqualTo(dateSet.ToLocalTime());
+			target.UtcDateTime().Should().Be.EqualTo(dateSet);
 		}
 
 		[Test]
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			var nu = DateTime.UtcNow;
 			((IModifyNow) target).SetNow(null);
-			target.UtcTime().Should().Be.IncludedIn(nu.AddMinutes(-1), nu.AddMinutes(1));
+			target.UtcDateTime().Should().Be.IncludedIn(nu.AddMinutes(-1), nu.AddMinutes(1));
 		}
 	}
 }

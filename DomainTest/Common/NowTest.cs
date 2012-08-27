@@ -24,22 +24,22 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldBeCurrentTime()
 		{
 			var nu = DateTime.Now;
-			target.LocalTime().Should().Be.GreaterThan(nu.AddSeconds(-1));
-			target.LocalTime().Should().Be.LessThan(nu.AddSeconds(1));
+			target.LocalDateTime().Should().Be.GreaterThan(nu.AddSeconds(-1));
+			target.LocalDateTime().Should().Be.LessThan(nu.AddSeconds(1));
 		}
 
 		[Test]
 		public void ShouldBeCurrentUtcTime()
 		{
 			var nu = DateTime.UtcNow;
-			target.UtcTime().Should().Be.GreaterThan(nu.AddSeconds(-1));
-			target.UtcTime().Should().Be.LessThan(nu.AddSeconds(1));
+			target.UtcDateTime().Should().Be.GreaterThan(nu.AddSeconds(-1));
+			target.UtcDateTime().Should().Be.LessThan(nu.AddSeconds(1));
 		}
 
 		[Test]
 		public void ShouldReturnCurrentDateAsDateOnly()
 		{
-			target.Date().Date.Should().Be.EqualTo(DateTime.Now.Date);
+			target.DateOnly().Date.Should().Be.EqualTo(DateTime.Now.Date);
 		}
 	}
 }

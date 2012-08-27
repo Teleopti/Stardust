@@ -10,16 +10,16 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Returns curent datetime
 		/// </summary>
-		DateTime LocalTime();
+		DateTime LocalDateTime();
 
 		/// <summary>
 		/// Returns curent datetime in UTC
 		/// </summary>
-		DateTime UtcTime();
+		DateTime UtcDateTime();
 
 		/// <summary>
 		/// Returns current date
 		/// </summary>
-		DateOnly Date();
+		DateOnly DateOnly();
 	}
 }

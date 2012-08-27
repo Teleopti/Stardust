@@ -24,17 +24,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 
 			#region INow Members
 
-			public DateTime LocalTime()
+			public DateTime LocalDateTime()
 			{
 				return _now;
 			}
 
-			public DateTime UtcTime()
+			public DateTime UtcDateTime()
 			{
 				return _now.ToUniversalTime();
 			}
 
-			public DateOnly Date()
+			public DateOnly DateOnly()
 			{
 				return new DateOnly();
 			}
