@@ -15,10 +15,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public class AddAbsenceCommand : AddLayerCommand
 	{
+		private IResourceOptimizationHelper _resourceOptimizationHelper;
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public AddAbsenceCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, ISchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts)
+		public AddAbsenceCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, ISchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts)//, IResourceOptimizationHelper resourceOptimizationHelper)
 			: base(schedulerStateHolder, scheduleViewBase, presenter, scheduleParts ?? scheduleViewBase.CurrentColumnSelectedSchedules())
 		{
+			//_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -97,6 +100,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				}
 
+				MarkPeriodToBeRecalculated(dateOnlyPeriod);
 				ScheduleViewBase.RefreshRangeForAgentPeriod(selectedPerson, absencePeriod);
 			}
 			
