@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
