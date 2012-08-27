@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public ViewResult BeforeScenario()
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
-			//updateIocNow(new Now());
+			updateIocNow(new Now());
 			var viewModel = new TestMessageViewModel
 								{
 									Title = "Setting up for scenario",
@@ -40,8 +40,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 									ListItems = new[]
 									            	{
 									            		"Restoring Ccc7 database",
-														"Clearing Analytics database",
-														"Removing browser cookie"
+															"Clearing Analytics database",
+															"Removing browser cookie",
+															"Setting default implementation for INow"
 									            	}
 								};
 			return View("Message", viewModel);
@@ -93,13 +94,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ViewResult SetCurrentTime(DateTime dateSet)
 		{
-			var newTime = new ModifiedNow(dateSet);
+			var utcDate = new DateTime(dateSet.Ticks, DateTimeKind.Utc);
+			var newTime = new ModifiedNow(utcDate);
 			updateIocNow(newTime);
 
 			var viewModel = new TestMessageViewModel
 			{
 				Title = "Time changed on server!",
-				Message = "INow component now thinks time is " + dateSet
+				Message = "INow component now thinks time is " + utcDate
 			};
 			return View("Message", viewModel);
 		}
@@ -107,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private void updateIocNow(INow newTime)
 		{
 			var updater = new ContainerBuilder();
-			updater.Register(c => newTime).As<INow>();
+			updater.Register(c => newTime).As<INow>().SingleInstance();
 			updater.Update(_container.ComponentRegistry);
 		}
 	}
