@@ -54,8 +54,11 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 				selectbox.selectbox('show');
 			if (selectbox.selectbox('contains', teamId))
 				selectbox.selectbox('select', teamId);
-			else
-				_navigateTo(_currentFixedDate());
+			else {
+				var date = _currentFixedDate();
+				if (date)
+					_navigateTo(date);
+			}
 		});
 	}
 
@@ -80,7 +83,11 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
 
 	function _currentFixedDate() {
-		return $('#TeamSchedule-body').data('mytime-periodselection').Date;
+		if ($('#TeamSchedule-body').data('mytime-periodselection')) {
+			return $('#TeamSchedule-body').data('mytime-periodselection').Date;
+		}else {
+			return undefined;
+		}
 	}
 
 	function _currentUrlDate() {
