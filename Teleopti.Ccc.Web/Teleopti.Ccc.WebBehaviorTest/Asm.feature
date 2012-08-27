@@ -26,6 +26,7 @@ Background:
 	| EndTime           | 2030-01-01 17:00   |
 	| ShiftCategoryName | ForTest |
 
+@ignore
 Scenario: No permission to ASM module
 	Given I have the role 'No access to ASM'
 	When I am viewing week schedule

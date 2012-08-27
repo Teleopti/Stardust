@@ -132,18 +132,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("No permission to ASM module")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void NoPermissionToASMModule()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No permission to ASM module", ((string[])(null)));
-#line 29
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No permission to ASM module", new string[] {
+                        "ignore"});
+#line 30
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 30
- testRunner.Given("I have the role \'No access to ASM\'");
 #line 31
- testRunner.When("I am viewing week schedule");
+ testRunner.Given("I have the role \'No access to ASM\'");
 #line 32
+ testRunner.When("I am viewing week schedule");
+#line 33
  testRunner.Then("ASM link should not be visible");
 #line hidden
             this.ScenarioCleanup();
@@ -154,19 +156,19 @@ this.FeatureBackground();
         public virtual void ShowPartOfAgentSScheduleInPopup()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show part of agent\'s schedule in popup", ((string[])(null)));
-#line 34
+#line 35
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 35
- testRunner.Given("I have the role \'Full access to mytime\'");
 #line 36
- testRunner.And("Current time is \'2030-01-01\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 37
- testRunner.When("I view my week schedule");
+ testRunner.And("Current time is \'2030-01-01\'");
 #line 38
- testRunner.And("I click ASM link");
+ testRunner.When("I view my week schedule");
 #line 39
+ testRunner.And("I click ASM link");
+#line 40
  testRunner.Then("I should see a schedule in popup");
 #line hidden
             this.ScenarioCleanup();
