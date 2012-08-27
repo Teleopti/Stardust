@@ -78,11 +78,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.numericUpDownNegativeDayOff = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownPositiveDayOff = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.textBoxExtAvgWorkTimePerDay = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-            this.AutoLabelFullDayAbsence = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.radioButtonFromSchedule = new System.Windows.Forms.RadioButton();
             this.radioButtonFromContract = new System.Windows.Forms.RadioButton();
+            this.textBoxExtAvgWorkTimePerDay = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
             this.tableLayoutPanelSubHeader3 = new System.Windows.Forms.TableLayoutPanel();
             this.labelSubHeader3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
@@ -109,7 +107,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNegativeDayOff)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPositiveDayOff)).BeginInit();
             this.tableLayoutPanel4.SuspendLayout();
-            this.tableLayoutPanel7.SuspendLayout();
             this.tableLayoutPanelSubHeader3.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
@@ -132,9 +129,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanelBody.RowCount = 5;
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 92F));
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 387F));
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 360F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanelBody.Size = new System.Drawing.Size(809, 628);
             this.tableLayoutPanelBody.TabIndex = 55;
             // 
@@ -301,7 +299,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(809, 387);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(809, 360);
             this.tableLayoutPanel5.TabIndex = 2;
             // 
             // tableLayoutPanelSubHeader2
@@ -365,8 +363,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel1, 1, 3);
             this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel2, 1, 4);
             this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel4, 1, 2);
-            this.tableLayoutPanel6.Controls.Add(this.AutoLabelFullDayAbsence, 0, 13);
-            this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel7, 1, 13);
             this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 29);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 14;
@@ -384,7 +380,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(803, 355);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(803, 328);
             this.tableLayoutPanel6.TabIndex = 0;
             // 
             // checkBoxAdjustTimeBankWithPartTimePercentage
@@ -392,7 +388,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.checkBoxAdjustTimeBankWithPartTimePercentage.Location = new System.Drawing.Point(303, 308);
             this.checkBoxAdjustTimeBankWithPartTimePercentage.Name = "checkBoxAdjustTimeBankWithPartTimePercentage";
             this.checkBoxAdjustTimeBankWithPartTimePercentage.Size = new System.Drawing.Size(17, 19);
-            this.checkBoxAdjustTimeBankWithPartTimePercentage.TabIndex = 13;
+            this.checkBoxAdjustTimeBankWithPartTimePercentage.TabIndex = 67;
             this.checkBoxAdjustTimeBankWithPartTimePercentage.ThemesEnabled = false;
             this.checkBoxAdjustTimeBankWithPartTimePercentage.CheckStateChanged += new System.EventHandler(this.checkBoxAdjustTimeBankWithPartTimePercentage_CheckStateChanged);
             // 
@@ -401,7 +397,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.checkBoxAdjustTimeBankWithSeasonality.Location = new System.Drawing.Point(303, 281);
             this.checkBoxAdjustTimeBankWithSeasonality.Name = "checkBoxAdjustTimeBankWithSeasonality";
             this.checkBoxAdjustTimeBankWithSeasonality.Size = new System.Drawing.Size(17, 19);
-            this.checkBoxAdjustTimeBankWithSeasonality.TabIndex = 12;
+            this.checkBoxAdjustTimeBankWithSeasonality.TabIndex = 66;
             this.checkBoxAdjustTimeBankWithSeasonality.ThemesEnabled = false;
             this.checkBoxAdjustTimeBankWithSeasonality.CheckStateChanged += new System.EventHandler(this.checkBoxAdjustTimeBankWithSeasonality_CheckStateChanged);
             // 
@@ -439,7 +435,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.timeSpanTextBoxPlanningMax.MaximumValue = System.TimeSpan.Parse("4.03:59:00");
             this.timeSpanTextBoxPlanningMax.Name = "timeSpanTextBoxPlanningMax";
             this.timeSpanTextBoxPlanningMax.Size = new System.Drawing.Size(74, 22);
-            this.timeSpanTextBoxPlanningMax.TabIndex = 11;
+            this.timeSpanTextBoxPlanningMax.TabIndex = 63;
             this.timeSpanTextBoxPlanningMax.TimeSpanBoxHeight = 21;
             this.timeSpanTextBoxPlanningMax.TimeSpanBoxWidth = 33;
             // 
@@ -453,7 +449,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.timeSpanTextBoxPlanningMin.MaximumValue = System.TimeSpan.Parse("00:00:00");
             this.timeSpanTextBoxPlanningMin.Name = "timeSpanTextBoxPlanningMin";
             this.timeSpanTextBoxPlanningMin.Size = new System.Drawing.Size(74, 22);
-            this.timeSpanTextBoxPlanningMin.TabIndex = 10;
+            this.timeSpanTextBoxPlanningMin.TabIndex = 62;
             this.timeSpanTextBoxPlanningMin.TimeSpanBoxHeight = 21;
             this.timeSpanTextBoxPlanningMin.TimeSpanBoxWidth = 33;
             // 
@@ -600,7 +596,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtMaxTimePerWeek.MaximumValue = System.TimeSpan.Parse("3.12:00:00");
             this.textBoxExtMaxTimePerWeek.Name = "textBoxExtMaxTimePerWeek";
             this.textBoxExtMaxTimePerWeek.Size = new System.Drawing.Size(74, 22);
-            this.textBoxExtMaxTimePerWeek.TabIndex = 6;
+            this.textBoxExtMaxTimePerWeek.TabIndex = 4;
             this.textBoxExtMaxTimePerWeek.TimeSpanBoxHeight = 21;
             this.textBoxExtMaxTimePerWeek.TimeSpanBoxWidth = 33;
             // 
@@ -614,7 +610,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtNightlyRestTime.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
             this.textBoxExtNightlyRestTime.Name = "textBoxExtNightlyRestTime";
             this.textBoxExtNightlyRestTime.Size = new System.Drawing.Size(74, 22);
-            this.textBoxExtNightlyRestTime.TabIndex = 7;
+            this.textBoxExtNightlyRestTime.TabIndex = 5;
             this.textBoxExtNightlyRestTime.TimeSpanBoxHeight = 21;
             this.textBoxExtNightlyRestTime.TimeSpanBoxWidth = 33;
             // 
@@ -628,7 +624,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtWeeklyRestTime.MaximumValue = System.TimeSpan.Parse("2.08:00:00");
             this.textBoxExtWeeklyRestTime.Name = "textBoxExtWeeklyRestTime";
             this.textBoxExtWeeklyRestTime.Size = new System.Drawing.Size(74, 22);
-            this.textBoxExtWeeklyRestTime.TabIndex = 8;
+            this.textBoxExtWeeklyRestTime.TabIndex = 6;
             this.textBoxExtWeeklyRestTime.TimeSpanBoxHeight = 21;
             this.textBoxExtWeeklyRestTime.TimeSpanBoxWidth = 33;
             // 
@@ -642,7 +638,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExMinTimeSchedulePeriod.MaximumValue = System.TimeSpan.Parse("83.08:00:00");
             this.textBoxExMinTimeSchedulePeriod.Name = "textBoxExMinTimeSchedulePeriod";
             this.textBoxExMinTimeSchedulePeriod.Size = new System.Drawing.Size(74, 22);
-            this.textBoxExMinTimeSchedulePeriod.TabIndex = 9;
+            this.textBoxExMinTimeSchedulePeriod.TabIndex = 59;
             this.textBoxExMinTimeSchedulePeriod.TimeSpanBoxHeight = 21;
             this.textBoxExMinTimeSchedulePeriod.TimeSpanBoxWidth = 33;
             // 
@@ -662,7 +658,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(497, 23);
-            this.tableLayoutPanel1.TabIndex = 2;
+            this.tableLayoutPanel1.TabIndex = 68;
             // 
             // timeSpanTextBoxNegativeTolerance
             // 
@@ -675,7 +671,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.timeSpanTextBoxNegativeTolerance.MaximumValue = System.TimeSpan.Parse("12.00:00:00");
             this.timeSpanTextBoxNegativeTolerance.Name = "timeSpanTextBoxNegativeTolerance";
             this.timeSpanTextBoxNegativeTolerance.Size = new System.Drawing.Size(67, 22);
-            this.timeSpanTextBoxNegativeTolerance.TabIndex = 2;
+            this.timeSpanTextBoxNegativeTolerance.TabIndex = 3;
             this.timeSpanTextBoxNegativeTolerance.TimeSpanBoxHeight = 21;
             this.timeSpanTextBoxNegativeTolerance.TimeSpanBoxWidth = 33;
             // 
@@ -690,7 +686,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.timeSpanTextBoxPositiveTolerance.MaximumValue = System.TimeSpan.Parse("12.00:00:00");
             this.timeSpanTextBoxPositiveTolerance.Name = "timeSpanTextBoxPositiveTolerance";
             this.timeSpanTextBoxPositiveTolerance.Size = new System.Drawing.Size(57, 22);
-            this.timeSpanTextBoxPositiveTolerance.TabIndex = 3;
+            this.timeSpanTextBoxPositiveTolerance.TabIndex = 2;
             this.timeSpanTextBoxPositiveTolerance.TimeSpanBoxHeight = 21;
             this.timeSpanTextBoxPositiveTolerance.TimeSpanBoxWidth = 33;
             // 
@@ -722,7 +718,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(497, 23);
-            this.tableLayoutPanel2.TabIndex = 3;
+            this.tableLayoutPanel2.TabIndex = 68;
             // 
             // autoLabel12
             // 
@@ -742,7 +738,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.numericUpDownNegativeDayOff.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
             this.numericUpDownNegativeDayOff.Name = "numericUpDownNegativeDayOff";
             this.numericUpDownNegativeDayOff.Size = new System.Drawing.Size(45, 21);
-            this.numericUpDownNegativeDayOff.TabIndex = 4;
+            this.numericUpDownNegativeDayOff.TabIndex = 59;
             this.numericUpDownNegativeDayOff.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDownNegativeDayOff.ValueChanged += new System.EventHandler(this.numericUpDownNegativeDayOff_ValueChanged);
             // 
@@ -752,7 +748,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.numericUpDownPositiveDayOff.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
             this.numericUpDownPositiveDayOff.Name = "numericUpDownPositiveDayOff";
             this.numericUpDownPositiveDayOff.Size = new System.Drawing.Size(45, 21);
-            this.numericUpDownPositiveDayOff.TabIndex = 5;
+            this.numericUpDownPositiveDayOff.TabIndex = 59;
             this.numericUpDownPositiveDayOff.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDownPositiveDayOff.ValueChanged += new System.EventHandler(this.numericUpDownPositiveDayOff_ValueChanged);
             // 
@@ -762,6 +758,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Controls.Add(this.radioButtonFromSchedule, 2, 0);
+            this.tableLayoutPanel4.Controls.Add(this.radioButtonFromContract, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.textBoxExtAvgWorkTimePerDay, 0, 0);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(303, 34);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -769,6 +767,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(493, 21);
             this.tableLayoutPanel4.TabIndex = 1;
+            // 
+            // radioButtonFromSchedule
+            // 
+            this.radioButtonFromSchedule.AutoSize = true;
+            this.radioButtonFromSchedule.Location = new System.Drawing.Point(314, 3);
+            this.radioButtonFromSchedule.Name = "radioButtonFromSchedule";
+            this.radioButtonFromSchedule.Size = new System.Drawing.Size(134, 15);
+            this.radioButtonFromSchedule.TabIndex = 3;
+            this.radioButtonFromSchedule.Text = "xxFromSchedulePeriod";
+            this.radioButtonFromSchedule.UseVisualStyleBackColor = true;
+            this.radioButtonFromSchedule.CheckedChanged += new System.EventHandler(this.radioButtonFromSchedule_CheckedChanged);
+            // 
+            // radioButtonFromContract
+            // 
+            this.radioButtonFromContract.AutoSize = true;
+            this.radioButtonFromContract.Checked = true;
+            this.radioButtonFromContract.Location = new System.Drawing.Point(133, 3);
+            this.radioButtonFromContract.Name = "radioButtonFromContract";
+            this.radioButtonFromContract.Size = new System.Drawing.Size(103, 15);
+            this.radioButtonFromContract.TabIndex = 2;
+            this.radioButtonFromContract.TabStop = true;
+            this.radioButtonFromContract.Text = "xxFromContract";
+            this.radioButtonFromContract.UseVisualStyleBackColor = true;
+            this.radioButtonFromContract.CheckedChanged += new System.EventHandler(this.radioButtonFromContract_CheckedChanged);
             // 
             // textBoxExtAvgWorkTimePerDay
             // 
@@ -784,56 +806,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtAvgWorkTimePerDay.TimeSpanBoxHeight = 21;
             this.textBoxExtAvgWorkTimePerDay.TimeSpanBoxWidth = 33;
             // 
-            // AutoLabelFullDayAbsence
-            // 
-            this.AutoLabelFullDayAbsence.AutoSize = false;
-            this.AutoLabelFullDayAbsence.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AutoLabelFullDayAbsence.Location = new System.Drawing.Point(3, 332);
-            this.AutoLabelFullDayAbsence.Name = "AutoLabelFullDayAbsence";
-            this.AutoLabelFullDayAbsence.Size = new System.Drawing.Size(294, 29);
-            this.AutoLabelFullDayAbsence.TabIndex = 69;
-            this.AutoLabelFullDayAbsence.Text = "xxFullDayAbsence";
-            this.AutoLabelFullDayAbsence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // tableLayoutPanel7
-            // 
-            this.tableLayoutPanel7.ColumnCount = 2;
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel7.Controls.Add(this.radioButtonFromSchedule, 1, 0);
-            this.tableLayoutPanel7.Controls.Add(this.radioButtonFromContract, 0, 0);
-            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(303, 335);
-            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
-            this.tableLayoutPanel7.RowCount = 1;
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(497, 23);
-            this.tableLayoutPanel7.TabIndex = 70;
-            // 
-            // radioButtonFromSchedule
-            // 
-            this.radioButtonFromSchedule.AutoSize = true;
-            this.radioButtonFromSchedule.Location = new System.Drawing.Point(153, 3);
-            this.radioButtonFromSchedule.Name = "radioButtonFromSchedule";
-            this.radioButtonFromSchedule.Size = new System.Drawing.Size(134, 17);
-            this.radioButtonFromSchedule.TabIndex = 15;
-            this.radioButtonFromSchedule.Text = "xxFromSchedulePeriod";
-            this.radioButtonFromSchedule.UseVisualStyleBackColor = true;
-            this.radioButtonFromSchedule.CheckedChanged += new System.EventHandler(this.radioButtonFromSchedule_CheckedChanged);
-            // 
-            // radioButtonFromContract
-            // 
-            this.radioButtonFromContract.AutoSize = true;
-            this.radioButtonFromContract.Checked = true;
-            this.radioButtonFromContract.Location = new System.Drawing.Point(3, 3);
-            this.radioButtonFromContract.Name = "radioButtonFromContract";
-            this.radioButtonFromContract.Size = new System.Drawing.Size(103, 17);
-            this.radioButtonFromContract.TabIndex = 14;
-            this.radioButtonFromContract.TabStop = true;
-            this.radioButtonFromContract.Text = "xxFromContract";
-            this.radioButtonFromContract.UseVisualStyleBackColor = true;
-            this.radioButtonFromContract.CheckedChanged += new System.EventHandler(this.radioButtonFromContract_CheckedChanged);
-            // 
             // tableLayoutPanelSubHeader3
             // 
             this.tableLayoutPanelSubHeader3.BackColor = System.Drawing.Color.LightSteelBlue;
@@ -841,7 +813,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanelSubHeader3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelSubHeader3.Controls.Add(this.labelSubHeader3, 0, 0);
             this.tableLayoutPanelSubHeader3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelSubHeader3.Location = new System.Drawing.Point(3, 515);
+            this.tableLayoutPanelSubHeader3.Location = new System.Drawing.Point(3, 488);
             this.tableLayoutPanelSubHeader3.Name = "tableLayoutPanelSubHeader3";
             this.tableLayoutPanelSubHeader3.RowCount = 1;
             this.tableLayoutPanelSubHeader3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -871,11 +843,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanel9.Controls.Add(this.checkedListBoxMultiplicatorDefenitionSets, 1, 0);
             this.tableLayoutPanel9.Controls.Add(this.labelConnectedMultiplicatorDefinitionSets, 0, 0);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 548);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 521);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             this.tableLayoutPanel9.RowCount = 1;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(803, 77);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(803, 104);
             this.tableLayoutPanel9.TabIndex = 1;
             // 
             // checkedListBoxMultiplicatorDefenitionSets
@@ -886,7 +858,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.checkedListBoxMultiplicatorDefenitionSets.FormattingEnabled = true;
             this.checkedListBoxMultiplicatorDefenitionSets.Location = new System.Drawing.Point(303, 3);
             this.checkedListBoxMultiplicatorDefenitionSets.Name = "checkedListBoxMultiplicatorDefenitionSets";
-            this.checkedListBoxMultiplicatorDefenitionSets.Size = new System.Drawing.Size(497, 71);
+            this.checkedListBoxMultiplicatorDefenitionSets.Size = new System.Drawing.Size(497, 98);
             this.checkedListBoxMultiplicatorDefenitionSets.TabIndex = 0;
             this.checkedListBoxMultiplicatorDefenitionSets.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxMultiplicatorDefenitionSetsItemCheck);
             // 
@@ -984,8 +956,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNegativeDayOff)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPositiveDayOff)).EndInit();
             this.tableLayoutPanel4.ResumeLayout(false);
-            this.tableLayoutPanel7.ResumeLayout(false);
-            this.tableLayoutPanel7.PerformLayout();
+            this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanelSubHeader3.ResumeLayout(false);
             this.tableLayoutPanelSubHeader3.PerformLayout();
             this.tableLayoutPanel9.ResumeLayout(false);
@@ -1059,8 +1030,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private System.Windows.Forms.RadioButton radioButtonFromSchedule;
         private System.Windows.Forms.RadioButton radioButtonFromContract;
         private Controls.TimeSpanTextBox timeSpanTextBoxNegativeTolerance;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel AutoLabelFullDayAbsence;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
 
     }
 }

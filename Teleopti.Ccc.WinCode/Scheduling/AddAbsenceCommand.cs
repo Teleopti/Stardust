@@ -97,6 +97,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				}
 
+				MarkPeriodToBeRecalculated(dateOnlyPeriod);
 				ScheduleViewBase.RefreshRangeForAgentPeriod(selectedPerson, absencePeriod);
 			}
 			
