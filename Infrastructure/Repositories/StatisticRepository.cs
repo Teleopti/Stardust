@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetReadOnly(true)
                 .SetDateTime("start_date", period.StartDateTime)
                 .SetDateTime("end_date", period.EndDateTime)
-                .SetString("externallogonlist",externalLogOnList.ToString())
+                .SetParameter("externallogonlist", externalLogOnList.ToString(), NHibernateUtil.StringClob)
                 .SetResultTransformer(Transformers.AliasToBean(typeof(ExternalAgentState)));
         }
 
