@@ -230,6 +230,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		public void LoadData(RestrictionSchedulingOptions schedulingOptions)
 		{
+			if (_stateHolder == null) return;
 			_loadedCounter = 0;
 			_schedulingOptions = schedulingOptions;
 
