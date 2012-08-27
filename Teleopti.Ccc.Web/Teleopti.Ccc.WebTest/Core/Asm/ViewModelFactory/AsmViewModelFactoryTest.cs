@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;

@@ -74,9 +74,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table1.AddRow(new string[] {
                         "Name",
                         "Full access to mytime"});
-            table1.AddRow(new string[] {
-                        "ViewUnpublishedSchedules",
-                        "true"});
 #line 8
  testRunner.Given("there is a role with", ((string)(null)), table1);
 #line hidden
@@ -84,16 +81,52 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Field",
                         "Value"});
             table2.AddRow(new string[] {
+                        "Name",
+                        "Published schedule"});
+            table2.AddRow(new string[] {
+                        "Schedule published to date",
+                        "2040-06-24"});
+#line 11
+  testRunner.And("I have a workflow control set with", ((string)(null)), table2);
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table3.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+            table3.AddRow(new string[] {
+                        "Type",
+                        "Week"});
+            table3.AddRow(new string[] {
+                        "Length",
+                        "1"});
+#line 15
+ testRunner.And("I have a schedule period with", ((string)(null)), table3);
+#line hidden
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table4.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+#line 20
+ testRunner.And("I have a person period with", ((string)(null)), table4);
+#line hidden
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table5.AddRow(new string[] {
                         "StartTime",
                         "2030-01-01 08:00"});
-            table2.AddRow(new string[] {
+            table5.AddRow(new string[] {
                         "EndTime",
                         "2030-01-01 17:00"});
-            table2.AddRow(new string[] {
+            table5.AddRow(new string[] {
                         "ShiftCategoryName",
                         "ForTest"});
-#line 12
- testRunner.And("there is a shift with", ((string)(null)), table2);
+#line 23
+ testRunner.And("there is a shift with", ((string)(null)), table5);
 #line hidden
         }
         
@@ -102,15 +135,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void NoPermissionToASMModule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No permission to ASM module", ((string[])(null)));
-#line 18
+#line 29
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 19
+#line 30
  testRunner.Given("I have the role \'No access to ASM\'");
-#line 20
+#line 31
  testRunner.When("I am viewing week schedule");
-#line 21
+#line 32
  testRunner.Then("ASM link should not be visible");
 #line hidden
             this.ScenarioCleanup();
@@ -121,19 +154,19 @@ this.FeatureBackground();
         public virtual void ShowPartOfAgentSScheduleInPopup()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show part of agent\'s schedule in popup", ((string[])(null)));
-#line 23
+#line 34
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 24
+#line 35
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 25
+#line 36
  testRunner.And("Current time is \'2030-01-01\'");
-#line 26
+#line 37
  testRunner.When("I view my week schedule");
-#line 27
+#line 38
  testRunner.And("I click ASM link");
-#line 28
+#line 39
  testRunner.Then("I should see a schedule in popup");
 #line hidden
             this.ScenarioCleanup();

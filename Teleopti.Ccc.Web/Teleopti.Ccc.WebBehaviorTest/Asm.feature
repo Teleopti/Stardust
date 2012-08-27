@@ -8,7 +8,18 @@ Background:
 	Given there is a role with
 	| Field                    | Value                 |
 	| Name                     | Full access to mytime |
-	| ViewUnpublishedSchedules | true                  |
+	 And I have a workflow control set with
+	| Field                      | Value              |
+	| Name                       | Published schedule |
+	| Schedule published to date | 2040-06-24         |
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
 	And there is a shift with
 	| Field             | Value   |
 	| StartTime         | 2030-01-01 08:00   |
