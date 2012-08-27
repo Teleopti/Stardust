@@ -67,5 +67,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
             return true;
         }
+
+		// mark affected (+1) days to resource calculate 
+		protected void MarkPeriodToBeRecalculated(DateOnlyPeriod dateOnlyPeriod)
+		{
+
+			foreach (var dateOnly in dateOnlyPeriod.DayCollection())
+			{
+				_schedulerStateHolder.MarkDateToBeRecalculated(dateOnly);
+			}
+			DateOnly dayAfter = dateOnlyPeriod.DayCollection()[dateOnlyPeriod.DayCollection().Count - 1].AddDays(1);
+			_schedulerStateHolder.MarkDateToBeRecalculated(dayAfter);
+		}
     }
 }
