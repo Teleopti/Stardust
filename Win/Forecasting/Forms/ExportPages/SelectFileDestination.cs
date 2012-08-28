@@ -35,13 +35,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             }
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            SaveFile();
-        }
-
         private void SaveFile()
         {
             _saveFileDialog = new SaveFileDialog();
