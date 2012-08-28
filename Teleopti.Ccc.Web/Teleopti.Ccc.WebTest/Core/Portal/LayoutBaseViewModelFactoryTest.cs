@@ -52,18 +52,23 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldSetTime()
 		{
-			var expected = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var year1700 = new DateTime(1700, 1, 1,0,0,0,DateTimeKind.Utc);
+			var today = new DateTime(2001, 1, 1,1,12,0,0,DateTimeKind.Utc);
+
+			var expected = today.Subtract(year1700).TotalMilliseconds;
+			
 			var time = new Now();
-			((IModifyNow)time).SetNow(expected);
+			((IModifyNow)time).SetNow(today);
 			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, time);
-			target.CreateLayoutBaseViewModel().ExplicitlySetDateTime.Value.Should().Be.EqualTo(expected);
+			
+			target.CreateLayoutBaseViewModel().ExplicitlySetMilliSecondsFromYear1700.Should().Be.EqualTo(expected);
 		}
 
 		[Test]
-		public void ShouldSetNullIfNoTime()
+		public void ShouldSReturnZeroIfNotSet()
 		{
 			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now());
-			target.CreateLayoutBaseViewModel().ExplicitlySetDateTime.HasValue.Should().Be.False();
+			target.CreateLayoutBaseViewModel().ExplicitlySetMilliSecondsFromYear1700.Should().Be.EqualTo(0);
 		}
 	}
 }

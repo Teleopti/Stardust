@@ -69,7 +69,15 @@
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Settings.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Test.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Init.js")"></script>
-
+	
+	@if (ViewBag.LayoutBase.ExplicitlySetDateTime.HasValue){
+	  	<script type="text/javascript">
+	  		$(function () {
+	  			Date.prototype.getTime = function () { return "hello world"; };
+	  		});
+		</script>
+	  }
+	
 	@RenderSection("head", required: false)
 </head>
 <body @Html.LayoutBase().FullDirAndLangClass()@Html.LayoutBase().FullDirAttribute()>

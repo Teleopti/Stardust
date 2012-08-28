@@ -100,6 +100,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				Title = "Time changed on server!",
 				Message = "INow component now thinks time is " + utcDate
 			};
+			ViewBag.SetTime = "hello";
+
 			return View("Message", viewModel);
 		}
 
