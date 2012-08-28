@@ -50,32 +50,26 @@
 </style>
 
 <script>
-	$(function () {
-		_moveTimeLineToNow();
-	})
+	var refreshMilliSeconds = 100;
+
+	$(function() {
+		setInterval(function() { _moveTimeLineToNow(); }, refreshMilliSeconds);
+	});
 	
 	function _moveTimeLineToNow() {
 		var clientMsSince1970 = new Date().getTime();
-		alert(clientMsSince1970);
 		var serverMsSince1970 = @milliSecondsSince1970;
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
-		alert(serverMsSince1970);
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
 		var startPixel = -(@pixelsPerHour * hoursSinceStart);
 		$('.asm-timeline').css('left', (startPixel +@timeMarkerPosition) + 'px');
-
-		//
 		//debug
-		var timme = Math.floor(hoursSinceStart) - 24;
-		var minutes = (hoursSinceStart - Math.floor(hoursSinceStart)) * 60;
-		$('#clockDebug').text(timme + ':' + parseInt(minutes));
+		$('#clockDebug').text(''+new Date(clientMsSince1970));
 	}
 </script>
 
 <b>Tidslinjen ska visa</b><div id="clockDebug"></div><br/><br/>
-henke: @ViewBag.SetTime henke!
 Antal lager: @(Model.Layers.Count)<br/>
-Datum att visa: @(Model.StartDate)
 <div class="asm-timeline-border">
 	<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;">
 	</div>
