@@ -1,9 +1,9 @@
 ﻿@using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
 @model AsmViewModel
 @{
-	const double pixelsPerMinute = 0.8;
+	const double pixelsPerHour = 50;
 	const int timeLineHourBorderSize = 1;
-	var timeLineHourWidth = (int) (60*pixelsPerMinute)-timeLineHourBorderSize;
+	const double timeLineHourWidth = (pixelsPerHour) - timeLineHourBorderSize;
 	var milliSecondsSince1970 = Model.StartDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
 }
 <style>
@@ -55,33 +55,34 @@
 	})
 	
 	function _moveTimeLineToNow() {
-		var pixelsPerMinute = 0.8
-		alert(pixelsPerMinute);
 		var clientMsSince1970 = new Date().getTime();
 		var serverMsSince1970 = @milliSecondsSince1970;
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
-		var minutesSinceStart = msSinceStart / 1000 / 60;
-		alert('minutessincestart' + minutesSinceStart);
-		var pixelPosition = pixelsPerMinute * minutesSinceStart;
-		alert('pixel' + pixelPosition);
-		var startPixel = -(pixelsPerMinute * minutesSinceStart);
-		alert(startPixel);
+		var hoursSinceStart = msSinceStart / 1000 / 60/60;
+		var startPixel = -(@pixelsPerHour * hoursSinceStart);
 		$('.asm-timeline').css('left', startPixel + 'px');
-		alert(minutesSinceStart);
+
+		//
+		//debug
+		var timme = Math.floor(hoursSinceStart) - 24;
+		var minutes = (hoursSinceStart - Math.floor(hoursSinceStart)) * 60;
+		$('#clockDebug').text(timme + ':' + parseInt(minutes));
 	}
 </script>
+
+<b>Tidslinjen ska visa</b><div id="clockDebug"></div><br/><br/>
 
 Antal lager: @(Model.Layers.Count)<br/>
 Datum att visa: @(Model.StartDate)
 <div class="asm-timeline-border">
 	<div class="asm-now-marker">
 	</div>
-	<div class="asm-timeline" style="width:@(3*24*60*pixelsPerMinute)px">
+	<div class="asm-timeline" style="width:@(3*24*pixelsPerHour)px">
 		@foreach (var layer in Model.Layers)
   {
 			<span class="asm-layer" style="
-			left:@(layer.RelativeStartInMinutes * pixelsPerMinute)px;
-			padding-left:@(layer.LengthInMinutes * pixelsPerMinute)px;
+			left:@(layer.RelativeStartInMinutes * pixelsPerHour/60)px;
+			padding-left:@(layer.LengthInMinutes * pixelsPerHour/60)px;
 			background-color: @(layer.Color)"></span>
   }
 		@for (var day = 0; day <= 2; day++)
