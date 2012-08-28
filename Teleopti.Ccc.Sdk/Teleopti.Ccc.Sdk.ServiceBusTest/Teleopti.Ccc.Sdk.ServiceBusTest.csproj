@@ -124,6 +124,7 @@
   <ItemGroup>
     <Compile Include="AbsenceRequestResolveTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
+    <Compile Include="Denormalizer\SmsReadModelHandlerTest.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumerTest.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelConsumerTest.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumerTest.cs" />
@@ -156,6 +157,11 @@
     <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSagaTest.cs" />
     <Compile Include="SimpleBootStrapper.cs" />
+    <Compile Include="Sms\ClickatellSmsSenderTest.cs" />
+    <Compile Include="Sms\SignificantChangeCheckerTest.cs" />
+    <Compile Include="Sms\SmsConfigReaderTest.cs" />
+    <Compile Include="Sms\SmsLinkCheckerTest.cs" />
+    <Compile Include="Sms\SmsSenderFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
