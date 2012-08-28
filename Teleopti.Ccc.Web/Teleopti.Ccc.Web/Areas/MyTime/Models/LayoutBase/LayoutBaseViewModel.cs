@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase
 		public CultureSpecificViewModel CultureSpecific { get; set; }
 		public string Footer { get; set; }
 		public DatePickerGlobalizationViewModel DatePickerGlobalization { get; set; }
-		public double ExplicitlySetMilliSecondsFromYear1700 { get; set; }
+		public double ExplicitlySetMilliSecondsFromYear1970 { get; set; }
 	}
 }

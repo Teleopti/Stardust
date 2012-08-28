@@ -5,7 +5,7 @@
 	const int timeLineHourBorderSize = 1;
 	const double timeLineHourWidth = (pixelsPerHour) - timeLineHourBorderSize;
 	const int timeMarkerPosition = 120;
-	var milliSecondsSince1970 = Model.StartDate.Subtract(new DateTime(1700, 1, 1)).TotalMilliseconds;
+	var milliSecondsSince1970 = Model.StartDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
 }
 <style>
 	.asm-timeline-border
@@ -58,18 +58,26 @@
 	
 	function _moveTimeLineToNow() {
 		var clientMsSince1970 = new Date().getTime();
+		alert(new Date(clientMsSince1970));
+		alert(clientMsSince1970);
 		var serverMsSince1970 = @milliSecondsSince1970;
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
+		alert(clientMsSince1970);
+		alert(serverMsSince1970);
+		alert('@(Model.StartDate)');
 		var startPixel = -(@pixelsPerHour * hoursSinceStart);
 		$('.asm-timeline').css('left', (startPixel +@timeMarkerPosition) + 'px');
 		//debug
 		$('#clockDebug').text(''+new Date(clientMsSince1970));
+		$('#leftdebug').text('' + startPixel);
 	}
 </script>
 
 <b>Tidslinjen ska visa</b><div id="clockDebug"></div><br/><br/>
 Antal lager: @(Model.Layers.Count)<br/>
+left-position på hela skiten: <div id="leftdebug"></div>
+
 <div class="asm-timeline-border">
 	<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;">
 	</div>
