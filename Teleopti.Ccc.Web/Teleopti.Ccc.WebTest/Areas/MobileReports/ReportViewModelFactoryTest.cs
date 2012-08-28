@@ -39,6 +39,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 				return new DateOnly();
 			}
 
+			public bool IsExplicitlySet()
+			{
+				return false;
+			}
+
 			#endregion
 		}
 

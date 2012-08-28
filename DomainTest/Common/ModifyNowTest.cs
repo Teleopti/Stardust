@@ -42,5 +42,18 @@ namespace Teleopti.Ccc.DomainTest.Common
 			((IModifyNow) target).SetNow(null);
 			target.UtcDateTime().Should().Be.IncludedIn(nu.AddMinutes(-1), nu.AddMinutes(1));
 		}
+
+		[Test]
+		public void ShouldBeExplicitlySet()
+		{
+			target.IsExplicitlySet().Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotBeExplicitlySet()
+		{
+			((IModifyNow)target).SetNow(null);
+			target.IsExplicitlySet().Should().Be.False();
+		}
 	}
 }
