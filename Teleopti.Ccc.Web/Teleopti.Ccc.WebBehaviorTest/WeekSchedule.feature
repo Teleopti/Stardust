@@ -9,12 +9,40 @@ Scenario: View current week
 	When I view my week schedule
 	Then I should see the start and end dates for current week
 
+############
 Scenario: View night shift
 	Given I am an agent
 	And I have a night shift starting on monday
 	And My schedule is published
 	When I view my week schedule
 	Then the shift should end on monday
+
+############ new
+Scenario: View start of night shift on last day of week for swedish culture
+	Given I am an agent
+	And I have a scheduled shift according to this:
+	| field      | value      |
+	| start date | 2012-08-26 |
+	| start time | 21:00      |
+	| end date   | 2012-08-27 |
+	| end time   | 06:00      |
+	And My schedule is published
+	When I view my week schedule for date '2012-08-26'
+	Then I should see the start of the shift on date '2012-08-26'
+
+############ new
+Scenario: View end of night shift from previuos week for swedish culture
+	Given I am an agent
+	And I am swedish
+	And I have a scheduled shift according to this:
+	| field      | value      |
+	| start date | 2012-08-26 |
+	| start time | 21:00      |
+	| end date   | 2012-08-27 |
+	| end time   | 06:00      |
+	And My schedule is published
+	When I view my week schedule for date '2012-08-27'
+	Then I should see the end of the shift on date '2012-08-27'
 
 Scenario: Do not show unpublished schedule
 	Given I am an agent
@@ -117,6 +145,7 @@ Scenario: Show timeline with no schedule
 	| end timeline   | 23:59 |
 	| timeline count | 25    |
 
+############
 Scenario: Show timeline with schedule
 	Given I am an agent
 	And I have shifts scheduled for two weeks
@@ -124,11 +153,12 @@ Scenario: Show timeline with schedule
 	When I view my week schedule
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field          | Value |
-	| start timeline | 20:00 |
-	| end timeline   | 4:00  |
-	| timeline count | 9     |
+	| start timeline | 0:00  |
+	| end timeline   | 23:59 |
+	| timeline count | 25    |
 
-Scenario: Show timeline with schedule with different start and end time on different day
+############
+Scenario: Show timeline with schedule with start and end time on different day
 	Given I am an agent
 	And I have shifts scheduled with different activities for two weeks
 	And My schedule is published
@@ -137,8 +167,9 @@ Scenario: Show timeline with schedule with different start and end time on diffe
 	| Field          | Value |
 	| start timeline | 8:00  |
 	| end timeline   | 18:00 |
-	| timeline count | 11     |
+	| timeline count | 11    |
 
+############??????
 Scenario: Show activity with correct position, height and color
 	Given I am an agent
 	And I have custom shifts scheduled on wednesday for two weeks:
