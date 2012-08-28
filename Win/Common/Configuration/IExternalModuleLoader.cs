@@ -65,6 +65,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         SetScorecard,
         ChangeYourPassword,
         AuditTrailSetting, 
-        ScheduleTag
+        ScheduleTag,
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
+		SmsSettings
     } ;
 }
