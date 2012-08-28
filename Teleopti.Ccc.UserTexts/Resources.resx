@@ -11027,4 +11027,7 @@ These options are activated:
     <value>From Schedule Period</value>
     <comment>Contract Time is from schedule period</comment>
   </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>Full Day Absence</value>
+  </data>
 </root>
