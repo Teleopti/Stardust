@@ -4,30 +4,65 @@
 	const double pixelsPerMinute = 0.3;
 }
 <style>
-	div.asm-layer
+	.asm-timeline-border
 	{
-		height: 30px;
-		top: 50px;
+		border: solid green;
+		top: 100px;
+		position: relative;
+		height: 50px; /*overflow: hidden;*/
 	}
+	
+	.asm-timeline
+	{
+		left: 100px;
+		border: solid red;
+		position: relative;
+		width: 1000px;
+		height: 40px;
+	}
+	
+	.asm-layer
+	{
+		position: absolute;
+		height: 50px;
+	}
+	
+	.asm-layer-extender
+	{
+		padding-left: 100px;
+	}
+	
+	.asm-now-marker
+	{
+		background-color: black;
+		opacity: 0.5;
+		width: 120px;
+		position: absolute;
+		height: 100%;
+	}
+	
 </style>
-<div style="position: absolute">
-	​
-	@foreach (var layer in Model.Layers)
- {
-		<div class="absolute asm-layer" style=" 
-										left:@(layer.RelativeStartInMinutes * pixelsPerMinute)px;
-										width:@(layer.LengthInMinutes* pixelsPerMinute)px;
-										background-color: @(layer.Color)">
-		</div>
- }
-	@for (var day = 0; day <= 2; day++)
- {
-	 for (var hour = 1; hour <= 24; hour++)
-	 {
-	 	<div class="absolute" style="left:@(pixelsPerMinute*day*24*60 + pixelsPerMinute*hour*60)px;
-										                                   	border-left: 1px solid rgba(0, 0, 0, 0.15);
-											top: 10px;
-											height: 100px;">@(hour)</div>
-	 }
- }
+@(Model.Layers.Count)
+@(Model.StartDate)
+<div class="asm-timeline-border">
+	<div class="asm-now-marker">
+	</div>
+	<div class="asm-timeline">
+		@foreach (var layer in Model.Layers)
+  {
+			<span class="asm-layer" style="
+			left:@(layer.RelativeStartInMinutes * pixelsPerMinute)px;
+			padding-left:@(layer.LengthInMinutes * pixelsPerMinute)px;
+			background-color: @(layer.Color)"/>
+  }
+		@for (var day = 0; day <= 2; day++)
+  {
+	  for (var hour = 1; hour <= 24; hour++)
+	  {
+@*span style="left:@(pixelsPerMinute*day*24*60 + pixelsPerMinute*hour*60)px;
+	border-left: 1px solid rgba(0, 0, 0, 0.15);">@(hour)</span>*@
+	  }
+  }
+	</div>
 </div>
+​ 
