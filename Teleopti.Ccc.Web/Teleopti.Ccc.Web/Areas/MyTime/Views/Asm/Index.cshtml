@@ -1,7 +1,10 @@
 ﻿@using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
 @model AsmViewModel
 @{
-	const double pixelsPerMinute = 0.3;
+	const double pixelsPerMinute = 0.8;
+	const int timeLineHourBorderSize = 1;
+	var timeLineHourWidth = (int) (60*pixelsPerMinute)-timeLineHourBorderSize;
+	
 }
 <style>
 	.asm-timeline-border
@@ -9,7 +12,8 @@
 		border: solid green;
 		top: 100px;
 		position: relative;
-		height: 50px; /*overflow: hidden;*/
+		height: 50px; 
+		/*overflow: hidden;*/
 	}
 	
 	.asm-timeline
@@ -17,8 +21,11 @@
 		left: 100px;
 		border: solid red;
 		position: relative;
-		width: 1000px;
 		height: 40px;
+	}
+	
+	.asm-timeline-numbers {
+		float: left;
 	}
 	
 	.asm-layer
@@ -47,20 +54,20 @@
 <div class="asm-timeline-border">
 	<div class="asm-now-marker">
 	</div>
-	<div class="asm-timeline">
+	<div class="asm-timeline" style="width:@(3*24*60*pixelsPerMinute)px">
 		@foreach (var layer in Model.Layers)
   {
 			<span class="asm-layer" style="
 			left:@(layer.RelativeStartInMinutes * pixelsPerMinute)px;
 			padding-left:@(layer.LengthInMinutes * pixelsPerMinute)px;
-			background-color: @(layer.Color)"/>
+			background-color: @(layer.Color)"></span>
   }
 		@for (var day = 0; day <= 2; day++)
   {
 	  for (var hour = 1; hour <= 24; hour++)
 	  {
-@*span style="left:@(pixelsPerMinute*day*24*60 + pixelsPerMinute*hour*60)px;
-	border-left: 1px solid rgba(0, 0, 0, 0.15);">@(hour)</span>*@
+	  	<span class="asm-timeline-numbers" style="width:@(timeLineHourWidth)px;
+															border-right:@(timeLineHourBorderSize)px solid black;">@(hour)</span>
 	  }
   }
 	</div>
