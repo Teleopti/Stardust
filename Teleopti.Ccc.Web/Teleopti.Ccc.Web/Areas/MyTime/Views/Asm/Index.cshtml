@@ -5,7 +5,7 @@
 	const int timeLineHourBorderSize = 1;
 	const double timeLineHourWidth = (pixelsPerHour) - timeLineHourBorderSize;
 	const int timeMarkerPosition = 120;
-	var milliSecondsSince1970 = Model.StartDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+	var milliSecondsSince1970 = Model.StartDate.Subtract(new DateTime(1700, 1, 1)).TotalMilliseconds;
 }
 <style>
 	.asm-timeline-border
@@ -56,8 +56,10 @@
 	
 	function _moveTimeLineToNow() {
 		var clientMsSince1970 = new Date().getTime();
+		alert(clientMsSince1970);
 		var serverMsSince1970 = @milliSecondsSince1970;
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
+		alert(serverMsSince1970);
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
 		var startPixel = -(@pixelsPerHour * hoursSinceStart);
 		$('.asm-timeline').css('left', (startPixel +@timeMarkerPosition) + 'px');
