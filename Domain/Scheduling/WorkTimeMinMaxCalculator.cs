@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var personPeriod = person.Period(scheduleDate);
 			var personContract = personPeriod.PersonContract;
-			var avgWorkTime = new TimeSpan((long)(personContract.Contract.WorkTime.AvgWorkTimePerDay.Ticks * personContract.PartTimePercentage.Percentage.Value));
+			var avgWorkTime = new TimeSpan((long)(person.AverageWorkTimeOfDay(scheduleDate).Ticks * personContract.PartTimePercentage.Percentage.Value));
 
 			if (!personContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate))
 				return null;

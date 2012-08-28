@@ -8708,6 +8708,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to From Contract.
+        /// </summary>
+        public static string FromContract {
+            get {
+                return ResourceManager.GetString("FromContract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From.
         /// </summary>
         public static string FromDate {
@@ -8735,6 +8744,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to From Schedule Period.
+        /// </summary>
+        public static string FromSchedulePeriod {
+            get {
+                return ResourceManager.GetString("FromSchedulePeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From - To.
         /// </summary>
         public static string FromTo {
@@ -8758,6 +8776,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FullDay {
             get {
                 return ResourceManager.GetString("FullDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full Day Absence.
+        /// </summary>
+        public static string FullDayAbsence {
+            get {
+                return ResourceManager.GetString("FullDayAbsence", resourceCulture);
             }
         }
         
