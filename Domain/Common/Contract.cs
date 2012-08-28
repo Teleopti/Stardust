@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Domain.Common
         private TimeSpan _planningTimeBankMax;
         private bool _adjustTimeBankWithSeasonality;
         private bool _adjustTimeBankWithPartTimePercentage;
+        private bool _isWorkTimeFromContract;
+        private bool _isWorkTimeFromSchedulePeriod;
 
         /// <summary>
         /// Creates a new instance of Contract
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Common
         {
             _employmentType = EmploymentType.FixedStaffNormalWorkTime;
             _description = new Description(name);
+            _isWorkTimeFromContract = true;
         }
 
         /// <summary>
@@ -198,6 +201,18 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get { return _negativeDayOffTolerance; }
             set { _negativeDayOffTolerance = value; }
+        }
+
+        public virtual bool IsWorkTimeFromContract
+        {
+            get { return _isWorkTimeFromContract; }
+            set { _isWorkTimeFromContract = value; }
+        }
+
+        public virtual bool IsWorkTimeFromSchedulePeriod
+        {
+            get { return _isWorkTimeFromSchedulePeriod; }
+            set { _isWorkTimeFromSchedulePeriod = value; }
         }
     }
 }
