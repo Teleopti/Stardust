@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             loadSkills();
             var listViewColumnSorter = new ListViewColumnSorter { Order = SortOrder.Ascending };
             listViewSkills.ListViewItemSorter = listViewColumnSorter;
-            reloadSkillsListView();
+            reloadSkillsListView(stateObj.ExportSkillToFileCommandModel.Skill);
         }
 
         public bool Depopulate(ExportSkillModel stateObj)
@@ -78,7 +78,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             listViewSkills.Columns.Add(header);
         }
 
-        private void reloadSkillsListView()
+        private static void findChecked(ListViewItem lvi, ISkill skill, ISkill selectedSkill)
+        {
+            if (skill.Id.Equals(selectedSkill.Id))
+                lvi.Selected = true;
+        }
+
+        private void reloadSkillsListView(ISkill selectedSkill)
         {
             listViewSkills.BeginUpdate();
             listViewSkills.ListViewItemSorter = null;
@@ -94,6 +100,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             foreach (var skill in _skills)
             {
                 var lvi = new ListViewItem { Tag = skill,  Text = skill.Name };
+                if (selectedSkill != null)
+                    findChecked(lvi, skill, selectedSkill);
                 _allItems.Add(lvi);
             }
 
