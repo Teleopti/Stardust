@@ -11015,4 +11015,8 @@ These options are activated:
     <value>Type (loc)</value>
     <comment>Type used in anywhere report</comment>
   </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>Service Level and Employee Ready</value>
+    <comment>Service Level and Agents Ready</comment>
+  </data>
 </root>
