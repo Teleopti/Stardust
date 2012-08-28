@@ -26,6 +26,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		private static readonly ScenarioContextLazy<MobileGlobalMenuPage> _mobileGlobalMenuPage =
 		new ScenarioContextLazy<MobileGlobalMenuPage>(() => Browser.Current.Page<MobileGlobalMenuPage>());
 		public static MobileGlobalMenuPage MobileGlobalMenuPage { get { return _mobileGlobalMenuPage.Value; } }
+
+		private static readonly ScenarioContextLazy<GlobalMenuPage> _globalMenuPage =
+		new ScenarioContextLazy<GlobalMenuPage>(() => Browser.Current.Page<GlobalMenuPage>());
+		public static GlobalMenuPage GlobalMenuPage { get { return _globalMenuPage.Value; } }
 		
 		private static readonly ScenarioContextLazy<RequestsPage> _requestsPage =
 			new ScenarioContextLazy<RequestsPage>(() => Browser.Current.Page<RequestsPage>());
