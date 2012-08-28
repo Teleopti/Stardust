@@ -10974,14 +10974,15 @@ These options are activated:
     <comment>No activity</comment>
   </data>
   <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
-    <value>Please select at least one option from Team Optimization. </value>
+    <value>Please select at least one of the options "Shift Category", "Start Time" or "End Time" in  Team Optimization. </value>
     <comment>The Team Optimization options</comment>
   </data>
   <data name="SchedulingOptionMessageBox" xml:space="preserve">
     <value>Scheduling Options</value>
   </data>
   <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
-    <value>Please select at least one option from Team Scheduling.</value>
+    <value>Please select at least one of the options "Shift Category", "Start Time" or "End Time" in  Team Scheduling.</value>
+    <comment>Team scheduling options</comment>
   </data>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Manage SMS Settings</value>
