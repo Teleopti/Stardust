@@ -87,7 +87,7 @@ Datum att visa: @(Model.StartDate)
   }
 		@for (var day = 0; day <= 2; day++)
   {
-	  for (var hour = 1; hour <= 24; hour++)
+	  for (var hour = 0; hour < 24; hour++)
 	  {
 	  	<span class="asm-timeline-numbers" style="width:@(timeLineHourWidth)px;
 															border-right:@(timeLineHourBorderSize)px solid black;">@(hour)</span>
