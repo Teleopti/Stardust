@@ -51,10 +51,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         protected override void OnLoad(System.EventArgs e)
         {
             base.OnLoad(e);
-            //var exportModel = _stateObj.ExportMultisiteSkillToSkillCommandModel;
+            
             var exportModel = _stateObj.ExportSkillToFileCommandModel;
-            reportDateFromToSelector1.WorkPeriodStart = exportModel.Period.StartDate;
-            reportDateFromToSelector1.WorkPeriodEnd = exportModel.Period.EndDate;
+            reportDateFromToSelector1.WorkPeriodStart = exportModel.Period.StartDate == new DateOnly() ? new DateOnly(DateTime.Now.Date) : exportModel.Period.StartDate;
+            reportDateFromToSelector1.WorkPeriodEnd = exportModel.Period.EndDate == new DateOnly() ? new DateOnly(DateTime.Now.Date.AddDays(7)) : exportModel.Period.EndDate;
 
             loadScenarios();
 
