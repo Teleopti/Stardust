@@ -4,7 +4,7 @@
 	const double pixelsPerMinute = 0.8;
 	const int timeLineHourBorderSize = 1;
 	var timeLineHourWidth = (int) (60*pixelsPerMinute)-timeLineHourBorderSize;
-	
+	var milliSecondsSince1970 = Model.StartDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
 }
 <style>
 	.asm-timeline-border
@@ -18,10 +18,10 @@
 	
 	.asm-timeline
 	{
-		left: 100px;
 		border: solid red;
 		position: relative;
 		height: 40px;
+		left: 100px;
 	}
 	
 	.asm-timeline-numbers {
@@ -47,10 +47,32 @@
 		position: absolute;
 		height: 100%;
 	}
-	
 </style>
-@(Model.Layers.Count)
-@(Model.StartDate)
+
+<script>
+	$(function () {
+		_moveTimeLineToNow();
+	})
+	
+	function _moveTimeLineToNow() {
+		var pixelsPerMinute = 0.8
+		alert(pixelsPerMinute);
+		var clientMsSince1970 = new Date().getTime();
+		var serverMsSince1970 = @milliSecondsSince1970;
+		var msSinceStart = clientMsSince1970 - serverMsSince1970;
+		var minutesSinceStart = msSinceStart / 1000 / 60;
+		alert('minutessincestart' + minutesSinceStart);
+		var pixelPosition = pixelsPerMinute * minutesSinceStart;
+		alert('pixel' + pixelPosition);
+		var startPixel = -(pixelsPerMinute * minutesSinceStart);
+		alert(startPixel);
+		$('.asm-timeline').css('left', startPixel + 'px');
+		alert(minutesSinceStart);
+	}
+</script>
+
+Antal lager: @(Model.Layers.Count)<br/>
+Datum att visa: @(Model.StartDate)
 <div class="asm-timeline-border">
 	<div class="asm-now-marker">
 	</div>
