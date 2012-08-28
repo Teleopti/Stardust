@@ -4,6 +4,7 @@
 	const double pixelsPerHour = 50;
 	const int timeLineHourBorderSize = 1;
 	const double timeLineHourWidth = (pixelsPerHour) - timeLineHourBorderSize;
+	const int timeMarkerPosition = 120;
 	var milliSecondsSince1970 = Model.StartDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
 }
 <style>
@@ -43,7 +44,6 @@
 	{
 		background-color: black;
 		opacity: 0.5;
-		width: 120px;
 		position: absolute;
 		height: 100%;
 	}
@@ -60,7 +60,7 @@
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
 		var startPixel = -(@pixelsPerHour * hoursSinceStart);
-		$('.asm-timeline').css('left', startPixel + 'px');
+		$('.asm-timeline').css('left', (startPixel +@timeMarkerPosition) + 'px');
 
 		//
 		//debug
@@ -75,7 +75,7 @@
 Antal lager: @(Model.Layers.Count)<br/>
 Datum att visa: @(Model.StartDate)
 <div class="asm-timeline-border">
-	<div class="asm-now-marker">
+	<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;">
 	</div>
 	<div class="asm-timeline" style="width:@(3*24*pixelsPerHour)px">
 		@foreach (var layer in Model.Layers)
