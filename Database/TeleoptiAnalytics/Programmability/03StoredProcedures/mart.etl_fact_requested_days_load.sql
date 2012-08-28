@@ -88,6 +88,7 @@ INNER JOIN mart.dim_request_type rt
 INNER JOIN mart.dim_request_status rs
 	ON rs.request_status_id = stg.request_status_code
 WHERE stg.request_date BETWEEN @start_date AND @end_date
+	AND dp.to_be_deleted = 0
 
 ----------------
 --updating request statuses
