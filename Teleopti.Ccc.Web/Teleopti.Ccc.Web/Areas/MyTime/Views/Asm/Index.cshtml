@@ -72,6 +72,9 @@
 	var refreshMilliSeconds = 100;
 
 	$(function() {
+		$('.asm-sliding-schedules').hide();
+		_moveTimeLineToNow();
+		$('.asm-sliding-schedules').show();
 		setInterval(function() { _moveTimeLineToNow(); }, refreshMilliSeconds);
 	});
 	
