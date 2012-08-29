@@ -191,6 +191,23 @@ Scenario: Show timeline with night shift
 	| end timeline   | 23:59 |
 	| timeline count | 25    |
 
+############
+Scenario: Show timeline with night shift from the last day of the previous week
+	Given I am an agent
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-26 20:00 |
+	| EndTime           | 2012-08-27 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
+	And My schedule is published
+	When I view my week schedule for date '2012-08-27'
+	Then I should see start timeline and end timeline according to schedule with:
+	| Field          | Value |
+	| start timeline | 0:00  |
+	| end timeline   | 4:00  |
+	| timeline count | 5     |
+
 ############??????
 Scenario: Show activity with correct position, height and color
 	Given I am an agent

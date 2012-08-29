@@ -604,10 +604,10 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Show activity with correct position, height and color")]
-        public virtual void ShowActivityWithCorrectPositionHeightAndColor()
+        [NUnit.Framework.DescriptionAttribute("Show timeline with night shift from the last day of the previous week")]
+        public virtual void ShowTimelineWithNightShiftFromTheLastDayOfThePreviousWeek()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show activity with correct position, height and color", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show timeline with night shift from the last day of the previous week", ((string[])(null)));
 #line 195
 this.ScenarioSetup(scenarioInfo);
 #line 196
@@ -617,44 +617,94 @@ this.ScenarioSetup(scenarioInfo);
                         "Field",
                         "Value"});
             table10.AddRow(new string[] {
-                        "Phone",
-                        "09:00-10:30"});
+                        "StartTime",
+                        "2012-08-26 20:00"});
             table10.AddRow(new string[] {
-                        "Shortbreak",
-                        "10:30-11:00"});
+                        "EndTime",
+                        "2012-08-27 04:00"});
             table10.AddRow(new string[] {
-                        "Phone",
-                        "11:00-12:00"});
+                        "ShiftCategoryName",
+                        "ForTest"});
             table10.AddRow(new string[] {
                         "Lunch",
-                        "12:00-14:00"});
-            table10.AddRow(new string[] {
-                        "Phone",
-                        "14:00-18:00"});
+                        "true"});
 #line 197
- testRunner.And("I have custom shifts scheduled on wednesday for two weeks:", ((string)(null)), table10);
-#line 204
+ testRunner.And("there is a shift with", ((string)(null)), table10);
+#line 203
  testRunner.And("My schedule is published");
-#line 205
- testRunner.When("I view my week schedule");
+#line 204
+ testRunner.When("I view my week schedule for date \'2012-08-27\'");
 #line hidden
             TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table11.AddRow(new string[] {
+                        "start timeline",
+                        "0:00"});
+            table11.AddRow(new string[] {
+                        "end timeline",
+                        "4:00"});
+            table11.AddRow(new string[] {
+                        "timeline count",
+                        "5"});
+#line 205
+ testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table11);
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show activity with correct position, height and color")]
+        public virtual void ShowActivityWithCorrectPositionHeightAndColor()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show activity with correct position, height and color", ((string[])(null)));
+#line 212
+this.ScenarioSetup(scenarioInfo);
+#line 213
+ testRunner.Given("I am an agent");
+#line hidden
+            TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table12.AddRow(new string[] {
+                        "Phone",
+                        "09:00-10:30"});
+            table12.AddRow(new string[] {
+                        "Shortbreak",
+                        "10:30-11:00"});
+            table12.AddRow(new string[] {
+                        "Phone",
+                        "11:00-12:00"});
+            table12.AddRow(new string[] {
+                        "Lunch",
+                        "12:00-14:00"});
+            table12.AddRow(new string[] {
+                        "Phone",
+                        "14:00-18:00"});
+#line 214
+ testRunner.And("I have custom shifts scheduled on wednesday for two weeks:", ((string)(null)), table12);
+#line 221
+ testRunner.And("My schedule is published");
+#line 222
+ testRunner.When("I view my week schedule");
+#line hidden
+            TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                         "Activity",
                         "Start Position",
                         "Height",
                         "Color"});
-            table11.AddRow(new string[] {
+            table13.AddRow(new string[] {
                         "Phone",
                         "67",
                         "99px",
                         "Green"});
-            table11.AddRow(new string[] {
+            table13.AddRow(new string[] {
                         "Shortbreak",
                         "167",
                         "32px",
                         "Red"});
-#line 206
- testRunner.Then("I should see wednesday\'s activities:", ((string)(null)), table11);
+#line 223
+ testRunner.Then("I should see wednesday\'s activities:", ((string)(null)), table13);
 #line hidden
             this.ScenarioCleanup();
         }

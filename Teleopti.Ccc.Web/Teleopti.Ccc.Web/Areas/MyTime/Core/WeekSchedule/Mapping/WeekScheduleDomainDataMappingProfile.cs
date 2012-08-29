@@ -33,10 +33,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ConvertUsing(s =>
 								{
 									var date = s;
-									var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(s, CultureInfo.CurrentCulture));
+									var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 									var week = new DateOnlyPeriod(firstDayOfWeek, firstDayOfWeek.AddDays(6));
+                                    var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), firstDayOfWeek.AddDays(6));
 
-									var scheduleDays = _scheduleProvider.Invoke().GetScheduleForPeriod(week) ?? new IScheduleDay[] { };
+                                    var scheduleDays = _scheduleProvider.Invoke().GetScheduleForPeriod(weekWithPreviousDay) ?? new IScheduleDay[] { };
 									var personRequests = _personRequestProvider.Invoke().RetrieveRequests(week);
 
 									var earliest =
@@ -49,7 +50,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
                                                     {
                                                         var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
                                                         var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
-                                                        earlyStart = endTime.Days > startTime.Days ? TimeSpan.Zero : startTime;
+                                                        if (endTime.Days > startTime.Days)
+                                                            earlyStart = TimeSpan.Zero;
+                                                        else if (x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
+                                                            earlyStart = startTime;
                                                     }
 												    return earlyStart;
 												});
@@ -63,7 +67,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
                                                     {
                                                         var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
                                                         var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
-                                                        lateEnd = endTime.Days > startTime.Days ? new TimeSpan(23, 59, 59) : endTime;
+                                                        if (endTime.Days > startTime.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
+                                                            lateEnd = new TimeSpan(23, 59, 59);
+                                                        else
+                                                        {
+                                                            lateEnd = endTime.Days == 1 ? endTime.Add(new TimeSpan(-1,0,0,0)) : endTime;
+                                                        }
                                                     }
                                                     return lateEnd;
 												});
@@ -73,13 +82,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 									var days = (from day in firstDayOfWeek.Date.DateRange(7)
 												let scheduleDay = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day)
+												let scheduleYesterday = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day.AddDays(-1))
 												let projection = scheduleDay == null ? null : _projectionProvider.Invoke().Projection(scheduleDay)
+                                                let projectionYesterday = scheduleYesterday == null ? null : _projectionProvider.Invoke().Projection(scheduleYesterday)
 												let personRequestsForDay = personRequests == null ? null : (from i in personRequests where _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(i.Request.Period.StartDateTime).Date == day select i).ToArray()
 												select new WeekScheduleDayDomainData
 														{
 															Date = new DateOnly(day),
 															PersonRequests = personRequestsForDay,
 															Projection = projection,
+															ProjectionYesterday = projectionYesterday,
 															ScheduleDay = scheduleDay,
 															MinMaxTime = minMaxTime,
 														}
