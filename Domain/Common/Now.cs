@@ -5,19 +5,19 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public sealed class Now : INow, IModifyNow
 	{
-		private DateTime? _fixedDateTime;
+		private DateTime? _fixedLocalDateTime;
 
 		public DateTime LocalDateTime()
 		{
-			return _fixedDateTime.HasValue ? 
-					_fixedDateTime.Value.ToLocalTime() : 
+			return _fixedLocalDateTime.HasValue ? 
+					_fixedLocalDateTime.Value : 
 					DateTime.Now;
 		}
 
 		public DateTime UtcDateTime()
 		{
-			return _fixedDateTime.HasValue ? 
-				_fixedDateTime.Value : 
+			return _fixedLocalDateTime.HasValue ? 
+				TimeZoneHelper.ConvertToUtc(_fixedLocalDateTime.Value) : 
 				DateTime.UtcNow;
 		}
 
@@ -26,18 +26,14 @@ namespace Teleopti.Ccc.Domain.Common
 			return new DateOnly(LocalDateTime());
 		}
 
-		void IModifyNow.SetNow(DateTime? dateTime)
+		void IModifyNow.SetNow(DateTime? localDateTime)
 		{
-			if (dateTime.HasValue)
-			{
-				InParameter.VerifyDateIsUtc("dateTime", dateTime.Value);				
-			}
-			_fixedDateTime = dateTime;
+			_fixedLocalDateTime = localDateTime;
 		}
 
 		public bool IsExplicitlySet()
 		{
-			return _fixedDateTime.HasValue;
+			return _fixedLocalDateTime.HasValue;
 		}
 	}
 }

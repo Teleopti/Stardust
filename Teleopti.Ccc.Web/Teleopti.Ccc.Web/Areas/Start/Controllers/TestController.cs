@@ -92,13 +92,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ViewResult SetCurrentTime(DateTime dateSet)
 		{
-			var utcDate = new DateTime(dateSet.Ticks, DateTimeKind.Utc);
-			updateIocNow(utcDate);
+			updateIocNow(dateSet);
 
 			var viewModel = new TestMessageViewModel
 			{
 				Title = "Time changed on server!",
-				Message = "INow component now thinks time is " + utcDate
+				Message = "INow component now thinks time is " + dateSet
 			};
 			ViewBag.SetTime = "hello";
 

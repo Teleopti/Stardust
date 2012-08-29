@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[SetUp]
 		public void Setup()
 		{
-			dateSet = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			dateSet = new DateTime(2000, 1, 1);
 			target = new Now();
 			((IModifyNow)target).SetNow(dateSet);
 		}
@@ -24,15 +24,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldReturnFixedDate()
 		{
 			target.DateOnly().Should().Be.EqualTo(new DateOnly(dateSet));
-			target.LocalDateTime().Should().Be.EqualTo(dateSet.ToLocalTime());
-			target.UtcDateTime().Should().Be.EqualTo(dateSet);
-		}
-
-		[Test]
-		public void MustSetUsingUtc()
-		{
-			Assert.Throws<ArgumentException>(() =>
-			     ((IModifyNow) target).SetNow(new DateTime(2000, 1, 1)));
+			target.LocalDateTime().Should().Be.EqualTo(dateSet);
+			target.UtcDateTime().Should().Be.EqualTo(TimeZoneHelper.ConvertToUtc(dateSet));
 		}
 
 		[Test]
