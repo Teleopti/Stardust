@@ -34,5 +34,10 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			_fixedDateTime = dateTime;
 		}
+
+		public bool IsExplicitlySet()
+		{
+			return _fixedDateTime.HasValue;
+		}
 	}
 }

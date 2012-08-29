@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var uri =new Uri(TestSiteConfigurationSetup.Url,"MyTime/Asm");
 			using(var asmPopup = Browser.AttachTo<IE>(Find.ByUrl(uri)))
 			{
-				var layers = asmPopup.Divs.Filter(Find.ByClass("asm-layer",false));
+				var layers = asmPopup.Spans.Filter(Find.ByClass("asm-layer",false));
 				EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
 			}
 		}

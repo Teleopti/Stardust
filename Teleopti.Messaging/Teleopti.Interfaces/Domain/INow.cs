@@ -21,5 +21,10 @@ namespace Teleopti.Interfaces.Domain
 		/// Returns current date
 		/// </summary>
 		DateOnly DateOnly();
+
+		/// <summary>
+		/// Has time been explicitly set (mostly used in tests)
+		/// </summary>
+		bool IsExplicitlySet();
 	}
 }

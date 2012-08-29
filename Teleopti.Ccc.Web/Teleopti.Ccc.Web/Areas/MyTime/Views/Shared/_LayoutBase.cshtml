@@ -69,7 +69,16 @@
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Settings.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Test.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Init.js")"></script>
-
+	
+	@if (ViewBag.LayoutBase.ExplicitlySetMilliSecondsFromYear1970 != 0)
+ {
+	  	<script type="text/javascript">
+	  		$(function () {
+	  			Date.prototype.getTime = function () { return @(ViewBag.LayoutBase.ExplicitlySetMilliSecondsFromYear1970); };
+	  		});
+		</script>
+	  }
+	
 	@RenderSection("head", required: false)
 </head>
 <body @Html.LayoutBase().FullDirAndLangClass()@Html.LayoutBase().FullDirAttribute()>
