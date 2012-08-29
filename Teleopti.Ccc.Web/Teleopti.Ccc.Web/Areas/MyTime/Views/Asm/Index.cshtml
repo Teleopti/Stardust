@@ -56,14 +56,14 @@
 	});
 	
 	function _moveTimeLineToNow() {
-		var clientMsSince1970 = new Date().getTime();
-		var sererTimeInJs = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month-1), @(Model.StartDate.Day));
-		var serverMsSince1970 = sererTimeInJs.getTime();
+		var clientMsSince1970 = new Date().getTeleoptiTime();
+		var serverTimeInJs = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month-1), @(Model.StartDate.Day));
+		var serverMsSince1970 = serverTimeInJs.getTime();
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
+		
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
 		var startPixel = -(@pixelsPerHour * hoursSinceStart);
 		$('.asm-timeline').css('left', (startPixel +@timeMarkerPosition) + 'px');
-		
 		//debug
 		$('#clockDebug').text(''+new Date(clientMsSince1970));
 		$('#leftdebug').text('' + startPixel);

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[SetUp]
 		public void Setup()
 		{
-			target = new Now();
+			target = new Now(null);
 		}
 
 		[Test]

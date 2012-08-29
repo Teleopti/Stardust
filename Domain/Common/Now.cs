@@ -5,7 +5,13 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public sealed class Now : INow, IModifyNow
 	{
+		private readonly Func<IUserTimeZone> _userTimeZone;
 		private DateTime? _fixedLocalDateTime;
+
+		public Now(Func<IUserTimeZone> userTimeZone)
+		{
+			_userTimeZone = userTimeZone;
+		}
 
 		public DateTime LocalDateTime()
 		{
@@ -17,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Common
 		public DateTime UtcDateTime()
 		{
 			return _fixedLocalDateTime.HasValue ? 
-				TimeZoneHelper.ConvertToUtc(_fixedLocalDateTime.Value) : 
+				TimeZoneHelper.ConvertToUtc(_fixedLocalDateTime.Value, _userTimeZone().TimeZone()) : 
 				DateTime.UtcNow;
 		}
 
