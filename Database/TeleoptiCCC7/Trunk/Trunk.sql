@@ -18,5 +18,7 @@ ALTER TABLE dbo.Activity ADD
 	AllowOverwrite bit NOT NULL CONSTRAINT DF_Activity_AllowOverwrite DEFAULT 1
 GO
 
-ALTER TABLE dbo.Activity SET (LOCK_ESCALATION = TABLE)
+update dbo.activity SET AllowOverwrite = 0 where ReportLevelDetail = 2
+
+
 GO
