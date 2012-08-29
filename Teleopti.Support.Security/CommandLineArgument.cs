@@ -16,13 +16,19 @@ namespace Teleopti.Support.Security
         private bool _personUpdateMode;
         private bool _passwordEncryptionMode;
         private bool _licenseStatusMode;
+		private string _aggDatabase;
 
         public CommandLineArgument(string[] argumentCollection)
         {
             _argumentCollection = argumentCollection;
             readArguments();
         }
-        
+
+		public string AggDatabase
+		{
+			get { return _aggDatabase; }
+		}
+
         public bool PersonUpdateMode
         {
             get { return _personUpdateMode; }
@@ -125,6 +131,9 @@ namespace Teleopti.Support.Security
                     case "-LS":
                         _licenseStatusMode = true;
                         break;
+					case "-CD":   // Cross Db Name
+						_aggDatabase = switchValue;
+						break;
                 }
             }
         }
