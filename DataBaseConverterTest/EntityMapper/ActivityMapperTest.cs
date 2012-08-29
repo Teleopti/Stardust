@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         [Test]
         public void CanValidateNumberOfProperties()
         {
-            Assert.AreEqual(24, PropertyCounter.CountProperties(typeof (Activity)));
+            Assert.AreEqual(25, PropertyCounter.CountProperties(typeof (Activity)));
         }
 
 
