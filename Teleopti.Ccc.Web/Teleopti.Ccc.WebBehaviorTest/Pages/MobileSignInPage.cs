@@ -60,13 +60,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		private void WaitForSigninResult()
 		{
-			Func<bool> signedInOrBusinessUnitListExists = () =>
-			                                              	{
-																return SignoutButton.IESafeExists() ||
-																	ErrorDisplayed() ||
-																	BusinessUnitsDisplayed()
-			                                              			;
-			                                              	};
+			Func<bool> signedInOrBusinessUnitListExists = () => SignoutButton.IESafeExists() ||
+			                                                    ErrorDisplayed() ||
+			                                                    BusinessUnitsDisplayed();
 			var found = signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
 			if (!found)
 				throw new ApplicationException("Waiting for signin result failed!");

@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				        		                			}
 				        		                	}
 				        	});
-			logOn.Stub(x => x.LogOn(businessunitid, "datasource", person.Id.Value, AuthenticationTypeOption.Application, false)).Throw(new PermissionException());
+			logOn.Stub(x => x.LogOn(businessunitid, "datasource", person.Id.Value, AuthenticationTypeOption.Application)).Throw(new PermissionException());
 
 			var target = MakeAuthenticationControllerWithAcceptJsonHeader(
 				viewModelFactory, authenticator, logOn, null);

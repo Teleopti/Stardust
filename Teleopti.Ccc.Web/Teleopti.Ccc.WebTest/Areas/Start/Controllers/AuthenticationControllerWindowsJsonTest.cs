@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				        		                		new BusinessUnitViewModel {Id = businessunitid, Name = "businessunit"}
 				        		                	}
 				        	});
-			logOn.Stub(x => x.LogOn(businessunitid, "datasource", person.Id.Value, AuthenticationTypeOption.Windows, false)).Throw(new PermissionException());
+			logOn.Stub(x => x.LogOn(businessunitid, "datasource", person.Id.Value, AuthenticationTypeOption.Windows)).Throw(new PermissionException());
 
 			var target = MakeAuthenticationControllerWithAcceptJsonHeader(
 				viewModelFactory, authenticator, logOn, null);

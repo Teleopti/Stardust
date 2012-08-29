@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_principalAuthorization = principalAuthorization;
 		}
 
-		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType, bool isAnywhereReport)
+		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType)
 		{
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
@@ -49,7 +49,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				_logOnOff.LogOn(dataSource, person, businessUnit, authenticationType);
 				var principal = _currentTeleoptiPrincipal.Current();
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
-				bool allowed = _principalAuthorization.IsPermitted(isAnywhereReport ? DefinedRaptorApplicationFunctionPaths.Anywhere : DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
+
+				bool allowed = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere) ||
+				               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
 
 				if (!allowed)
 					throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");

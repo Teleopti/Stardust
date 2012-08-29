@@ -31,6 +31,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "signout")]
 		public Link SignOutLink;
 
+		[FindBy(Id = "signout-button")]
+		public Link SignoutButton { get; set; }
+
 
 		public void SelectApplicationTestDataSource()
 		{
@@ -81,13 +84,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		private void WaitForSigninResult()
 		{
 			// move this to the actual navigation, which is the one that actually acts too early?
-			Func<bool> signedInOrBusinessUnitListExists = () =>
-			                                              	{
-																return SignOutLink.IESafeExists() ||
-																	   BusinessUnitList.IESafeExists() ||
-																	   GlobalMenuList.IESafeExists() ||
-																	   ValidationSummary.IESafeExists();
-			                                              	};
+			Func<bool> signedInOrBusinessUnitListExists = () => SignoutButton.IESafeExists() ||
+			                                                    SignOutLink.IESafeExists() ||
+			                                                    BusinessUnitList.IESafeExists() ||
+			                                                    GlobalMenuList.IESafeExists() ||
+			                                                    ValidationSummary.IESafeExists();
 			var found = signedInOrBusinessUnitListExists.WaitUntil(EventualTimeouts.Poll, EventualTimeouts.Timeout);
 			if (!found)
 				throw new ApplicationException("Waiting for signin result failed!");

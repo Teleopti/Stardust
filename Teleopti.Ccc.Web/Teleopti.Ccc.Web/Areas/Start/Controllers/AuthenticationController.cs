@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					return PartialView(winView, signInModel.Value);
 
 			var authenticationResult = _authenticator.AuthenticateWindowsUser(model.DataSourceName);
-			return tryLogon(winView, signInModel, authenticationResult, AuthenticationTypeOption.Windows, false);
+			return tryLogon(winView, signInModel, authenticationResult, AuthenticationTypeOption.Windows);
 		}
 
 		[HttpPost]
@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			var authenticationResult = _authenticator.AuthenticateApplicationUser(model.DataSourceName, model.UserName,
 			                                                                      model.Password);
-			return tryLogon(appView, signInModel, authenticationResult, AuthenticationTypeOption.Application, model.IsAnywhereReport);
+			return tryLogon(appView, signInModel, authenticationResult, AuthenticationTypeOption.Application);
 		}
 
-		private ActionResult tryLogon(string currentView, Lazy<object> signInModel, AuthenticateResult authenticationResult, AuthenticationTypeOption authenticationType, bool isAnywhereReport)
+		private ActionResult tryLogon(string currentView, Lazy<object> signInModel, AuthenticateResult authenticationResult, AuthenticationTypeOption authenticationType)
 		{
 			if (!authenticationResult.Successful)
 			{
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					var businessUnitId = businessUnitViewModel.BusinessUnits.First().Id;
 					var persionId = authenticationResult.Person.Id.Value;
 					var dataSourceName = authenticationResult.DataSource.DataSourceName;
-					return tryLogOnAndReturnResult(businessUnitId, dataSourceName, persionId, authenticationType, isAnywhereReport);
+					return tryLogOnAndReturnResult(businessUnitId, dataSourceName, persionId, authenticationType);
 				default:
 					if (IsJsonRequest())
 					{
@@ -133,14 +133,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpPost]
 		public ActionResult Logon([Bind(Prefix = "SignIn")] SignInBusinessUnitModel model)
 		{
-			return tryLogOnAndReturnResult(model.BusinessUnitId, model.DataSourceName, model.PersonId, (AuthenticationTypeOption)model.AuthenticationType, false);
+			return tryLogOnAndReturnResult(model.BusinessUnitId, model.DataSourceName, model.PersonId, (AuthenticationTypeOption)model.AuthenticationType);
 		}
 
-		private ActionResult tryLogOnAndReturnResult(Guid buisinessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType, bool isAnywhereReport)
+		private ActionResult tryLogOnAndReturnResult(Guid buisinessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType)
 		{
 			try
 			{
-				_logon.LogOn(buisinessUnitId, dataSourceName, personId, authenticationType, isAnywhereReport);
+				_logon.LogOn(buisinessUnitId, dataSourceName, personId, authenticationType);
 
 				return _redirector.SignInRedirect();
 			}
