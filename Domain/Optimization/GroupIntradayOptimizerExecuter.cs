@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool Execute(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave, IList<IScheduleMatrixPro> allMatrixes)
 		{
 			_schedulePartModifyAndRollbackService.ClearModificationCollection();

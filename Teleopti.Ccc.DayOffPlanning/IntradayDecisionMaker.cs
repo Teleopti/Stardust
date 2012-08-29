@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.DayOffPlanning
     public class IntradayDecisionMaker : IIntradayDecisionMaker
     {
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public DateOnly? Execute(ILockableBitArray lockableBitArray, IScheduleResultDataExtractor dataExtractor, IScheduleMatrixPro matrix)
 		{
 			IList<double?> values = dataExtractor.Values();

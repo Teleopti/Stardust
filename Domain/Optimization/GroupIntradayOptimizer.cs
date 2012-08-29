@@ -16,18 +16,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IScheduleMatrixLockableBitArrayConverter _scheduleMatrixLockableBitArrayConverter;
 		private readonly IIntradayDecisionMaker _intradayDecisionMaker;
-		private readonly IScheduleResultDataExtractor _dayIntraDayDeviationDataExtractor;
+		private readonly IScheduleResultDataExtractor _dayIntradayDeviationDataExtractor;
 		private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
 		private ILockableBitArray _lockableBitArray;
 
 		public GroupIntradayOptimizer(IScheduleMatrixLockableBitArrayConverter scheduleMatrixLockableBitArrayConverter, 
 			IIntradayDecisionMaker intradayDecisionMaker,
-			IScheduleResultDataExtractor dayIntraDayDeviationDataExtractor,
+			IScheduleResultDataExtractor dayIntradayDeviationDataExtractor,
 			IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
 		{
 			_scheduleMatrixLockableBitArrayConverter = scheduleMatrixLockableBitArrayConverter;
 			_intradayDecisionMaker = intradayDecisionMaker;
-			_dayIntraDayDeviationDataExtractor = dayIntraDayDeviationDataExtractor;
+			_dayIntradayDeviationDataExtractor = dayIntradayDeviationDataExtractor;
 			_optimizationOverLimitByRestrictionDecider = optimizationOverLimitByRestrictionDecider;
 		}
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_lockableBitArray = _scheduleMatrixLockableBitArrayConverter.Convert(false, false);
 			}
 
-			DateOnly? date = _intradayDecisionMaker.Execute(_lockableBitArray, _dayIntraDayDeviationDataExtractor,
+			DateOnly? date = _intradayDecisionMaker.Execute(_lockableBitArray, _dayIntradayDeviationDataExtractor,
 												 _scheduleMatrixLockableBitArrayConverter.SourceMatrix);
 			return date;
 		}
