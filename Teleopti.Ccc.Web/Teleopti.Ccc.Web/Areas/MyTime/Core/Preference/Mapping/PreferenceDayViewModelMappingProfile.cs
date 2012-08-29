@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Web;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;

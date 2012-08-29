@@ -149,6 +149,8 @@ namespace Teleopti.Ccc.Win.Common
             double value;
             if (double.TryParse(textBoxExtPercent.Text, out value))
             {
+                if (double.IsInfinity(value) || double.IsNaN(value))
+                    textBoxExtPercent.Text = "0";
                 if (InputType == "0")
                 {
                     if (value > maxValue || value < minValue)

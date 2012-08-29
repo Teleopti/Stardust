@@ -983,5 +983,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             retShifts.Count.Should().Be.EqualTo(1);
             _mocks.VerifyAll();
         }
+
+
     }
 }

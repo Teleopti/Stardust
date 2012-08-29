@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -21,7 +22,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
         private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
-        private SaveFileDialog _saveFileDialog; 
+        private SaveFileDialog _saveFileDialog;
+        private const string dateTimeFormat = "yyyyMMdd";
 
         public SelectFileDestination()
         {
@@ -33,21 +35,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             }
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            SaveFile();
-        }
-
         private void SaveFile()
         {
             _saveFileDialog = new SaveFileDialog();
             _saveFileDialog.Title = Resources.SelectFileDestination;
-            _saveFileDialog.FileName = _stateObj.ExportSkillToFileCommandModel.Skill.Name + " - " +
-                                       _stateObj.ExportSkillToFileCommandModel.Period;
+            var period = _stateObj.ExportSkillToFileCommandModel.Period;
+            _saveFileDialog.FileName = _stateObj.ExportSkillToFileCommandModel.Skill.Name + " " +
+                                       period.StartDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture) +
+                                       "-" +
+                                       period.EndDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture);
             _saveFileDialog.Filter = Resources.CSVFile;
-                                  
+
 
             if (_saveFileDialog.ShowDialog() == DialogResult.OK) textBox1.Text = _saveFileDialog.FileName;
         }

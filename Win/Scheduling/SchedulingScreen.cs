@@ -3176,8 +3176,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
         {
             setThreadCulture();
-            _optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator,
-                                                               true, true);
+            _optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator, true, true);
         }
 
         private void validateAllPersons()

@@ -141,6 +141,7 @@
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\EntityExtensions.cs" />
+    <Compile Include="Common\IModifyNow.cs" />
     <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
@@ -771,6 +772,7 @@
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
     <Compile Include="Security\ISystemUserPasswordSpecification.cs" />
     <Compile Include="Security\InsufficientPrivilegeException.cs" />
@@ -845,6 +847,7 @@
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingCalculationMethod.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSettingScheduleExport.cs" />
     <Compile Include="SystemSetting\GlobalSetting\DefaultSegment.cs" />
+    <Compile Include="SystemSetting\GlobalSetting\SmsSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\StringSetting.cs" />
     <Compile Include="SystemSetting\PersonalSettingData.cs" />
     <Compile Include="SystemSetting\SettingData.cs" />
