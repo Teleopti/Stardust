@@ -7,33 +7,49 @@
 	const int timeMarkerPosition = 120;
 }
 <style>
+	.asm-outer-canvas {
+		background: white;
+		padding:6px; 
+		border: 1px solid rgba(0, 0, 0, 0.15);
+		margin: 5px;
+	}
+	
 	.asm-canvas
 	{
-		border: solid green;
-		top: 30px;
 		position: relative;
-		height: 70px; 
+		height: 70px;
 		overflow: hidden;
+		background: #F8F8F8;
+		border: 1px solid rgba(0, 0, 0, 0.15);
 	}
 	
 	.asm-sliding-schedules
 	{
-		border: solid red;
+		border: 1px solid rgba(0, 0, 0, 0.15);
 		position: relative;
 		height: 40px;
 		left: 100px;
 		top: 20px;
 	}
-
-	.asm-timeline-line {
+	
+	.asm-timeline-line
+	{
 		float: left;
 		height: 70px;
 	}
 	
-	.asm-timeline-number {
+	.asm-timeline-number
+	{
+		padding: 1px;
+		padding-left: 4px;
+		padding-right: 5px;
 		position: relative;
+		border: 1px solid rgba(0, 0, 0, 0.15);
+		background: white;
 		top: -20px;
 		left: -25px;
+		font-family: verdana;
+		font-size: 8px;
 	}
 	
 	.asm-layer
@@ -55,7 +71,6 @@
 		height: 100%;
 	}
 </style>
-
 <script>
 	var refreshMilliSeconds = 100;
 
@@ -65,7 +80,7 @@
 	
 	function _moveTimeLineToNow() {
 		var clientMsSince1970 = new Date().getTeleoptiTime();
-		var serverTimeInJs = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month-1), @(Model.StartDate.Day));
+		var serverTimeInJs = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day));
 		var serverMsSince1970 = serverTimeInJs.getTime();
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
 		
@@ -77,33 +92,28 @@
 		$('#leftdebug').text('' + startPixel);
 	}
 </script>
-
-<span id="clockDebug"></span><br/>
-Antal lager: @(Model.Layers.Count)<br/>
-left-position på hela skiten: <span id="leftdebug"></span>
-<div class="teamschedule-timeline-label ui-corner-all">12:00</div>
-
-<div class="asm-canvas">
-	<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;">
-	</div>
-	<div class="asm-sliding-schedules" style="width:@(3*24*pixelsPerHour)px">
-		@foreach (var layer in Model.Layers)
-  {
-			<span class="asm-layer" style="
-			left:@(layer.RelativeStartInMinutes * pixelsPerHour/60)px;
-			padding-left:@(layer.LengthInMinutes * pixelsPerHour/60)px;
-			background-color: @(layer.Color)"></span>
-  }
-		@for (var day = 0; day <= 2; day++)
-  {
-	  for (var hour = 0; hour < 24; hour++)
-	  {
-	  	<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;
-			                                   	border-right:@(timeLineHourBorderSize)px solid rgba(0, 0, 0, 0.15);">
-			<span class="asm-timeline-number">@(hour)</span>
-		</span>
-	  }
-  }
+<div class="asm-outer-canvas ui-corner-all">
+	<div class="asm-canvas ui-corner-all" class="pdl5 pdt5 pdr5">
+		<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;">
+		</div>
+		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px">
+			@foreach (var layer in Model.Layers)
+			{
+				<span class="asm-layer" style="
+                                                                                                                                                                                                    	left:@(layer.RelativeStartInMinutes * pixelsPerHour / 60)px;
+                                                                                                                                                                                                    	padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
+                                                                                                                                                                                                    	background-color: @(layer.Color)">
+				</span>
+			}
+			@for (var day = 0; day <= 2; day++)
+			{
+				for (var hour = 0; hour < 24; hour++)
+				{
+					<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;
+                                                                                                                                                                                                    	                                   	border-right:@(timeLineHourBorderSize)px solid rgba(0, 0, 0, 0.15);">
+						<span class="asm-timeline-number ui-corner-all">@(hour)</span> </span>
+				}
+			}
+		</div>
 	</div>
 </div>
-​ 
