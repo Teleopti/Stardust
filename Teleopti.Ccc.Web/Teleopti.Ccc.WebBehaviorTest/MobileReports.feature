@@ -12,11 +12,6 @@ Background:
 	| Field                    | Value                       |
 	| Name                     | No access to mobile reports |
 	| Access to mobile reports | false                       |
-	And there is a role with
-    | Field                    | Value                         |
-    | Name                     | Access to mobile reports only |
-    | Access to mytime web     | false                         |
-    | Access to mobile reports | true                          |
 
 Scenario: Enter Application 
 	Given I have the role 'Access to mobile reports'
@@ -32,7 +27,7 @@ Scenario: Enter Application without permission
  	Given I have the role 'Access to mobile reports'
  	And I view MobileReports
  	When I click the signout button
- 	Then I should be signed out
+ 	Then I should be signed out from MobileReports
 
 
 Scenario: View Report
