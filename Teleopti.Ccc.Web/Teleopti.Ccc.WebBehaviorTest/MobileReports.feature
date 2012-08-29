@@ -12,6 +12,11 @@ Background:
 	| Field                    | Value                       |
 	| Name                     | No access to mobile reports |
 	| Access to mobile reports | false                       |
+	And there is a role with
+    | Field                    | Value                         |
+    | Name                     | Access to mobile reports only |
+    | Access to mytime web     | false                         |
+    | Access to mobile reports | true                          |
 
 Scenario: Enter Application 
 	Given I have the role 'Access to mobile reports'
@@ -23,18 +28,12 @@ Scenario: Enter Application without permission
 	When I view MobileReports
 	Then I should see friendly error message
 
-Scenario: Logout from application
-	Given I have the role 'Access to mobile reports'
-	And I view MobileReports
-	When I click the signout button
-	Then I should be signed out
+ Scenario: Sign out from application
+ 	Given I have the role 'Access to mobile reports'
+ 	And I view MobileReports
+ 	When I click the signout button
+ 	Then I should be signed out
 
-Scenario: Enter Application with report preference
-	Given I have the role 'Access to mobile reports'
-	And I have previously viewed reports
-	When I enter MobileReports
-	Then I should see a report 
-	And date of should be today
 
 Scenario: View Report
 	Given I have the role 'Access to mobile reports'
@@ -102,3 +101,4 @@ Scenario: Tabledata shows sunday as first day of week for US culture
 	And I have analytics fact queue data
 	When I view a report with week data
 	Then I should see sunday as the first day of week in tabledata
+
