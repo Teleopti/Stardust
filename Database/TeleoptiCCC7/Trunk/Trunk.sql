@@ -20,8 +20,7 @@ CREATE TABLE [ReadModel].[ScheduleDay](
 		[WorkDay] [bit] NOT NULL,
 		[WorkTime] [bigint] NOT NULL,
 		[ContractTime] [bigint] NOT NULL,
-		[Name] [nvarchar](50) NOT NULL,
-		[ShortName] [nvarchar](25) NULL,
+		[Label] [nvarchar](50) NOT NULL,
 		[DisplayColor] [int] NOT NULL,
 		[InsertedOn] [datetime] NOT NULL
 	)
