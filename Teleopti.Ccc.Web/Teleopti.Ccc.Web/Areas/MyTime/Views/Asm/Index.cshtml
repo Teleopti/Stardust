@@ -59,7 +59,8 @@
 	
 	function _moveTimeLineToNow() {
 		var clientMsSince1970 = new Date().getTime();
-		var serverMsSince1970 = @milliSecondsSince1970;
+		var sererTimeInJs = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month-1), @(Model.StartDate.Day));
+		var serverMsSince1970 = sererTimeInJs.getTime();
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
 		var startPixel = -(@pixelsPerHour * hoursSinceStart);
