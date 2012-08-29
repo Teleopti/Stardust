@@ -11031,4 +11031,8 @@ These options are activated:
   <data name="FullDayAbsence" xml:space="preserve">
     <value>Full Day Absence</value>
   </data>
+  <data name="AllowOverwrite" xml:space="preserve">
+    <value>Allow Overwrite</value>
+    <comment>Column Allow overwrite</comment>
+  </data>
 </root>

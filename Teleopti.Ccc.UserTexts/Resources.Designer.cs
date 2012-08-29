@@ -1637,6 +1637,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow Overwrite.
+        /// </summary>
+        public static string AllowOverwrite {
+            get {
+                return ResourceManager.GetString("AllowOverwrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can change and save.
         /// </summary>
         public static string AllowPersonModifications {
