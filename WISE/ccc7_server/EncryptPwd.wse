@@ -151,16 +151,8 @@ end
 item: Remark
   Text=This command fixes the CrossDB view from Analytics into Agg DB
 end
-item: Display Message
-  Title=String
-  Text=/C ""%SUPPORTTOOLSDIR%Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DMART%" -CD"%DAGG%" %SA%"
-end
 item: Execute Program
   Pathname=CMD
   Command Line=/C ""%SUPPORTTOOLSDIR%Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DMART%" -CD"%DAGG%" %SA%"
   Flags=00000010
-end
-item: Display Message
-  Title=String
-  Text=/C ""%SUPPORTTOOLSDIR%Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DMART%" -CD"%DAGG%" %SA%"
 end
