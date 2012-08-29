@@ -26,8 +26,7 @@
 				var signInModel = {
 					"UserName": $('#ApplicationSignIn_SignIn_UserName').val(),
 					"Password": $('#ApplicationSignIn_SignIn_Password').val(),
-					"DataSourceName": $('input[name="signin-sel-datasource"]:checked', $('#application-signin')).val(),
-					"IsAnywhereReport": true
+					"DataSourceName": $('input[name="signin-sel-datasource"]:checked', $('#application-signin')).val()
 				};
 
 				cNs.XRequest('#application-signin', 'Application', signInModel, function (data) {
