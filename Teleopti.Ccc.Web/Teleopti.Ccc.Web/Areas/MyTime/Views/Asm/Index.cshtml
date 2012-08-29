@@ -54,8 +54,10 @@
 	
 	.asm-layer
 	{
+		top: 5px;
 		position: absolute;
-		height: 50px;
+		height: 30px;
+		opacity: 0.8;
 	}
 	
 	.asm-layer-extender
@@ -99,7 +101,7 @@
 		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px">
 			@foreach (var layer in Model.Layers)
 			{
-				<span class="asm-layer" style="
+				<span class="asm-layer ui-corner-all" style="
                                                                                                                                                                                                     	left:@(layer.RelativeStartInMinutes * pixelsPerHour / 60)px;
                                                                                                                                                                                                     	padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
                                                                                                                                                                                                     	background-color: @(layer.Color)">
