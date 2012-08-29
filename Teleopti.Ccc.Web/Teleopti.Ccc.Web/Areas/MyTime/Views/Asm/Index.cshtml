@@ -7,25 +7,33 @@
 	const int timeMarkerPosition = 120;
 }
 <style>
-	.asm-timeline-border
+	.asm-canvas
 	{
 		border: solid green;
 		top: 30px;
 		position: relative;
-		height: 50px; 
+		height: 70px; 
 		overflow: hidden;
 	}
 	
-	.asm-timeline
+	.asm-sliding-schedules
 	{
 		border: solid red;
 		position: relative;
 		height: 40px;
 		left: 100px;
+		top: 20px;
+	}
+
+	.asm-timeline-line {
+		float: left;
+		height: 70px;
 	}
 	
-	.asm-timeline-numbers {
-		float: left;
+	.asm-timeline-number {
+		position: relative;
+		top: -20px;
+		left: -25px;
 	}
 	
 	.asm-layer
@@ -63,7 +71,7 @@
 		
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
 		var startPixel = -(@pixelsPerHour * hoursSinceStart);
-		$('.asm-timeline').css('left', (startPixel +@timeMarkerPosition) + 'px');
+		$('.asm-sliding-schedules').css('left', (startPixel +@timeMarkerPosition) + 'px');
 		//debug
 		$('#clockDebug').text(''+new Date(clientMsSince1970));
 		$('#leftdebug').text('' + startPixel);
@@ -73,11 +81,12 @@
 <span id="clockDebug"></span><br/>
 Antal lager: @(Model.Layers.Count)<br/>
 left-position på hela skiten: <span id="leftdebug"></span>
+<div class="teamschedule-timeline-label ui-corner-all">12:00</div>
 
-<div class="asm-timeline-border">
+<div class="asm-canvas">
 	<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;">
 	</div>
-	<div class="asm-timeline" style="width:@(3*24*pixelsPerHour)px">
+	<div class="asm-sliding-schedules" style="width:@(3*24*pixelsPerHour)px">
 		@foreach (var layer in Model.Layers)
   {
 			<span class="asm-layer" style="
@@ -89,8 +98,10 @@ left-position på hela skiten: <span id="leftdebug"></span>
   {
 	  for (var hour = 0; hour < 24; hour++)
 	  {
-	  	<span class="asm-timeline-numbers" style="width:@(timeLineHourWidth)px;
-															border-right:@(timeLineHourBorderSize)px solid black;">@(hour)</span>
+	  	<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;
+			                                   	border-right:@(timeLineHourBorderSize)px solid rgba(0, 0, 0, 0.15);">
+			<span class="asm-timeline-number">@(hour)</span>
+		</span>
 	  }
   }
 	</div>
