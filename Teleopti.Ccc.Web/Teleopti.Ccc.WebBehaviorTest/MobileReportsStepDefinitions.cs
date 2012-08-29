@@ -176,6 +176,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click next date")]
 		public void WhenIClickNextDate()
 		{
+			// before click next date, make sure current is today
+			var expexted = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
+			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
 			_page.ReportViewNextDateNavigation.EventualClick();
 		}
 
@@ -189,6 +192,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click previous date")]
 		public void WhenIClickPreviousDate()
 		{
+			// before click previous date, make sure current is today
+			var expexted = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
+			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
 			_page.ReportViewPrevDateNavigation.EventualClick();
 		}
 
