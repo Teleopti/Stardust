@@ -686,6 +686,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			//_scheduleTypeColumn.ColumnComparer = new SchedulePeriodUnitComparer();
 			//_gridColumns.Add(_scheduleTypeColumn);
 
+			//_scheduleTypeColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
+			//_scheduleTypeColumn.CellChanged += ParentColumn_CellChanged;
+			//_scheduleTypeColumn.ColumnComparer = new SchedulePeriodUnitComparer();
+			//_gridColumns.Add(_scheduleTypeColumn);
+
 			_scheduleTypeColumn = new DropDownColumnForPeriodGrids<SchedulePeriodModel, SchedulePeriodTypeDisplay>
 				("PeriodType", UserTexts.Resources.Type, SchedulePeriodTypeDisplay.ListOfPeriodType, "DisplayName");
 			_scheduleTypeColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
