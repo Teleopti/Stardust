@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleResultDataExtractor _dayIntraDayDeviationDataExtractor;
 		private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
 		private ILockableBitArray _lockableBitArray;
-		private readonly IScheduleMatrixPro _matrix;
 
 		public GroupIntradayOptimizer(IScheduleMatrixLockableBitArrayConverter scheduleMatrixLockableBitArrayConverter, 
 			IIntradayDecisionMaker intradayDecisionMaker,
@@ -30,25 +29,29 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayDecisionMaker = intradayDecisionMaker;
 			_dayIntraDayDeviationDataExtractor = dayIntraDayDeviationDataExtractor;
 			_optimizationOverLimitByRestrictionDecider = optimizationOverLimitByRestrictionDecider;
-			_matrix = _scheduleMatrixLockableBitArrayConverter.SourceMatrix;
 		}
 
 		public DateOnly? Execute()
 		{
 			if(_lockableBitArray == null)
+			{
 				_lockableBitArray = _scheduleMatrixLockableBitArrayConverter.Convert(false, false);
+			}
+
 			DateOnly? date = _intradayDecisionMaker.Execute(_lockableBitArray, _dayIntraDayDeviationDataExtractor,
-				                                 _matrix);
+												 _scheduleMatrixLockableBitArrayConverter.SourceMatrix);
 			return date;
 		}
 
 		public void LockDate(DateOnly dateOnly)
 		{
 			if (_lockableBitArray == null)
+			{
 				_lockableBitArray = _scheduleMatrixLockableBitArrayConverter.Convert(false, false);
+			}
 
 			int index = 0;
-			foreach (var fullWeeksPeriodDay in _matrix.FullWeeksPeriodDays)
+			foreach (var fullWeeksPeriodDay in _scheduleMatrixLockableBitArrayConverter.SourceMatrix.FullWeeksPeriodDays)
 			{
 				if(fullWeeksPeriodDay.Day == dateOnly)
 					_lockableBitArray.Lock(index, true);
@@ -63,7 +66,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IScheduleMatrixPro Matrix
 		{
-			get { return _scheduleMatrixLockableBitArrayConverter.SourceMatrix; }
+			get
+			{
+				return _scheduleMatrixLockableBitArrayConverter.SourceMatrix;
+			}
 		}
 
 		public IOptimizationOverLimitByRestrictionDecider OptimizationOverLimitByRestrictionDecider
@@ -73,7 +79,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool IsMatrixForDateAndPerson(DateOnly dateOnly, IPerson person)
 		{
-			if (_matrix.Person == person && _matrix.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
+			IScheduleMatrixPro matrix = Matrix;
+			if (matrix.Person == person && matrix.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
 				return true;
 
 			return false;

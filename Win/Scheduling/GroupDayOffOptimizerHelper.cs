@@ -147,13 +147,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
 			   OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
-			IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator, groupPersonConsistentChecker, workShiftBackToLegalStateService, resourceOptimizationHelper);
+			IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
+			                                                             groupPersonConsistentChecker,
+			                                                             workShiftBackToLegalStateService,
+			                                                             resourceOptimizationHelper);
 			var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-			var service = new GroupIntradayOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, rollbackService,
-			                                                deleteSchedulePartService, schedulingOptionsCreator,
-			                                                mainShiftOptimizeActivitySpecificationSetter, optimizationPreferences,
+			IGroupIntradayOptimizerExecuter groupIntradayOptimizerExecuter = new GroupIntradayOptimizerExecuter(rollbackService,
+			                                                deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
+			                                                mainShiftOptimizeActivitySpecificationSetter,
 			                                                groupMatrixHelper, groupSchedulingService,
 			                                                groupPersonBuilderForOptimization);
+			var service = new GroupIntradayOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupIntradayOptimizerExecuter);
 
 			//service.ReportProgress += resourceOptimizerPersonOptimized;
 			service.Execute(allMatrix);

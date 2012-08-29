@@ -211,6 +211,7 @@
     <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerTest.cs" />
+    <Compile Include="Optimization\GroupIntradayOptimizerExecuterTest.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandlerTest.cs" />
     <Compile Include="Optimization\ExtendReduceDaysOffOptimizerServiceTest.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Optimization\DayOffOptimizerConflictHandlerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidatorTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerTest.cs" />
+    <Compile Include="Optimization\GroupIntradayOptimizerTest.cs" />
     <Compile Include="Optimization\GroupMatrixContainerCreatorTest.cs" />
     <Compile Include="Optimization\GroupMatrixHelperTest.cs" />
     <Compile Include="Optimization\GroupOptimizationValidatorRunnerTest.cs" />
