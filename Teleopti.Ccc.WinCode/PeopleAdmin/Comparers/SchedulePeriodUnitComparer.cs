@@ -42,10 +42,13 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Comparers
 			{
 				result = 1;
 			}
-			else
+			else 
 			{
-				// Compares the teminal date of the y with the teminal date of y
-				result = string.Compare(((SchedulePeriodType)x.PeriodType).ToString(), ((SchedulePeriodType)y.PeriodType).ToString()
+				//// Compares the teminal date of the y with the teminal date of y
+				//result = string.Compare(((SchedulePeriodType)x.PeriodType).ToString(), ((SchedulePeriodType)y.PeriodType).ToString()
+				//    , StringComparison.CurrentCulture);
+
+				result = string.Compare(x.PeriodType.PeriodType.ToString(), y.PeriodType.PeriodType.ToString()
 					, StringComparison.CurrentCulture);
 			}
 
