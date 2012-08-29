@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             foreach (TItems theComboItem in _comboItems)
             {
                 string itemName = null;
-                try { itemName = (string)_propertyReflector.GetValue(theComboItem, _displayMember); }
+                try { itemName = _propertyReflector.GetValue(theComboItem, _displayMember).ToString(); }
                 catch (InvalidCastException) { }
                 if (itemName == displayMember)
                 {
@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                     return true;
                 }
             }
-			//it must be possible to empty the BudgetGroup
-			if (_baseClass.Equals(typeof(Domain.Budgeting.BudgetGroup)) && string.IsNullOrEmpty(displayMember))
+
+			if (string.IsNullOrEmpty(displayMember))
 			{
 				comboItem = default(TItems);
 				return true;
@@ -109,7 +109,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             if (e.ColIndex > 0 && e.RowIndex > 0)
             {
                 if (dataItems.Count == 0) return;
-                TData dataItem = dataItems.ElementAt(e.RowIndex - 1);
+				if (dataItems.Count < e.RowIndex) return;
+
+                TData dataItem = dataItems[e.RowIndex - 1];
 
                 if (typeof(TItems).IsAssignableFrom(e.Style.CellValue.GetType()) ||
                     typeof(TItems) == e.Style.CellValue.GetType().BaseType ||

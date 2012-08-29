@@ -189,6 +189,11 @@ namespace Teleopti.Messaging.SignalR
 				var subscriptionWithHandlersToRemove = new List<SubscriptionWithHandler>();
 				foreach (var subscriptionHandler in _subscriptionHandlers)
 				{
+					if (subscriptionHandler.Value == null)
+					{
+						continue;
+					}
+
 					foreach (var subscriptionWithHandler in subscriptionHandler.Value)
 					{
 						var target = subscriptionWithHandler.Handler;
