@@ -12,10 +12,16 @@ Scenario: View current week
 ############
 Scenario: View night shift
 	Given I am an agent
-	And I have a night shift starting on monday
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-27 20:00 |
+	| EndTime           | 2012-08-28 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
 	And My schedule is published
-	When I view my week schedule
-	Then the shift should end on monday
+	When I view my week schedule for date '2012-08-27'
+	Then I should not see the end of the shift on date '2012-08-27'
+	And I should see the end of the shift on date '2012-08-28'
 
 ############ new
 Scenario: View start of night shift on last day of week for swedish culture
@@ -146,28 +152,44 @@ Scenario: Show timeline with no schedule
 	| timeline count | 25    |
 
 ############
-Scenario: Show timeline with schedule
+Scenario: Show timeline with schedule 
 	Given I am an agent
-	And I have shifts scheduled for two weeks
-	And My schedule is published
-	When I view my week schedule
-	Then I should see start timeline and end timeline according to schedule with:
-	| Field          | Value |
-	| start timeline | 0:00  |
-	| end timeline   | 23:59 |
-	| timeline count | 25    |
-
-############
-Scenario: Show timeline with schedule with start and end time on different day
-	Given I am an agent
-	And I have shifts scheduled with different activities for two weeks
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-27 10:00 |
+	| EndTime           | 2012-08-27 20:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-28 08:00 |
+	| EndTime           | 2012-08-28 17:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
 	And My schedule is published
 	When I view my week schedule
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field          | Value |
 	| start timeline | 8:00  |
-	| end timeline   | 18:00 |
-	| timeline count | 11    |
+	| end timeline   | 20:00 |
+	| timeline count | 13    |
+
+############
+Scenario: Show timeline with night shift
+	Given I am an agent
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-27 20:00 |
+	| EndTime           | 2012-08-28 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
+	And My schedule is published
+	When I view my week schedule for date '2012-08-27'
+	Then I should see start timeline and end timeline according to schedule with:
+	| Field          | Value |
+	| start timeline | 0:00  |
+	| end timeline   | 23:59 |
+	| timeline count | 25    |
 
 ############??????
 Scenario: Show activity with correct position, height and color

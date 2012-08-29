@@ -44,20 +44,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 											x =>
 												{
 													var period = _projectionProvider.Invoke().Projection(x).Period();
-													return (period != null && _projectionProvider.Invoke().Projection(x).HasLayers
-													        	? period.Value.TimePeriod(
-													        		TeleoptiPrincipal.Current.Regional.TimeZone).StartTime
-													        	: new TimeSpan(23, 59, 59));
+												    var earlyStart = new TimeSpan(23, 59, 59);
+                                                    if (period != null && _projectionProvider.Invoke().Projection(x).HasLayers)
+                                                    {
+                                                        var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
+                                                        var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
+                                                        earlyStart = endTime.Days > startTime.Days ? TimeSpan.Zero : startTime;
+                                                    }
+												    return earlyStart;
 												});
 									var latest =
 										scheduleDays.Max(
 											x =>
 												{
 													var period = _projectionProvider.Invoke().Projection(x).Period();
-													return (period != null && _projectionProvider.Invoke().Projection(x).HasLayers
-													        	? period.Value.TimePeriod(
-													        		TeleoptiPrincipal.Current.Regional.TimeZone).EndTime
-													        	: new TimeSpan(0, 0, 0));
+												    var lateEnd = new TimeSpan(0, 0, 0);
+                                                    if (period != null && _projectionProvider.Invoke().Projection(x).HasLayers)
+                                                    {
+                                                        var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
+                                                        var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
+                                                        lateEnd = endTime.Days > startTime.Days ? new TimeSpan(23, 59, 59) : endTime;
+                                                    }
+                                                    return lateEnd;
 												});
 									TimePeriod minMaxTime = earliest > latest
 									                        	? new TimePeriod(latest, earliest)

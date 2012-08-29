@@ -242,6 +242,32 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(00);
 		}
 
+        [Test]
+        public void ShouldMapMinMaxTimeForNightShift()
+        {
+            var date = new DateOnly(2012,08,28);
+            var scheduleDay = new StubFactory().ScheduleDayStub(date);
+
+            userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+            var localMidnightInUtc = timeZone.ConvertTimeToUtc(date.Date);
+            var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+            var layer = new StubFactory().VisualLayerStub();
+            layer.Period = projectionPeriod;
+            var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+            scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { scheduleDay });
+            projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+
+            var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+
+            result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
+            result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
+
+            result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(23);
+            result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(59);
+        }
+
 		[TearDown]
 		public void Teardown()
 		{

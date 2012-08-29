@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
@@ -62,19 +63,48 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			AssertShowingWeekForDay(TestDataSetup.FirstDayOfCurrentWeek(UserFactory.User().Culture));
 		}
 
-		[Then(@"the shift should end on monday")]
-		public void ThenTheShiftShouldEndOnMonday()
-		{
-			var contents = _page.FirstDay.InnerHtml;
+        [Then(@"I should not see the end of the shift on date '(.*)'")]
+        public void ThenIShouldNotSeeTheEndOfTheShiftOnDate(DateTime date)
+        {
+            var dateString = _page.FirstDay.GetAttributeValue("data-mytime-date");
 
-			var indexForShiftStart = contents.IndexOf(TestData.ActivityPhone.Description.Name);
-			var indexForShiftEnd = contents.IndexOf(TestData.ActivityPhone.Description.Name,
-													indexForShiftStart +
-													TestData.ActivityPhone.Description.Name.Length);
+            DateTime dateFromPage;
+            if (DateTime.TryParse(dateString, UserFactory.User().Culture, DateTimeStyles.None, out dateFromPage))
+            {
+                dateFromPage.Date.Should().Be.EqualTo(date.Date);
+            }
+            dateFromPage.Should().Not.Be.EqualTo(null);
 
-			indexForShiftEnd.Should().Be.GreaterThan(indexForShiftStart);
-		}
+            var contents = _page.FirstDay.InnerHtml;
 
+            var indexForShiftStart = contents.IndexOf(TestData.ActivityPhone.Description.Name);
+            var indexForShiftEnd = contents.IndexOf(TestData.ActivityPhone.Description.Name,
+                                                    indexForShiftStart +
+                                                    TestData.ActivityPhone.Description.Name.Length);
+
+            indexForShiftEnd.Should().Be.EqualTo(-1);
+        }
+
+        [Then(@"I should see the end of the shift on date '(.*)'")]
+        public void ThenIShouldSeeTheEndOfTheShiftOnDate(DateTime date)
+        {
+            var dateString = _page.SecondDay.GetAttributeValue("data-mytime-date");
+
+            DateTime dateFromPage;
+            if (DateTime.TryParse(dateString, UserFactory.User().Culture, DateTimeStyles.None, out dateFromPage))
+            {
+                dateFromPage.Date.Should().Be.EqualTo(date.Date);
+            }
+            dateFromPage.Should().Not.Be.EqualTo(null);
+
+            var contents = _page.SecondDay.InnerHtml;
+
+            var indexForShiftEnd = contents.IndexOf(TestData.ActivityPhone.Description.Name);
+
+            indexForShiftEnd.Should().Be.GreaterThan(-1);
+        }
+
+        
 		[Then(@"I should see the meeting details")]
 		public void ThenIShouldSeeTheMeetingDetails()
 		{

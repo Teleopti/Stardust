@@ -87,6 +87,39 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         }
 
         [Test]
+        public void ShouldCreatePeriodViewModelFromActivityLayerForNightShift()
+        {
+            period = new DateTimePeriod(new DateTime(2012, 8, 27, 18, 0, 0, DateTimeKind.Utc),
+                                        new DateTime(2012, 8, 28, 02, 0, 0, DateTimeKind.Utc));
+            visualActivityLayer = factory.CreateShiftSetupLayer(activity, period, person);
+
+            var visualLayers = new List<IVisualLayer> { visualActivityLayer };
+            using (mocks.Record())
+            {
+                Expect.Call(visualLayerCollection.GetEnumerator()).Return(visualLayers.GetEnumerator());
+            }
+            using (mocks.Playback())
+            {
+                var endTimeLine = new TimeSpan(23, 59, 0);
+                var startShift = new TimeSpan(20, 0, 0);
+                var cutShiftTime = new TimeSpan(23,59,0);
+
+                minMaxTime = new TimePeriod(new TimeSpan(0,0,0), endTimeLine);
+                var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime);
+
+                var layerDetails = result.Single();
+                layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
+                layerDetails.Summary.Should().Be.EqualTo("8:00");
+                layerDetails.Title.Should().Be.EqualTo("Phone");
+                layerDetails.TimeSpan.Should().Be.EqualTo("20:00 - 04:00");
+                layerDetails.Meeting.Should().Be.Null();
+                layerDetails.Color.Should().Be.EqualTo("0,128,0");
+                layerDetails.StartPositionPercentage.Should().Be.EqualTo((decimal)(startShift - TimeSpan.Zero).Ticks / (decimal)(endTimeLine - TimeSpan.Zero).Ticks);
+                layerDetails.EndPositionPercentage.Should().Be.EqualTo((decimal)(cutShiftTime - TimeSpan.Zero).Ticks / (decimal)(endTimeLine - TimeSpan.Zero).Ticks);
+            }
+        }
+
+        [Test]
         public void ShouldCreatePeriodViewModelFromAbsenceLayer()
         {
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");

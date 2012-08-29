@@ -29,19 +29,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	       var shiftCat = new ShiftCategory("will be removed");
 			new ShiftCategoryRepository(uow).Add(shiftCat);
             
-            var dateUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(StartTime.Date);
+            var startDateUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(StartTime.Date);
+            var endDateUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(EndTime.Date);
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			// create main shift
-            _assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime.TimeOfDay), dateUtc.Add(EndTime.TimeOfDay));
+            _assignmentPeriod = new DateTimePeriod(startDateUtc.Add(StartTime.TimeOfDay), endDateUtc.Add(EndTime.TimeOfDay));
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
 			assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, _assignmentPeriod, shiftCat));
 
 			// add lunch
 			if (Lunch)
 			{
-                var lunchPeriod = new DateTimePeriod(dateUtc.Add(StartTime.TimeOfDay).AddHours(3), dateUtc.Add(StartTime.TimeOfDay).AddHours(4));
+                var lunchPeriod = new DateTimePeriod(startDateUtc.Add(StartTime.TimeOfDay).AddHours(3), startDateUtc.Add(StartTime.TimeOfDay).AddHours(4));
 				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
 			}
 
