@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -7,6 +8,34 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 {
+	public class SchedulePeriodTypeDisplay
+	{
+		public SchedulePeriodType PeriodType { get; private set; }
+		public string DisplayName { get; private set; }
+
+		public SchedulePeriodTypeDisplay(SchedulePeriodType periodType, string displayName)
+		{
+			PeriodType = periodType;
+			DisplayName = displayName;
+		}
+
+		public static IList<SchedulePeriodTypeDisplay> ListOfPeriodType
+		{
+			get
+			{
+				var ret = new List<SchedulePeriodTypeDisplay>
+				          	{
+				          		new SchedulePeriodTypeDisplay(SchedulePeriodType.Month, UserTexts.Resources.Month),
+				          		new SchedulePeriodTypeDisplay(SchedulePeriodType.Week, UserTexts.Resources.Week),
+				          		new SchedulePeriodTypeDisplay(SchedulePeriodType.Day, UserTexts.Resources.Day),
+				          	};
+
+				return ret;
+			}
+
+		}
+	}
+
     /// <summary>
     /// Schedule period adapter.
     /// </summary>
@@ -133,27 +162,40 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// </remarks>
         public GridControl GridControl { get; set; }
 
-        /// <summary>
-        /// Gets the unit.
-        /// </summary>
-        /// <value>The unit.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-06-10
-        /// </remarks>
-        public SchedulePeriodType? PeriodType
-        {
-            get
-            {
-                if (_currentSchedulePeriod == null) return null;
-                return _currentSchedulePeriod.PeriodType;
-            }
-            set
-            {
-                if (_currentSchedulePeriod != null && value.HasValue)
-                    _currentSchedulePeriod.PeriodType = value.Value;
-            }
-        }
+		///// <summary>
+		///// Gets the unit.
+		///// </summary>
+		///// <value>The unit.</value>
+		///// <remarks>
+		///// Created by: Dinesh Ranasinghe
+		///// Created date: 2008-06-10
+		///// </remarks>
+		//public SchedulePeriodType? PeriodType
+		//{
+		//    get
+		//    {
+		//        if (_currentSchedulePeriod == null) return null;
+		//        return _currentSchedulePeriod.PeriodType;
+		//    }
+		//    set
+		//    {
+		//        if (_currentSchedulePeriod != null && value.HasValue)
+		//            _currentSchedulePeriod.PeriodType = value.Value;
+		//    }
+		//}
+
+		public SchedulePeriodTypeDisplay PeriodType
+		{
+			get
+			{
+				if (_currentSchedulePeriod == null) return null;
+				return SchedulePeriodTypeDisplay.ListOfPeriodType.SingleOrDefault(p => p.PeriodType == _currentSchedulePeriod.PeriodType);
+			}
+			set
+			{
+				if (value != null) _currentSchedulePeriod.PeriodType = value.PeriodType;
+			}
+		}
 
         /// <summary>
         /// Gets or sets a value indicating whether [expand state].
