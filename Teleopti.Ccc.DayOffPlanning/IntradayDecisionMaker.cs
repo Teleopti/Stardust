@@ -7,6 +7,15 @@ namespace Teleopti.Ccc.DayOffPlanning
     public class IntradayDecisionMaker : IIntradayDecisionMaker
     {
 
+		public DateOnly? Execute(ILockableBitArray lockableBitArray, IScheduleResultDataExtractor dataExtractor, IScheduleMatrixPro matrix)
+		{
+			IList<double?> values = dataExtractor.Values();
+
+			int? indexOfHighestStandardDeviation = GetIndexOfWorkdayWithHighestValue(lockableBitArray, values);
+			if (!indexOfHighestStandardDeviation.HasValue)
+				return null;
+			return matrix.FullWeeksPeriodDays[indexOfHighestStandardDeviation.Value].Day;
+		}
         /// <summary>
         /// Gets and returns the working day with the highest standard deviation.
         /// </summary>

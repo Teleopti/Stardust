@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -49,11 +50,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
             IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
             IList<IScheduleMatrixPro> matrixListForDayOffOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
-			//IList<IScheduleMatrixPro> matrixListForIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
+			IList<IScheduleMatrixPro> matrixListForIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
 
 			//IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization = createMatrixContainerList(matrixListForWorkShiftOptimization);
             IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization = createMatrixContainerList(matrixListForDayOffOptimization);
-			//IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForIntradayOptimization = createMatrixContainerList(matrixListForIntradayOptimization);
+			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForIntradayOptimization = createMatrixContainerList(matrixListForIntradayOptimization);
 
             var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
             var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
@@ -79,8 +80,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				//IList<IScheduleMatrixOriginalStateContainer> workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization =
 				//    createMatrixContainerList(matrixListForWorkShiftAndIntradayOptimization);
 
-                bool originalKeepShiftCategorySettings = optimizerPreferences.Shifts.KeepShiftCategories;
-                optimizerPreferences.Shifts.KeepShiftCategories = true;
+
 
 				//if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
 				//    _scheduleOptimizerHelper.RunWorkShiftOptimization(
@@ -90,14 +90,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				//        selectedPeriod, 
 				//        _backgroundWorker);
 
-				//if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
-				//    _scheduleOptimizerHelper.RunIntradayOptimization(
-				//        optimizerPreferences,
-				//        matrixOriginalStateContainerListForIntradayOptimization,
-				//        workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
-				//        backgroundWorker);
+				if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
+					runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
 
-                optimizerPreferences.Shifts.KeepShiftCategories = originalKeepShiftCategorySettings;
             }
             
             
@@ -109,6 +104,60 @@ namespace Teleopti.Ccc.Win.Scheduling
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
 
+		private void runIntradayOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
+		{
+			var schedulingOptionsCreator = new SchedulingOptionsCreator();
+			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			var restrictionChecker = new RestrictionChecker();
+			var decisionMaker = new IntradayDecisionMaker();
+			IList<IGroupIntradayOptimizer> optimizers = new List<IGroupIntradayOptimizer>();
+			foreach (var originalStateContainer in originalStateContainers)
+			{
+				var matrix = originalStateContainer.ScheduleMatrix;
+
+				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, restrictionChecker,
+				                                                                              optimizationPreferences,
+				                                                                              originalStateContainer);
+				RelativeDailyStandardDeviationsByAllSkillsExtractor relativeDailyStandardDeviationsByAllSkillsExtractor =
+					new RelativeDailyStandardDeviationsByAllSkillsExtractor(matrix, schedulingOptions);
+				IScheduleMatrixLockableBitArrayConverter lockableBitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(matrix);
+				var optimizer = new GroupIntradayOptimizer(lockableBitArrayConverter, decisionMaker,
+				                                           relativeDailyStandardDeviationsByAllSkillsExtractor,
+				                                           optimizerOverLimitDecider);
+				optimizers.Add(optimizer);
+			}
+
+			var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
+			var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+        		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
+			IList<IScheduleMatrixPro> allMatrix = originalStateContainers.Select(container => container.ScheduleMatrix).ToList();
+			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
+			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
+			                                                                                                 _scheduleDayChangeCallback,
+			                                                                                                 new ScheduleTagSetter
+			                                                                                                 	(optimizationPreferences
+			                                                                                                 	 	.General.
+			                                                                                                 	 	ScheduleTag));
+			var deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
+			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+			IGroupMatrixContainerCreator groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+			IGroupPersonConsistentChecker groupPersonConsistentChecker =
+				_container.Resolve<IGroupPersonConsistentChecker>();
+			IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+			IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
+			   OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
+			IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator, groupPersonConsistentChecker, workShiftBackToLegalStateService, resourceOptimizationHelper);
+			var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
+			var service = new GroupIntradayOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, rollbackService,
+			                                                deleteSchedulePartService, schedulingOptionsCreator,
+			                                                mainShiftOptimizeActivitySpecificationSetter, optimizationPreferences,
+			                                                groupMatrixHelper, groupSchedulingService,
+			                                                groupPersonBuilderForOptimization);
+
+			//service.ReportProgress += resourceOptimizerPersonOptimized;
+			service.Execute(allMatrix);
+		}
         private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
         {
             IScheduleDayEquator scheduleDayEquator = new ScheduleDayEquator();
@@ -246,7 +295,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
 			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
 			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper, groupOptimizerFindMatrixesForGroup);
-            service.ReportProgress += resourceOptimizerPersonOptimized;
+            
             //another service too
             service.Execute(optimizerContainers, optimizerPreferences.Extra.KeepSameDaysOffInTeam);
             service.ReportProgress -= resourceOptimizerPersonOptimized;
@@ -291,7 +340,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IScheduleMatrixPro scheduleMatrix = originalStateContainer.ScheduleMatrix;
 
             IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-               OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(scheduleMatrix, rollbackService, _container);
+               OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
 
             IScheduleMatrixLockableBitArrayConverter scheduleMatrixArrayConverter =
                 new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);

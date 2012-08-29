@@ -19,26 +19,33 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
 
-		/// <summary>
-		/// Schedules the removed day off days.
-		/// </summary>
-		/// <param name="daysOffToReschedule">The days off to reschedule.</param>
-		/// <param name="groupPerson">The group person.</param>
-		/// <param name="groupSchedulingService">The group scheduling service.</param>
-		/// <param name="schedulePartModifyAndRollbackService">The schedule part modify and rollback service.</param>
-		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <param name="groupPersonBuilderForOptimization">The group person builder for optimization.</param>
-		/// <returns></returns>
-        bool ScheduleRemovedDayOffDays(
-            IList<DateOnly> daysOffToReschedule,
-            IGroupPerson groupPerson,
-            IGroupSchedulingService groupSchedulingService,
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-            ISchedulingOptions schedulingOptions,
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
+    	/// <summary>
+    	/// Schedules the removed day off days.
+    	/// </summary>
+    	/// <param name="daysOffToReschedule">The days off to reschedule.</param>
+    	/// <param name="groupPerson">The group person.</param>
+    	/// <param name="groupSchedulingService">The group scheduling service.</param>
+    	/// <param name="schedulePartModifyAndRollbackService">The schedule part modify and rollback service.</param>
+    	/// <param name="schedulingOptions">The scheduling options.</param>
+    	/// <param name="groupPersonBuilderForOptimization">The group person builder for optimization.</param>
+    	/// <returns></returns>
+    	bool ScheduleRemovedDayOffDays(
+    		IList<DateOnly> daysOffToReschedule,
+    		IGroupPerson groupPerson,
+    		IGroupSchedulingService groupSchedulingService,
+    		ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+    		ISchedulingOptions schedulingOptions,
+    		IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
 
     	IList<DateOnly> GoBackToLegalState(IList<DateOnly> daysOffToReschedule, IGroupPerson groupPerson,
     	                                   ISchedulingOptions schedulingOptions);
+
+    	bool ScheduleSinglePerson(DateOnly dayToReschedule, IPerson person,
+    	                          IGroupSchedulingService groupSchedulingService,
+    	                          ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+    	                          ISchedulingOptions schedulingOptions,
+    	                          IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+    	                          IList<IScheduleMatrixPro> allMatrixes);
 
         /// <summary>
         /// Creates the group matrix containers.
@@ -84,7 +91,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         	_resourceOptimizationHelper = resourceOptimizationHelper;
         }
 
-    	/// <summary>
+		
+
+		/// <summary>
         /// Creates the group matrix containers.
         /// </summary>
         /// <param name="allMatrixes">All matrixes.</param>
@@ -182,6 +191,20 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
             return true;
         }
+
+		public bool ScheduleSinglePerson(DateOnly dayToReschedule, IPerson person, IGroupSchedulingService groupSchedulingService, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, IList<IScheduleMatrixPro> allMatrixes)
+		{
+			IGroupPerson groupPersonToRun = groupPersonBuilderForOptimization.BuildGroupPerson(person,
+																								   dayToReschedule);
+			_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPersonToRun,
+																	   dayToReschedule, schedulingOptions);
+			if (!groupSchedulingService.ScheduleOneDayOnOnePerson(dayToReschedule, person, schedulingOptions, groupPersonToRun, allMatrixes))
+			{
+				schedulePartModifyAndRollbackService.Rollback();
+				return false;
+			}
+			return true;
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<DateOnly> GoBackToLegalState(IList<DateOnly> daysOffToReschedule, IGroupPerson groupPerson,

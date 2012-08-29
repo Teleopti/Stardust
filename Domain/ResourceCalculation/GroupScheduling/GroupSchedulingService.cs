@@ -13,6 +13,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker);
         bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
+
+    	bool ScheduleOneDayOnOnePerson(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions,
+    	                               IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
     }
 
     public class GroupSchedulingService : IGroupSchedulingService
@@ -151,7 +154,82 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			return true;
         }
 
-        protected void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+    	public bool ScheduleOneDayOnOnePerson(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList)
+    	{
+			var scheduleDictionary = _resultStateHolder.Schedules;
+
+			if (groupPerson == null)
+				return false;
+			var members = groupPerson.GroupMembers;
+			var agentAverageFairness = scheduleDictionary.AverageFairnessPoints(members);
+			var best = groupPerson.CommonPossibleStartEndCategory;
+			if (best == null)
+			{
+				IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
+
+				var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions, agentAverageFairness);
+				best = bestCategoryResult.BestPossible;
+
+				if (best == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)
+					_finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ErrorMessageNotAValidSchedulePeriod);
+
+				if (best == null && bestCategoryResult.FailureCause == FailureCause.ConflictingRestrictions)
+					_finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ConflictingRestrictions);
+			}
+
+
+			if (best == null)
+			{
+				return false;
+			}
+			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(members, dateOnly, schedulingOptions, scheduleDictionary);
+
+			IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
+
+			if (scheduleDay.IsScheduled())
+				return true;
+
+			bool locked = false;
+			foreach (var scheduleMatrixPro in matrixList)
+			{
+				if (scheduleMatrixPro.Person == scheduleDay.Person)
+				{
+					if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
+					{
+						if (!scheduleMatrixPro.UnlockedDays.Contains(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)))
+						{
+							locked = true;
+						}
+					}
+				}
+			}
+			if (locked)
+			{
+				return true;
+			}
+
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+																		schedulingOptions.ConsiderShortBreaks);
+
+			bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, effectiveRestriction,
+															   resourceCalculateDelayer, best);
+			if (!sucess)
+			{
+				return false;
+
+			}
+			OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
+			if (_cancelMe)
+			{
+				_rollbackService.Rollback();
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+				return false;
+			}
+
+    		return true;
+    	}
+
+    	protected void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
         {
             EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
             if (temp != null)

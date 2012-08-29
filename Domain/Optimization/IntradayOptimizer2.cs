@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
             
-            //delete schedule on the two days
+            //delete schedule
 			IList<IScheduleDay> listToDelete = new List<IScheduleDay> { scheduleDay };    
             var changed = new changedDay
                               {

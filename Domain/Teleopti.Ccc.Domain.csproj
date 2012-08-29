@@ -233,6 +233,8 @@
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToAdd.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemove.cs" />
+    <Compile Include="Optimization\GroupIntradayOptimizer.cs" />
+    <Compile Include="Optimization\GroupIntradayOptimizerService.cs" />
     <Compile Include="Optimization\GroupOptimizationValidatorRunner.cs" />
     <Compile Include="Optimization\GroupOptimizerFindMatrixesForGroup.cs" />
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroup.cs" />
