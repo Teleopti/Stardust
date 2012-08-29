@@ -93,7 +93,7 @@
 	}
 </script>
 <div class="asm-outer-canvas ui-corner-all">
-	<div class="asm-canvas ui-corner-all" class="pdl5 pdt5 pdr5">
+	<div class="asm-canvas ui-corner-all">
 		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px">
 			@foreach (var layer in Model.Layers)
 			{
@@ -113,7 +113,6 @@
 				}
 			}
 		</div>
-						<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;">
-		</div>
+		<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;"></div>
 	</div>
 </div>
