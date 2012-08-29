@@ -11035,4 +11035,8 @@ These options are activated:
     <value>You don't have permission to access the web portal.</value>
     <comment>no permission for mytimeweb or anywhere report</comment>
   </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Mobile Reports</value>
+    <comment>Mobile Reports title used in anywhere report</comment>
+  </data>
 </root>
