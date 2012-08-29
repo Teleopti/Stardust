@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				          		new SchedulePeriodTypeDisplay(SchedulePeriodType.Month, UserTexts.Resources.Month),
 				          		new SchedulePeriodTypeDisplay(SchedulePeriodType.Week, UserTexts.Resources.Week),
 				          		new SchedulePeriodTypeDisplay(SchedulePeriodType.Day, UserTexts.Resources.Day),
+								new SchedulePeriodTypeDisplay(SchedulePeriodType.ChineseMonth, "xxMonth7-8")
 				          	};
 
 				return ret;
