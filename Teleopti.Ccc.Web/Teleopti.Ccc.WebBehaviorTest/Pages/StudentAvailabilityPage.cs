@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Button OkButton { get; set; }
 
 		[FindBy(Id = "StudentAvailability-edit-cancel-button")]
-		public Button CancelButton;
+		public Button CancelButton { get; set; }
 
 		[FindBy(Id = "StudentAvailability-edit-section")]
-		public Div InputPanel;
+		public Div InputPanel { get; set; }
 
 		[FindBy(Id = "StudentAvailability-period")]
 		public Div StudentAvailabilityPeriod;
