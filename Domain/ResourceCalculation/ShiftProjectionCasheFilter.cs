@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             shiftList = FilterOnBusinessRules(current, shiftList, dateToSchedule, finderResult);
 
             var dayPart = current.ScheduledDay(dateToSchedule);
-            //shiftList = FilterOnPersonalShifts(shiftList, dayPart, finderResult);
+            
             return FilterOnNotOverwritableActivities(shiftList, dayPart, finderResult);
         }
 
@@ -486,7 +486,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     continue;
                 filteredList.Add(shift);
             }
-            finderResult.AddFilterResults(new WorkShiftFilterResult("xxAfterCheckingAgainstActivities", cnt, filteredList.Count));
+            finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstActivities,
+                                                                    cnt, filteredList.Count));
 
             return filteredList;
         }

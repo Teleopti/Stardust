@@ -1250,6 +1250,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to After checking against activities.
+        /// </summary>
+        public static string AfterCheckingAgainstActivities {
+            get {
+                return ResourceManager.GetString("AfterCheckingAgainstActivities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checking against keep start and end time.
         /// </summary>
         public static string AfterCheckingAgainstKeepStartAndEndTime {
