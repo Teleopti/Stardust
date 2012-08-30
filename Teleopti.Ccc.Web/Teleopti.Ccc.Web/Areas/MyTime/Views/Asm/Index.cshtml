@@ -5,34 +5,11 @@
 	const double timeLineHourWidth = (pixelsPerHour) - 1; //"1" due to border size
 }
 <script type="text/javascript">
-	var refreshMilliSeconds = 200;
-
-	$(function() {
+	$(function () {
 		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
 		var pixelsPerHour = @(pixelsPerHour);
-		var slidingSchedules = $('.asm-sliding-schedules');
-
-		_moveTimeLineToNow(slidingSchedules, serverMsSince1970, pixelsPerHour);
-		slidingSchedules.show();
-		
-		setInterval(function() {
-			 _moveTimeLineToNow(slidingSchedules, serverMsSince1970, pixelsPerHour);
-			_updateInfoCanvas();
-		}, refreshMilliSeconds);
+		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, pixelsPerHour);
 	});
-	
-	function _updateInfoCanvas() {
-		$('#asm-info-debug').text(new Date().getTeleoptiTime());
-	}
-
-	function _moveTimeLineToNow(slidingSchedules, serverMsSince1970, pixelsPerHour) {
-		var clientMsSince1970 = new Date().getTeleoptiTime();
-		var msSinceStart = clientMsSince1970 - serverMsSince1970;
-		
-		var hoursSinceStart = msSinceStart / 1000 / 60/60;
-		var startPixel = -(pixelsPerHour * hoursSinceStart);
-		slidingSchedules.css('left', (startPixel) + 'px');
-	}
 </script>
 
 <div class="asm-outer-canvas ui-corner-all">
