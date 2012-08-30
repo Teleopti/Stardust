@@ -133,27 +133,21 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// </remarks>
         public GridControl GridControl { get; set; }
 
-        /// <summary>
-        /// Gets the unit.
-        /// </summary>
-        /// <value>The unit.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-06-10
-        /// </remarks>
-        public SchedulePeriodType? PeriodType
-        {
-            get
-            {
-                if (_currentSchedulePeriod == null) return null;
-                return _currentSchedulePeriod.PeriodType;
-            }
-            set
-            {
-                if (_currentSchedulePeriod != null && value.HasValue)
-                    _currentSchedulePeriod.PeriodType = value.Value;
-            }
-        }
+		public SchedulePeriodType? PeriodType
+		{
+			get
+			{
+				if (_currentSchedulePeriod == null) return null;
+				return _currentSchedulePeriod.PeriodType;
+			}
+			set
+			{
+				if (value.HasValue)
+				{
+					_currentSchedulePeriod.PeriodType = value.Value;
+				}
+			}
+		}
 
         /// <summary>
         /// Gets or sets a value indicating whether [expand state].

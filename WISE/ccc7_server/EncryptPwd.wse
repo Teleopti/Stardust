@@ -42,11 +42,38 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=DATABASEINSTALLER
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DBINST
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=DB_CCC7
   Variable Name2=_PROP_VAR_
   Variable Value2=DCCC
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_CCCAGG
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DAGG
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_ANALYTICS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DMART
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
@@ -104,39 +131,19 @@ item: Set Variable
 end
 item: End Block
 end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=DATABASEINSTALLER
-  Variable Name2=_PROP_VAR_
-  Variable Value2=DIR
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
 item: Remark
-  Text=This command encrypts passwords in CCC7-db
+  Text=This command do most magic in CCC7-db via the Security Exe
 end
 item: Execute Program
-  Pathname=.\Enrypted\Teleopti.Support.Security.exe
-  Command Line=-DS"%SRV%" -DD"%DCCC%" %SA%
-  Default Directory=%DIR%
+  Pathname=CMD
+  Command Line=/C ""%DBINST%Enrypted\Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DCCC%" %SA%"
   Flags=00000010
 end
 item: Remark
-  Text=This command fixes DateOnly in forecaster
+  Text=This command fixes the CrossDB view from Analytics into Agg DB
 end
 item: Execute Program
-  Pathname=.\Enrypted\Teleopti.Support.Security.exe
-  Command Line=-DS"%SRV%" -DD"%DCCC%"  -FM %SA%
-  Default Directory=%DIR%
-  Flags=00000010
-end
-item: Remark
-  Text=This command fixes first day of week setting on person
-end
-item: Execute Program
-  Pathname=.\Enrypted\Teleopti.Support.Security.exe
-  Command Line=-DS"%SRV%" -DD"%DCCC%"  -PU %SA%
-  Default Directory=%DIR%
+  Pathname=CMD
+  Command Line=/C ""%DBINST%Enrypted\Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DMART%" -CD"%DAGG%" %SA%"
   Flags=00000010
 end

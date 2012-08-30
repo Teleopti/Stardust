@@ -140,6 +140,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			result.Should().Be.EqualTo(expected);
 		}
 
+        [Test]
+        public void ShouldReturnWorkTimeFromSchedulePeriodForAbsencePreference()
+        {
+            var person = PersonFactory.CreatePerson();
+            var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
+            var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+            var personContract = PersonContractFactory.CreateFulltimePersonContractWithWorkingWeekContractSchedule();
+            personContract.Contract.IsWorkTimeFromSchedulePeriod = true;
+            personContract.Contract.IsWorkTimeFromContract = false;
+            var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2012, 01, 01), personContract, new Team());
+            var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
+            var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
+            personPeriod.RuleSetBag = ruleSetBag;
+            person.AddPersonPeriod(personPeriod);
+            var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2012, 01, 01));
+            schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(6);
+            person.AddSchedulePeriod(schedulePeriod);
+            scheduleDay.Stub(x => x.Person).Return(person);
+            scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 02), CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+            effectiveRestrictionForDisplayCreator.Stub(x => x.GetEffectiveRestrictionForDisplay(scheduleDay, new EffectiveRestrictionOptions(true, true))).Return(effectiveRestriction);
+            effectiveRestriction.Stub(x => x.Absence).Return(new Absence { InContractTime = true });
+
+            var averageWorkTime = new TimeSpan((long)(TimeSpan.FromHours(6).Ticks * personContract.PartTimePercentage.Percentage.Value));
+            var expected = new WorkTimeMinMax() { WorkTimeLimitation = new WorkTimeLimitation(averageWorkTime, averageWorkTime) };
+            
+            var target = new WorkTimeMinMaxCalculator(null, effectiveRestrictionForDisplayCreator);
+            PreferenceType? preferenceType;
+            var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay, out preferenceType);
+
+            result.Should().Be.EqualTo(expected);
+        }
+
 		[Test]
 		public void ShouldReturnNullWorkTimeForAbsencePreferenceOnDayOff()
 		{

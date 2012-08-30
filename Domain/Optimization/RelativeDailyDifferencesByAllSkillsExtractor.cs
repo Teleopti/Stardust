@@ -4,8 +4,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public class RelativeDailyDifferencesByAllSkillsExtractor : IScheduleResultDataExtractor
-    {
+	public class RelativeDailyDifferencesByAllSkillsExtractor : IScheduleResultDataExtractor, IRelativeDailyDifferencesByAllSkillsExtractor
+	{
         private readonly DateOnlyPeriod _period;
         private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
         private readonly ISkillExtractor _allSkillExtractor;
@@ -20,6 +20,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             _allSkillExtractor = allSkillExtractor;
         }
 
+		public RelativeDailyDifferencesByAllSkillsExtractor(
+			IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator,
+			ISkillExtractor allSkillExtractor)
+		{
+			_dailySkillForecastAndScheduledValueCalculator = dailySkillForecastAndScheduledValueCalculator;
+			_allSkillExtractor = allSkillExtractor;
+		}
+
         public IList<double?> Values()
         {
             IList<double?> ret = new List<double?>();
@@ -33,7 +41,20 @@ namespace Teleopti.Ccc.Domain.Optimization
             return ret;
         }
 
-        private double? DayValue(DateOnly scheduleDay)
+    	public IList<double?> Values(DateOnlyPeriod period)
+    	{
+			IList<double?> ret = new List<double?>();
+
+			foreach (DateOnly day in period.DayCollection())
+			{
+				double? value = DayValue(day);
+				ret.Add(value);
+			}
+
+			return ret;
+    	}
+
+    	private double? DayValue(DateOnly scheduleDay)
         {
             double dailyForecast = 0;
             double dailyScheduled = 0;

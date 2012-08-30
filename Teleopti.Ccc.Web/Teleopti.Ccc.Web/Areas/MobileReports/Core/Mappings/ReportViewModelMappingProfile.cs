@@ -45,9 +45,10 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 					d => d.ReportName, a => a.MapFrom(s => _userTextTranslator.Invoke().TranslateText(s.ReportNameResourceKey)));
 
 			// -2 for all special all skill from Mart
-			CreateMap<ReportControlSkillGet, SkillSelectionViewModel>().ForMember(d => d.SkillId, a => a.MapFrom(s => s.Id))
-				.ForMember(d => d.SkillName, a => a.MapFrom(s => s.Name)).ForMember(
-					d => d.AllSkills, a => a.MapFrom(s => s.Id == -2));
+			CreateMap<ReportControlSkillGet, SkillSelectionViewModel>()
+				.ForMember(d => d.SkillId, a => a.MapFrom(s => s.Id))
+				.ForMember(d => d.SkillName, a => a.MapFrom(s => s.Name))
+				.ForMember(d => d.AllSkills, a => a.MapFrom(s => s.Id == -2));
 		}
 	}
 }

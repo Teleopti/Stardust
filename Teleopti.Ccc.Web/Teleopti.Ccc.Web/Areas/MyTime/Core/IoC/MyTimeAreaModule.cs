@@ -9,6 +9,8 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
@@ -47,6 +49,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			registerAutoMapperTypes(builder);
 			registerRequestsType(builder);
 			registerSettingsTypes(builder);
+			registerAsmTypes(builder);
+		}
+
+		private void registerAsmTypes(ContainerBuilder builder)
+		{
+			builder.RegisterType<AsmViewModelFactory>().As<IAsmViewModelFactory>();
+			builder.RegisterType<AsmViewModelMapper>().As<IAsmViewModelMapper>();
 		}
 
 		private void registerSettingsTypes(ContainerBuilder builder)

@@ -25,20 +25,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			ValidatorResult result = new ValidatorResult();
 
+			if (dates.Count < 2)
+			{
+				result.Success = true;
+				return result;
+			}
+
 			if(useSameDaysOff)
 			{
 				DateOnly firstDate = dates[0];
 				IGroupPerson firstGroup = _groupPersonBuilderForOptimization.BuildGroupPerson(person, firstDate);
-				if(dates.Count < 2)
-				{
-					result.Success = true;
-					return result;
-				}
-
+				IList<IPerson> firstGroupMembers = firstGroup.GroupMembers;
+				
 				for (int i = 1; i < dates.Count; i++)
 				{
-					IGroupPerson groupToCompare = _groupPersonBuilderForOptimization.BuildGroupPerson(person, dates[i]);
-					if(firstGroup.GroupMembers.Count != groupToCompare.GroupMembers.Count)
+					IGroupPerson thisGroup = _groupPersonBuilderForOptimization.BuildGroupPerson(person, dates[i]);
+					IList<IPerson> groupMembersToCompare = thisGroup.GroupMembers;
+					if (firstGroupMembers.Count != groupMembersToCompare.Count)
 					{
 						result.Success = true;
 						result.DaysToLock = new DateOnlyPeriod(dates[0], dates[0]);
@@ -46,9 +49,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 						return result;
 					}
 
-					foreach (var member in firstGroup.GroupMembers)
+					foreach (var member in firstGroupMembers)
 					{
-						if(!groupToCompare.GroupMembers.Contains(member))
+						if (!groupMembersToCompare.Contains(member))
 						{
 							result.Success = true;
 							result.DaysToLock = new DateOnlyPeriod(dates[0], dates[0]);

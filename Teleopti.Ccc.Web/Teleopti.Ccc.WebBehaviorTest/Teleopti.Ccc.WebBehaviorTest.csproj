@@ -82,11 +82,13 @@
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
+    <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftCategoryStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\TimeStepDefinition.cs" />
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
@@ -95,6 +97,14 @@
     <Compile Include="Data\Setups\Generic\DayOffTemplateConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
     <Compile Include="Bindings\Generic\PreferencesPageStepDefinitions.cs" />
+    <Compile Include="Pages\GlobalMenuPage.cs" />
+    <Compile Include="Asm.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Asm.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Setups\Generic\ShiftConfigurable.cs" />
+    <Compile Include="Pages\AsmPage.cs" />
     <Compile Include="Data\Setups\Specific\AnotherSite.cs" />
     <Compile Include="Data\Setups\Common\CommonBusinessUnit.cs" />
     <Compile Include="Data\Setups\Common\CommonSite.cs" />
@@ -434,6 +444,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ApplicationStartRecovery.feature.cs</LastGenOutput>
     </None>
+    <None Include="Asm.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Asm.feature.cs</LastGenOutput>
+    </None>
     <None Include="MobileReports.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MobileReports.feature.cs</LastGenOutput>
@@ -535,10 +549,6 @@
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\ReportTexts.csproj">
-      <Project>{82A5CB58-9CBC-45A2-B13E-F8917C846B1A}</Project>
-      <Name>ReportTexts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>

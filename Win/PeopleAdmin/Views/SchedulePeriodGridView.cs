@@ -574,10 +574,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_childGridColumns.Add(_childGridNumberColumn);
 
 			_childGridScheduleTypeColumn = new DropDownColumnForPeriodGrids<SchedulePeriodChildModel,
-				SchedulePeriodType>("PeriodType",
+				KeyValuePair<SchedulePeriodType,string>>("PeriodType",
 									 UserTexts.Resources.Type,
-									 (IList<SchedulePeriodType>)Enum.GetValues(typeof(SchedulePeriodType)),
-									"PeriodType");
+									 LanguageResourceHelper.TranslateEnumToList<SchedulePeriodType>(),
+									"value", "key", typeof(SchedulePeriodType));
 			_childGridScheduleTypeColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 			_childGridScheduleTypeColumn.CellChanged += ChildColumn_CellChanged;
 			_childGridColumns.Add(_childGridScheduleTypeColumn);
@@ -668,8 +668,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_numberColumn.ColumnComparer = new SchedulePeriodNumberComparer();
 			_gridColumns.Add(_numberColumn);
 
-			_scheduleTypeColumn = new DropDownColumnForPeriodGrids<SchedulePeriodModel, SchedulePeriodType>
-				("PeriodType", UserTexts.Resources.Type, (IList<SchedulePeriodType>)Enum.GetValues(typeof(SchedulePeriodType)), "PeriodType");
+			_scheduleTypeColumn = new DropDownColumnForPeriodGrids<SchedulePeriodModel, KeyValuePair<SchedulePeriodType,string>>
+				("PeriodType", UserTexts.Resources.Type, LanguageResourceHelper.TranslateEnumToList<SchedulePeriodType>(), "value", "key", typeof(SchedulePeriodType));
+			//_scheduleTypeColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
+			//_scheduleTypeColumn.CellChanged += ParentColumn_CellChanged;
+			//_scheduleTypeColumn.ColumnComparer = new SchedulePeriodUnitComparer();
+			//_gridColumns.Add(_scheduleTypeColumn);
 			_scheduleTypeColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
 			_scheduleTypeColumn.CellChanged += ParentColumn_CellChanged;
 			_scheduleTypeColumn.ColumnComparer = new SchedulePeriodUnitComparer();

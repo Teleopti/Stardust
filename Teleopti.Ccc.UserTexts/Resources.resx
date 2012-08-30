@@ -10974,14 +10974,15 @@ These options are activated:
     <comment>No activity</comment>
   </data>
   <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
-    <value>Please select at least one option from Team Optimization. </value>
+    <value>Please select at least one of the options "Shift Category", "Start Time" or "End Time" in  Team Optimization. </value>
     <comment>The Team Optimization options</comment>
   </data>
   <data name="SchedulingOptionMessageBox" xml:space="preserve">
     <value>Scheduling Options</value>
   </data>
   <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
-    <value>Please select at least one option from Team Scheduling.</value>
+    <value>Please select at least one of the options "Shift Category", "Start Time" or "End Time" in  Team Scheduling.</value>
+    <comment>Team scheduling options</comment>
   </data>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Manage SMS Settings</value>
@@ -10994,5 +10995,64 @@ These options are activated:
   <data name="SmsSettings" xml:space="preserve">
     <value>SMS Settings</value>
     <comment>Caption 2 in SMS settings page</comment>
+  </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>Your working hours have changed</value>
+    <comment>text in sms message (later - Your working hours have changed these days:)</comment>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>Graph (loc)</value>
+    <comment>Graph used in anywhere report</comment>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Interval (loc)</value>
+    <comment>Interval used in anywhere report</comment>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Table (loc)</value>
+    <comment>Table used in anywhere report</comment>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Type (loc)</value>
+    <comment>Type used in anywhere report</comment>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>Service Level and Employee Ready</value>
+    <comment>Service Level and Agents Ready</comment>
+  </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>From Contract</value>
+    <comment>Contract time is from contract</comment>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>From Schedule Period</value>
+    <comment>Contract Time is from schedule period</comment>
+  </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>Full Day Absence</value>
+  </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>You don't have permission to access the web portal.</value>
+    <comment>no permission for mytimeweb or anywhere report</comment>
+  </data>
+  <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
+    <value>Month 7-8</value>
+    <comment>To specify schedule period type Chinese Month (7-8 days off)</comment>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Mobile Reports</value>
+    <comment>Mobile Reports title used in anywhere report</comment>
+  </data>
+  <data name="SchedulePeriodTypeDay" xml:space="preserve">
+    <value>Day</value>
+    <comment>To specify schedule period type Day</comment>
+  </data>
+  <data name="SchedulePeriodTypeMonth" xml:space="preserve">
+    <value>Month</value>
+    <comment>To specify schedule period type Month</comment>
+  </data>
+  <data name="SchedulePeriodTypeWeek" xml:space="preserve">
+    <value>Week</value>
+    <comment>To specify schedule period type Week</comment>
   </data>
 </root>

@@ -84,17 +84,33 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if (!currentAbsencePeriod.HasValue)
 						continue;
 
+					var modifiedList = new List<IScheduleDay>();
+
+					/* Bugfix for 20329> ESL not updating when making a multiday absence and do rollback
+					 * The main problem is that the absence layer is added to one scedule day only but can last over several days.
+					 * As a result, only one day is added to the undo list, and the information about the length of the layer is lost during the
+					 * restore action so only one day is recalculated in ESL
+					 * The solution is to fake schedule modification with a clone on those days that are affected.
+					*/
+					// clone all affected days 
+					for (int i = 1; i < scheduleDays.Count; i++)
+					{
+						IScheduleDay current = scheduleDays[i];
+						IScheduleDay clone = current.Clone() as IScheduleDay;
+						modifiedList.Add(clone);
+					}
+
+					// finally the absence is added to the first day only
 					IAbsenceLayer absLayer = new AbsenceLayer(absence, currentAbsencePeriod.Value);
 					firstDayInList.CreateAndAddAbsence(absLayer);
-				    var firstDay = new List<IScheduleDay> {firstDayInList};
+					modifiedList.Add(firstDayInList);
 
-                    if (!Presenter.ModifySchedulePart(firstDay))
+					if (!Presenter.ModifySchedulePart(modifiedList))
                     {
                         var scheduleRange = (IValidateScheduleRange) SchedulerStateHolder.Schedules[selectedPerson];
                         scheduleRange.ValidateBusinessRules(NewBusinessRuleCollection.MinimumAndPersonAccount(SchedulerStateHolder.SchedulingResultState));
                         return;
                     }
-
 				}
 
 				ScheduleViewBase.RefreshRangeForAgentPeriod(selectedPerson, absencePeriod);

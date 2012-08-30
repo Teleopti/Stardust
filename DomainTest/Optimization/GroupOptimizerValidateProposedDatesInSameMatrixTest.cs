@@ -72,5 +72,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.IsTrue(result.DaysToLock.Value.Contains(_date1));
 		}
 
+		[Test]
+		public void ShouldReturnFalseIfNoMatrixesFound()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person1, _date1)).Return(new List<IScheduleMatrixPro>());
+			}
+
+			ValidatorResult result;
+			using (_mock.Playback())
+			{
+				result = _target.Validate(_person1, new List<DateOnly> { _date1 }, true);
+			}
+
+			Assert.IsFalse(result.Success);
+		}
+
 	}
 }

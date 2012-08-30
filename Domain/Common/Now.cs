@@ -3,16 +3,41 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class Now : INow
+	public sealed class Now : INow, IModifyNow
 	{
-		public DateTime Time
+		private DateTime? _fixedDateTime;
+
+		public DateTime LocalDateTime()
 		{
-			get { return DateTime.Now; }
+			return _fixedDateTime.HasValue ? 
+					_fixedDateTime.Value.ToLocalTime() : 
+					DateTime.Now;
 		}
 
-		public DateTime UtcTime
+		public DateTime UtcDateTime()
 		{
-			get { return DateTime.UtcNow; }
+			return _fixedDateTime.HasValue ? 
+				_fixedDateTime.Value : 
+				DateTime.UtcNow;
+		}
+
+		public DateOnly DateOnly()
+		{
+			return new DateOnly(LocalDateTime());
+		}
+
+		void IModifyNow.SetNow(DateTime? dateTime)
+		{
+			if (dateTime.HasValue)
+			{
+				InParameter.VerifyDateIsUtc("dateTime", dateTime.Value);				
+			}
+			_fixedDateTime = dateTime;
+		}
+
+		public bool IsExplicitlySet()
+		{
+			return _fixedDateTime.HasValue;
 		}
 	}
 }

@@ -79,25 +79,25 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             set { ContainedEntity.Number = value; }
         }
 
-        /// <summary>
-        /// Gets the unit.
-        /// </summary>
-        /// <value>The unit.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-06-10
-        /// </remarks>
-        public SchedulePeriodType? PeriodType
-        {
-            get
-            {
-                return ContainedEntity.PeriodType;
-            }
-            set
-            {
-                ContainedEntity.PeriodType = (SchedulePeriodType)value;
-            }
-        }
+		/// <summary>
+		/// Gets the unit.
+		/// </summary>
+		/// <value>The unit.</value>
+		/// <remarks>
+		/// Created by: Dinesh Ranasinghe
+		/// Created date: 2008-06-10
+		/// </remarks>
+		public SchedulePeriodType? PeriodType
+		{
+			get
+			{
+				return ContainedEntity.PeriodType;
+			}
+			set
+			{
+				ContainedEntity.PeriodType = value.GetValueOrDefault();
+			}
+		}
 
         /// <summary>
         /// Gets the days off.

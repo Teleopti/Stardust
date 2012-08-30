@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
@@ -11,13 +12,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	public class TestController : Controller
 	{
+		private readonly IModifyNow _modifyNow;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
 
-		public TestController(ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
+		public TestController(IModifyNow modifyNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
 		{
+			_modifyNow = modifyNow;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
 			_logon = logon;
@@ -27,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public ViewResult BeforeScenario()
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
+			updateIocNow(null);
 			var viewModel = new TestMessageViewModel
 								{
 									Title = "Setting up for scenario",
@@ -34,8 +38,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 									ListItems = new[]
 									            	{
 									            		"Restoring Ccc7 database",
-														"Clearing Analytics database",
-														"Removing browser cookie"
+															"Clearing Analytics database",
+															"Removing browser cookie",
+															"Setting default implementation for INow"
 									            	}
 								};
 			return View("Message", viewModel);
@@ -83,6 +88,26 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			                		Message = "Cookie has an invalid datasource on your command!"
 			                	};
 			return View("Message", viewModel);
+		}
+
+		public ViewResult SetCurrentTime(DateTime dateSet)
+		{
+			var utcDate = new DateTime(dateSet.Ticks, DateTimeKind.Utc);
+			updateIocNow(utcDate);
+
+			var viewModel = new TestMessageViewModel
+			{
+				Title = "Time changed on server!",
+				Message = "INow component now thinks time is " + utcDate
+			};
+			ViewBag.SetTime = "hello";
+
+			return View("Message", viewModel);
+		}
+
+		private void updateIocNow(DateTime? dateTimeSet)
+		{
+			_modifyNow.SetNow(dateTimeSet);
 		}
 	}
 }

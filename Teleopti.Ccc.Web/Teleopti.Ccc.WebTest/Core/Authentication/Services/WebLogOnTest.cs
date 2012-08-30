@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		}
 
 		[Test]
-		public void ShouldResolveIndataAndLogon()
+		public void ShouldResolveIndataAndLogonWithMyTimeWebPermission()
 		{
 			var buId = Guid.NewGuid();
 			const string dataSourceName = "sdfsjdlfkjsd ";
@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
 				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit, AuthenticationTypeOption.Unknown));
+				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 				Expect.Call(() => sessionSpecificDataProvider.StoreInCookie(null)).IgnoreArguments();
 			}
@@ -87,7 +88,39 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		}
 
 		[Test]
-		public void ShouldThrowIfNoPermission()
+		public void ShouldResolveIndataAndLogonWithAnywherePermission()
+		{
+			var buId = Guid.NewGuid();
+			const string dataSourceName = "sdfsjdlfkjsd ";
+			var personId = Guid.NewGuid();
+
+			var choosenBusinessUnit = new BusinessUnit("sdfsdf");
+			var choosenDatasource = mocks.DynamicMock<IDataSource>();
+			var uow = mocks.DynamicMock<IUnitOfWork>();
+			var logonPerson = new Person();
+
+			using (mocks.Record())
+			{
+				Expect.Call(dataSourcesProvider.RetrieveDataSourceByName(dataSourceName))
+					.Return(choosenDatasource);
+				Expect.Call(choosenDatasource.Application).Return(unitOfWorkFactory);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);
+				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
+				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
+				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
+				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit, AuthenticationTypeOption.Unknown));
+				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
+				Expect.Call(() => sessionSpecificDataProvider.StoreInCookie(null)).IgnoreArguments();
+			}
+			using (mocks.Playback())
+			{
+				target.LogOn(buId, dataSourceName, personId, AuthenticationTypeOption.Unknown);
+			}
+		}
+
+		[Test]
+		public void ShouldThrowIfNoMyTimeWebAndAnywherePermission()
 		{
 			var buId = Guid.NewGuid();
 			const string dataSourceName = "sdfsjdlfkjsd ";
@@ -110,6 +143,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
 				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit, AuthenticationTypeOption.Application));
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(false);
+				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
 			}
 			using (mocks.Playback())
 			{
@@ -117,5 +151,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				                                   target.LogOn(buId, dataSourceName, personId, AuthenticationTypeOption.Application));
 			}
 		}
+
 	}
 }

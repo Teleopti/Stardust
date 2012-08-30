@@ -36,7 +36,7 @@
 <div data-role="page" id="home-view">
 	<div data-role="header">
 		<h1>
-			Mobile Reports
+			@Resources.MobileReports
 		</h1>
 		@Html.ActionLink(Resources.LogOut, "SignOut", "Authentication", new
 																			{
@@ -100,13 +100,13 @@
 			</li>
 			<li data-role="fieldcontain">
 				<fieldset data-role="controlgroup">
-					<legend>Type (loc)</legend>
+					<legend>@Resources.TypeLOC</legend>
 					<input type="checkbox" name="report-settings-type-graph" id="report-settings-type-graph" />
 					<label for="report-settings-type-graph">
-						Graph (loc)</label>
+						@Resources.GraphLOC</label>
 					<input type="checkbox" name="report-settings-type-table" id="report-settings-type-table" />
 					<label for="report-settings-type-table">
-						Table (loc)
+						@Resources.TableLOC
 					</label>
 				</fieldset>
 			</li>

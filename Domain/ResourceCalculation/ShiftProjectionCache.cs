@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -160,7 +161,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public TimeSpan WorkShiftEndTime
     	{
-			get { return WorkShiftProjectionPeriod.EndDateTime.TimeOfDay; }
+			get
+			{
+				var basedate = WorkShift.BaseDate;
+				double day = WorkShiftProjectionPeriod.EndDateTime.Date.Subtract(basedate).TotalDays;
+				return WorkShiftProjectionPeriod.EndDateTime.TimeOfDay.Add(TimeSpan.FromDays(day));
+			}
     	}
 
     	private static bool PeriodIsWorkTimeInProjection(IVisualLayerCollection mainShiftProjection, DateTimePeriod period)

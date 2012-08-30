@@ -6,6 +6,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
+	/// <summary>
+	/// "Modified now" part is tested in ModifyNowTest
+	/// </summary>
 	[TestFixture]
 	public class NowTest
 	{
@@ -21,16 +24,22 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldBeCurrentTime()
 		{
 			var nu = DateTime.Now;
-			target.Time.Should().Be.GreaterThan(nu.AddSeconds(-1));
-			target.Time.Should().Be.LessThan(nu.AddSeconds(1));
+			target.LocalDateTime().Should().Be.GreaterThan(nu.AddSeconds(-1));
+			target.LocalDateTime().Should().Be.LessThan(nu.AddSeconds(1));
 		}
 
 		[Test]
 		public void ShouldBeCurrentUtcTime()
 		{
 			var nu = DateTime.UtcNow;
-			target.UtcTime.Should().Be.GreaterThan(nu.AddSeconds(-1));
-			target.UtcTime.Should().Be.LessThan(nu.AddSeconds(1));
+			target.UtcDateTime().Should().Be.GreaterThan(nu.AddSeconds(-1));
+			target.UtcDateTime().Should().Be.LessThan(nu.AddSeconds(1));
+		}
+
+		[Test]
+		public void ShouldReturnCurrentDateAsDateOnly()
+		{
+			target.DateOnly().Date.Should().Be.EqualTo(DateTime.Now.Date);
 		}
 	}
 }

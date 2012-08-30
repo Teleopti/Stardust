@@ -10,11 +10,21 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Returns curent datetime
 		/// </summary>
-		DateTime Time { get; }
+		DateTime LocalDateTime();
 
 		/// <summary>
 		/// Returns curent datetime in UTC
 		/// </summary>
-		DateTime UtcTime { get; }
+		DateTime UtcDateTime();
+
+		/// <summary>
+		/// Returns current date
+		/// </summary>
+		DateOnly DateOnly();
+
+		/// <summary>
+		/// Has time been explicitly set (mostly used in tests)
+		/// </summary>
+		bool IsExplicitlySet();
 	}
 }

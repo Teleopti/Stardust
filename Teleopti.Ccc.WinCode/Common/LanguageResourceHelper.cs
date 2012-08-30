@@ -164,15 +164,17 @@ namespace Teleopti.Ccc.WinCode.Common
         /// Created by: robink
         /// Created date: 2008-05-28
         /// </remarks>
-        public static IDictionary<object,string> TranslateEnum(Type type)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
+		public static IDictionary<T,string> TranslateEnum<T>()
         {
+        	var type = typeof (T);
             if (!type.IsEnum) throw new ArgumentException("The provided type must be enum.","type");
-            IDictionary<object, string> translations = new Dictionary<object, string>();          
-            foreach (var item in Enum.GetValues(type))
+            IDictionary<T, string> translations = new Dictionary<T, string>();
+            foreach (T item in Enum.GetValues(type))
             {
                 string key = string.Concat(type.Name, item.ToString());
                 string translatedText = UserTexts.Resources.ResourceManager.GetString(key);
-                if (string.IsNullOrEmpty(translatedText)) throw new ArgumentNullException("type", String.Concat("All items in the enum must have translations. Missing key was:", key));
+                if (string.IsNullOrEmpty(translatedText)) throw new ArgumentNullException("T", String.Concat("All items in the enum must have translations. Missing key was:", key));
                 translations.Add(item, translatedText);
             }
             return translations;

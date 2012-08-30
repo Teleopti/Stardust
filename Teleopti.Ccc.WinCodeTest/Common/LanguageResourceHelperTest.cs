@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void VerifyEnumWithNoTranslationCannotBeTranslated()
         {
-            LanguageResourceHelper.TranslateEnum(typeof(TaskOwnerPeriodType));
+            LanguageResourceHelper.TranslateEnum<TaskOwnerPeriodType>();
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyEnumCanBeTranslated()
         {
             //Enum as key, string as value
-            IDictionary<object, string> enumTranslation = LanguageResourceHelper.TranslateEnum(typeof(EmploymentType));
+            IDictionary<EmploymentType, string> enumTranslation = LanguageResourceHelper.TranslateEnum<EmploymentType>();
             Assert.AreEqual(3, enumTranslation.Count);
             Assert.IsTrue(enumTranslation.ContainsKey(EmploymentType.FixedStaffNormalWorkTime));
             Assert.IsFalse(string.IsNullOrEmpty(enumTranslation[EmploymentType.FixedStaffNormalWorkTime]));
@@ -177,10 +177,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         /// Created by: robink
         /// Created date: 2008-05-28
         /// </remarks>
-        [Test, ExpectedException(typeof(ArgumentException))]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentException))]
         public void VerifyNotEnumCannotBeTranslated()
         {
-            LanguageResourceHelper.TranslateEnum(target.GetType());
+            LanguageResourceHelper.TranslateEnum<LanguageResourceHelper>();
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]

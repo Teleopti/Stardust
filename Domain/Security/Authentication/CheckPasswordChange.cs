@@ -15,19 +15,18 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
         public AuthenticationResult Check(IUserDetail userDetail)
         {
+        	var lastPasswordChange = userDetail.LastPasswordChange;
+        	var passwordValidForDayCount = _passwordPolicy.PasswordValidForDayCount;
+        	var maxDays = DateTime.MaxValue.Subtract(lastPasswordChange);
             var result = new AuthenticationResult{Successful = true, Person = userDetail.Person};
-            DateTime expirationDate;
-            try
-            {
-                 expirationDate = userDetail.LastPasswordChange.AddDays(_passwordPolicy.PasswordValidForDayCount);
 
-            }
-            catch(ArgumentException)
-            {
-                expirationDate = DateTime.MaxValue;
-            }
+			DateTime expirationDate = DateTime.MaxValue;
+			if (passwordValidForDayCount<maxDays.TotalDays)
+			{
+				expirationDate = lastPasswordChange.AddDays(passwordValidForDayCount);
+			}
 
-            if (expirationDate<=DateTime.UtcNow)
+			if (expirationDate<=DateTime.UtcNow)
             {
                 userDetail.Lock();
                 result.Successful = false;

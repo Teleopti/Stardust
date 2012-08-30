@@ -8708,6 +8708,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to From Contract.
+        /// </summary>
+        public static string FromContract {
+            get {
+                return ResourceManager.GetString("FromContract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From.
         /// </summary>
         public static string FromDate {
@@ -8735,6 +8744,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to From Schedule Period.
+        /// </summary>
+        public static string FromSchedulePeriod {
+            get {
+                return ResourceManager.GetString("FromSchedulePeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From - To.
         /// </summary>
         public static string FromTo {
@@ -8758,6 +8776,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FullDay {
             get {
                 return ResourceManager.GetString("FullDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full Day Absence.
+        /// </summary>
+        public static string FullDayAbsence {
+            get {
+                return ResourceManager.GetString("FullDayAbsence", resourceCulture);
             }
         }
         
@@ -8911,6 +8938,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string GrantedBySupervisor {
             get {
                 return ResourceManager.GetString("GrantedBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Graph (loc).
+        /// </summary>
+        public static string GraphLOC {
+            get {
+                return ResourceManager.GetString("GraphLOC", resourceCulture);
             }
         }
         
@@ -9897,6 +9933,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have permission to access the web portal..
+        /// </summary>
+        public static string InsufficientPermissionForWeb {
+            get {
+                return ResourceManager.GetString("InsufficientPermissionForWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Internal Note:.
         /// </summary>
         public static string InternalNoteColon {
@@ -9938,6 +9983,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string IntervalLengthHMMColon {
             get {
                 return ResourceManager.GetString("IntervalLengthHMMColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interval (loc).
+        /// </summary>
+        public static string IntervalLOC {
+            get {
+                return ResourceManager.GetString("IntervalLOC", resourceCulture);
             }
         }
         
@@ -12144,6 +12198,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MissingWorkflowControlSet {
             get {
                 return ResourceManager.GetString("MissingWorkflowControlSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mobile Reports.
+        /// </summary>
+        public static string MobileReports {
+            get {
+                return ResourceManager.GetString("MobileReports", resourceCulture);
             }
         }
         
@@ -17904,6 +17967,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service Level and Employee Ready.
+        /// </summary>
+        public static string ResReportServiceLevelAndAgentsReady {
+            get {
+                return ResourceManager.GetString("ResReportServiceLevelAndAgentsReady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift Category and Full Day Absence per Agent.
         /// </summary>
         public static string ResReportShiftCategoryAndDayAbsencePerAgent {
@@ -18751,6 +18823,42 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Month 7-8.
+        /// </summary>
+        public static string SchedulePeriodTypeChineseMonth {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeChineseMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day.
+        /// </summary>
+        public static string SchedulePeriodTypeDay {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Month.
+        /// </summary>
+        public static string SchedulePeriodTypeMonth {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Week.
+        /// </summary>
+        public static string SchedulePeriodTypeWeek {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeWeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Periods.
         /// </summary>
         public static string SchedulePeriodView {
@@ -19090,7 +19198,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select at least one option from Team Optimization. .
+        ///   Looks up a localized string similar to Please select at least one of the options &quot;Shift Category&quot;, &quot;Start Time&quot; or &quot;End Time&quot; in  Team Optimization. .
         /// </summary>
         public static string SelectAtleastOneOptimizationOption {
             get {
@@ -19099,7 +19207,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select at least one option from Team Scheduling..
+        ///   Looks up a localized string similar to Please select at least one of the options &quot;Shift Category&quot;, &quot;Start Time&quot; or &quot;End Time&quot; in  Team Scheduling..
         /// </summary>
         public static string SelectAtleastOneSchedulingOption {
             get {
@@ -21467,6 +21575,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Table (loc).
+        /// </summary>
+        public static string TableLOC {
+            get {
+                return ResourceManager.GetString("TableLOC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tag changes with:.
         /// </summary>
         public static string TagChangesWithColon {
@@ -22707,6 +22824,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Type {
             get {
                 return ResourceManager.GetString("Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type (loc).
+        /// </summary>
+        public static string TypeLOC {
+            get {
+                return ResourceManager.GetString("TypeLOC", resourceCulture);
             }
         }
         
@@ -24825,6 +24951,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YourScheduleForDateParameters {
             get {
                 return ResourceManager.GetString("YourScheduleForDateParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your working hours have changed.
+        /// </summary>
+        public static string YourWorkingHoursHaveChanged {
+            get {
+                return ResourceManager.GetString("YourWorkingHoursHaveChanged", resourceCulture);
             }
         }
         

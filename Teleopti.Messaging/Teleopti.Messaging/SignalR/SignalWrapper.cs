@@ -155,7 +155,17 @@ namespace Teleopti.Messaging.SignalR
 						var subscription = _hubProxy.Subscribe(EventName);
 						subscription.Data -= subscription_Data;
 					}
-					_hubConnection.Stop();
+
+					ThreadPool.QueueUserWorkItem(state =>
+					                             	{
+					                             		try
+					                             		{
+															_hubConnection.Stop();
+					                             		}
+					                             		catch (Exception)
+					                             		{
+					                             		}
+					                             	});
 				}
 				catch (Exception)
 				{
