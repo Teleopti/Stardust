@@ -370,35 +370,35 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult)
         {
-            if (shiftList.Count == 0)
-                return shiftList;
-            DateTimePeriod? period = GetMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
-            if (period.HasValue)
-            {
-                var meetings = schedulePart.PersonMeetingCollection();
-                var personalAssignments = schedulePart.PersonAssignmentCollection();
-                int cntBefore = shiftList.Count;
-                IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
-                foreach (IShiftProjectionCache t in shiftList)
-                {
-                    IShiftProjectionCache proj = t;
-                    if (!proj.MainShiftProjection.Period().HasValue) continue;
-                    DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
-                    if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignments))
-                    {
-                        workShiftsWithinPeriod.Add(proj);
-                    }
-                }
-				finderResult.AddFilterResults(
-                    new WorkShiftFilterResult(
-						string.Format(CultureInfo.CurrentCulture,
-                                      UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
-                                      period.Value.LocalStartDateTime, period.Value.LocalEndDateTime), cntBefore,
-                        workShiftsWithinPeriod.Count));
+            //if (shiftList.Count == 0)
+            //    return shiftList;
+            //DateTimePeriod? period = GetMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
+            //if (period.HasValue)
+            //{
+            //    var meetings = schedulePart.PersonMeetingCollection();
+            //    var personalAssignments = schedulePart.PersonAssignmentCollection();
+            //    int cntBefore = shiftList.Count;
+            //    IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
+            //    foreach (IShiftProjectionCache t in shiftList)
+            //    {
+            //        IShiftProjectionCache proj = t;
+            //        if (!proj.MainShiftProjection.Period().HasValue) continue;
+            //        DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
+            //        if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignments))
+            //        {
+            //            workShiftsWithinPeriod.Add(proj);
+            //        }
+            //    }
+            //    finderResult.AddFilterResults(
+            //        new WorkShiftFilterResult(
+            //            string.Format(CultureInfo.CurrentCulture,
+            //                          UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
+            //                          period.Value.LocalStartDateTime, period.Value.LocalEndDateTime), cntBefore,
+            //            workShiftsWithinPeriod.Count));
 
-                return workShiftsWithinPeriod;
+            //    return workShiftsWithinPeriod;
 
-            }
+            //}
             return shiftList;
         }
 
@@ -408,9 +408,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             shiftList = FilterOnBusinessRules(current, shiftList, dateToSchedule, finderResult);
 
-            IScheduleDay dayPart =
-                current.ScheduledDay(dateToSchedule);
-            return FilterOnPersonalShifts(shiftList, dayPart, finderResult);
+            var dayPart = current.ScheduledDay(dateToSchedule);
+            //shiftList = FilterOnPersonalShifts(shiftList, dayPart, finderResult);
+            return FilterOnNotOverwritableActivities(shiftList, dayPart, finderResult);
         }
 
 
@@ -428,14 +428,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IPerson> groupOfPersons, IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
     	{
-			InParameter.NotNull("groupOfPersons", groupOfPersons);
-			InParameter.NotNull("scheduleDictionary", scheduleDictionary);
-			foreach (var person in groupOfPersons)
-			{
-				var range = scheduleDictionary[person];
-				var part = range.ScheduledDay(dateOnly);
-				shiftList = FilterOnPersonalShifts(shiftList, part, finderResult);
-			}
+            //InParameter.NotNull("groupOfPersons", groupOfPersons);
+            //InParameter.NotNull("scheduleDictionary", scheduleDictionary);
+            //foreach (var person in groupOfPersons)
+            //{
+            //    var range = scheduleDictionary[person];
+            //    var part = range.ScheduledDay(dateOnly);
+            //    shiftList = FilterOnPersonalShifts(shiftList, part, finderResult);
+            //}
 			return shiftList;
     	}
 
@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         }
 
-        public IList<IShiftProjectionCache> FilterOnOverwritableActivities(IList<IShiftProjectionCache> shiftList, IScheduleDay part, IWorkShiftFinderResult finderResult)
+        public IList<IShiftProjectionCache> FilterOnNotOverwritableActivities(IList<IShiftProjectionCache> shiftList, IScheduleDay part, IWorkShiftFinderResult finderResult)
         {
             var filteredList = new List<IShiftProjectionCache>();
             var meetings = part.PersonMeetingCollection();

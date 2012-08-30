@@ -1020,7 +1020,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_personAssignment.PersonalShiftCollection).Return(readOnlyPersonalShifts).Repeat.AtLeastOnce();
             Expect.Call(personalShift.LayerCollection).Return(personalLayers).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
-            var retShifts = _target.FilterOnOverwritableActivities(shifts,_part,  _finderResult);
+            var retShifts = _target.FilterOnNotOverwritableActivities(shifts,_part,  _finderResult);
             retShifts.Count.Should().Be.EqualTo(0);
             _mocks.VerifyAll();
         }
@@ -1058,7 +1058,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
             Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
-            var retShifts = _target.FilterOnOverwritableActivities(shifts, _part, _finderResult);
+            var retShifts = _target.FilterOnNotOverwritableActivities(shifts, _part, _finderResult);
             retShifts.Count.Should().Be.EqualTo(1);
             _mocks.VerifyAll();
         }

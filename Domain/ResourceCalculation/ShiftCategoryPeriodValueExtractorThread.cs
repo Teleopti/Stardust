@@ -133,8 +133,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnBusinessRules(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
             
-            _shiftProjectionList = _shiftProjectionCacheFilter.
-                FilterOnPersonalShifts(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
+            //_shiftProjectionList = _shiftProjectionCacheFilter.
+            //    FilterOnPersonalShifts(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
 
             
 			_shiftProjectionList =
