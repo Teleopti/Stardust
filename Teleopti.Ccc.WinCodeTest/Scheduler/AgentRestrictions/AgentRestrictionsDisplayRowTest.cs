@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using(_mocks.Playback())
 			{
-				Assert.AreEqual(UserTexts.Resources.Day, _displayRow.PeriodType);
+				Assert.AreEqual(UserTexts.Resources.SchedulePeriodTypeDay, _displayRow.PeriodType);
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Playback())
 			{
-				Assert.AreEqual(UserTexts.Resources.Month, _displayRow.PeriodType);
+				Assert.AreEqual(UserTexts.Resources.SchedulePeriodTypeMonth, _displayRow.PeriodType);
 			}
 		}
 
@@ -127,7 +127,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Playback())
 			{
-				Assert.AreEqual(UserTexts.Resources.Week, _displayRow.PeriodType);
+				Assert.AreEqual(UserTexts.Resources.SchedulePeriodTypeWeek, _displayRow.PeriodType);
+			}
+		}
+
+		[Test]
+		public void ShouldGetPeriodTypeChineseMonth()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.PeriodType).Return(SchedulePeriodType.ChineseMonth);
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.AreEqual(UserTexts.Resources.SchedulePeriodTypeChineseMonth, _displayRow.PeriodType);
 			}
 		}
 

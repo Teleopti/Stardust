@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
@@ -109,16 +110,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public string PeriodType
 		{
-			get
-			{
-				switch (_matrix.SchedulePeriod.PeriodType)
-				{
-					case SchedulePeriodType.Day: return UserTexts.Resources.Day;
-					case SchedulePeriodType.Month: return UserTexts.Resources.Month;
-					case SchedulePeriodType.Week: return UserTexts.Resources.Week;
-					default: return UserTexts.Resources.None;
-				}
-			}
+			get { return LanguageResourceHelper.TranslateEnumValue(_matrix.SchedulePeriod.PeriodType); }
 		}
 
 		public string StartDate
