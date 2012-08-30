@@ -368,40 +368,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return period;
         }
 
-        public IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult)
-        {
-            //if (shiftList.Count == 0)
-            //    return shiftList;
-            //DateTimePeriod? period = GetMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
-            //if (period.HasValue)
-            //{
-            //    var meetings = schedulePart.PersonMeetingCollection();
-            //    var personalAssignments = schedulePart.PersonAssignmentCollection();
-            //    int cntBefore = shiftList.Count;
-            //    IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
-            //    foreach (IShiftProjectionCache t in shiftList)
-            //    {
-            //        IShiftProjectionCache proj = t;
-            //        if (!proj.MainShiftProjection.Period().HasValue) continue;
-            //        DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
-            //        if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignments))
-            //        {
-            //            workShiftsWithinPeriod.Add(proj);
-            //        }
-            //    }
-            //    finderResult.AddFilterResults(
-            //        new WorkShiftFilterResult(
-            //            string.Format(CultureInfo.CurrentCulture,
-            //                          UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
-            //                          period.Value.LocalStartDateTime, period.Value.LocalEndDateTime), cntBefore,
-            //            workShiftsWithinPeriod.Count));
-
-            //    return workShiftsWithinPeriod;
-
-            //}
-            return shiftList;
-        }
-
         public IList<IShiftProjectionCache> Filter(MinMax<TimeSpan> validMinMax, IList<IShiftProjectionCache> shiftList, DateOnly dateToSchedule, IScheduleRange current, IWorkShiftFinderResult finderResult)
         {
             shiftList = FilterOnContractTime(validMinMax, shiftList, finderResult);
@@ -425,19 +391,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
             return shiftList;
         }
-
-		public IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IPerson> groupOfPersons, IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
-    	{
-            //InParameter.NotNull("groupOfPersons", groupOfPersons);
-            //InParameter.NotNull("scheduleDictionary", scheduleDictionary);
-            //foreach (var person in groupOfPersons)
-            //{
-            //    var range = scheduleDictionary[person];
-            //    var part = range.ScheduledDay(dateOnly);
-            //    shiftList = FilterOnPersonalShifts(shiftList, part, finderResult);
-            //}
-			return shiftList;
-    	}
 
 		public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd(IList<IShiftProjectionCache> shiftList, IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
         {

@@ -85,9 +85,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnBusinessRules(personList, scheduleDictionary, _dateOnly,
                                                                               _shiftProjectionList, finderResult)).
                     IgnoreArguments().Return(_shiftProjectionList).Repeat.AtLeastOnce();
-                Expect.Call(_shiftProjectionCacheFilter.FilterOnPersonalShifts(personList, scheduleDictionary, _dateOnly,
-                                                                              _shiftProjectionList, finderResult)).
-                    IgnoreArguments().Return(_shiftProjectionList).Repeat.AtLeastOnce();
+                //Expect.Call(_shiftProjectionCacheFilter.FilterOnPersonalShifts(personList, scheduleDictionary, _dateOnly,
+                //                                                              _shiftProjectionList, finderResult)).
+                //    IgnoreArguments().Return(_shiftProjectionList).Repeat.AtLeastOnce();
 
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(_shiftProjectionList,
                                                                                               _possibleStartEndCategory,
