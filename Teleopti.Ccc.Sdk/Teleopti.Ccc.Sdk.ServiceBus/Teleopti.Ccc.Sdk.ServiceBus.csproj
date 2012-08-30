@@ -157,6 +157,10 @@
     <Compile Include="AuthorizationContainerInstaller.cs" />
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="BusStartup.cs" />
+    <Compile Include="Denormalizer\ScheduleDayReadModelsCreator.cs" />
+    <Compile Include="Denormalizer\DenormalizeScheduleDayMessageConsumer.cs" />
+    <Compile Include="Denormalizer\InitialLoadScheduleDayConsumer.cs" />
+    <Compile Include="InitialLoadOfScheduleDayReadModel.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelCreator.cs" />

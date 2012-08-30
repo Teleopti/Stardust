@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 	public class ScheduleDayReadModelCreatorTest
 	{
 		private MockRepository _mocks;
-		//private ScheduleDayReadModelCreator _target;
+		private ScheduleDayReadModelCreator _target;
 		private IPerson _person;
 		private IProjectionService _projService;
 		private IVisualLayerCollection _proj;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_person.SetId(Guid.NewGuid());
 			_projService = _mocks.StrictMock<IProjectionService>();
 			_proj = _mocks.StrictMock<IVisualLayerCollection>();
-			//_target = new ScheduleDayReadModelCreator();
+			_target = new ScheduleDayReadModelCreator();
 			_period = new DateTimePeriod(2012,8,20,2012,8,27);
 		}
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			Expect.Call(ass.MainShift).Return(shift);
 			Expect.Call(shift.ShiftCategory).Return(cat);
 			_mocks.ReplayAll();
-			var model = ScheduleDayReadModelCreator.TurnScheduleToModel(sched);
+			var model = _target.TurnScheduleToModel(sched);
 			Assert.That(model.StartDateTime, Is.Not.EqualTo(new DateTime()));
 			Assert.That(model.Workday, Is.True);
 			_mocks.VerifyAll();
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			Expect.Call(sched.SignificantPart()).Return(SchedulePartView.Overtime);
 			
 			_mocks.ReplayAll();
-			var model = ScheduleDayReadModelCreator.TurnScheduleToModel(sched);
+			var model = _target.TurnScheduleToModel(sched);
 			Assert.That(model.StartDateTime, Is.Not.EqualTo(new DateTime()));
 			Assert.That(model.Workday, Is.True);
 
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			Expect.Call(personAbsence.Layer).Return(layer);
 			Expect.Call(layer.Payload).Return(pl);
 			_mocks.ReplayAll();
-			var model = ScheduleDayReadModelCreator.TurnScheduleToModel(sched);
+			var model = _target.TurnScheduleToModel(sched);
 			Assert.That(model.StartDateTime, Is.Not.EqualTo(new DateTime()));
 			Assert.That(model.Workday, Is.False);
 
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			Expect.Call(sched.PersonDayOffCollection()).Return(dayOffCol);
 			Expect.Call(personDayOff.DayOff).Return(dagOff);
 			_mocks.ReplayAll();
-			var model = ScheduleDayReadModelCreator.TurnScheduleToModel(sched);
+			var model = _target.TurnScheduleToModel(sched);
 			Assert.That(model.StartDateTime, Is.Not.EqualTo(new DateTime()));
 			Assert.That(model.Workday, Is.False);
 

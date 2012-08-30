@@ -112,8 +112,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			result.Should().Be.Null();
 		}
-		
-		[Test]
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "WorkDay"), Test]
 		public void ShouldReturnWorkTimeFromContractForAbsencePreferenceOnWorkDay()
 		{
 			var person = PersonFactory.CreatePerson();
