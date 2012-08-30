@@ -194,6 +194,8 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractor.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerForWebDisplay.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferencePeriodFeedbackViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePeriodFeedbackProvider.cs" />

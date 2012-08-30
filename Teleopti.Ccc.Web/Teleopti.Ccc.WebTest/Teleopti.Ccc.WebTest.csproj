@@ -122,6 +122,7 @@
     <Compile Include="Core\Portal\PortalViewModelFactoryScheduleTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
     <Compile Include="Core\Settings\PersonPersisterTest.cs" />
+    <Compile Include="Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractorTest.cs" />
     <Compile Include="FakeCurrentHttpContext.cs" />
     <Compile Include="FakeCurrentTeleoptiPrincipal.cs" />
     <Compile Include="Areas\MobileReports\UserSettingServiceTest.cs" />
