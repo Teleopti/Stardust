@@ -21,6 +21,7 @@ namespace Teleopti.Messaging.SignalR
 		private const string HubClassName = "MessageBrokerHub";
 		private readonly IDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new Dictionary<string, IList<SubscriptionWithHandler>>();
 		private SignalWrapper _wrapper;
+		private readonly object WrapperLock = new object();
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public SignalBroker(IDictionary<Type, IList<Type>> typeFilter)
@@ -42,8 +43,13 @@ namespace Teleopti.Messaging.SignalR
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 		public void Dispose()
 		{
-			_wrapper.StopListening();
-			_wrapper = null;
+			lock (WrapperLock)
+			{
+				if (_wrapper == null) return;
+
+				_wrapper.StopListening();
+				_wrapper = null;
+			}
 		}
 
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
@@ -83,7 +89,12 @@ namespace Teleopti.Messaging.SignalR
 
 		private void callProxy(Notification state)
 		{
-			_wrapper.NotifyClients(state);
+			lock (WrapperLock)
+			{
+				if (_wrapper == null) return;
+
+				_wrapper.NotifyClients(state);
+			}
 		}
 
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
@@ -148,46 +159,60 @@ namespace Teleopti.Messaging.SignalR
 				BusinessUnitId = Subscription.IdToString(businessUnitId),
 			};
 
-			_wrapper.AddSubscription(subscription).Then(_ =>
+			lock (WrapperLock)
 			{
-				var route = subscription.Route();
+				if (_wrapper == null) return;
 
-				IList<SubscriptionWithHandler> handlers;
-				if (!_subscriptionHandlers.TryGetValue(route, out handlers))
+				_wrapper.AddSubscription(subscription).Then(_ =>
 				{
-					handlers = new List<SubscriptionWithHandler>();
-					_subscriptionHandlers.Add(route, handlers);
-				}
-				handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription });
-			});
+					var route = subscription.Route();
+
+					IList<SubscriptionWithHandler> handlers;
+					if (!_subscriptionHandlers.TryGetValue(route, out handlers))
+					{
+						handlers = new List<SubscriptionWithHandler>();
+						_subscriptionHandlers.Add(route, handlers);
+					}
+					handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription });
+				});
+			}
 		}
 
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			if (_wrapper == null || _subscriptionHandlers==null) return;
-
 			var handlersToRemove = new List<string>();
-			var subscriptionWithHandlersToRemove = new List<SubscriptionWithHandler>();
-			foreach (var subscriptionHandler in _subscriptionHandlers)
+
+			lock (WrapperLock)
 			{
-				foreach (var subscriptionWithHandler in subscriptionHandler.Value)
+				if (_wrapper == null) return;
+
+				var subscriptionWithHandlersToRemove = new List<SubscriptionWithHandler>();
+				foreach (var subscriptionHandler in _subscriptionHandlers)
 				{
-					var target = subscriptionWithHandler.Handler;
-					if (target == eventMessageHandler)
+					if (subscriptionHandler.Value == null)
 					{
-						subscriptionWithHandlersToRemove.Add(subscriptionWithHandler);
-						if (subscriptionHandler.Value.Count==0)
+						continue;
+					}
+
+					foreach (var subscriptionWithHandler in subscriptionHandler.Value)
+					{
+						var target = subscriptionWithHandler.Handler;
+						if (target == eventMessageHandler)
 						{
-							var route = subscriptionWithHandler.Subscription.Route();
-							_wrapper.RemoveSubscription(route);
-							handlersToRemove.Add(route);
+							subscriptionWithHandlersToRemove.Add(subscriptionWithHandler);
+							if (subscriptionHandler.Value.Count == 0 && subscriptionWithHandler.Subscription!=null)
+							{
+								var route = subscriptionWithHandler.Subscription.Route();
+								_wrapper.RemoveSubscription(route);
+								handlersToRemove.Add(route);
+							}
 						}
 					}
-				}
 
-				foreach (var subscriptionWithHandler in subscriptionWithHandlersToRemove)
-				{
-					subscriptionHandler.Value.Remove(subscriptionWithHandler);
+					foreach (var subscriptionWithHandler in subscriptionWithHandlersToRemove)
+					{
+						subscriptionHandler.Value.Remove(subscriptionWithHandler);
+					}
 				}
 			}
 
@@ -324,9 +349,12 @@ namespace Teleopti.Messaging.SignalR
 			var connection = new HubConnection(serverUrl.ToString());
 			var hubProxy = connection.CreateProxy(HubClassName);
 
-			_wrapper = new SignalWrapper(hubProxy, connection);
-			_wrapper.OnNotification += onNotification;
-			_wrapper.StartListening();
+			lock (WrapperLock)
+			{
+				_wrapper = new SignalWrapper(hubProxy, connection);
+				_wrapper.OnNotification += onNotification;
+				_wrapper.StartListening();
+			}
 		}
 
 		private void onNotification(Notification d)
@@ -353,8 +381,13 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StopMessageBroker()
 		{
-			_wrapper.OnNotification -= onNotification;
-			_wrapper.StopListening();
+			lock (WrapperLock)
+			{
+				if (_wrapper == null) return;
+
+				_wrapper.OnNotification -= onNotification;
+				_wrapper.StopListening();
+			}
 		}
 
 		public int Initialized { get; set; }
@@ -379,7 +412,10 @@ namespace Teleopti.Messaging.SignalR
 
 		public bool IsInitialized
 		{
-			get { return _wrapper!=null && _wrapper.IsInitialized(); }
+			get
+			{
+				return _wrapper!=null && _wrapper.IsInitialized();
+			}
 		}
 
 		public event EventHandler<EventMessageArgs> EventMessageHandler;

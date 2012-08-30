@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
@@ -134,7 +135,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
                 if (colIndex == 1)
                     return _model.GetRowData(rowIndex - _numberOfHeaders).NumberOfWarnings;
                 if (colIndex == 2)
-                    return _model.GetRowData(rowIndex - _numberOfHeaders).SchedulePeriod.PeriodType.ToString();
+                    return LanguageResourceHelper.TranslateEnumValue(_model.GetRowData(rowIndex - _numberOfHeaders).SchedulePeriod.PeriodType);
                 if (colIndex == 3)
                     return _model.GetRowData(rowIndex - _numberOfHeaders).Period.Value.StartDate.ToShortDateString();
                 if (colIndex == 4)

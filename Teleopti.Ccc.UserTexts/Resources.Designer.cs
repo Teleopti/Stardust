@@ -18823,6 +18823,42 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Month 7-8.
+        /// </summary>
+        public static string SchedulePeriodTypeChineseMonth {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeChineseMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day.
+        /// </summary>
+        public static string SchedulePeriodTypeDay {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Month.
+        /// </summary>
+        public static string SchedulePeriodTypeMonth {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Week.
+        /// </summary>
+        public static string SchedulePeriodTypeWeek {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeWeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Periods.
         /// </summary>
         public static string SchedulePeriodView {

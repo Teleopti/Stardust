@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 {
     class DropDownColumnForPeriodGrids<TData, TItems> : ColumnBase<TData>
     {
-        private readonly PropertyReflector _propertyReflector = new PropertyReflector();
+    	private readonly string _valueMember;
+    	private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
         private readonly string _headerText;
         private readonly string _bindingProperty;
@@ -36,15 +37,23 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                              string displayMember, Type baseClass)
             : this(bindingProperty, headerText, comboItems, displayMember)
         {
-            _baseClass = baseClass;
+			_baseClass = baseClass;
         }
 
-        private bool tryGetItemByDisplayMember(string displayMember, out TItems comboItem)
+		public DropDownColumnForPeriodGrids(string bindingProperty, string headerText,
+							 IEnumerable<TItems> comboItems,
+							 string displayMember, string valueMember, Type baseClass)
+			: this(bindingProperty, headerText, comboItems, displayMember, baseClass)
+		{
+			_valueMember = valueMember;
+		}
+
+    	private bool tryGetItemByDisplayMember(string displayMember, out TItems comboItem)
         {
             foreach (TItems theComboItem in _comboItems)
             {
                 string itemName = null;
-                try { itemName = (string)_propertyReflector.GetValue(theComboItem, _displayMember); }
+                try { itemName = _propertyReflector.GetValue(theComboItem, _displayMember).ToString(); }
                 catch (InvalidCastException) { }
                 if (itemName == displayMember)
                 {
@@ -52,8 +61,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                     return true;
                 }
             }
-			//it must be possible to empty the BudgetGroup
-			if (_baseClass.Equals(typeof(Domain.Budgeting.BudgetGroup)) && string.IsNullOrEmpty(displayMember))
+
+			if (string.IsNullOrEmpty(displayMember))
 			{
 				comboItem = default(TItems);
 				return true;
@@ -97,6 +106,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 e.Style.DisplayMember = _displayMember;
 				e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
             	
+				if (!string.IsNullOrEmpty(_valueMember))
+				{
+					e.Style.ValueMember = _valueMember;
+				}
+
                 OnCellDisplayChanged(dataItem, e);
                 e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
 
@@ -109,11 +123,19 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             if (e.ColIndex > 0 && e.RowIndex > 0)
             {
                 if (dataItems.Count == 0) return;
-                TData dataItem = dataItems.ElementAt(e.RowIndex - 1);
+				if (dataItems.Count < e.RowIndex) return;
 
-                if (typeof(TItems).IsAssignableFrom(e.Style.CellValue.GetType()) ||
-                    typeof(TItems) == e.Style.CellValue.GetType().BaseType ||
-                    typeof(TItems) == e.Style.CellValue.GetType() || _baseClass == e.Style.CellValue.GetType() || _baseClass == e.Style.CellValue.GetType().BaseType)
+                TData dataItem = dataItems[e.RowIndex - 1];
+
+            	var typeOfItem = typeof (TItems);
+				if (!string.IsNullOrEmpty(_valueMember))
+				{
+					
+				}
+
+                if (typeOfItem.IsAssignableFrom(e.Style.CellValue.GetType()) ||
+                    typeOfItem == e.Style.CellValue.GetType().BaseType ||
+                    typeOfItem == e.Style.CellValue.GetType() || _baseClass == e.Style.CellValue.GetType() || _baseClass == e.Style.CellValue.GetType().BaseType)
                 {
                     _propertyReflector.SetValue(dataItem, _bindingProperty, e.Style.CellValue);
                     e.Handled = true;

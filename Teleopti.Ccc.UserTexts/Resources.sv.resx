@@ -6211,7 +6211,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Schemalagd tid per agent</comment>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Servicenivå och Agenter redo</value>
+    <value>Servicenivå och agenter redo</value>
     <comment>Servicenivå och Agenter Ready</comment>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
@@ -10536,5 +10536,50 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="WalkAways" xml:space="preserve">
     <value>Walk aways</value>
+  </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>Ditt önskemål är utanför aktuellt intervall.</value>
+  </data>
+  <data name="FileExportFailed" xml:space="preserve">
+    <value>Filexport misslyckades</value>
+  </data>
+  <data name="FileExportFinished" xml:space="preserve">
+    <value>Filexport klar</value>
+  </data>
+  <data name="OptimizationOptionMessageBox" xml:space="preserve">
+    <value>Optimeringsinställningar</value>
+  </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>Ingen aktivitet</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
+    <value>Var god välj minst ett av alternativen "Skiftkategori", "Starttid" eller "Sluttid" för teamoptimeringen.</value>
+  </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>Schemaläggningsinställningar</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>Var god välj minst ett av alternativen "Skiftkategori", "Starttid" eller "Sluttid" för teamschemaläggningen.</value>
+  </data>
+  <data name="ManageSmsSettings" xml:space="preserve">
+    <value>Hantera SMS-inställningar</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
+    <value>Ange vilken kolumn telefonnummer för SMS ska hämtas från</value>
+  </data>
+  <data name="SmsSettings" xml:space="preserve">
+    <value>SMS-inställningar</value>
+  </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>Dina arbetstider har ändrats.</value>
+  </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>Från kontrakt</value>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>Fråm schemaperiod</value>
+  </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>Heldagsfrånvaro</value>
   </data>
 </root>
