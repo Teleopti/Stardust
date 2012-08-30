@@ -468,8 +468,8 @@
         <DataSetName>DataSet1</DataSetName>
         <Top>0.3175cm</Top>
         <Left>0.25cm</Left>
-        <Height>3cm</Height>
-        <Width>26.95cm</Width>
+        <Height>2.99999cm</Height>
+        <Width>26.94999cm</Width>
         <Style>
           <Direction>=Parameters!Direction.Value</Direction>
           <Language>=User!Language</Language>
@@ -693,6 +693,11 @@
                   <GroupExpression>=Fields!ActivityName.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Fields!ActivityName.Value</Value>
+                </SortExpression>
+              </SortExpressions>
               <TablixHeader>
                 <Size>0.68898in</Size>
                 <CellContents>
@@ -791,6 +796,11 @@
                   <GroupExpression>=Fields!ScheduledDate.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Fields!ScheduledDate.Value</Value>
+                </SortExpression>
+              </SortExpressions>
               <TablixHeader>
                 <Size>0.68898in</Size>
                 <CellContents>
@@ -823,6 +833,7 @@
                       <PaddingBottom>2pt</PaddingBottom>
                     </Style>
                   </Textbox>
+                  <rd:Selected>true</rd:Selected>
                 </CellContents>
               </TablixHeader>
               <DataElementOutput>Output</DataElementOutput>
