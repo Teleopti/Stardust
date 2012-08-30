@@ -4,19 +4,19 @@
 	const double pixelsPerHour = 50;
 	const double timeLineHourWidth = (pixelsPerHour) - 1; //"1" due to border size
 }
-<script>
+<script type="text/javascript">
 	var refreshMilliSeconds = 200;
 
 	$(function() {
-	   var slidingSchedules = $('.asm-sliding-schedules');
 		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
-		
+		var pixelsPerHour = @(pixelsPerHour);
+		var slidingSchedules = $('.asm-sliding-schedules');
 
-		slidingSchedules.hide();
-		_moveTimeLineToNow(slidingSchedules, serverMsSince1970);
+		_moveTimeLineToNow(slidingSchedules, serverMsSince1970, pixelsPerHour);
 		slidingSchedules.show();
+		
 		setInterval(function() {
-			 _moveTimeLineToNow(slidingSchedules, serverMsSince1970);
+			 _moveTimeLineToNow(slidingSchedules, serverMsSince1970, pixelsPerHour);
 			_updateInfoCanvas();
 		}, refreshMilliSeconds);
 	});
@@ -25,12 +25,12 @@
 		$('#asm-info-debug').text(new Date().getTeleoptiTime());
 	}
 
-	function _moveTimeLineToNow(slidingSchedules, serverMsSince1970) {
+	function _moveTimeLineToNow(slidingSchedules, serverMsSince1970, pixelsPerHour) {
 		var clientMsSince1970 = new Date().getTeleoptiTime();
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
 		
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
-		var startPixel = -(@pixelsPerHour * hoursSinceStart);
+		var startPixel = -(pixelsPerHour * hoursSinceStart);
 		slidingSchedules.css('left', (startPixel) + 'px');
 	}
 </script>
