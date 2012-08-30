@@ -18,7 +18,7 @@ ALTER TABLE dbo.Activity ADD
 	AllowOverwrite bit NOT NULL CONSTRAINT DF_Activity_AllowOverwrite DEFAULT 1
 GO
 
-update dbo.activity SET AllowOverwrite = 0 where ReportLevelDetail = 2
+update  dbo.activity SET AllowOverwrite = 0 where InWorkTime  = 0
 
 
 GO
