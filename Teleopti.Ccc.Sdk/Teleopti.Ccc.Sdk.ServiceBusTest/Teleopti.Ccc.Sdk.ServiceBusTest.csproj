@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="AbsenceRequestResolveTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
+    <Compile Include="Denormalizer\InitialLoadScheduleDayConsumerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumerTest.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelConsumerTest.cs" />

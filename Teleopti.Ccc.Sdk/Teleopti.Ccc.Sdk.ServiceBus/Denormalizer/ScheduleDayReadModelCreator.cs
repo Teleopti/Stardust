@@ -3,10 +3,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public static class ScheduleDayReadModelCreator
+	public interface IScheduleDayReadModelCreator
+	{
+		ScheduleDayReadModel TurnScheduleToModel(IScheduleDay scheduleDay);
+	}
+
+	public class ScheduleDayReadModelCreator : IScheduleDayReadModelCreator
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public static ScheduleDayReadModel TurnScheduleToModel(IScheduleDay scheduleDay)
+		public ScheduleDayReadModel TurnScheduleToModel(IScheduleDay scheduleDay)
 		{
 			var ret = new ScheduleDayReadModel();
 			var person = scheduleDay.Person;
