@@ -71,12 +71,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new ScheduleIsPublished());
 		}
 
-		[Given(@"I am a supervisor")]
-		public void GivenIAmASupervisor()
-		{
-			UserFactory.User().Setup(new Supervisor());
-		}
-
 		[Given(@"I have analytics data for today")]
 		public void GivenIHaveAnalyticsDataForToday()
 		{

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             if (skillDayTemplate.TemplateSkillDataPeriodCollection.Count > 0)
             {
                 ITemplateSkillDataPeriod skillDataPeriodTemplate = skillDayTemplate.TemplateSkillDataPeriodCollection[0];
-
+                timeSpanTextBoxServiceLevelTime.MaximumValue = TimeSpan.FromSeconds(skill.DefaultResolution * TimeDefinition.SecondsPerMinute * TimeDefinition.HoursPerDay); 
                 timeSpanTextBoxServiceLevelTime.Value = (TimeSpan.FromSeconds(skillDataPeriodTemplate.ServiceAgreement.ServiceLevel.Seconds));
                 integerTextBoxMinimumAgents.IntegerValue =
                     skillDataPeriodTemplate.SkillPersonData.MinimumPersons;

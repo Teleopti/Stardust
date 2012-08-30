@@ -15,14 +15,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference")]
 		public SplitButton PreferenceButton { get; set; }
 
+		[FindBy(Id = "Preference-extended")]
+		public Button ExtendedPreferenceButton { get; set; }
+
 		[FindBy(Id = "Preference-delete-button")]
 		public Button DeleteButton { get; set; }
 
 		[FindBy(Id = "Preference-period")]
 		public Div PreferencePeriod;
 
+		[FindBy(Id = "Preference-extended-preference")]
+		public SelectBox ExtendedPreferenceSelectBox;
+
 		[FindBy(Id = "Preference-period-feedback-view")]
 		public Div PreferencePeriodFeedbackView { get; set; }
+
+		[FindBy(Id = "Preference-extended-save")]
+		public Button ExtendedPreferenceSaveButton { get; set; }
 
 		public void SelectPreferenceItemByText(string text, bool wait)
 		{

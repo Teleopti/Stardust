@@ -50,7 +50,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				var principal = _currentTeleoptiPrincipal.Current();
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
 
-				var allowed = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
+				bool allowed = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere) ||
+				               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
+
 				if (!allowed)
 					throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");
 			}

@@ -215,8 +215,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyPeriodTypeCanSet()
         {
-            _target.PeriodType = SchedulePeriodType.Week;
-            Assert.AreEqual(SchedulePeriodType.Week, _target.PeriodType);
+			_target.PeriodType = SchedulePeriodType.Month;
+			Assert.AreEqual(SchedulePeriodType.Month, _target.PeriodType);
         }
         [Test]
         public void VerifyMustHave()

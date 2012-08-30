@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private IUserSetup _cultureSetup = new SwedishCulture();
 
-		private readonly DataFactory _dataFactory = new DataFactory();
+		private readonly DataFactory _dataFactory = new DataFactory(ScenarioUnitOfWorkState.UnitOfWorkAction);
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
 		private readonly IList<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
 		private readonly IList<IPostSetup> _postSetups = new List<IPostSetup>();
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			CultureInfo culture = null;
 
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _dataFactory.Apply(uow));
+			_dataFactory.Apply();
 
 			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
 			                                         	{

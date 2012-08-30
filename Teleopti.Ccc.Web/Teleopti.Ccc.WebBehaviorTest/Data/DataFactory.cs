@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -7,16 +8,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public class DataFactory
 	{
+		private readonly Action<Action<IUnitOfWork>> _unitOfWorkActionAction;
 		private readonly IList<IDataSetup> _dataSetups = new List<IDataSetup>();
+
+		public DataFactory(Action<Action<IUnitOfWork>> unitOfWorkActionAction) {
+			_unitOfWorkActionAction = unitOfWorkActionAction;
+		}
 
 		public void Setup(IDataSetup dataSetup)
 		{
 			_dataSetups.Add(dataSetup);
 		}
 
-		public void Apply(IUnitOfWork unitOfWork)
+		public void Apply()
 		{
-			_dataSetups.ForEach(s => s.Apply(unitOfWork));
+			_dataSetups.ForEach(s => _unitOfWorkActionAction.Invoke(s.Apply));
 		}
 
 		public void Clear()
