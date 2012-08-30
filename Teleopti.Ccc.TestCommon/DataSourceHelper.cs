@@ -144,14 +144,20 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static void PersistAuditSetting()
 		{
-			using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-			{
-				conn.Open();
-				using(var cmd = new SqlCommand("delete from auditing.Auditsetting", conn))
-					cmd.ExecuteNonQuery();
-				using(var cmd = new SqlCommand("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ",0)", conn))
-					cmd.ExecuteNonQuery();
-			}
+			ExceptionToConsole(
+				() =>
+					{
+						using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
+						{
+							conn.Open();
+							using (var cmd = new SqlCommand("delete from auditing.Auditsetting", conn))
+								cmd.ExecuteNonQuery();
+							using (var cmd = new SqlCommand("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ",0)", conn))
+								cmd.ExecuteNonQuery();
+						}
+					},
+				"Failed to persistn audit setting in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				);
 		}
 
 
