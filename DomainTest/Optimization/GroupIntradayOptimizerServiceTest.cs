@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldRunUntilAllOptimizersFailsInDecisionStep()
+		public void ShouldRunUntilAllOptimizersFailsInFindDateStep()
 		{
 			//DateOnly date = new DateOnly(2012, 1, 1);
 			using (_mock.Record())

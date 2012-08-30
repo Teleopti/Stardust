@@ -119,7 +119,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IVirtualSchedulePeriod schedulePeriodActivePerson = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
             IPerson activePerson = _mocks.StrictMock<IPerson>();
-            IList<IPerson> persons = new List<IPerson>{ activePerson };
 
             DateOnly dayOffToRemove = new DateOnly(2001, 02, 01);
             IList<DateOnly> daysOffToRemove = new List<DateOnly>{ dayOffToRemove };
