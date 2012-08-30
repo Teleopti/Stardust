@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -80,36 +79,23 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             set { ContainedEntity.Number = value; }
         }
 
-		///// <summary>
-		///// Gets the unit.
-		///// </summary>
-		///// <value>The unit.</value>
-		///// <remarks>
-		///// Created by: Dinesh Ranasinghe
-		///// Created date: 2008-06-10
-		///// </remarks>
-		//public SchedulePeriodType? PeriodType
-		//{
-		//    get
-		//    {
-		//        return ContainedEntity.PeriodType;
-		//    }
-		//    set
-		//    {
-		//        ContainedEntity.PeriodType = (SchedulePeriodType)value;
-		//    }
-		//}
-
-		public SchedulePeriodTypeDisplay PeriodType
+		/// <summary>
+		/// Gets the unit.
+		/// </summary>
+		/// <value>The unit.</value>
+		/// <remarks>
+		/// Created by: Dinesh Ranasinghe
+		/// Created date: 2008-06-10
+		/// </remarks>
+		public SchedulePeriodType? PeriodType
 		{
 			get
 			{
-				if (ContainedEntity == null) return null;
-				return SchedulePeriodTypeDisplay.ListOfPeriodType.SingleOrDefault(p => p.PeriodType == ContainedEntity.PeriodType);
+				return ContainedEntity.PeriodType;
 			}
 			set
 			{
-				if (value != null) ContainedEntity.PeriodType = value.PeriodType;
+				ContainedEntity.PeriodType = value.GetValueOrDefault();
 			}
 		}
 

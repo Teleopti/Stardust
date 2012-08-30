@@ -1,11 +1,7 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
-
-#endregion
 
 namespace Teleopti.Ccc.WinCode.PeopleAdmin.Comparers
 {
@@ -45,11 +41,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Comparers
 			else 
 			{
 				//// Compares the teminal date of the y with the teminal date of y
-				//result = string.Compare(((SchedulePeriodType)x.PeriodType).ToString(), ((SchedulePeriodType)y.PeriodType).ToString()
-				//    , StringComparison.CurrentCulture);
-
-				result = string.Compare(x.PeriodType.PeriodType.ToString(), y.PeriodType.PeriodType.ToString()
-					, StringComparison.CurrentCulture);
+				result = string.Compare(((SchedulePeriodType)x.PeriodType).ToString(), ((SchedulePeriodType)y.PeriodType).ToString()
+				    , StringComparison.CurrentCulture);
 			}
 
 			return result;

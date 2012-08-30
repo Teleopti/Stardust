@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -144,15 +144,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             get
             {
-                if (_schedulePeriod.PeriodType == SchedulePeriodType.Week)
-                {
-                    return UserTexts.Resources.Week;
-                }
-                if (_schedulePeriod.PeriodType == SchedulePeriodType.Day)
-                {
-                    return UserTexts.Resources.Day;
-                }
-                return UserTexts.Resources.Month;
+            	return LanguageResourceHelper.TranslateEnumValue(_schedulePeriod.PeriodType);
             }
         }
         public DateOnly SelectedDate
