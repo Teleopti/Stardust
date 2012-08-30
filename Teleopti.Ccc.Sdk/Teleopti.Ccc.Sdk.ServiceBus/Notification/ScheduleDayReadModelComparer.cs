@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
             
             
             // Check if the working day is change to Off day.
-            if (newReadModel.WorkDay != existingReadModel.WorkDay)
+            if (newReadModel.Workday != existingReadModel.Workday)
             {
                 // if chnage working day to an Off day.
-                if (!newReadModel.WorkDay)
+                if (!newReadModel.Workday)
                 {
                     message = string.Format(cultureInfo, UserTexts.Resources.YourWorkingHoursHaveChanged) + " " + weekDayName + " " + startDate + string.Format(cultureInfo, UserTexts.Resources.NotWorking);
                 }
