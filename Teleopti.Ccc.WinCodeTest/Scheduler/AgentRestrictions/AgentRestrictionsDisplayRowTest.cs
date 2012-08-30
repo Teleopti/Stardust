@@ -82,7 +82,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 				Assert.AreEqual(UserTexts.Resources.No, _displayRow.Ok);
 				Assert.AreEqual(4, _displayRow.Warnings);
-				Assert.IsNotNull(_displayRow.Warning(7));
+				Assert.IsNotNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.ContractTime));
+				Assert.IsNotNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.DaysOffSchedule));
+				Assert.IsNotNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.Min));
+				Assert.IsNotNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.Max));
+				Assert.IsNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.Type));
 			}	
 		}
 
