@@ -2,14 +2,13 @@
 @model AsmViewModel
 @{
 	const double pixelsPerHour = 50;
-	const int timeLineHourBorderSize = 1;
-	const double timeLineHourWidth = (pixelsPerHour) - timeLineHourBorderSize;
+	const double timeLineHourWidth = (pixelsPerHour) - 1; //"1" due to border size
 }
 <style>
 .asm-sliding-schedules{
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	 position: relative;
-	 		top: 20px;
+			top: 20px;
 	height: 40px;
 	 }
 .asm-current-info{
@@ -21,7 +20,7 @@
 	 float:left;
 		width: 800px;
 		overflow: hidden;
-	 	background: #F8F8F8;
+		background: #F8F8F8;
 		height: 70px;
 		border: 1px solid rgba(0, 0, 0, 0.15);
 	 }
@@ -45,6 +44,7 @@
 	{
 		height: 70px;
 		float: left;
+		border-right:1px solid rgba(0, 0, 0, 0.15);
 	}
 
 	.asm-timeline-number
@@ -64,7 +64,7 @@
 	.asm-info-canvas {
 		width: 100px;
 		overflow: hidden;
-	 	background: #F8F8F8;
+		background: #F8F8F8;
 		height: 70px;
 		border: 1px solid rgba(0, 0, 0, 0.15);
 	}
@@ -111,16 +111,16 @@
 			@foreach (var layer in Model.Layers)
 			{
 				<span class="asm-layer ui-corner-all" style="
-                                                                  	left:@(layer.RelativeStartInMinutes * pixelsPerHour / 60)px;
-                                                                  	padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
-                                                                  	background-color: @(layer.Color)">
+																							left:@(layer.RelativeStartInMinutes * pixelsPerHour / 60)px;
+																							padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
+																							background-color: @(layer.Color)">
 				</span>
 			}
 			@for (var day = 0; day <= 2; day++)
 			{
 				for (var hour = 0; hour < 24; hour++)
 				{
-					<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;border-right:@(timeLineHourBorderSize)px solid rgba(0, 0, 0, 0.15);">
+					<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
 						<span class="asm-timeline-number ui-corner-all">@(hour)</span>
 					</span>
 				}
@@ -128,7 +128,7 @@
 		</div>
 	</div>
 	 <div class="asm-current-info">
-	 	<div class="asm-info-canvas ui-corner-all">
+		<div class="asm-info-canvas ui-corner-all">
 			kdsaslödkfj 
 		</div>
 	 </div>
