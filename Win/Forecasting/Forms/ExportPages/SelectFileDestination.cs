@@ -66,7 +66,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             if (String.IsNullOrEmpty(textBox1.Text)) return false;
             var commandModel = stateObj.ExportSkillToFileCommandModel;
             commandModel.FileName = textBox1.Text;
-            _saveFileDialog.Dispose();
+            
+            if (_saveFileDialog!=null)
+                _saveFileDialog.Dispose();
+
             GetSelectedCheckBox(stateObj);
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
