@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -468,6 +470,40 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             return finalShiftList;
 
-        }      
+        }
+
+        public IList<IShiftProjectionCache> FilterOnOverwritableActivities(IList<IShiftProjectionCache> shiftList, IScheduleDay part, IWorkShiftFinderResult finderResult)
+        {
+            var filteredList = new List<IShiftProjectionCache>();
+            var meetings = part.PersonMeetingCollection();
+            var personAssignments = part.PersonAssignmentCollection();
+            var cnt = shiftList.Count;
+            foreach (var shift in shiftList)
+            {
+                if (shift.MainShiftProjection.Any(x => !((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&
+                                                       isActivityIntersectedWithMeetingOrPersonalShift(
+                                                           personAssignments, meetings, x)))
+                    continue;
+                filteredList.Add(shift);
+            }
+            finderResult.AddFilterResults(new WorkShiftFilterResult("xxAfterCheckingAgainstActivities", cnt, filteredList.Count));
+
+            return filteredList;
+        }
+
+        private static bool isActivityIntersectedWithMeetingOrPersonalShift(IEnumerable<IPersonAssignment> personAssignments,
+                                                                            IEnumerable<IPersonMeeting> meetings, IVisualLayer layer)
+        {
+            if (meetings.Any(x => x.Period.Intersect(layer.Period)))
+                return true;
+
+            foreach (var personAssignment in personAssignments)
+            {
+                if (personAssignment.PersonalShiftCollection.Any(
+                        x => x.LayerCollection.Any(l => l.Period.Intersect(layer.Period))))
+                    return true;
+            }
+            return false;
+        }
     }
 }
