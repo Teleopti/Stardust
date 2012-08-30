@@ -4,40 +4,49 @@
 	const double pixelsPerHour = 50;
 	const int timeLineHourBorderSize = 1;
 	const double timeLineHourWidth = (pixelsPerHour) - timeLineHourBorderSize;
-	const int timeMarkerPosition = 120;
 }
 <style>
-	.asm-outer-canvas {
+.asm-sliding-schedules{
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	 position: relative;
+	 		top: 20px;
+	height: 40px;
+	 }
+.asm-current-info{
+	 float:left;
+	 width: 100px;
+	margin-left: 10px;
+	 }
+.asm-schedule-canvas{
+	 float:left;
+		width: 800px;
+		overflow: hidden;
+	 	background: #F8F8F8;
+		height: 70px;
+		border: 1px solid rgba(0, 0, 0, 0.15);
+	 }
+
+.asm-outer-canvas{
+		 width: 1000px;
 		background: white;
 		padding:6px; 
 		border: 1px solid rgba(0, 0, 0, 0.15);
 		margin: 5px;
-	}
-	
-	.asm-canvas
-	{
-		position: relative;
-		height: 70px;
-		overflow: hidden;
-		background: #F8F8F8;
-		border: 1px solid rgba(0, 0, 0, 0.15);
-	}
-	
-	.asm-sliding-schedules
-	{
-		border: 1px solid rgba(0, 0, 0, 0.15);
-		position: relative;
-		height: 40px;
-		top: 20px;
-		position: absolute;
-	}
-	
+		height:72px;
+}
+.asm-layer{
+	 position: absolute;
+	opacity: 0.8;
+	height: 30px;
+	top: 5px;
+}
+
 	.asm-timeline-line
 	{
-		float: left;
 		height: 70px;
+		float: left;
 	}
-	
+
 	.asm-timeline-number
 	{
 		padding: 1px;
@@ -51,20 +60,22 @@
 		font-family: verdana;
 		font-size: 8px;
 	}
-	
-	.asm-layer
-	{
-		top: 5px;
-		position: absolute;
-		height: 30px;
-		opacity: 0.8;
+
+	.asm-info-canvas {
+		width: 100px;
+		overflow: hidden;
+	 	background: #F8F8F8;
+		height: 70px;
+		border: 1px solid rgba(0, 0, 0, 0.15);
 	}
 	
-	.asm-now-marker
-	{
-		background-color: rgba(0, 0, 0, 0.2);
-		position: absolute;
-		height: 100%;
+	.asm-time-marker {
+		background-color: rgba(0,0,0,0.15); 
+		width:150px;
+		height: 72px;
+		float:left; 
+		position:relative; 
+		z-index: 1;
 		border-right: 1px solid black;
 	}
 </style>
@@ -86,33 +97,40 @@
 		
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
 		var startPixel = -(@pixelsPerHour * hoursSinceStart);
-		$('.asm-sliding-schedules').css('left', (startPixel +@timeMarkerPosition) + 'px');
+		$('.asm-sliding-schedules').css('left', (startPixel) + 'px');
 		//debug
 		$('#clockDebug').text(''+new Date(clientMsSince1970));
 		$('#leftdebug').text('' + startPixel);
 	}
 </script>
+
 <div class="asm-outer-canvas ui-corner-all">
-	<div class="asm-canvas ui-corner-all">
-		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px">
+	<div class="asm-schedule-canvas ui-corner-all">
+		<div class="asm-time-marker"></div>
+		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px;">
 			@foreach (var layer in Model.Layers)
 			{
 				<span class="asm-layer ui-corner-all" style="
-                                                                 	left:@(layer.RelativeStartInMinutes * pixelsPerHour / 60)px;
-                                                                 	padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
-                                                                 	background-color: @(layer.Color)">
+                                                                  	left:@(layer.RelativeStartInMinutes * pixelsPerHour / 60)px;
+                                                                  	padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
+                                                                  	background-color: @(layer.Color)">
 				</span>
 			}
 			@for (var day = 0; day <= 2; day++)
 			{
 				for (var hour = 0; hour < 24; hour++)
 				{
-					<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;
-                                                                 	                                   	border-right:@(timeLineHourBorderSize)px solid rgba(0, 0, 0, 0.15);">
-						<span class="asm-timeline-number ui-corner-all">@(hour)</span> </span>
+					<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;border-right:@(timeLineHourBorderSize)px solid rgba(0, 0, 0, 0.15);">
+						<span class="asm-timeline-number ui-corner-all">@(hour)</span>
+					</span>
 				}
 			}
 		</div>
-		<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;"></div>
 	</div>
+	 <div class="asm-current-info">
+	 	<div class="asm-info-canvas ui-corner-all">
+			kdsaslödkfj 
+		</div>
+	 </div>
+	  <div class="clearboth" />
 </div>
