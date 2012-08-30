@@ -1,14 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class GroupIntradayOptimizerService
+	public interface IGroupIntradayOptimizerService
+	{
+		void Execute(IList<IScheduleMatrixPro> allMatrixes);
+		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+		void OnReportProgress(string message);
+	}
+
+	public class GroupIntradayOptimizerService : IGroupIntradayOptimizerService
 	{
 		private readonly IList<IGroupIntradayOptimizer> _optimizers;
 		private readonly IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
 		private readonly IGroupIntradayOptimizerExecuter _groupIntradayOptimizerExecuter;
+		private bool _cancelMe;
 
 		public GroupIntradayOptimizerService(IList<IGroupIntradayOptimizer> optimizers,
 		                                     IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup,
@@ -18,6 +29,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
 			_groupIntradayOptimizerExecuter = groupIntradayOptimizerExecuter;
 		}
+
+		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
 		public void Execute(IList<IScheduleMatrixPro> allMatrixes)
 		{
@@ -33,13 +46,31 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
+		public void OnReportProgress(string message)
+		{
+			var handler = ReportProgress;
+			if (handler != null)
+			{
+				var args = new ResourceOptimizerProgressEventArgs(null, 0, 0, message);
+				handler(this, args);
+				if (args.Cancel)
+					_cancelMe = true;
+			}
+		}
+
 		private IList<IGroupIntradayOptimizer> runTheList(IList<IGroupIntradayOptimizer> runningList,
 		                                                  IList<IScheduleMatrixPro> allMatrixes)
 		{
 			IList<IGroupIntradayOptimizer> skipList = new List<IGroupIntradayOptimizer>();
 			List<IGroupIntradayOptimizer> removeList = new List<IGroupIntradayOptimizer>();
+			int executes = 0;
 			foreach (var optimizer in runningList.GetRandom(runningList.Count, true))
 			{
+				IPerson person = optimizer.Person;
+				executes++;
+				if(_cancelMe)
+					break;
+
 				if (skipList.Contains(optimizer))
 					continue;
 
@@ -54,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 
 				IList<IScheduleMatrixPro> matrixes =
-					_groupOptimizerFindMatrixesForGroup.Find(optimizer.Person, selectedDate.Value);
+					_groupOptimizerFindMatrixesForGroup.Find(person, selectedDate.Value);
 				foreach (var matrix in matrixes)
 				{
 					foreach (var groupIntradayOptimizer in runningList)
@@ -80,8 +111,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					removeList.AddRange(memberList);
 				}
+
+				reportProgress(selectedDate.Value, success, runningList.Count, executes, person);
 			}
 			return removeList;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.GroupIntradayOptimizerService.OnReportProgress(System.String)")]
+		private void reportProgress(DateOnly date, bool result, int activeOptimizers, int executes, IPerson owner)
+		{
+			string dateString = date.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
+			string who = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers + ")" + executes + " " + dateString + " " + owner.Name.ToString(NameOrderOption.FirstNameLastName);
+			string success;
+			if (!result)
+			{
+				success = " " + Resources.wasNotSuccessful;
+			}
+			else
+			{
+				success = " " + Resources.wasSuccessful;
+			}
+
+			
+			//string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ")";
+			OnReportProgress(who + success);
 		}
 	}
 }

@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
 					return false;
-				IList<DateOnly> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions);
+				IList<DateOnly> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions, allMatrixes);
 				if (removedDays == null)
 					return false;
 

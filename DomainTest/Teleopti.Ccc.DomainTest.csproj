@@ -231,6 +231,7 @@
     <Compile Include="Optimization\DayOffOptimizerConflictHandlerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidatorTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerTest.cs" />
+    <Compile Include="Optimization\GroupIntradayOptimizerServiceTest.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerTest.cs" />
     <Compile Include="Optimization\GroupMatrixContainerCreatorTest.cs" />
     <Compile Include="Optimization\GroupMatrixHelperTest.cs" />
