@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 		{
 			IList<double?> values = dataExtractor.Values();
 
-			int? indexOfHighestStandardDeviation = GetIndexOfWorkdayWithHighestValue(lockableBitArray, values);
+			int? indexOfHighestStandardDeviation = getIndexOfWorkdayWithHighestValue(lockableBitArray, values);
 			if (!indexOfHighestStandardDeviation.HasValue)
 				return null;
 			return matrix.FullWeeksPeriodDays[indexOfHighestStandardDeviation.Value].Day;
@@ -29,13 +28,13 @@ namespace Teleopti.Ccc.DayOffPlanning
             ILockableBitArray bitArray = matrixConverter.Convert(false, false);
             IList<double?> values = dataExtractor.Values();
 
-            int? indexOfHighestStandardDeviation = GetIndexOfWorkdayWithHighestValue(bitArray, values);
+            int? indexOfHighestStandardDeviation = getIndexOfWorkdayWithHighestValue(bitArray, values);
             if (!indexOfHighestStandardDeviation.HasValue)
                 return null;
             return matrix.FullWeeksPeriodDays[indexOfHighestStandardDeviation.Value].Day;
         }
 
-        private static int? GetIndexOfWorkdayWithHighestValue(ILockableBitArray lockableBitArray, IList<double?> values)
+        private static int? getIndexOfWorkdayWithHighestValue(ILockableBitArray lockableBitArray, IList<double?> values)
         {
             int? currentIndex = null;
             double currentHighestValue = 0d;
