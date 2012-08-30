@@ -3,8 +3,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class ScheduleDayReadModelCreator
+	public static class ScheduleDayReadModelCreator
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static ScheduleDayReadModel TurnScheduleToModel(IScheduleDay scheduleDay)
 		{
 			var ret = new ScheduleDayReadModel();
@@ -30,11 +31,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				var cat = scheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory;
 				ret.Label = cat.Description.ShortName;
 				ret.ColorCode = cat.DisplayColor.ToArgb();
-				ret.WorkDay = true;
+				ret.Workday = true;
 			}
 			if (significantPart.Equals(SchedulePartView.Overtime))
 			{
-				ret.WorkDay = true;
+				ret.Workday = true;
 			}
 			if (significantPart.Equals(SchedulePartView.FullDayAbsence))
 				ret.Label = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;

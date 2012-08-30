@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				EndDateTime = new DateTime(2012, 8, 29, 17, 0, 0),
 				Label = "DY",
 				PersonId = personId,
-				WorkDay = true
+				Workday = true
 			};
 			_target.SaveReadModel(model);
 		}

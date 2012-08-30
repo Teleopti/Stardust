@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 		private INotificationConfigReader _notificationConfigReader;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void SendNotification(INotificationMessage message, string mobileNumber)
 		{
 			if(!_notificationConfigReader.HasLoadedConfig)

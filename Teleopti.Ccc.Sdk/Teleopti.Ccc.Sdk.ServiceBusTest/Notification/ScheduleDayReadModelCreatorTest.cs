@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_mocks.ReplayAll();
 			var model = ScheduleDayReadModelCreator.TurnScheduleToModel(sched);
 			Assert.That(model.StartDateTime, Is.Not.EqualTo(new DateTime()));
-			Assert.That(model.WorkDay, Is.True);
+			Assert.That(model.Workday, Is.True);
 			_mocks.VerifyAll();
 		}
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_mocks.ReplayAll();
 			var model = ScheduleDayReadModelCreator.TurnScheduleToModel(sched);
 			Assert.That(model.StartDateTime, Is.Not.EqualTo(new DateTime()));
-			Assert.That(model.WorkDay, Is.True);
+			Assert.That(model.Workday, Is.True);
 
 			_mocks.VerifyAll();
 		}
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_mocks.ReplayAll();
 			var model = ScheduleDayReadModelCreator.TurnScheduleToModel(sched);
 			Assert.That(model.StartDateTime, Is.Not.EqualTo(new DateTime()));
-			Assert.That(model.WorkDay, Is.False);
+			Assert.That(model.Workday, Is.False);
 
 			_mocks.VerifyAll();
 		}
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_mocks.ReplayAll();
 			var model = ScheduleDayReadModelCreator.TurnScheduleToModel(sched);
 			Assert.That(model.StartDateTime, Is.Not.EqualTo(new DateTime()));
-			Assert.That(model.WorkDay, Is.False);
+			Assert.That(model.Workday, Is.False);
 
 			_mocks.VerifyAll();
 		}

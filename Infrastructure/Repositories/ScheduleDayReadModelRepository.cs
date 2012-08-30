@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
 			{
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-					"SELECT PersonId, BelongsToDate AS Date, StartDateTime, EndDateTime, WorkDay, Label, DisplayColor AS ColorCode, WorkTime AS WorkTimeTicks, ContractTime AS ContractTimeTicks FROM ReadModel.ScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
+					"SELECT PersonId, BelongsToDate AS Date, StartDateTime, EndDateTime, Workday, Label, DisplayColor AS ColorCode, WorkTime AS WorkTimeTicks, ContractTime AS ContractTimeTicks FROM ReadModel.ScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
 					.SetGuid("personid", personId)
 					.SetDateTime("startdate",startDate)
 					.SetDateTime("enddate", toDate)
@@ -35,18 +35,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SaveReadModel(ScheduleDayReadModel model)
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
-					"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,WorkDay,WorkTime,ContractTime,Label,DisplayColor,InsertedOn) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:WorkDay,:WorkTime,:ContractTime,:Label,:DisplayColor,:InsertedOn)")
+					"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,InsertedOn) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:InsertedOn)")
 					.SetGuid("PersonId", model.PersonId)
 					.SetDateTime("StartDateTime", model.StartDateTime)
 					.SetDateTime("EndDateTime", model.EndDateTime)
 					.SetInt64("WorkTime", model.WorkTime.Ticks)
 					.SetInt64("ContractTime", model.ContractTime.Ticks)
-					.SetBoolean("WorkDay", model.WorkDay)
+					.SetBoolean("Workday", model.Workday)
 					.SetString("Label", model.Label)
 					.SetInt32("DisplayColor", model.DisplayColor.ToArgb())
 					.SetDateTime("Date", model.BelongsToDate)
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public DateOnly BelongsToDate { get{return new DateOnly(Date);} }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
-		public bool WorkDay { get; set; }
+		public bool Workday { get; set; }
 		public string Label { get; set; }
 		public int ColorCode { get; set; }
 		public Color DisplayColor { get { return Color.FromArgb(ColorCode); } }
