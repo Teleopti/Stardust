@@ -82,25 +82,30 @@
 	var refreshMilliSeconds = 100;
 
 	$(function() {
-		var slidingSchedules = $('.asm-sliding-schedules');
+	   var slidingSchedules = $('.asm-sliding-schedules');
+		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
+		
+
 		slidingSchedules.hide();
-		_moveTimeLineToNow(slidingSchedules);
+		_moveTimeLineToNow(slidingSchedules, serverMsSince1970);
 		slidingSchedules.show();
-		setInterval(function() { _moveTimeLineToNow(slidingSchedules); }, refreshMilliSeconds);
+		setInterval(function() {
+			 _moveTimeLineToNow(slidingSchedules, serverMsSince1970);
+			_updateInfoCanvas();
+		}, refreshMilliSeconds);
 	});
 	
-	function _moveTimeLineToNow(slidingSchedules) {
+	function _updateInfoCanvas() {
+		$('#asm-debug').text(new Date().getTeleoptiTime());
+	}
+
+	function _moveTimeLineToNow(slidingSchedules, serverMsSince1970) {
 		var clientMsSince1970 = new Date().getTeleoptiTime();
-		var serverTimeInJs = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day));
-		var serverMsSince1970 = serverTimeInJs.getTime();
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
 		
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
 		var startPixel = -(@pixelsPerHour * hoursSinceStart);
 		slidingSchedules.css('left', (startPixel) + 'px');
-		//debug
-		$('#clockDebug').text(''+new Date(clientMsSince1970));
-		$('#leftdebug').text('' + startPixel);
 	}
 </script>
 
@@ -127,10 +132,10 @@
 			}
 		</div>
 	</div>
-	 <div class="asm-current-info">
+	<div class="asm-current-info">
 		<div class="asm-info-canvas ui-corner-all">
-			kdsaslödkfj 
+			Debug: <span id="asm-debug"></span>
 		</div>
-	 </div>
+	</div>
 	  <div class="clearboth" />
 </div>
