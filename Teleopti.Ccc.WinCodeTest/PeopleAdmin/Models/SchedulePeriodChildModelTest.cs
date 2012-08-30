@@ -118,9 +118,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyPeriodTypeCanSet()
         {
-			var periodTypeDisplay = new SchedulePeriodTypeDisplay(SchedulePeriodType.Month, UserTexts.Resources.Month);
-			_target.PeriodType = periodTypeDisplay;
-			Assert.AreEqual(periodTypeDisplay.PeriodType, _target.PeriodType.PeriodType);
+			_target.PeriodType = SchedulePeriodType.Month;
+			Assert.AreEqual(SchedulePeriodType.Month, _target.PeriodType);
         }
         [Test]
         public void VerifyMustHave()
