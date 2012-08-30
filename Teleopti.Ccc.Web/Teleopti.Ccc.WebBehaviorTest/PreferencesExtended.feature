@@ -6,44 +6,42 @@
 
 	
 Background:
-         Given there is a role with
-         | Field                          | Value                          |
-         | Name                           | Access to extended preferences |
-         | Access to extended preferences | true                           |
-         And there is a role with
-         | Field                          | Value                             |
-         | Name                           | No access to extended preferences |
-         | Access to extended preferences | false                             |
-         And there is a shift category 
-         | Field | Value |
-         | Name  | Late  |
-         And there is an activity 
-         | Field | Value |
-         | Name  | Lunch |
-         And there is a dayoff 
-         | Field | Value  |
-         | Name  | Dayoff |
-         And there is an absence 
-         | Field | Value   |
-         | Name  | Illness |
-    And I have a workflow control set with
-         | Field                      | Value              |
-         | Name                       | Published schedule |
-         | Schedule published to date | 2012-06-24         |
-         | Available shift category   | Late               |
-         | Available dayoff           | Dayoff             |
-         | Available absence          | Illness            |
-         | Available activity         | Lunch              |
-         And I have a schedule period with 
-         | Field      | Value      |
-         | Start date | 2012-06-18 |
-         | Type       | Week       |
-         | Length     | 1          |
-         And I have a person period with 
-         | Field      | Value      |
-         | Start date | 2012-06-18 |
-
-
+	Given there is a role with
+	| Field                          | Value                          |
+	| Name                           | Access to extended preferences |
+	| Access to extended preferences | true                           |
+	And there is a role with
+	| Field                          | Value                             |
+	| Name                           | No access to extended preferences |
+	| Access to extended preferences | false                             |
+	And there is a shift category with
+	| Field | Value |
+	| Name  | Late  |
+	And there is an activity with
+	| Field | Value |
+	| Name  | Lunch |
+	And there is a dayoff with
+	| Field | Value  |
+	| Name  | Dayoff |
+	And there is an absence with
+	| Field | Value   |
+	| Name  | Illness |
+	And I have a workflow control set with
+	| Field                      | Value              |
+	| Name                       | Published schedule |
+	| Schedule published to date | 2012-06-24         |
+	| Available shift category   | Late               |
+	| Available dayoff           | Dayoff             |
+	| Available absence          | Illness            |
+	| Available activity         | Lunch              |
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
 
 Scenario: Can see indication of an extended preference
 	Given I have the role 'Access to extended preferences'
@@ -124,19 +122,19 @@ Scenario: Activity list contains available activities when editing extended pref
 
 Scenario: Add standard preference
          Given I have the role 'Access to extended preferences'
-         And I view preferences for date '2012-06-20'
+         And I am viewing preferences for date '2012-06-20'
          When I select day '2012-06-20'
          And I click the add extended preference button
          And I input extended preference fields with
          | Field      | Value |
          | Preference | Late  |
-         And I click the save button
+         And I click the save extended preference button
          Then I should not see an extended preference indication on '2012-06-20'
          And I should see the preference 'Late' on '2012-06-20'
 
 Scenario: Add extended preference
          Given I have the role 'Access to extended preferences'
-         And I view preferences for date '2012-06-20'
+         And I am viewing preferences for date '2012-06-20'
          When I select day '2012-06-20'
          And I click the add extended preference button
          And I input extended preference fields with
@@ -181,7 +179,7 @@ Scenario: Edit extended preference
          | Date       | 2012-06-20 |
          | IsExtended | true       |
          | Preference | Dayoff     |
-         And I view preferences for date '2012-06-20'
+         And I am viewing preferences for date '2012-06-20'
          When I click the extended preference indication on '2012-06-20'
          And I input extended preference fields with
          | Field                       | Value |
@@ -221,7 +219,7 @@ Scenario: Edit extended preference
 # Validation
 Scenario: Verify time validation for preference start and end time
          Given I have the role 'Access to extended preferences'
-         And I view preferences for date '2012-06-20'
+         And I am viewing preferences for date '2012-06-20'
          When I select day '2012-06-20'
          And I click the extended preference button
          And I input extended preference fields with

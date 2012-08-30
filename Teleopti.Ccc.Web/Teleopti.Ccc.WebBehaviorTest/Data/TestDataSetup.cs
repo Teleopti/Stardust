@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void CreateMinimumTestData()
 		{
-			DataSourceHelper.PersistAuditSetting();
+			DataSourceHelper.PersistAuditSetting();// TODO: Remove, its done in DataSourceHelper.CreateDataSource();
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreatePersonThatCreatesTestData);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateLicense);
 		}
@@ -283,10 +283,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateActivities(IUnitOfWork unitOfWork)
 		{
-			TestData.ActivityPhone = ActivityFactory.CreateActivity("Phone", Color.FromKnownColor(KnownColor.Green));
-			TestData.ActivityShortBreak = ActivityFactory.CreateActivity("ShortBreak", Color.FromKnownColor(KnownColor.Red));
-			TestData.ActivityLunch = ActivityFactory.CreateActivity("Lunch", Color.FromKnownColor(KnownColor.Yellow));
-			TestData.ActivityTraining = ActivityFactory.CreateActivity("Training", Color.FromKnownColor(KnownColor.Purple));
+			TestData.ActivityPhone = ActivityFactory.CreateActivity("Legacy activity Phone", Color.FromKnownColor(KnownColor.Green));
+			TestData.ActivityShortBreak = ActivityFactory.CreateActivity("Legacy activity ShortBreak", Color.FromKnownColor(KnownColor.Red));
+			TestData.ActivityLunch = ActivityFactory.CreateActivity("Legacy activity Lunch", Color.FromKnownColor(KnownColor.Yellow));
+			TestData.ActivityTraining = ActivityFactory.CreateActivity("Legacy activity Training", Color.FromKnownColor(KnownColor.Purple));
 
 			TestData.ActivityPhone.GroupingActivity = TestData.GroupingActivity;
 			TestData.ActivityShortBreak.GroupingActivity = TestData.GroupingActivity;
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateShiftCategory(IUnitOfWork unitOfWork)
 		{
-			TestData.ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("Late", "Purple");
+			TestData.ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("Legacy common shift category", "Purple");
 
 			var shiftCategoryRepository = new ShiftCategoryRepository(unitOfWork);
 			shiftCategoryRepository.Add(TestData.ShiftCategory);
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateDayOffTemplate(IUnitOfWork unitOfWork)
 		{
-			TestData.DayOffTemplate = DayOffFactory.CreateDayOff(new Description("Day off", "DO"));
+			TestData.DayOffTemplate = DayOffFactory.CreateDayOff(new Description("Legacy common day off", "LCDO"));
 
 			var dayOffRepository = new DayOffRepository(unitOfWork);
 			dayOffRepository.Add(TestData.DayOffTemplate);
@@ -326,11 +326,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateAbsence(IUnitOfWork unitOfWork)
 		{
-			TestData.Absence = AbsenceFactory.CreateAbsence("Illness", "IL", new Color());
-			TestData.ConfidentialAbsence = AbsenceFactory.CreateAbsence("Confidential");
+			TestData.Absence = AbsenceFactory.CreateAbsence("Legacy common absence", "LCA", new Color());
+			TestData.ConfidentialAbsence = AbsenceFactory.CreateAbsence("Legacy common confidential absence");
 			TestData.ConfidentialAbsence.Confidential = true;
 			TestData.ConfidentialAbsence.DisplayColor = Color.GreenYellow;
-			TestData.AbsenceInContractTime = AbsenceFactory.CreateAbsence("Vacation", "VA", new Color());
+			TestData.AbsenceInContractTime = AbsenceFactory.CreateAbsence("Legact common vacation absence", "LCA2", new Color());
 			TestData.AbsenceInContractTime.InContractTime = true;
 
 			var absenceRepository = new AbsenceRepository(unitOfWork);

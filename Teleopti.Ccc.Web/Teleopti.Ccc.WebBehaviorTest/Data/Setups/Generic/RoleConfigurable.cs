@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool ViewUnpublishedSchedules { get; set; }
 		public bool ViewConfidential { get; set; }
 		public bool AccessToMobileReports { get; set; }
+		public bool AccessToExtendedPreferences { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
 			AccessToMobileReports = true;
+			AccessToExtendedPreferences = true;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -40,6 +42,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			if (!AccessToMobileReports)
 				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere select f;
+
+			if (!AccessToExtendedPreferences)
+				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences select f;
 
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 
