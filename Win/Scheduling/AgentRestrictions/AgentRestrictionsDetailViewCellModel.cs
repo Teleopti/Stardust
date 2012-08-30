@@ -113,6 +113,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			g.SmoothingMode = SmoothingMode.HighQuality;
 
 			base.OnDraw(g, clientRectangle, rowIndex, colIndex, style);
+
+			if (cellData == null) return;
+
 			var preference = new PreferenceRestriction();
 			var effectiveRestriction = cellData.EffectiveRestriction;
 
