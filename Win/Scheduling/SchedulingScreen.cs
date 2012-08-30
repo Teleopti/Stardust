@@ -1096,13 +1096,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 toolStripMenuItemFindMatching.Visible = true;
             }
 
-			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
-			{
-				ToolStripMenuItemRestrictionViewTemp.Visible = true;
-			}
-
-
-
+			
             backgroundWorkerLoadData.DoWork += backgroundWorkerLoadData_DoWork;
             backgroundWorkerLoadData.RunWorkerCompleted += backgroundWorkerLoadData_RunWorkerCompleted;
             backgroundWorkerLoadData.ProgressChanged += backgroundWorkerLoadData_ProgressChanged;
@@ -8408,30 +8402,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (e.Button != MouseButtons.Left) return;
             ExportToPdf(true);
         }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private void ToolStripMenuItemRestrictionViewTemp_MouseUp(object sender, MouseEventArgs e)
-		{
-			var callback = new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState);
-
-			var persons = _schedulerState.FilteredPersonDictionary.Values.ToList();
-			if (persons.Count == 0) return;
-			var schedulePart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
-			var selectedPerson = persons.FirstOrDefault();
-			if(schedulePart != null) selectedPerson = schedulePart.Person;
-
-			var schedulingOptions = new RestrictionSchedulingOptions
-			{
-				UseAvailability = true,
-				UsePreferences = true,
-				UseStudentAvailability = true,
-				UseRotations = true,
-				UseScheduling = true
-			};
-
-			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, schedulingOptions, _workShiftWorkTime, selectedPerson, _gridLockManager, SchedulePartFilter,_clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
-			agentRestrictionView.ShowDialog(this);
-		}
     }
 }
 
