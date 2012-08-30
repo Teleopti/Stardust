@@ -40,6 +40,7 @@
 	top: 5px;
 }
 
+
 	.asm-timeline-line
 	{
 		height: 70px;
@@ -77,6 +78,24 @@
 		z-index: 1;
 		border-right: 1px solid black;
 	}
+	
+	.asm-info-canvas span 
+	{
+		float: left;
+		position: relative;
+		overflow: hidden;
+		white-space: nowrap;
+		margin-right: 1em;
+	}
+	
+	.asm-info-canvas div 
+	{
+		margin-right: 1em;
+		text-align: left;
+		font-family: verdana;
+		font-size: 10px;
+	}
+	
 </style>
 <script>
 	var refreshMilliSeconds = 100;
@@ -134,8 +153,23 @@
 	</div>
 	<div class="asm-current-info">
 		<div class="asm-info-canvas ui-corner-all">
-			Debug: <span id="asm-debug"></span>
+			<span style="width: 50px;">
+				<div>xxDebug</div>
+				<div>xxCurrent </div>
+				<div>xxNext</div>
+			</span>
+
+			<span style="width: 50px;">
+				<div id="asm-info-debug" >dsf</div>
+				<div id="asm-info-current-activity" >PhonePhonePhone</div>
+				<div id="asm-info-next-activity">Back office</div>			
+			</span>
+			<span style="width: 50px;">
+				<div/>
+				<div>12:00</div>
+				<div>14:30</div>
+			</span>
 		</div>
-	</div>
+		</div>
 	  <div class="clearboth" />
 </div>
