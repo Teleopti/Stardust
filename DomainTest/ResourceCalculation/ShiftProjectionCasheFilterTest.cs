@@ -991,38 +991,46 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
             _personAssignments = new List<IPersonAssignment> { _personAssignment };
-            var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(_personAssignments);
-            var personalShift = _mocks.StrictMock<IPersonalShift>();
-            var readOnlyPersonalShifts = new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift> { personalShift });
-
+             var personalShift = _mocks.StrictMock<IPersonalShift>();
+            
             var currentDate = new DateTime(2009, 1, 10, 0, 0, 0, DateTimeKind.Utc);
             var lunch = ActivityFactory.CreateActivity("lunch");
             lunch.AllowOverwrite = false;
-            var lunchLayer = new List<IVisualLayer>
-                                 {
-                                     new VisualLayer(lunch, new DateTimePeriod(currentDate.AddHours(11), currentDate.AddHours(12)),
-                                                     lunch, null)
-                                 };
-            var layerCollection1 = new VisualLayerCollection(null, lunchLayer, new ProjectionPayloadMerger());
-            var personalLayers = new LayerCollection<IActivity>
-                             {
-                                 new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("personal"),
-                                                                new DateTimePeriod(currentDate.AddHours(10),
-                                                                                   currentDate.AddHours(13)))
-                             };
             IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
             var readOnlymeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>());
             var c1 = _mocks.StrictMock<IShiftProjectionCache>();
             shifts.Add(c1);
-            Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
-            Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+            Expect.Call(c1.MainShiftProjection).Return(new VisualLayerCollection(null, GetLunchLayer(currentDate, lunch), new ProjectionPayloadMerger())).Repeat.AtLeastOnce();
+            Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
             Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
-            Expect.Call(_personAssignment.PersonalShiftCollection).Return(readOnlyPersonalShifts).Repeat.AtLeastOnce();
-            Expect.Call(personalShift.LayerCollection).Return(personalLayers).Repeat.AtLeastOnce();
+            Expect.Call(_personAssignment.PersonalShiftCollection).Return(new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift> { personalShift })).Repeat.AtLeastOnce();
+            Expect.Call(personalShift.LayerCollection).Return(GetPersonalLayers(currentDate)).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
             var retShifts = _target.FilterOnNotOverWritableActivities(shifts,_part,  _finderResult);
             retShifts.Count.Should().Be.EqualTo(0);
             _mocks.VerifyAll();
+        }
+
+        private static LayerCollection<IActivity> GetPersonalLayers(DateTime currentDate)
+        {
+            var personalLayers = new LayerCollection<IActivity>
+                                     {
+                                         new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("personal"),
+                                                                        new DateTimePeriod(currentDate.AddHours(10),
+                                                                                           currentDate.AddHours(13)))
+                                     };
+            return personalLayers;
+        }
+
+        private static List<IVisualLayer> GetLunchLayer(DateTime currentDate, Activity lunch)
+        {
+            var lunchLayer = new List<IVisualLayer>
+                                 {
+                                     new VisualLayer(lunch,
+                                                     new DateTimePeriod(currentDate.AddHours(11), currentDate.AddHours(12)),
+                                                     lunch, null)
+                                 };
+            return lunchLayer;
         }
 
         [Test]
@@ -1030,10 +1038,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
             _personAssignments = new List<IPersonAssignment> { _personAssignment };
-            var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(_personAssignments);
-            var personalShift = _mocks.StrictMock<IPersonalShift>();
-            var readOnlyPersonalShifts = new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift> { personalShift });
-
+            
             var currentDate = new DateTime(2009, 1, 10, 0, 0, 0, DateTimeKind.Utc);
             var lunch = ActivityFactory.CreateActivity("lunch");
             lunch.AllowOverwrite = true;
@@ -1043,19 +1048,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                      lunch, null)
                                  };
             var layerCollection1 = new VisualLayerCollection(null, lunchLayer, new ProjectionPayloadMerger());
-            var personalLayers = new LayerCollection<IActivity>
-                             {
-                                 new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("personal"),
-                                                                new DateTimePeriod(currentDate.AddHours(10),
-                                                                                   currentDate.AddHours(13)))
-                             };
+            
             IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
             var meeting = _mocks.StrictMock<IPersonMeeting>();
             var readOnlymeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> {meeting});
             var c1 = _mocks.StrictMock<IShiftProjectionCache>();
             shifts.Add(c1);
             Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
-            Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+            Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
             Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
             var retShifts = _target.FilterOnNotOverWritableActivities(shifts, _part, _finderResult);
