@@ -181,7 +181,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="part"></param>
         /// <param name="finderResult"></param>
         /// <returns></returns>
-        IList<IShiftProjectionCache> FilterOnNotOverwritableActivities(IList<IShiftProjectionCache> shiftList,
+        IList<IShiftProjectionCache> FilterOnNotOverWritableActivities(IList<IShiftProjectionCache> shiftList,
                                                                     IScheduleDay part,
                                                                     IWorkShiftFinderResult finderResult);
 

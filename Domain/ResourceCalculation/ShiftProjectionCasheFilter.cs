@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             var dayPart = current.ScheduledDay(dateToSchedule);
             
-            return FilterOnNotOverwritableActivities(shiftList, dayPart, finderResult);
+            return FilterOnNotOverWritableActivities(shiftList, dayPart, finderResult);
         }
 
 
@@ -425,12 +425,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         }
 
-        public IList<IShiftProjectionCache> FilterOnNotOverwritableActivities(IList<IShiftProjectionCache> shiftList, IScheduleDay part, IWorkShiftFinderResult finderResult)
+        public IList<IShiftProjectionCache> FilterOnNotOverWritableActivities(IList<IShiftProjectionCache> shiftList, IScheduleDay part, IWorkShiftFinderResult finderResult)
         {
+            if (shiftList == null) throw new ArgumentNullException("shiftList");
+            if (part == null) throw new ArgumentNullException("part");
+            if (finderResult == null) throw new ArgumentNullException("finderResult");
+
             var filteredList = new List<IShiftProjectionCache>();
             var meetings = part.PersonMeetingCollection();
             var personAssignments = part.PersonAssignmentCollection();
             var cnt = shiftList.Count;
+            
             foreach (var shift in shiftList)
             {
                 if (shift.MainShiftProjection.Any(x => !((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&
