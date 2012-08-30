@@ -1,10 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Sdk.ServiceBus.SMS;
+using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
+namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 {
 	[TestFixture]
 	public class SignificantChangeCheckerTest
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			var date = DateTime.Now.Date;
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(20)), new DateOnly(date.AddDays(30)) );
 
-			Assert.That(_target.SignificantChangeMessages(period, _person).Count, Is.EqualTo(0));
+			Assert.That(_target.SignificantChangeMessages(period, _person).Subject, Is.EqualTo(""));
 		}
 
 		[Test]
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			var date = DateTime.Now.Date;
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(-20)), new DateOnly(date.AddDays(-1)));
 
-			Assert.That(_target.SignificantChangeMessages(period, _person).Count, Is.EqualTo(0));
+			Assert.That(_target.SignificantChangeMessages(period, _person).Subject, Is.Empty);
 		}
 
 		[Test]
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			var date = DateTime.Now.Date;
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(-20)), new DateOnly(date.AddDays(1)));
 
-			Assert.That(_target.SignificantChangeMessages(period, _person).Count, Is.GreaterThan(0));
+			Assert.That(_target.SignificantChangeMessages(period, _person).Subject, Is.Not.Empty);
 		}
 
 		[Test]
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			var date = DateTime.Now.Date;
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(5)), new DateOnly(date.AddDays(20)));
 
-			Assert.That(_target.SignificantChangeMessages(period, _person).Count, Is.GreaterThan(0));
+			Assert.That(_target.SignificantChangeMessages(period, _person).Subject, Is.Not.Empty);
 		}
 	}
 

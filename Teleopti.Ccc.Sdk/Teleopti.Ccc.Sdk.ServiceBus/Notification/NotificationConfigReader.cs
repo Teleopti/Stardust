@@ -2,10 +2,9 @@
 using System.Xml;
 using System.Xml.XPath;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
+namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
-	public interface ISmsConfigReader
+	public interface INotificationConfigReader
 	{
 		bool HasLoadedConfig { get; }
 		IXPathNavigable XmlDocument { get; }
@@ -18,24 +17,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 		string Data { get; }
 	}
 
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
-	public class SmsConfigReader : ISmsConfigReader
+	public class NotificationConfigReader : INotificationConfigReader
 	{
 		private readonly string _configFile;
 		private XmlDocument _configXml;
 
-		public SmsConfigReader()
-			: this("SmsConfig.xml")
+		public NotificationConfigReader()
+			: this("NotificationConfig.xml")
 		{ }
 
-		public SmsConfigReader(string configFile)
+		public NotificationConfigReader(string configFile)
 		{
 			_configFile = configFile;
 			loadFile();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode")]
-		public SmsConfigReader(XmlDocument xmlDocument)
+		public NotificationConfigReader(XmlDocument xmlDocument)
 		{
 			_configXml = xmlDocument;
 			HasLoadedConfig = true;

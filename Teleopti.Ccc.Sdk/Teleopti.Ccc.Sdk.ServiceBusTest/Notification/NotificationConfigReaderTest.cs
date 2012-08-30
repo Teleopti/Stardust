@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Xml;
 using NUnit.Framework;
-using Teleopti.Ccc.Sdk.ServiceBus.SMS;
+using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
+namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), TestFixture]
-	public class SmsConfigReaderTest
+	[TestFixture]
+	public class NotificationConfigReaderTest
 	{
-		private SmsConfigReader _target;
+		private NotificationConfigReader _target;
 		private string _emptyDoc = "";
 		
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = new SmsConfigReader("SmsConfig.xml.notinuse");
+			_target = new NotificationConfigReader("NotificationConfig.xml.notinuse");
 			_emptyDoc = @"<?xml version='1.0' encoding='utf-8' ?>
 					<Config>
 					</Config>";
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		[Test]
 		public void ShouldNotLoadTheFile()
 		{
-			_target = new SmsConfigReader("SmsConfig.xml");
+			_target = new NotificationConfigReader("NotificationConfig.xml");
 			Assert.That(_target.HasLoadedConfig, Is.False);
 			Assert.That(_target.XmlDocument, Is.Null);
 			Assert.That(_target.User, Is.EqualTo(""));
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 			var doc = new XmlDocument();
 			doc.LoadXml(_emptyDoc);
 
-			_target = new SmsConfigReader(doc);
+			_target = new NotificationConfigReader(doc);
 			Assert.That(_target.HasLoadedConfig, Is.True);
 			Assert.That(_target.XmlDocument, Is.Not.Null);
 			Assert.That(_target.User, Is.EqualTo(""));
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
 		[Test]
 		public void ShouldHaveAClassProperty()
 		{
-			Assert.That(_target.ClassName, Is.EqualTo("Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellSmsSender"));
+			Assert.That(_target.ClassName, Is.EqualTo("Teleopti.Ccc.Sdk.ServiceBus.Notification.ClickatellNotificationSender"));
 		}
 
 		[Test]

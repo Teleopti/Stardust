@@ -5,11 +5,11 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Sdk.ServiceBus.SMS;
+using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.Sms
+namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), TestFixture]
 	public class SmsLinkCheckerTest

@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
-using Teleopti.Ccc.Sdk.ServiceBus.SMS;
+using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -14,18 +14,18 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), TestFixture]
-	public class SmsReadModelHandlerTest
+	[TestFixture]
+	public class ScheduleDayReadModelHandlerTest
 	{
 		private MockRepository _mocks;
 		private ISignificantChangeChecker _significantChangeChecker;
-		private ISmsSender _smsSender;
-		private SmsReadModelHandler _target;
+		private INotificationSender _notificationSender;
+		private ScheduleDayReadModelHandler _target;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IScenarioRepository _scenarioRepository;
 		private IPersonRepository _personRepository;
 		private ISmsLinkChecker _smsLinkChecker;
-		private ISmsSenderFactory _smsSenderFactory;
+		private INotificationSenderFactory _notificationSenderFactory;
 
 		[SetUp]
 		public void Setup()
@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_personRepository = _mocks.StrictMock<IPersonRepository>();
 			_significantChangeChecker = _mocks.StrictMock<ISignificantChangeChecker>();
 			_smsLinkChecker = _mocks.StrictMock<ISmsLinkChecker>();
-			_smsSenderFactory = _mocks.StrictMock<ISmsSenderFactory>();
-			_smsSender = _mocks.StrictMock<ISmsSender>();
-			_target = new SmsReadModelHandler(_unitOfWorkFactory, _scenarioRepository, _personRepository, _significantChangeChecker, _smsLinkChecker, _smsSenderFactory);
+			_notificationSenderFactory = _mocks.StrictMock<INotificationSenderFactory>();
+			_notificationSender = _mocks.StrictMock<INotificationSender>();
+			_target = new ScheduleDayReadModelHandler(_unitOfWorkFactory, _scenarioRepository, _personRepository, _significantChangeChecker, _smsLinkChecker, _notificationSenderFactory);
 			DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator("", DateTime.Now.AddDays(100), 1000, 1000,
 			                                                                  LicenseType.Agent, new Percent(.10), null, null);
 			
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			});
 			_mocks.VerifyAll();
 		}
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ändrats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Sdk.ServiceBus.SMS.ISmsSender.SendSms(System.String,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ändrats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Sdk.ServiceBus.SMS.INotificationSender.SendNotification(System.String,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldCheckSignificantChangeAndSendIfTrue()
 		{
 			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
-
+			var mess = new NotificationMessage() {Subject = "ändrats!"};
 			var period = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddDays(2));
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.Date.AddDays(1)));
 			var uow = _mocks.StrictMock<IUnitOfWork>();
@@ -106,10 +106,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
 			Expect.Call(_scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
 			Expect.Call(_personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
-			Expect.Call(_significantChangeChecker.SignificantChangeMessages(dateOnlyPeriod, person)).Return(new List<string>{"ändrats!"});
+			Expect.Call(_significantChangeChecker.SignificantChangeMessages(dateOnlyPeriod, person)).Return(mess);
 			Expect.Call(_smsLinkChecker.SmsMobileNumber(person)).Return("124578");
-			Expect.Call(_smsSenderFactory.Sender).Return(_smsSender);
-			Expect.Call(() => _smsSender.SendSms("ändrats!", "124578"));
+			Expect.Call(_notificationSenderFactory.Sender).Return(_notificationSender);
+			Expect.Call(() => _notificationSender.SendNotification(mess, "124578"));
 			Expect.Call(uow.Dispose);
 
 			_mocks.ReplayAll();
