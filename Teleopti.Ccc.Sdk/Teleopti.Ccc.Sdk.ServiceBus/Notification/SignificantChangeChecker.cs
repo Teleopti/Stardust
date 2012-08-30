@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			if (dateOnlyPeriod.EndDate < date)
 				return ret;
 
-			//NEXT PBI check against readmodel and split messages if too long
+            //NEXT PBI check against readmodel and split messages if too long
 			var lang = person.PermissionInformation.UICulture();
 			var mess = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged",lang);
 			if (string.IsNullOrEmpty(mess))

@@ -10997,7 +10997,7 @@ These options are activated:
     <comment>Caption 2 in SMS settings page</comment>
   </data>
   <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
-    <value>Your working hours have changed</value>
+    <value>Your working hours have changed :</value>
     <comment>text in sms message (later - Your working hours have changed these days:)</comment>
   </data>
   <data name="GraphLOC" xml:space="preserve">
@@ -11030,5 +11030,9 @@ These options are activated:
   </data>
   <data name="FullDayAbsence" xml:space="preserve">
     <value>Full Day Absence</value>
+  </data>
+  <data name="NotWorking" xml:space="preserve">
+    <value>Not Working.</value>
+    <comment>Not Working.</comment>
   </data>
 </root>

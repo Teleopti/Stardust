@@ -163,6 +163,7 @@
     <Compile Include="Denormalizer\ScheduleDayReadModelHandler.cs" />
     <Compile Include="Notification\INotificationSender.cs" />
     <Compile Include="Notification\NotificationMessage.cs" />
+    <Compile Include="Notification\ScheduleDayReadModelComparer.cs" />
     <Compile Include="Notification\SignificantChangeChecker.cs" />
     <Compile Include="Notification\NotificationConfigReader.cs" />
     <Compile Include="Notification\SmsLinkChecker.cs" />
