@@ -38,3 +38,11 @@ Scenario: Show part of agent's schedule in popup
 	When I view my week schedule
 	And I click ASM link
 	Then I should see a schedule in popup
+
+	@ignore
+Scenario: Write name of current activity
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 10:00'
+	When I view my regional settings
+	And I click ASM link
+	Then I should see 'Lunch' as current activity
