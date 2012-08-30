@@ -83,13 +83,14 @@
 	var refreshMilliSeconds = 100;
 
 	$(function() {
-		$('.asm-sliding-schedules').hide();
-		_moveTimeLineToNow();
-		$('.asm-sliding-schedules').show();
-		setInterval(function() { _moveTimeLineToNow(); }, refreshMilliSeconds);
+		var slidingSchedules = $('.asm-sliding-schedules');
+		slidingSchedules.hide();
+		_moveTimeLineToNow(slidingSchedules);
+		slidingSchedules.show();
+		setInterval(function() { _moveTimeLineToNow(slidingSchedules); }, refreshMilliSeconds);
 	});
 	
-	function _moveTimeLineToNow() {
+	function _moveTimeLineToNow(slidingSchedules) {
 		var clientMsSince1970 = new Date().getTeleoptiTime();
 		var serverTimeInJs = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day));
 		var serverMsSince1970 = serverTimeInJs.getTime();
@@ -97,7 +98,7 @@
 		
 		var hoursSinceStart = msSinceStart / 1000 / 60/60;
 		var startPixel = -(@pixelsPerHour * hoursSinceStart);
-		$('.asm-sliding-schedules').css('left', (startPixel) + 'px');
+		slidingSchedules.css('left', (startPixel) + 'px');
 		//debug
 		$('#clockDebug').text(''+new Date(clientMsSince1970));
 		$('#leftdebug').text('' + startPixel);
