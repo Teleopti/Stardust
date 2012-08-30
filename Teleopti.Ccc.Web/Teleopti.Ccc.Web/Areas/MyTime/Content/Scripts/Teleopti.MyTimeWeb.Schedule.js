@@ -16,9 +16,11 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 
+	var addTextRequestTooltip = null;
+
 	function _initTooltip() {
 		var addTextRequest = $('.add-request-space');
-		$('<div/>').qtip({
+		addTextRequestTooltip = $('<div />').qtip({
 
 			content: {
 				text: $('#Schedule-addRequest-section'),
@@ -68,7 +70,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _initTodayButton() {
 		$('#Schedule-today-button')
-			.click(function() {
+			.click(function () {
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
 			});
 	}
@@ -76,7 +78,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	return {
 		Init: function () {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
-				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/Week', Teleopti.MyTimeWeb.Schedule.PartialInit);
+				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/Week', Teleopti.MyTimeWeb.Schedule.PartialInit, Teleopti.MyTimeWeb.Schedule.PartialDispose);
 			}
 			Teleopti.MyTimeWeb.Schedule.Request.Init();
 			_initTodayButton();
@@ -88,6 +90,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 			Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
+		},
+		PartialDispose: function () {
+			addTextRequestTooltip.qtip('toggle', false);
 		}
 	};
 
