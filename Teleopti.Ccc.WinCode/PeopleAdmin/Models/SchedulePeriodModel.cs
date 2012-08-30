@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 {
-								new SchedulePeriodTypeDisplay(SchedulePeriodType.ChineseMonth, "xxMonth7-8")
     /// <summary>
     /// Schedule period adapter.
     /// </summary>
