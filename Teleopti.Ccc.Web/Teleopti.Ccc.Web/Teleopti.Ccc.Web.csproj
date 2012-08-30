@@ -487,6 +487,7 @@
     <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.report.graph.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.report.table.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
+    <Content Include="Areas\MyTime\Content\Css\Asm.css" />
     <Content Include="Areas\MyTime\Content\Css\CalendarView.css" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
     <Content Include="Areas\MyTime\Content\Css\TooltipCustom.css" />
@@ -494,6 +495,7 @@
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Css\TooltipInput.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Asm.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Init.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Ajax.js" />
