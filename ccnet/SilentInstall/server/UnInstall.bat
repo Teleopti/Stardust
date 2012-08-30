@@ -1,5 +1,17 @@
+@echo off
+COLOR A
+cls
+::init
+SET /A ERRORLEV=0
+
 ::uninstall MSI
-MsiExec.exe /X{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /QB
+MsiExec.exe /X{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /qn
+SET /A ERRORLEV=%ERRORLEVEL%
+IF %ERRORLEV% NEQ 0 (
+SET /A ERRORLEV=1
+GOTO :error
+)
+
 
 ::Drop IIS website and App-pools"%systemroot%\System32\inetsrv\appcmd" delete app "Default Web Site/TeleoptiCCC/Analytics"
 "%systemroot%\System32\inetsrv\appcmd" delete app "Default Web Site/TeleoptiCCC/Client"
@@ -19,3 +31,19 @@ MsiExec.exe /X{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /QB
 ::remove regkeys
 reg delete HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC /va /f
 reg delete HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC /f
+
+::done
+GOTO :eof
+
+:Error
+COLOR C
+ECHO.
+ECHO --------
+IF %ERRORLEV% NEQ 0 ECHO Errors found!
+IF %ERRORLEV% EQU 1 ECHO The msi did not uninstall, might not exists. ERRORLEV is: %ERRORLEV%
+ECHO.
+ECHO --------
+GOTO :EOF
+
+
+:EOF
