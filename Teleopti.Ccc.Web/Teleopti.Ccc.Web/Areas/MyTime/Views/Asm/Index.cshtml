@@ -13,7 +13,7 @@
 	 }
 .asm-current-info{
 	 float:left;
-	 width: 200px;
+	 width: 250px;
 	margin-left: 10px;
 	 }
 .asm-schedule-canvas{
@@ -98,7 +98,7 @@
 	
 </style>
 <script>
-	var refreshMilliSeconds = 100;
+	var refreshMilliSeconds = 200;
 
 	$(function() {
 	   var slidingSchedules = $('.asm-sliding-schedules');
@@ -115,7 +115,7 @@
 	});
 	
 	function _updateInfoCanvas() {
-		$('#asm-debug').text(new Date().getTeleoptiTime());
+		$('#asm-info-debug').text(new Date().getTeleoptiTime());
 	}
 
 	function _moveTimeLineToNow(slidingSchedules, serverMsSince1970) {
@@ -159,13 +159,13 @@
 				<div>xxNext</div>
 			</span>
 
-			<span style="width: 50px;">
-				<div id="asm-info-debug" >dsf</div>
+			<span style="width: 115px;">
+				<div id="asm-info-debug">&nbsp;</div>
 				<div id="asm-info-current-activity" >PhonePhonePhone</div>
 				<div id="asm-info-next-activity">Back office</div>			
 			</span>
-			<span style="width: 50px;">
-				<div/>
+			<span style="width: 40px;">
+				<div>&nbsp;</div>
 				<div>12:00</div>
 				<div>14:30</div>
 			</span>
