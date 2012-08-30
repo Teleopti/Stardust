@@ -11031,4 +11031,20 @@ These options are activated:
   <data name="FullDayAbsence" xml:space="preserve">
     <value>Full Day Absence</value>
   </data>
+  <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
+    <value>Month 7-8</value>
+    <comment>To specify schedule period type Chinese Month (7-8 days off)</comment>
+  </data>
+  <data name="SchedulePeriodTypeDay" xml:space="preserve">
+    <value>Day</value>
+    <comment>To specify schedule period type Day</comment>
+  </data>
+  <data name="SchedulePeriodTypeMonth" xml:space="preserve">
+    <value>Month</value>
+    <comment>To specify schedule period type Month</comment>
+  </data>
+  <data name="SchedulePeriodTypeWeek" xml:space="preserve">
+    <value>Week</value>
+    <comment>To specify schedule period type Week</comment>
+  </data>
 </root>
