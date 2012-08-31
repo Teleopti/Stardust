@@ -1,4 +1,5 @@
-﻿.ui-tooltip-custom 
+﻿
+.ui-tooltip-custom 
 {
 	border-color: rgb(200, 200, 200);
 	background-color: rgb(255,255,255);
@@ -9,28 +10,4 @@
 	padding: 5px;
 	font-size: 12px;
 	line-height: 18px;
-}
-
-/*** ToolTip Team schedule ***/
-.ui-tooltip-transparent {
-	border-width: 0;
-}
-.ui-tooltip-transparent .ui-tooltip-titlebar,
-.ui-tooltip-transparent .ui-tooltip-content{
-	border-color: rgb(241,241,241);
-	background-color: rgba(241,241,241,0.9);
-	color: #010101;
-	font-size: 10px;
-	line-height: 12px;
-	padding: 1px 4px;
-	text-align: left;
-	word-wrap: break-word;
-}
-
-
-.ie7 .ui-tooltip-transparent .ui-tooltip-titlebar,
-.ie7 .ui-tooltip-transparent .ui-tooltip-content,
-.ie8 .ui-tooltip-transparent .ui-tooltip-titlebar,
-.ie8 .ui-tooltip-transparent .ui-tooltip-content{
-	background-color: rgb(241,241,241);
 }
