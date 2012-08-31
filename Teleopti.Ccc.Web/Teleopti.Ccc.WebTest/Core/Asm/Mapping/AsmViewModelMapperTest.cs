@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
@@ -59,22 +60,22 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		}
 
 		[Test]
-		public void ShouldSetMinutesFromStartOnLayer()
+		public void ShouldSetStart()
 		{
-			var start = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			const int diffInMinutes = 123;
+			var scheduleStart = new DateTime(1999, 1, 1, 2, 3, 4, DateTimeKind.Utc);
+			var expected = scheduleStart.SubtractJavascriptBaseDate().TotalMilliseconds;
 
-			var scheduleDay =scheduleFactory.ScheduleDayStub(start);
+			var scheduleDay =scheduleFactory.ScheduleDayStub(scheduleStart);
 
 			projectionProvider.Expect(p => p.Projection(scheduleDay))
 				.Return(scheduleFactory.ProjectionStub(new[]
 				                                       	{
-				                                       		scheduleFactory.VisualLayerStub(new DateTimePeriod(start.AddMinutes(diffInMinutes),start.AddMinutes(diffInMinutes).AddHours(1)))
+				                                       		scheduleFactory.VisualLayerStub(new DateTimePeriod(scheduleStart, scheduleStart.AddHours(1)))
 				                                       	}));
 
 			var result = target.Map(new[] { scheduleDay });
 
-			result.Layers.First().RelativeStartInMinutes.Should().Be.EqualTo(diffInMinutes);
+			result.Layers.First().StartJavascriptBaseDate.Should().Be.EqualTo(expected);
 		}
 
 		[Test]
