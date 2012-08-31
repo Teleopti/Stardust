@@ -177,10 +177,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Write name of current activity")]
-        public virtual void WriteNameOfCurrentActivity()
+        [NUnit.Framework.DescriptionAttribute("Write name and time of current activity")]
+        public virtual void WriteNameAndTimeOfCurrentActivity()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write name of current activity", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write name and time of current activity", ((string[])(null)));
 #line 43
 this.ScenarioSetup(scenarioInfo);
 #line 8
@@ -196,7 +196,9 @@ this.FeatureBackground();
 #line 48
  testRunner.Then("I should see Phone as current activity");
 #line 49
- testRunner.And("I should see \'17:00\' as current end time");
+ testRunner.And("I should see \'08:00\' as current start time");
+#line 50
+ testRunner.And("I should see \'11:00\' as current end time");
 #line hidden
             this.ScenarioCleanup();
         }

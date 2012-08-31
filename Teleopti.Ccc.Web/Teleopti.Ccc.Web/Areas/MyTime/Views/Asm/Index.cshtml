@@ -4,7 +4,7 @@
 @{
 	const double pixelsPerHour = 50;
 	const double timeLineHourWidth = (pixelsPerHour) - 1; //"1" due to border size
-	double canvasStartMsSince1970 = Model.StartDate.SubtractJavascriptBaseDate().TotalMilliseconds; //denna ska ersätta StartDate i modellen
+	double canvasStartMsSince1970 = Model.StartDate.SubtractJavascriptBaseDate().TotalMilliseconds;
 }
 <script type="text/javascript">
 	$(function () {
@@ -12,20 +12,30 @@
 		var pixelsPerHour = @(pixelsPerHour);
 
 
-		var latestStart = 0;
-		var nu = 2120;
+		var currentStart = 0;
+		var currentEnd = 0;
+		var currentActivity;
+		var nu = new Date().getTeleoptiTime();
 		$('.asm-layer')
 			.each(function() {
-				var startElement = $(this).find('.asm-start');
-				var start = startElement.text();
-				if(start > latestStart && start <= nu) {
-					latestStart = start;
+				var start = parseFloat($(this).find('.asm-layer-start').text());
+				var end = parseFloat($(this).find('.asm-layer-end').text());
+				if(nu >=start && nu <end) {
+					currentStart = start;
+					currentEnd = end;
+					currentActivity = $(this).find('.asm-layer-activity').text();
+					return false;
 				}
 			});
-		alert(latestStart);
+		if(currentStart>0) {
+			$('#asm-info-current-activity').text(currentActivity);
+			$('#asm-info-current-starttime').text(new Date(currentStart).toString("HH:mm"));
+			$('#asm-info-current-endtime').text(new Date(currentEnd).toString("HH:mm"));
+		}
 
 		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, pixelsPerHour);
 	});
+	
 </script>
 
 <div class="asm-outer-canvas ui-corner-all">
@@ -35,10 +45,11 @@
 			@foreach (var layer in Model.Layers)
 			{
 				<span class="asm-layer ui-corner-all" style="left:@((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000)px;
-                                                                 	padding-left:@((layer.EndJavascriptBaseDate -layer.StartJavascriptBaseDate) * pixelsPerHour /60 / 60/1000)px;
+                                                                 	padding-left:@((layer.EndJavascriptBaseDate - layer.StartJavascriptBaseDate) * pixelsPerHour /60 / 60/1000)px;
                                                                  	background-color: @(layer.Color)">
-					<span class="asm-start" style="display: none;">@(layer.StartJavascriptBaseDate)</span>
-					<span class="asm-end" style="display: none;">@((layer.StartJavascriptBaseDate -canvasStartMsSince1970))</span>
+					<span class="asm-layer-start" style="display: none;">@(layer.StartJavascriptBaseDate)</span>
+					<span class="asm-layer-end" style="display: none;">@((layer.EndJavascriptBaseDate))</span>
+					<span class="asm-layer-activity" style="display: none;">@(layer.Payload)</span>
 				</span>
 			}
 			@for (var day = 0; day <= 2; day++)
@@ -56,18 +67,18 @@
 		<div class="asm-info-canvas ui-corner-all">
 			<span style="width: 50px;">
 				<div>xxDebug</div>
-				<div>xxCurrent</div>
+				<div id="asm-info-current-starttime">&nbsp;</div>
 				<div>xxNext</div>
 			</span>
 
 			<span style="width: 115px;">
 				<div id="asm-info-debug">&nbsp;</div>
-				<div id="asm-info-current-activity">PhonePhonePhone</div>
-				<div id="asm-info-next-activity">Back office</div>			
+				<div id="asm-info-current-activity">&nbsp;</div>
+				<div id="asm-info-next-activity">&nbsp;</div>			
 			</span>
 			<span style="width: 40px;">
 				<div>&nbsp;</div>
-				<div id="asm-info-current-time">PhonePhonePhone</div>
+				<div id="asm-info-current-endtime">&nbsp;</div>
 				<div>14:30</div>
 			</span>
 		</div>

@@ -40,10 +40,11 @@ Scenario: Show part of agent's schedule in popup
 	And I click ASM link
 	Then I should see a schedule in popup
 
-Scenario: Write name of current activity
+Scenario: Write name and time of current activity
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 10:00'
 	When I view my regional settings
 	And I click ASM link
 	Then I should see Phone as current activity
-	And I should see '17:00' as current end time
+	And I should see '08:00' as current start time
+	And I should see '11:00' as current end time
