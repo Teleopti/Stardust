@@ -69,10 +69,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _initTodayButton() {
 		$('#Schedule-today-button')
-			.click(function() {
+			.click(function () {
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
 			});
 	}
+
+
+	
 
 	return {
 		Init: function () {
@@ -83,8 +86,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_initTodayButton();
 		},
 		PartialInit: function () {
-			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 			_initRequestTooltip();
+			Teleopti.MyTimeWeb.Common.Layout.ActivateTransparentTooltip();
+			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 			_initPeriodSelection();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();

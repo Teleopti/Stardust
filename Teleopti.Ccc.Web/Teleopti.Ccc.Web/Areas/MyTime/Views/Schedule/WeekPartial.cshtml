@@ -66,7 +66,7 @@
 						const int pixelToDisplayTitle = 16;
 						var tooltipText = period.Meeting == null ? period.TimeSpan : string.Format("<div>{0}</div><div><dl><dt>Subject: </dt><dd> {1} </dd><dt>Location: </dt><dd> {2} </dd></dl></div>", period.TimeSpan, period.Meeting.Title, period.Meeting.Location);
 
-						<div class="week-schedule-layer absolute tooltip" tooltip-title="@period.Title" tooltip-text="@tooltipText" 
+						<div class="week-schedule-layer absolute tooltip-transparent" tooltip-title="@period.Title" tooltip-text="@tooltipText" 
 							style="background-color: @string.Format("rgb({0})", period.Color); height: @(heightPixel)px; top: @(topPixel)px;">
 							@if (period.Meeting != null)
 							{

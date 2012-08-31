@@ -454,6 +454,7 @@ button.icon-left{padding-left: 35px;}
 
 /*** ToolTip ***/
 .tooltip{position: relative;}
+.tooltip-transparent{position: relative;}
 .tooltip-container{
 	position: absolute;
 	bottom: 4px;
