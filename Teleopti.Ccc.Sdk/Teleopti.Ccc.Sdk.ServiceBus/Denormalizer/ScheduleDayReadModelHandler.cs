@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
 
 				var newReadModels = _scheduleDayReadModelsCreator.GetReadModels(scenario, period, person);
-				//check for SMS license, if none just skip this. Later we maybe have to check agians for example EMAIL-license
+				//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
 				if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains("TeleoptiCcc/SMSLink"))
 				{
 					var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod, person, newReadModels);

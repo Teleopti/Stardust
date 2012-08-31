@@ -8,6 +8,8 @@ using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
+	// Later move this class to own dll where all the Notification Senders could be 
+	// Then more could be added without changes in the Service Bus
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public class ClickatellNotificationSender : INotificationSender
 	{
@@ -54,7 +56,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				catch (Exception exception)
 				{
 					Logger.Error("Error occurred trying to access: " + _notificationConfigReader.Url + msgData, exception);
-				
 				}
 			}
 			
