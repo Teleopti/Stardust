@@ -10,10 +10,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 	public class AsmViewModelMapper : IAsmViewModelMapper
 	{
 		private readonly IProjectionProvider _projectionProvider;
+		private readonly IUserTimeZone _userTimeZoneInfo;
 
-		public AsmViewModelMapper(IProjectionProvider projectionProvider)
+		public AsmViewModelMapper(IProjectionProvider projectionProvider, IUserTimeZone userTimeZoneInfo)
 		{
 			_projectionProvider = projectionProvider;
+			_userTimeZoneInfo = userTimeZoneInfo;
 		}
 
 		public AsmViewModel Map(IEnumerable<IScheduleDay> scheduleDays)
@@ -29,18 +31,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 				}
 				if (scheduleDay.DateOnlyAsPeriod.DateOnly < earliest)
 				{
-					earliest = scheduleDay.DateOnlyAsPeriod.DateOnly;
+					earliest = scheduleDay.DateOnlyAsPeriod.DateOnly.Date;
 				}
 			}
 
-			var ret = new AsmViewModel{StartDate = earliest};
+			var ret = new AsmViewModel { StartDate = earliest};
 			foreach (var visualLayer in layers)
 			{
+				var timeZone = _userTimeZoneInfo.TimeZone();
+				var startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone);
+				var endDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.EndDateTime, timeZone);
+				               	
 				ret.Layers.Add(new AsmLayer
 				               	{
-				               		Payload = visualLayer.DisplayDescription().Name,
-											StartJavascriptBaseDate = visualLayer.Period.StartDateTime.SubtractJavascriptBaseDate().TotalMilliseconds,
-											EndJavascriptBaseDate = visualLayer.Period.EndDateTime.SubtractJavascriptBaseDate().TotalMilliseconds,
+											Payload = visualLayer.DisplayDescription().Name,
+											StartJavascriptBaseDate = startDate.SubtractJavascriptBaseDate().TotalMilliseconds,
+											EndJavascriptBaseDate = endDate.SubtractJavascriptBaseDate().TotalMilliseconds,
 											Color = ColorTranslator.ToHtml(visualLayer.DisplayColor())
 				               	});
 			}

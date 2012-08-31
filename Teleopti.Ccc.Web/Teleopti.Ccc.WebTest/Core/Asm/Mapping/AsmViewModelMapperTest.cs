@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Core;
@@ -17,13 +18,17 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		private StubFactory scheduleFactory;
 		private IProjectionProvider projectionProvider;
 		private IAsmViewModelMapper target;
+		private IUserTimeZone userTimeZone;
 
 		[SetUp]
 		public void Setup()
 		{
 			projectionProvider = MockRepository.GenerateStub<IProjectionProvider>();
+			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			scheduleFactory = new StubFactory();
-			target = new AsmViewModelMapper(projectionProvider);
+			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
+			target = new AsmViewModelMapper(projectionProvider, userTimeZone);
 		}
 
 		[Test]
@@ -48,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		[Test]
 		public void ShouldUseEarliestScheduleDayDateAsModelDate()
 		{
-			var expected = new DateTime(1900, 1, 1);
+			var expected = new DateTime(1900, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 			var result = target.Map(new[]
 				               {
@@ -62,27 +67,28 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		[Test]
 		public void ShouldSetStart()
 		{
-			var scheduleStart = new DateTime(1999, 1, 1, 2, 3, 4, DateTimeKind.Utc);
-			var expected = scheduleStart.SubtractJavascriptBaseDate().TotalMilliseconds;
+			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var expected = TimeZoneHelper.ConvertFromUtc(layerPeriod.StartDateTime, userTimeZone.TimeZone());
 
-			var scheduleDay =scheduleFactory.ScheduleDayStub(scheduleStart);
+			var scheduleDay =scheduleFactory.ScheduleDayStub(layerPeriod.StartDateTime);
 
 			projectionProvider.Expect(p => p.Projection(scheduleDay))
 				.Return(scheduleFactory.ProjectionStub(new[]
 				                                       	{
-				                                       		scheduleFactory.VisualLayerStub(new DateTimePeriod(scheduleStart, scheduleStart.AddHours(1)))
+				                                       		scheduleFactory.VisualLayerStub(layerPeriod)
 				                                       	}));
 
 			var result = target.Map(new[] { scheduleDay });
 
-			result.Layers.First().StartJavascriptBaseDate.Should().Be.EqualTo(expected);
+			result.Layers.First().StartJavascriptBaseDate.Should().Be.EqualTo(expected.SubtractJavascriptBaseDate().TotalMilliseconds);
 		}
 
 		[Test]
 		public void ShouldSetEnd()
 		{
-			var scheduleEnd = DateTime.UtcNow;
-			var layerPeriod = new DateTimePeriod(scheduleEnd.AddHours(-3), scheduleEnd);
+			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var expected = TimeZoneHelper.ConvertFromUtc(layerPeriod.EndDateTime, userTimeZone.TimeZone());
+
 			var scheduleDay = scheduleFactory.ScheduleDayStub(layerPeriod.StartDateTime);
 
 			projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(scheduleFactory.ProjectionStub(new[]
@@ -90,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       		scheduleFactory.VisualLayerStub(layerPeriod)
 				                                       	}));
 			var res = target.Map(new[] {scheduleDay});
-			res.Layers.First().EndJavascriptBaseDate.Should().Be.EqualTo(scheduleEnd.SubtractJavascriptBaseDate().TotalMilliseconds);
+			res.Layers.First().EndJavascriptBaseDate.Should().Be.EqualTo(expected.SubtractJavascriptBaseDate().TotalMilliseconds);
 		}
 
 		[Test]
