@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
 	{
 		public string Payload { get; set; }
 		public double StartJavascriptBaseDate { get; set; }
-		public int LengthInMinutes { get; set; }
+		public double EndJavascriptBaseDate { get; set; }
 
 		public string Color { get; set; }
 	}

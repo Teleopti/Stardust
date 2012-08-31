@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 				               	{
 				               		Payload = visualLayer.DisplayDescription().Name,
 											StartJavascriptBaseDate = visualLayer.Period.StartDateTime.SubtractJavascriptBaseDate().TotalMilliseconds,
-											LengthInMinutes = (int) visualLayer.Period.ElapsedTime().TotalMinutes,
+											EndJavascriptBaseDate = visualLayer.Period.EndDateTime.SubtractJavascriptBaseDate().TotalMilliseconds,
 											Color = ColorTranslator.ToHtml(visualLayer.DisplayColor())
 				               	});
 			}

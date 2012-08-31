@@ -79,18 +79,18 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		}
 
 		[Test]
-		public void ShouldSetLayerLength()
+		public void ShouldSetEnd()
 		{
-			const int length = 1324;
-			var startDate = DateTime.UtcNow;
-			var layerPeriod = new DateTimePeriod(startDate, startDate.AddMinutes(length));
-			var scheduleDay = scheduleFactory.ScheduleDayStub(startDate);
+			var scheduleEnd = DateTime.UtcNow;
+			var layerPeriod = new DateTimePeriod(scheduleEnd.AddHours(-3), scheduleEnd);
+			var scheduleDay = scheduleFactory.ScheduleDayStub(layerPeriod.StartDateTime);
+
 			projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(scheduleFactory.ProjectionStub(new[]
 				                                       	{
 				                                       		scheduleFactory.VisualLayerStub(layerPeriod)
 				                                       	}));
 			var res = target.Map(new[] {scheduleDay});
-			res.Layers.First().LengthInMinutes.Should().Be.EqualTo(length);
+			res.Layers.First().EndJavascriptBaseDate.Should().Be.EqualTo(scheduleEnd.SubtractJavascriptBaseDate().TotalMilliseconds);
 		}
 
 		[Test]

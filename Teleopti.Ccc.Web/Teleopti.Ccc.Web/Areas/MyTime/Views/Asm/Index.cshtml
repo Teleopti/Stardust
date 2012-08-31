@@ -33,7 +33,7 @@
 			@foreach (var layer in Model.Layers)
 			{
 				<span class="asm-layer ui-corner-all" style="left:@(layer.StartJavascriptBaseDate * pixelsPerHour / 60)px;
-                                                                 	padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
+                                                                 	padding-left:@(layer.EndJavascriptBaseDate * pixelsPerHour / 60)px;
                                                                  	background-color: @(layer.Color)">
 					<span class="asm-start" style="display: none;">@(layer.StartJavascriptBaseDate)</span>
 					<span class="asm-end" style="display: none;">23123123123123</span>
