@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				ScheduleDayReadModel newModel = null;
 				ScheduleDayReadModel oldModel = null;
 
-				var message = _scheduleDayReadModelComparer.FindSignificantChanges(newModel, oldModel, lang);
+				var message = _scheduleDayReadModelComparer.FindSignificantChanges(newModel, oldModel, lang,dateOnly);
 				if(!string.IsNullOrEmpty(message))
 					ret.Messages.Add(message);
 

@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 					// Get list of readmodels from class that fetch for person and period and turn into list of readmodels
 					var readModels = _scheduleDayReadModelsCreator.GetReadModels(scenario, period, person);
-					// save them TALHA MUST fix a bugg with datetime gets an overflow if we use default value
-					//if(readModels.Count > 0)
-					//    _scheduleDayReadModelRepository.SaveReadModels(readModels);
+					// save them
+					if(readModels.Count > 0)
+					    _scheduleDayReadModelRepository.SaveReadModels(readModels);
 				}
 			}
 		}

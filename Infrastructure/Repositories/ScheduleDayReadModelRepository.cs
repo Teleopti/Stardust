@@ -98,6 +98,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	public class ScheduleDayReadModel
 	{
+		public ScheduleDayReadModel()
+		{
+			StartDateTime = new DateTime(1900,1,1);
+			EndDateTime = new DateTime(1900,1,1);
+		}
 		public Guid PersonId { get; set; }
 		public DateTime Date { get; set; }
 		public DateOnly BelongsToDate { get{return new DateOnly(Date);} }
