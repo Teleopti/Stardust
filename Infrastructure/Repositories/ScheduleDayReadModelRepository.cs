@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			uow.PersistAll();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SaveReadModels(IList<ScheduleDayReadModel> models)
 		{
 			using (var uow = _unitOfWorkFactory.CurrentUnitOfWork())
@@ -68,7 +69,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				uow.PersistAll();
 			}
 		}
-		
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		private void SaveReadModel(ScheduleDayReadModel model, IUnitOfWork uow)
 		{
 			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
