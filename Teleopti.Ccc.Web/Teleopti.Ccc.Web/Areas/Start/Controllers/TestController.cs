@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var viewModel = new TestMessageViewModel
 			{
 				Title = "Time changed on server!",
-				Message = "INow component now thinks time is " + dateSet
+				Message = "Time is set to " + dateSet + " in UTC"
 			};
 			ViewBag.SetTime = "hello";
 
