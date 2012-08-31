@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         [Then(@"I should not see the end of the shift on date '(.*)'")]
         public void ThenIShouldNotSeeTheEndOfTheShiftOnDate(DateTime date)
         {
-            var dateString = _page.FirstDay.GetAttributeValue("data-mytime-date");
+            var dateString = _page.DayElementForDate(date).GetAttributeValue("data-mytime-date");
 
             DateTime dateFromPage;
             if (DateTime.TryParse(dateString, UserFactory.User().Culture, DateTimeStyles.None, out dateFromPage))
@@ -75,20 +75,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
             }
             dateFromPage.Should().Not.Be.EqualTo(null);
 
-            var contents = _page.FirstDay.InnerHtml;
-
-            var indexForShiftStart = contents.IndexOf(TestData.ActivityPhone.Description.Name);
-            var indexForShiftEnd = contents.IndexOf(TestData.ActivityPhone.Description.Name,
-                                                    indexForShiftStart +
-                                                    TestData.ActivityPhone.Description.Name.Length);
-
-            indexForShiftEnd.Should().Be.EqualTo(-1);
+            _page.DayElementForDate(date).ListItems[4].Divs.Count.Should().Be.EqualTo(2);
         }
 
         [Then(@"I should see the end of the shift on date '(.*)'")]
         public void ThenIShouldSeeTheEndOfTheShiftOnDate(DateTime date)
         {
-            var dateString = _page.SecondDay.GetAttributeValue("data-mytime-date");
+            var dateString = _page.DayElementForDate(date).GetAttributeValue("data-mytime-date");
 
             DateTime dateFromPage;
             if (DateTime.TryParse(dateString, UserFactory.User().Culture, DateTimeStyles.None, out dateFromPage))
@@ -97,12 +90,28 @@ namespace Teleopti.Ccc.WebBehaviorTest
             }
             dateFromPage.Should().Not.Be.EqualTo(null);
 
-            var contents = _page.SecondDay.InnerHtml;
+            var contents = _page.DayElementForDate(date).InnerHtml;
 
             var indexForShiftEnd = contents.IndexOf(TestData.ActivityPhone.Description.Name);
 
             indexForShiftEnd.Should().Be.GreaterThan(-1);
         }
+
+        [Then(@"I should see the start of the shift on date '(.*)'")]
+        public void ThenIShouldSeeTheStartOfTheShiftOnDate(DateTime date)
+        {
+            var dateString = _page.DayElementForDate(date).GetAttributeValue("data-mytime-date");
+
+            DateTime dateFromPage;
+            if (DateTime.TryParse(dateString, UserFactory.User().Culture, DateTimeStyles.None, out dateFromPage))
+            {
+                dateFromPage.Date.Should().Be.EqualTo(date.Date);
+            }
+            dateFromPage.Should().Not.Be.EqualTo(null);
+
+            _page.DayElementForDate(date).ListItems[4].Divs.Count.Should().Be.EqualTo(2);
+        }
+
 
         
 		[Then(@"I should see the meeting details")]
@@ -169,9 +178,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeStartTimelineAndEndTimelineAccordingToScheduleWith(Table table)
 		{
 			var divs = _page.Timelines.Divs;
-			EventualAssert.That(() => string.Format("{0}", divs.Count), Is.EqualTo(table.Rows[2][1]));
 			EventualAssert.That(() => divs[0].InnerHtml, Is.StringContaining(table.Rows[0][1]));
 			EventualAssert.That(() => divs[divs.Count - 1].InnerHtml, Is.StringContaining(table.Rows[1][1]));
+			EventualAssert.That(() => string.Format("{0}", divs.Count), Is.EqualTo(table.Rows[2][1]));
 		}
 
 		[Then(@"I should see wednesday's activities:")]

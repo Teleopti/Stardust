@@ -9,7 +9,6 @@ Scenario: View current week
 	When I view my week schedule
 	Then I should see the start and end dates for current week
 
-############
 Scenario: View night shift
 	Given I am an agent
 	And there is a shift with
@@ -23,29 +22,28 @@ Scenario: View night shift
 	Then I should not see the end of the shift on date '2012-08-27'
 	And I should see the end of the shift on date '2012-08-28'
 
-############ new
 Scenario: View start of night shift on last day of week for swedish culture
 	Given I am an agent
-	And I have a scheduled shift according to this:
-	| field      | value      |
-	| start date | 2012-08-26 |
-	| start time | 21:00      |
-	| end date   | 2012-08-27 |
-	| end time   | 06:00      |
+	And I am swedish
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-26 20:00 |
+	| EndTime           | 2012-08-27 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
 	And My schedule is published
 	When I view my week schedule for date '2012-08-26'
 	Then I should see the start of the shift on date '2012-08-26'
 
-############ new
 Scenario: View end of night shift from previuos week for swedish culture
 	Given I am an agent
 	And I am swedish
-	And I have a scheduled shift according to this:
-	| field      | value      |
-	| start date | 2012-08-26 |
-	| start time | 21:00      |
-	| end date   | 2012-08-27 |
-	| end time   | 06:00      |
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-26 20:00 |
+	| EndTime           | 2012-08-27 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
 	And My schedule is published
 	When I view my week schedule for date '2012-08-27'
 	Then I should see the end of the shift on date '2012-08-27'
@@ -104,8 +102,6 @@ Scenario: Week-picker sunday first day of week for US culture
 	When I open the week-picker
 	Then I should see sunday as the first day of week
 
-
-	
 Scenario: Show text request symbol
 	Given I am an agent
 	And I have an existing text request
@@ -133,14 +129,11 @@ Scenario: Navigate to request page by clicking request symbol
 	And I click the request symbol
 	Then I should see request page
 
-
 Scenario: Navigate to current week
 	Given I am an agent
 	And I view my week schedule one month ago
 	When I click the current week button
 	Then I should see the start and end dates for current week
-
-
 
 Scenario: Show timeline with no schedule
 	Given I am an agent
@@ -151,7 +144,6 @@ Scenario: Show timeline with no schedule
 	| end timeline   | 23:59 |
 	| timeline count | 25    |
 
-############
 Scenario: Show timeline with schedule 
 	Given I am an agent
 	And there is a shift with
@@ -174,7 +166,6 @@ Scenario: Show timeline with schedule
 	| end timeline   | 20:00 |
 	| timeline count | 13    |
 
-############
 Scenario: Show timeline with night shift
 	Given I am an agent
 	And there is a shift with
@@ -191,7 +182,6 @@ Scenario: Show timeline with night shift
 	| end timeline   | 23:59 |
 	| timeline count | 25    |
 
-############
 Scenario: Show timeline with night shift from the last day of the previous week
 	Given I am an agent
 	And there is a shift with
@@ -208,7 +198,22 @@ Scenario: Show timeline with night shift from the last day of the previous week
 	| end timeline   | 4:00  |
 	| timeline count | 5     |
 
-############??????
+Scenario: Show timeline with night shift starting on the last day of current week
+	Given I am an agent
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-26 20:00 |
+	| EndTime           | 2012-08-27 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
+	And My schedule is published
+	When I view my week schedule for date '2012-08-26'
+	Then I should see start timeline and end timeline according to schedule with:
+	| Field          | Value |
+	| start timeline | 20:00 |
+	| end timeline   | 23:59 |
+	| timeline count | 5     |
+
 Scenario: Show activity with correct position, height and color
 	Given I am an agent
 	And I have custom shifts scheduled on wednesday for two weeks:

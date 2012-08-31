@@ -50,7 +50,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
                                                     {
                                                         var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
                                                         var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
-                                                        if (endTime.Days > startTime.Days)
+                                                        var localEndDate =
+                                                            new DateOnly(period.Value.EndDateTimeLocal(
+                                                                TeleoptiPrincipal.Current.Regional.TimeZone).Date);
+                                                        if (endTime.Days > startTime.Days && week.Contains(localEndDate))
                                                             earlyStart = TimeSpan.Zero;
                                                         else if (x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
                                                             earlyStart = startTime;
