@@ -6044,7 +6044,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				((AgentRestrictionsDetailView)_scheduleView).InitializeGrid();
 				var args = e as AgentDisplayRowEventArgs;
 				if (args == null) return;
-				if(args.MoveTodate) ((AgentRestrictionsDetailView)_scheduleView).SelectDateIfExists(_dateNavigateControl.SelectedDate);
+				if(args.MoveToDate) ((AgentRestrictionsDetailView)_scheduleView).SelectDateIfExists(_dateNavigateControl.SelectedDate);
 				if(args.UpdateShiftEditor) updateShiftEditor();		
 			}
 		}

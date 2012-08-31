@@ -91,6 +91,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, IRestrictionExtractor restrictionExtractor, RestrictionSchedulingOptions schedulingOptions, TimeSpan periodTarget)
 		{
+			if(schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
+
 			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor, schedulingOptions);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
 			_model.LoadDetails(scheduleMatrixPro, restrictionExtractor, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
@@ -101,6 +103,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		public override void AddSelectedSchedulesInColumnToList(GridRangeInfo range, int colIndex, ICollection<IScheduleDay> selectedSchedules)
 		{
+			if(range == null) throw new ArgumentNullException("range");
+			if(selectedSchedules == null) throw new ArgumentNullException("selectedSchedules");
+
 			for (int j = range.Top; j <= range.Bottom; j++)
 			{
 				if (colIndex >= 0)
@@ -114,7 +119,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			}
 		}
 
-		public override Point GetCellPositionForAgentDay(IEntity person, System.DateTime date)
+		public override Point GetCellPositionForAgentDay(IEntity person, System.DateTime dayDate)
 		{
 			Point point = new Point(-1, -1);
 
@@ -124,7 +129,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 				{
 					IScheduleDay schedulePart = ViewGrid.Model[i, j].CellValue as IScheduleDay;
 
-					if (schedulePart != null && schedulePart.Period.Contains(date))
+					if (schedulePart != null && schedulePart.Period.Contains(dayDate))
 					{
 						point = new Point(j, i);
 						break;
@@ -170,6 +175,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			//AgentInfoHelper agentInfoHelper = _singleAgentRestrictionPresenter.SelectedAgentInfo();
 			//if (agentInfoHelper != null)
 			//    ((RestrictionSummaryPresenter)Presenter).GetNextPeriod(agentInfoHelper);
+
+			if(schedules == null) throw new ArgumentNullException("schedules");
 
 			var personsToReload = new HashSet<IPerson>();
 			foreach (IScheduleDay schedulePart in schedules)

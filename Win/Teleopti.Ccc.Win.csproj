@@ -1184,12 +1184,6 @@
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPreferencePainter.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainter.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsWarningDrawer.cs" />
-    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionViewTEMP.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionViewTEMP.Designer.cs">
-      <DependentUpon>AgentRestrictionViewTEMP.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\BlockOptimizerHelper.cs" />
     <Compile Include="Scheduling\AuditHistoryView.cs">
       <SubType>Form</SubType>
@@ -2675,9 +2669,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\ReportSettingsScheduledTimePerActivityView.resx">
       <DependentUpon>ReportSettingsScheduledTimePerActivityView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\AgentRestrictions\AgentRestrictionViewTEMP.resx">
-      <DependentUpon>AgentRestrictionViewTEMP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>

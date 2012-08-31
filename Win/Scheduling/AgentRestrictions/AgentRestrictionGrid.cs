@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			get { return _agentDisplayRow; }
 		}
 
-		public bool MoveTodate
+		public bool MoveToDate
 		{
 			get { return _moveToDate; }
 		}
@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		}
 	}
 
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class AgentRestrictionGrid : GridControl, IAgentRestrictionsView
 	{
 		private AgentRestrictionsPresenter _presenter;
