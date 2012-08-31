@@ -156,6 +156,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initViewModels(_soon);
 			_activateSelectable();
 			_initExtendedPanels();
+			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 		},
 		CallWhenLoaded: function (callback) {
 			_callWhenLoaded(callback);

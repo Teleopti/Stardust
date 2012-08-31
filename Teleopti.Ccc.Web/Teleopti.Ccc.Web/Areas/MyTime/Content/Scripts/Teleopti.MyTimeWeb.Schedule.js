@@ -16,7 +16,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 
-	function _initTooltip() {
+	function _initRequestTooltip() {
 		var addTextRequest = $('.add-request-space');
 		$('<div/>').qtip({
 
@@ -33,7 +33,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				at: 'middle right',
 				viewport: $(window),
 				adjust: {
-					x: 15
+					x: 2
 				}
 			},
 			events: {
@@ -51,6 +51,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				event: 'mousedown'
 			},
 			style: {
+				def: false,
 				classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow',
 				tip: true,
 				border: {
@@ -68,10 +69,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _initTodayButton() {
 		$('#Schedule-today-button')
-			.click(function() {
+			.click(function () {
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
 			});
 	}
+
+
+	
 
 	return {
 		Init: function () {
@@ -82,8 +86,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_initTodayButton();
 		},
 		PartialInit: function () {
+			_initRequestTooltip();
+			Teleopti.MyTimeWeb.Common.Layout.ActivateTransparentTooltip();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
-			_initTooltip();
 			_initPeriodSelection();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();

@@ -137,6 +137,45 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		},
 
 
+		ActivateTransparentTooltip: function () {
+			$('.tooltip-transparent')
+				.add('[title]')
+				.each(function() {
+
+					var content = {
+						title: $(this).attr('tooltip-title'),
+						text: $(this).attr('tooltip-text')
+					};
+
+					var attr = $(this).attr('title');
+					if (typeof attr !== 'undefined' && attr !== false) {
+						content = {
+							text: function() {
+								return $(this).attr('title');
+							}
+						};
+					}
+
+					$(this).qtip({
+						content: content,
+						style: {
+							def: false,
+							classes: 'ui-tooltip-transparent ui-tooltip-rounded ui-tooltip-shadow',
+							tip: true
+						},
+						position: {
+							my: 'bottom left',
+							at: 'top right',
+							target: 'mouse',
+							adjust: {
+								x: 10,
+								y: -3
+							}
+						}
+					});
+				});
+		},
+
 		//Activating tooltip where available
 		ActivateTooltip: function () {
 
@@ -148,16 +187,16 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 						title: $(this).attr('tooltip-title'),
 						text: $(this).attr('tooltip-text')
 					};
-					
+
 					var attr = $(this).attr('title');
 					if (typeof attr !== 'undefined' && attr !== false) {
 						content = {
-							text: function() {
+							text: function () {
 								return $(this).attr('title');
 							}
 						};
 					}
-					
+
 					$(this).qtip({
 						content: content,
 						style: {
@@ -178,6 +217,7 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 				});
 
 		}
+
 	};
 })(jQuery);
 

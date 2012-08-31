@@ -94,15 +94,18 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		return Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 	}
 
+
+	
 	return {
 		Init: function () {
 			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit);
 			_initTeamPicker();
 		},
 		TeamSchedulePartialInit: function () {
+			Teleopti.MyTimeWeb.Common.Layout.ActivateTransparentTooltip();
+			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 			_initPeriodSelection();
 			_initTeamPickerSelection();
-			common.Layout.ActivateTooltip();
 			_initAgentNameOverflow();
 		}
 	};
