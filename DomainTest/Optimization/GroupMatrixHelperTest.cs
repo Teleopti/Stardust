@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization));
+                Assert.IsTrue(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _allScheduleMatrixes));
             }
         }
 
@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization));
+                Assert.IsFalse(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _allScheduleMatrixes));
             }
         }
     }

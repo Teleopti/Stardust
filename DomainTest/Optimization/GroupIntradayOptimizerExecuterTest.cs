@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment);
 				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, date));
@@ -112,6 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1));
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment);
 				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, new DateOnly(2012, 1, 1)));
@@ -144,6 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1));
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment);
 				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, new DateOnly(2012, 1, 1)));
@@ -172,6 +175,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1));
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment);
 				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, new DateOnly(2012, 1, 1)));
@@ -196,6 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private void commonMocks()
 		{
 			Expect.Call(() =>_schedulePartModifyAndRollbackService.ClearModificationCollection());
+			Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			Expect.Call(() => _deleteService.Delete(_daysToDelete, _schedulePartModifyAndRollbackService));
 			Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences)).Return(_schedulingOptions);
 		}

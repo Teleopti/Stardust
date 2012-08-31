@@ -51,12 +51,25 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
 		{
 			_schedulePartModifyAndRollbackService.ClearModificationCollection();
-			_deleteService.Delete(daysToDelete, _schedulePartModifyAndRollbackService);
+
+			IList<IScheduleDay> cleanedList = new List<IScheduleDay>();
+			foreach (var scheduleDay in daysToDelete)
+			{
+				SchedulePartView significant = scheduleDay.SignificantPart();
+				if(significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff && significant != SchedulePartView.ContractDayOff)
+					cleanedList.Add(scheduleDay);
+
+			}
+			_deleteService.Delete(cleanedList, _schedulePartModifyAndRollbackService);
 
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			foreach (var scheduleDay in daysToSave)
 			{
 				if(!scheduleDay.IsScheduled())
+					continue;
+
+				SchedulePartView significant = scheduleDay.SignificantPart();
+				if(significant == SchedulePartView.FullDayAbsence || significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
 					continue;
 
 				DateOnly shiftDate = scheduleDay.DateOnlyAsPeriod.DateOnly;

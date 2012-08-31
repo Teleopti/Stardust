@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				List<DateOnly> allDates = new List<DateOnly>(daysOffToRemove);
 				allDates.AddRange(removedDays);
-				if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(allDates, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions, _groupPersonBuilderForOptimization))
+				if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(allDates, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions, _groupPersonBuilderForOptimization, allMatrixes))
 					return false;
 			}
 			

@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(true);
             	Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions, _allScheduleMatrixes)).IgnoreArguments().Return
             		(new List<DateOnly>());
-                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization)).IgnoreArguments()
+                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _allScheduleMatrixes)).IgnoreArguments()
                     .Return(true);
 
             }
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(true);
 				Expect.Call(_groupMatrixHelper.GoBackToLegalState(new List<DateOnly> { dayOffToRemove }, groupPerson, _schedulingOptions, _allScheduleMatrixes)).Return(
             		new List<DateOnly>());
-                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization)).IgnoreArguments()
+                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _allScheduleMatrixes)).IgnoreArguments()
                     .Return(false);
 
             }
