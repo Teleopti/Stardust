@@ -3,6 +3,13 @@
 	As a user
 	I want to be redirected to the correct locations
 
+Background:
+	Given there is a role with
+	| Field                    | Value                       |
+	| Name                     | Access to report not mytime |
+	| Access to mobile reports | true                        |
+	| Access to mytime web     | false                       |
+
 Scenario: Browse to root
 	Given I am not signed in
 	When I navigate to the site's root
@@ -37,7 +44,7 @@ Scenario: Browse to root and sign in to MyTime
 	Then I should see MyTime
 
 Scenario: Browse to root and sign in to Mobile Reports
-	Given I am a user with access only to Mobile Reports
+	Given I have the role 'Access to report not mytime'
 	When I navigate to the site's root
 	And I sign in
 	Then I should see Mobile Reports

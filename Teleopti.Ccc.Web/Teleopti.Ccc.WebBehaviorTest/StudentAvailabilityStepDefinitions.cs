@@ -37,15 +37,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the edit button")]
 		public void WhenIClickEditButton()
 		{
-			_page.EditButton.WaitUntil(b => b.Enabled, 5);
-			_page.EditButton.Click();
+			_page.EditButton.EventualClick();
 		}
 
 		[When(@"I click the cancel button")]
 		public void WhenIClickTheCancelButton()
 		{
-			_page.CancelButton.WaitUntil(b => b.Enabled, 5);
-			_page.CancelButton.Click();
+			_page.InputPanel.WaitUntilDisplayed();
+			_page.CancelButton.EventualClick();
 		}
 
 		[When(@"I input student availability values")]
@@ -175,7 +174,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see the student availability values")]
 		public void ThenIShouldNotSeeTheStudentAvailabilityValues()
 		{
-			Assert.That(() => _page.InputPanel.Style.Display, Is.EqualTo("none").After(5000, 10));
+			EventualAssert.That(() => _page.InputPanel.Style.Display, Is.EqualTo("none"));
 		}
 
 		[Then(@"I should not be able to see student availability link")]

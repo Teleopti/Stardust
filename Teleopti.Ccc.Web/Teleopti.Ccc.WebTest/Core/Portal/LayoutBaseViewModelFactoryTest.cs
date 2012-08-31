@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal
 {
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			_mocks = new MockRepository();
 			_cultureSpecificViewModelFactory = _mocks.DynamicMock<ICultureSpecificViewModelFactory>();
 			_datePickerGlobalizationViewModelFactory = _mocks.DynamicMock<IDatePickerGlobalizationViewModelFactory>();
-			_target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now());
+			_target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null));
 		}
 
 		[Test]
@@ -54,12 +55,13 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		{
 			var year1970 = new DateTime(1970, 1, 1,0,0,0,DateTimeKind.Utc);
 			var today = new DateTime(2001, 1, 1,1,12,0,0,DateTimeKind.Utc);
-
+			var nowComponent = MockRepository.GenerateMock<INow>();
 			var expected = today.Subtract(year1970).TotalMilliseconds;
-			
-			var time = new Now();
-			((IModifyNow)time).SetNow(today);
-			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, time);
+
+			nowComponent.Expect(c => c.IsExplicitlySet()).Return(true);
+			nowComponent.Expect(c => c.UtcDateTime()).Return(today);
+
+			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, nowComponent);
 			
 			target.CreateLayoutBaseViewModel().ExplicitlySetMilliSecondsFromYear1970.Should().Be.EqualTo(expected);
 		}
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldSReturnZeroIfNotSet()
 		{
-			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now());
+			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null));
 			target.CreateLayoutBaseViewModel().ExplicitlySetMilliSecondsFromYear1970.Should().Be.EqualTo(0);
 		}
 	}

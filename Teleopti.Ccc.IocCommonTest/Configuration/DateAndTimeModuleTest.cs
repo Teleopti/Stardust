@@ -1,5 +1,6 @@
 using Autofac;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new DateAndTimeModule());
+			containerBuilder.Register(c => MockRepository.GenerateMock<IUserTimeZone>()).As<IUserTimeZone>(); //no impl of IUserTimeZone available outside web yet
 		}
 
 

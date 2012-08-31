@@ -9933,6 +9933,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have permission to access the web portal..
+        /// </summary>
+        public static string InsufficientPermissionForWeb {
+            get {
+                return ResourceManager.GetString("InsufficientPermissionForWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Internal Note:.
         /// </summary>
         public static string InternalNoteColon {
@@ -12189,6 +12198,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MissingWorkflowControlSet {
             get {
                 return ResourceManager.GetString("MissingWorkflowControlSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mobile Reports.
+        /// </summary>
+        public static string MobileReports {
+            get {
+                return ResourceManager.GetString("MobileReports", resourceCulture);
             }
         }
         
@@ -17949,7 +17967,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service Level and Employee Ready.
+        ///   Looks up a localized string similar to Service Level  and Agents Ready.
         /// </summary>
         public static string ResReportServiceLevelAndAgentsReady {
             get {
@@ -18801,6 +18819,42 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SchedulePeriods {
             get {
                 return ResourceManager.GetString("SchedulePeriods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Month 7-8.
+        /// </summary>
+        public static string SchedulePeriodTypeChineseMonth {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeChineseMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day.
+        /// </summary>
+        public static string SchedulePeriodTypeDay {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Month.
+        /// </summary>
+        public static string SchedulePeriodTypeMonth {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Week.
+        /// </summary>
+        public static string SchedulePeriodTypeWeek {
+            get {
+                return ResourceManager.GetString("SchedulePeriodTypeWeek", resourceCulture);
             }
         }
         

@@ -42,11 +42,11 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=SUPPORTTOOLS
+  Variable Value1=DATABASEINSTALLER
   Variable Name2=_PROP_VAR_
-  Variable Value2=SUPPORTTOOLSDIR
+  Variable Value2=DBINST
   Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
@@ -131,21 +131,12 @@ item: Set Variable
 end
 item: End Block
 end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=DATABASEINSTALLER
-  Variable Name2=_PROP_VAR_
-  Variable Value2=DIR
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
 item: Remark
   Text=This command do most magic in CCC7-db via the Security Exe
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DCCC%" %SA%"
+  Command Line=/C ""%DBINST%Enrypted\Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DCCC%" %SA%"
   Flags=00000010
 end
 item: Remark
@@ -153,6 +144,6 @@ item: Remark
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DMART%" -CD"%DAGG%" %SA%"
+  Command Line=/C ""%DBINST%Enrypted\Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DMART%" -CD"%DAGG%" %SA%"
   Flags=00000010
 end

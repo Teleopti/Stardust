@@ -102,6 +102,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
 		}
 
+		[Then(@"I should be signed out from MobileReports")]
+		public void ThenIShouldBeSignedOutFromMobileReports()
+		{
+			// when test on desktop browser, cannot detect it's a mobile browser
+			// so when signout, it goes to common signin page, not mobile signin page
+			EventualAssert.That(
+				() => Pages.Pages.MobileSignInPage.UserNameTextField.Exists || Pages.Pages.SignInPage.UserNameTextField.Exists,
+				Is.True);
+		}
+
 	}
 
 

@@ -16,6 +16,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -32,10 +33,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         private ISchedulingResultStateHolder _stateHolder;
         private bool _dateIsSelected;
         private IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
-		private readonly IDictionary<EmploymentType, string> _employmentTypeList = new Dictionary<EmploymentType, string>();
+		private readonly IDictionary<EmploymentType, string> _employmentTypeList;
         private IList<IOptionalColumn> _optionalColumns;
+    	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
 
-		public FormAgentInfo()
+    	public FormAgentInfo()
         {
             InitializeComponent();
             if (!DesignMode)
@@ -43,12 +45,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             TopLevel = true;
 
-			
-			_employmentTypeList.Add(EmploymentType.FixedStaffNormalWorkTime, Resources.EmploymentTypeFixedStaffNormalWorkTime);
-			_employmentTypeList.Add(EmploymentType.FixedStaffDayWorkTime, Resources.EmploymentTypeFixedStaffDayWorkTime);
-			_employmentTypeList.Add(EmploymentType.HourlyStaff, Resources.EmploymentTypeHourlyStaff);
-
-            
+			_employmentTypeList = LanguageResourceHelper.TranslateEnum<EmploymentType>();
+			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
 		public FormAgentInfo(IWorkShiftWorkTime workShiftWorkTime)
@@ -392,7 +390,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             listViewSchedulePeriod.Items.Add(item);
 
             createAndAddItem(listViewSchedulePeriod, Resources.Period, helper.Period.Value.DateString, 1);
-            createAndAddItem(listViewSchedulePeriod, Resources.Type, helper.SchedulePeriod.PeriodType.ToString(), 2);
+            createAndAddItem(listViewSchedulePeriod, Resources.Type, _schedulePeriodTypeList[helper.SchedulePeriod.PeriodType], 2);
             if (person.Period(helper.SelectedDate) == null)
                 return;
             EmploymentType employmentType = person.Period(helper.SelectedDate).PersonContract.Contract.EmploymentType;

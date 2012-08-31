@@ -11,6 +11,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class AsmStepDefinition
 	{
+		private static readonly Uri asmUri = new Uri(TestSiteConfigurationSetup.Url,"MyTime/Asm");
+
 		[When(@"I click ASM link")]
 		public void WhenIClickASMLink()
 		{
@@ -20,11 +22,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a schedule in popup")]
 		public void ThenIShouldSeeAScheduleInPopup()
 		{
-			var uri =new Uri(TestSiteConfigurationSetup.Url,"MyTime/Asm");
-			using(var asmPopup = Browser.AttachTo<IE>(Find.ByUrl(uri)))
+			using (var asmPopup = Browser.AttachTo<IE>(Find.ByUrl(asmUri)))
 			{
 				var layers = asmPopup.Spans.Filter(Find.ByClass("asm-layer",false));
 				EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
+			}
+		}
+
+		[Then(@"I should see the name of current activity")]
+		public void ThenIShouldSeeTheNameOfCurrentActivity()
+		{
+			using (var asmPopup = Browser.AttachTo<IE>(Find.ByUrl(asmUri)))
+			{
+				var element = asmPopup.Element(Find.ById("asm-info-current-activity"));
+				EventualAssert.That(() => element.Text, Is.EqualTo("lunch"));
 			}
 		}
 	}

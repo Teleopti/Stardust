@@ -2,97 +2,58 @@
 @model AsmViewModel
 @{
 	const double pixelsPerHour = 50;
-	const int timeLineHourBorderSize = 1;
-	const double timeLineHourWidth = (pixelsPerHour) - timeLineHourBorderSize;
-	const int timeMarkerPosition = 120;
-	var milliSecondsSince1970 = Model.StartDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+	const double timeLineHourWidth = (pixelsPerHour) - 1; //"1" due to border size
 }
-<style>
-	.asm-timeline-border
-	{
-		border: solid green;
-		top: 30px;
-		position: relative;
-		height: 50px; 
-		overflow: hidden;
-	}
-	
-	.asm-timeline
-	{
-		border: solid red;
-		position: relative;
-		height: 40px;
-		left: 100px;
-	}
-	
-	.asm-timeline-numbers {
-		float: left;
-	}
-	
-	.asm-layer
-	{
-		position: absolute;
-		height: 50px;
-	}
-	
-	.asm-layer-extender
-	{
-		padding-left: 100px;
-	}
-	
-	.asm-now-marker
-	{
-		background-color: black;
-		opacity: 0.5;
-		position: absolute;
-		height: 100%;
-	}
-</style>
-
-<script>
-	var refreshMilliSeconds = 100;
-
-	$(function() {
-		setInterval(function() { _moveTimeLineToNow(); }, refreshMilliSeconds);
+<script type="text/javascript">
+	$(function () {
+		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
+		var pixelsPerHour = @(pixelsPerHour);
+		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, pixelsPerHour);
 	});
-	
-	function _moveTimeLineToNow() {
-		var clientMsSince1970 = new Date().getTime();
-		var serverMsSince1970 = @milliSecondsSince1970;
-		var msSinceStart = clientMsSince1970 - serverMsSince1970;
-		var hoursSinceStart = msSinceStart / 1000 / 60/60;
-		var startPixel = -(@pixelsPerHour * hoursSinceStart);
-		$('.asm-timeline').css('left', (startPixel +@timeMarkerPosition) + 'px');
-		
-		//debug
-		$('#clockDebug').text(''+new Date(clientMsSince1970));
-		$('#leftdebug').text('' + startPixel);
-	}
 </script>
 
-<span id="clockDebug"></span><br/>
-Antal lager: @(Model.Layers.Count)<br/>
-left-position på hela skiten: <span id="leftdebug"></span>
+<div class="asm-outer-canvas ui-corner-all">
+	<div class="asm-schedule-canvas ui-corner-all">
+		<div class="asm-time-marker"></div>
+		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px;">
+			@foreach (var layer in Model.Layers)
+			{
+				<span class="asm-layer ui-corner-all" style="
+																							left:@(layer.RelativeStartInMinutes * pixelsPerHour / 60)px;
+																							padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
+																							background-color: @(layer.Color)">
+				</span>
+			}
+			@for (var day = 0; day <= 2; day++)
+			{
+				for (var hour = 0; hour < 24; hour++)
+				{
+					<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
+						<span class="asm-timeline-number ui-corner-all">@(hour)</span>
+					</span>
+				}
+			}
+		</div>
+	</div>
+	<div class="asm-current-info">
+		<div class="asm-info-canvas ui-corner-all">
+			<span style="width: 50px;">
+				<div>xxDebug</div>
+				<div>xxCurrent</div>
+				<div>xxNext</div>
+			</span>
 
-<div class="asm-timeline-border">
-	<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;">
-	</div>
-	<div class="asm-timeline" style="width:@(3*24*pixelsPerHour)px">
-		@foreach (var layer in Model.Layers)
-  {
-			<span class="asm-layer" style="
-			left:@(layer.RelativeStartInMinutes * pixelsPerHour/60)px;
-			padding-left:@(layer.LengthInMinutes * pixelsPerHour/60)px;
-			background-color: @(layer.Color)"></span>
-  }
-		@for (var day = 0; day <= 2; day++)
-  {
-	  for (var hour = 0; hour < 24; hour++)
-	  {
-	  	<span class="asm-timeline-numbers" style="width:@(timeLineHourWidth)px;
-															border-right:@(timeLineHourBorderSize)px solid black;">@(hour)</span>
-	  }
-  }
-	</div>
+			<span style="width: 115px;">
+				<div id="asm-info-debug">&nbsp;</div>
+				<div id="asm-info-current-activity">PhonePhonePhone</div>
+				<div id="asm-info-next-activity">Back office</div>			
+			</span>
+			<span style="width: 40px;">
+				<div>&nbsp;</div>
+				<div>12:00</div>
+				<div>14:30</div>
+			</span>
+		</div>
+		</div>
+	  <div class="clearboth" />
 </div>
-​ 

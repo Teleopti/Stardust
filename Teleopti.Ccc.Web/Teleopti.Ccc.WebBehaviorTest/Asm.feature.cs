@@ -173,6 +173,31 @@ this.FeatureBackground();
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Write name of current activity")]
+        [NUnit.Framework.IgnoreAttribute()]
+        public virtual void WriteNameOfCurrentActivity()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write name of current activity", new string[] {
+                        "ignore"});
+#line 43
+this.ScenarioSetup(scenarioInfo);
+#line 7
+this.FeatureBackground();
+#line 44
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 45
+ testRunner.And("Current time is \'2030-01-01 10:00\'");
+#line 46
+ testRunner.When("I view my regional settings");
+#line 47
+ testRunner.And("I click ASM link");
+#line 48
+ testRunner.Then("I should see \'Lunch\' as current activity");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 {
     class DropDownColumnForPeriodGrids<TData, TItems> : ColumnBase<TData>
     {
-        private readonly PropertyReflector _propertyReflector = new PropertyReflector();
+    	private readonly string _valueMember;
+    	private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
         private readonly string _headerText;
         private readonly string _bindingProperty;
@@ -36,10 +37,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                              string displayMember, Type baseClass)
             : this(bindingProperty, headerText, comboItems, displayMember)
         {
-            _baseClass = baseClass;
+			_baseClass = baseClass;
         }
 
-        private bool tryGetItemByDisplayMember(string displayMember, out TItems comboItem)
+		public DropDownColumnForPeriodGrids(string bindingProperty, string headerText,
+							 IEnumerable<TItems> comboItems,
+							 string displayMember, string valueMember, Type baseClass)
+			: this(bindingProperty, headerText, comboItems, displayMember, baseClass)
+		{
+			_valueMember = valueMember;
+		}
+
+    	private bool tryGetItemByDisplayMember(string displayMember, out TItems comboItem)
         {
             foreach (TItems theComboItem in _comboItems)
             {
@@ -97,6 +106,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 e.Style.DisplayMember = _displayMember;
 				e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
             	
+				if (!string.IsNullOrEmpty(_valueMember))
+				{
+					e.Style.ValueMember = _valueMember;
+				}
+
                 OnCellDisplayChanged(dataItem, e);
                 e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
 
@@ -113,9 +127,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
                 TData dataItem = dataItems[e.RowIndex - 1];
 
-                if (typeof(TItems).IsAssignableFrom(e.Style.CellValue.GetType()) ||
-                    typeof(TItems) == e.Style.CellValue.GetType().BaseType ||
-                    typeof(TItems) == e.Style.CellValue.GetType() || _baseClass == e.Style.CellValue.GetType() || _baseClass == e.Style.CellValue.GetType().BaseType)
+            	var typeOfItem = typeof (TItems);
+				if (!string.IsNullOrEmpty(_valueMember))
+				{
+					
+				}
+
+                if (typeOfItem.IsAssignableFrom(e.Style.CellValue.GetType()) ||
+                    typeOfItem == e.Style.CellValue.GetType().BaseType ||
+                    typeOfItem == e.Style.CellValue.GetType() || _baseClass == e.Style.CellValue.GetType() || _baseClass == e.Style.CellValue.GetType().BaseType)
                 {
                     _propertyReflector.SetValue(dataItem, _bindingProperty, e.Style.CellValue);
                     e.Handled = true;
