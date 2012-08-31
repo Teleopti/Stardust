@@ -422,13 +422,13 @@ this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
 #line 124
-         testRunner.Given("I have the role \'Access to extended preferences\'");
+    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 125
-         testRunner.And("I am viewing preferences for date \'2012-06-20\'");
+    testRunner.And("I am viewing preferences for date \'2012-06-20\'");
 #line 126
-         testRunner.When("I select day \'2012-06-20\'");
+    testRunner.When("I select day \'2012-06-20\'");
 #line 127
-         testRunner.And("I click the add extended preference button");
+    testRunner.And("I click the add extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -437,13 +437,13 @@ this.FeatureBackground();
                         "Preference",
                         "Late"});
 #line 128
-         testRunner.And("I input extended preference fields with", ((string)(null)), table14);
+    testRunner.And("I input extended preference fields with", ((string)(null)), table14);
 #line 131
-         testRunner.And("I click the save extended preference button");
+    testRunner.And("I click the apply extended preferences button");
 #line 132
-         testRunner.Then("I should not see an extended preference indication on \'2012-06-20\'");
+    testRunner.Then("I should not see an extended preference indication on \'2012-06-20\'");
 #line 133
-         testRunner.And("I should see the preference \'Late\' on \'2012-06-20\'");
+    testRunner.And("I should see the preference \'Late\' on \'2012-06-20\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -458,13 +458,13 @@ this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
 #line 136
-         testRunner.Given("I have the role \'Access to extended preferences\'");
+ testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 137
-         testRunner.And("I am viewing preferences for date \'2012-06-20\'");
+ testRunner.And("I am viewing preferences for date \'2012-06-20\'");
 #line 138
-         testRunner.When("I select day \'2012-06-20\'");
+ testRunner.When("I select day \'2012-06-20\'");
 #line 139
-         testRunner.And("I click the add extended preference button");
+ testRunner.And("I click the add extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -512,11 +512,11 @@ this.FeatureBackground();
                         "Activity time maximum",
                         "00:45"});
 #line 140
-         testRunner.And("I input extended preference fields with", ((string)(null)), table15);
+ testRunner.And("I input extended preference fields with", ((string)(null)), table15);
 #line 156
-         testRunner.And("I click the save button");
+ testRunner.And("I click the apply extended preferences button");
 #line 157
-         testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+ testRunner.And("I click the extended preference indication on \'2012-06-20\'");
 #line hidden
             TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -564,7 +564,7 @@ this.FeatureBackground();
                         "Activity time maximum",
                         "00:45"});
 #line 158
-         testRunner.Then("I should see extended panel with", ((string)(null)), table16);
+ testRunner.Then("I should see extended panel with", ((string)(null)), table16);
 #line hidden
             this.ScenarioCleanup();
         }

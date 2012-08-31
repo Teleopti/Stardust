@@ -121,56 +121,56 @@ Scenario: Activity list contains available activities when editing extended pref
          | Activity | Lunch |
 
 Scenario: Add standard preference
-         Given I have the role 'Access to extended preferences'
-         And I am viewing preferences for date '2012-06-20'
-         When I select day '2012-06-20'
-         And I click the add extended preference button
-         And I input extended preference fields with
-         | Field      | Value |
-         | Preference | Late  |
-         And I click the save extended preference button
-         Then I should not see an extended preference indication on '2012-06-20'
-         And I should see the preference 'Late' on '2012-06-20'
+    Given I have the role 'Access to extended preferences'
+    And I am viewing preferences for date '2012-06-20'
+    When I select day '2012-06-20'
+    And I click the add extended preference button
+    And I input extended preference fields with
+    | Field      | Value |
+    | Preference | Late  |
+    And I click the apply extended preferences button
+    Then I should not see an extended preference indication on '2012-06-20'
+    And I should see the preference 'Late' on '2012-06-20'
 
 Scenario: Add extended preference
-         Given I have the role 'Access to extended preferences'
-         And I am viewing preferences for date '2012-06-20'
-         When I select day '2012-06-20'
-         And I click the add extended preference button
-         And I input extended preference fields with
-         | Field                       | Value |
-         | Preference                  | Late  |
-         | Start time minimum          | 10:30 |
-         | Start time maximum          | 11:00 |
-         | End time minimum            | 19:00 |
-         | End time maximum            | 20:30 |
-         | Work time minimum           | 08:00 |
-         | Work time maximum           | 08:30 |
-         | Activity                    | Lunch |
-         | Activity Start time minimum | 11:30 |
-         | Activity Start time maximum | 11:45 |
-         | Activity End time minimum   | 12:00 |
-         | Activity End time maximum   | 12:15 |
-         | Activity time minimum       | 00:15 |
-         | Activity time maximum       | 00:45 |
-         And I click the save button
-         And I click the extended preference indication on '2012-06-20'
-         Then I should see extended panel with
-         | Field                       | Value |
-         | Preference                  | Late  |
-         | Start time minimum          | 10:30 |
-         | Start time maximum          | 11:00 |
-         | End time minimum            | 19:30 |
-         | End time maximum            | 20:00 |
-         | Work time minimum           | 08:00 |
-         | Work time maximum           | 08:30 |
-         | Activity                    | Lunch |
-         | Activity Start time minimum | 11:30 |
-         | Activity Start time maximum | 11:45 |
-         | Activity End time minimum   | 12:00 |
-         | Activity End time maximum   | 12:15 |
-         | Activity time minimum       | 00:15 |
-         | Activity time maximum       | 00:45 |
+	Given I have the role 'Access to extended preferences'
+	And I am viewing preferences for date '2012-06-20'
+	When I select day '2012-06-20'
+	And I click the add extended preference button
+	And I input extended preference fields with
+	| Field                       | Value |
+	| Preference                  | Late  |
+	| Start time minimum          | 10:30 |
+	| Start time maximum          | 11:00 |
+	| End time minimum            | 19:00 |
+	| End time maximum            | 20:30 |
+	| Work time minimum           | 08:00 |
+	| Work time maximum           | 08:30 |
+	| Activity                    | Lunch |
+	| Activity Start time minimum | 11:30 |
+	| Activity Start time maximum | 11:45 |
+	| Activity End time minimum   | 12:00 |
+	| Activity End time maximum   | 12:15 |
+	| Activity time minimum       | 00:15 |
+	| Activity time maximum       | 00:45 |
+	And I click the apply extended preferences button
+	And I click the extended preference indication on '2012-06-20'
+	Then I should see extended panel with
+	| Field                       | Value |
+	| Preference                  | Late  |
+	| Start time minimum          | 10:30 |
+	| Start time maximum          | 11:00 |
+	| End time minimum            | 19:30 |
+	| End time maximum            | 20:00 |
+	| Work time minimum           | 08:00 |
+	| Work time maximum           | 08:30 |
+	| Activity                    | Lunch |
+	| Activity Start time minimum | 11:30 |
+	| Activity Start time maximum | 11:45 |
+	| Activity End time minimum   | 12:00 |
+	| Activity End time maximum   | 12:15 |
+	| Activity time minimum       | 00:15 |
+	| Activity time maximum       | 00:45 |
 
 Scenario: Edit extended preference
          Given I have the role 'Access to extended preferences'

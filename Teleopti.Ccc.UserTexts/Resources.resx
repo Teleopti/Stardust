@@ -11055,4 +11055,7 @@ These options are activated:
     <value>Week</value>
     <comment>To specify schedule period type Week</comment>
   </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>Add extended preference</value>
+  </data>
 </root>

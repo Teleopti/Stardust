@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -7,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -81,8 +83,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			preferenceSplitButton.Options.Single().Value.Should().Be(shiftCategory.Id.ToString());
 			preferenceSplitButton.Options.Single().Text.Should().Be(shiftCategory.Description.Name);
-			preferenceSplitButton.Options.Single().Style.Name.Should().Be(shiftCategory.DisplayColor.ToStyleClass());
-			preferenceSplitButton.Options.Single().Style.ColorHex.Should().Be(shiftCategory.DisplayColor.ToHtml());
+			preferenceSplitButton.Options.Single().Color.Should().Be(shiftCategory.DisplayColor.ToHtml());
 		}
 
 		[Test]
@@ -106,8 +107,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			preferenceSplitButton.Options.Single().Value.Should().Be(absence.Id.ToString());
 			preferenceSplitButton.Options.Single().Text.Should().Be(absence.Description.Name);
-			preferenceSplitButton.Options.Single().Style.Name.Should().Be(absence.DisplayColor.ToStyleClass());
-			preferenceSplitButton.Options.Single().Style.ColorHex.Should().Be(absence.DisplayColor.ToHtml());
+			preferenceSplitButton.Options.Single().Color.Should().Be(absence.DisplayColor.ToHtml());
 		}
 
 		[Test]
@@ -131,8 +131,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			preferenceSplitButton.Options.Single().Value.Should().Be(dayOff.Id.ToString());
 			preferenceSplitButton.Options.Single().Text.Should().Be(dayOff.Description.Name);
-			preferenceSplitButton.Options.Single().Style.Name.Should().Be(dayOff.DisplayColor.ToStyleClass());
-			preferenceSplitButton.Options.Single().Style.ColorHex.Should().Be(dayOff.DisplayColor.ToHtml());
+			preferenceSplitButton.Options.Single().Color.Should().Be(dayOff.DisplayColor.ToHtml());
 		}
 
 		[Test]
@@ -155,7 +154,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			                             select t as ToolBarSplitButton)
 				.Single();
 
-			preferenceSplitButton.Options.ElementAt(1).Should().Be.OfType<SplitButtonSplitter>();
+			preferenceSplitButton.Options.ElementAt(1).Should().Be.OfType<OptionSplit>();
 		}
 
 		[Test]
@@ -177,5 +176,31 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			deleteButton.Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldHaveAddExtendedPreferenceButton()
+		{
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			var button = result.ControllerItems<ToolBarButtonItem>("Preference").FirstOrDefault(i => i.ButtonType == "add-extended");
+
+			button.Should().Not.Be.Null();
+			button.Title.Should().Be(Resources.AddExtendedPreference);
+		}
+		
 	}
+
+	public static class Ext
+	{
+		public static IEnumerable<T> ControllerItems<T>(this PortalViewModel model, string controller) where T : ToolBarItemBase
+		{
+			return from ni in model.NavigationItems
+			       from ti in ni.ToolBarItems
+			       where ti is T
+				   && ni.Controller == controller
+			       select ti as T;
+		} 
+	}
+
 }

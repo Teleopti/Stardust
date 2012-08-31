@@ -22,15 +22,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click the add extended preference button")]
 		public void WhenIClickTheAddExtendedPreferenceButton()
 		{
-			ScenarioContext.Current.Pending();
 			Pages.Pages.PreferencePage.ExtendedPreferenceButton.EventualClick();
 		}
 
 		[When(@"I input extended preference fields with")]
 		public void WhenIInputExtendedPreferenceFieldsWith(Table table)
 		{
-			ScenarioContext.Current.Pending();
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
+			if (fields.Preference == null)
+				ScenarioContext.Current.Pending();
 			Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Preference);
 		}
 
@@ -39,11 +39,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			public string Preference { get; set; }
 		}
 
-		[When(@"I click the save extended preference button")]
-		public void WhenIClickTheSaveButton()
+		[When(@"I click the apply extended preferences button")]
+		public void WhenIClickTheApplyButton()
 		{
-			ScenarioContext.Current.Pending();
-			Pages.Pages.PreferencePage.ExtendedPreferenceSaveButton.EventualClick();
+			Pages.Pages.PreferencePage.ExtendedPreferenceApplyButton.EventualClick();
 		}
 
 		[When(@"I click the extended preference indication on '(.*)'")]
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldNotSeeAnExtendedPreferenceIndicationOn(DateTime date)
 		{
 			var indication = Pages.Pages.PreferencePage.ExtendedPreferenceIndicationForDate(date);
-			EventualAssert.That(() => indication.Exists, Is.False);
+			EventualAssert.That(() => indication.DisplayVisible(), Is.False);
 		}
 
 		[Then(@"I should see the extended preference on '(.*)'")]

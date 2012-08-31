@@ -40,39 +40,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	public class ToolBarSelectBox : ToolBarItemBase
 	{
 		public string Type { get; set; }
-		public IEnumerable<SelectBoxOption> Options { get; set; }
-	}
-
-	public class SelectBoxOption
-	{
-		public string Value { get; set; }
-		public string Text { get; set; }
+		public IEnumerable<IOption> Options { get; set; }
 	}
 
 	public class ToolBarSplitButton : ToolBarItemBase
 	{
-		public IEnumerable<ISplitButtonOption> Options { get; set; }
-	}
-
-	public interface ISplitButtonOption
-	{
-		string Value { get; }
-		string Text { get; }
-		StyleClassViewModel Style { get; }
-	}
-
-	public class SplitButtonSplitter : ISplitButtonOption
-	{
-		public string Value { get { return "-"; } }
-		public string Text { get { return "-"; } }
-		public StyleClassViewModel Style { get; set; }
-	}
-
-	public class SplitButtonOption : ISplitButtonOption
-	{
-		public string Value { get; set; }
-		public string Text { get; set; }
-		public StyleClassViewModel Style { get; set; }
+		public IEnumerable<IOption> Options { get; set; }
 	}
 
 	public class ToolBarDatePicker : ToolBarItemBase
@@ -80,4 +53,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public string NextTitle { get; set; }
 		public string PrevTitle { get; set; }
 	}
+
+
+
+
+	public class Option : IOption
+	{
+		public string Value { get; set; }
+		public string Text { get; set; }
+		public string Color { get; set; }
+	}
+
+	public class OptionSplit : IOption
+	{
+		public string Value { get { return "-"; } }
+		public string Text { get { return "-"; } }
+		public string Color { get { return null; } }
+	}
+
+	public interface IOption
+	{
+		string Value { get; }
+		string Text { get; }
+		string Color { get; }
+	}
+
 }

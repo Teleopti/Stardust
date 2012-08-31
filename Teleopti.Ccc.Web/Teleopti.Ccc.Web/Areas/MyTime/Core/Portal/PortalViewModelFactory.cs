@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			       		               		new ToolBarSelectBox
 			       		               			{
 			       		               				Type = "TeamPicker",
-			       		               				Options = new SelectBoxOption[] {}
+			       		               				Options = new Option[] {}
 			       		               			}
 			       		               	}
 			       	};
@@ -112,76 +112,65 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 		private SectionNavigationItem createPreferenceNavigationItem()
 		{
 			return new SectionNavigationItem
-					{
-						Action = "Index",
-						Controller = "Preference",
-						Title = Resources.Preference,
-						NavigationItems = new NavigationItem[0],
-						ToolBarItems = new ToolBarItemBase[]
+			       	{
+			       		Action = "Index",
+			       		Controller = "Preference",
+			       		Title = Resources.Preference,
+			       		NavigationItems = new NavigationItem[0],
+			       		ToolBarItems = new ToolBarItemBase[]
 			       		               	{
 			       		               		new ToolBarDatePicker
 			       		               			{
 			       		               				NextTitle = Resources.NextPeriod,
 			       		               				PrevTitle = Resources.PreviousPeriod
 			       		               			},
-											new ToolBarSeparatorItem(),
-											new ToolBarSplitButton 
-												{
-													Title = Resources.Preference, 
-													Options = PreferenceOptions()
-												},
-											new ToolBarSeparatorItem(),
-					       					new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
+			       		               		new ToolBarSeparatorItem(),
+			       		               		new ToolBarSplitButton
+			       		               			{
+			       		               				Title = Resources.Preference,
+			       		               				Options = PreferenceOptions()
+			       		               			},
+			       		               		new ToolBarButtonItem {Title = Resources.AddExtendedPreference, ButtonType = "add-extended"},
+			       		               		new ToolBarSeparatorItem(),
+			       		               		new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
 			       		               	}
-					};
+			       	};
 		}
 
-		private IEnumerable<ISplitButtonOption> PreferenceOptions()
+		private IEnumerable<IOption> PreferenceOptions()
 		{
 			var shiftCategories = (from s in _preferenceOptionsProvider.RetrieveShiftCategoryOptions().MakeSureNotNull()
-			                       select new SplitButtonOption
+			                       select new Option
 			                              	{
 			                              		Value = s.Id.ToString(),
 			                              		Text = s.Description.Name,
-			                              		Style = new StyleClassViewModel
-			                              		        	{
-			                              		        		Name = s.DisplayColor.ToStyleClass(),
-			                              		        		ColorHex = s.DisplayColor.ToHtml(),
-			                              		        	}
+												Color = s.DisplayColor.ToHtml()
 			                              	})
 				.ToArray();
 			var dayOffs = (from s in _preferenceOptionsProvider.RetrieveDayOffOptions().MakeSureNotNull()
-			               select new SplitButtonOption
+						   select new Option
 			                      	{
 			                      		Value = s.Id.ToString(),
 			                      		Text = s.Description.Name,
-			                      		Style = new StyleClassViewModel
-			                      		        	{
-			                      		        		Name = s.DisplayColor.ToStyleClass(),
-			                      		        		ColorHex = s.DisplayColor.ToHtml(),
-			                      		        	}
+										Color = s.DisplayColor.ToHtml()
 			                      	})
 				.ToArray();
 			var absences = (from s in _preferenceOptionsProvider.RetrieveAbsenceOptions().MakeSureNotNull()
-			                select new SplitButtonOption
+							select new Option
 			                       	{
 			                       		Value = s.Id.ToString(),
 			                       		Text = s.Description.Name,
-			                       		Style = new StyleClassViewModel
-			                       		        	{
-			                       		        		Name = s.DisplayColor.ToStyleClass(),
-			                       		        		ColorHex = s.DisplayColor.ToHtml(),
-			                       		        	}
+										Color = s.DisplayColor.ToHtml()
 			                       	})
 				.ToArray();
 
-			var options = new List<ISplitButtonOption>();
+			var options = new List<IOption>();
 			options.AddRange(shiftCategories);
 			if (options.Count > 0 && dayOffs.Any())
-				options.Add(new SplitButtonSplitter());
+				options.Add(new OptionSplit());
 			options.AddRange(dayOffs);
 			if (options.Count > 0 && absences.Any())
-				options.Add(new SplitButtonSplitter());
+				options.Add(new OptionSplit());
 			options.AddRange(absences);
 
 			return options;

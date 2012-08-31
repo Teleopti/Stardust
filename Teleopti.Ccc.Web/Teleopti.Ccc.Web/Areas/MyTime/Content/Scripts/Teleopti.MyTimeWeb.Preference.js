@@ -17,6 +17,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	var loadingStarted = false;
 	var periodFeedbackViewModel = null;
 	var dayViewModels = {};
+	var addExtendedTooltip = null;
 
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#PreferenceDateRangeSelector';
@@ -25,19 +26,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	}
 
 	function _initSplitButton() {
-		$('#Preference-set-button')
-			.parent()
+		$('#Preference')
 			.splitbutton({
 				clicked: function (event, item) {
-					var promises = [];
-					$('#Preference-body-inner .ui-selected')
-						.each(function (index, cell) {
-							var date = $(cell).data('mytime-date');
-							var promise = dayViewModels[date].SetPreference(item.value);
-							promises.push(promise);
-						});
-					$.when.apply(null, promises)
-						.done(function () { periodFeedbackViewModel.LoadFeedback(); });
+					_setPreference(item.value);
 				}
 			});
 	}
@@ -56,6 +48,71 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					.done(function () { periodFeedbackViewModel.LoadFeedback(); });
 			})
 			.removeAttr('disabled');
+	}
+
+	function _setPreference(preference) {
+		var promises = [];
+		$('#Preference-body-inner .ui-selected')
+			.each(function (index, cell) {
+				var date = $(cell).data('mytime-date');
+				var promise = dayViewModels[date].SetPreference(preference);
+				promises.push(promise);
+			});
+		$.when.apply(null, promises)
+			.done(function () { periodFeedbackViewModel.LoadFeedback(); });
+	}
+
+	function _initAddExtendedButton() {
+		var button = $('#Preference-add-extended-button');
+		var template = $('#Preference-add-extended-form-template');
+
+		addExtendedTooltip = $('<div/>')
+			.qtip({
+				content: {
+					text: template
+				},
+				position: {
+					target: button,
+					my: "left top",
+					at: "left bottom",
+					adjust: {
+						x: 5,
+						y: -5
+					}
+				},
+				show: {
+					target: button,
+					event: 'click'
+				},
+				hide: {
+					target: button,
+					event: 'click'
+				},
+				style: {
+					def: false,
+					classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+					tip: {
+						corner: "top left"
+					}
+				},
+				events: {
+					render: function () {
+
+						$('#Preference-extended-preference').selectbox();
+						$('#Preference-extended-apply')
+							.button()
+							.click(function () {
+								var value = $('#Preference-extended-preference').selectbox('value');
+								_setPreference(value);
+							});
+					}
+				}
+			});
+
+	}
+
+	function _hideAddExtendedTooltip() {
+		addExtendedTooltip.qtip('toggle', false);
 	}
 
 	function _activateSelectable() {
@@ -142,9 +199,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	return {
 		Init: function () {
-			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Preference/Index', Teleopti.MyTimeWeb.Preference.PreferencePartialInit);
+			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Preference/Index',
+				Teleopti.MyTimeWeb.Preference.PreferencePartialInit,
+				Teleopti.MyTimeWeb.Preference.PreferencePartialDispose
+			);
 			_initSplitButton();
 			_initDeleteButton();
+			_initAddExtendedButton();
 		},
 		InitViewModels: function () {
 			_initViewModels();
@@ -156,6 +217,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initViewModels(_soon);
 			_activateSelectable();
 			_initExtendedPanels();
+		},
+		PreferencePartialDispose: function () {
+			_hideAddExtendedTooltip();
 		},
 		CallWhenLoaded: function (callback) {
 			_callWhenLoaded(callback);

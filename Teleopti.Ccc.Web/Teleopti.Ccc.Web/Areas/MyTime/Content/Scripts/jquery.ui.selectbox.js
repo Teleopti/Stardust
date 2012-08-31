@@ -76,6 +76,14 @@
 				;
 
 			menu.data("autocomplete")._renderItem = function (ul, item) {
+				if (item.label == "-")
+					item.label = "";
+				if (item.value == "-" && item.label != "") {
+					return $('<li></li>')
+						.addClass('ui-selectbox-menu-splitter')
+						.append(item.label)
+						.appendTo(ul);
+				}
 				if (item.value == "-") {
 					return $('<li></li>')
 						.addClass('ui-selectbox-menu-splitter')
@@ -180,6 +188,10 @@
 
 		selectableOptions: function () {
 			return $(':not(option[value="-"])', this._select);
+		},
+
+		value: function () {
+			return this._button.data("value");
 		},
 
 		destroy: function () {
