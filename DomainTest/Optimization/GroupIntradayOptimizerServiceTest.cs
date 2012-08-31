@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IScheduleDayPro _scheduleDayPro;
 		private IScheduleDay _scheduleDay;
 		private bool _eventExecuted;
+		private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
 
 		[SetUp]
 		public void Setup()
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_person = PersonFactory.CreatePerson();
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
+			_optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
 
 		}
 
@@ -57,8 +59,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay);
 				Expect.Call(() => _optimizer.LockDate(date));
+				Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
 				Expect.Call(_groupIntradayOptimizerExecuter.Execute(new List<IScheduleDay> {_scheduleDay},
-				                                                    new List<IScheduleDay> {_scheduleDay}, _allMatrixes)).Return(
+				                                                    new List<IScheduleDay> {_scheduleDay}, _allMatrixes,
+				                                                    _optimizationOverLimitByRestrictionDecider)).Return(
 				                                                    	false);
 			}
 
@@ -103,13 +107,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_matrix.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.Twice();
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.Twice();
 				Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.Twice();
-				Expect.Call(() => _optimizer.LockDate(date)).Repeat.Twice();
-				//Expect.Call(_groupIntradayOptimizerExecuter.Execute(new List<IScheduleDay> { _scheduleDay },
-				//                                                    new List<IScheduleDay> { _scheduleDay }, _allMatrixes)).Return(
-				//                                                        false);
-				Expect.Call(_groupIntradayOptimizerExecuter.Execute(new List<IScheduleDay> { _scheduleDay },
-																	new List<IScheduleDay> { _scheduleDay }, _allMatrixes)).IgnoreArguments().Return(
-																		false);
+				Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
+				Expect.Call(_groupIntradayOptimizerExecuter.Execute(new List<IScheduleDay> {_scheduleDay},
+				                                                    new List<IScheduleDay> {_scheduleDay}, _allMatrixes,
+				                                                    _optimizationOverLimitByRestrictionDecider)).IgnoreArguments().
+					Return(
+						false);
+				Expect.Call(() => _optimizer.LockDate(date)).Repeat.Times(2);
 			}
 			using (_mock.Playback())
 			{

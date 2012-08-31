@@ -8,7 +8,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IGroupIntradayOptimizerExecuter
 	{
 		bool Execute(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave,
-		             IList<IScheduleMatrixPro> allMatrixes);
+		             IList<IScheduleMatrixPro> allMatrixes,
+		             IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider);
 	}
 
 	public class GroupIntradayOptimizerExecuter : IGroupIntradayOptimizerExecuter
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IGroupMatrixHelper _groupMatrixHelper;
 		private readonly IGroupSchedulingService _groupSchedulingService;
 		private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
 		public GroupIntradayOptimizerExecuter(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			IDeleteSchedulePartService deleteService, 
@@ -29,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			IGroupMatrixHelper groupMatrixHelper,
 			IGroupSchedulingService groupSchedulingService,
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_deleteService = deleteService;
@@ -39,10 +42,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupMatrixHelper = groupMatrixHelper;
 			_groupSchedulingService = groupSchedulingService;
 			_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public bool Execute(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave, IList<IScheduleMatrixPro> allMatrixes)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public bool Execute(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave, 
+			IList<IScheduleMatrixPro> allMatrixes, 
+			IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
 		{
 			_schedulePartModifyAndRollbackService.ClearModificationCollection();
 			_deleteService.Delete(daysToDelete, _schedulePartModifyAndRollbackService);
@@ -65,6 +71,25 @@ namespace Teleopti.Ccc.Domain.Optimization
 																	  allMatrixes);
 				if (!success)
 					return false;
+
+				bool yes = optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit();
+				if (yes)
+				{
+					_schedulePartModifyAndRollbackService.Rollback();
+					_resourceOptimizationHelper.ResourceCalculateDate(shiftDate, true, true);
+					_resourceOptimizationHelper.ResourceCalculateDate(shiftDate.AddDays(1), true, true);
+					return false;
+				}
+
+				IList<DateOnly> result = optimizationOverLimitByRestrictionDecider.OverLimit();
+				if(result.Count > 0)
+				{
+					_schedulePartModifyAndRollbackService.Rollback();
+					_resourceOptimizationHelper.ResourceCalculateDate(shiftDate, true, true);
+					_resourceOptimizationHelper.ResourceCalculateDate(shiftDate.AddDays(1), true, true);
+					return false;
+				}
+
 			}
 			return true;
 		}

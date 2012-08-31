@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private IList<IGroupIntradayOptimizer> runTheList(IList<IGroupIntradayOptimizer> runningList,
 		                                                  IList<IScheduleMatrixPro> allMatrixes)
 		{
-			IList<IGroupIntradayOptimizer> skipList = new List<IGroupIntradayOptimizer>();
+			List<IGroupIntradayOptimizer> skipList = new List<IGroupIntradayOptimizer>();
 			List<IGroupIntradayOptimizer> removeList = new List<IGroupIntradayOptimizer>();
 			int executes = 0;
 			foreach (var optimizer in runningList.GetRandom(runningList.Count, true))
@@ -105,13 +105,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 					groupIntradayOptimizer.LockDate(selectedDate.Value);
 				}
 
-				var success = _groupIntradayOptimizerExecuter.Execute(daysToDelete, daysToSave, allMatrixes);
+				var success = _groupIntradayOptimizerExecuter.Execute(daysToDelete, daysToSave, allMatrixes, optimizer.OptimizationOverLimitByRestrictionDecider);
 
 				if (!success)
 				{
 					removeList.AddRange(memberList);
 				}
 
+				skipList.AddRange(memberList);
 				reportProgress(selectedDate.Value, success, runningList.Count, executes, person);
 			}
 			return removeList;

@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IMainShift _mainShift;
 		private IPersonAssignment _personAssignment;
 		private IPerson _person;
+		private IResourceOptimizationHelper _resourceOptimizationHelper;
+		private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
 			
 		[SetUp]
 		public void Setup()
@@ -45,11 +47,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_mainShiftOptimizeActivitySpecificationSetter = _mock.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
 			_groupMatrixHelper = _mock.StrictMock<IGroupMatrixHelper>();
 			_groupSchedulingService = _mock.StrictMock<IGroupSchedulingService>();
+			_resourceOptimizationHelper = _mock.StrictMock<IResourceOptimizationHelper>();
 			_groupPersonBuilderForOptimization = _mock.StrictMock<IGroupPersonBuilderForOptimization>();
 			_target = new GroupIntradayOptimizerExecuter(_schedulePartModifyAndRollbackService, _deleteService,
 			                                             _schedulingOptionsCreator, _optimizerPreferences,
 			                                             _mainShiftOptimizeActivitySpecificationSetter, _groupMatrixHelper,
-			                                             _groupSchedulingService, _groupPersonBuilderForOptimization);
+			                                             _groupSchedulingService, _groupPersonBuilderForOptimization,
+														 _resourceOptimizationHelper);
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_daysToDelete = new List<IScheduleDay> { _scheduleDay };
 			_daysToSave = new List<IScheduleDay> { _scheduleDay };
@@ -60,7 +64,75 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_mainShift = _mock.StrictMock<IMainShift>();
 			_personAssignment = _mock.StrictMock<IPersonAssignment>();
 			_person = new Person();
+			
+			_optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
 
+		}
+
+		[Test]
+		public void ShouldRollbackIfToManyRestrictionsBroken()
+		{
+			DateOnly date = new DateOnly(2012, 1, 1);
+			using (_mock.Record())
+			{
+				commonMocks();
+				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date);
+				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment);
+				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
+				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, date));
+				Expect.Call(_scheduleDay.Person).Return(_person);
+				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(date, _person, _groupSchedulingService,
+																	_schedulePartModifyAndRollbackService, _schedulingOptions,
+																	_groupPersonBuilderForOptimization, _allMatrixes)).Return(true);
+				Expect.Call(_optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit()).Return(false);
+				Expect.Call(_optimizationOverLimitByRestrictionDecider.OverLimit()).Return(new List<DateOnly>{new DateOnly()});
+				Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date, true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true));
+			}
+
+			bool result;
+
+			using (_mock.Playback())
+			{
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider);
+			}
+
+			Assert.IsFalse(result);
+		}
+
+		[Test]
+		public void ShouldRollbackIfMovedToManyDays()
+		{
+			using (_mock.Record())
+			{
+				commonMocks();
+				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1));
+				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment);
+				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
+				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, new DateOnly(2012, 1, 1)));
+				Expect.Call(_scheduleDay.Person).Return(_person);
+				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(new DateOnly(2012, 1, 1), _person, _groupSchedulingService,
+																	_schedulePartModifyAndRollbackService, _schedulingOptions,
+																	_groupPersonBuilderForOptimization, _allMatrixes)).Return(true);
+				Expect.Call(_optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit()).Return(true);
+				Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+				Expect.Call(() =>_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true));
+			}
+
+			bool result;
+
+			using (_mock.Playback())
+			{
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider);
+			}
+
+			Assert.IsFalse(result);
 		}
 
 		[Test]
@@ -85,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mock.Playback())
 			{
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider);
 			}
 
 			Assert.IsFalse(result);
@@ -107,13 +179,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(new DateOnly(2012, 1, 1), _person, _groupSchedulingService,
 																	_schedulePartModifyAndRollbackService, _schedulingOptions,
 																	_groupPersonBuilderForOptimization, _allMatrixes)).Return(true);
+				Expect.Call(_optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit()).Return(false);
+				Expect.Call(_optimizationOverLimitByRestrictionDecider.OverLimit()).Return(new List<DateOnly>());
 			}
 
 			bool result;
 
 			using (_mock.Playback())
 			{
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider);
 			}
 
 			Assert.IsTrue(result);

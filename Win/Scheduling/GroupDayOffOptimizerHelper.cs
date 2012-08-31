@@ -157,11 +157,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                                deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
 			                                                mainShiftOptimizeActivitySpecificationSetter,
 			                                                groupMatrixHelper, groupSchedulingService,
-			                                                groupPersonBuilderForOptimization);
+			                                                groupPersonBuilderForOptimization, _resourceOptimizationHelper);
 			var service = new GroupIntradayOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupIntradayOptimizerExecuter);
 
-			//service.ReportProgress += resourceOptimizerPersonOptimized;
+			service.ReportProgress += resourceOptimizerPersonOptimized;
 			service.Execute(allMatrix);
+			service.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
         private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
         {
