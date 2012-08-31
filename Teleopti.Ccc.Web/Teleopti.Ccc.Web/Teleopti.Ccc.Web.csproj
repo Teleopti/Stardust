@@ -686,6 +686,7 @@
     <Content Include="Areas\Start\Views\Menu\MobileMenu.cshtml" />
     <Content Include="Areas\Start\Views\Menu\Index.cshtml" />
     <Content Include="Areas\Start\Views\Menu\Menu.cshtml" />
+    <Content Include="Areas\Start\Views\Test\WidgetStylingSample.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
