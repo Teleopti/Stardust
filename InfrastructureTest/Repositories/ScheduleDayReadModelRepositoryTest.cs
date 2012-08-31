@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -23,28 +24,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldSaveReadModel()
-		{
-			var guid = Guid.NewGuid();
-			createAndSaveReadModel(guid);
-
-		}
-
-		[Test]
 		public void ShouldSaveAndLoadReadModel()
 		{
-			SkipRollback();
+			_target = new ScheduleDayReadModelRepository(UnitOfWorkFactory.Current);
 			var guid = Guid.NewGuid();
 			var dateOnly = new DateOnly(2012, 8, 29);
+			Assert.That(_target.IsInitialized(),Is.False);
 			createAndSaveReadModel(guid);
-			UnitOfWork.PersistAll();
 			var ret = _target.ReadModelsOnPerson(dateOnly.AddDays(-1), dateOnly.AddDays(5), guid);
 			Assert.That(ret.Count, Is.EqualTo(1));
-
+			Assert.That(_target.IsInitialized(), Is.True);
+			_target.ClearPeriodForPerson(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(2)), guid);
+			Assert.That(_target.IsInitialized(), Is.False);
 		}
+
 		private void createAndSaveReadModel(Guid personId)
 		{
-			_target = new ScheduleDayReadModelRepository(UnitOfWorkFactory.Current);
 			var model = new ScheduleDayReadModel
 			{
 				Date = new DateTime(2012, 8, 29),
@@ -57,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersonId = personId,
 				Workday = true
 			};
-			_target.SaveReadModel(model);
+			_target.SaveReadModels(new List<ScheduleDayReadModel>{model});
 		}
 	}
 

@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
 			builder.RegisterType<ScheduleDayReadModelCreator>().As<IScheduleDayReadModelCreator>();
 			builder.RegisterType<ScheduleDayReadModelsCreator>().As<IScheduleDayReadModelsCreator>();
+			builder.RegisterType<ScheduleDayReadModelComparer>().As<IScheduleDayReadModelComparer>();
             //builder.RegisterType<UpdatePersonFinderReadModel>().As<IUpdatePersonFinderReadModel>();
 			//builder.RegisterType<UpdateGroupingReadModel>().As<IUpdateGroupingReadModel>();
 		}

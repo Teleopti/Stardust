@@ -8,7 +8,18 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class ScheduleDayReadModelRepository
+	public interface IScheduleDayReadModelRepository
+	{
+		IList<ScheduleDayReadModel> ReadModelsOnPerson(DateOnly startDate, DateOnly toDate, Guid personId);
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId);
+
+		void SaveReadModels(IList<ScheduleDayReadModel> models);
+		bool IsInitialized();
+	}
+
+	public class ScheduleDayReadModelRepository : IScheduleDayReadModelRepository
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
@@ -30,31 +41,58 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					 .SetResultTransformer(Transformers.AliasToBean(typeof(ScheduleDayReadModel)))
 					 .SetReadOnly(true)
 					 .List<ScheduleDayReadModel>();
-
-
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SaveReadModel(ScheduleDayReadModel model)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
+			((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+				"DELETE FROM ReadModel.ScheduleDay WHERE BelongsToDate BETWEEN :StartDate AND :EndDate AND PersonId=:person")
+				.SetGuid("person", personId)
+				.SetDateTime("StartDate", period.StartDate)
+				.SetDateTime("EndDate", period.EndDate)
+				.ExecuteUpdate();
+			uow.PersistAll();
+		}
+
+		public void SaveReadModels(IList<ScheduleDayReadModel> models)
+		{
+			using (var uow = _unitOfWorkFactory.CurrentUnitOfWork())
 			{
-				((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
-					"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,InsertedOn) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:InsertedOn)")
-					.SetGuid("PersonId", model.PersonId)
-					.SetDateTime("StartDateTime", model.StartDateTime)
-					.SetDateTime("EndDateTime", model.EndDateTime)
-					.SetInt64("WorkTime", model.WorkTime.Ticks)
-					.SetInt64("ContractTime", model.ContractTime.Ticks)
-					.SetBoolean("Workday", model.Workday)
-					.SetString("Label", model.Label)
-					.SetInt32("DisplayColor", model.DisplayColor.ToArgb())
-					.SetDateTime("Date", model.BelongsToDate)
-					.SetDateTime("InsertedOn", DateTime.UtcNow)
-					.ExecuteUpdate();
+				foreach (var scheduleDayReadModel in models)
+				{
+					SaveReadModel(scheduleDayReadModel, uow);
+				}
 				uow.PersistAll();
 			}
+		}
+		
+		private void SaveReadModel(ScheduleDayReadModel model, IUnitOfWork uow)
+		{
+			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
+				"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,InsertedOn) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:InsertedOn)")
+				.SetGuid("PersonId", model.PersonId)
+				.SetDateTime("StartDateTime", model.StartDateTime)
+				.SetDateTime("EndDateTime", model.EndDateTime)
+				.SetInt64("WorkTime", model.WorkTime.Ticks)
+				.SetInt64("ContractTime", model.ContractTime.Ticks)
+				.SetBoolean("Workday", model.Workday)
+				.SetString("Label", model.Label)
+				.SetInt32("DisplayColor", model.DisplayColor.ToArgb())
+				.SetDateTime("Date", model.BelongsToDate)
+				.SetDateTime("InsertedOn", DateTime.UtcNow)
+				.ExecuteUpdate();
+		}
+
+		public bool IsInitialized()
+		{
+			var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
+			var result = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+				"SELECT TOP 1 * FROM ReadModel.ScheduleDay")
+				.List();
+			return result.Count > 0;
 		}
 	}
 

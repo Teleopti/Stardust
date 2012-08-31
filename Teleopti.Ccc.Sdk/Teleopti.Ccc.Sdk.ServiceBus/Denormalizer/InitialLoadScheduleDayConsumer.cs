@@ -16,16 +16,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonRepository _personRepository;
+		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IServiceBus _serviceBus;
 
-		public InitialLoadScheduleDayConsumer(IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, 
+		public InitialLoadScheduleDayConsumer(IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IScheduleDayReadModelRepository scheduleDayReadModelRepository,
 			IPersonAssignmentRepository personAssignmentRepository, IScenarioRepository scenarioRepository, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRepository = personRepository;
-			
+			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
+
 			_personAssignmentRepository = personAssignmentRepository;
 			_scenarioRepository = scenarioRepository;
 			_serviceBus = serviceBus;
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			IEnumerable<DenormalizeScheduleDayMessage> messages = new DenormalizeScheduleDayMessage[] { };
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				//if (!_scheduleProjectionReadOnlyRepository.IsInitialized())
+				if (!_scheduleDayReadModelRepository.IsInitialized())
 				{
 					if (hasAssignments())
 					{
