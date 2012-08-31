@@ -11,6 +11,7 @@
 	<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Content/Scripts/jquery.qtip.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.custom.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Site.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.splitbutton.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.selectbox.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.labeledinput.css")" rel="stylesheet" type="text/css" />
@@ -39,13 +40,14 @@
 	        $("#splitbutton-sample").splitbutton();
 	        $("#selectbox-sample").selectbox();
 	        $("#combobox-sample-list").combobox();
+	        $("#the-input").labeledinput();
 	    });
 	</script>
 </head>
 <body>
-	<div>
+	<div class="floatleft">
 		<h1>Splitbutton</h1>
-		<div id="splitbutton-sample" class="floatleft">
+		<div id="splitbutton-sample">
 			
         <button title="Sample" id="splitbutton-sample-set-button"></button>
 			<select title="Sample" id="splitbutton-sample-list">
@@ -60,10 +62,10 @@
 		</div>
 	</div>
     
-	<div>
+	<div class="floatleft">
 		<h1>Selectbox</h1>
 		<div id="selectbox-sample">
-			<select title="Sample" id="selectbox-sample-list" class="ui-selectbox-init floatleft">
+			<select title="Sample" id="selectbox-sample-list" class="ui-selectbox-init">
 				<optgroup label="Option group"></optgroup>
 				<option value="option1">Option 1</option>
 				<option value="option2">Option 2</option>
@@ -74,16 +76,19 @@
 			</select>
 		</div>
 	</div>
-    
-	<div>
+	<br />
+    <div>
 		<h1>Labeled input</h1>
-		<div id="labeled-input-sample"></div>
+		<div id="labeled-input-sample">
+			<label class="displayblock" for="the-input">Label text:</label>
+		    <input id="the-input" type="text"/>
+		</div>
 	</div>
-    
-	<div>
+    <br />
+	<div class="floatleft">
 		<h1>Combobox</h1>
 		<div id="combobox-sample">
-			<select title="Sample" id="combobox-sample-list" class="floatleft">
+			<select title="Sample" id="combobox-sample-list">
 				<optgroup label="Option group"></optgroup>
 				<option value="option1">Option 1</option>
 				<option value="option2">Option 2</option>
