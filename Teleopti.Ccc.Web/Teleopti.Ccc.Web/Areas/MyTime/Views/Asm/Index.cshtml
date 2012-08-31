@@ -8,6 +8,20 @@
 	$(function () {
 		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
 		var pixelsPerHour = @(pixelsPerHour);
+
+
+		var latestStart = 0;
+		var nu = 2120;
+		$('.asm-layer')
+			.each(function() {
+				var startElement = $(this).find('.asm-start');
+				var start = startElement.text();
+				if(start > latestStart && start <= nu) {
+					latestStart = start;
+				}
+			});
+		alert(latestStart);
+
 		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, pixelsPerHour);
 	});
 </script>
@@ -19,8 +33,10 @@
 			@foreach (var layer in Model.Layers)
 			{
 				<span class="asm-layer ui-corner-all" style="left:@(layer.RelativeStartInMinutes * pixelsPerHour / 60)px;
-																			padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
-																			background-color: @(layer.Color)">
+                                                                 	padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
+                                                                 	background-color: @(layer.Color)">
+					<span class="asm-start" style="display: none;">@(layer.RelativeStartInMinutes)</span>
+					<span class="asm-end" style="display: none;">23123123123123</span>
 				</span>
 			}
 			@for (var day = 0; day <= 2; day++)
