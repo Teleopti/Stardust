@@ -15,9 +15,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
     [TestFixture]
     public class ScheduleDayReadModelComparerTest
     {
-        private MockRepository _mocks;
         private IPerson _person;
-        private ScheduleDayReadModelComparer scheduleDayReadModelComparer;
+        private ScheduleDayReadModelComparer _scheduleDayReadModelComparer;
 
         [SetUp]
         public void Setup()
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
            
             _person = PersonFactory.CreatePerson("test");
             _person.PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
-            scheduleDayReadModelComparer = new ScheduleDayReadModelComparer();
+            _scheduleDayReadModelComparer = new ScheduleDayReadModelComparer();
         }
 
         [Test]
@@ -41,8 +40,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
             existingReadModel.EndDateTime = new DateTime();
             existingReadModel.Workday = true;
 
-            var message = scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
-                                                                              _person.PermissionInformation.Culture());
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
+                                                                              _person.PermissionInformation.Culture(), new DateOnly(2012,08,31));
             Assert.IsNull(message);
         }
 
@@ -59,11 +58,46 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
             existingReadModel.EndDateTime = new DateTime(2012,01,01);
             existingReadModel.Workday = true;
 
-            var message = scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
-                                                                              _person.PermissionInformation.Culture());
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
+                                                                              _person.PermissionInformation.Culture(), new DateOnly(2012,08,31));
             Assert.IsNotNull(message);
-
         }
 
+        [Test]
+        public void ShouldReturnNullIfBothAreOffDays()
+        {
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(null, null,
+                                                                              _person.PermissionInformation.Culture(),
+                                                                              new DateOnly(2012, 08, 31));
+            Assert.IsNull(message);
+        }
+
+        [Test]
+        public void ShouldReturnMessageIfChangeFromOffDayToWorkingDay()
+        {
+            ScheduleDayReadModel newReadModel = new ScheduleDayReadModel();
+            newReadModel.StartDateTime = new DateTime();
+            newReadModel.EndDateTime = new DateTime();
+            newReadModel.Workday = true;
+
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, null,
+                                                                              _person.PermissionInformation.Culture(),
+                                                                              new DateOnly(2012, 08, 31));
+            Assert.IsNotNull(message);
+        }
+
+        [Test]
+        public void ShouldReturnMessageIfChangeFromWorkingDayToOffDay()
+        {
+            ScheduleDayReadModel existingReadModel = new ScheduleDayReadModel();
+            existingReadModel.StartDateTime = new DateTime(2012, 01, 01);
+            existingReadModel.EndDateTime = new DateTime(2012, 01, 01);
+            existingReadModel.Workday = true;
+
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(null, existingReadModel,
+                                                                              _person.PermissionInformation.Culture(),
+                                                                              new DateOnly(2012, 08, 31));
+            Assert.IsNotNull(message);
+        }
     }
 }
