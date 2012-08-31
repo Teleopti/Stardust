@@ -11,10 +11,42 @@ Scenario: View current week
 
 Scenario: View night shift
 	Given I am an agent
-	And I have a night shift starting on monday
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-27 20:00 |
+	| EndTime           | 2012-08-28 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
 	And My schedule is published
-	When I view my week schedule
-	Then the shift should end on monday
+	When I view my week schedule for date '2012-08-27'
+	Then I should not see the end of the shift on date '2012-08-27'
+	And I should see the end of the shift on date '2012-08-28'
+
+Scenario: View start of night shift on last day of week for swedish culture
+	Given I am an agent
+	And I am swedish
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-26 20:00 |
+	| EndTime           | 2012-08-27 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
+	And My schedule is published
+	When I view my week schedule for date '2012-08-26'
+	Then I should see the start of the shift on date '2012-08-26'
+
+Scenario: View end of night shift from previuos week for swedish culture
+	Given I am an agent
+	And I am swedish
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-26 20:00 |
+	| EndTime           | 2012-08-27 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
+	And My schedule is published
+	When I view my week schedule for date '2012-08-27'
+	Then I should see the end of the shift on date '2012-08-27'
 
 Scenario: Do not show unpublished schedule
 	Given I am an agent
@@ -70,8 +102,6 @@ Scenario: Week-picker sunday first day of week for US culture
 	When I open the week-picker
 	Then I should see sunday as the first day of week
 
-
-	
 Scenario: Show text request symbol
 	Given I am an agent
 	And I have an existing text request
@@ -99,14 +129,11 @@ Scenario: Navigate to request page by clicking request symbol
 	And I click the request symbol
 	Then I should see request page
 
-
 Scenario: Navigate to current week
 	Given I am an agent
 	And I view my week schedule one month ago
 	When I click the current week button
 	Then I should see the start and end dates for current week
-
-
 
 Scenario: Show timeline with no schedule
 	Given I am an agent
@@ -117,27 +144,75 @@ Scenario: Show timeline with no schedule
 	| end timeline   | 23:59 |
 	| timeline count | 25    |
 
-Scenario: Show timeline with schedule
+Scenario: Show timeline with schedule 
 	Given I am an agent
-	And I have shifts scheduled for two weeks
-	And My schedule is published
-	When I view my week schedule
-	Then I should see start timeline and end timeline according to schedule with:
-	| Field          | Value |
-	| start timeline | 20:00 |
-	| end timeline   | 4:00  |
-	| timeline count | 9     |
-
-Scenario: Show timeline with schedule with different start and end time on different day
-	Given I am an agent
-	And I have shifts scheduled with different activities for two weeks
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-27 10:00 |
+	| EndTime           | 2012-08-27 20:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-28 08:00 |
+	| EndTime           | 2012-08-28 17:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
 	And My schedule is published
 	When I view my week schedule
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field          | Value |
 	| start timeline | 8:00  |
-	| end timeline   | 18:00 |
-	| timeline count | 11     |
+	| end timeline   | 20:00 |
+	| timeline count | 13    |
+
+Scenario: Show timeline with night shift
+	Given I am an agent
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-27 20:00 |
+	| EndTime           | 2012-08-28 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
+	And My schedule is published
+	When I view my week schedule for date '2012-08-27'
+	Then I should see start timeline and end timeline according to schedule with:
+	| Field          | Value |
+	| start timeline | 0:00  |
+	| end timeline   | 23:59 |
+	| timeline count | 25    |
+
+Scenario: Show timeline with night shift from the last day of the previous week
+	Given I am an agent
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-26 20:00 |
+	| EndTime           | 2012-08-27 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
+	And My schedule is published
+	When I view my week schedule for date '2012-08-27'
+	Then I should see start timeline and end timeline according to schedule with:
+	| Field          | Value |
+	| start timeline | 0:00  |
+	| end timeline   | 4:00  |
+	| timeline count | 5     |
+
+Scenario: Show timeline with night shift starting on the last day of current week
+	Given I am an agent
+	And there is a shift with
+	| Field             | Value            |
+	| StartTime         | 2012-08-26 20:00 |
+	| EndTime           | 2012-08-27 04:00 |
+	| ShiftCategoryName | ForTest          |
+	| Lunch             | true             |
+	And My schedule is published
+	When I view my week schedule for date '2012-08-26'
+	Then I should see start timeline and end timeline according to schedule with:
+	| Field          | Value |
+	| start timeline | 20:00 |
+	| end timeline   | 23:59 |
+	| timeline count | 5     |
 
 Scenario: Show activity with correct position, height and color
 	Given I am an agent
