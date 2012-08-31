@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
 			((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
-				"DELETE FROM ReadModel.ScheduleDay WHERE BelongsToDate BETWEEN :StartDate AND :EndDate AND PersonId=:person")
+				"DELETE FROM ReadModel.ScheduleDay WHERE PersonId=:person AND BelongsToDate BETWEEN :StartDate AND :EndDate")
 				.SetGuid("person", personId)
 				.SetDateTime("StartDate", period.StartDate)
 				.SetDateTime("EndDate", period.EndDate)

@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		[Test]
 		public void ShouldNotSendIfNoConfig()
 		{
+			smsMessage.Messages.Add("On a day");
 			Expect.Call(_notificationConfigReader.HasLoadedConfig).Return(false);
 			_mocks.ReplayAll();
 			_target.SendNotification(smsMessage,"" );

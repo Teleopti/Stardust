@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		[Test]
 		public void ShouldNotLoadTheFile()
 		{
-			_target = new NotificationConfigReader("NotificationConfig.xml");
+			_target = new NotificationConfigReader();
 			Assert.That(_target.HasLoadedConfig, Is.False);
 			Assert.That(_target.XmlDocument, Is.Null);
 			Assert.That(_target.User, Is.EqualTo(""));
@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			Assert.That(_target.Api, Is.EqualTo(""));
 			Assert.That(_target.From, Is.EqualTo(""));
 			Assert.That(_target.Data, Is.EqualTo(""));
+			Assert.That(_target.ClassName, Is.EqualTo(""));
 		}
 
 		[Test]
@@ -56,6 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			Assert.That(_target.Api, Is.EqualTo(""));
 			Assert.That(_target.From, Is.EqualTo(""));
 			Assert.That(_target.Data, Is.EqualTo(""));
+			Assert.That(_target.ClassName, Is.EqualTo(""));
 		}
 
 		[Test]
