@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool Execute(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave, 
 			IList<IScheduleMatrixPro> allMatrixes, 
 			IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
