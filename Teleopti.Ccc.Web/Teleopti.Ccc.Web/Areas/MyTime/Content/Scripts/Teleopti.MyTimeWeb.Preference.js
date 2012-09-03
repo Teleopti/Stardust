@@ -414,6 +414,8 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	};
 
 	this.ReadPreference = function (data) {
+		if (!data) return;
+
 		self.Color(data.Color);
 		self.Preference(data.Preference);
 		self.Extended(data.Extended);
@@ -463,14 +465,14 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 	this.SetPreference = function (value) {
 		var data = null;
-		if(typeof(value)=='string' ) {
+		if (typeof (value) == 'string') {
 			data = {
 				Date: self.Date,
 				PreferenceId: value
 			};
-		}else {
+		} else {
 			data = value;
-			data.Date=self.Date;
+			data.Date = self.Date;
 		}
 		var deferred = $.Deferred();
 		ajaxForDate({
