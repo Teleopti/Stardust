@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -25,26 +27,39 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 		public INotificationMessage SignificantChangeNotificationMessage(DateOnlyPeriod dateOnlyPeriod, IPerson person, IList<ScheduleDayReadModel> newReadModels)
 		{
 			var ret = new NotificationMessage();
-			var date = DateTime.Now.Date;
-			if (dateOnlyPeriod.StartDate > date.AddDays(14))
-				return ret;
-			if (dateOnlyPeriod.EndDate < date)
-				return ret;
+            //var date = DateTime.Now.Date;
+            //if (dateOnlyPeriod.StartDate > date.AddDays(14))
+            //    return ret;
+            //if (dateOnlyPeriod.EndDate < date)
+            //    return ret;
 
-			var oldReadModels = _scheduleDayReadModelRepository.ReadModelsOnPerson(dateOnlyPeriod.StartDate,
-			                                                                       dateOnlyPeriod.EndDate, person.Id.Value);
+            var period = new DateOnlyPeriod(new DateOnly(DateTime.Now), new DateOnly(DateTime.Now.AddDays(14)));
+		    var overlappingPeriod = dateOnlyPeriod.Intersection(period);
+            
 
-			var lang = person.PermissionInformation.UICulture();
-			foreach (var dateOnly in dateOnlyPeriod.DayCollection())
+            if (overlappingPeriod==null)
+                return ret;
+
+            IList<ScheduleDayReadModel> newReadModelWithinIntersectionPeriod = new List<ScheduleDayReadModel>();
+            
+            newReadModelWithinIntersectionPeriod =
+                    newReadModels.Where(y => y.Date >= overlappingPeriod.Value.StartDate && y.Date <= overlappingPeriod.Value.EndDate).ToList();
+
+
+            var oldReadModels = _scheduleDayReadModelRepository.ReadModelsOnPerson(overlappingPeriod.Value.StartDate,
+                                                                                   overlappingPeriod.Value.EndDate, person.Id.Value);
+		    
+            var lang = person.PermissionInformation.UICulture();
+			
+            foreach (var dateOnly in dateOnlyPeriod.DayCollection())
 			{
-				//TALHA find the day in both list and add some test to testclass of course
-				ScheduleDayReadModel newModel = null;
-				ScheduleDayReadModel oldModel = null;
+			    string message = null;
+                var newReadModelDay = newReadModelWithinIntersectionPeriod.FirstOrDefault(x => x.Date == dateOnly);
+			    var existingReadModelDay = oldReadModels.FirstOrDefault(y => y.Date == dateOnly);
 
-				var message = _scheduleDayReadModelComparer.FindSignificantChanges(newModel, oldModel, lang,dateOnly);
+                message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModelDay, existingReadModelDay, lang, dateOnly);
 				if(!string.IsNullOrEmpty(message))
 					ret.Messages.Add(message);
-
 			}
 
 			if (ret.Messages.Count == 0)
