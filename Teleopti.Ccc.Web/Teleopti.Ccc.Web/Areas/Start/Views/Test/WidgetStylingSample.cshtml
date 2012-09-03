@@ -1,0 +1,104 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>WidgetStylingSample</title>
+    
+	<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/Scripts/jquery.qtip.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.custom.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Site.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.splitbutton.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.selectbox.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.labeledinput.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.connector.css")" rel="stylesheet" type="text/css" />
+	
+	<script src="@Url.Content("~/Content/Scripts/jquery-1.6.4.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/modernizr-1.7.min.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/jquery-ui-1.8.16.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/json2.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/date.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/jquery.hoverIntent.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/jquery.qtip.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/indexOf.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/knockout-2.1.0.js")"></script>
+
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.extensions.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.labeledinput.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.splitbutton.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.selectbox.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.custominput.js")"></script>
+    <script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.combobox.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.calendarselectable.js")"></script>
+    
+	<script type="text/javascript">
+	    $(function() {
+	        $("#splitbutton-sample").splitbutton();
+	        $("#selectbox-sample-list").selectbox();
+	        $("#combobox-sample-list").combobox();
+	        $("#the-input").labeledinput();
+	    });
+	</script>
+</head>
+<body>
+	<div class="floatleft">
+		<h1>Splitbutton</h1>
+		<div id="splitbutton-sample">
+			
+        <button title="Sample" id="splitbutton-sample-set-button"></button>
+			<select title="Sample" id="splitbutton-sample-list">
+				<optgroup label="Option group"></optgroup>
+				<option value="option1" selected="selected">Option 1</option>
+				<option value="option2">Option 2</option>
+				<option value="-">Separator with text</option>
+				<option value="option3">Option 3</option>
+				<option value="-"></option>
+				<option value="option4">Option 4</option>
+			</select>
+		</div>
+	</div>
+    
+	<div class="floatleft">
+		<h1>Selectbox</h1>
+		<div id="selectbox-sample">
+			<select title="Sample" id="selectbox-sample-list" class="ui-selectbox-init">
+				<optgroup label="Option group"></optgroup>
+				<option value="option1" selected="selected">Option 1</option>
+				<option value="option2">Option 2</option>
+				<option value="-">Separator with text</option>
+				<option value="option3">Option 3</option>
+				<option value="-"></option>
+				<option value="option4">Option 4</option>
+			</select>
+		</div>
+	</div>
+	<br />
+    <div>
+		<h1>Labeled input</h1>
+		<div id="labeled-input-sample">
+			<label class="displayblock" for="the-input">Label text:</label>
+		    <input id="the-input" type="text"/>
+		</div>
+	</div>
+    <br />
+	<div class="floatleft">
+		<h1>Combobox</h1>
+		<div id="combobox-sample">
+			<select title="Sample" id="combobox-sample-list">
+				<optgroup label="Option group"></optgroup>
+				<option value="option1">Option 1</option>
+				<option value="option2">Option 2</option>
+				<option value="-">Separator with text</option>
+				<option value="option3">Option 3</option>
+				<option value="-"></option>
+				<option value="option4">Option 4</option>
+			</select>
+		</div>
+	</div>
+    
+</body>
+</html>

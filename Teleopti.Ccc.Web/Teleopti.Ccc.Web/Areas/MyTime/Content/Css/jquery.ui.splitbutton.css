@@ -27,6 +27,11 @@
 	white-space: nowrap;
 }
 
+.ui-splitbutton-button .ui-button-text
+{
+    padding-top: 0.1em;
+    line-height: 1.0;
+}
 .ui-splitbutton-menu li
 {
 	position: relative;
