@@ -22,7 +22,7 @@ GO
 -----------------------------------------------
 -- Who	When		What
 -----------------------------------------------
--- DJ	1020-10-07	Casting Mb as int, add Exucute as
+-- DJ	2010-10-07	Casting Mb as int, add Exucute as
 -- DJ	2011-04-20	Make Azure compatible
 --
 -- =============================================
