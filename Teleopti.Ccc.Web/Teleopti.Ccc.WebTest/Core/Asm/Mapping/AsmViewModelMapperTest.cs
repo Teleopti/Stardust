@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                  scheduleFactory.ScheduleDayStub(expected),
 										scheduleFactory.ScheduleDayStub(new DateTime(2100, 1, 1))
 				               });
-			result.StartDate.Should().Be.EqualTo(expected);
+			result.StartDate.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(expected, timeZone));
 		}
 
 		[Test]
