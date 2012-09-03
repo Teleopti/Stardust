@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string ShiftCategoryName { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
-		public bool Lunch { get; set; }
+		public bool Lunch3HoursAfterStart { get; set; }
 
 		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, _assignmentPeriod, shiftCat));
 
 			// add lunch
-			if (Lunch)
+			if (Lunch3HoursAfterStart)
 			{
 				var lunchPeriod = new DateTimePeriod(dateUtc.Add(StartTime.TimeOfDay).AddHours(3), dateUtc.Add(StartTime.TimeOfDay).AddHours(4));
 				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			// rolling my own contract time calculation.
 			// do we need to do a projection here really?
 			var contractTime = _assignmentPeriod.ElapsedTime();
-			if (Lunch)
+			if (Lunch3HoursAfterStart)
 				contractTime = contractTime.Subtract(TimeSpan.FromHours(1));
 			return contractTime;
 		}

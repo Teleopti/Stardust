@@ -4,7 +4,6 @@
 	position: relative;
 	top: 20px;
 	height: 40px;
-	display: none; /*hide when loaded, before moved to correct place*/
 }
 .asm-current-info
 {
@@ -30,6 +29,7 @@
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	margin: 5px;
 	height: 72px;
+	display: none; /*hide when loaded, before moved to correct place*/
 }
 .asm-layer
 {
@@ -85,15 +85,14 @@
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
-	margin-right: 1em;
 }
 
 .asm-info-canvas div
 {
-	margin-right: 1em;
 	text-align: left;
 	font-family: verdana;
 	font-size: 10px;
+	white-space:pre;
 }
 
 body

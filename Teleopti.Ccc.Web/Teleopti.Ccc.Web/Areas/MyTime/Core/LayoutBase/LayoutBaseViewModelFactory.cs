@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
+﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 
 			if (_now.IsExplicitlySet())
 			{
-				milliseconds = _now.UtcDateTime().SubtractJavascriptBaseDate().TotalMilliseconds;
+				milliseconds = _now.LocalDateTime().SubtractJavascriptBaseDate().TotalMilliseconds;
 			}
 			return new LayoutBaseViewModel
 			       	{

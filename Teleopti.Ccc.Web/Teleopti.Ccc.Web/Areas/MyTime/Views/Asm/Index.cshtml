@@ -1,59 +1,59 @@
 ﻿@using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
+@using Teleopti.Ccc.Web.Core
 @model AsmViewModel
 @{
 	const double pixelsPerHour = 50;
 	const double timeLineHourWidth = (pixelsPerHour) - 1; //"1" due to border size
+	double canvasStartMsSince1970 = Model.StartDate.SubtractJavascriptBaseDate().TotalMilliseconds;
+	const int timeLineMarkerWidth = 150;
 }
 <script type="text/javascript">
 	$(function () {
 		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
-		var pixelsPerHour = @(pixelsPerHour);
-		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, pixelsPerHour);
+		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, @(pixelsPerHour));
 	});
 </script>
-
 <div class="asm-outer-canvas ui-corner-all">
 	<div class="asm-schedule-canvas ui-corner-all">
-		<div class="asm-time-marker"></div>
+		<div class="asm-time-marker" style="width:@(timeLineMarkerWidth)px">
+		</div>
 		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px;">
 			@foreach (var layer in Model.Layers)
-			{
-				<span class="asm-layer ui-corner-all" style="
-																							left:@(layer.RelativeStartInMinutes * pixelsPerHour / 60)px;
-																							padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
-																							background-color: @(layer.Color)">
-				</span>
-			}
-			@for (var day = 0; day <= 2; day++)
-			{
-				for (var hour = 0; hour < 24; hour++)
-				{
-					<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
-						<span class="asm-timeline-number ui-corner-all">@(hour)</span>
-					</span>
-				}
-			}
+	{
+				<span class="asm-layer ui-corner-all" style="left:@((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth)px;
+																						padding-left:@((layer.EndJavascriptBaseDate - layer.StartJavascriptBaseDate) * pixelsPerHour / 60 / 60 / 1000)px;
+																						background-color: @(layer.Color)"
+						data-asm-start-milliseconds="@(layer.StartJavascriptBaseDate)"
+						data-asm-start-time="@(layer.StartTimeText)"
+						data-asm-end-milliseconds="@(layer.EndJavascriptBaseDate)"
+						data-asm-end-time="@(layer.EndTimeText)"
+						data-asm-activity="@(layer.Payload)"></span>
+	}
+			<!-- ko foreach: timeLines -->
+			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;"><span class="asm-timeline-number ui-corner-all"
+				data-bind="text: $data"></span></span>
+			<!-- /ko -->
 		</div>
 	</div>
 	<div class="asm-current-info">
 		<div class="asm-info-canvas ui-corner-all">
 			<span style="width: 50px;">
-				<div>xxDebug</div>
-				<div>xxCurrent</div>
-				<div>xxNext</div>
-			</span>
-
-			<span style="width: 115px;">
-				<div id="asm-info-debug">&nbsp;</div>
-				<div id="asm-info-current-activity">PhonePhonePhone</div>
-				<div id="asm-info-next-activity">Back office</div>			
-			</span>
-			<span style="width: 40px;">
-				<div>&nbsp;</div>
-				<div>12:00</div>
-				<div>14:30</div>
+				<div id="asm-info-current-starttime">
+				</div>
+				<div id="asm-info-next-starttime">
+				</div>
+			</span><span style="width: 150px;">
+				<div id="asm-info-current-activity">
+				</div>
+				<div id="asm-info-next-activity">
+				</div>
+			</span><span>
+				<div id="asm-info-current-endtime">
+				</div>
+				<div id="asm-info-next-endtime">
+				</div>
 			</span>
 		</div>
-		</div>
-	  <div class="clearboth" />
+	</div>
+	<div class="clearboth" />
 </div>
