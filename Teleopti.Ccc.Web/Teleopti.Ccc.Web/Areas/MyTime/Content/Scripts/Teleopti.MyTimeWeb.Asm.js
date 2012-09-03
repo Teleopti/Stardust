@@ -1,4 +1,5 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -12,11 +13,24 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var refreshSeconds = 20;
 
 		_refresh(serverMsSince1970, pixelsPerHour);
+		_bindTimeLine();
 		$('.asm-outer-canvas').show();
 
 		setInterval(function () {
 			_refresh(serverMsSince1970, pixelsPerHour);
 		}, refreshSeconds * 1000);
+	}
+
+	function _bindTimeLine() {
+		var timelineArray = new Array();
+		for (var day = 0; day <= 2; day++) {
+			for (var hour = 0; hour < 24; hour++) {
+				timelineArray.push(hour);
+			}
+		}
+		ko.applyBindings({
+			timeLines: timelineArray
+		});
 	}
 
 	function _refresh(serverMsSince1970, pixelsPerHour) {

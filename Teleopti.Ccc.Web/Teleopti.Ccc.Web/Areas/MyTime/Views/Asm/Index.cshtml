@@ -33,15 +33,11 @@
 						data-asm-activity="@(layer.Payload)">
 				</span>
 			}
-			@for (var day = 0; day <= 2; day++)
-			{
-				for (var hour = 0; hour < 24; hour++)
-				{
-					<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
-						<span class="asm-timeline-number ui-corner-all">@(hour)</span>
-					</span>
-				}
-			}
+			<!-- ko foreach: timeLines -->
+			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
+				<span class="asm-timeline-number ui-corner-all" data-bind="text: $data"></span>
+			</span>
+			<!-- /ko -->
 		</div>
 	</div>
 	<div class="asm-current-info">
