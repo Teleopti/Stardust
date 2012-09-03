@@ -1,4 +1,5 @@
 @echo off
+SETLOCAL
 COLOR A
 cls
 ::init
@@ -14,11 +15,11 @@ CD "%~dp0"
 SETLOCAL EnableDelayedExpansion
 SET S=
 del "%tempInstall%" /Q
-for /f "tokens=* delims= " %%a in (%2.txt) do (
+for /f "tokens=* delims= " %%a in (config/%~2.txt) do (
 set S=!S!%%a 
 )
 set S=start /wait MSIExec /i "%~1" !S!
- > "%tempInstall%" echo.!S! /passive /l*v "%~1.log"
+ > "%tempInstall%" echo.!S! /qn /l* "%~1.log"
 
 ::show msiexec string
 more "%tempInstall%"
@@ -52,3 +53,4 @@ GOTO :EOF
 
 
 :EOF
+ENDLOCAL
