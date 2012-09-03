@@ -5,7 +5,7 @@
 	const double pixelsPerHour = 50;
 	const double timeLineHourWidth = (pixelsPerHour) - 1; //"1" due to border size
 	double canvasStartMsSince1970 = Model.StartDate.SubtractJavascriptBaseDate().TotalMilliseconds;
-	const int timeLineMarkerWidth =150;
+	const int timeLineMarkerWidth = 150;
 }
 <script type="text/javascript">
 	$(function () {
@@ -13,45 +13,47 @@
 		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, @(pixelsPerHour));
 	});
 </script>
-
 <div class="asm-outer-canvas ui-corner-all">
 	<div class="asm-schedule-canvas ui-corner-all">
-		<div class="asm-time-marker" style="width:@(timeLineMarkerWidth)px"></div>
+		<div class="asm-time-marker" style="width:@(timeLineMarkerWidth)px">
+		</div>
 		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px;">
 			@foreach (var layer in Model.Layers)
-			{
+	{
 				<span class="asm-layer ui-corner-all" style="left:@((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth)px;
-                                                                  padding-left:@((layer.EndJavascriptBaseDate - layer.StartJavascriptBaseDate) * pixelsPerHour /60 / 60/1000)px;
-                                                                  background-color: @(layer.Color)"
+																						padding-left:@((layer.EndJavascriptBaseDate - layer.StartJavascriptBaseDate) * pixelsPerHour / 60 / 60 / 1000)px;
+																						background-color: @(layer.Color)"
 						data-asm-start-milliseconds="@(layer.StartJavascriptBaseDate)"
 						data-asm-start-time="@(layer.StartTimeText)"
 						data-asm-end-milliseconds="@(layer.EndJavascriptBaseDate)"
 						data-asm-end-time="@(layer.EndTimeText)"
-						data-asm-activity="@(layer.Payload)">
-				</span>
-			}
+						data-asm-activity="@(layer.Payload)"></span>
+	}
 			<!-- ko foreach: timeLines -->
-			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
-				<span class="asm-timeline-number ui-corner-all" data-bind="text: $data"></span>
-			</span>
+			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;"><span class="asm-timeline-number ui-corner-all"
+				data-bind="text: $data"></span></span>
 			<!-- /ko -->
 		</div>
 	</div>
 	<div class="asm-current-info">
 		<div class="asm-info-canvas ui-corner-all">
 			<span style="width: 50px;">
-				<div id="asm-info-current-starttime"></div>
-				<div id="asm-info-next-starttime"></div>
-			</span>
-			<span style="width: 150px;">
-				<div id="asm-info-current-activity"></div>
-				<div id="asm-info-next-activity"></div>			
-			</span>
-			<span>
-				<div id="asm-info-current-endtime"></div>
-				<div id="asm-info-next-endtime"></div>
+				<div id="asm-info-current-starttime">
+				</div>
+				<div id="asm-info-next-starttime">
+				</div>
+			</span><span style="width: 150px;">
+				<div id="asm-info-current-activity">
+				</div>
+				<div id="asm-info-next-activity">
+				</div>
+			</span><span>
+				<div id="asm-info-current-endtime">
+				</div>
+				<div id="asm-info-next-endtime">
+				</div>
 			</span>
 		</div>
-		</div>
-	  <div class="clearboth" />
+	</div>
+	<div class="clearboth" />
 </div>
