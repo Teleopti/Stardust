@@ -23,6 +23,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public IEnumerable<ToolBarItemBase> ToolBarItems { get; set; }
 	}
 
+	public class PreferenceNavigationItem : SectionNavigationItem
+	{
+		public IEnumerable<IOption> PreferenceOptions { get; set; }
+		public IEnumerable<IOption> ActivityOptions { get; set; }
+	}
+
 	public abstract class ToolBarItemBase
 	{
 		public string Title { get; set; }

@@ -30,36 +30,31 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			var result = target.CreatePortalViewModel();
 
-			var preferences = (from i in result.NavigationItems where i.Controller == "Preference" select i).SingleOrDefault();
-			preferences.Should().Be.Null();
+			result.Controller<PreferenceNavigationItem>().Should().Be.Null();
 		}
 
 		[Test]
 		public void PreferenceShouldHaveDatePicker()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
-			var preference = (from i in result.NavigationItems where i.Controller == "Preference" select i).Single();
-			var datePicker = (from i in preference.ToolBarItems where i is ToolBarDatePicker select i).SingleOrDefault();
+			var datePicker = result.ControllerItems<ToolBarDatePicker, PreferenceNavigationItem>().SingleOrDefault();
+
 			datePicker.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void PreferenceShouldHaveSplitButton()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
-			var preference = (from i in result.NavigationItems where i.Controller == "Preference" select i).Single();
-			var datePicker = (from i in preference.ToolBarItems where i is ToolBarSplitButton select i).SingleOrDefault();
-			datePicker.Should().Not.Be.Null();
+			var preferenceSplitButton = result.ControllerItems<ToolBarSplitButton, PreferenceNavigationItem>().SingleOrDefault();
+
+			preferenceSplitButton.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -74,12 +69,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			var result = target.CreatePortalViewModel();
 
-			var preferenceSplitButton = (from n in result.NavigationItems
-			                             from t in n.ToolBarItems
-			                             where n.Controller == "Preference"
-			                                   && t.GetType() == typeof(ToolBarSplitButton)
-			                             select t as ToolBarSplitButton)
-				.Single();
+			var preferenceSplitButton = result.ControllerItems<ToolBarSplitButton, PreferenceNavigationItem>().SingleOrDefault();
 
 			preferenceSplitButton.Options.Single().Value.Should().Be(shiftCategory.Id.ToString());
 			preferenceSplitButton.Options.Single().Text.Should().Be(shiftCategory.Description.Name);
@@ -98,12 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			var result = target.CreatePortalViewModel();
 
-			var preferenceSplitButton = (from n in result.NavigationItems
-			                             from t in n.ToolBarItems
-			                             where n.Controller == "Preference"
-			                                   && t.GetType() == typeof(ToolBarSplitButton)
-			                             select t as ToolBarSplitButton)
-				.Single();
+			var preferenceSplitButton = result.ControllerItems<ToolBarSplitButton, PreferenceNavigationItem>().SingleOrDefault();
 
 			preferenceSplitButton.Options.Single().Value.Should().Be(absence.Id.ToString());
 			preferenceSplitButton.Options.Single().Text.Should().Be(absence.Description.Name);
@@ -122,12 +107,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			var result = target.CreatePortalViewModel();
 
-			var preferenceSplitButton = (from n in result.NavigationItems
-			                             from t in n.ToolBarItems
-			                             where n.Controller == "Preference"
-			                                   && t.GetType() == typeof(ToolBarSplitButton)
-			                             select t as ToolBarSplitButton)
-				.Single();
+			var preferenceSplitButton = result.ControllerItems<ToolBarSplitButton, PreferenceNavigationItem>().SingleOrDefault();
 
 			preferenceSplitButton.Options.Single().Value.Should().Be(dayOff.Id.ToString());
 			preferenceSplitButton.Options.Single().Text.Should().Be(dayOff.Description.Name);
@@ -137,22 +117,15 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldHaveSplitterInPreferenceSplitButton()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
 			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
 			preferenceOptionsProvider.Stub(x => x.RetrieveShiftCategoryOptions()).Return(new[] { new ShiftCategory(" ") });
 			preferenceOptionsProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { new DayOffTemplate(new Description()) });
 
-			var target = new PortalViewModelFactory(permissionProvider, preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
-			var preferenceSplitButton = (from n in result.NavigationItems
-			                             from t in n.ToolBarItems
-			                             where n.Controller == "Preference"
-			                                   && t.GetType() == typeof(ToolBarSplitButton)
-			                             select t as ToolBarSplitButton)
-				.Single();
+			var preferenceSplitButton = result.ControllerItems<ToolBarSplitButton, PreferenceNavigationItem>().SingleOrDefault();
 
 			preferenceSplitButton.Options.ElementAt(1).Should().Be.OfType<OptionSplit>();
 		}
@@ -160,18 +133,11 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void PreferenceShouldHaveDeleteButton()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
-			var deleteButton = (from n in result.NavigationItems
-			                    from t in n.ToolBarItems
-			                    where n.Controller == "Preference"
-			                          && t is ToolBarButtonItem
-			                          && ((ToolBarButtonItem)t).ButtonType == "delete"
-			                    select t).SingleOrDefault();
+			var deleteButton = result.ControllerItems<ToolBarButtonItem, PreferenceNavigationItem>().SingleOrDefault(t => t.ButtonType == "delete");
 
 			deleteButton.Should().Not.Be.Null();
 		}
@@ -188,11 +154,110 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			button.Should().Not.Be.Null();
 			button.Title.Should().Be(Resources.AddExtendedPreference);
 		}
-		
+
+		[Test]
+		public void ShouldHaveShiftCategoriesInPreferenceOptions()
+		{
+			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
+			var shiftCategory = new ShiftCategory("Test") {DisplayColor = Color.Pink};
+			shiftCategory.SetId(Guid.NewGuid());
+			preferenceOptionsProvider.Stub(x => x.RetrieveShiftCategoryOptions()).Return(new[] { shiftCategory });
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Value.Should().Be(shiftCategory.Id.ToString());
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Text.Should().Be(shiftCategory.Description.Name);
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Color.Should().Be(shiftCategory.DisplayColor.ToHtml());
+		}
+
+		[Test]
+		public void ShouldHaveAbsenceInPreferenceOptions()
+		{
+			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
+			var absence = new Absence { Description = new Description("Test"), DisplayColor = Color.Plum };
+			absence.SetId(Guid.NewGuid());
+			preferenceOptionsProvider.Stub(x => x.RetrieveAbsenceOptions()).Return(new[] { absence });
+
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Value.Should().Be(absence.Id.ToString());
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Text.Should().Be(absence.Description.Name);
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Color.Should().Be(absence.DisplayColor.ToHtml());
+		}
+
+		[Test]
+		public void ShouldHaveDayOffInPreferenceOptions()
+		{
+			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
+			var dayOff = new DayOffTemplate(new Description("Test")) { DisplayColor = Color.Purple };
+			dayOff.SetId(Guid.NewGuid());
+			preferenceOptionsProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { dayOff });
+
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Value.Should().Be(dayOff.Id.ToString());
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Text.Should().Be(dayOff.Description.Name);
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Color.Should().Be(dayOff.DisplayColor.ToHtml());
+		}
+
+		[Test]
+		public void ShouldHaveActivityInActivityOptions()
+		{
+			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
+			var activity = new Activity("Test") { DisplayColor = Color.BurlyWood };
+			activity.SetId(Guid.NewGuid());
+			preferenceOptionsProvider.Stub(x => x.RetrieveActivityOptions()).Return(new[] { activity });
+
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			result.Controller<PreferenceNavigationItem>().ActivityOptions.Single().Value.Should().Be(activity.Id.ToString());
+			result.Controller<PreferenceNavigationItem>().ActivityOptions.Single().Text.Should().Be(activity.Description.Name);
+			result.Controller<PreferenceNavigationItem>().ActivityOptions.Single().Color.Should().Be(activity.DisplayColor.ToHtml());
+		}
+
+		[Test]
+		public void ShouldOnlyGetShiftCategoriesOnce()
+		{
+			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
+
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			target.CreatePortalViewModel();
+
+			preferenceOptionsProvider.AssertWasCalled(x => x.RetrieveShiftCategoryOptions(), o => o.Repeat.Once());
+
+		}
+
+
 	}
 
 	public static class Ext
 	{
+		public static T Controller<T>(this PortalViewModel model) where T : SectionNavigationItem
+		{
+			return (from ni in model.NavigationItems
+				   where ni is T
+				   select ni as T).SingleOrDefault();
+		}
+
+		public static IEnumerable<T> ControllerItems<T, TController>(this PortalViewModel model)
+			where T : ToolBarItemBase
+			where TController : SectionNavigationItem 
+		{
+			return from ni in model.NavigationItems
+				   where ni is TController
+				   from ti in ni.ToolBarItems
+				   where ti is T
+				   select ti as T;
+		}
+
 		public static IEnumerable<T> ControllerItems<T>(this PortalViewModel model, string controller) where T : ToolBarItemBase
 		{
 			return from ni in model.NavigationItems

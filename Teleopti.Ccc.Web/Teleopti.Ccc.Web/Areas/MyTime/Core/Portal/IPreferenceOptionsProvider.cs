@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 		IEnumerable<IShiftCategory> RetrieveShiftCategoryOptions();
 		IEnumerable<IDayOffTemplate> RetrieveDayOffOptions();
 		IEnumerable<IAbsence> RetrieveAbsenceOptions();
+		IEnumerable<IActivity> RetrieveActivityOptions();
 	}
 }
