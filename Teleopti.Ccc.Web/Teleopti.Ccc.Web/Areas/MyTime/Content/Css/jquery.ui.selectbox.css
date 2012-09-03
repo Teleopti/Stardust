@@ -16,10 +16,14 @@
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+.ui-selectbox-button .ui-button-text
+{
+    padding-top: 0.1em;
+    line-height: 1.0;
+}
 .ui-selectbox-menu .ui-autocomplete a 
 {
 	padding-left: 30px;
-	font-size: 10px;
 }
 .ui-selectbox-menu-splitter 
 {
@@ -38,7 +42,6 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	font-size: 10px;
 }
 .ui-selectbox .ui-button-text .notused
 {
