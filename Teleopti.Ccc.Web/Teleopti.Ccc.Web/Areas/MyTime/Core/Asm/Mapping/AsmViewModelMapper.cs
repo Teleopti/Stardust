@@ -34,11 +34,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 					earliest = scheduleDay.DateOnlyAsPeriod.DateOnly.Date;
 				}
 			}
-
-			var ret = new AsmViewModel { StartDate = earliest};
+			var timeZone = _userTimeZoneInfo.TimeZone();
+			var ret = new AsmViewModel { StartDate = TimeZoneHelper.ConvertFromUtc(earliest, timeZone)};
 			foreach (var visualLayer in layers)
 			{
-				var timeZone = _userTimeZoneInfo.TimeZone();
 				var startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone);
 				var endDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.EndDateTime, timeZone);
 				               	
@@ -47,7 +46,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 											Payload = visualLayer.DisplayDescription().Name,
 											StartJavascriptBaseDate = startDate.SubtractJavascriptBaseDate().TotalMilliseconds,
 											EndJavascriptBaseDate = endDate.SubtractJavascriptBaseDate().TotalMilliseconds,
-											Color = ColorTranslator.ToHtml(visualLayer.DisplayColor())
+											Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
+											StartTimeText = startDate.ToString("HH:mm"),
+											EndTimeText = endDate.ToString("HH:mm")
 				               	});
 			}
 			return ret;

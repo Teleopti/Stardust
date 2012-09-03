@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		private IProjectionProvider projectionProvider;
 		private IAsmViewModelMapper target;
 		private IUserTimeZone userTimeZone;
+		private CccTimeZoneInfo timeZone;
 
 		[SetUp]
 		public void Setup()
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			projectionProvider = MockRepository.GenerateStub<IProjectionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			scheduleFactory = new StubFactory();
-			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+			timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
 			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
 			target = new AsmViewModelMapper(projectionProvider, userTimeZone);
 		}
@@ -111,7 +112,34 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			var res = target.Map(new[] { scheduleDay });
 
 			res.Layers.First().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(color));
+		}
 
+		[Test]
+		public void ShouldSetStartTimeText()
+		{
+			var startDate = new DateTime(2000, 1, 1, 8, 15, 0, DateTimeKind.Utc);
+			var scheduleDay = scheduleFactory.ScheduleDayStub(new DateTime());
+			projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(scheduleFactory.ProjectionStub(new[]
+				                                       	{
+				                                       		scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(2)))
+				                                       	}));
+			var res = target.Map(new[] { scheduleDay });
+
+			res.Layers.First().StartTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(startDate, timeZone).ToString("HH:mm"));
+		}
+
+		[Test]
+		public void ShouldSetEndTimeText()
+		{
+			var endDate = new DateTime(2000, 1, 1, 11, 55, 0, DateTimeKind.Utc);
+			var scheduleDay = scheduleFactory.ScheduleDayStub(new DateTime());
+			projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(scheduleFactory.ProjectionStub(new[]
+				                                       	{
+				                                       		scheduleFactory.VisualLayerStub(new DateTimePeriod(endDate.AddHours(-5), endDate))
+				                                       	}));
+			var res = target.Map(new[] { scheduleDay });
+
+			res.Layers.First().EndTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(endDate, timeZone).ToString("HH:mm"));
 		}
 	}
 }

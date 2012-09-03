@@ -13,25 +13,27 @@
 		var pixelsPerHour = @(pixelsPerHour);
 
 
-		var currentStart = 0;
-		var currentEnd = 0;
-		var currentActivity;
+		var currentStart;
+		var currentEnd;
+		var currentActivity ='';
 		var nu = new Date().getTeleoptiTime();
 		$('.asm-layer')
 			.each(function() {
-				var start = parseFloat($(this).find('.asm-layer-start').text());
-				var end = parseFloat($(this).find('.asm-layer-end').text());
+				var startSpan = $(this).find('.asm-layer-start');
+				var endSpan = $(this).find('.asm-layer-end');
+				var start = parseFloat(startSpan.attr('milliseconds'));
+				var end = parseFloat(endSpan.attr('milliseconds'));
 				if(nu >=start && nu <end) {
-					currentStart = start;
-					currentEnd = end;
+					currentStart = startSpan.text();
+					currentEnd = endSpan.text();
 					currentActivity = $(this).find('.asm-layer-activity').text();
 					return false;
 				}
 			});
-		if(currentStart>0) {
+		if(currentActivity!='') {
 			$('#asm-info-current-activity').text(currentActivity);
-			$('#asm-info-current-starttime').text(new Date(currentStart).toString("HH:mm"));
-			$('#asm-info-current-endtime').text(new Date(currentEnd).toString("HH:mm"));
+			$('#asm-info-current-starttime').text(currentStart);
+			$('#asm-info-current-endtime').text(currentEnd);
 		}
 
 		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, pixelsPerHour);
@@ -48,8 +50,8 @@
 				<span class="asm-layer ui-corner-all" style="left:@((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth)px;
                                                                  	padding-left:@((layer.EndJavascriptBaseDate - layer.StartJavascriptBaseDate) * pixelsPerHour /60 / 60/1000)px;
                                                                  	background-color: @(layer.Color)">
-					<span class="asm-layer-start" style="display: none;">@(layer.StartJavascriptBaseDate)</span>
-					<span class="asm-layer-end" style="display: none;">@((layer.EndJavascriptBaseDate))</span>
+					<span class="asm-layer-start" style="display: none;" milliseconds="@(layer.StartJavascriptBaseDate)">@(layer.StartTimeText)</span>
+					<span class="asm-layer-end" style="display: none;" milliseconds="@(layer.EndJavascriptBaseDate)">@(layer.EndTimeText)</span>
 					<span class="asm-layer-activity" style="display: none;">@(layer.Payload)</span>
 				</span>
 			}
