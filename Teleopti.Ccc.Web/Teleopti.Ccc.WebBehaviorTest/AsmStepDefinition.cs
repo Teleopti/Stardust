@@ -38,7 +38,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see '(.*)' as current end time")]
 		public void ThenIShouldSeeTimeAsCurrentEndTime(string time)
 		{
-			var element = _popup.Element(Find.ById("asm-info-current-time"));
+			var element = _popup.Element(Find.ById("asm-info-current-endtime"));
+			EventualAssert.That(() => element.Text, Is.EqualTo(time));
+		}
+
+		[Then(@"I should see '(.*)' as current start time")]
+		public void ThenIShouldSeeTimeAsCurrentStartTime(string time)
+		{
+			var element = _popup.Element(Find.ById("asm-info-current-starttime"));
 			EventualAssert.That(() => element.Text, Is.EqualTo(time));
 		}
 
