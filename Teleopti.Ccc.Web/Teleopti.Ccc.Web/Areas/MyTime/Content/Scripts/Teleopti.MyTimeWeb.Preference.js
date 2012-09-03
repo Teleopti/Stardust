@@ -99,6 +99,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					render: function () {
 
 						$('#Preference-extended-preference').selectbox();
+						$('#Preference-extended-activity').selectbox();
+						$("#Preference-add-extended-form-template .time-input").combobox();
+						
 						$('#Preference-extended-apply')
 							.button()
 							.click(function () {

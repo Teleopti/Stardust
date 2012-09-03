@@ -1,6 +1,7 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
+@using Teleopti.Interfaces.Domain
 @model Teleopti.Ccc.Web.Areas.MyTime.Models.Portal.PortalViewModel
 <nav id="tabs" class="main-nav">
 	<ul>
@@ -65,24 +66,128 @@
 				}
 				
 
-				@if (navSection.Controller == "Preference")
+				@if (navSection is PreferenceNavigationItem)
 				{
-					var options = from i in navSection.ToolBarItems
-					              let toolBarSplitButton = i as ToolBarSplitButton
-					              where toolBarSplitButton != null
-					              from o in toolBarSplitButton.Options
-					              select o;
+					var preferenceNavigation = navSection as PreferenceNavigationItem;
+					var times = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0))
+					            let value = @Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(t))
+					            let text = TimeHelper.TimeOfDayFromTimeSpan(t)
+					            select new Option
+					                   	{
+					                   		Value = value,
+					                   		Text = text
+					                   	};
 					<div id="Preference-add-extended-form-template" class="displaynone"> 
 						
 						<select id="Preference-extended-preference">
 							<option value="">&nbsp;</option>
 							<option value="-"></option>
-							@foreach (var option in options)
+							@foreach (var option in preferenceNavigation.PreferenceOptions)
 							{
 								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
 							}
 						</select>
+
+						<select id="Preference-extended-start-time-minimum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+						<select id="Preference-extended-start-time-maximum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+
+						<select id="Preference-extended-end-time-minimum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+						<select id="Preference-extended-end-time-maximum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+
+						<select id="Preference-extended-work-time-minimum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+						<select id="Preference-extended-work-time-maximum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
 						
+						<select id="Preference-extended-activity">
+							<option value="">&nbsp;</option>
+							<option value="-"></option>
+							@foreach (var option in preferenceNavigation.ActivityOptions)
+							{
+								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
+							}
+						</select>
+
+						<select id="Preference-extended-activity-start-time-minimum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+						<select id="Preference-extended-activity-start-time-maximum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+
+						<select id="Preference-extended-activity-end-time-minimum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+						<select id="Preference-extended-activity-end-time-maximum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+
+						<select id="Preference-extended-activity-time-minimum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+						<select id="Preference-extended-activity-time-maximum" class="time-input">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+
+
 						<button id="Preference-extended-apply">@Resources.Apply</button>
 					</div>
 				}

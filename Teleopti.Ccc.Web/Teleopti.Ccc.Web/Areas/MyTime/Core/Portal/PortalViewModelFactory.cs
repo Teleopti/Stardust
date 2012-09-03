@@ -109,9 +109,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 					};
 		}
 
-		private SectionNavigationItem createPreferenceNavigationItem()
+		private PreferenceNavigationItem createPreferenceNavigationItem()
 		{
-			return new SectionNavigationItem
+			var preferenceOptions = PreferenceOptions();
+			return new PreferenceNavigationItem
 			       	{
 			       		Action = "Index",
 			       		Controller = "Preference",
@@ -128,13 +129,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			       		               		new ToolBarSplitButton
 			       		               			{
 			       		               				Title = Resources.Preference,
-			       		               				Options = PreferenceOptions()
+			       		               				Options = preferenceOptions
 			       		               			},
 			       		               		new ToolBarButtonItem {Title = Resources.AddExtendedPreference, ButtonType = "add-extended"},
 			       		               		new ToolBarSeparatorItem(),
 			       		               		new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
-			       		               	}
+			       		               	},
+						PreferenceOptions = preferenceOptions,
+						ActivityOptions = ActivityOptions()
 			       	};
+		}
+
+		private IEnumerable<IOption> ActivityOptions()
+		{
+			return from a in _preferenceOptionsProvider.RetrieveActivityOptions().MakeSureNotNull()
+			       select new Option
+			              	{
+			              		Value = a.Id.ToString(),
+			              		Text = a.Description.Name,
+			              		Color = a.DisplayColor.ToHtml()
+			              	};
 		}
 
 		private IEnumerable<IOption> PreferenceOptions()

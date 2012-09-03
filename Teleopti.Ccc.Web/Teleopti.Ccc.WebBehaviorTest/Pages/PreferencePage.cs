@@ -26,6 +26,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Preference-extended-preference-container")]
 		public SelectBox ExtendedPreferenceSelectBox;
+		[FindBy(Id = "Preference-extended-start-time-minimum")]
+		public TextField ExtendedPreferenceStartTimeMinimum;
+		[FindBy(Id = "Preference-extended-start-time-maximum")]
+		public TextField ExtendedPreferenceStartTimeMaximum;
+		[FindBy(Id = "Preference-extended-end-time-minimum")]
+		public TextField ExtendedPreferenceEndTimeMinimum;
+		[FindBy(Id = "Preference-extended-end-time-maximum")]
+		public TextField ExtendedPreferenceEndTimeMaximum;
+		[FindBy(Id = "Preference-extended-work-time-minimum")]
+		public TextField ExtendedPreferenceWorkTimeMinimum;
+		[FindBy(Id = "Preference-extended-work-time-maximum")]
+		public TextField ExtendedPreferenceWorkTimeMaximum;
+		[FindBy(Id = "Preference-extended-activity-container")]
+		public SelectBox ExtendedPreferenceActivity;
+		[FindBy(Id = "Preference-extended-activity-start-time-minimum")]
+		public TextField ExtendedPreferenceActivityStartTimeMinimum;
+		[FindBy(Id = "Preference-extended-activity-start-time-maximum")]
+		public TextField ExtendedPreferenceActivityStartTimeMaximum;
+		[FindBy(Id = "Preference-extended-activity-end-time-minimum")]
+		public TextField ExtendedPreferenceActivityEndTimeMinimum;
+		[FindBy(Id = "Preference-extended-activity-end-time-maximum")]
+		public TextField ExtendedPreferenceActivityEndTimeMaximum;
+		[FindBy(Id = "Preference-extended-activity-work-time-minimum")]
+		public TextField ExtendedPreferenceActivityTimeMinimum;
+		[FindBy(Id = "Preference-extended-activity-work-time-maximum")]
+		public TextField ExtendedPreferenceActivityTimeMaximum;
 
 		[FindBy(Id = "Preference-period-feedback-view")]
 		public Div PreferencePeriodFeedbackView { get; set; }
