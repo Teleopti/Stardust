@@ -28,12 +28,12 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var nu = new Date().getTeleoptiTime();
 
 		//default-values
-		$('#asm-info-current-activity').text('-');
-		$('#asm-info-current-starttime').text(' ');
-		$('#asm-info-current-endtime').text(' ');
-		$('#asm-info-next-activity').text('-');
-		$('#asm-info-next-starttime').text(' ');
-		$('#asm-info-next-endtime').text(' ');
+		$('#asm-info-current-activity').text('');
+		$('#asm-info-current-starttime').text('');
+		$('#asm-info-current-endtime').html('');
+		$('#asm-info-next-activity').text('');
+		$('#asm-info-next-starttime').html('');
+		$('#asm-info-next-endtime').html('');
 
 		$('.asm-layer')
 			.each(function () {
@@ -53,7 +53,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					return false;
 				}
 			});
-		$('#asm-info-debug').text(new Date().getTeleoptiTime());
 	}
 
 	function _moveTimeLineToNow(serverMsSince1970, pixelsPerHour) {
