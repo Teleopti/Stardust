@@ -101,6 +101,3 @@
 	line-height: 1em;
 	font-size: 0.8em;
 }
-body > div > .ui-tooltip-content {
-    overflow:visible;
-}
