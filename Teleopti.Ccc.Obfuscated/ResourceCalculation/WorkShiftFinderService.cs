@@ -73,6 +73,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             IRuleSetBag bag = personPeriod.RuleSetBag;
 
             _shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_scheduleDateOnly, timeZone, bag, false);
+			if(_shiftList.Count == 0 && schedulingOptions.UsePreferences)
+				_shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_scheduleDateOnly, timeZone, bag, true);
 
             IWorkShiftCalculationResultHolder result = null;
             if(_shiftList.Count > 0)
