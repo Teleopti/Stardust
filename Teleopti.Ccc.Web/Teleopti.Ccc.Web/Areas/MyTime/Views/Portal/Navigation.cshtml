@@ -70,7 +70,7 @@
 				{
 					var preferenceNavigation = navSection as PreferenceNavigationItem;
 					var times = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0))
-					            let value = @Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(t))
+					            let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
 					            let text = TimeHelper.TimeOfDayFromTimeSpan(t)
 					            select new Option
 					                   	{
