@@ -10,11 +10,8 @@
 <script type="text/javascript">
 	$(function () {
 		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
-		var pixelsPerHour = @(pixelsPerHour);
-
-		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, pixelsPerHour);
+		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, @(pixelsPerHour));
 	});
-	
 </script>
 
 <div class="asm-outer-canvas ui-corner-all">
