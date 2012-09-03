@@ -85,12 +85,10 @@
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
-	margin-right: 1em;
 }
 
 .asm-info-canvas div
 {
-	margin-right: 1em;
 	text-align: left;
 	font-family: verdana;
 	font-size: 10px;
