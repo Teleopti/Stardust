@@ -67,10 +67,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapShiftCategoryToDestination()
 		{
 			var destination = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
-			var input = new PreferenceDayInput { Id = Guid.NewGuid() };
+			var input = new PreferenceDayInput { PreferenceId = Guid.NewGuid() };
 			var shiftCategory = new ShiftCategory(" ");
 
-			shiftCategoryRepository.Stub(x => x.Get(input.Id)).Return(shiftCategory);
+			shiftCategoryRepository.Stub(x => x.Get(input.PreferenceId)).Return(shiftCategory);
 
 			Mapper.Map<PreferenceDayInput, IPreferenceDay>(input, destination);
 
@@ -103,9 +103,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var shiftCategory = new ShiftCategory(" ");
 			shiftCategory.SetId(Guid.NewGuid());
-			var input = new PreferenceDayInput { Id = shiftCategory.Id.Value };
+			var input = new PreferenceDayInput { PreferenceId = shiftCategory.Id.Value };
 
-			shiftCategoryRepository.Stub(x => x.Get(input.Id)).Return(shiftCategory);
+			shiftCategoryRepository.Stub(x => x.Get(input.PreferenceId)).Return(shiftCategory);
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
@@ -117,9 +117,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var dayOffTemplate = new DayOffTemplate(new Description(" "));
 			dayOffTemplate.SetId(Guid.NewGuid());
-			var input = new PreferenceDayInput { Id = dayOffTemplate.Id.Value };
+			var input = new PreferenceDayInput { PreferenceId = dayOffTemplate.Id.Value };
 
-			dayOffRepository.Stub(x => x.Get(input.Id)).Return(dayOffTemplate);
+			dayOffRepository.Stub(x => x.Get(input.PreferenceId)).Return(dayOffTemplate);
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
@@ -131,9 +131,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var absence = new Absence();
 			absence.SetId(Guid.NewGuid());
-			var input = new PreferenceDayInput { Id = absence.Id.Value };
+			var input = new PreferenceDayInput { PreferenceId = absence.Id.Value };
 
-			absenceRepository.Stub(x => x.Get(input.Id)).Return(absence);
+			absenceRepository.Stub(x => x.Get(input.PreferenceId)).Return(absence);
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 

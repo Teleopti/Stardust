@@ -137,7 +137,46 @@
 						Ajax: function (options) {
 							equal(options.url, "Preference/Preference");
 							equal(options.data.Date, "2012-06-11");
-							equal(options.data.Id, "id");
+							equal(options.data.PreferenceId, "id");
+							options.success({
+								Preference: "a shift category",
+								Color: "black",
+								Extended: false
+							});
+						}
+					};
+
+					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+					viewModelDay.Date = "2012-06-11";
+
+					expect(5);
+
+					viewModelDay.SetPreference("id");
+
+					equal(viewModelDay.Preference(), "a shift category");
+					equal(viewModelDay.Color(), "black");
+				});
+
+				test("should set extended preference", function () {
+
+					var ajax = {
+						Ajax: function (options) {
+							equal(options.url, "Preference/Preference");
+							equal(options.data.Date, "2012-09-03", "Date");
+							equal(options.data.PreferenceId, "id1", "PreferenceId");
+							equal(options.data.StartTimeMinimum, "8:00", "StartTimeMinimum");
+							equal(options.data.StartTimeMaximum, "9:00", "StartTimeMaximum");
+							equal(options.data.EndTimeMinimum, "15:00");
+							equal(options.data.EndTimeMaximum, "18:00");
+							equal(options.data.WorkTimeMinimum, "6:00");
+							equal(options.data.WorkTimeMaximum, "8:00");
+							equal(options.data.ActivityId, "id2");
+							equal(options.data.ActivityStartTimeMinimum, "11:00");
+							equal(options.data.ActivityStartTimeMaximum, "12:00");
+							equal(options.data.ActivityEndTimeMinimum, "12:02");
+							equal(options.data.ActivityEndTimeMaximum, "13:00");
+							equal(options.data.ActivityTimeMinimum, "1:00");
+							equal(options.data.ActivityTimeMaximum, "0:30");
 							options.success({
 								Preference: "a shift category",
 								Color: "black",
@@ -147,14 +186,27 @@
 					};
 
 					var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
-					viewModelDay.Date = "2012-06-11";
+					viewModelDay.Date = "2012-09-03";
 
-					expect(6);
+					expect(16 + 1);
 
-					viewModelDay.SetPreference("id");
+					viewModelDay.SetPreference({
+						PreferenceId: "id1",
+						StartTimeMinimum: "8:00",
+						StartTimeMaximum: "9:00",
+						EndTimeMinimum: "15:00",
+						EndTimeMaximum: "18:00",
+						WorkTimeMinimum: "6:00",
+						WorkTimeMaximum: "8:00",
+						ActivityId: "id2",
+						ActivityStartTimeMinimum: "11:00",
+						ActivityStartTimeMaximum: "12:00",
+						ActivityEndTimeMinimum: "12:02",
+						ActivityEndTimeMaximum: "13:00",
+						ActivityTimeMinimum: "1:00",
+						ActivityTimeMaximum: "0:30"
+					});
 
-					equal(viewModelDay.Preference(), "a shift category");
-					equal(viewModelDay.Color(), "black");
 					equal(viewModelDay.Extended(), true);
 				});
 

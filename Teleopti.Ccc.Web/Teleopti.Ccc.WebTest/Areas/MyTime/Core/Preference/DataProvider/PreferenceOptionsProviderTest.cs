@@ -147,6 +147,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			result.Should().Be.Empty();
 		}
 
+		[Test]
+		public void ShouldReturnEmptyActivityIfNotActivity()
+		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = new Person
+			             	{
+			             		WorkflowControlSet = new WorkflowControlSet
+			             		                     	{
+			             		                     		AllowedPreferenceActivity = null
+			             		                     	}
+			             	};
+			loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
+			var target = new PreferenceOptionsProvider(loggedOnUser);
+
+			var result = target.RetrieveActivityOptions();
+
+			result.Should().Have.Count.EqualTo(0);
+		}
+
 
 
 	}
