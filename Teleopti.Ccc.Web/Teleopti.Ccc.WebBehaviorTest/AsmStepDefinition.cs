@@ -47,28 +47,32 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTimeAsCurrentEndTime(string time)
 		{
 			var element = _popup.Element(Find.ById("asm-info-current-endtime"));
-			EventualAssert.That(() => element.Text, Is.EqualTo(time));
+			var stringToCompare = string.IsNullOrEmpty(time) ? null : time;
+			EventualAssert.That(() => element.Text, Is.EqualTo(stringToCompare));
 		}
 
 		[Then(@"I should see '(.*)' as current start time")]
 		public void ThenIShouldSeeTimeAsCurrentStartTime(string time)
 		{
 			var element = _popup.Element(Find.ById("asm-info-current-starttime"));
-			EventualAssert.That(() => element.Text, Is.EqualTo(time));
+			var stringToCompare = string.IsNullOrEmpty(time) ? null : time;
+			EventualAssert.That(() => element.Text, Is.EqualTo(stringToCompare));
 		}
 
 		[Then(@"I should see '(.*)' as next end time")]
 		public void ThenIShouldSeeTimeAsNextEndTime(string time)
 		{
 			var element = _popup.Element(Find.ById("asm-info-next-endtime"));
-			EventualAssert.That(() => element.Text, Is.EqualTo(time));
+			var stringToCompare = string.IsNullOrEmpty(time) ? null : time;
+			EventualAssert.That(() => element.Text, Is.EqualTo(stringToCompare));
 		}
 
 		[Then(@"I should see '(.*)' as next start time")]
 		public void ThenIShouldSeeTimeAsNextStartTime(string time)
 		{
 			var element = _popup.Element(Find.ById("asm-info-next-starttime"));
-			EventualAssert.That(() => element.Text, Is.EqualTo(time));
+			var stringToCompare = string.IsNullOrEmpty(time) ? null : time;
+			EventualAssert.That(() => element.Text, Is.EqualTo(stringToCompare));
 		}
 
 		[AfterScenario("ASM")]

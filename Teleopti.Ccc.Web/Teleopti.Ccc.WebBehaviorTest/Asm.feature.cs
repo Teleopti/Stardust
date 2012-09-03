@@ -204,10 +204,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Write name and time of next activity")]
-        public virtual void WriteNameAndTimeOfNextActivity()
+        [NUnit.Framework.DescriptionAttribute("Write name and time of current activity when it doesn\'t exist")]
+        public virtual void WriteNameAndTimeOfCurrentActivityWhenItDoesnTExist()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write name and time of next activity", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write name and time of current activity when it doesn\'t exist", ((string[])(null)));
 #line 52
 this.ScenarioSetup(scenarioInfo);
 #line 8
@@ -215,16 +215,66 @@ this.FeatureBackground();
 #line 53
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 54
- testRunner.And("Current time is \'2030-01-01 10:00\'");
+ testRunner.And("Current time is \'2030-01-01 18:00\'");
 #line 55
  testRunner.When("I view my regional settings");
 #line 56
  testRunner.And("I click ASM link");
 #line 57
- testRunner.Then("I should see Lunch as next activity");
+ testRunner.Then("I should see \'\' as current start time");
 #line 58
+ testRunner.And("I should see \'\' as current end time");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Write name and time of next activity when it doesn\'t exist")]
+        public virtual void WriteNameAndTimeOfNextActivityWhenItDoesnTExist()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write name and time of next activity when it doesn\'t exist", ((string[])(null)));
+#line 60
+this.ScenarioSetup(scenarioInfo);
+#line 8
+this.FeatureBackground();
+#line 61
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 62
+ testRunner.And("Current time is \'2030-01-01 18:00\'");
+#line 63
+ testRunner.When("I view my regional settings");
+#line 64
+ testRunner.And("I click ASM link");
+#line 65
+ testRunner.Then("I should see \'\' as next start time");
+#line 66
+ testRunner.And("I should see \'\' as next end time");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Write name and time of next activity")]
+        public virtual void WriteNameAndTimeOfNextActivity()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write name and time of next activity", ((string[])(null)));
+#line 68
+this.ScenarioSetup(scenarioInfo);
+#line 8
+this.FeatureBackground();
+#line 69
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 70
+ testRunner.And("Current time is \'2030-01-01 10:00\'");
+#line 71
+ testRunner.When("I view my regional settings");
+#line 72
+ testRunner.And("I click ASM link");
+#line 73
+ testRunner.Then("I should see Lunch as next activity");
+#line 74
  testRunner.And("I should see \'11:00\' as next start time");
-#line 59
+#line 75
  testRunner.And("I should see \'12:00\' as next end time");
 #line hidden
             this.ScenarioCleanup();

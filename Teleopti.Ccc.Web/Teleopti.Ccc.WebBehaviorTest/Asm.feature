@@ -49,6 +49,22 @@ Scenario: Write name and time of current activity
 	And I should see '08:00' as current start time
 	And I should see '11:00' as current end time
 
+Scenario: Write name and time of current activity when it doesn't exist
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 18:00'
+	When I view my regional settings
+	And I click ASM link
+	Then I should see '' as current start time
+	And I should see '' as current end time
+
+Scenario: Write name and time of next activity when it doesn't exist
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 18:00'
+	When I view my regional settings
+	And I click ASM link
+	Then I should see '' as next start time
+	And I should see '' as next end time
+
 Scenario: Write name and time of next activity
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 10:00'

@@ -26,6 +26,15 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function _updateInfoCanvas() {
 		var nu = new Date().getTeleoptiTime();
+
+		//default-values
+		$('#asm-info-current-activity').text('-');
+		$('#asm-info-current-starttime').text(' ');
+		$('#asm-info-current-endtime').text(' ');
+		$('#asm-info-next-activity').text('-');
+		$('#asm-info-next-starttime').text(' ');
+		$('#asm-info-next-endtime').text(' ');
+
 		$('.asm-layer')
 			.each(function () {
 				var startMs = parseFloat($(this).data('asm-start-milliseconds'));
