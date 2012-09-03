@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeLunchAsNextActivity()
 		{
 			var element = _popup.Element(Find.ById("asm-info-next-activity"));
-			EventualAssert.That(() => element.Text, Is.EqualTo(TestData.ActivityPhone.Description.Name));
+			EventualAssert.That(() => element.Text, Is.EqualTo(TestData.ActivityLunch.Description.Name));
 		}
 
 		[Then(@"I should see '(.*)' as current end time")]

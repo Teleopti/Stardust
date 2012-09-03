@@ -25,26 +25,25 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _updateInfoCanvas() {
-		var currentStart;
-		var currentEnd;
-		var currentActivity = '';
 		var nu = new Date().getTeleoptiTime();
 		$('.asm-layer')
 			.each(function () {
-				var start = parseFloat($(this).data('asm-start-milliseconds'));
-				var end = parseFloat($(this).data('asm-end-milliseconds'));
-				if (nu >= start && nu < end) {
-					currentStart = $(this).data('asm-start-time');
-					currentEnd = $(this).data('asm-end-time');
-					currentActivity = $(this).data('asm-activity');
+				var startMs = parseFloat($(this).data('asm-start-milliseconds'));
+				var endMs = parseFloat($(this).data('asm-end-milliseconds'));
+				if (nu >= startMs && nu < endMs) {
+					$('#asm-info-current-activity').text($(this).data('asm-activity'));
+					$('#asm-info-current-starttime').text($(this).data('asm-start-time'));
+					$('#asm-info-current-endtime').text($(this).data('asm-end-time'));
+
+					var nextLayer = $(this).next();
+					if (nextLayer.length > 0) {
+						$('#asm-info-next-activity').text(nextLayer.data('asm-activity'));
+						$('#asm-info-next-starttime').text(nextLayer.data('asm-start-time'));
+						$('#asm-info-next-endtime').text(nextLayer.data('asm-end-time'));
+					}
 					return false;
 				}
 			});
-		if (currentActivity != '') {
-			$('#asm-info-current-activity').text(currentActivity);
-			$('#asm-info-current-starttime').text(currentStart);
-			$('#asm-info-current-endtime').text(currentEnd);
-		}
 		$('#asm-info-debug').text(new Date().getTeleoptiTime());
 	}
 
