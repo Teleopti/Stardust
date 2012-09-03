@@ -12,27 +12,6 @@
 		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
 		var pixelsPerHour = @(pixelsPerHour);
 
-		var currentStart;
-		var currentEnd;
-		var currentActivity ='';
-		var nu = new Date().getTeleoptiTime();
-		$('.asm-layer')
-			.each(function() {
-				var start = parseFloat($(this).data('asm-start-milliseconds'));
-				var end = parseFloat($(this).data('asm-end-milliseconds'));
-				if(nu >=start && nu <end) {
-					currentStart = $(this).data('asm-start-time');
-					currentEnd =  $(this).data('asm-end-time');
-					currentActivity = $(this).data('asm-activity');
-					return false;
-				}
-			});
-		if(currentActivity!='') {
-			$('#asm-info-current-activity').text(currentActivity);
-			$('#asm-info-current-starttime').text(currentStart);
-			$('#asm-info-current-endtime').text(currentEnd);
-		}
-
 		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, pixelsPerHour);
 	});
 	
