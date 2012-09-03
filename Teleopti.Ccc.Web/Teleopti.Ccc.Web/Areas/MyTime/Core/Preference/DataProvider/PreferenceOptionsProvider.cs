@@ -33,7 +33,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public IEnumerable<IActivity> RetrieveActivityOptions()
 		{
-			return GetWorkflowControlSetData(w => new[] { w.AllowedPreferenceActivity });
+			var activity = GetWorkflowControlSetData(w => w.AllowedPreferenceActivity, () => null);
+			if (activity == null)
+				return new IActivity[] {};
+			return new[] {activity};
 		}
 
 		private IEnumerable<T> GetWorkflowControlSetData<T>(Func<IWorkflowControlSet, IEnumerable<T>> getData)

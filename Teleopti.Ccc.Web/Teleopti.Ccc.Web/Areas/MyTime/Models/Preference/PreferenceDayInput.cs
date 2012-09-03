@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 	public class PreferenceDayInput
 	{
 		public DateOnly Date { get; set; }
-		public Guid Id { get; set; }
+		public Guid PreferenceId { get; set; }
 	}
 }

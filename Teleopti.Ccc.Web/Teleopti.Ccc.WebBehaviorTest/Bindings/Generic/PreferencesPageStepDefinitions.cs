@@ -82,13 +82,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				ScenarioContext.Current.Pending();
 
 			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Preference);
-			if (fields.StartTimeMinimum != null)
-			{
-				ScenarioContext.Current.Pending();
+
+			if (fields.StartTimeMinimum == null)
 				return;
-				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Value = fields.StartTimeMinimum;
-			}
-			return;
+			ScenarioContext.Current.Pending();
+
+			if (fields.StartTimeMinimum != null) Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Value = fields.StartTimeMinimum;
 			if (fields.StartTimeMaximum != null) Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Value = fields.StartTimeMaximum;
 			if (fields.EndTimeMinimum != null) Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimum.Value = fields.EndTimeMinimum;
 			if (fields.EndTimeMaximum != null) Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Value = fields.EndTimeMaximum;
