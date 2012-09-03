@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
            
             _person = PersonFactory.CreatePerson("test");
             _person.PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
+            _person.PermissionInformation.SetUICulture(CultureInfo.CurrentUICulture);
             _scheduleDayReadModelComparer = new ScheduleDayReadModelComparer();
         }
 
@@ -96,7 +97,73 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
             var message = _scheduleDayReadModelComparer.FindSignificantChanges(null, existingReadModel,
                                                                               _person.PermissionInformation.Culture(),
-                                                                              new DateOnly(2012, 08, 31));
+                                                                              new DateOnly(2012, 01, 01));
+            Assert.IsNotNull(message);
+        }
+
+        [Test]
+        public void ShouldNotDetectFromNullToNoWorkDay()
+        {
+            ScheduleDayReadModel newReadModel = new ScheduleDayReadModel();
+            newReadModel.StartDateTime = new DateTime();
+            newReadModel.EndDateTime = new DateTime();
+            newReadModel.Workday = false;
+
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, null,
+                                                                              _person.PermissionInformation.Culture(),
+                                                                              new DateOnly(DateTime.Now.Date));
+            Assert.IsNull(message);
+        }
+
+        [Test]
+        public void ShouldNotDetectFromNoWorkDayToNull()
+        {
+            ScheduleDayReadModel existingReadModel = new ScheduleDayReadModel();
+            existingReadModel.StartDateTime = new DateTime();
+            existingReadModel.EndDateTime = new DateTime();
+            existingReadModel.Workday = false;
+
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(null, existingReadModel,
+                                                                              _person.PermissionInformation.Culture(),
+                                                                              new DateOnly(DateTime.Now.Date));
+            Assert.IsNull(message);
+        }
+
+        [Test]
+        public void ShouldDetectIfWorkDayIsChangedToNoWorkDay()
+        {
+            ScheduleDayReadModel newReadModel = new ScheduleDayReadModel();
+            newReadModel.StartDateTime = new DateTime();
+            newReadModel.EndDateTime = new DateTime();
+            newReadModel.Workday = false;
+
+            ScheduleDayReadModel existingReadModel = new ScheduleDayReadModel();
+            existingReadModel.StartDateTime = new DateTime();
+            existingReadModel.EndDateTime = new DateTime();
+            existingReadModel.Workday = true;
+
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
+                                                                              _person.PermissionInformation.Culture(),
+                                                                              new DateOnly(DateTime.Now.Date));
+            Assert.IsNotNull(message);
+        }
+
+        [Test]
+        public void ShouldDetectIfNoWorkDayIsChangedToWorkDay()
+        {
+            ScheduleDayReadModel newReadModel = new ScheduleDayReadModel();
+            newReadModel.StartDateTime = new DateTime();
+            newReadModel.EndDateTime = new DateTime();
+            newReadModel.Workday = true;
+
+            ScheduleDayReadModel existingReadModel = new ScheduleDayReadModel();
+            existingReadModel.StartDateTime = new DateTime();
+            existingReadModel.EndDateTime = new DateTime();
+            existingReadModel.Workday = false;
+
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
+                                                                              _person.PermissionInformation.Culture(),
+                                                                              new DateOnly(DateTime.Now.Date));
             Assert.IsNotNull(message);
         }
     }
