@@ -12,21 +12,18 @@
 		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
 		var pixelsPerHour = @(pixelsPerHour);
 
-
 		var currentStart;
 		var currentEnd;
 		var currentActivity ='';
 		var nu = new Date().getTeleoptiTime();
 		$('.asm-layer')
 			.each(function() {
-				var startSpan = $(this).find('.asm-layer-start');
-				var endSpan = $(this).find('.asm-layer-end');
-				var start = parseFloat(startSpan.attr('milliseconds'));
-				var end = parseFloat(endSpan.attr('milliseconds'));
+				var start = parseFloat($(this).data('asm-start-milliseconds'));
+				var end = parseFloat($(this).data('asm-end-milliseconds'));
 				if(nu >=start && nu <end) {
-					currentStart = startSpan.text();
-					currentEnd = endSpan.text();
-					currentActivity = $(this).find('.asm-layer-activity').text();
+					currentStart = $(this).data('asm-start-time');
+					currentEnd =  $(this).data('asm-end-time');
+					currentActivity = $(this).data('asm-activity');
 					return false;
 				}
 			});
@@ -48,11 +45,13 @@
 			@foreach (var layer in Model.Layers)
 			{
 				<span class="asm-layer ui-corner-all" style="left:@((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth)px;
-                                                                 	padding-left:@((layer.EndJavascriptBaseDate - layer.StartJavascriptBaseDate) * pixelsPerHour /60 / 60/1000)px;
-                                                                 	background-color: @(layer.Color)">
-					<span class="asm-layer-start" style="display: none;" milliseconds="@(layer.StartJavascriptBaseDate)">@(layer.StartTimeText)</span>
-					<span class="asm-layer-end" style="display: none;" milliseconds="@(layer.EndJavascriptBaseDate)">@(layer.EndTimeText)</span>
-					<span class="asm-layer-activity" style="display: none;">@(layer.Payload)</span>
+                                                                  padding-left:@((layer.EndJavascriptBaseDate - layer.StartJavascriptBaseDate) * pixelsPerHour /60 / 60/1000)px;
+                                                                  background-color: @(layer.Color)"
+						data-asm-start-milliseconds="@(layer.StartJavascriptBaseDate)"
+						data-asm-start-time="@(layer.StartTimeText)"
+						data-asm-end-milliseconds="@(layer.EndJavascriptBaseDate)"
+						data-asm-end-time="@(layer.EndTimeText)"
+						data-asm-activity="@(layer.Payload)">
 				</span>
 			}
 			@for (var day = 0; day <= 2; day++)
