@@ -48,18 +48,3 @@
 	background-image: url(../Images/button_sprite.png);
 	background-position: -150px -122px;
 }
-
-
-/* jquery.ui.combobox.css */
-
-button.ui-button-icon-only {
-	height: 20px; 
-	width: 1.8em;
-	background-position: -12px -90px;
-	border: 0;
-	margin-left: -18px;
-}
-
-input[type=TEXT].ui-autocomplete-input {
-    vertical-align: top;
-}
