@@ -83,13 +83,12 @@
     </Compile>
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
-    <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\WeekScheduleTimeIndicatorStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftCategoryStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\TimeStepDefinition.cs" />
     <Compile Include="Bindings\Generic\TimeStepDefinition.cs" />
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
@@ -100,11 +99,6 @@
     <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
     <Compile Include="Bindings\Generic\PreferencesPageStepDefinitions.cs" />
     <Compile Include="Pages\GlobalMenuPage.cs" />
-    <Compile Include="Asm.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Asm.feature</DependentUpon>
-    </Compile>
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
       <AutoGen>True</AutoGen>

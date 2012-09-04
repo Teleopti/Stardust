@@ -68,9 +68,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _initTodayButton() {
 		$('#Schedule-today-button')
-			.click(function() {
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
-			});
+		.click(function() {
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
+		});
+	}
+
+	function _initTimeIndicator() {
+		$('#Schedule-today-button')
+		.click(function () {
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
+		});
 	}
 
 	return {
@@ -80,6 +87,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 			Teleopti.MyTimeWeb.Schedule.Request.Init();
 			_initTodayButton();
+			_initTimeIndicator();
 		},
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
