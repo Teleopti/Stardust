@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IList<IPerson> _selectedPersons = new List<IPerson>();
         private readonly SkillDayGridControl _skillDayGridControl;
         private readonly SkillIntradayGridControl _skillIntradayGridControl;
+    	private readonly SkillWeekGridControl _skillWeekGridControl;
         //private bool _intradayMode;
         private DateOnly _currentIntraDayDate;
         private DockingManager _dockingManager;
@@ -420,6 +421,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             _skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart")
                                             {ContextMenu = contextMenuStripResultView.ContextMenu};
 
+			_skillWeekGridControl = new SkillWeekGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
+
             setUpZomMenu();
             var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
             _container = lifetimeScope.BeginLifetimeScope();
@@ -491,6 +494,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             AddControlHelpContext(_chartControlSkillData);
             AddControlHelpContext(_skillDayGridControl);
             AddControlHelpContext(_skillIntradayGridControl);
+			AddControlHelpContext(_skillWeekGridControl);
 
             displayOptionsFromSetting();
             _dateNavigateControl.SetAvailableTimeSpan(loadingPeriod);
@@ -2915,6 +2919,66 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region Virtual skill handling
 
+		private void SkillGridMenuItemPeriodClick(object sender, EventArgs e)
+		{
+			_skillResultViewSetting = SkillResultViewSetting.Period;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = true;
+			toolStripRadioButtonIntraday.Checked = false;
+			toolStripRadioButtonDay.Checked = false;
+			toolStripRadioButtonWeek.Checked = false;
+			toolStripRadioButtonMonth.Checked = false;
+			toolStripRadioButtonPeriod.Checked = true;
+
+			_currentSelectedGridRow = null;
+
+			drawSkillGrid();
+			reloadChart();		
+		}
+
+		private void SkillGridMenuItemMonthClick(object sender, EventArgs e)
+		{
+			_skillResultViewSetting = SkillResultViewSetting.Month;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = true;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
+			toolStripRadioButtonIntraday.Checked = false;
+			toolStripRadioButtonDay.Checked = false;
+			toolStripRadioButtonWeek.Checked = false;
+			toolStripRadioButtonMonth.Checked = true;
+			toolStripRadioButtonPeriod.Checked = false;
+
+			_currentSelectedGridRow = null;
+
+			drawSkillGrid();
+			reloadChart();	
+		}
+
+		private void SkillGridMenuItemWeekClick(object sender, EventArgs e)
+		{
+			_skillResultViewSetting = SkillResultViewSetting.Week;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = true;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
+			toolStripRadioButtonIntraday.Checked = false;
+			toolStripRadioButtonDay.Checked = false;
+			toolStripRadioButtonWeek.Checked = true;
+			toolStripRadioButtonMonth.Checked = false;
+			toolStripRadioButtonPeriod.Checked = false;
+
+			_currentSelectedGridRow = null;
+
+			drawSkillGrid();
+			reloadChart();	
+		}
+
         private void skillGridMenuItemDay_Click(object sender, EventArgs e)
         {
 			//_intradayMode = false;
@@ -2931,8 +2995,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         	_skillResultViewSetting = SkillResultViewSetting.Day;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = true;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
 			toolStripRadioButtonIntraday.Checked = false;
 			toolStripRadioButtonDay.Checked = true;
+			toolStripRadioButtonWeek.Checked = false;
+			toolStripRadioButtonMonth.Checked = false;
+			toolStripRadioButtonPeriod.Checked = false;
 			_currentSelectedGridRow = null;
 
 			drawSkillGrid();
@@ -2954,12 +3024,18 @@ namespace Teleopti.Ccc.Win.Scheduling
         	_skillResultViewSetting = SkillResultViewSetting.Intraday;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = true;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
+			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
 			toolStripRadioButtonIntraday.Checked = true;
 			toolStripRadioButtonDay.Checked = false;
+			toolStripRadioButtonWeek.Checked = false;
+			toolStripRadioButtonMonth.Checked = false;
+			toolStripRadioButtonPeriod.Checked = false;
 			_currentSelectedGridRow = null;
 
 			drawSkillGrid();
-			reloadChart();
+			reloadChart();	
         }
 
         private void skillGridMenuItem_Click(object sender, EventArgs e)
@@ -3356,6 +3432,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _skillIntradayGridControl.SaveSetting();
             _skillDayGridControl.SaveSetting();
+			_skillWeekGridControl.SaveSetting();
         }
 
         private void updateShiftEditor()
@@ -3767,6 +3844,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _skillIntradayGridControl.RefreshGrid();
 
                     _skillDayGridControl.RefreshGrid(new List<DateOnly>(e.ChangedDays));
+
+					_skillWeekGridControl.RefreshGrid();
                 	refreshChart();
                 }
 
@@ -3797,6 +3876,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             updateRibbon(ControlType.SchedulerGridSkillData);
         }
+
+		private void skillWeekGridControl_GotFocus(object sender, EventArgs e)
+		{
+			updateRibbon(ControlType.SchedulerGridSkillData);
+		}
 
         private void wpfShiftEditor1_ShiftUpdated(object sender, ShiftEditorEventArgs e)
         {
@@ -3961,6 +4045,18 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   e.GridToChartAxis, e.LineColor);
         }
 
+		private void skillWeekGridControlSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+		{
+			if (_skillWeekGridControl.CurrentSelectedGridRow != null)
+			{
+				_currentSelectedGridRow = _skillWeekGridControl.CurrentSelectedGridRow;
+				IChartSeriesSetting chartSeriesSettings =
+					_skillWeekGridControl.CurrentSelectedGridRow.ChartSeriesSettings;
+				_gridrowInChartSettingButtons.SetButtons(chartSeriesSettings.Enabled, chartSeriesSettings.AxisLocation,
+														 chartSeriesSettings.SeriesType, chartSeriesSettings.Color);
+			}
+		}
+
         private void skillIntradayGridControl_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
             if (_skillIntradayGridControl.CurrentSelectedGridRow != null)
@@ -4004,6 +4100,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             int column = Math.Max(1,
                                   (int) GridChartManager.GetIntervalValueForChartPoint(_chartControlSkillData, e.Point));
+
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week) && !_chartInIntradayMode)
+				_skillWeekGridControl.ScrollCellInView(0, column);
 
             //if (_intradayMode && _chartInIntradayMode)
 			if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday) && _chartInIntradayMode)
@@ -4641,6 +4741,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			refreshSummarySkillIfActive();
             _skillIntradayGridControl.RefreshGrid();
             _skillDayGridControl.RefreshGrid();
+			_skillWeekGridControl.RefreshGrid();
 			refreshChart();
             statusStrip1.Refresh();
             Application.DoEvents();
@@ -4660,6 +4761,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					refreshSummarySkillIfActive();
                     _skillIntradayGridControl.RefreshGrid();
                     _skillDayGridControl.RefreshGrid();
+					_skillWeekGridControl.RefreshGrid();
 					refreshChart();
                     _scheduleCounter = 0;
                 }
@@ -4694,6 +4796,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 //_grid.Refresh();
                 _skillIntradayGridControl.RefreshGrid();
                 _skillDayGridControl.RefreshGrid();
+				_skillWeekGridControl.RefreshGrid();
 				refreshChart();
 
                 if (_scheduleView != null)
@@ -5640,12 +5743,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void setupContextMenuSkillGrid()
         {
-            var skillGridMenuItem = new ToolStripMenuItem(Resources.Day) {Name = "Day", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Day)};
+			var skillGridMenuItem = new ToolStripMenuItem(Resources.Period) { Name = "Period", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Period) };
+        	skillGridMenuItem.Click += SkillGridMenuItemPeriodClick;
+			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+
+			skillGridMenuItem = new ToolStripMenuItem(Resources.Month) { Name = "Month", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Month) };
+			skillGridMenuItem.Click += SkillGridMenuItemMonthClick;
+			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+
+			skillGridMenuItem = new ToolStripMenuItem(Resources.Week) { Name = "Week", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Week) };
+			skillGridMenuItem.Click += SkillGridMenuItemWeekClick;
+			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+
+            skillGridMenuItem = new ToolStripMenuItem(Resources.Day) {Name = "Day", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Day)};
             skillGridMenuItem.Click += skillGridMenuItemDay_Click;
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+
             skillGridMenuItem = new ToolStripMenuItem(Resources.Intraday) {Name = "Intraday", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Intraday)};
             skillGridMenuItem.Click += skillGridMenuItemIntraDay_Click;
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+
             skillGridMenuItem = new ToolStripMenuItem(Resources.UseShrinkage);
             skillGridMenuItem.Click += toolStripMenuItemUseShrinkage_Click;
             skillGridMenuItem.Checked = _shrinkage;
@@ -5662,6 +5779,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
             _skillDayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
             _skillIntradayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
+        	_skillWeekGridControl.ContextMenuStrip = _contextMenuSkillGrid;
         }
 
         private void setUpZomMenu()
@@ -6494,10 +6612,18 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var skill = (ISkill) tab.Tag;
                     IAggregateSkill aggregateSkillSkill = skill;
 
+					if(_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
+					{
+						_chartDescription = skill.Name;
+						positionControl(_skillWeekGridControl);
+						ActiveControl = _skillWeekGridControl;
+						_skillWeekGridControl.DrawDayGrid(_schedulerState, skill);
+						_skillWeekGridControl.DrawDayGrid(_schedulerState, skill);	
+					}
                     //if (_intradayMode)
-					if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+					else if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
                     {
-                        drawIntraday(skill, aggregateSkillSkill);
+                        drawIntraday(skill, aggregateSkillSkill);	
                     }
                     else
                     {
@@ -6519,8 +6645,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if(!aggregateSkillSkill.IsVirtual)
 				return;
 
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
+			{
+				_skillWeekGridControl.SetDataSource(_schedulerState, skill);	
+			}
+
 			//if (_intradayMode)
-			if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			else if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
 			{
 				var skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 					aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate,
@@ -6746,8 +6877,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void reloadChart()
         {
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Day,
+												  _chartDescription);
+				_gridChartManager.ReloadChart(_skillWeekGridControl, description);
+				_chartInIntradayMode = false;
+			}
+
             //if (_intradayMode)
-			if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			else if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
             {
                 string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Intraday,
                                                    _chartDescription);
@@ -6794,9 +6934,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             _skillDayGridControl.GotFocus += skillDayGridControl_GotFocus;
             _skillIntradayGridControl.GotFocus += skillIntradayGridControl_GotFocus;
+			_skillWeekGridControl.GotFocus += skillWeekGridControl_GotFocus;
 
             _skillDayGridControl.SelectionChanged += skillDayGridControl_SelectionChanged;
             _skillIntradayGridControl.SelectionChanged += skillIntradayGridControl_SelectionChanged;
+			_skillWeekGridControl.SelectionChanged += skillWeekGridControlSelectionChanged;
 
             _gridrowInChartSettingButtons.LineInChartSettingsChanged +=
                 gridlinesInChartSettings_LineInChartSettingsChanged;
@@ -6991,10 +7133,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (_skillIntradayGridControl != null)
                 _skillIntradayGridControl.GotFocus -= skillIntradayGridControl_GotFocus;
 
+			if (_skillWeekGridControl != null)
+				_skillWeekGridControl.GotFocus -= skillWeekGridControl_GotFocus;
+
             if (_skillDayGridControl != null)
                 _skillDayGridControl.SelectionChanged -= skillDayGridControl_SelectionChanged;
             if (_skillIntradayGridControl != null)
                 _skillIntradayGridControl.SelectionChanged -= skillIntradayGridControl_SelectionChanged;
+
+			if (_skillWeekGridControl != null)
+				_skillWeekGridControl.SelectionChanged -= skillWeekGridControlSelectionChanged;
 
             if (_gridrowInChartSettingButtons != null)
             {
