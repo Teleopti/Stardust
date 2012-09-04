@@ -13,12 +13,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly Func<IShiftCategoryRepository> _shiftCategoryRepository;
 		private readonly Func<IDayOffRepository> _dayOffRepository;
 		private readonly Func<IAbsenceRepository> _absenceRepository;
+		private readonly Func<IActivityRepository> _activityRespository;
 
-		public PreferenceDayInputMappingProfile(Func<IShiftCategoryRepository> shiftCategoryRepository, Func<IDayOffRepository> dayOffRepository, Func<IAbsenceRepository> absenceRepository)
+		public PreferenceDayInputMappingProfile(Func<IShiftCategoryRepository> shiftCategoryRepository, Func<IDayOffRepository> dayOffRepository, Func<IAbsenceRepository> absenceRepository, Func<IActivityRepository> activityRespository)
 		{
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_dayOffRepository = dayOffRepository;
 			_absenceRepository = absenceRepository;
+			_activityRespository = activityRespository;
 		}
 
 		protected override void Configure()
@@ -30,15 +32,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 
 			CreateMap<PreferenceDayInput, IPreferenceRestriction>()
-				.ConstructUsing(s => new PreferenceRestriction())
+				.ConstructUsing(s =>
+					{
+						var restriction = new PreferenceRestriction();
+						if (s.ActivityPreferenceId != Guid.Empty)
+						{
+							restriction.AddActivityRestriction(
+								new ActivityRestriction(_activityRespository.Invoke().Get(s.ActivityPreferenceId))
+									{
+										StartTimeLimitation = new StartTimeLimitation(s.ActivityEarliestStartTime, s.ActivityLatestStartTime),
+										EndTimeLimitation = new EndTimeLimitation(s.ActivityEarlistEndTime, s.ActivityLatestEndTime),
+										WorkTimeLimitation = new WorkTimeLimitation(s.ActivityMinimumTime, s.ActivityMaximumTime)
+									});
+						}
+						return restriction;
+					})
 				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => _shiftCategoryRepository.Invoke().Get(s.PreferenceId)))
 				.ForMember(d => d.Absence, o => o.MapFrom(s => _absenceRepository.Invoke().Get(s.PreferenceId)))
 				.ForMember(d => d.DayOffTemplate, o => o.MapFrom(s => _dayOffRepository.Invoke().Get(s.PreferenceId)))
-				.ForMember(d => d.ActivityRestrictionCollection, o => o.Ignore())
 				.ForMember(d => d.MustHave, o => o.Ignore())
-				.ForMember(d => d.StartTimeLimitation, o => o.Ignore())
-				.ForMember(d => d.EndTimeLimitation, o => o.Ignore())
-				.ForMember(d => d.WorkTimeLimitation, o => o.Ignore())
+				.ForMember(d => d.ActivityRestrictionCollection, o => o.Ignore())
+				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => new StartTimeLimitation(s.EarliestStartTime,s.LatestStartTime)))
+				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => new EndTimeLimitation(s.EarliestEndTime,s.LatestEndTime)))
+				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(s => new WorkTimeLimitation(s.MinimumWorkTime,s.MaximumWorkTime)))
 				;
 
 		}

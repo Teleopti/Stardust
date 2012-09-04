@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IShiftCategoryRepository shiftCategoryRepository;
 		private IDayOffRepository dayOffRepository;
 		private IAbsenceRepository absenceRepository;
+		private IActivityRepository activityRepository;
 
 		[SetUp]
 		public void Setup()
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			shiftCategoryRepository = MockRepository.GenerateMock<IShiftCategoryRepository>();
 			dayOffRepository = MockRepository.GenerateMock<IDayOffRepository>();
 			absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
+			activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 
 			Mapper.Reset();
 			Mapper.Initialize(
@@ -43,7 +46,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 							new PreferenceDayInputMappingProfile(
 						        () => shiftCategoryRepository,
 						        () => dayOffRepository,
-						        () => absenceRepository
+						        () => absenceRepository,
+								() => activityRepository
 						        )
 							);
 					}
@@ -140,5 +144,82 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.Restriction.Absence.Should().Be.SameInstanceAs(absence);
 		}
 
+		[Test]
+		public void ShouldMapStartTimeLimitation()
+		{
+			var earliest = TimeSpan.FromHours(8);
+			var latest = TimeSpan.FromHours(9);
+			var input = new PreferenceDayInput { EarliestStartTime = earliest,LatestStartTime = latest};
+
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+
+			result.Restriction.StartTimeLimitation.StartTime.Should().Be.EqualTo(earliest);
+			result.Restriction.StartTimeLimitation.EndTime.Should().Be.EqualTo(latest);
+		}
+
+		[Test]
+		public void ShouldMapEndTimeLimitation()
+		{
+			var earliest = TimeSpan.FromHours(16);
+			var latest = TimeSpan.FromHours(17);
+			var input = new PreferenceDayInput { EarliestEndTime = earliest, LatestEndTime = latest };
+
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+
+			result.Restriction.EndTimeLimitation.StartTime.Should().Be.EqualTo(earliest);
+			result.Restriction.EndTimeLimitation.EndTime.Should().Be.EqualTo(latest);
+		}
+
+		[Test]
+		public void ShouldMapWorkTimeLimitation()
+		{
+			var shortest = TimeSpan.FromHours(7);
+			var longest = TimeSpan.FromHours(8);
+			var input = new PreferenceDayInput { MinimumWorkTime = shortest, MaximumWorkTime = longest };
+
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+
+			result.Restriction.WorkTimeLimitation.StartTime.Should().Be.EqualTo(shortest);
+			result.Restriction.WorkTimeLimitation.EndTime.Should().Be.EqualTo(longest);
+		}
+
+		[Test]
+		public void ShouldMapActivityRestriction()
+		{
+			var shortest = TimeSpan.FromHours(0.5);
+			var longest = TimeSpan.FromHours(1);
+
+			var earliestStartTime = TimeSpan.FromHours(11);
+			var latestStartTime = TimeSpan.FromHours(12);
+
+			var earliestEndTime = TimeSpan.FromHours(11.5);
+			var latestEndTime = TimeSpan.FromHours(13);
+
+			var activity = new Activity("Lunch");
+			activity.SetId(Guid.NewGuid());
+
+			var input = new PreferenceDayInput
+				{
+					ActivityMinimumTime = shortest,
+					ActivityMaximumTime = longest,
+					ActivityPreferenceId = activity.Id.Value,
+					ActivityEarliestStartTime = earliestStartTime,
+					ActivityLatestStartTime = latestStartTime,
+					ActivityEarlistEndTime = earliestEndTime,
+					ActivityLatestEndTime = latestEndTime
+				};
+
+			activityRepository.Stub(x => x.Get(input.ActivityPreferenceId)).Return(activity);
+
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+
+			var activityRestriction = result.Restriction.ActivityRestrictionCollection.Single();
+			activityRestriction.StartTimeLimitation.StartTime.Should().Be.EqualTo(earliestStartTime);
+			activityRestriction.StartTimeLimitation.EndTime.Should().Be.EqualTo(latestStartTime);
+			activityRestriction.EndTimeLimitation.StartTime.Should().Be.EqualTo(earliestEndTime);
+			activityRestriction.EndTimeLimitation.EndTime.Should().Be.EqualTo(latestEndTime);
+			activityRestriction.WorkTimeLimitation.StartTime.Should().Be.EqualTo(shortest);
+			activityRestriction.WorkTimeLimitation.EndTime.Should().Be.EqualTo(longest);
+		}
 	}
 }
