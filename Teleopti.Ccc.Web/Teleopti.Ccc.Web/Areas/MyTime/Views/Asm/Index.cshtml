@@ -23,9 +23,7 @@
 				<span class="asm-layer ui-corner-all" style="left:@((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth)px;
 																						padding-left:@((layer.EndJavascriptBaseDate - layer.StartJavascriptBaseDate) * pixelsPerHour / 60 / 60 / 1000)px;
 																						background-color: @(layer.Color)"
-						data-asm-start-milliseconds="@(layer.StartJavascriptBaseDate)"
 						data-asm-start-time="@(layer.StartTimeText)"
-						data-asm-end-milliseconds="@(layer.EndJavascriptBaseDate)"
 						data-asm-end-time="@(layer.EndTimeText)"
 						data-asm-activity="@(layer.Payload)"></span>
 	}

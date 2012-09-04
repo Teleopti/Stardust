@@ -39,21 +39,19 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _updateInfoCanvas() {
-		var nu = new Date().getTeleoptiTime();
-
 		//default-values
 		$('#asm-info-current-activity').text('');
 		$('#asm-info-current-starttime').text('');
-		$('#asm-info-current-endtime').html('');
+		$('#asm-info-current-endtime').text('');
 		$('#asm-info-next-activity').text('');
-		$('#asm-info-next-starttime').html('');
-		$('#asm-info-next-endtime').html('');
-
+		$('#asm-info-next-starttime').text('');
+		$('#asm-info-next-endtime').text('');
+		var timelinePosition = parseFloat($('.asm-time-marker').css('width')) - parseFloat($(".asm-sliding-schedules").css('left'));
 		$('.asm-layer')
 			.each(function () {
-				var startMs = parseFloat($(this).data('asm-start-milliseconds'));
-				var endMs = parseFloat($(this).data('asm-end-milliseconds'));
-				if (nu >= startMs && nu < endMs) {
+				var startPos = parseFloat($(this).css('left'));
+				var endPos = startPos + parseFloat($(this).css('padding-left'));
+				if (startPos <= timelinePosition && endPos > timelinePosition) {
 					$('#asm-info-current-activity').text($(this).data('asm-activity'));
 					$('#asm-info-current-starttime').text($(this).data('asm-start-time'));
 					$('#asm-info-current-endtime').text($(this).data('asm-end-time'));
