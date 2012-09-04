@@ -1,10 +1,8 @@
 ﻿using System.Collections;
-using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -13,25 +11,23 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     [TestFixture]
     public class DayOffOptimizationLegalStateValidatorListCreatorTest
     {
-
         private DayOffOptimizationLegalStateValidatorListCreator _target;
         private IDaysOffPreferences _dayOffPreferences;
         private IOfficialWeekendDays _officialWeekendDays;
         private MinMax<int> _periodIndexRange;
         private BitArray _periodDays;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _dayOffPreferences = new DaysOffPreferences();
-            _officialWeekendDays = new OfficialWeekendDays(new CultureInfo("se-SE"));
+
+            _officialWeekendDays = new OfficialWeekendDays();
             _periodIndexRange = new MinMax<int>(13, 19);
             _periodDays = new BitArray(28);
         }
 
-        #region Build Active Validators tests
-
-        [Test]
+    	[Test]
         public void VerifyConsecutiveDaysOffValidatorCreation()
         {
             _dayOffPreferences = DaysOffPreferencesFactory.CreateWithFalseDefaultValues();
@@ -131,7 +127,5 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.AreEqual(1, _target.BuildActiveValidatorList().Count);
             Assert.IsInstanceOf(typeof(KeepFreeWeekendDayValidator), _target.BuildActiveValidatorList()[0]);
         }
-
-        #endregion
     }
 }

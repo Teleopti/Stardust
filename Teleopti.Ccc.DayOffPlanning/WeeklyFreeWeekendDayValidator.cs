@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DayOffPlanning
         private IList<int> WeekendDayIndexes(BitArray periodDays, int minimumIndex, int maximumIndex)
         {
             IList<int> result = new List<int>();
-            IList<int> officialWeekendDays = _officialWeekendDays.WeekendDayIndexes();
+            IList<int> officialWeekendDays = _officialWeekendDays.WeekendDayIndexesRelativeStartDayOfWeek();
 
             for (int i = minimumIndex; i <= maximumIndex; i++)
             {

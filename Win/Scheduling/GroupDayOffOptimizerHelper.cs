@@ -299,15 +299,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             
             IPerson person = scheduleMatrix.Person;
             // create decisionmakers
-            CultureInfo culture = person.PermissionInformation.Culture();
 
             IList<IDayOffLegalStateValidator> legalStateValidators =
                 OptimizerHelperHelper.CreateLegalStateValidators(person, scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
 
             IEnumerable<IDayOffDecisionMaker> decisionMakers =
-                OptimizerHelperHelper.CreateDecisionMakers(culture, person, scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
+                OptimizerHelperHelper.CreateDecisionMakers(person, scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
 
-            IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions(scheduleMatrixArray, culture);
+            IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions(scheduleMatrixArray);
             ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
                 = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, dayOffPreferences, 25);
 

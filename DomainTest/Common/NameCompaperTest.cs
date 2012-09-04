@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             names = new List<Name> { name1, name2, name3, name4, name5 };
 
-            _cultureInfo = CultureInfo.CreateSpecificCulture("se-SE");
+            _cultureInfo = CultureInfo.CreateSpecificCulture("sv-SE");
             _target = new NameComparer(_cultureInfo);
 
             IList<Name> sortedList = names.OrderBy(a => a, _target).ToList();
