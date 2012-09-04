@@ -299,9 +299,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             
             // create decisionmakers
 
-            IList<IDayOffLegalStateValidator> legalStateValidators =
-                OptimizerHelperHelper.CreateLegalStateValidators(scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
-
             IEnumerable<IDayOffDecisionMaker> decisionMakers =
                 OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
 
