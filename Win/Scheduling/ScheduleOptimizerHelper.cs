@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
 					new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-                IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro = OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(scheduleMatrix, schedulePartModifyAndRollbackService, _container);
+                IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro = OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(schedulePartModifyAndRollbackService, _container);
                 workShiftBackToLegalStateServicePro.Execute(scheduleMatrix, schedulingOptions);
 
                 backgroundWorker.ReportProgress(1);
@@ -1105,7 +1105,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IScheduleMatrixOriginalStateContainer originalStateContainer)
         {
             IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-                 OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(scheduleMatrix, rollbackService, _container);
+                 OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
 
             IScheduleMatrixLockableBitArrayConverter scheduleMatrixArrayConverter =
                 new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);

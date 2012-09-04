@@ -1,98 +1,59 @@
 ﻿@using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
+@using Teleopti.Ccc.Web.Core
 @model AsmViewModel
 @{
 	const double pixelsPerHour = 50;
-	const int timeLineHourBorderSize = 1;
-	const double timeLineHourWidth = (pixelsPerHour) - timeLineHourBorderSize;
-	const int timeMarkerPosition = 120;
-	var milliSecondsSince1970 = Model.StartDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+	const double timeLineHourWidth = (pixelsPerHour) - 1; //"1" due to border size
+	double canvasStartMsSince1970 = Model.StartDate.SubtractJavascriptBaseDate().TotalMilliseconds;
+	const int timeLineMarkerWidth = 150;
 }
-<style>
-	.asm-timeline-border
-	{
-		border: solid green;
-		top: 30px;
-		position: relative;
-		height: 50px; 
-		overflow: hidden;
-	}
-	
-	.asm-timeline
-	{
-		border: solid red;
-		position: relative;
-		height: 40px;
-		left: 100px;
-	}
-	
-	.asm-timeline-numbers {
-		float: left;
-	}
-	
-	.asm-layer
-	{
-		position: absolute;
-		height: 50px;
-	}
-	
-	.asm-layer-extender
-	{
-		padding-left: 100px;
-	}
-	
-	.asm-now-marker
-	{
-		background-color: black;
-		opacity: 0.5;
-		position: absolute;
-		height: 100%;
-	}
-</style>
-
-<script>
-	var refreshMilliSeconds = 100;
-
-	$(function() {
-		setInterval(function() { _moveTimeLineToNow(); }, refreshMilliSeconds);
+<script type="text/javascript">
+	$(function () {
+		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
+		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, @(pixelsPerHour));
 	});
-	
-	function _moveTimeLineToNow() {
-		var clientMsSince1970 = new Date().getTime();
-		var serverMsSince1970 = @milliSecondsSince1970;
-		var msSinceStart = clientMsSince1970 - serverMsSince1970;
-		var hoursSinceStart = msSinceStart / 1000 / 60/60;
-		var startPixel = -(@pixelsPerHour * hoursSinceStart);
-		$('.asm-timeline').css('left', (startPixel +@timeMarkerPosition) + 'px');
-		
-		//debug
-		$('#clockDebug').text(''+new Date(clientMsSince1970));
-		$('#leftdebug').text('' + startPixel);
-	}
 </script>
-
-<span id="clockDebug"></span><br/>
-Antal lager: @(Model.Layers.Count)<br/>
-left-position på hela skiten: <span id="leftdebug"></span>
-
-<div class="asm-timeline-border">
-	<div class="asm-now-marker" style="width: @(timeMarkerPosition)px;">
+<div class="asm-outer-canvas ui-corner-all">
+	<div class="asm-schedule-canvas ui-corner-all">
+		<div class="asm-time-marker" style="width:@(timeLineMarkerWidth)px">
+		</div>
+		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px;">
+			@foreach (var layer in Model.Layers)
+	{
+				<span class="asm-layer ui-corner-all" style="left:@((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth)px;
+																						padding-left:@((layer.EndJavascriptBaseDate - layer.StartJavascriptBaseDate) * pixelsPerHour / 60 / 60 / 1000)px;
+																						background-color: @(layer.Color)"
+						data-asm-start-milliseconds="@(layer.StartJavascriptBaseDate)"
+						data-asm-start-time="@(layer.StartTimeText)"
+						data-asm-end-milliseconds="@(layer.EndJavascriptBaseDate)"
+						data-asm-end-time="@(layer.EndTimeText)"
+						data-asm-activity="@(layer.Payload)"></span>
+	}
+			<!-- ko foreach: timeLines -->
+			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;"><span class="asm-timeline-number ui-corner-all"
+				data-bind="text: $data"></span></span>
+			<!-- /ko -->
+		</div>
 	</div>
-	<div class="asm-timeline" style="width:@(3*24*pixelsPerHour)px">
-		@foreach (var layer in Model.Layers)
-  {
-			<span class="asm-layer" style="
-			left:@(layer.RelativeStartInMinutes * pixelsPerHour/60)px;
-			padding-left:@(layer.LengthInMinutes * pixelsPerHour/60)px;
-			background-color: @(layer.Color)"></span>
-  }
-		@for (var day = 0; day <= 2; day++)
-  {
-	  for (var hour = 0; hour < 24; hour++)
-	  {
-	  	<span class="asm-timeline-numbers" style="width:@(timeLineHourWidth)px;
-															border-right:@(timeLineHourBorderSize)px solid black;">@(hour)</span>
-	  }
-  }
+	<div class="asm-current-info">
+		<div class="asm-info-canvas ui-corner-all">
+			<span style="width: 50px;">
+				<div id="asm-info-current-starttime">
+				</div>
+				<div id="asm-info-next-starttime">
+				</div>
+			</span><span style="width: 150px;">
+				<div id="asm-info-current-activity">
+				</div>
+				<div id="asm-info-next-activity">
+				</div>
+			</span><span>
+				<div id="asm-info-current-endtime">
+				</div>
+				<div id="asm-info-next-endtime">
+				</div>
+			</span>
+		</div>
 	</div>
+	<div class="clearboth" />
 </div>
-​ 

@@ -11,7 +11,7 @@ GO
 -- ======change log=======
 -- When			Who		Why
 -- 2012-03-13	DavidJ	Fix Azure compability => Remove unwanted SET commands, No SELECT INTO
-
+-- 2012-09-03	Ola		Use the #TempPersonPeriodWithEndDate everywhere for speed
 -- =============================================
 CREATE PROCEDURE [ReadModel].[LoadOrganizationForSelector]
 @type nvarchar(200), -- Organization or for example Contract, ContractSchedule
@@ -63,11 +63,17 @@ BEGIN
 		FirstName [nvarchar](50),
 		LastName [nvarchar](50),
 		EmploymentNumber [nvarchar](50),
-		Team [nvarchar](50)
+		Team [nvarchar](50),
+		Parent [uniqueidentifier],
+		[Contract]  [uniqueidentifier],
+		[ContractSchedule]  [uniqueidentifier],
+		PartTimePercentage  [uniqueidentifier],
+		RuleSetBag [uniqueidentifier],
+		PeriodId [uniqueidentifier]
 	)
 	
 	INSERT INTO #TempPersonPeriodWithEndDate 
-		SELECT Person.Id, FirstName, LastName, EmploymentNumber,Team  
+		SELECT Person.Id, FirstName, LastName, EmploymentNumber,Team, Parent, [Contract], [ContractSchedule], PartTimePercentage, RuleSetBag, pp.Id
 		FROM PersonPeriodWithEndDate pp
 		INNER JOIN Person ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 		and ISNULL(TerminalDate, '2100-01-01') >= @ondate
@@ -127,11 +133,9 @@ BEGIN
 	IF @type = 'Contract'
 	BEGIN
 		INSERT #otherResult
-		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
+		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
 		FirstName, LastName, EmploymentNumber  
-		FROM Person p
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+		FROM  #TempPersonPeriodWithEndDate pp 
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 		INNER JOIN Contract c ON pp.Contract = c.Id AND c.IsDeleted = 0
@@ -141,11 +145,9 @@ BEGIN
 	BEGIN
 
 		INSERT #otherResult
-		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
+		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
 		FirstName, LastName, EmploymentNumber  
-		FROM Person p
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+		FROM #TempPersonPeriodWithEndDate pp 
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 		INNER JOIN ContractSchedule c ON pp.ContractSchedule = c.Id AND c.IsDeleted = 0
@@ -155,11 +157,9 @@ BEGIN
 	IF @type = 'PartTimePercentage'
 	BEGIN
 		INSERT #otherResult
-		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,
+		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,
 		FirstName, LastName, EmploymentNumber   
-		FROM Person p
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+		FROM #TempPersonPeriodWithEndDate pp
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 		INNER JOIN PartTimePercentage c ON pp.PartTimePercentage = c.Id AND c.IsDeleted = 0
@@ -186,11 +186,9 @@ BEGIN
 	BEGIN
 		
 		INSERT #otherResult
-		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,  
+		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,  
 		FirstName, LastName, EmploymentNumber  
-		FROM Person p 
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+		FROM #TempPersonPeriodWithEndDate pp
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 		INNER JOIN RuleSetBag c ON pp.RuleSetBag = c.Id AND c.IsDeleted = 0 
@@ -200,14 +198,12 @@ BEGIN
 	BEGIN
 
 		INSERT #otherResult
-		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,s.Name,  
+		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit ,s.Name,  
 		FirstName, LastName, EmploymentNumber  
-		FROM Person p
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+		FROM #TempPersonPeriodWithEndDate pp 
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-		INNER JOIN PersonSkill ps ON pp.Id = ps.Parent
+		INNER JOIN PersonSkill ps ON PeriodId = ps.Parent
 		INNER JOIN Skill s ON ps.Skill = s.Id AND s.IsDeleted = 0
 	 
 	END

@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
 
             if (_saveFileDialog.ShowDialog() == DialogResult.OK) textBox1.Text = _saveFileDialog.FileName;
+            _saveFileDialog.Dispose();
         }
 
         private void setColors()
@@ -66,7 +67,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             if (String.IsNullOrEmpty(textBox1.Text)) return false;
             var commandModel = stateObj.ExportSkillToFileCommandModel;
             commandModel.FileName = textBox1.Text;
-            _saveFileDialog.Dispose();
             GetSelectedCheckBox(stateObj);
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
