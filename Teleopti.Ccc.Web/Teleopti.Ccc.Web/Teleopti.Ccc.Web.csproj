@@ -236,6 +236,7 @@
     <Compile Include="Core\RequestContext\IdentityProvider.cs" />
     <Compile Include="Core\RequestContext\IIdentityProvider.cs" />
     <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
+    <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 								new ActivityRestriction(_activityRespository.Invoke().Get(s.ActivityPreferenceId))
 									{
 										StartTimeLimitation = new StartTimeLimitation(s.ActivityEarliestStartTime, s.ActivityLatestStartTime),
-										EndTimeLimitation = new EndTimeLimitation(s.ActivityEarlistEndTime, s.ActivityLatestEndTime),
+										EndTimeLimitation = new EndTimeLimitation(s.ActivityEarliestEndTime, s.ActivityLatestEndTime),
 										WorkTimeLimitation = new WorkTimeLimitation(s.ActivityMinimumTime, s.ActivityMaximumTime)
 									});
 						}

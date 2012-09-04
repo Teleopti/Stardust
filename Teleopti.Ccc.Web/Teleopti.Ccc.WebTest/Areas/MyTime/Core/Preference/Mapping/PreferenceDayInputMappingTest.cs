@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					ActivityPreferenceId = activity.Id.Value,
 					ActivityEarliestStartTime = earliestStartTime,
 					ActivityLatestStartTime = latestStartTime,
-					ActivityEarlistEndTime = earliestEndTime,
+					ActivityEarliestEndTime = earliestEndTime,
 					ActivityLatestEndTime = latestEndTime
 				};
 

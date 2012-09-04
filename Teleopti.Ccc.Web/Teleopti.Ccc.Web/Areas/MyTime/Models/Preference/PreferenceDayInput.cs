@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public TimeSpan? ActivityEarliestStartTime { get; set; }
 		public TimeSpan? ActivityLatestStartTime { get; set; }
 
-		public TimeSpan? ActivityEarlistEndTime { get; set; }
+		public TimeSpan? ActivityEarliestEndTime { get; set; }
 		public TimeSpan? ActivityLatestEndTime { get; set; }
 	}
 }
