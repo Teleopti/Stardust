@@ -263,11 +263,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (skill == null) return;
 
-			//if (InvokeRequired)
-			//{
-			//    BeginInvoke(new MethodInvoker(() => SetDataSource(stateHolder, skill)));
-			//}
-
 			_weeks = new List<DateOnlyPeriod>();
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection();
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
@@ -275,7 +270,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			foreach (var dateOnly in _dates)
 			{
 				var weekPeriod = DateHelper.GetWeekPeriod(dateOnly, CultureInfo.CurrentCulture);
-				if (!_weeks.Contains(weekPeriod)) _weeks.Add(weekPeriod);
+				if (!_weeks.Contains(weekPeriod)) 
+				{
+					var weekDays = weekPeriod.DayCollection();
+					var exists = weekDays.All(weekDateOnly => _dates.Contains(weekDateOnly));
+					if(exists) _weeks.Add(weekPeriod);
+				}
 			}
 
 			IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>> skillWeekPeriods = new Dictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>();
