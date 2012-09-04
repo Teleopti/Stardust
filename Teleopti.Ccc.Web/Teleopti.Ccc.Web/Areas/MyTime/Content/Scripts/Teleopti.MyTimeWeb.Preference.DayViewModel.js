@@ -127,6 +127,8 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	};
 
 	this.ReadPreference = function (data) {
+		if (!data) return;
+
 		self.Color(data.Color);
 		self.Preference(data.Preference);
 		self.Extended(data.Extended);

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			if (fields.StartTimeMinimum == null)
 				return;
-			ScenarioContext.Current.Pending();
+			
 
 			if (fields.StartTimeMinimum != null) Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Value = fields.StartTimeMinimum;
 			if (fields.StartTimeMaximum != null) Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Value = fields.StartTimeMaximum;
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			if (fields.WorkTimeMinimum != null) Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMinimum.Value = fields.WorkTimeMinimum;
 			if (fields.WorkTimeMaximum != null) Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.Value = fields.WorkTimeMaximum;
 
-			if (fields.Activity != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Activity);
+			if (fields.Activity != null) Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Select(fields.Activity);
 			if (fields.ActivityStartTimeMinimum != null) Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Value = fields.ActivityStartTimeMinimum;
 			if (fields.ActivityStartTimeMaximum != null) Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Value = fields.ActivityStartTimeMaximum;
 			if (fields.ActivityEndTimeMinimum != null) Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Value = fields.ActivityEndTimeMinimum;
@@ -106,6 +106,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see extended preference with")]
 		public void ThenIShouldSeeExtendedPanelWith(Table table)
 		{
+			ScenarioContext.Current.Pending();
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
 			var extendedPreference = Pages.Pages.PreferencePage.ExtendedPreferenceForDate(fields.Date);
 

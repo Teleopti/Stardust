@@ -6,6 +6,17 @@
 
 AddExtendedPreferenceFormViewModel = function () {
 	this.PreferenceId = ko.observable();
-	this.StartTimeMinimum = ko.observable();
-	this.ActivityId = ko.observable();
+	this.EarliestStartTime = ko.observable();
+	this.LatestStartTime = ko.observable();
+	this.EarliestEndTime = ko.observable();
+	this.LatestEndTime = ko.observable();
+	this.MinimumWorkTime = ko.observable();
+	this.MaximumWorkTime = ko.observable();
+	this.ActivityEarliestStartTime = ko.observable();
+	this.ActivityLatestStartTime = ko.observable();
+	this.ActivityEarliestEndTime = ko.observable();
+	this.ActivityLatestEndTime = ko.observable();
+	this.ActivityPreferenceId = ko.observable();
+	this.ActivityMinimumTime = ko.observable();
+	this.ActivityMaximumTime = ko.observable();
 };

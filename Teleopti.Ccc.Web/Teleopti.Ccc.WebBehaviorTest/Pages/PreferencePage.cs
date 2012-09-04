@@ -26,31 +26,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Preference-extended-preference-container")]
 		public SelectBox ExtendedPreferenceSelectBox;
-		[FindBy(Id = "Preference-extended-start-time-minimum")]
+		[FindBy(Id = "Preference-extended-start-time-minimum-input")]
 		public TextField ExtendedPreferenceStartTimeMinimum;
-		[FindBy(Id = "Preference-extended-start-time-maximum")]
+		[FindBy(Id = "Preference-extended-start-time-maximum-input")]
 		public TextField ExtendedPreferenceStartTimeMaximum;
-		[FindBy(Id = "Preference-extended-end-time-minimum")]
+		[FindBy(Id = "Preference-extended-end-time-minimum-input")]
 		public TextField ExtendedPreferenceEndTimeMinimum;
-		[FindBy(Id = "Preference-extended-end-time-maximum")]
+		[FindBy(Id = "Preference-extended-end-time-maximum-input")]
 		public TextField ExtendedPreferenceEndTimeMaximum;
-		[FindBy(Id = "Preference-extended-work-time-minimum")]
+		[FindBy(Id = "Preference-extended-work-time-minimum-input")]
 		public TextField ExtendedPreferenceWorkTimeMinimum;
-		[FindBy(Id = "Preference-extended-work-time-maximum")]
+		[FindBy(Id = "Preference-extended-work-time-maximum-input")]
 		public TextField ExtendedPreferenceWorkTimeMaximum;
 		[FindBy(Id = "Preference-extended-activity-container")]
 		public SelectBox ExtendedPreferenceActivity;
-		[FindBy(Id = "Preference-extended-activity-start-time-minimum")]
+		[FindBy(Id = "Preference-extended-activity-start-time-minimum-input")]
 		public TextField ExtendedPreferenceActivityStartTimeMinimum;
-		[FindBy(Id = "Preference-extended-activity-start-time-maximum")]
+		[FindBy(Id = "Preference-extended-activity-start-time-maximum-input")]
 		public TextField ExtendedPreferenceActivityStartTimeMaximum;
-		[FindBy(Id = "Preference-extended-activity-end-time-minimum")]
+		[FindBy(Id = "Preference-extended-activity-end-time-minimum-input")]
 		public TextField ExtendedPreferenceActivityEndTimeMinimum;
-		[FindBy(Id = "Preference-extended-activity-end-time-maximum")]
+		[FindBy(Id = "Preference-extended-activity-end-time-maximum-input")]
 		public TextField ExtendedPreferenceActivityEndTimeMaximum;
-		[FindBy(Id = "Preference-extended-activity-work-time-minimum")]
+		[FindBy(Id = "Preference-extended-activity-time-minimum-input")]
 		public TextField ExtendedPreferenceActivityTimeMinimum;
-		[FindBy(Id = "Preference-extended-activity-work-time-maximum")]
+		[FindBy(Id = "Preference-extended-activity-time-maximum-input")]
 		public TextField ExtendedPreferenceActivityTimeMaximum;
 
 		[FindBy(Id = "Preference-period-feedback-view")]
