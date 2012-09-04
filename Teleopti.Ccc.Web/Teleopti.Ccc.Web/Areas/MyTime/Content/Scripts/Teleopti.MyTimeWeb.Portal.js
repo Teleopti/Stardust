@@ -333,8 +333,6 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
             }, function () {
                 $(this).removeClass('ui-state-hover');
             });
-
-            $(".henke").css('cursor', 'pointer');
         }
     };
 })(jQuery);
