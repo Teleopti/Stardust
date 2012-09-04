@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +9,6 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     public class TuiCaseSolverTest
     {
         private TuiCaseSolver _target;
-        private CultureInfo _culture;
         private IDayOffBackToLegalStateFunctions _functions;
         private ILockableBitArray _bitArray;
         private IDaysOffPreferences _daysOffPreferences;
@@ -19,8 +17,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void Setup()
         {
             _bitArray = array1();
-            _culture = CultureInfo.CreateSpecificCulture("en-GB");
-            _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _functions = new DayOffBackToLegalStateFunctions(_bitArray);
             _daysOffPreferences = new DaysOffPreferences();
 			_target = new TuiCaseSolver(_bitArray, _functions, _daysOffPreferences, 20, 1);
         }
@@ -96,7 +93,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         {
             _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 6);
             _bitArray = array3();
-            _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _functions = new DayOffBackToLegalStateFunctions(_bitArray);
 			_target = new TuiCaseSolver(_bitArray, _functions, _daysOffPreferences, 20, 1);
             Assert.AreEqual(MinMaxNumberOfResult.Ok, _target.ResolvableState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());

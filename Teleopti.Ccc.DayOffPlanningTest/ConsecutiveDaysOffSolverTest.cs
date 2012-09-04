@@ -1,4 +1,3 @@
-using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
@@ -10,7 +9,6 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     public class ConsecutiveDaysOffSolverTest
     {
         private IDayOffBackToLegalStateSolver _target;
-        private CultureInfo _culture;
         private IDayOffBackToLegalStateFunctions _functions;
         private LockableBitArray _bitArray;
         private IDaysOffPreferences _daysOffPreferences;
@@ -19,8 +17,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void Setup()
         {
             _bitArray = array1();
-            _culture = CultureInfo.CreateSpecificCulture("en-GB");
-            _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _functions = new DayOffBackToLegalStateFunctions(_bitArray);
             _daysOffPreferences = ruleSetForTest();
             _target = new ConsecutiveDaysOffSolver(_bitArray, _functions, _daysOffPreferences, 20);
         }

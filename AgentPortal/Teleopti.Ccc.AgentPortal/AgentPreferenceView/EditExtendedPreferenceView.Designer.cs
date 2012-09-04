@@ -206,7 +206,7 @@
             this.outlookTimePickerWorkTimeMin.DefaultResolution = 1;
             this.outlookTimePickerWorkTimeMin.EnableNull = true;
             this.outlookTimePickerWorkTimeMin.Location = new System.Drawing.Point(574, 28);
-            this.outlookTimePickerWorkTimeMin.MaxTime = System.TimeSpan.Parse("1.12:00:00");
+            this.outlookTimePickerWorkTimeMin.MaxTime = System.TimeSpan.Parse("23:59:59");
             this.outlookTimePickerWorkTimeMin.Name = "outlookTimePickerWorkTimeMin";
             this.outlookTimePickerWorkTimeMin.Size = new System.Drawing.Size(74, 21);
             this.outlookTimePickerWorkTimeMin.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -221,7 +221,7 @@
             this.outlookTimePickerWorkTimeMax.DefaultResolution = 1;
             this.outlookTimePickerWorkTimeMax.EnableNull = true;
             this.outlookTimePickerWorkTimeMax.Location = new System.Drawing.Point(654, 28);
-            this.outlookTimePickerWorkTimeMax.MaxTime = System.TimeSpan.Parse("1.12:00:00");
+            this.outlookTimePickerWorkTimeMax.MaxTime = System.TimeSpan.Parse("23:59:59");
             this.outlookTimePickerWorkTimeMax.Name = "outlookTimePickerWorkTimeMax";
             this.outlookTimePickerWorkTimeMax.Size = new System.Drawing.Size(74, 21);
             this.outlookTimePickerWorkTimeMax.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;

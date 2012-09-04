@@ -102,13 +102,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
 					return false;
-				IList<DateOnly> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions);
+				IList<DateOnly> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions, allMatrixes);
 				if (removedDays == null)
 					return false;
 
 				List<DateOnly> allDates = new List<DateOnly>(daysOffToRemove);
 				allDates.AddRange(removedDays);
-				if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(allDates, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions, _groupPersonBuilderForOptimization))
+				if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(allDates, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions, _groupPersonBuilderForOptimization, allMatrixes))
 					return false;
 			}
 			

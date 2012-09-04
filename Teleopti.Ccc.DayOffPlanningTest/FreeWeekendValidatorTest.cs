@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
@@ -11,19 +10,15 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     [TestFixture]
     public class FreeWeekendValidatorSwedenTest
     {
-        #region Variables
-
-        private FreeWeekendValidator _target;
+    	private FreeWeekendValidator _target;
         private MinMax<int> _periodRange;
         private BitArray _bitArray;
         private IOfficialWeekendDays _officialWeekendDays;
 
-        #endregion
-
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
-            _officialWeekendDays = new OfficialWeekendDays(new CultureInfo("se-SE"));
+            _officialWeekendDays = new OfficialWeekendDays();
             _bitArray = createBitArrayForTest();
         }
 
@@ -47,10 +42,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.IsFalse(_target.IsValid(_bitArray, 13));
         }
 
-
-        #region Week before and after
-
-        [Test]
+    	[Test]
         public void VerifyFirstValidDayInPeriod()
         {
             _periodRange = new MinMax<int>(12, 19);
@@ -86,9 +78,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 
         }
 
-        #endregion
-
-        private static BitArray createBitArrayForTest()
+    	private static BitArray createBitArrayForTest()
         {
             bool[] values = new bool[]
                                 {
@@ -133,19 +123,15 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     [TestFixture]
     public class FreeWeekendValidatorUSTest
     {
-        #region Variables
-
-        private IDayOffLegalStateValidator _target;
+    	private IDayOffLegalStateValidator _target;
         private MinMax<int> _periodRange;
         private BitArray _bitArray;
         private IOfficialWeekendDays _officialWeekendDays;
 
-        #endregion
-
-        [SetUp]
+    	[SetUp]
         public void Setup()
-        {
-            _officialWeekendDays = new OfficialWeekendDays(new CultureInfo("en-US"));
+    	{
+            _officialWeekendDays = new OfficialWeekendDays();
             _periodRange = new MinMax<int>(7, 13);
             _bitArray = createBitArrayForTest();
         }
@@ -193,19 +179,15 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     [TestFixture]
     public class FreeWeekendValidatorArabicTest
     {
-        #region Variables
-
-        private IDayOffLegalStateValidator _target;
+    	private IDayOffLegalStateValidator _target;
         private MinMax<int> _periodRange;
         private BitArray _bitArray;
         private IOfficialWeekendDays _officialWeekendDays;
 
-        #endregion
-
-        [SetUp]
+    	[SetUp]
         public void Setup()
-        {
-            _officialWeekendDays = new OfficialWeekendDays(new CultureInfo("ar-AE"));
+    	{
+            _officialWeekendDays = new OfficialWeekendDays();
             _periodRange = new MinMax<int>(7, 13);
             _bitArray = createBitArrayForTest();
         }
