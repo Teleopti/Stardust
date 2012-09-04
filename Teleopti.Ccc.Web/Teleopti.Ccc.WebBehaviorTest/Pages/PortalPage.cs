@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		}
 
 		[FindBy(Id = "asm-button")]
-		public Button AsmButton { get; set; }
+		public Span AsmButton { get; set; }
 
 		[FindBy(Id = "signout")]
 		public Link SignOutLink;
