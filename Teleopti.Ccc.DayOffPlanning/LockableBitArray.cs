@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.DayOffPlanning
                 PeriodArea = new MinMax<int>(0, bitArrayCount - 1);
         }
 
-
         public BitArray DaysOffBitArray
         {
             get { return _dayOffBits; }
