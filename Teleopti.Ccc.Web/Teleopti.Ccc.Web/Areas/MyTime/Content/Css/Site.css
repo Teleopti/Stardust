@@ -402,7 +402,7 @@ html.full-height #push{
 .icon.validation-req{background-position: -432px 0;}
 .icon.validation-error{background-position: -575px 0;}
 .icon.toolbar-addTextRequest {background-position: 0px -511px; width: 24px}
-.icon.toolbar-today {background-position: -155px -26px; width: 24px}
+.icon.toolbar-today {background-position: -155px -26px;width: 24px;margin-left: 19px;}
 .icon.preference-warning {	background-position: -159px -54px; width: 16px;	height: 16px; }
 
 .text-request {
@@ -589,7 +589,6 @@ header {
 #toolbar-right{width: 253px;}
 .toolbar-inner{background-position: right -35px; font-size: 9px; height: 21px; padding: 7px;}
 
-.date-range-selector{padding-right: 19px;}
 .date-range-selector .datepicker{
 	 background: #fff url(../Images/button_sprite.png) right -120px no-repeat; 
 	 border: 0px;

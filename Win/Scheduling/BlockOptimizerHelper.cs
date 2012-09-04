@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IScheduleMatrixOriginalStateContainer originalStateContainer)
         {
             IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-                 OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(scheduleMatrix, rollbackService, _container);
+                 OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
 
             IScheduleMatrixLockableBitArrayConverter scheduleMatrixArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
             IDaysOffPreferences daysOffPreferences = optimizerPreferences.DaysOff;

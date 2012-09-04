@@ -1,3 +1,4 @@
+using System.Net;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -46,7 +47,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[ActionName("Preference")]
 		public virtual JsonResult GetPreference(DateOnly date)
 		{
-			return Json(_viewModelFactory.CreateDayViewModel(date), JsonRequestBehavior.AllowGet);
+			var model = _viewModelFactory.CreateDayViewModel(date);
+			if (model==null)
+			{
+				Response.StatusCode = (int) HttpStatusCode.NoContent;
+				return null;
+			}
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]

@@ -5,13 +5,17 @@ cls
 SET /A ERRORLEV=0
 
 ::uninstall MSI
-MsiExec.exe /X{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /qn
-SET /A ERRORLEV=%ERRORLEVEL%
-IF %ERRORLEV% NEQ 0 (
-SET /A ERRORLEV=1
-GOTO :error
+::64-bit
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /v DisplayName
+if %errorlevel% NEQ 1 (
+MsiExec.exe /X{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /qn /L "uninstall-server.log"
 )
 
+::32-bit
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /v DisplayName
+if %errorlevel% NEQ 1 (
+MsiExec.exe /X{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /qn /L "uninstall-server.log"
+)
 
 ::Drop IIS website and App-pools"%systemroot%\System32\inetsrv\appcmd" delete app "Default Web Site/TeleoptiCCC/Analytics"
 "%systemroot%\System32\inetsrv\appcmd" delete app "Default Web Site/TeleoptiCCC/Client"

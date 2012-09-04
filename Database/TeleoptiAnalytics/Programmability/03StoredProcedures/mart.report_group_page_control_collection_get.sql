@@ -20,12 +20,12 @@ SELECT
 FROM 
 	mart.v_report_control_collection cc
 INNER JOIN
-	mart.report r
+	mart.v_report r --henrikl: changed to view
 ON
 	cc.CollectionId = r.ControlCollectionId
 WHERE
 	r.Id = @report_id
-	AND cc.ControlId = 'A9718D69-77A9-4D1D-9D44-DBA7EA7E92F5' --29
+	AND cc.ControlId IN ('A9718D69-77A9-4D1D-9D44-DBA7EA7E92F5','31CED060-EC3F-48F8-B115-3178B2D0ABD6') --henrik, addded guid 31CED060-EC3F-48F8-B115-3178B2D0ABD6 to be used by custom reports
 
 GO
 
