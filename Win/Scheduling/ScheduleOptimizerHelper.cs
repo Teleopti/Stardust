@@ -1127,7 +1127,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             ILockableBitArray scheduleMatrixArray =
                 scheduleMatrixArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter);
 
-            IPerson person = scheduleMatrix.Person;
             // create decisionmakers
 
             IEnumerable<IDayOffDecisionMaker> decisionMakers =
