@@ -63,14 +63,14 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, nowComponent);
 			
-			target.CreateLayoutBaseViewModel().ExplicitlySetMilliSecondsFromYear1970.Should().Be.EqualTo(expected);
+			target.CreateLayoutBaseViewModel().FixedDate.Should().Be.EqualTo(expected);
 		}
 
 		[Test]
 		public void ShouldSReturnZeroIfNotSet()
 		{
 			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null));
-			target.CreateLayoutBaseViewModel().ExplicitlySetMilliSecondsFromYear1970.Should().Be.EqualTo(0);
+			target.CreateLayoutBaseViewModel().FixedDate.Should().Be.EqualTo(0);
 		}
 	}
 }
