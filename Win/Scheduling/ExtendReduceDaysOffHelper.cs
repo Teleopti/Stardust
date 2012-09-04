@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 													scheduleServiceForFlexibleAgents, _allResults, resourceCalculateDelayer);
 
                 IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-                 OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(scheduleMatrixPro, schedulePartModifyAndRollbackService, _container);
+                 OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(schedulePartModifyAndRollbackService, _container);
 
                 IDayOffsInPeriodCalculator dayOffsInPeriodCalculator = new DayOffsInPeriodCalculator(schedulerStateHolder.SchedulingResultState);
 

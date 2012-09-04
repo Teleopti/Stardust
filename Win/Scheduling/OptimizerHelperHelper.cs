@@ -366,13 +366,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(IScheduleMatrixPro scheduleMatrix,
-            ISchedulePartModifyAndRollbackService rollbackService, ILifetimeScope container)
+        public static IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(ISchedulePartModifyAndRollbackService rollbackService, ILifetimeScope container)
         {
             var workShiftMinMaxCalculator = container.Resolve<IWorkShiftMinMaxCalculator>();
             //var bitArrayCreator = container.Resolve<IWorkShiftBackToLegalStateBitArrayCreator>();
 			var bitArrayCreator = new WorkShiftBackToLegalStateBitArrayCreator();
-            var period = new DateOnlyPeriod(scheduleMatrix.FullWeeksPeriodDays[0].Day, scheduleMatrix.FullWeeksPeriodDays[scheduleMatrix.FullWeeksPeriodDays.Count - 1].Day);
 
             var dailySkillForecastAndScheduledValueCalculator =
                 container.Resolve<IDailySkillForecastAndScheduledValueCalculator>();
