@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 	{
 		public string Time { get; set; }
 		public decimal PositionPercentage { get; set; }
- 	}
+		public string TimeFixedFormat { get; set; }
+	}
 
 	[Flags]
 	public enum SpecialDateState

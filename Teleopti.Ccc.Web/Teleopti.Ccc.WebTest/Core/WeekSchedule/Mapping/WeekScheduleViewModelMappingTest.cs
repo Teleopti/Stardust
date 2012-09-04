@@ -335,5 +335,14 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			result.TimeLine.ElementAt(1).Time.Should().Be.EqualTo("9:00");
 			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5/(17.5 - 8.5));
 		}
+
+		[Test]
+		public void ShouldGetPosition()
+		{
+
+			var testPos = 668 *
+						  ((new TimeSpan(12, 0, 0).TotalMinutes - TimeSpan.Zero.TotalMinutes) /
+						   (new TimeSpan(23, 59, 0).TotalMinutes - TimeSpan.Zero.TotalMinutes));
+		}
 	}
 }

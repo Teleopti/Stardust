@@ -17,9 +17,20 @@
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
 		<div class="weekview-timeline floatleft">
 			<div class="schedule-time-indicator relative" style="width: 31px; top: @(Math.Round(scheduleHeight * 0.47))px;"></div>
+			@{int timelineCounter = 0;}
 			@foreach (var time in Model.TimeLine)
 			{
-				<div class="weekview-timeline-label absolute" style="top: @(Math.Round(scheduleHeight * time.PositionPercentage) + 198)px;">
+				string timelineAttribute = "";
+				timelineCounter++;
+				if (timelineCounter == 1)
+				{
+					timelineAttribute = "data-timeline-start=" + time.Time;
+				}
+				if (timelineCounter == Model.TimeLine.Count())
+				{
+					timelineAttribute = "data-timeline-end=" + time.Time;
+				}
+				<div class="weekview-timeline-label absolute" style="top: @(Math.Round(scheduleHeight * time.PositionPercentage) + 198)px;" @timelineAttribute>
 					@time.Time
 				</div>
 			}

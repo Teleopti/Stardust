@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                                              EndTime - minMaxTime.StartTime).Ticks/
                                         (minMaxTime.EndTime - minMaxTime.StartTime).Ticks
                                 });
+
             }
             return newList;
         }
