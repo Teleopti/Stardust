@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
@@ -353,11 +352,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             ILockableBitArray scheduleMatrixArray =
                 scheduleMatrixArrayConverter.Convert(dayOffPreferences.ConsiderWeekBefore, dayOffPreferences.ConsiderWeekAfter);
             
-            IPerson person = scheduleMatrix.Person;
             // create decisionmakers
 
             IEnumerable<IDayOffDecisionMaker> decisionMakers =
-                OptimizerHelperHelper.CreateDecisionMakers(person, scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
+                OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
 
             IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions(scheduleMatrixArray);
             ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
