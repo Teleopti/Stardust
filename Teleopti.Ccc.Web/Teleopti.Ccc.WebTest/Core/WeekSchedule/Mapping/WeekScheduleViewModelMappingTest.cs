@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                 	{Date = DateOnly.Today, Projection = MockRepository.GenerateMock<IVisualLayerCollection>()};
 			var periodViewModels = new PeriodViewModel[] {};
 
-			periodViewModelFactory.Stub(x => x.CreatePeriodViewModels(domainData.Projection, new TimePeriod())).Return(periodViewModels);
+			periodViewModelFactory.Stub(x => x.CreatePeriodViewModels(domainData.Projection, new TimePeriod(), domainData.Date, domainData.ScheduleDay.TimeZone)).Return(periodViewModels);
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 

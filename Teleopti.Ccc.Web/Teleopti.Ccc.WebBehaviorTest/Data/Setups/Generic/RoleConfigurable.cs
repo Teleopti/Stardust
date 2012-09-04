@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			BusinessUnit = GlobalDataContext.Data().Data<CommonBusinessUnit>().BusinessUnit.Description.Name;
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
-			AccessToMobileReports = true;
+			AccessToMobileReports = false;
 			AccessToExtendedPreferences = true;
 			AccessToMytimeWeb = true;
 		}
