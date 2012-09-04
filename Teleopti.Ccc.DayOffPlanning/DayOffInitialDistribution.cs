@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.DayOffPlanning
     /// </summary>
     public class DayOffInitialDistribution
     {
-
         private readonly IOfficialWeekendDays _officialWeekendDays;
 
         public DayOffInitialDistribution(IOfficialWeekendDays officialWeekendDays)
@@ -32,10 +31,11 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         private IList<int> DayoffDistributionPriorityList()
         {
+        	var weekendList = _officialWeekendDays.WeekendDayIndexesRelativeStartDayOfWeek();
             IList<int> resultList = new List<int> { 6, 5, 4, 3, 2, 1, 0 };
-            for (int i = 0; i < _officialWeekendDays.WeekendDayIndexes().Count; i++)
+            for (int i = 0; i < weekendList.Count; i++)
             {
-                int currentValue = _officialWeekendDays.WeekendDayIndexes()[i];
+                int currentValue = weekendList[i];
                 resultList.Remove(currentValue);
                 resultList.Insert(0, currentValue);
             }

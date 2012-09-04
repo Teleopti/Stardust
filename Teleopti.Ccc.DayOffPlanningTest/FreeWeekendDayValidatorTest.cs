@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Common;
@@ -13,19 +10,15 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     [TestFixture]
     public class FreeWeekendDayValidatorTest
     {
-        #region Variables
-
-        private FreeWeekendDayValidator _target;
+    	private FreeWeekendDayValidator _target;
         private IOfficialWeekendDays _officialWeekendDays;
         private MinMax<int> _periodRange;
         private BitArray _periodDays;
-
-        #endregion
-
-        [SetUp]
+    	
+    	[SetUp]
         public void Setup()
         {
-            _officialWeekendDays = new OfficialWeekendDays(new CultureInfo("se-SE"));
+            _officialWeekendDays = new OfficialWeekendDays();
             _periodDays = createBitArrayForTest();
         }
 
@@ -71,9 +64,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.IsFalse(_target.IsValid(bitArray, 13));
         }
 
-        #region Week before and after
-
-        [Test]
+    	[Test]
         public void VerifyFirstValidDayInPeriod()
         {
             _periodRange = new MinMax<int>(13, 19);
@@ -113,9 +104,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         }
 
 
-        #endregion
-
-        private static BitArray createBitArrayForTest()
+    	private static BitArray createBitArrayForTest()
         {
             bool[] values = new bool[]
                                 {

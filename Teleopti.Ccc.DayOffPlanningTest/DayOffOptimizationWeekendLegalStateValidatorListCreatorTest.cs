@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
-using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         {
             IDaysOffPreferences rules = new DaysOffPreferences();
             rules.UseFullWeekendsOff = true;
-            IOfficialWeekendDays weekendDays = new OfficialWeekendDays(new CultureInfo(1053));
+            IOfficialWeekendDays weekendDays = new OfficialWeekendDays();
             _target = new DayOffOptimizationWeekendLegalStateValidatorListCreator(rules, weekendDays,
                                                                                   new MinMax<int>(7, 21));
         }
