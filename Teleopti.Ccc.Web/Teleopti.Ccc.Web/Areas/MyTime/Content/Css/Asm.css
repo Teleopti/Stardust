@@ -14,7 +14,7 @@
 .asm-schedule-canvas
 {
 	float: left;
-	width: 700px;
+	width: 600px;
 	overflow: hidden;
 	background: #F8F8F8;
 	height: 70px;
@@ -23,7 +23,7 @@
 
 .asm-outer-canvas
 {
-	width: 965px;
+	width: 865px;
 	background: white;
 	padding: 6px;
 	border: 1px solid rgba(0, 0, 0, 0.15);
