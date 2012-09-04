@@ -32,6 +32,6 @@ ROBOCOPY "%SrcShare%\%version%" "%DestShare%\%version%" "*.msi"
 ROBOCOPY "%SrcCode%" "%DestShare%\SilentInstall" /E
 
 ::installation
-Call "%DestShare%\SilentInstall\server\SilentInstall.bat" "%CCCEXE%" "localhostDemoNoPM"
+Call "%DestShare%\SilentInstall\server\SilentInstall.bat" "%CCCEXE%" "localhostDemoNoPM" install
 
 ENDLOCAL
