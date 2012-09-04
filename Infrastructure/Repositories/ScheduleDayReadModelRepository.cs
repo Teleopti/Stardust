@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)
 		{
-			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
+			var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
 			((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
 				"DELETE FROM ReadModel.ScheduleDay WHERE PersonId=:person AND BelongsToDate BETWEEN :StartDate AND :EndDate")
 				.SetGuid("person", personId)
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SaveReadModels(IList<ScheduleDayReadModel> models)
 		{
-			using (var uow = _unitOfWorkFactory.CurrentUnitOfWork())
+			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				foreach (var scheduleDayReadModel in models)
 				{
