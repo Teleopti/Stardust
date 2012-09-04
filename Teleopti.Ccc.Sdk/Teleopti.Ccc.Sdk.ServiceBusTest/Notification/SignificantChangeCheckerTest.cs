@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		}
 
         [Test]
-        public void ShouldReturnMessageIfChangeIsWithInFourteenDays()
+        public void ShouldReturnMessageIfChangeIsWithinFourteenDays()
         {
             var date = DateTime.Now.Date;
             var period = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date.AddDays(2)));
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         }
 
         [Test]
-        public void ShouldReturnMessageIfDayNotExistInCurrentReadModel()
+        public void ShouldReturnNotificationIfDayNotExistIncurrentReadModel()
         {
             var date = DateTime.Now.Date;
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(1)));

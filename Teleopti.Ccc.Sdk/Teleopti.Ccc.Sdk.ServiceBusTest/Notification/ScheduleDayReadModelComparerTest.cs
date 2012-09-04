@@ -31,12 +31,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         [Test]
         public void ShouldGetNullMessageIfNoSignificantChange()
         {
-            ScheduleDayReadModel newReadModel = new ScheduleDayReadModel();
+            var newReadModel = new ScheduleDayReadModel();
             newReadModel.StartDateTime = new DateTime();
             newReadModel.EndDateTime = new DateTime();
             newReadModel.Workday = true;
 
-            ScheduleDayReadModel existingReadModel = new ScheduleDayReadModel();
+            var existingReadModel = new ScheduleDayReadModel();
             existingReadModel.StartDateTime = new DateTime();
             existingReadModel.EndDateTime = new DateTime();
             existingReadModel.Workday = true;
@@ -47,14 +47,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         }
 
         [Test]
-        public void ShouldNotReturnNullMessageIfSignifcantChangeExists()
+        public void ShouldReturnNotificationIfSignificantChangeExists()
         {
-            ScheduleDayReadModel newReadModel = new ScheduleDayReadModel();
+            var newReadModel = new ScheduleDayReadModel();
             newReadModel.StartDateTime = new DateTime();
             newReadModel.EndDateTime = new DateTime();
             newReadModel.Workday = true;
 
-            ScheduleDayReadModel existingReadModel = new ScheduleDayReadModel();
+            var existingReadModel = new ScheduleDayReadModel();
             existingReadModel.StartDateTime = new DateTime(2012,01,01);
             existingReadModel.EndDateTime = new DateTime(2012,01,01);
             existingReadModel.Workday = true;
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         [Test]
         public void ShouldReturnMessageIfChangeFromOffDayToWorkingDay()
         {
-            ScheduleDayReadModel newReadModel = new ScheduleDayReadModel();
+            var newReadModel = new ScheduleDayReadModel();
             newReadModel.StartDateTime = new DateTime();
             newReadModel.EndDateTime = new DateTime();
             newReadModel.Workday = true;
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         [Test]
         public void ShouldReturnMessageIfChangeFromWorkingDayToOffDay()
         {
-            ScheduleDayReadModel existingReadModel = new ScheduleDayReadModel();
+            var existingReadModel = new ScheduleDayReadModel();
             existingReadModel.StartDateTime = new DateTime(2012, 01, 01);
             existingReadModel.EndDateTime = new DateTime(2012, 01, 01);
             existingReadModel.Workday = true;
@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         }
 
         [Test]
-        public void ShouldNotDetectFromNullToNoWorkDay()
+        public void ShouldNotDetectFromNullToNoWorkday()
         {
-            ScheduleDayReadModel newReadModel = new ScheduleDayReadModel();
+            var newReadModel = new ScheduleDayReadModel();
             newReadModel.StartDateTime = new DateTime();
             newReadModel.EndDateTime = new DateTime();
             newReadModel.Workday = false;
@@ -116,9 +116,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         }
 
         [Test]
-        public void ShouldNotDetectFromNoWorkDayToNull()
+        public void ShouldNotDetectFromNoWorkdayToNull()
         {
-            ScheduleDayReadModel existingReadModel = new ScheduleDayReadModel();
+            var existingReadModel = new ScheduleDayReadModel();
             existingReadModel.StartDateTime = new DateTime();
             existingReadModel.EndDateTime = new DateTime();
             existingReadModel.Workday = false;
@@ -130,14 +130,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         }
 
         [Test]
-        public void ShouldDetectIfWorkDayIsChangedToNoWorkDay()
+        public void ShouldDetectIfWorkdayIsChangedToNoWorkday()
         {
-            ScheduleDayReadModel newReadModel = new ScheduleDayReadModel();
+            var newReadModel = new ScheduleDayReadModel();
             newReadModel.StartDateTime = new DateTime();
             newReadModel.EndDateTime = new DateTime();
             newReadModel.Workday = false;
 
-            ScheduleDayReadModel existingReadModel = new ScheduleDayReadModel();
+            var existingReadModel = new ScheduleDayReadModel();
             existingReadModel.StartDateTime = new DateTime();
             existingReadModel.EndDateTime = new DateTime();
             existingReadModel.Workday = true;
@@ -149,14 +149,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         }
 
         [Test]
-        public void ShouldDetectIfNoWorkDayIsChangedToWorkDay()
+        public void ShouldDetectIfNoWorkdayIsChangedToWorkday()
         {
-            ScheduleDayReadModel newReadModel = new ScheduleDayReadModel();
+            var newReadModel = new ScheduleDayReadModel();
             newReadModel.StartDateTime = new DateTime();
             newReadModel.EndDateTime = new DateTime();
             newReadModel.Workday = true;
 
-            ScheduleDayReadModel existingReadModel = new ScheduleDayReadModel();
+            var existingReadModel = new ScheduleDayReadModel();
             existingReadModel.StartDateTime = new DateTime();
             existingReadModel.EndDateTime = new DateTime();
             existingReadModel.Workday = false;

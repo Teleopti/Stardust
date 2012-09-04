@@ -23,43 +23,73 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				return;
 			//TODO check if empty concat and split into several if too long
  			// we handle this here because here we know it is a sms
-			var smsMessage = message.Subject;
-			if(message.Messages.Count > 0)
-				smsMessage += " " + message.Messages[0];
+			//var smsMessage = message.Subject;
 
-			using (var client = new WebClient())
-			{
-				// Add a user agent header in case the 
-				// requested URI contains a query.
-				var smsString = _notificationConfigReader.Data;
+            // list for messages to send
+            IList<string> messagesToSendList = new List<string>();
+		    const int len = 40;
+            string temp = message.Subject + " ";
 
-				client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-				var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User, _notificationConfigReader.Password, mobileNumber, _notificationConfigReader.From,
-										 smsMessage);
-				try
-				{
-					var data = client.OpenRead(_notificationConfigReader.Url + msgData);
-					if (data != null)
-					{
-						var reader = new StreamReader(data);
-						var s = reader.ReadToEnd();
-						data.Close();				
-						reader.Close();
-						var doc = new XmlDocument();
-						doc.LoadXml(s);
-						if(doc.GetElementsByTagName("fault").Count > 0)
-						{
-							Logger.Error("Error occurred sending SMS: " + s);
-						}
-					}
-				}
-				catch (Exception exception)
-				{
-					Logger.Error("Error occurred trying to access: " + _notificationConfigReader.Url + msgData, exception);
-				}
-			}
-			
+            for (int i = 0; i < message.Messages.Count; )
+            {
+                if (temp.Length + message.Messages[i].Length < len)
+                {
+                    temp = temp + message.Messages[i] + ",";
+                    i++;
+                    if (i == message.Messages.Count)
+                    {
+                        string replace = temp.Substring(0, temp.Length-1);
+                        messagesToSendList.Add(replace + ".");
+                    }
+                }
+                else
+                {
+                    string replace = temp.Substring(0, temp.Length - 1);
+                    messagesToSendList.Add(replace + ".");
+                    temp = message.Subject + " "; 
+                }
+            }
+
+            foreach(var msg in messagesToSendList)
+            {
+                SendSmsNotifications(msg, mobileNumber);
+            }
 		}
+
+        private void SendSmsNotifications(string smsMessage, string mobileNumber)
+        {
+            using (var client = new WebClient())
+            {
+                // Add a user agent header in case the 
+                // requested URI contains a query.
+                var smsString = _notificationConfigReader.Data;
+
+                client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+                var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User, _notificationConfigReader.Password, mobileNumber, _notificationConfigReader.From,
+                                         smsMessage);
+                try
+                {
+                    var data = client.OpenRead(_notificationConfigReader.Url + msgData);
+                    if (data != null)
+                    {
+                        var reader = new StreamReader(data);
+                        var s = reader.ReadToEnd();
+                        //reader.Close();
+                        data.Close();
+                        var doc = new XmlDocument();
+                        doc.LoadXml(s);
+                        if (doc.GetElementsByTagName("fault").Count > 0)
+                        {
+                            Logger.Error("Error occurred sending SMS: " + s);
+                        }
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Logger.Error("Error occurred trying to access: " + _notificationConfigReader.Url + msgData, exception);
+                }
+            }
+        }
 
 		public void SetConfigReader(INotificationConfigReader notificationConfigReader)
 		{

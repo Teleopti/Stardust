@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
@@ -66,6 +67,30 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_target.SendNotification(smsMessage, "46709218108");
 		}
 
+        [Test]
+        public void ShouldSplitMessageIfGreaterThanMaxLength()
+        {
+            INotificationMessage msg = new NotificationMessage();
+            msg.Subject = "Your Working Hours have changed";
+            msg.Messages.Add("test1");
+            msg.Messages.Add("test2");
+            msg.Messages.Add("test3");
+
+            var doc = new XmlDocument();
+			doc.LoadXml(xml);
+
+            Expect.Call(_notificationConfigReader.HasLoadedConfig).Return(true);
+            Expect.Call(_notificationConfigReader.Data).Return("test");
+            Expect.Call(_notificationConfigReader.From).Return("From Person");
+            Expect.Call(_notificationConfigReader.User).Return("user");
+            Expect.Call(_notificationConfigReader.Password).Return("pswd");
+            Expect.Call(_notificationConfigReader.Url).Return(new Uri("http://www.clickatell.com")).Repeat.Twice();
+            _mocks.ReplayAll();
+            
+            _target.SendNotification(msg, "46709218108");
+            _mocks.VerifyAll();
+        }
+
 		[Test]
 		public void ShouldLogIfUrlIsIncorrect()
 		{
@@ -95,4 +120,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_target.SendNotification(smsMessage, "46709218108");
 		}
 	}
+
+   
 }

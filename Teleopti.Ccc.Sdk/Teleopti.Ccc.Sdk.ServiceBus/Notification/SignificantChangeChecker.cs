@@ -32,25 +32,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
             //    return ret;
             //if (dateOnlyPeriod.EndDate < date)
             //    return ret;
-
+            var lang = person.PermissionInformation.UICulture();
             var period = new DateOnlyPeriod(new DateOnly(DateTime.Now), new DateOnly(DateTime.Now.AddDays(14)));
 		    var overlappingPeriod = dateOnlyPeriod.Intersection(period);
             
-
             if (overlappingPeriod==null)
                 return ret;
 
-            IList<ScheduleDayReadModel> newReadModelWithinIntersectionPeriod = new List<ScheduleDayReadModel>();
-            
-            newReadModelWithinIntersectionPeriod =
-                    newReadModels.Where(y => y.Date >= overlappingPeriod.Value.StartDate && y.Date <= overlappingPeriod.Value.EndDate).ToList();
+		    var overLapppingPeriodStartDate = overlappingPeriod.Value.StartDate;
+		    var overLappingPeriodEndDate = overlappingPeriod.Value.EndDate;
 
+		    IList<ScheduleDayReadModel> newReadModelWithinIntersectionPeriod =
+                newReadModels.Where(y => y.Date >= overLapppingPeriodStartDate && y.Date <= overLappingPeriodEndDate).ToList();
 
-            var oldReadModels = _scheduleDayReadModelRepository.ReadModelsOnPerson(overlappingPeriod.Value.StartDate,
-                                                                                   overlappingPeriod.Value.EndDate, person.Id.Value);
+            var oldReadModels = _scheduleDayReadModelRepository.ReadModelsOnPerson(overLapppingPeriodStartDate,
+                                                                                   overLappingPeriodEndDate, person.Id.GetValueOrDefault());
 		    
-            var lang = person.PermissionInformation.UICulture();
-			
             foreach (var dateOnly in dateOnlyPeriod.DayCollection())
 			{
 			    string message = null;
