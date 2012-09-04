@@ -16,8 +16,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 		private INotificationConfigReader _notificationConfigReader;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		public void SendNotification(INotificationMessage message, string mobileNumber)
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public void SendNotification(INotificationMessage message, string mobileNumber)
 		{
 			if(!_notificationConfigReader.HasLoadedConfig)
 				return;
@@ -56,6 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
             }
 		}
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         private void SendSmsNotifications(string smsMessage, string mobileNumber)
         {
             using (var client = new WebClient())
@@ -74,8 +76,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
                     {
                         var reader = new StreamReader(data);
                         var s = reader.ReadToEnd();
-                        //reader.Close();
                         data.Close();
+                        reader.Close();
                         var doc = new XmlDocument();
                         doc.LoadXml(s);
                         if (doc.GetElementsByTagName("fault").Count > 0)
