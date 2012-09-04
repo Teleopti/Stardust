@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IList<IScheduleDay> _scheduleDayList;
         private ISchedulePartModifyAndRollbackService _modifyAndRollbackService;
     	private DateOnlyPeriod _period;
+    	private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
 
         [SetUp]
         public void Setup()
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _modifyAndRollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_period = new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MaxValue);
             _target = new WorkShiftBackToLegalStateStep(_bitArrayCreator, _decisionMaker, _deleteService, _modifyAndRollbackService);
+        	_dateOnlyAsDateTimePeriod = _mockRepository.StrictMock<IDateOnlyAsDateTimePeriod>();
         }
 
         [Test]
@@ -56,12 +58,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_day1})).Repeat.AtLeastOnce();
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_day1.Day).Return(DateOnly.MaxValue).Repeat.AtLeastOnce();
+            	Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay);
                 _deleteService.Delete(_scheduleDayList, _modifyAndRollbackService);
+            	Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+            	Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(DateOnly.MaxValue);
             }
             using(_mockRepository.Playback())
             {
-                DateOnly? result = _target.ExecuteWeekStep(_weekIndex, _scheduleMatrix);
-                Assert.AreEqual(DateOnly.MaxValue, result.Value);
+                IScheduleDay result = _target.ExecuteWeekStep(_weekIndex, _scheduleMatrix);
+                Assert.AreEqual(DateOnly.MaxValue, result.DateOnlyAsPeriod.DateOnly);
             }
         }
 
@@ -77,12 +82,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _day1 })).Repeat.AtLeastOnce();
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_day1.Day).Return(DateOnly.MaxValue).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay);
                 _deleteService.Delete(_scheduleDayList, _modifyAndRollbackService);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(DateOnly.MaxValue);
             }
             using (_mockRepository.Playback())
             {
-                DateOnly? result = _target.ExecutePeriodStep(raise, _scheduleMatrix);
-                Assert.AreEqual(DateOnly.MaxValue, result.Value);
+                IScheduleDay result = _target.ExecutePeriodStep(raise, _scheduleMatrix);
+                Assert.AreEqual(DateOnly.MaxValue, result.DateOnlyAsPeriod.DateOnly);
             }
         }
 
@@ -98,12 +106,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _day1 })).Repeat.AtLeastOnce();
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
             	Expect.Call(_day1.Day).Return(DateOnly.MaxValue).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay);
                 _deleteService.Delete(_scheduleDayList, _modifyAndRollbackService);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(DateOnly.MaxValue);
             }
             using (_mockRepository.Playback())
             {
-                DateOnly? result = _target.ExecutePeriodStep(raise, _scheduleMatrix);
-                Assert.AreEqual(DateOnly.MaxValue, result.Value);
+                IScheduleDay result = _target.ExecutePeriodStep(raise, _scheduleMatrix);
+                Assert.AreEqual(DateOnly.MaxValue, result.DateOnlyAsPeriod.DateOnly);
             }
         }
     }
