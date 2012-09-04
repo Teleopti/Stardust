@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
@@ -213,7 +212,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Validators")]
         public static IList<IDayOffLegalStateValidator> CreateLegalStateValidators(
-           IPerson person,
            ILockableBitArray bitArray,
            IDaysOffPreferences dayOffPreferences,
            IOptimizationPreferences optimizerPreferences)
@@ -221,7 +219,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             MinMax<int> periodArea = bitArray.PeriodArea;
             if (!dayOffPreferences.ConsiderWeekBefore)
                 periodArea = new MinMax<int>(periodArea.Minimum + 7, periodArea.Maximum + 7);
-            IOfficialWeekendDays weekendDays = new OfficialWeekendDays(person.PermissionInformation.Culture());
+            IOfficialWeekendDays weekendDays = new OfficialWeekendDays();
             IDayOffLegalStateValidatorListCreator validatorListCreator =
                 new DayOffOptimizationLegalStateValidatorListCreator
                     (optimizerPreferences.DaysOff,
@@ -234,14 +232,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Validators")]
         public static IList<IDayOffLegalStateValidator> CreateLegalStateValidatorsToKeepWeekendNumbers(
-            IPerson person,
             ILockableBitArray bitArray,
             IOptimizationPreferences optimizerPreferences)
         {
             MinMax<int> periodArea = bitArray.PeriodArea;
             if (!optimizerPreferences.DaysOff.ConsiderWeekBefore)
                 periodArea = new MinMax<int>(periodArea.Minimum + 7, periodArea.Maximum + 7);
-            IOfficialWeekendDays weekendDays = new OfficialWeekendDays(person.PermissionInformation.Culture());
+            IOfficialWeekendDays weekendDays = new OfficialWeekendDays();
             IDayOffLegalStateValidatorListCreator validatorListCreator =
                 new DayOffOptimizationWeekendLegalStateValidatorListCreator(optimizerPreferences.DaysOff,
                      weekendDays,
@@ -251,19 +248,17 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         public static IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
-            CultureInfo culture,
-            IPerson person,
             ILockableBitArray scheduleMatrixArray,
             IDaysOffPreferences daysOffPreferences,
             IOptimizationPreferences optimizerPreferences)
         {
             IList<IDayOffLegalStateValidator> legalStateValidators =
-                 CreateLegalStateValidators(person, scheduleMatrixArray, daysOffPreferences, optimizerPreferences);
+                 CreateLegalStateValidators(scheduleMatrixArray, daysOffPreferences, optimizerPreferences);
 
             IList<IDayOffLegalStateValidator> legalStateValidatorsToKeepWeekEnds =
-                CreateLegalStateValidatorsToKeepWeekendNumbers(person, scheduleMatrixArray, optimizerPreferences);
+                CreateLegalStateValidatorsToKeepWeekendNumbers(scheduleMatrixArray, optimizerPreferences);
 
-            IOfficialWeekendDays officialWeekendDays = new OfficialWeekendDays(culture);
+            IOfficialWeekendDays officialWeekendDays = new OfficialWeekendDays();
             ILogWriter logWriter = new LogWriter<DayOffOptimizationService>();
 
             IDayOffDecisionMaker moveDayOffDecisionMaker = new MoveOneDayOffDecisionMaker(legalStateValidators, logWriter);
@@ -310,7 +305,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 ILockableBitArray bitArray = bitArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore,
                                                                       daysOffPreferences.ConsiderWeekAfter);
 
-                IDayOffBackToLegalStateFunctions functions = new DayOffBackToLegalStateFunctions(bitArray, matrixOriginalStateContainer.ScheduleMatrix.Person.PermissionInformation.Culture());
+                IDayOffBackToLegalStateFunctions functions = new DayOffBackToLegalStateFunctions(bitArray);
                 ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(functions, daysOffPreferences, 20);
                 ISmartDayOffBackToLegalStateSolverContainer solverContainer = new SmartDayOffBackToLegalStateSolverContainer(matrixOriginalStateContainer, bitArray, solverService);
                 solverContainers.Add(solverContainer);

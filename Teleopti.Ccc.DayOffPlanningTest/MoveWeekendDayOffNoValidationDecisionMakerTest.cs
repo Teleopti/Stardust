@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
@@ -17,12 +16,12 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         private MockRepository _mockRepository;
         private ILogWriter _logWriter;
 
-
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mockRepository = new MockRepository();
-            _officialWeekendDays = new OfficialWeekendDays(new CultureInfo("se-SE"));
+
+			_officialWeekendDays = new OfficialWeekendDays();
             _logWriter = _mockRepository.StrictMock<ILogWriter>();
             _target = new MoveWeekendDayOffNoValidationDecisionMaker(_officialWeekendDays, _logWriter);
         }
