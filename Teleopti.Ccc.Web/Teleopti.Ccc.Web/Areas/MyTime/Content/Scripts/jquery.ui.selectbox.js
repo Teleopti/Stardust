@@ -2,7 +2,8 @@
 	$.widget("ui.selectbox", {
 
 		options: {
-			source: null
+			source: null,
+			value: null
 		},
 
 		_create: function () {
@@ -164,6 +165,24 @@
 					success();
 				}
 			});
+		},
+
+		_setOption: function (key, value) {
+			switch (key) {
+				case "clear":
+					// handle changes to clear option
+					break;
+				case "value":
+					this._selectValue(value);
+					break;
+			}
+
+			if (this._super)
+				// In jQuery UI 1.9 and above, you use the _super method instead
+				this._super("_setOption", key, value);
+			else
+				// In jQuery UI 1.8, you have to manually invoke the _setOption method from the base widget
+				$.Widget.prototype._setOption.apply(this, arguments);
 		},
 
 		refresh: function (success) {

@@ -494,6 +494,7 @@
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Css\TooltipInput.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.selectbox.ko.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.DayViewModel.Tests.js" />
@@ -607,6 +608,7 @@
     <Content Include="Content\Scripts\excanvas.compressed.js" />
     <Content Include="Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
+    <Content Include="Content\Scripts\knockout-jquery-ui-widget.js" />
     <Content Include="Content\Scripts\qunit.css" />
     <Content Include="Content\Scripts\qunit.js" />
     <Content Include="Content\Scripts\RGraph.bar.js" />

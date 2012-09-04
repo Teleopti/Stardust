@@ -1,16 +1,16 @@
 ﻿
-$(document).ready(function() {
+$(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Preference initializer");
 
-	test("should load preferences", function() {
+	test("should load preferences", function () {
 
 		$("#qunit-fixture")
 			.append("<li data-mytime-date='2012-06-11' class='inperiod preference' />")
 			.append("<li data-mytime-date='2012-06-12' class='inperiod preference' />");
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				if (options.url != "Preference/Preference")
 					return;
 				if (options.data.Date == '2012-06-11')
@@ -27,14 +27,14 @@ $(document).ready(function() {
 		target.InitViewModels();
 	});
 
-	test("should only load preference for days with class preference", function() {
+	test("should only load preference for days with class preference", function () {
 
 		$("#qunit-fixture")
 			.append("<li data-mytime-date='2012-06-11' class='inperiod' ><div><div class='preference'></div></div><li>")
 			.append("<li data-mytime-date='2012-06-12' class='inperiod' />");
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				if (options.url != "Preference/Preference")
 					return;
 				if (options.data.Date == '2012-06-11')
@@ -52,7 +52,7 @@ $(document).ready(function() {
 	});
 
 
-	test("should load day feedback and bind", function() {
+	test("should load day feedback and bind", function () {
 
 		$("#qunit-fixture")
 			.html("<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>")
@@ -60,7 +60,7 @@ $(document).ready(function() {
 			.append("<li data-mytime-date='2012-06-12' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />");
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				if (options.url != "PreferenceFeedback/Feedback")
 					return;
 				if (options.data.Date == '2012-06-11')
@@ -85,13 +85,13 @@ $(document).ready(function() {
 		equal($('li[data-mytime-date="2012-06-12"]').text(), "8:00");
 	});
 
-	test("should only load feedback for days with class feedback", function() {
+	test("should only load feedback for days with class feedback", function () {
 		$("#qunit-fixture")
 			.html("<li data-mytime-date='2012-06-11' data-bind='text: PossibleContractTimeLower' />")
 			.append("<li data-mytime-date='2012-06-12' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />");
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				if (options.url != "PreferenceFeedback/Feedback")
 					return;
 				options.success({
@@ -108,7 +108,7 @@ $(document).ready(function() {
 		equal($('li[data-mytime-date="2012-06-12"]').text(), "8:00");
 	});
 
-	test("should compute with static schedule data", function() {
+	test("should compute with static schedule data", function () {
 
 		$("#qunit-fixture")
 			.html("<div id='Preference-period-feedback-view'><span data-bind='text: PossibleResultContractTimeLower' /><span data-bind='text: PossibleResultContractTimeUpper' /></div>")
@@ -116,7 +116,7 @@ $(document).ready(function() {
 			.append("<li data-mytime-date='2012-06-14' class='inperiod'><span data-mytime-contract-time='60' /></li>");
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				if (options.url == "PreferenceFeedback/Feedback")
 					ok(true, "feedback should not be loaded");
 			}
@@ -132,16 +132,16 @@ $(document).ready(function() {
 		equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeUpper"]').text(), "3:00", "upper contract time");
 	});
 
-	test("should load period feedback", function() {
+	test("should load period feedback", function () {
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				equal(options.url, "PreferenceFeedback/PeriodFeedback", "period feedback ajax url");
 				equal(options.data.Date, "2012-06-13", "period feedback date");
 			}
 		};
 		var portal = {
-			CurrentFixedDate: function() { return "2012-06-13"; }
+			CurrentFixedDate: function () { return "2012-06-13"; }
 		};
 
 		expect(2);
@@ -152,14 +152,14 @@ $(document).ready(function() {
 
 	});
 
-	test("should clear day view models on init", function() {
+	test("should clear day view models on init", function () {
 
 		$("#qunit-fixture")
 			.html("<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>")
 			.append("<li data-mytime-date='2012-06-19' class='inperiod feedback' />");
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				if (options.url != "PreferenceFeedback/Feedback")
 					return;
 				if (options.data.Date == '2012-06-19' || options.data.Date == '2012-06-20')
@@ -181,4 +181,5 @@ $(document).ready(function() {
 
 		equal($('#Preference-period-feedback-view').text(), "6:00", "day sum after reinit same instance");
 	});
+	
 });

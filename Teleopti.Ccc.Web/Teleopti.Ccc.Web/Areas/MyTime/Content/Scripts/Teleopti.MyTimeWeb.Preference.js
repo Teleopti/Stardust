@@ -18,6 +18,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	var periodFeedbackViewModel = null;
 	var dayViewModels = {};
 	var addExtendedTooltip = null;
+	var addExtendedPreferenceFormViewModel = null;
 
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#PreferenceDateRangeSelector';
@@ -65,6 +66,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
 		var template = $('#Preference-add-extended-form-template');
+		addExtendedPreferenceFormViewModel = new AddExtendedPreferenceFormViewModel();
 
 		addExtendedTooltip = $('<div/>')
 			.qtip({
@@ -98,16 +100,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				events: {
 					render: function () {
 
-						$('#Preference-extended-preference').selectbox();
-						$('#Preference-extended-activity').selectbox();
-						$("#Preference-add-extended-form-template .time-input").combobox();
-						
 						$('#Preference-extended-apply')
 							.button()
 							.click(function () {
-								var value = $('#Preference-extended-preference').selectbox('value');
-								_setPreference(value);
+								_setPreference(addExtendedPreferenceFormViewModel.PreferenceId());
 							});
+
+						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form-template")[0]);
 					}
 				}
 			});

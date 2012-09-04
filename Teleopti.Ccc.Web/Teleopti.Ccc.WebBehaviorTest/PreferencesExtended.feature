@@ -156,22 +156,22 @@ Scenario: Add extended preference
 	And I click the apply extended preferences button
 	And I click the extended preference indication on '2012-06-20'
 	Then I should see extended preference with
-	| Field                       | Value      |
-	| Date                        | 2012-06-20 |
-	| Preference                  | Late       |
-	| Start time minimum          | 10:30      |
-	| Start time maximum          | 11:00      |
-	| End time minimum            | 19:30      |
-	| End time maximum            | 20:00      |
-	| Work time minimum           | 08:00      |
-	| Work time maximum           | 08:30      |
-	| Activity                    | Lunch      |
-	| Activity Start time minimum | 11:30      |
-	| Activity Start time maximum | 11:45      |
-	| Activity End time minimum   | 12:00      |
-	| Activity End time maximum   | 12:15      |
-	| Activity time minimum       | 00:15      |
-	| Activity time maximum       | 00:45      |
+	| Field                       | Value |
+	| Date                  | 2012-06-20  |
+	| Preference                  | Late  |
+	| Start time minimum          | 10:30 |
+	| Start time maximum          | 11:00 |
+	| End time minimum            | 19:30 |
+	| End time maximum            | 20:00 |
+	| Work time minimum           | 08:00 |
+	| Work time maximum           | 08:30 |
+	| Activity                    | Lunch |
+	| Activity Start time minimum | 11:30 |
+	| Activity Start time maximum | 11:45 |
+	| Activity End time minimum   | 12:00 |
+	| Activity End time maximum   | 12:15 |
+	| Activity time minimum       | 00:15 |
+	| Activity time maximum       | 00:45 |
 
 Scenario: Edit extended preference
          Given I have the role 'Access to extended preferences'

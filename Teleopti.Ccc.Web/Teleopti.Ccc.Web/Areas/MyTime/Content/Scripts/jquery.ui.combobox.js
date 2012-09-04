@@ -1,11 +1,13 @@
 (function ($) {
 	$.widget("ui.combobox", {
 		_create: function () {
+			var self = this._self = this;
+
 			var width = this.element.getWidth();
-			var self = this,
-					select = this.element.hide(),
-					selected = select.children(":selected"),
-					value = selected.val() ? selected.text() : "";
+			var select = this.element.hide();
+			var selected = select.children(":selected");
+			var value = selected.val() ? selected.text() : "";
+
 			var input = this.input = $('<input type="text">')
 					.insertAfter(select)
 					.attr("id", select.attr('id') + '-input')
@@ -16,6 +18,8 @@
 						delay: 0,
 						minLength: 0,
 						source: function (request, response) {
+							self._triggerChanged();
+
 							var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
 							response(select.children("option").map(function () {
 
@@ -47,11 +51,10 @@
 						},
 						select: function (event, ui) {
 							ui.item.option.selected = true;
-							self._trigger("selected", event, {
-								item: ui.item.option
-							});
+							self._triggerChanged(ui.item.value);
 						},
 						change: function (event, ui) {
+							self._triggerChanged();
 							if (!ui.item) {
 								var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex($(this).val()) + "$", "i"),
 									valid = false;
@@ -114,6 +117,36 @@
 					});
 		},
 
+		_triggerChanged: function (value) {
+			if (!value)
+				value = this.input.val();
+			this._trigger("changed", event, { value: value });
+		},
+
+		_setValue: function (value) {
+			this.element.val(value);
+			$(this.input).val(value);
+			$(this.input).trigger('change');
+		},
+
+		_setOption: function (key, value) {
+			switch (key) {
+				case "clear":
+					// handle changes to clear option
+					break;
+				case "value":
+					this._setValue(value);
+					break;
+			}
+
+			if (this._super)
+			// In jQuery UI 1.9 and above, you use the _super method instead
+				this._super("_setOption", key, value);
+			else
+			// In jQuery UI 1.8, you have to manually invoke the _setOption method from the base widget
+				$.Widget.prototype._setOption.apply(this, arguments);
+		},
+
 		destroy: function () {
 			this.input.remove();
 			this.button.remove();
@@ -122,9 +155,7 @@
 		},
 
 		set: function (value) {
-			this.element.val(value);
-			$(this.input).val(value);
-			$(this.input).trigger('change');
+			_setValue(value);
 		}
 	});
 })(jQuery);

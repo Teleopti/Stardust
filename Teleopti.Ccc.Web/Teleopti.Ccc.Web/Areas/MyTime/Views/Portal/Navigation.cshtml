@@ -79,7 +79,7 @@
 					                   	};
 					<div id="Preference-add-extended-form-template" class="displaynone"> 
 						
-						<select id="Preference-extended-preference">
+						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId">
 							<option value="">&nbsp;</option>
 							<option value="-"></option>
 							@foreach (var option in preferenceNavigation.PreferenceOptions)
@@ -88,7 +88,7 @@
 							}
 						</select>
 
-						<select id="Preference-extended-start-time-minimum" class="time-input">
+						<select id="Preference-extended-start-time-minimum" class="time-input" data-bind="combobox: StartTimeMinimum">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in times)
 							{
@@ -133,7 +133,7 @@
 							}
 						</select>
 						
-						<select id="Preference-extended-activity">
+						<select id="Preference-extended-activity" data-bind="selectbox: ActivityId">
 							<option value="">&nbsp;</option>
 							<option value="-"></option>
 							@foreach (var option in preferenceNavigation.ActivityOptions)
