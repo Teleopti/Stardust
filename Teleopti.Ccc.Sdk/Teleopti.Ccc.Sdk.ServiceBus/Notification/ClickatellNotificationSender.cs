@@ -28,12 +28,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
             // list for messages to send
             IList<string> messagesToSendList = new List<string>();
-		    const int len = 40;
+		    const int maxLength = 160;
             string temp = message.Subject + " ";
 
             for (int i = 0; i < message.Messages.Count; )
             {
-                if (temp.Length + message.Messages[i].Length < len)
+                if (temp.Length + message.Messages[i].Length < maxLength)
                 {
                     temp = temp + message.Messages[i] + ",";
                     i++;
