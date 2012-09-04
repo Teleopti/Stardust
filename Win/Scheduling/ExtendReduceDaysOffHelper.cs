@@ -112,8 +112,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     bitArrayConverter.Convert(optimizerPreferences.DaysOff.ConsiderWeekBefore,
                                               optimizerPreferences.DaysOff.ConsiderWeekAfter);
                 IList<IDayOffLegalStateValidator> validators =
-                    OptimizerHelperHelper.CreateLegalStateValidators(scheduleMatrixPro.Person, bitArray,
-                                                                     optimizerPreferences.DaysOff, optimizerPreferences);
+                    OptimizerHelperHelper.CreateLegalStateValidators(bitArray, optimizerPreferences.DaysOff, optimizerPreferences);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true,
 																		true);
 

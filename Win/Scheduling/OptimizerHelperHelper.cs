@@ -212,7 +212,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Validators")]
         public static IList<IDayOffLegalStateValidator> CreateLegalStateValidators(
-           IPerson person,
            ILockableBitArray bitArray,
            IDaysOffPreferences dayOffPreferences,
            IOptimizationPreferences optimizerPreferences)
@@ -233,7 +232,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Validators")]
         public static IList<IDayOffLegalStateValidator> CreateLegalStateValidatorsToKeepWeekendNumbers(
-            IPerson person,
             ILockableBitArray bitArray,
             IOptimizationPreferences optimizerPreferences)
         {
@@ -250,16 +248,15 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         public static IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
-            IPerson person,
             ILockableBitArray scheduleMatrixArray,
             IDaysOffPreferences daysOffPreferences,
             IOptimizationPreferences optimizerPreferences)
         {
             IList<IDayOffLegalStateValidator> legalStateValidators =
-                 CreateLegalStateValidators(person, scheduleMatrixArray, daysOffPreferences, optimizerPreferences);
+                 CreateLegalStateValidators(scheduleMatrixArray, daysOffPreferences, optimizerPreferences);
 
             IList<IDayOffLegalStateValidator> legalStateValidatorsToKeepWeekEnds =
-                CreateLegalStateValidatorsToKeepWeekendNumbers(person, scheduleMatrixArray, optimizerPreferences);
+                CreateLegalStateValidatorsToKeepWeekendNumbers(scheduleMatrixArray, optimizerPreferences);
 
             IOfficialWeekendDays officialWeekendDays = new OfficialWeekendDays();
             ILogWriter logWriter = new LogWriter<DayOffOptimizationService>();
