@@ -277,64 +277,64 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 
-	function _hideSettingsMenu() {
-		$(".dropdown dd ul").hide();
-	}
-	return {
-		// Activating buttons in toolbar
-		ActivateToolbarButtons: function () {
-			$(".buttonset-nav").buttonset();
-		},
+    function _hideSettingsMenu() {
+        $(".dropdown dd ul").hide();
+    }
+    return {
+        // Activating buttons in toolbar
+        ActivateToolbarButtons: function () {
+            $(".buttonset-nav").buttonset();
+        },
 
-		// Activate date buttons
-		ActivateDateButtons: function () {
-			$(".date-range-selector").each(function () {
-				var t = $(this);
-				t.find("button:first").button({
-					icons: {
-						primary: "ui-icon-triangle-1-w"
-					},
-					text: false
-				});
-				t.find("button:last").button({
-					icons: {
-						primary: "ui-icon-triangle-1-e"
-					},
-					text: false
-				});
-			});
-		},
-		ActivateHorizontalScroll: function () {
-			$(window).scroll(function () {
-				$('header').css("left", -$(window).scrollLeft() + "px");
-			});
-		},
-		HideSettingsMenu: function () {
-			_hideSettingsMenu();
-		},
-		ActivateSettingsMenu: function () {
-			$(".dropdown dt span").live("click", function () {
-				$(".dropdown dd ul").toggle();
-			});
+        // Activate date buttons
+        ActivateDateButtons: function () {
+            $(".date-range-selector").each(function () {
+                var t = $(this);
+                t.find("button:first").button({
+                    icons: {
+                        primary: "ui-icon-triangle-1-w"
+                    },
+                    text: false
+                });
+                t.find("button:last").button({
+                    icons: {
+                        primary: "ui-icon-triangle-1-e"
+                    },
+                    text: false
+                });
+            });
+        },
+        ActivateHorizontalScroll: function () {
+            $(window).scroll(function () {
+                $('header').css("left", -$(window).scrollLeft() + "px");
+            });
+        },
+        HideSettingsMenu: function () {
+            _hideSettingsMenu();
+        },
+        ActivateSettingsMenu: function () {
+            $(".dropdown dt span").live("click", function () {
+                $(".dropdown dd ul").toggle();
+            });
 
-			$(".dropdown dd ul").live("click", function () {
-				_hideSettingsMenu();
-			});
+            $(".dropdown dd ul").live("click", function () {
+                _hideSettingsMenu();
+            });
 
 
-			$(document).bind('click', function (e) {
-				var $clicked = $(e.target);
-				if (!$clicked.parents().hasClass("dropdown"))
-					_hideSettingsMenu();
-			});
+            $(document).bind('click', function (e) {
+                var $clicked = $(e.target);
+                if (!$clicked.parents().hasClass("dropdown"))
+                    _hideSettingsMenu();
+            });
 
-			$(".dropdown a").hover(function () {
-				$(this).addClass('ui-state-hover');
-			}, function () {
-				$(this).removeClass('ui-state-hover');
-			});
-		}
-	};
+            $(".dropdown a").hover(function () {
+                $(this).addClass('ui-state-hover');
+            }, function () {
+                $(this).removeClass('ui-state-hover');
+            });
+        }
+    };
 })(jQuery);
 
 
