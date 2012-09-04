@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
             gridBoundColumnOwner.ReadOnly = true;
             gridBoundColumnOwner.StyleInfo.HorizontalAlignment = GridHorizontalAlignment.Left;
 
-            gridBoundColumnTimestamp.HeaderText = UserTexts.Resources.Timestamp;
+            gridBoundColumnTimestamp.HeaderText = UserTexts.Resources.StartTime;
             gridBoundColumnTimestamp.MappingName = "Timestamp";
             gridBoundColumnTimestamp.ReadOnly = true;
             gridBoundColumnTimestamp.StyleInfo.HorizontalAlignment = GridHorizontalAlignment.Left;
