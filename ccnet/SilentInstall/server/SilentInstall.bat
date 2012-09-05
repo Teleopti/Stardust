@@ -4,30 +4,43 @@ COLOR A
 cls
 
 ::init
-set msipath=%~1
-set config=%~2
-set action=%3
-
 SET /A ERRORLEV=0
-SET msipath2=
+SET /A msierror=0
 SET msiCommandString=
 SET CCCServer=52613B22-2102-4BFB-AAFB-EF420F3A24B5
 SET tempInstall=%temp%\temp.bat
 
-::get to local dir. NOTE: this will NOT work if script is started from a different drive letter!
+::change drive letter
+%~d0
+::change path
 CD "%~dp0"
 
-if "%msipath%"=="" set /P msipath=Provide the full path to your msi file: 
+::check argument
+set argC=0
+for %%x in (%*) do Set /A argC+=1
+if %argC% EQU 0 goto :userinput
+if %argC% EQU 3 goto :commandlineInput
+goto :help
 
-::remove doube quotes
-call:removeQuotes msipath2 %msipath%
+:userinput
+set /P msipath=Provide the full path to your msi file: 
+::remove any double quotes
+set msipath=%msipath:"=%
 
-if "%config%"=="" set /P config=Provide config name: 
-IF "%action%"=="" CHOICE /C se /M "Would you like to reivew the msiExec string (S) or execute it (E)?"
+set /P config=Provide config name: 
+
+CHOICE /C se /M "Would you like to show (S) the msiExec string or install the product (I)?"
 IF ERRORLEVEL 1 SET action=show
 IF ERRORLEVEL 2 SET action=install
+goto :start
 
+:commandlineInput
+set msipath=%~1
+set config=%~2
+set action=%~3
 
+goto :start
+:Start
 ::concat all parameters into one string
 SETLOCAL EnableDelayedExpansion
 SET S=
@@ -35,19 +48,18 @@ del "%tempInstall%" /Q
 for /f "tokens=* delims= " %%a in (config/%config%.txt) do (
 set S=!S!%%a 
 )
-set S=start /wait MSIExec /i "%msipath2%" !S!
+set S=start /wait MSIExec /i "%msipath%" !S!
  > "%tempInstall%" echo.!S! /qn /l* "install.log"
 
-::show msiexec string
-more "%tempInstall%"
-
+echo action is: %action%
 if "%action%"=="show" notepad "%tempInstall%"
-if "%action%"=="install" "%tempInstall%"
+if "%action%"=="install" (
+more "%tempInstall%"
+"%tempInstall%"
+set msierror=%errorloevel%
+)
 
 ::this part does not Work ... must get error handling to bubble up to this level
-set /A msierror=%errorlevel%
-ECHO MSIExec Errorlevel: %msierror%
-
 IF %msierror% NEQ 0 (
 SET /A ERRORLEV=2
 GOTO :error
@@ -55,15 +67,15 @@ GOTO :error
 
 ::done
 GOTO :eof
-:removeQuotes
-SETLOCAL
-set string=%~2
-(
-ENDLOCAL
-set "%~1=%string%"
-)
-goto:eof
 
+:help
+COLOR E
+ECHO Run this batch file manully with no paramters, to enter input manually.
+ECHO OR, Run this batch file from command line with paramters:
+ECHO Msipath ^{local path^} ConfigName ^{Name of config file^} Action ^{show^|install^}
+ECHO.
+ECHO Example: SilentInstall.bat "C:\Temp\Teleopti CCC 7.2.0.0.msi" localhostDemoNoPM install
+GOTO :EOF
 
 :Error
 COLOR C
