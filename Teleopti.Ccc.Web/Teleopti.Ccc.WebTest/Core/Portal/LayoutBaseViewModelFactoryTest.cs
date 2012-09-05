@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal
@@ -54,23 +53,22 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldSetTime()
 		{
-			var today = new DateTime(2001, 1, 1,1,12,0,0,DateTimeKind.Utc);
+			var date = new DateTime(2001, 1, 1,1,12,0,0,DateTimeKind.Utc);
 			var nowComponent = MockRepository.GenerateMock<INow>();
-			var expected = today.SubtractJavascriptBaseDate().TotalMilliseconds;
 
 			nowComponent.Expect(c => c.IsExplicitlySet()).Return(true);
-			nowComponent.Expect(c => c.LocalDateTime()).Return(today);
+			nowComponent.Expect(c => c.LocalDateTime()).Return(date);
 
 			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, nowComponent);
 			
-			target.CreateLayoutBaseViewModel().FixedDate.Should().Be.EqualTo(expected);
+			target.CreateLayoutBaseViewModel().FixedDate.Should().Be.EqualTo(date);
 		}
 
 		[Test]
-		public void ShouldSReturnZeroIfNotSet()
+		public void ShouldReturnNullIfNotSet()
 		{
 			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null));
-			target.CreateLayoutBaseViewModel().FixedDate.Should().Be.EqualTo(0);
+			target.CreateLayoutBaseViewModel().FixedDate.HasValue.Should().Be.False();
 		}
 	}
 }
