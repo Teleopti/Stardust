@@ -21,5 +21,10 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The removed days.</value>
         IList<DateOnly> RemovedDays { get; }
+
+		/// <summary>
+		/// Gets the removed schedules.
+		/// </summary>
+		IList<IScheduleDay> RemovedSchedules { get; }
     }
 }

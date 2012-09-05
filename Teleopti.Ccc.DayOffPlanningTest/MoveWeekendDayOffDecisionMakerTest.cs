@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
@@ -20,12 +19,12 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         private ILogWriter _logWriter;
 
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _validator = _mocks.StrictMock<IDayOffLegalStateValidator>();
-            _officialWeekendDays = new OfficialWeekendDays(new CultureInfo("se-SE"));
+            _officialWeekendDays = new OfficialWeekendDays();
             _logWriter = _mocks.StrictMock<ILogWriter>();
             _target = new MoveWeekendDayOffDecisionMaker(new List<IDayOffLegalStateValidator> { _validator }, _officialWeekendDays, true, _logWriter);
         }
@@ -81,82 +80,6 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.AreEqual(resultArray, "0000000-1100000-0000000-0010011-0000011-0000000-0000000");
         }
 
-        //[Test]
-        //public void SimpleTestWithEverythingOverstaffed()
-        //{
-        //    IList<double?> values = new List<double?> { 200, 105, 175, 190, 0, 1, 50 };
-        //    ILockableBitArray bitArray = createBitArrayForTest();
-        //    using (_mocks.Record())
-        //    {
-        //        Expect.Call(_validator.IsValid(new BitArray(0), 0)).IgnoreArguments().Return(true).Repeat.Any();
-        //    }
-        //    bool res;
-        //    using (_mocks.Playback())
-        //    {
-        //        res = _target.Execute(bitArray, values);
-        //    }
-        //    Assert.IsTrue(res);
-        //    Assert.IsTrue(bitArray[0]);
-        //    Assert.IsFalse(bitArray[5]);
-        //}
-
-        //[Test]
-        //public void SimpleTestWithEverythingUnderstaffed()
-        //{
-        //    IList<double?> values = new List<double?> { -200, -105, -175, -190, -10, -1000, -500 };
-        //    ILockableBitArray bitArray = createBitArrayForTest();
-        //    using (_mocks.Record())
-        //    {
-        //        Expect.Call(_validator.IsValid(new BitArray(0), 0)).IgnoreArguments().Return(true).Repeat.Any();
-        //    }
-        //    bool res;
-        //    using (_mocks.Playback())
-        //    {
-        //        res = _target.Execute(bitArray, values);
-        //    }
-        //    Assert.IsTrue(res);
-        //    Assert.IsTrue(bitArray[4]);
-        //    Assert.IsFalse(bitArray[5]);
-        //}
-
-        //[Test]
-        //public void VerifyNoMoveIfBestDayOffHasHigherValueThanBestWorkday()
-        //{
-        //    IList<double?> values = new List<double?> { 2, 5, 75, 90, 0, 100, 500 };
-        //    ILockableBitArray bitArray = createBitArrayForTest();
-        //    using (_mocks.Record())
-        //    {
-        //        Expect.Call(_validator.IsValid(new BitArray(0), 0)).IgnoreArguments().Return(true).Repeat.Any();
-        //    }
-        //    bool res;
-        //    using (_mocks.Playback())
-        //    {
-        //        res = _target.Execute(bitArray, values);
-        //    }
-        //    Assert.IsFalse(res);
-        //    Assert.IsTrue(bitArray[5]);
-        //    Assert.IsTrue(bitArray[6]);
-        //}
-
-        //[Test]
-        //public void VerifyNoMoveIfNoValidStateCouldBeFound()
-        //{
-        //    IList<double?> values = new List<double?> { 100, 5, 75, 90, -1, -100, -50 };
-        //    ILockableBitArray bitArray = createBitArrayForTest();
-        //    using (_mocks.Record())
-        //    {
-        //        Expect.Call(_validator.IsValid(new BitArray(0), 0)).IgnoreArguments().Return(false).Repeat.Any();
-        //    }
-        //    bool res;
-        //    using (_mocks.Playback())
-        //    {
-        //        res = _target.Execute(bitArray, values);
-        //    }
-        //    Assert.IsFalse(res);
-        //    Assert.IsTrue(bitArray[5]);
-        //    Assert.IsTrue(bitArray[6]);
-        //}
-
         private static IList<double?> createValueList()
         {
             return new List<double?>
@@ -171,48 +94,6 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 
         private static ILockableBitArray createBitArrayForTest()
         {
-            //bool[] values = new bool[]
-            //                    {
-            //                        true,
-            //                        true,
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-
-            //                        false,
-            //                        false,
-            //                        true,
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        true,
-            //                        true,
-
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        false,
-            //                        true,
-            //                        true
-            //                    };
             ILockableBitArray ret = new LockableBitArray(35, false, false, null);
             ret.PeriodArea = new MinMax<int>(0, 35);
             ret.Set(0, true);

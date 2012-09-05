@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Globalization;
+﻿using System;
+using System.Collections;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -16,18 +16,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private MockRepository _mockRepository;
         private IScheduleMatrixBitArrayConverter _matrixBitArrayConverter;
         private IDaysOffPreferences _daysOffPreferences;
-        private CultureInfo _cultureInfo;
         private IScheduleMatrixPro _matrix;
+    	private IPerson _person;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mockRepository = new MockRepository();
             _matrixBitArrayConverter = _mockRepository.StrictMock<IScheduleMatrixBitArrayConverter>();
             _daysOffPreferences = new DaysOffPreferences();
-            _cultureInfo = new CultureInfo("se-SE");
+        	
+			_person = PersonFactory.CreatePerson();
+			_person.FirstDayOfWeek = DayOfWeek.Monday;
+
             _matrix = _mockRepository.StrictMock<IScheduleMatrixPro>();
-            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences, _cultureInfo);
+            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences);
         }
 
         [Test]
@@ -39,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
 
             setTwoDayOffPerWeekInRules();
-            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences, _cultureInfo);
+            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences);
 
             Assert.IsNull(_target.Result);
             _target.Execute(_matrix);
@@ -59,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
 
             setTwoFullWeekEndsInRules();
-            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences, _cultureInfo);
+            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences);
             
             Assert.IsNull(_target.Result);
             _target.Execute(_matrix);
@@ -80,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
 
             setImpossibleRules();
-            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences, _cultureInfo);
+            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences);
 
             Assert.IsNull(_target.Result);
             _target.Execute(_matrix);
@@ -105,6 +108,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_matrixBitArrayConverter.PeriodIndexRange(_matrix))
                 .Return(new MinMax<int>(7, 20))
                 .Repeat.Any();
+
+        	Expect.Call(_matrix.Person)
+        		.Return(_person)
+        		.Repeat.Any();
         }
 
         private void setTwoDayOffPerWeekInRules()

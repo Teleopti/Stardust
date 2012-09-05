@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private void reportProgress(DateOnly date, bool result, int activeOptimizers, int executes, IPerson owner)
 		{
 			string dateString = date.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
-			string who = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers + ")" + executes + " " + dateString + " " + owner.Name.ToString(NameOrderOption.FirstNameLastName);
+			string who = Resources.OptimizingIntraday + Resources.Colon + "(" + activeOptimizers + ")" + executes + " " + dateString + " " + owner.Name.ToString(NameOrderOption.FirstNameLastName);
 			string success;
 			if (!result)
 			{

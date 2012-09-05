@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.OnlineReporting.Model
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.OnlineReporting.Model
                     list.AddRange(GetReportDataFromSchedulePart(schedulePart, payloads));
                 }
             }
-			return list;
+			return list.OrderBy(o1 => o1.ActivityName).ThenBy(o2 => o2.ScheduledDate).ToList();
         }
 
         public static IList<IReportData> GetReportDataFromScheduleParts(IList<IScheduleDay> scheduleParts)
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.OnlineReporting.Model
             {
                 list.AddRange(GetReportDataFromSchedulePart(schedulePart, null));
             }
-            return list;
+			return list.OrderBy(o1 => o1.ActivityName).ThenBy(o2 => o2.ScheduledDate).ToList();
         }
 
         public static IList<IReportData> GetReportDataFromSchedulePart(IScheduleDay schedulePart, IList<IPayload> payloads)

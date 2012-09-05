@@ -11055,4 +11055,12 @@ These options are activated:
     <value>Week</value>
     <comment>To specify schedule period type Week</comment>
   </data>
+  <data name="PleaseChooseAReportType" xml:space="preserve">
+    <value>Please choose a report type.</value>
+    <comment>Used in mobile report, prompt user to select a report type.</comment>
+  </data>
+  <data name="PleaseChooseSkillSet" xml:space="preserve">
+    <value>Please choose skill set.</value>
+    <comment>Used in mobile report, prompt user to select skill set.</comment>
+  </data>
 </root>

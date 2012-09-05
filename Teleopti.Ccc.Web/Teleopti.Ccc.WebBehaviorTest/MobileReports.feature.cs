@@ -115,19 +115,38 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Enter Application without permission")]
-        public virtual void EnterApplicationWithoutPermission()
+        [NUnit.Framework.DescriptionAttribute("Default report settings")]
+        public virtual void DefaultReportSettings()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Enter Application without permission", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default report settings", ((string[])(null)));
 #line 21
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line 22
- testRunner.Given("I have the role \'No access to mobile reports\'");
+ testRunner.Given("I have the role \'Access to mobile reports\'");
 #line 23
- testRunner.When("I view MobileReports");
+ testRunner.When("I view ReportSettings");
 #line 24
+ testRunner.Then("I should see ReportSettings with default value");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Enter Application without permission")]
+        public virtual void EnterApplicationWithoutPermission()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Enter Application without permission", ((string[])(null)));
+#line 26
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 27
+ testRunner.Given("I have the role \'No access to mobile reports\'");
+#line 28
+ testRunner.When("I view MobileReports");
+#line 29
  testRunner.Then("I should see friendly error message");
 #line hidden
             this.ScenarioCleanup();
@@ -138,17 +157,17 @@ this.FeatureBackground();
         public virtual void SignOutFromApplication()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign out from application", ((string[])(null)));
-#line 26
+#line 31
  this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 27
+#line 32
   testRunner.Given("I have the role \'Access to mobile reports\'");
-#line 28
+#line 33
   testRunner.And("I view MobileReports");
-#line 29
+#line 34
   testRunner.When("I click the signout button");
-#line 30
+#line 35
   testRunner.Then("I should be signed out from MobileReports");
 #line hidden
             this.ScenarioCleanup();
@@ -159,33 +178,33 @@ this.FeatureBackground();
         public virtual void ViewReport()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View Report", ((string[])(null)));
-#line 33
+#line 39
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 34
- testRunner.Given("I have the role \'Access to mobile reports\'");
-#line 35
- testRunner.And("I have analytics data for today");
-#line 36
- testRunner.And("I have analytics fact queue data");
-#line 37
- testRunner.When("I view ReportSettings");
-#line 38
- testRunner.And("I select a report");
-#line 39
- testRunner.And("I select date today");
 #line 40
- testRunner.And("I check type Graph");
+ testRunner.Given("I have the role \'Access to mobile reports\'");
 #line 41
- testRunner.And("I check type Table");
+ testRunner.And("I have analytics data for today");
 #line 42
- testRunner.And("I click View Report Button");
+ testRunner.And("I have analytics fact queue data");
 #line 43
- testRunner.Then("I should see a report");
+ testRunner.When("I view ReportSettings");
 #line 44
- testRunner.And("I should see a graph");
+ testRunner.And("I select a report");
 #line 45
+ testRunner.And("I select date today");
+#line 46
+ testRunner.And("I check type Graph");
+#line 47
+ testRunner.And("I check type Table");
+#line 48
+ testRunner.And("I click View Report Button");
+#line 49
+ testRunner.Then("I should see a report");
+#line 50
+ testRunner.And("I should see a graph");
+#line 51
  testRunner.And("I should see a table");
 #line hidden
             this.ScenarioCleanup();
@@ -196,21 +215,21 @@ this.FeatureBackground();
         public virtual void SelectDateInDate_Picker()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Select date in date-picker", ((string[])(null)));
-#line 47
+#line 53
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 48
+#line 54
  testRunner.Given("I have the role \'Access to mobile reports\'");
-#line 49
+#line 55
  testRunner.When("I view ReportSettings");
-#line 50
+#line 56
  testRunner.And("I open the date-picker");
-#line 51
+#line 57
  testRunner.And("I click on any date");
-#line 52
+#line 58
  testRunner.Then("the date-picker should close");
-#line 53
+#line 59
  testRunner.And("I should see the selected date");
 #line hidden
             this.ScenarioCleanup();
@@ -221,25 +240,25 @@ this.FeatureBackground();
         public virtual void SelectSkillInSkill_Picker()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Select skill in skill-picker", ((string[])(null)));
-#line 55
+#line 61
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 56
- testRunner.Given("I have the role \'Access to mobile reports\'");
-#line 57
- testRunner.And("I have analytics data for today");
-#line 58
- testRunner.And("I have skill analytics data");
-#line 59
- testRunner.When("I view ReportSettings");
-#line 60
- testRunner.And("I open the skill-picker");
-#line 61
- testRunner.And("I select a skill");
 #line 62
- testRunner.And("I close the skill-picker");
+ testRunner.Given("I have the role \'Access to mobile reports\'");
 #line 63
+ testRunner.And("I have analytics data for today");
+#line 64
+ testRunner.And("I have skill analytics data");
+#line 65
+ testRunner.When("I view ReportSettings");
+#line 66
+ testRunner.And("I open the skill-picker");
+#line 67
+ testRunner.And("I select a skill");
+#line 68
+ testRunner.And("I close the skill-picker");
+#line 69
  testRunner.Then("I should see the selected skill");
 #line hidden
             this.ScenarioCleanup();
@@ -250,21 +269,21 @@ this.FeatureBackground();
         public virtual void SelectAllSkillsItemInSkill_Picker()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Select all skills item in skill-picker", ((string[])(null)));
-#line 65
+#line 71
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 66
+#line 72
  testRunner.Given("I have the role \'Access to mobile reports\'");
-#line 67
+#line 73
  testRunner.When("I view ReportSettings");
-#line 68
+#line 74
  testRunner.And("I open the skill-picker");
-#line 69
+#line 75
  testRunner.And("I select the all skills item");
-#line 70
+#line 76
  testRunner.And("I close the skill-picker");
-#line 71
+#line 77
  testRunner.Then("I should see the all skill item selected");
 #line hidden
             this.ScenarioCleanup();
@@ -275,19 +294,19 @@ this.FeatureBackground();
         public virtual void NavigateWithinReportViewToPreviousDay()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate within report view to previous day", ((string[])(null)));
-#line 73
+#line 79
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 74
+#line 80
  testRunner.Given("I have the role \'Access to mobile reports\'");
-#line 75
+#line 81
  testRunner.And("I have analytics data for the current week");
-#line 76
+#line 82
  testRunner.And("I am viewing a report");
-#line 77
+#line 83
  testRunner.When("I click previous date");
-#line 78
+#line 84
  testRunner.Then("I should see a report for previous date");
 #line hidden
             this.ScenarioCleanup();
@@ -298,19 +317,19 @@ this.FeatureBackground();
         public virtual void NavigateWithinReportViewToNextDay()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate within report view to next day", ((string[])(null)));
-#line 80
+#line 86
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 81
+#line 87
  testRunner.Given("I have the role \'Access to mobile reports\'");
-#line 82
+#line 88
  testRunner.And("I have analytics data for the current week");
-#line 83
+#line 89
  testRunner.And("I am viewing a report");
-#line 84
+#line 90
  testRunner.When("I click next date");
-#line 85
+#line 91
  testRunner.Then("I should see a report for next date");
 #line hidden
             this.ScenarioCleanup();
@@ -321,15 +340,15 @@ this.FeatureBackground();
         public virtual void EnterApplicationWithPartialAccessToReports()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Enter Application with partial access to reports", ((string[])(null)));
-#line 87
+#line 93
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 88
+#line 94
  testRunner.Given("I am user with partial access to reports");
-#line 89
+#line 95
  testRunner.When("I view ReportSettings");
-#line 90
+#line 96
  testRunner.Then("I should only see reports i have access to");
 #line hidden
             this.ScenarioCleanup();
@@ -340,21 +359,21 @@ this.FeatureBackground();
         public virtual void TabledataShowsSundayAsFirstDayOfWeekForUSCulture()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Tabledata shows sunday as first day of week for US culture", ((string[])(null)));
-#line 92
+#line 98
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 93
+#line 99
  testRunner.Given("I have the role \'Access to mobile reports\'");
-#line 94
+#line 100
  testRunner.And("I am american");
-#line 95
+#line 101
  testRunner.And("I have analytics data for the current week");
-#line 96
+#line 102
  testRunner.And("I have analytics fact queue data");
-#line 97
+#line 103
  testRunner.When("I view a report with week data");
-#line 98
+#line 104
  testRunner.Then("I should see sunday as the first day of week in tabledata");
 #line hidden
             this.ScenarioCleanup();

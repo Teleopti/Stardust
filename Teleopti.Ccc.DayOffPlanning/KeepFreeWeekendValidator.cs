@@ -7,17 +7,11 @@ namespace Teleopti.Ccc.DayOffPlanning
 {
     public class KeepFreeWeekendValidator : IDayOffLegalStateValidator
     {
-        #region Variables
-
-        private readonly MinMax<int> _options;
+    	private readonly MinMax<int> _options;
         private readonly IOfficialWeekendDays _officialWeekendDays;
         private readonly MinMax<int> _periodIndexRange;
 
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
+    	/// <summary>
         /// Initializes a new instance of the <see cref="KeepFreeWeekendValidator"/> class.
         /// </summary>
         /// <param name="originalPeriodDays">The original period days.</param>
@@ -36,12 +30,7 @@ namespace Teleopti.Ccc.DayOffPlanning
             _options = new MinMax<int>(weekendCount, weekendCount);
         }
 
-
-        #endregion
-
-        #region Interface
-
-        public bool IsValid(BitArray periodDays, int dayOffIndex)
+    	public bool IsValid(BitArray periodDays, int dayOffIndex)
         {
             int minimumIndex = _periodIndexRange.Minimum;
             int maximumIndex = _periodIndexRange.Maximum;
@@ -59,12 +48,7 @@ namespace Teleopti.Ccc.DayOffPlanning
             return (weekendCount >= _options.Minimum && weekendCount <= _options.Maximum);
         }
 
-
-        #endregion
-
-        #region Local
-
-        private static int CountWeekEnds(IList<int> weekendDayIndexes)
+    	private static int CountWeekEnds(IList<int> weekendDayIndexes)
         {
             int weekends = 0;
             if (weekendDayIndexes.Count < 2)
@@ -81,7 +65,7 @@ namespace Teleopti.Ccc.DayOffPlanning
         private IList<int> WeekendDayIndexes(BitArray array, int minimumIndex, int maximumIndex)
         {
             IList<int> result = new List<int>();
-            IList<int> officialWeekendDays = _officialWeekendDays.WeekendDayIndexes();
+            IList<int> officialWeekendDays = _officialWeekendDays.WeekendDayIndexesRelativeStartDayOfWeek();
 
             for (int i = minimumIndex; i <= maximumIndex; i++)
             {
@@ -91,8 +75,5 @@ namespace Teleopti.Ccc.DayOffPlanning
             }
             return result;
         }
-       
-        #endregion
-
     }
 }

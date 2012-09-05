@@ -129,6 +129,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             return ValidColumn(columnIndex) && ValidRow(rowIndex);
         }
 
+        internal virtual bool ValidCell(int columnIndex, int rowIndex, int rowCount)
+        {
+            return ValidColumn(columnIndex) && ValidRow(rowIndex, rowCount);
+        }
+
+        internal virtual bool ValidRow(int rowIndex, int rowCount)
+        {
+            return rowIndex >= 0 && rowIndex <= rowCount;
+        }
+
         internal virtual bool ValidColumn(int columnIndex)
         {
             var ret = false;
