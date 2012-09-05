@@ -3,6 +3,7 @@
 /// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -59,8 +60,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				var promise = dayViewModels[date].SetPreference(preference);
 				promises.push(promise);
 			});
-		$.when.apply(null, promises)
-			.done(function () { periodFeedbackViewModel.LoadFeedback(); });
+		if (promises.length != 0) {
+			$.when.apply(null, promises)
+				.done(function() { periodFeedbackViewModel.LoadFeedback(); });
+		}
+
 	}
 
 	function _initAddExtendedButton() {
@@ -70,6 +74,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 		addExtendedTooltip = $('<div/>')
 			.qtip({
+				id: "add-extended",
 				content: {
 					text: template
 				},
