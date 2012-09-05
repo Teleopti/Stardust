@@ -14,9 +14,9 @@ Background:
     
 Scenario: Do not show time indicator if no permission
 	Given I have the role 'No access to ASM'
-	And Current time is '2012-09-03 12:00'
-	When I view my week schedule for date '2012-09-03'
-	Then I should not see the time indicator
+	And Current time is '2012-10-03 12:00'
+	When I view my week schedule for date '2012-10-03'
+	Then I should not see the time indicator for date '2012-10-03'
 
 # Ändra "end" 
 Scenario: Show the time indicator at correct time
@@ -49,20 +49,29 @@ Scenario: Show time indicator for the part of the week that has passed
 # Ändra "end"
 Scenario: Show time indicator movement
 	Given I have the role 'Full access to mytime'
-	And Current time is '2001-01-03 12:00'
-	And I should see the end of time indicator at time '2001-01-03 12:00'
+	And Current time is '2013-10-03 12:00'
+	And I should see the time indicator at time '2013-10-03 12:00'
 	When Time has passed with '1' minutes 
-	Then I should see the end of time indicator at time '2001-01-03 12:01'
+	Then I should see the time indicator at time '2013-10-03 12:01'
 	
 # Ändra "end"
 Scenario: Show time indicator movement at midnight
 	Given I have the role 'Full access to mytime'
 	And Current time is '2001-01-01 23:59'
-	And I should see the end of time indicator at time '2001-01-01 23:59'
+	And I should see the time indicator at time '2001-01-01 23:59'
 	When Time has passed with '1' minutes
-	Then I should see the end of time indicator at time '2001-01-02 00:00'
+	Then I should see the time indicator at time '2001-01-02 00:00'
 
+Scenario: Handle time indicator movement from winter to summer time
+	Given I have the role 'Full access to mytime'
+	And Current time is '2013-10-27 2:59'
+	And I should see the time indicator at time '2013-10-27 2:59'
+	When Time has passed with '1' minutes
+	Then I should see the time indicator at time '2013-10-28 02:00'
 
-
-	
-
+Scenario: Handle time indicator movement from summer to winter time
+	Given I have the role 'Full access to mytime'
+	And Current time is '2014-03-30 1:59'
+	And I should see the time indicator at time '2014-03-30 1:59'
+	When Time has passed with '1' minutes
+	Then I should see the time indicator at time '2014-03-30 03:00'

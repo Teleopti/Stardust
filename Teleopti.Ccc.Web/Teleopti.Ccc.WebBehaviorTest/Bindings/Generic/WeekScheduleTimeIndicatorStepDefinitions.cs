@@ -15,28 +15,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	{
 		private WeekSchedulePage _page { get { return Pages.Pages.WeekSchedulePage; } }
 
+		[Given(@"I should see the time indicator at time '(.*)'")]
 		[Then(@"I should see the time indicator at time '(.*)'")]
 		public void ThenIShouldSeeTheTimeIndicatorAtTime(DateTime date)
 		{
-			var localDate = TimeZoneHelper.ConvertFromUtc(date, UserFactory.User().Person.PermissionInformation.DefaultTimeZone());
 			var dateString = _page.DayElementForDate(date).GetAttributeValue("data-mytime-date");
 
 			DateTime dateFromPage;
 			if (DateTime.TryParse(dateString, UserFactory.User().Culture, DateTimeStyles.None, out dateFromPage))
 			{
-				dateFromPage.Date.Should().Be.EqualTo(localDate.Date);
+				dateFromPage.Date.Should().Be.EqualTo(date.Date);
 			}
 			dateFromPage.Should().Not.Be.EqualTo(null);
 
-			var positionPercentage = (decimal)(localDate.TimeOfDay - TimeSpan.Zero).Ticks / (new TimeSpan(23, 59, 59) - TimeSpan.Zero).Ticks;
+			var positionPercentage = (decimal)(date.TimeOfDay - TimeSpan.Zero).Ticks / (new TimeSpan(23, 59, 59) - TimeSpan.Zero).Ticks;
 			const int heightOfDay = 668;
 			var heightOfTimeIndicator = Math.Round(positionPercentage * heightOfDay, 0);
 
-			_page.DayElementForDate(localDate).ListItems[4].Divs.Count.Should().Be.EqualTo(1);
-			_page.DayElementForDate(localDate).ListItems[4].Divs[0].Style.GetAttributeValue("Top").Should().Be.EqualTo(
+			_page.DayElementForDate(date).ListItems[4].Divs.Count.Should().Be.EqualTo(1);
+			_page.DayElementForDate(date).ListItems[4].Divs[0].Style.GetAttributeValue("Top").Should().Be.EqualTo(
 				Math.Round(heightOfTimeIndicator, 0).ToString(CultureInfo.InvariantCulture) + "px");
 		}
 
-		
+		[Then(@"I should not see the time indicator for date '(.*)'")]
+		public void ThenIShouldNotSeeTheTimeIndicatorForDate(DateTime date)
+		{
+			_page.DayElementForDate(date).ListItems[4].Divs.Count.Should().Be.EqualTo(1);
+			_page.DayElementForDate(date).ListItems[4].Divs[0].Style.GetAttributeValue("display").Should().Be.EqualTo("none");
+		}
 	}
 }

@@ -104,11 +104,11 @@ this.FeatureBackground();
 #line 16
  testRunner.Given("I have the role \'No access to ASM\'");
 #line 17
- testRunner.And("Current time is \'2012-09-03 12:00\'");
+ testRunner.And("Current time is \'2012-10-03 12:00\'");
 #line 18
- testRunner.When("I view my week schedule for date \'2012-09-03\'");
+ testRunner.When("I view my week schedule for date \'2012-10-03\'");
 #line 19
- testRunner.Then("I should not see the time indicator");
+ testRunner.Then("I should not see the time indicator for date \'2012-10-03\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -210,13 +210,13 @@ this.FeatureBackground();
 #line 51
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 52
- testRunner.And("Current time is \'2001-01-03 12:00\'");
+ testRunner.And("Current time is \'2013-10-03 12:00\'");
 #line 53
- testRunner.And("I should see the end of time indicator at time \'2001-01-03 12:00\'");
+ testRunner.And("I should see the time indicator at time \'2013-10-03 12:00\'");
 #line 54
  testRunner.When("Time has passed with \'1\' minutes");
 #line 55
- testRunner.Then("I should see the end of time indicator at time \'2001-01-03 12:01\'");
+ testRunner.Then("I should see the time indicator at time \'2013-10-03 12:01\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -235,11 +235,57 @@ this.FeatureBackground();
 #line 60
  testRunner.And("Current time is \'2001-01-01 23:59\'");
 #line 61
- testRunner.And("I should see the end of time indicator at time \'2001-01-01 23:59\'");
+ testRunner.And("I should see the time indicator at time \'2001-01-01 23:59\'");
 #line 62
  testRunner.When("Time has passed with \'1\' minutes");
 #line 63
- testRunner.Then("I should see the end of time indicator at time \'2001-01-02 00:00\'");
+ testRunner.Then("I should see the time indicator at time \'2001-01-02 00:00\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Handle time indicator movement from winter to summer time")]
+        public virtual void HandleTimeIndicatorMovementFromWinterToSummerTime()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Handle time indicator movement from winter to summer time", ((string[])(null)));
+#line 65
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 66
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 67
+ testRunner.And("Current time is \'2013-10-27 2:59\'");
+#line 68
+ testRunner.And("I should see the time indicator at time \'2013-10-27 2:59\'");
+#line 69
+ testRunner.When("Time has passed with \'1\' minutes");
+#line 70
+ testRunner.Then("I should see the time indicator at time \'2013-10-28 02:00\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Handle time indicator movement from summer to winter time")]
+        public virtual void HandleTimeIndicatorMovementFromSummerToWinterTime()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Handle time indicator movement from summer to winter time", ((string[])(null)));
+#line 72
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 73
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 74
+ testRunner.And("Current time is \'2014-03-30 1:59\'");
+#line 75
+ testRunner.And("I should see the time indicator at time \'2014-03-30 1:59\'");
+#line 76
+ testRunner.When("Time has passed with \'1\' minutes");
+#line 77
+ testRunner.Then("I should see the time indicator at time \'2014-03-30 03:00\'");
 #line hidden
             this.ScenarioCleanup();
         }
