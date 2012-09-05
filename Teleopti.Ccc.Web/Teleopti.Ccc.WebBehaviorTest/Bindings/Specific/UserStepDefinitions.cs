@@ -677,6 +677,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
 		}
 
+        [Given(@"I have a scheduled shift according to this:")]
+        public void GivenIHaveAScheduledShiftAccordingToThis(Table table)
+        {
+            ScenarioContext.Current.Pending();
+        }
+
 	}
 
 }

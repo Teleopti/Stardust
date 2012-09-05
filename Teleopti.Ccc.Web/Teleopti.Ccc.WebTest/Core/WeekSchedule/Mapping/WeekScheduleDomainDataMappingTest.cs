@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
+using System.Threading;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -115,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var date = new DateOnly(DateTime.Now);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
-			var period = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
 			var scheduleDay = new StubFactory().ScheduleDayStub(date);
 			var projection = new StubFactory().ProjectionStub();
 
@@ -141,6 +142,27 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			result.Days.Single(d => d.Date == date).Projection.Should().Be.SameInstanceAs(projection);
 		}
+       
+        [Test]
+        public void ShouldMapProjectionIncludingTheDayBeforeCurrentWeek()
+        {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("sv-SE");
+            var date = new DateOnly(2012, 08, 27);
+            var yesterdayDate = new DateOnly(2012, 08, 26);
+            var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+            var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), firstDayOfWeek.AddDays(6));
+            var scheduleDay = new StubFactory().ScheduleDayStub(date);
+            var scheduleYesterday = new StubFactory().ScheduleDayStub(yesterdayDate);
+            var projectionYesterday = new StubFactory().ProjectionStub();
+
+            scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay, scheduleYesterday });
+            projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projectionYesterday);
+
+            var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+
+            result.Days.Single(d => d.Date == date).ProjectionYesterday.Should().Not.Be.Null();
+            result.Days.Single(d => d.Date == date).ProjectionYesterday.Should().Be.SameInstanceAs(projectionYesterday);
+        }
 
 		[Test]
 		public void ShouldMapPersonRequests()
@@ -148,11 +170,12 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var date = new DateOnly(DateTime.Now);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
-			var period = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+			var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+			var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
 			var scheduleDay = new StubFactory().ScheduleDayStub(date);
 			var projection = new StubFactory().ProjectionStub();
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+            scheduleProvider.Stub(x => x.GetScheduleForPeriod(weekWithPreviousDay)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
@@ -163,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                                      		DateTime.UtcNow, DateTime.UtcNow.AddHours(1))
 			                                      	));
 
-			personRequestProvider.Stub(x => x.RetrieveRequests(period)).Return(new[] {personRequest});
+			personRequestProvider.Stub(x => x.RetrieveRequests(week)).Return(new[] {personRequest});
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 
@@ -175,12 +198,13 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		{
 			var date = new DateOnly(DateTime.Now);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
-			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
-			var period = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+            var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+            var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+            var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
 			var scheduleDay = new StubFactory().ScheduleDayStub(date);
 			var projection = new StubFactory().ProjectionStub();
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(weekWithPreviousDay)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
@@ -193,7 +217,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                                      		localMidnightInUtc, localMidnightInUtc.AddHours(1))
 			                                      	));
 
-			personRequestProvider.Stub(x => x.RetrieveRequests(period)).Return(new[] {personRequest});
+			personRequestProvider.Stub(x => x.RetrieveRequests(week)).Return(new[] {personRequest});
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 
@@ -241,6 +265,93 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(17);
 			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(00);
 		}
+
+        [Test]
+        public void ShouldMapMinMaxTimeForNightShift()
+        {
+            var date = new DateOnly(2012,08,28);
+            var scheduleDay = new StubFactory().ScheduleDayStub(date);
+
+            userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+            var localMidnightInUtc = timeZone.ConvertTimeToUtc(date.Date);
+            var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+            var layer = new StubFactory().VisualLayerStub();
+            layer.Period = projectionPeriod;
+            var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+            scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { scheduleDay });
+            projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+
+            var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+
+            result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
+            result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
+
+            result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(23);
+            result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(59);
+        }
+
+        [Test]
+        public void ShouldMapMinMaxTimeForNightShiftFromPreviousWeek()
+        {
+            var date = new DateOnly(2012, 08, 28);
+            var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+            var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+            var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+            var scheduleDay = new StubFactory().ScheduleDayStub(firstDayOfWeek.AddDays(-1).Date);   
+
+            userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+            var localMidnightInUtc = timeZone.ConvertTimeToUtc(firstDayOfWeek.AddDays(-1).Date);
+            var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+            var layer = new StubFactory().VisualLayerStub();
+            layer.Period = projectionPeriod;
+            var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+            scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+            projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+
+            var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(firstDayOfWeek);
+
+            result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
+            result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
+
+            result.MinMaxTime.EndTime.Days.Should().Be.EqualTo(0);
+            result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(4);
+            result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(0);
+        }
+
+        [Test]
+        public void ShouldMapMinMaxTimeForNightShiftStartingOnTheLastDayOfCurrentWeek()
+        {
+            var date = new DateOnly(2012, 08, 26);
+            var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+            var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+            var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+            var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
+
+            userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+            var localMidnightInUtc = timeZone.ConvertTimeToUtc(lastDayOfWeek.Date);
+            var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+            var layer = new StubFactory().VisualLayerStub();
+            layer.Period = projectionPeriod;
+            var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+            scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+            projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+
+            var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(lastDayOfWeek);
+
+            result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(20);
+            result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
+
+            result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(23);
+            result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(59);
+        }
 
 		[TearDown]
 		public void Teardown()

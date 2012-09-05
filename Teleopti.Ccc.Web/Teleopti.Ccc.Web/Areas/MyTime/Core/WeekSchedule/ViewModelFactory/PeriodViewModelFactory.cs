@@ -10,58 +10,56 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public class PeriodViewModelFactory : IPeriodViewModelFactory
-	{
-		public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IVisualLayerCollection visualLayerCollection, TimePeriod minMaxTime)
-		{
-			foreach (var visualLayer in visualLayerCollection)
-			{
-				MeetingViewModel meetingModel = null;
+    {
+        public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateTime localDate, ICccTimeZoneInfo timeZone)
+        {
+            var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
+            var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
 
-				var meetingPayload = visualLayer.Payload as IMeetingPayload;
-				if (meetingPayload != null)
-				{
-					meetingModel = new MeetingViewModel
-					{
-						Location = meetingPayload.Meeting.GetLocation(new NoFormatting()),
-						Title = meetingPayload.Meeting.GetSubject(new NoFormatting())
-					};
-				}
+            var newList = new List<PeriodViewModel>();
+            
+            foreach (var visualLayer in layerExtendedList)
+            {
+                MeetingViewModel meetingModel = null;
+                
+                var meetingPayload = visualLayer.Payload as IMeetingPayload;
+                if (meetingPayload!=null)
+                {
+                    meetingModel = new MeetingViewModel
+                                        {
+                                            Location = meetingPayload.Meeting.GetLocation(new NoFormatting()),
+                                            Title = meetingPayload.Meeting.GetSubject(new NoFormatting())
+                                        };
+                }
 
-				var dateTimePeriod = visualLayer.Period;
-				var timePeriod = dateTimePeriod.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
+                //yield return
+                newList.Add(new PeriodViewModel
+                                {
+                                    Summary =
+                                        TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
+                                                                               CultureInfo.CurrentUICulture),
+                                    Title = visualLayer.DisplayDescription().Name,
+                                    TimeSpan =
+                                        visualLayer.Period.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+                                        ToShortTimeString(CultureInfo.CurrentUICulture),
+                                    StyleClassName = colorToString(visualLayer.DisplayColor()),
+                                    Meeting = meetingModel,
+                                    Color = visualLayer.DisplayColor().ToCSV(),
+                                    StartPositionPercentage =
+                                        (decimal)
+                                        (visualLayer.VisualPeriod.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+                                             StartTime - minMaxTime.StartTime).Ticks/
+                                        (minMaxTime.EndTime - minMaxTime.StartTime).Ticks,
+                                    EndPositionPercentage =
+                                        (decimal)
+                                        (visualLayer.VisualPeriod.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+                                             EndTime - minMaxTime.StartTime).Ticks/
+                                        (minMaxTime.EndTime - minMaxTime.StartTime).Ticks
+                                });
 
-				var startTime = timePeriod.StartTime;
-				var endTime = timePeriod.EndTime;
-
-				// make sure the shifts over midnight are displayed on the same day
-				if (startTime < minMaxTime.StartTime)
-				{
-					startTime+=TimeSpan.FromDays(1);
-				}
-
-				if (endTime < minMaxTime.StartTime)
-				{
-					endTime += TimeSpan.FromDays(1);
-				}
-
-				yield return
-					new PeriodViewModel
-					{
-						Summary =
-							TimeHelper.GetLongHourMinuteTimeString(dateTimePeriod.ElapsedTime(),
-																   CultureInfo.CurrentUICulture),
-						Title = visualLayer.DisplayDescription().Name,
-						TimeSpan =
-							dateTimePeriod.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
-							ToShortTimeString(CultureInfo.CurrentUICulture),
-						StyleClassName = colorToString(visualLayer.DisplayColor()),
-						Meeting = meetingModel,
-						Color = visualLayer.DisplayColor().ToCSV(),
-						StartPositionPercentage = (decimal)(startTime - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks,
-						EndPositionPercentage = (decimal)(endTime - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks
-					};
-			}
-		}
+            }
+            return newList;
+        }
 
 
 		private static string colorToString(Color color)
@@ -69,5 +67,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var colorCode = color.ToArgb();
 			return string.Concat("color_", ColorTranslator.ToHtml(Color.FromArgb(colorCode)).Replace("#", ""));
 		}
+
 	}
 }

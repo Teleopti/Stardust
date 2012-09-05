@@ -68,9 +68,36 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _initTodayButton() {
 		$('#Schedule-today-button')
-			.click(function() {
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
-			});
+		.click(function () {
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
+		});
+	}
+
+	function _setTimeIndicator() {
+
+		var timelineHeight = 668;
+
+		var ms = new Date().getTeleoptiTime();
+		var hours = new Date(ms).getHours();
+		var minutes = new Date(ms).getMinutes();
+		var clientNowMinutes = (hours * 60) + (minutes * 1);
+
+		var timelineStartMinutes = getMinutes("div[data-timeline-start]");
+		var timelineEndMinutes = getMinutes("div[data-timeline-end]");
+
+		var division = (clientNowMinutes - timelineStartMinutes) / (timelineEndMinutes - timelineStartMinutes);
+		var position = Math.round(timelineHeight * division);
+
+		var formattedDate = $.datepicker.formatDate('yy-mm-dd', new Date(ms));
+		var timeIndicator = $('ul[data-mytime-date="' + formattedDate + '"] .schedule-time-indicator');
+
+		timeIndicator.css("top", position).show();
+	}
+
+	function getMinutes(elementSelector) {
+		var timeString = $(elementSelector).text();
+		var timeParts = timeString.split(":");
+		return (timeParts[0] * 60) + (timeParts[1] * 1);
 	}
 
 	return {
@@ -88,6 +115,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 			Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
+			_setTimeIndicator();
 		}
 	};
 

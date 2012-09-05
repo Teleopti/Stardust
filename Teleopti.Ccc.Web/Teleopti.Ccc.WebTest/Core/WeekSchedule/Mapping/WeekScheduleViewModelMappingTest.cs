@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                 	{Date = DateOnly.Today, Projection = MockRepository.GenerateMock<IVisualLayerCollection>()};
 			var periodViewModels = new PeriodViewModel[] {};
 
-			periodViewModelFactory.Stub(x => x.CreatePeriodViewModels(domainData.Projection, new TimePeriod())).Return(periodViewModels);
+			periodViewModelFactory.Stub(x => x.CreatePeriodViewModels(domainData.Projection, new TimePeriod(), domainData.Date, domainData.ScheduleDay.TimeZone)).Return(periodViewModels);
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
@@ -334,6 +334,15 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			result.TimeLine.First().PositionPercentage.Should().Be.EqualTo(0.0);
 			result.TimeLine.ElementAt(1).Time.Should().Be.EqualTo("9:00");
 			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5/(17.5 - 8.5));
+		}
+
+		[Test]
+		public void ShouldGetPosition()
+		{
+
+			var testPos = 668 *
+						  ((new TimeSpan(12, 0, 0).TotalMinutes - TimeSpan.Zero.TotalMinutes) /
+						   (new TimeSpan(23, 59, 0).TotalMinutes - TimeSpan.Zero.TotalMinutes));
 		}
 	}
 }

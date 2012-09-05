@@ -85,6 +85,7 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\WeekScheduleTimeIndicatorStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftCategoryStepDefinitions.cs" />
@@ -98,6 +99,11 @@
     <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
     <Compile Include="Bindings\Generic\PreferencesPageStepDefinitions.cs" />
     <Compile Include="Pages\GlobalMenuPage.cs" />
+    <Compile Include="WeekScheduleTimeIndicator.feature.cs">
+      <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Asm.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -443,6 +449,14 @@
     <None Include="ApplicationStartRecovery.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ApplicationStartRecovery.feature.cs</LastGenOutput>
+    </None>
+    <None Include="WeekScheduleTimeIndicator.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WeekScheduleTimeIndicator.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Asm.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Asm.feature.cs</LastGenOutput>
     </None>
     <None Include="Asm.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
