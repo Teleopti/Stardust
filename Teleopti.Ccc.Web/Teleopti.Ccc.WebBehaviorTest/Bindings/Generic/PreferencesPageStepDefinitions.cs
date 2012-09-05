@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
@@ -73,6 +74,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(preference));
+		}
+
+		[Then(@"I should not see the extended preference button")]
+		public void ThenIShouldNotSeeTheExtendedPreferenceButton()
+		{
+			EventualAssert.That(()=>Pages.Pages.PreferencePage.ExtendedPreferenceButton.Exists, Is.False);
+		}
+
+		[Then(@"I should see these available preferences")]
+		public void ThenIShouldSeeTheseAvailablePreferences(Table table)
+		{
+			var collection = Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectList.AllContents;
+			var actual=new string[collection.Count];
+			collection.CopyTo(actual, 0);
+			var expected = table.Rows.Select(o => o["Value"] == string.Empty ? " " : o["Value"]);
+			CollectionAssert.AreEqual(expected, actual);
 		}
 
 

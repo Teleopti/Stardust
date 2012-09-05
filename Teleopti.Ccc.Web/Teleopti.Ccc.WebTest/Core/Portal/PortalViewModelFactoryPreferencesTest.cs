@@ -156,6 +156,19 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		}
 
 		[Test]
+		public void ShouldNotHaveAddExtendedPreferenceButtonIfNoPermission()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences)).Return(false);
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			var button = result.ControllerItems<ToolBarButtonItem>("Preference").FirstOrDefault(i => i.ButtonType == "add-extended");
+			button.Should().Be.Null();
+		}
+
+		[Test]
 		public void ShouldHaveShiftCategoriesInPreferenceOptions()
 		{
 			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();

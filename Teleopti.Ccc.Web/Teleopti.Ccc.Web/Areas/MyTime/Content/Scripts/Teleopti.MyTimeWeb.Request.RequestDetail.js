@@ -49,7 +49,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _initControls() {
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
-		ko.applyBindings(requestViewModel, ko.dataFor($('#Request-detail-section')));
+		ko.applyBindings(requestViewModel, $('#Request-detail-section')[0]);
 
 		$('#Request-detail-section .date-input')
 			.datepicker()

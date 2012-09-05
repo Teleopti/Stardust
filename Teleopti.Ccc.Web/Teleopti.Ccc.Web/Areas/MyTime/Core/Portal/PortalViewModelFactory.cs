@@ -112,29 +112,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 		private PreferenceNavigationItem createPreferenceNavigationItem()
 		{
 			var preferenceOptions = PreferenceOptions();
+			var toolbarItems = new ToolBarItemBase[]
+				{
+					new ToolBarDatePicker
+						{
+							NextTitle = Resources.NextPeriod,
+							PrevTitle = Resources.PreviousPeriod
+						},
+					new ToolBarSeparatorItem(),
+					new ToolBarSplitButton
+						{
+							Title = Resources.Preference,
+							Options = preferenceOptions
+						},
+					new ToolBarSeparatorItem(),
+					new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
+				};
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences))
+			{
+				toolbarItems = toolbarItems.Concat(new[] { new ToolBarButtonItem { Title = Resources.AddExtendedPreference, ButtonType = "add-extended" } }).ToArray();
+			}
 			return new PreferenceNavigationItem
 			       	{
 			       		Action = "Index",
 			       		Controller = "Preference",
 			       		Title = Resources.Preference,
 			       		NavigationItems = new NavigationItem[0],
-			       		ToolBarItems = new ToolBarItemBase[]
-			       		               	{
-			       		               		new ToolBarDatePicker
-			       		               			{
-			       		               				NextTitle = Resources.NextPeriod,
-			       		               				PrevTitle = Resources.PreviousPeriod
-			       		               			},
-			       		               		new ToolBarSeparatorItem(),
-			       		               		new ToolBarSplitButton
-			       		               			{
-			       		               				Title = Resources.Preference,
-			       		               				Options = preferenceOptions
-			       		               			},
-			       		               		new ToolBarButtonItem {Title = Resources.AddExtendedPreference, ButtonType = "add-extended"},
-			       		               		new ToolBarSeparatorItem(),
-			       		               		new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
-			       		               	},
+						ToolBarItems = toolbarItems,
 						PreferenceOptions = preferenceOptions,
 						ActivityOptions = ActivityOptions()
 			       	};

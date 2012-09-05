@@ -3,7 +3,7 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 @using Teleopti.Interfaces.Domain
-@model Teleopti.Ccc.Web.Areas.MyTime.Models.Portal.PortalViewModel
+@model PortalViewModel
 <nav id="tabs" class="main-nav">
 	<ul>
 		@foreach (var navSection in Model.NavigationItems)
@@ -90,7 +90,7 @@
 						
 						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId">
 							<option value="">&nbsp;</option>
-							<option value="-"></option>
+							<option value="-">-</option>
 							@foreach (var option in preferenceNavigation.PreferenceOptions)
 							{
 								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
