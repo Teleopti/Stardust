@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("ASM")]
     [NUnit.Framework.CategoryAttribute("ASM")]
+    [NUnit.Framework.IgnoreAttribute()]
     public partial class ASMFeature
     {
         
@@ -34,7 +35,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "ASM", "In order to improve adherence\r\nAs an agent\r\nI want to see my current activities", ProgrammingLanguage.CSharp, new string[] {
-                        "ASM"});
+                        "ASM",
+                        "ignore"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         
         public virtual void FeatureBackground()
         {
-#line 8
+#line 9
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -76,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table1.AddRow(new string[] {
                         "Name",
                         "Full access to mytime"});
-#line 9
+#line 10
  testRunner.Given("there is a role with", ((string)(null)), table1);
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table2.AddRow(new string[] {
                         "Schedule published to date",
                         "2040-06-24"});
-#line 12
+#line 13
   testRunner.And("I have a workflow control set with", ((string)(null)), table2);
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table3.AddRow(new string[] {
                         "Length",
                         "1"});
-#line 16
+#line 17
  testRunner.And("I have a schedule period with", ((string)(null)), table3);
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
@@ -112,7 +114,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table4.AddRow(new string[] {
                         "Start date",
                         "2012-06-18"});
-#line 21
+#line 22
  testRunner.And("I have a person period with", ((string)(null)), table4);
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
@@ -127,7 +129,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table5.AddRow(new string[] {
                         "Lunch3HoursAfterStart",
                         "true"});
-#line 24
+#line 25
  testRunner.And("there is a shift with", ((string)(null)), table5);
 #line hidden
         }
@@ -139,15 +141,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No permission to ASM module", new string[] {
                         "ignore"});
-#line 31
-this.ScenarioSetup(scenarioInfo);
-#line 8
-this.FeatureBackground();
 #line 32
- testRunner.Given("I have the role \'No access to ASM\'");
+this.ScenarioSetup(scenarioInfo);
+#line 9
+this.FeatureBackground();
 #line 33
- testRunner.When("I am viewing week schedule");
+ testRunner.Given("I have the role \'No access to ASM\'");
 #line 34
+ testRunner.When("I am viewing week schedule");
+#line 35
  testRunner.Then("ASM link should not be visible");
 #line hidden
             this.ScenarioCleanup();
@@ -158,19 +160,19 @@ this.FeatureBackground();
         public virtual void ShowPartOfAgentSScheduleInPopup()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show part of agent\'s schedule in popup", ((string[])(null)));
-#line 36
-this.ScenarioSetup(scenarioInfo);
-#line 8
-this.FeatureBackground();
 #line 37
- testRunner.Given("I have the role \'Full access to mytime\'");
+this.ScenarioSetup(scenarioInfo);
+#line 9
+this.FeatureBackground();
 #line 38
- testRunner.And("Current time is \'2030-01-01\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 39
- testRunner.When("I view my week schedule");
+ testRunner.And("Current time is \'2030-01-01\'");
 #line 40
- testRunner.And("I click ASM link");
+ testRunner.When("I view my week schedule");
 #line 41
+ testRunner.And("I click ASM link");
+#line 42
  testRunner.Then("I should see a schedule in popup");
 #line hidden
             this.ScenarioCleanup();
@@ -181,19 +183,19 @@ this.FeatureBackground();
         public virtual void WriteAllUpcomingActivities()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write all upcoming activities", ((string[])(null)));
-#line 43
-this.ScenarioSetup(scenarioInfo);
-#line 8
-this.FeatureBackground();
 #line 44
- testRunner.Given("I have the role \'Full access to mytime\'");
+this.ScenarioSetup(scenarioInfo);
+#line 9
+this.FeatureBackground();
 #line 45
- testRunner.And("Current time is \'2030-01-01 07:00\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 46
- testRunner.When("I view my regional settings");
+ testRunner.And("Current time is \'2030-01-01 07:00\'");
 #line 47
- testRunner.And("I click ASM link");
+ testRunner.When("I view my regional settings");
 #line 48
+ testRunner.And("I click ASM link");
+#line 49
  testRunner.Then("I should see \'3\' upcoming activities");
 #line hidden
             this.ScenarioCleanup();
@@ -204,19 +206,19 @@ this.FeatureBackground();
         public virtual void CurrentActivityShouldBeShown()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Current activity should be shown", ((string[])(null)));
-#line 50
-this.ScenarioSetup(scenarioInfo);
-#line 8
-this.FeatureBackground();
 #line 51
- testRunner.Given("I have the role \'Full access to mytime\'");
+this.ScenarioSetup(scenarioInfo);
+#line 9
+this.FeatureBackground();
 #line 52
- testRunner.And("Current time is \'2030-01-01 16:00\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 53
- testRunner.When("I view my regional settings");
+ testRunner.And("Current time is \'2030-01-01 16:00\'");
 #line 54
- testRunner.And("I click ASM link");
+ testRunner.When("I view my regional settings");
 #line 55
+ testRunner.And("I click ASM link");
+#line 56
  testRunner.Then("I should see Phone as current activity");
 #line hidden
             this.ScenarioCleanup();
@@ -227,19 +229,19 @@ this.FeatureBackground();
         public virtual void NoCurrentActivityToShow()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No current activity to show", ((string[])(null)));
-#line 57
-this.ScenarioSetup(scenarioInfo);
-#line 8
-this.FeatureBackground();
 #line 58
- testRunner.Given("I have the role \'Full access to mytime\'");
+this.ScenarioSetup(scenarioInfo);
+#line 9
+this.FeatureBackground();
 #line 59
- testRunner.And("Current time is \'2030-01-01 07:00\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 60
- testRunner.When("I view my regional settings");
+ testRunner.And("Current time is \'2030-01-01 07:00\'");
 #line 61
- testRunner.And("I click ASM link");
+ testRunner.When("I view my regional settings");
 #line 62
+ testRunner.And("I click ASM link");
+#line 63
  testRunner.Then("I should not see as current activity");
 #line hidden
             this.ScenarioCleanup();

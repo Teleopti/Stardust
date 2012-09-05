@@ -1,4 +1,5 @@
 ﻿@ASM
+@ignore
 Feature: ASM
 	In order to improve adherence
 	As an agent
