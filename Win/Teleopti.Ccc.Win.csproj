@@ -322,6 +322,11 @@
     <Compile Include="Common\Configuration\SmsSettingsControl.Designer.cs">
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\Controls\Rows\SkillWeekGridRowStaffingIssuesSummary.cs" />
+    <Compile Include="Common\Controls\Rows\SkillWeekGridRowStaffingIssues.cs" />
+    <Compile Include="Common\Controls\Rows\SkillWeekGridRowMinMaxIssuesSummary.cs" />
+    <Compile Include="Common\Controls\Rows\SkillWeekGridRowMinMaxIssues.cs" />
+    <Compile Include="Common\Controls\Rows\SkillWeekGridRow.cs" />
     <Compile Include="Common\ExternalExceptionHandler.cs" />
     <Compile Include="Common\Configuration\AuditingPage.cs">
       <SubType>UserControl</SubType>
@@ -1196,6 +1201,9 @@
     </Compile>
     <Compile Include="Scheduling\AuditHistoryView.Designer.cs">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\SkillWeekGridControl.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Scheduling\PersonsFilterView.cs">
       <SubType>Form</SubType>
