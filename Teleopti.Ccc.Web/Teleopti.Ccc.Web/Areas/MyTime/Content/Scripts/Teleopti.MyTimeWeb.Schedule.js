@@ -86,7 +86,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var timelineEndMinutes = getMinutes("div[data-timeline-end]");
 
 		var division = (clientNowMinutes - timelineStartMinutes) / (timelineEndMinutes - timelineStartMinutes);
-		var position = timelineHeight * division;
+		var position = Math.round(timelineHeight * division);
 
 		var formattedDate = $.datepicker.formatDate('yy-mm-dd', new Date(ms));
 		var timeIndicator = $('ul[data-mytime-date="' + formattedDate + '"] .schedule-time-indicator');
