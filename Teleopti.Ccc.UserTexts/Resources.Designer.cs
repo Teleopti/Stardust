@@ -1250,6 +1250,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to After checking against activities.
+        /// </summary>
+        public static string AfterCheckingAgainstActivities {
+            get {
+                return ResourceManager.GetString("AfterCheckingAgainstActivities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checking against keep start and end time.
         /// </summary>
         public static string AfterCheckingAgainstKeepStartAndEndTime {
@@ -1633,6 +1642,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Allowance {
             get {
                 return ResourceManager.GetString("Allowance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow Overwrite.
+        /// </summary>
+        public static string AllowOverwrite {
+            get {
+                return ResourceManager.GetString("AllowOverwrite", resourceCulture);
             }
         }
         

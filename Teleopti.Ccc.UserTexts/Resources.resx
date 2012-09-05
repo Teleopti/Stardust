@@ -11063,4 +11063,11 @@ These options are activated:
     <value>Please choose skill set.</value>
     <comment>Used in mobile report, prompt user to select skill set.</comment>
   </data>
+  <data name="AllowOverwrite" xml:space="preserve">
+    <value>Allow Overwrite</value>
+    <comment>Column Allow overwrite</comment>
+  </data>
+  <data name="AfterCheckingAgainstActivities" xml:space="preserve">
+    <value>After checking against activities</value>  
+  </data>
 </root>
