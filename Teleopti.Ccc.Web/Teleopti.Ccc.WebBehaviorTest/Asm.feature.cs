@@ -246,6 +246,31 @@ this.FeatureBackground();
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Current activity changes")]
+        public virtual void CurrentActivityChanges()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Current activity changes", ((string[])(null)));
+#line 65
+this.ScenarioSetup(scenarioInfo);
+#line 9
+this.FeatureBackground();
+#line 66
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 67
+ testRunner.And("Current time is \'2030-01-01 11:59\'");
+#line 68
+ testRunner.When("I view my regional settings");
+#line 69
+ testRunner.And("I click ASM link");
+#line 70
+ testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
+#line 71
+ testRunner.Then("I should see Phone as current activity");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

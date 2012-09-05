@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class AsmStepDefinition
 	{
-		private static readonly Uri asmUri = new Uri(TestSiteConfigurationSetup.Url,"MyTime/Asm");
+		public static readonly Uri asmUri = new Uri(TestSiteConfigurationSetup.Url,"MyTime/Asm");
 		private IE _popup;
 
 		[When(@"I click ASM link")]
