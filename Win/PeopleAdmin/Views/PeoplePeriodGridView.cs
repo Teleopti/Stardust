@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			if (personPeriodChildCollection != null)
 			{
-				if (ValidCell(e.ColIndex, e.RowIndex))
+				if (ValidCell(e.ColIndex, e.RowIndex, gridControl.RowCount))
 				{
 					_childGridColumns[e.ColIndex].GetCellInfo(e, personPeriodChildCollection);
 				}
@@ -430,11 +430,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		internal override void ChildGridQuerySaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
-			var personPeriodChildCollection = ((GridControl)sender).Tag as ReadOnlyCollection<PersonPeriodChildModel>;
+		    var grid =(GridControl) sender;
+			var personPeriodChildCollection = grid.Tag as ReadOnlyCollection<PersonPeriodChildModel>;
 
 			if (personPeriodChildCollection != null)
 			{
-				if (ValidCell(e.ColIndex, e.RowIndex) && _childGridColumns.Count > e.ColIndex)
+				if (ValidCell(e.ColIndex, e.RowIndex, grid.RowCount) && _childGridColumns.Count > e.ColIndex)
 				{
 					_childGridColumns[e.ColIndex].SaveCellInfo(e, personPeriodChildCollection);
 				}
