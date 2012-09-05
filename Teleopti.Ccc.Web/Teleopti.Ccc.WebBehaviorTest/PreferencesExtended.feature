@@ -161,17 +161,17 @@ Scenario: Add extended preference
 	| Preference                  | Late  |
 	| Start time minimum          | 10:30 |
 	| Start time maximum          | 11:00 |
-	| End time minimum            | 19:30 |
-	| End time maximum            | 20:00 |
-	| Work time minimum           | 08:00 |
-	| Work time maximum           | 08:30 |
+	| End time minimum            | 19:00 |
+	| End time maximum            | 20:30 |
+	| Work time minimum           | 8:00 |
+	| Work time maximum           | 8:30 |
 	| Activity                    | Lunch |
 	| Activity Start time minimum | 11:30 |
 	| Activity Start time maximum | 11:45 |
 	| Activity End time minimum   | 12:00 |
 	| Activity End time maximum   | 12:15 |
-	| Activity time minimum       | 00:15 |
-	| Activity time maximum       | 00:45 |
+	| Activity time minimum       | 0:15 |
+	| Activity time maximum       | 0:45 |
 
 Scenario: Edit extended preference
          Given I have the role 'Access to extended preferences'

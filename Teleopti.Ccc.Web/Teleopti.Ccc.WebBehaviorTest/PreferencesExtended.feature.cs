@@ -535,16 +535,16 @@ this.FeatureBackground();
                         "11:00"});
             table16.AddRow(new string[] {
                         "End time minimum",
-                        "19:30"});
+                        "19:00"});
             table16.AddRow(new string[] {
                         "End time maximum",
-                        "20:00"});
+                        "20:30"});
             table16.AddRow(new string[] {
                         "Work time minimum",
-                        "08:00"});
+                        "8:00"});
             table16.AddRow(new string[] {
                         "Work time maximum",
-                        "08:30"});
+                        "8:30"});
             table16.AddRow(new string[] {
                         "Activity",
                         "Lunch"});
@@ -562,10 +562,10 @@ this.FeatureBackground();
                         "12:15"});
             table16.AddRow(new string[] {
                         "Activity time minimum",
-                        "00:15"});
+                        "0:15"});
             table16.AddRow(new string[] {
                         "Activity time maximum",
-                        "00:45"});
+                        "0:45"});
 #line 158
  testRunner.Then("I should see extended preference with", ((string)(null)), table16);
 #line hidden
