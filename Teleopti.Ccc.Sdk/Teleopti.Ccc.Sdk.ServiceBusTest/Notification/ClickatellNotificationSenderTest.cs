@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -67,28 +69,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_target.SendNotification(smsMessage, "46709218108");
 		}
 
-        [Test]
-        public void ShouldSplitMessageIfGreaterThanMaxLength()
+       [Test]
+        public void ShouldSplitMessageIfGreaterThanMaxSmsLength()
         {
             INotificationMessage msg = new NotificationMessage();
             msg.Subject = "Your Working Hours have changed";
-            msg.Messages.Add("test1");
-            msg.Messages.Add("test2");
-            msg.Messages.Add("test3");
-
-            var doc = new XmlDocument();
-			doc.LoadXml(xml);
-
-            Expect.Call(_notificationConfigReader.HasLoadedConfig).Return(true);
-            Expect.Call(_notificationConfigReader.Data).Return("test");
-            Expect.Call(_notificationConfigReader.From).Return("From Person");
-            Expect.Call(_notificationConfigReader.User).Return("user");
-            Expect.Call(_notificationConfigReader.Password).Return("pswd");
-            Expect.Call(_notificationConfigReader.Url).Return(new Uri("http://www.clickatell.com")).Repeat.Twice();
-            _mocks.ReplayAll();
+            msg.Messages.Add("Monday 2012-01-01 08:00-17:00");
+            msg.Messages.Add("Tuesday 2012-01-02 08:00-16:00");
+            msg.Messages.Add("Wedneday 2012-01-03 08:00-16:00");
+            msg.Messages.Add("Thrusday 2012-01-04 08:00-16:00");
+            msg.Messages.Add("Friday 2012-01-05 08:00-16:00");
+            msg.Messages.Add("Monday 2012-01-08 Not Working");
             
-            _target.SendNotification(msg, "46709218108");
-            _mocks.VerifyAll();
+            IList<string> messages = _target.GetSmsMessagesToSend(msg);
+            Assert.That(messages.Count, Is.EqualTo(2));
         }
 
 		[Test]

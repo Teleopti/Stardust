@@ -27,19 +27,30 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			//var smsMessage = message.Subject;
 
             // list for messages to send
+            IList<string> messagesToSendList = GetSmsMessagesToSend(message);
+		    
+            foreach(var msg in messagesToSendList)
+            {
+                SendSmsNotifications(msg, mobileNumber);
+            }
+
+        }
+
+        public IList<string> GetSmsMessagesToSend(INotificationMessage message)
+        {
             IList<string> messagesToSendList = new List<string>();
-		    const int maxLength = 160;
+            const int maxSmsLength = 160;
             string temp = message.Subject + " ";
 
             for (int i = 0; i < message.Messages.Count; )
             {
-                if (temp.Length + message.Messages[i].Length < maxLength)
+                if (temp.Length + message.Messages[i].Length < maxSmsLength)
                 {
                     temp = temp + message.Messages[i] + ",";
                     i++;
                     if (i == message.Messages.Count)
                     {
-                        string replace = temp.Substring(0, temp.Length-1);
+                        string replace = temp.Substring(0, temp.Length - 1);
                         messagesToSendList.Add(replace + ".");
                     }
                 }
@@ -47,15 +58,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
                 {
                     string replace = temp.Substring(0, temp.Length - 1);
                     messagesToSendList.Add(replace + ".");
-                    temp = message.Subject + " "; 
+                    temp = message.Subject + " ";
                 }
             }
 
-            foreach(var msg in messagesToSendList)
-            {
-                SendSmsNotifications(msg, mobileNumber);
-            }
-		}
+            return messagesToSendList;
+        }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         private void SendSmsNotifications(string smsMessage, string mobileNumber)
