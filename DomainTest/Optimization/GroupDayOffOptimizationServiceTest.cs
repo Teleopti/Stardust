@@ -156,19 +156,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
             Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 1), false, false));
 
-            Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10);
-            Expect.Call(_container1.Execute()).Return(true);
+            //Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10);
+            //Expect.Call(_container1.Execute()).Return(true);
             //worse
-            Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(11);
-            Expect.Call(_schedulePartModifyAndRollbackService.ModificationCollection).Return(
-                new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _scheduleDay }));
-            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-            Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2011, 1, 1));
-            Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 1), false, false));
+            //Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(11);
+			//Expect.Call(_schedulePartModifyAndRollbackService.ModificationCollection).Return(
+			//    new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _scheduleDay }));
+			//Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+			//Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2011, 1, 1));
+			//Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+			//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 1), false, false));
 
-            Expect.Call(_container1.Owner).Return(owner).Repeat.AtLeastOnce();
-            Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection()).Repeat.Times(2);
+			Expect.Call(_container1.Owner).Return(owner).Repeat.AtLeastOnce();
+			//Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection()).Repeat.Times(2);
         	Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(owner, new DateOnly(2011, 1, 1))).Return(
         		new List<IScheduleMatrixPro> {_matrix1, _matrix2}).Repeat.Any();
         	Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod1).Repeat.Any();

@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -372,5 +373,70 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Assert.IsFalse(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _allScheduleMatrixes));
             }
         }
+
+		[Test]
+		public void ScheduleBackToLegalStateDaysShouldReturnFalseIfSchedulingFails()
+		{
+			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
+			ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
+			IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, new DateTimePeriod());
+			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
+			IOptimizationPreferences optimizationPreferences = new OptimizationPreferences();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly());
+				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions,
+																						   optimizationPreferences,
+				                                                                           personAssignment.MainShift,
+				                                                                           new DateOnly()));
+				Expect.Call(_scheduleDay.Person).Return(_person);
+				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly())).Return(groupPerson);
+				Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, new DateOnly(),
+																						   _schedulingOptions)).Return(false);
+
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsFalse(_target.ScheduleBackToLegalStateDays(new List<IScheduleDay> { _scheduleDay }, groupSchedulingService, rollbackService, _schedulingOptions, optimizationPreferences, _groupPersonBuilderForOptimization, _allScheduleMatrixes));
+			}
+		}
+
+		[Test]
+		public void ScheduleBackToLegalStateDaysShouldReturnTrueIfSuccessfulScheduling()
+		{
+			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
+			ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
+			IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, new DateTimePeriod());
+			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
+			IOptimizationPreferences optimizationPreferences = new OptimizationPreferences();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly());
+				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions,
+																						   optimizationPreferences,
+																						   personAssignment.MainShift,
+																						   new DateOnly()));
+				Expect.Call(_scheduleDay.Person).Return(_person);
+				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly())).Return(groupPerson);
+				Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, new DateOnly(),
+																						   _schedulingOptions)).Return(true);
+				Expect.Call(groupSchedulingService.ScheduleOneDayOnOnePerson(new DateOnly(), _person, _schedulingOptions, groupPerson, _allScheduleMatrixes)).Return(true);
+
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsTrue(_target.ScheduleBackToLegalStateDays(new List<IScheduleDay> { _scheduleDay }, groupSchedulingService, rollbackService, _schedulingOptions, optimizationPreferences, _groupPersonBuilderForOptimization, _allScheduleMatrixes));
+			}
+		}
+
     }
+
 }

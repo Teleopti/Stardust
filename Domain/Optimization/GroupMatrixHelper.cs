@@ -228,8 +228,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			IGroupPerson groupPersonToRun = groupPersonBuilderForOptimization.BuildGroupPerson(person,
 																								   dayToReschedule);
-			_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPersonToRun,
-																	   dayToReschedule, schedulingOptions);
+			if(!_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPersonToRun, dayToReschedule, schedulingOptions))
+				return false;
 			if (!groupSchedulingService.ScheduleOneDayOnOnePerson(dayToReschedule, person, schedulingOptions, groupPersonToRun, allMatrixes))
 			{
 				schedulePartModifyAndRollbackService.Rollback();

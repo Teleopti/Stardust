@@ -303,8 +303,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
 			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
 			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper, groupOptimizerFindMatrixesForGroup);
-            
-            //another service too
+
+			service.ReportProgress += resourceOptimizerPersonOptimized;
             service.Execute(optimizerContainers, optimizerPreferences.Extra.KeepSameDaysOffInTeam);
             service.ReportProgress -= resourceOptimizerPersonOptimized;
         }
