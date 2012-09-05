@@ -88,8 +88,12 @@ Scenario: Preference list contains available preferences when adding extended pr
          When I click the add extended preference button
          Then I should see these available preferences
          | Value   |
+         |         |
+         | -       |
          | Late    |
+         | -       |
          | Dayoff  |
+         | -       |
          | Illness |
 
 Scenario: Can only select available preferences when adding an existing extended preference 
@@ -222,13 +226,13 @@ Scenario: Verify time validation for preference start and end time
          Given I have the role 'Access to extended preferences'
          And I am viewing preferences for date '2012-06-20'
          When I select day '2012-06-20'
-         And I click the extended preference button
+         And I click the add extended preference button
          And I input extended preference fields with
-         | Field            | Value |
-         | Preference       | Late  |
+         | Field              | Value |
+         | Preference         | Late  |
          | Start time minimum | 10:30 |
          | Start time maximum | 10:00 |
-         And I click the save button
+         And I click the apply extended preferences button
          Then I should see extended panel with
          | Field            | Value               |
          | Validation Error | Invalid time period |

@@ -90,7 +90,7 @@
 						
 						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId">
 							<option value="">&nbsp;</option>
-							<option value="-"></option>
+							<option value="-">-</option>
 							@foreach (var option in preferenceNavigation.PreferenceOptions)
 							{
 								<option value="@option.Value" data-color="@option.Color">@option.Text</option>

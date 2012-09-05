@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -77,6 +78,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			EventualAssert.That(()=>Pages.Pages.PreferencePage.ExtendedPreferenceButton.Exists, Is.False);
 		}
+
+		[Then(@"I should see these available preferences")]
+		public void ThenIShouldSeeTheseAvailablePreferences(Table table)
+		{
+			var collection = Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectList.AllContents;
+			var actual=new string[collection.Count];
+			collection.CopyTo(actual, 0);
+			var expected = table.Rows.Select(o => o["Value"] == string.Empty ? " " : o["Value"]);
+			CollectionAssert.AreEqual(expected, actual);
+		}
+
 
 
 		[When(@"I input extended preference fields with")]
