@@ -236,6 +236,7 @@
     <Compile Include="Optimization\GroupIntradayOptimizer.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerExecuter.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerService.cs" />
+    <Compile Include="Optimization\GroupMoveTimeOptimizer.cs" />
     <Compile Include="Optimization\GroupOptimizationValidatorRunner.cs" />
     <Compile Include="Optimization\GroupOptimizerFindMatrixesForGroup.cs" />
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroup.cs" />
