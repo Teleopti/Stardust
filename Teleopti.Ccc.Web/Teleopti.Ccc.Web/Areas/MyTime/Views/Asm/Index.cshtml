@@ -36,22 +36,15 @@
 	</div>
 	<div class="asm-current-info">
 		<div class="asm-info-canvas ui-corner-all">
-			<span style="width: 50px;">
-				<div id="asm-info-current-starttime">
-				</div>
-				<div id="asm-info-next-starttime">
-				</div>
-			</span><span style="width: 150px;">
-				<div id="asm-info-current-activity">
-				</div>
-				<div id="asm-info-next-activity">
-				</div>
-			</span><span>
-				<div id="asm-info-current-endtime">
-				</div>
-				<div id="asm-info-next-endtime">
-				</div>
-			</span>
+			<div>Upcoming activities</div>
+			<table>
+				<tbody data-bind="foreach: activityInfo">
+					<tr data-bind="style: {'opacity': active == true ? '1' : '0.4'}">
+						<td class="asm-info-time-column" data-bind="text: time"></td>
+						<td data-bind="text: payload"></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div class="clearboth" />

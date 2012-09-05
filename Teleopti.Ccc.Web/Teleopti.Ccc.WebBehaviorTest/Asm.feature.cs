@@ -281,6 +281,33 @@ this.FeatureBackground();
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Write name and time of next activity when current doesn\'t exist")]
+        public virtual void WriteNameAndTimeOfNextActivityWhenCurrentDoesnTExist()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write name and time of next activity when current doesn\'t exist", ((string[])(null)));
+#line 78
+this.ScenarioSetup(scenarioInfo);
+#line 9
+this.FeatureBackground();
+#line 79
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 80
+ testRunner.And("Current time is \'2030-01-01 07:50\'");
+#line 81
+ testRunner.When("I view my regional settings");
+#line 82
+ testRunner.And("I click ASM link");
+#line 83
+ testRunner.Then("I should see Phone as next activity");
+#line 84
+ testRunner.And("I should see \'08:00\' as next start time");
+#line 85
+ testRunner.And("I should see \'11:00\' as next end time");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

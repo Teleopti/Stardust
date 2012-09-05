@@ -43,6 +43,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => element.Text, Is.EqualTo(TestData.ActivityLunch.Description.Name));
 		}
 
+		[Then(@"I should see Phone as next activity")]
+		public void ThenIShouldSeePhoneAsNextActivity()
+		{
+			var element = _popup.Element(Find.ById("asm-info-next-activity"));
+			EventualAssert.That(() => element.Text, Is.EqualTo(TestData.ActivityPhone.Description.Name));
+		}
+
 		[Then(@"I should see '(.*)' as current end time")]
 		public void ThenIShouldSeeTimeAsCurrentEndTime(string time)
 		{

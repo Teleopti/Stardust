@@ -74,3 +74,12 @@ Scenario: Write name and time of next activity
 	Then I should see Lunch as next activity
 	And I should see '11:00' as next start time
 	And I should see '12:00' as next end time
+
+Scenario: Write name and time of next activity when current doesn't exist
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 07:50'
+	When I view my regional settings
+	And I click ASM link
+	Then I should see Phone as next activity
+	And I should see '08:00' as next start time
+	And I should see '11:00' as next end time

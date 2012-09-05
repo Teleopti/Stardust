@@ -8,7 +8,7 @@
 .asm-current-info
 {
 	float: left;
-	width: 250px;
+	width: 200px;
 	margin-left: 10px;
 }
 .asm-schedule-canvas
@@ -23,7 +23,7 @@
 
 .asm-outer-canvas
 {
-	width: 865px;
+	width: 815px;
 	background: white;
 	padding: 6px;
 	border: 1px solid rgba(0, 0, 0, 0.15);
@@ -78,23 +78,31 @@
 	border-right: 1px solid black;
 }
 
-.asm-info-canvas span
-{
-	float: left;
-	position: relative;
-	overflow: hidden;
-	white-space: nowrap;
-}
-
-.asm-info-canvas div
-{
-	text-align: left;
-	font-family: verdana;
-	font-size: 10px;
-	white-space:pre;
-}
-
 body
 {
 	overflow: hidden;
+}
+
+.asm-info-canvas table {
+	width: 100%; 
+	table-layout: fixed;
+	overflow: hidden;
+	white-space: nowrap;
+	text-align: left;
+	font-family: verdana;
+	font-size: 10px;
+}
+
+.asm-info-canvas td.asm-info-time-column
+{
+	width: 39px;
+}
+
+.asm-info-canvas div 
+{
+	padding-bottom: 3px;
+	font-weight: bold;
+	text-align: left;
+	font-family: verdana;
+	font-size: 10px;
 }
