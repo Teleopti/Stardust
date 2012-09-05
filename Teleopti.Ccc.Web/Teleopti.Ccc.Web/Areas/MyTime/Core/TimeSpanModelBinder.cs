@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			}
 
 			TimeSpan converterFromClient;
+
+			userValue = userValue.Trim();
 			if (TimeHelper.TryParseLongHourStringDefaultInterpretation(userValue, out converterFromClient, TimeFormatsType.HoursMinutes, false))
 				return converterFromClient;
 

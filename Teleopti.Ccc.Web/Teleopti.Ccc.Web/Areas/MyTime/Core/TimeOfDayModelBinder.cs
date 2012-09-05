@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			}
 
 			TimeSpan converterFromClient;
+
+			userValue = userValue.Trim();
 			if (TimeHelper.TryParse(userValue, out converterFromClient))
 				if ((int) converterFromClient.TotalDays == 0)
 					return new TimeOfDay(converterFromClient);
