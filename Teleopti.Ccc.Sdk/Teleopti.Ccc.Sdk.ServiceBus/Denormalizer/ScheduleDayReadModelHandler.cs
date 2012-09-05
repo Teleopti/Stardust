@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 						var number = _smsLinkChecker.SmsMobileNumber(person);
 						if (!string.IsNullOrEmpty(number))
 						{
-							var smsSender = _notificationSenderFactory.Sender;
+							var smsSender = _notificationSenderFactory.GetSender();
 							smsSender.SendNotification(smsMessages, number);
 						}
 					}

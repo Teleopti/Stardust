@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			Expect.Call(_notificationConfigReader.Assembly).Return("Teleopti.Ccc.Sdk.Notification");
 			Expect.Call(_notificationConfigReader.ClassName).Return("Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender");
 			_mocks.ReplayAll();
-			var sender = _target.Sender;
+			var sender = _target.GetSender();
 			Assert.That(sender, Is.Not.Null);
 			Assert.That(sender.GetType(), Is.EqualTo(typeof(ClickatellNotificationSender)));
 			_mocks.VerifyAll();
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		{
 			Expect.Call(_notificationConfigReader.HasLoadedConfig).Return(false);
 			_mocks.ReplayAll();
-			var sender = _target.Sender;
+			var sender = _target.GetSender();
 			Assert.That(sender, Is.Null);
 			_mocks.VerifyAll();
 		}
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			Expect.Call(_notificationConfigReader.HasLoadedConfig).Return(true);
 			Expect.Call(_notificationConfigReader.Assembly).Return("Teleopti.Ccc.Sdk.Nottification");
 			_mocks.ReplayAll();
-			var sender = _target.Sender;
+			_target.GetSender();
 			_mocks.VerifyAll();
 		}
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			Expect.Call(_notificationConfigReader.Assembly).Return("Teleopti.Ccc.Sdk.Notification");
 			Expect.Call(_notificationConfigReader.ClassName).Return("Teleopti.Ccc.Sdk.Notification.ClickAndTellNotificationSender").Repeat.Twice();
 			_mocks.ReplayAll();
-			var sender = _target.Sender;
+			_target.GetSender();
 			_mocks.VerifyAll();
 		}
 	}

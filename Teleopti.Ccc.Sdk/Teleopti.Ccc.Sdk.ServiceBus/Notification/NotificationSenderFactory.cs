@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
 	public interface INotificationSenderFactory
 	{
-		INotificationSender Sender { get; }
+		INotificationSender GetSender();
 	}
 
 	public class NotificationSenderFactory : INotificationSenderFactory
@@ -20,26 +20,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
 		//
 		//create via reflection of the class from config file
-		public INotificationSender Sender
-		{
-			get
-			{
-				INotificationSender sender = null;
-				if (_notificationConfigReader.HasLoadedConfig)
-				{
-					//TODO Add error handling and logging of errors, or service bus do that?
-					var assembly = Assembly.Load(_notificationConfigReader.Assembly);
-					var type = assembly.GetType(_notificationConfigReader.ClassName);
-					if (type == null)
-						throw new TypeLoadException("Type " + _notificationConfigReader.ClassName + " can't be found");
-					sender = (INotificationSender)Activator.CreateInstance(type);
-				}
-				// default
-				if (sender != null)
-					sender.SetConfigReader(_notificationConfigReader);
 
-				return sender;
+		public INotificationSender GetSender()
+		{
+			INotificationSender sender = null;
+			if (_notificationConfigReader.HasLoadedConfig)
+			{
+				//TODO Add error handling and logging of errors, or service bus do that?
+				var assembly = Assembly.Load(_notificationConfigReader.Assembly);
+				var type = assembly.GetType(_notificationConfigReader.ClassName);
+				if (type == null)
+					throw new TypeLoadException("Type " + _notificationConfigReader.ClassName + " can't be found");
+				sender = (INotificationSender) Activator.CreateInstance(type);
 			}
+			// default
+			if (sender != null)
+				sender.SetConfigReader(_notificationConfigReader);
+
+			return sender;
 		}
 	}
 }

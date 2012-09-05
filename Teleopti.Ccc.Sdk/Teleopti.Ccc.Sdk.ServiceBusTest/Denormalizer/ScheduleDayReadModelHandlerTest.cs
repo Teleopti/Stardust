@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			Expect.Call(_scheduleDayReadModelsCreator.GetReadModels(scenario, period, person)).Return(models);
 			Expect.Call(_significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod, person, models)).Return(mess);
 			Expect.Call(_smsLinkChecker.SmsMobileNumber(person)).Return("124578");
-			Expect.Call(_notificationSenderFactory.Sender).Return(_notificationSender);
+			Expect.Call(_notificationSenderFactory.GetSender()).Return(_notificationSender);
 			Expect.Call(() => _notificationSender.SendNotification(mess, "124578"));
 			Expect.Call(() =>_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, person.Id.Value));
 			Expect.Call(() => _scheduleDayReadModelRepository.SaveReadModels(models));
