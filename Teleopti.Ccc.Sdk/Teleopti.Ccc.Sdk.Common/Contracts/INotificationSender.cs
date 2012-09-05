@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
+﻿namespace Teleopti.Ccc.Sdk.Common.Contracts
 {
 	
 	public interface INotificationSender
