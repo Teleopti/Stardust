@@ -147,27 +147,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapStartTimeLimitation()
 		{
-			var earliest = TimeSpan.FromHours(8);
-			var latest = TimeSpan.FromHours(9);
+			var earliest = new TimeOfDay(TimeSpan.FromHours(8));
+			var latest = new TimeOfDay(TimeSpan.FromHours(9));
 			var input = new PreferenceDayInput { EarliestStartTime = earliest,LatestStartTime = latest};
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
-			result.Restriction.StartTimeLimitation.StartTime.Should().Be.EqualTo(earliest);
-			result.Restriction.StartTimeLimitation.EndTime.Should().Be.EqualTo(latest);
+			result.Restriction.StartTimeLimitation.StartTime.Should().Be.EqualTo(earliest.Time);
+			result.Restriction.StartTimeLimitation.EndTime.Should().Be.EqualTo(latest.Time);
 		}
 
 		[Test]
 		public void ShouldMapEndTimeLimitation()
 		{
-			var earliest = TimeSpan.FromHours(16);
-			var latest = TimeSpan.FromHours(17);
+			var earliest = new TimeOfDay(TimeSpan.FromHours(16));
+			var latest = new TimeOfDay(TimeSpan.FromHours(17));
 			var input = new PreferenceDayInput { EarliestEndTime = earliest, LatestEndTime = latest };
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
-			result.Restriction.EndTimeLimitation.StartTime.Should().Be.EqualTo(earliest);
-			result.Restriction.EndTimeLimitation.EndTime.Should().Be.EqualTo(latest);
+			result.Restriction.EndTimeLimitation.StartTime.Should().Be.EqualTo(earliest.Time);
+			result.Restriction.EndTimeLimitation.EndTime.Should().Be.EqualTo(latest.Time);
 		}
 
 		[Test]
@@ -189,11 +189,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var shortest = TimeSpan.FromHours(0.5);
 			var longest = TimeSpan.FromHours(1);
 
-			var earliestStartTime = TimeSpan.FromHours(11);
-			var latestStartTime = TimeSpan.FromHours(12);
+			var earliestStartTime = new TimeOfDay(TimeSpan.FromHours(11));
+			var latestStartTime = new TimeOfDay(TimeSpan.FromHours(12));
 
-			var earliestEndTime = TimeSpan.FromHours(11.5);
-			var latestEndTime = TimeSpan.FromHours(13);
+			var earliestEndTime = new TimeOfDay(TimeSpan.FromHours(11.5));
+			var latestEndTime = new TimeOfDay(TimeSpan.FromHours(13));
 
 			var activity = new Activity("Lunch");
 			activity.SetId(Guid.NewGuid());
@@ -214,10 +214,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
 			var activityRestriction = result.Restriction.ActivityRestrictionCollection.Single();
-			activityRestriction.StartTimeLimitation.StartTime.Should().Be.EqualTo(earliestStartTime);
-			activityRestriction.StartTimeLimitation.EndTime.Should().Be.EqualTo(latestStartTime);
-			activityRestriction.EndTimeLimitation.StartTime.Should().Be.EqualTo(earliestEndTime);
-			activityRestriction.EndTimeLimitation.EndTime.Should().Be.EqualTo(latestEndTime);
+			activityRestriction.StartTimeLimitation.StartTime.Should().Be.EqualTo(earliestStartTime.Time);
+			activityRestriction.StartTimeLimitation.EndTime.Should().Be.EqualTo(latestStartTime.Time);
+			activityRestriction.EndTimeLimitation.StartTime.Should().Be.EqualTo(earliestEndTime.Time);
+			activityRestriction.EndTimeLimitation.EndTime.Should().Be.EqualTo(latestEndTime.Time);
 			activityRestriction.WorkTimeLimitation.StartTime.Should().Be.EqualTo(shortest);
 			activityRestriction.WorkTimeLimitation.EndTime.Should().Be.EqualTo(longest);
 		}

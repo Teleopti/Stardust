@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public DateOnly Date { get; set; }
 		public Guid PreferenceId { get; set; }
 
-		public TimeSpan? EarliestStartTime { get; set; }
-		public TimeSpan? LatestStartTime { get; set; }
+		public TimeOfDay? EarliestStartTime { get; set; }
+		public TimeOfDay? LatestStartTime { get; set; }
 
-		public TimeSpan? EarliestEndTime { get; set; }
-		public TimeSpan? LatestEndTime { get; set; }
+		public TimeOfDay? EarliestEndTime { get; set; }
+		public TimeOfDay? LatestEndTime { get; set; }
 
 		public TimeSpan? MinimumWorkTime { get; set; }
 		public TimeSpan? MaximumWorkTime { get; set; }
@@ -22,10 +22,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public TimeSpan? ActivityMinimumTime { get; set; }
 		public TimeSpan? ActivityMaximumTime { get; set; }
 
-		public TimeSpan? ActivityEarliestStartTime { get; set; }
-		public TimeSpan? ActivityLatestStartTime { get; set; }
+		public TimeOfDay? ActivityEarliestStartTime { get; set; }
+		public TimeOfDay? ActivityLatestStartTime { get; set; }
 
-		public TimeSpan? ActivityEarliestEndTime { get; set; }
-		public TimeSpan? ActivityLatestEndTime { get; set; }
+		public TimeOfDay? ActivityEarliestEndTime { get; set; }
+		public TimeOfDay? ActivityLatestEndTime { get; set; }
 	}
 }

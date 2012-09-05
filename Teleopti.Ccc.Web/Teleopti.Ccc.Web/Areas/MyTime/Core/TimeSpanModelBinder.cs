@@ -18,12 +18,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var userValue = bindingContext.ValueProvider.GetValue(bindingContext.ModelName).AttemptedValue;
 
 			TimeSpan converterFromClient;
-			if (TimeHelper.TryParse(userValue, out converterFromClient))
-				if ((int)converterFromClient.TotalDays == 0)
-					return converterFromClient;
+			if (TimeHelper.TryParseLongHourStringDefaultInterpretation(userValue, out converterFromClient, TimeFormatsType.HoursMinutes, false))
+				return converterFromClient;
 
 			bindingContext.ModelState.AddModelError("timeError", string.Format(CultureInfo.CurrentUICulture, Resources.InvalidTimeValue, userValue));
-			return new TimeSpan();
+			return TimeSpan.Zero;
 		}
 	}
 }

@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 							restriction.AddActivityRestriction(
 								new ActivityRestriction(_activityRespository.Invoke().Get(s.ActivityPreferenceId))
 									{
-										StartTimeLimitation = new StartTimeLimitation(s.ActivityEarliestStartTime, s.ActivityLatestStartTime),
-										EndTimeLimitation = new EndTimeLimitation(s.ActivityEarliestEndTime, s.ActivityLatestEndTime),
+										StartTimeLimitation = new StartTimeLimitation(FromTimeOfDay(s.ActivityEarliestStartTime),FromTimeOfDay(s.ActivityLatestStartTime)),
+										EndTimeLimitation = new EndTimeLimitation(FromTimeOfDay(s.ActivityEarliestEndTime), FromTimeOfDay(s.ActivityLatestEndTime)),
 										WorkTimeLimitation = new WorkTimeLimitation(s.ActivityMinimumTime, s.ActivityMaximumTime)
 									});
 						}
@@ -52,11 +52,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.DayOffTemplate, o => o.MapFrom(s => _dayOffRepository.Invoke().Get(s.PreferenceId)))
 				.ForMember(d => d.MustHave, o => o.Ignore())
 				.ForMember(d => d.ActivityRestrictionCollection, o => o.Ignore())
-				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => new StartTimeLimitation(s.EarliestStartTime,s.LatestStartTime)))
-				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => new EndTimeLimitation(s.EarliestEndTime,s.LatestEndTime)))
+				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => new StartTimeLimitation(FromTimeOfDay(s.EarliestStartTime),FromTimeOfDay(s.LatestStartTime))))
+				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => new EndTimeLimitation(FromTimeOfDay(s.EarliestEndTime),FromTimeOfDay(s.LatestEndTime))))
 				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(s => new WorkTimeLimitation(s.MinimumWorkTime,s.MaximumWorkTime)))
 				;
+		}
 
+		private TimeSpan? FromTimeOfDay(TimeOfDay? value)
+		{
+			if (!value.HasValue) return null;
+			return value.Value.Time;
 		}
 
 		public class PreferenceDayInputToPreferenceDay : ITypeConverter<PreferenceDayInput, IPreferenceDay>
