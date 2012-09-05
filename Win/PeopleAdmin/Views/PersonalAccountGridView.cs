@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
             if (personAccountChildCollection != null)
             {
-                if (ValidCell(e.ColIndex, e.RowIndex))
+                if (ValidCell(e.ColIndex, e.RowIndex, gridControl.RowCount))
                 {
                     _childGridColumns[e.ColIndex].GetCellInfo(e, personAccountChildCollection);
                 }
@@ -407,11 +407,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
         internal override void ChildGridQuerySaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
         {
-            var personAccountChildCollection = ((GridControl)sender).Tag as ReadOnlyCollection<IPersonAccountChildModel>;
+            var grid = (GridControl) sender;
+            var personAccountChildCollection = grid.Tag as ReadOnlyCollection<IPersonAccountChildModel>;
 
             if (personAccountChildCollection != null)
             {
-                if (ValidCell(e.ColIndex, e.RowIndex))
+                if (ValidCell(e.ColIndex, e.RowIndex, grid.RowCount))
                 {
                     _childGridColumns[e.ColIndex].SaveCellInfo(e, personAccountChildCollection);
                 }

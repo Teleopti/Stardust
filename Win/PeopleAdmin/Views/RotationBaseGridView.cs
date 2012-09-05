@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			PeopleWorksheet.StateHolder.CurrentRotationChildName = gridControl.Text;
 
 			if (personRotationChildCollection != null)
-				if (ValidCell(e.ColIndex, e.RowIndex))
+				if (ValidCell(e.ColIndex, e.RowIndex, gridControl.RowCount))
 				{
 					_childGridColumns[e.ColIndex].GetCellInfo(e, personRotationChildCollection);
 				}
@@ -157,10 +157,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						return;
 				}
 			}
-
-			var personRotationChildCollection = ((GridControl)sender).Tag as ReadOnlyCollection<TAdapterChild>;
+		    var grid = (GridControl) sender;
+			var personRotationChildCollection = grid.Tag as ReadOnlyCollection<TAdapterChild>;
 			if (personRotationChildCollection != null)
-				if (ValidCell(e.ColIndex, e.RowIndex))
+				if (ValidCell(e.ColIndex, e.RowIndex, grid.RowCount))
 					_childGridColumns[e.ColIndex].SaveCellInfo(e, personRotationChildCollection);
 		}
 
