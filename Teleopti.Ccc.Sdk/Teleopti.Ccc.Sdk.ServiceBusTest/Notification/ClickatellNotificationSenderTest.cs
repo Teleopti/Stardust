@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_target.SendNotification(smsMessage, "46709218108");
 		}
 
-       [Test]
+	   [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), Test]
         public void ShouldSplitMessageIfGreaterThanMaxSmsLength()
 		{
 		    INotificationMessage msg = new NotificationMessage();
