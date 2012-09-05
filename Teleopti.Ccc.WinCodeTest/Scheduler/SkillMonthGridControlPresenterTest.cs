@@ -10,10 +10,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
 	[TestFixture]
-	public class SkillWeekGridControlPresenterTest
+	public class SkillMonthGridControlPresenterTest
 	{
-		private SkillWeekGridControlPresenter _presenter;
-		private ISkillWeekGridControl _view;
+		private SkillMonthGridControlPresenter _presenter;
+		private ISkillMonthGridControl _view;
 		private MockRepository _mocks;
 		private ISchedulerStateHolder _stateHolder;
 		private ISkill _skill;
@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_view = _mocks.StrictMock<ISkillWeekGridControl>();
+			_view = _mocks.StrictMock<ISkillMonthGridControl>();
 			_stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
 			_skill = _mocks.StrictMock<ISkill>();
-			_presenter = new SkillWeekGridControlPresenter(_view);
+			_presenter = new SkillMonthGridControlPresenter(_view);
 			_dateOnlyPeriodAsDateTimePeriod = _mocks.StrictMock<IDateOnlyPeriodAsDateTimePeriod>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldCreateDataSourceOnVirtualSkill()
 		{
-			_startTime = new DateTime(2012, 9, 3, 0, 0, 0, DateTimeKind.Utc);
-			_endTime = new DateTime(2012, 9, 9, 23, 59, 59, DateTimeKind.Utc);
+			_startTime = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
+			_endTime = new DateTime(2012, 9, 30, 23, 59, 59, DateTimeKind.Utc);
 			_dateTimePeriod = new DateTimePeriod(_startTime, _endTime);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(_startTime), new DateOnly(_endTime));
 
@@ -71,33 +71,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldDrawWeekGrid()
-		{
-			_startTime = new DateTime(2012, 9, 3, 0, 0, 0, DateTimeKind.Utc);
-			_endTime = new DateTime(2012, 9, 9, 23, 59, 59, DateTimeKind.Utc);
-			_dateTimePeriod = new DateTimePeriod(_startTime, _endTime);
-
-			using(_mocks.Record())
-			{
-				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
-				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
-				Expect.Call(_stateHolder.TimeZoneInfo).Return(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).Repeat.AtLeastOnce();
-				Expect.Call(() => _view.CreateGridRows(_skill, null, _stateHolder)).IgnoreArguments();
-				Expect.Call(() => _view.SetDataSource(_stateHolder, _skill));
-				Expect.Call(() => _view.SetupGrid(1));
-			}
-
-			using(_mocks.Playback())
-			{
-				_presenter.DrawWeekGrid(_stateHolder, _skill);
-			}
-		}
-
-		[Test]
 		public void ShouldCreateDataSourceOnNonVirtualSkill()
 		{
-			_startTime = new DateTime(2012, 9, 3, 0, 0, 0, DateTimeKind.Utc);
-			_endTime = new DateTime(2012, 9, 9, 23, 59, 59, DateTimeKind.Utc);
+			_startTime = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
+			_endTime = new DateTime(2012, 9, 30, 23, 59, 59, DateTimeKind.Utc);
 			_dateTimePeriod = new DateTimePeriod(_startTime, _endTime);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(_startTime), new DateOnly(_endTime));
 
@@ -120,57 +97,33 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
+		public void ShouldDrawMonthGrid()
+		{
+			_startTime = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
+			_endTime = new DateTime(2012, 9, 30, 23, 59, 59, DateTimeKind.Utc);
+			_dateTimePeriod = new DateTimePeriod(_startTime, _endTime);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
+				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
+				Expect.Call(_stateHolder.TimeZoneInfo).Return(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).Repeat.AtLeastOnce();
+				Expect.Call(() => _view.CreateGridRows(_skill, null, _stateHolder)).IgnoreArguments();
+				Expect.Call(() => _view.SetDataSource(_stateHolder, _skill));
+				Expect.Call(() => _view.SetupGrid(1));
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.DrawMonthGrid(_stateHolder, _skill);
+			}
+		}
+
+		[Test]
 		public void ShouldSetDates()
 		{
-			_startTime = new DateTime(2012,9, 3, 0, 0, 0,DateTimeKind.Utc);
-			_endTime = new DateTime(2012, 9, 9, 23, 59, 59, DateTimeKind.Utc);
-			_dateTimePeriod = new DateTimePeriod(_startTime, _endTime);
-
-			using(_mocks.Record())
-			{
-				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
-				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
-				Expect.Call(_stateHolder.TimeZoneInfo).Return(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).Repeat.AtLeastOnce();	
-			}
-
-			using(_mocks.Playback())
-			{
-				_presenter.SetDates(_stateHolder);
-
-				Assert.AreEqual(7, _presenter.Dates.Count);
-				Assert.AreEqual(new DateOnly(2012, 9, 3), _presenter.Dates[0]);
-				Assert.AreEqual(new DateOnly(2012, 9, 9), _presenter.Dates[6]);
-			}
-		}
-
-		[Test]
-		public void ShouldSetWeeks()
-		{
-			_startTime = new DateTime(2012, 9, 3, 0, 0, 0, DateTimeKind.Utc);
-			_endTime = new DateTime(2012, 9, 16, 23, 59, 59, DateTimeKind.Utc);
-			_dateTimePeriod = new DateTimePeriod(_startTime, _endTime);
-
-			using(_mocks.Record())
-			{
-				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
-				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
-				Expect.Call(_stateHolder.TimeZoneInfo).Return(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).Repeat.AtLeastOnce();	
-			}
-
-			using(_mocks.Playback())
-			{
-				_presenter.SetDates(_stateHolder);
-				_presenter.SetWeeks();
-
-				Assert.AreEqual(2, _presenter.Weeks.Count);
-			}		
-		}
-
-		[Test]
-		public void ShouldOnlySetFullWeeks()
-		{
-			_startTime = new DateTime(2012, 9, 3, 0, 0, 0, DateTimeKind.Utc);
-			_endTime = new DateTime(2012, 9, 4, 0, 0, 0, DateTimeKind.Utc);
+			_startTime = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
+			_endTime = new DateTime(2012, 9, 30, 23, 59, 59, DateTimeKind.Utc);
 			_dateTimePeriod = new DateTimePeriod(_startTime, _endTime);
 
 			using (_mocks.Record())
@@ -183,10 +136,57 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mocks.Playback())
 			{
 				_presenter.SetDates(_stateHolder);
-				_presenter.SetWeeks();
 
-				Assert.AreEqual(0, _presenter.Weeks.Count);
-			}	
+				Assert.AreEqual(30, _presenter.Dates.Count);
+				Assert.AreEqual(new DateOnly(2012, 9, 1), _presenter.Dates[0]);
+				Assert.AreEqual(new DateOnly(2012, 9, 30), _presenter.Dates[29]);
+			}
+		}
+
+		[Test]
+		public void ShouldSetMonths()
+		{
+			_startTime = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
+			_endTime = new DateTime(2012, 9, 30, 23, 59, 59, DateTimeKind.Utc);
+			_dateTimePeriod = new DateTimePeriod(_startTime, _endTime);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
+				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
+				Expect.Call(_stateHolder.TimeZoneInfo).Return(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.SetDates(_stateHolder);
+				_presenter.SetMonths();
+
+				Assert.AreEqual(1, _presenter.Months.Count);
+			}
+		}
+
+		[Test]
+		public void ShouldOnlySetFullMonths()
+		{
+			_startTime = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
+			_endTime = new DateTime(2012, 9, 25, 0, 0, 0, DateTimeKind.Utc);
+			_dateTimePeriod = new DateTimePeriod(_startTime, _endTime);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
+				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
+				Expect.Call(_stateHolder.TimeZoneInfo).Return(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				_presenter.SetDates(_stateHolder);
+				_presenter.SetMonths();
+
+				Assert.AreEqual(0, _presenter.Months.Count);
+			}
 		}
 	}
 }

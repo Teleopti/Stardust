@@ -626,6 +626,7 @@
     <Compile Include="Scheduler\SchedulerStateLoaderTest.cs" />
     <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortingCommandsTest.cs" />
     <Compile Include="Scheduler\SetTagCommandTest.cs" />
+    <Compile Include="Scheduler\SkillMonthGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\SkillWeekGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
     <Compile Include="Scheduler\WorkShiftMasterActivityCheckerTest.cs" />

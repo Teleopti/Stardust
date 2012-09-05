@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly SkillDayGridControl _skillDayGridControl;
         private readonly SkillIntradayGridControl _skillIntradayGridControl;
     	private readonly SkillWeekGridControl _skillWeekGridControl;
+    	private readonly SkillMonthGridControl _skillMonthGridControl;
         //private bool _intradayMode;
         private DateOnly _currentIntraDayDate;
         private DockingManager _dockingManager;
@@ -422,6 +423,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                             {ContextMenu = contextMenuStripResultView.ContextMenu};
 
 			_skillWeekGridControl = new SkillWeekGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
+        	_skillMonthGridControl = new SkillMonthGridControl {ContextMenu = contextMenuStripResultView.ContextMenu };
 
             setUpZomMenu();
             var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
@@ -495,6 +497,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             AddControlHelpContext(_skillDayGridControl);
             AddControlHelpContext(_skillIntradayGridControl);
 			AddControlHelpContext(_skillWeekGridControl);
+			AddControlHelpContext(_skillMonthGridControl);
 
             displayOptionsFromSetting();
             _dateNavigateControl.SetAvailableTimeSpan(loadingPeriod);
@@ -3433,6 +3436,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _skillIntradayGridControl.SaveSetting();
             _skillDayGridControl.SaveSetting();
 			_skillWeekGridControl.SaveSetting();
+			_skillMonthGridControl.SaveSetting();
         }
 
         private void updateShiftEditor()
@@ -3846,6 +3850,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _skillDayGridControl.RefreshGrid(new List<DateOnly>(e.ChangedDays));
 
 					_skillWeekGridControl.RefreshGrid();
+					_skillMonthGridControl.RefreshGrid();
                 	refreshChart();
                 }
 
@@ -3878,6 +3883,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 		private void skillWeekGridControl_GotFocus(object sender, EventArgs e)
+		{
+			updateRibbon(ControlType.SchedulerGridSkillData);
+		}
+
+		private void skillMonthGridControl_GotFocus(object sender, EventArgs e)
 		{
 			updateRibbon(ControlType.SchedulerGridSkillData);
 		}
@@ -4057,6 +4067,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
+		private void skillMonthGridControlSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+		{
+			if (_skillMonthGridControl.CurrentSelectedGridRow != null)
+			{
+				_currentSelectedGridRow = _skillMonthGridControl.CurrentSelectedGridRow;
+				IChartSeriesSetting chartSeriesSettings =
+					_skillMonthGridControl.CurrentSelectedGridRow.ChartSeriesSettings;
+				_gridrowInChartSettingButtons.SetButtons(chartSeriesSettings.Enabled, chartSeriesSettings.AxisLocation,
+														 chartSeriesSettings.SeriesType, chartSeriesSettings.Color);
+			}
+		}
+
         private void skillIntradayGridControl_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
             if (_skillIntradayGridControl.CurrentSelectedGridRow != null)
@@ -4104,6 +4126,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week) && !_chartInIntradayMode)
 				_skillWeekGridControl.ScrollCellInView(0, column);
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month) && !_chartInIntradayMode)
+				_skillMonthGridControl.ScrollCellInView(0, column);
 
             //if (_intradayMode && _chartInIntradayMode)
 			if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday) && _chartInIntradayMode)
@@ -4742,6 +4767,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _skillIntradayGridControl.RefreshGrid();
             _skillDayGridControl.RefreshGrid();
 			_skillWeekGridControl.RefreshGrid();
+			_skillMonthGridControl.RefreshGrid();
 			refreshChart();
             statusStrip1.Refresh();
             Application.DoEvents();
@@ -4762,6 +4788,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _skillIntradayGridControl.RefreshGrid();
                     _skillDayGridControl.RefreshGrid();
 					_skillWeekGridControl.RefreshGrid();
+					_skillMonthGridControl.RefreshGrid();
 					refreshChart();
                     _scheduleCounter = 0;
                 }
@@ -4797,6 +4824,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _skillIntradayGridControl.RefreshGrid();
                 _skillDayGridControl.RefreshGrid();
 				_skillWeekGridControl.RefreshGrid();
+				_skillMonthGridControl.RefreshGrid();
 				refreshChart();
 
                 if (_scheduleView != null)
@@ -5780,6 +5808,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _skillDayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
             _skillIntradayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
         	_skillWeekGridControl.ContextMenuStrip = _contextMenuSkillGrid;
+        	_skillMonthGridControl.ContextMenuStrip = _contextMenuSkillGrid;
         }
 
         private void setUpZomMenu()
@@ -6620,12 +6649,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_skillWeekGridControl.DrawDayGrid(_schedulerState, skill);
 						_skillWeekGridControl.DrawDayGrid(_schedulerState, skill);	
 					}
+
+					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
+					{
+						_chartDescription = skill.Name;
+						positionControl(_skillMonthGridControl);
+						ActiveControl = _skillMonthGridControl;
+						_skillMonthGridControl.DrawDayGrid(_schedulerState, skill);
+						_skillMonthGridControl.DrawDayGrid(_schedulerState, skill);
+					}
+
                     //if (_intradayMode)
-					else if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+					if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
                     {
                         drawIntraday(skill, aggregateSkillSkill);	
                     }
-                    else
+                    if(_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
                     {
                         _chartDescription = skill.Name;
                         positionControl(_skillDayGridControl);
@@ -6652,8 +6691,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_skillWeekGridControl.SetDataSource(_schedulerState, skill);	
 			}
 
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
+			{
+				_skillMonthGridControl.SetDataSource(_schedulerState, skill);
+			}
+
 			//if (_intradayMode)
-			else if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
 			{
 				var skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 					aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate,
@@ -6664,7 +6708,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (_skillIntradayGridControl.Presenter.RowManager != null)
 					_skillIntradayGridControl.Presenter.RowManager.SetDataSource(skillStaffPeriods);
 			}
-			else
+			if(_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
 				_skillDayGridControl.SetDataSource(_schedulerState, skill);	
 		}
 
@@ -6888,15 +6932,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_chartInIntradayMode = false;
 			}
 
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Month,
+												  _chartDescription);
+				_gridChartManager.ReloadChart(_skillMonthGridControl, description);
+				_chartInIntradayMode = false;
+			}
+
             //if (_intradayMode)
-			else if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
             {
                 string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Intraday,
                                                    _chartDescription);
                 _gridChartManager.ReloadChart(_skillIntradayGridControl, description);
                 _chartInIntradayMode = true;
             }
-            else
+            if(_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
             {
                 string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Day,
                                                    _chartDescription);
@@ -6937,10 +6989,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             _skillDayGridControl.GotFocus += skillDayGridControl_GotFocus;
             _skillIntradayGridControl.GotFocus += skillIntradayGridControl_GotFocus;
 			_skillWeekGridControl.GotFocus += skillWeekGridControl_GotFocus;
+			_skillMonthGridControl.GotFocus += skillMonthGridControl_GotFocus;
 
             _skillDayGridControl.SelectionChanged += skillDayGridControl_SelectionChanged;
             _skillIntradayGridControl.SelectionChanged += skillIntradayGridControl_SelectionChanged;
 			_skillWeekGridControl.SelectionChanged += skillWeekGridControlSelectionChanged;
+			_skillMonthGridControl.SelectionChanged += skillMonthGridControlSelectionChanged;
 
             _gridrowInChartSettingButtons.LineInChartSettingsChanged +=
                 gridlinesInChartSettings_LineInChartSettingsChanged;
@@ -7138,13 +7192,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_skillWeekGridControl != null)
 				_skillWeekGridControl.GotFocus -= skillWeekGridControl_GotFocus;
 
+			if (_skillMonthGridControl != null)
+				_skillMonthGridControl.GotFocus -= skillMonthGridControl_GotFocus;
+
             if (_skillDayGridControl != null)
                 _skillDayGridControl.SelectionChanged -= skillDayGridControl_SelectionChanged;
+
             if (_skillIntradayGridControl != null)
                 _skillIntradayGridControl.SelectionChanged -= skillIntradayGridControl_SelectionChanged;
 
 			if (_skillWeekGridControl != null)
 				_skillWeekGridControl.SelectionChanged -= skillWeekGridControlSelectionChanged;
+
+			if (_skillMonthGridControl != null)
+				_skillMonthGridControl.SelectionChanged -= skillMonthGridControlSelectionChanged;
 
             if (_gridrowInChartSettingButtons != null)
             {

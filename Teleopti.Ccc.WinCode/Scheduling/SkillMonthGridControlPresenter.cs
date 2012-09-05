@@ -6,58 +6,61 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public interface ISkillWeekGridControl
+	public interface ISkillMonthGridControl
 	{
 		void CreateGridRows(ISkill skill, IList<DateOnly> dates, ISchedulerStateHolder schedulerStateHolder);
 		void SetDataSource(ISchedulerStateHolder stateHolder, ISkill skill);
 		void SetupGrid(int colCount);
 	}
 
-	public class SkillWeekGridControlPresenter
+	public class SkillMonthGridControlPresenter
 	{
-		private readonly ISkillWeekGridControl _view;
-		private IList<DateOnlyPeriod> _weeks;
+		private readonly ISkillMonthGridControl _view;
+		private IList<DateOnlyPeriod> _months;
 		private IList<DateOnly> _dates;
 
-		public SkillWeekGridControlPresenter(ISkillWeekGridControl view)
+		public SkillMonthGridControlPresenter(ISkillMonthGridControl view)
 		{
 			_view = view;
 		}
 
-		public void DrawWeekGrid(ISchedulerStateHolder stateHolder, ISkill skill)
+		public void DrawMonthGrid(ISchedulerStateHolder stateHolder, ISkill skill)
 		{
 			if (stateHolder == null || skill == null) return;
 
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection();
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
 
-			var weekDates = new List<DateOnly>();
-			_weeks = new List<DateOnlyPeriod>();
+			var monthDates = new List<DateOnly>();
+			_months = new List<DateOnlyPeriod>();
 
 			foreach (var dateOnly in _dates)
 			{
-				var weekPeriod = DateHelper.GetWeekPeriod(dateOnly, CultureInfo.CurrentCulture);
-				if (!_weeks.Contains(weekPeriod))
+				var startDate = DateHelper.GetFirstDateInMonth(dateOnly.Date, CultureInfo.CurrentCulture);
+				var endDate = DateHelper.GetLastDateInMonth(dateOnly.Date, CultureInfo.CurrentCulture);
+				var monthPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
+
+				if (!_months.Contains(monthPeriod))
 				{
-					var weekDays = weekPeriod.DayCollection();
-					var exists = weekDays.All(weekDateOnly => _dates.Contains(weekDateOnly));
-					if (exists) _weeks.Add(weekPeriod);
+					var monthDays = monthPeriod.DayCollection();
+					var exists = monthDays.All(monthDateOnly => _dates.Contains(monthDateOnly));
+					if (exists) _months.Add(monthPeriod);
 				}
 			}
 
-			foreach (var dateOnlyPeriod in _weeks)
+			foreach (var dateOnlyPeriod in _months)
 			{
-				weekDates.Add(dateOnlyPeriod.StartDate);
+				monthDates.Add(dateOnlyPeriod.StartDate);
 			}
 
-			_view.CreateGridRows(skill, weekDates, stateHolder);
+			_view.CreateGridRows(skill, monthDates, stateHolder);
 			_view.SetDataSource(stateHolder, skill);
-			_view.SetupGrid(_weeks.Count);		
+			_view.SetupGrid(_months.Count);
 		}
 
-		public IList<DateOnlyPeriod> Weeks
+		public IList<DateOnlyPeriod> Months
 		{
-			get { return _weeks; }
+			get { return _months; }
 		}
 
 		public IList<DateOnly> Dates
@@ -73,17 +76,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();	
 		}
 
-		public void SetWeeks()
+		public void SetMonths()
 		{
-			_weeks = new List<DateOnlyPeriod>();
+			_months = new List<DateOnlyPeriod>();
 			foreach (var dateOnly in _dates)
 			{
-				var weekPeriod = DateHelper.GetWeekPeriod(dateOnly,  CultureInfo.CurrentCulture);
-				if (!_weeks.Contains(weekPeriod))
+				var startDate = DateHelper.GetFirstDateInMonth(dateOnly.Date, CultureInfo.CurrentCulture);
+				var endDate = DateHelper.GetLastDateInMonth(dateOnly.Date, CultureInfo.CurrentCulture);
+				var monthPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
+
+				if (!_months.Contains(monthPeriod))
 				{
-					var weekDays = weekPeriod.DayCollection();
-					var exists = weekDays.All(weekDateOnly => _dates.Contains(weekDateOnly));
-					if (exists) _weeks.Add(weekPeriod);
+					var monthDays = monthPeriod.DayCollection();
+					var exists = monthDays.All(monthDateOnly => _dates.Contains(monthDateOnly));
+					if (exists) _months.Add(monthPeriod);
 				}
 			}
 		}
@@ -95,12 +101,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			
 			SetDates(stateHolder);
-			SetWeeks();
+			SetMonths();
 			
-			IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>> skillWeekPeriods = new Dictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>();
+			IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>> skillMonthPeriods = new Dictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>();
 			IAggregateSkill aggregateSkillSkill = skill;
 
-			foreach (var dateOnlyPeriod in _weeks)
+			foreach (var dateOnlyPeriod in _months)
 			{
 				IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod>();
 				if (aggregateSkillSkill.IsVirtual)
@@ -113,11 +119,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					periods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, periodToFind);
 				}
 
-				skillWeekPeriods.Add(dateOnlyPeriod, periods);
+				skillMonthPeriods.Add(dateOnlyPeriod, periods);
 
 			}
 
-			return skillWeekPeriods;
+			return skillMonthPeriods;
 		}
 	}
 }
