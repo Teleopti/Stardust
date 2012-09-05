@@ -6,6 +6,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Filters;
@@ -60,6 +61,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPostOrPut]
 		public virtual JsonResult Preference(PreferenceDayInput input)
 		{
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
 			return Json(_preferencePersister.Persist(input));
 		}
 

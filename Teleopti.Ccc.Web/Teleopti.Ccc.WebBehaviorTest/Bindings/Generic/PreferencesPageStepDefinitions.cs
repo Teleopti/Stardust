@@ -96,6 +96,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			CollectionAssert.AreEqual(expected, Pages.Pages.PreferencePage.ExtendedPreferenceActivity.SelectList.AllContents);
 		}
 
+		[Then(@"I should see add extended preferences panel with error '(.*)'")]
+		public void ThenIShouldSeeAddExtendedPreferencesPanelWithError(string error)
+		{
+			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferencePanel.Exists, Is.True);
+		}
+
 
 
 

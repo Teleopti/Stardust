@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 {
-	public class PreferenceDayInput
+	public class PreferenceDayInput : IValidatableObject
 	{
 		public DateOnly Date { get; set; }
 		public Guid PreferenceId { get; set; }
@@ -27,5 +30,42 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 
 		public TimeOfDay? ActivityEarliestEndTime { get; set; }
 		public TimeOfDay? ActivityLatestEndTime { get; set; }
+
+
+		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+		{
+			var result = new List<ValidationResult>();
+			if (ValidateTimeOfDay(EarliestStartTime, LatestStartTime))
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+			if (ValidateTimeOfDay(EarliestEndTime, LatestEndTime))
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+			if (ValidateTimeOfDay(ActivityEarliestStartTime, ActivityLatestStartTime))
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+			if (ValidateTimeOfDay(ActivityEarliestEndTime, ActivityLatestEndTime))
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+			if (ValidateTimeSpan(MinimumWorkTime, MaximumWorkTime))
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+			if (ValidateTimeSpan(ActivityMinimumTime, ActivityMaximumTime))
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+			return result;
+		}
+
+		private static bool ValidateTimeSpan(TimeSpan? min, TimeSpan? max)
+		{
+			if (min.HasValue && max.HasValue)
+			{
+				return min.Value > max.Value;
+			}
+			return false;
+		}
+
+		private static bool ValidateTimeOfDay(TimeOfDay? early, TimeOfDay? late)
+		{
+			if (early.HasValue && late.HasValue)
+			{
+				return early.Value.Time > late.Value.Time;
+			}
+			return false;
+		}
 	}
 }

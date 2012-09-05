@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference-period")]
 		public Div PreferencePeriod;
 
+		[FindBy(Id = "ui-tooltip-add-extended")]
+		public Div ExtendedPreferencePanel;
 		[FindBy(Id = "Preference-extended-preference-container")]
 		public SelectBox ExtendedPreferenceSelectBox;
 		[FindBy(Id = "Preference-extended-start-time-minimum-input")]

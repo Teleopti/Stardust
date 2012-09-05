@@ -119,6 +119,7 @@
     <Compile Include="Areas\MyTime\Controllers\AsmControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactoryTest.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputTest.cs" />
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />

@@ -239,9 +239,7 @@ Scenario: Verify time validation for preference start and end time
     | Start time minimum | 10:30 |
     | Start time maximum | 10:00 |
     And I click the apply extended preferences button
-    Then I should see extended panel with
-    | Field            | Value               |
-    | Validation Error | Invalid time period |
+    Then I should see add extended preferences panel with error 'Invalid time period'
 
 Scenario: Disable all time fields when absence preference is selected
     Given I have the role 'Access to extended preferences'

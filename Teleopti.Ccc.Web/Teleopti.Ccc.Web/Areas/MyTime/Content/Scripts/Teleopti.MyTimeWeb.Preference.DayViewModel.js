@@ -177,6 +177,15 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		});
 	};
 
+	function _displayValidationError(data) {
+		var message = data.Errors.join('</br>');
+		$('#Preference-extended-error').html(message || '');
+	}
+
+	function _clearValidationError() {
+		$('#Preference-extended-error').html('');
+	}
+
 	this.SetPreference = function (value) {
 		if (typeof (value) == 'string') {
 			value = JSON.stringify({
@@ -196,6 +205,15 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			complete: function () {
 				deferred.resolve();
 				self.LoadFeedback();
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					_displayValidationError(data);
+//					$('#Request-detail-ok-button').prop('disabled', false);
+					return;
+				}
+//				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 			}
 		});
 		return deferred.promise();
