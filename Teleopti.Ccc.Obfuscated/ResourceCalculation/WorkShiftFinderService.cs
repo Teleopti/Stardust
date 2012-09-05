@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			{
 				_shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_scheduleDateOnly, timeZone, bag, true);
 				if (_shiftList.Count > 0)
-					result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions);
+					result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions, possibleStartEndCategory);
 			}
 
             return result;
