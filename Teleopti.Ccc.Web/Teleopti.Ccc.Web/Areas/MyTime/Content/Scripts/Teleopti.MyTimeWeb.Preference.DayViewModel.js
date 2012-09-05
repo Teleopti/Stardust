@@ -205,7 +205,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		var deferred = $.Deferred();
 		ajaxForDate({
 			type: 'DELETE',
-			data: { Date: self.Date },
+			data: JSON.stringify({ Date: self.Date }),
 			date: self.Date,
 			statusCode404: function () { },
 			success: this.ReadPreference,

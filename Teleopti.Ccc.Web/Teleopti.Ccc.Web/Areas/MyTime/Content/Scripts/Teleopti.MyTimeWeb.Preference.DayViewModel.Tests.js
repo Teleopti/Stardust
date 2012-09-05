@@ -148,7 +148,10 @@ $(document).ready(function () {
 		var ajax = {
 			Ajax: function (options) {
 				equal(options.url, "Preference/Preference");
-				equal(options.data.Date, "2012-06-11");
+
+				var result = jQuery.parseJSON(options.data);
+				
+				equal(result.Date, "2012-06-11");
 				options.success({
 					Preference: "deleted!",
 					Color: "deleted!",
