@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
@@ -24,17 +25,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			get
 			{
 				INotificationSender sender = null;
-				if(_notificationConfigReader.HasLoadedConfig)
+				if (_notificationConfigReader.HasLoadedConfig)
 				{
-					//TODO Add error handling and logging of errors
-					var type = Assembly.GetExecutingAssembly().GetType(_notificationConfigReader.ClassName);
-					sender =  (INotificationSender)Activator.CreateInstance(type);
+					//TODO Add error handling and logging of errors, or service bus do that?
+					var assembly = Assembly.Load(_notificationConfigReader.Assembly);
+					var type = assembly.GetType(_notificationConfigReader.ClassName);
+					if (type == null)
+						throw new TypeLoadException("Type " + _notificationConfigReader.ClassName + " can't be found");
+					sender = (INotificationSender)Activator.CreateInstance(type);
 				}
 				// default
-				if(sender == null)
-					sender =  new ClickatellNotificationSender();
+				if (sender != null)
+					sender.SetConfigReader(_notificationConfigReader);
 
-				sender.SetConfigReader(_notificationConfigReader);
 				return sender;
 			}
 		}

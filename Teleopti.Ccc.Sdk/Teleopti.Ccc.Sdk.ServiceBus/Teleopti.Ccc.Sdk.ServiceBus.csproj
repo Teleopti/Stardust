@@ -165,13 +165,11 @@
     <Compile Include="DenormalizeBusBootStrapper.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelCreator.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandler.cs" />
-    <Compile Include="Notification\INotificationSender.cs" />
     <Compile Include="Notification\NotificationMessage.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparer.cs" />
     <Compile Include="Notification\SignificantChangeChecker.cs" />
     <Compile Include="Notification\NotificationConfigReader.cs" />
     <Compile Include="Notification\SmsLinkChecker.cs" />
-    <Compile Include="Notification\ClickatellNotificationSender.cs" />
     <Compile Include="Notification\NotificationSenderFactory.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
@@ -308,6 +306,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.Logic\Teleopti.Ccc.Sdk.Logic.csproj">
       <Project>{1277112D-B11A-4358-AF9A-8C9C7A5E701E}</Project>
       <Name>Teleopti.Ccc.Sdk.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Sdk.Notification\Teleopti.Ccc.Sdk.Notification.csproj">
+      <Project>{87ADCA35-6114-4499-8233-6011611BF8AA}</Project>
+      <Name>Teleopti.Ccc.Sdk.Notification</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

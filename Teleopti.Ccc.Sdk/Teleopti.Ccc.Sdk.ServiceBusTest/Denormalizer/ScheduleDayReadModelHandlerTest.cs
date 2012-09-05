@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Ccc.TestCommon.FakeData;

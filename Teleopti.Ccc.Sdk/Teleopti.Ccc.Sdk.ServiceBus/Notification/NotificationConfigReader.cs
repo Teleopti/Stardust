@@ -1,22 +1,11 @@
 ﻿using System;
 using System.Xml;
 using System.Xml.XPath;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
-	public interface INotificationConfigReader
-	{
-		bool HasLoadedConfig { get; }
-		IXPathNavigable XmlDocument { get; }
-		Uri Url { get; }
-		string User { get; }
-		string Password { get; }
-		string From { get; }
-		string ClassName { get; }
-		string Api { get; }
-		string Data { get; }
-	}
-
+	
 	public class NotificationConfigReader : INotificationConfigReader
 	{
 		private readonly string _configFile;
@@ -120,6 +109,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 					return "";
 				if (_configXml.GetElementsByTagName("class").Count > 0)
 					return _configXml.GetElementsByTagName("class")[0].InnerText;
+				return "";
+			}
+		}
+
+		public string Assembly
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				if (_configXml.GetElementsByTagName("assembly").Count > 0)
+					return _configXml.GetElementsByTagName("assembly")[0].InnerText;
 				return "";
 			}
 		}

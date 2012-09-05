@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification

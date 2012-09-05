@@ -1,13 +1,8 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
-	public interface INotificationMessage
-	{
-		string Subject { get; set; }
-		IList<string> Messages { get;  }
-	}
-
 	public class NotificationMessage : INotificationMessage
 	{
 		private string _subject = "";
