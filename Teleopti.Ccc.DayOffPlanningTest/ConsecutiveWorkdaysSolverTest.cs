@@ -1,4 +1,3 @@
-using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
@@ -10,7 +9,6 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     public class ConsecutiveWorkdaysSolverTest
     {
         private IDayOffBackToLegalStateSolver _target;
-        private CultureInfo _culture;
         private IDayOffBackToLegalStateFunctions _functions;
         private LockableBitArray _bitArray;
         private IDaysOffPreferences _datDaysOffPreferences;
@@ -19,8 +17,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void Setup()
         {
             _bitArray = array1();
-            _culture = CultureInfo.CreateSpecificCulture("en-GB");
-            _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _functions = new DayOffBackToLegalStateFunctions(_bitArray);
             _datDaysOffPreferences = new DaysOffPreferences();
             _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
         }
@@ -124,7 +121,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void VerifySetToFewBackWhenConsideringWeekAfter()
         {
             _bitArray = array2();
-            _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _functions = new DayOffBackToLegalStateFunctions(_bitArray);
             _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
             _bitArray.PeriodArea = new MinMax<int>(0, 6);
             _bitArray.Lock(7, true);
@@ -144,7 +141,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         {
             _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 6);
             _bitArray = array3();
-            _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _functions = new DayOffBackToLegalStateFunctions(_bitArray);
             _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
             Assert.AreEqual(MinMaxNumberOfResult.Ok, _target.ResolvableState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());

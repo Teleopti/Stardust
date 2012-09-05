@@ -18,6 +18,11 @@ Scenario: Enter Application
 	When I view MobileReports
 	Then I should see ReportSettings
 
+Scenario: Default report settings
+	Given I have the role 'Access to mobile reports'
+	When I view ReportSettings
+	Then I should see ReportSettings with default value
+
 Scenario: Enter Application without permission
 	Given I have the role 'No access to mobile reports'
 	When I view MobileReports
@@ -28,6 +33,7 @@ Scenario: Enter Application without permission
  	And I view MobileReports
  	When I click the signout button
  	Then I should be signed out from MobileReports
+
 
 
 Scenario: View Report

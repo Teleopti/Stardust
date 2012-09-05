@@ -30,8 +30,9 @@
 						data-asm-activity="@(layer.Payload)"></span>
 	}
 			<!-- ko foreach: timeLines -->
-			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;"><span class="asm-timeline-number ui-corner-all"
-				data-bind="text: $data"></span></span>
+			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
+				<span class="asm-timeline-number ui-corner-all" data-bind="text: $data"></span>
+			</span>
 			<!-- /ko -->
 		</div>
 	</div>

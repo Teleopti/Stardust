@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
 
@@ -11,14 +10,12 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     {
         private IDayOffBackToLegalStateFunctions _target;
         private LockableBitArray _bitArray;
-        private CultureInfo _culture;
 
         [SetUp]
         public void Setup()
         {
             _bitArray = array1();
-            _culture = CultureInfo.CreateSpecificCulture("en-GB");
-            _target = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _target = new DayOffBackToLegalStateFunctions(_bitArray);
         }
 
         [Test]
@@ -155,7 +152,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void VerifyFindShortestConsecutiveWorkdayWhenBothBeforeAndAfterIsLockedWithoutSolution()
         {
             _bitArray = array4();
-            _target = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _target = new DayOffBackToLegalStateFunctions(_bitArray);
             Point point = _target.FindShortestConsecutiveWorkdayBlockWithAtLeastOneMovableBitBeforeOrAfter();
             Assert.AreEqual(-1, point.X);
             Assert.AreEqual(-1, point.Y);
@@ -265,7 +262,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void VerifyFindShortestWorkdayBlockDoesNotConsiderTheEndsOfTheArray()
         {
             _bitArray = array2();
-            _target = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _target = new DayOffBackToLegalStateFunctions(_bitArray);
             Point result = _target.FindShortestConsecutiveWorkdayBlockWithAtLeastOneMovableBitBeforeOrAfter();
             Assert.AreEqual(8, result.X);
             Assert.AreEqual(9, result.Y);
@@ -275,7 +272,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 		public void WeekNumberOfDaysOffListShouldCalculateCorrect()
 		{
 			_bitArray = array3();
-			_target = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+			_target = new DayOffBackToLegalStateFunctions(_bitArray);
 			IDictionary<int, int> result = _target.CreateWeeklyDaysOffsDictionary(true, true);
 			Assert.AreEqual(1, result.Count);
 			Assert.AreEqual(2, result[0]);

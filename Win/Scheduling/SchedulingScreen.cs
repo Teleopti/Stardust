@@ -6473,6 +6473,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void refreshSummarySkillIfActive()
 		{
+			if (_tabSkillData.SelectedIndex < 0) return;
+
 			var tab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
             var skill = (ISkill) tab.Tag;
             IAggregateSkill aggregateSkillSkill = skill;

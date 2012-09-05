@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.TestCommon;
+﻿using System;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.UserTexts;
 
@@ -102,6 +103,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.Exists, Is.True);
 			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 		}
+
+		[Then(@"I should see ReportSettings with default value")]
+		public void ThenIShouldSeeReportSettingsWithDefaultValue()
+		{
+			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.EqualTo(new DateOnly(DateTime.Today.AddDays(-1)).ToShortDateString(UserFactory.User().Culture)));
+			EventualAssert.That(() => _page.ReportSkillSelectionList.Text, Is.StringContaining(Resources.All));
+			EventualAssert.That(() => _page.ReportTypeGraphInput.Checked, Is.True);
+			EventualAssert.That(() => _page.ReportTypeTableInput.Checked, Is.False);
+			EventualAssert.That(() => _page.ReportIntervalWeekInput.Checked, Is.False);
+		}
+
 
 		[Then(@"I should see the selected date")]
 		public void ThenIShouldSeeTheSelectedDate()

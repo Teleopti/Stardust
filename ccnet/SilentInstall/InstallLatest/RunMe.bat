@@ -17,7 +17,7 @@ SET INSTALLDIR=C:\Program Files (x86)\Teleopti
 for /f "delims=" %%i in ('dir "%DestShare%" /s /b /ad ^| sort /r') do rd "%%i" > NUL
 
 ::uninstall current server MSI
-Call "%DestShare%\SilentInstall\server\UnInstall.bat"
+Call "%DestShare%\SilentInstall\server\UnInstall.bat" > NUL
 
 ::Get latest version figure
 CALL %ROOTDIR%\head.bat 1 %SrcShare%\7.2.* > %temp%\Version.txt
@@ -32,6 +32,6 @@ ROBOCOPY "%SrcShare%\%version%" "%DestShare%\%version%" "*.msi"
 ROBOCOPY "%SrcCode%" "%DestShare%\SilentInstall" /E
 
 ::installation
-Call "%DestShare%\SilentInstall\server\SilentInstall.bat" "%CCCEXE%" "localhostDemoNoPM"
+Call "%DestShare%\SilentInstall\server\SilentInstall.bat" "%CCCEXE%" "localhostDemoNoPM" install
 
 ENDLOCAL
