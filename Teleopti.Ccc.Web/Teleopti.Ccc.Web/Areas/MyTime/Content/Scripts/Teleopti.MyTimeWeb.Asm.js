@@ -65,8 +65,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var slidingSchedules = $('.asm-sliding-schedules');
 		var clientMsSince1970 = new Date().getTeleoptiTime();
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
-		document.title = new Date(clientMsSince1970) + ":" + clientMsSince1970;
-
 		var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
 		var startPixel = -(pixelsPerHour * hoursSinceStart);
 		slidingSchedules.css('left', (startPixel) + 'px');
