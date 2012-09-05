@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ChartSettings _defaultChartSettings = new ChartSettings();
 		private readonly SkillWeekGridControlPresenter _presenter;
 
-        //constructor
         public SkillWeekGridControl()
         {
             initializeComponent();
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_presenter = new SkillWeekGridControlPresenter(this);
         }
 
-        //initialize component
         private void initializeComponent()
         {
             QueryColWidth += gridSkillDataQueryColWidth;
@@ -71,7 +69,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             _defaultChartSettings.SelectedRows.Add("RelativeDifference");
         }
 
-        //initialize grid
         private void initializeGrid()
         {
             CellModels.Add("TimeCell", timeSpanLongHourMinutesStaticCellModel());
@@ -231,42 +228,13 @@ namespace Teleopti.Ccc.Win.Scheduling
            _presenter.DrawWeekGrid(stateHolder, skill);	
         }
 
-        //refresh grid
         public void RefreshGrid()
         {
-            using (PerformanceOutput.ForOperation("Refreshing SkillDayGridControl"))
+            using (PerformanceOutput.ForOperation("Refreshing SkillWeekGridControl"))
             {
                 Refresh();
             }
         }
-
-        //refresh grid on selected dates
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "localDates")]
-		public void RefreshGrid(IList<DateOnly> localDates)
-        {
-            if (_rowManager==null || _rowManager.DataSource==null || _rowManager.DataSource.Count == 0) return;
-
-			Refresh();
-			//using (PerformanceOutput.ForOperation("Refreshing SkillDayGridControl on dates"))
-			//{
-			//    foreach(DateOnly date in localDates)
-			//    {
-			//        RefreshRange(GridRangeInfo.Col(getColumnIndexFromDate(date)), true); 
-			//    }
-			//}
-        }
-
-		////get colIndex from a date
-		//private int getColumnIndexFromDate(DateTime localDate)
-		//{
-		//    for (int i = 0; i < ColCount; i++)
-		//    {
-		//        if (_dates[i] == TimeZoneHelper.ConvertToUtc(localDate))
-		//            return i + 1;
-		//    }
-            
-		//    return -1;
-		//}
 
         public AbstractDetailView Owner
         {
