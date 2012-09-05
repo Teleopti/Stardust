@@ -72,6 +72,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(preference));
 		}
 
+		[Then(@"I should not see the extended preference button")]
+		public void ThenIShouldNotSeeTheExtendedPreferenceButton()
+		{
+			EventualAssert.That(()=>Pages.Pages.PreferencePage.ExtendedPreferenceButton.Exists, Is.False);
+		}
 
 
 		[When(@"I input extended preference fields with")]
