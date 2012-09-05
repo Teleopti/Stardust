@@ -85,12 +85,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see these available preferences")]
 		public void ThenIShouldSeeTheseAvailablePreferences(Table table)
 		{
-			var collection = Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectList.AllContents;
-			var actual=new string[collection.Count];
-			collection.CopyTo(actual, 0);
 			var expected = table.Rows.Select(o => o["Value"] == string.Empty ? " " : o["Value"]);
-			CollectionAssert.AreEqual(expected, actual);
+			CollectionAssert.AreEqual(expected, Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectList.AllContents);
 		}
+
+		[Then(@"I should see these available activities")]
+		public void ThenIShouldSeeTheseAvailableActivities(Table table)
+		{
+			var expected = table.Rows.Select(o => o["Value"] == string.Empty ? " " : o["Value"]);
+			CollectionAssert.AreEqual(expected, Pages.Pages.PreferencePage.ExtendedPreferenceActivity.SelectList.AllContents);
+		}
+
 
 
 

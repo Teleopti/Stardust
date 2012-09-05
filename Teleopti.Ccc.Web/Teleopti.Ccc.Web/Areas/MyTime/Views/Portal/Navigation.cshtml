@@ -144,7 +144,7 @@
 						
 						<select id="Preference-extended-activity" data-bind="selectbox: ActivityPreferenceId">
 							<option value="">&nbsp;</option>
-							<option value="-"></option>
+							<option value="-">-</option>
 							@foreach (var option in preferenceNavigation.ActivityOptions)
 							{
 								<option value="@option.Value" data-color="@option.Color">@option.Text</option>

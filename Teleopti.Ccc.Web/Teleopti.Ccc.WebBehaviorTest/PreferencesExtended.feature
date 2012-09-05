@@ -143,13 +143,15 @@ Scenario: Preference list contains available preferences when adding extended pr
 	| -       |
 	| Illness |
 
-Scenario: Activity list contains available activities when adding extended preference  
+Scenario: Activity list contains available activities when adding extended preference
     Given I have the role 'Access to extended preferences'
     And I am viewing preferences
     When I click the add extended preference button
     Then I should see these available activities
-    | Field    | Value |
-    | Activity | Lunch |
+    | Value |
+    |       |
+    | -     |
+    | Lunch |
 
 
 #edit preference
@@ -160,6 +162,7 @@ Scenario: Cannot edit extended preference without permission
     And I click the extended preference indication on '2012-06-20'
     Then I should not be able to edit extended preference on '2012-06-20'
 
+@ignore
 Scenario: Can only select available preferences when editing an existing extended preference 
     Given I have the role 'Access to extended preferences'
     And I have an extended preference on '2012-06-20'
@@ -170,7 +173,7 @@ Scenario: Can only select available preferences when editing an existing extende
     | Late    |
     | Dayoff  |
     | Illness |
-
+@ignore
 Scenario: Can only select available activities when editing an existing extended preference 
     Given I have the role 'Access to extended preferences'
     And I have an extended preference on '2012-06-20'
