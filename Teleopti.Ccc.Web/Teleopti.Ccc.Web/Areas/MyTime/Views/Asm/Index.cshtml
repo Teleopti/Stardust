@@ -37,9 +37,9 @@
 	<div class="asm-current-info">
 		<div class="asm-info-canvas ui-corner-all">
 			<div>Upcoming activities</div>
-			<table>
+			<table id="asm-current-info-table">
 				<tbody data-bind="foreach: activityInfo">
-					<tr data-bind="style: {'opacity': active == true ? '1' : '0.4'}">
+					<tr data-bind="css: { 'asm-info-current-activity' : active }">
 						<td class="asm-info-time-column" data-bind="text: time"></td>
 						<td data-bind="text: payload"></td>
 					</tr>

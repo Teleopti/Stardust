@@ -10,7 +10,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Asm = (function () {
 	function _start(serverMsSince1970, pixelsPerHour) {
-		var refreshSeconds = 3;
+		var refreshSeconds = 300;
 		var observableInfo = ko.observable();
 		var timeLineArray = _timeLineArray();
 

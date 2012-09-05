@@ -98,6 +98,17 @@ body
 	width: 39px;
 }
 
+.asm-info-canvas tr
+{
+	opacity: 0.4;
+}
+
+.asm-info-current-activity 
+{
+	opacity: 1 !important;
+}
+
+
 .asm-info-canvas div 
 {
 	padding-bottom: 3px;

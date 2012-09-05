@@ -28,13 +28,28 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
 		}
 
+		[Then(@"I should see '(.*)' upcoming activities")]
+		public void ThenIShouldSeeUpcomingActivities(int numberOfUpcomingActivities)
+		{
+			EventualAssert.That(() => _popup.Table("asm-current-info-table").TableRows.Count, Is.EqualTo(numberOfUpcomingActivities));
+		}
+
+
 		[Then(@"I should see Phone as current activity")]
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
-			var element = _popup.Element(Find.ById("asm-info-current-activity"));
-			EventualAssert.That(() => element.Text, Is.EqualTo(TestData.ActivityPhone.Description.Name));
+			var infoTable = _popup.Table("asm-current-info-table");
+			var activeTdsWithPhone = infoTable.TableRow(Find.ByClass("asm-info-current-activity")).Children().Filter(Find.ByText(TestData.ActivityPhone.Description.Name));
+			EventualAssert.That(() => activeTdsWithPhone.Count, Is.EqualTo(1));
 		}
 
+		[Then(@"I should not see as current activity")]
+		public void ThenIShouldNotSeeAsCurrentActivity()
+		{
+			var infoTable = _popup.Table("asm-current-info-table");
+			var activeTd = infoTable.TableRow(Find.ByClass("asm-info-current-activity"));
+			EventualAssert.That(() => activeTd.Exists, Is.False);
+		}
 
 		[Then(@"I should see Lunch as next activity")]
 		public void ThenIShouldSeeLunchAsNextActivity()
