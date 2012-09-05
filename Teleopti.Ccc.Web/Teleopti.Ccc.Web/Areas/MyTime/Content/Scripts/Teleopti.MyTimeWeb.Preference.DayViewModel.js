@@ -29,6 +29,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		return ajax.Ajax({
 			url: url,
 			dataType: "json",
+			contentType: "application/json; charset=utf-8",
 			type: type,
 			beforeSend: function (jqXHR) {
 
@@ -184,7 +185,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			};
 		} else {
 			value.Date = self.Date;
-			value = ko.toJS(value);
+			value = ko.toJSON(value);
 		}
 		var deferred = $.Deferred();
 		ajaxForDate({
