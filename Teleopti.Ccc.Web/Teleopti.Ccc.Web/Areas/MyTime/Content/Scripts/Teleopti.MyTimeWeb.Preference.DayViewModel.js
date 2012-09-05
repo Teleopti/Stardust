@@ -179,10 +179,10 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 	this.SetPreference = function (value) {
 		if (typeof (value) == 'string') {
-			value = {
+			value = JSON.stringify({
 				Date: self.Date,
 				PreferenceId: value
-			};
+			});
 		} else {
 			value.Date = self.Date;
 			value = ko.toJSON(value);
