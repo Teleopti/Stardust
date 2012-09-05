@@ -37,17 +37,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see Phone as current activity")]
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
-			var infoTable = _popup.Table("asm-current-info-table");
 			EventualAssert.That(() => 
-				infoTable.TableRow(Find.ByClass("asm-info-current-activity")).Children().Filter(Find.ByText(TestData.ActivityPhone.Description.Name)).Count, 
+				_popup.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Children().Filter(Find.ByText(TestData.ActivityPhone.Description.Name)).Count, 
 				Is.EqualTo(1));
 		}
 
 		[Then(@"I should not see as current activity")]
 		public void ThenIShouldNotSeeAsCurrentActivity()
 		{
-			var infoTable = _popup.Table("asm-current-info-table");
-			EventualAssert.That(() => infoTable.TableRow(Find.ByClass("asm-info-current-activity")).Exists, Is.False);
+			EventualAssert.That(() => _popup.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Exists, Is.False);
 		}
 
 		[AfterScenario("ASM")]
