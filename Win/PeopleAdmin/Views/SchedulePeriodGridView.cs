@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			ReadOnlyCollection<SchedulePeriodChildModel> schedulePeriodChildCollection =
 				grid.Tag as ReadOnlyCollection<SchedulePeriodChildModel>;
 			if (schedulePeriodChildCollection != null)
-				if (ValidCell(e.ColIndex, e.RowIndex))
+				if (ValidCell(e.ColIndex, e.RowIndex, grid.RowCount))
 					_childGridColumns[e.ColIndex].SaveCellInfo(e, schedulePeriodChildCollection);
 
 			grid.Refresh();
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			if (schedulePeriodChildCollection != null)
 			{
 
-				if (ValidCell(e.ColIndex, e.RowIndex))
+				if (ValidCell(e.ColIndex, e.RowIndex, gridControl.RowCount))
 				{
 					_childGridColumns[e.ColIndex].GetCellInfo(e, schedulePeriodChildCollection);
 				}
