@@ -3706,7 +3706,7 @@
     <value>Temps planifié par agent</value>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Niveau de service et Agents en Ready</value>
+    <value>Niveau de service et Agents Ready</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
     <value>Catégorie d'Horaire et Absence Journée Entière par Agent</value>
@@ -4141,7 +4141,7 @@
     <value>Créér Rapport Gestionnaire de Performances</value>
   </data>
   <data name="ModifyWriteProtectedSchedule" xml:space="preserve">
-    <value>Modifier planning protégé en l'écriture</value>
+    <value>Modifier planning protégé en écriture</value>
   </data>
   <data name="SetWriteProtection" xml:space="preserve">
     <value>Définir protection en écriture</value>
@@ -8277,5 +8277,227 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="ManualAgents" xml:space="preserve">
     <value>Agents (Supplantation manuelle)</value>
+  </data>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>Le statut de la demande a été modifié, vous ne pouvez la mettre à jour/la supprimer.</value>
+  </data>
+  <data name="SkillTypeRetail" xml:space="preserve">
+    <value>Distribution</value>
+  </data>
+  <data name="ActualEmployees" xml:space="preserve">
+    <value>Staff réel</value>
+  </data>
+  <data name="ExportToBU" xml:space="preserve">
+    <value>Exporter vers Unité Opérationnelle</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Exporter vers fichier</value>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>Export de fichier terminé</value>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>Sélectionner une date et un scénario</value>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>Sélectionner destination de fichier</value>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>Sélectionner compétence</value>
+  </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>Fichiers CSV (*.csv)|*.csv</value>
+  </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>Exporter Personnel</value>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>Exporter Volume</value>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>Exporter Volume et Personnel</value>
+  </data>
+  <data name="AfterCustomerWorkTime" xml:space="preserve">
+    <value>Durée de travail post client</value>
+  </data>
+  <data name="AverageAfterCustomerWork" xml:space="preserve">
+    <value>Temps de travail moyen après client</value>
+  </data>
+  <data name="AverageCustomers" xml:space="preserve">
+    <value>Moyenne Clients</value>
+  </data>
+  <data name="CalculatedCustomers" xml:space="preserve">
+    <value>Clients calculés</value>
+  </data>
+  <data name="CampaignCustomersPercent" xml:space="preserve">
+    <value>Campagne clients %</value>
+  </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>Même horaire de fin</value>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>Même catégorie d'horaire</value>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>Même horaire de début</value>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>Utiliser Restrictions</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="DeviationCustomersColon" xml:space="preserve">
+    <value>Déviation clients</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Employé</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Employés</value>
+  </data>
+  <data name="EmployeesInc" xml:space="preserve">
+    <value>Employés Inc</value>
+  </data>
+  <data name="EmployeesIncWithShrinkage" xml:space="preserve">
+    <value>Employés inc avec réduction</value>
+  </data>
+  <data name="EmployeesWithShrinkage" xml:space="preserve">
+    <value>Employés avec réduction</value>
+  </data>
+  <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
+    <value>Durée de travail post client</value>
+  </data>
+  <data name="ForecastedCustomers" xml:space="preserve">
+    <value>Clients prévus</value>
+  </data>
+  <data name="ForecastedCustomersColon" xml:space="preserve">
+    <value>Clients prévus:</value>
+  </data>
+  <data name="ForecastedEmployees" xml:space="preserve">
+    <value>Employés prévus</value>
+  </data>
+  <data name="ForecastedEmployeesIncoming" xml:space="preserve">
+    <value>Employés prévus entrant</value>
+  </data>
+  <data name="IndexAfterCustomerWork" xml:space="preserve">
+    <value>Index travail post client</value>
+  </data>
+  <data name="IndexCustomers" xml:space="preserve">
+    <value>Index clients</value>
+  </data>
+  <data name="MaximumEmployees" xml:space="preserve">
+    <value>Employés maximum</value>
+  </data>
+  <data name="MinimumEmployees" xml:space="preserve">
+    <value>Employés minimum</value>
+  </data>
+  <data name="OfferedCustomers" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="OriginalAfterCustomerWork" xml:space="preserve">
+    <value>Travail Post Client original</value>
+  </data>
+  <data name="OriginalCustomers" xml:space="preserve">
+    <value>Clients Originaux</value>
+  </data>
+  <data name="OriginalOfferedCustomers" xml:space="preserve">
+    <value>Clients Originaux</value>
+  </data>
+  <data name="ScheduledEmployees" xml:space="preserve">
+    <value>Employés planifiés</value>
+  </data>
+  <data name="ScheduledEmployeesIncoming" xml:space="preserve">
+    <value>Employés planifiés entrant</value>
+  </data>
+  <data name="ServedCustomers" xml:space="preserve">
+    <value>Clients servis</value>
+  </data>
+  <data name="TotalCustomers" xml:space="preserve">
+    <value>Total Clients</value>
+  </data>
+  <data name="ValidatedAfterCustomerWork" xml:space="preserve">
+    <value>Travail post-client validé</value>
+  </data>
+  <data name="ValidatedCustomers" xml:space="preserve">
+    <value>Clients validés</value>
+  </data>
+  <data name="WalkAways" xml:space="preserve">
+    <value>Sans achat</value>
+  </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>Votre préférence est hors scope</value>
+  </data>
+  <data name="FileExportFailed" xml:space="preserve">
+    <value>Export de fichier échoué</value>
+  </data>
+  <data name="FileExportFinished" xml:space="preserve">
+    <value>Export de fichier terminé</value>
+  </data>
+  <data name="OptimizationOptionMessageBox" xml:space="preserve">
+    <value>Options d'optimisation</value>
+  </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>Pas d'activité</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
+    <value>Merci de sélectionner au moins l'une des options "Catégorie d'horaires", "Horaire de départ" et "Horaire de fin" dans Optimisation d'Equipe.</value>
+  </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>Options de planification</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>Merci de sélectionner au moins l'une des options "Catégorie d'horaires", "Horaire de départ" et "Horaire de fin" dans Planification d'Equipe.</value>
+  </data>
+  <data name="ManageSmsSettings" xml:space="preserve">
+    <value>Gérer les paramètres de SMS</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
+    <value>Sélectionner depuis quelle colonne obtenir le numéro de tel SMS</value>
+  </data>
+  <data name="SmsSettings" xml:space="preserve">
+    <value>Paramètres SMS</value>
+  </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>Vos horaires de travail ont changé</value>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>Graphe (loc)</value>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Intervalle (loc)</value>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Tableau (loc)</value>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Type (loc)</value>
+  </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>Depuis contrat</value>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>Depuis Période de Planification</value>
+  </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>Absence Journée Complète</value>
+  </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>Vous n'avez pas la permission d'accéder le portail web</value>
+  </data>
+  <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
+    <value>Mois 7-8</value>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Rapports Mobiles</value>
+  </data>
+  <data name="SchedulePeriodTypeDay" xml:space="preserve">
+    <value>Jour</value>
+  </data>
+  <data name="SchedulePeriodTypeMonth" xml:space="preserve">
+    <value>Mois</value>
+  </data>
+  <data name="SchedulePeriodTypeWeek" xml:space="preserve">
+    <value>Semaine</value>
   </data>
 </root>
