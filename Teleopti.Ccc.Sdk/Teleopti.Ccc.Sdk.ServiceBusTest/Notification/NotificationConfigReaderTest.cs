@@ -91,9 +91,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		}
 
 		[Test]
+		public void ShouldHaveAnAssemblyProperty()
+		{
+			Assert.That(_target.Assembly, Is.EqualTo("Teleopti.Ccc.Sdk.Notification"));
+		}
+
+		[Test]
 		public void ShouldHaveAClassProperty()
 		{
-			Assert.That(_target.ClassName, Is.EqualTo("Teleopti.Ccc.Sdk.ServiceBus.Notification.ClickatellNotificationSender"));
+			Assert.That(_target.ClassName, Is.EqualTo("Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender"));
 		}
 
 		[Test]

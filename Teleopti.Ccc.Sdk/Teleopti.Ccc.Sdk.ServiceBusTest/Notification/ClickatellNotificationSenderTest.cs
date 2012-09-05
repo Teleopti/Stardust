@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -18,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		// if you want to try change to <password>cadadi01</password> (works as long as we have credits) <from>{3}</from>
 		private MockRepository _mocks;
 		private INotificationConfigReader _notificationConfigReader;
-		private INotificationSender _target;
+		private ClickatellNotificationSender _target;
 		private INotificationMessage smsMessage = new NotificationMessage() { Subject = "Schedule has changed" };
 
 		private const string xml = @"<?xml version='1.0' encoding='utf-8' ?>
@@ -74,9 +72,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
        [Test]
         public void ShouldSplitMessageIfGreaterThanMaxSmsLength()
-		//{
-		//    INotificationMessage msg = new NotificationMessage();
-		//    msg.Subject = "Your Working Hours have changed";
+		{
+		    INotificationMessage msg = new NotificationMessage();
+		    msg.Subject = "Your Working Hours have changed";
             msg.Messages.Add("Monday 2012-01-01 08:00-17:00");
             msg.Messages.Add("Tuesday 2012-01-02 08:00-16:00");
             msg.Messages.Add("Wedneday 2012-01-03 08:00-16:00");
@@ -86,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
             
             IList<string> messages = _target.GetSmsMessagesToSend(msg);
             Assert.That(messages.Count, Is.EqualTo(2));
-		//}
+		}
 
 		[Test]
 		public void ShouldLogIfUrlIsIncorrect()
