@@ -8,6 +8,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 {
 	public class TimeOfDayModelBinder : IModelBinder
 	{
+		private readonly bool _nullable;
+
+		public TimeOfDayModelBinder(bool nullable = false)
+		{
+			_nullable = nullable;
+		}
+
 		public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
 		{
 			return bindFromModelName(bindingContext);
@@ -16,6 +23,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		private object bindFromModelName(ModelBindingContext bindingContext)
 		{
 			var userValue = bindingContext.ValueProvider.GetValue(bindingContext.ModelName).AttemptedValue;
+			if (shouldReturnNull(userValue))
+			{
+				return null;
+			}
 
 			TimeSpan converterFromClient;
 			if (TimeHelper.TryParse(userValue, out converterFromClient))
@@ -24,6 +35,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 
 			bindingContext.ModelState.AddModelError("timeError", string.Format(CultureInfo.CurrentUICulture, Resources.InvalidTimeValue, userValue));
 			return new TimeOfDay();
+		}
+
+		private bool shouldReturnNull(string userValue)
+		{
+			return _nullable && string.IsNullOrWhiteSpace(userValue);
 		}
 	}
 }

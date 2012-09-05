@@ -10,14 +10,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core
 {
 	[TestFixture]
-	public class TimeOfDayModelBinderTest
+	public class TimeSpanModelBinderTest
 	{
 		[Test]
 		public void ShouldSupportCurrentCultureFormatOfTime()
 		{
 			var expectedTime = TimeSpan.FromHours(3).Add(TimeSpan.FromMinutes(39));
-			var expectedResult = new TimeOfDay(expectedTime);
-
+			
 			var dict = new NameValueCollection
 			           	{
 			           		{"time", expectedTime.ToString()}
@@ -29,18 +28,17 @@ namespace Teleopti.Ccc.WebTest.Core
 				ValueProvider = new NameValueCollectionValueProvider(dict, CultureInfo.CurrentCulture)
 			};
 
-			var binder = new TimeOfDayModelBinder();
+			var binder = new TimeSpanModelBinder();
 
-			var result = (TimeOfDay)binder.BindModel(null, bindingContext);
+			var result = (TimeSpan)binder.BindModel(null, bindingContext);
 
-			result.Should().Be.EqualTo(expectedResult);
+			result.Should().Be.EqualTo(expectedTime);
 		}
 
 		[Test]
 		public void ShouldConsiderSingleNumberAsHour()
 		{
 			var expectedTime = TimeSpan.FromHours(3);
-			var expectedResult = new TimeOfDay(expectedTime);
 
 			var dict = new NameValueCollection
 			           	{
@@ -53,11 +51,11 @@ namespace Teleopti.Ccc.WebTest.Core
 				ValueProvider = new NameValueCollectionValueProvider(dict, CultureInfo.CurrentCulture)
 			};
 
-			var binder = new TimeOfDayModelBinder();
+			var binder = new TimeSpanModelBinder();
 
-			var result = (TimeOfDay)binder.BindModel(null, bindingContext);
+			var result = (TimeSpan)binder.BindModel(null, bindingContext);
 
-			result.Should().Be.EqualTo(expectedResult);
+			result.Should().Be.EqualTo(expectedTime);
 		}
 
 		[Test]
@@ -74,9 +72,9 @@ namespace Teleopti.Ccc.WebTest.Core
 				ValueProvider = new NameValueCollectionValueProvider(dict, CultureInfo.CurrentCulture)
 			};
 
-			var binder = new TimeOfDayModelBinder(nullable:true);
+			var binder = new TimeSpanModelBinder(nullable: true);
 
-			var result = (TimeOfDay?)binder.BindModel(null, bindingContext);
+			var result = (TimeSpan?)binder.BindModel(null, bindingContext);
 			result.HasValue.Should().Be.False();
 		}
 
@@ -94,17 +92,17 @@ namespace Teleopti.Ccc.WebTest.Core
 				ValueProvider = new NameValueCollectionValueProvider(dict, CultureInfo.CurrentCulture)
 			};
 
-			var binder = new TimeOfDayModelBinder();
+			var binder = new TimeSpanModelBinder();
 				
 			var result = binder.BindModel(null, bindingContext);
 
 			bindingContext.ModelState["timeError"].Errors[0].ErrorMessage
 				.Should().Contain("ballefjong");
-			result.Should().Be.EqualTo(new TimeOfDay());
+			result.Should().Be.EqualTo(TimeSpan.Zero);
 		}
 
 		[Test]
-		public void ShouldSetModelErrorIfNegativeNumber()
+		public void ShouldWorkWithNegativeNumbers()
 		{
 			var dict = new NameValueCollection
 			           	{
@@ -116,13 +114,31 @@ namespace Teleopti.Ccc.WebTest.Core
 				ValueProvider = new NameValueCollectionValueProvider(dict, CultureInfo.CurrentCulture)
 			};
 
-			var binder = new TimeOfDayModelBinder();
+			var binder = new TimeSpanModelBinder();
 
 			var result = binder.BindModel(null, bindingContext);
 
-			bindingContext.ModelState["timeError"].Errors[0].ErrorMessage
-				.Should().Contain("-9");
-			result.Should().Be.EqualTo(new TimeOfDay());
+			result.Should().Be.EqualTo(TimeSpan.FromHours(-9));
+		}
+
+		[Test]
+		public void ShouldWorkLargeTimeSpans()
+		{
+			var dict = new NameValueCollection
+			           	{
+			           		{"time", "26:00"}
+			           	};
+			var bindingContext = new ModelBindingContext
+			{
+				ModelName = "time",
+				ValueProvider = new NameValueCollectionValueProvider(dict, CultureInfo.CurrentCulture)
+			};
+
+			var binder = new TimeSpanModelBinder();
+
+			var result = binder.BindModel(null, bindingContext);
+
+			result.Should().Be.EqualTo(TimeSpan.FromHours(26));
 		}
 	}
 }

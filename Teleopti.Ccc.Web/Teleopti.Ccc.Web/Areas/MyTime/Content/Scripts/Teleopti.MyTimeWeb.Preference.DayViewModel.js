@@ -184,6 +184,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			};
 		} else {
 			value.Date = self.Date;
+			value = ko.toJS(value);
 		}
 		var deferred = $.Deferred();
 		ajaxForDate({
