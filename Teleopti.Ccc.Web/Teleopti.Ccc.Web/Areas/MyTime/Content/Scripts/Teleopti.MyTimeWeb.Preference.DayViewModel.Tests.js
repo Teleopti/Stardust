@@ -1,12 +1,12 @@
 ﻿
-$(document).ready(function() {
+$(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Preference day view model");
 
-	test("should load preference", function() {
+	test("should load preference", function () {
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				equal(options.url, "Preference/Preference");
 				equal(options.data.Date, "2012-06-11");
 				options.success({
@@ -45,7 +45,7 @@ $(document).ready(function() {
 		equal(viewModelDay.ActivityTimeLimitation(), "1:00-2:00");
 	});
 
-	test("should bind extended", function() {
+	test("should bind extended", function () {
 
 		var element = $("#qunit-fixture")
 			.append("<div class='extended-indication' data-bind='visible: Extended' style='display: none'></div>")[0];
@@ -58,10 +58,10 @@ $(document).ready(function() {
 		equal($(element).is(':visible'), true);
 	});
 
-	test("should set preference", function() {
+	test("should set preference", function () {
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				equal(options.url, "Preference/Preference");
 				equal(options.data.Date, "2012-06-11");
 				equal(options.data.PreferenceId, "id");
@@ -84,26 +84,29 @@ $(document).ready(function() {
 		equal(viewModelDay.Color(), "black");
 	});
 
-	test("should set extended preference", function() {
+	test("should set extended preference", function () {
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				equal(options.url, "Preference/Preference");
-				equal(options.data.Date, "2012-09-03", "Date");
-				equal(options.data.PreferenceId, "id1", "PreferenceId");
-				equal(options.data.StartTimeMinimum, "8:00", "StartTimeMinimum");
-				equal(options.data.StartTimeMaximum, "9:00", "StartTimeMaximum");
-				equal(options.data.EndTimeMinimum, "15:00");
-				equal(options.data.EndTimeMaximum, "18:00");
-				equal(options.data.WorkTimeMinimum, "6:00");
-				equal(options.data.WorkTimeMaximum, "8:00");
-				equal(options.data.ActivityId, "id2");
-				equal(options.data.ActivityStartTimeMinimum, "11:00");
-				equal(options.data.ActivityStartTimeMaximum, "12:00");
-				equal(options.data.ActivityEndTimeMinimum, "12:02");
-				equal(options.data.ActivityEndTimeMaximum, "13:00");
-				equal(options.data.ActivityTimeMinimum, "1:00");
-				equal(options.data.ActivityTimeMaximum, "0:30");
+
+				var result = jQuery.parseJSON(options.data);
+
+				equal(result.Date, "2012-09-03", "Date");
+				equal(result.PreferenceId, "id1", "PreferenceId");
+				equal(result.EarliestStartTime, "8:00", "StartTimeMinimum");
+				equal(result.LatestStartTime, "9:00", "StartTimeMaximum");
+				equal(result.EarliestEndTime, "15:00");
+				equal(result.LatestEndTime, "18:00");
+				equal(result.WorkTimeMinimum, "6:00");
+				equal(result.WorkTimeMaximum, "8:00");
+				equal(result.ActivityPreferenceId, "id2");
+				equal(result.ActivityEarliestStartTime, "11:00");
+				equal(result.ActivityLatestStartTime, "12:00");
+				equal(result.ActivityEarliestEndTime, "12:02");
+				equal(result.ActivityLatestEndTime, "13:00");
+				equal(result.ActivityTimeMinimum, "1:00");
+				equal(result.ActivityTimeMaximum, "0:30");
 				options.success({
 					Preference: "a shift category",
 					Color: "black",
@@ -119,17 +122,17 @@ $(document).ready(function() {
 
 		viewModelDay.SetPreference({
 			PreferenceId: "id1",
-			StartTimeMinimum: "8:00",
-			StartTimeMaximum: "9:00",
-			EndTimeMinimum: "15:00",
-			EndTimeMaximum: "18:00",
+			EarliestStartTime: "8:00",
+			LatestStartTime: "9:00",
+			EarliestEndTime: "15:00",
+			LatestEndTime: "18:00",
 			WorkTimeMinimum: "6:00",
 			WorkTimeMaximum: "8:00",
-			ActivityId: "id2",
-			ActivityStartTimeMinimum: "11:00",
-			ActivityStartTimeMaximum: "12:00",
-			ActivityEndTimeMinimum: "12:02",
-			ActivityEndTimeMaximum: "13:00",
+			ActivityPreferenceId: "id2",
+			ActivityEarliestStartTime: "11:00",
+			ActivityLatestStartTime: "12:00",
+			ActivityEarliestEndTime: "12:02",
+			ActivityLatestEndTime: "13:00",
 			ActivityTimeMinimum: "1:00",
 			ActivityTimeMaximum: "0:30"
 		});
@@ -137,10 +140,10 @@ $(document).ready(function() {
 		equal(viewModelDay.Extended(), true);
 	});
 
-	test("should delete preference", function() {
+	test("should delete preference", function () {
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				equal(options.url, "Preference/Preference");
 				equal(options.data.Date, "2012-06-11");
 				options.success({
@@ -163,7 +166,7 @@ $(document).ready(function() {
 		equal(viewModelDay.Extended(), "deleted!");
 	});
 
-	test("should format possible contract time", function() {
+	test("should format possible contract time", function () {
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		viewModelDay.PossibleContractTimeMinutesLower(6 * 60 + 30);
 		viewModelDay.PossibleContractTimeMinutesUpper(8 * 60 + 5);
@@ -173,10 +176,10 @@ $(document).ready(function() {
 		equal(viewModelDay.PossibleContractTimeUpper(), "8:05");
 	});
 
-	test("should load feedback", function() {
+	test("should load feedback", function () {
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				options.success({
 					FeedbackError: "an error",
 					PossibleStartTimes: "6:00-9:00",
@@ -198,7 +201,7 @@ $(document).ready(function() {
 		equal(viewModelDay.PossibleContractTimes(), "7:00-12:00");
 	});
 
-	test("should compute DisplayFeedbackError", function() {
+	test("should compute DisplayFeedbackError", function () {
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 
@@ -218,13 +221,13 @@ $(document).ready(function() {
 
 	});
 
-	test("should compute DisplayFeedback", function() {
+	test("should compute DisplayFeedback", function () {
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 
 		equal(viewModelDay.DisplayFeedback(), false, "compute not initialized");
 
-		var resetViewModel = function() {
+		var resetViewModel = function () {
 			viewModelDay.PossibleStartTimes(undefined);
 			viewModelDay.PossibleEndTimes(undefined);
 			viewModelDay.PossibleContractTimeMinutesLower(undefined);
