@@ -63,8 +63,11 @@ $(document).ready(function () {
 		var ajax = {
 			Ajax: function (options) {
 				equal(options.url, "Preference/Preference");
-				equal(options.data.Date, "2012-06-11");
-				equal(options.data.PreferenceId, "id");
+
+				var result = jQuery.parseJSON(options.data);
+				
+				equal(result.Date, "2012-06-11");
+				equal(result.PreferenceId, "id");
 				options.success({
 					Preference: "a shift category",
 					Color: "black",

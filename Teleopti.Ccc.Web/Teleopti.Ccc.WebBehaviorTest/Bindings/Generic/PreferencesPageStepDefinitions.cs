@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				Browser.Current.Eval("$('#"+Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Id+"').blur()");
 			}
 
-			Thread.Sleep(400);
+			Thread.Sleep(500);
 		}
 
 		[Then(@"I should see extended preference with")]
