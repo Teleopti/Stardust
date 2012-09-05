@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     		IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
 			IList<IScheduleMatrixPro> allMatrixes);
 
-    	IList<DateOnly> GoBackToLegalState(IList<DateOnly> daysOffToReschedule, IGroupPerson groupPerson,
+    	IList<IScheduleDay> GoBackToLegalState(IList<DateOnly> daysOffToReschedule, IGroupPerson groupPerson,
 										   ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes);
 
     	bool ScheduleSinglePerson(DateOnly dayToReschedule, IPerson person,
@@ -74,6 +74,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IList<DateOnly> daysOffToAdd,
 			IPerson person,
 			IDaysOffPreferences daysOffPreferences);
+
+    	bool ScheduleBackToLegalStateDays(IList<IScheduleDay> removedDays, IGroupSchedulingService groupSchedulingService,
+    	                                  ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+    	                                  ISchedulingOptions schedulingOptions,
+    	                                  IOptimizationPreferences optimizationPreferences,
+    	                                  IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+    	                                  IList<IScheduleMatrixPro> allMatrixes);
     }
 
 	public class GroupMatrixHelper : IGroupMatrixHelper
@@ -82,14 +89,17 @@ namespace Teleopti.Ccc.Domain.Optimization
     	private readonly IGroupPersonConsistentChecker _groupPersonConsistentChecker;
 		private readonly IWorkShiftBackToLegalStateServicePro _workShiftBackToLegalStateServicePro;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
-        public GroupMatrixHelper(IGroupMatrixContainerCreator groupMatrixContainerCreator, IGroupPersonConsistentChecker groupPersonConsistentChecker,
-			IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro, IResourceOptimizationHelper resourceOptimizationHelper)
+		public GroupMatrixHelper(IGroupMatrixContainerCreator groupMatrixContainerCreator, IGroupPersonConsistentChecker groupPersonConsistentChecker,
+			IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro, IResourceOptimizationHelper resourceOptimizationHelper,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
         {
         	_groupMatrixContainerCreator = groupMatrixContainerCreator;
         	_groupPersonConsistentChecker = groupPersonConsistentChecker;
         	_workShiftBackToLegalStateServicePro = workShiftBackToLegalStateServicePro;
         	_resourceOptimizationHelper = resourceOptimizationHelper;
+        	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
         }
 
 		
@@ -166,7 +176,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return containers;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool ScheduleBackToLegalStateDays(IList<IScheduleDay> removedDays, IGroupSchedulingService groupSchedulingService, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, IList<IScheduleMatrixPro> allMatrixes)
+		{
+			foreach (var scheduleDay in removedDays)
+			{
+				DateOnly date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+				_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, optimizationPreferences, scheduleDay.AssignmentHighZOrder().MainShift, date);
+				if (!ScheduleSinglePerson(date, scheduleDay.Person, groupSchedulingService, schedulePartModifyAndRollbackService, schedulingOptions, groupPersonBuilderForOptimization, allMatrixes))
+					return false;
+			}
+
+			return true;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool ExecuteDayOffMoves(IList<GroupMatrixContainer> containers, IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
             foreach (var matrixContainer in containers)
@@ -215,10 +239,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IList<DateOnly> GoBackToLegalState(IList<DateOnly> daysOffToReschedule, IGroupPerson groupPerson,
+		public IList<IScheduleDay> GoBackToLegalState(IList<DateOnly> daysOffToReschedule, IGroupPerson groupPerson,
 			ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes)
 		{
-			List<DateOnly> returnList = new List<DateOnly>();
+			List<IScheduleDay> returnList = new List<IScheduleDay>();
 			foreach (var groupMember in groupPerson.GroupMembers)
 			{
 				foreach (var dateOnly in daysOffToReschedule)
@@ -240,7 +264,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 					}
 				}
 			}
-			HashSet<DateOnly> uniqeDates = new HashSet<DateOnly>(returnList);
+
+			HashSet<DateOnly> uniqeDates = new HashSet<DateOnly>();
+			foreach (var scheduleDay in returnList)
+			{
+				uniqeDates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
+			}
+
 
 			foreach (var uniqeDate in uniqeDates)
 			{
@@ -248,16 +278,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_resourceOptimizationHelper.ResourceCalculateDate(uniqeDate.AddDays(1), true, true);
 			}
 
-			return new List<DateOnly>(uniqeDates);
+			return returnList;
 
 		}
 
-		private IList<DateOnly> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+		private IList<IScheduleDay> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
 			if (!_workShiftBackToLegalStateServicePro.Execute(matrix, schedulingOptions))
 				return null;
 
-			IList<DateOnly> removedIllegalDates = _workShiftBackToLegalStateServicePro.RemovedDays;
+			var removedIllegalDates = _workShiftBackToLegalStateServicePro.RemovedSchedules;
 			return removedIllegalDates;
 		}
 

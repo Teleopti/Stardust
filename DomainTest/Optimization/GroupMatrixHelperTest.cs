@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
@@ -28,6 +27,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IResourceOptimizationHelper _resourceOptimizationHelper;
     	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
     	private IPerson _person;
+    	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+    	private IScheduleDay _scheduleDay;
+    	private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
 
         [SetUp]
         public void Setup()
@@ -44,11 +46,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         	_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
         	_workShiftBackToLegalStateServicePro = _mocks.StrictMock<IWorkShiftBackToLegalStateServicePro>();
         	_groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
+        	_mainShiftOptimizeActivitySpecificationSetter =
+        		_mocks.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
 
-			_target = new GroupMatrixHelper(_groupMatrixContainerCreator, _groupPersonConsistentChecker, _workShiftBackToLegalStateServicePro, _resourceOptimizationHelper);
+        	_target = new GroupMatrixHelper(_groupMatrixContainerCreator, _groupPersonConsistentChecker,
+        	                                _workShiftBackToLegalStateServicePro, _resourceOptimizationHelper,
+											_mainShiftOptimizeActivitySpecificationSetter);
 
 			_schedulingOptions = new SchedulingOptions();
         	_person = _mocks.StrictMock<IPerson>();
+        	_scheduleDay = _mocks.StrictMock<IScheduleDay>();
+        	_dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
 
         }
 
@@ -82,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void GoBackToLegalStateShouldReturnUniqueDates()
+		public void GoBackToLegalStateShouldReturnListOfSchedulesRemoved()
 		{
 			DateOnly date = new DateOnly();
 			IList<DateOnly> daysOffToReschedule = new List<DateOnly>{date};
@@ -97,12 +105,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_activeScheduleMatrix.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(date, date));
 				Expect.Call(_workShiftBackToLegalStateServicePro.Execute(_activeScheduleMatrix, _schedulingOptions)).Return(true);
-				Expect.Call(_workShiftBackToLegalStateServicePro.RemovedDays).Return(new List<DateOnly>{date});
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date);
+				Expect.Call(_workShiftBackToLegalStateServicePro.RemovedSchedules).Return(new List<IScheduleDay> { _scheduleDay });
 				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date, true, true));
 				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true));
 			}
 
-			IList<DateOnly> result;
+			IList<IScheduleDay> result;
 
 			using (_mocks.Playback())
 			{
@@ -110,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 
 			Assert.AreEqual(1, result.Count);
-			Assert.AreEqual(date, result[0]);
+			Assert.AreSame(_scheduleDay, result[0]);
 		}
 
         [Test]

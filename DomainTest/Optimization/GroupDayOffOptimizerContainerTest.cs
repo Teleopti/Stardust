@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _dayOffDecisionMakerExecuter, 
                 _optimizationPreferences.DaysOff))
                 .Return(_groupDayOffOptimizer);
-            Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions)).IgnoreArguments()
+			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences)).IgnoreArguments()
                 .Return(true);
             Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
 
@@ -108,11 +108,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         	                                                               _dayOffDecisionMakerExecuter,
         	                                                               _optimizationPreferences.DaysOff)).Return(_groupDayOffOptimizer).Repeat.
         		Times(3);
-            Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions)).IgnoreArguments()
+			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences)).IgnoreArguments()
                 .Return(false);
-            Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions)).IgnoreArguments()
+			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences)).IgnoreArguments()
                 .Return(false);
-            Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions)).IgnoreArguments()
+			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences)).IgnoreArguments()
                 .Return(true);
             Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         	                                                               _dayOffDecisionMakerExecuter,
         	                                                               _optimizationPreferences.DaysOff)).Return(_groupDayOffOptimizer).Repeat.
         		Times(3);
-            Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions)).IgnoreArguments()
+			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences)).IgnoreArguments()
                 .Return(false).Repeat.Times(3);
 
             _mocks.ReplayAll();
