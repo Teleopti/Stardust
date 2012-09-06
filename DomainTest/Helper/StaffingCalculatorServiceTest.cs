@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [Test]
         public void VerifyTeleoptiErgBExtended()
         {
-            Assert.AreEqual(0.211,
+            Assert.AreEqual(0.187,
                            Math.Round(_calculatorService.TeleoptiErgBExtended(_servers, _intensity), 3));
             Assert.AreEqual(0,
                            Math.Round(_calculatorService.TeleoptiErgBExtended(-1, _intensity), 3));
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [Test]
         public void VerifyTeleoptiErgCExtended()
         {
-            Assert.AreEqual(0.416,
+            Assert.AreEqual(0.381,
                            Math.Round(_calculatorService.TeleoptiErgCExtended(_servers, _intensity), 3));
             Assert.AreEqual(0,
                            Math.Round(_calculatorService.TeleoptiErgCExtended(-1, _intensity), 3));
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [Test]
         public void VerifyServiceLevelAchieved()
         {
-            Assert.AreEqual(0.799,
+            Assert.AreEqual(0.819,
                          Math.Round(_calculatorService.ServiceLevelAchieved(_agents, _serviceTime, _calls, _averageHandlingTime, _periodLength, _orderedSla), 3));
             Assert.AreEqual(1,
                         Math.Round(_calculatorService.ServiceLevelAchieved(_agents, _serviceTime, _calls, 0, _periodLength, _orderedSla), 3));
