@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				                                                    new List<IScheduleDay> {_scheduleDay}, _allMatrixes,
 				                                                    _optimizationOverLimitByRestrictionDecider)).IgnoreArguments().
 					Return(
-						false);
+						true);
 				Expect.Call(() => _optimizer.LockDate(date)).Repeat.Times(2);
 			}
 			using (_mock.Playback())
@@ -122,6 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Assert.IsTrue(_eventExecuted);
 			}
 		}
+
 
 		void _target_ReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
