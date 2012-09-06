@@ -533,6 +533,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             setPermissionOnControls();
             setInitialClipboardControlState();
             setupContextMenuSkillGrid();
+        	setupToolbarButtonsChartViews();
             contextMenuViews.Opened += contextMenuViews_Opened;
             setHeaderText(loadingPeriod.StartDate, loadingPeriod.EndDate);
             setLoadingOptions();
@@ -1374,30 +1375,32 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        private void toolStripRadioButtonDayOrIntraday_Click(object sender, EventArgs e) //todo osten : to tab
-        {
-			//_intradayMode = (sender == toolStripRadioButtonIntraday);
-
-			//((ToolStripMenuItem) _contextMenuSkillGrid.Items["IntraDay"]).Checked = _intradayMode;
-			//((ToolStripMenuItem) _contextMenuSkillGrid.Items["Day"]).Checked = !_intradayMode;
-			//_currentSelectedGridRow = null;
-
-			//drawSkillGrid();
-			//reloadChart();
-
-        	_skillResultViewSetting = SkillResultViewSetting.Day;
-			if (sender == toolStripRadioButtonIntraday) _skillResultViewSetting = SkillResultViewSetting.Intraday;
-
+		private void toolStripButtonChartPeriodView_Click(object sender, EventArgs e)
+		{
+			var button = sender as ToolStripButton;
+			if(button == toolStripButtonChartPeriodView) _skillResultViewSetting = SkillResultViewSetting.Period;		
+			if (button == toolStripButtonChartMonthView) _skillResultViewSetting = SkillResultViewSetting.Month;
+			if (button == toolStripButtonChartWeekView) _skillResultViewSetting = SkillResultViewSetting.Week;
+			if (button == toolStripButtonChartDayView) _skillResultViewSetting = SkillResultViewSetting.Day;
+			if (button == toolStripButtonChartIntradayView) _skillResultViewSetting = SkillResultViewSetting.Intraday;
+			
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Intraday);
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Day);
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Period);
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Month);
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Week);
+
+			if (toolStripButtonChartIntradayView != null) toolStripButtonChartIntradayView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Intraday);
+			if (toolStripButtonChartDayView != null) toolStripButtonChartDayView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Day);
+			if (toolStripButtonChartPeriodView != null) toolStripButtonChartPeriodView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Period);
+			if (toolStripButtonChartMonthView != null) toolStripButtonChartMonthView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Month);
+			if (toolStripButtonChartWeekView != null) toolStripButtonChartWeekView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Week);
+
 			_currentSelectedGridRow = null;
 
 			drawSkillGrid();
 			reloadChart();
-        }
+		}
 
         private void toolStripButtonZoom_Click(object sender, EventArgs e)
         {
@@ -2936,11 +2939,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = true;
-			toolStripRadioButtonIntraday.Checked = false;
-			toolStripRadioButtonDay.Checked = false;
-			toolStripRadioButtonWeek.Checked = false;
-			toolStripRadioButtonMonth.Checked = false;
-			toolStripRadioButtonPeriod.Checked = true;
+			
+			toolStripButtonChartPeriodView.Checked = true;
+			toolStripButtonChartMonthView.Checked = false;
+			toolStripButtonChartWeekView.Checked = false;
+			toolStripButtonChartDayView.Checked = false;
+			toolStripButtonChartIntradayView.Checked = false;
 
 			_currentSelectedGridRow = null;
 
@@ -2956,11 +2960,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = true;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
-			toolStripRadioButtonIntraday.Checked = false;
-			toolStripRadioButtonDay.Checked = false;
-			toolStripRadioButtonWeek.Checked = false;
-			toolStripRadioButtonMonth.Checked = true;
-			toolStripRadioButtonPeriod.Checked = false;
+			
+			toolStripButtonChartPeriodView.Checked = false;
+			toolStripButtonChartMonthView.Checked = true;
+			toolStripButtonChartWeekView.Checked = false;
+			toolStripButtonChartDayView.Checked = false;
+			toolStripButtonChartIntradayView.Checked = false;
 
 			_currentSelectedGridRow = null;
 
@@ -2976,11 +2981,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = true;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
-			toolStripRadioButtonIntraday.Checked = false;
-			toolStripRadioButtonDay.Checked = false;
-			toolStripRadioButtonWeek.Checked = true;
-			toolStripRadioButtonMonth.Checked = false;
-			toolStripRadioButtonPeriod.Checked = false;
+			
+			toolStripButtonChartPeriodView.Checked = false;
+			toolStripButtonChartMonthView.Checked = false;
+			toolStripButtonChartWeekView.Checked = true;
+			toolStripButtonChartDayView.Checked = false;
+			toolStripButtonChartIntradayView.Checked = false;
 
 			_currentSelectedGridRow = null;
 
@@ -2990,29 +2996,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void skillGridMenuItemDay_Click(object sender, EventArgs e)
         {
-			//_intradayMode = false;
-			//((ToolStripMenuItem) _contextMenuSkillGrid.Items["IntraDay"]).Checked = _intradayMode;
-			//((ToolStripMenuItem) _contextMenuSkillGrid.Items["Day"]).Checked = !_intradayMode;
-			//toolStripRadioButtonIntraday.Checked = _intradayMode;
-			//toolStripRadioButtonDay.Checked = !_intradayMode;
-			//_currentSelectedGridRow = null;
-
-			//drawSkillGrid();
-			//reloadChart();
-
-
         	_skillResultViewSetting = SkillResultViewSetting.Day;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = true;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
-			toolStripRadioButtonIntraday.Checked = false;
-			toolStripRadioButtonDay.Checked = true;
-			toolStripRadioButtonWeek.Checked = false;
-			toolStripRadioButtonMonth.Checked = false;
-			toolStripRadioButtonPeriod.Checked = false;
+			
 			_currentSelectedGridRow = null;
+
+			toolStripButtonChartPeriodView.Checked = false;
+			toolStripButtonChartMonthView.Checked = false;
+			toolStripButtonChartWeekView.Checked = false;
+			toolStripButtonChartDayView.Checked = true;
+			toolStripButtonChartIntradayView.Checked = false;
 
 			drawSkillGrid();
 			reloadChart();
@@ -3020,27 +3017,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void skillGridMenuItemIntraDay_Click(object sender, EventArgs e)
         {
-			//_intradayMode = true;
-			//((ToolStripMenuItem) _contextMenuSkillGrid.Items["IntraDay"]).Checked = _intradayMode;
-			//((ToolStripMenuItem) _contextMenuSkillGrid.Items["Day"]).Checked = !_intradayMode;
-			//toolStripRadioButtonIntraday.Checked = _intradayMode;
-			//toolStripRadioButtonDay.Checked = !_intradayMode;
-			//_currentSelectedGridRow = null;
-
-			//drawSkillGrid();
-			//reloadChart();
-
         	_skillResultViewSetting = SkillResultViewSetting.Intraday;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = true;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
 			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
-			toolStripRadioButtonIntraday.Checked = true;
-			toolStripRadioButtonDay.Checked = false;
-			toolStripRadioButtonWeek.Checked = false;
-			toolStripRadioButtonMonth.Checked = false;
-			toolStripRadioButtonPeriod.Checked = false;
+			
+			toolStripButtonChartPeriodView.Checked = false;
+			toolStripButtonChartMonthView.Checked = false;
+			toolStripButtonChartWeekView.Checked = false;
+			toolStripButtonChartDayView.Checked = false;
+			toolStripButtonChartIntradayView.Checked = true;
+
 			_currentSelectedGridRow = null;
 
 			drawSkillGrid();
@@ -5799,6 +5788,15 @@ namespace Teleopti.Ccc.Win.Scheduling
                 control.Enabled = value;
             }
         }
+
+		private void setupToolbarButtonsChartViews()
+		{
+			if (toolStripButtonChartIntradayView != null) toolStripButtonChartIntradayView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Intraday);
+			if (toolStripButtonChartDayView != null) toolStripButtonChartDayView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Day);
+			if (toolStripButtonChartPeriodView != null) toolStripButtonChartPeriodView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Period);
+			if (toolStripButtonChartMonthView != null) toolStripButtonChartMonthView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Month);
+			if (toolStripButtonChartWeekView != null) toolStripButtonChartWeekView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Week);
+		}
 
         private void setupContextMenuSkillGrid()
         {
@@ -8686,6 +8684,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var agentRestrictionView = new AgentRestrictionViewTemp(SchedulerState, persons, schedulingOptions, _workShiftWorkTime, selectedPerson, _gridLockManager, SchedulePartFilter,_clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
 			agentRestrictionView.ShowDialog(this);
 		}
+
     }
 }
 
