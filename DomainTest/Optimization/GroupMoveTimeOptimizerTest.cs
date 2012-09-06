@@ -176,6 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(result);
         }
 
+
         private void commomMocks()
         {
             Expect.Call(_scheduleMatrixLockableBitArrayConverter.Convert(false, false)).Return(_lockableBitArray);

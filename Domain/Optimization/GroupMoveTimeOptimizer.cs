@@ -21,7 +21,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
         private ILockableBitArray _lockableBitArray;
 
-        public GroupMoveTimeOptimizer(IScheduleMatrixLockableBitArrayConverter scheduleMatrixLockableBitArrayConverter, IMoveTimeDecisionMaker moveTimeDecisionMaker, IScheduleResultDataExtractor dataExtractor, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
+        public GroupMoveTimeOptimizer(IScheduleMatrixLockableBitArrayConverter scheduleMatrixLockableBitArrayConverter, 
+                                        IMoveTimeDecisionMaker moveTimeDecisionMaker, 
+                                        IScheduleResultDataExtractor dataExtractor,
+                                        IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
+
         {
             _scheduleMatrixLockableBitArrayConverter = scheduleMatrixLockableBitArrayConverter;
             _moveTimeDecisionMaker = moveTimeDecisionMaker;
@@ -37,6 +41,21 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
             var dates = _moveTimeDecisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor);
+
+            if (dates.Count != 2)
+                return dates;
+            //var result = _groupMoveTimeValidatorRunner.Run(Person,new List<DateOnly>{ dates[0]}, new List<DateOnly>{ dates[1]},true);
+            //if (!result.Success)
+            //{
+            //    foreach(var date in dates )
+            //    {
+            //        LockDate(date);
+            //    }
+                
+            //}
+            
+            //run executer 
+
             return dates;
         }
 
