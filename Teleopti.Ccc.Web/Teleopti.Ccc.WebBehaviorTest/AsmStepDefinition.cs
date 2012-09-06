@@ -54,9 +54,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"ASM link should not be visible")]
 		public void ThenASMLinkShouldNotBeVisible()
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(()=>Pages.Pages.CurrentPortalPage.AsmButton.Exists,Is.False);
 		}
-
 
 		[AfterScenario("ASM")]
 		public void AfterScenario()
