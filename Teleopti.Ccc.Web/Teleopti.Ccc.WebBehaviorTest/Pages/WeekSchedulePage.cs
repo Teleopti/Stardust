@@ -96,9 +96,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Schedule-addRequest-ok-button")]
 		public Button OkButton { get; set; }
 
-		public Div Timelines
-		{ 
-			get { return Document.Div(Find.ByClass("weekview-timeline", false)); }
+		public DivCollection TimelineLabels
+		{
+			get
+			{
+				var timelineDiv = Document.Div(Find.ByClass("weekview-timeline", false));
+				return timelineDiv.Divs.Filter(Find.ByClass("weekview-timeline-label", false)); 
+			}
 		}
 
 		public Element CancelButton
@@ -117,5 +121,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Schedule-today-button")]
 		public Button TodayButton { get; set; }
+
+		public DivCollection DayLayers(List numberOfDayInWeek)
+		{
+			return numberOfDayInWeek.ListItems[4].Divs.Filter(Find.ByClass("week-schedule-layer", false));
+		}
 	}
 }

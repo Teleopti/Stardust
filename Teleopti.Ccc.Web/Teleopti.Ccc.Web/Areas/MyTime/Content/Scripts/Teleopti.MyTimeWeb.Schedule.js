@@ -74,6 +74,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
 
 	function _setTimeIndicator() {
+		if ($('.ASM-permission-granted').length == 0)
+			return;
 
 		var timelineHeight = 668;
 

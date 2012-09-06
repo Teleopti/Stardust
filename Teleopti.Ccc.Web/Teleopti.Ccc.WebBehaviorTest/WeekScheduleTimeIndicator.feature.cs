@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Name",
                         "No access to ASM"});
             table2.AddRow(new string[] {
-                        "Access to Agent Schedule Messenger",
+                        "Access To Agent Schedule Messenger",
                         "false"});
 #line 10
  testRunner.And("there is a role with", ((string)(null)), table2);

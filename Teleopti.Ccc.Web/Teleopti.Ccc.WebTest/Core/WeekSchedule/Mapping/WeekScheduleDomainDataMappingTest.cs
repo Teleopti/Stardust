@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Principal;
 using System.Threading;
 using AutoMapper;
@@ -8,12 +10,16 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.WebTest.Core.Mapping;
@@ -29,7 +35,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IPersonRequestProvider personRequestProvider;
 		private IUserTimeZone userTimeZone;
 		private IPrincipal principalBefore;
-		private ICccTimeZoneInfo timeZone; 
+		private ICccTimeZoneInfo timeZone;
+		private IPermissionProvider permissionProvider;
 
 		[SetUp]
 		public void Setup()
@@ -40,6 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
+			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 
 			Mapper.Reset();
@@ -48,7 +56,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 					Depend.On(scheduleProvider),
 					Depend.On(projectionProvider),
 					Depend.On(personRequestProvider),
-					Depend.On(userTimeZone)
+					Depend.On(userTimeZone),
+					Depend.On(permissionProvider)
 					)));
 		}
 
@@ -341,7 +350,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
             layer.Period = projectionPeriod;
             var projection = new StubFactory().ProjectionStub(new[] { layer });
 
-            scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
             projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
             var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(lastDayOfWeek);
@@ -353,6 +362,34 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
             result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(59);
         }
 
+		[Test]
+		public void ShouldMapAsmPermission()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
+
+			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			var localMidnightInUtc = timeZone.ConvertTimeToUtc(lastDayOfWeek.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var layer = new StubFactory().VisualLayerStub();
+			layer.Period = projectionPeriod;
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+			
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(firstDayOfWeek);
+
+			result.AsmPermission.Should().Be.True();
+		}
+
+		
 		[TearDown]
 		public void Teardown()
 		{

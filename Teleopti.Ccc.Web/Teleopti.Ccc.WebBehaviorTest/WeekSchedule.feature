@@ -71,7 +71,8 @@ Scenario: View meeting
 	When I view my week schedule
 	And I click on the meeting
 	Then I should see the meeting details
-
+	
+	###
 Scenario: View public note
 	Given I am an agent
 	And I have a public note on tuesday
@@ -159,7 +160,7 @@ Scenario: Show timeline with schedule
 	| ShiftCategoryName | ForTest          |
 	| Lunch             | true             |
 	And My schedule is published
-	When I view my week schedule
+	When I view my week schedule for date '2012-08-27'
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field          | Value |
 	| start timeline | 8:00  |

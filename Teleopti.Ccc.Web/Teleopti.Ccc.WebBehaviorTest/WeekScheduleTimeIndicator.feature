@@ -10,7 +10,7 @@ Background:
 	And there is a role with
 	| Field									| Value				|
 	| Name									| No access to ASM	|
-	| Access to Agent Schedule Messenger	| false				|
+	| Access To Agent Schedule Messenger	| false				|
     
 Scenario: Do not show time indicator if no permission
 	Given I have the role 'No access to ASM'

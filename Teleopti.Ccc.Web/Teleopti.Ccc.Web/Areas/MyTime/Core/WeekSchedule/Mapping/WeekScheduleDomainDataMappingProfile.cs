@@ -2,8 +2,10 @@ using System;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
@@ -16,13 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IResolve<IProjectionProvider> _projectionProvider;
 		private readonly IResolve<IPersonRequestProvider> _personRequestProvider;
 		private readonly IResolve<IUserTimeZone> _userTimeZone;
+		private readonly IResolve<IPermissionProvider> _permissionProvider;
 
-		public WeekScheduleDomainDataMappingProfile(IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider, IResolve<IPersonRequestProvider> personRequestProvider, IResolve<IUserTimeZone> userTimeZone)
+		public WeekScheduleDomainDataMappingProfile(IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider, IResolve<IPersonRequestProvider> personRequestProvider, IResolve<IUserTimeZone> userTimeZone, IResolve<IPermissionProvider> permissionProvider)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
 			_personRequestProvider = personRequestProvider;
 			_userTimeZone = userTimeZone;
+			_permissionProvider = permissionProvider;
 		}
 
 		protected override void Configure()
@@ -105,12 +109,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															ScheduleDays = scheduleDays,
 															Projections = (from d in days where d.Projection != null select d.Projection).ToArray()
 									                  	};
+
+									bool asmPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
+
 									return new WeekScheduleDomainData
 											{
 												Date = date,
 												Days = days,
 												ColorSource = colorSource,
-												MinMaxTime = minMaxTime
+												MinMaxTime = minMaxTime,
+												AsmPermission = asmPermission
 											};
 								});
 

@@ -337,12 +337,15 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 
 		[Test]
-		public void ShouldGetPosition()
+		public void ShouldMapAsmPermission()
 		{
+			var domainData = new WeekScheduleDomainData()
+			{
+				AsmPermission = true
+			};
 
-			var testPos = 668 *
-						  ((new TimeSpan(12, 0, 0).TotalMinutes - TimeSpan.Zero.TotalMinutes) /
-						   (new TimeSpan(23, 59, 0).TotalMinutes - TimeSpan.Zero.TotalMinutes));
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+			result.AsmPermission.Should().Be.True();
 		}
 	}
 }
