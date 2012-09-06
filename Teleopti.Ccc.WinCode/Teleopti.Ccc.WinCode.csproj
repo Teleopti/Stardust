@@ -547,6 +547,7 @@
     <Compile Include="Scheduling\AuditHistory\NextPageCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\PreviousPageCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\RevisionDisplayRow.cs" />
+    <Compile Include="Scheduling\SkillFullPeriodGridControlPresenter.cs" />
     <Compile Include="Scheduling\SkillMonthGridControlPresenter.cs" />
     <Compile Include="Scheduling\DayPresenterNew.cs" />
     <Compile Include="Scheduling\DayPresenterScaleCalculator.cs" />

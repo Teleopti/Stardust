@@ -538,6 +538,7 @@
     <Compile Include="Scheduler\AuditHistory\PreviousPageCommandTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
+    <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\DateTimePeriodIsValidTest.cs" />
     <Compile Include="Scheduler\DayPresenterNewTest.cs" />
     <Compile Include="Scheduler\DayPresenterScaleCalculatorTest.cs" />
