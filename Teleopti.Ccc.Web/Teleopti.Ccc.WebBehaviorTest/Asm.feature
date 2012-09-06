@@ -9,6 +9,11 @@ Background:
 	Given there is a role with
 	| Field                    | Value                 |
 	| Name                     | Full access to mytime |
+	And there is a role with
+	| Field         | Value            |
+	| Name          | No access to ASM |
+	| Access To Asm | False            |
+
 	 And I have a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
@@ -27,7 +32,7 @@ Background:
 	| EndTime               | 2030-01-01 17:00 |
 	| Lunch3HoursAfterStart | true             |
 
-@ignore
+
 Scenario: No permission to ASM module
 	Given I have the role 'No access to ASM'
 	When I am viewing week schedule
