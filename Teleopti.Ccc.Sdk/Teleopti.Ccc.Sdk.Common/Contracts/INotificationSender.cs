@@ -4,7 +4,7 @@
 	public interface INotificationSender
 	{
 
-		void SendNotification(INotificationMessage message, string mobileNumber);
+		void SendNotification(INotificationMessage message, string to);
 		
 		void SetConfigReader(INotificationConfigReader notificationConfigReader);
 	}

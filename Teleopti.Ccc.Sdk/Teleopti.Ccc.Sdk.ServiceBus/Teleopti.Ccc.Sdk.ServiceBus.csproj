@@ -307,10 +307,6 @@
       <Project>{1277112D-B11A-4358-AF9A-8C9C7A5E701E}</Project>
       <Name>Teleopti.Ccc.Sdk.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Sdk.Notification\Teleopti.Ccc.Sdk.Notification.csproj">
-      <Project>{87ADCA35-6114-4499-8233-6011611BF8AA}</Project>
-      <Name>Teleopti.Ccc.Sdk.Notification</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

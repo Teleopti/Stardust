@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 		//private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SendNotification(INotificationMessage message, string mobileNumber)
+		public void SendNotification(INotificationMessage message, string to)
 		{
 			if (!_notificationConfigReader.HasLoadedConfig)
 				return;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 		    
             foreach(var msg in messagesToSendList)
             {
-                SendSmsNotifications(msg, mobileNumber);
+                SendSmsNotifications(msg, to);
             }
 
         }
