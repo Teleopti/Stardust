@@ -51,6 +51,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => activeTd.Exists, Is.False);
 		}
 
+		[Then(@"ASM link should not be visible")]
+		public void ThenASMLinkShouldNotBeVisible()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+
 		[AfterScenario("ASM")]
 		public void AfterScenario()
 		{
