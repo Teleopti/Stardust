@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a schedule in popup")]
 		public void ThenIShouldSeeAScheduleInPopup()
 		{
-			var layers = _popup.Spans.Filter(Find.ByClass("asm-layer",false));
-			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
+			EventualAssert.That(() =>  _popup.Spans.Filter(Find.ByClass("asm-layer",false)).Count, Is.GreaterThan(0));
 		}
 
 		[Then(@"I should see '(.*)' upcoming activities")]
@@ -38,17 +37,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see Phone as current activity")]
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
-			var infoTable = _popup.Table("asm-current-info-table");
-			var activeTdsWithPhone = infoTable.TableRow(Find.ByClass("asm-info-current-activity")).Children().Filter(Find.ByText(TestData.ActivityPhone.Description.Name));
-			EventualAssert.That(() => activeTdsWithPhone.Count, Is.EqualTo(1));
+			EventualAssert.That(() => 
+				_popup.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Children().Filter(Find.ByText(TestData.ActivityPhone.Description.Name)).Count, 
+				Is.EqualTo(1));
 		}
 
 		[Then(@"I should not see as current activity")]
 		public void ThenIShouldNotSeeAsCurrentActivity()
 		{
-			var infoTable = _popup.Table("asm-current-info-table");
-			var activeTd = infoTable.TableRow(Find.ByClass("asm-info-current-activity"));
-			EventualAssert.That(() => activeTd.Exists, Is.False);
+			EventualAssert.That(() => _popup.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Exists, Is.False);
 		}
 
 		[Then(@"ASM link should not be visible")]
