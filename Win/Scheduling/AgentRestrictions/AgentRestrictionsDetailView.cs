@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -15,6 +17,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	{
 		private readonly AgentRestrictionsDetailModel _model;
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
+		private bool _useScheduling;
 
 		public AgentRestrictionsDetailView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
@@ -31,7 +34,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			InitializeGrid();
 		}
 
-		private void InitializeGrid()
+		public void InitializeGrid()
 		{
 			ViewGrid.Rows.HeaderCount = 0;
 			ViewGrid.Cols.HeaderCount = 0;
@@ -88,11 +91,143 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, IRestrictionExtractor restrictionExtractor, RestrictionSchedulingOptions schedulingOptions, TimeSpan periodTarget)
 		{
+			if(schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
+
 			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor, schedulingOptions);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
 			_model.LoadDetails(scheduleMatrixPro, restrictionExtractor, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
-			ViewGrid.Refresh();
-			InitializeGrid();
+			_useScheduling = schedulingOptions.UseScheduling;
+			//ViewGrid.Refresh();
+			//InitializeGrid();	
+		}
+
+		public override void AddSelectedSchedulesInColumnToList(GridRangeInfo range, int colIndex, ICollection<IScheduleDay> selectedSchedules)
+		{
+			if(range == null) throw new ArgumentNullException("range");
+			if(selectedSchedules == null) throw new ArgumentNullException("selectedSchedules");
+
+			for (int j = range.Top; j <= range.Bottom; j++)
+			{
+				if (colIndex >= 0)
+				{
+					IScheduleDay schedulePart = ViewGrid.Model[j, colIndex].CellValue as IScheduleDay;
+
+					if (schedulePart != null)
+						selectedSchedules.Add(schedulePart);
+				}
+
+			}
+		}
+
+		public override Point GetCellPositionForAgentDay(IEntity person, System.DateTime dayDate)
+		{
+			Point point = new Point(-1, -1);
+
+			for (int i = 1; i <= ViewGrid.RowCount; i++)
+			{
+				for (int j = 1; j <= ViewGrid.ColCount; j++)
+				{
+					IScheduleDay schedulePart = ViewGrid.Model[i, j].CellValue as IScheduleDay;
+
+					if (schedulePart != null && schedulePart.Period.Contains(dayDate))
+					{
+						point = new Point(j, i);
+						break;
+					}
+				}
+			}
+
+			return point;
+		}
+
+		public override void SelectFirstDayInGrid()
+		{
+			GridRangeInfo info = GridRangeInfo.Cell(TheGrid.Rows.HeaderCount + 1, TheGrid.Cols.HeaderCount + 1);
+			TheGrid.Selections.Clear(true);
+			TheGrid.CurrentCell.Activate(TheGrid.Rows.HeaderCount + 1, TheGrid.Cols.HeaderCount + 1, GridSetCurrentCellOptions.SetFocus);
+			TheGrid.Selections.ChangeSelection(info, info, true);
+			TheGrid.CurrentCell.MoveTo(TheGrid.Rows.HeaderCount + 1, TheGrid.Cols.HeaderCount + 1);
+		}
+
+		public override DateOnly SelectedDateLocal()
+		{
+			//DateOnly tag;
+			var tag = TheGrid[ViewGrid.CurrentCell.RowIndex, ViewGrid.CurrentCell.ColIndex].Tag;
+			if ((tag is DateOnly)) return (DateOnly)tag;
+			return Presenter.SelectedPeriod.DateOnlyPeriod.StartDate;
+
+			//if (ViewGrid.CurrentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
+			//{
+			//    tag = (DateOnly)ViewGrid.Model[1, ViewGrid.CurrentCell.ColIndex].Tag;
+			//}
+			//else
+			//{
+			//    tag = Presenter.SelectedPeriod.DateOnlyPeriod.StartDate;
+			//}
+
+			//return tag;
+		}
+
+		public override void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules)
+		{
+			//if (_singleAgentRestrictionPresenter == null)
+			//    return;
+			//AgentInfoHelper agentInfoHelper = _singleAgentRestrictionPresenter.SelectedAgentInfo();
+			//if (agentInfoHelper != null)
+			//    ((RestrictionSummaryPresenter)Presenter).GetNextPeriod(agentInfoHelper);
+
+			if(schedules == null) throw new ArgumentNullException("schedules");
+
+			var personsToReload = new HashSet<IPerson>();
+			foreach (IScheduleDay schedulePart in schedules)
+			{
+				personsToReload.Add(schedulePart.Person);
+				Point point = GetCellPositionForAgentDay(schedulePart.Person, schedulePart.Period.StartDateTime);
+
+				if (point.X != -1 && point.Y != -1)
+				{
+					TheGrid.InvalidateRange(GridRangeInfo.Row(point.X));
+				}
+			}
+			//_singleAgentRestrictionPresenter.Reload(personsToReload);
+		}
+
+		internal override void CellDrawn(object sender, GridDrawCellEventArgs e)
+		{
+			IScheduleDay cellValue = e.Style.CellValue as IScheduleDay;
+			if (cellValue != null && _useScheduling)
+				AddMarkersToCell(e, cellValue, cellValue.SignificantPart());
+		}
+
+		internal override void CellClick(object sender, GridCellClickEventArgs e)
+		{
+			//handle selection when click on col header
+			if (e.RowIndex == 0)
+				e.Cancel = true;
+		}
+
+		public void SelectDateIfExists(DateOnly dateOnly)
+		{
+			var rows = TheGrid.RowCount;
+			var cols = TheGrid.ColCount;
+
+			for (var row = 0; row < rows; row++)
+			{
+				for (var col = 0; col < cols; col++)
+				{
+					var tag = TheGrid[row, col].Tag;
+
+					if (!(tag is DateOnly)) continue;
+					if (!tag.Equals(dateOnly)) continue;
+					var info = GridRangeInfo.Cell(row, col);
+					TheGrid.Selections.Clear(true);
+					TheGrid.CurrentCell.Activate(row, col, GridSetCurrentCellOptions.SetFocus);
+					TheGrid.Selections.ChangeSelection(info, info, true);
+					TheGrid.CurrentCell.MoveTo(row, col);
+
+					break;
+				}
+			}
 		}
 	}
 }

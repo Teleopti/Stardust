@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
@@ -68,14 +69,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		public TimeSpan ContractTargetTime { get; set; }
 		public TimeSpan ContractCurrentTime { get; set; }
 		public int CurrentDaysOff { get; set; }
-		private readonly Dictionary<AgentRestrictionDisplayRowColumn, string> _warnings;
+		private readonly IList<AgentRestrictionDisplayRowColumn> _warnings; 
 		public TimePeriod MinMaxTime { get; set; }
 
 		public AgentRestrictionsDisplayRow(IScheduleMatrixPro matrix)
 		{
 			_matrix = matrix;
 			State = AgentRestrictionDisplayRowState.NotAvailable;
-			_warnings = new Dictionary<AgentRestrictionDisplayRowColumn, string>();
+			_warnings = new List<AgentRestrictionDisplayRowColumn>();
 		}
 
 		public IScheduleMatrixPro Matrix
@@ -87,19 +88,24 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		{
 			_warnings.Clear();
 
-			if (ContractCurrentTime < MinMaxTime.StartTime || ContractCurrentTime > MinMaxTime.EndTime) _warnings.Add(AgentRestrictionDisplayRowColumn.ContractTime, UserTexts.Resources.ContractTimeDoesNotMeetTheTargetTime);
-			if (!CurrentDaysOff.Equals(TargetDaysOff)) _warnings.Add(AgentRestrictionDisplayRowColumn.DaysOffSchedule, UserTexts.Resources.WrongNumberOfDaysOff);
-			if (((IAgentDisplayData)this).MinimumPossibleTime > MinMaxTime.EndTime) _warnings.Add(AgentRestrictionDisplayRowColumn.Min, UserTexts.Resources.LowestPossibleWorkTimeIsTooHigh);
-			if (((IAgentDisplayData)this).MaximumPossibleTime < MinMaxTime.StartTime) _warnings.Add(AgentRestrictionDisplayRowColumn.Max, UserTexts.Resources.HighestPossibleWorkTimeIsTooLow);
+			if (ContractCurrentTime < MinMaxTime.StartTime || ContractCurrentTime > MinMaxTime.EndTime) _warnings.Add(AgentRestrictionDisplayRowColumn.ContractTime);
+			if (!CurrentDaysOff.Equals(TargetDaysOff)) _warnings.Add(AgentRestrictionDisplayRowColumn.DaysOffSchedule);
+			if (((IAgentDisplayData)this).MinimumPossibleTime > MinMaxTime.EndTime) _warnings.Add(AgentRestrictionDisplayRowColumn.Min);
+			if (((IAgentDisplayData)this).MaximumPossibleTime < MinMaxTime.StartTime) _warnings.Add(AgentRestrictionDisplayRowColumn.Max);
 		}
 
 		public string Warning(int index)
 		{
 			if (_warnings.Count == 0) return null;
 			var column = (AgentRestrictionDisplayRowColumn)index;
-			string warning;
-			_warnings.TryGetValue(column, out warning);
-			return warning;
+			if (!_warnings.Contains(column)) return null;
+			
+			if (column.Equals(AgentRestrictionDisplayRowColumn.ContractTime)) return UserTexts.Resources.ContractTimeDoesNotMeetTheTargetTime;
+			if (column.Equals(AgentRestrictionDisplayRowColumn.DaysOffSchedule)) return UserTexts.Resources.WrongNumberOfDaysOff;
+			if (column.Equals(AgentRestrictionDisplayRowColumn.Min)) return UserTexts.Resources.LowestPossibleWorkTimeIsTooHigh;
+			if (column.Equals(AgentRestrictionDisplayRowColumn.Max)) return UserTexts.Resources.HighestPossibleWorkTimeIsTooLow;
+			
+			return null;	
 		}
 
 		public int Warnings
@@ -109,16 +115,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public string PeriodType
 		{
-			get
-			{
-				switch (_matrix.SchedulePeriod.PeriodType)
-				{
-					case SchedulePeriodType.Day: return UserTexts.Resources.Day;
-					case SchedulePeriodType.Month: return UserTexts.Resources.Month;
-					case SchedulePeriodType.Week: return UserTexts.Resources.Week;
-					default: return UserTexts.Resources.None;
-				}
-			}
+			get { return LanguageResourceHelper.TranslateEnumValue(_matrix.SchedulePeriod.PeriodType); }
 		}
 
 		public string StartDate
