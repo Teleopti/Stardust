@@ -755,7 +755,7 @@ this.FeatureBackground();
 #line 241
     testRunner.And("I click the apply extended preferences button");
 #line 242
-    testRunner.Then("I should see add extended preferences panel with error \'Invalid time period\'");
+    testRunner.Then("I should see add extended preferences panel with error \'Invalid time startTime\'");
 #line hidden
             this.ScenarioCleanup();
         }
