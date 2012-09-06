@@ -350,7 +350,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
             var canSeeCalculation = permissionService.IsPermitted(ApplicationFunctionHelper.Instance().DefinedApplicationFunctionPaths.ViewSchedulePeriodCalculation);
             if (canSeeCalculation)
                 labelPeriodCalculationInfo.Text = calculationInfo;
-
             else
                 labelPeriodCalculationInfo.Visible = false;
         }
