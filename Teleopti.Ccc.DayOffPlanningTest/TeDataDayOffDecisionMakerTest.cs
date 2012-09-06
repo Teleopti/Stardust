@@ -32,6 +32,12 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			_target = new TeDataDayOffDecisionMaker(_validatorListWithoutConsecutiveWorkDaysValidator, _consecutiveWorkDaysValidator, false, new LogWriterForTest());
 			Assert.IsFalse(_target.Execute(null, null));
 		}
+
+		[Test]
+		public void FakeTest()
+		{
+			_target.Execute(null, null);
+		}
 	}
 
 	public class LogWriterForTest : ILogWriter
