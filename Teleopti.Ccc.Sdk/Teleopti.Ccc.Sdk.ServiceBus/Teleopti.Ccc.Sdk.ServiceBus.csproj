@@ -133,6 +133,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -156,15 +157,20 @@
     <Compile Include="AuthorizationContainerInstaller.cs" />
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="BusStartup.cs" />
+    <Compile Include="Denormalizer\ScheduleDayReadModelsCreator.cs" />
+    <Compile Include="Denormalizer\DenormalizeScheduleDayMessageConsumer.cs" />
+    <Compile Include="Denormalizer\InitialLoadScheduleDayConsumer.cs" />
+    <Compile Include="InitialLoadOfScheduleDayReadModel.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
-    <Compile Include="Denormalizer\SmsReadModelHandler.cs" />
-    <Compile Include="SMS\ISmsSender.cs" />
-    <Compile Include="SMS\SignificantChangeChecker.cs" />
-    <Compile Include="SMS\SmsConfigReader.cs" />
-    <Compile Include="SMS\SmsLinkChecker.cs" />
-    <Compile Include="SMS\ClickatellSmsSender.cs" />
-    <Compile Include="SMS\SmsSenderFactory.cs" />
+    <Compile Include="Denormalizer\ScheduleDayReadModelCreator.cs" />
+    <Compile Include="Denormalizer\ScheduleDayReadModelHandler.cs" />
+    <Compile Include="Notification\NotificationMessage.cs" />
+    <Compile Include="Notification\ScheduleDayReadModelComparer.cs" />
+    <Compile Include="Notification\SignificantChangeChecker.cs" />
+    <Compile Include="Notification\NotificationConfigReader.cs" />
+    <Compile Include="Notification\SmsLinkChecker.cs" />
+    <Compile Include="Notification\NotificationSenderFactory.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumer.cs" />
@@ -260,7 +266,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="SmsConfig.xml.notinuse">
+    <None Include="NotificationConfig.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -300,6 +306,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.Logic\Teleopti.Ccc.Sdk.Logic.csproj">
       <Project>{1277112D-B11A-4358-AF9A-8C9C7A5E701E}</Project>
       <Name>Teleopti.Ccc.Sdk.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Sdk.Notification\Teleopti.Ccc.Sdk.Notification.csproj">
+      <Project>{87ADCA35-6114-4499-8233-6011611BF8AA}</Project>
+      <Name>Teleopti.Ccc.Sdk.Notification</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
