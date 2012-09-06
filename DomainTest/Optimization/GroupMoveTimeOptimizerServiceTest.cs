@@ -1,0 +1,168 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.Optimization
+{
+    class GroupMoveTimeOptimizerServiceTest
+    {
+        private MockRepository _mock;
+        private IGroupMoveTimeOptimizerService _target;
+        private IGroupMoveTimeOptimizer _optimizer;
+        private IList<IGroupMoveTimeOptimizer> _optimizers;
+        private IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
+        private IGroupMoveTimeOptimizationExecuter _groupMoveTimeOptimizerExecuter;
+        private IScheduleMatrixPro _matrix;
+        private IList<IScheduleMatrixPro> _allMatrixes;
+        private IPerson _person;
+        private IScheduleDayPro _scheduleDayPro;
+        private IScheduleDay _scheduleDay;
+        private bool _eventExecuted;
+        private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
+        private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private IScheduleMatrixPro _matrix2;
+        private IScheduleDay _scheduleDay2;
+        private IScheduleDayPro _scheduleDayPro2;
+        private IScheduleMatrixPro _scheduleMatrixPro;
+        private IGroupOptimizationValidatorRunner _groupMoveTimeValidatorRunner;
+
+        [SetUp]
+        public void Setup()
+        {
+            _mock = new MockRepository();
+            _optimizer = _mock.StrictMock<IGroupMoveTimeOptimizer>();
+            _optimizers = new List<IGroupMoveTimeOptimizer> { _optimizer };
+            _groupOptimizerFindMatrixesForGroup = _mock.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
+            _groupMoveTimeOptimizerExecuter = _mock.DynamicMock<IGroupMoveTimeOptimizationExecuter>();
+            _groupPersonBuilderForOptimization = _mock.DynamicMock<IGroupPersonBuilderForOptimization>();
+            _groupMoveTimeValidatorRunner = _mock.Stub<IGroupOptimizationValidatorRunner>();
+            _target = new GroupMoveTimeOptimizerService(_optimizers, _groupOptimizerFindMatrixesForGroup,
+                                                        _groupMoveTimeOptimizerExecuter, _groupPersonBuilderForOptimization, _groupMoveTimeValidatorRunner);
+            _matrix = _mock.DynamicMock<IScheduleMatrixPro>();
+            _matrix2 = _mock.DynamicMock<IScheduleMatrixPro>();
+            _allMatrixes = new List<IScheduleMatrixPro> { _matrix, _matrix2 };
+            _person = PersonFactory.CreatePerson();
+            _scheduleDayPro = _mock.DynamicMock<IScheduleDayPro>();
+            _scheduleDayPro2 = _mock.DynamicMock<IScheduleDayPro>();
+            _scheduleDay = _mock.StrictMock<IScheduleDay>();
+            _scheduleDay2 = _mock.StrictMock<IScheduleDay>();
+            _optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
+            _scheduleMatrixPro = _mock.DynamicMock<IScheduleMatrixPro>();
+            
+
+        }
+
+        [Test]
+        public void ShouldRunUntilAllOptimizersFailsInSchedulingStep()
+        {
+            DateOnly date = new DateOnly(2012, 1, 1);
+            DateOnly date2 = new DateOnly(2012, 1, 2);
+
+            _groupMoveTimeValidatorRunner.Stub(x => x.Run(_person, new List<DateOnly>(), new List<DateOnly>(), true)).IgnoreArguments() .Return(new ValidatorResult(){Success = true});
+
+
+            using (_mock.Record())
+            {
+                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 }).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
+                Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce() ;
+                Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce() ;
+                Expect.Call(_matrix2.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.IsMatrixForDateAndPerson(date, _person)).Return(true).Repeat.AtLeastOnce() ;
+                Expect.Call(_optimizer.IsMatrixForDateAndPerson(date2, _person)).Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.Matrix).Return(_matrix).Repeat.AtLeastOnce() ;
+                Expect.Call(_matrix.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
+                Expect.Call(_matrix.GetScheduleDayByKey(date2)).Return(_scheduleDayPro2).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo() )).Repeat.AtLeastOnce() ;
+                
+            }
+
+            using (_mock.Playback())
+            {
+                _target.Execute(_allMatrixes);
+            }
+        }
+
+        [Test]
+        public void ShouldRunUntilAllOptimizersFailsInFindDateStep()
+        {
+            //DateOnly date = new DateOnly(2012, 1, 1);
+            using (_mock.Record())
+            {
+                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly>( ));
+                Expect.Call(_optimizer.Person).Return(_person);
+            }
+
+            using (_mock.Playback())
+            {
+                _target.Execute(_allMatrixes);
+            }
+        }
+
+        [Test]
+        public void VerifyReportProgressEventExecutedAndCanCancel()
+        {
+            DateOnly date = new DateOnly(2012, 1, 1);
+            DateOnly date2 = new DateOnly(2012, 1, 2);
+            _optimizers = new List<IGroupMoveTimeOptimizer> { _optimizer, _optimizer };
+            _target = new GroupMoveTimeOptimizerService(_optimizers, _groupOptimizerFindMatrixesForGroup,
+                                                        _groupMoveTimeOptimizerExecuter, _groupPersonBuilderForOptimization, _groupMoveTimeValidatorRunner);
+            _target.ReportProgress += _target_ReportProgress;
+            _groupMoveTimeValidatorRunner.Stub(x => x.Run(_person, new List<DateOnly>(), new List<DateOnly>(), true)).IgnoreArguments().Return(new ValidatorResult() { Success = true });
+
+            using (_mock.Record())
+            {
+                Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 }).Repeat.AtLeastOnce();
+                Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
+                Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce();
+                Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce() ;
+                Expect.Call(_optimizer.IsMatrixForDateAndPerson(date, _person)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                //Expect.Call(_optimizer.IsMatrixForDateAndPerson(date2, _person)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.Matrix).Return(_matrix).Repeat.AtLeastOnce() ;
+                Expect.Call(_matrix.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
+                Expect.Call(_matrix.GetScheduleDayByKey(date2)).Return(_scheduleDayPro2).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.Twice();
+                Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.Twice();
+                Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
+                Expect.Call(_groupMoveTimeOptimizerExecuter.Execute(new List<IScheduleDay> { _scheduleDay },
+                                                                    new List<IScheduleDay> { _scheduleDay }, _allMatrixes,
+                                                                    _optimizationOverLimitByRestrictionDecider)).IgnoreArguments().
+                    Return(
+                        false);
+                Expect.Call(() => _optimizer.LockDate(date)).Repeat.Times(2);
+            }
+            using (_mock.Playback())
+            {
+                _target.Execute(_allMatrixes);
+                _target.ReportProgress -= _target_ReportProgress;
+                Assert.IsTrue(_eventExecuted);
+            }
+        }
+
+        void _target_ReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
+        {
+            _eventExecuted = true;
+            e.Cancel = true;
+        }
+    }
+
+
+   
+
+}
