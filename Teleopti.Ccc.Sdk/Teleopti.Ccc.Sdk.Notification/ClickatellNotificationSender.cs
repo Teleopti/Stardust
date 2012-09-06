@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 		//private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SendNotification(INotificationMessage message, string to)
+		public void SendNotification(INotificationMessage message, string receiver)
 		{
 			if (!_notificationConfigReader.HasLoadedConfig)
 				return;
@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Sdk.Notification
 			// we handle this here because here we know it is a sms
 			//var smsMessage = message.Subject;
 
-			// list for messages to send
+			// list for messages receiver send
             IList<string> messagesToSendList = GetSmsMessagesToSend(message);
 		    
             foreach(var msg in messagesToSendList)
             {
-                SendSmsNotifications(msg, to);
+                SendSmsNotifications(msg, receiver);
             }
 
         }
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.Sdk.Notification
 				catch (Exception exception)
 				{
 					throw (new SendNotificationException(
-						"Error occurred trying to access: " + _notificationConfigReader.Url + msgData, exception));
-					//Logger.Error("Error occurred trying to access: " + _notificationConfigReader.Url + msgData, exception);
+						"Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception));
+					//Logger.Error("Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception);
 				}
 			}
 		}
