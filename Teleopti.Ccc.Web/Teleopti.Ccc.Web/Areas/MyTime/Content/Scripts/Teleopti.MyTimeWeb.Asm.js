@@ -10,7 +10,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Asm = (function () {
 	function _start(serverMsSince1970, pixelsPerHour) {
-		var refreshSeconds = 300;
+		var refreshSeconds = 1;
 		var observableInfo = ko.observable();
 		var timeLineArray = _timeLineArray();
 
@@ -65,7 +65,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var slidingSchedules = $('.asm-sliding-schedules');
 		var clientMsSince1970 = new Date().getTeleoptiTime();
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
-
 		var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
 		var startPixel = -(pixelsPerHour * hoursSinceStart);
 		slidingSchedules.css('left', (startPixel) + 'px');

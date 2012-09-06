@@ -1,5 +1,4 @@
 ﻿@ASM
-@ignore
 Feature: ASM
 	In order to improve adherence
 	As an agent
@@ -61,3 +60,11 @@ Scenario: No current activity to show
 	When I view my regional settings
 	And I click ASM link
 	Then I should not see as current activity
+
+Scenario: Current activity changes
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 11:59'
+	When I view my regional settings
+	And I click ASM link
+	And Current browser time has changed to '2030-01-01 12:00'
+	Then I should see Phone as current activity

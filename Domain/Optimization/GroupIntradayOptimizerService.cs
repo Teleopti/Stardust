@@ -38,6 +38,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			while (runningList.Count > 0)
 			{
+				if (_cancelMe)
+					return;
+
 				IList<IGroupIntradayOptimizer> removeList = runTheList(runningList, allMatrixes);
 				foreach (var groupIntradayOptimizer in removeList)
 				{
