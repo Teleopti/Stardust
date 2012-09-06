@@ -6194,10 +6194,6 @@ Meeting</value>
     <value>Agent Queue Statistics</value>
     <comment>Agent Queue Statistics</comment>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent Schedule Adherence</value>
-    <comment>Agent Schedule Adherence</comment>
-  </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Agent Metrics</value>
     <comment>Agent Schedule Result</comment>
@@ -11054,5 +11050,13 @@ These options are activated:
   <data name="SchedulePeriodTypeWeek" xml:space="preserve">
     <value>Week</value>
     <comment>To specify schedule period type Week</comment>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Adherence per Agent</value>
+    <comment>Adherence per Agent</comment>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Adherence per Day</value>
+    <comment>Adherence per Day</comment>
   </data>
 </root>

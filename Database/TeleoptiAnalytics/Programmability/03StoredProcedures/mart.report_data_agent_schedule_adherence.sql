@@ -30,14 +30,15 @@ GO
 --				2012-01-23 Change parameters @group_page_group_set and @team_set to sets and nvarchar(max)
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
 --				2012-04-16 Bug 18933
-
--- Description:	Used by report Agent  - Schedule Adherence
+--				2012-09-06 Added new functionality for report Adherence Per Agent. Parameter @date_to only used by Adherence Per Agent.
+-- Description:	Used by reports Adherence per Agent and Adherence per Date.
 -- TODO: remove scenario from this SP and .aspx selection. Only default scenario is calculated in the fact-table
 -- =============================================
 
 
 CREATE PROCEDURE [mart].[report_data_agent_schedule_adherence] 
 @date_from datetime,
+@date_to datetime = @date_from, --NEW 20120903 KJ, default_value equals to start_date
 @group_page_code uniqueidentifier,
 @group_page_group_set nvarchar(max),
 @group_page_agent_code uniqueidentifier,
@@ -56,8 +57,8 @@ AS
 SET NOCOUNT ON 
 
 --todo: make this input on the SP
-DECLARE @date_to datetime
-SET @date_to = @date_from
+--DECLARE @date_to datetime
+--SET @date_to = @date_from
 
 ------------
 --Create all needed temp tables. Just for performance
@@ -378,8 +379,8 @@ INSERT #person_intervals
 		ON 1=1
 	INNER JOIN #person_id a
 		ON p.person_id = a.person_id
-	WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date
-	
+	--WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date
+	WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date OR @date_to BETWEEN p.valid_from_date AND p.valid_to_date --20120905 KJ ADDED @DATE_TO
 
 --Start creating the result set
 --a) insert agent statistics matching scheduled time
@@ -432,7 +433,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 		ON b.local_date_id = d.date_id
 	INNER JOIN mart.dim_interval i
 		ON b.local_interval_id = i.interval_id
-	WHERE d.date_date = @date_from
+	WHERE d.date_date BETWEEN @date_from AND @date_to --20120905 KJ ADDED @DATE_TO
 	AND fs.scenario_id=@scenario_id
 	AND b.time_zone_id=@time_zone_id
 ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,d.date_id,d.date_date,i.interval_id
@@ -479,7 +480,7 @@ FROM mart.dim_person p
 			WHERE fsd.person_id=fs.person_id
 			AND fsd.date_id=fs.schedule_date_id
 			AND fsd.interval_id=fs.interval_id)
-	AND d.date_date = @date_from
+	AND d.date_date BETWEEN @date_from AND @date_to --20120905 KJ ADDED @DATE_TO
 	AND b.time_zone_id=@time_zone_id
 END
 
@@ -586,7 +587,7 @@ update #result set mininterval = minint, maxinterval = maxint
 from  #minmax
 inner join #result on #minmax.person_id = #result.person_id
 
-/*Sortering 1=FÃ¶rnamn,2=Efternamn,3=Shift_start,4=Adherence,5=ShiftEnd*/
+/*Sortering 1=FÃ¶rnamn,2=Efternamn,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date*/
 --NOTE: If you change the column order/name you need to consider SDK DTO as well!
 --		see: 
 IF @sort_by=1
@@ -619,3 +620,9 @@ SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, 
 				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
 				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone
 				FROM #result ORDER BY maxinterval, person_first_name,person_last_name,person_id,interval_id
+IF @sort_by=6
+SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
+				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
+				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
+				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone
+				FROM #result ORDER BY date,interval_id
