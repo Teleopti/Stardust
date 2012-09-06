@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public int MainHeaderRow
         {
-            get { return 1; }
+            get { return 0; }
         }
 
         public bool HasColumns
