@@ -346,11 +346,13 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
             autoLabelDayOffs.Text = dayOffsText;
             autoLabelDayOffs.ForeColor = dayOffsColor;
             var permissionService = PermissionService.Instance();
-            labelPeriodCalculationInfo.Visible = false;
+            labelPeriodCalculationInfo.Visible = true;
             var canSeeCalculation = permissionService.IsPermitted(ApplicationFunctionHelper.Instance().DefinedApplicationFunctionPaths.ViewSchedulePeriodCalculation);
-            if(canSeeCalculation)
-                labelPeriodCalculationInfo.Visible = true;
+            if (canSeeCalculation)
                 labelPeriodCalculationInfo.Text = calculationInfo;
+
+            else
+                labelPeriodCalculationInfo.Visible = false;
         }
         public void SetValidationPicture(Bitmap picture)
         {
