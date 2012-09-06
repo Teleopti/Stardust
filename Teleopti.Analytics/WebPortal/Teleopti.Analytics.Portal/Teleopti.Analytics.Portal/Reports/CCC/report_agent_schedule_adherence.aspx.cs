@@ -201,7 +201,8 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		private void SetReportHeaderParmaterLabels()
 		{
-			tdReportName.InnerText = ReportTexts.Resources.ResReportAgentScheduleAdherence;
+			tdReportName.InnerText = ReportTexts.Resources.ResReportAdherencePerAgent;
+			//tdReportName.InnerText = ReportTexts.Resources.ResReportAdherencePerDay;
 
 			tdGroupPageLabel.InnerText = ReportTexts.Resources.ResGroupPageColon;
 			tdGroupPageGroupLabel.InnerText = ReportTexts.Resources.ResGroupPageGroupColon;
