@@ -83,7 +83,10 @@
 					</ul>
 				</dd>
 			</dl>
-			<span id="asm-button" title="@Resources.OpenASM" class="icon employee cursorpointer" />
+			@if(Model.ShowAsm)
+			{
+				<span id="asm-button" title="@Resources.OpenASM" class="icon employee cursorpointer" />	
+			}		
 		</div>
 	</section>
 				
