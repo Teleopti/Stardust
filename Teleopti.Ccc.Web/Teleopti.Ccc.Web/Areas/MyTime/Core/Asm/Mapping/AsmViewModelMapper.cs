@@ -33,15 +33,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 				}
 				if (scheduleDay.DateOnlyAsPeriod.DateOnly < earliest)
 				{
-					earliest = scheduleDay.DateOnlyAsPeriod.DateOnly.Date;
+					earliest = scheduleDay.DateOnlyAsPeriod.DateOnly;
 				}
 			}
 			var timeZone = _userTimeZoneInfo.TimeZone();
+			var earliestAsUtc = new DateTime(earliest.Ticks, DateTimeKind.Utc);
 			return new AsmViewModel
 			          	{
-			          		StartDateTime = TimeZoneHelper.ConvertFromUtc(earliest, timeZone),
+								StartDateTime = TimeZoneHelper.ConvertFromUtc(earliestAsUtc, timeZone),
 			          		Layers = createAsmLayers(timeZone, layers),
-								Hours = createHours(earliest, timeZone)
+								Hours = createHours(earliestAsUtc, timeZone)
 			          	};
 		}
 
