@@ -148,6 +148,50 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.IsFalse(_target.SetToFewBackToLegalState());
         }
 
+		[Test]
+		public void FixForBug20501()
+		{
+			_datDaysOffPreferences.ConsecutiveDaysOffValue = new MinMax<int>(2, 2);
+			_datDaysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(2, 2);
+			_datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(5, 5);
+			_datDaysOffPreferences.ConsiderWeekBefore = true;
+			_datDaysOffPreferences.ConsiderWeekAfter = true;
+			_bitArray = new LockableBitArray(42, true, true, null);
+			_bitArray.SetAll(false);
+			_bitArray.Set(2, true);
+			_bitArray.Set(3, true);
+			_bitArray.Set(5, true);
+			_bitArray.Set(6, true);
+			_bitArray.Set(12, true);
+			_bitArray.Set(13, true);
+			_bitArray.Set(19, true);
+			_bitArray.Set(20, true);
+			_bitArray.Set(26, true);
+			_bitArray.Set(27, true);
+			_bitArray.Set(33, true);
+			_bitArray.Set(34, true);
+			_bitArray.Set(37, true); //this one was selected and no check if it was locked
+
+			for (int i = 0; i < _bitArray.Count; i++)
+			{
+				_bitArray.Lock(i, true);
+			}
+
+			_bitArray.Lock(12, false);
+			_bitArray.Lock(13, false);
+			_bitArray.Lock(17, false);
+			_bitArray.Lock(19, false);
+			_bitArray.Lock(20, false);
+			_bitArray.Lock(26, false);
+			_bitArray.Lock(27, false);
+			_bitArray.Lock(33, false);
+			_bitArray.Lock(34, false);
+			
+			_functions = new DayOffBackToLegalStateFunctions(_bitArray);
+			_target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
+			Assert.IsTrue(_target.SetToFewBackToLegalState());
+		}
+
         private static LockableBitArray array1()
         {
             LockableBitArray ret = new LockableBitArray(28, true, true, null);

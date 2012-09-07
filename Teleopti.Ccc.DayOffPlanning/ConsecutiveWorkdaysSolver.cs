@@ -71,7 +71,8 @@ namespace Teleopti.Ccc.DayOffPlanning
             return true;
         }
 
-        public bool SetToFewBackToLegalState()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		public bool SetToFewBackToLegalState()
         {
             if (ResolvableState() == MinMaxNumberOfResult.Ok)
             {
@@ -119,10 +120,21 @@ namespace Teleopti.Ccc.DayOffPlanning
                 }
                 if(indexToMoveFrom == -1)
                 {
-                    indexToMoveFrom = shortestBlock.X - 1;
-                    if (_functions.IsWeekendDay(indexToMoveFrom, weekEndList))
-                        indexToMoveFrom = shortestBlock.Y + 1;
+					if(!_bitArray.IsLocked(shortestBlock.X - 1, true))
+					{
+						indexToMoveFrom = shortestBlock.X - 1;
+						if (_functions.IsWeekendDay(indexToMoveFrom, weekEndList))
+						{
+							if (!_bitArray.IsLocked(shortestBlock.Y + 1, true))
+								indexToMoveFrom = shortestBlock.Y + 1;
+						}
+							
+					}
+                    
                 }
+
+				if (indexToMoveFrom == -1)
+					return true;
 
                 _bitArray.Set(indexToMoveFrom, false);
                 Point longestBlock = _functions.FindLongestConsecutiveWorkdayBlockWithAtLeastOneUnlockedBit();

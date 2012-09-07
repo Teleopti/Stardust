@@ -93,6 +93,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("RequiresSkill", Resources.RequiresSkill));
 			gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("RequiresSeat", Resources.RequiresSeat));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InReadyTime", Resources.InReadyTime));
+            gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("AllowOverwrite",Resources.AllowOverwrite ));
 
             gridColumns.Add(new SFGridDropDownEnumColumn<IActivity, ReportLevelDetailAdapter, ReportLevelDetail>("ReportLevelDetail", Resources.ReportLevel, ReportLevelDetails(), "DisplayName", "ReportLevelDetail"));
 
