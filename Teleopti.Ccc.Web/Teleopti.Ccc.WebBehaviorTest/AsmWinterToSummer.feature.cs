@@ -69,6 +69,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void FeatureBackground()
         {
 #line 7
+#line 8
+ testRunner.Given("I am located in Stockholm");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -76,8 +78,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table1.AddRow(new string[] {
                         "Name",
                         "Full access to mytime"});
-#line 8
- testRunner.Given("there is a role with", ((string)(null)), table1);
+#line 9
+ testRunner.And("there is a role with", ((string)(null)), table1);
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table2.AddRow(new string[] {
                         "Schedule published to date",
                         "2040-06-24"});
-#line 11
+#line 12
   testRunner.And("I have a workflow control set with", ((string)(null)), table2);
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table3.AddRow(new string[] {
                         "Length",
                         "1"});
-#line 15
+#line 16
  testRunner.And("I have a schedule period with", ((string)(null)), table3);
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
@@ -112,7 +114,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table4.AddRow(new string[] {
                         "Start date",
                         "2012-06-18"});
-#line 20
+#line 21
  testRunner.And("I have a person period with", ((string)(null)), table4);
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
@@ -124,7 +126,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table5.AddRow(new string[] {
                         "EndTime",
                         "2020-03-29 05:00"});
-#line 23
+#line 24
  testRunner.And("there is a shift with", ((string)(null)), table5);
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -136,10 +138,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table6.AddRow(new string[] {
                         "EndTime",
                         "2020-03-28 06:00"});
-#line 28
+#line 29
  testRunner.And("there is a shift with", ((string)(null)), table6);
-#line 32
- testRunner.And("I am swedish");
 #line hidden
         }
         
@@ -161,7 +161,30 @@ this.FeatureBackground();
 #line 38
  testRunner.And("I click ASM link");
 #line 39
- testRunner.Then("The last layer should be \'7\' hours long");
+ testRunner.Then("The last layer should be \'5\' hours long");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Timeline crossing winter to summer daylight should repeat one hour")]
+        [NUnit.Framework.IgnoreAttribute()]
+        public virtual void TimelineCrossingWinterToSummerDaylightShouldRepeatOneHour()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Timeline crossing winter to summer daylight should repeat one hour", new string[] {
+                        "ignore"});
+#line 42
+this.ScenarioSetup(scenarioInfo);
+#line 7
+this.FeatureBackground();
+#line 43
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 44
+ testRunner.And("Current time is \'2020-03-28 20:00\'");
+#line 45
+ testRunner.When("I view my regional settings");
+#line 46
+ testRunner.And("I click ASM link");
 #line hidden
             this.ScenarioCleanup();
         }

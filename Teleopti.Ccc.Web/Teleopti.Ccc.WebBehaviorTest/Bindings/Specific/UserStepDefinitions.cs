@@ -534,6 +534,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().SetupCulture(new HawaiiTimeZone());
 		}
 
+		[Given(@"I am located in Stockholm")]
+		public void GivenIAmLocatedInStockholm()
+		{
+			UserFactory.User().SetupCulture(new StockholmTimeZone());
+		}
+
+
 		[Given(@"I have an existing text request")]
 		public void GivenIHaveAnExistingTextRequest()
 		{
