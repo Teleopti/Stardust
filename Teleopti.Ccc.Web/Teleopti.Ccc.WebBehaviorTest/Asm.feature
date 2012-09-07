@@ -13,8 +13,7 @@ Background:
 	| Field         | Value            |
 	| Name          | No access to ASM |
 	| Access To Asm | False            |
-
-	 And I have a workflow control set with
+	And I have a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
 	| Schedule published to date | 2040-06-24         |

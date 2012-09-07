@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class AsmStepDefinition
 	{
+		private const string attributeUsedForWidth = "padding-left";
 		public static readonly Uri asmUri = new Uri(TestSiteConfigurationSetup.Url,"MyTime/Asm");
 		private IE _popup;
 
@@ -54,7 +56,30 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(()=>Pages.Pages.CurrentPortalPage.AsmButton.Exists,Is.False);
 		}
 
+		[Then(@"The last layer should be '(.*)' hours long")]
+		public void ThenTheLastLayerShouldBeHoursLong(int hours)
+		{
+			EventualAssert.That(() =>
+			                    	{
+											var allLayers = _popup.Elements.Filter(Find.ByClass("asm-layer", false));
+											var oneHourLayer = allLayers.First();
+											var pxPerHour = pixelLength(oneHourLayer);
+											var theLayerToCheck = allLayers.Last();
+											return pixelLength(theLayerToCheck) / pxPerHour;
+			                    	}, Is.EqualTo(hours));
+
+
+			ScenarioContext.Current.Pending();
+		}
+
+		private static int pixelLength(Element oneHourLengthLayer)
+		{
+			return Convert.ToInt32(oneHourLengthLayer.Style.GetAttributeValue(attributeUsedForWidth).TrimEnd('p','x'));
+		}
+
+
 		[AfterScenario("ASM")]
+		[AfterScenario("ASMWinterSummer")]
 		public void AfterScenario()
 		{
 			killPopupIfExists();
