@@ -110,14 +110,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIInputExtendedPreferenceFieldsWith(Table table)
 		{
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
-			if (fields.Preference == null)
-				ScenarioContext.Current.Pending();
-
+			
 			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Preference);
 
-			if (fields.StartTimeMinimum == null)
-				return;
-			
 			if (fields.StartTimeMinimum != null)
 			{
 				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Focus();
@@ -208,7 +203,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			if (fields.ActivityTimeMaximum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityTimeMaximum));
 		}
 
+		[Then(@"I should be able to edit activity minimum and maximum fields")]
+		public void ThenIShouldBeAbleToEditActivityMinimumAndMaximumFields()
+		{
+			EventualAssert.That(()=>Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Enabled, Is.True);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Enabled, Is.True);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Enabled, Is.True);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.Enabled, Is.True);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Enabled, Is.True);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Enabled, Is.True);
+		}
 
+		[Then(@"I should not be able to edit activity minimum and maximum fields")]
+		public void ThenIShouldNotBeAbleToEditActivityMinimumAndMaximumFields()
+		{
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Enabled, Is.False);
+		}
 
 		private class ExtendedPreferenceFields
 		{

@@ -62,15 +62,30 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			});
 		if (promises.length != 0) {
 			$.when.apply(null, promises)
-				.done(function() { periodFeedbackViewModel.LoadFeedback(); });
+				.done(function () { periodFeedbackViewModel.LoadFeedback(); });
 		}
 
+	}
+
+	function _toggleActivityInputFields(enable) {
+		$('#Preference-add-extended-form-template .activity-preference-field').each(
+				function () {
+					if (enable) {
+						$(this).removeAttr('disabled');
+						$(this).next('button').removeAttr('disabled');
+					} else {
+						$(this).attr('disabled', 'disabled');
+						$(this).next('button').attr('disabled', 'disabled');
+					}
+				}
+			);
 	}
 
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
 		var template = $('#Preference-add-extended-form-template');
 		addExtendedPreferenceFormViewModel = new AddExtendedPreferenceFormViewModel();
+		addExtendedPreferenceFormViewModel.EnableActivityTimeEditing.subscribe(_toggleActivityInputFields);
 
 		addExtendedTooltip = $('<div/>')
 			.qtip({
@@ -112,10 +127,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 							});
 
 						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form-template")[0]);
+
+						_toggleActivityInputFields(false);
 					}
 				}
 			});
-
 	}
 
 	function _hideAddExtendedTooltip() {
