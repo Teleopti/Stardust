@@ -5,12 +5,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
 {
 	public class AsmViewModel
 	{
-		public AsmViewModel()
-		{
-			Layers = new List<AsmLayer>();
-		}
-
-		public IList<AsmLayer> Layers { get; private set; }
+		public IEnumerable<AsmLayer> Layers { get; set; }
 		public DateTime StartDate { get; set; }
+		public IEnumerable<string> Hours { get; set; }
 	}
 }

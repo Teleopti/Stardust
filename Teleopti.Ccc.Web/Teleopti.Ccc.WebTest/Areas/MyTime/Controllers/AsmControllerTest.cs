@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -20,8 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			const string payload = "phone";
 			var asmModelFactory = MockRepository.GenerateMock<IAsmViewModelFactory>();
 			var layoutFactory = MockRepository.GenerateMock<ILayoutBaseViewModelFactory>();
-			var asmViewModel = new AsmViewModel();
-			asmViewModel.Layers.Add(new AsmLayer {Payload = payload});
+			var asmViewModel = new AsmViewModel {Layers = new List<AsmLayer> {new AsmLayer {Payload = payload}}};
 			asmModelFactory.Expect(fac => fac.CreateViewModel()).Return(asmViewModel);
 
 			using (var controller = new AsmController(asmModelFactory, layoutFactory))

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -47,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				.Return(scheduleFactory.ProjectionStub(new[] { scheduleFactory.VisualLayerStub("3") }));
 
 			var result = target.Map(new[] { scheduleDay1, scheduleDay2, scheduleDay3 }).Layers;
-			result.Count.Should().Be.EqualTo(3);
+			result.Count().Should().Be.EqualTo(3);
 			result.Any(l => l.Payload.Equals("1")).Should().Be.True();
 		}
 
@@ -140,6 +142,21 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			var res = target.Map(new[] { scheduleDay });
 
 			res.Layers.First().EndTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(endDate, timeZone).ToString("HH:mm"));
+		}
+
+		[Test]
+		public void ShouldSetHours()
+		{
+			var hoursAsInts = new List<int>();
+			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			var expected = hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.InvariantCulture));
+
+			var date = new DateTime(2000, 1, 1);
+			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
+			var res = target.Map(new[] {scheduleDay});
+			res.Hours.Should().Have.SameSequenceAs(expected);
 		}
 	}
 }
