@@ -8,6 +8,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			projectionProvider = MockRepository.GenerateStub<IProjectionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			scheduleFactory = new StubFactory();
-			timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+			timeZone = new CccTimeZoneInfo((TimeZoneInfo) CccTimeZoneInfoFactory.StockholmTimeZoneInfo().TimeZoneInfoObject);
 			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
 			target = new AsmViewModelMapper(projectionProvider, userTimeZone);
 		}
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                  scheduleFactory.ScheduleDayStub(expected),
 										scheduleFactory.ScheduleDayStub(new DateTime(2100, 1, 1))
 				               });
-			result.StartDate.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(expected, timeZone));
+			result.StartDateTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(expected, timeZone));
 		}
 
 		[Test]
@@ -147,13 +148,35 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		[Test]
 		public void ShouldSetHours()
 		{
+			//stockholm +1 
 			var hoursAsInts = new List<int>();
+			hoursAsInts.AddRange(Enumerable.Range(1, 23));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
-			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			hoursAsInts.Add(0);
 			var expected = hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.InvariantCulture));
 
 			var date = new DateTime(2000, 1, 1);
+			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
+			var res = target.Map(new[] {scheduleDay});
+			res.Hours.Should().Have.SameSequenceAs(expected);
+		}
+
+		[Test]
+		public void ShouldSetHoursWhenWinterBecomesSummer()
+		{
+			var hoursAsInts = new List<int>();
+			hoursAsInts.Add(1);
+			//02:00 doesn't exist!
+			hoursAsInts.AddRange(Enumerable.Range(3, 21));
+			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			hoursAsInts.Add(0);
+			hoursAsInts.Add(1);
+			var expected = hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.InvariantCulture));
+
+			var date = new DateTime(2020, 3, 29);
+
 			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
 			var res = target.Map(new[] {scheduleDay});
 			res.Hours.Should().Have.SameSequenceAs(expected);

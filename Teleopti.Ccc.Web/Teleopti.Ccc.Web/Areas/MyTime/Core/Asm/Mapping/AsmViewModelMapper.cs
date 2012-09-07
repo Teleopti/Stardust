@@ -39,19 +39,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			var timeZone = _userTimeZoneInfo.TimeZone();
 			return new AsmViewModel
 			          	{
-			          		StartDate = TimeZoneHelper.ConvertFromUtc(earliest, timeZone),
+			          		StartDateTime = TimeZoneHelper.ConvertFromUtc(earliest, timeZone),
 			          		Layers = createAsmLayers(timeZone, layers),
-								Hours = createHours()
+								Hours = createHours(earliest, timeZone)
 			          	};
 		}
 
-		private static IEnumerable<string> createHours()
+		private static IEnumerable<string> createHours(DateTime start, ICccTimeZoneInfo timeZone)
 		{
+			const int numberOfHoursToShow = 24*3;
 			var hoursAsInts = new List<int>();
-			hoursAsInts.AddRange(Enumerable.Range(0, 24));
-			hoursAsInts.AddRange(Enumerable.Range(0, 24));
-			hoursAsInts.AddRange(Enumerable.Range(0, 24));
-			return hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.InvariantCulture));
+			var localStart = timeZone.ConvertTimeFromUtc(start);
+			
+			for (var hour = 0; hour < numberOfHoursToShow; hour++)
+			{
+				var localTime = timeZone.ConvertTimeFromUtc(start.AddHours(hour));
+				hoursAsInts.Add(localTime.Hour);
+			}
+
+			//hoursAsInts.AddRange(Enumerable.Range(localStartHour, 24 - localStartHour));
+			//hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			//hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			//hoursAsInts.AddRange(Enumerable.Range(0, 24));
+
+			return hoursAsInts.Take(numberOfHoursToShow).Select(x => x.ToString(CultureInfo.InvariantCulture));
 		}
 
 		private static IEnumerable<AsmLayer> createAsmLayers(ICccTimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)

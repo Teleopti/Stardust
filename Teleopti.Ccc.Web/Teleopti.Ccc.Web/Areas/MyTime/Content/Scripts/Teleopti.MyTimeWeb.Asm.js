@@ -9,13 +9,12 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Asm = (function () {
-	function _start(serverMsSince1970, pixelsPerHour) {
+	function _start(serverMsSince1970, pixelsPerHour, hours) {
 		var refreshSeconds = 1;
 		var observableInfo = ko.observable();
-		var timeLineArray = _timeLineArray();
 
 		ko.applyBindings({
-			timeLines: timeLineArray,
+			timeLines: hours,
 			activityInfo: observableInfo
 		});
 
@@ -25,16 +24,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		setInterval(function () {
 			_refresh(serverMsSince1970, pixelsPerHour, observableInfo);
 		}, refreshSeconds * 1000);
-	}
-
-	function _timeLineArray() {
-		var timelineArray = new Array();
-		for (var day = 0; day <= 2; day++) {
-			for (var hour = 0; hour < 24; hour++) {
-				timelineArray.push(hour);
-			}
-		}
-		return timelineArray;
 	}
 
 	function _refresh(serverMsSince1970, pixelsPerHour, observableInfo) {
@@ -71,8 +60,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	return {
-		Init: function (serverMsSince1970, pixelsPerHour) {
-			_start(serverMsSince1970, pixelsPerHour);
+		Init: function (serverMsSince1970, pixelsPerHour, hours) {
+			_start(serverMsSince1970, pixelsPerHour, hours);
 		}
 	};
 

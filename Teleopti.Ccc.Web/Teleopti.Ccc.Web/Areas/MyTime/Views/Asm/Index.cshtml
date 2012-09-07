@@ -4,13 +4,13 @@
 @{
 	const double pixelsPerHour = 50;
 	const double timeLineHourWidth = (pixelsPerHour) - 1; //"1" due to border size
-	double canvasStartMsSince1970 = Model.StartDate.SubtractJavascriptBaseDate().TotalMilliseconds;
+	var canvasStartMsSince1970 = Model.StartDateTime.SubtractJavascriptBaseDate().TotalMilliseconds;
 	const int timeLineMarkerWidth = 100;
 }
 <script type="text/javascript">
 	$(function () {
-		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
-		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, @(pixelsPerHour));
+		var serverMsSince1970 = new Date(@(Model.StartDateTime.Year), @(Model.StartDateTime.Month - 1), @(Model.StartDateTime.Day), @(Model.StartDateTime.Hour)).getTime();
+		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, @(pixelsPerHour), @(Html.Raw(Json.Encode(Model.Hours))));
 	});
 </script>
 <div class="asm-outer-canvas ui-corner-all">

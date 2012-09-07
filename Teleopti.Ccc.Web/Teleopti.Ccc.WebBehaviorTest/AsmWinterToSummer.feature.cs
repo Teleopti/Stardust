@@ -161,7 +161,7 @@ this.FeatureBackground();
 #line 38
  testRunner.And("I click ASM link");
 #line 39
- testRunner.Then("The last layer should be \'5\' hours long");
+ testRunner.Then("The last layer should be \'6\' hours long");
 #line hidden
             this.ScenarioCleanup();
         }

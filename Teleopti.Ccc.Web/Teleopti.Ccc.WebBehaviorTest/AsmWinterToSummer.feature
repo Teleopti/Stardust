@@ -36,7 +36,7 @@ Scenario: Shift crossing winter to summer daylight should have one hour longer p
 	And Current time is '2020-03-28 20:00'
 	When I view my regional settings
 	And I click ASM link
-	Then The last layer should be '5' hours long
+	Then The last layer should be '6' hours long
 
 @ignore
 Scenario: Timeline crossing winter to summer daylight should repeat one hour
