@@ -214,7 +214,7 @@ this.FeatureBackground();
 #line 53
  testRunner.And("I should see the time indicator at time \'2013-10-03 12:00\'");
 #line 54
- testRunner.When("Time has passed with \'1\' minutes");
+ testRunner.When("Current browser time has changed to \'2013-10-03 12:01\'");
 #line 55
  testRunner.Then("I should see the time indicator at time \'2013-10-03 12:01\'");
 #line hidden
@@ -286,6 +286,27 @@ this.FeatureBackground();
  testRunner.When("Time has passed with \'1\' minutes");
 #line 77
  testRunner.Then("I should see the time indicator at time \'2014-03-30 03:00\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Dont show time indicator when viewing other week than current")]
+        public virtual void DontShowTimeIndicatorWhenViewingOtherWeekThanCurrent()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Dont show time indicator when viewing other week than current", ((string[])(null)));
+#line 79
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 80
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 81
+ testRunner.And("Current time is \'2014-03-12 12:00\'");
+#line 82
+ testRunner.When("I view my week schedule for date \'2014-03-05\'");
+#line 83
+ testRunner.Then("I should not see the time indicator");
 #line hidden
             this.ScenarioCleanup();
         }

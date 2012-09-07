@@ -51,7 +51,7 @@ Scenario: Show time indicator movement
 	Given I have the role 'Full access to mytime'
 	And Current time is '2013-10-03 12:00'
 	And I should see the time indicator at time '2013-10-03 12:00'
-	When Time has passed with '1' minutes 
+	When Current browser time has changed to '2013-10-03 12:01'
 	Then I should see the time indicator at time '2013-10-03 12:01'
 	
 # Ändra "end"
@@ -75,3 +75,9 @@ Scenario: Handle time indicator movement from summer to winter time
 	And I should see the time indicator at time '2014-03-30 1:59'
 	When Time has passed with '1' minutes
 	Then I should see the time indicator at time '2014-03-30 03:00'
+
+Scenario: Dont show time indicator when viewing other week than current
+	Given I have the role 'Full access to mytime'
+	And Current time is '2014-03-12 12:00'
+	When I view my week schedule for date '2014-03-05'
+	Then I should not see the time indicator

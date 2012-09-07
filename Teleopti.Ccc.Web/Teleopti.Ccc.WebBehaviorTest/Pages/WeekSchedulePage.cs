@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public List SecondDay { get { return DayElements.ElementAt(1); } }
 		public List ThirdDay { get { return DayElements.ElementAt(2); } }
 		public List FourthDay { get { return DayElements.ElementAt(3); } }
-		public List Fifith { get { return DayElements.ElementAt(4); } }
+		public List FifthDay { get { return DayElements.ElementAt(4); } }
 		public List SixthDay { get { return DayElements.ElementAt(5); } }
 		public List SeventhDay { get { return DayElements.ElementAt(6); } }
 
@@ -108,6 +108,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Element CancelButton
 		{
 			get { return Document.Element(Find.ByClass("ui-tooltip-close", false)); }
+		}
+
+		public Div TimeIndicatorForDate(DateTime date)
+		{
+			return DayElementForDate(date).ListItems[4].Div(Find.ByClass("week-schedule-time-indicator", false));
+		}
+
+		public Div TimeIndicatorInTimeLine
+		{
+			get
+			{
+				var timelineDiv = Document.Div(Find.ByClass("weekview-timeline", false));
+				return timelineDiv.Div(Find.ByClass("week-schedule-time-indicator-small", false)); 
+			}
 		}
 
 		//not yet used

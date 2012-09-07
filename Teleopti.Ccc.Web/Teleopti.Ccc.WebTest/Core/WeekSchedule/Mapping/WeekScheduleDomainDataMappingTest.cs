@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Security.Principal;
 using System.Threading;
 using AutoMapper;
@@ -10,9 +8,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
@@ -37,6 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IPrincipal principalBefore;
 		private ICccTimeZoneInfo timeZone;
 		private IPermissionProvider permissionProvider;
+		private INow now;
 
 		[SetUp]
 		public void Setup()
@@ -49,6 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			now = MockRepository.GenerateMock<INow>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
@@ -57,7 +55,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 					Depend.On(projectionProvider),
 					Depend.On(personRequestProvider),
 					Depend.On(userTimeZone),
-					Depend.On(permissionProvider)
+					Depend.On(permissionProvider),
+					Depend.On(now)
 					)));
 		}
 
@@ -387,6 +386,33 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(firstDayOfWeek);
 
 			result.AsmPermission.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapIsCurrentWeek()
+		{
+			var date = new DateOnly(2014, 08, 26);
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
+
+			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			var localMidnightInUtc = timeZone.ConvertTimeToUtc(lastDayOfWeek.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var layer = new StubFactory().VisualLayerStub();
+			layer.Period = projectionPeriod;
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+			now.Stub(x => x.DateOnly()).Return(date);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(firstDayOfWeek);
+
+			result.IsCurrentWeek.Should().Be.True();
 		}
 
 		

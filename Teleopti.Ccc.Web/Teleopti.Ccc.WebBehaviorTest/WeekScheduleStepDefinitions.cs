@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.SecondDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
 			_page.ThirdDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
 			_page.FourthDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
-			_page.Fifith.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
+			_page.FifthDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
 		}
 
 		[Then(@"I should not see any shifts after wednesday")]
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			_page.ThirdDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.True();
 			_page.FourthDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
-			_page.Fifith.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
+			_page.FifthDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
 		}
 
 		[Then(@"I should see the start and end dates for current week")]

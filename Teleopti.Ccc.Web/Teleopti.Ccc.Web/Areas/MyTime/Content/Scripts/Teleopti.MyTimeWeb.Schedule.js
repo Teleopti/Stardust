@@ -74,10 +74,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
 
 	function _setTimeIndicator() {
-		if ($('.ASM-permission-granted').length == 0)
+		if ($('.week-schedule-ASM-permission-granted').length == 0 | $('.week-schedule-current-week').length == 0)
 			return;
-
+		
 		var timelineHeight = 668;
+		var timelineOffset = 203;
+		var timeindicatorHeight = 2;
 
 		var ms = new Date().getTeleoptiTime();
 		var hours = new Date(ms).getHours();
@@ -88,12 +90,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var timelineEndMinutes = getMinutes("div[data-timeline-end]");
 
 		var division = (clientNowMinutes - timelineStartMinutes) / (timelineEndMinutes - timelineStartMinutes);
-		var position = Math.round(timelineHeight * division);
+		var position = Math.round(timelineHeight * division) - Math.round(timeindicatorHeight / 2);
 
 		var formattedDate = $.datepicker.formatDate('yy-mm-dd', new Date(ms));
-		var timeIndicator = $('ul[data-mytime-date="' + formattedDate + '"] .schedule-time-indicator');
+		var timeIndicator = $('ul[data-mytime-date="' + formattedDate + '"] .week-schedule-time-indicator');
+		var timeIndicatorTimeLine = $('.week-schedule-time-indicator-small');
 
 		timeIndicator.css("top", position).show();
+		timeIndicatorTimeLine.css("top", position + timelineOffset).show();
 	}
 
 	function getMinutes(elementSelector) {

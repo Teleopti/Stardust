@@ -5,39 +5,44 @@
 @model WeekScheduleViewModel
 @{
 	const int scheduleHeight = 668;
+	const int timelineOffset = 198;
 	Layout = null;
 }
 @if (Model.AsmPermission)
 {
-	<div class="ASM-permission-granted">hej</div>
+	<div class="week-schedule-ASM-permission-granted"></div>
+}
+@if (Model.IsCurrentWeek)
+{
+	<div class="week-schedule-current-week"></div>
 }
 <div id="ScheduleWeek-body" class="body-weekview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 	<style>
 		@foreach (var style in Model.Styles)
-  {
+		{
 			@string.Format("li.third.{0} {{background-color: rgb({1});}}\n", style.Name, ColorTranslator.FromHtml(style.ColorHex).ToCSV())
-  }
+		}
 	</style>
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
 		<div class="weekview-timeline floatleft">
-			<div class="schedule-time-indicator relative" style="width: 31px; top: @(Math.Round(scheduleHeight * 0.47))px;"></div>
+			<div class="week-schedule-time-indicator-small absolute"></div>
 			@{int timelineCounter = 0;}
 			@foreach (var time in Model.TimeLine)
-   {
-	   string timelineAttribute = "";
-	   timelineCounter++;
-	   if (timelineCounter == 1)
-	   {
-		   timelineAttribute = "data-timeline-start=" + time.Time;
-	   }
-	   if (timelineCounter == Model.TimeLine.Count())
-	   {
-		   timelineAttribute = "data-timeline-end=" + time.Time;
-	   }
-				<div class="weekview-timeline-label absolute" style="top: @(Math.Round(scheduleHeight * time.PositionPercentage) + 198)px;" @timelineAttribute>
+			{
+				string timelineAttribute = "";
+				timelineCounter++;
+				if (timelineCounter == 1)
+				{
+					timelineAttribute = "data-timeline-start=" + time.Time;
+				}
+				if (timelineCounter == Model.TimeLine.Count())
+				{
+					timelineAttribute = "data-timeline-end=" + time.Time;
+				}
+				<div class="weekview-timeline-label absolute" style="top: @(Math.Round(scheduleHeight * time.PositionPercentage) + timelineOffset)px;" @timelineAttribute>
 					@time.Time
 				</div>
-   }
+			}
 		</div>
 		@foreach (var day in Model.Days)
   {
@@ -64,35 +69,34 @@
 						<div class="icon text-request ir floatright" />
 					</div>
 					@if (day.HasNote)
-	 {
-						<div class="icon comment-day ir tooltip floatright" tooltip-text="@day.Note.Message">
-						</div>
-	 }
+					 {
+						<div class="icon comment-day ir tooltip floatright" tooltip-text="@day.Note.Message"></div>
+					 }
 					<div id="add-request-cell"  @(Model.RequestPermission.TextRequestPermission ? @Html.Raw("class=\"add-request-space\"") : @Html.Raw("class=\"\""))></div>
 				</li>
 				<li class="weekview-day-schedule relative">
-					<div class="schedule-time-indicator" style="height: 2px; top: 194px;"></div>
+					<div class="week-schedule-time-indicator relative"></div>
 					@foreach (var period in day.Periods)
-	 {
-		 var topPixel = Math.Round(scheduleHeight * period.StartPositionPercentage);
-		 var bottomPixel = Math.Round(scheduleHeight * period.EndPositionPercentage) - 1;
-		 var heightPixel = bottomPixel - topPixel;
-		 var heightDouble = scheduleHeight * (period.EndPositionPercentage - period.StartPositionPercentage);
+					 {
+						 var topPixel = Math.Round(scheduleHeight * period.StartPositionPercentage);
+						 var bottomPixel = Math.Round(scheduleHeight * period.EndPositionPercentage) - 1;
+						 var heightPixel = bottomPixel - topPixel;
+						 var heightDouble = scheduleHeight * (period.EndPositionPercentage - period.StartPositionPercentage);
 
-		 const int pixelToDisplayAll = 33;
-		 const int pixelToDisplayTitle = 16;
-		 var tooltipText = period.Meeting == null ? period.TimeSpan : string.Format("<div>{0}</div><div><dl><dt>Subject: </dt><dd> {1} </dd><dt>Location: </dt><dd> {2} </dd></dl></div>", period.TimeSpan, period.Meeting.Title, period.Meeting.Location);
+						 const int pixelToDisplayAll = 33;
+						 const int pixelToDisplayTitle = 16;
+						 var tooltipText = period.Meeting == null ? period.TimeSpan : string.Format("<div>{0}</div><div><dl><dt>Subject: </dt><dd> {1} </dd><dt>Location: </dt><dd> {2} </dd></dl></div>", period.TimeSpan, period.Meeting.Title, period.Meeting.Location);
 
 						<div class="week-schedule-layer absolute tooltip" tooltip-title="@period.Title" tooltip-text="@tooltipText" 
 								style="background-color: @string.Format("rgb({0})", period.Color); height: @(heightPixel)px; top: @(topPixel)px; width: 131px">
 							@if (period.Meeting != null)
-	   {
+							{
 								<div class="icon meeting floatright"></div>
-	   }
+							}
 							<strong @(heightDouble > pixelToDisplayTitle ? @Html.Raw("class=\"truncate\"") : @Html.Raw("class=\"truncate displaynone\""))>@period.Title</strong>
 							<span @(heightDouble < pixelToDisplayAll ? @Html.Raw("class=\"fullwidth displaynone\"") : @Html.Raw("class=\"fullwidth displayblock\""))>@period.TimeSpan</span>
 						</div>
-	 }
+					}
 				</li>
 			</ul>
   }

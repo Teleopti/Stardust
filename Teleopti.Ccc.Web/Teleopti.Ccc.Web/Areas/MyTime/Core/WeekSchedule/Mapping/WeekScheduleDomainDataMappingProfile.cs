@@ -19,14 +19,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IResolve<IPersonRequestProvider> _personRequestProvider;
 		private readonly IResolve<IUserTimeZone> _userTimeZone;
 		private readonly IResolve<IPermissionProvider> _permissionProvider;
+		private readonly IResolve<INow> _now;
 
-		public WeekScheduleDomainDataMappingProfile(IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider, IResolve<IPersonRequestProvider> personRequestProvider, IResolve<IUserTimeZone> userTimeZone, IResolve<IPermissionProvider> permissionProvider)
+		public WeekScheduleDomainDataMappingProfile(IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider, IResolve<IPersonRequestProvider> personRequestProvider, IResolve<IUserTimeZone> userTimeZone, IResolve<IPermissionProvider> permissionProvider, IResolve<INow> now)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
 			_personRequestProvider = personRequestProvider;
 			_userTimeZone = userTimeZone;
 			_permissionProvider = permissionProvider;
+			_now = now;
 		}
 
 		protected override void Configure()
@@ -111,6 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									                  	};
 
 									bool asmPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
+									bool isCurrentWeek = week.Contains(_now.Invoke().DateOnly());
 
 									return new WeekScheduleDomainData
 											{
@@ -118,7 +121,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												Days = days,
 												ColorSource = colorSource,
 												MinMaxTime = minMaxTime,
-												AsmPermission = asmPermission
+												AsmPermission = asmPermission,
+												IsCurrentWeek = isCurrentWeek
 											};
 								});
 

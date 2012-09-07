@@ -347,5 +347,17 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 			result.AsmPermission.Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldMapIsCurrentWeek()
+		{
+			var domainData = new WeekScheduleDomainData()
+			{
+				IsCurrentWeek = true
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+			result.IsCurrentWeek.Should().Be.True();
+		}
 	}
 }
