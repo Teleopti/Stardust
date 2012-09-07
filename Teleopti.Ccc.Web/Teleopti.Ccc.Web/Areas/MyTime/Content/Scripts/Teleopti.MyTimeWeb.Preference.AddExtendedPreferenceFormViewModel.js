@@ -19,4 +19,9 @@ AddExtendedPreferenceFormViewModel = function () {
 	this.ActivityPreferenceId = ko.observable();
 	this.ActivityMinimumTime = ko.observable();
 	this.ActivityMaximumTime = ko.observable();
+
+	this.EnableActivityTimeEditing = ko.computed(function () {
+		var result = this.ActivityPreferenceId();
+		return result != undefined && result != '';
+	}, this);
 };

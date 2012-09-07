@@ -151,29 +151,14 @@
 							}
 						</select>
 
-						<select id="Preference-extended-activity-start-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestStartTime">
+						<select id="Preference-extended-activity-start-time-minimum" class="time-input activity-preference-field" data-bind="combobox: ActivityEarliestStartTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in times)
 							{
 								<option value="@timeSpan.Value">@timeSpan.Text</option>
 							}
 						</select>
-						<select id="Preference-extended-activity-start-time-maximum" class="time-input" data-bind="combobox: ActivityLatestStartTime">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-
-						<select id="Preference-extended-activity-end-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestEndTime">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						<select id="Preference-extended-activity-end-time-maximum" class="time-input" data-bind="combobox: ActivityLatestEndTime">
+						<select id="Preference-extended-activity-start-time-maximum" class="time-input activity-preference-field" data-bind="combobox: ActivityLatestStartTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in times)
 							{
@@ -181,14 +166,29 @@
 							}
 						</select>
 
-						<select id="Preference-extended-activity-time-minimum" class="time-input" data-bind="combobox: ActivityMinimumTime">
+						<select id="Preference-extended-activity-end-time-minimum" class="time-input activity-preference-field" data-bind="combobox: ActivityEarliestEndTime">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+						<select id="Preference-extended-activity-end-time-maximum" class="time-input activity-preference-field" data-bind="combobox: ActivityLatestEndTime">
+							<option value="">&nbsp;</option>
+							@foreach (var timeSpan in times)
+							{
+								<option value="@timeSpan.Value">@timeSpan.Text</option>
+							}
+						</select>
+
+						<select id="Preference-extended-activity-time-minimum" class="time-input activity-preference-field" data-bind="combobox: ActivityMinimumTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in timeLengths)
 							{
 								<option value="@timeSpan.Value">@timeSpan.Text</option>
 							}
 						</select>
-						<select id="Preference-extended-activity-time-maximum" class="time-input" data-bind="combobox: ActivityMaximumTime">
+						<select id="Preference-extended-activity-time-maximum" class="time-input activity-preference-field" data-bind="combobox: ActivityMaximumTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in timeLengths)
 							{

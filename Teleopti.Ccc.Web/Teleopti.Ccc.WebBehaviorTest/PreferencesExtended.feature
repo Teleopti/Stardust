@@ -298,3 +298,9 @@ Scenario: Enable activity time fields when activity is selected
     | Field      | Value |
     | Activity   | Lunch |
     Then I should be able to edit activity minimum and maximum fields
+	     
+Scenario: Verify activity time fields are disabled before activity is selected
+    Given I have the role 'Access to extended preferences'
+    And I am viewing preferences
+    When I click the add extended preference button
+    Then I should not be able to edit activity minimum and maximum fields
