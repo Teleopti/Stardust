@@ -116,18 +116,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             //var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
             //var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-                new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
-            IList<IScheduleMatrixPro> allMatrix = originalStateContainers.Select(container => container.ScheduleMatrix).ToList();
-            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
-            ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
-                                                                                                             _scheduleDayChangeCallback,
-                                                                                                             new ScheduleTagSetter
-                                                                                                                (optimizationPreferences
-                                                                                                                    .General.
-                                                                                                                    ScheduleTag));
-            var deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
-            var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+            IDeleteSchedulePartService deleteSchedulePartService;
+            MainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter;
+            IList<IScheduleMatrixPro> allMatrix;
+            ISchedulePartModifyAndRollbackService rollbackService;
+            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup;
+            var groupPersonBuilderForOptimization = TeamOptimizerHelper(originalStateContainers, optimizationPreferences,
+                                                                        out deleteSchedulePartService,
+                                                                        out mainShiftOptimizeActivitySpecificationSetter,
+                                                                        out allMatrix, out rollbackService,
+                                                                        out groupOptimizerFindMatrixesForGroup);
+
             //IGroupMatrixContainerCreator groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
             //IGroupPersonConsistentChecker groupPersonConsistentChecker =
             //    _container.Resolve<IGroupPersonConsistentChecker>();
@@ -154,6 +153,34 @@ namespace Teleopti.Ccc.Win.Scheduling
             service.ReportProgress += resourceOptimizerPersonOptimized;
             service.Execute(allMatrix);
             service.ReportProgress -= resourceOptimizerPersonOptimized;
+        }
+
+        private IGroupPersonBuilderForOptimization TeamOptimizerHelper(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers,
+                                                                       IOptimizationPreferences optimizationPreferences,
+                                                                       out IDeleteSchedulePartService deleteSchedulePartService,
+                                                                       out MainShiftOptimizeActivitySpecificationSetter
+                                                                           mainShiftOptimizeActivitySpecificationSetter,
+                                                                       out IList<IScheduleMatrixPro> allMatrix,
+                                                                       out ISchedulePartModifyAndRollbackService rollbackService,
+                                                                       out IGroupOptimizerFindMatrixesForGroup
+                                                                           groupOptimizerFindMatrixesForGroup)
+        {
+            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+                new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState,
+                                                      _container.Resolve<IGroupPersonFactory>(),
+                                                      _container.Resolve<IGroupPagePerDateHolder>());
+            allMatrix = originalStateContainers.Select(container => container.ScheduleMatrix).ToList();
+            groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization,
+                                                                                        allMatrix);
+            rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
+                                                                       _scheduleDayChangeCallback,
+                                                                       new ScheduleTagSetter
+                                                                           (optimizationPreferences
+                                                                                .General.
+                                                                                ScheduleTag));
+            deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
+            mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+            return groupPersonBuilderForOptimization;
         }
 
         private static void ExtractOptimizer(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences,
