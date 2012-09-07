@@ -18399,6 +18399,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Same days off.
+        /// </summary>
+        public static string SameDaysOff {
+            get {
+                return ResourceManager.GetString("SameDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Same end time.
         /// </summary>
         public static string SameEndTime {
@@ -18809,6 +18818,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ScheduleOnlyPreferenceDays {
             get {
                 return ResourceManager.GetString("ScheduleOnlyPreferenceDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schedule Only Preference Must Have.
+        /// </summary>
+        public static string ScheduleOnlyPreferenceMustHave {
+            get {
+                return ResourceManager.GetString("ScheduleOnlyPreferenceMustHave", resourceCulture);
             }
         }
         
@@ -19918,6 +19936,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift categories.
+        /// </summary>
+        public static string ShiftCategories {
+            get {
+                return ResourceManager.GetString("ShiftCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift Categories Available for Preferences.
         /// </summary>
         public static string ShiftCategoriesAvailableForExtendedPreference {
@@ -19945,7 +19972,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift category limitations.
+        ///   Looks up a localized string similar to Shift Category Limitations.
         /// </summary>
         public static string ShiftCategoryLimitations {
             get {
