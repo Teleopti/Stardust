@@ -39,24 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 _lockableBitArray = _scheduleMatrixLockableBitArrayConverter.Convert(false, false);
             }
-
-            var dates = _moveTimeDecisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor);
-
-            if (dates.Count != 2)
-                return dates;
-            //var result = _groupMoveTimeValidatorRunner.Run(Person,new List<DateOnly>{ dates[0]}, new List<DateOnly>{ dates[1]},true);
-            //if (!result.Success)
-            //{
-            //    foreach(var date in dates )
-            //    {
-            //        LockDate(date);
-            //    }
-                
-            //}
-            
-            //run executer 
-
-            return dates;
+            return _moveTimeDecisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor);
         }
 
         public void LockDate(DateOnly dateOnly)
@@ -66,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _lockableBitArray = _scheduleMatrixLockableBitArrayConverter.Convert(false, false);
             }
 
-            int index = 0;
+            var index = 0;
             foreach (var fullWeeksPeriodDay in _scheduleMatrixLockableBitArrayConverter.SourceMatrix.FullWeeksPeriodDays)
             {
                 if (fullWeeksPeriodDay.Day == dateOnly)
