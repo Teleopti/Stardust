@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         //private IGroupOptimizationValidatorRunner _groupMoveTimeValidatorRunner;
         private bool _cancelMe;
 
-        public GroupMoveTimeOptimizerService(IList<IGroupMoveTimeOptimizer> optimizers, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, IGroupMoveTimeOptimizationExecuter groupMoveTimeOptimizerExecuter, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+        public GroupMoveTimeOptimizerService(IList<IGroupMoveTimeOptimizer> optimizers, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, IGroupMoveTimeOptimizationExecuter groupMoveTimeOptimizerExecuter,
              IGroupOptimizationValidatorRunner groupMoveTimeValidatorRunner)
         {
             _optimizers = optimizers;

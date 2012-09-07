@@ -92,6 +92,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
 					runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
 
+                //running the team optimization
+                RunTeamOptimizationService(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
             }
             
             
@@ -103,7 +105,73 @@ namespace Teleopti.Ccc.Win.Scheduling
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        private void RunTeamOptimizationService(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
+        {
+            var schedulingOptionsCreator = new SchedulingOptionsCreator();
+            var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+            var restrictionChecker = new RestrictionChecker();
+            var decisionMaker = new MoveTimeDecisionMaker2();
+            IList<IGroupMoveTimeOptimizer> optimizers = new List<IGroupMoveTimeOptimizer>();
+            foreach (var originalStateContainer in originalStateContainers)
+            {
+                var matrix = originalStateContainer.ScheduleMatrix;
+
+                var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, restrictionChecker,
+                                                                                              optimizationPreferences,
+                                                                                              originalStateContainer);
+                RelativeDailyStandardDeviationsByAllSkillsExtractor relativeDailyStandardDeviationsByAllSkillsExtractor =
+                    new RelativeDailyStandardDeviationsByAllSkillsExtractor(matrix, schedulingOptions);
+                IScheduleMatrixLockableBitArrayConverter lockableBitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(matrix);
+                var optimizer = new GroupMoveTimeOptimizer(lockableBitArrayConverter, decisionMaker,
+                                                           relativeDailyStandardDeviationsByAllSkillsExtractor,
+                                                           optimizerOverLimitDecider);
+                optimizers.Add(optimizer);
+            }
+
+            var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
+            var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+                new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
+            IList<IScheduleMatrixPro> allMatrix = originalStateContainers.Select(container => container.ScheduleMatrix).ToList();
+            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
+            ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
+                                                                                                             _scheduleDayChangeCallback,
+                                                                                                             new ScheduleTagSetter
+                                                                                                                (optimizationPreferences
+                                                                                                                    .General.
+                                                                                                                    ScheduleTag));
+            var deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
+            var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+            IGroupMatrixContainerCreator groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+            IGroupPersonConsistentChecker groupPersonConsistentChecker =
+                _container.Resolve<IGroupPersonConsistentChecker>();
+            IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+            IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
+               OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
+            IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
+                                                                         groupPersonConsistentChecker,
+                                                                         workShiftBackToLegalStateService,
+                                                                         resourceOptimizationHelper);
+            var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
+            IGroupMoveTimeOptimizationExecuter groupIntradayOptimizerExecuter = new GroupMoveTimeOptimizationExecuter(rollbackService,
+                                                            deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
+                                                            mainShiftOptimizeActivitySpecificationSetter,
+                                                            groupMatrixHelper, groupSchedulingService,
+                                                            groupPersonBuilderForOptimization, _resourceOptimizationHelper);
+            IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix = new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup);
+            IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup = new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup);
+            IGroupOptimizationValidatorRunner groupMoveTimeValidatorRunner =
+                new GroupMoveTimeValidatorRunner(groupOptimizerValidateProposedDatesInSameMatrix,
+                                                 groupOptimizerValidateProposedDatesInSameGroup);
+            var service = new GroupMoveTimeOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupIntradayOptimizerExecuter, groupMoveTimeValidatorRunner);
+
+            service.ReportProgress += resourceOptimizerPersonOptimized;
+            service.Execute(allMatrix);
+            service.ReportProgress -= resourceOptimizerPersonOptimized;
+        }
+
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void runIntradayOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
 		{
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();

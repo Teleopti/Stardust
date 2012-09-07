@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly IDeleteSchedulePartService _deleteService;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
-        private readonly OptimizationPreferences _optimizerPreferences;
+        private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
         private readonly IGroupMatrixHelper _groupMatrixHelper;
         private readonly IGroupSchedulingService _groupSchedulingService;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
         public GroupMoveTimeOptimizationExecuter(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IDeleteSchedulePartService deleteService, 
-                                                 ISchedulingOptionsCreator schedulingOptionsCreator, OptimizationPreferences optimizerPreferences, IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
+                                                 ISchedulingOptionsCreator schedulingOptionsCreator, IOptimizationPreferences optimizerPreferences, IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
                                                  IGroupMatrixHelper groupMatrixHelper, IGroupSchedulingService groupSchedulingService, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, IResourceOptimizationHelper resourceOptimizationHelper)
         {
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;

@@ -28,11 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _scheduleDay;
         private bool _eventExecuted;
         private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
-        private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
         private IScheduleMatrixPro _matrix2;
-        private IScheduleDay _scheduleDay2;
         private IScheduleDayPro _scheduleDayPro2;
-        private IScheduleMatrixPro _scheduleMatrixPro;
         private IGroupOptimizationValidatorRunner _groupMoveTimeValidatorRunner;
 
         [SetUp]
@@ -43,10 +40,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizers = new List<IGroupMoveTimeOptimizer> { _optimizer };
             _groupOptimizerFindMatrixesForGroup = _mock.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
             _groupMoveTimeOptimizerExecuter = _mock.DynamicMock<IGroupMoveTimeOptimizationExecuter>();
-            _groupPersonBuilderForOptimization = _mock.DynamicMock<IGroupPersonBuilderForOptimization>();
             _groupMoveTimeValidatorRunner = _mock.Stub<IGroupOptimizationValidatorRunner>();
             _target = new GroupMoveTimeOptimizerService(_optimizers, _groupOptimizerFindMatrixesForGroup,
-                                                        _groupMoveTimeOptimizerExecuter, _groupPersonBuilderForOptimization, _groupMoveTimeValidatorRunner);
+                                                        _groupMoveTimeOptimizerExecuter, _groupMoveTimeValidatorRunner);
             _matrix = _mock.DynamicMock<IScheduleMatrixPro>();
             _matrix2 = _mock.DynamicMock<IScheduleMatrixPro>();
             _allMatrixes = new List<IScheduleMatrixPro> { _matrix, _matrix2 };
@@ -54,9 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayPro = _mock.DynamicMock<IScheduleDayPro>();
             _scheduleDayPro2 = _mock.DynamicMock<IScheduleDayPro>();
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
-            _scheduleDay2 = _mock.StrictMock<IScheduleDay>();
             _optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
-            _scheduleMatrixPro = _mock.DynamicMock<IScheduleMatrixPro>();
             
 
         }
