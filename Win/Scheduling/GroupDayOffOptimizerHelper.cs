@@ -73,49 +73,20 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 if (optimizerPreferences.General.OptimizationStepDaysOff)
                     runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod);
-
-
-				//IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
-				//IList<IScheduleMatrixOriginalStateContainer> workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization =
-				//    createMatrixContainerList(matrixListForWorkShiftAndIntradayOptimization);
-
-
-
-				//if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
-				//    _scheduleOptimizerHelper.RunWorkShiftOptimization(
-				//        optimizerPreferences, 
-				//        matrixOriginalStateContainerListForWorkShiftOptimization, 
-				//        workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
-				//        selectedPeriod, 
-				//        _backgroundWorker);
-
 				if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
 					runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
-
-                //running the team optimization
-                RunTeamOptimizationService(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
+                if(optimizerPreferences.General.OptimizationStepTimeBetweenDays)
+                    runMoveTimeOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
             }
-            
-            
-			//if (optimizerPreferences.General.UseShiftCategoryLimitations)
-			//{
-			//    removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker, schedulingOptions, optimizerPreferences);
-			//}
-            //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
 
-        private void RunTeamOptimizationService(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
+        private void runMoveTimeOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
         {
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
-            //var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-            //var restrictionChecker = new RestrictionChecker();
-            //var decisionMaker = new MoveTimeDecisionMaker2();
             IList<IGroupMoveTimeOptimizer> optimizers = new List<IGroupMoveTimeOptimizer>();
             ExtractOptimizer(originalStateContainers, optimizationPreferences, schedulingOptionsCreator, optimizers);
 
-            //var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
-            //var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
             IDeleteSchedulePartService deleteSchedulePartService;
             MainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter;
             IList<IScheduleMatrixPro> allMatrix;
@@ -127,28 +98,20 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                         out allMatrix, out rollbackService,
                                                                         out groupOptimizerFindMatrixesForGroup);
 
-            //IGroupMatrixContainerCreator groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
-            //IGroupPersonConsistentChecker groupPersonConsistentChecker =
-            //    _container.Resolve<IGroupPersonConsistentChecker>();
-            //IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-            //IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-            //   OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
-            IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(_container.Resolve<IGroupMatrixContainerCreator>(),
+            var groupMatrixHelper = new GroupMatrixHelper(_container.Resolve<IGroupMatrixContainerCreator>(),
                                                                          _container.Resolve<IGroupPersonConsistentChecker>(),
                                                                          OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container),
                                                                          _container.Resolve<IResourceOptimizationHelper>());
             var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-            IGroupMoveTimeOptimizationExecuter groupIntradayOptimizerExecuter = new GroupMoveTimeOptimizationExecuter(rollbackService,
+            var groupMoveTimeOptimizerExecuter = new GroupMoveTimeOptimizationExecuter(rollbackService,
                                                             deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
                                                             mainShiftOptimizeActivitySpecificationSetter,
                                                             groupMatrixHelper, groupSchedulingService,
                                                             groupPersonBuilderForOptimization, _resourceOptimizationHelper);
-            //IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix = new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup);
-            //IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup = new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup);
-            IGroupOptimizationValidatorRunner groupMoveTimeValidatorRunner =
+            var groupMoveTimeValidatorRunner =
                 new GroupMoveTimeValidatorRunner(new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup),
                                                  new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup));
-            var service = new GroupMoveTimeOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupIntradayOptimizerExecuter, groupMoveTimeValidatorRunner);
+            var service = new GroupMoveTimeOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupMoveTimeOptimizerExecuter, groupMoveTimeValidatorRunner);
 
             service.ReportProgress += resourceOptimizerPersonOptimized;
             service.Execute(allMatrix);

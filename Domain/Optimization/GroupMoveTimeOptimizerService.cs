@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
         private readonly IGroupMoveTimeOptimizationExecuter _groupMoveTimeOptimizerExecuter;
         private readonly IGroupOptimizationValidatorRunner _groupMoveTimeValidatorRunner;
-        //private IGroupOptimizationValidatorRunner _groupMoveTimeValidatorRunner;
         private bool _cancelMe;
 
         public GroupMoveTimeOptimizerService(IList<IGroupMoveTimeOptimizer> optimizers, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, IGroupMoveTimeOptimizationExecuter groupMoveTimeOptimizerExecuter,
@@ -25,11 +24,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
             _groupMoveTimeOptimizerExecuter = groupMoveTimeOptimizerExecuter;
             _groupMoveTimeValidatorRunner = groupMoveTimeValidatorRunner;
-            //IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix = new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup);
-            //IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup = new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup);
-            //_groupMoveTimeValidatorRunner =
-            //    new GroupMoveTimeValidatorRunner(groupOptimizerValidateProposedDatesInSameMatrix,
-            //                                     groupOptimizerValidateProposedDatesInSameGroup);
         }
 
         public void Execute(IList<IScheduleMatrixPro> allMatrixes)
@@ -38,24 +32,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             while (runningList.Count > 0)
             {
-                IList<IGroupMoveTimeOptimizer> removeList = runTheList(runningList, allMatrixes);
+                var removeList = runTheList(runningList, allMatrixes);
                 foreach (var groupMoveTimeOptimizer in removeList)
                 {
                     runningList.Remove(groupMoveTimeOptimizer);
                 }
             }
         }
-
-
-        private IList<IGroupMoveTimeOptimizer> runTheList(IList<IGroupMoveTimeOptimizer> runningList,
+        
+        private IEnumerable<IGroupMoveTimeOptimizer> runTheList(ICollection<IGroupMoveTimeOptimizer> runningList,
                                                           IList<IScheduleMatrixPro> allMatrixes)
         {
-            List<IGroupMoveTimeOptimizer> skipList = new List<IGroupMoveTimeOptimizer>();
-            List<IGroupMoveTimeOptimizer> removeList = new List<IGroupMoveTimeOptimizer>();
-            int executes = 0;
+            var skipList = new List<IGroupMoveTimeOptimizer>();
+            var removeList = new List<IGroupMoveTimeOptimizer>();
+            var executes = 0;
             foreach (var optimizer in runningList.GetRandom(runningList.Count, true))
             {
-                IPerson person = optimizer.Person;
+                var person = optimizer.Person;
                 executes++;
                 if (_cancelMe)
                     break;
@@ -76,14 +69,13 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var firstDate = selectedDate[0];
                 var secDate = selectedDate[1];
 
-                List<IScheduleMatrixPro> matrixes =
+                var matrixes =
 
                     _groupOptimizerFindMatrixesForGroup.Find(person, firstDate).ToList();
                 matrixes.AddRange(_groupOptimizerFindMatrixesForGroup.Find(person, secDate).ToList());
 
                 foreach (var matrix in matrixes)
                 {
-                    
                     foreach (var  groupMoveTimeOptimizer in runningList)
                     {
                         if (groupMoveTimeOptimizer.IsMatrixForDateAndPerson(firstDate, matrix.Person) && groupMoveTimeOptimizer.IsMatrixForDateAndPerson(secDate, matrix.Person))
@@ -93,8 +85,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 IList<IScheduleDay> daysToSave = new List<IScheduleDay>();
                 IList<IScheduleDay> daysToDelete = new List<IScheduleDay>();
-                ProcessScheduleDay(daysToDelete,   daysToSave, memberList, firstDate,false );
-                ProcessScheduleDay(daysToDelete,  daysToSave, memberList, secDate,true );
+                processScheduleDay(daysToDelete,   daysToSave, memberList, firstDate, false );
+                processScheduleDay(daysToDelete,  daysToSave, memberList, secDate, true );
 
                 var validateResult = daysToSave.All(d=> _groupMoveTimeValidatorRunner.Run(person, new List<DateOnly> { d.DateOnlyAsPeriod.DateOnly  },
                                                                        new List<DateOnly> { d.DateOnlyAsPeriod.DateOnly  }, true).Success );
@@ -107,30 +99,24 @@ namespace Teleopti.Ccc.Domain.Optimization
                 }
 
                 skipList.AddRange(memberList);
-                reportProgress(firstDate , success, runningList.Count, executes, person);
-                //reportProgress(firstDate, success, runningList.Count, executes, person);
+                reportProgress(firstDate, success, runningList.Count, executes, person);
             }
             return removeList;
         }
 
-        private static  void ProcessScheduleDay(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave,
-                                        IList<IGroupMoveTimeOptimizer> memberList, DateOnly selectedDate,bool lockDay)
+        private static void processScheduleDay(ICollection<IScheduleDay> daysToDelete, ICollection<IScheduleDay> daysToSave,
+                                        IEnumerable<IGroupMoveTimeOptimizer> memberList, DateOnly selectedDate, bool lockDay)
         {
             foreach (var groupMoveTimeOptimizer in memberList)
             {
-                IScheduleDay scheduleDay =
-                    groupMoveTimeOptimizer.Matrix.GetScheduleDayByKey(selectedDate).DaySchedulePart();
+                var scheduleDay = groupMoveTimeOptimizer.Matrix.GetScheduleDayByKey(selectedDate).DaySchedulePart();
                 daysToSave.Add((IScheduleDay) scheduleDay.Clone());
                 daysToDelete.Add(scheduleDay);
-               
-
-                if ( lockDay) 
+                if (lockDay)
                     groupMoveTimeOptimizer.LockDate(selectedDate);
-               
             }
         }
-
-
+        
         public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
         public void OnReportProgress(string message)
@@ -159,13 +145,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 success = " " + Resources.wasSuccessful;
             }
-
-
-            //string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ")";
             var progreeString = who + success;
             OnReportProgress(progreeString);
         }
-      
     }
 
     public interface IGroupMoveTimeOptimizerService
