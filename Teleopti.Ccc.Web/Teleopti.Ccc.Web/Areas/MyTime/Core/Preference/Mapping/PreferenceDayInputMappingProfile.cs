@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -35,59 +36,48 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<PreferenceDayInput, IPreferenceRestriction>()
 				.ConstructUsing(s => new PreferenceRestriction())
-				//.ConstructUsing(s =>
-				//    {
-				//        var restriction = new PreferenceRestriction();
-				//        if (s.ActivityPreferenceId != Guid.Empty)
-				//        {
-				//            restriction.AddActivityRestriction(
-				//                new ActivityRestriction(_activityRespository.Invoke().Get(s.ActivityPreferenceId))
-				//                    {
-				//                        StartTimeLimitation = new StartTimeLimitation(FromTimeOfDay(s.ActivityEarliestStartTime),FromTimeOfDay(s.ActivityLatestStartTime)),
-				//                        EndTimeLimitation = new EndTimeLimitation(FromTimeOfDay(s.ActivityEarliestEndTime), FromTimeOfDay(s.ActivityLatestEndTime)),
-				//                        WorkTimeLimitation = new WorkTimeLimitation(s.ActivityMinimumTime, s.ActivityMaximumTime)
-				//                    });
-				//        }
-				//        return restriction;
-				//    })
 				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => _shiftCategoryRepository.Invoke().Get(s.PreferenceId)))
 				.ForMember(d => d.Absence, o => o.MapFrom(s => _absenceRepository.Invoke().Get(s.PreferenceId)))
 				.ForMember(d => d.DayOffTemplate, o => o.MapFrom(s => _dayOffRepository.Invoke().Get(s.PreferenceId)))
 				.ForMember(d => d.MustHave, o => o.Ignore())
-				.ForMember(d => d.ActivityRestrictionCollection, o => o.MapFrom(s =>
+				.ForMember(d => d.ActivityRestrictionCollection, o => o.Ignore())
+				.ForMember(d => d.StartTimeLimitation,
+				           o =>
+				           o.MapFrom(
+					           s => new StartTimeLimitation(FromTimeOfDay(s.EarliestStartTime), FromTimeOfDay(s.LatestStartTime))))
+				.ForMember(d => d.EndTimeLimitation,
+				           o =>
+				           o.MapFrom(s => new EndTimeLimitation(FromTimeOfDay(s.EarliestEndTime), FromTimeOfDay(s.LatestEndTime))))
+				.ForMember(d => d.WorkTimeLimitation,
+				           o => o.MapFrom(s => new WorkTimeLimitation(s.MinimumWorkTime, s.MaximumWorkTime)))
+				.AfterMap((s, d) =>
 					{
-						var activityRestrictions = s.ActivityPreferenceId != Guid.Empty
-													   ? new[]
-								                           {
-									                           new ActivityRestriction(_activityRespository.Invoke().Get(s.ActivityPreferenceId))
-										                           {
-											                           StartTimeLimitation =
-												                           new StartTimeLimitation(FromTimeOfDay(s.ActivityEarliestStartTime),
-												                                                   FromTimeOfDay(s.ActivityLatestStartTime)),
-											                           EndTimeLimitation =
-												                           new EndTimeLimitation(FromTimeOfDay(s.ActivityEarliestEndTime),
-												                                                 FromTimeOfDay(s.ActivityLatestEndTime)),
-											                           WorkTimeLimitation =
-												                           new WorkTimeLimitation(s.ActivityMinimumTime, s.ActivityMaximumTime)
-										                           }
-								                           }
-													   : new ActivityRestriction[] { };
-						return new ReadOnlyCollection<IActivityRestriction>(activityRestrictions);
-						//if (s.ActivityPreferenceId != Guid.Empty)
-						//{
-						//    activityRestrictionCollection.AddActivityRestriction(
-						//        new ActivityRestriction(_activityRespository.Invoke().Get(s.ActivityPreferenceId))
-						//        {
-						//            StartTimeLimitation = new StartTimeLimitation(FromTimeOfDay(s.ActivityEarliestStartTime), FromTimeOfDay(s.ActivityLatestStartTime)),
-						//            EndTimeLimitation = new EndTimeLimitation(FromTimeOfDay(s.ActivityEarliestEndTime), FromTimeOfDay(s.ActivityLatestEndTime)),
-						//            WorkTimeLimitation = new WorkTimeLimitation(s.ActivityMinimumTime, s.ActivityMaximumTime)
-						//        });
-						//}
-						//return restriction;
-					}))
-				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => new StartTimeLimitation(FromTimeOfDay(s.EarliestStartTime),FromTimeOfDay(s.LatestStartTime))))
-				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => new EndTimeLimitation(FromTimeOfDay(s.EarliestEndTime),FromTimeOfDay(s.LatestEndTime))))
-				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(s => new WorkTimeLimitation(s.MinimumWorkTime,s.MaximumWorkTime)))
+						if (s.ActivityPreferenceId != Guid.Empty)
+						{
+							IActivityRestriction activityRestriction;
+							if (d.ActivityRestrictionCollection.Count == 0)
+							{
+								activityRestriction = new ActivityRestriction(_activityRespository.Invoke().Get(s.ActivityPreferenceId));
+								d.AddActivityRestriction(activityRestriction);
+							}
+							else
+							{
+								activityRestriction = d.ActivityRestrictionCollection.First();
+								activityRestriction.Activity = _activityRespository.Invoke().Get(s.ActivityPreferenceId);
+							}
+
+							activityRestriction.StartTimeLimitation =
+								new StartTimeLimitation(FromTimeOfDay(s.ActivityEarliestStartTime), FromTimeOfDay(s.ActivityLatestStartTime));
+							activityRestriction.EndTimeLimitation =
+								new EndTimeLimitation(FromTimeOfDay(s.ActivityEarliestEndTime), FromTimeOfDay(s.ActivityLatestEndTime));
+							activityRestriction.WorkTimeLimitation = new WorkTimeLimitation(s.ActivityMinimumTime, s.ActivityMaximumTime);
+						}
+						else
+						{
+							var currentItems = new List<IActivityRestriction>(d.ActivityRestrictionCollection);
+							currentItems.ForEach(d.RemoveActivityRestriction);
+						}
+					})
 				;
 		}
 

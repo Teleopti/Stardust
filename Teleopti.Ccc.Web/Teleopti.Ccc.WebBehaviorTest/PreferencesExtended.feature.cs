@@ -522,7 +522,9 @@ this.FeatureBackground();
 #line 163
     testRunner.And("I am viewing preferences for date \'2012-09-05\'");
 #line 164
-    testRunner.When("I click the add extended preference button");
+ testRunner.When("I select day \'2012-09-05\'");
+#line 165
+    testRunner.And("I click the add extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -569,11 +571,11 @@ this.FeatureBackground();
             table16.AddRow(new string[] {
                         "Activity time maximum",
                         "00:45"});
-#line 165
+#line 166
     testRunner.And("I input extended preference fields with", ((string)(null)), table16);
-#line 181
-    testRunner.And("I click the apply extended preferences button");
 #line 182
+    testRunner.And("I click the apply extended preferences button");
+#line 183
     testRunner.And("I click the extended preference indication on \'2012-09-05\'");
 #line hidden
             TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
@@ -593,16 +595,16 @@ this.FeatureBackground();
                         "11:00"});
             table17.AddRow(new string[] {
                         "End time minimum",
-                        "19:30"});
+                        "19:00"});
             table17.AddRow(new string[] {
                         "End time maximum",
-                        "20:00"});
+                        "20:30"});
             table17.AddRow(new string[] {
                         "Work time minimum",
-                        "08:00"});
+                        "8:00"});
             table17.AddRow(new string[] {
                         "Work time maximum",
-                        "08:30"});
+                        "8:30"});
             table17.AddRow(new string[] {
                         "Activity",
                         "Lunch"});
@@ -620,11 +622,11 @@ this.FeatureBackground();
                         "12:45"});
             table17.AddRow(new string[] {
                         "Activity time minimum",
-                        "00:15"});
+                        "0:15"});
             table17.AddRow(new string[] {
                         "Activity time maximum",
-                        "00:45"});
-#line 183
+                        "0:45"});
+#line 184
     testRunner.Then("I should see extended preference with", ((string)(null)), table17);
 #line hidden
             this.ScenarioCleanup();
@@ -637,19 +639,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot edit extended preference without permission", new string[] {
                         "ignore"});
-#line 203
+#line 204
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 204
-    testRunner.Given("I have the role \'No access to extended preferences\'");
 #line 205
-    testRunner.And("I have an extended preference on \'2012-06-20\'");
+    testRunner.Given("I have the role \'No access to extended preferences\'");
 #line 206
-    testRunner.When("I view preferences for date \'2012-06-20\'");
+    testRunner.And("I have an extended preference on \'2012-06-20\'");
 #line 207
-    testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+    testRunner.When("I view preferences for date \'2012-06-20\'");
 #line 208
+    testRunner.And("I click the extended preference indication on \'2012-06-20\'");
+#line 209
     testRunner.Then("I should not be able to edit extended preference on \'2012-06-20\'");
 #line hidden
             this.ScenarioCleanup();
@@ -664,17 +666,17 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can only select available preferences when editing an existing extended preferenc" +
                     "e", new string[] {
                         "ignore"});
-#line 211
+#line 212
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 212
-    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 213
-    testRunner.And("I have an extended preference on \'2012-06-20\'");
+    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 214
-    testRunner.When("I view preferences for date \'2012-06-20\'");
+    testRunner.And("I have an extended preference on \'2012-06-20\'");
 #line 215
+    testRunner.When("I view preferences for date \'2012-06-20\'");
+#line 216
     testRunner.And("I click the extended preference indication on \'2012-06-20\'");
 #line hidden
             TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
@@ -685,7 +687,7 @@ this.FeatureBackground();
                         "Dayoff"});
             table18.AddRow(new string[] {
                         "Illness"});
-#line 216
+#line 217
     testRunner.Then("I should see these available preferences", ((string)(null)), table18);
 #line hidden
             this.ScenarioCleanup();
@@ -700,17 +702,17 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can only select available activities when editing an existing extended preference" +
                     "", new string[] {
                         "ignore"});
-#line 222
+#line 223
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 223
-    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 224
-    testRunner.And("I have an extended preference on \'2012-06-20\'");
+    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 225
-    testRunner.When("I view preferences for date \'2012-06-20\'");
+    testRunner.And("I have an extended preference on \'2012-06-20\'");
 #line 226
+    testRunner.When("I view preferences for date \'2012-06-20\'");
+#line 227
     testRunner.And("I click the extended preference indication on \'2012-06-20\'");
 #line hidden
             TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
@@ -719,7 +721,7 @@ this.FeatureBackground();
             table19.AddRow(new string[] {
                         "Activity",
                         "Lunch"});
-#line 227
+#line 228
     testRunner.Then("I should see these available activities", ((string)(null)), table19);
 #line hidden
             this.ScenarioCleanup();
@@ -730,17 +732,17 @@ this.FeatureBackground();
         public virtual void VerifyTimeValidationForPreferenceStartAndEndTime()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify time validation for preference start and end time", ((string[])(null)));
-#line 234
+#line 235
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 235
-    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 236
-    testRunner.And("I am viewing preferences for date \'2012-06-20\'");
+    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 237
-    testRunner.When("I select day \'2012-06-20\'");
+    testRunner.And("I am viewing preferences for date \'2012-06-20\'");
 #line 238
+    testRunner.When("I select day \'2012-06-20\'");
+#line 239
     testRunner.And("I click the add extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
@@ -755,11 +757,11 @@ this.FeatureBackground();
             table20.AddRow(new string[] {
                         "Start time maximum",
                         "10:00"});
-#line 239
+#line 240
     testRunner.And("I input extended preference fields with", ((string)(null)), table20);
-#line 244
-    testRunner.And("I click the apply extended preferences button");
 #line 245
+    testRunner.And("I click the apply extended preferences button");
+#line 246
     testRunner.Then("I should see add extended preferences panel with error \'Invalid time startTime\'");
 #line hidden
             this.ScenarioCleanup();
@@ -770,15 +772,15 @@ this.FeatureBackground();
         public virtual void DisableAllTimeFieldsWhenAbsencePreferenceIsSelected()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Disable all time fields when absence preference is selected", ((string[])(null)));
-#line 247
+#line 248
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 248
-    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 249
-    testRunner.And("I am viewing preferences");
+    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 250
+    testRunner.And("I am viewing preferences");
+#line 251
     testRunner.When("I click the add extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
@@ -787,9 +789,9 @@ this.FeatureBackground();
             table21.AddRow(new string[] {
                         "Preference",
                         "Illness"});
-#line 251
+#line 252
     testRunner.And("I input extended preference fields with", ((string)(null)), table21);
-#line 254
+#line 255
     testRunner.Then("I should not be able to edit time fields");
 #line hidden
             this.ScenarioCleanup();
@@ -800,15 +802,15 @@ this.FeatureBackground();
         public virtual void DisableAllTimeFieldsWhenDayOffIsSelected()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Disable all time fields, when day off is selected", ((string[])(null)));
-#line 256
+#line 257
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 257
-    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 258
-    testRunner.And("I am viewing preferences");
+    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 259
+    testRunner.And("I am viewing preferences");
+#line 260
     testRunner.When("I click the add extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
@@ -817,7 +819,7 @@ this.FeatureBackground();
             table22.AddRow(new string[] {
                         "Activity",
                         "Lunch"});
-#line 260
+#line 261
     testRunner.And("I input extended preference fields with", ((string)(null)), table22);
 #line hidden
             TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
@@ -826,9 +828,9 @@ this.FeatureBackground();
             table23.AddRow(new string[] {
                         "Preference",
                         "Dayoff"});
-#line 263
+#line 264
     testRunner.And("I input extended preference fields with", ((string)(null)), table23);
-#line 266
+#line 267
     testRunner.Then("I should not be able to edit activity time fields");
 #line hidden
             this.ScenarioCleanup();
@@ -839,15 +841,15 @@ this.FeatureBackground();
         public virtual void ResetActivityFieldWhenDayOffIsSelected()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Reset activity field when day off is selected", ((string[])(null)));
-#line 268
+#line 269
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 269
-    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 270
-    testRunner.And("I am viewing preferences");
+    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 271
+    testRunner.And("I am viewing preferences");
+#line 272
     testRunner.When("I click the add extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
@@ -856,7 +858,7 @@ this.FeatureBackground();
             table24.AddRow(new string[] {
                         "Activity",
                         "Lunch"});
-#line 272
+#line 273
     testRunner.And("I input extended preference fields with", ((string)(null)), table24);
 #line hidden
             TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
@@ -865,9 +867,9 @@ this.FeatureBackground();
             table25.AddRow(new string[] {
                         "Preference",
                         "Dayoff"});
-#line 275
+#line 276
     testRunner.And("I input extended preference fields with", ((string)(null)), table25);
-#line 278
+#line 279
     testRunner.Then("I should see activity dropdown list selected to \"none\"");
 #line hidden
             this.ScenarioCleanup();
@@ -878,13 +880,13 @@ this.FeatureBackground();
         public virtual void ResetActivityFieldWhenAbsenceIsSelected()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Reset activity field when absence is selected", ((string[])(null)));
-#line 280
+#line 281
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 281
-    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 282
+    testRunner.Given("I have the role \'Access to extended preferences\'");
+#line 283
     testRunner.And("I am viewing preferences");
 #line hidden
             TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
@@ -893,9 +895,9 @@ this.FeatureBackground();
             table26.AddRow(new string[] {
                         "Activity",
                         "Lunch"});
-#line 283
+#line 284
     testRunner.And("I input extended preference fields with", ((string)(null)), table26);
-#line 286
+#line 287
     testRunner.When("I click the extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
@@ -904,9 +906,9 @@ this.FeatureBackground();
             table27.AddRow(new string[] {
                         "Preference",
                         "Illness"});
-#line 287
+#line 288
     testRunner.And("I input extended preference fields with", ((string)(null)), table27);
-#line 290
+#line 291
     testRunner.And("I should see activity dropdown list selected to \"none\"");
 #line hidden
             this.ScenarioCleanup();
@@ -917,15 +919,15 @@ this.FeatureBackground();
         public virtual void EnableActivityTimeFieldsWhenActivityIsSelected()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Enable activity time fields when activity is selected", ((string[])(null)));
-#line 292
+#line 293
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 293
-    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 294
-    testRunner.And("I am viewing preferences");
+    testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 295
+    testRunner.And("I am viewing preferences");
+#line 296
     testRunner.When("I click the add extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
@@ -934,9 +936,9 @@ this.FeatureBackground();
             table28.AddRow(new string[] {
                         "Activity",
                         "Lunch"});
-#line 296
+#line 297
     testRunner.And("I input extended preference fields with", ((string)(null)), table28);
-#line 299
+#line 300
     testRunner.Then("I should be able to edit activity minimum and maximum fields");
 #line hidden
             this.ScenarioCleanup();
