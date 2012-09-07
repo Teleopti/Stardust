@@ -117,35 +117,65 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyReportProgressEventExecutedAndCanCancel()
         {
+            //DateOnly date = new DateOnly(2012, 1, 1);
+            //DateOnly date2 = new DateOnly(2012, 1, 2);
+            //_optimizers = new List<IGroupMoveTimeOptimizer> { _optimizer };
+            //_target = new GroupMoveTimeOptimizerService(_optimizers, _groupOptimizerFindMatrixesForGroup,
+            //                                            _groupMoveTimeOptimizerExecuter, _groupPersonBuilderForOptimization, _groupMoveTimeValidatorRunner);
+            //_target.ReportProgress += _target_ReportProgress;
+            //_groupMoveTimeValidatorRunner.Stub(x => x.Run(_person, new List<DateOnly>(), new List<DateOnly>(), true)).IgnoreArguments().Return(new ValidatorResult() { Success = true });
+
+
+            //using (_mock.Record())
+            //{
+            //    Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
+            //    Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 }).Repeat.AtLeastOnce();
+            //    Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes);
+            //    Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes);
+            //    Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce();
+            //    Expect.Call(_optimizer.IsMatrixForDateAndPerson(date, _person)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+            //    //Expect.Call(_optimizer.IsMatrixForDateAndPerson(date2, _person)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+            //    Expect.Call(_optimizer.Matrix).Return(_matrix).Repeat.AtLeastOnce();
+            //    Expect.Call(_matrix.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
+            //    Expect.Call(_matrix.GetScheduleDayByKey(date2)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
+            //    Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.Twice();
+            //    Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.Twice();
+            //    Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
+            //    Expect.Call(_groupMoveTimeOptimizerExecuter.Execute(new List<IScheduleDay> { _scheduleDay },
+            //                                                        new List<IScheduleDay> { _scheduleDay }, _allMatrixes,
+            //                                                        _optimizationOverLimitByRestrictionDecider)).IgnoreArguments().
+            //        Return(
+            //            false);
+            //    Expect.Call(() => _optimizer.LockDate(date)).Repeat.Times(2);
+            //}
+
+
             DateOnly date = new DateOnly(2012, 1, 1);
             DateOnly date2 = new DateOnly(2012, 1, 2);
-            _optimizers = new List<IGroupMoveTimeOptimizer> { _optimizer, _optimizer };
-            _target = new GroupMoveTimeOptimizerService(_optimizers, _groupOptimizerFindMatrixesForGroup,
-                                                        _groupMoveTimeOptimizerExecuter, _groupPersonBuilderForOptimization, _groupMoveTimeValidatorRunner);
             _target.ReportProgress += _target_ReportProgress;
             _groupMoveTimeValidatorRunner.Stub(x => x.Run(_person, new List<DateOnly>(), new List<DateOnly>(), true)).IgnoreArguments().Return(new ValidatorResult() { Success = true });
 
+
             using (_mock.Record())
             {
-                Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 }).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
                 Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce();
-                Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce() ;
-                Expect.Call(_optimizer.IsMatrixForDateAndPerson(date, _person)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-                //Expect.Call(_optimizer.IsMatrixForDateAndPerson(date2, _person)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_optimizer.Matrix).Return(_matrix).Repeat.AtLeastOnce() ;
+                Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_matrix2.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.IsMatrixForDateAndPerson(date, _person)).Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.IsMatrixForDateAndPerson(date2, _person)).Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.Matrix).Return(_matrix).Repeat.AtLeastOnce();
                 Expect.Call(_matrix.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
                 Expect.Call(_matrix.GetScheduleDayByKey(date2)).Return(_scheduleDayPro2).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.Twice();
-                Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.Twice();
+                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
-                Expect.Call(_groupMoveTimeOptimizerExecuter.Execute(new List<IScheduleDay> { _scheduleDay },
-                                                                    new List<IScheduleDay> { _scheduleDay }, _allMatrixes,
-                                                                    _optimizationOverLimitByRestrictionDecider)).IgnoreArguments().
-                    Return(
-                        false);
-                Expect.Call(() => _optimizer.LockDate(date)).Repeat.Times(2);
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo())).Repeat.AtLeastOnce();
+
             }
             using (_mock.Playback())
             {
