@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -69,11 +68,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var firstDate = selectedDate[0];
                 var secDate = selectedDate[1];
 
-                var matrixes =
-
-                    _groupOptimizerFindMatrixesForGroup.Find(person, firstDate).ToList();
-                matrixes.AddRange(_groupOptimizerFindMatrixesForGroup.Find(person, secDate).ToList());
-
+                var matrixes = _groupOptimizerFindMatrixesForGroup.Find(person, firstDate).Intersect(_groupOptimizerFindMatrixesForGroup.Find(person, secDate));
                 foreach (var matrix in matrixes)
                 {
                     foreach (var  groupMoveTimeOptimizer in runningList)
@@ -83,8 +78,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                     }
                 }
 
-                IList<IScheduleDay> daysToSave = new List<IScheduleDay>();
-                IList<IScheduleDay> daysToDelete = new List<IScheduleDay>();
+                var daysToSave = new List<IScheduleDay>();
+                var daysToDelete = new List<IScheduleDay>();
                 processScheduleDay(daysToDelete,   daysToSave, memberList, firstDate, false );
                 processScheduleDay(daysToDelete,  daysToSave, memberList, secDate, true );
 
@@ -99,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 }
 
                 skipList.AddRange(memberList);
-                reportProgress(firstDate, success, runningList.Count, executes, person);
+                reportProgress(firstDate,secDate, success, runningList.Count, executes, person);
             }
             return removeList;
         }
@@ -132,10 +127,12 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.GroupMoveTimeOptimizerService.OnReportProgress(System.String)")]
-        private void reportProgress(DateOnly date, bool result, int activeOptimizers, int executes, IPerson owner)
+        private void reportProgress(DateOnly firstDate, DateOnly secondDate, bool result, int activeOptimizers, int executes, IPerson owner)
         {
-            string dateString = date.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
-            string who = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers + ")" + executes + " " + dateString + " " + owner.Name.ToString(NameOrderOption.FirstNameLastName);
+            var firstDateStr = firstDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
+            var secondDateStr = firstDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
+            var who = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers + ")" + executes + " " +
+                         firstDateStr + ":" + secondDateStr + " " + owner.Name.ToString(NameOrderOption.FirstNameLastName);
             string success;
             if (!result)
             {

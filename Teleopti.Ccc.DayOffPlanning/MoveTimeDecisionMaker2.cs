@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.DayOffPlanning
             {
                 foreach (int currentMoveToIndex in indexesToMoveTo)
                 {
+                    if (currentMoveToIndex == currentMoveFromIndex) continue;
                     if (values[currentMoveToIndex - bitArray.PeriodArea.Minimum] <
                         values[currentMoveFromIndex - bitArray.PeriodArea.Minimum])
                         break;
-
                     if (areFoundDaysValid(currentMoveFromIndex, currentMoveToIndex, matrix))
                     {
                         DateOnly mostUnderStaffedDay = matrix.FullWeeksPeriodDays[currentMoveFromIndex].Day;
