@@ -129,6 +129,25 @@ Scenario: Add extended preference
 	| Activity time minimum       | 0:15       |
 	| Activity time maximum       | 0:45       |
 
+Scenario: Add extended preference when span to next day
+	Given I have the role 'Access to extended preferences'
+	And I am viewing preferences for date '2012-09-05'
+	When I select day '2012-09-05'
+	And I click the add extended preference button
+	And I input extended preference fields with
+	| Field                     | Value |
+	| End time minimum          | 02:00 |
+	| End time minimum next day | true  |
+	| End time maximum          | 02:30 |
+	| End time maximum next day | true  |
+	And I click the apply extended preferences button
+	And I click the extended preference indication on '2012-09-05'
+	Then I should see extended preference with
+	| Field            | Value      |
+	| Date             | 2012-09-05 |
+	| End time minimum | 02:00 + 1  |
+	| End time maximum | 02:30 + 1  |
+
 Scenario: Preference list contains available preferences when adding extended preference 
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
