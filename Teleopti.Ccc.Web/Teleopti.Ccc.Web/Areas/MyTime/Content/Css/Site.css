@@ -170,6 +170,8 @@ sup { vertical-align: super; font-size: smaller; }
 
 .invisible { visibility: hidden; } /* Hide visually and from screenreaders, but maintain layout */
 
+.cursorpointer { cursor: pointer; }
+
 .clearfix:before, .clearfix:after
 {
 	content: "\0020";

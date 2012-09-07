@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             using (PerformanceOutput.ForOperation("Optimizing days off for " + optimizers.Count() + " agents"))
             {
                 executeOptimizersWhileActiveFound(optimizers);
-                if (_cancelMe)
-                    return;
-                executeOptimizersWhileActiveFound(optimizers);
+				//if (_cancelMe)
+				//    return;
+				//executeOptimizersWhileActiveFound(optimizers);
             }
         }
 

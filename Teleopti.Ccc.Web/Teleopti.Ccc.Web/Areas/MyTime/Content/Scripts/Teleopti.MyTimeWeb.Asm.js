@@ -10,70 +10,61 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Asm = (function () {
 	function _start(serverMsSince1970, pixelsPerHour) {
-		var refreshSeconds = 20;
+		var refreshSeconds = 1;
+		var observableInfo = ko.observable();
+		var timeLineArray = _timeLineArray();
 
-		_refresh(serverMsSince1970, pixelsPerHour);
-		_bindTimeLine();
+		ko.applyBindings({
+			timeLines: timeLineArray,
+			activityInfo: observableInfo
+		});
+
+		_refresh(serverMsSince1970, pixelsPerHour, observableInfo);
 		$('.asm-outer-canvas').show();
 
 		setInterval(function () {
-			_refresh(serverMsSince1970, pixelsPerHour);
+			_refresh(serverMsSince1970, pixelsPerHour, observableInfo);
 		}, refreshSeconds * 1000);
 	}
 
-	function _bindTimeLine() {
+	function _timeLineArray() {
 		var timelineArray = new Array();
 		for (var day = 0; day <= 2; day++) {
 			for (var hour = 0; hour < 24; hour++) {
 				timelineArray.push(hour);
 			}
 		}
-		ko.applyBindings({
-			timeLines: timelineArray
-		});
+		return timelineArray;
 	}
 
-	function _refresh(serverMsSince1970, pixelsPerHour) {
+	function _refresh(serverMsSince1970, pixelsPerHour, observableInfo) {
 		_moveTimeLineToNow(serverMsSince1970, pixelsPerHour);
-		_updateInfoCanvas();
+		_updateInfoCanvas(observableInfo);
 	}
 
-	function _updateInfoCanvas() {
-		var nu = new Date().getTeleoptiTime();
+	function _updateInfoCanvas(observableInfo) {
+		var model = new Array();
 
-		//default-values
-		$('#asm-info-current-activity').text('');
-		$('#asm-info-current-starttime').text('');
-		$('#asm-info-current-endtime').html('');
-		$('#asm-info-next-activity').text('');
-		$('#asm-info-next-starttime').html('');
-		$('#asm-info-next-endtime').html('');
-
+		var timelinePosition = parseFloat($('.asm-time-marker').css('width')) - parseFloat($(".asm-sliding-schedules").css('left'));
 		$('.asm-layer')
 			.each(function () {
-				var startMs = parseFloat($(this).data('asm-start-milliseconds'));
-				var endMs = parseFloat($(this).data('asm-end-milliseconds'));
-				if (nu >= startMs && nu < endMs) {
-					$('#asm-info-current-activity').text($(this).data('asm-activity'));
-					$('#asm-info-current-starttime').text($(this).data('asm-start-time'));
-					$('#asm-info-current-endtime').text($(this).data('asm-end-time'));
-
-					var nextLayer = $(this).next();
-					if (nextLayer.length > 0) {
-						$('#asm-info-next-activity').text(nextLayer.data('asm-activity'));
-						$('#asm-info-next-starttime').text(nextLayer.data('asm-start-time'));
-						$('#asm-info-next-endtime').text(nextLayer.data('asm-end-time'));
+				var startPos = parseFloat($(this).css('left'));
+				var endPos = startPos + parseFloat($(this).css('padding-left'));
+				if (endPos > timelinePosition) {
+					var active = false;
+					if (startPos <= timelinePosition) {
+						active = true;
 					}
-					return false;
+					model.push({ 'payload': $(this).data('asm-activity'), 'time': $(this).data('asm-start-time'), 'active': active });
 				}
 			});
+		observableInfo(model);
 	}
 
 	function _moveTimeLineToNow(serverMsSince1970, pixelsPerHour) {
 		var slidingSchedules = $('.asm-sliding-schedules');
 		var clientMsSince1970 = new Date().getTeleoptiTime();
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
-
 		var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
 		var startPixel = -(pixelsPerHour * hoursSinceStart);
 		slidingSchedules.css('left', (startPixel) + 'px');

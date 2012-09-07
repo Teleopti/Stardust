@@ -29,7 +29,7 @@ set msipath=%msipath:"=%
 
 set /P config=Provide config name: 
 
-CHOICE /C se /M "Would you like to show (S) the msiExec string or install the product (I)?"
+CHOICE /C si /M "Would you like to show (S) the msiExec string or install the product (I)?"
 IF ERRORLEVEL 1 SET action=show
 IF ERRORLEVEL 2 SET action=install
 goto :start
