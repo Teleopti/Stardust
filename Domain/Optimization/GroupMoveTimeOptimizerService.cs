@@ -145,6 +145,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.GroupMoveTimeOptimizerService.OnReportProgress(System.String)")]
         private void reportProgress(DateOnly date, bool result, int activeOptimizers, int executes, IPerson owner)
         {
             string dateString = date.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
