@@ -55,6 +55,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference-extended-activity-time-maximum-input")]
 		public TextField ExtendedPreferenceActivityTimeMaximum;
 
+		[FindBy(Id = "Preference-extended-error")]
+		public Div ExtendedPreferencePanelError { get; set; }
+
 		[FindBy(Id = "Preference-period-feedback-view")]
 		public Div PreferencePeriodFeedbackView { get; set; }
 

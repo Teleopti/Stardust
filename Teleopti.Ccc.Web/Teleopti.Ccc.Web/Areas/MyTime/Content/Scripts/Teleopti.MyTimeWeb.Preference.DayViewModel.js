@@ -62,8 +62,13 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			success: success,
 			data: data,
 			statusCode404: statusCode404,
-			error: function (jqXHR, textStatus, errorThrown) {
 
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var errorMessage = $.parseJSON(jqXHR.responseText);
+					_displayValidationError(errorMessage);
+					return;
+				}
 				var cellHtml = $('<h2></h2>')
 					.addClass('error');
 
@@ -195,6 +200,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		} else {
 			value.Date = self.Date;
 			value = ko.toJSON(value);
+			_clearValidationError();
 		}
 		var deferred = $.Deferred();
 		ajaxForDate({
@@ -205,15 +211,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			complete: function () {
 				deferred.resolve();
 				self.LoadFeedback();
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
-					var data = $.parseJSON(jqXHR.responseText);
-					_displayValidationError(data);
-//					$('#Request-detail-ok-button').prop('disabled', false);
-					return;
-				}
-//				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 			}
 		});
 		return deferred.promise();

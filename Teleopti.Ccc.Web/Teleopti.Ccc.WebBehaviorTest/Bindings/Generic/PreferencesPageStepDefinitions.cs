@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -96,11 +97,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			CollectionAssert.AreEqual(expected, Pages.Pages.PreferencePage.ExtendedPreferenceActivity.SelectList.AllContents);
 		}
 
-		[Then(@"I should see add extended preferences panel with error '(.*)'")]
-		public void ThenIShouldSeeAddExtendedPreferencesPanelWithError(string error)
+		[Then(@"I should see add extended preferences panel with error 'Invalid time startTime'")]
+		public void ThenIShouldSeeAddExtendedPreferencesPanelWithError()
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferencePanel.Exists, Is.True);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferencePanelError.Text, Is.StringContaining(string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
 		}
 
 
@@ -122,6 +123,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			{
 				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Value = fields.StartTimeMaximum;
+				Browser.Current.Eval("$('#" + Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Id + "').blur()");
 			}
 			if (fields.EndTimeMinimum != null)
 			{

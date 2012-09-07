@@ -36,17 +36,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		{
 			var result = new List<ValidationResult>();
 			if (ValidateTimeOfDay(EarliestStartTime, LatestStartTime))
-				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
 			if (ValidateTimeOfDay(EarliestEndTime, LatestEndTime))
-				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.EndTime)));
 			if (ValidateTimeOfDay(ActivityEarliestStartTime, ActivityLatestStartTime))
-				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.ActivityTime)));
 			if (ValidateTimeOfDay(ActivityEarliestEndTime, ActivityLatestEndTime))
-				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.ActivityTime)));
 			if (ValidateTimeSpan(MinimumWorkTime, MaximumWorkTime))
-				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.WorkTime)));
 			if (ValidateTimeSpan(ActivityMinimumTime, ActivityMaximumTime))
-				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period)));
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.ActivityLength)));
 			return result;
 		}
 

@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 			else
 			{
-				_mapper.Map(input, preferenceDay);
 				ClearExtendedAndMustHaveData(preferenceDay);
+				_mapper.Map(input, preferenceDay);
 			}
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 		}
