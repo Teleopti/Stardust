@@ -70,11 +70,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			var asmLayers = (from visualLayer in layers
 			                 let startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone)
 			                 let endDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.EndDateTime, timeZone)
+			                 let length = visualLayer.Period.ElapsedTime().TotalMinutes
 			                 select new AsmLayer
 			                        	{
 			                        		Payload = visualLayer.DisplayDescription().Name,
 			                        		StartJavascriptBaseDate = startDate.SubtractJavascriptBaseDate().TotalMilliseconds,
-			                        		EndJavascriptBaseDate = endDate.SubtractJavascriptBaseDate().TotalMilliseconds,
+			                        		LengthInMinutes = length,
 			                        		Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
 			                        		StartTimeText = startDate.ToString("HH:mm"),
 			                        		EndTimeText = endDate.ToString("HH:mm")

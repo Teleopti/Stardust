@@ -91,8 +91,6 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		public void ShouldSetEnd()
 		{
 			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			var expected = TimeZoneHelper.ConvertFromUtc(layerPeriod.EndDateTime, userTimeZone.TimeZone());
-
 			var scheduleDay = scheduleFactory.ScheduleDayStub(layerPeriod.StartDateTime);
 
 			projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(scheduleFactory.ProjectionStub(new[]
@@ -100,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       		scheduleFactory.VisualLayerStub(layerPeriod)
 				                                       	}));
 			var res = target.Map(new[] {scheduleDay});
-			res.Layers.First().EndJavascriptBaseDate.Should().Be.EqualTo(expected.SubtractJavascriptBaseDate().TotalMilliseconds);
+			res.Layers.First().LengthInMinutes.Should().Be.EqualTo(layerPeriod.ElapsedTime().TotalMinutes);
 		}
 
 		[Test]

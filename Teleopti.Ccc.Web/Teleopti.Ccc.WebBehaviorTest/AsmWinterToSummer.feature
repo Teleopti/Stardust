@@ -31,17 +31,9 @@ Background:
 	| StartTime             | 2020-03-28 05:00 |
 	| EndTime               | 2020-03-28 06:00 |
 
-Scenario: Shift crossing winter to summer daylight should have one hour longer period
+Scenario: Shift crossing winter to summer daylight should have correct length
 	Given I have the role 'Full access to mytime'
 	And Current time is '2020-03-28 20:00'
 	When I view my regional settings
 	And I click ASM link
-	Then The last layer should be '6' hours long
-
-@ignore
-Scenario: Timeline crossing winter to summer daylight should repeat one hour
-	Given I have the role 'Full access to mytime'
-	And Current time is '2020-03-28 20:00'
-	When I view my regional settings
-	And I click ASM link
-
+	Then The last layer should be '5' hours long

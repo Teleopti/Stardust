@@ -67,9 +67,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 											var theLayerToCheck = allLayers.Last();
 											return pixelLength(theLayerToCheck) / pxPerHour;
 			                    	}, Is.EqualTo(hours));
-
-
-			ScenarioContext.Current.Pending();
 		}
 
 		private static int pixelLength(Element oneHourLengthLayer)

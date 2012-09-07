@@ -144,10 +144,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Shift crossing winter to summer daylight should have one hour longer period")]
-        public virtual void ShiftCrossingWinterToSummerDaylightShouldHaveOneHourLongerPeriod()
+        [NUnit.Framework.DescriptionAttribute("Shift crossing winter to summer daylight should have correct length")]
+        public virtual void ShiftCrossingWinterToSummerDaylightShouldHaveCorrectLength()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Shift crossing winter to summer daylight should have one hour longer period", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Shift crossing winter to summer daylight should have correct length", ((string[])(null)));
 #line 34
 this.ScenarioSetup(scenarioInfo);
 #line 7
@@ -161,30 +161,7 @@ this.FeatureBackground();
 #line 38
  testRunner.And("I click ASM link");
 #line 39
- testRunner.Then("The last layer should be \'6\' hours long");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Timeline crossing winter to summer daylight should repeat one hour")]
-        [NUnit.Framework.IgnoreAttribute()]
-        public virtual void TimelineCrossingWinterToSummerDaylightShouldRepeatOneHour()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Timeline crossing winter to summer daylight should repeat one hour", new string[] {
-                        "ignore"});
-#line 42
-this.ScenarioSetup(scenarioInfo);
-#line 7
-this.FeatureBackground();
-#line 43
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line 44
- testRunner.And("Current time is \'2020-03-28 20:00\'");
-#line 45
- testRunner.When("I view my regional settings");
-#line 46
- testRunner.And("I click ASM link");
+ testRunner.Then("The last layer should be \'5\' hours long");
 #line hidden
             this.ScenarioCleanup();
         }
