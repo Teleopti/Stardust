@@ -49,18 +49,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 		{
 			const int numberOfHoursToShow = 24*3;
 			var hoursAsInts = new List<int>();
-			var localStart = timeZone.ConvertTimeFromUtc(start);
 			
 			for (var hour = 0; hour < numberOfHoursToShow; hour++)
 			{
 				var localTime = timeZone.ConvertTimeFromUtc(start.AddHours(hour));
 				hoursAsInts.Add(localTime.Hour);
 			}
-
-			//hoursAsInts.AddRange(Enumerable.Range(localStartHour, 24 - localStartHour));
-			//hoursAsInts.AddRange(Enumerable.Range(0, 24));
-			//hoursAsInts.AddRange(Enumerable.Range(0, 24));
-			//hoursAsInts.AddRange(Enumerable.Range(0, 24));
 
 			return hoursAsInts.Take(numberOfHoursToShow).Select(x => x.ToString(CultureInfo.InvariantCulture));
 		}
