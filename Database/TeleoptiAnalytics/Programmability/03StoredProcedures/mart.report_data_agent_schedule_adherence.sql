@@ -2,9 +2,12 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[repo
 DROP PROCEDURE [mart].[report_data_agent_schedule_adherence]
 GO
 
+/* 
 
---[mart].[report_data_agent_schedule_adherence] @date_from='Jan  4 2013 12:00AM',@group_page_code='C2BAEB17-9E91-40FA-AA5A-1DD963BF834D',@group_page_group_set='2',@group_page_agent_code='C2BAEB15-9E91-40FA-AA5A-1DD963BF834D',@site_id='1',@team_set='1',@adherence_id='1',@sort_by='1',@time_zone_id='1',@person_code='C2BAEB18-9E91-40FA-AA5A-1DD963BF834D',@agent_person_code='C2BAEB12-9E91-40FA-AA5A-1DD963BF834D',@report_id='13',@language_id='1',@business_unit_code='C2BAEB14-9E91-40FA-AA5A-1DD963BF834D',@from_matrix='1'
+exec mart.report_data_agent_schedule_adherence @date_from='2009-02-01 00:00:00',@adherence_id=1,@date_to='2009-02-28 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'0',@team_set=N'7',@agent_person_code=N'11610fe4-0130-4568-97de-9b5e015b2564',@sort_by=N'6',@time_zone_id=N'1',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+exec mart.report_data_agent_schedule_adherence @date_from='2009-01-13 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'7',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'2',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 
+*/
 -- =============================================
 -- Author:		KJ
 -- Create date: 2008-07-01
@@ -41,7 +44,7 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_adherence]
 @date_to datetime = @date_from, --NEW 20120903 KJ, default_value equals to start_date
 @group_page_code uniqueidentifier,
 @group_page_group_set nvarchar(max),
-@group_page_agent_code uniqueidentifier,
+@group_page_agent_code uniqueidentifier = '567E693D-9D55-47F9-AAAB-D620C71CACE8',
 @site_id int,  --currently obsolete
 @team_set nvarchar(max),
 @adherence_id int,--1,2 eller 3 från adherence_calculation tabellen
