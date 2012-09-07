@@ -16,18 +16,19 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupOptimizerValidateProposedDatesInSameGroup = groupOptimizerValidateProposedDatesInSameGroup;
         }
 
-        public delegate ValidatorResult ValidateMoveTimeDelegate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
+        private delegate ValidatorResult ValidateMoveTimeDelegate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
 
         public ValidatorResult Run(IPerson person, IList<DateOnly> daysMoveTimeFrom, IList<DateOnly> daysMoveTimeTo, bool moveSameDay)
         {
             var runnableList = new Dictionary<ValidateMoveTimeDelegate, IAsyncResult>();
 
             IList<DateOnly> allDays = new List<DateOnly>(daysMoveTimeFrom);
-            foreach (var dateOnly in daysMoveTimeTo)
-            {
-                allDays.Add(dateOnly);
-            }
-				
+            if (daysMoveTimeTo != null)
+                foreach (var dateOnly in daysMoveTimeTo)
+                {
+                    allDays.Add(dateOnly);
+                }
+
             ValidateMoveTimeDelegate toRun = _groupOptimizerValidateProposedDatesInSameMatrix.Validate;
             var result = toRun.BeginInvoke(person, allDays, moveSameDay, null, null);
             runnableList.Add(toRun, result);

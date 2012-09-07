@@ -108,30 +108,16 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void RunTeamOptimizationService(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
         {
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
-            var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-            var restrictionChecker = new RestrictionChecker();
-            var decisionMaker = new MoveTimeDecisionMaker2();
+            //var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+            //var restrictionChecker = new RestrictionChecker();
+            //var decisionMaker = new MoveTimeDecisionMaker2();
             IList<IGroupMoveTimeOptimizer> optimizers = new List<IGroupMoveTimeOptimizer>();
-            foreach (var originalStateContainer in originalStateContainers)
-            {
-                var matrix = originalStateContainer.ScheduleMatrix;
+            ExtractOptimizer(originalStateContainers, optimizationPreferences, schedulingOptionsCreator, optimizers);
 
-                var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, restrictionChecker,
-                                                                                              optimizationPreferences,
-                                                                                              originalStateContainer);
-                RelativeDailyStandardDeviationsByAllSkillsExtractor relativeDailyStandardDeviationsByAllSkillsExtractor =
-                    new RelativeDailyStandardDeviationsByAllSkillsExtractor(matrix, schedulingOptions);
-                IScheduleMatrixLockableBitArrayConverter lockableBitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(matrix);
-                var optimizer = new GroupMoveTimeOptimizer(lockableBitArrayConverter, decisionMaker,
-                                                           relativeDailyStandardDeviationsByAllSkillsExtractor,
-                                                           optimizerOverLimitDecider);
-                optimizers.Add(optimizer);
-            }
-
-            var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
-            var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+            //var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
+            //var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-                new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
+                new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
             IList<IScheduleMatrixPro> allMatrix = originalStateContainers.Select(container => container.ScheduleMatrix).ToList();
             IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
             ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
@@ -142,32 +128,55 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                                                                     ScheduleTag));
             var deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
             var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
-            IGroupMatrixContainerCreator groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
-            IGroupPersonConsistentChecker groupPersonConsistentChecker =
-                _container.Resolve<IGroupPersonConsistentChecker>();
-            IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-            IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-               OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
-            IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
-                                                                         groupPersonConsistentChecker,
-                                                                         workShiftBackToLegalStateService,
-                                                                         resourceOptimizationHelper);
+            //IGroupMatrixContainerCreator groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+            //IGroupPersonConsistentChecker groupPersonConsistentChecker =
+            //    _container.Resolve<IGroupPersonConsistentChecker>();
+            //IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+            //IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
+            //   OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
+            IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(_container.Resolve<IGroupMatrixContainerCreator>(),
+                                                                         _container.Resolve<IGroupPersonConsistentChecker>(),
+                                                                         OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container),
+                                                                         _container.Resolve<IResourceOptimizationHelper>());
             var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
             IGroupMoveTimeOptimizationExecuter groupIntradayOptimizerExecuter = new GroupMoveTimeOptimizationExecuter(rollbackService,
                                                             deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
                                                             mainShiftOptimizeActivitySpecificationSetter,
                                                             groupMatrixHelper, groupSchedulingService,
                                                             groupPersonBuilderForOptimization, _resourceOptimizationHelper);
-            IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix = new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup);
-            IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup = new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup);
+            //IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix = new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup);
+            //IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup = new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup);
             IGroupOptimizationValidatorRunner groupMoveTimeValidatorRunner =
-                new GroupMoveTimeValidatorRunner(groupOptimizerValidateProposedDatesInSameMatrix,
-                                                 groupOptimizerValidateProposedDatesInSameGroup);
+                new GroupMoveTimeValidatorRunner(new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup),
+                                                 new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup));
             var service = new GroupMoveTimeOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupIntradayOptimizerExecuter, groupMoveTimeValidatorRunner);
 
             service.ReportProgress += resourceOptimizerPersonOptimized;
             service.Execute(allMatrix);
             service.ReportProgress -= resourceOptimizerPersonOptimized;
+        }
+
+        private static void ExtractOptimizer(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences,
+                                             SchedulingOptionsCreator schedulingOptionsCreator, IList<IGroupMoveTimeOptimizer> optimizers)
+        {
+            foreach (var originalStateContainer in originalStateContainers)
+            {
+                var matrix = originalStateContainer.ScheduleMatrix;
+
+                var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, new RestrictionChecker(),
+                                                                                              optimizationPreferences,
+                                                                                              originalStateContainer);
+                RelativeDailyStandardDeviationsByAllSkillsExtractor relativeDailyStandardDeviationsByAllSkillsExtractor =
+                    new RelativeDailyStandardDeviationsByAllSkillsExtractor(matrix,
+                                                                            schedulingOptionsCreator.CreateSchedulingOptions(
+                                                                                optimizationPreferences));
+                IScheduleMatrixLockableBitArrayConverter lockableBitArrayConverter =
+                    new ScheduleMatrixLockableBitArrayConverter(matrix);
+                var optimizer = new GroupMoveTimeOptimizer(lockableBitArrayConverter, new MoveTimeDecisionMaker2(),
+                                                           relativeDailyStandardDeviationsByAllSkillsExtractor,
+                                                           optimizerOverLimitDecider);
+                optimizers.Add(optimizer);
+            }
         }
 
 

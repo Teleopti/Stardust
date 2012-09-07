@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return removeList;
         }
 
-        private void ProcessScheduleDay(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave,
+        private static  void ProcessScheduleDay(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave,
                                         IList<IGroupMoveTimeOptimizer> memberList, DateOnly selectedDate,bool lockDay)
         {
             foreach (var groupMoveTimeOptimizer in memberList)
@@ -161,7 +161,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 
             //string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ")";
-            OnReportProgress(who + success);
+            var progreeString = who + success;
+            OnReportProgress(progreeString);
         }
       
     }

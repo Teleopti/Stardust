@@ -43,22 +43,28 @@ namespace Teleopti.Ccc.Domain.Optimization
             _schedulePartModifyAndRollbackService.ClearModificationCollection();
 
             IList<IScheduleDay> cleanedList = new List<IScheduleDay>();
-            foreach (var scheduleDay in daysToDelete)
-            {
-                SchedulePartView significant = scheduleDay.SignificantPart();
-                if (significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff && significant != SchedulePartView.ContractDayOff)
-                    cleanedList.Add(scheduleDay);
+            if (daysToDelete != null)
+                foreach (var scheduleDay in daysToDelete)
+                {
+                    SchedulePartView significant = scheduleDay.SignificantPart();
+                    if (significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff && significant != SchedulePartView.ContractDayOff)
+                        cleanedList.Add(scheduleDay);
 
-            }
+                }
             _deleteService.Delete(cleanedList, _schedulePartModifyAndRollbackService);
 
             var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
+
+            if (daysToSave!= null)
+            {
+                schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
+                if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, daysToSave[0], schedulingOptions)) return false;
+
+                schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
+                if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, daysToSave[1], schedulingOptions)) return false;
+            }
+
             
-            schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
-            if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, daysToSave[0], schedulingOptions)) return false;
-            
-            schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime ;
-            if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, daysToSave[1], schedulingOptions)) return false;
             return true;
         }
 

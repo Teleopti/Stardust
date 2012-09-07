@@ -13,6 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
+    [TestFixture ]
     class GroupMoveTimeOptimizerServiceTest
     {
         private MockRepository _mock;

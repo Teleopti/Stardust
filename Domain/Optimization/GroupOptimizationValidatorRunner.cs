@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupOptimizerValidateProposedDatesInSameGroup = groupOptimizerValidateProposedDatesInSameGroup;
 		}
 
-	    public delegate ValidatorResult ValidateDaysOffMoveDelegate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
+	    private delegate ValidatorResult ValidateDaysOffMoveDelegate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public ValidatorResult Run(IPerson person, IList<DateOnly> daysMoveTimeFrom, IList<DateOnly> daysMoveTimeTo, bool moveSameDay)
