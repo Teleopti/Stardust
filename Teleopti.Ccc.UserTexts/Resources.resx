@@ -8186,7 +8186,7 @@ Period</value>
     <comment>Header in people</comment>
   </data>
   <data name="ShiftCategoryLimitations" xml:space="preserve">
-    <value>Shift category limitations</value>
+    <value>Shift Category Limitations</value>
     <comment>Header in People</comment>
   </data>
   <data name="ResetLayout" xml:space="preserve">
@@ -11034,5 +11034,17 @@ These options are activated:
   <data name="SchedulePeriodTypeWeek" xml:space="preserve">
     <value>Week</value>
     <comment>To specify schedule period type Week</comment>
+  </data>
+  <data name="SameDaysOff" xml:space="preserve">
+    <value>Same days off</value>
+    <comment>Use same days off when optimizing teams</comment>
+  </data>
+  <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
+    <value>Schedule Only Preference Must Have</value>
+    <comment>Schedule only must have preferences</comment>
+  </data>
+  <data name="ShiftCategories" xml:space="preserve">
+    <value>Shift categories</value>
+    <comment>Shift categories</comment>
   </data>
 </root>
