@@ -3269,17 +3269,42 @@ namespace Teleopti.Ccc.Win.Scheduling
             _scheduleOptimizerHelper.ResetWorkShiftFinderResults();
         }
 
+		private void disableScheduleButtonsOnNonCoherentSelection(IEnumerable<IScheduleDay> selectedSchedules)
+		{
+			IScheduleDay scheduleDay = null;
+			var sortedList = selectedSchedules.OrderBy(d => d.DateOnlyAsPeriod.DateOnly).ToList();
+
+			foreach (var selectedSchedule in sortedList)
+			{
+				if (scheduleDay != null)
+				{
+					if (scheduleDay.DateOnlyAsPeriod.DateOnly.Equals(selectedSchedule.DateOnlyAsPeriod.DateOnly))continue;
+					if(!scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(1).Equals(selectedSchedule.DateOnlyAsPeriod.DateOnly))
+					{
+						toolStripSplitButtonSchedule.Enabled = false;
+						break;
+					}		
+				}
+
+				scheduleDay = selectedSchedule;
+			}
+		}
+
         private void grid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
             if (e.Reason == GridSelectionReason.Clear) return;
-
+			if (_scheduleView == null) return;
             using (PerformanceOutput.ForOperation("Changing selection in view"))
             {
-				if(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
+				if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
+				{
 					toolStripSplitButtonSchedule.Enabled = _scheduleView.TheGrid.Selections.Count == 1;
+					if (_splitterManager.ShowRestrictionView) disableScheduleButtonsOnNonCoherentSelection(_scheduleView.SelectedSchedules());
+				}
+
             	disableButtonsIfTeamLeaderMode();
-                if (_scheduleView != null &&
-                    (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp))
+                //if (_scheduleView != null &&
+                if (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp)
                 {
                     _scheduleView.Presenter.UpdateFromEditor();
                     updateShiftEditor();
@@ -3287,6 +3312,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var selectedSchedules = _scheduleView.SelectedSchedules();
                     updateSelectionInfo(selectedSchedules);
                     enableSwapButtons(selectedSchedules);
+					
 
                     var selectedDate = _scheduleView.SelectedDateLocal();
                     if (_currentIntraDayDate != selectedDate)
