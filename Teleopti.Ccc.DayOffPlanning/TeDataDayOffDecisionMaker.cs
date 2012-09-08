@@ -26,32 +26,32 @@ namespace Teleopti.Ccc.DayOffPlanning
 
 		//repeate until success or no more weeks
 
-		private readonly IList<IDayOffLegalStateValidator> _validatorListWithoutMaxConsecutiveWorkdays;
-		private readonly IDayOffLegalStateValidator _maxConsecutiveWorkdaysValidator;
+		private IList<IDayOffLegalStateValidator> _validatorListWithoutMaxConsecutiveWorkdays;
+		private IDayOffLegalStateValidator _maxConsecutiveWorkdaysValidator;
+		private readonly IList<IDayOffLegalStateValidator> _validatorList;
 		private readonly bool _is2222;
 		private readonly ILogWriter _logWriter;
 
 		public TeDataDayOffDecisionMaker(
-            IList<IDayOffLegalStateValidator> validatorListWithoutMaxConsecutiveWorkdays, 
-			IDayOffLegalStateValidator maxConsecutiveWorkdaysValidator,
+            IList<IDayOffLegalStateValidator> validatorList, 
 			bool is2222,
             ILogWriter logWriter)
 		{
-			_validatorListWithoutMaxConsecutiveWorkdays = validatorListWithoutMaxConsecutiveWorkdays;
-			_maxConsecutiveWorkdaysValidator = maxConsecutiveWorkdaysValidator;
+			_validatorList = validatorList;
 			_is2222 = is2222;
 			_logWriter = logWriter;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
 		public bool Execute(ILockableBitArray lockableBitArray, IList<double?> values)
 		{
 			if (!_is2222)
 				return false;
 
-			ILockableBitArray workingBitArray = (ILockableBitArray)lockableBitArray.Clone();
+			extractConsecutiveWorkdaysValidator();
+			var workingBitArray = (ILockableBitArray)lockableBitArray.Clone();
 
-			string decisionMakerName = this.ToString();
+			string decisionMakerName = ToString();
 			_logWriter.LogInfo("Execute of " + decisionMakerName);
 
 			IEnumerable<int> indexesToMoveFrom = createPreferredIndexesToMoveFrom(workingBitArray, values);
@@ -63,18 +63,18 @@ namespace Teleopti.Ccc.DayOffPlanning
 			if (indexesToMoveTo.Count() < 2)
 				return false;
 
-			if(!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
+			while(!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
 			{
 				workingBitArray.Lock(indexesToMoveTo.First(), true);
 				indexesToMoveTo = createPreferredIndexesToMoveTo(workingBitArray, values, weekIndex);
 				if (indexesToMoveTo.Count() < 2)
 					return false;
 
-				if (!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
-					return false;
+				//if (!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
+				//    return false;
 			}
 
-			if (!validateConsecutiveWorkdays(workingBitArray, _maxConsecutiveWorkdaysValidator))
+			while (!validateConsecutiveWorkdays(workingBitArray, _maxConsecutiveWorkdaysValidator))
 			{
 				if (weekIndex == (int)Math.Floor((workingBitArray.Count - 1) / 7d))
 					return false;
@@ -88,15 +88,15 @@ namespace Teleopti.Ccc.DayOffPlanning
 				if (indexesToMoveTo.Count() < 2)
 					return false;
 
-				if (!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
+				while (!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
 				{
 					workingBitArray.Lock(indexesToMoveTo.First(), true);
 					indexesToMoveTo = createPreferredIndexesToMoveTo(workingBitArray, values, weekIndex);
 					if (indexesToMoveTo.Count() < 2)
 						return false;
 
-					if (!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
-						return false;
+					//if (!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
+					//    return false;
 				}
 
 			}
@@ -107,12 +107,27 @@ namespace Teleopti.Ccc.DayOffPlanning
 
 			for (int i = 0; i < lockableBitArray.Count; i++)
 			{
-				lockableBitArray.Set(i, workingBitArray[i]);
+				if(!lockableBitArray.IsLocked(i,true))
+					lockableBitArray.Set(i, workingBitArray[i]);
 			}
 			return true;
 		}
 
-		private IEnumerable<int> findMoveInSpecificWeek(int weekIndex, ILockableBitArray lockableBitArray, IList<double?> values)
+		private void extractConsecutiveWorkdaysValidator()
+		{
+			IDayOffLegalStateValidator maxConsecutiveWorkdaysValidator = null;
+			foreach (var dayOffLegalStateValidator in _validatorList)
+			{
+				if (dayOffLegalStateValidator.GetType() == typeof(ConsecutiveWorkdayValidator))
+					maxConsecutiveWorkdaysValidator = dayOffLegalStateValidator;
+			}
+
+			_validatorListWithoutMaxConsecutiveWorkdays = new List<IDayOffLegalStateValidator>(_validatorList);
+			_validatorListWithoutMaxConsecutiveWorkdays.Remove(maxConsecutiveWorkdaysValidator);
+			_maxConsecutiveWorkdaysValidator = maxConsecutiveWorkdaysValidator;
+		}
+
+		private static IEnumerable<int> findMoveInSpecificWeek(int weekIndex, ILockableBitArray lockableBitArray, IList<double?> values)
 		{
 			IList<int> ret = new List<int>();
 
@@ -150,13 +165,13 @@ namespace Teleopti.Ccc.DayOffPlanning
 			return new List<int> { firstIndex, firstIndex + 1 };
 		}
 
-		private bool validateConsecutiveWorkdays(ILockableBitArray workingArray, IDayOffLegalStateValidator consecutiveWorkdaysValidator)
+		private static bool validateConsecutiveWorkdays(ILockableBitArray workingArray, IDayOffLegalStateValidator consecutiveWorkdaysValidator)
 		{
 			bool valid = validateArray(workingArray, new List<IDayOffLegalStateValidator>{ consecutiveWorkdaysValidator});
 			return valid;
 		}
 
-		private bool moveAndValidate(IEnumerable<int> indexesToMoveFrom, IEnumerable<int> indexesToMoveTo, ILockableBitArray workingArray, IList<IDayOffLegalStateValidator> validatorList)
+		private static bool moveAndValidate(IEnumerable<int> indexesToMoveFrom, IEnumerable<int> indexesToMoveTo, ILockableBitArray workingArray, IList<IDayOffLegalStateValidator> validatorList)
 		{
 			ILockableBitArray clone = (LockableBitArray)workingArray.Clone();
 			clone.Set(indexesToMoveFrom.First(), false);
@@ -178,7 +193,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 			return false;
 		}
 
-		private IEnumerable<int> createPreferredIndexesToMoveFrom(ILockableBitArray lockableBitArray, IList<double?> values)
+		private static IEnumerable<int> createPreferredIndexesToMoveFrom(ILockableBitArray lockableBitArray, IList<double?> values)
 		{
 			IList<int> ret = new List<int>();
 			int firstIndex = -1;
@@ -230,8 +245,8 @@ namespace Teleopti.Ccc.DayOffPlanning
 				int index = i + 7*weekIndex;
 				if (lockableBitArray[index])
 					continue;
-				if (lockableBitArray[index + 1])
-					continue;
+				//if (lockableBitArray[index + 1])
+				//    continue;
 				if (lockableBitArray.IsLocked(index, true))
 					continue;
 				if (lockableBitArray.IsLocked(index + 1, true))
@@ -268,7 +283,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 		//}
 
 	
-		private bool validateArray(ILockableBitArray array, IList<IDayOffLegalStateValidator> validatorList)
+		private static bool validateArray(ILockableBitArray array, IList<IDayOffLegalStateValidator> validatorList)
 		{
 			BitArray longBitArray = array.ToLongBitArray();
 			int offset = 0;
@@ -288,7 +303,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 		}
 
 		
-		private bool validateIndex(BitArray daysOffArray, int index, IList<IDayOffLegalStateValidator> validatorList)
+		private static bool validateIndex(BitArray daysOffArray, int index, IList<IDayOffLegalStateValidator> validatorList)
 		{
 			foreach (IDayOffLegalStateValidator validator in validatorList)
 			{
