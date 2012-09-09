@@ -67,6 +67,30 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			Assert.IsTrue(result);
 			Assert.AreEqual("Teleopti.Ccc.DayOffPlanning.LockableBitArray 001100000110000011000", _array.ToString());
 		}
+
+		[Test]
+		public void ShouldReturnToWeekIndexZeroIfRequired()
+		{
+			_array = new LockableBitArray(28, false, false, null);
+			_array.Set(5, true);
+			_array.Set(6, true);
+			_array.Set(12, true);
+			_array.Set(13, true);
+			_array.Set(19, true);
+			_array.Set(20, true);
+			_array.Set(26, true);
+			_array.Set(27, true);
+
+			_values = new List<double?> { -0.21, -0.06, -0.14, -0.2, -0.08, -0.45, -0.18, 
+											-0.21, -0.09, -0,17, -0.17, -0.08, -0.45, -0.05, 
+											-0.21, -0.13, -0.20, -0.17, -0.08, -0.37, 0.05
+											-0.21, -0.13, -0.20, -0.22, -0.15, -0.21, 0.30};
+
+			bool result = _target.Execute(_array, _values);
+
+			Assert.IsTrue(result);
+			Assert.AreEqual("Teleopti.Ccc.DayOffPlanning.LockableBitArray 0110000011000011000001100000", _array.ToString());
+		}
 	}
 
 	public class LogWriterForTest : ILogWriter

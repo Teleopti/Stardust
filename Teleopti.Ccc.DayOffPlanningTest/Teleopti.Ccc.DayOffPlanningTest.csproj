@@ -133,6 +133,7 @@
     <Compile Include="TeDataDayOffDecisionMakerTest.cs" />
     <Compile Include="TuiCaseSolverTest.cs" />
     <Compile Include="WorkShiftBackToLegalStateBitArrayCreatorTest.cs" />
+    <Compile Include="WorkShiftBackToLegalStateDecisionMakerTest.cs" />
     <Compile Include="WorkShiftLegalStatePeriodDecisionMakerTest.cs" />
     <Compile Include="IntradayDecisionMakerTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />

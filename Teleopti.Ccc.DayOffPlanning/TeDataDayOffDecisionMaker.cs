@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.DayOffPlanning
 			string decisionMakerName = ToString();
 			_logWriter.LogInfo("Execute of " + decisionMakerName);
 
-			IEnumerable<int> indexesToMoveFrom = createPreferredIndexesToMoveFrom(workingBitArray, values);
+			IList<int> indexesToMoveFrom = createPreferredIndexesToMoveFrom(workingBitArray, values);
 			if (indexesToMoveFrom.Count() < 2)
 				return false;
 
 			int weekIndex = (int)Math.Floor(indexesToMoveFrom.First() / 7d);
-			IEnumerable<int> indexesToMoveTo = createPreferredIndexesToMoveTo(workingBitArray, values, weekIndex);
+			IList<int> indexesToMoveTo = createPreferredIndexesToMoveTo(workingBitArray, values, weekIndex);
 			if (indexesToMoveTo.Count() < 2)
 				return false;
 
@@ -69,15 +69,12 @@ namespace Teleopti.Ccc.DayOffPlanning
 				indexesToMoveTo = createPreferredIndexesToMoveTo(workingBitArray, values, weekIndex);
 				if (indexesToMoveTo.Count() < 2)
 					return false;
-
-				//if (!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
-				//    return false;
 			}
 
 			while (!validateConsecutiveWorkdays(workingBitArray, _maxConsecutiveWorkdaysValidator))
 			{
 				if (weekIndex == (int)Math.Floor((workingBitArray.Count - 1) / 7d))
-					return false;
+					weekIndex = 0;
 
 				indexesToMoveFrom = findMoveInSpecificWeek(weekIndex + 1, workingBitArray, values);
 				if (indexesToMoveFrom.Count() < 2)
@@ -94,9 +91,6 @@ namespace Teleopti.Ccc.DayOffPlanning
 					indexesToMoveTo = createPreferredIndexesToMoveTo(workingBitArray, values, weekIndex);
 					if (indexesToMoveTo.Count() < 2)
 						return false;
-
-					//if (!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
-					//    return false;
 				}
 
 			}
@@ -127,7 +121,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 			_maxConsecutiveWorkdaysValidator = maxConsecutiveWorkdaysValidator;
 		}
 
-		private static IEnumerable<int> findMoveInSpecificWeek(int weekIndex, ILockableBitArray lockableBitArray, IList<double?> values)
+		private static IList<int> findMoveInSpecificWeek(int weekIndex, ILockableBitArray lockableBitArray, IList<double?> values)
 		{
 			IList<int> ret = new List<int>();
 
@@ -171,7 +165,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 			return valid;
 		}
 
-		private static bool moveAndValidate(IEnumerable<int> indexesToMoveFrom, IEnumerable<int> indexesToMoveTo, ILockableBitArray workingArray, IList<IDayOffLegalStateValidator> validatorList)
+		private static bool moveAndValidate(IList<int> indexesToMoveFrom, IList<int> indexesToMoveTo, ILockableBitArray workingArray, IList<IDayOffLegalStateValidator> validatorList)
 		{
 			ILockableBitArray clone = (LockableBitArray)workingArray.Clone();
 			clone.Set(indexesToMoveFrom.First(), false);
@@ -185,6 +179,8 @@ namespace Teleopti.Ccc.DayOffPlanning
 				workingArray.Set(indexesToMoveFrom.First(), false);
 				workingArray.Set(indexesToMoveTo.First(), true);
 				workingArray.Set(indexesToMoveFrom.Last(), false);
+				//lock this one to prevent moving back and forward and back and.....
+				workingArray.Lock(indexesToMoveFrom.Last(), true);
 				workingArray.Set(indexesToMoveTo.Last(), true);
 
 				return true;
@@ -193,7 +189,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 			return false;
 		}
 
-		private static IEnumerable<int> createPreferredIndexesToMoveFrom(ILockableBitArray lockableBitArray, IList<double?> values)
+		private static IList<int> createPreferredIndexesToMoveFrom(ILockableBitArray lockableBitArray, IList<double?> values)
 		{
 			IList<int> ret = new List<int>();
 			int firstIndex = -1;
@@ -234,7 +230,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 			return new List<int> {firstIndex, firstIndex + 1};
 		}
 
-		private static IEnumerable<int> createPreferredIndexesToMoveTo(ILockableBitArray lockableBitArray, IList<double?> values, int weekIndex)
+		private static IList<int> createPreferredIndexesToMoveTo(ILockableBitArray lockableBitArray, IList<double?> values, int weekIndex)
 		{
 			IList<int> ret = new List<int>();
 
@@ -272,17 +268,6 @@ namespace Teleopti.Ccc.DayOffPlanning
 			return new List<int> { firstIndex, firstIndex + 1 };
 		}
 
-		//private static int sortByValueAscending(KeyValuePair<int, double> x, KeyValuePair<int, double> y)
-		//{
-		//    return x.Value.CompareTo(y.Value);
-		//}
-
-		//private static int sortByValueDescending(KeyValuePair<int, double> x, KeyValuePair<int, double> y)
-		//{
-		//    return -1 * x.Value.CompareTo(y.Value);
-		//}
-
-	
 		private static bool validateArray(ILockableBitArray array, IList<IDayOffLegalStateValidator> validatorList)
 		{
 			BitArray longBitArray = array.ToLongBitArray();
