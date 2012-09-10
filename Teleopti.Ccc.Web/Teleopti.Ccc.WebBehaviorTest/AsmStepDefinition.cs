@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		[AfterScenario("ASM")]
 		[AfterScenario("ASMWinterSummer")]
+		[AfterScenario("ASMSummerWinter")]
 		public void AfterScenario()
 		{
 			killPopupIfExists();
