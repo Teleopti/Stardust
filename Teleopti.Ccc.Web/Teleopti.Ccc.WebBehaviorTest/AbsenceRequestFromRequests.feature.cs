@@ -473,6 +473,30 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Can see why absence request was denied")]
+        public virtual void CanSeeWhyAbsenceRequestWasDenied()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can see why absence request was denied", ((string[])(null)));
+#line 151
+this.ScenarioSetup(scenarioInfo);
+#line 152
+            testRunner.Given("I am an agent");
+#line 153
+            testRunner.And("I have a denied absence request beacuse of missing workflow control set");
+#line 154
+            testRunner.And("I am viewing requests");
+#line 155
+            testRunner.When("I click on the request");
+#line 156
+            testRunner.Then("I should see the absence request\'s details form");
+#line 157
+            testRunner.And("I should see that my request was denied with reason \'Din förfrågan kunde inte beh" +
+                    "andlas. Du har inget arbetsflöde uppsatt.\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

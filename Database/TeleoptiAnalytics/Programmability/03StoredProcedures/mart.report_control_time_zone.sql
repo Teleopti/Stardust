@@ -25,7 +25,7 @@ AS
 
 --hide time zone in this report(s)
 IF @report_id in ('8DE1AB0F-32C2-4619-A2B2-97385BE4C49C')
-	SELECT 1 as id ,'DontDisplayMe' as name, 0 AS default_value  --because im the only time zone
+	SELECT 1 as id ,'DontDisplayMe' as name,  cast(0 as bit)  AS default_value  --because im the only time zone
 ELSE
 	SELECT 
 		tz.time_zone_id as id,
