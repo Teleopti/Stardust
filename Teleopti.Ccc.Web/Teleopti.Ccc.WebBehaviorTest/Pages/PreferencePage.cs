@@ -34,8 +34,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public TextField ExtendedPreferenceStartTimeMaximum;
 		[FindBy(Id = "Preference-extended-end-time-minimum-input")]
 		public TextField ExtendedPreferenceEndTimeMinimum;
+		[FindBy(Id = "Preference-extended-end-time-minimum-next-day")]
+		public CheckBox ExtendedPreferenceEndTimeMinimumNextDay;
 		[FindBy(Id = "Preference-extended-end-time-maximum-input")]
 		public TextField ExtendedPreferenceEndTimeMaximum;
+		[FindBy(Id = "Preference-extended-end-time-maximum-next-day")]
+		public CheckBox ExtendedPreferenceEndTimeMaximumNextDay;
 		[FindBy(Id = "Preference-extended-work-time-minimum-input")]
 		public TextField ExtendedPreferenceWorkTimeMinimum;
 		[FindBy(Id = "Preference-extended-work-time-maximum-input")]

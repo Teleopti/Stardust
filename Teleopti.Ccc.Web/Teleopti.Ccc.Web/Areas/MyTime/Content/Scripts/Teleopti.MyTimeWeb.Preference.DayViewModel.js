@@ -199,7 +199,14 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			});
 		} else {
 			value.Date = self.Date;
-			value = ko.toJSON(value);
+			var jsValue = ko.toJS(value);
+			if (!jsValue.PreferenceId) {
+				delete jsValue.PreferenceId;
+			}
+			if (!jsValue.ActivityPreferenceId) {
+				delete jsValue.ActivityPreferenceId;
+			}
+			value = ko.toJSON(jsValue);
 			_clearValidationError();
 		}
 		var deferred = $.Deferred();

@@ -127,10 +127,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimum.Value = fields.EndTimeMinimum;
 			}
+			if (fields.EndTimeMinimumNextDay)
+			{
+				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimumNextDay.Checked = true;
+			}
 			if (fields.EndTimeMaximum != null)
 			{
 				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Value = fields.EndTimeMaximum;
+			}
+			if (fields.EndTimeMaximumNextDay)
+			{
+				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximumNextDay.Checked = true;
 			}
 			if (fields.WorkTimeMinimum != null)
 			{
@@ -251,7 +259,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			public string StartTimeMinimum { get; set; }
 			public string StartTimeMaximum { get; set; }
 			public string EndTimeMinimum { get; set; }
+			public bool EndTimeMinimumNextDay { get; set; }
 			public string EndTimeMaximum { get; set; }
+			public bool EndTimeMaximumNextDay { get; set; }
 			public string WorkTimeMinimum { get; set; }
 			public string WorkTimeMaximum { get; set; }
 			public string Activity { get; set; }
