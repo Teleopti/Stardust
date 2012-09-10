@@ -11062,6 +11062,7 @@ These options are activated:
   <data name="SameDaysOff" xml:space="preserve">
     <value>Same days off</value>
     <comment>Use same days off when optimizing teams</comment>
+  </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
     <value>Adherence per Agent</value>
     <comment>Adherence per Agent</comment>
