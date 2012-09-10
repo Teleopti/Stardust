@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			projectionProvider = MockRepository.GenerateStub<IProjectionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			scheduleFactory = new StubFactory();
-			timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+			timeZone = new CccTimeZoneInfo((TimeZoneInfo) CccTimeZoneInfoFactory.StockholmTimeZoneInfo().TimeZoneInfoObject);
 			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
 			target = new AsmViewModelMapper(projectionProvider, userTimeZone);
 		}
@@ -47,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				.Return(scheduleFactory.ProjectionStub(new[] { scheduleFactory.VisualLayerStub("3") }));
 
 			var result = target.Map(new[] { scheduleDay1, scheduleDay2, scheduleDay3 }).Layers;
-			result.Count.Should().Be.EqualTo(3);
+			result.Count().Should().Be.EqualTo(3);
 			result.Any(l => l.Payload.Equals("1")).Should().Be.True();
 		}
 
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                  scheduleFactory.ScheduleDayStub(expected),
 										scheduleFactory.ScheduleDayStub(new DateTime(2100, 1, 1))
 				               });
-			result.StartDate.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(expected, timeZone));
+			result.StartDateTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(expected, timeZone));
 		}
 
 		[Test]
@@ -88,8 +91,6 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		public void ShouldSetEnd()
 		{
 			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			var expected = TimeZoneHelper.ConvertFromUtc(layerPeriod.EndDateTime, userTimeZone.TimeZone());
-
 			var scheduleDay = scheduleFactory.ScheduleDayStub(layerPeriod.StartDateTime);
 
 			projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(scheduleFactory.ProjectionStub(new[]
@@ -97,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       		scheduleFactory.VisualLayerStub(layerPeriod)
 				                                       	}));
 			var res = target.Map(new[] {scheduleDay});
-			res.Layers.First().EndJavascriptBaseDate.Should().Be.EqualTo(expected.SubtractJavascriptBaseDate().TotalMilliseconds);
+			res.Layers.First().LengthInMinutes.Should().Be.EqualTo(layerPeriod.ElapsedTime().TotalMinutes);
 		}
 
 		[Test]
@@ -140,6 +141,43 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			var res = target.Map(new[] { scheduleDay });
 
 			res.Layers.First().EndTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(endDate, timeZone).ToString("HH:mm"));
+		}
+
+		[Test]
+		public void ShouldSetHours()
+		{
+			//stockholm +1 
+			var hoursAsInts = new List<int>();
+			hoursAsInts.AddRange(Enumerable.Range(1, 23));
+			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			hoursAsInts.Add(0);
+			var expected = hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.InvariantCulture));
+
+			var date = new DateTime(2000, 1, 1);
+			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
+			var res = target.Map(new[] {scheduleDay});
+			res.Hours.Should().Have.SameSequenceAs(expected);
+		}
+
+		[Test]
+		public void ShouldSetHoursWhenWinterBecomesSummer()
+		{
+			var hoursAsInts = new List<int>();
+			hoursAsInts.Add(1);
+			//02:00 doesn't exist!
+			hoursAsInts.AddRange(Enumerable.Range(3, 21));
+			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			hoursAsInts.Add(0);
+			hoursAsInts.Add(1);
+			var expected = hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.InvariantCulture));
+
+			var date = new DateTime(2020, 3, 29);
+
+			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
+			var res = target.Map(new[] {scheduleDay});
+			res.Hours.Should().Have.SameSequenceAs(expected);
 		}
 	}
 }

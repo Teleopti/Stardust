@@ -107,6 +107,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq">
@@ -124,7 +125,10 @@
   <ItemGroup>
     <Compile Include="AbsenceRequestResolveTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
-    <Compile Include="Denormalizer\SmsReadModelHandlerTest.cs" />
+    <Compile Include="Denormalizer\DenormalizeScheduleDayMessageConsumerTest.cs" />
+    <Compile Include="Denormalizer\InitialLoadScheduleDayConsumerTest.cs" />
+    <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
+    <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumerTest.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelConsumerTest.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumerTest.cs" />
@@ -149,6 +153,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IntegrationTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
+    <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
     <Compile Include="Payroll\PayrollExportResolveTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />
@@ -157,11 +162,12 @@
     <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSagaTest.cs" />
     <Compile Include="SimpleBootStrapper.cs" />
-    <Compile Include="Sms\ClickatellSmsSenderTest.cs" />
-    <Compile Include="Sms\SignificantChangeCheckerTest.cs" />
-    <Compile Include="Sms\SmsConfigReaderTest.cs" />
-    <Compile Include="Sms\SmsLinkCheckerTest.cs" />
-    <Compile Include="Sms\SmsSenderFactoryTest.cs" />
+    <Compile Include="Notification\ClickatellNotificationSenderTest.cs" />
+    <Compile Include="Notification\ScheduleDayReadModelCreatorTest.cs" />
+    <Compile Include="Notification\SignificantChangeCheckerTest.cs" />
+    <Compile Include="Notification\NotificationConfigReaderTest.cs" />
+    <Compile Include="Notification\SmsLinkCheckerTest.cs" />
+    <Compile Include="Notification\NotificationSenderFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
@@ -205,6 +211,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj">
       <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>
       <Name>Teleopti.Ccc.Sdk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Sdk.Notification\Teleopti.Ccc.Sdk.Notification.csproj">
+      <Project>{87ADCA35-6114-4499-8233-6011611BF8AA}</Project>
+      <Name>Teleopti.Ccc.Sdk.Notification</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.csproj">
       <Project>{9DF2D12C-4895-42D9-A365-6B9F97E787B5}</Project>

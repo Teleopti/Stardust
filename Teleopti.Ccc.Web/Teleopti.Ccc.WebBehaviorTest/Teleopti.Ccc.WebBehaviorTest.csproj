@@ -81,6 +81,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="AsmSummerToWinter.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AsmSummerToWinter.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AsmWinterToSummer.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AsmWinterToSummer.feature</DependentUpon>
+    </Compile>
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
@@ -97,6 +107,7 @@
     <Compile Include="Data\Setups\Generic\DayOffTemplateConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
     <Compile Include="Bindings\Generic\PreferencesPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Specific\StockholmTimeZone.cs" />
     <Compile Include="Pages\GlobalMenuPage.cs" />
     <Compile Include="Asm.feature.cs">
       <AutoGen>True</AutoGen>
@@ -447,6 +458,14 @@
     <None Include="Asm.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Asm.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AsmSummerToWinter.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AsmSummerToWinter.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AsmWinterToSummer.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AsmWinterToSummer.feature.cs</LastGenOutput>
     </None>
     <None Include="MobileReports.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

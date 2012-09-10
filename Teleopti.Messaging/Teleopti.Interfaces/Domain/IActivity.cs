@@ -116,5 +116,10 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets or sets the PayrollCode
     	///</summary>
     	string PayrollCode { get; set; }
+
+        /// <summary>
+        /// Allow the overwrite on the activity
+        /// </summary>
+        bool AllowOverwrite { get; set; }
     }
 }

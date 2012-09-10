@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -366,49 +368,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return period;
         }
 
-        public IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult)
-        {
-            if (shiftList.Count == 0)
-                return shiftList;
-            DateTimePeriod? period = GetMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
-            if (period.HasValue)
-            {
-                var meetings = schedulePart.PersonMeetingCollection();
-                var personalAssignments = schedulePart.PersonAssignmentCollection();
-                int cntBefore = shiftList.Count;
-                IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
-                foreach (IShiftProjectionCache t in shiftList)
-                {
-                    IShiftProjectionCache proj = t;
-                    if (!proj.MainShiftProjection.Period().HasValue) continue;
-                    DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
-                    if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignments))
-                    {
-                        workShiftsWithinPeriod.Add(proj);
-                    }
-                }
-				finderResult.AddFilterResults(
-                    new WorkShiftFilterResult(
-						string.Format(CultureInfo.CurrentCulture,
-                                      UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
-                                      period.Value.LocalStartDateTime, period.Value.LocalEndDateTime), cntBefore,
-                        workShiftsWithinPeriod.Count));
-
-                return workShiftsWithinPeriod;
-
-            }
-            return shiftList;
-        }
-
         public IList<IShiftProjectionCache> Filter(MinMax<TimeSpan> validMinMax, IList<IShiftProjectionCache> shiftList, DateOnly dateToSchedule, IScheduleRange current, IWorkShiftFinderResult finderResult)
         {
             shiftList = FilterOnContractTime(validMinMax, shiftList, finderResult);
 
             shiftList = FilterOnBusinessRules(current, shiftList, dateToSchedule, finderResult);
 
-            IScheduleDay dayPart =
-                current.ScheduledDay(dateToSchedule);
-            return FilterOnPersonalShifts(shiftList, dayPart, finderResult);
+            var dayPart = current.ScheduledDay(dateToSchedule);
+            
+            return FilterOnNotOverWritableActivities(shiftList, dayPart, finderResult);
         }
 
 
@@ -423,19 +391,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
             return shiftList;
         }
-
-		public IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IPerson> groupOfPersons, IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
-    	{
-			InParameter.NotNull("groupOfPersons", groupOfPersons);
-			InParameter.NotNull("scheduleDictionary", scheduleDictionary);
-			foreach (var person in groupOfPersons)
-			{
-				var range = scheduleDictionary[person];
-				var part = range.ScheduledDay(dateOnly);
-				shiftList = FilterOnPersonalShifts(shiftList, part, finderResult);
-			}
-			return shiftList;
-    	}
 
 		public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd(IList<IShiftProjectionCache> shiftList, IPossibleStartEndCategory possibleStartEndCategory, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
         {
@@ -468,6 +423,46 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             return finalShiftList;
 
-        }      
+        }
+
+        public IList<IShiftProjectionCache> FilterOnNotOverWritableActivities(IList<IShiftProjectionCache> shiftList, IScheduleDay part, IWorkShiftFinderResult finderResult)
+        {
+            if (shiftList == null) throw new ArgumentNullException("shiftList");
+            if (part == null) throw new ArgumentNullException("part");
+            if (finderResult == null) throw new ArgumentNullException("finderResult");
+
+            var filteredList = new List<IShiftProjectionCache>();
+            var meetings = part.PersonMeetingCollection();
+            var personAssignments = part.PersonAssignmentCollection();
+            var cnt = shiftList.Count;
+            
+            foreach (var shift in shiftList)
+            {
+                if (shift.MainShiftProjection.Any(x => !((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&
+                                                       isActivityIntersectedWithMeetingOrPersonalShift(
+                                                           personAssignments, meetings, x)))
+                    continue;
+                filteredList.Add(shift);
+            }
+            finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstActivities,
+                                                                    cnt, filteredList.Count));
+
+            return filteredList;
+        }
+
+        private static bool isActivityIntersectedWithMeetingOrPersonalShift(IEnumerable<IPersonAssignment> personAssignments,
+                                                                            IEnumerable<IPersonMeeting> meetings, IVisualLayer layer)
+        {
+            if (meetings.Any(x => x.Period.Intersect(layer.Period)))
+                return true;
+
+            foreach (var personAssignment in personAssignments)
+            {
+                if (personAssignment.PersonalShiftCollection.Any(
+                        x => x.LayerCollection.Any(l => l.Period.Intersect(layer.Period))))
+                    return true;
+            }
+            return false;
+        }
     }
 }

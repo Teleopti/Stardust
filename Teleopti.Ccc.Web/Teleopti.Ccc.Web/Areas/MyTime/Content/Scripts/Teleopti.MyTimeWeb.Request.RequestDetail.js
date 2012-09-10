@@ -234,6 +234,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		$('#Request-detail-entityid').val(data.Id);
 		$('#Request-detail-subject-input').change();
 		$('#Request-detail-message-input').change();
+		$('#Request-detail-deny-reason').text(data.DenyReason);
 		requestViewModel.IsFullDay(data.IsFullDay);
 	};
 

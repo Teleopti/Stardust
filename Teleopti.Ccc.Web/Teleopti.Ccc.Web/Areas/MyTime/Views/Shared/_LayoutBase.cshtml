@@ -79,11 +79,12 @@
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Init.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Asm.js")"></script>
 	
-	@if (ViewBag.LayoutBase.ExplicitlySetMilliSecondsFromYear1970 != 0)
- {
+	@if (ViewBag.LayoutBase.FixedDate != null)
+	{
+		DateTime date = ViewBag.LayoutBase.FixedDate;
 		<script type="text/javascript">
 			$(function () {
-				Date.prototype.getTeleoptiTime = function () { return @(ViewBag.LayoutBase.ExplicitlySetMilliSecondsFromYear1970); };
+				Date.prototype.getTeleoptiTime = function () { return new Date(@(date.Year), @(date.Month -1), @(date.Day), @(date.Hour), @(date.Minute), @(date.Second)).getTime(); };
 			});
 		</script>		
  }

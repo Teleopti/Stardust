@@ -10598,4 +10598,70 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Vecka</value>
     <comment>To specify schedule period type Week</comment>
   </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>Du har inte rättigheter som ger tillgång till webbportalen.</value>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Mobilrapporter</value>
+  </data>
+  <data name="PleaseChooseAReportType" xml:space="preserve">
+    <value>Var god välj en rapporttyp. </value>
+  </data>
+  <data name="PleaseChooseSkillSet" xml:space="preserve">
+    <value>Var god välj kompetens.</value>
+  </data>
+  <data name="ExportToBU" xml:space="preserve">
+    <value>Exportera till affärsenhet</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Exportera till fil </value>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>Filexporten är klar</value>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>Välj ett datum och ett scenario</value>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>Välj fildestination</value>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>Välj en kompetens</value>
+  </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>CSV-filer (*.csv)|*.csv</value>
+  </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>Exportera bemanning</value>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>Exportera workload</value>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>Exportera workload och bemanning</value>
+  </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>Samma sluttid</value>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>Samma skiftkategori</value>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>Samma starttid</value>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>Använd begränsningar</value>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>Graf (loc)</value>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Intervall (loc)</value>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Tabell (loc)</value>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Typ (loc)</value>
+  </data>
 </root>

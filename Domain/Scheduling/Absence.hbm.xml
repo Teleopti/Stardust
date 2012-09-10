@@ -83,6 +83,7 @@
 		<property name="IsDeleted"
 			  type="boolean"
 			  not-null="true"/>
+    
 		<filter name="businessUnitFilter"
 			condition=":businessUnitParameter = BusinessUnit" />
 		<filter name="deletedFlagFilter"

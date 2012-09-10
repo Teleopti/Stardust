@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public IEnumerable<SectionNavigationItem> NavigationItems { get; set; }
 		public string CustomerName { get; set; }
 		public bool ShowChangePassword { get; set; }
+		public bool ShowAsm { get; set; }
 	}
 
 	public class NavigationItem

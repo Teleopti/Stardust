@@ -1,16 +1,18 @@
-﻿@using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
+﻿@using System.Globalization
+@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
 @using Teleopti.Ccc.Web.Core
 @model AsmViewModel
 @{
 	const double pixelsPerHour = 50;
 	const double timeLineHourWidth = (pixelsPerHour) - 1; //"1" due to border size
-	double canvasStartMsSince1970 = Model.StartDate.SubtractJavascriptBaseDate().TotalMilliseconds;
-	const int timeLineMarkerWidth = 150;
+	var canvasStartMsSince1970 = Model.StartDateTime.SubtractJavascriptBaseDate().TotalMilliseconds;
+	const int timeLineMarkerWidth = 100;
 }
 <script type="text/javascript">
 	$(function () {
-		var serverMsSince1970 = new Date(@(Model.StartDate.Year), @(Model.StartDate.Month - 1), @(Model.StartDate.Day)).getTime();
-		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, @(pixelsPerHour));
+		var serverMsSince1970 = new Date(@(Model.StartDateTime.Year), @(Model.StartDateTime.Month - 1), @(Model.StartDateTime.Day), @(Model.StartDateTime.Hour)).getTime();
+		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, @(pixelsPerHour), @(Html.Raw(Json.Encode(Model.Hours))));
 	});
 </script>
 <div class="asm-outer-canvas ui-corner-all">
@@ -20,14 +22,13 @@
 		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px;">
 			@foreach (var layer in Model.Layers)
 	{
-				<span class="asm-layer ui-corner-all" style="left:@((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth)px;
-																						padding-left:@((layer.EndJavascriptBaseDate - layer.StartJavascriptBaseDate) * pixelsPerHour / 60 / 60 / 1000)px;
+				<span class="asm-layer ui-corner-all" style="left:@(((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth).ToString(CultureInfo.InvariantCulture) + "px");
+																						padding-left:@((layer.LengthInMinutes * pixelsPerHour / 60).ToString(CultureInfo.InvariantCulture) + "px");
 																						background-color: @(layer.Color)"
-						data-asm-start-milliseconds="@(layer.StartJavascriptBaseDate)"
 						data-asm-start-time="@(layer.StartTimeText)"
-						data-asm-end-milliseconds="@(layer.EndJavascriptBaseDate)"
 						data-asm-end-time="@(layer.EndTimeText)"
-						data-asm-activity="@(layer.Payload)"></span>
+						data-asm-activity="@(layer.Payload)"
+						title="@(string.Format("{0}{1}{2} {3}",layer.StartTimeText,"-",layer.EndTimeText,layer.Payload))"></span>
 	}
 			<!-- ko foreach: timeLines -->
 			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
@@ -38,22 +39,15 @@
 	</div>
 	<div class="asm-current-info">
 		<div class="asm-info-canvas ui-corner-all">
-			<span style="width: 50px;">
-				<div id="asm-info-current-starttime">
-				</div>
-				<div id="asm-info-next-starttime">
-				</div>
-			</span><span style="width: 150px;">
-				<div id="asm-info-current-activity">
-				</div>
-				<div id="asm-info-next-activity">
-				</div>
-			</span><span>
-				<div id="asm-info-current-endtime">
-				</div>
-				<div id="asm-info-next-endtime">
-				</div>
-			</span>
+			<div>@(Resources.Activities)</div>
+			<table id="asm-current-info-table">
+				<tbody data-bind="foreach: activityInfo">
+					<tr data-bind="css: { 'asm-info-current-activity' : active }">
+						<td class="asm-info-time-column" data-bind="text: time"></td>
+						<td data-bind="text: payload"></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div class="clearboth" />

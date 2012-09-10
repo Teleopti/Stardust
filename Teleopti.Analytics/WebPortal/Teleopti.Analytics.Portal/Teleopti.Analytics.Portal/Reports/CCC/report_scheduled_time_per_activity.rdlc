@@ -1180,6 +1180,11 @@
                   <GroupExpression>=Fields!activity_name.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Fields!activity_name.Value</Value>
+                </SortExpression>
+              </SortExpressions>
               <TablixHeader>
                 <Size>0.68898in</Size>
                 <CellContents>
@@ -1219,6 +1224,7 @@
                       <PaddingBottom>2pt</PaddingBottom>
                     </Style>
                   </Textbox>
+                  <rd:Selected>true</rd:Selected>
                 </CellContents>
               </TablixHeader>
               <DataElementOutput>Output</DataElementOutput>
@@ -1278,6 +1284,11 @@
                   <GroupExpression>=Fields!date.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Fields!date.Value</Value>
+                </SortExpression>
+              </SortExpressions>
               <TablixHeader>
                 <Size>0.68898in</Size>
                 <CellContents>

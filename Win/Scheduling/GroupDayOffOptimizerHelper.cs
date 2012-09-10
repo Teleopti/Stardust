@@ -147,10 +147,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
 			   OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
+
 			IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
 			                                                             groupPersonConsistentChecker,
 			                                                             workShiftBackToLegalStateService,
-			                                                             resourceOptimizationHelper);
+			                                                             resourceOptimizationHelper, 
+																		 mainShiftOptimizeActivitySpecificationSetter);
 			var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
 			IGroupIntradayOptimizerExecuter groupIntradayOptimizerExecuter = new GroupIntradayOptimizerExecuter(rollbackService,
 			                                                deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
@@ -300,8 +302,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
 			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
 			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper, groupOptimizerFindMatrixesForGroup);
-            
-            //another service too
+
+			service.ReportProgress += resourceOptimizerPersonOptimized;
             service.Execute(optimizerContainers, optimizerPreferences.Extra.KeepSameDaysOffInTeam);
             service.ReportProgress -= resourceOptimizerPersonOptimized;
         }
@@ -382,7 +384,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         	IGroupPersonConsistentChecker groupPersonConsistentChecker =
         		_container.Resolve<IGroupPersonConsistentChecker>();
         	IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-			IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator, groupPersonConsistentChecker, workShiftBackToLegalStateService, resourceOptimizationHelper);
+			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+        	IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
+        	                                                             groupPersonConsistentChecker,
+        	                                                             workShiftBackToLegalStateService,
+        	                                                             resourceOptimizationHelper,
+        	                                                             mainShiftOptimizeActivitySpecificationSetter);
 			var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
         	var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
         	IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
@@ -402,7 +409,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
-        	var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,

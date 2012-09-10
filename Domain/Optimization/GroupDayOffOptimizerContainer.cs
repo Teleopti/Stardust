@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var dayOffOptimizer =
                 _groupDayOffOptimizerCreator.CreateDayOffOptimizer(_converter, decisionMaker, _dayOffDecisionMakerExecuter , daysOffPreferences);
 
-            bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes, schedulingOptions);
+			bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes, schedulingOptions, _optimizationPreferences);
             return dayOffOptimizerResult;
         }
 

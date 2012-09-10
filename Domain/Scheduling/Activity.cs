@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
         [NonSerialized]
         private readonly DeletedDescription _deletedDescription = new DeletedDescription();
 
+        private bool _allowOverwrite;
+
         #region Constructors
 
         /// <summary>
@@ -90,6 +92,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			get { return Description.Name; }
 		}
+
+        public virtual bool AllowOverwrite
+        {
+            get { return _allowOverwrite; }
+            set { _allowOverwrite = value; }
+        }
 
 
 		/// <summary>

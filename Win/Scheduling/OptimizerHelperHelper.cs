@@ -247,7 +247,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             return validatorListCreator.BuildActiveValidatorList();
         }
 
-        public static IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public static IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
             ILockableBitArray scheduleMatrixArray,
             IDaysOffPreferences daysOffPreferences,
             IOptimizationPreferences optimizerPreferences)
@@ -265,7 +266,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             IDayOffDecisionMaker moveWeekEndDecisionMaker = new MoveWeekendDayOffDecisionMaker(legalStateValidatorsToKeepWeekEnds, officialWeekendDays, true, logWriter);
             IDayOffDecisionMaker moveTwoWeekEndDaysDecisionMaker = new MoveWeekendDayOffDecisionMaker(legalStateValidators, officialWeekendDays, false, logWriter);
 
-            return new List<IDayOffDecisionMaker> { moveDayOffDecisionMaker, moveTwoWeekEndDaysDecisionMaker, moveWeekEndDecisionMaker };
+        	bool is2222 = false;
+			if(optimizerPreferences.DaysOff.UseDaysOffPerWeek && optimizerPreferences.DaysOff.DaysOffPerWeekValue.Minimum == 2 && optimizerPreferences.DaysOff.DaysOffPerWeekValue.Maximum == 2)
+			{
+				if(optimizerPreferences.DaysOff.UseConsecutiveDaysOff && optimizerPreferences.DaysOff.ConsecutiveDaysOffValue.Minimum == 2 && optimizerPreferences.DaysOff.ConsecutiveDaysOffValue.Maximum == 2)
+				{
+					if (optimizerPreferences.DaysOff.UseConsecutiveWorkdays)
+						is2222 = true;
+				}
+			}
+			IDayOffDecisionMaker teDataDayOffDecisionMaker = new TeDataDayOffDecisionMaker(legalStateValidators, is2222, logWriter);
+
+			return new List<IDayOffDecisionMaker> { moveDayOffDecisionMaker, moveTwoWeekEndDaysDecisionMaker, moveWeekEndDecisionMaker, teDataDayOffDecisionMaker };
         }
 
         public static void SetConsiderShortBreaks(ClipHandler clipHandler, DateOnlyPeriod period, IReschedulingPreferences options, IComponentContext container)
