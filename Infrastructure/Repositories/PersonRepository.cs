@@ -266,14 +266,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateOnlyPeriod period)
         {
-            ICollection<IPerson> retList = Session.CreateCriteria(typeof(Person), "per")
-                      .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-                      .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
-                      .Add(Subqueries.Exists(findActivePeriod(team, period)))
-                      .AddOrder(Order.Asc("Name.LastName"))
-                      .AddOrder(Order.Asc("Name.FirstName"))
-                      .SetResultTransformer(Transformers.DistinctRootEntity)
-                      .List<IPerson>();
+        	ICollection<IPerson> retList = Session.CreateCriteria(typeof (Person), "per")
+        		.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+        		.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+        		.Add(Restrictions.Or(
+        			Restrictions.IsNull("TerminalDate"),
+        			Restrictions.Ge("TerminalDate", period.StartDate)
+        		     	))
+        		.Add(Subqueries.Exists(findActivePeriod(team, period)))
+        		.AddOrder(Order.Asc("Name.LastName"))
+        		.AddOrder(Order.Asc("Name.FirstName"))
+        		.SetResultTransformer(Transformers.DistinctRootEntity)
+        		.List<IPerson>();
 
             return retList;
 
@@ -285,6 +289,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					  .SetFetchMode("OptionalColumnValueCollection",FetchMode.Join)
 					  .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
 					  .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+					  .Add(Restrictions.Or(
+						 Restrictions.IsNull("TerminalDate"),
+						 Restrictions.Ge("TerminalDate", period.StartDate)
+						 ))
 					  .Add(Subqueries.Exists(findActivePeriod(team, period)))
 					  .AddOrder(Order.Asc("Name.LastName"))
 					  .AddOrder(Order.Asc("Name.FirstName"))
