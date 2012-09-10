@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -231,6 +232,30 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.RawDateTo.Should().Be.EqualTo(endInCorrectTimezone.ToShortDateString());
 			result.RawTimeFrom.Should().Be.EqualTo(startInCorrectTimezone.ToShortTimeString());
 			result.RawTimeTo.Should().Be.EqualTo(endInCorrectTimezone.ToShortTimeString());
+		}
+
+		[Test]
+		public void ShouldMapDenyReason()
+		{
+			var request = new PersonRequest(new Person(), new AbsenceRequest(new Absence(),  new DateTimePeriod()));
+			request.Deny(null, "RequestDenyReasonNoWorkflow", new PersonRequestAuthorizationCheckerForTest());
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+
+			result.DenyReason.Should().Be.EqualTo(UserTexts.Resources.RequestDenyReasonNoWorkflow);
+		}
+
+
+		[Test]
+		public void ShouldMapAlreadyTranslatedDenyReason()
+		{
+			var denyReason = "You must work at 2011-09-23.";
+			var request = new PersonRequest(new Person(), new AbsenceRequest(new Absence(), new DateTimePeriod()));
+			request.Deny(null, denyReason, new PersonRequestAuthorizationCheckerForTest());
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+
+			result.DenyReason.Should().Be.EqualTo(denyReason);
 		}
 	}
 }

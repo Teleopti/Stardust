@@ -26,26 +26,59 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			CreateMap<IPersonRequest, RequestViewModel>()
 				.ForMember(d => d.Link, o => o.MapFrom(s => s))
 				.ForMember(d => d.Subject, o => o.MapFrom(s => s.GetSubject(new NoFormatting())))
-				.ForMember(d => d.Dates, o => o.MapFrom(s => s.Request.Period.ToShortDateTimeString(_userTimeZone.Invoke().TimeZone())))
+				.ForMember(d => d.Dates,
+				           o => o.MapFrom(s => s.Request.Period.ToShortDateTimeString(_userTimeZone.Invoke().TimeZone())))
 				.ForMember(d => d.Status, o => o.MapFrom(s => s.StatusText))
 				.ForMember(d => d.Text, o => o.MapFrom(s => s.GetMessage(new NoFormatting())))
 				.ForMember(d => d.Type, o => o.MapFrom(s => s.Request.RequestTypeDescription))
 				.ForMember(d => d.TypeEnum, o => o.MapFrom(s => s.Request.RequestType))
 				.ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn.HasValue
-																					? _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.UpdatedOn.Value).ToShortDateTimeString()
-																					: null))
-				.ForMember(d => d.RawDateFrom, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime).ToShortDateString()))
-				.ForMember(d => d.RawDateTo, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime).ToShortDateString()))
-				.ForMember(d => d.RawTimeFrom, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime).ToShortTimeString()))
-				.ForMember(d => d.RawTimeTo, o => o.MapFrom(s => _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime).ToShortTimeString()))
+				                                                 	? _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(
+				                                                 		s.UpdatedOn.Value).ToShortDateTimeString()
+				                                                 	: null))
+				.ForMember(d => d.RawDateFrom,
+				           o =>
+				           o.MapFrom(
+				           	s =>
+				           	_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime).ToShortDateString()))
+				.ForMember(d => d.RawDateTo,
+				           o =>
+				           o.MapFrom(
+				           	s =>
+				           	_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime).ToShortDateString()))
+				.ForMember(d => d.RawTimeFrom,
+				           o =>
+				           o.MapFrom(
+				           	s =>
+				           	_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime).ToShortTimeString()))
+				.ForMember(d => d.RawTimeTo,
+				           o =>
+				           o.MapFrom(
+				           	s =>
+				           	_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime).ToShortTimeString()))
 				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription.Name))
 				.ForMember(d => d.IsFullDay, o => o.MapFrom(s =>
 				                                            	{
-																	var start = _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime);
-																	var end = _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime);
-																	var allDayEndDateTime = start.AddDays(1).AddMinutes(-1);
-																	return start.TimeOfDay == TimeSpan.Zero && end.TimeOfDay == allDayEndDateTime.TimeOfDay;
+				                                            		var start =
+				                                            			_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(
+				                                            				s.Request.Period.StartDateTime);
+				                                            		var end =
+				                                            			_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(
+				                                            				s.Request.Period.EndDateTime);
+				                                            		var allDayEndDateTime = start.AddDays(1).AddMinutes(-1);
+				                                            		return start.TimeOfDay == TimeSpan.Zero &&
+				                                            		       end.TimeOfDay == allDayEndDateTime.TimeOfDay;
 				                                            	}))
+				.ForMember(d => d.DenyReason, o => o.MapFrom(s =>
+				                                             	{
+				                                             		UserTexts.Resources.ResourceManager.IgnoreCase = true;
+				                                             		var result = UserTexts.Resources.ResourceManager.GetString(s.DenyReason);
+																	if(string.IsNullOrEmpty(result))
+																	{
+																		result = s.DenyReason;
+																	}
+				                                             		return result;
+				                                             	}))
 				;
 
 			CreateMap<IPersonRequest, Link>()

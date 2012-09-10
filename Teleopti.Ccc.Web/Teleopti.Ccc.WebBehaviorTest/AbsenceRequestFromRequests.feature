@@ -147,3 +147,11 @@ Scenario: Can not delete denied absence request
 	And I have a denied absence request
 	When I am viewing requests
 	Then I should not see a delete button
+	
+Scenario: Can see why absence request was denied
+            Given I am an agent
+            And I have a denied absence request beacuse of missing workflow control set
+            And I am viewing requests
+            When I click on the request
+            Then I should see the absence request's details form
+            And I should see that my request was denied with reason 'Din förfrågan kunde inte behandlas. Du har inget arbetsflöde uppsatt.'
