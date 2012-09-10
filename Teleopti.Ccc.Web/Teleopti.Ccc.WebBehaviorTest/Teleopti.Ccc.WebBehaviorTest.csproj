@@ -458,10 +458,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Asm.feature.cs</LastGenOutput>
     </None>
-    <None Include="Asm.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Asm.feature.cs</LastGenOutput>
-    </None>
     <None Include="MobileReports.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MobileReports.feature.cs</LastGenOutput>
