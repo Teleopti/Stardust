@@ -281,10 +281,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Upcoming activity starttime shoould be displayed")]
-        public virtual void UpcomingActivityStarttimeShoouldBeDisplayed()
+        [NUnit.Framework.DescriptionAttribute("Upcoming activity starttime should be displayed")]
+        public virtual void UpcomingActivityStarttimeShouldBeDisplayed()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime shoould be displayed", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime should be displayed", ((string[])(null)));
 #line 76
 this.ScenarioSetup(scenarioInfo);
 #line 8
@@ -292,13 +292,38 @@ this.FeatureBackground();
 #line 77
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 78
- testRunner.And("Current time is \'2030-01-01 07:00\'");
+ testRunner.And("Current time is \'2029-12-31 12:01\'");
 #line 79
  testRunner.When("I view my regional settings");
 #line 80
  testRunner.And("I click ASM link");
 #line 81
  testRunner.Then("I should see last activity starttime as \'12:00\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Upcoming activity starttime starting after more than 24 hours should be indicated" +
+            " as next day")]
+        public virtual void UpcomingActivityStarttimeStartingAfterMoreThan24HoursShouldBeIndicatedAsNextDay()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime starting after more than 24 hours should be indicated" +
+                    " as next day", ((string[])(null)));
+#line 83
+this.ScenarioSetup(scenarioInfo);
+#line 8
+this.FeatureBackground();
+#line 84
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 85
+ testRunner.And("Current time is \'2029-12-31 12:00\'");
+#line 86
+ testRunner.When("I view my regional settings");
+#line 87
+ testRunner.And("I click ASM link");
+#line 88
+ testRunner.Then("I should see last activity starttime as \'12:00+1\'");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -9,8 +9,11 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Asm = (function () {
+	var pxPerHour;
+
 	function _start(serverMsSince1970, pixelsPerHour, hours) {
 		var refreshSeconds = 1;
+		pxPerHour = pixelsPerHour;
 		var observableInfo = ko.observable();
 
 		ko.applyBindings({
@@ -18,23 +21,24 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			activityInfo: observableInfo
 		});
 
-		_refresh(serverMsSince1970, pixelsPerHour, observableInfo);
+		_refresh(serverMsSince1970, observableInfo);
 		$('.asm-outer-canvas').show();
 
 		setInterval(function () {
-			_refresh(serverMsSince1970, pixelsPerHour, observableInfo);
+			_refresh(serverMsSince1970, observableInfo);
 		}, refreshSeconds * 1000);
 	}
 
-	function _refresh(serverMsSince1970, pixelsPerHour, observableInfo) {
-		_moveTimeLineToNow(serverMsSince1970, pixelsPerHour);
+	function _refresh(serverMsSince1970, observableInfo) {
+		_moveTimeLineToNow(serverMsSince1970);
 		_updateInfoCanvas(observableInfo);
 	}
 
 	function _updateInfoCanvas(observableInfo) {
 		var model = new Array();
+		var timeLineFixedPos = parseFloat($('.asm-time-marker').css('width'));
+		var timelinePosition = timeLineFixedPos - parseFloat($(".asm-sliding-schedules").css('left'));
 
-		var timelinePosition = parseFloat($('.asm-time-marker').css('width')) - parseFloat($(".asm-sliding-schedules").css('left'));
 		$('.asm-layer')
 			.each(function () {
 				var startPos = parseFloat($(this).css('left'));
@@ -44,18 +48,24 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					if (startPos <= timelinePosition) {
 						active = true;
 					}
-					model.push({ 'payload': $(this).data('asm-activity'), 'time': $(this).data('asm-start-time'), 'active': active });
+					var startText = $(this).data('asm-start-time');
+
+					if (startPos - timelinePosition  >= 24 * pxPerHour) {
+						startText += '+1';
+					}
+
+					model.push({ 'payload': $(this).data('asm-activity'), 'time': startText, 'active': active });
 				}
 			});
 		observableInfo(model);
 	}
 
-	function _moveTimeLineToNow(serverMsSince1970, pixelsPerHour) {
+	function _moveTimeLineToNow(serverMsSince1970) {
 		var slidingSchedules = $('.asm-sliding-schedules');
 		var clientMsSince1970 = new Date().getTeleoptiTime();
 		var msSinceStart = clientMsSince1970 - serverMsSince1970;
 		var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
-		var startPixel = -(pixelsPerHour * hoursSinceStart);
+		var startPixel = -(pxPerHour * hoursSinceStart);
 		slidingSchedules.css('left', (startPixel) + 'px');
 	}
 
