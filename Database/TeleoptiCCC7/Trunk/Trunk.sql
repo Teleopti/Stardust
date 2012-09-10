@@ -96,12 +96,3 @@ AND fix.Batch = @Batch
 IF (SELECT COUNT(1) FROM dbo.MainShiftActivityLayerFix306 WHERE Batch=@Batch)> 0
 PRINT 'Shifts have been updated'
 GO
--------------------
---Add UNIQUE INDEX to prevetn this from happing again
--------------------
-IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[MainShiftActivityLayer]') AND name = N'UIX_MainShiftActivityLayer_Parent_OrderIndex')
-CREATE UNIQUE NONCLUSTERED INDEX [UIX_MainShiftActivityLayer_Parent_OrderIndex] ON [dbo].[MainShiftActivityLayer] 
-(
-	[Parent] ASC,
-	[OrderIndex] ASC
-)
