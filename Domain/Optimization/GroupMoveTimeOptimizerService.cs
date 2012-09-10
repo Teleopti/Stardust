@@ -109,10 +109,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 {
                     daysToSave.Add((IScheduleDay)scheduleDay.Clone());
                     daysToDelete.Add(scheduleDay);
-                    if (lockDay)
-                        groupMoveTimeOptimizer.LockDate(selectedDate);
                 }
-                
+                if (lockDay)
+                    groupMoveTimeOptimizer.LockDate(selectedDate);
             }
         }
         

@@ -8,22 +8,29 @@ namespace Teleopti.Ccc.DayOffPlanning
     {
         public IList<DateOnly> Execute(IScheduleMatrixLockableBitArrayConverter matrixConverter, IScheduleResultDataExtractor dataExtractor)
         {
+            return makeDecision(matrixConverter.Convert(false, false), matrixConverter.SourceMatrix, dataExtractor);
+        }
 
+        public IList<DateOnly> Execute(ILockableBitArray lockableBitArray, IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor)
+        {
+            return makeDecision(lockableBitArray, matrix, dataExtractor);
+        }
+
+        private static IList<DateOnly> makeDecision(ILockableBitArray lockableBitArray, IScheduleMatrixPro matrix,
+                                          IScheduleResultDataExtractor dataExtractor)
+        {
             IList<DateOnly> result = new List<DateOnly>(2);
+            var values = dataExtractor.Values();
 
-            IScheduleMatrixPro matrix = matrixConverter.SourceMatrix;
-            ILockableBitArray bitArray = matrixConverter.Convert(false, false);
-            IList<double?> values = dataExtractor.Values();
-
-            IList<int> indexesToMoveFrom = createIndexListSortByValueAscending(bitArray, values);
-            IList<int> indexesToMoveTo = createIndexListSortByValueDescending(bitArray, values);
+            var indexesToMoveFrom = createIndexListSortByValueAscending(lockableBitArray, values);
+            var indexesToMoveTo = createIndexListSortByValueDescending(lockableBitArray, values);
             foreach (int currentMoveFromIndex in indexesToMoveFrom)
             {
                 foreach (int currentMoveToIndex in indexesToMoveTo)
                 {
                     if (currentMoveToIndex == currentMoveFromIndex) continue;
-                    if (values[currentMoveToIndex - bitArray.PeriodArea.Minimum] <
-                        values[currentMoveFromIndex - bitArray.PeriodArea.Minimum])
+                    if (values[currentMoveToIndex - lockableBitArray.PeriodArea.Minimum] <
+                        values[currentMoveFromIndex - lockableBitArray.PeriodArea.Minimum])
                         break;
                     if (areFoundDaysValid(currentMoveFromIndex, currentMoveToIndex, matrix))
                     {
@@ -35,7 +42,6 @@ namespace Teleopti.Ccc.DayOffPlanning
                     }
                 }
             }
-
             return result;
         }
 

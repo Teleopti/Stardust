@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mock.Record())
             {
                 Expect.Call(_scheduleMatrixLockableBitArrayConverter.Convert(false, false)).Return(_lockableBitArray);
-                Expect.Call(_moveTimeDecisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor)).IgnoreArguments().Return(new List<DateOnly>(2));
+                Expect.Call(_scheduleMatrixLockableBitArrayConverter.SourceMatrix).Return(_matrix);
+                Expect.Call(_moveTimeDecisionMaker.Execute(_lockableBitArray, _matrix, _dataExtractor)).IgnoreArguments().Return(new List<DateOnly>(2));
             }
 
             IList<DateOnly> result;
@@ -83,7 +84,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mock.Record())
             {
                 Expect.Call(_scheduleMatrixLockableBitArrayConverter.Convert(false, false)).Return(_lockableBitArray);
-                Expect.Call(_moveTimeDecisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor)).Return(moveDates);
+                Expect.Call(_scheduleMatrixLockableBitArrayConverter.SourceMatrix).Return(_matrix);
+                Expect.Call(_moveTimeDecisionMaker.Execute(_lockableBitArray, _matrix, _dataExtractor)).Return(moveDates);
             }
 
             IList<DateOnly> result;

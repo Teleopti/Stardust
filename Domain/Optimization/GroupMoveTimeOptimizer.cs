@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 _lockableBitArray = _scheduleMatrixLockableBitArrayConverter.Convert(false, false);
             }
-            return _moveTimeDecisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor);
+            return _moveTimeDecisionMaker.Execute(_lockableBitArray, Matrix, _dataExtractor);
         }
 
         public void LockDate(DateOnly dateOnly)
