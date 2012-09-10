@@ -81,12 +81,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				                		               select l.Period.Value)
 				                			.ToArray();
 
-				                		var minLocal = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day);
-				                		var maxLocal = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day);
+				                		var minLocal = s.Date.Date;
+				                		var maxLocal = s.Date.Date;
 				                		minLocal = minLocal.Add(TeamScheduleDomainData.DefaultDisplayTime.StartTime);
 				                		maxLocal = maxLocal.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.EndTime);
-				                		var min = _userTimeZone().TimeZone().ConvertTimeToUtc(minLocal);
-				                		var max = _userTimeZone().TimeZone().ConvertTimeToUtc(maxLocal);
+
+				                		var timeZone = _userTimeZone().TimeZone();
+				                		var min = timeZone.ConvertTimeToUtc(minLocal);
+				                		var max = timeZone.ConvertTimeToUtc(maxLocal);
 
 				                		if (periods.Any())
 				                		{
