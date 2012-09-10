@@ -6852,6 +6852,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			TabPageAdv tab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
 
 			tab.Controls.Add(control);
+			tab.BackColor = control.BackColor;
 
 			//position _grid
 			control.Dock = DockStyle.Left;

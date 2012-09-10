@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public static int PreferredGridWidth
 		{
-			get { return RowHeaderWidth * 2; }
+			get { return RowHeaderWidth * 2 + System.Windows.Forms.SystemInformation.VerticalScrollBarWidth; }
 		}
 
         private void Model_ClipboardCanCopy(object sender, GridCutPasteEventArgs e)
