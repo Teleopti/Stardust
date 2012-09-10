@@ -7,8 +7,9 @@ using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
-using Teleopti.Ccc.Sdk.ServiceBus.SMS;
+using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -41,8 +42,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
 			builder.RegisterType<SmsLinkChecker>().As<ISmsLinkChecker>();
-			builder.RegisterType<SmsSenderFactory>().As<ISmsSenderFactory>();
-			builder.RegisterType<SmsConfigReader>().As<ISmsConfigReader>();
+			builder.RegisterType<NotificationSenderFactory>().As<INotificationSenderFactory>();
+			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
+			builder.RegisterType<ScheduleDayReadModelCreator>().As<IScheduleDayReadModelCreator>();
+			builder.RegisterType<ScheduleDayReadModelsCreator>().As<IScheduleDayReadModelsCreator>();
+			builder.RegisterType<ScheduleDayReadModelComparer>().As<IScheduleDayReadModelComparer>();
             //builder.RegisterType<UpdatePersonFinderReadModel>().As<IUpdatePersonFinderReadModel>();
 			//builder.RegisterType<UpdateGroupingReadModel>().As<IUpdateGroupingReadModel>();
 		}

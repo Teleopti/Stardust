@@ -98,14 +98,6 @@ AND fix.Batch = @Batch
 -------------------
 IF (SELECT COUNT(1) FROM dbo.MainShiftActivityLayerFix306 WHERE Batch=@Batch)> 0
 PRINT 'Shifts have been updated'
-
-select * from dbo.MainShiftActivityLayerFix306 
-CREATE UNIQUE NONCLUSTERED INDEX [UIX_MainShiftActivityLayer_Parent_OrderIndex]
-ON [dbo].[MainShiftActivityLayer] 
-(
-	[Parent] ASC,
-	[OrderIndex] ASC
-)
 GO
 -------------------
 --Add UNIQUE INDEX to prevetn this from happing again
@@ -116,3 +108,41 @@ CREATE UNIQUE NONCLUSTERED INDEX [UIX_MainShiftActivityLayer_Parent_OrderIndex] 
 	[Parent] ASC,
 	[OrderIndex] ASC
 )
+GO
+----------------  
+--Name: Ola
+--Date: 2012-08-31
+--Desc: Add new ReadModel
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[ScheduleDay]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [ReadModel].[ScheduleDay](
+		[Id] [uniqueidentifier] NOT NULL,
+		[PersonId] [uniqueidentifier] NOT NULL,
+		[BelongsToDate] [smalldatetime] NOT NULL,
+		[StartDateTime] [datetime] NOT NULL,
+		[EndDateTime] [datetime] NOT NULL,
+		[Workday] [bit] NOT NULL,
+		[WorkTime] [bigint] NOT NULL,
+		[ContractTime] [bigint] NOT NULL,
+		[Label] [nvarchar](50) NOT NULL,
+		[DisplayColor] [int] NOT NULL,
+		[InsertedOn] [datetime] NOT NULL
+	)
+	
+	
+	ALTER TABLE ReadModel.[ScheduleDay] ADD CONSTRAINT
+		PK_ScheduleDayReadOnly PRIMARY KEY NONCLUSTERED 
+		(
+		Id
+		)
+
+	CREATE CLUSTERED INDEX [CIX_ScheduleDayReadOnly] ON [ReadModel].[ScheduleDay] 
+	(
+		[PersonId] ASC,
+		[BelongsToDate] ASC	
+	)
+
+	ALTER TABLE [ReadModel].[ScheduleDay] ADD  CONSTRAINT [DF_ScheduleDayReadOnly_Id]  DEFAULT (newid()) FOR [Id]
+END
+GO

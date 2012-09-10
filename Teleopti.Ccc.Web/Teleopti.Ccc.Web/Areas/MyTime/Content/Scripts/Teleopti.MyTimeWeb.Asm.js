@@ -69,8 +69,11 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		slidingSchedules.css('left', (startPixel) + 'px');
 	}
 
+
+
 	return {
 		Init: function (serverMsSince1970, pixelsPerHour, hours) {
+			$('body').css('overflow', 'hidden');
 			_start(serverMsSince1970, pixelsPerHour, hours);
 		}
 	};

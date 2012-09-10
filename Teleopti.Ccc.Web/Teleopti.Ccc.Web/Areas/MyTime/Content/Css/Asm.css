@@ -78,11 +78,6 @@
 	border-right: 1px solid black;
 }
 
-body
-{
-	overflow: hidden;
-}
-
 .asm-info-canvas table {
 	width: 100%; 
 	table-layout: fixed;
