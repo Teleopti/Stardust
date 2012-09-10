@@ -81,6 +81,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="AsmSummerToWinter.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AsmSummerToWinter.feature</DependentUpon>
+    </Compile>
     <Compile Include="AsmWinterToSummer.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -453,6 +458,10 @@
     <None Include="Asm.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Asm.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AsmSummerToWinter.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AsmSummerToWinter.feature.cs</LastGenOutput>
     </None>
     <None Include="AsmWinterToSummer.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
