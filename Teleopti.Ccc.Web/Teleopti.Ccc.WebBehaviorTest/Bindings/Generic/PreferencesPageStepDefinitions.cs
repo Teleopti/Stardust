@@ -104,9 +104,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferencePanelError.Text, Is.StringContaining(string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
 		}
 
-
-
-
 		[When(@"I input extended preference fields with")]
 		public void WhenIInputExtendedPreferenceFieldsWith(Table table)
 		{
@@ -180,6 +177,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			}
 
 			Thread.Sleep(500);
+		}
+
+		[Then(@"I should not be able to edit time fields")]
+		public void ThenIShouldNotBeAbleToEditTimeFields()
+		{
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMinimum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.Enabled, Is.False);
+
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Button.Enabled, Is.False,"");
+			
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Enabled, Is.False);
 		}
 
 		[Then(@"I should see extended preference with")]

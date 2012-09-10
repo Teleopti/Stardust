@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public string Value { get; set; }
 		public string Text { get; set; }
 		public string Color { get; set; }
+		public string Type { get; set; }
 	}
 
 	public class OptionSplit : IOption
@@ -75,6 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public string Value { get { return "-"; } }
 		public string Text { get { return "-"; } }
 		public string Color { get { return null; } }
+		public string Type { get { return "-"; } }
 	}
 
 	public interface IOption
@@ -82,6 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		string Value { get; }
 		string Text { get; }
 		string Color { get; }
+		string Type { get; } 
 	}
 
 }

@@ -157,30 +157,42 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 
 		private IEnumerable<IOption> PreferenceOptions()
 		{
-			var shiftCategories = (from s in _preferenceOptionsProvider.RetrieveShiftCategoryOptions().MakeSureNotNull()
-			                       select new Option
-			                              	{
-			                              		Value = s.Id.ToString(),
-			                              		Text = s.Description.Name,
-												Color = s.DisplayColor.ToHtml()
-			                              	})
-				.ToArray();
-			var dayOffs = (from s in _preferenceOptionsProvider.RetrieveDayOffOptions().MakeSureNotNull()
-						   select new Option
-			                      	{
-			                      		Value = s.Id.ToString(),
-			                      		Text = s.Description.Name,
-										Color = s.DisplayColor.ToHtml()
-			                      	})
-				.ToArray();
-			var absences = (from s in _preferenceOptionsProvider.RetrieveAbsenceOptions().MakeSureNotNull()
-							select new Option
-			                       	{
-			                       		Value = s.Id.ToString(),
-			                       		Text = s.Description.Name,
-										Color = s.DisplayColor.ToHtml()
-			                       	})
-				.ToArray();
+			var shiftCategories =
+				_preferenceOptionsProvider.RetrieveShiftCategoryOptions().MakeSureNotNull().Select(s => new Option
+				                                                                                        	{
+				                                                                                        		Value = s.Id.ToString(),
+				                                                                                        		Text = s.Description.Name,
+				                                                                                        		Color =
+				                                                                                        			s.DisplayColor.ToHtml(),
+				                                                                                        		Type = s.GetType().Name
+				                                                                                        	}).ToArray();
+
+			var dayOffs = _preferenceOptionsProvider.RetrieveDayOffOptions().MakeSureNotNull().Select(s => new Option
+			                                                                                               	{
+			                                                                                               		Value =
+			                                                                                               			s.Id.ToString(),
+			                                                                                               		Text =
+			                                                                                               			s.Description.Name,
+			                                                                                               		Color =
+			                                                                                               			s.DisplayColor.
+			                                                                                               			ToHtml(),
+			                                                                                               		Type =
+			                                                                                               			s.GetType().Name
+			                                                                                               	}).ToArray();
+
+			var absences = _preferenceOptionsProvider.RetrieveAbsenceOptions().MakeSureNotNull().Select(s => new Option
+			                                                                                                 	{
+			                                                                                                 		Value =
+			                                                                                                 			s.Id.ToString(),
+			                                                                                                 		Text =
+			                                                                                                 			s.Description.
+			                                                                                                 			Name,
+			                                                                                                 		Color =
+			                                                                                                 			s.DisplayColor.
+			                                                                                                 			ToHtml(),
+			                                                                                                 		Type =
+			                                                                                                 			s.GetType().Name
+			                                                                                                 	}).ToArray();
 
 			var options = new List<IOption>();
 			options.AddRange(shiftCategories);
