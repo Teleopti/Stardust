@@ -109,7 +109,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			var selected = $('#Preference-extended-preference').find('option:selected');
 			var preferenceType = selected.data('preference-type');
 
-			_toggleTimeAndActivityInputFields(preferenceType != 'Absence');
+			_toggleTimeAndActivityInputFields(preferenceType != 'Absence' && preferenceType != 'DayOffTemplate');
 		});
 
 		addExtendedTooltip = $('<div/>')

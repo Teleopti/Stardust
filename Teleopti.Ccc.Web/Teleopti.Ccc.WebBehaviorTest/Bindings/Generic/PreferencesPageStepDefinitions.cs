@@ -272,10 +272,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			public string ActivityTimeMinimum { get; set; }
 			public string ActivityTimeMaximum { get; set; }
 		}
-
-
 	}
-
-
-
 }
