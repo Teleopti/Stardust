@@ -278,12 +278,9 @@ Scenario: Disable all time fields, when day off is selected
     And I am viewing preferences
     When I click the add extended preference button
     And I input extended preference fields with
-    | Field    | Value |
-    | Activity | Lunch |
-    And I input extended preference fields with
     | Field      | Value  |
     | Preference | Dayoff |
-    Then I should not be able to edit activity time fields
+    Then I should not be able to edit time fields
 
 Scenario: Reset activity field when day off is selected
     Given I have the role 'Access to extended preferences'

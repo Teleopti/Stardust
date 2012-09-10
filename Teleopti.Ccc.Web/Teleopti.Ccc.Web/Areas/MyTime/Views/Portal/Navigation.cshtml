@@ -93,18 +93,18 @@
 							<option value="-">-</option>
 							@foreach (var option in preferenceNavigation.PreferenceOptions)
 							{
-								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
+								<option value="@option.Value" data-color="@option.Color" data-preference-type="@option.Type">@option.Text</option>
 							}
 						</select>
 
-						<select id="Preference-extended-start-time-minimum" class="time-input" data-bind="combobox: EarliestStartTime">
+						<select id="Preference-extended-start-time-minimum" class="time-input preference-field" data-bind="combobox: EarliestStartTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in times)
 							{
 								<option value="@timeSpan.Value">@timeSpan.Text</option>
 							}
 						</select>
-						<select id="Preference-extended-start-time-maximum" class="time-input" data-bind="combobox: LatestStartTime">
+						<select id="Preference-extended-start-time-maximum" class="time-input preference-field" data-bind="combobox: LatestStartTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in times)
 							{
@@ -112,7 +112,7 @@
 							}
 						</select>
 
-						<select id="Preference-extended-end-time-minimum" class="time-input" data-bind="combobox: EarliestEndTime">
+						<select id="Preference-extended-end-time-minimum" class="time-input preference-field" data-bind="combobox: EarliestEndTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in times)
 							{
@@ -120,7 +120,7 @@
 							}
 						</select>
 						<input type="checkbox" id="Preference-extended-end-time-minimum-next-day" data-bind="checked: EarliestEndTimeNextDay" title="@Resources.NextDay"/>
-						<select id="Preference-extended-end-time-maximum" class="time-input" data-bind="combobox: LatestEndTime">
+						<select id="Preference-extended-end-time-maximum" class="time-input preference-field" data-bind="combobox: LatestEndTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in times)
 							{
@@ -128,14 +128,14 @@
 							}
 						</select>
 						<input type="checkbox" id="Preference-extended-end-time-maximum-next-day" data-bind="checked: LatestEndTimeNextDay" title="@Resources.NextDay"/>
-						<select id="Preference-extended-work-time-minimum" class="time-input" data-bind="combobox: MinimumWorkTime">
+						<select id="Preference-extended-work-time-minimum" class="time-input preference-field" data-bind="combobox: MinimumWorkTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in timeLengths)
 							{
 								<option value="@timeSpan.Value">@timeSpan.Text</option>
 							}
 						</select>
-						<select id="Preference-extended-work-time-maximum" class="time-input" data-bind="combobox: MaximumWorkTime">
+						<select id="Preference-extended-work-time-maximum" class="time-input preference-field" data-bind="combobox: MaximumWorkTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in timeLengths)
 							{
