@@ -32,8 +32,8 @@ SET CreateAnalytics=
 ::Get current Branch
 CD "%ROOTDIR%\..\..\.."
 SET HgFolder=%CD%
-CALL :BRANCH %CD%
-ECHO Current branch is: %BRANCH%
+CALL :BRANCH "%CD%"
+ECHO Current branch is: "%BRANCH%"
 ECHO.
 
 ::Clean up last log files
@@ -175,9 +175,9 @@ IF "%IFBUS%"=="y" SET BUS=BUS
 
 ECHO.
 ECHO OBSERVE!: This script will now destroy the current databases namned:
-ECHO %Branch%_%Customer%_TeleoptiCCC7
-IF %LOADSTAT% EQU 1 ECHO %Branch%_%Customer%_TeleoptiAnalytics
-IF %LOADSTAT% EQU 1 ECHO %Branch%_%Customer%_TeleoptiCCCAgg
+ECHO "%Branch%_%Customer%_TeleoptiCCC7"
+IF %LOADSTAT% EQU 1 ECHO "%Branch%_%Customer%_TeleoptiAnalytics"
+IF %LOADSTAT% EQU 1 ECHO "%Branch%_%Customer%_TeleoptiCCCAgg"
 ECHO.
 ECHO on instance: %INSTANCE%
 ECHO.
@@ -239,7 +239,7 @@ ECHO.
 ECHO.
 ECHO ------
 ECHO Restoring baselines databases from backup. This will take a few minutes...
-SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\tsql\Restore.sql" -v DATAFOLDER="%DataFolder%" -v RARFOLDER="%RarFolder%" -v CUSTOMER=%CUSTOMER% -v LOADSTAT=%LOADSTAT% -v BRANCH=%BRANCH%
+SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\tsql\Restore.sql" -v DATAFOLDER="%DataFolder%" -v RARFOLDER="%RarFolder%" -v CUSTOMER=%CUSTOMER% -v LOADSTAT=%LOADSTAT% -v BRANCH="%BRANCH%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=11 & GOTO :error
 
 ECHO Restoring baselines. Done!
@@ -258,8 +258,8 @@ findstr /I /C:"%Branch%_%Customer%_TeleoptiAnalytics" "%temp%\FindDB.txt"
 if %errorlevel% NEQ 0 SET CreateAnalytics=-C -L%SQLLogin%:%SQLPwd%
 
 ::create or patch Analytics
-ECHO "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics%
-"%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics%
+ECHO %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiAnalytics" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics%
+%DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiAnalytics" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics%
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 
 ::check if we need to create Agg (no stat)
@@ -268,25 +268,14 @@ findstr /I /C:"%Branch%_%Customer%_TeleoptiCCCAgg" "%temp%\FindDB.txt"
 if %errorlevel% NEQ 0 SET CreateAgg=-C -L%SQLLogin%:%SQLPwd%
 
 ::Create or Patch Agg
-ECHO "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg%
-"%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg%
+ECHO %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiCCCAgg" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg%
+%DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiCCCAgg" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg%
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :Error
-
-::Create views for all Cross DBs
-ECHO Adding views for Crossdatabases
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'"
-if %errorlevel% NEQ 0 SET /A ERRORLEV=5 & GOTO :Error
-
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossDatabaseView_load"
-if %errorlevel% NEQ 0 SET /A ERRORLEV=5 & GOTO :Error
-
-::Update MsgBroker settings
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Address] SET [Address] = '%COMPUTERNAME%',[Port]=9090 WHERE [AddressId] = 1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = 8090 WHERE [ConfigurationId]=1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = '%COMPUTERNAME%' WHERE [ConfigurationId]=2"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=17 & GOTO :Error
 
 ::Upgrade Raptor DB to latest version
 CD "%DBMANAGERPATH%"
-"%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCC7 -E -OTeleoptiCCC7 %TRUNK%
+ECHO %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiCCC7" -E -OTeleoptiCCC7 %TRUNK%
+%DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiCCC7" -E -OTeleoptiCCC7 %TRUNK%
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
 ECHO Upgrade databases. Done!
@@ -301,15 +290,16 @@ ECHO Building %ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Secu
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
 ECHO Encrypting passwords ...
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD%Branch%_%Customer%_TeleoptiCCC7 -EE
+"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiCCC7" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
 
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'"
-if %errorlevel% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
+ECHO Fix Cross DB stuff
+"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::Add license (only if Demoreg)
 IF "%Customer%"=="%Demoreg%" (
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiCCC7 -i"%ROOTDIR%\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=13 & GOTO :Error
 )
 
