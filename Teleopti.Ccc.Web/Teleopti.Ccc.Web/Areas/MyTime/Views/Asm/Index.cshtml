@@ -1,4 +1,5 @@
-﻿@using Teleopti.Ccc.UserTexts
+﻿@using System.Globalization
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
 @using Teleopti.Ccc.Web.Core
 @model AsmViewModel
@@ -21,8 +22,8 @@
 		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px;">
 			@foreach (var layer in Model.Layers)
 	{
-				<span class="asm-layer ui-corner-all" style="left:@((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth)px;
-																						padding-left:@(layer.LengthInMinutes * pixelsPerHour / 60)px;
+				<span class="asm-layer ui-corner-all" style="left: @(((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth).ToString(CultureInfo.InvariantCulture) + "px");
+																						padding-left:@((layer.LengthInMinutes * pixelsPerHour / 60).ToString(CultureInfo.InvariantCulture) + "px");
 																						background-color: @(layer.Color)"
 						data-asm-start-time="@(layer.StartTimeText)"
 						data-asm-end-time="@(layer.EndTimeText)"
