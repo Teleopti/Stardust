@@ -105,10 +105,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             foreach (var groupMoveTimeOptimizer in memberList)
             {
                 var scheduleDay = groupMoveTimeOptimizer.Matrix.GetScheduleDayByKey(selectedDate).DaySchedulePart();
+                daysToDelete.Add(scheduleDay);
                 if(scheduleDay.Person == person )
                 {
                     daysToSave.Add((IScheduleDay)scheduleDay.Clone());
-                    daysToDelete.Add(scheduleDay);
                 }
                 if (lockDay)
                     groupMoveTimeOptimizer.LockDate(selectedDate);

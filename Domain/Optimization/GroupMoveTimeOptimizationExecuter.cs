@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
                 if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, daysToSave[0], schedulingOptions)) return false;
 
-                schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
+                schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short;
                 if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, daysToSave[1], schedulingOptions)) return false;
             }
 
