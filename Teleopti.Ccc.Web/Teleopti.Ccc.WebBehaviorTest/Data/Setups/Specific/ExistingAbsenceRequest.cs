@@ -48,8 +48,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 	public class ExistingDeniedAbsenceRequest : IUserDataSetup
 	{
+		private readonly string _denyReason;
 		public PersonRequest PersonRequest;
 		public AbsenceRequest AbsenceRequest;
+
+		public ExistingDeniedAbsenceRequest()
+		{
+		}
+
+		public ExistingDeniedAbsenceRequest(string denyReason)
+		{
+			_denyReason = denyReason;
+		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -58,7 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			PersonRequest = new PersonRequest(user, AbsenceRequest) { Subject = "I need some vacation" };
 			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
 			PersonRequest.Pending();
-			PersonRequest.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
+			PersonRequest.Deny(null, _denyReason, new PersonRequestAuthorizationCheckerForTest());
 
 			var requestRepository = new PersonRequestRepository(uow);
 

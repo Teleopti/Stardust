@@ -23,5 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		Button OkButton { get; set; }
 		Element CancelButton { get; }
+
+		Span RequestDetailDenyReason { get; }
 	}
 }

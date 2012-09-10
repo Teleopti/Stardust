@@ -108,5 +108,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.DisplayHidden(), Is.True);
 		}
+
+		[Given(@"I have a denied absence request beacuse of missing workflow control set")]
+		public void GivenIHaveADeniedAbsenceRequestBeacuseOfMissingWorkflowControlSet()
+		{
+			UserFactory.User().Setup(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
+		}
+
+		[Then(@"I should see that my request was denied with reason '(.*)'")]
+		public void ThenIShouldSeeThatMyRequestWasDeniedWithGivenReason(string reason)
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.DisplayVisible(), Is.True);
+			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailDenyReason.Text,
+															Is.EqualTo(reason));
+		}
 	}
 }
