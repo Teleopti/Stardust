@@ -72,3 +72,10 @@ Scenario: Current activity changes
 	And I click ASM link
 	And Current browser time has changed to '2030-01-01 12:00'
 	Then I should see Phone as current activity
+
+Scenario: Upcoming activity starttime shoould be displayed
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 07:00'
+	When I view my regional settings
+	And I click ASM link
+	Then I should see last activity starttime as '12:00'
