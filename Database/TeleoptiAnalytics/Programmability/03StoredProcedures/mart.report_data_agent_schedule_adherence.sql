@@ -6,6 +6,8 @@ GO
 
 exec mart.report_data_agent_schedule_adherence @date_from='2009-02-01 00:00:00',@adherence_id=1,@date_to='2009-02-28 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'0',@team_set=N'7',@agent_person_code=N'11610fe4-0130-4568-97de-9b5e015b2564',@sort_by=N'6',@time_zone_id=N'1',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 exec mart.report_data_agent_schedule_adherence @date_from='2009-01-13 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'7',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'2',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@date_to='2009-02-11 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'826f2a46-93bb-4b04-8d5e-9b5e015b2577',@adherence_id=N'1',@sort_by=N'6',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 
 */
 -- =============================================
@@ -59,10 +61,6 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_adherence]
 AS
 SET NOCOUNT ON 
 
---todo: make this input on the SP
---DECLARE @date_to datetime
---SET @date_to = @date_from
-
 ------------
 --Create all needed temp tables. Just for performance
 ------------
@@ -85,13 +83,11 @@ CREATE TABLE #minmax(
 )
 
 CREATE TABLE #team_adh_tot(
-	[date_id] [int] NULL,
 	[adherence_calc_s] [decimal](38, 3) NULL,
 	[deviation_s] [decimal](38, 3) NULL
 )
 
 CREATE TABLE #team_adh(
-	[date_id] [int] NULL,
 	[interval_id] [int] NULL,
 	[adherence_calc_s] [decimal](38, 3) NULL,
 	[deviation_s] [decimal](38, 3) NULL
@@ -519,9 +515,9 @@ INNER JOIN #result r ON r.date_id=a.date_id AND r.person_id=a.person_id
 
 --per interval
 INSERT INTO #team_adh
-SELECT date_id,interval_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
+SELECT interval_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
 FROM #result
-GROUP by date_id,interval_id
+GROUP by interval_id
 
 UPDATE #result
 SET team_adherence=
@@ -532,22 +528,12 @@ SET team_adherence=
 	END
 ,team_deviation_s=a.deviation_s
 FROM #team_adh a
-INNER JOIN #result r ON r.date_id=a.date_id AND r.interval_id=a.interval_id
---WHERE a.adherence_calc_m>0
-
-/*De som inte avviker och inte har någon ready time får 100 i adherence*/
-/*
-UPDATE #result
-SET team_adherence=1,team_deviation_m=0
-FROM #result
-WHERE team_adherence is null and team_deviation_m is null
-*/
+INNER JOIN #result r ON r.interval_id=a.interval_id
 
 --total(for all selected)
 INSERT INTO #team_adh_tot
-SELECT date_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
+SELECT sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
 FROM #result
-GROUP by date_id
 
 UPDATE #result
 SET team_adherence_tot=
@@ -558,9 +544,6 @@ SET team_adherence_tot=
 	END
 ,team_deviation_tot_s=a.deviation_s
 FROM #team_adh_tot a
-INNER JOIN #result r ON r.date_id=a.date_id
---WHERE a.adherence_calc_m>0
-
 
 /*Set display color and name on activity or absence*/
 UPDATE #result
@@ -590,9 +573,9 @@ update #result set mininterval = minint, maxinterval = maxint
 from  #minmax
 inner join #result on #minmax.person_id = #result.person_id
 
-/*Sortering 1=FÃ¶rnamn,2=Efternamn,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date*/
---NOTE: If you change the column order/name you need to consider SDK DTO as well!
---		see: 
+-- Sortering 1=FirstName,2=LastName,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date
+-- NOTE: If you change the column order/name you need to consider SDK DTO as well!
+
 IF @sort_by=1
 	SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
 				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot, deviation_s/60.0 as 'deviation_m' ,adherence_calc_s,deviation_tot_s/60.0 as 'deviation_tot_m' ,round(ready_time_s/60.0 ,0)'ready_time_m',
