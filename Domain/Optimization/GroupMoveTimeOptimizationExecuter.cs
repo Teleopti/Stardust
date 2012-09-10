@@ -55,8 +55,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 
+            
             if (daysToSave!= null)
             {
+               
                 schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
                 if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, daysToSave[0], schedulingOptions)) return false;
 

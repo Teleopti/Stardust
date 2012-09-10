@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 var daysToSave = new List<IScheduleDay>();
                 var daysToDelete = new List<IScheduleDay>();
-                processScheduleDay(daysToDelete,   daysToSave, memberList, firstDate, false );
-                processScheduleDay(daysToDelete,  daysToSave, memberList, secDate, true );
+                processScheduleDay(daysToDelete, daysToSave, memberList, firstDate, false, person);
+                processScheduleDay(daysToDelete, daysToSave, memberList, secDate, true, person);
 
                 var validateResult = daysToSave.All(d=> _groupMoveTimeValidatorRunner.Run(person, new List<DateOnly> { d.DateOnlyAsPeriod.DateOnly  },
                                                                        new List<DateOnly> { d.DateOnlyAsPeriod.DateOnly  }, true).Success );
@@ -100,15 +100,19 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         private static void processScheduleDay(ICollection<IScheduleDay> daysToDelete, ICollection<IScheduleDay> daysToSave,
-                                        IEnumerable<IGroupMoveTimeOptimizer> memberList, DateOnly selectedDate, bool lockDay)
+                                        IEnumerable<IGroupMoveTimeOptimizer> memberList, DateOnly selectedDate, bool lockDay, IPerson person)
         {
             foreach (var groupMoveTimeOptimizer in memberList)
             {
                 var scheduleDay = groupMoveTimeOptimizer.Matrix.GetScheduleDayByKey(selectedDate).DaySchedulePart();
-                daysToSave.Add((IScheduleDay) scheduleDay.Clone());
-                daysToDelete.Add(scheduleDay);
-                if (lockDay)
-                    groupMoveTimeOptimizer.LockDate(selectedDate);
+                if(scheduleDay.Person == person )
+                {
+                    daysToSave.Add((IScheduleDay)scheduleDay.Clone());
+                    daysToDelete.Add(scheduleDay);
+                    if (lockDay)
+                        groupMoveTimeOptimizer.LockDate(selectedDate);
+                }
+                
             }
         }
         
@@ -130,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private void reportProgress(DateOnly firstDate, DateOnly secondDate, bool result, int activeOptimizers, int executes, IPerson owner)
         {
             var firstDateStr = firstDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
-            var secondDateStr = firstDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
+            var secondDateStr = secondDate .ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture);
             var who = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers + ")" + executes + " " +
                          firstDateStr + ":" + secondDateStr + " " + owner.Name.ToString(NameOrderOption.FirstNameLastName);
             string success;
