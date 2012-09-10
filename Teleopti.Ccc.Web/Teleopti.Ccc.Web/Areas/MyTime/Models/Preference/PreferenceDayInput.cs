@@ -39,8 +39,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 			var result = new List<ValidationResult>();
 			if (ValidateTimeOfDay(EarliestStartTime, LatestStartTime))
 				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
-			if (ValidateTimeOfDay(EarliestEndTime, LatestEndTime))
-				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.EndTime)));
+			if (EarliestEndTime.HasValue && LatestEndTime.HasValue)
+			{
+				var earliest = EarliestEndTimeNextDay
+					               ? EarliestEndTime.Value.Time.Add(TimeSpan.FromDays(1))
+					               : EarliestEndTime.Value.Time;
+				var latest = LatestEndTimeNextDay ? LatestEndTime.Value.Time.Add(TimeSpan.FromDays(1)) : LatestEndTime.Value.Time;
+				if (earliest > latest)
+				{
+					result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.EndTime)));
+				}
+			}
 			if (ValidateTimeOfDay(ActivityEarliestStartTime, ActivityLatestStartTime))
 				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.ActivityTime)));
 			if (ValidateTimeOfDay(ActivityEarliestEndTime, ActivityLatestEndTime))
