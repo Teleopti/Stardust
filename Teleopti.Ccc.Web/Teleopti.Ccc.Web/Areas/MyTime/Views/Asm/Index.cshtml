@@ -27,7 +27,7 @@
 						data-asm-start-time="@(layer.StartTimeText)"
 						data-asm-end-time="@(layer.EndTimeText)"
 						data-asm-activity="@(layer.Payload)"
-						title="@(string.Format("{0}{1}{2} {3}",layer.StartTimeText,Resources.Colon,layer.EndTimeText,layer.Payload))"></span>
+						title="@(string.Format("{0}{1}{2} {3}",layer.StartTimeText,"-",layer.EndTimeText,layer.Payload))"></span>
 	}
 			<!-- ko foreach: timeLines -->
 			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
@@ -38,7 +38,7 @@
 	</div>
 	<div class="asm-current-info">
 		<div class="asm-info-canvas ui-corner-all">
-			<div>xxxActivities (start time)</div>
+			<div>@(Resources.Activities)</div>
 			<table id="asm-current-info-table">
 				<tbody data-bind="foreach: activityInfo">
 					<tr data-bind="css: { 'asm-info-current-activity' : active }">
