@@ -22,3 +22,40 @@ update  dbo.activity SET AllowOverwrite = 0 where InWorkTime  = 0
 
 
 GO
+----------------  
+--Name: Ola
+--Date: 2012-08-31
+--Desc: Add new ReadModel
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[ScheduleDay]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [ReadModel].[ScheduleDay](
+		[Id] [uniqueidentifier] NOT NULL,
+		[PersonId] [uniqueidentifier] NOT NULL,
+		[BelongsToDate] [smalldatetime] NOT NULL,
+		[StartDateTime] [datetime] NOT NULL,
+		[EndDateTime] [datetime] NOT NULL,
+		[Workday] [bit] NOT NULL,
+		[WorkTime] [bigint] NOT NULL,
+		[ContractTime] [bigint] NOT NULL,
+		[Label] [nvarchar](50) NOT NULL,
+		[DisplayColor] [int] NOT NULL,
+		[InsertedOn] [datetime] NOT NULL
+	)
+	
+	
+	ALTER TABLE ReadModel.[ScheduleDay] ADD CONSTRAINT
+		PK_ScheduleDayReadOnly PRIMARY KEY NONCLUSTERED 
+		(
+		Id
+		)
+
+	CREATE CLUSTERED INDEX [CIX_ScheduleDayReadOnly] ON [ReadModel].[ScheduleDay] 
+	(
+		[PersonId] ASC,
+		[BelongsToDate] ASC	
+	)
+
+	ALTER TABLE [ReadModel].[ScheduleDay] ADD  CONSTRAINT [DF_ScheduleDayReadOnly_Id]  DEFAULT (newid()) FOR [Id]
+END
+GO
