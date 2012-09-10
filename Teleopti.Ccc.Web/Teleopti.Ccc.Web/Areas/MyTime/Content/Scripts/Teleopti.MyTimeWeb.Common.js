@@ -160,7 +160,9 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 			$('[title]').each(function () {
 				$(this).qtip({
 					content: {
-						text: $(this).attr('title')
+						text: function() {
+							return $(this).attr('title');
+						}
 					},
 					title: "test",
 					style: {
