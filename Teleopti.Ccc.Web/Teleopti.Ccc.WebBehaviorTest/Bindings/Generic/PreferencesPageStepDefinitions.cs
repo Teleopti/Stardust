@@ -198,6 +198,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Enabled, Is.False);
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMinimum.Enabled, Is.False);
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximumNextDay.Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimumNextDay.Enabled, Is.False);
 
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Button.Enabled, Is.False,"");
 			
@@ -235,7 +237,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should be able to edit activity minimum and maximum fields")]
 		public void ThenIShouldBeAbleToEditActivityMinimumAndMaximumFields()
 		{
-			EventualAssert.That(()=>Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Enabled, Is.True);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Enabled, Is.True);
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Enabled, Is.True);
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Enabled, Is.True);
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.Enabled, Is.True);

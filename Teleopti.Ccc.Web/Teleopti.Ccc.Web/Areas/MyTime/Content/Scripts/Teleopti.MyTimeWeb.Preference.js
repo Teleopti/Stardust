@@ -86,18 +86,21 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			function () {
 				if (enable) {
 					$(this).removeAttr('disabled');
-					$('#Preference-extended-activity').removeAttr('disabled', 'disabled');
-					$('#Preference-extended-activity').next('button').removeAttr('disabled', 'disabled');
 					$(this).next('button').removeAttr('disabled');
 				} else {
-					addExtendedPreferenceFormViewModel.ActivityPreferenceId('');
-					$('#Preference-extended-activity').attr('disabled', 'disabled');
-					$('#Preference-extended-activity').next('button').attr('disabled', 'disabled');
 					$(this).attr('disabled', 'disabled');
 					$(this).next('button').attr('disabled', 'disabled');
 				}
 			}
 		);
+		if (enable) {
+			$('#Preference-extended-activity').removeAttr('disabled');
+			$('#Preference-extended-activity').next('button').removeAttr('disabled');
+		} else {
+			addExtendedPreferenceFormViewModel.ActivityPreferenceId('');
+			$('#Preference-extended-activity').attr('disabled', 'disabled');
+			$('#Preference-extended-activity').next('button').attr('disabled', 'disabled');
+		}
 	}
 
 	function _initAddExtendedButton() {
