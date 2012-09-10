@@ -119,7 +119,7 @@
 								<option value="@timeSpan.Value">@timeSpan.Text</option>
 							}
 						</select>
-						<input type="checkbox" id="Preference-extended-end-time-minimum-next-day"/>
+						<input type="checkbox" id="Preference-extended-end-time-minimum-next-day" data-bind="checked: EarliestEndTimeNextDay" title="@Resources.NextDay"/>
 						<select id="Preference-extended-end-time-maximum" class="time-input preference-field" data-bind="combobox: LatestEndTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in times)
@@ -127,7 +127,7 @@
 								<option value="@timeSpan.Value">@timeSpan.Text</option>
 							}
 						</select>
-						<input type="checkbox" id="Preference-extended-end-time-maximum-next-day"/>
+						<input type="checkbox" id="Preference-extended-end-time-maximum-next-day" data-bind="checked: LatestEndTimeNextDay" title="@Resources.NextDay"/>
 						<select id="Preference-extended-work-time-minimum" class="time-input preference-field" data-bind="combobox: MinimumWorkTime">
 							<option value="">&nbsp;</option>
 							@foreach (var timeSpan in timeLengths)

@@ -473,10 +473,10 @@ this.FeatureBackground();
                         "2012-09-05"});
             table14.AddRow(new string[] {
                         "End time minimum",
-                        "02:00 + 1"});
+                        "02:00 +1"});
             table14.AddRow(new string[] {
                         "End time maximum",
-                        "02:30 + 1"});
+                        "02:30 +1"});
 #line 145
  testRunner.Then("I should see extended preference with", ((string)(null)), table14);
 #line hidden

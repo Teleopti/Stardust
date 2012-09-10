@@ -145,8 +145,8 @@ Scenario: Add extended preference when span to next day
 	Then I should see extended preference with
 	| Field            | Value      |
 	| Date             | 2012-09-05 |
-	| End time minimum | 02:00 + 1  |
-	| End time maximum | 02:30 + 1  |
+	| End time minimum | 02:00 +1  |
+	| End time maximum | 02:30 +1  |
 
 Scenario: Preference list contains available preferences when adding extended preference 
 	Given I have the role 'Access to extended preferences'

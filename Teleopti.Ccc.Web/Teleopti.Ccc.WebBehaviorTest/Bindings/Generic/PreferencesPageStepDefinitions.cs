@@ -135,6 +135,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			{
 				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Value = fields.EndTimeMaximum;
+				Browser.Current.Eval("$('#" + Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Id + "').blur()");
+
 			}
 			if (fields.EndTimeMaximumNextDay)
 			{
