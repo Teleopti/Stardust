@@ -29,6 +29,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		private IDictionary<int, IList<IntervalToolTip>> _intervalToolTipDictionary =
 			new Dictionary<int, IList<IntervalToolTip>>();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private IDictionary<DateTime, IList<IntervalToolTip>> _intervalDateToolTipDictionary =
 			new Dictionary<DateTime, IList<IntervalToolTip>>();
 
@@ -531,14 +532,14 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			return toolTip;
 		}
 
-		public IntervalToolTip GetToolTip(DateTime date, int interval)
+		public IntervalToolTip GetToolTip(DateTime date, int getIntervalId)
 		{
 			// for now
 			return new IntervalToolTip();
-			IList<IntervalToolTip> toolTipList = _intervalDateToolTipDictionary[date];
-			var toolTip = toolTipList.Where(t => interval >= t.StartInterval &&
-							   interval <= t.EndInterval).FirstOrDefault();
-			return toolTip;
+			//IList<IntervalToolTip> toolTipList = _intervalDateToolTipDictionary[date];
+			//var toolTip = toolTipList.Where(t => interval >= t.StartInterval &&
+			//                   interval <= t.EndInterval).FirstOrDefault();
+			//return toolTip;
 		}
 
 		private List<TableCell> FillWithBlancCells(int startInterval, int endInterval)
