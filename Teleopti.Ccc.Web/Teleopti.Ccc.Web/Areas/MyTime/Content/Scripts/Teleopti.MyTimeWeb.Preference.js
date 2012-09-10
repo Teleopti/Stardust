@@ -90,7 +90,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					$('#Preference-extended-activity').next('button').removeAttr('disabled', 'disabled');
 					$(this).next('button').removeAttr('disabled');
 				} else {
-					$('#Preference-extended-activity').val($('#Preference-extended-activity option:first').val());
+					addExtendedPreferenceFormViewModel.ActivityPreferenceId('');
 					$('#Preference-extended-activity').attr('disabled', 'disabled');
 					$('#Preference-extended-activity').next('button').attr('disabled', 'disabled');
 					$(this).attr('disabled', 'disabled');
@@ -105,7 +105,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var template = $('#Preference-add-extended-form-template');
 		addExtendedPreferenceFormViewModel = new AddExtendedPreferenceFormViewModel();
 		addExtendedPreferenceFormViewModel.EnableActivityTimeEditing.subscribe(_toggleActivityInputFields);
-		addExtendedPreferenceFormViewModel.PreferenceId.subscribe(function() {
+		addExtendedPreferenceFormViewModel.PreferenceId.subscribe(function () {
 			var selected = $('#Preference-extended-preference').find('option:selected');
 			var preferenceType = selected.data('preference-type');
 

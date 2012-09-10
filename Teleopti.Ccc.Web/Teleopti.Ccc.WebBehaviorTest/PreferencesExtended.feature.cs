@@ -919,7 +919,7 @@ this.FeatureBackground();
 #line 292
     testRunner.And("I input extended preference fields with", ((string)(null)), table26);
 #line 295
-    testRunner.Then("I should see activity dropdown list selected to \"none\"");
+    testRunner.Then("I should see activity dropdown list selected to \" \"");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -937,6 +937,8 @@ this.FeatureBackground();
     testRunner.Given("I have the role \'Access to extended preferences\'");
 #line 299
     testRunner.And("I am viewing preferences");
+#line 300
+    testRunner.When("I click the add extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -944,10 +946,8 @@ this.FeatureBackground();
             table27.AddRow(new string[] {
                         "Activity",
                         "Lunch"});
-#line 300
+#line 301
     testRunner.And("I input extended preference fields with", ((string)(null)), table27);
-#line 303
-    testRunner.When("I click the extended preference button");
 #line hidden
             TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -958,7 +958,7 @@ this.FeatureBackground();
 #line 304
     testRunner.And("I input extended preference fields with", ((string)(null)), table28);
 #line 307
-    testRunner.And("I should see activity dropdown list selected to \"none\"");
+    testRunner.Then("I should see activity dropdown list selected to \" \"");
 #line hidden
             this.ScenarioCleanup();
         }

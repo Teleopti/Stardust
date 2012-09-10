@@ -292,19 +292,19 @@ Scenario: Reset activity field when day off is selected
     And I input extended preference fields with
     | Field      | Value  |
     | Preference | Dayoff |
-    Then I should see activity dropdown list selected to "none"
+    Then I should see activity dropdown list selected to " "
 
 Scenario: Reset activity field when absence is selected
     Given I have the role 'Access to extended preferences'
     And I am viewing preferences
+    When I click the add extended preference button
     And I input extended preference fields with
     | Field    | Value |
     | Activity | Lunch |
-    When I click the extended preference button
     And I input extended preference fields with
     | Field      | Value   |
     | Preference | Illness |
-    And I should see activity dropdown list selected to "none"
+    Then I should see activity dropdown list selected to " "
          
 Scenario: Enable activity time fields when activity is selected
     Given I have the role 'Access to extended preferences'

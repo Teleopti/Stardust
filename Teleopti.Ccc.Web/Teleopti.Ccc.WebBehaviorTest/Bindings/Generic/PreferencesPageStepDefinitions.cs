@@ -251,6 +251,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Enabled, Is.False);
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Enabled, Is.False);
 		}
+		
+		[Then(@"I should see activity dropdown list selected to ""(.*)""")]
+		public void ThenIShouldSeeActivityDropdownListSelected(string selectedText)
+		{
+			EventualAssert.That(() => 
+				Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Button.OuterText, Is.EqualTo(selectedText));
+		}
 
 		private class ExtendedPreferenceFields
 		{
