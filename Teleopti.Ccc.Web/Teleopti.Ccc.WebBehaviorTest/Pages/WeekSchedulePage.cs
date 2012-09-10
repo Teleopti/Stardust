@@ -107,6 +107,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		}
 
 		//not yet used
+		public Span RequestDetailDenyReason { get; private set; }
+
+		//not yet used
 		public TextField RequestDetailEntityId { get; private set; }
 
 
