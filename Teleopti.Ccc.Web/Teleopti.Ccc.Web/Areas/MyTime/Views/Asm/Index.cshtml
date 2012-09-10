@@ -1,4 +1,5 @@
-﻿@using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
+﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
 @using Teleopti.Ccc.Web.Core
 @model AsmViewModel
 @{
@@ -25,7 +26,8 @@
 																						background-color: @(layer.Color)"
 						data-asm-start-time="@(layer.StartTimeText)"
 						data-asm-end-time="@(layer.EndTimeText)"
-						data-asm-activity="@(layer.Payload)"></span>
+						data-asm-activity="@(layer.Payload)"
+						title="@(string.Format("{0}{1}{2} {3}",layer.StartTimeText,Resources.Colon,layer.EndTimeText,layer.Payload))"></span>
 	}
 			<!-- ko foreach: timeLines -->
 			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
