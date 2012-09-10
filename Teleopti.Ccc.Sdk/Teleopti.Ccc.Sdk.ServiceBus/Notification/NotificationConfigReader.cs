@@ -1,41 +1,28 @@
 ﻿using System;
 using System.Xml;
 using System.Xml.XPath;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
+namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
-	public interface ISmsConfigReader
-	{
-		bool HasLoadedConfig { get; }
-		IXPathNavigable XmlDocument { get; }
-		Uri Url { get; }
-		string User { get; }
-		string Password { get; }
-		string From { get; }
-		string ClassName { get; }
-		string Api { get; }
-		string Data { get; }
-	}
-
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
-	public class SmsConfigReader : ISmsConfigReader
+	
+	public class NotificationConfigReader : INotificationConfigReader
 	{
 		private readonly string _configFile;
 		private XmlDocument _configXml;
 
-		public SmsConfigReader()
-			: this("SmsConfig.xml")
+		public NotificationConfigReader()
+			: this("NotificationConfig.xml")
 		{ }
 
-		public SmsConfigReader(string configFile)
+		public NotificationConfigReader(string configFile)
 		{
 			_configFile = configFile;
 			loadFile();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode")]
-		public SmsConfigReader(XmlDocument xmlDocument)
+		public NotificationConfigReader(XmlDocument xmlDocument)
 		{
 			_configXml = xmlDocument;
 			HasLoadedConfig = true;
@@ -122,6 +109,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.SMS
 					return "";
 				if (_configXml.GetElementsByTagName("class").Count > 0)
 					return _configXml.GetElementsByTagName("class")[0].InnerText;
+				return "";
+			}
+		}
+
+		public string Assembly
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				if (_configXml.GetElementsByTagName("assembly").Count > 0)
+					return _configXml.GetElementsByTagName("assembly")[0].InnerText;
 				return "";
 			}
 		}

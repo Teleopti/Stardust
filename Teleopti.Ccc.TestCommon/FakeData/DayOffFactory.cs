@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Scheduling;
+﻿using System;
+using System.Drawing;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -24,5 +26,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             return new DayOffTemplate(description);
         }
+
+		public static DayOff CreateDayOffDayOff(string description)
+		{
+			return new DayOff(DateTime.Now.ToUniversalTime() ,TimeSpan.FromHours(36),TimeSpan.FromHours(2),new Description(description), Color.Gray,"CODE");
+		}
     }
 }

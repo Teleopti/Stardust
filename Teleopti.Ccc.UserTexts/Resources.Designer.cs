@@ -14302,6 +14302,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not Working..
+        /// </summary>
+        public static string NotWorking {
+            get {
+                return ResourceManager.GetString("NotWorking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Value In Name Field.
         /// </summary>
         public static string NoValueInNameField {
@@ -25018,7 +25027,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your working hours have changed.
+        ///   Looks up a localized string similar to Your working hours have changed :.
         /// </summary>
         public static string YourWorkingHoursHaveChanged {
             get {
