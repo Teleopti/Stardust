@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Value.Should().Be(dayOff.Id.ToString());
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Text.Should().Be(dayOff.Description.Name);
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Color.Should().Be(dayOff.DisplayColor.ToHtml());
-			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Should().Be(dayOff.DisplayColor.ToHtml());
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Type.Should().Be(dayOff.GetType().Name);
 		}
 
 		[Test]
