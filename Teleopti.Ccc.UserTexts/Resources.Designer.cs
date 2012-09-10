@@ -17850,6 +17850,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adherence per Agent.
+        /// </summary>
+        public static string ResReportAdherencePerAgent {
+            get {
+                return ResourceManager.GetString("ResReportAdherencePerAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adherence per Day.
+        /// </summary>
+        public static string ResReportAdherencePerDay {
+            get {
+                return ResourceManager.GetString("ResReportAdherencePerDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agent Queue Metrics.
         /// </summary>
         public static string ResReportAgentQueueMetrics {
@@ -17864,15 +17882,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResReportAgentQueueStatistics {
             get {
                 return ResourceManager.GetString("ResReportAgentQueueStatistics", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Agent Schedule Adherence.
-        /// </summary>
-        public static string ResReportAgentScheduleAdherence {
-            get {
-                return ResourceManager.GetString("ResReportAgentScheduleAdherence", resourceCulture);
             }
         }
         
