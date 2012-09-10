@@ -171,6 +171,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapEndTimeLimitationNextDay()
+		{
+			var earliest = new TimeOfDay(TimeSpan.FromHours(2));
+			var latest = new TimeOfDay(TimeSpan.FromHours(3));
+			var input = new PreferenceDayInput
+				{EarliestEndTime = earliest, LatestEndTime = latest, EarliestEndTimeNextDay = true, LatestEndTimeNextDay = true};
+
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+
+			result.Restriction.EndTimeLimitation.StartTime.Should().Be.EqualTo(earliest.Time.Add(TimeSpan.FromDays(1)));
+			result.Restriction.EndTimeLimitation.EndTime.Should().Be.EqualTo(latest.Time.Add(TimeSpan.FromDays(1)));
+		}
+
+		[Test]
 		public void ShouldMapWorkTimeLimitation()
 		{
 			var shortest = TimeSpan.FromHours(7);

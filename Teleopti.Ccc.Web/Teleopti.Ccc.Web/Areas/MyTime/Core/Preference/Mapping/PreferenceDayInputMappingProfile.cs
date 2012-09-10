@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					           s => new StartTimeLimitation(FromTimeOfDay(s.EarliestStartTime), FromTimeOfDay(s.LatestStartTime))))
 				.ForMember(d => d.EndTimeLimitation,
 				           o =>
-				           o.MapFrom(s => new EndTimeLimitation(FromTimeOfDay(s.EarliestEndTime), FromTimeOfDay(s.LatestEndTime))))
+				           o.MapFrom(s => new EndTimeLimitation(FromTimeOfDay(s.EarliestEndTime, s.EarliestEndTimeNextDay), FromTimeOfDay(s.LatestEndTime, s.LatestEndTimeNextDay))))
 				.ForMember(d => d.WorkTimeLimitation,
 				           o => o.MapFrom(s => new WorkTimeLimitation(s.MinimumWorkTime, s.MaximumWorkTime)))
 				.AfterMap((s, d) =>
@@ -81,10 +81,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 		}
 
-		private TimeSpan? FromTimeOfDay(TimeOfDay? value)
+		private TimeSpan? FromTimeOfDay(TimeOfDay? value, bool nextDay = false)
 		{
 			if (!value.HasValue) return null;
-			return value.Value.Time;
+			return nextDay ? value.Value.Time.Add(TimeSpan.FromDays(1)) : value.Value.Time;
 		}
 
 		public class PreferenceDayInputToPreferenceDay : ITypeConverter<PreferenceDayInput, IPreferenceDay>
