@@ -23,6 +23,8 @@
 				.appendTo(container)
 				;
 
+			container.attr('title', select.attr('title'));
+			
 			var button = this._button = $('<button></button>')
 				.attr("id", id + '-button')
 				.attr("disabled", "disabled")
@@ -178,10 +180,10 @@
 			}
 
 			if (this._super)
-				// In jQuery UI 1.9 and above, you use the _super method instead
+			// In jQuery UI 1.9 and above, you use the _super method instead
 				this._super("_setOption", key, value);
 			else
-				// In jQuery UI 1.8, you have to manually invoke the _setOption method from the base widget
+			// In jQuery UI 1.8, you have to manually invoke the _setOption method from the base widget
 				$.Widget.prototype._setOption.apply(this, arguments);
 		},
 

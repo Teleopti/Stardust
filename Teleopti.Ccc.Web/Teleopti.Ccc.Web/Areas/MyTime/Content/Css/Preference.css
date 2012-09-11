@@ -84,6 +84,15 @@
 }
 
 
+.time-limitation-label.icon.leftarrow,
+.time-limitation-label.icon.rightarrow,
+.time-limitation-label.icon.doublearrow-blue
+{
+	/*display: block; /* required because chrome will display a different height without content otherwise */
+	width: 10px;
+	height: 14px;
+}
+
 #Preference-period-feedback-view 
 {
 	color: gray;
