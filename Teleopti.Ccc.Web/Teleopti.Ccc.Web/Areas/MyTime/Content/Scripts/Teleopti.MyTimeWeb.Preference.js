@@ -68,24 +68,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	}
 
 	function _toggleTimeAndActivityInputFields(enable) {
-		$('#Preference-add-extended-form .preference-field').each(
-			function () {
-				if (enable) {
-					$(this).removeAttr('disabled');
-					$(this).next('button').removeAttr('disabled');
-				} else {
-					$(this).attr('disabled', 'disabled');
-					$(this).next('button').attr('disabled', 'disabled');
-				}
-			}
-		);
-		if (enable) {
-			$('#Preference-extended-activity').removeAttr('disabled');
-			$('#Preference-extended-activity').next('button').removeAttr('disabled');
-		} else {
+		addExtendedPreferenceFormViewModel.IsTimeInputEnabled(enable);
+		
+		if (!enable) {
 			addExtendedPreferenceFormViewModel.ActivityPreferenceId('');
-			$('#Preference-extended-activity').attr('disabled', 'disabled');
-			$('#Preference-extended-activity').next('button').attr('disabled', 'disabled');
 		}
 	}
 

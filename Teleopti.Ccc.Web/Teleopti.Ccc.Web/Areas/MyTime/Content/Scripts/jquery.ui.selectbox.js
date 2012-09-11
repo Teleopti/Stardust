@@ -177,6 +177,9 @@
 				case "value":
 					this._selectValue(value);
 					break;
+				case "enabled":
+					this._setEnabled(value);
+					break;
 			}
 
 			if (this._super)
@@ -185,6 +188,16 @@
 			else
 			// In jQuery UI 1.8, you have to manually invoke the _setOption method from the base widget
 				$.Widget.prototype._setOption.apply(this, arguments);
+		},
+
+		_setEnabled: function (value) {
+			if (value) {
+				this._select.removeAttr('disabled');
+				this._button.removeAttr('disabled');
+			} else {
+				this._select.attr('disabled', 'disabled');
+				this._button.attr('disabled', 'disabled');
+			}
 		},
 
 		refresh: function (success) {
