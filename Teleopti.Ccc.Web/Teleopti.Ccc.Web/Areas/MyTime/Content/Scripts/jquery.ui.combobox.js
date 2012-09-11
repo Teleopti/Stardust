@@ -168,7 +168,7 @@
 		},
 
 		set: function (value) {
-			_setValue(value);
+			this._setValue(value);
 		}
 	});
 })(jQuery);
