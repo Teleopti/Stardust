@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		public void ShouldNotHaveAddExtendedPreferenceButtonIfNoPermission()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences)).Return(false);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();

@@ -7852,6 +7852,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extended Preferences.
+        /// </summary>
+        public static string ExtendedPreferencesWeb {
+            get {
+                return ResourceManager.GetString("ExtendedPreferencesWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extending and reducing days off for flexible agents.
         /// </summary>
         public static string ExtendingAndReducingDaysoff {
