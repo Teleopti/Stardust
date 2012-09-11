@@ -27,5 +27,14 @@ jqueryui: {
 			});
 		}
 	};
+	
+	ko.bindingHandlers['combobox-enabled'] = {
+		update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+			var observable = valueAccessor();
+			$(element).combobox({
+				enabled: ko.utils.unwrapObservable(observable)
+			});
+		}
+	};
 
 })(jQuery);

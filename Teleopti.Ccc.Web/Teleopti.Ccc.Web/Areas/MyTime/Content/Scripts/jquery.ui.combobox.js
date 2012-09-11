@@ -128,7 +128,17 @@
 			$(this.input).val(value);
 			$(this.input).trigger('change');
 		},
-
+		
+		_setEnabled: function (value) {
+			if (value) {
+				this.input.removeAttr('disabled');
+				this.button.removeAttr('disabled');
+			} else {
+				this.input.attr('disabled', 'disabled');
+				this.button.attr('disabled', 'disabled');
+			}
+		},
+		
 		_setOption: function (key, value) {
 			switch (key) {
 				case "clear":
@@ -136,6 +146,9 @@
 					break;
 				case "value":
 					this._setValue(value);
+					break;
+				case "enabled":
+					this._setEnabled(value);
 					break;
 			}
 

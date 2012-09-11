@@ -67,22 +67,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	}
 
-	function _toggleActivityInputFields(enable) {
-		$('#Preference-add-extended-form-template .activity-preference-field').each(
-				function () {
-					if (enable) {
-						$(this).removeAttr('disabled');
-						$(this).next('button').removeAttr('disabled');
-					} else {
-						$(this).attr('disabled', 'disabled');
-						$(this).next('button').attr('disabled', 'disabled');
-					}
-				}
-			);
-	}
-
 	function _toggleTimeAndActivityInputFields(enable) {
-		$('#Preference-add-extended-form-template .preference-field').each(
+		$('#Preference-add-extended-form .preference-field').each(
 			function () {
 				if (enable) {
 					$(this).removeAttr('disabled');
@@ -105,9 +91,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
-		var template = $('#Preference-add-extended-form-template');
+		var template = $('#Preference-add-extended-form');
 		addExtendedPreferenceFormViewModel = new AddExtendedPreferenceFormViewModel();
-		addExtendedPreferenceFormViewModel.EnableActivityTimeEditing.subscribe(_toggleActivityInputFields);
 		addExtendedPreferenceFormViewModel.PreferenceId.subscribe(function () {
 			var selected = $('#Preference-extended-preference').find('option:selected');
 			var preferenceType = selected.data('preference-type');
@@ -154,9 +139,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 								_setPreference(addExtendedPreferenceFormViewModel);
 							});
 
-						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form-template")[0]);
-
-						_toggleActivityInputFields(false);
+						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
 					}
 				}
 			});
