@@ -152,11 +152,11 @@ this.FeatureBackground();
 #line 31
  testRunner.And("I should see the time indicator at time \'2012-09-13 12:00\'");
 #line 32
- testRunner.When("Current browser time has changed to \'2012-09-13 12:30\'");
+ testRunner.When("Current browser time has changed to \'2012-09-13 12:01\'");
 #line 33
  testRunner.And("I navigate to week schedule page for date \'2012-09-13\'");
 #line 34
- testRunner.Then("I should see the time indicator at time \'2012-09-13 12:30\'");
+ testRunner.Then("I should see the time indicator at time \'2012-09-13 12:01\'");
 #line hidden
             this.ScenarioCleanup();
         }

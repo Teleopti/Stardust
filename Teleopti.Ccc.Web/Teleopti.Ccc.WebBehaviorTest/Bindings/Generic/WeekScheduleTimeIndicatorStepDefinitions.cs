@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			const int heightOfDay = 668;
 			const int timeLineOffset = 203;
 			const int timeIndicatorHeight = 2;
-			var positionPercentage = (decimal)(date.TimeOfDay - TimeSpan.Zero).Ticks / (new TimeSpan(23, 59, 59) - TimeSpan.Zero).Ticks;
+			var positionPercentage = (decimal)(date.TimeOfDay - TimeSpan.Zero).Ticks / (new TimeSpan(23, 59, 0) - TimeSpan.Zero).Ticks;
 			var heightOfTimeIndicator = Math.Round(positionPercentage * heightOfDay, 0) - Math.Round((decimal) (timeIndicatorHeight / 2), 0);
 
 			EventualAssert.That(() => _page.TimeIndicatorForDate(date).Style.GetAttributeValue("Top"), Is.EqualTo(Math.Round(heightOfTimeIndicator, 0).ToString(CultureInfo.InvariantCulture) + "px"));
