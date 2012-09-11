@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
         private SaveFileDialog _saveFileDialog;
         private const string dateTimeFormat = "yyyyMMdd";
-
+        
         public SelectFileDestination()
         {
             InitializeComponent();
@@ -46,15 +46,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
                                        period.EndDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture);
             _saveFileDialog.Filter = Resources.CSVFile;
 
-
-            if (_saveFileDialog.ShowDialog() == DialogResult.OK) textBox1.Text = _saveFileDialog.FileName;
+            if (_saveFileDialog.ShowDialog() == DialogResult.OK) txtFileName.Text = _saveFileDialog.FileName;
             _saveFileDialog.Dispose();
         }
 
         private void setColors()
         {
             BackColor = ColorHelper.WizardBackgroundColor();
-            textBox1.BackColor = ColorHelper.WizardPanelBackgroundColor();
+            txtFileName.BackColor = ColorHelper.WizardPanelBackgroundColor();
         }
 
         public void Populate(ExportSkillModel stateObj)
@@ -64,9 +63,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public bool Depopulate(ExportSkillModel stateObj)
         {
-            if (String.IsNullOrEmpty(textBox1.Text)) return false;
+            if (String.IsNullOrEmpty(txtFileName.Text)) return false;
             var commandModel = stateObj.ExportSkillToFileCommandModel;
-            commandModel.FileName = textBox1.Text;
+            var pathExists = IsFilePathExists(txtFileName.Text);
+            
+            if (pathExists)
+                commandModel.FileName = txtFileName.Text;
+            else
+                commandModel.FileName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + txtFileName.Text;
+
             GetSelectedCheckBox(stateObj);
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
@@ -77,6 +82,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
                 command.Execute();
             }
             return true;
+        }
+
+        private bool IsFilePathExists(string fileName)
+        {
+            bool isExists = fileName.Contains("\\");
+            return isExists;
         }
 
         public void SetEditMode()
