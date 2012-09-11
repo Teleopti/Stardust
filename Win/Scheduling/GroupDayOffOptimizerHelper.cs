@@ -85,14 +85,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
             IList<IGroupMoveTimeOptimizer> optimizers = new List<IGroupMoveTimeOptimizer>();
-            ExtractOptimizer(originalStateContainers, optimizationPreferences, schedulingOptionsCreator, optimizers);
+            extractOptimizer(originalStateContainers, optimizationPreferences, optimizers);
 
             IDeleteSchedulePartService deleteSchedulePartService;
             MainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter;
             IList<IScheduleMatrixPro> allMatrix;
             ISchedulePartModifyAndRollbackService rollbackService;
             IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup;
-            var groupPersonBuilderForOptimization = TeamOptimizerHelper(originalStateContainers, optimizationPreferences,
+            var groupPersonBuilderForOptimization = teamOptimizerHelper(originalStateContainers, optimizationPreferences,
                                                                         out deleteSchedulePartService,
                                                                         out mainShiftOptimizeActivitySpecificationSetter,
                                                                         out allMatrix, out rollbackService,
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             service.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
-        private IGroupPersonBuilderForOptimization TeamOptimizerHelper(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers,
+        private IGroupPersonBuilderForOptimization teamOptimizerHelper(IEnumerable<IScheduleMatrixOriginalStateContainer> originalStateContainers,
                                                                        IOptimizationPreferences optimizationPreferences,
                                                                        out IDeleteSchedulePartService deleteSchedulePartService,
                                                                        out MainShiftOptimizeActivitySpecificationSetter
@@ -146,8 +146,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return groupPersonBuilderForOptimization;
         }
 
-        private static void ExtractOptimizer(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences,
-                                             SchedulingOptionsCreator schedulingOptionsCreator, IList<IGroupMoveTimeOptimizer> optimizers)
+        private static void extractOptimizer(IEnumerable<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences, ICollection<IGroupMoveTimeOptimizer> optimizers)
         {
             foreach (var originalStateContainer in originalStateContainers)
             {
@@ -156,14 +155,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, new RestrictionChecker(),
                                                                                               optimizationPreferences,
                                                                                               originalStateContainer);
-                RelativeDailyStandardDeviationsByAllSkillsExtractor relativeDailyStandardDeviationsByAllSkillsExtractor =
-                    new RelativeDailyStandardDeviationsByAllSkillsExtractor(matrix,
-                                                                            schedulingOptionsCreator.CreateSchedulingOptions(
-                                                                                optimizationPreferences));
-                IScheduleMatrixLockableBitArrayConverter lockableBitArrayConverter =
+                var dataExtractorProvider = new ScheduleResultDataExtractorProvider(optimizationPreferences.Advanced);
+                var personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
+                var lockableBitArrayConverter =
                     new ScheduleMatrixLockableBitArrayConverter(matrix);
                 var optimizer = new GroupMoveTimeOptimizer(lockableBitArrayConverter, new MoveTimeDecisionMaker2(),
-                                                           relativeDailyStandardDeviationsByAllSkillsExtractor,
+                                                           personalSkillsDataExtractor,
                                                            optimizerOverLimitDecider);
                 optimizers.Add(optimizer);
             }
