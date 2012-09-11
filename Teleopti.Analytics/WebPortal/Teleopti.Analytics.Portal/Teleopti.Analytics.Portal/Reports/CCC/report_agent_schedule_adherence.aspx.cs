@@ -85,7 +85,10 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			{
 				HideTimeZoneParameter(false);
 				SetIntervalInformation();
-				SetEarliestShiftStartAndLatestShiftEnd();
+				if (ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
+					setEarliestShiftStartAndLatestShiftEndPerDay();
+				else	
+					SetEarliestShiftStartAndLatestShiftEnd();
 				CreateReportTable();
 			}
 			else
@@ -526,7 +529,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		public IntervalToolTip GetToolTip(int personId, int interval)
 		{
-			IList<IntervalToolTip> toolTipList = _intervalToolTipDictionary[personId];
+			var toolTipList = _intervalToolTipDictionary[personId];
 			var toolTip = toolTipList.Where(t => interval >= t.StartInterval &&
 							   interval <= t.EndInterval).FirstOrDefault();
 			return toolTip;
@@ -534,12 +537,10 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		public IntervalToolTip GetToolTip(DateTime date, int getIntervalId)
 		{
-			// for now
-			return new IntervalToolTip();
-			//IList<IntervalToolTip> toolTipList = _intervalDateToolTipDictionary[date];
-			//var toolTip = toolTipList.Where(t => interval >= t.StartInterval &&
-			//                   interval <= t.EndInterval).FirstOrDefault();
-			//return toolTip;
+			var toolTipList = _intervalDateToolTipDictionary[date];
+			var toolTip = toolTipList.Where(t => getIntervalId >= t.StartInterval &&
+							   getIntervalId <= t.EndInterval).FirstOrDefault();
+			return toolTip;
 		}
 
 		private List<TableCell> FillWithBlancCells(int startInterval, int endInterval)
@@ -717,6 +718,97 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		{
 			return String.Concat(hourPart.ToString("00", CultureInfo.InvariantCulture), ":",
 								 minutePart.ToString("00", CultureInfo.InvariantCulture));
+		}
+
+		private void setEarliestShiftStartAndLatestShiftEndPerDay()
+		{
+			// Also gather information about activity/absence layer periods for Tooltip usage.
+
+			var previousDate = new DateTime();
+			int previousActivityId = -2;
+			int previousAbsenceId = -2;
+			int previousIntervalId = -2;
+			IntervalToolTip intervalToolTip = null;
+			IList<IntervalToolTip> intervalToolTipList = null;//new List<IntervalToolTip>();
+			_timeLineStartInterval = _intervalsPerDay;
+
+			foreach (DataRow row in _dataTable.Rows)
+			{
+				if ((int)row["interval_id"] < _timeLineStartInterval)
+				{
+					_timeLineStartInterval = (int)row["interval_id"];
+				}
+				if ((int)row["interval_id"] > _timeLineEndInterval)
+				{
+					_timeLineEndInterval = (int)row["interval_id"];
+				}
+
+				if (previousDate != (DateTime)row["date"])
+				{
+					// Count the nr of detail rows we will need
+					_personCount++;
+
+					// Gather tooltip for each activity/absence layer
+					//if (intervalToolTip != null && intervalToolTipList != null && intervalToolTipList.Count > 0)
+					if (intervalToolTip != null && intervalToolTipList != null)
+					{
+						intervalToolTip.EndInterval = previousIntervalId;
+						intervalToolTipList.Add(intervalToolTip);
+						_intervalDateToolTipDictionary.Add(previousDate, intervalToolTipList);
+					}
+
+					intervalToolTipList = new List<IntervalToolTip>();
+					intervalToolTip = new IntervalToolTip
+					{
+						StartInterval = ((int)row["interval_id"]),
+						AbsenceOrActivityName = ((String)row["activity_absence_name"])
+					};
+
+					previousActivityId = (int)row["activity_id"];
+					previousAbsenceId = (int)row["absence_id"];
+				}
+
+				if ((previousActivityId != (int)row["activity_id"]) || (previousAbsenceId != (int)row["absence_id"]))
+				{
+					// We´re in the start of a new layer. Save the end interval of the previous layer 
+					// and the start of the current layer into different tooltip objects.
+					if (intervalToolTip != null && intervalToolTipList != null)
+					{
+						intervalToolTip.EndInterval = previousIntervalId;
+						intervalToolTipList.Add(intervalToolTip);
+					}
+
+					intervalToolTip = new IntervalToolTip
+					{
+						StartInterval = ((int)row["interval_id"]),
+						AbsenceOrActivityName = ((String)row["activity_absence_name"])
+					};
+				}
+
+				previousDate = (DateTime)row["date"];
+				previousActivityId = (int)row["activity_id"];
+				previousAbsenceId = (int)row["absence_id"];
+				previousIntervalId = (int)row["interval_id"];
+			}
+
+			// Catch the end of the last layer. Save the end interval of the last layer into tooltip object.
+			if (intervalToolTip != null && intervalToolTipList != null)
+			{
+				intervalToolTip.EndInterval = previousIntervalId;
+				intervalToolTipList.Add(intervalToolTip);
+				_intervalDateToolTipDictionary.Add(previousDate, intervalToolTipList);
+			}
+
+			_timeLineEndInterval += 1;
+			// See to that the start and end variables begins and ends at whole hours
+			if (_timeLineStartInterval % _intervalsPerHour != 0)
+			{
+				_timeLineStartInterval -= _timeLineStartInterval % _intervalsPerHour;
+			}
+			if (_timeLineEndInterval % _intervalsPerHour != 0)
+			{
+				_timeLineEndInterval += _intervalsPerHour - (_timeLineEndInterval % _intervalsPerHour);
+			}
 		}
 
 		private void SetEarliestShiftStartAndLatestShiftEnd()
