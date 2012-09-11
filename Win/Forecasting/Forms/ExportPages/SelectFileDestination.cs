@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
         private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
-        private SaveFileDialog _saveFileDialog;
         private const string dateTimeFormat = "yyyyMMdd";
 
         public SelectFileDestination()
@@ -37,18 +36,22 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         private void SaveFile()
         {
-            _saveFileDialog = new SaveFileDialog();
-            _saveFileDialog.Title = Resources.SelectFileDestination;
-            var period = _stateObj.ExportSkillToFileCommandModel.Period;
-            _saveFileDialog.FileName = _stateObj.ExportSkillToFileCommandModel.Skill.Name + " " +
-                                       period.StartDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture) +
-                                       "-" +
-                                       period.EndDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture);
-            _saveFileDialog.Filter = Resources.CSVFile;
+            using(var saveFileDialog = new SaveFileDialog())
+            {
+            	saveFileDialog.Title = Resources.SelectFileDestination;
+            	var period = _stateObj.ExportSkillToFileCommandModel.Period;
+            	saveFileDialog.FileName = _stateObj.ExportSkillToFileCommandModel.Skill.Name + " " +
+            	                           period.StartDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture) +
+            	                           "-" +
+            	                           period.EndDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture);
+            	saveFileDialog.Filter = Resources.CSVFile;
+            	saveFileDialog.OverwritePrompt = true;
 
-
-            if (_saveFileDialog.ShowDialog() == DialogResult.OK) textBox1.Text = _saveFileDialog.FileName;
-            _saveFileDialog.Dispose();
+            	if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            	{
+            		textBox1.Text = saveFileDialog.FileName;
+            	}
+            }
         }
 
         private void setColors()
