@@ -167,6 +167,14 @@
 			});
 		},
 
+		_setEnabled: function (value) {
+			if (value) {
+				this._button.removeAttr('disabled');
+			} else {
+				this._button.attr('disabled', 'disabled');
+			}
+		},
+
 		_setOption: function (key, value) {
 			switch (key) {
 				case "clear":
@@ -174,6 +182,9 @@
 					break;
 				case "value":
 					this._selectValue(value);
+					break;
+				case "enabled":
+					this._setEnabled(value);
 					break;
 			}
 

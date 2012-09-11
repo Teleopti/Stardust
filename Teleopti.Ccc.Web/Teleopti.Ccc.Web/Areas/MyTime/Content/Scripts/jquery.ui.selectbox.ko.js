@@ -28,4 +28,14 @@ jqueryui: {
 		}
 	};
 
+	ko.bindingHandlers['selectbox-enabled'] = {
+		update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+			var observable = valueAccessor();
+			$(element).selectbox({
+				enabled: ko.utils.unwrapObservable(observable)
+			});
+		}
+	};
+
+
 })(jQuery);
