@@ -1,15 +1,10 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_schedule_adherence]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[report_data_agent_schedule_adherence]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_schedule_adherence_per_day]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[report_data_agent_schedule_adherence_per_day]
 GO
 
-/* 
 
-exec mart.report_data_agent_schedule_adherence @date_from='2009-02-01 00:00:00',@adherence_id=1,@date_to='2009-02-28 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'0',@team_set=N'7',@agent_person_code=N'11610fe4-0130-4568-97de-9b5e015b2564',@sort_by=N'6',@time_zone_id=N'1',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-exec mart.report_data_agent_schedule_adherence @date_from='2009-01-13 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'7',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'2',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@date_to='2009-02-11 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'826f2a46-93bb-4b04-8d5e-9b5e015b2577',@adherence_id=N'1',@sort_by=N'6',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+--[mart].[report_data_agent_schedule_adherence_per_day] @date_from='Jan  4 2013 12:00AM',@group_page_code='C2BAEB17-9E91-40FA-AA5A-1DD963BF834D',@group_page_group_set='2',@group_page_agent_code='C2BAEB15-9E91-40FA-AA5A-1DD963BF834D',@site_id='1',@team_set='1',@adherence_id='1',@sort_by='1',@time_zone_id='1',@person_code='C2BAEB18-9E91-40FA-AA5A-1DD963BF834D',@agent_person_code='C2BAEB12-9E91-40FA-AA5A-1DD963BF834D',@report_id='13',@language_id='1',@business_unit_code='C2BAEB14-9E91-40FA-AA5A-1DD963BF834D',@from_matrix='1'
 
-*/
 -- =============================================
 -- Author:		KJ
 -- Create date: 2008-07-01
@@ -35,18 +30,17 @@ exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',
 --				2012-01-23 Change parameters @group_page_group_set and @team_set to sets and nvarchar(max)
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
 --				2012-04-16 Bug 18933
---				2012-09-06 Added new functionality for report Adherence Per Agent. Parameter @date_to only used by Adherence Per Agent.
--- Description:	Used by reports Adherence per Agent and Adherence per Date.
+
+-- Description:	Used by report Agent  - Schedule Adherence
 -- TODO: remove scenario from this SP and .aspx selection. Only default scenario is calculated in the fact-table
 -- =============================================
 
 
-CREATE PROCEDURE [mart].[report_data_agent_schedule_adherence] 
+CREATE PROCEDURE [mart].[report_data_agent_schedule_adherence_per_day] 
 @date_from datetime,
-@date_to datetime = @date_from, --NEW 20120903 KJ, default_value equals to start_date
 @group_page_code uniqueidentifier,
 @group_page_group_set nvarchar(max),
-@group_page_agent_code uniqueidentifier = '567E693D-9D55-47F9-AAAB-D620C71CACE8',
+@group_page_agent_code uniqueidentifier,
 @site_id int,  --currently obsolete
 @team_set nvarchar(max),
 @adherence_id int,--1,2 eller 3 från adherence_calculation tabellen
@@ -60,6 +54,10 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_adherence]
 @from_matrix bit = 1 --Not from SDK
 AS
 SET NOCOUNT ON 
+
+--todo: make this input on the SP
+DECLARE @date_to datetime
+SET @date_to = @date_from
 
 ------------
 --Create all needed temp tables. Just for performance
@@ -83,11 +81,13 @@ CREATE TABLE #minmax(
 )
 
 CREATE TABLE #team_adh_tot(
+	[date_id] [int] NULL,
 	[adherence_calc_s] [decimal](38, 3) NULL,
 	[deviation_s] [decimal](38, 3) NULL
 )
 
 CREATE TABLE #team_adh(
+	[date_id] [int] NULL,
 	[interval_id] [int] NULL,
 	[adherence_calc_s] [decimal](38, 3) NULL,
 	[deviation_s] [decimal](38, 3) NULL
@@ -378,8 +378,8 @@ INSERT #person_intervals
 		ON 1=1
 	INNER JOIN #person_id a
 		ON p.person_id = a.person_id
-	--WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date
-	WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date OR @date_to BETWEEN p.valid_from_date AND p.valid_to_date --20120905 KJ ADDED @DATE_TO
+	WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date
+	
 
 --Start creating the result set
 --a) insert agent statistics matching scheduled time
@@ -432,7 +432,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 		ON b.local_date_id = d.date_id
 	INNER JOIN mart.dim_interval i
 		ON b.local_interval_id = i.interval_id
-	WHERE d.date_date BETWEEN @date_from AND @date_to --20120905 KJ ADDED @DATE_TO
+	WHERE d.date_date = @date_from
 	AND fs.scenario_id=@scenario_id
 	AND b.time_zone_id=@time_zone_id
 ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,d.date_id,d.date_date,i.interval_id
@@ -479,7 +479,7 @@ FROM mart.dim_person p
 			WHERE fsd.person_id=fs.person_id
 			AND fsd.date_id=fs.schedule_date_id
 			AND fsd.interval_id=fs.interval_id)
-	AND d.date_date BETWEEN @date_from AND @date_to --20120905 KJ ADDED @DATE_TO
+	AND d.date_date = @date_from
 	AND b.time_zone_id=@time_zone_id
 END
 
@@ -515,9 +515,9 @@ INNER JOIN #result r ON r.date_id=a.date_id AND r.person_id=a.person_id
 
 --per interval
 INSERT INTO #team_adh
-SELECT interval_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
+SELECT date_id,interval_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
 FROM #result
-GROUP by interval_id
+GROUP by date_id,interval_id
 
 UPDATE #result
 SET team_adherence=
@@ -528,12 +528,22 @@ SET team_adherence=
 	END
 ,team_deviation_s=a.deviation_s
 FROM #team_adh a
-INNER JOIN #result r ON r.interval_id=a.interval_id
+INNER JOIN #result r ON r.date_id=a.date_id AND r.interval_id=a.interval_id
+--WHERE a.adherence_calc_m>0
+
+/*De som inte avviker och inte har någon ready time får 100 i adherence*/
+/*
+UPDATE #result
+SET team_adherence=1,team_deviation_m=0
+FROM #result
+WHERE team_adherence is null and team_deviation_m is null
+*/
 
 --total(for all selected)
 INSERT INTO #team_adh_tot
-SELECT sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
+SELECT date_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
 FROM #result
+GROUP by date_id
 
 UPDATE #result
 SET team_adherence_tot=
@@ -544,6 +554,9 @@ SET team_adherence_tot=
 	END
 ,team_deviation_tot_s=a.deviation_s
 FROM #team_adh_tot a
+INNER JOIN #result r ON r.date_id=a.date_id
+--WHERE a.adherence_calc_m>0
+
 
 /*Set display color and name on activity or absence*/
 UPDATE #result
@@ -573,9 +586,9 @@ update #result set mininterval = minint, maxinterval = maxint
 from  #minmax
 inner join #result on #minmax.person_id = #result.person_id
 
--- Sortering 1=FirstName,2=LastName,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date
--- NOTE: If you change the column order/name you need to consider SDK DTO as well!
-
+/*Sortering 1=FÃ¶rnamn,2=Efternamn,3=Shift_start,4=Adherence,5=ShiftEnd*/
+--NOTE: If you change the column order/name you need to consider SDK DTO as well!
+--		see: 
 IF @sort_by=1
 	SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
 				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot, deviation_s/60.0 as 'deviation_m' ,adherence_calc_s,deviation_tot_s/60.0 as 'deviation_tot_m' ,round(ready_time_s/60.0 ,0)'ready_time_m',
@@ -606,9 +619,3 @@ SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, 
 				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
 				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone
 				FROM #result ORDER BY maxinterval, person_first_name,person_last_name,person_id,interval_id
-IF @sort_by=6
-SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
-				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
-				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
-				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone
-				FROM #result ORDER BY date,interval_id
