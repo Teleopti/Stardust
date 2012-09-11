@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
+using Teleopti.Analytics.Etl.Interfaces;
+using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 
 namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 {
-    public static class ScheduleDataRowFactory
-    {
-        public static DataRow CreateScheduleDataRow(DataTable dataTable
-                                                  , IVisualLayer layer
-                                                  , ScheduleProjection scheduleProjection
-                                                  , IntervalBase interval
-                                                  , DateTime insertDateTime,
-                                                    int intervalsPerDay)
+	public class ScheduleDataRowFactory : IScheduleDataRowFactory
+	{
+        public DataRow CreateScheduleDataRow(DataTable dataTable
+											, IVisualLayer layer
+											, IScheduleProjection scheduleProjection
+											, IntervalBase interval
+											, DateTime insertDateTime
+											, int intervalsPerDay
+											, IVisualLayerCollection layerCollection)
         {
-            //DateTimePeriod personPayloadPeriod = scheduleProjection.SchedulePartProjection.ProjectedLayerCollection.Period().Value;
-            DateTimePeriod personPayloadPeriod =
-                GetShiftPeriod(scheduleProjection.SchedulePartProjectionMerged, layer);
+            DateTimePeriod personPayloadPeriod = GetShiftPeriod(scheduleProjection.SchedulePartProjectionMerged, layer);
             IPayload payload = layer.Payload;
             DataRow row = dataTable.NewRow();
 
@@ -64,7 +63,7 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 
             row["shift_length_m"] = personPayloadPeriod.EndDateTime.Subtract(personPayloadPeriod.StartDateTime).TotalMinutes;
 
-            var timeInfo = new TimeInfo(payload, layer, scheduleProjection.SchedulePartProjection);
+            var timeInfo = new TimeInfo(payload, layer, layerCollection);
 
             row["scheduled_time_m"] = timeInfo.TotalTime.Time;
             row["scheduled_time_absence_m"] = timeInfo.TotalTime.AbsenceTime;
@@ -113,7 +112,7 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
             return row;
         }
 
-        public static DateTimePeriod GetShiftPeriod(IVisualLayerCollection layerCollection, ILayer<IPayload> layer )
+        public DateTimePeriod GetShiftPeriod(IVisualLayerCollection layerCollection, ILayer<IPayload> layer )
         {
 			//would be nice not doing this for every interval, if it becomes a perf problem - I need to talk with Jonas
 			var periods = new List<DateTimePeriod>();
@@ -130,22 +129,5 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 
 			return (DateTimePeriod)layerCollection.Period();
         }
-
-        public static IPersonAbsence GetPersonAbsenceForLayer(IScheduleDay schedule, ILayer layer)
-        {
-            IPersonAbsence pAbsence = null;
-            IList<IPersonAbsence> pAbsenceCollection = schedule.PersonAbsenceCollection();
-            foreach (IPersonAbsence personAbsence in pAbsenceCollection)
-            {
-                if (personAbsence.Period.Contains(layer.Period))
-                {
-                    pAbsence = personAbsence;
-                    break;
-                }
-            }
-            return pAbsence;
-        }
-
-
     }
 }
