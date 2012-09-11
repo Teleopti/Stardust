@@ -91,7 +91,6 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             var root = new TreeNodeAdv(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Name) { LeftImageIndices = new[] { 0 }, Expanded = true, Tag = new List<Guid>(), TagObject = new List<Guid>() };
             nodes.Add(root);
             var usersNode = new TreeNodeAdv(Resources.UserName) { LeftImageIndices = new[] { 1 } ,Tag = new List<Guid>()};
-            root.Nodes.Add(usersNode);
             var currSite = new TreeNodeAdv("");
         	var currTeamText = ""; 
             var currTeam = new TreeNodeAdv("");
@@ -147,12 +146,12 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                     ((IList<Guid>)currTeam.Tag).Add(personSelectorOrganization.PersonId);
                 }
             }
-            if (usersNode.Nodes.Count == 0)
-                root.Nodes.Remove(usersNode);
-
+            
             foreach (TreeNodeAdv nodeLevel1 in nodes)
             {
                 nodeLevel1.Nodes.Sort();
+                if (usersNode.Nodes.Count > 0)
+                    nodeLevel1.Nodes.Insert(0, usersNode);
                 foreach (TreeNodeAdv nodeLevel2 in nodeLevel1.Nodes)
                 {
                     nodeLevel2.Nodes.Sort();
