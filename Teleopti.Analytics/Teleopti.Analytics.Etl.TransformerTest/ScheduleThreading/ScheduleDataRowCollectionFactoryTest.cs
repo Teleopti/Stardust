@@ -52,8 +52,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
 			_layer2Period = new DateTimePeriod(theDate.Add(new TimeSpan(12, 15, 0)), theDate.Add(new TimeSpan(12, 30, 0)));
 			
 			var factory = new VisualLayerFactory();
-			_layer1 = factory.CreateShiftSetupLayer(activity1, _layer1Period);
-			_layer2 = factory.CreateShiftSetupLayer(activity2, _layer2Period);
+			_layer1 = factory.CreateShiftSetupLayer(activity1, _layer1Period, _person);
+			_layer2 = factory.CreateShiftSetupLayer(activity2, _layer2Period, _person);
 
 			_target = new ScheduleDataRowCollectionFactory();
 		}
