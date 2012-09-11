@@ -56,7 +56,6 @@
             this.reportHeader1.HeaderText = "autoLabel1";
             this.reportHeader1.Location = new System.Drawing.Point(3, 3);
             this.reportHeader1.Name = "reportHeader1";
-            this.reportHeader1.ReportName = null;
             this.reportHeader1.Size = new System.Drawing.Size(650, 32);
             this.reportHeader1.TabIndex = 10;
             // 

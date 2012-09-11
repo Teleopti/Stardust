@@ -7993,10 +7993,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             Cursor.Current = Cursors.WaitCursor;
             if (_scheduleView.SelectedSchedules().Count > 0)
             {
-                ReportHandler.ShowReport(
-                    ReportHandler.CreateReportDetail(
-                        DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport), _scheduleView,
-                    SchedulerState.RequestedScenario, CultureInfo.CurrentCulture);
+            	var reportDetail =
+            		ReportHandler.CreateReportDetail(
+            			ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+            			                               DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport));
+                ReportHandler.ShowReport(reportDetail, _scheduleView, SchedulerState.RequestedScenario, CultureInfo.CurrentCulture);
             }
             Cursor.Current = Cursors.Default;
         }

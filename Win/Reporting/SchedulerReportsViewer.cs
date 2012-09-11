@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
             try
             {
-                switch (_reportDetail.Function)
+                switch (_reportDetail.FunctionPath)
                 {
                     case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
                         refreshScheduledTimePerActivity();
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Win.Reporting
         
         void _backgroundWorkerLoadReport_DoWork(object sender, DoWorkEventArgs e)
         {
-            switch (_reportDetail.Function)
+            switch (_reportDetail.FunctionPath)
             {
                 case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
                     e.Result = getReportDataForScheduleTimePerActivityReport(e.Argument as ReportSettingsScheduledTimePerActivityModel);
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.Reporting
             Cursor = Cursors.Default;
             if (rethrowBackgroundException(e)) return;
 
-            switch (_reportDetail.Function)
+            switch (_reportDetail.FunctionPath)
             {
                 case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
                     var reportDataPackage1 = e.Result as ReportDataPackage<IReportData>;
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
         private Object getReportSettingsModel()
         {
-            switch (_reportDetail.Function)
+            switch (_reportDetail.FunctionPath)
             {
                 case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
                     return _reportSettings1.ScheduleTimePerActivitySettingsModel;

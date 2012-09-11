@@ -2,7 +2,6 @@
 using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Interfaces.Domain;
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.Win.Reporting
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void SetupFromScheduler(ReportDetail reportDetail)
         {
-            _presenter.HideSettingsAndSetReportHeader(reportDetail.Function, reportDetail.DisplayName);
+            _presenter.HideSettingsAndSetReportHeader(reportDetail);
         }
 
         public void Unfold()
@@ -89,11 +88,6 @@ namespace Teleopti.Ccc.Win.Reporting
         public void ReportHeaderCheckRightToLeft()
         {
             reportHeader1.CheckRightToLeft();
-        }
-
-        public void SetReportFunctionPath(string functionPath)
-        {
-            reportHeader1.ReportName = functionPath;
         }
 
         public void AddSettingsForScheduledTimePerActivityReport(IReportSettingsScheduledTimePerActivityView settingsScheduledTimePerActivityView)
@@ -147,7 +141,12 @@ namespace Teleopti.Ccc.Win.Reporting
 			panelSettingsContainer.Controls.Add((ReportSettingsScheduleTimeVersusTargetTimeView)settingsScheduleTimeVersusTargetTimeView);	
 		}
 
-        public void Init(IEventAggregator eventAggregator, IComponentContext componentContext, IApplicationFunction applicationFunction)
+    	public void SetReportFunctionCode(string functionCode)
+    	{
+    		reportHeader1.ReportFunctionCode = functionCode;
+    	}
+
+    	public void Init(IEventAggregator eventAggregator, IComponentContext componentContext, IApplicationFunction applicationFunction)
         {
             _eventAggregator = eventAggregator;
             _componentContext = componentContext;

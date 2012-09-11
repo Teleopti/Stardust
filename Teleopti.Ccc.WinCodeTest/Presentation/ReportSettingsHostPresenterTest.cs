@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Ccc.WinCodeTest.Common;
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         [Test]
         public void ShouldNotShowAnySettingsIfFunctionCodeIsInvalid()
         {
-            _target.ShowSettings(new ReportDetail { Function = "blablabla" });
+            _target.ShowSettings(new ReportDetail { FunctionPath = "blablabla/my report" });
         }
 
         [Test]
@@ -38,15 +37,16 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
             Expect.Call(() => _view.AddSettingsForScheduledTimePerActivityReport(settingsScheduledTimePerActivityView));
             Expect.Call(settingsScheduledTimePerActivityView.InitializeSettings);
             Expect.Call(() => _view.ReportHeaderCheckRightToLeft());
-            Expect.Call(() => _view.SetReportFunctionPath(DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport));
             Expect.Call(() => _view.SetHeaderText(UserTexts.Resources.ScheduledTimePerActivity));
+			Expect.Call(() => _view.SetReportFunctionCode("functionCode"));
             Expect.Call(() => _view.Unfold());
             _mocks.ReplayAll();
 
             ReportDetail reportDetail = new ReportDetail
                                             {
-                                                Function = DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport,
-                                                DisplayName = UserTexts.Resources.ScheduledTimePerActivity
+                                                FunctionPath = DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport,
+                                                DisplayName = UserTexts.Resources.ScheduledTimePerActivity,
+												FunctionCode = "functionCode"
                                             };
             _target.ShowSettings(reportDetail);
             _mocks.VerifyAll();
@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
             Assert.IsNotNull(_target.SettingsForScheduledTimePerActivityReport);
         }
 
-        //NEW_AUDITING
         [Test]
         public void ShouldShowSettingsForScheduleAuditingReport()
         {
@@ -64,15 +63,16 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
             Expect.Call(() => _view.AddSettingsForScheduleAuditingReport(settingsScheduleAuditingView));
             Expect.Call(settingsScheduleAuditingView.InitializeSettings);
             Expect.Call(() => _view.ReportHeaderCheckRightToLeft());
-            Expect.Call(() => _view.SetReportFunctionPath(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport));
-            Expect.Call(() => _view.SetHeaderText(UserTexts.Resources.All));
+			Expect.Call(() => _view.SetReportFunctionCode("functionCode"));
+            Expect.Call(() => _view.SetHeaderText(UserTexts.Resources.ScheduleAuditTrailReport));
             Expect.Call(() => _view.Unfold());
             _mocks.ReplayAll();
 
             ReportDetail reportDetail = new ReportDetail
             {
-                Function = DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport,
-                DisplayName = UserTexts.Resources.All
+                FunctionPath = DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport,
+                DisplayName = UserTexts.Resources.ScheduleAuditTrailReport,
+				FunctionCode = "functionCode"
             };
             _target.ShowSettings(reportDetail);
             _mocks.VerifyAll();
@@ -89,15 +89,16 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
 			Expect.Call(() => _view.AddSettingsForScheduleTimeVersusTargetTimeReport(settingsSettingsScheduleTimeVersusTargetTimeView));
 			Expect.Call(settingsSettingsScheduleTimeVersusTargetTimeView.InitializeSettings);
 			Expect.Call(() => _view.ReportHeaderCheckRightToLeft());
-			Expect.Call(() => _view.SetReportFunctionPath(DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport));
+			Expect.Call(() => _view.SetReportFunctionCode("functionCode"));
 			Expect.Call(() => _view.SetHeaderText(UserTexts.Resources.ScheduledTimeVsTarget));
 			Expect.Call(() => _view.Unfold());
 			_mocks.ReplayAll();
 			
-			var reportDetail = new ReportDetail()
+			var reportDetail = new ReportDetail
 			                            	{
-			                            		Function = DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport,
-			                            		DisplayName = UserTexts.Resources.ScheduledTimeVsTarget
+			                            		FunctionPath = DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport,
+			                            		DisplayName = UserTexts.Resources.ScheduledTimeVsTarget,
+												FunctionCode = "functionCode"
 			                            	};
 
 			_target.ShowSettings(reportDetail);
@@ -108,13 +109,18 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Presentation.IReportSettingsHostView.SetHeaderText(System.String)"), Test]
         public void ShouldShowReportNameButDisableSettingsWhenCallComesFromScheduler()
         {
-            Expect.Call(() => _view.SetReportFunctionPath("Report/Path"));
+            Expect.Call(() => _view.SetReportFunctionCode("Path"));
             Expect.Call(() => _view.DisableShowSettings());
             Expect.Call(() => _view.ReportHeaderCheckRightToLeft());
             Expect.Call(() => _view.SetHeaderText("Report Header"));
             _mocks.ReplayAll();
 
-            _target.HideSettingsAndSetReportHeader("Report/Path", "Report Header");
+        	_target.HideSettingsAndSetReportHeader(new ReportDetail
+        	                                       	{
+        	                                       		FunctionPath = "Report/Path",
+        	                                       		DisplayName = "Report Header",
+        	                                       		FunctionCode = "Path"
+        	                                       	});
             _mocks.VerifyAll();
         }
 

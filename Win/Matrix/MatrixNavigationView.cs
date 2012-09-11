@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Win.Matrix
         public void OpenRealTime(IApplicationFunction func)
         {
             Cursor = Cursors.WaitCursor;
-            ReportHandler.ShowReport(ReportHandler.CreateReportDetail(func.FunctionPath), _componentContext, func);
+            ReportHandler.ShowReport(ReportHandler.CreateReportDetail(func), _componentContext, func);
             Cursor = DefaultCursor;
         }
     }

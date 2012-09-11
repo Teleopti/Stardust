@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Reporting;
+﻿using Teleopti.Ccc.WinCode.Reporting;
 
 namespace Teleopti.Ccc.WinCode.Presentation
 {
@@ -14,7 +13,6 @@ namespace Teleopti.Ccc.WinCode.Presentation
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         IReportSettingsScheduledTimePerActivityView GetSettingsForScheduledTimePerActivityReport();
         void ReportHeaderCheckRightToLeft();
-        void SetReportFunctionPath(string functionPath);
         void AddSettingsForScheduledTimePerActivityReport(IReportSettingsScheduledTimePerActivityView settingsScheduledTimePerActivityView);
         void DisableShowSettings();
 
@@ -24,5 +22,6 @@ namespace Teleopti.Ccc.WinCode.Presentation
 
     	IReportSettingsScheduleTimeVersusTargetTimeView GetSettingsForScheduleTimeVersusTargetTimeReport { get; }
     	void AddSettingsForScheduleTimeVersusTargetTimeReport(IReportSettingsScheduleTimeVersusTargetTimeView settingsScheduleTimeVersusTargetTimeView);
+    	void SetReportFunctionCode(string functionCode);
     }
 }

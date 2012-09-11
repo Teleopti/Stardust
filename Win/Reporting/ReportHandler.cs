@@ -12,7 +12,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.OnlineReporting;
 using Teleopti.Ccc.OnlineReporting.Model;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
@@ -32,47 +31,33 @@ namespace Teleopti.Ccc.Win.Reporting
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static void ShowReport(ReportDetail reportDetail, ScheduleViewBase scheduleViewBase, IScenario loadedScenario, CultureInfo culture)
         {
-            switch (reportDetail.Function)
+            switch (reportDetail.FunctionPath)
             {
                 case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
                     showScheduleTimePerActivity(reportDetail, scheduleViewBase, loadedScenario, culture);
                     break;
-                default:
-                    break;
             }
         }
 
-        public static ReportDetail CreateReportDetail(string appFunctionReport)
+        public static ReportDetail CreateReportDetail(IApplicationFunction appFunctionReport)
         {
-            switch (appFunctionReport)
+        	var reportDetail = new ReportDetail {FunctionPath = appFunctionReport.FunctionPath, FunctionCode = appFunctionReport.FunctionCode};
+            switch (reportDetail.FunctionPath)
             {
                 case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
-                    return new ReportDetail
-                               {
-                                   File = "report_scheduled_time_per_activity.rdlc",
-                                   Function = appFunctionReport,
-                                   DisplayName = UserTexts.Resources.ScheduledTimePerActivity
-                               };
+            		reportDetail.File = "report_scheduled_time_per_activity.rdlc";
+            		reportDetail.DisplayName = UserTexts.Resources.ScheduledTimePerActivity;
+					break;
                 case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:
-                    //NEW_AUDIT
-                    return new ReportDetail
-                                {
-                                    File = "report_auditing.rdlc",
-                                    Function = appFunctionReport,
-                                    DisplayName = Resources.ScheduleAuditTrailReport
-                                };
-
+					reportDetail.File = "report_auditing.rdlc";
+            		reportDetail.DisplayName = UserTexts.Resources.ScheduleAuditTrailReport;
+                    break;
                 case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-            		return new ReportDetail
-            		       	{
-								File = "report_schedule_time_vs_target.rdlc",
-            		       		Function = appFunctionReport,
-            		       		DisplayName = UserTexts.Resources.ScheduledTimeVsTarget
-            		       	};
-                default:
+					reportDetail.File = "report_schedule_time_vs_target.rdlc";
+            		reportDetail.DisplayName = UserTexts.Resources.ScheduledTimeVsTarget;
                     break;
             }
-            return new ReportDetail();
+            return reportDetail;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -87,7 +72,7 @@ namespace Teleopti.Ccc.Win.Reporting
         	}
 			catch (DataSourceException dataSourceException)
         	{
-				using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenReports, Resources.ServerUnavailable))
+				using (var view = new SimpleExceptionHandlerView(dataSourceException, UserTexts.Resources.OpenReports, UserTexts.Resources.ServerUnavailable))
 				{
 					view.ShowDialog();
 				}
@@ -133,8 +118,8 @@ namespace Teleopti.Ccc.Win.Reporting
 
 			VirtualSchedulePeriodFinder periodFinder;
 
-			var startDate = new DateOnly(DateOnly.MaxValue);
-			var endDate = new DateOnly(DateOnly.MinValue);
+			var startDate = DateOnly.MaxValue;
+			var endDate = DateOnly.MinValue;
 			var personDictionary = new Dictionary<IPerson, IList<IVirtualSchedulePeriod>>();
 
 			foreach(var person in model.Persons)
