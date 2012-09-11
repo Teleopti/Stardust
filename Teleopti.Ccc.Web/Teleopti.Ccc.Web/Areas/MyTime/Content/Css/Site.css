@@ -914,7 +914,7 @@ footer p
 
 .rtl .icon-left{ padding-right: 25px; padding-left: 0px; width: auto; }
 .rtl header .icon-left{padding-right: 0; padding-left: 25px;}
-.rtl .icon.meeting{background-position: -250px -2px;}
+.rtl .icon.meeting{background-position: -309px 1px;}
 .rtl .tooltip-container dl dd, .rtl .tooltip-container dl dt {float: right;}
 
 .ie7 .rtl .weekview-day{float: right;}
