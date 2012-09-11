@@ -107,6 +107,7 @@
     <Compile Include="Job\Steps\StageSkillJobStep.cs" />
     <Compile Include="OvertimeTransformer.cs" />
     <Compile Include="PmPermissionExtractor.cs" />
+    <Compile Include="ScheduleThreading\IScheduleDataRowFactory.cs" />
     <Compile Include="SkillTransformer.cs" />
     <Compile Include="DayOffTransformer.cs" />
     <Compile Include="GroupPagePersonTransformer.cs" />

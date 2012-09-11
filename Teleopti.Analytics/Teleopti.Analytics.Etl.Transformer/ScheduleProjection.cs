@@ -1,35 +1,34 @@
 using System.Linq;
+using Teleopti.Analytics.Etl.Interfaces;
+using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Transformer
 {
-    public class ScheduleProjection
+    public class ScheduleProjection : IScheduleProjection
     {
         private readonly IVisualLayerCollection _projection;
         private readonly IScheduleDay _schedulePart;
 		private readonly IVisualLayerCollection _schedulePartProjectionMerged;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ScheduleProjection(IScheduleDay schedule, IVisualLayerCollection projection)
+        public ScheduleProjection(IScheduleDay schedule, IVisualLayerCollection projection)
         {
             _schedulePart = schedule;
             _projection = projection;
 
 			_schedulePartProjectionMerged = new VisualLayerCollection(projection.Person,
-												 projection.ToList<IVisualLayer>(),
+												 projection.ToList(),
 												 new ProjectionIntersectingPeriodMerger());
         }
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public IScheduleDay SchedulePart
         {
             get { return _schedulePart; }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public IVisualLayerCollection SchedulePartProjection
         {
             get { return _projection; }

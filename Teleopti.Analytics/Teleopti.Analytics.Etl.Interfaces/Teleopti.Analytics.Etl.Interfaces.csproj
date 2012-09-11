@@ -89,6 +89,7 @@
     <Compile Include="Common\IEtlRunningInformation.cs" />
     <Compile Include="Common\IRunControllerRepository.cs" />
     <Compile Include="Common\PmPermissionType.cs" />
+    <Compile Include="Transformer\IScheduleProjection.cs" />
     <Compile Include="PerformanceManager\IPmPermissionExtractor.cs" />
     <Compile Include="PerformanceManager\IPMService.cs" />
     <Compile Include="PerformanceManager\PmGetUsersException.cs" />
