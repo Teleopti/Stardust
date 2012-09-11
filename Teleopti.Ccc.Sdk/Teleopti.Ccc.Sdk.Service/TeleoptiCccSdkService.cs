@@ -828,7 +828,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			IStatisticRepository repository = repositoryFactory.CreateStatisticRepository();
 			int adherenceCalculationId = GetMatrixReportSetting();
 
-			IList returnValues = repository.LoadAdherenceData(dateTime, timeZoneId, personDto.Id.Value, agentPersonDto.Id.Value, languageId, adherenceCalculationId);
+			IList returnValues = repository.LoadAdherenceData(dateTime,dateTime, timeZoneId, personDto.Id.Value, agentPersonDto.Id.Value, languageId, adherenceCalculationId);
 			if (returnValues.Count == 0)
 				return adherenceDto;
 			foreach (object[] data in returnValues)
