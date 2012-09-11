@@ -46,9 +46,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             	                           period.EndDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture);
             	saveFileDialog.Filter = Resources.CSVFile;
             	saveFileDialog.OverwritePrompt = true;
-            if (_saveFileDialog.ShowDialog() == DialogResult.OK) txtFileName.Text = _saveFileDialog.FileName;
+                
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
             	{
-            		textBox1.Text = saveFileDialog.FileName;
+            		txtFileName.Text = saveFileDialog.FileName;
             	}
             }
         }
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         {
             if (String.IsNullOrEmpty(txtFileName.Text)) return false;
             var commandModel = stateObj.ExportSkillToFileCommandModel;
-            var pathExists = IsFilePathExists(txtFileName.Text);
+            var pathExists = txtFileName.Text.Contains("\\");
             
             if (pathExists)
                 commandModel.FileName = txtFileName.Text;
@@ -87,12 +88,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             return true;
         }
 
-        private bool IsFilePathExists(string fileName)
-        {
-            bool isExists = fileName.Contains("\\");
-            return isExists;
-        }
-
+       
         public void SetEditMode()
         {
         }
