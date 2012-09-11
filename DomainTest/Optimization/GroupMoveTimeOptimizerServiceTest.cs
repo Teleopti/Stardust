@@ -111,18 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
             using (_mock.Record())
             {
-                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 }).Repeat.AtLeastOnce();
-                Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
-                Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce();
-                Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_matrix2.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_optimizer.IsMatrixForDateAndPerson(date, _person)).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_optimizer.IsMatrixForDateAndPerson(date2, _person)).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_optimizer.Matrix).Return(_matrix).Repeat.AtLeastOnce();
-                Expect.Call(_matrix.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
-                Expect.Call(_matrix.GetScheduleDayByKey(date2)).Return(_scheduleDayPro2).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+                VerifyReportProgressEventExecutedAndCanCancelExpectValues(date2, date);
                 Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
@@ -136,6 +125,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target.ReportProgress -= targetReportProgress;
                 Assert.IsTrue(_eventExecuted);
             }
+        }
+
+        private void VerifyReportProgressEventExecutedAndCanCancelExpectValues(DateOnly date2, DateOnly date)
+        {
+            Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> {date, date2}).Repeat.AtLeastOnce();
+            Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
+            Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
+            Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce();
+            Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce();
+            Expect.Call(_matrix2.Person).Return(_person).Repeat.AtLeastOnce();
+            Expect.Call(_optimizer.IsMatrixForDateAndPerson(date, _person)).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_optimizer.IsMatrixForDateAndPerson(date2, _person)).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_optimizer.Matrix).Return(_matrix).Repeat.AtLeastOnce();
+            Expect.Call(_matrix.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
+            Expect.Call(_matrix.GetScheduleDayByKey(date2)).Return(_scheduleDayPro2).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
         }
 
         void targetReportProgress(object sender, ResourceOptimizerProgressEventArgs e)

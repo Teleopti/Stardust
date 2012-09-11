@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     }
                 }
 
-                var daysToSave = new List<KeyValuePair<MoveTimeDays ,IScheduleDay>>();
+                var daysToSave = new List<KeyValuePair<MoveTimeDay ,IScheduleDay>>();
                 var daysToDelete = new List<IScheduleDay>();
                 processScheduleDay(daysToDelete, daysToSave, memberList, firstDate, false);
                 processScheduleDay(daysToDelete, daysToSave, memberList, secDate, true);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return removeList;
         }
 
-        private static void processScheduleDay(ICollection<IScheduleDay> daysToDelete, ICollection<KeyValuePair<MoveTimeDays, IScheduleDay>> daysToSave,
+        private static void processScheduleDay(ICollection<IScheduleDay> daysToDelete, ICollection<KeyValuePair<MoveTimeDay, IScheduleDay>> daysToSave,
                                         IEnumerable<IGroupMoveTimeOptimizer> memberList, DateOnly selectedDate, bool isSecondDay)
         {
             foreach (var groupMoveTimeOptimizer in memberList)
@@ -109,11 +109,11 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (isSecondDay)
                 {
                     groupMoveTimeOptimizer.LockDate(selectedDate);
-                    daysToSave.Add(new KeyValuePair<MoveTimeDays, IScheduleDay>(MoveTimeDays.SecondDay , (IScheduleDay)scheduleDay.Clone()));
+                    daysToSave.Add(new KeyValuePair<MoveTimeDay, IScheduleDay>(MoveTimeDay.SecondDay , (IScheduleDay)scheduleDay.Clone()));
                 }
                 else
                 {
-                    daysToSave.Add(new KeyValuePair<MoveTimeDays, IScheduleDay>(MoveTimeDays.FirstDay, (IScheduleDay)scheduleDay.Clone()));
+                    daysToSave.Add(new KeyValuePair<MoveTimeDay, IScheduleDay>(MoveTimeDay.FirstDay, (IScheduleDay)scheduleDay.Clone()));
                 }
             }
         }
