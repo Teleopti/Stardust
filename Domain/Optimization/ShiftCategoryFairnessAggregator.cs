@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class ShiftCategoryFairnessAggregator : IShiftCategoryFairnessAggregator
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IShiftCategoryFairness GetShiftCategoryFairnessForPersons(IScheduleDictionary scheduleDictionary, IList<IPerson> persons)
 		{
 			IShiftCategoryFairness result = null;
