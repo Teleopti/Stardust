@@ -26,17 +26,21 @@ Scenario: Show the time indicator at correct time
 
 Scenario: Show time indicator movement
 	Given I have the role 'Full access to mytime'
-	And Current time is '2013-10-03 12:00'
-	And I should see the time indicator at time '2013-10-03 12:00'
-	When Current browser time has changed to '2013-10-03 12:01'
-	Then I should see the time indicator at time '2013-10-03 12:01'
-	
+	And Current time is '2012-09-13 12:00'
+	And I view my week schedule
+	And I should see the time indicator at time '2012-09-13 12:00'
+	When Current browser time has changed to '2012-09-13 12:30'
+	And I navigate to week schedule page for date '2012-09-13'
+	Then I should see the time indicator at time '2012-09-13 12:30'
+		
 Scenario: Show time indicator movement at midnight
 	Given I have the role 'Full access to mytime'
-	And Current time is '2014-01-01 23:59'
-	And I should see the time indicator at time '2014-01-01 23:59'
-	When Time has passed with '1' minutes
-	Then I should see the time indicator at time '2014-01-02 00:00'
+	And Current time is '2012-09-13 23:59'
+	And I view my week schedule
+	And I should see the time indicator at time '2012-09-13 23:59'
+	When Current browser time has changed to '2012-09-14 00:00'
+	And I navigate to week schedule page for date '2012-09-14'
+	Then I should see the time indicator at time '2012-09-14 00:00'
 
 Scenario: Handle time indicator movement from winter to summer time
 	Given I have the role 'Full access to mytime'

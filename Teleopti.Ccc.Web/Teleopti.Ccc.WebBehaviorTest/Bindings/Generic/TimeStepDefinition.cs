@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			if (WatiN.Core.Browser.Exists<IE>(popupConstraint))
 			{
 				WatiN.Core.Browser.AttachTo<IE>(popupConstraint).Eval(setJsDate);
-			}
+            }
 		}
 	}
 }
