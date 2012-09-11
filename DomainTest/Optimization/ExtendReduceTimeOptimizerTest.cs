@@ -5,6 +5,7 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingOptions _schedulingOptions;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 
-        [SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
             _scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-            _effectiveRestriction = _mocks.Stub<IEffectiveRestriction>();
+            _effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
             _schedulingOptions = new SchedulingOptions();
         }
 
@@ -119,6 +120,54 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             Assert.IsTrue(result);
         }
+
+
+		[Test]
+		public void ShouldReturnTrueIfDateToLengthenIsSuccessfulWhenKeepShiftCategory()
+		{
+			_schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
+			ExtendReduceTimeDecisionMakerResult decisionMakerResult = new ExtendReduceTimeDecisionMakerResult();
+			decisionMakerResult.DayToLengthen = new DateOnly(2011, 1, 1);
+			decisionMakerResult.DayToShorten = new DateOnly(2011, 1, 2);
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
+			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
+			var mainShift = _mocks.StrictMock<IMainShift>();
+
+			using (_mocks.Record())
+			{
+				commonMocks(decisionMakerResult);
+
+				Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
+				Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
+					.Return(false).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+					.Return(true);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+					.Return(false);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+					.Return(30);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+					.Return(30);
+				Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 1)))
+					.Return(true).Repeat.Any();
+
+				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(personAssignment.MainShift).Return(mainShift).Repeat.Twice();
+				Expect.Call(mainShift.ShiftCategory).Return(shiftCategory).Repeat.Twice();
+			}
+
+			bool result;
+
+			using (_mocks.Playback())
+			{
+				result = _target.Execute();
+			}
+
+			Assert.IsTrue(result);
+			Assert.IsNotNull(_effectiveRestriction.ShiftCategory);
+			Assert.AreSame(shiftCategory, _effectiveRestriction.ShiftCategory);
+		}
 
         [Test]
         public void ShouldReturnTrueIfDateToShortenIsSuccessful()

@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
             matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
-            if (!tryScheduleDay(dateOnly, schedulingOptions, lenghtHint))
+            if (!tryScheduleDay(dateOnly, schedulingOptions, lenghtHint, scheduleDayBefore))
 
             {
                 _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
@@ -189,11 +189,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, WorkShiftLengthHintOption workShiftLengthHintOption)
+        private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, WorkShiftLengthHintOption workShiftLengthHintOption, IScheduleDay originalScheduleDay)
         {
             IScheduleDayPro scheduleDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(day);
             schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay.DaySchedulePart(), schedulingOptions);
+
+			if(schedulingOptions.RescheduleOptions == OptimizationRestriction.KeepShiftCategory) 
+				effectiveRestriction.ShiftCategory = originalScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory;
 
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
