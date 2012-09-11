@@ -78,6 +78,8 @@
 						}
 					})
 				;
+
+			input.attr('title', select.attr('title'));
 			input[0].defaultValue = value;
 
 			input.data("autocomplete")._renderItem = function (ul, item) {
@@ -128,7 +130,7 @@
 			$(this.input).val(value);
 			$(this.input).trigger('change');
 		},
-		
+
 		_setEnabled: function (value) {
 			if (value) {
 				this.input.removeAttr('disabled');
@@ -138,7 +140,7 @@
 				this.button.attr('disabled', 'disabled');
 			}
 		},
-		
+
 		_setOption: function (key, value) {
 			switch (key) {
 				case "clear":
