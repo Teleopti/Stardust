@@ -56,6 +56,9 @@ ECHO copy done
 ::Get ReportViewer
 XCOPY /d /y "%Dependencies%\ReportViewer2010.exe" "%ContentDest%\TeleoptiCCC\bin"
 
+::Get Eventlog register Source
+XCOPY /d /y "%Dependencies%\RegisterEventLogSource.exe" "%ContentDest%\TeleoptiCCC\bin"
+
 ::update config and run scpack
 FOR /F %%G IN ('DIR /B Customer\*.txt') DO CALL :FuncDeployConfig %%G 
 IF %ERRORLEV% NEQ 0 SET ERRORLEV=103 & GOTO error
