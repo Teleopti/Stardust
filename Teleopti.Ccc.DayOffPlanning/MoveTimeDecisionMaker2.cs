@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 
             foreach (int index in lockableBitArray.UnlockedIndexes)
             {
-                if (values[index - lockableBitArray.PeriodArea.Minimum].HasValue)
+                if (values[index - lockableBitArray.PeriodArea.Minimum].HasValue )
                     test.Add(new KeyValuePair<int, double>(index, values[index - lockableBitArray.PeriodArea.Minimum].Value));
             }
 

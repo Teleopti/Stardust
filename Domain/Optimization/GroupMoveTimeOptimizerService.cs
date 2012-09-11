@@ -78,12 +78,12 @@ namespace Teleopti.Ccc.Domain.Optimization
                     }
                 }
 
-                var daysToSave = new List<IScheduleDay>();
+                var daysToSave = new List<KeyValuePair<MoveTimeDays ,IScheduleDay>>();
                 var daysToDelete = new List<IScheduleDay>();
-                processScheduleDay(daysToDelete, daysToSave, memberList, firstDate, false, person);
-                processScheduleDay(daysToDelete, daysToSave, memberList, secDate, true, person);
+                processScheduleDay(daysToDelete, daysToSave, memberList, firstDate, false);
+                processScheduleDay(daysToDelete, daysToSave, memberList, secDate, true);
 
-                var validateResult = daysToSave.All(d=> _groupMoveTimeValidatorRunner.Run(person, new List<DateOnly> { d.DateOnlyAsPeriod.DateOnly  },
+                var validateResult = daysToDelete.All(d => _groupMoveTimeValidatorRunner.Run(person, new List<DateOnly> { d.DateOnlyAsPeriod.DateOnly },
                                                                        new List<DateOnly> { d.DateOnlyAsPeriod.DateOnly  }, true).Success );
                 if (!validateResult) continue;
                 var success = _groupMoveTimeOptimizerExecuter.Execute(daysToDelete, daysToSave, allMatrixes, optimizer.OptimizationOverLimitByRestrictionDecider);
@@ -99,19 +99,22 @@ namespace Teleopti.Ccc.Domain.Optimization
             return removeList;
         }
 
-        private static void processScheduleDay(ICollection<IScheduleDay> daysToDelete, ICollection<IScheduleDay> daysToSave,
-                                        IEnumerable<IGroupMoveTimeOptimizer> memberList, DateOnly selectedDate, bool lockDay, IPerson person)
+        private static void processScheduleDay(ICollection<IScheduleDay> daysToDelete, ICollection<KeyValuePair<MoveTimeDays, IScheduleDay>> daysToSave,
+                                        IEnumerable<IGroupMoveTimeOptimizer> memberList, DateOnly selectedDate, bool isSecondDay)
         {
             foreach (var groupMoveTimeOptimizer in memberList)
             {
                 var scheduleDay = groupMoveTimeOptimizer.Matrix.GetScheduleDayByKey(selectedDate).DaySchedulePart();
                 daysToDelete.Add(scheduleDay);
-                if(scheduleDay.Person == person )
+                if (isSecondDay)
                 {
-                    daysToSave.Add((IScheduleDay)scheduleDay.Clone());
-                }
-                if (lockDay)
                     groupMoveTimeOptimizer.LockDate(selectedDate);
+                    daysToSave.Add(new KeyValuePair<MoveTimeDays, IScheduleDay>(MoveTimeDays.SecondDay , (IScheduleDay)scheduleDay.Clone()));
+                }
+                else
+                {
+                    daysToSave.Add(new KeyValuePair<MoveTimeDays, IScheduleDay>(MoveTimeDays.FirstDay, (IScheduleDay)scheduleDay.Clone()));
+                }
             }
         }
         

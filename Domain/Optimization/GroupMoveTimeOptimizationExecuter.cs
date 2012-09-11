@@ -8,8 +8,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupMoveTimeOptimizationExecuter
     {
-        bool Execute(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave, IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider);
+        bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<MoveTimeDays, IScheduleDay>> daysToSave, IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider);
     }
+
+
+    public enum MoveTimeDays
+    {
+        FirstDay,
+        SecondDay
+    };
+
 
     public class GroupMoveTimeOptimizationExecuter : IGroupMoveTimeOptimizationExecuter
     {
@@ -38,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _resourceOptimizationHelper = resourceOptimizationHelper;
         }
 
-        public bool Execute(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave, IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
+        public bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<MoveTimeDays, IScheduleDay>> daysToSave, IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
         {
             _schedulePartModifyAndRollbackService.ClearModificationCollection();
 
@@ -55,18 +63,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 
-            
-            if (daysToSave!= null)
+            if (daysToSave != null)
             {
-               
-                schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
-                if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, daysToSave[0], schedulingOptions)) return false;
-
-                schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short;
-                if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, daysToSave[1], schedulingOptions)) return false;
+                foreach(var pair in daysToSave  )
+                {
+                    if(pair.Key == MoveTimeDays.FirstDay )
+                    {
+                        schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
+                        if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value , schedulingOptions))
+                            return false;
+                    }else if(pair.Key == MoveTimeDays.SecondDay  )
+                    {
+                        schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short;
+                        if (!ReSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, schedulingOptions)) 
+                            return false;
+                    }
+                }
             }
 
-            
             return true;
         }
 

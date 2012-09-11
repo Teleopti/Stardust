@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IResourceOptimizationHelper _resourceOptimizationHelper;
         private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
         private IList<IScheduleDay  > _daysToDelete;
-        private IList<IScheduleDay> _daysToSave;
+        private IList<KeyValuePair<MoveTimeDays, IScheduleDay>> _daysToSave;
         private IList<IScheduleMatrixPro  > _allMatrixes;
         private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
         private IScheduleDay  _scheduleDay1;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
 
             _daysToDelete = new List<IScheduleDay> { _scheduleDay1,_scheduleDay2 };
-            _daysToSave = new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 };
+            _daysToSave = new List<KeyValuePair<MoveTimeDays, IScheduleDay>> {new KeyValuePair<MoveTimeDays, IScheduleDay>(MoveTimeDays.FirstDay , _scheduleDay1),new KeyValuePair<MoveTimeDays, IScheduleDay>(MoveTimeDays.SecondDay , _scheduleDay2 )};
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _allMatrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
 
