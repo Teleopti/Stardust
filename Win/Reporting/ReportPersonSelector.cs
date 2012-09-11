@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Reporting
     public partial class ReportPersonSelector : BaseUserControl
     {
         private HashSet<Guid> _selectedAgentGuids = new HashSet<Guid>();
-		private DateOnlyPeriod _dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(DateTime.Today), new DateOnly(DateTime.Today));
+		private DateOnlyPeriod _dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
         private IApplicationFunction _applicationFunction;
         private IComponentContext _componentContext;
         private ICollection<IPerson> _selectedAgents = new List<IPerson>();

@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var res = Session.GetNamedQuery("CheckIfWindowsUserExists")
 					.SetString("userName", userName)
 					.SetString("domainName", domainName)
-					.SetDateTime("dateNow", new DateOnly(DateTime.Now))
+					.SetDateTime("dateNow", DateOnly.Today)
 					.UniqueResult();
 
 			return res != null;
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(Restrictions.Eq("WindowsAuthenticationInfo.WindowsLogOnName", logOnName))
                 .Add(Restrictions.Disjunction()
                         .Add(Restrictions.IsNull("TerminalDate"))
-                        .Add(Restrictions.Ge("TerminalDate", new DateOnly(DateTime.Now))))
+                        .Add(Restrictions.Ge("TerminalDate", DateOnly.Today)))
                 .Add(Restrictions.Eq("WindowsAuthenticationInfo.DomainName", domainName));
         }
 

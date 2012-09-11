@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
             rotation1 = new Rotation("My 1 week rotation", 7);
             rotation2 = new Rotation("My 2 week rotation", 14);
 
-            personRotation1 = new PersonRotation(person1,rotation1,new DateOnly(DateTime.Today),21 );
-            personRotation2 = new PersonRotation(person2, rotation2, new DateOnly(DateTime.Today), 28);
+            personRotation1 = new PersonRotation(person1,rotation1,DateOnly.Today,21 );
+            personRotation2 = new PersonRotation(person2, rotation2, DateOnly.Today, 28);
          }
 
         #endregion

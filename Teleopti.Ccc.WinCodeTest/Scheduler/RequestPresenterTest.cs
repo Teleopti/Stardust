@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             Expect.Call(_schedules[_person1]).Return(totalScheduleRange);
 
-            Expect.Call(totalScheduleRange.ScheduledDay(new DateOnly(DateTime.Today))).IgnoreArguments().Return(daySchedule);
+            Expect.Call(totalScheduleRange.ScheduledDay(DateOnly.Today)).IgnoreArguments().Return(daySchedule);
             Expect.Call(daySchedule.FullAccess).Return(true);
             daySchedule.Add(null);
             LastCall.IgnoreArguments();
@@ -470,7 +470,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             Expect.Call(_schedules[_person1]).Return(totalScheduleRange);
 
-            Expect.Call(totalScheduleRange.ScheduledDay(new DateOnly(DateTime.Today))).IgnoreArguments().Return(daySchedule);
+            Expect.Call(totalScheduleRange.ScheduledDay(DateOnly.Today)).IgnoreArguments().Return(daySchedule);
             Expect.Call(daySchedule.FullAccess).Return(true);
             daySchedule.Add(null);
             LastCall.IgnoreArguments();

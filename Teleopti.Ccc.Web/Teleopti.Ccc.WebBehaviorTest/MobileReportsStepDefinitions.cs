@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see ReportSettings with default value")]
 		public void ThenIShouldSeeReportSettingsWithDefaultValue()
 		{
-			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.EqualTo(new DateOnly(DateTime.Today.AddDays(-1)).ToShortDateString(UserFactory.User().Culture)));
+			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.EqualTo(DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture)));
 			EventualAssert.That(() => _page.ReportSkillSelectionList.Text, Is.StringContaining(Resources.All));
 			EventualAssert.That(() => _page.ReportTypeGraphInput.Checked, Is.True);
 			EventualAssert.That(() => _page.ReportTypeTableInput.Checked, Is.False);

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapDate()
 		{
-			var date = new DateOnly(DateTime.Now);
+			var date = DateOnly.Today;
 			var scheduleDay = new StubFactory().ScheduleDayStub(date);
 			var projection = new StubFactory().ProjectionStub();
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapAWeeksDays()
 		{
-			var date = new DateOnly(DateTime.Now);
+			var date = DateOnly.Today;
 			var scheduleDay = new StubFactory().ScheduleDayStub(date);
 			var projection = new StubFactory().ProjectionStub();
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapWeeksDates()
 		{
-			var date = new DateOnly(DateTime.Now);
+			var date = DateOnly.Today;
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 			var scheduleDay = new StubFactory().ScheduleDayStub(date);
 			var projection = new StubFactory().ProjectionStub();
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapScheduleDay()
 		{
-			var date = new DateOnly(DateTime.Now);
+			var date = DateOnly.Today;
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
 			var period = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapProjection()
 		{
-			var date = new DateOnly(DateTime.Now);
+			var date = DateOnly.Today;
 			var scheduleDay = new StubFactory().ScheduleDayStub(date);
 			var projection = new StubFactory().ProjectionStub();
 
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapPersonRequests()
 		{
-			var date = new DateOnly(DateTime.Now);
+			var date = DateOnly.Today;
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
 			var period = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapPersonRequestsStartingAtMidnight()
 		{
-			var date = new DateOnly(DateTime.Now);
+			var date = DateOnly.Today;
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
 			var period = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapColorSource()
 		{
-			var date = new DateOnly(DateTime.Now);
+			var date = DateOnly.Today;
 			var scheduleDay = new StubFactory().ScheduleDayStub(date);
 			var projection = new StubFactory().ProjectionStub();
 
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapMinMaxTime()
 		{
-			var date = new DateOnly(DateTime.Now);
+			var date = DateOnly.Today;
 			var scheduleDay = new StubFactory().ScheduleDayStub(date);
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
             _personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(DateTime.MinValue.AddYears(2)), _skill1);
             _personPeriod2 = PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(DateTime.Now.AddYears(50)), _skill2);
-            _personPeriod3 = PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(DateTime.Now), _skill3);
+            _personPeriod3 = PersonPeriodFactory.CreatePersonPeriodWithSkills(DateOnly.Today, _skill3);
 
             _personPeriod1.RuleSetBag = new RuleSetBag();
             _personPeriod2.RuleSetBag = new RuleSetBag();

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
             ITeam team1 = TeamFactory.CreateSimpleTeam();
             // Creates the person period
             IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod
-                (new DateOnly(DateTime.Today),
+                (DateOnly.Today,
                  PersonContractFactory.CreatePersonContract(contractName, scheduleName, partTimePercentage),
                  team1);
             person.AddPersonPeriod(personPeriod1);

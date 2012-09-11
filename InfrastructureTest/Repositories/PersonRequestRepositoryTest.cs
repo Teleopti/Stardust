@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldFindTextAndAbsenceRequestsForAgentWithPaging()
 		{
 			var shiftTradeRequest = new PersonRequest(_person, new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
-				                      	{new ShiftTradeSwapDetail(_person, _person, new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.Date))}));
+				                      	{new ShiftTradeSwapDetail(_person, _person, DateOnly.Today, DateOnly.Today)}));
 			var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
 			var absenceRequest = CreateAggregateWithCorrectBusinessUnit();
 			var textRequest2 = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));

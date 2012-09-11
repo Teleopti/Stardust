@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyViewpointDate()
         {
-            Assert.AreEqual(new DateOnly(DateTime.Today), _target.ViewpointDate);
+            Assert.AreEqual(DateOnly.Today, _target.ViewpointDate);
             DateOnly dateOnly = new DateOnly(2010, 1, 1);
             _target.ViewpointDate = dateOnly;
             Assert.AreEqual(dateOnly, _target.ViewpointDate);

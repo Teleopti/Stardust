@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         [Test]
         public void ShouldHaveAllMatchingSkills()
         {
-            var dateOnly = new DateOnly(DateTime.Today.AddDays(1));
+            var dateOnly = DateOnly.Today.AddDays(1);
             using (_mocks.Record())
             {
                 Expect.Call(_checkItem.PersonFrom).Return(_personFrom).Repeat.Any();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         [Test]
         public void ShouldNoticeMissingSkill()
         {
-            var dateOnly = new DateOnly(DateTime.Today.AddDays(1));
+            var dateOnly = DateOnly.Today.AddDays(1);
             using (_mocks.Record())
             {
                 Expect.Call(_checkItem.PersonFrom).Return(_personFrom).Repeat.Any();
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         [Test]
         public void ShouldFailIfNoPersonPeriodAvailable()
         {
-            var dateOnly = new DateOnly(DateTime.Today.AddDays(1));
+            var dateOnly = DateOnly.Today.AddDays(1);
             using (_mocks.Record())
             {
                 Expect.Call(_checkItem.PersonFrom).Return(_personFrom).Repeat.Any();

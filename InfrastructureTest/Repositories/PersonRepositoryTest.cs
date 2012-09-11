@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
 		                                           {DomainName = "domain", WindowsLogOnName = "username"};
 			
-			person.TerminalDate = new DateOnly(DateTime.Now.AddDays(-2));
+			person.TerminalDate = DateOnly.Today.AddDays(-2);
 			PersistAndRemoveFromUnitOfWork(person);
 
 			target.DoesWindowsUserExists("domain", "username").Should().Be.False();

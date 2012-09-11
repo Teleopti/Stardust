@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
             rotation1 = new Rotation("My 1 week rotation", 7);
             rotation2 = new Rotation("My 2 week rotation", 14);
 
-            personRotation1 = PeopleAdminUtilityTestHelper.CreatePersonRotation(new DateOnly(DateTime.Today),
+            personRotation1 = PeopleAdminUtilityTestHelper.CreatePersonRotation(DateOnly.Today,
                                                                                 new Name("Kung-fu", "Panda"),
                                                                                 rotation1,
                                                                                 person1, 1);
             personRotation2 =
-                PeopleAdminUtilityTestHelper.CreatePersonRotation(new DateOnly(DateTime.Today.AddDays(5)), new Name("Dark Knight", "Bat Man"),
+                PeopleAdminUtilityTestHelper.CreatePersonRotation(DateOnly.Today.AddDays(5), new Name("Dark Knight", "Bat Man"),
                                                                   rotation2, person2, 1);
         }
 

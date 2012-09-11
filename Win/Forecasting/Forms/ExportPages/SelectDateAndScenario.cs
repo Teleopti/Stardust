@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
@@ -53,8 +50,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             base.OnLoad(e);
             
             var exportModel = _stateObj.ExportSkillToFileCommandModel;
-            reportDateFromToSelector1.WorkPeriodStart = exportModel.Period.StartDate == new DateOnly() ? new DateOnly(DateTime.Now.Date) : exportModel.Period.StartDate;
-            reportDateFromToSelector1.WorkPeriodEnd = exportModel.Period.EndDate == new DateOnly() ? new DateOnly(DateTime.Now.Date.AddDays(7)) : exportModel.Period.EndDate;
+            reportDateFromToSelector1.WorkPeriodStart = exportModel.Period.StartDate == new DateOnly() ? DateOnly.Today : exportModel.Period.StartDate;
+            reportDateFromToSelector1.WorkPeriodEnd = exportModel.Period.EndDate == new DateOnly() ? DateOnly.Today.AddDays(7) : exportModel.Period.EndDate;
 
             loadScenarios();
 
