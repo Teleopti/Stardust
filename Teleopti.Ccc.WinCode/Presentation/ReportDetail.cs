@@ -2,8 +2,10 @@
 {
     public class ReportDetail
     {
-        public string Function { get; set; }
+        public string FunctionPath { get; set; }
         public string File { get; set; }
         public string DisplayName { get; set; }
+
+    	public string FunctionCode { get; set; }
     }
 }
