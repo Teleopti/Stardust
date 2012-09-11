@@ -259,16 +259,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        public IList LoadAdherenceData(DateTime dateTimeFrom, DateTime dateTimeTo, string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId, int adherenceId)
+        public IList LoadAdherenceData(DateTime dateTime, string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId, int adherenceId)
         {
             using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
                 return session(uow).CreateSQLQuery(
-					"exec mart.raptor_adherence_report_load @date_from=:date_from, @date_to=:date_to, @time_zone_id=:time_zone_id, @person_code=:person_code, @agent_person_code=:agent_person_code, @language_id=:language_id, @adherence_id=:adherence_id")
+					"exec mart.raptor_adherence_report_load @date_from=:date_from, @time_zone_id=:time_zone_id, @person_code=:person_code, @agent_person_code=:agent_person_code, @language_id=:language_id, @adherence_id=:adherence_id")
 
                     .SetReadOnly(true)
-                    .SetDateTime("date_from", dateTimeFrom)
-					.SetDateTime("date_to", dateTimeTo)
+                    .SetDateTime("date_from", dateTime)
                     .SetString("time_zone_id", timeZoneId)
                     .SetGuid("person_code", personCode)
                     .SetGuid("agent_person_code", agentPersonCode)

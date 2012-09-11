@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </remarks>
         void LoadDimQueues();
 
-        IList LoadAdherenceData(DateTime dateTimeFrom,DateTime dateTimeTo, string timeZoneId, Guid personCode,
+        IList LoadAdherenceData(DateTime dateTime, string timeZoneId, Guid personCode,
                                  Guid agentPersonCode, int languageId, int adherenceId);
 
         /// <summary>
