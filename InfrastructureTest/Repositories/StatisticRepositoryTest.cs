@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyLoadAdherenceData()
         {
-            IList returnList = target.LoadAdherenceData(DateTime.Now, "W. Europe Standard Time", Guid.NewGuid(),
+			var returnList = target.LoadAdherenceData(DateTime.Now, DateTime.Now.AddDays(1), "W. Europe Standard Time", Guid.NewGuid(),
                                                         Guid.NewGuid(), 1033, 1);
             Assert.IsNotNull(returnList);
         }

@@ -102,21 +102,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </remarks>
         void LoadDimQueues();
 
-        /// <summary>
-        /// Loads the adherence data.
-        /// </summary>
-        /// <param name="dateTime">The date time.</param>
-        /// <param name="timeZoneId">The time zone id.</param>
-        /// <param name="personCode">The person code.</param>
-        /// <param name="agentPersonCode">The agent person code.</param>
-        /// <param name="languageId">The language id.</param>
-        /// <param name="adherenceId">The adherence id.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2009-08-19
-        /// </remarks>
-        IList LoadAdherenceData(DateTime dateTime, string timeZoneId, Guid personCode,
+        IList LoadAdherenceData(DateTime dateTimeFrom,DateTime dateTimeTo, string timeZoneId, Guid personCode,
                                  Guid agentPersonCode, int languageId, int adherenceId);
 
         /// <summary>

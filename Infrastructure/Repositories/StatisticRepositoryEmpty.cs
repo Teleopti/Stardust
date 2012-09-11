@@ -107,10 +107,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             
         }
 
-        public IList LoadAdherenceData(DateTime dateTime, string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId, int adherenceId)
-        {
-            return new List<object>();
-        }
+    	public IList LoadAdherenceData(DateTime dateTimeFrom, DateTime dateTimeTo, string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId, int adherenceId)
+    	{
+			return new List<object>();
+    	}
 
         #region IStatisticRepository Members
 
