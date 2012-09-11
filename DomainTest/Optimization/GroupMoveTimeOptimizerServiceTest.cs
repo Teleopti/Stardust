@@ -74,7 +74,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo() )).Repeat.AtLeastOnce();
@@ -111,10 +110,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
             using (_mock.Record())
             {
-                VerifyReportProgressEventExecutedAndCanCancelExpectValues(date2, date);
+                verifyReportProgressEventExecutedAndCanCancelExpectValues(date2, date);
                 Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo())).Repeat.AtLeastOnce();
@@ -127,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
         }
 
-        private void VerifyReportProgressEventExecutedAndCanCancelExpectValues(DateOnly date2, DateOnly date)
+        private void verifyReportProgressEventExecutedAndCanCancelExpectValues(DateOnly date2, DateOnly date)
         {
             Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> {date, date2}).Repeat.AtLeastOnce();
             Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
