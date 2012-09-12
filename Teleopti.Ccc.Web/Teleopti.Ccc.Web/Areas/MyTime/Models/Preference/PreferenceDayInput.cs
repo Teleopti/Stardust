@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 	public class PreferenceDayInput : IValidatableObject
 	{
 		public DateOnly Date { get; set; }
-		public Guid PreferenceId { get; set; }
+		public Guid? PreferenceId { get; set; }
 
 		public TimeOfDay? EarliestStartTime { get; set; }
 		public TimeOfDay? LatestStartTime { get; set; }
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public TimeSpan? MinimumWorkTime { get; set; }
 		public TimeSpan? MaximumWorkTime { get; set; }
 
-		public Guid ActivityPreferenceId { get; set; }
+		public Guid? ActivityPreferenceId { get; set; }
 
 		public TimeSpan? ActivityMinimumTime { get; set; }
 		public TimeSpan? ActivityMaximumTime { get; set; }

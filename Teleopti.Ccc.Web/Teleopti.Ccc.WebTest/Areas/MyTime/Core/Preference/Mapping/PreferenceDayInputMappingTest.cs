@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
@@ -47,7 +48,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 						        () => shiftCategoryRepository,
 						        () => dayOffRepository,
 						        () => absenceRepository,
-								() => activityRepository
+								() => activityRepository,
+								Depend.On(Mapper.Engine)
 						        )
 							);
 					}
@@ -74,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var input = new PreferenceDayInput { PreferenceId = Guid.NewGuid() };
 			var shiftCategory = new ShiftCategory(" ");
 
-			shiftCategoryRepository.Stub(x => x.Get(input.PreferenceId)).Return(shiftCategory);
+			shiftCategoryRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(shiftCategory);
 
 			Mapper.Map<PreferenceDayInput, IPreferenceDay>(input, destination);
 
@@ -109,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			shiftCategory.SetId(Guid.NewGuid());
 			var input = new PreferenceDayInput { PreferenceId = shiftCategory.Id.Value };
 
-			shiftCategoryRepository.Stub(x => x.Get(input.PreferenceId)).Return(shiftCategory);
+			shiftCategoryRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(shiftCategory);
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
@@ -123,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			dayOffTemplate.SetId(Guid.NewGuid());
 			var input = new PreferenceDayInput { PreferenceId = dayOffTemplate.Id.Value };
 
-			dayOffRepository.Stub(x => x.Get(input.PreferenceId)).Return(dayOffTemplate);
+			dayOffRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(dayOffTemplate);
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
@@ -137,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			absence.SetId(Guid.NewGuid());
 			var input = new PreferenceDayInput { PreferenceId = absence.Id.Value };
 
-			absenceRepository.Stub(x => x.Get(input.PreferenceId)).Return(absence);
+			absenceRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(absence);
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
@@ -147,93 +149,140 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapStartTimeLimitation()
 		{
-			var earliest = new TimeOfDay(TimeSpan.FromHours(8));
-			var latest = new TimeOfDay(TimeSpan.FromHours(9));
-			var input = new PreferenceDayInput { EarliestStartTime = earliest,LatestStartTime = latest};
+			var input = new PreferenceDayInput
+			            	{
+			            		EarliestStartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+								LatestStartTime = new TimeOfDay(TimeSpan.FromHours(9))
+			            	};
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
-			result.Restriction.StartTimeLimitation.StartTime.Should().Be.EqualTo(earliest.Time);
-			result.Restriction.StartTimeLimitation.EndTime.Should().Be.EqualTo(latest.Time);
+			result.Restriction.StartTimeLimitation
+				.Should().Be.EqualTo(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
 		}
 
 		[Test]
 		public void ShouldMapEndTimeLimitation()
 		{
-			var earliest = new TimeOfDay(TimeSpan.FromHours(16));
-			var latest = new TimeOfDay(TimeSpan.FromHours(17));
-			var input = new PreferenceDayInput { EarliestEndTime = earliest, LatestEndTime = latest };
+			var input = new PreferenceDayInput
+			            	{
+			            		EarliestEndTime = new TimeOfDay(TimeSpan.FromHours(16)), 
+								LatestEndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			            	};
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
-			result.Restriction.EndTimeLimitation.StartTime.Should().Be.EqualTo(earliest.Time);
-			result.Restriction.EndTimeLimitation.EndTime.Should().Be.EqualTo(latest.Time);
+			result.Restriction.EndTimeLimitation
+				.Should().Be.EqualTo(new EndTimeLimitation(TimeSpan.FromHours(16), TimeSpan.FromHours(17)));
 		}
 
 		[Test]
 		public void ShouldMapEndTimeLimitationNextDay()
 		{
-			var earliest = new TimeOfDay(TimeSpan.FromHours(2));
-			var latest = new TimeOfDay(TimeSpan.FromHours(3));
 			var input = new PreferenceDayInput
-				{EarliestEndTime = earliest, LatestEndTime = latest, EarliestEndTimeNextDay = true, LatestEndTimeNextDay = true};
+			            	{
+			            		EarliestEndTime = new TimeOfDay(TimeSpan.FromHours(2)), 
+								LatestEndTime = new TimeOfDay(TimeSpan.FromHours(3)), 
+								EarliestEndTimeNextDay = true, 
+								LatestEndTimeNextDay = true
+			            	};
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
-			result.Restriction.EndTimeLimitation.StartTime.Should().Be.EqualTo(earliest.Time.Add(TimeSpan.FromDays(1)));
-			result.Restriction.EndTimeLimitation.EndTime.Should().Be.EqualTo(latest.Time.Add(TimeSpan.FromDays(1)));
+			result.Restriction.EndTimeLimitation
+				.Should().Be.EqualTo(new EndTimeLimitation(TimeSpan.FromHours(24 + 2), TimeSpan.FromHours(24 + 3)));
 		}
 
 		[Test]
 		public void ShouldMapWorkTimeLimitation()
 		{
-			var shortest = TimeSpan.FromHours(7);
-			var longest = TimeSpan.FromHours(8);
-			var input = new PreferenceDayInput { MinimumWorkTime = shortest, MaximumWorkTime = longest };
+			var input = new PreferenceDayInput
+			            	{
+			            		MinimumWorkTime = TimeSpan.FromHours(7), 
+								MaximumWorkTime = TimeSpan.FromHours(8)
+			            	};
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
-			result.Restriction.WorkTimeLimitation.StartTime.Should().Be.EqualTo(shortest);
-			result.Restriction.WorkTimeLimitation.EndTime.Should().Be.EqualTo(longest);
+			result.Restriction.WorkTimeLimitation
+				.Should().Be.EqualTo(new WorkTimeLimitation(TimeSpan.FromHours(7), TimeSpan.FromHours(8)));
+		}
+		
+		[Test]
+		public void ShouldMapEmptyActivity()
+		{
+			var input = new PreferenceDayInput
+			            	{
+			            		ActivityPreferenceId = null,
+								ActivityEarliestStartTime = new TimeOfDay(TimeSpan.FromHours(8))
+			            	};
+
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+
+			result.Restriction.ActivityRestrictionCollection.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
-		public void ShouldMapActivityRestriction()
+		public void ShouldMapActivity()
 		{
-			var shortest = TimeSpan.FromHours(0.5);
-			var longest = TimeSpan.FromHours(1);
-
-			var earliestStartTime = new TimeOfDay(TimeSpan.FromHours(11));
-			var latestStartTime = new TimeOfDay(TimeSpan.FromHours(12));
-
-			var earliestEndTime = new TimeOfDay(TimeSpan.FromHours(11.5));
-			var latestEndTime = new TimeOfDay(TimeSpan.FromHours(13));
-
 			var activity = new Activity("Lunch");
 			activity.SetId(Guid.NewGuid());
+			var input = new PreferenceDayInput {ActivityPreferenceId = activity.Id.Value};
 
-			var input = new PreferenceDayInput
-				{
-					ActivityMinimumTime = shortest,
-					ActivityMaximumTime = longest,
-					ActivityPreferenceId = activity.Id.Value,
-					ActivityEarliestStartTime = earliestStartTime,
-					ActivityLatestStartTime = latestStartTime,
-					ActivityEarliestEndTime = earliestEndTime,
-					ActivityLatestEndTime = latestEndTime
-				};
-
-			activityRepository.Stub(x => x.Get(input.ActivityPreferenceId)).Return(activity);
+			activityRepository.Stub(x => x.Get(input.ActivityPreferenceId.Value)).Return(activity);
 
 			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 
-			var activityRestriction = result.Restriction.ActivityRestrictionCollection.Single();
-			activityRestriction.StartTimeLimitation.StartTime.Should().Be.EqualTo(earliestStartTime.Time);
-			activityRestriction.StartTimeLimitation.EndTime.Should().Be.EqualTo(latestStartTime.Time);
-			activityRestriction.EndTimeLimitation.StartTime.Should().Be.EqualTo(earliestEndTime.Time);
-			activityRestriction.EndTimeLimitation.EndTime.Should().Be.EqualTo(latestEndTime.Time);
-			activityRestriction.WorkTimeLimitation.StartTime.Should().Be.EqualTo(shortest);
-			activityRestriction.WorkTimeLimitation.EndTime.Should().Be.EqualTo(longest);
+			result.Restriction.ActivityRestrictionCollection.Single().Activity.Should().Be(activity);
 		}
+
+		[Test]
+		public void ShouldMapActivityStartTimeLimitation()
+		{
+			var input = new PreferenceDayInput
+			            	{
+			            		ActivityPreferenceId = Guid.NewGuid(),
+								ActivityEarliestStartTime = new TimeOfDay(TimeSpan.FromHours(10)),
+								ActivityLatestStartTime = new TimeOfDay(TimeSpan.FromHours(12)),
+			            	};
+
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+
+			result.Restriction.ActivityRestrictionCollection.Single().StartTimeLimitation
+				.Should().Be.EqualTo(new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(12)));
+		}
+
+		[Test]
+		public void ShouldMapActivityEndTimeLimitation()
+		{
+			var input = new PreferenceDayInput
+			            	{
+			            		ActivityPreferenceId = Guid.NewGuid(),
+			            		ActivityEarliestEndTime = new TimeOfDay(TimeSpan.FromHours(11)),
+			            		ActivityLatestEndTime = new TimeOfDay(TimeSpan.FromHours(13)),
+			            	};
+
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+
+			result.Restriction.ActivityRestrictionCollection.Single().EndTimeLimitation
+				.Should().Be.EqualTo(new EndTimeLimitation(TimeSpan.FromHours(11), TimeSpan.FromHours(13)));
+		}
+
+		[Test]
+		public void ShouldMapActivityWorkTimeLimitation()
+		{
+			var input = new PreferenceDayInput
+			            	{
+			            		ActivityPreferenceId = Guid.NewGuid(),
+			            		ActivityMinimumTime = TimeSpan.FromHours(1),
+			            		ActivityMaximumTime = TimeSpan.FromHours(3),
+			            	};
+
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+
+			result.Restriction.ActivityRestrictionCollection.Single().WorkTimeLimitation
+				.Should().Be.EqualTo(new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(3)));
+		}
+
 	}
 }
