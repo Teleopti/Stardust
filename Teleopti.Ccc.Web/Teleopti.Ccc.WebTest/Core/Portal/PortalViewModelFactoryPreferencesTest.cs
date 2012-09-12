@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			shiftCategory.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveShiftCategoryOptions()).Return(new[] { shiftCategory });
 
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+			var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			absence.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveAbsenceOptions()).Return(new[] { absence });
 
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+			var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			dayOff.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { dayOff });
 
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+			var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -181,13 +181,13 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			preferenceOptionsProvider.Stub(x => x.RetrieveShiftCategoryOptions()).Return(new[] { new ShiftCategory(" ") });
 			preferenceOptionsProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { new DayOffTemplate(new Description()) });
 
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+			var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
 			var preferenceSplitButton = result.ControllerItems<ToolBarSplitButton, PreferenceNavigationItem>().SingleOrDefault();
 
-			preferenceSplitButton.Options.ElementAt(1).Should().Be.OfType<OptionSplit>();
+			preferenceSplitButton.Options.ElementAt(1).Should().Be.OfType<PreferenceOptionSplit>();
 		}
 
 		[Test]
@@ -242,6 +242,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Value.Should().Be(shiftCategory.Id.ToString());
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Text.Should().Be(shiftCategory.Description.Name);
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Color.Should().Be(shiftCategory.DisplayColor.ToHtml());
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Extended.Should().Be.True();
 		}
 
 		[Test]
@@ -259,6 +260,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Value.Should().Be(absence.Id.ToString());
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Text.Should().Be(absence.Description.Name);
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Color.Should().Be(absence.DisplayColor.ToHtml());
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Extended.Should().Be.False();
 		}
 
 		[Test]
@@ -276,7 +278,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Value.Should().Be(dayOff.Id.ToString());
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Text.Should().Be(dayOff.Description.Name);
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Color.Should().Be(dayOff.DisplayColor.ToHtml());
-			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Type.Should().Be(dayOff.GetType().Name);
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Extended.Should().Be.False();
 		}
 
 		[Test]
