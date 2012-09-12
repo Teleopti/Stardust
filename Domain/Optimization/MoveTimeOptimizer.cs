@@ -273,7 +273,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
 
-        	IScheduleDay originalScheduleDay = _workShiftOriginalStateContainer.OldPeriodDaysState[day];
+        	var dic = _workShiftOriginalStateContainer.OldPeriodDaysState;
+        	IScheduleDay originalScheduleDay = dic[day];
         	IPersonAssignment personAssignment = originalScheduleDay.AssignmentHighZOrder();
 			IMainShift originalShift = personAssignment.MainShift;
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, day);
