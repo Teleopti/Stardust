@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(_mostOverStaffDay);
             Expect.Call(_mostUnderStaffDay.Day)
                 .Return(_mostUnderStaffDate);
-            Expect.Call(_mostOverStaffDay.Day).Return(_mostOverStaffDate);
+            
             Expect.Call(_mostUnderStaffSchedulePart.Clone())
                 .Return(_mostUnderStaffSchedulePart).Repeat.AtLeastOnce();
             Expect.Call(_mostOverStaffSchedulePart.Clone())
@@ -161,6 +161,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(_mostUnderStaffDay).Repeat.AtLeastOnce();
             Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_mostOverStaffDate))
                 .Return(_mostOverStaffDay).Repeat.AtLeastOnce();
+			Expect.Call(_mostOverStaffDay.Day).Return(_mostOverStaffDate);
+			Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+			Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+			Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MinValue);
+			Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+			Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+			Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MaxValue);
+			Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+			Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+			Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
+			Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+			Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+			Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
             Expect.Call(_deleteService.Delete(null, null, null, null)).IgnoreArguments()
                .Return(null);
             Expect.Call(_resourceCalculateDaysDecider.DecideDates(_mostUnderStaffSchedulePart,_mostUnderStaffSchedulePart))
@@ -271,6 +284,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_mostUnderStaffSchedulePart).Repeat.AtLeastOnce();
                 Expect.Call(_mostOverStaffSchedulePart.Clone())
                     .Return(_mostOverStaffSchedulePart).Repeat.AtLeastOnce();
+				Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MinValue);
+				Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MaxValue);
+				Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
+				Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
                 Expect.Call(_deleteService.Delete(null, null, null, null)).IgnoreArguments()
                     .Return(null);
                 Expect.Call(_mostUnderStaffDay.DaySchedulePart()).Return(_mostUnderStaffSchedulePart).Repeat.AtLeastOnce();
@@ -359,6 +384,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_mostUnderStaffSchedulePart).Repeat.AtLeastOnce();
                 Expect.Call(_mostOverStaffSchedulePart.Clone())
                     .Return(_mostOverStaffSchedulePart).Repeat.AtLeastOnce();
+				Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MinValue);
+				Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MaxValue);
+				Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
+				Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
                 Expect.Call(_deleteService.Delete(null, null, null, null)).IgnoreArguments().Return(null);
                 Expect.Call(_mostUnderStaffDay.DaySchedulePart())
                     .Return(_mostUnderStaffSchedulePart).Repeat.AtLeastOnce();
@@ -447,6 +484,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_mostUnderStaffDate);
                 Expect.Call(_mostOverStaffDay.Day)
                     .Return(_mostOverStaffDate);
+				Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MinValue);
+				Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MaxValue);
+				Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
                 Expect.Call(_mostUnderStaffSchedulePart.Clone())
                     .Return(_mostUnderStaffSchedulePart);
                 Expect.Call(_mostOverStaffSchedulePart.Clone())
@@ -500,6 +546,88 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
         }
 
+		//[Test]
+		//public void ShouldRollBackIfSameContractTime()
+		//{
+		//     using (_mockRepository.Record())
+		//    {
+		//        Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
+		//            .Return(_schedulingOptions);
+		//        Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+		//        Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
+		//        Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
+		//             .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
+		//        Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
+		//            .Return(false).Repeat.AtLeastOnce();
+		//        Expect.Call(_bitArrayConverter.SourceMatrix)
+		//            .Return(_scheduleMatrix).Repeat.AtLeastOnce();
+		//        Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+		//            .Return(2);
+		//        Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor)).
+		//            Return(new List<DateOnly> { _mostUnderStaffDate, _mostOverStaffDate });
+		//        Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary)
+		//            .Return(_fullWeeksPeriodDictionary).Repeat.Any();
+		//        Expect.Call(_mostUnderStaffDay.DaySchedulePart())
+		//            .Return(_mostUnderStaffSchedulePart).Repeat.AtLeastOnce();
+		//        Expect.Call(_mostOverStaffDay.DaySchedulePart())
+		//            .Return(_mostOverStaffSchedulePart).Repeat.AtLeastOnce();
+		//        Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_mostUnderStaffDate))
+		//            .Return(_mostUnderStaffDay).Repeat.AtLeastOnce();
+		//        Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_mostOverStaffDate))
+		//            .Return(_mostOverStaffDay).Repeat.AtLeastOnce();
+		//        Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+		//        Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+		//        Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MinValue);
+		//        Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+		//        Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+		//        Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MaxValue);
+		//        Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+		//        Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+		//        Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
+		//        Expect.Call(_mostUnderStaffSchedulePart.Clone())
+		//            .Return(_mostUnderStaffSchedulePart);
+		//        Expect.Call(_mostOverStaffSchedulePart.Clone())
+		//            .Return(_mostOverStaffSchedulePart);
+		//        Expect.Call(_mostUnderStaffDay.Day)
+		//            .Return(_mostUnderStaffDate);
+		//        Expect.Call(_mostOverStaffDay.Day)
+		//            .Return(_mostOverStaffDate);
+		//        Expect.Call(_deleteService.Delete(null, null, null, null)).IgnoreArguments()
+		//            .Return(null);
+		//        Expect.Call(_resourceCalculateDaysDecider.DecideDates(_mostUnderStaffSchedulePart, _mostUnderStaffSchedulePart))
+		//            .Return(new List<DateOnly> { _mostUnderStaffDate });
+		//        Expect.Call(_resourceCalculateDaysDecider.DecideDates(_mostOverStaffSchedulePart, _mostOverStaffSchedulePart))
+		//            .Return(new List<DateOnly> { _mostOverStaffDate });
+		//        Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostUnderStaffDate, true, true));
+		//        Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostOverStaffDate, true, true));
+		//        Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostUnderStaffSchedulePart, _schedulingOptions))
+		//            .Return(_effectiveRestriction);
+		//        Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions))
+		//            .Return(_effectiveRestriction);
+		//        Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+		//            .Return(true);
+		//        Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate)).Return(true);
+		//        // rollback
+		//        _rollbackService.ClearModificationCollection();
+		//        _rollbackService.Rollback();
+		//        Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostUnderStaffDate, true, true));
+		//        Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostUnderStaffDate.AddDays(1), true, true));
+		//        Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostOverStaffDate, true, true));
+		//        Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostOverStaffDate.AddDays(1), true, true));
+
+		//        // lock day
+		//        _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+		//    }
+
+		//    bool result;
+
+		//    using (_mockRepository.Playback())
+		//    {
+		//        result = _target.Execute();
+		//        Assert.IsTrue(result);
+		//    }
+		//}
+
         [Test]
         public void VerifyExecuteFirstDayCannotScheduled()
         {
@@ -528,6 +656,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_mostUnderStaffDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_mostOverStaffDate))
                     .Return(_mostOverStaffDay).Repeat.AtLeastOnce();
+            	Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+            	Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+            	Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MinValue);
+				Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.MaxValue);
                 Expect.Call(_mostUnderStaffSchedulePart.Clone())
                     .Return(_mostUnderStaffSchedulePart);
                 Expect.Call(_mostOverStaffSchedulePart.Clone())
@@ -576,6 +710,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Assert.IsTrue(result);
             }
         }
+
+
 
         //[Test]
         //public void VerifyIsMovedDaysUnderLimit()
