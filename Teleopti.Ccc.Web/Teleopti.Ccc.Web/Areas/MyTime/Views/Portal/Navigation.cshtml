@@ -19,10 +19,12 @@
 	{
 		<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
 			<div class="toolbar-inner">
+				@{ int index = 0; }
 				@foreach (var toolbarItem in navSection.ToolBarItems)
 				{
 					if (toolbarItem is ToolBarSeparatorItem)
 					{
+						{ index = 0;}
 						<div class="seperator"></div>
 					}
 					if (toolbarItem is ToolBarDatePicker)
@@ -39,7 +41,7 @@
 					if (toolbarItem is ToolBarButtonItem)
 					{
 						var button = toolbarItem as ToolBarButtonItem;
-						<button title="@Html.AttributeEncode(button.Title)" id="@string.Format("{0}-{1}-button", navSection.Controller, button.ButtonType)" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon ir floatleft">@button.Title</button>
+						<button title="@Html.AttributeEncode(button.Title)" id="@string.Format("{0}-{1}-button", navSection.Controller, button.ButtonType)" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon ir floatleft@((index>1) ? " ml10" : "")">@button.Title</button>
 					}
 					if (toolbarItem is ToolBarSplitButton)
 					{
@@ -64,6 +66,9 @@
 							}
 						</select>
 					}
+					{
+						index++;
+					}
 				}
 				
 
@@ -79,16 +84,16 @@
 					                   		Text = text
 					                   	};
 					var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
-								let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t,CultureInfo.CurrentCulture))
-									  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
-								select new Option
-								{
-									Value = value,
-									Text = text
-								};
+					                  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t,CultureInfo.CurrentCulture))
+					                  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
+					                  select new Option
+					                         	{
+					                         		Value = value,
+					                         		Text = text
+					                         	};
 					<div id="Preference-add-extended-form" class="displaynone"> 
 						
-						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId">
+						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId" title="@Resources.Preference" class="ml15">
 							<option value="">&nbsp;</option>
 							<option value="-">-</option>
 							@foreach (var option in preferenceNavigation.PreferenceOptions)
@@ -96,108 +101,129 @@
 								<option value="@option.Value" data-color="@option.Color" data-preference-type="@option.Type">@option.Text</option>
 							}
 						</select>
-
-						<select id="Preference-extended-start-time-minimum" class="time-input preference-field" data-bind="combobox: EarliestStartTime">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						<select id="Preference-extended-start-time-maximum" class="time-input preference-field" data-bind="combobox: LatestStartTime">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-
-						<select id="Preference-extended-end-time-minimum" class="time-input preference-field" data-bind="combobox: EarliestEndTime">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						<input type="checkbox" id="Preference-extended-end-time-minimum-next-day" class="preference-field" data-bind="checked: EarliestEndTimeNextDay" title="@Resources.NextDay"/>
-						<select id="Preference-extended-end-time-maximum" class="time-input preference-field" data-bind="combobox: LatestEndTime">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						<input type="checkbox" id="Preference-extended-end-time-maximum-next-day" class="preference-field" data-bind="checked: LatestEndTimeNextDay" title="@Resources.NextDay"/>
-						<select id="Preference-extended-work-time-minimum" class="time-input preference-field" data-bind="combobox: MinimumWorkTime">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in timeLengths)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						<select id="Preference-extended-work-time-maximum" class="time-input preference-field" data-bind="combobox: MaximumWorkTime">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in timeLengths)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						
-						<select id="Preference-extended-activity" data-bind="selectbox: ActivityPreferenceId">
-							<option value="">&nbsp;</option>
-							<option value="-">-</option>
-							@foreach (var option in preferenceNavigation.ActivityOptions)
-							{
-								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
-							}
-						</select>
-
-						<select id="Preference-extended-activity-start-time-minimum" class="time-input activity-preference-field" data-bind="combobox: ActivityEarliestStartTime, combobox-enabled: EnableActivityTimeEditing">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						<select id="Preference-extended-activity-start-time-maximum" class="time-input activity-preference-field" data-bind="combobox: ActivityLatestStartTime, combobox-enabled: EnableActivityTimeEditing">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-
-						<select id="Preference-extended-activity-end-time-minimum" class="time-input activity-preference-field" data-bind="combobox: ActivityEarliestEndTime, combobox-enabled: EnableActivityTimeEditing">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						<select id="Preference-extended-activity-end-time-maximum" class="time-input activity-preference-field" data-bind="combobox: ActivityLatestEndTime, combobox-enabled: EnableActivityTimeEditing">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-
-						<select id="Preference-extended-activity-time-minimum" class="time-input activity-preference-field" data-bind="combobox: ActivityMinimumTime, combobox-enabled: EnableActivityTimeEditing">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in timeLengths)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						<select id="Preference-extended-activity-time-maximum" class="time-input activity-preference-field" data-bind="combobox: ActivityMaximumTime, combobox-enabled: EnableActivityTimeEditing">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in timeLengths)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-
-						<button id="Preference-extended-apply">@Resources.Apply</button>
+						<div id="Preference-extended-time-input-fields" data-bind="visible: IsTimeInputEnabled">
+							<div class="mt5">
+								<div class="time-limitation-label icon leftarrow"></div>
+								<select id="Preference-extended-start-time-minimum" class="time-input" data-bind="combobox: EarliestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestStartTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<span class="ml20"></span>
+								<select id="Preference-extended-start-time-maximum" class="time-input" data-bind="combobox: LatestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestStartTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+							</div>
+							<div>
+								<div class="time-limitation-label icon rightarrow"></div>
+								<select id="Preference-extended-end-time-minimum" class="time-input" data-bind="combobox: EarliestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestEndTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<input type="checkbox" id="Preference-extended-end-time-minimum-next-day" class="preference-next-day-checkbox" data-bind="checked: EarliestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
+								<select id="Preference-extended-end-time-maximum" class="time-input" data-bind="combobox: LatestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestEndTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<input type="checkbox" id="Preference-extended-end-time-maximum-next-day" class="preference-next-day-checkbox" data-bind="checked: LatestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
+							</div>
+							<div>
+								<div class="time-limitation-label icon doublearrow-blue"></div>
+								<select id="Preference-extended-work-time-minimum" class="time-input" data-bind="combobox: MinimumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MinWorkTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in timeLengths)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<span class="ml20"></span> 
+								<select id="Preference-extended-work-time-maximum" class="time-input" data-bind="combobox: MaximumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MaxWorkTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in timeLengths)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+							</div>
+							<hr/>
+							<select id="Preference-extended-activity" data-bind="selectbox: ActivityPreferenceId, selectbox-enabled: IsTimeInputEnabled" title="@Resources.Activity" class="ml15">
+								<option value="">&nbsp;</option>
+								<option value="-">-</option>
+								@foreach (var option in preferenceNavigation.ActivityOptions)
+								{
+									<option value="@option.Value" data-color="@option.Color">@option.Text</option>
+								}
+							</select>
+						</div>
+						<div id="activity-preference-fields" data-bind="visible: EnableActivityTimeEditing" class="mt5">
+							<div>
+								<div class="time-limitation-label icon leftarrow"></div>
+								<select id="Preference-extended-activity-start-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestStartTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<span class="ml20"></span>
+								<select id="Preference-extended-activity-start-time-maximum" class="time-input" data-bind="combobox: ActivityLatestStartTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+							</div>
+							<div>
+								<div class="time-limitation-label icon rightarrow"></div>
+								<select id="Preference-extended-activity-end-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestEndTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<span class="ml20"></span>
+								<select id="Preference-extended-activity-end-time-maximum" class="time-input" data-bind="combobox: ActivityLatestEndTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+							</div>
+							<div>
+								<div class="time-limitation-label icon doublearrow-blue"></div>
+								<select id="Preference-extended-activity-time-minimum" class="time-input" data-bind="combobox: ActivityMinimumTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in timeLengths)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<span class="ml20"></span>
+								<select id="Preference-extended-activity-time-maximum" class="time-input" data-bind="combobox: ActivityMaximumTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in timeLengths)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+							</div>
+						</div>
+						<button id="Preference-extended-apply" class="mr20 mb5 mt10">@Resources.Apply</button>
 						<div id="Preference-extended-error" class="error"></div>
 					</div>
 				}

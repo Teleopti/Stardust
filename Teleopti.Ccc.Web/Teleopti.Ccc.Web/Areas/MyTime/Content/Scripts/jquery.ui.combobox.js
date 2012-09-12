@@ -75,6 +75,8 @@
 						return false;
 					}
 				});
+
+			input.attr('title', select.attr('title'));
 			input[0].defaultValue = value;
 
 			input.data("autocomplete")._renderItem = function (ul, item) {

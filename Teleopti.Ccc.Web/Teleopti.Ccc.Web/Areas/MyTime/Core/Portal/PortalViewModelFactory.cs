@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 					new ToolBarSeparatorItem(),
 					new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
 				};
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences))
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
 				toolbarItems = toolbarItems.Concat(new[] { new ToolBarButtonItem { Title = Resources.AddExtendedPreference, ButtonType = "add-extended" } }).ToArray();
 			}

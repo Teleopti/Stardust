@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere select f;
 
 			if (!AccessToExtendedPreferences)
-				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences select f;
+				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb select f;
 			if (!AccessToMytimeWeb)
 				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTimeWeb select f;
 			if (!AccessToAsm)
