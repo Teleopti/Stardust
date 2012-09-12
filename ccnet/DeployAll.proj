@@ -192,13 +192,11 @@
 		$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.Release.config"/>
 
 	<!--StartPage-->
-			<StartPage
-			Include=
+	<StartPage
+	Include=
 	"$(CCNetWorkingDirectory)\Teleopti.CCC.StartPage\index.html;
-	$(CCNetWorkingDirectory)\Teleopti.CCC.StartPage\Images\*.*"
-			"/>
+	$(CCNetWorkingDirectory)\Teleopti.CCC.StartPage\Images\*.*"/>
 
-	
 			<!--Analytics-->
 			<Analytics
 			Include=
