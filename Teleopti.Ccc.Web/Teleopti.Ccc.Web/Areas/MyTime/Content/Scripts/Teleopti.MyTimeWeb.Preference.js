@@ -116,7 +116,16 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$('#Preference-extended-apply')
 							.button()
 							.click(function () {
-								_setPreference(addExtendedPreferenceFormViewModel);
+
+								var preference = ko.toJS(addExtendedPreferenceFormViewModel);
+								if (!preference.PreferenceId) {
+									delete preference.PreferenceId;
+								}
+								if (!preference.ActivityPreferenceId) {
+									delete preference.ActivityPreferenceId;
+								}
+
+								_setPreference(preference);
 							});
 
 						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);

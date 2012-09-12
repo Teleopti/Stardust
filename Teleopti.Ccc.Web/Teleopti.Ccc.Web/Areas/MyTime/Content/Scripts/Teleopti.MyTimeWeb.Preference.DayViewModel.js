@@ -181,26 +181,18 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 	this.SetPreference = function (value, validationErrorCallback) {
 		if (typeof (value) == 'string') {
-			value = JSON.stringify({
+			value = {
 				Date: self.Date,
 				PreferenceId: value
-			});
+			};
 		} else {
 			value.Date = self.Date;
-			var jsValue = ko.toJS(value);
-			if (!jsValue.PreferenceId) {
-				delete jsValue.PreferenceId;
-			}
-			if (!jsValue.ActivityPreferenceId) {
-				delete jsValue.ActivityPreferenceId;
-			}
-			value = ko.toJSON(jsValue);
 		}
 
 		var deferred = $.Deferred();
 		ajaxForDate({
 			type: 'POST',
-			data: value,
+			data: JSON.stringify(value),
 			date: self.Date,
 			statusCode400: function (jqXHR, textStatus, errorThrown) {
 				var errorMessage = $.parseJSON(jqXHR.responseText);
