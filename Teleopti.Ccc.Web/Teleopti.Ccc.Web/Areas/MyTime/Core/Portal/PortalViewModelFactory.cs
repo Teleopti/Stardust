@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			{
 				navigationItems.Add(createStudentAvailabilityNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences))
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) || 
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
 				navigationItems.Add(createPreferenceNavigationItem());
 			}
@@ -113,25 +115,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 		private PreferenceNavigationItem createPreferenceNavigationItem()
 		{
 			var preferenceOptions = PreferenceOptions();
-			var toolbarItems = new ToolBarItemBase[]
-				{
-					new ToolBarDatePicker
+			var toolbarItems = new List<ToolBarItemBase>
+			                   	{
+			                   		new ToolBarDatePicker
+			                   			{
+			                   				NextTitle = Resources.NextPeriod,
+			                   				PrevTitle = Resources.PreviousPeriod
+			                   			}
+			                   	};
+			if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
+			{
+				toolbarItems.AddRange(
+					new ToolBarItemBase[]
 						{
-							NextTitle = Resources.NextPeriod,
-							PrevTitle = Resources.PreviousPeriod
-						},
-					new ToolBarSeparatorItem(),
-					new ToolBarSplitButton
-						{
-							Title = Resources.Preference,
-							Options = preferenceOptions
-						},
-					new ToolBarSeparatorItem(),
-					new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
-				};
+							new ToolBarSeparatorItem(),
+							new ToolBarSplitButton
+								{
+									Title = Resources.Preference,
+									Options = preferenceOptions
+								}
+						});
+			}
+
+			toolbarItems.AddRange(
+				new ToolBarItemBase[]
+					{
+						new ToolBarSeparatorItem(),
+						new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
+					});
+
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
-				toolbarItems = toolbarItems.Concat(new[] { new ToolBarButtonItem { Title = Resources.AddExtendedPreference, ButtonType = "add-extended" } }).ToArray();
+				toolbarItems.Add(new ToolBarButtonItem {Title = Resources.AddExtendedPreference, ButtonType = "add-extended"});
 			}
 			return new PreferenceNavigationItem
 			       	{

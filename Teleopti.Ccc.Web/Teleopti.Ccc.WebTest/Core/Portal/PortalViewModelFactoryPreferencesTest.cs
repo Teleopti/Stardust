@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -23,14 +24,61 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldNotHavePreferencesNavigationItemIfNotPermission()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.StandardPreferences))).Return(true);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences)).Return(false);
+			var permissionProvider = NoPermissionToPreferences();
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
 			result.Controller<PreferenceNavigationItem>().Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldHavePreferencesNavigationItemIfOnlyPermissionToExtendedPreferences()
+		{
+			var permissionProvider = NoPermissionToStandardPreferences();
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			result.Controller<PreferenceNavigationItem>().Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldHavePreferencesNavigationItemIfOnlyPermissionToStandardPreferences()
+		{
+			var permissionProvider = NoPermissionToExtendedPreferences();
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			result.Controller<PreferenceNavigationItem>().Should().Not.Be.Null();
+		}
+
+		private IPermissionProvider NoPermissionToPreferences()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Matches(new PredicateConstraint<string>(s => s != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb &&
+			                                                                                                                         s != DefinedRaptorApplicationFunctionPaths.StandardPreferences)))).Return(true);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences)).Return(false);
+
+			return permissionProvider;
+		}
+
+		private IPermissionProvider NoPermissionToStandardPreferences()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.StandardPreferences))).Return(true);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences)).Return(false);
+			return permissionProvider;
+		}
+
+		private IPermissionProvider NoPermissionToExtendedPreferences()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))).Return(true);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);
+			return permissionProvider;
 		}
 
 		[Test]
@@ -46,9 +94,21 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		}
 
 		[Test]
-		public void PreferenceShouldHaveSplitButton()
+		public void PreferenceShouldNotHaveSplitButtonWhenExtendedPreferencesIsPermitted()
 		{
 			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			var preferenceSplitButton = result.ControllerItems<ToolBarSplitButton, PreferenceNavigationItem>().SingleOrDefault();
+
+			preferenceSplitButton.Should().Be.Null();
+		}
+
+		[Test]
+		public void PreferenceShouldHaveSplitButton()
+		{
+			var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
