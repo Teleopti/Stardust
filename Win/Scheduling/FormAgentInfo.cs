@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     public partial class FormAgentInfo : BaseRibbonForm
     {
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
+    	private readonly ILifetimeScope _container;
     	private IPerson _selectedPerson;
         private ICollection<DateOnly> _dateOnlyList;
         private ISchedulingResultStateHolder _stateHolder;
@@ -49,10 +51,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public FormAgentInfo(IWorkShiftWorkTime workShiftWorkTime)
+		public FormAgentInfo(IWorkShiftWorkTime workShiftWorkTime, ILifetimeScope container)
 			: this()
 		{
 			_workShiftWorkTime = workShiftWorkTime;
+			_container = container;
 		}
 
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]

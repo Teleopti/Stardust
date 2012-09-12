@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public IFairnessValueResult FairnessPoints()
         {
-            DateTimePeriod period = createVisiblePeriodMinusFourWeeksPeriod();
+            DateTimePeriod period = VisiblePeriodMinusFourWeeksPeriod();
             return FairnessPoints(period);
         }
 
@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return null;
         }
 
-        private DateTimePeriod createVisiblePeriodMinusFourWeeksPeriod()
+        public DateTimePeriod VisiblePeriodMinusFourWeeksPeriod()
         {
             TimeSpan offset = TimeSpan.FromDays(-28);
             return ((ISchedule)this).Owner.Period.VisiblePeriod.ChangeStartTime(offset);
@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 ShiftCategoryFairnessCreator creator = new ShiftCategoryFairnessCreator();
                 ICccTimeZoneInfo timeZoneInfo = this.Person.PermissionInformation.DefaultTimeZone();
-                DateOnlyPeriod period = createVisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
+                DateOnlyPeriod period = VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
                 _shiftCategoryFairness = creator.CreatePersonShiftCategoryFairness(this, period);
             }
             return _shiftCategoryFairness;
