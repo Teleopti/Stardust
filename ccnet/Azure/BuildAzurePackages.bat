@@ -53,6 +53,9 @@ for /f "tokens=1,2 delims=," %%g in (contentMapping.txt) do ROBOCOPY "%ContentSo
 Echo Getting Previous build. Done
 ECHO copy done
 
+::Get StartPage
+XCOPY /S /d /y "%ContentSource%\StartPage" "%ContentDest%\TeleoptiCCC"
+
 ::Get ReportViewer
 XCOPY /d /y "%Dependencies%\ReportViewer2010.exe" "%ContentDest%\TeleoptiCCC\bin"
 
