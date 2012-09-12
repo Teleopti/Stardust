@@ -54,10 +54,18 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _setPreference(preference) {
 		var promises = [];
+
+		addExtendedPreferenceFormViewModel.ValidationError('');
+
+		var validationErrorCallback = function(data) {
+			var message = data.Errors.join('</br>');
+			addExtendedPreferenceFormViewModel.ValidationError(message);
+		};
+		
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
-				var promise = dayViewModels[date].SetPreference(preference);
+				var promise = dayViewModels[date].SetPreference(preference, validationErrorCallback);
 				promises.push(promise);
 			});
 		if (promises.length != 0) {
@@ -67,24 +75,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	}
 
-	function _toggleTimeAndActivityInputFields(enable) {
-		addExtendedPreferenceFormViewModel.IsTimeInputEnabled(enable);
-		
-		if (!enable) {
-			addExtendedPreferenceFormViewModel.ActivityPreferenceId('');
-		}
-	}
-
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
 		var template = $('#Preference-add-extended-form');
 		addExtendedPreferenceFormViewModel = new AddExtendedPreferenceFormViewModel();
-		addExtendedPreferenceFormViewModel.PreferenceId.subscribe(function () {
-			var selected = $('#Preference-extended-preference').find('option:selected');
-			var preferenceType = selected.data('preference-type');
-
-			_toggleTimeAndActivityInputFields(preferenceType != 'Absence' && preferenceType != 'DayOffTemplate');
-		});
 
 		addExtendedTooltip = $('<div/>')
 			.qtip({

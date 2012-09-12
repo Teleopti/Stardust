@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			var preferenceSplitButton = result.ControllerItems<ToolBarSplitButton, PreferenceNavigationItem>().SingleOrDefault();
 
-			preferenceSplitButton.Options.ElementAt(1).Should().Be.OfType<OptionSplit>();
+			preferenceSplitButton.Options.ElementAt(1).Should().Be.OfType<PreferenceOptionSplit>();
 		}
 
 		[Test]
@@ -236,6 +236,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Value.Should().Be(shiftCategory.Id.ToString());
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Text.Should().Be(shiftCategory.Description.Name);
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Color.Should().Be(shiftCategory.DisplayColor.ToHtml());
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Extended.Should().Be.True();
 		}
 
 		[Test]
@@ -253,6 +254,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Value.Should().Be(absence.Id.ToString());
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Text.Should().Be(absence.Description.Name);
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Color.Should().Be(absence.DisplayColor.ToHtml());
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Extended.Should().Be.False();
 		}
 
 		[Test]
@@ -270,7 +272,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Value.Should().Be(dayOff.Id.ToString());
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Text.Should().Be(dayOff.Description.Name);
 			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Color.Should().Be(dayOff.DisplayColor.ToHtml());
-			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Type.Should().Be(dayOff.GetType().Name);
+			result.Controller<PreferenceNavigationItem>().PreferenceOptions.Single().Extended.Should().Be.False();
 		}
 
 		[Test]

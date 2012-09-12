@@ -19,6 +19,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		var type = options.type || 'GET',
 		    date = options.date || null, // required
 		    data = options.data || {},
+		    statusCode400 = options.statusCode400,
 		    statusCode404 = options.statusCode404,
 		    url = options.url || "Preference/Preference",
 		    success = options.success || function () {
@@ -62,13 +63,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			success: success,
 			data: data,
 			statusCode404: statusCode404,
+			statusCode400: statusCode400,
 
 			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
-					var errorMessage = $.parseJSON(jqXHR.responseText);
-					_displayValidationError(errorMessage);
-					return;
-				}
 				var cellHtml = $('<h2></h2>')
 					.addClass('error');
 
@@ -182,16 +179,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		});
 	};
 
-	function _displayValidationError(data) {
-		var message = data.Errors.join('</br>');
-		$('#Preference-extended-error').html(message || '');
-	}
-
-	function _clearValidationError() {
-		$('#Preference-extended-error').html('');
-	}
-
-	this.SetPreference = function (value) {
+	this.SetPreference = function (value, validationErrorCallback) {
 		if (typeof (value) == 'string') {
 			value = JSON.stringify({
 				Date: self.Date,
@@ -207,13 +195,17 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 				delete jsValue.ActivityPreferenceId;
 			}
 			value = ko.toJSON(jsValue);
-			_clearValidationError();
 		}
+
 		var deferred = $.Deferred();
 		ajaxForDate({
 			type: 'POST',
 			data: value,
 			date: self.Date,
+			statusCode400: function (jqXHR, textStatus, errorThrown) {
+				var errorMessage = $.parseJSON(jqXHR.responseText);
+				validationErrorCallback(errorMessage);
+			},
 			success: this.ReadPreference,
 			complete: function () {
 				deferred.resolve();
@@ -285,7 +277,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			return true;
 		return false;
 	});
-
 
 };
 
