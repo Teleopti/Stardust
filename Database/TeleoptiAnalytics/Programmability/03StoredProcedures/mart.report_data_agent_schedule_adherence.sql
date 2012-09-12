@@ -79,7 +79,8 @@ CREATE TABLE #fact_schedule_deviation (
 CREATE TABLE #minmax(
 	[minint] [int] NULL,
 	[maxint] [int] NULL,
-	[person_id] [int] NULL
+	[person_id] [int] NULL,
+	[date]	[datetime] NULL
 )
 
 CREATE TABLE #team_adh_tot(
@@ -566,12 +567,12 @@ INNER JOIN mart.dim_activity a on a.activity_id =-1
 WHERE r.count_activity_per_interval >1
 
 INSERT INTO #minmax
-SELECT min(interval_id) minint ,max(interval_id) maxint, person_id
-FROM #result GROUP BY person_id 
+SELECT min(interval_id) minint ,max(interval_id) maxint, person_id, date
+FROM #result GROUP BY person_id, date 
  
 update #result set mininterval = minint, maxinterval = maxint
 from  #minmax
-inner join #result on #minmax.person_id = #result.person_id
+inner join #result on #minmax.person_id = #result.person_id and #minmax.date=#result.date
 
 -- Sortering 1=FirstName,2=LastName,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date
 -- NOTE: If you change the column order/name you need to consider SDK DTO as well!
@@ -593,19 +594,19 @@ SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, 
 				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
 				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
 				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone
-				FROM #result ORDER BY mininterval, person_first_name,person_last_name,person_id,interval_id
+				FROM #result ORDER BY mininterval,date, person_first_name,person_last_name,person_id,interval_id
 IF @sort_by=4
 	SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
 				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
 				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
 				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone
-				FROM #result ORDER BY adherence_tot,person_first_name,person_last_name,person_id,interval_id
+				FROM #result ORDER BY adherence_tot,date,person_first_name,person_last_name,person_id,interval_id
 IF @sort_by=5
 SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
 				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
 				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
 				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone
-				FROM #result ORDER BY maxinterval, person_first_name,person_last_name,person_id,interval_id
+				FROM #result ORDER BY maxinterval,date, person_first_name,person_last_name,person_id,interval_id
 IF @sort_by=6
 SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
 				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
