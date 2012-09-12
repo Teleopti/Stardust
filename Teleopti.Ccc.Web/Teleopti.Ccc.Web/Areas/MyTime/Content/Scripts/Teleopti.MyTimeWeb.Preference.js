@@ -54,10 +54,18 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _setPreference(preference) {
 		var promises = [];
+
+		addExtendedPreferenceFormViewModel.ValidationError('');
+
+		var validationErrorCallback = function(data) {
+			var message = data.Errors.join('</br>');
+			addExtendedPreferenceFormViewModel.ValidationError(message);
+		};
+		
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
-				var promise = dayViewModels[date].SetPreference(preference);
+				var promise = dayViewModels[date].SetPreference(preference, validationErrorCallback);
 				promises.push(promise);
 			});
 		if (promises.length != 0) {

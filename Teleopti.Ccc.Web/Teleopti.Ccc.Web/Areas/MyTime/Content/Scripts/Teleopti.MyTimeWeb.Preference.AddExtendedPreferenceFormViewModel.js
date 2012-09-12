@@ -35,5 +35,7 @@ AddExtendedPreferenceFormViewModel = function () {
 		if (!newValue)
 			self.ActivityPreferenceId('');
 	});
+
+	this.ValidationError = ko.observable();
 };
 
