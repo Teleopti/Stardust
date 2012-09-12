@@ -43,12 +43,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
-    	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
-    	private IPersonAssignment _personAssignment;
     	private IProjectionService _projectionService;
     	private IVisualLayerCollection _visualLayerCollection;
-    	private IMainShift _mainShift;
-    	private IDictionary<DateOnly, IScheduleDay> _originalDays;
+		private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+		private IPersonAssignment _personAssignment;
+		private IMainShift _mainShift;
+		private IDictionary<DateOnly, IScheduleDay> _originalDays;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -78,39 +78,38 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _rollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
             _deleteService = _mockRepository.StrictMock<IDeleteSchedulePartService>();
             _resourceOptimizationHelper = _mockRepository.StrictMock<IResourceOptimizationHelper>();
-            _schedulingOptions = new SchedulingOptions();
             _effectiveRestrictionCreator = _mockRepository.StrictMock<IEffectiveRestrictionCreator>();
             _effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
             _resourceCalculateDaysDecider = _mockRepository.StrictMock<IResourceCalculateDaysDecider>();
             _workShiftOriginalStateContainer = _mockRepository.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _optimizationOverLimitDecider = _mockRepository.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
             _schedulingOptionsCreator = _mockRepository.StrictMock<ISchedulingOptionsCreator>();
-        	_mainShiftOptimizeActivitySpecificationSetter =
-        		_mockRepository.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
         	_projectionService = _mockRepository.StrictMock<IProjectionService>();
         	_visualLayerCollection = _mockRepository.StrictMock<IVisualLayerCollection>();
-        	_personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
-        	_mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-			_originalDays = new Dictionary<DateOnly, IScheduleDay>();
-			_originalDays.Add(_mostOverStaffDate, _mostOverStaffSchedulePart);
-			_originalDays.Add(_mostUnderStaffDate, _mostUnderStaffSchedulePart);
+			_mainShiftOptimizeActivitySpecificationSetter =
+		    _mockRepository.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
+		    _projectionService = _mockRepository.StrictMock<IProjectionService>();
+		    _personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
+		    _mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+		    _originalDays = new Dictionary<DateOnly, IScheduleDay>{{_mostOverStaffDate, _mostOverStaffSchedulePart},{_mostUnderStaffDate, _mostUnderStaffSchedulePart}};
 
-            _target = new MoveTimeOptimizer(
-                _periodValueCalculator,
-                _personalSkillsDataExtractor,
-                _decisionMaker,
-                _bitArrayConverter,
-                _scheduleService,
-                _optimizerPreferences,
-                _rollbackService,
-                _deleteService,
-                _resourceOptimizationHelper,
-                _effectiveRestrictionCreator,
-                _resourceCalculateDaysDecider,
-                _workShiftOriginalStateContainer,
-                _optimizationOverLimitDecider,
-                _schedulingOptionsCreator,
-				_mainShiftOptimizeActivitySpecificationSetter);
+        	_target = new MoveTimeOptimizer(
+        		_periodValueCalculator,
+        		_personalSkillsDataExtractor,
+        		_decisionMaker,
+        		_bitArrayConverter,
+        		_scheduleService,
+        		_optimizerPreferences,
+        		_rollbackService,
+        		_deleteService,
+        		_resourceOptimizationHelper,
+        		_effectiveRestrictionCreator,
+        		_resourceCalculateDaysDecider,
+        		_workShiftOriginalStateContainer,
+        		_optimizationOverLimitDecider,
+        		_schedulingOptionsCreator,
+        		_mainShiftOptimizeActivitySpecificationSetter
+        		);
         }
 
         [Test]
@@ -134,12 +133,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                 .Return(_schedulingOptions);
 			Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
-
             Expect.Call(_optimizationOverLimitDecider.OverLimit())
                  .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
             Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
-
             Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.AtLeastOnce();
 
             makePeriodBetter();
@@ -149,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(new List<DateOnly> { _mostUnderStaffDate, _mostOverStaffDate });
             Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary)
                 .Return(_fullWeeksPeriodDictionary).Repeat.Any();
-            Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
+            //Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
             Expect.Call(_mostOverStaffDay.DaySchedulePart())
                 .Return(_mostOverStaffSchedulePart).Repeat.AtLeastOnce();
             Expect.Call(_mostUnderStaffDay.DaySchedulePart())
@@ -194,22 +191,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_effectiveRestriction);
             Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions))
                     .Return(_effectiveRestriction);
-			Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
-                     .Return(true);
-            Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate))
-                .Return(true);
-			Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays).Repeat.AtLeastOnce();
-        	Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false,
-        	                                                 _effectiveRestriction, _resourceCalculateDelayer, null)).
-        		IgnoreArguments().Return(true);
 			Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
 			Expect.Call(_personAssignment.MainShift).Return(_mainShift);
 			Expect.Call(_mostOverStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
 			Expect.Call(_personAssignment.MainShift).Return(_mainShift);
+			//Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(new Dictionary<DateOnly, IScheduleDay>{{_mostOverStaffDate, _mostOverStaffSchedulePart},{_mostUnderStaffDate, _mostUnderStaffSchedulePart}}).Repeat.AtLeastOnce();
+			Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays).Repeat.AtLeastOnce();
+			//Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays);
 			Expect.Call(
-				() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).IgnoreArguments().Repeat.AtLeastOnce();
+					() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).IgnoreArguments().Repeat.AtLeastOnce();
+			Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+                     .Return(true);
+            Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate))
+                .Return(true);
+			Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+                .Return(true);
             Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostOverStaffDate))
                 .Return(false);
+			//Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_mostOverStaffDate])
+			//    .Return(_mostOverStaffSchedulePart);
+			//Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_mostUnderStaffDate])
+			//    .Return(_mostUnderStaffSchedulePart);
             Expect.Call(() => _rollbackService.Modify(_mostOverStaffSchedulePart, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance))).IgnoreArguments();
 
             // lock day
@@ -249,6 +251,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                 .Return(_schedulingOptions);
         	Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+			Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
             Expect.Call(_optimizationOverLimitDecider.OverLimit())
                 .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
             Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
@@ -320,24 +323,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_effectiveRestriction);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions))
                     .Return(_effectiveRestriction);
-            	Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays).Repeat.AtLeastOnce();
-            	Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false,
-            	                                                 _effectiveRestriction, _resourceCalculateDelayer, null)).
-            		IgnoreArguments().Return(true);
-            	Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
-            	Expect.Call(_personAssignment.MainShift).Return(_mainShift);
+				Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
+				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
 				Expect.Call(_mostOverStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
 				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
-            	Expect.Call(
-            		() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays).Repeat.AtLeastOnce();
+				Expect.Call(
+					() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+                    .Return(true);
                 Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate))
                     .Return(true);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostOverStaffDate))
                     .Return(false);
 				//Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_mostOverStaffDate])
-				//    .Return(_mostOverStaffSchedulePart);
+				//    .Return(_mostOverStaffSchedulePart).IgnoreArguments().Repeat.Any();
                 Expect.Call(() =>_rollbackService.Modify(_mostOverStaffSchedulePart,new ScheduleTagSetter(KeepOriginalScheduleTag.Instance))).IgnoreArguments();
                 //Expect.Call(_schedulingOptions.ConsiderShortBreaks)
                 //    .Return(true).Repeat.AtLeastOnce();
@@ -428,23 +430,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_effectiveRestriction);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions))
                     .Return(_effectiveRestriction);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
-                    .Return(true);
-                Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate))
-                    .Return(true);
-				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays).Repeat.AtLeastOnce();
-            	Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false,
-            	                                                 _effectiveRestriction, _resourceCalculateDelayer, null)).
-            		IgnoreArguments().Return(true);
 				Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
 				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
 				Expect.Call(_mostOverStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
 				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
+				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays).Repeat.AtLeastOnce();
 				Expect.Call(
 					() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+                    .Return(true);
+                Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate))
+                    .Return(true);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+                    .Return(true);
                 Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostOverStaffDate))
                     .Return(false);
-
+				//Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_mostOverStaffDate])
+				//    .Return(_mostOverStaffSchedulePart).IgnoreArguments().Repeat.Any();
                 Expect.Call(() =>_rollbackService.Modify(_mostOverStaffSchedulePart,new ScheduleTagSetter(KeepOriginalScheduleTag.Instance))).IgnoreArguments();
 
                 // NO rollback
@@ -477,14 +479,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(_schedulingOptions);
+				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
                 Expect.Call(_optimizationOverLimitDecider.OverLimit())
                     .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
-				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
                 Expect.Call(_bitArrayConverter.SourceMatrix)
                     .Return(_scheduleMatrix).Repeat.AtLeastOnce();
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(2);
+            	Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(2);
                 Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor)).IgnoreArguments()
                     .Return(new List<DateOnly> { _mostUnderStaffDate, _mostOverStaffDate });
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary)
@@ -529,19 +531,26 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_effectiveRestriction);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions))
                         .Return(_effectiveRestriction);
+                Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
 				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays).Repeat.AtLeastOnce();
+				//Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
+				//    .Return(true);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+					.Return(true);
+				Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate)).IgnoreArguments().Return(true);
+				Expect.Call(
+					() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).IgnoreArguments().Repeat.AtLeastOnce();
+				//Expect.Call(() =>
+				//    _scheduleMatrix.LockPeriod(new DateOnlyPeriod(new DateOnly(2010, 1, 9), new DateOnly(2010, 1, 9))));
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
+                    .Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+					.Return(false);
 				Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
-            	Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false,
-            	                                                 _effectiveRestriction, _resourceCalculateDelayer, null)).
-            		IgnoreArguments().Return(true);
 				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
 				Expect.Call(_mostOverStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
 				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
-				Expect.Call(
-					() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).IgnoreArguments().Repeat.AtLeastOnce();
-                Expect.Call(_workShiftOriginalStateContainer.WorkShiftChanged(_mostUnderStaffDate)).Return(true);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostOverStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
-                    .Return(false);
+				//Expect.Call(_personAssignment.MainShift).Return(_mainShift);
                 //Expect.Call(_schedulingOptions.ConsiderShortBreaks)
                 //    .Return(true).Repeat.AtLeastOnce();
                 // rollback
@@ -734,9 +743,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(_schedulingOptions);
+				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+				Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                      .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
-				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_bitArrayConverter.SourceMatrix)
@@ -747,6 +757,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     Return(new List<DateOnly> { _mostUnderStaffDate, _mostOverStaffDate });
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary)
                     .Return(_fullWeeksPeriodDictionary).Repeat.Any();
+                Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
                 Expect.Call(_mostUnderStaffDay.DaySchedulePart())
                     .Return(_mostUnderStaffSchedulePart).Repeat.AtLeastOnce();
                 Expect.Call(_mostOverStaffDay.DaySchedulePart())
@@ -782,15 +793,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions)).IgnoreArguments()
                     .Return(_effectiveRestriction);
 				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays).Repeat.AtLeastOnce();
-            	Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false,
-            	                                                 _effectiveRestriction, _resourceCalculateDelayer, null)).
-            		IgnoreArguments().Return(false);
-				Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
-				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
-				//Expect.Call(_mostOverStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
-				//Expect.Call(_personAssignment.MainShift).Return(_mainShift);
 				Expect.Call(
 					() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments()
+                    .Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
+					.Return(false);
+				Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
+				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
                 // rollback
                 _rollbackService.ClearModificationCollection();
                 _rollbackService.Rollback();
@@ -809,40 +819,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Assert.IsTrue(result);
             }
         }
-
-
-
-
-
-        //[Test]
-        //public void VerifyIsMovedDaysUnderLimit()
-        //{
-
-        //    using (_mockRepository.Record())
-        //    {
-        //        Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-        //             .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
-        //    }
-        //    using (_mockRepository.Playback())
-        //    {
-        //        Assert.IsTrue(_target.RestrictionsOverMax().Count == 0);
-        //    }
-        //}
-
-        //[Test]
-        //public void VerifyIsMovedDaysOverLimit()
-        //{
-
-        //    using (_mockRepository.Record())
-        //    {
-        //        Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-        //             .Return(true).Repeat.AtLeastOnce();
-        //    }
-        //    using (_mockRepository.Playback())
-        //    {
-        //        Assert.IsTrue(_target.RestrictionsOverMax());
-        //    }
-        //}
-
     }
 }
