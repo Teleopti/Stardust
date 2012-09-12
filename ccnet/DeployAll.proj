@@ -194,8 +194,9 @@
 	<!--StartPage-->
 	<StartPage
 	Include=
-	"$(CCNetWorkingDirectory)\Teleopti.CCC.StartPage\index.html;
-	$(CCNetWorkingDirectory)\Teleopti.CCC.StartPage\Images\*.*"/>
+	"$(CCNetWorkingDirectory)\Teleopti.CCC.StartPage\**\*.html;
+	$(CCNetWorkingDirectory)\Teleopti.CCC.StartPage\**\*.png;
+	$(CCNetWorkingDirectory)\Teleopti.CCC.StartPage\**\*.jpg;"/>
 
 			<!--Analytics-->
 			<Analytics
