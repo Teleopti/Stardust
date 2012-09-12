@@ -157,9 +157,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                                               originalStateContainer);
                 var dataExtractorProvider = new ScheduleResultDataExtractorProvider(optimizationPreferences.Advanced);
                 var personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
+                IPeriodValueCalculatorProvider periodValueCalculatorProvider = new PeriodValueCalculatorProvider();
+                var periodValueCalculator = periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
+
                 var lockableBitArrayConverter =
                     new ScheduleMatrixLockableBitArrayConverter(matrix);
-                var optimizer = new GroupMoveTimeOptimizer(lockableBitArrayConverter, new MoveTimeDecisionMaker2(),
+                var optimizer = new GroupMoveTimeOptimizer(periodValueCalculator, lockableBitArrayConverter, new MoveTimeDecisionMaker2(),
                                                            personalSkillsDataExtractor,
                                                            optimizerOverLimitDecider);
                 optimizers.Add(optimizer);

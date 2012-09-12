@@ -11,22 +11,25 @@ namespace Teleopti.Ccc.Domain.Optimization
         IPerson Person { get; }
         IOptimizationOverLimitByRestrictionDecider OptimizationOverLimitByRestrictionDecider { get; }
         bool IsMatrixForDateAndPerson(DateOnly dateOnly, IPerson person);
+        double PeriodValue();
     }
 
     public class GroupMoveTimeOptimizer : IGroupMoveTimeOptimizer
     {
+        private readonly IPeriodValueCalculator _periodValueCalculator;
         private readonly IScheduleMatrixLockableBitArrayConverter _scheduleMatrixLockableBitArrayConverter;
         private readonly IMoveTimeDecisionMaker _moveTimeDecisionMaker;
         private readonly IScheduleResultDataExtractor _dataExtractor;
         private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
         private ILockableBitArray _lockableBitArray;
 
-        public GroupMoveTimeOptimizer(IScheduleMatrixLockableBitArrayConverter scheduleMatrixLockableBitArrayConverter, 
+        public GroupMoveTimeOptimizer(IPeriodValueCalculator periodValueCalculator,IScheduleMatrixLockableBitArrayConverter scheduleMatrixLockableBitArrayConverter, 
                                         IMoveTimeDecisionMaker moveTimeDecisionMaker, 
                                         IScheduleResultDataExtractor dataExtractor,
                                         IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
 
         {
+            _periodValueCalculator = periodValueCalculator;
             _scheduleMatrixLockableBitArrayConverter = scheduleMatrixLockableBitArrayConverter;
             _moveTimeDecisionMaker = moveTimeDecisionMaker;
             _dataExtractor = dataExtractor;
@@ -64,6 +67,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 return _scheduleMatrixLockableBitArrayConverter.SourceMatrix;
             }
+        }
+
+        public double PeriodValue()
+        {
+            return _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
         }
 
         public IPerson Person

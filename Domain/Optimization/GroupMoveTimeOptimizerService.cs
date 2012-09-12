@@ -86,9 +86,20 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var validateResult = daysToDelete.All(d => _groupMoveTimeValidatorRunner.Run(person, new List<DateOnly> { d.DateOnlyAsPeriod.DateOnly },
                                                                        new List<DateOnly> { d.DateOnlyAsPeriod.DateOnly  }, true).Success );
                 if (!validateResult) continue;
-                var success = _groupMoveTimeOptimizerExecuter.Execute(daysToDelete, daysToSave, allMatrixes, optimizer.OptimizationOverLimitByRestrictionDecider);
 
-                if (!success)
+                var oldPeriodValue = optimizer.PeriodValue();
+                var success = _groupMoveTimeOptimizerExecuter.Execute(daysToDelete, daysToSave, allMatrixes, optimizer.OptimizationOverLimitByRestrictionDecider);
+                if(success)
+                {
+                    var newPeriodValue = optimizer.PeriodValue();
+                    var isPeriodWorse = newPeriodValue > oldPeriodValue;
+                    if (isPeriodWorse)
+                    {
+                        _groupMoveTimeOptimizerExecuter.Rollback(firstDate);
+                        _groupMoveTimeOptimizerExecuter.Rollback(secDate);
+                    }
+                }
+                else
                 {
                     removeList.AddRange(memberList);
                 }

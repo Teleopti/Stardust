@@ -21,16 +21,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleMatrixPro _matrix;
         private IPerson _person;
         private ILockableBitArray _lockableBitArray;
+        private IPeriodValueCalculator _periodValueCalculator;
 
         [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
+            _periodValueCalculator = _mock.StrictMock<IPeriodValueCalculator>();
             _scheduleMatrixLockableBitArrayConverter = _mock.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
             _moveTimeDecisionMaker = _mock.StrictMock<IMoveTimeDecisionMaker>();
             _dataExtractor = _mock.StrictMock<IScheduleResultDataExtractor>();
             _optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
-            _target = new GroupMoveTimeOptimizer(_scheduleMatrixLockableBitArrayConverter, _moveTimeDecisionMaker,
+            _target = new GroupMoveTimeOptimizer(_periodValueCalculator, _scheduleMatrixLockableBitArrayConverter, _moveTimeDecisionMaker,
                                                  _dataExtractor, _optimizationOverLimitByRestrictionDecider);
              _matrix = _mock.StrictMock<IScheduleMatrixPro>();
             _person = PersonFactory.CreatePerson();
