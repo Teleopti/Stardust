@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -101,6 +102,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             //delete schedule on the two days
             IList<IScheduleDay> listToDelete = new List<IScheduleDay> { firstDay.DaySchedulePart(), secondDay.DaySchedulePart() };
 
+			TimeSpan firstDayContractTime = firstDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
+			TimeSpan secondDayContractTime = secondDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
             IDictionary<DateOnly, changedDay> dic = new Dictionary<DateOnly, changedDay>();
             changedDay changedDay = new changedDay();
             changedDay.DateChanged = firstDay.Day;
@@ -126,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             resourceCalculateMovedDays(dic.Values);
 
-            if (!tryScheduleFirstDay(firstDayDate, schedulingOptions, firstDayEffectiveRestriction))
+            if (!tryScheduleFirstDay(firstDayDate, schedulingOptions, firstDayEffectiveRestriction, firstDayContractTime))
             {
 
                 resourceCalculateDays(firstDayDate, secondDayDate);
@@ -137,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             // Back to legal state
             // leave it for now
 
-            if (!tryScheduleSecondDay(secondDayDate, schedulingOptions, secondDayEffectiveRestriction))
+            if (!tryScheduleSecondDay(secondDayDate, schedulingOptions, secondDayEffectiveRestriction, secondDayContractTime))
             {
                 resourceCalculateDays(firstDayDate, secondDayDate);
                 return true;
