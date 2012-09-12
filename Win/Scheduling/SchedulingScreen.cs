@@ -1393,7 +1393,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 return;
             if (_agentInfo == null)
             {
-                _agentInfo = new FormAgentInfo(_workShiftWorkTime);
+                _agentInfo = new FormAgentInfo(_workShiftWorkTime, _container);
                 _agentInfo.FormClosed += _agentInfo_FormClosed;
                 _agentInfo.Show(this);
             }
