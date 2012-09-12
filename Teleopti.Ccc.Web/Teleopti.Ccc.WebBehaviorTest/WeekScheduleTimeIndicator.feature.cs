@@ -104,11 +104,11 @@ this.FeatureBackground();
 #line 16
  testRunner.Given("I have the role \'No access to ASM\'");
 #line 17
- testRunner.And("Current time is \'2012-10-03 12:00\'");
+ testRunner.And("Current time is \'2030-10-03 12:00\'");
 #line 18
- testRunner.When("I view my week schedule for date \'2012-10-03\'");
+ testRunner.When("I view my week schedule for date \'2030-10-03\'");
 #line 19
- testRunner.Then("I should not see the time indicator for date \'2012-10-03\'");
+ testRunner.Then("I should not see the time indicator for date \'2030-10-03\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -125,11 +125,11 @@ this.FeatureBackground();
 #line 22
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 23
- testRunner.And("Current time is \'2012-10-03 12:00\'");
+ testRunner.And("Current time is \'2030-10-03 12:00\'");
 #line 24
- testRunner.When("I view my week schedule for date \'2012-10-03\'");
+ testRunner.When("I view my week schedule for date \'2030-10-03\'");
 #line 25
- testRunner.Then("I should see the time indicator at time \'2012-10-03 12:00\'");
+ testRunner.Then("I should see the time indicator at time \'2030-10-03 12:00\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -146,17 +146,15 @@ this.FeatureBackground();
 #line 28
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 29
- testRunner.And("Current time is \'2012-09-13 12:00\'");
+ testRunner.And("Current time is \'2030-09-20 12:00\'");
 #line 30
- testRunner.And("I view my week schedule");
+ testRunner.And("I view my week schedule for date \'2030-09-20\'");
 #line 31
- testRunner.And("I should see the time indicator at time \'2012-09-13 12:00\'");
+ testRunner.And("I should see the time indicator at time \'2030-09-20 12:00\'");
 #line 32
- testRunner.When("Current browser time has changed to \'2012-09-13 12:01\'");
+ testRunner.When("Current browser time has changed to \'2030-09-20 12:01\'");
 #line 33
- testRunner.And("I navigate to week schedule page for date \'2012-09-13\'");
-#line 34
- testRunner.Then("I should see the time indicator at time \'2012-09-13 12:01\'");
+ testRunner.Then("I should see the time indicator at time \'2030-09-20 12:01\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -166,78 +164,22 @@ this.FeatureBackground();
         public virtual void ShowTimeIndicatorMovementAtMidnight()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show time indicator movement at midnight", ((string[])(null)));
+#line 35
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
 #line 36
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 37
- testRunner.Given("I have the role \'Full access to mytime\'");
+ testRunner.And("Current time is \'2030-09-20 23:59\'");
 #line 38
- testRunner.And("Current time is \'2012-09-13 23:59\'");
+ testRunner.And("I view my week schedule for date \'2030-09-20\'");
 #line 39
- testRunner.And("I view my week schedule");
+ testRunner.And("I should see the time indicator at time \'2030-09-20 23:59\'");
 #line 40
- testRunner.And("I should see the time indicator at time \'2012-09-13 23:59\'");
+ testRunner.When("Current browser time has changed to \'2030-09-21 0:00\'");
 #line 41
- testRunner.When("Current browser time has changed to \'2012-09-14 00:00\'");
-#line 42
- testRunner.And("I navigate to week schedule page for date \'2012-09-14\'");
-#line 43
- testRunner.Then("I should see the time indicator at time \'2012-09-14 00:00\'");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Handle time indicator movement from winter to summer time")]
-        public virtual void HandleTimeIndicatorMovementFromWinterToSummerTime()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Handle time indicator movement from winter to summer time", ((string[])(null)));
-#line 45
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
-#line 46
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line 47
- testRunner.And("Current time is \'2012-09-14 2:59\'");
-#line 48
- testRunner.And("I view my week schedule");
-#line 49
- testRunner.And("I should see the time indicator at time \'2012-09-14 2:59\'");
-#line 50
- testRunner.When("Current browser time has changed to \'2012-09-14 02:00\'");
-#line 51
- testRunner.And("I navigate to week schedule page for date \'2012-09-14\'");
-#line 52
- testRunner.Then("I should see the time indicator at time \'2012-09-14 02:00\'");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Handle time indicator movement from summer to winter time")]
-        public virtual void HandleTimeIndicatorMovementFromSummerToWinterTime()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Handle time indicator movement from summer to winter time", ((string[])(null)));
-#line 54
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
-#line 55
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line 56
- testRunner.And("Current time is \'2012-09-14 1:59\'");
-#line 57
- testRunner.And("I view my week schedule");
-#line 58
- testRunner.And("I should see the time indicator at time \'2012-09-14 1:59\'");
-#line 59
- testRunner.When("Current browser time has changed to \'2012-09-14 03:00\'");
-#line 60
- testRunner.And("I navigate to week schedule page for date \'2012-09-14\'");
-#line 61
- testRunner.Then("I should see the time indicator at time \'2012-09-14 03:00\'");
+ testRunner.Then("I should see the time indicator at time \'2030-09-21 0:00\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -247,18 +189,87 @@ this.FeatureBackground();
         public virtual void DoNotShowTimeIndicatorWhenViewingOtherWeekThanCurrent()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show time indicator when viewing other week than current", ((string[])(null)));
-#line 63
+#line 43
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 64
+#line 44
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 65
- testRunner.And("Current time is \'2014-03-12 12:00\'");
-#line 66
- testRunner.When("I view my week schedule for date \'2014-03-05\'");
-#line 67
+#line 45
+ testRunner.And("Current time is \'2030-03-12 12:00\'");
+#line 46
+ testRunner.When("I view my week schedule for date \'2030-03-05\'");
+#line 47
  testRunner.Then("I should not see the time indicator");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show the time indicator at correct time with a shift")]
+        public virtual void ShowTheTimeIndicatorAtCorrectTimeWithAShift()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show the time indicator at correct time with a shift", ((string[])(null)));
+#line 49
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 50
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table3.AddRow(new string[] {
+                        "Name",
+                        "Published schedule"});
+            table3.AddRow(new string[] {
+                        "Schedule published to date",
+                        "2040-06-24"});
+#line 51
+ testRunner.And("I have a workflow control set with", ((string)(null)), table3);
+#line hidden
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table4.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+            table4.AddRow(new string[] {
+                        "Type",
+                        "Week"});
+            table4.AddRow(new string[] {
+                        "Length",
+                        "1"});
+#line 55
+ testRunner.And("I have a schedule period with", ((string)(null)), table4);
+#line hidden
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table5.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+#line 60
+ testRunner.And("I have a person period with", ((string)(null)), table5);
+#line hidden
+            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table6.AddRow(new string[] {
+                        "StartTime",
+                        "2030-01-01 10:00"});
+            table6.AddRow(new string[] {
+                        "EndTime",
+                        "2030-01-01 12:00"});
+#line 63
+ testRunner.And("there is a shift with", ((string)(null)), table6);
+#line 67
+ testRunner.And("Current time is \'2030-01-01 11:00\'");
+#line 68
+ testRunner.When("I view my week schedule for date \'2030-01-01\'");
+#line 69
+ testRunner.Then("I should see the time indicator at time \'2030-01-01 11:00\'");
 #line hidden
             this.ScenarioCleanup();
         }

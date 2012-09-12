@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoWeekSchedulePage();
 		}
 
+        [Given(@"I view my week schedule for date '(.*)'")]
         [When(@"I view my week schedule for date '(.*)'")]
         public void WhenIViewMyWeekScheduleForDate(DateTime date)
         {

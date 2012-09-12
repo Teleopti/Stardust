@@ -30,6 +30,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			{
 				WatiN.Core.Browser.AttachTo<IE>(popupConstraint).Eval(setJsDate);
             }
+
+		    var setJsTimeIndicatorMovement =
+		        string.Format(@"Teleopti.MyTimeWeb.Schedule.SetTimeIndicator(new Date({0}, {1}, {2}, {3}, {4}, {5}));",
+		                      time.Year, time.Month - 1, time.Day, time.Hour, time.Minute, time.Second);
+            Browser.Current.Eval(setJsTimeIndicatorMovement);
 		}
 	}
 }
