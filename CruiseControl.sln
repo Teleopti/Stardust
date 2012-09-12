@@ -194,6 +194,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DBManager.Libr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.Notification", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Notification\Teleopti.Ccc.Sdk.Notification.csproj", "{87ADCA35-6114-4499-8233-6011611BF8AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Startpage", "Teleopti.Ccc.Startpage\Teleopti.Ccc.Startpage.csproj", "{BF7E4697-98E5-47B1-8C2E-DA24E308453F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1292,6 +1294,18 @@ Global
 		{87ADCA35-6114-4499-8233-6011611BF8AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{87ADCA35-6114-4499-8233-6011611BF8AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{87ADCA35-6114-4499-8233-6011611BF8AA}.Release|x86.ActiveCfg = Release|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|.NET.ActiveCfg = Release|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
