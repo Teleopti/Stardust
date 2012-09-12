@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.btnChoose = new System.Windows.Forms.Button();
-            this.radioButtonImportStaffing = new System.Windows.Forms.RadioButton();
             this.radioButtonImportWLAndStaffing = new System.Windows.Forms.RadioButton();
+            this.txtFileName = new System.Windows.Forms.TextBox();
+            this.btnChoose = new System.Windows.Forms.Button();
             this.radioButtonImportWorkload = new System.Windows.Forms.RadioButton();
+            this.radioButtonImportStaffing = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,7 +43,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 366F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.radioButtonImportWLAndStaffing, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.textBox1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.txtFileName, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.btnChoose, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.radioButtonImportWorkload, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.radioButtonImportStaffing, 0, 3);
@@ -59,12 +59,22 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(489, 338);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
-            // textBox1
+            // radioButtonImportWLAndStaffing
             // 
-            this.textBox1.Location = new System.Drawing.Point(3, 43);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(360, 20);
-            this.textBox1.TabIndex = 0;
+            this.radioButtonImportWLAndStaffing.AutoSize = true;
+            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(3, 93);
+            this.radioButtonImportWLAndStaffing.Name = "radioButtonImportWLAndStaffing";
+            this.radioButtonImportWLAndStaffing.Size = new System.Drawing.Size(166, 17);
+            this.radioButtonImportWLAndStaffing.TabIndex = 5;
+            this.radioButtonImportWLAndStaffing.Text = "xxExportWorkloadAndStaffing";
+            this.radioButtonImportWLAndStaffing.UseVisualStyleBackColor = true;
+            // 
+            // txtFileName
+            // 
+            this.txtFileName.Location = new System.Drawing.Point(3, 43);
+            this.txtFileName.Name = "txtFileName";
+            this.txtFileName.Size = new System.Drawing.Size(360, 20);
+            this.txtFileName.TabIndex = 0;
             // 
             // btnChoose
             // 
@@ -76,37 +86,27 @@
             this.btnChoose.UseVisualStyleBackColor = true;
             this.btnChoose.Click += new System.EventHandler(this.btnChoose_Click);
             // 
-            // radioButtonImportStaffing
-            // 
-            this.radioButtonImportStaffing.AutoSize = true;
-            this.radioButtonImportStaffing.Location = new System.Drawing.Point(3, 116);
-            this.radioButtonImportStaffing.Name = "radioButtonImportStaffing";
-            this.radioButtonImportStaffing.Size = new System.Drawing.Size(100, 17);
-            this.radioButtonImportStaffing.TabIndex = 4;
-            this.radioButtonImportStaffing.Text = "xxExportStaffing";
-            this.radioButtonImportStaffing.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonImportWLAndStaffing
-            // 
-            this.radioButtonImportWLAndStaffing.AutoSize = true;
-            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(3, 93);
-            this.radioButtonImportWLAndStaffing.Name = "radioButtonImportWLAndStaffing";
-            this.radioButtonImportWLAndStaffing.Size = new System.Drawing.Size(165, 17);
-            this.radioButtonImportWLAndStaffing.TabIndex = 5;
-            this.radioButtonImportWLAndStaffing.Text = "xxExportWorkloadAndStaffing";
-            this.radioButtonImportWLAndStaffing.UseVisualStyleBackColor = true;
-            // 
             // radioButtonImportWorkload
             // 
             this.radioButtonImportWorkload.AutoSize = true;
             this.radioButtonImportWorkload.Checked = true;
             this.radioButtonImportWorkload.Location = new System.Drawing.Point(3, 139);
             this.radioButtonImportWorkload.Name = "radioButtonImportWorkload";
-            this.radioButtonImportWorkload.Size = new System.Drawing.Size(110, 17);
+            this.radioButtonImportWorkload.Size = new System.Drawing.Size(111, 17);
             this.radioButtonImportWorkload.TabIndex = 3;
             this.radioButtonImportWorkload.TabStop = true;
             this.radioButtonImportWorkload.Text = "xxExportWorkload";
             this.radioButtonImportWorkload.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonImportStaffing
+            // 
+            this.radioButtonImportStaffing.AutoSize = true;
+            this.radioButtonImportStaffing.Location = new System.Drawing.Point(3, 116);
+            this.radioButtonImportStaffing.Name = "radioButtonImportStaffing";
+            this.radioButtonImportStaffing.Size = new System.Drawing.Size(101, 17);
+            this.radioButtonImportStaffing.TabIndex = 4;
+            this.radioButtonImportStaffing.Text = "xxExportStaffing";
+            this.radioButtonImportStaffing.UseVisualStyleBackColor = true;
             // 
             // SelectFileDestination
             // 
@@ -124,7 +124,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtFileName;
         private System.Windows.Forms.Button btnChoose;
         private System.Windows.Forms.RadioButton radioButtonImportWLAndStaffing;
         private System.Windows.Forms.RadioButton radioButtonImportWorkload;

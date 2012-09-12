@@ -33,7 +33,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				at: 'middle right',
 				viewport: $(window),
 				adjust: {
-					x: 15
+					x: 5
 				}
 			},
 			events: {
@@ -51,8 +51,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				event: 'mousedown'
 			},
 			style: {
+				def: false,
 				classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow',
-				tip: true,
 				border: {
 					radius: 2
 				}
@@ -68,7 +68,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _initTodayButton() {
 		$('#Schedule-today-button')
-			.click(function() {
+			.click(function () {
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
 			});
 	}

@@ -1,5 +1,8 @@
 ﻿
 /*** ToolTip input ***/
+.ui-tooltip-input {
+	border-width: 0px;
+}
 
 .ui-tooltip-input .ui-tooltip-titlebar,
 .ui-tooltip-input .ui-tooltip-content{

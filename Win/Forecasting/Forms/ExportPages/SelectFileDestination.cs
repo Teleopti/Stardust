@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         private readonly ICollection<string> _errorMessages = new List<string>();
         private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
         private const string dateTimeFormat = "yyyyMMdd";
-
+        
         public SelectFileDestination()
         {
             InitializeComponent();
@@ -46,10 +46,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             	                           period.EndDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture);
             	saveFileDialog.Filter = Resources.CSVFile;
             	saveFileDialog.OverwritePrompt = true;
-
-            	if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
             	{
-            		textBox1.Text = saveFileDialog.FileName;
+            		txtFileName.Text = saveFileDialog.FileName;
             	}
             }
         }
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         private void setColors()
         {
             BackColor = ColorHelper.WizardBackgroundColor();
-            textBox1.BackColor = ColorHelper.WizardPanelBackgroundColor();
+            txtFileName.BackColor = ColorHelper.WizardPanelBackgroundColor();
         }
 
         public void Populate(ExportSkillModel stateObj)
@@ -67,9 +67,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public bool Depopulate(ExportSkillModel stateObj)
         {
-            if (String.IsNullOrEmpty(textBox1.Text)) return false;
+            if (String.IsNullOrEmpty(txtFileName.Text)) return false;
             var commandModel = stateObj.ExportSkillToFileCommandModel;
-            commandModel.FileName = textBox1.Text;
+            var pathExists = txtFileName.Text.Contains("\\");
+            
+            if (pathExists)
+                commandModel.FileName = txtFileName.Text;
+            else
+                commandModel.FileName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + txtFileName.Text;
+
             GetSelectedCheckBox(stateObj);
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
@@ -82,6 +88,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             return true;
         }
 
+       
         public void SetEditMode()
         {
         }
