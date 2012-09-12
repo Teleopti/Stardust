@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			{
 				navigationItems.Add(createStudentAvailabilityNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) || 
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
 				navigationItems.Add(createPreferenceNavigationItem());
@@ -120,29 +121,32 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			                   			{
 			                   				NextTitle = Resources.NextPeriod,
 			                   				PrevTitle = Resources.PreviousPeriod
-			                   			},
+			                   			}
 			                   	};
-
 			if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
-				toolbarItems.AddRange(new ToolBarItemBase[]
-				                      	{
-				                      		new ToolBarSeparatorItem(),
-				                      		new ToolBarSplitButton
-				                      			{
-				                      				Title = Resources.Preference,
-				                      				Options = preferenceOptions
-				                      			},
-				                      	});
+				toolbarItems.AddRange(
+					new ToolBarItemBase[]
+						{
+							new ToolBarSeparatorItem(),
+							new ToolBarSplitButton
+								{
+									Title = Resources.Preference,
+									Options = preferenceOptions
+								}
+						});
 			}
-			toolbarItems.AddRange(new ToolBarItemBase[]
-			                      	{
-			                      		new ToolBarSeparatorItem(),
-			                      		new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
-			                      	});
+
+			toolbarItems.AddRange(
+				new ToolBarItemBase[]
+					{
+						new ToolBarSeparatorItem(),
+						new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
+					});
+
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
-				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.AddExtendedPreference, ButtonType = "add-extended" });
+				toolbarItems.Add(new ToolBarButtonItem {Title = Resources.AddExtendedPreference, ButtonType = "add-extended"});
 			}
 			return new PreferenceNavigationItem
 			       	{
@@ -167,52 +171,52 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			              	};
 		}
 
-		private IEnumerable<IPreferenceOption> PreferenceOptions()
+		private IEnumerable<IOption> PreferenceOptions()
 		{
 			var shiftCategories =
-				_preferenceOptionsProvider
-					.RetrieveShiftCategoryOptions()
-					.MakeSureNotNull()
-					.Select(s => new PreferenceOption
-					             	{
-					             		Value = s.Id.ToString(),
-					             		Text = s.Description.Name,
-					             		Color = s.DisplayColor.ToHtml(),
-					             		Extended = true
-					             	})
-					.ToArray();
+				_preferenceOptionsProvider.RetrieveShiftCategoryOptions().MakeSureNotNull().Select(s => new Option
+				                                                                                        	{
+				                                                                                        		Value = s.Id.ToString(),
+				                                                                                        		Text = s.Description.Name,
+				                                                                                        		Color =
+				                                                                                        			s.DisplayColor.ToHtml(),
+				                                                                                        		Type = s.GetType().Name
+				                                                                                        	}).ToArray();
 
-			var dayOffs = _preferenceOptionsProvider
-				.RetrieveDayOffOptions()
-				.MakeSureNotNull()
-				.Select(s => new PreferenceOption
-				             	{
-				             		Value = s.Id.ToString(),
-				             		Text = s.Description.Name,
-				             		Color = s.DisplayColor.ToHtml(),
-				             		Extended = false
-				             	})
-				.ToArray();
+			var dayOffs = _preferenceOptionsProvider.RetrieveDayOffOptions().MakeSureNotNull().Select(s => new Option
+			                                                                                               	{
+			                                                                                               		Value =
+			                                                                                               			s.Id.ToString(),
+			                                                                                               		Text =
+			                                                                                               			s.Description.Name,
+			                                                                                               		Color =
+			                                                                                               			s.DisplayColor.
+			                                                                                               			ToHtml(),
+			                                                                                               		Type =
+			                                                                                               			s.GetType().Name
+			                                                                                               	}).ToArray();
 
-			var absences = _preferenceOptionsProvider
-				.RetrieveAbsenceOptions()
-				.MakeSureNotNull()
-				.Select(s => new PreferenceOption
-				             	{
-				             		Value =s.Id.ToString(),
-				             		Text =s.Description.Name,
-				             		Color =s.DisplayColor.ToHtml(),
-				             		Extended = false
-				             	})
-				.ToArray();
+			var absences = _preferenceOptionsProvider.RetrieveAbsenceOptions().MakeSureNotNull().Select(s => new Option
+			                                                                                                 	{
+			                                                                                                 		Value =
+			                                                                                                 			s.Id.ToString(),
+			                                                                                                 		Text =
+			                                                                                                 			s.Description.
+			                                                                                                 			Name,
+			                                                                                                 		Color =
+			                                                                                                 			s.DisplayColor.
+			                                                                                                 			ToHtml(),
+			                                                                                                 		Type =
+			                                                                                                 			s.GetType().Name
+			                                                                                                 	}).ToArray();
 
-			var options = new List<IPreferenceOption>();
+			var options = new List<IOption>();
 			options.AddRange(shiftCategories);
 			if (options.Count > 0 && dayOffs.Any())
-				options.Add(new PreferenceOptionSplit());
+				options.Add(new OptionSplit());
 			options.AddRange(dayOffs);
 			if (options.Count > 0 && absences.Any())
-				options.Add(new PreferenceOptionSplit());
+				options.Add(new OptionSplit());
 			options.AddRange(absences);
 
 			return options;
