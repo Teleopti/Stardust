@@ -253,24 +253,28 @@ namespace Teleopti.Ccc.Domain.Optimization
             return _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
         }
 
-        private bool tryScheduleSecondDay(DateOnly secondDate, ISchedulingOptions  schedulingOptions, IEffectiveRestriction effectiveRestriction)
+		private bool tryScheduleSecondDay(DateOnly secondDate, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, TimeSpan originalLength)
         {
-            return tryScheduleDay(secondDate, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime);
+            return tryScheduleDay(secondDate, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.Short, originalLength);
         }
 
-        private bool tryScheduleFirstDay(DateOnly firstDate, ISchedulingOptions  schedulingOptions, IEffectiveRestriction effectiveRestriction)
+		private bool tryScheduleFirstDay(DateOnly firstDate, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, TimeSpan originalLength)
         {
-            return tryScheduleDay(firstDate, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.Long);
+            return tryScheduleDay(firstDate, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.Long, originalLength);
         }
 
-        private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption)
+        private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption, TimeSpan originalLength )
         {
             IScheduleDayPro scheduleDay = _matrixConverter.SourceMatrix.FullWeeksPeriodDictionary[day];
             schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
 
-			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer))
+        	bool success = _scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false,
+        	                                                    effectiveRestriction, resourceCalculateDelayer);
+			if (success && scheduleDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime() == originalLength)
+				success = false;
+			if (!success)
             {
                 _rollbackService.Rollback();
                 lockDay(day);
