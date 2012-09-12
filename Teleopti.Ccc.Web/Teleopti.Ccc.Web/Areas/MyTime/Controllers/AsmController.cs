@@ -6,6 +6,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OpenAsm)]
 	public class AsmController : Controller
 	{
 		private readonly IAsmViewModelFactory _asmModelFactory;
@@ -18,7 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OpenAsm)]
 		public ViewResult Index()
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
