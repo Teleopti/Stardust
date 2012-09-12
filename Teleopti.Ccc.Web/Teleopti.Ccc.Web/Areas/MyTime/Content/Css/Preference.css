@@ -118,3 +118,6 @@
 #Preference-extended-apply {
     float: right;
 }
+.rtl #Preference-extended-apply {
+    float: left;
+}
