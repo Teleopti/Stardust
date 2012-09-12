@@ -126,6 +126,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 							});
 
 						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
+
 					}
 				}
 			});

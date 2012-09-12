@@ -239,10 +239,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	};
 
 	function _fillFormRequestType(payload) {
-		$('#Absence-type').combobox("set", payload);
+		$('#Absence-type')
+			.combobox({
+				value: payload
+			});
 	};
 
-	function _clearFormData() {	
+	function _clearFormData() {
 		$('#Request-detail-section input, #Request-detail-section textarea, #Request-detail-section select')
 			.not(':button, :submit, :reset')
 			.reset()

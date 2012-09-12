@@ -169,6 +169,14 @@
 			});
 		},
 
+		_setEnabled: function (value) {
+			if (value) {
+				this._button.removeAttr('disabled');
+			} else {
+				this._button.attr('disabled', 'disabled');
+			}
+		},
+
 		_setOption: function (key, value) {
 			switch (key) {
 				case "clear":
