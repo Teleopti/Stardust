@@ -62,6 +62,10 @@
             this.listViewPerson = new System.Windows.Forms.ListView();
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tabPageFairness = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+            this.listViewFairness = new System.Windows.Forms.ListView();
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabControlAgentInfo)).BeginInit();
             this.tabControlAgentInfo.SuspendLayout();
@@ -69,14 +73,17 @@
             this.tabPageAdvRestrictions.SuspendLayout();
             this.tabPageAdvPersonPeriod.SuspendLayout();
             this.tabPageAdvPerson.SuspendLayout();
+            this.tabPageFairness.SuspendLayout();
             this.SuspendLayout();
             // 
             // ribbonControlAdv1
             // 
             this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
             this.ribbonControlAdv1.MenuButtonText = "";
             this.ribbonControlAdv1.MenuButtonVisible = false;
+            this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
             this.ribbonControlAdv1.Name = "ribbonControlAdv1";
             // 
             // ribbonControlAdv1.OfficeMenu
@@ -85,7 +92,6 @@
             this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
             this.ribbonControlAdv1.QuickPanelVisible = false;
             this.ribbonControlAdv1.SelectedTab = null;
-            this.ribbonControlAdv1.ShowMinimizeButton = false;
             this.ribbonControlAdv1.Size = new System.Drawing.Size(517, 33);
             this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
             this.ribbonControlAdv1.TabIndex = 0;
@@ -98,6 +104,7 @@
             this.tabControlAgentInfo.Controls.Add(this.tabPageAdvRestrictions);
             this.tabControlAgentInfo.Controls.Add(this.tabPageAdvPersonPeriod);
             this.tabControlAgentInfo.Controls.Add(this.tabPageAdvPerson);
+            this.tabControlAgentInfo.Controls.Add(this.tabPageFairness);
             this.tabControlAgentInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlAgentInfo.Location = new System.Drawing.Point(6, 34);
             this.tabControlAgentInfo.Name = "tabControlAgentInfo";
@@ -115,6 +122,7 @@
             this.tabPageAdvSchedulePeriod.ImageSize = new System.Drawing.Size(16, 16);
             this.tabPageAdvSchedulePeriod.Location = new System.Drawing.Point(1, 22);
             this.tabPageAdvSchedulePeriod.Name = "tabPageAdvSchedulePeriod";
+            this.tabPageAdvSchedulePeriod.ShowCloseButton = true;
             this.tabPageAdvSchedulePeriod.Size = new System.Drawing.Size(504, 472);
             this.tabPageAdvSchedulePeriod.TabIndex = 2;
             this.tabPageAdvSchedulePeriod.Text = "xxSchedulePeriod";
@@ -162,6 +170,7 @@
             this.tabPageAdvRestrictions.ImageSize = new System.Drawing.Size(16, 16);
             this.tabPageAdvRestrictions.Location = new System.Drawing.Point(1, 22);
             this.tabPageAdvRestrictions.Name = "tabPageAdvRestrictions";
+            this.tabPageAdvRestrictions.ShowCloseButton = true;
             this.tabPageAdvRestrictions.Size = new System.Drawing.Size(504, 472);
             this.tabPageAdvRestrictions.TabIndex = 4;
             this.tabPageAdvRestrictions.Text = "xxRestrictions";
@@ -203,6 +212,7 @@
             this.tabPageAdvPersonPeriod.ImageSize = new System.Drawing.Size(16, 16);
             this.tabPageAdvPersonPeriod.Location = new System.Drawing.Point(1, 22);
             this.tabPageAdvPersonPeriod.Name = "tabPageAdvPersonPeriod";
+            this.tabPageAdvPersonPeriod.ShowCloseButton = true;
             this.tabPageAdvPersonPeriod.Size = new System.Drawing.Size(504, 472);
             this.tabPageAdvPersonPeriod.TabIndex = 3;
             this.tabPageAdvPersonPeriod.Text = "xxPersonPeriod";
@@ -244,6 +254,7 @@
             this.tabPageAdvPerson.ImageSize = new System.Drawing.Size(16, 16);
             this.tabPageAdvPerson.Location = new System.Drawing.Point(1, 22);
             this.tabPageAdvPerson.Name = "tabPageAdvPerson";
+            this.tabPageAdvPerson.ShowCloseButton = true;
             this.tabPageAdvPerson.Size = new System.Drawing.Size(504, 472);
             this.tabPageAdvPerson.TabIndex = 5;
             this.tabPageAdvPerson.Text = "xxPerson";
@@ -278,6 +289,45 @@
             // 
             this.columnHeader8.Width = 249;
             // 
+            // tabPageFairness
+            // 
+            this.tabPageFairness.Controls.Add(this.listViewFairness);
+            this.tabPageFairness.Image = null;
+            this.tabPageFairness.ImageSize = new System.Drawing.Size(16, 16);
+            this.tabPageFairness.Location = new System.Drawing.Point(1, 22);
+            this.tabPageFairness.Name = "tabPageFairness";
+            this.tabPageFairness.ShowCloseButton = true;
+            this.tabPageFairness.Size = new System.Drawing.Size(504, 472);
+            this.tabPageFairness.TabIndex = 6;
+            this.tabPageFairness.Text = "xxFairness";
+            this.tabPageFairness.ThemesEnabled = false;
+            // 
+            // listViewFairness
+            // 
+            this.listViewFairness.BackColor = System.Drawing.SystemColors.Info;
+            this.listViewFairness.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader9,
+            this.columnHeader10});
+            this.listViewFairness.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewFairness.FullRowSelect = true;
+            this.listViewFairness.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listViewFairness.Location = new System.Drawing.Point(0, 0);
+            this.listViewFairness.Name = "listViewFairness";
+            this.listViewFairness.Size = new System.Drawing.Size(504, 472);
+            this.listViewFairness.SmallImageList = this.imageList1;
+            this.listViewFairness.TabIndex = 4;
+            this.listViewFairness.UseCompatibleStateImageBehavior = false;
+            this.listViewFairness.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "xxStatistics";
+            this.columnHeader9.Width = 250;
+            // 
+            // columnHeader10
+            // 
+            this.columnHeader10.Width = 249;
+            // 
             // FormAgentInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -295,6 +345,7 @@
             this.tabPageAdvRestrictions.ResumeLayout(false);
             this.tabPageAdvPersonPeriod.ResumeLayout(false);
             this.tabPageAdvPerson.ResumeLayout(false);
+            this.tabPageFairness.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
@@ -320,5 +371,10 @@
         private System.Windows.Forms.ListView listViewPerson;
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ColumnHeader columnHeader8;
+        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageFairness;
+        private System.Windows.Forms.ListView listViewFairness;
+        private System.Windows.Forms.ColumnHeader columnHeader9;
+        private System.Windows.Forms.ColumnHeader columnHeader10;
+        
 	}
 }
