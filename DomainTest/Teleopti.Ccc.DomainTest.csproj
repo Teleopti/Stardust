@@ -253,7 +253,6 @@
     <Compile Include="Optimization\SchedulingOptionsCreatorTest1.cs" />
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSettingTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSettingTest.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairnessAggregateManagerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairnessAggregatorTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairnessComparerTest.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettingsTest.cs" />

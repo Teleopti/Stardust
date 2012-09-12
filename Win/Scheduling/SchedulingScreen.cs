@@ -1429,10 +1429,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                UseRotations = false
                                                            };
 
-                _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate =
-                    ScheduleOptimizerHelper.CreateGroupPagePerDate(_scheduleView,
-                                                                   _container.Resolve<GroupScheduleGroupPageDataProvider>(),
-                                                                   schedulingOptions.GroupPageForShiftCategoryFairness);
+                _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
+					.CreateGroupPagePerDate(_scheduleView, _container.Resolve<GroupScheduleGroupPageDataProvider>(), 
+					schedulingOptions.GroupPageForShiftCategoryFairness);
 
                 var finderService = _container.Resolve<IWorkShiftFinderService>();
                 // This is not working now I presume (SelectedSchedules is probably not correct)
@@ -4487,11 +4486,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                 groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10),
                                                      groupPagePeriod.EndDate.AddDays(10));
 
-            _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate =
-                ScheduleOptimizerHelper.CreateGroupPagePerDate(groupPagePeriod.DayCollection(),
-                                                               _container.Resolve<GroupScheduleGroupPageDataProvider>(),
-                                                               _optimizerOriginalPreferences.SchedulingOptions.
-                                                                   GroupPageForShiftCategoryFairness);
+			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
+				   .CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(),
+				   _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness);
+
 
             if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
             {
@@ -4731,11 +4729,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                 selectedGroupPage = _optimizationPreferences.Extra.GroupPageOnCompareWith;
             }
 
-		    _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate =
-		        ScheduleOptimizerHelper.CreateGroupPagePerDate(
-		            groupPagePeriod.DayCollection(),
-		            _container.Resolve<GroupScheduleGroupPageDataProvider>(),
-					selectedGroupPage);
+			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
+				   .CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<GroupScheduleGroupPageDataProvider>(),
+				   selectedGroupPage);
+
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
             switch (options.OptimizationMethod)
             {

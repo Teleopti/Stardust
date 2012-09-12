@@ -131,8 +131,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             builder.RegisterType<LockableBitArrayChangesTracker>().As<ILockableBitArrayChangesTracker>().InstancePerLifetimeScope();
             builder.RegisterType<GroupDayOffOptimizerCreator>().As<IGroupDayOffOptimizerCreator>().InstancePerLifetimeScope();
-            
-            builder.RegisterType<GroupScheduleGroupPageDataProvider>().InstancePerLifetimeScope();
+
+			builder.RegisterType<GroupScheduleGroupPageDataProvider>().As<IGroupScheduleGroupPageDataProvider>().InstancePerLifetimeScope();
 
             builder.RegisterType<GroupMatrixContainerCreator>().As<IGroupMatrixContainerCreator>().InstancePerLifetimeScope();
 			
@@ -145,6 +145,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<BestGroupValueExtractorThreadFactory>().As<IBestGroupValueExtractorThreadFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<PossibleCombinationsOfStartEndCategoryCreator>().As<IPossibleCombinationsOfStartEndCategoryCreator>().InstancePerLifetimeScope();
 			builder.RegisterType<PossibleCombinationsOfStartEndCategoryRunner>().As<IPossibleCombinationsOfStartEndCategoryRunner>().InstancePerLifetimeScope();
+
+
+			builder.RegisterType<GroupPageCreator>().As<IGroupPageCreator>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupPageFactory>().As<IGroupPageFactory>().InstancePerLifetimeScope();
         }
 
     }
