@@ -63,9 +63,13 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageFairness = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.listViewFairness = new System.Windows.Forms.ListView();
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.agentGroupPageLabel = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+            this.comboBoxAgentGrouping = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabControlAgentInfo)).BeginInit();
             this.tabControlAgentInfo.SuspendLayout();
@@ -74,6 +78,9 @@
             this.tabPageAdvPersonPeriod.SuspendLayout();
             this.tabPageAdvPerson.SuspendLayout();
             this.tabPageFairness.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxAgentGrouping)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbonControlAdv1
@@ -291,7 +298,7 @@
             // 
             // tabPageFairness
             // 
-            this.tabPageFairness.Controls.Add(this.listViewFairness);
+            this.tabPageFairness.Controls.Add(this.tableLayoutPanel1);
             this.tabPageFairness.Image = null;
             this.tabPageFairness.ImageSize = new System.Drawing.Size(16, 16);
             this.tabPageFairness.Location = new System.Drawing.Point(1, 22);
@@ -302,19 +309,37 @@
             this.tabPageFairness.Text = "xxFairness";
             this.tabPageFairness.ThemesEnabled = false;
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.Info;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.listViewFairness, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(504, 472);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
             // listViewFairness
             // 
             this.listViewFairness.BackColor = System.Drawing.SystemColors.Info;
+            this.listViewFairness.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listViewFairness.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader9,
             this.columnHeader10});
             this.listViewFairness.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewFairness.FullRowSelect = true;
             this.listViewFairness.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.listViewFairness.Location = new System.Drawing.Point(0, 0);
+            this.listViewFairness.Location = new System.Drawing.Point(3, 144);
             this.listViewFairness.Name = "listViewFairness";
-            this.listViewFairness.Size = new System.Drawing.Size(504, 472);
-            this.listViewFairness.SmallImageList = this.imageList1;
+            this.listViewFairness.Scrollable = false;
+            this.listViewFairness.Size = new System.Drawing.Size(498, 325);
+            this.listViewFairness.StateImageList = this.imageList1;
             this.listViewFairness.TabIndex = 4;
             this.listViewFairness.UseCompatibleStateImageBehavior = false;
             this.listViewFairness.View = System.Windows.Forms.View.Details;
@@ -328,6 +353,43 @@
             // 
             this.columnHeader10.Width = 249;
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.30924F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.69077F));
+            this.tableLayoutPanel2.Controls.Add(this.agentGroupPageLabel, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.comboBoxAgentGrouping, 1, 1);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 75F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 99F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(498, 135);
+            this.tableLayoutPanel2.TabIndex = 5;
+            // 
+            // agentGroupPageLabel
+            // 
+            this.agentGroupPageLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.agentGroupPageLabel.Location = new System.Drawing.Point(16, 16);
+            this.agentGroupPageLabel.Name = "agentGroupPageLabel";
+            this.agentGroupPageLabel.Size = new System.Drawing.Size(102, 13);
+            this.agentGroupPageLabel.TabIndex = 0;
+            this.agentGroupPageLabel.Text = "xxAgentGroupPage";
+            // 
+            // comboBoxAgentGrouping
+            // 
+            this.comboBoxAgentGrouping.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.comboBoxAgentGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAgentGrouping.Location = new System.Drawing.Point(138, 12);
+            this.comboBoxAgentGrouping.Name = "comboBoxAgentGrouping";
+            this.comboBoxAgentGrouping.Size = new System.Drawing.Size(176, 19);
+            this.comboBoxAgentGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.comboBoxAgentGrouping.TabIndex = 1;
+            this.comboBoxAgentGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxAgentGrouping_SelectedIndexChanged);
+            // 
             // FormAgentInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -337,6 +399,7 @@
             this.Controls.Add(this.ribbonControlAdv1);
             this.Name = "FormAgentInfo";
             this.Text = "xxAgentInfo";
+            this.Load += new System.EventHandler(this.AgentInfo_FromLoad);
             this.ResizeEnd += new System.EventHandler(this.FormAgentInfoResizeEnd);
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabControlAgentInfo)).EndInit();
@@ -346,6 +409,10 @@
             this.tabPageAdvPersonPeriod.ResumeLayout(false);
             this.tabPageAdvPerson.ResumeLayout(false);
             this.tabPageFairness.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxAgentGrouping)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -372,9 +439,13 @@
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageFairness;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ListView listViewFairness;
         private System.Windows.Forms.ColumnHeader columnHeader9;
         private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private Syncfusion.Windows.Forms.Tools.AutoLabel agentGroupPageLabel;
+        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAgentGrouping;
         
 	}
 }
