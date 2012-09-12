@@ -101,7 +101,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (tabControlAgentInfo.SelectedTab == tabPageAdvPerson && _dateIsSelected)
             {
                 updatePersonInfo(_selectedPerson);
+                return;
             }
+            
             if(tabControlAgentInfo.SelectedTab == tabPageFairness && _dateIsSelected)
             {
                 updateFairnessInfo(_selectedPerson, _dateOnlyList.First(), _stateHolder);
