@@ -77,14 +77,14 @@ Scenario: Select period from period-picker
 
 
 Scenario: View standard preference list
-	Given I am an agent
+	Given I am an agent without access to extended preferences
 	And I have an open workflow control set with an allowed standard preference
 	And I am viewing preferences
 	When I click the standard preference split-button
 	Then I should see the workflow control set's standard preferences list
 
 Scenario: Remember selected standard preference
-	Given I am an agent
+	Given I am an agent without access to extended preferences
 	And I have an open workflow control set with an allowed standard preference
 	And I am viewing preferences
 	When I change standard preference
@@ -92,7 +92,7 @@ Scenario: Remember selected standard preference
 	Then I should see the selected standard preference in the split-button
 
 Scenario: Add standard preference
-	Given I am an agent
+	Given I am an agent without access to extended preferences
 	And I have an open workflow control set with an allowed standard preference
 	And I am viewing preferences
 	When I select an editable day without preference
@@ -100,7 +100,7 @@ Scenario: Add standard preference
 	Then I should see the standard preference in the calendar
 
 Scenario: Replace standard preference
-	Given I am an agent
+	Given I am an agent without access to extended preferences
 	And I have an open workflow control set with an allowed standard preference
 	And I have existing standard preference
 	And I am viewing preferences
@@ -110,7 +110,7 @@ Scenario: Replace standard preference
 	And I should not see the former standard preference in the calendar
 
 Scenario: Set multiple preference
-	Given I am an agent
+	Given I am an agent without access to extended preferences
 	And I have an open workflow control set with an allowed standard preference
 	And I have existing standard preference
 	And I am viewing preferences
@@ -120,7 +120,7 @@ Scenario: Set multiple preference
 	Then I should see the 2 standard preferences in the calendar
 
 Scenario: Delete multiple standard preference
-	Given I am an agent
+	Given I am an agent without access to extended preferences
 	And I have a workflow control set with open standard preference period
 	And I have 2 existing standard preference
 	And I am viewing preferences

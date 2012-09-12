@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.StandardPreferences)]
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.StandardPreferences,DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)]
 	[Aspects]
 	public class PreferenceController : Controller
 	{
