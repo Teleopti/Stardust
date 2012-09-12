@@ -6,6 +6,10 @@
 	margin-left: -18px;
 }
 
+.rtl button.ui-corner-right  {
+	float: right
+}
+
 input[type=TEXT].ui-autocomplete-input {
     vertical-align: top;
 }
