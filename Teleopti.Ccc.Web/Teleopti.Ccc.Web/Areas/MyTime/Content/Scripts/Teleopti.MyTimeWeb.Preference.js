@@ -67,24 +67,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	}
 
-	function _toggleTimeAndActivityInputFields(enable) {
-		addExtendedPreferenceFormViewModel.IsTimeInputEnabled(enable);
-		
-		if (!enable) {
-			addExtendedPreferenceFormViewModel.ActivityPreferenceId('');
-		}
-	}
-
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
 		var template = $('#Preference-add-extended-form');
 		addExtendedPreferenceFormViewModel = new AddExtendedPreferenceFormViewModel();
-		addExtendedPreferenceFormViewModel.PreferenceId.subscribe(function () {
-			var selected = $('#Preference-extended-preference').find('option:selected');
-			var preferenceType = selected.data('preference-type');
-
-			_toggleTimeAndActivityInputFields(preferenceType != 'Absence' && preferenceType != 'DayOffTemplate');
-		});
 
 		addExtendedTooltip = $('<div/>')
 			.qtip({

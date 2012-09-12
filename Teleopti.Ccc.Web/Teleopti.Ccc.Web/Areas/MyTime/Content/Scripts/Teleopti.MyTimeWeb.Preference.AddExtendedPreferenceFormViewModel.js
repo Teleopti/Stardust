@@ -5,6 +5,8 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 AddExtendedPreferenceFormViewModel = function () {
+	var self = this;
+
 	this.PreferenceId = ko.observable();
 	this.EarliestStartTime = ko.observable();
 	this.LatestStartTime = ko.observable();
@@ -22,10 +24,16 @@ AddExtendedPreferenceFormViewModel = function () {
 	this.ActivityMinimumTime = ko.observable();
 	this.ActivityMaximumTime = ko.observable();
 
-	this.IsTimeInputEnabled = ko.observable(true);
+	this.IsTimeInputEnabled = ko.observable();
 
 	this.EnableActivityTimeEditing = ko.computed(function () {
-		var result = this.ActivityPreferenceId();
+		var result = self.ActivityPreferenceId();
 		return result != undefined && result != '';
-	}, this);
+	});
+
+	this.IsTimeInputEnabled.subscribe(function (newValue) {
+		if (!newValue)
+			self.ActivityPreferenceId('');
+	});
 };
+

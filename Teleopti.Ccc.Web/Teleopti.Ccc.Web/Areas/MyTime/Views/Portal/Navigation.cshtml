@@ -93,12 +93,12 @@
 					                         	};
 					<div id="Preference-add-extended-form" class="displaynone"> 
 						
-						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId" title="@Resources.Preference" class="ml15">
-							<option value="">&nbsp;</option>
+						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15">
+							<option value="" data-preference-extended="true">&nbsp;</option>
 							<option value="-">-</option>
 							@foreach (var option in preferenceNavigation.PreferenceOptions)
 							{
-								<option value="@option.Value" data-color="@option.Color" data-preference-type="@option.Type">@option.Text</option>
+								<option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@option.Text</option>
 							}
 						</select>
 						<div id="Preference-extended-time-input-fields" data-bind="visible: IsTimeInputEnabled">
