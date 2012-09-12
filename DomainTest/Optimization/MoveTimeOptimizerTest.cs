@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IProjectionService _projectionService;
     	private IVisualLayerCollection _visualLayerCollection;
 
-        [SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
 			_schedulingOptions = new SchedulingOptions();
