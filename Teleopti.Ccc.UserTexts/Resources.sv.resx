@@ -10664,4 +10664,28 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="TypeLOC" xml:space="preserve">
     <value>Typ (loc)</value>
   </data>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>Schemalagda och verkliga agenter</value>
+  </data>
+  <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+    <value>Ingen personperiod hittad för denna användare</value>
+  </data>
+  <data name="NotWorking" xml:space="preserve">
+    <value>Arbetar inte.</value>
+  </data>
+  <data name="SameDaysOff" xml:space="preserve">
+    <value>Samma fridagar</value>
+  </data>
+  <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
+    <value>Schemalägg bara vetoönskemål</value>
+  </data>
+  <data name="AllowOverwrite" xml:space="preserve">
+    <value>Tillåt överskrivning</value>
+  </data>
+  <data name="ShiftCategories" xml:space="preserve">
+    <value>Skiftkategorier</value>
+  </data>
+  <data name="AfterCheckingAgainstActivities" xml:space="preserve">
+    <value>Efter aktivitetskontroll</value>
+  </data>
 </root>
