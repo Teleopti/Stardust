@@ -141,8 +141,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Value = fields.ActivityTimeMinimum;
 			if (fields.ActivityTimeMaximum != null)
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Value = fields.ActivityTimeMaximum;
-
-			Thread.Sleep(500);
 		}
 
 		[Then(@"I should not be able to edit time fields")]
