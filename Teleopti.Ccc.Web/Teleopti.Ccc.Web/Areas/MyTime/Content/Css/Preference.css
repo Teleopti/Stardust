@@ -110,3 +110,11 @@
 	line-height: 1em;
 	font-size: 0.8em;
 }
+.preference-next-day-checkbox {
+    width: 17px;
+    padding: 0 0 0 0;
+    vertical-align: baseline;
+}
+#Preference-extended-apply {
+    float: right;
+}
