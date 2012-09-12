@@ -17,6 +17,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -36,6 +37,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IDictionary<EmploymentType, string> _employmentTypeList;
         private IList<IOptionalColumn> _optionalColumns;
     	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
+        private ISchedulerGroupPagesProvider _groupPagesProvider;
+        private IList<IGroupPageLight> _groupPages;
+        private bool _dataLoaded;
+        private ISchedulingOptions _localSchedulingOptions;
+        private ISchedulingOptions _schedulingOptions;
 
     	public FormAgentInfo()
         {
@@ -49,10 +55,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public FormAgentInfo(IWorkShiftWorkTime workShiftWorkTime)
+		public FormAgentInfo(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider, ISchedulingOptions schedulingOptions)
 			: this()
 		{
 			_workShiftWorkTime = workShiftWorkTime;
+		    _groupPagesProvider = groupPagesProvider;
+		    _schedulingOptions = schedulingOptions;
 		}
 
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -150,8 +158,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                       FairnessPoints).ToString(CultureInfo.CurrentCulture), 2);
 
             }
-
-
+            
             EmploymentType employmentType = person.Period(helper.SelectedDate).PersonContract.Contract.EmploymentType;
             listViewFairness.Items.Add("");
             if (employmentType != EmploymentType.HourlyStaff)
@@ -167,7 +174,58 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        
+        private void initializeFairnessTab()
+        {
+            _groupPages = _groupPagesProvider.GetGroups(false);
+            comboBoxAgentGrouping.DataSource = _groupPages;
+            comboBoxAgentGrouping.DisplayMember = "Name";
+            comboBoxAgentGrouping.ValueMember = "Key";
+            ExchangeData(ExchangeDataOption.DataSourceToControls);
+            _dataLoaded = true;
+        }
+
+        public void ExchangeData(ExchangeDataOption direction)
+        {
+            if (direction == ExchangeDataOption.DataSourceToControls)
+            {
+                dataOffline();
+                InitializeGroupPage();
+                //setDataInControls();
+            }
+            else
+            {
+                getDataFromControls();
+                dataOnline();
+            }
+        }
+
+        private void dataOffline()
+        {
+            _localSchedulingOptions = (ISchedulingOptions)_schedulingOptions.Clone();
+        }
+
+        private void dataOnline()
+        {
+            _schedulingOptions.GroupOnGroupPage = _localSchedulingOptions.GroupOnGroupPage;
+        }
+
+        private void getDataFromControls()
+        {
+            _localSchedulingOptions.GroupOnGroupPage = (IGroupPageLight)comboBoxAgentGrouping.SelectedItem;
+        }
+
+        //private void setDataInControls()
+        //{
+           
+        //}
+
+        private void InitializeGroupPage()
+        {
+            if (_localSchedulingOptions.GroupOnGroupPage != null)
+            {
+                comboBoxAgentGrouping.SelectedValue = _localSchedulingOptions.GroupOnGroupPage.Key;
+            }
+        }
 
         private void updateRestrictionData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
         {
@@ -632,6 +690,21 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (Width - 270 > 0)
                 listViewPerson.Columns[1].Width = Width - 270;
+        }
+
+        private void comboBoxAgentGrouping_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_dataLoaded)
+            {
+                getDataFromControls();
+                //setDataInControls();
+                InitializeGroupPage();
+            }
+        }
+
+        private void AgentInfo_FromLoad(object sender, EventArgs e)
+        {
+            initializeFairnessTab();
         }
 
     }

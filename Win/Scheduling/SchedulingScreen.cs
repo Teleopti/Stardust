@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                          UseRotations = true,
                                          UseScheduling = true
                                      };
-
+            
             toolStripProgressBar1.Visible = true;
             toolStripProgressBar1.Maximum = loadingPeriod.DayCount() + 5;
             toolStripProgressBar1.Step = 1;
@@ -1393,7 +1393,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 return;
             if (_agentInfo == null)
             {
-                _agentInfo = new FormAgentInfo(_workShiftWorkTime);
+                _agentInfo = new FormAgentInfo(_workShiftWorkTime, _groupPagesProvider, _schedulingOptions);
                 _agentInfo.FormClosed += _agentInfo_FormClosed;
                 _agentInfo.Show(this);
             }
