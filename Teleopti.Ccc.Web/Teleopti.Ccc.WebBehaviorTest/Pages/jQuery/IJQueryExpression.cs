@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 		IJQueryExpression AddClass(string cssClass);
 		IJQueryExpression Trigger(string eventName);
 		IJQueryExpression Trigger(string eventName, string arguments);
-		IJQueryExpression Widget(string widget, string method);
+		IJQueryExpression WidgetCall(string widget, string method);
+		IJQueryExpression WidgetOptions(string widget, dynamic options);
 		IJQueryExpression Is(string selector);
 	}
 }

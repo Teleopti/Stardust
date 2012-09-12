@@ -28,36 +28,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Div ExtendedPreferencePanel;
 		[FindBy(Id = "Preference-extended-preference-container")]
 		public SelectBox ExtendedPreferenceSelectBox;
-		[FindBy(Id = "Preference-extended-start-time-minimum-input")]
-		public TextField ExtendedPreferenceStartTimeMinimum;
-		[FindBy(Id = "Preference-extended-start-time-maximum-input")]
-		public TextField ExtendedPreferenceStartTimeMaximum;
-		[FindBy(Id = "Preference-extended-end-time-minimum-input")]
-		public TextField ExtendedPreferenceEndTimeMinimum;
+		[FindBy(Id = "Preference-extended-start-time-minimum")]
+		public ComboBox ExtendedPreferenceStartTimeMinimum;
+		[FindBy(Id = "Preference-extended-start-time-maximum")]
+		public ComboBox ExtendedPreferenceStartTimeMaximum;
+		[FindBy(Id = "Preference-extended-end-time-minimum")]
+		public ComboBox ExtendedPreferenceEndTimeMinimum;
 		[FindBy(Id = "Preference-extended-end-time-minimum-next-day")]
 		public CheckBox ExtendedPreferenceEndTimeMinimumNextDay;
-		[FindBy(Id = "Preference-extended-end-time-maximum-input")]
-		public TextField ExtendedPreferenceEndTimeMaximum;
+		[FindBy(Id = "Preference-extended-end-time-maximum")]
+		public ComboBox ExtendedPreferenceEndTimeMaximum;
 		[FindBy(Id = "Preference-extended-end-time-maximum-next-day")]
 		public CheckBox ExtendedPreferenceEndTimeMaximumNextDay;
-		[FindBy(Id = "Preference-extended-work-time-minimum-input")]
-		public TextField ExtendedPreferenceWorkTimeMinimum;
-		[FindBy(Id = "Preference-extended-work-time-maximum-input")]
-		public TextField ExtendedPreferenceWorkTimeMaximum;
+		[FindBy(Id = "Preference-extended-work-time-minimum")]
+		public ComboBox ExtendedPreferenceWorkTimeMinimum;
+		[FindBy(Id = "Preference-extended-work-time-maximum")]
+		public ComboBox ExtendedPreferenceWorkTimeMaximum;
 		[FindBy(Id = "Preference-extended-activity-container")]
 		public SelectBox ExtendedPreferenceActivity;
-		[FindBy(Id = "Preference-extended-activity-start-time-minimum-input")]
-		public TextField ExtendedPreferenceActivityStartTimeMinimum;
-		[FindBy(Id = "Preference-extended-activity-start-time-maximum-input")]
-		public TextField ExtendedPreferenceActivityStartTimeMaximum;
-		[FindBy(Id = "Preference-extended-activity-end-time-minimum-input")]
-		public TextField ExtendedPreferenceActivityEndTimeMinimum;
-		[FindBy(Id = "Preference-extended-activity-end-time-maximum-input")]
-		public TextField ExtendedPreferenceActivityEndTimeMaximum;
-		[FindBy(Id = "Preference-extended-activity-time-minimum-input")]
-		public TextField ExtendedPreferenceActivityTimeMinimum;
-		[FindBy(Id = "Preference-extended-activity-time-maximum-input")]
-		public TextField ExtendedPreferenceActivityTimeMaximum;
+		[FindBy(Id = "Preference-extended-activity-start-time-minimum")]
+		public ComboBox ExtendedPreferenceActivityStartTimeMinimum;
+		[FindBy(Id = "Preference-extended-activity-start-time-maximum")]
+		public ComboBox ExtendedPreferenceActivityStartTimeMaximum;
+		[FindBy(Id = "Preference-extended-activity-end-time-minimum")]
+		public ComboBox ExtendedPreferenceActivityEndTimeMinimum;
+		[FindBy(Id = "Preference-extended-activity-end-time-maximum")]
+		public ComboBox ExtendedPreferenceActivityEndTimeMaximum;
+		[FindBy(Id = "Preference-extended-activity-time-minimum")]
+		public ComboBox ExtendedPreferenceActivityTimeMinimum;
+		[FindBy(Id = "Preference-extended-activity-time-maximum")]
+		public ComboBox ExtendedPreferenceActivityTimeMaximum;
 
 		[FindBy(Id = "Preference-extended-error")]
 		public Div ExtendedPreferencePanelError { get; set; }

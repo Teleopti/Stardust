@@ -112,79 +112,35 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Preference);
 
 			if (fields.StartTimeMinimum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Value = fields.StartTimeMinimum;
-			}
 			if (fields.StartTimeMaximum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Value = fields.StartTimeMaximum;
-				Browser.Current.Eval("$('#" + Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Id + "').blur()");
-			}
 			if (fields.EndTimeMinimum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimum.Value = fields.EndTimeMinimum;
-			}
 			if (fields.EndTimeMinimumNextDay)
-			{
 				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimumNextDay.Checked = true;
-			}
 			if (fields.EndTimeMaximum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Value = fields.EndTimeMaximum;
-				Browser.Current.Eval("$('#" + Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Id + "').blur()");
-
-			}
 			if (fields.EndTimeMaximumNextDay)
-			{
 				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximumNextDay.Checked = true;
-			}
 			if (fields.WorkTimeMinimum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMinimum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMinimum.Value = fields.WorkTimeMinimum;
-			}
 			if (fields.WorkTimeMaximum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.Value = fields.WorkTimeMaximum;
-			}
 
 			if (fields.Activity != null) Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Select(fields.Activity);
 			if (fields.ActivityStartTimeMinimum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Value = fields.ActivityStartTimeMinimum;
-			}
 			if (fields.ActivityStartTimeMaximum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Value = fields.ActivityStartTimeMaximum;
-			}
 			if (fields.ActivityEndTimeMinimum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Value = fields.ActivityEndTimeMinimum;
-			}
 			if (fields.ActivityEndTimeMaximum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.Value = fields.ActivityEndTimeMaximum;
-			}
 			if (fields.ActivityTimeMinimum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Value = fields.ActivityTimeMinimum;
-			}
 			if (fields.ActivityTimeMaximum != null)
-			{
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Focus();
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Value = fields.ActivityTimeMaximum;
-				Browser.Current.Eval("$('#"+Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Id+"').blur()");
-			}
 
 			Thread.Sleep(500);
 		}
