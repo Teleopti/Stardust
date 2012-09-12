@@ -394,6 +394,8 @@ html.full-height #push{
 .icon.rightarrow{background-position: 0 -266px; width: 9px; }
 .icon.doublearrow-blue{background-position: 0 -286px; width: 9px; }
 .icon.edit{background-position: 0 -308px; height: 15px; margin-top: -3px; margin-bottom: 3px;}
+.icon.toolbar-add-extended{background-position: 0 -363px; width: 21px;}
+.icon.toolbar-add-extended[disabled]{background-position: 0 -425px;}
 .icon.toolbar-edit{background-position: 0 -363px; width: 21px;}
 .icon.toolbar-edit[disabled]{background-position: 0 -425px;}
 .icon.toolbar-delete{background-position: 0 -394px; width: 26px;}
