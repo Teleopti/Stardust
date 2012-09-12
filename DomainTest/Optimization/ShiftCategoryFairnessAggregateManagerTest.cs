@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -19,7 +20,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 	}
 
-	public class ShiftCategoryFairnessAggregateManagerTest
+	public class ShiftCategoryFairnessAggregateManager
 	{
+		private readonly ISchedulingResultStateHolder _resultStateHolder;
+
+		public ShiftCategoryFairnessAggregateManager(ISchedulingResultStateHolder resultStateHolder)
+		{
+			_resultStateHolder = resultStateHolder;
+		}
 	}
 }
