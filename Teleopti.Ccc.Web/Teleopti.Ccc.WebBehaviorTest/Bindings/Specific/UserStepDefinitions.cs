@@ -180,6 +180,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new AgentWithoutPreferencesAccess());
 		}
 
+		[Given(@"I am an agent without access to extended preferences")]
+		public void GivenIAmAnAgentWithoutAccessToExtendedPreferences()
+		{
+			UserFactory.User().Setup(new AgentWithoutExtendedPreferencesAccess());
+			UserFactory.User().Setup(new SchedulePeriod());
+			UserFactory.User().Setup(new PersonPeriod());
+			UserFactory.User().Setup(new ScheduleIsPublished());
+		}
+
 		[Given(@"I am an agent without access to any requests")]
 		public void GivenIAmAnAgentWithoutAccessToAnyRequests()
 		{
