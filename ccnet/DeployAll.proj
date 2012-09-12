@@ -191,6 +191,14 @@
 		$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.Debug.config;
 		$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.Release.config"/>
 
+	<!--StartPage-->
+			<StartPage
+			Include=
+	"$(CCNetWorkingDirectory)\Teleopti.CCC.StartPage\index.html;
+	$(CCNetWorkingDirectory)\Teleopti.CCC.StartPage\Images\*.*"
+			"/>
+
+	
 			<!--Analytics-->
 			<Analytics
 			Include=
@@ -557,6 +565,8 @@
 	<!-- Note: Each Copy command have a corresponding set of files in the above "ItemGroup" -->
 	<Target Name="CopyFiles" DependsOnTargets="AllFilesIncluded">
 		<Message Text="Copying files to $(DeployPath)..."/>
+		<Copy 	SourceFiles="@(StartPage"
+				DestinationFiles="@(StartPage->'$(DeployPath)\StartPage\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy 	SourceFiles="@(Analytics)"
 			DestinationFiles="@(Analytics->'$(DeployPath)\Analytics\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy 	SourceFiles="@(PMService)"
