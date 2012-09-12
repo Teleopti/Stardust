@@ -140,5 +140,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			return numberOfDayInWeek.ListItems[4].Divs.Filter(Find.ByClass("week-schedule-layer", false));
 		}
+
+        public DivCollection DayLayers(DateTime date)
+        {
+            return DayElementForDate(date).ListItems[4].Divs.Filter(Find.ByClass("week-schedule-layer", false));
+        }
 	}
 }

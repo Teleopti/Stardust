@@ -3,23 +3,40 @@
 	As an agent
 	I want to see my schedule details
 
-
+Background:
+	Given there is a role with
+	| Field                    | Value                 |
+	| Name                     | Full access to mytime |
+	 And I have a workflow control set with
+	| Field                      | Value              |
+	| Name                       | Published schedule |
+	| Schedule published to date | 2040-06-24         |
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	
 Scenario: View current week
-	Given I am an agent
-	When I view my week schedule
-	Then I should see the start and end dates for current week
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-10-03 12:00'
+	When I view my week schedule for date '2030-10-03'
+	Then I should see the start and end dates of current week for date '2030-10-03'
 
 Scenario: View night shift
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
 	And there is a shift with
 	| Field                 | Value            |
-	| StartTime             | 2012-12-27 20:00 |
-	| EndTime               | 2012-12-28 04:00 |
+	| StartTime             | 2012-08-27 20:00 |
+	| EndTime               | 2012-08-28 04:00 |
 	| ShiftCategoryName     | ForTest          |
 	| Lunch3HoursAfterStart | true             |
-	When I view my week schedule for date '2012-12-27'
-	Then I should not see the end of the shift on date '2012-12-27'
-	And I should see the end of the shift on date '2012-12-28'
+	When I view my week schedule for date '2012-08-27'
+	Then I should not see the end of the shift on date '2012-08-27'
+	And I should see the end of the shift on date '2012-08-28'
 
 Scenario: View start of night shift on last day of week for swedish culture
 	Given I am an agent
@@ -128,7 +145,7 @@ Scenario: Navigate to current week
 	Given I am an agent
 	And I view my week schedule one month ago
 	When I click the current week button
-	Then I should see the start and end dates for current week
+	Then I should see the start and end dates of current week for date '2030-10-03'
 
 Scenario: Show timeline with no schedule
 	Given I am an agent

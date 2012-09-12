@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			// add lunch
 			if (Lunch3HoursAfterStart)
 			{
-				var lunchPeriod = new DateTimePeriod(startDateUtc.Add(StartTime.TimeOfDay).AddHours(3), endDateUtc.Add(StartTime.TimeOfDay).AddHours(4));
+                var lunchPeriod = new DateTimePeriod(startDateUtc.Add(StartTime.TimeOfDay).AddHours(3), startDateUtc.Add(StartTime.TimeOfDay).AddHours(4));
 				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
 			}
 

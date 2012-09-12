@@ -57,25 +57,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.FifthDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
 		}
 
-		[Then(@"I should see the start and end dates for current week")]
-		public void ThenIShouldSeeTheStartAndEndDatesForCurrentWeek()
-		{
-			AssertShowingWeekForDay(TestDataSetup.FirstDayOfCurrentWeek(UserFactory.User().Culture));
-		}
+        [Then(@"I should see the start and end dates of current week for date '(.*)'")]
+        public void ThenIShouldSeeTheStartAndEndDatesOfCurrentWeekForDate(DateTime date)
+        {
+            AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, UserFactory.User().Culture));
+        }
 
         [Then(@"I should not see the end of the shift on date '(.*)'")]
         public void ThenIShouldNotSeeTheEndOfTheShiftOnDate(DateTime date)
         {
-            var dateString = _page.DayElementForDate(date).GetAttributeValue("data-mytime-date");
-
-            DateTime dateFromPage;
-            if (DateTime.TryParse(dateString, UserFactory.User().Culture, DateTimeStyles.None, out dateFromPage))
-            {
-                dateFromPage.Date.Should().Be.EqualTo(date.Date);
-            }
-            dateFromPage.Should().Not.Be.EqualTo(null);
-
-            _page.DayElementForDate(date).ListItems[4].Divs.Count.Should().Be.EqualTo(2);
+            _page.DayLayers(date).Count.Should().Be.EqualTo(2);
         }
 
         [Then(@"I should see the end of the shift on date '(.*)'")]
