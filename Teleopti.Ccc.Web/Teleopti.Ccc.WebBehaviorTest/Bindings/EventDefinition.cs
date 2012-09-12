@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				TestSiteConfigurationSetup.Setup();
 
 				log4net.Config.XmlConfigurator.Configure();
-				EventualTimeouts.Set(TimeSpan.FromSeconds(5));
+				EventualTimeouts.Set(TimeSpan.FromSeconds(10));
 
 				TestDataSetup.CreateDataSource();
 
