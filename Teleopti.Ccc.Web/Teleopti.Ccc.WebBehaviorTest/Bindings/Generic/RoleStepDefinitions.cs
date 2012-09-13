@@ -22,5 +22,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(userRole);
 		}
 
+		[Given(@"I have a role with")]
+		public void GivenIHaveARoleWith(Table table)
+		{
+			var role = table.CreateInstance<RoleConfigurable>();
+			UserFactory.User().Setup(role);
+			var userRole = new RoleForUser { Name = role.Name };
+			UserFactory.User().Setup(userRole);
+		}
 	}
 }
