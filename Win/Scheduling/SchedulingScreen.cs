@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
-using Teleopti.Ccc.WinCode.Meetings.Commands;
 using log4net;
 using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
@@ -787,7 +785,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 toggleCalculation();
             }
-
             if (e.KeyCode == Keys.M && e.Modifiers == Keys.Alt)
             {
                 StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode = true;
@@ -795,33 +792,39 @@ namespace Teleopti.Ccc.Win.Scheduling
                 toolStripMenuItemFindMatching2.Visible = true;
                 Refresh();
             }
-
             if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
             {
-                _backgroundWorkerRunning = true;
-                _undoRedo.Undo();
-                _backgroundWorkerRunning = false;
-                SelectAndRefresh();
+                undoKeyDown();
             }
-
             if (e.KeyCode == Keys.Y && e.Modifiers == Keys.Control)
             {
-                _backgroundWorkerRunning = true;
-                _undoRedo.Redo();
-                _backgroundWorkerRunning = false;
-                SelectAndRefresh();
+                redoKeyDown();
             }
-
             if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
             {
                 save();
             }
-
             //numpad+ and alt and shift and ctrl
             if (e.KeyValue == 107 && e.Alt && e.Shift && e.Control)
                 nonBlendSkills();
 
             base.OnKeyDown(e);
+        }
+
+        private void redoKeyDown()
+        {
+            _backgroundWorkerRunning = true;
+            _undoRedo.Redo();
+            _backgroundWorkerRunning = false;
+            SelectAndRefresh();
+        }
+
+        private void undoKeyDown()
+        {
+            _backgroundWorkerRunning = true;
+            _undoRedo.Undo();
+            _backgroundWorkerRunning = false;
+            SelectAndRefresh();
         }
 
         private void toggleCalculation()
@@ -6971,6 +6974,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             wpfShiftEditor1.AddActivity += wpfShiftEditor_AddActivity;
             wpfShiftEditor1.AddOvertime += wpfShiftEditor_AddOvertime;
             wpfShiftEditor1.AddPersonalShift += wpfShiftEditor_AddPersonalShift;
+            wpfShiftEditor1.Undo +=wpfShiftEditor_Undo;
 
 
             restrictionEditor.RestrictionChanged += restrictionEditor_RestrictionChanged;
@@ -7011,7 +7015,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             #endregion
         }
-
 
         private void _grid_StartAutoScrolling(object sender, StartAutoScrollingEventArgs e)
         {
@@ -7351,7 +7354,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             _scheduleView.Presenter.AddAbsence(new List<IScheduleDay> {e.SchedulePart}, e.Period);
         }
 
-
+        private void wpfShiftEditor_Undo(object sender, EventArgs e)
+        {
+            undoKeyDown();
+            
+        }
 
         private void setColor()
         {
