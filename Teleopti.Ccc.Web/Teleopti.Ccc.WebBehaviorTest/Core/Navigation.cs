@@ -187,6 +187,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		void After(string pageUrl);
 	}
 
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
 	public class ApplicationStartupTimeout : IGoToInterceptor
 	{
 		private WatiNWaitForCompleteTimeout _timeout;
