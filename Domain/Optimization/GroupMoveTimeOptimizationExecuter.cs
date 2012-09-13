@@ -125,11 +125,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        public void Rollback(DateOnly shiftDate)
+        public void Rollback(DateOnly dateOnly)
         {
             _schedulePartModifyAndRollbackService.Rollback();
-            _resourceOptimizationHelper.ResourceCalculateDate(shiftDate, true, true);
-            _resourceOptimizationHelper.ResourceCalculateDate(shiftDate.AddDays(1), true, true);
+            _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+            _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, true);
         }
     }
 }
