@@ -15,23 +15,70 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var refreshSeconds = 1;
 		pxPerHour = pixelsPerHour;
 		var observableInfo = ko.observable();
+		var observableHours = ko.observableArray();
+		var observableLayers = ko.observableArray();
+		var vm = {
+			timeLines: observableHours,
+			activityInfo: observableInfo,
+			layers: observableLayers
+		};
 
-		ko.applyBindings({
-			timeLines: hours,
-			activityInfo: observableInfo
-		});
+		ko.applyBindings(vm);
 
-		_refresh(serverMsSince1970, observableInfo);
+		_loadViewModel(vm);
+
+		//_refresh(serverMsSince1970, observableInfo);
 		$('.asm-outer-canvas').show();
+
+		return;
 
 		setInterval(function () {
 			_refresh(serverMsSince1970, observableInfo);
 		}, refreshSeconds * 1000);
 	}
 
+	function _loadViewModel(asmViewModel) {
+		var yesterdayTemp = new Date(new Date().getTime());
+		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
+
+		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
+
+		Teleopti.MyTimeWeb.Ajax.Ajax({
+			url: '/MyTime/Asm/Today', //todo: fix!
+			dataType: "json",
+			type: 'GET',
+			data: { clientLocalAsmZero: yesterday.toJSON() }, //todo: fix!
+			success: function (data) {
+				asmViewModel.timeLines(data.Hours);
+				var newLayers = _updateLayers(data.Layers, yesterday);
+				asmViewModel.layers(newLayers);
+				_moveTimeLineToNow(yesterday);
+			},
+			error: function (data, textStatus, jqXHR) {
+				alert('fucked');
+			}
+		});
+	}
+
 	function _refresh(serverMsSince1970, observableInfo) {
 		_moveTimeLineToNow(serverMsSince1970);
 		_updateInfoCanvas(observableInfo);
+	}
+
+	function _updateLayers(layers, yesterday) {
+		var pixelPerHours = 50; //todo
+		var timeLineMarkerWidth = 100; //todo
+		var newLayers = new Array();
+		$.each(layers, function (key, layer) {
+			newLayers.push({ 'leftPx': ((layer.StartJavascriptBaseDate - yesterday.getTime()) * pixelPerHours / 60 / 60 / 1000 + timeLineMarkerWidth) + 'px',
+				'payload': layer.Payload,
+				'backgroundColor': layer.Color,
+				'paddingLeft': (layer.LengthInMinutes * pixelPerHours) / 60 + 'px'
+			});
+		});
+		console.log(newLayers);
+
+		return newLayers;
 	}
 
 	function _updateInfoCanvas(observableInfo) {
@@ -50,7 +97,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					}
 					var startText = $(this).data('asm-start-time');
 
-					if (startPos - timelinePosition  >= 24 * pxPerHour) {
+					if (startPos - timelinePosition >= 24 * pxPerHour) {
 						startText += '+1';
 					}
 

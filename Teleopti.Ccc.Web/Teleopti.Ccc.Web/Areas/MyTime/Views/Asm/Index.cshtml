@@ -15,6 +15,60 @@
 		Teleopti.MyTimeWeb.Asm.Init(serverMsSince1970, @(pixelsPerHour), @(Html.Raw(Json.Encode(Model.Hours))));
 	});
 </script>
+
+
+
+<div class="asm-outer-canvas ui-corner-all">
+	<div class="asm-schedule-canvas ui-corner-all">
+		<div class="asm-time-marker" style="width:@(timeLineMarkerWidth)px">
+		</div>
+		<div class="asm-sliding-schedules" style="width:@(3 * 24 * pixelsPerHour)px;">
+			<!-- ko foreach: layers -->
+			@*				<span class="asm-layer ui-corner-all" style="left:@(((layer.StartJavascriptBaseDate - canvasStartMsSince1970) * pixelsPerHour / 60 / 60 / 1000 + @timeLineMarkerWidth).ToString(CultureInfo.InvariantCulture) + "px");
+                                                                                                                       	padding-left:@((layer.LengthInMinutes * pixelsPerHour / 60).ToString(CultureInfo.InvariantCulture) + "px");
+                                                                                                                       	background-color: @(layer.Color)"
+						data-asm-start-time="@(layer.StartTimeText)"
+						data-asm-end-time="@(layer.EndTimeText)"
+						data-asm-activity="@(layer.Payload)"
+						title="@(string.Format("{0}{1}{2} {3}",layer.StartTimeText,"-",layer.EndTimeText,layer.Payload))"></span>*@
+						
+			<span class="asm-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft }"></span>
+			<!-- /ko -->
+			<!-- ko foreach: timeLines -->
+			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">
+				<span class="asm-timeline-number ui-corner-all" data-bind="text: $data"></span>
+			</span>
+			<!-- /ko -->
+		</div>
+	</div>
+	<div class="asm-current-info">
+		<div class="asm-info-canvas ui-corner-all">
+			<div>@(Resources.Activities)</div>
+			<table id="asm-current-info-table">
+				<tbody data-bind="foreach: activityInfo">
+					<tr data-bind="css: { 'asm-info-current-activity' : active }">
+						<td class="asm-info-time-column" data-bind="text: time"></td>
+						<td data-bind="text: payload"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="clearboth" />
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+@*
 <div class="asm-outer-canvas ui-corner-all">
 	<div class="asm-schedule-canvas ui-corner-all">
 		<div class="asm-time-marker" style="width:@(timeLineMarkerWidth)px">
@@ -51,4 +105,4 @@
 		</div>
 	</div>
 	<div class="clearboth" />
-</div>
+</div>*@
