@@ -49,6 +49,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _initControls() {
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+		if ($('#Request-detail-section').length == 0)
+			return;
 		ko.applyBindings(requestViewModel, $('#Request-detail-section')[0]);
 
 		$('#Request-detail-section .date-input')
