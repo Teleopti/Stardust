@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			               				LengthInMinutes = 120,
 			               				Payload = "phone",
 			               				StartTimeText = "15:00",
-			               				StartJavascriptBaseDate =clientLocalAsmZero.AddDays(1).AddHours(15).SubtractJavascriptBaseDate().TotalMilliseconds
+			               				StartJavascriptBaseDate =clientLocalAsmZero.AddDays(1).AddHours(15).Subtract(clientLocalAsmZero).TotalMinutes //todo -rename
 			               			}
 			               	};
 			return Json(model, JsonRequestBehavior.AllowGet);
