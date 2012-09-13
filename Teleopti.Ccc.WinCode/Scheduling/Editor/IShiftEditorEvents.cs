@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -75,6 +76,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         /// Occurs when [create meeting].
         /// </summary>
         event EventHandler<CustomEventArgs<IPersonMeeting>> CreateMeeting;
+
+        /// <summary>
+        /// Occurs when [undo].
+        /// </summary>
+        event EventHandler<EventArgs> Undo;
 
     }
 }
