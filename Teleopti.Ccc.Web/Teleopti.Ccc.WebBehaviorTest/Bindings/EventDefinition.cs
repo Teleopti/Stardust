@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -102,31 +103,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			if (!Browser.IsStarted()) return;
 			if (ScenarioContext.Current.TestError != null)
 			{
-				var artifactFileName = GetCommonArtifactFileNameForScenario();
-				SaveScreenshot(artifactFileName);
-				throw MakeScenarioException(artifactFileName);
+				Log.Error("Scenario exception occurred, dumping text and html.");
+				Log.Error("Html:");
+				Log.Error(Browser.Current.Html);
+				Log.Error("Text:");
+				Log.Error(Browser.Current.Text);
+				//var artifactFileName = GetCommonArtifactFileNameForScenario();
+				//SaveScreenshot(artifactFileName);
+				//throw MakeScenarioException(artifactFileName);
 			}
 		}
 
-		private static ScenarioErrorException MakeScenarioException(string artifact)
-		{
-			var html = Browser.Current.Html;
-			var text = Browser.Current.Text;
-			var message = string.Format("Scenario error occurred.\nArtifact:{0}\n\nText:\n{1}\n\nHtml:\n{2}", artifact, text, html);
-			return new ScenarioErrorException(message, ScenarioContext.Current.TestError);
-		}
+		//private static ScenarioErrorException MakeScenarioException(string artifact)
+		//{
+		//    var html = Browser.Current.Html;
+		//    var text = Browser.Current.Text;
+		//    var message = string.Format("Scenario error occurred.\nArtifact:{0}\n\nText:\n{1}\n\nHtml:\n{2}", artifact, text, html);
+		//    return new ScenarioErrorException(message, ScenarioContext.Current.TestError);
+		//}
 
-		private string GetCommonArtifactFileNameForScenario()
-		{
-			var fileName = ScenarioContext.Current.ScenarioInfo.Title + "." + Path.GetRandomFileName();
-			fileName = new string(fileName.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray());
-			return Path.Combine(Environment.CurrentDirectory, fileName);
-		}
+		//private string GetCommonArtifactFileNameForScenario()
+		//{
+		//    var fileName = ScenarioContext.Current.ScenarioInfo.Title + "." + Path.GetRandomFileName();
+		//    fileName = new string(fileName.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray());
+		//    return Path.Combine(Environment.CurrentDirectory, fileName);
+		//}
 
-		private static void SaveScreenshot(string artifactFileName)
-		{
-			Browser.Current.CaptureWebPageToFile(artifactFileName + ".jpg");
-		}
+		//private static void SaveScreenshot(string artifactFileName)
+		//{
+		//    Browser.Current.CaptureWebPageToFile(artifactFileName + ".jpg");
+		//}
 
 	}
 

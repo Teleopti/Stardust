@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -12,44 +13,49 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GoTo(string pageUrl)
 		{
-			using (new WatiNWaitForCompleteTimeout(60)) // to handle possible application startup
-			{
-				Browser.Current.WaitUntilAjaxContentComplete();
-				var uri = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
-				Log.Write("Browsing to: " + uri);
-				Browser.Current.GoTo(uri);
-				Log.Write("Ended up in: " + Browser.Current.Url);
-				Browser.Current.WaitUntilAjaxContentComplete();
-			}
+			GoTo(pageUrl, new IGoToInterceptor[] { });
+		}
+
+		public static void GoTo(string pageUrl, params IGoToInterceptor[] interceptors)
+		{
+			var list = interceptors.ToList();
+			list.ForEach(i => i.Before(pageUrl));
+
+			var uri = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
+			Log.Write("Browsing to: " + uri);
+			Browser.Current.GoTo(uri);
+			Log.Write("Ended up in: " + Browser.Current.Url);
+
+			list.ForEach(i => i.After(pageUrl));
 		}
 
 		public static void GotoGlobalSignInPage()
 		{
-			GoTo("Start/Authentication/SignIn");
+			GoTo("Start/Authentication/SignIn", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoGlobalMobileSignInPage()
 		{
-			GoTo("Start/Authentication/MobileSignIn");
+			GoTo("Start/Authentication/MobileSignIn", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileSignInPage>());
 		}
 
 		public static void GotoGlobalMobileMenuPage()
 		{
-			GoTo("Start/Menu/MobileMenu");
+			GoTo("Start/Menu/MobileMenu", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileSignInPage>());
 		}
 
 		public static void GotoMyTimeSignInPage()
 		{
-			GoTo("MyTime/Authentication/SignIn");
+			GoTo("MyTime/Authentication/SignIn", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoMobileReportsSignInPage(string hash)
 		{
-			GoTo("MobileReports/Authentication/SignIn" + hash);
+			GoTo("MobileReports/Authentication/SignIn" + hash, new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileSignInPage>());
 		}
 
@@ -61,25 +67,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoMyTime()
 		{
-			GoTo("MyTime");
+			GoTo("MyTime", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoMobileReports()
 		{
-			GoTo("MobileReports");
+			GoTo("MobileReports", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
 		public static void GotoSiteHomePage()
 		{
-			GoTo("");
+			GoTo("", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoAnApplicationPageOutsidePortal()
 		{
-			GoTo("MyTime/Schedule/Week");
+			GoTo("MyTime/Schedule/Week", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
@@ -90,71 +96,75 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoWeekSchedulePage()
 		{
-			GoTo("MyTime#Schedule/Week");
+			GoTo("MyTime#Schedule/Week", new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
 		public static void GotoWeekSchedulePage(DateTime date)
 		{
-			GoTo(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}", date.Year.ToString("0000"), date.Month.ToString("00"),
-			                   date.Day.ToString("00")));
+			GoTo(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}", 
+				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")), 
+				new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
 		public static void GotoStudentAvailability()
 		{
-			GoTo("MyTime#StudentAvailability/Index");
+			GoTo("MyTime#StudentAvailability/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<StudentAvailabilityPage>());
 		}
 
 		public static void GotoStudentAvailability(DateTime date)
 		{
-			GoTo(string.Format("MyTime#StudentAvailability/Index/{0}/{1}/{2}", date.Year.ToString("0000"),
-			                   date.Month.ToString("00"), date.Day.ToString("00")));
+			GoTo(string.Format("MyTime#StudentAvailability/Index/{0}/{1}/{2}",
+			                   date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+			     new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<StudentAvailabilityPage>());
 		}
 
 		public static void GotoPreference()
 		{
-			GoTo("MyTime#Preference/Index");
+			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
 		public static void GotoRegionalSettings()
 		{
-			GoTo("MyTime#Settings/Index");
+			GoTo("MyTime#Settings/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RegionalSettingsPage>());
 		}
 
 		public static void GotoPasswordPage()
 		{
-			GoTo("MyTime#Settings/Password");
+			GoTo("MyTime#Settings/Password", new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PasswordPage>());
 		}
 
 		public static void GotoPreference(DateTime date)
 		{
-			GoTo(string.Format("MyTime#Preference/Index/{0}/{1}/{2}", date.Year.ToString("0000"), date.Month.ToString("00"),
-			                   date.Day.ToString("00")));
+			GoTo(string.Format("MyTime#Preference/Index/{0}/{1}/{2}", 
+				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+				new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
 		public static void GotoRequests()
 		{
-			GoTo("MyTime#Requests/Index");
+			GoTo("MyTime#Requests/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 
 		public static void GotoTeamSchedule()
 		{
-			GoTo("MyTime#TeamSchedule/Index");
+			GoTo("MyTime#TeamSchedule/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
 		public static void GotoTeamSchedule(DateTime date)
 		{
-			GoTo(string.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}", date.Year.ToString("0000"), date.Month.ToString("00"),
-			                   date.Day.ToString("00")));
+			GoTo(String.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}", 
+				date.Year.ToString("0000"), date.Month.ToString("00"),date.Day.ToString("00"))
+				, new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
@@ -167,6 +177,51 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			Browser.Current.GoTo("about:blank");
 		}
+	}
+
+
+
+	public interface IGoToInterceptor
+	{
+		void Before(string pageUrl);
+		void After(string pageUrl);
+	}
+
+	public class ApplicationStartupTimeout : IGoToInterceptor
+	{
+		private WatiNWaitForCompleteTimeout _timeout;
+
+		public void Before(string pageUrl)
+		{
+			_timeout = new WatiNWaitForCompleteTimeout(60);
+		}
+
+		public void After(string pageUrl)
+		{
+			_timeout.Dispose();
+			_timeout = null;
+		}
+	}
+
+	public class LoadingOverlay : IGoToInterceptor
+	{
+		public void Before(string pageUrl)
+		{
+			WaitUntilLoadingOverlayIsHidden();
+		}
+
+		public void After(string pageUrl)
+		{
+			WaitUntilLoadingOverlayIsHidden();
+		}
+
+		private static void WaitUntilLoadingOverlayIsHidden()
+		{
+			var loading = Browser.Current.Div("loading");
+			if (!loading.Exists) return;
+			loading.WaitUntilHidden();
+		}
 
 	}
+
 }
