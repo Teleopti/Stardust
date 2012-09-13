@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.PeriodValue()).Return(2).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo() )).Repeat.AtLeastOnce();
@@ -116,6 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo())).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.PeriodValue()).Return(2).Repeat.AtLeastOnce();
             }
             using (_mock.Playback())
             {
