@@ -277,5 +277,11 @@ namespace Teleopti.Interfaces.Domain
 			}
 			return timeSpan < oneDay;
 		 }
+
+		/// <summary>
+		/// To's the string
+		/// </summary>
+		public override string ToString() { return StartTimeString + "-" + EndTimeString; }
+
     }
 }

@@ -30,4 +30,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 	}
+
 }

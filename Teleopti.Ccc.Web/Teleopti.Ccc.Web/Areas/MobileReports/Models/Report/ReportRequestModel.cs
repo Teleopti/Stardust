@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Report
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Report
 		/// <summary>
 		/// 	Predefined as Passed from DefinedReportProvider
 		/// </summary>
-		[Required]
+		[Required(ErrorMessageResourceName = "PleaseChooseAReportType", ErrorMessageResourceType = typeof(Resources))]
 		public string ReportId { get; set; }
 
 		/// <summary>
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Report
 		/// <summary>
 		/// 	Skill Id's csv
 		/// </summary>
-		[Required]
+		[Required(ErrorMessageResourceName = "PleaseChooseSkillSet", ErrorMessageResourceType = typeof(Resources))]
 		public string SkillSet { get; set; }
 
 		/// <summary>

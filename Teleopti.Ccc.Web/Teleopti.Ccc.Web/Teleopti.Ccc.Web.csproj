@@ -214,6 +214,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceRequestPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceRequestPersister.cs" />
     <Compile Include="Areas\Start\Models\Test\TestMessageViewModel.cs" />
+    <Compile Include="Core\DateTimeExtensions.cs" />
     <Compile Include="Core\RequestContext\CurrentBusinessUnitProvider.cs" />
     <Compile Include="Core\RequestContext\ICurrentBusinessUnitProvider.cs" />
     <Compile Include="Core\ServiceBus\IServiceBusSender.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="Core\RequestContext\IdentityProvider.cs" />
     <Compile Include="Core\RequestContext\IIdentityProvider.cs" />
     <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
+    <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -486,13 +488,25 @@
     <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.report.graph.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.report.table.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
+    <Content Include="Areas\MyTime\Content\Css\Asm.css" />
     <Content Include="Areas\MyTime\Content\Css\CalendarView.css" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
+    <Content Include="Areas\MyTime\Content\Css\jquery.ui.combobox.css" />
     <Content Include="Areas\MyTime\Content\Css\TooltipCustom.css" />
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Css\TooltipInput.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\knockout.bindings.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.combobox.ko.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Asm.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.selectbox.ko.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.DayViewModel.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Init.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Ajax.js" />
@@ -501,7 +515,7 @@
     <Content Include="Areas\MyTime\Content\Css\Preference.css" />
     <Content Include="Areas\MyTime\Content\Css\ScheduleStyles.css" />
     <Content Include="Areas\MyTime\Content\Css\WeekView.css" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.Tests.html" />
+    <Content Include="Areas\MyTime\Content\Scripts\AllTests.html" />
     <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
@@ -601,6 +615,7 @@
     <Content Include="Content\Scripts\excanvas.compressed.js" />
     <Content Include="Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
+    <Content Include="Content\Scripts\knockout-jquery-ui-widget.js" />
     <Content Include="Content\Scripts\qunit.css" />
     <Content Include="Content\Scripts\qunit.js" />
     <Content Include="Content\Scripts\RGraph.bar.js" />
@@ -686,6 +701,7 @@
     <Content Include="Areas\Start\Views\Menu\MobileMenu.cshtml" />
     <Content Include="Areas\Start\Views\Menu\Index.cshtml" />
     <Content Include="Areas\Start\Views\Menu\Menu.cshtml" />
+    <Content Include="Areas\Start\Views\Test\WidgetStylingSample.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

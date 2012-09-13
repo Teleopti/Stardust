@@ -39,6 +39,14 @@ IF EXISTS (SELECT distinct group_page_code FROM mart.dim_group_page WHERE group_
 		INSERT into #grouppagecontrols SELECT  '3D4F57F4-EC28-408B-BB96-E90DEABD16AD'
 		INSERT into #grouppagecontrols SELECT  'A7EF3BC8-E7B0-4C8F-B333-FB96068A21E9'
 		INSERT into #grouppagecontrols SELECT  'EFE140D0-904A-4326-BEC2-D45945F7EC6E'
+		--henrikl, 7 rows added for custom report
+		INSERT into #grouppagecontrols SELECT  'D464415A-4199-4EB7-BA2F-A471760F09BC'
+		INSERT into #grouppagecontrols SELECT  '0594AA2A-66DD-48E9-BA88-B68B98152B76'
+		INSERT into #grouppagecontrols SELECT  'D11B7738-8655-43DF-814B-5BB3FFC38C1B'
+		INSERT into #grouppagecontrols SELECT  '710F05D5-DF77-44D6-8B58-5326B6665989'
+		INSERT into #grouppagecontrols SELECT  '6B303D5A-203F-4AA0-80EB-E40B791D281B'
+		INSERT into #grouppagecontrols SELECT  '05E8C12F-FC3B-465C-B019-105806CC1029'
+		INSERT into #grouppagecontrols SELECT  '6BED0B7F-2434-4699-8BBB-FBCB2B3D7BA7'
 		SELECT Controls.* FROM
 		(
 			SELECT 
@@ -96,6 +104,13 @@ ELSE
 		INSERT into #grouppagecontrols SELECT  '80770D4D-11EF-42CB-9C91-9E6A27AF35E4'
 		INSERT into #grouppagecontrols SELECT  '5A9C7B5C-C0C6-4C31-817F-FDAA0D093B85'
 		INSERT into #grouppagecontrols SELECT  'B12E74F7-48EB-4FAF-8231-B5C422F80C9A'
+		--henrikl, 6 rows added for custom report
+		INSERT into #grouppagecontrols SELECT  'A4DE2EF1-DB3C-4CC5-A4E6-56D1DF8A06CB'
+		INSERT into #grouppagecontrols SELECT  'FFB22DC9-793B-4586-AEAC-C4F19850A5FF'
+		INSERT into #grouppagecontrols SELECT  '15A354FD-A10E-4045-AD9D-4B8945F4A2A9'
+		INSERT into #grouppagecontrols SELECT  '2555679A-73EE-4E7C-950A-AF547119AE99'
+		INSERT into #grouppagecontrols SELECT  '1A292B23-F497-4AFF-B616-93A50DCFF639'
+		INSERT into #grouppagecontrols SELECT  '31AFCFA9-7B79-4A67-A40E-4073A22FB67F'
 		SELECT Controls.* FROM
 		(
 			SELECT 

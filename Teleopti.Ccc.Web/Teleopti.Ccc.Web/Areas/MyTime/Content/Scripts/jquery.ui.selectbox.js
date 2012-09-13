@@ -2,7 +2,8 @@
 	$.widget("ui.selectbox", {
 
 		options: {
-			source: null
+			source: null,
+			value: null
 		},
 
 		_create: function () {
@@ -22,6 +23,8 @@
 				.appendTo(container)
 				;
 
+			container.attr('title', select.attr('title'));
+			
 			var button = this._button = $('<button></button>')
 				.attr("id", id + '-button')
 				.attr("disabled", "disabled")
@@ -76,6 +79,14 @@
 				;
 
 			menu.data("autocomplete")._renderItem = function (ul, item) {
+				if (item.label == "-")
+					item.label = "";
+				if (item.value == "-" && item.label != "") {
+					return $('<li></li>')
+						.addClass('ui-selectbox-menu-splitter')
+						.append(item.label)
+						.appendTo(ul);
+				}
 				if (item.value == "-") {
 					return $('<li></li>')
 						.addClass('ui-selectbox-menu-splitter')
@@ -158,6 +169,45 @@
 			});
 		},
 
+		_setEnabled: function (value) {
+			if (value) {
+				this._button.removeAttr('disabled');
+			} else {
+				this._button.attr('disabled', 'disabled');
+			}
+		},
+
+		_setOption: function (key, value) {
+			switch (key) {
+				case "clear":
+					// handle changes to clear option
+					break;
+				case "value":
+					this._selectValue(value);
+					break;
+				case "enabled":
+					this._setEnabled(value);
+					break;
+			}
+
+			if (this._super)
+			// In jQuery UI 1.9 and above, you use the _super method instead
+				this._super("_setOption", key, value);
+			else
+			// In jQuery UI 1.8, you have to manually invoke the _setOption method from the base widget
+				$.Widget.prototype._setOption.apply(this, arguments);
+		},
+
+		_setEnabled: function (value) {
+			if (value) {
+				this._select.removeAttr('disabled');
+				this._button.removeAttr('disabled');
+			} else {
+				this._select.attr('disabled', 'disabled');
+				this._button.attr('disabled', 'disabled');
+			}
+		},
+
 		refresh: function (success) {
 			this._refresh(success);
 		},
@@ -180,6 +230,10 @@
 
 		selectableOptions: function () {
 			return $(':not(option[value="-"])', this._select);
+		},
+
+		value: function () {
+			return this._button.data("value");
 		},
 
 		destroy: function () {

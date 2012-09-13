@@ -71,12 +71,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new ScheduleIsPublished());
 		}
 
-		[Given(@"I am a supervisor")]
-		public void GivenIAmASupervisor()
-		{
-			UserFactory.User().Setup(new Supervisor());
-		}
-
 		[Given(@"I have analytics data for today")]
 		public void GivenIHaveAnalyticsDataForToday()
 		{
@@ -184,6 +178,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIAmAnAgentWithoutAccessToPreferences()
 		{
 			UserFactory.User().Setup(new AgentWithoutPreferencesAccess());
+		}
+
+		[Given(@"I am an agent without access to extended preferences")]
+		public void GivenIAmAnAgentWithoutAccessToExtendedPreferences()
+		{
+			UserFactory.User().Setup(new AgentWithoutExtendedPreferencesAccess());
+			UserFactory.User().Setup(new SchedulePeriod());
+			UserFactory.User().Setup(new PersonPeriod());
+			UserFactory.User().Setup(new ScheduleIsPublished());
 		}
 
 		[Given(@"I am an agent without access to any requests")]
@@ -539,6 +542,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		{
 			UserFactory.User().SetupCulture(new HawaiiTimeZone());
 		}
+
+		[Given(@"I am located in Stockholm")]
+		public void GivenIAmLocatedInStockholm()
+		{
+			UserFactory.User().SetupCulture(new StockholmTimeZone());
+		}
+
 
 		[Given(@"I have an existing text request")]
 		public void GivenIHaveAnExistingTextRequest()

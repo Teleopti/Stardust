@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 
 		private void btnFilterData_Click(object sender, EventArgs e)
 		{
-            if (dateSelectionComposite1.SelectedDatesCount <= 0) return;
+            //if (dateSelectionComposite1.SelectedDatesCount <= 0) return;
             _filterDataView = new FilterDataView(_workload, this, _templateIndex, _filteredDates);
             _filterDataView.InitializeStatistics(_workloadDaysForTemplatesWithStatistics);
 			_filterDataView.Show(this);

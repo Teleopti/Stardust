@@ -124,6 +124,7 @@
     <Compile Include="Scheduling\DesiredShiftLengthCalculator.cs" />
     <Compile Include="Scheduling\GroupShiftLengthDecider.cs" />
     <Compile Include="Scheduling\ShiftLengthDecider.cs" />
+    <Compile Include="TeDataDayOffDecisionMaker.cs" />
     <Compile Include="TuiCaseSolver.cs" />
     <Compile Include="WorkShiftBackToLegalStateBitArrayCreator.cs" />
     <Compile Include="WorkShiftBackToLegalStateDecisionMaker.cs" />
@@ -139,8 +140,6 @@
     <Compile Include="Scheduling\ShiftCategoryFairnessShiftValueCalculator.cs" />
     <Compile Include="Scheduling\WorkShiftMinMaxCalculator.cs" />
     <Compile Include="Scheduling\WorkShiftWeekMinMaxCalculator.cs" />
-    <Compile Include="WeeklyFreeWeekendDayValidator.cs" />
-    <Compile Include="DayOffInitialDistribution.cs" />
     <Compile Include="DayOffOptimizationLegalStateValidatorListCreator.cs" />
     <Compile Include="IDayOffLegalStateValidatorListCreator.cs" />
     <Compile Include="KeepFreeWeekendValidator.cs" />

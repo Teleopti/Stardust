@@ -66,10 +66,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the global menu")]
 		public void ThenIShouldSeeTheGlobalMenu()
 		{
-			ScenarioContext.Current.Pending();
-			// need to see if the menu is actually displayed, not just the url
-			//EventualAssert.That(() => Pages.Pages.MenuPage.Something.Exists, Is.True);
-			Browser.Current.Url.Should().EndWith("/Start/Menu/Index");
+			EventualAssert.That(() => Pages.Pages.GlobalMenuPage.GlobalMenuList.ListItems.Count.Equals(2), Is.True);
+			Browser.Current.Url.Should().EndWith("/Start/Menu/Menu");
 		}
 
 		[Then(@"I should see MyTime")]

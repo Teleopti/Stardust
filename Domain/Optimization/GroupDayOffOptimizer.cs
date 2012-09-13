@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupDayOffOptimizer
     {
-        bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions);
+		bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences);
     }
 
     public class GroupDayOffOptimizer : IGroupDayOffOptimizer
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-		public bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions)
+		public bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
 		{
 			ILockableBitArray originalArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore,
 			                                                     _daysOffPreferences.ConsiderWeekAfter);
@@ -102,13 +102,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
 					return false;
-				IList<DateOnly> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions);
+				IList<IScheduleDay> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions, allMatrixes);
 				if (removedDays == null)
 					return false;
 
-				List<DateOnly> allDates = new List<DateOnly>(daysOffToRemove);
-				allDates.AddRange(removedDays);
-				if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(allDates, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions, _groupPersonBuilderForOptimization))
+				if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions, _groupPersonBuilderForOptimization, allMatrixes))
+					return false;
+
+				if (!_groupMatrixHelper.ScheduleBackToLegalStateDays(removedDays, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions, optimizationPreferences, _groupPersonBuilderForOptimization, allMatrixes))
 					return false;
 			}
 			

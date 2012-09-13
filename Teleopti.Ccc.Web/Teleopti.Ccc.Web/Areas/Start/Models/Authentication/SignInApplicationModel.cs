@@ -18,6 +18,5 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 		[DataType(DataType.Password)]
 		[Display(Name = "Password", Prompt = "Password", ResourceType = typeof (Resources))]
 		public string Password { get; set; }
-
 	}
 }

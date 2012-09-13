@@ -2883,7 +2883,7 @@ Rajaus</value>
     <comment>Name:</comment>
   </data>
   <data name="NightlyRestTimeColon" xml:space="preserve">
-    <value>Öinen lepoaika:</value>
+    <value>Yölepoaika</value>
     <comment>Nightly Rest Time</comment>
   </data>
   <data name="Colon" xml:space="preserve">
@@ -3059,7 +3059,7 @@ Rajaus</value>
     <comment>Forecasted ACW</comment>
   </data>
   <data name="ForecastedCallsColon" xml:space="preserve">
-    <value>Ennustetut puhelut:</value>
+    <value>Ennustetut puhelut: </value>
     <comment>Forecasted calls</comment>
   </data>
   <data name="ForecastedTalkTimeColon" xml:space="preserve">
@@ -10137,5 +10137,257 @@ Lisenssin nimi on {3} ja sisältää seuraavat lisäosat: {4}</value>
   </data>
   <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
     <value>{0} agenttia ei voitu aikatauluttaa.</value>
+  </data>
+  <data name="SchedulePeriodTypeWeek" xml:space="preserve">
+    <value>Viikko</value>
+  </data>
+  <data name="SchedulePeriodTypeMonth" xml:space="preserve">
+    <value>Kuukausi</value>
+  </data>
+  <data name="SchedulePeriodTypeDay" xml:space="preserve">
+    <value>Päivä</value>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Mobiiliraportti</value>
+  </data>
+  <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
+    <value>Kiinalainen kuukausi</value>
+  </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>Sinun käyttäjäoikeudet eivät riitä toimintoon. </value>
+  </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>CSV tiedostot (*.cdv)|*.csv</value>
+  </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>Koko päivän poissaolo</value>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>Työvuorojakson alusta</value>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>Vie työmäärä</value>
+  </data>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>Suunnitellut ja Todelliset Agentit</value>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>Vie työmäärä ja henkilömäärä</value>
+  </data>
+  <data name="FullDay" xml:space="preserve">
+    <value>Kokopäivä</value>
+  </data>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Liitä</value>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>Älä välitä työjakson tunneista</value>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Älä välitä tunneista per päivä</value>
+  </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>Sopimuksen alusta</value>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Malli (loc)</value>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Taulokko (loc)</value>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Älä välitä vapaapäivistä</value>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Ajanjakso (loc)</value>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>Diagrammi (loc)</value>
+  </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>Sinun työaikaasi on muutettu</value>
+  </data>
+  <data name="SmsSettings" xml:space="preserve">
+    <value>SMS Asetukset</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
+    <value>Aseta mistä sarakkeesta SMS numero otetaan</value>
+  </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>Tämä työmäärä {0} ikkuna on avoinna. Ystävällisesti sulje se, koska se ei ole enää voimassa. </value>
+  </data>
+  <data name="LongtermForecast" xml:space="preserve">
+    <value>Pitkänaikavälin ennuste. </value>
+  </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>Hallinnoin asetuksia. </value>
+  </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>Agentti (Käsiohjaus)</value>
+  </data>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>Sinun pyyntösi tila on muuttunut, et voi päivittää tai poistaa sitä. </value>
+  </data>
+  <data name="SkillTypeRetail" xml:space="preserve">
+    <value>Vähittäiskauppa</value>
+  </data>
+  <data name="ActualEmployees" xml:space="preserve">
+    <value>Tämän hetkiset työntekijät</value>
+  </data>
+  <data name="ManageSmsSettings" xml:space="preserve">
+    <value>Hallinnoin SMS asetuksia</value>
+  </data>
+  <data name="ExportToBU" xml:space="preserve">
+    <value>Vie liiketoimintayksikkö</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Vie tiedosto</value>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>Tiedoston vienti on valmis</value>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>Valitse päivä ennusteesta</value>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>Valitse tallennuksen kohde</value>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>Valitse taito</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>Valitse vähintään yksi vaihtoehto "Työvuoroluokka", "Aloitusaika" tai "Päättymis aika" Tiimivalikosta</value>
+  </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>Työvuorosuunnittelun asetukset</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
+    <value>Valitse vähintään yksi vaihtoehto "Työvuoroluokka", "Aloitusaika" tai "Päättymis aika" Tiimivalikosta</value>
+  </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>Ei aktiviteettia</value>
+  </data>
+  <data name="AfterCustomerWorkTime" xml:space="preserve">
+    <value>Jälkityö</value>
+  </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>Vie henkilöstötiedot</value>
+  </data>
+  <data name="OptimizationOptionMessageBox" xml:space="preserve">
+    <value>Optimointi mahdollisuudet</value>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>Sama aloitusaika</value>
+  </data>
+  <data name="FileExportFinished" xml:space="preserve">
+    <value>Tiedostonvienti valmis</value>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>Käytä rajoituksia</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Asiakkaat</value>
+  </data>
+  <data name="AverageAfterCustomerWork" xml:space="preserve">
+    <value>Keskimääräinen jälkityöaika</value>
+  </data>
+  <data name="AverageCustomers" xml:space="preserve">
+    <value>Keskimääräiset asiakkaat</value>
+  </data>
+  <data name="CalculatedCustomers" xml:space="preserve">
+    <value>Lasketut asiakkaat</value>
+  </data>
+  <data name="CampaignCustomersPercent" xml:space="preserve">
+    <value>Kampanja asiakkaat %</value>
+  </data>
+  <data name="FileExportFailed" xml:space="preserve">
+    <value>Tiedoston vienti epäonnistui</value>
+  </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>Sama päättymisaika</value>
+  </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>Sinun työvuorotoiveesi ei ole mahdollinen</value>
+  </data>
+  <data name="WalkAways" xml:space="preserve">
+    <value>Luovuttaneet asiakkaat</value>
+  </data>
+  <data name="ValidatedCustomers" xml:space="preserve">
+    <value>Validoidut asiakkaat</value>
+  </data>
+  <data name="ValidatedAfterCustomerWork" xml:space="preserve">
+    <value>Validoi jälkityöaika</value>
+  </data>
+  <data name="TotalCustomers" xml:space="preserve">
+    <value>Kaikki asiakkaat</value>
+  </data>
+  <data name="ServedCustomers" xml:space="preserve">
+    <value>Palvellut asiakkaat</value>
+  </data>
+  <data name="ScheduledEmployeesIncoming" xml:space="preserve">
+    <value>Työvuorotetut työntekijät, sisään</value>
+  </data>
+  <data name="ScheduledEmployees" xml:space="preserve">
+    <value>Työvuorotetut työntekijät</value>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>Sama työvuoroluokka</value>
+  </data>
+  <data name="EmployeesInc" xml:space="preserve">
+    <value>Työntekijät mukaan lukien</value>
+  </data>
+  <data name="DeviationCustomersColon" xml:space="preserve">
+    <value>Asiakaspoikkeama:</value>
+  </data>
+  <data name="EmployeesIncWithShrinkage" xml:space="preserve">
+    <value>Työntekijät mukaan laskettuna poissaolot</value>
+  </data>
+  <data name="OriginalOfferedCustomers" xml:space="preserve">
+    <value>Alkuperäiset asiakkaat</value>
+  </data>
+  <data name="OriginalCustomers" xml:space="preserve">
+    <value>Alkuperäiset asiakkaat</value>
+  </data>
+  <data name="OriginalAfterCustomerWork" xml:space="preserve">
+    <value>Alkuperäinen jälkityö</value>
+  </data>
+  <data name="OfferedCustomers" xml:space="preserve">
+    <value>Asiakkaat</value>
+  </data>
+  <data name="MinimumEmployees" xml:space="preserve">
+    <value>Työntekijöitä vähintään</value>
+  </data>
+  <data name="MaximumEmployees" xml:space="preserve">
+    <value>Työntekijöitä enintään</value>
+  </data>
+  <data name="IndexCustomers" xml:space="preserve">
+    <value>Indeksi asiakaat</value>
+  </data>
+  <data name="IndexAfterCustomerWork" xml:space="preserve">
+    <value>Indeksi asiakasjälkityö</value>
+  </data>
+  <data name="EmployeesWithShrinkage" xml:space="preserve">
+    <value>Työntekijät mukaan laskettuna poissaolot</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Työntekijä</value>
+  </data>
+  <data name="ForecastedEmployeesIncoming" xml:space="preserve">
+    <value>Ennustetut työntekijät</value>
+  </data>
+  <data name="ForecastedEmployees" xml:space="preserve">
+    <value>Ennustetut työntekijät</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Työntekijät</value>
+  </data>
+  <data name="ForecastedCustomersColon" xml:space="preserve">
+    <value>Ennustetut asiakkaat:</value>
+  </data>
+  <data name="ForecastedCustomers" xml:space="preserve">
+    <value>Ennustetut asiakkaat</value>
+  </data>
+  <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
+    <value>Ennustettu keskimääräinen jälkityöaika</value>
   </data>
 </root>

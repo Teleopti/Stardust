@@ -58,8 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 
 			preferenceProvider.Stub(x => x.GetPreferencesForDate(DateOnly.Today)).Return(null);
 
-			var exception = Assert.Throws<HttpException>(() => target.CreateDayViewModel(DateOnly.Today));
-			exception.GetHttpCode().Should().Be(404);
+			target.CreateDayViewModel(DateOnly.Today).Should().Be.Null();
 		}
 
 		[Test]

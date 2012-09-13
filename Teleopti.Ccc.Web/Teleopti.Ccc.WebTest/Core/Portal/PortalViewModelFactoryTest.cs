@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
@@ -68,6 +69,33 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			identityProvider.Expect(mock => mock.Current()).Return(identity);
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldShowAsmIfPermissionToShowAsm()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OpenAsm)).Return(false);
+
+			var target = CreateTarget(permissionProvider);
+
+			Assert.That(target.CreatePortalViewModel().ShowAsm, Is.False);
+		}
+
+		[Test]
+		public void ShouldNotShowAsmIfNoPermission()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OpenAsm)).Return(false);
+
+			var target = CreateTarget(permissionProvider);
+			
+			Assert.That(target.CreatePortalViewModel().ShowAsm, Is.False);
+		}
+
+		private static PortalViewModelFactory CreateTarget(IPermissionProvider permissionProvider)
+		{
+			return new PortalViewModelFactory(permissionProvider, null, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IIdentityProvider>()); 
 		}
 	}
 

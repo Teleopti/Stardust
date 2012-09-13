@@ -63,7 +63,6 @@ textarea { overflow: auto; } /* thnx ivannikolic! www.sitepoint.com/blogs/2010/0
 /* align checkboxes, radios, text inputs with their label
 	by: Thierry Koblentz tjkdesign.com/ez-css/css/base.css  */
 input[type="radio"] { vertical-align: text-bottom; }
-input[type="checkbox"] { vertical-align: bottom; }
 .ie7 input[type="checkbox"] { vertical-align: baseline; }
 .ie6 input { vertical-align: text-bottom; }
 
@@ -169,6 +168,8 @@ sup { vertical-align: super; font-size: smaller; }
 .absolute{ position: absolute; }
 
 .invisible { visibility: hidden; } /* Hide visually and from screenreaders, but maintain layout */
+
+.cursorpointer { cursor: pointer; }
 
 .clearfix:before, .clearfix:after
 {
@@ -402,7 +403,7 @@ html.full-height #push{
 .icon.validation-req{background-position: -432px 0;}
 .icon.validation-error{background-position: -575px 0;}
 .icon.toolbar-addTextRequest {background-position: 0px -511px; width: 24px}
-.icon.toolbar-today {background-position: -155px -26px; width: 24px}
+.icon.toolbar-today {background-position: -155px -26px;width: 24px;margin-left: 19px;}
 .icon.preference-warning {	background-position: -159px -54px; width: 16px;	height: 16px; }
 
 .text-request {
@@ -589,7 +590,6 @@ header {
 #toolbar-right{width: 253px;}
 .toolbar-inner{background-position: right -35px; font-size: 9px; height: 21px; padding: 7px;}
 
-.date-range-selector{padding-right: 19px;}
 .date-range-selector .datepicker{
 	 background: #fff url(../Images/button_sprite.png) right -120px no-repeat; 
 	 border: 0px;
@@ -681,15 +681,7 @@ header {
 }
 select.time-input
 {
-	width: 8.5em;
-}
-.rtl select.time-input
-{
-    width: 8.5em;
-}
-.rtl .time-input
-{
-    padding-right: 20px;
+	width: 8em;
 }
 .edit-module-inner button.ui-button-icon-only {
 	height: 20px; 

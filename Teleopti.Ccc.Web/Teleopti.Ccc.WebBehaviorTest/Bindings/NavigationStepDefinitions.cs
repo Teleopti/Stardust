@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[Given(@"I am viewing preferences")]
+		[When(@"I am viewing preferences")]
 		[When(@"I view preferences")]
 		public void GivenIAmViewingPreferences()
 		{
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoPreference();
 		}
 
+		[Given(@"I am viewing preferences for date '(.*)'")]
 		[When(@"I view preferences for date '(.*)'")]
 		public void WhenIViewPreferencesForDate(DateTime date)
 		{

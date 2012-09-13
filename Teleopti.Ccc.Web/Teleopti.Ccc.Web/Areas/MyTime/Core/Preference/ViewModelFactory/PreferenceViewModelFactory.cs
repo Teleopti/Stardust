@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		public PreferenceDayViewModel CreateDayViewModel(DateOnly date)
 		{
 			var preferenceDay = _preferenceProvider.GetPreferencesForDate(date);
-			if (preferenceDay == null)
-				throw new HttpException(404, "Preference not found");
+			if (preferenceDay == null) return null;
+
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 		}
 	}

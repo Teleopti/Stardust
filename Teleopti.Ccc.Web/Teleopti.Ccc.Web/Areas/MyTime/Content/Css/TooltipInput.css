@@ -27,17 +27,3 @@
 	padding-left: 1px !important;
 	padding-right: 1px !important;
 }
-
-.ui-tooltip-input button.ui-button-icon-only {
-	height: 20px; 
-	width: 1.7em; 
-	margin-left: -18px;
-	float: left;
-	background-position: -12px -90px;
-	border: 0;
-}
-
-.ui-tooltip-input .ui-autocomplete-input {
-	height: 16px;
-	float: left;
-}

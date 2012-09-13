@@ -49,7 +49,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _initControls() {
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
-		ko.applyBindings(requestViewModel, ko.dataFor($('#Request-detail-section')));
+		if ($('#Request-detail-section').length == 0)
+			return;
+		ko.applyBindings(requestViewModel, $('#Request-detail-section')[0]);
 
 		$('#Request-detail-section .date-input')
 			.datepicker()
@@ -234,14 +236,18 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		$('#Request-detail-entityid').val(data.Id);
 		$('#Request-detail-subject-input').change();
 		$('#Request-detail-message-input').change();
+		$('#Request-detail-deny-reason').text(data.DenyReason);
 		requestViewModel.IsFullDay(data.IsFullDay);
 	};
 
 	function _fillFormRequestType(payload) {
-		$('#Absence-type').combobox("set", payload);
+		$('#Absence-type')
+			.combobox({
+				value: payload
+			});
 	};
 
-	function _clearFormData() {	
+	function _clearFormData() {
 		$('#Request-detail-section input, #Request-detail-section textarea, #Request-detail-section select')
 			.not(':button, :submit, :reset')
 			.reset()

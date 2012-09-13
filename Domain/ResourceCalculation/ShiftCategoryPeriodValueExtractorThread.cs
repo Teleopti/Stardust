@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             var dictionary = ScheduleDictionary;
             _shiftProjectionList = _shiftProjectionCacheFilter.
-                FilterOnMainShiftOptimizeActivitiesSpecification(_shiftProjectionList, new All<IMainShift>());
+                FilterOnMainShiftOptimizeActivitiesSpecification(_shiftProjectionList, _schedulingOptions.MainShiftOptimizeActivitySpecification);
             
             _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, agentTimeZone, _shiftProjectionList,
@@ -133,8 +133,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnBusinessRules(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
             
-            _shiftProjectionList = _shiftProjectionCacheFilter.
-                FilterOnPersonalShifts(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
+            //_shiftProjectionList = _shiftProjectionCacheFilter.
+            //    FilterOnPersonalShifts(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
 
             
 			_shiftProjectionList =

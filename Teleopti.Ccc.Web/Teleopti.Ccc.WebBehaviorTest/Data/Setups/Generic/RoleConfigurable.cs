@@ -16,6 +16,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool ViewUnpublishedSchedules { get; set; }
 		public bool ViewConfidential { get; set; }
 		public bool AccessToMobileReports { get; set; }
+		public bool AccessToExtendedPreferences { get; set; }
+		public bool AccessToMytimeWeb { get; set; }
+		public bool AccessToAsm { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -23,6 +26,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
 			AccessToMobileReports = true;
+			AccessToExtendedPreferences = true;
+			AccessToMytimeWeb = true;
+			AccessToAsm = true;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -40,6 +46,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			if (!AccessToMobileReports)
 				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere select f;
+
+			if (!AccessToExtendedPreferences)
+				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb select f;
+			if (!AccessToMytimeWeb)
+				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTimeWeb select f;
+			if (!AccessToAsm)
+				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenAsm select f;
 
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 

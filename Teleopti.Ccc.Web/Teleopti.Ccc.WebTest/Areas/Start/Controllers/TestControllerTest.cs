@@ -1,15 +1,11 @@
 ﻿using System;
-using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
@@ -21,16 +17,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var dateSet = new DateTime(2000, 1, 2, 3, 4, 5);
 
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new DateAndTimeModule());
-			using(var container = containerBuilder.Build())
+			var modifyNow = MockRepository.GenerateStrictMock<IModifyNow>();
+			modifyNow.Expect(mock => mock.SetNow(dateSet));
+
+			using (var target = new TestController(modifyNow, null, null, null, null))
 			{
-				using (var target = new TestController(container.Resolve<IModifyNow>(), null, null, null, null))
-				{
-					target.SetCurrentTime(dateSet);
-				}
-				container.Resolve<INow>().UtcDateTime()
-					.Should().Be.EqualTo(dateSet);
+				target.SetCurrentTime(dateSet);
 			}
 		}
 
@@ -38,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void PlainStupid()
 		{
 			var sessionSpecificDataProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
-			using (var target = new TestController(new Now(), sessionSpecificDataProvider, null, null, null))
+			using (var target = new TestController(new Now(null), sessionSpecificDataProvider, null, null, null))
 			{
 				target.BeforeScenario();
 				target.CorruptMyCookie();

@@ -1,4 +1,3 @@
-using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
@@ -10,7 +9,6 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     public class ConsecutiveWorkdaysSolverTest
     {
         private IDayOffBackToLegalStateSolver _target;
-        private CultureInfo _culture;
         private IDayOffBackToLegalStateFunctions _functions;
         private LockableBitArray _bitArray;
         private IDaysOffPreferences _datDaysOffPreferences;
@@ -19,8 +17,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void Setup()
         {
             _bitArray = array1();
-            _culture = CultureInfo.CreateSpecificCulture("en-GB");
-            _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _functions = new DayOffBackToLegalStateFunctions(_bitArray);
             _datDaysOffPreferences = new DaysOffPreferences();
             _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
         }
@@ -124,7 +121,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void VerifySetToFewBackWhenConsideringWeekAfter()
         {
             _bitArray = array2();
-            _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _functions = new DayOffBackToLegalStateFunctions(_bitArray);
             _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
             _bitArray.PeriodArea = new MinMax<int>(0, 6);
             _bitArray.Lock(7, true);
@@ -144,12 +141,56 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         {
             _datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 6);
             _bitArray = array3();
-            _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
+            _functions = new DayOffBackToLegalStateFunctions(_bitArray);
             _target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
             Assert.AreEqual(MinMaxNumberOfResult.Ok, _target.ResolvableState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());
         }
+
+		[Test]
+		public void FixForBug20501()
+		{
+			_datDaysOffPreferences.ConsecutiveDaysOffValue = new MinMax<int>(2, 2);
+			_datDaysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(2, 2);
+			_datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(5, 5);
+			_datDaysOffPreferences.ConsiderWeekBefore = true;
+			_datDaysOffPreferences.ConsiderWeekAfter = true;
+			_bitArray = new LockableBitArray(42, true, true, null);
+			_bitArray.SetAll(false);
+			_bitArray.Set(2, true);
+			_bitArray.Set(3, true);
+			_bitArray.Set(5, true);
+			_bitArray.Set(6, true);
+			_bitArray.Set(12, true);
+			_bitArray.Set(13, true);
+			_bitArray.Set(19, true);
+			_bitArray.Set(20, true);
+			_bitArray.Set(26, true);
+			_bitArray.Set(27, true);
+			_bitArray.Set(33, true);
+			_bitArray.Set(34, true);
+			_bitArray.Set(37, true); //this one was selected and no check if it was locked
+
+			for (int i = 0; i < _bitArray.Count; i++)
+			{
+				_bitArray.Lock(i, true);
+			}
+
+			_bitArray.Lock(12, false);
+			_bitArray.Lock(13, false);
+			_bitArray.Lock(17, false);
+			_bitArray.Lock(19, false);
+			_bitArray.Lock(20, false);
+			_bitArray.Lock(26, false);
+			_bitArray.Lock(27, false);
+			_bitArray.Lock(33, false);
+			_bitArray.Lock(34, false);
+			
+			_functions = new DayOffBackToLegalStateFunctions(_bitArray);
+			_target = new ConsecutiveWorkdaysSolver(_bitArray, _functions, _datDaysOffPreferences, 20);
+			Assert.IsTrue(_target.SetToFewBackToLegalState());
+		}
 
         private static LockableBitArray array1()
         {

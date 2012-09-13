@@ -19,6 +19,7 @@
 	<link href="@Url.Content("~/Content/Scripts/jquery.qtip.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Site.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/TeamSchedule.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Asm.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Request.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Preference.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Settings.css")" rel="stylesheet" type="text/css" />
@@ -28,6 +29,7 @@
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.custom.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.splitbutton.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.selectbox.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.combobox.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.labeledinput.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.connector.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/TooltipInput.css")" rel="stylesheet" type="text/css" />
@@ -45,16 +47,20 @@
 	<script src="@Url.Content("~/Content/Scripts/jquery.qtip.js")"></script>
 	<script src="@Url.Content("~/Content/Scripts/indexOf.js")"></script>
 	<script src="@Url.Content("~/Content/Scripts/knockout-2.1.0.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/knockout-jquery-ui-widget.js")"></script>
 
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.extensions.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.labeledinput.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.splitbutton.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.selectbox.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.selectbox.ko.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.custominput.js")"></script>
-    <script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.combobox.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.combobox.js")"></script>
+    <script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.combobox.ko.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.calendarselectable.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.connector.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.tabberiet.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/knockout.bindings.js")"></script>
 
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js")"></script>
@@ -62,6 +68,9 @@
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.List.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.RequestDetail.js")"></script>
@@ -69,15 +78,25 @@
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Settings.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Test.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Init.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Asm.js")"></script>
 	
-	@if (ViewBag.LayoutBase.ExplicitlySetMilliSecondsFromYear1970 != 0)
- {
-	  	<script type="text/javascript">
-	  		$(function () {
-	  			Date.prototype.getTime = function () { return @(ViewBag.LayoutBase.ExplicitlySetMilliSecondsFromYear1970); };
-	  		});
-		</script>
-	  }
+	@if (ViewBag.LayoutBase.FixedDate != null)
+	{
+		DateTime date = ViewBag.LayoutBase.FixedDate;
+		<script type="text/javascript">
+			$(function () {
+				Date.prototype.getTeleoptiTime = function () { return new Date(@(date.Year), @(date.Month -1), @(date.Day), @(date.Hour), @(date.Minute), @(date.Second)).getTime(); };
+			});
+		</script>		
+ }
+ else
+	{
+		<script type="text/javascript">
+			$(function () {
+				Date.prototype.getTeleoptiTime = function () { return new Date().getTime(); };
+			});
+		</script>	
+	}
 	
 	@RenderSection("head", required: false)
 </head>
@@ -86,9 +105,9 @@
 	@RenderBody()
 	<footer class="col-1"> 
 		
-        <p>@ViewBag.LayoutBase.Footer</p>
+		  <p>@ViewBag.LayoutBase.Footer</p>
 		
-    </footer>
+	 </footer>
 	<div id="dialog-modal">
 	</div>
 	<div id="dialog">

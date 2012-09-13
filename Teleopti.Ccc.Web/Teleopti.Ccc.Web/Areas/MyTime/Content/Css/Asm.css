@@ -1,0 +1,114 @@
+﻿.asm-sliding-schedules
+{
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	position: relative;
+	top: 20px;
+	height: 40px;
+}
+.asm-current-info
+{
+	float: left;
+	width: 200px;
+	margin-left: 10px;
+}
+.asm-schedule-canvas
+{
+	float: left;
+	width: 600px;
+	overflow: hidden;
+	background: #F8F8F8;
+	height: 70px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.asm-outer-canvas
+{
+	width: 815px;
+	background: white;
+	padding: 6px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	margin: 5px;
+	height: 72px;
+	display: none; /*hide when loaded, before moved to correct place*/
+}
+.asm-layer
+{
+	position: absolute;
+	opacity: 0.8;
+	height: 30px;
+	top: 5px;
+}
+
+.asm-timeline-line
+{
+	height: 70px;
+	float: left;
+	border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.asm-timeline-number
+{
+	padding: 1px;
+	padding-left: 4px;
+	padding-right: 5px;
+	position: relative;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	background: white;
+	top: -20px;
+	left: -25px;
+	font-family: verdana;
+	font-size: 8px;
+}
+
+.asm-info-canvas
+{
+	overflow: hidden;
+	background: #F8F8F8;
+	height: 70px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.asm-time-marker
+{
+	background-color: rgba(0,0,0,0.15);
+	height: 72px;
+	float: left;
+	position: relative;
+	z-index: 1;
+	border-right: 1px solid black;
+}
+
+.asm-info-canvas table {
+	width: 100%; 
+	table-layout: fixed;
+	overflow: hidden;
+	white-space: nowrap;
+	text-align: left;
+	font-family: verdana;
+	font-size: 10px;
+}
+
+.asm-info-canvas td.asm-info-time-column
+{
+	width: 39px;
+}
+
+.asm-info-canvas tr
+{
+	opacity: 0.4;
+}
+
+.asm-info-current-activity 
+{
+	opacity: 1 !important;
+}
+
+
+.asm-info-canvas div 
+{
+	padding-bottom: 3px;
+	font-weight: bold;
+	text-align: left;
+	font-family: verdana;
+	font-size: 10px;
+}

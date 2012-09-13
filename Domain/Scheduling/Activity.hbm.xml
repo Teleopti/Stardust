@@ -74,6 +74,9 @@
     <property name="RequiresSeat"
 						type="boolean"
 						not-null="true" />
+    <property name="AllowOverwrite"
+			  type="boolean"
+			  not-null="true"/>
 			<property name="ReportLevelDetail" not-null="false"></property>
 			<many-to-one name="GroupingActivity"
 					 cascade="none" 

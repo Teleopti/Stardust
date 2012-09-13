@@ -1,7 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
@@ -9,50 +11,44 @@ namespace Teleopti.Ccc.DomainTest.Common
 	[TestFixture]
 	public class ModifyNowTest
 	{
-		private INow target;
-		private DateTime dateSet;
-
-		[SetUp]
-		public void Setup()
-		{
-			dateSet = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			target = new Now();
-			((IModifyNow)target).SetNow(dateSet);
-		}
-
 		[Test]
 		public void ShouldReturnFixedDate()
 		{
-			target.DateOnly().Should().Be.EqualTo(new DateOnly(dateSet));
-			target.LocalDateTime().Should().Be.EqualTo(dateSet.ToLocalTime());
-			target.UtcDateTime().Should().Be.EqualTo(dateSet);
-		}
+			var date = new DateTime(2000, 1, 1, 2, 3, 4);
+			var cccTimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			userTimeZone.Expect(mock => mock.TimeZone()).Return(cccTimeZone);
+			var target = new Now(() => userTimeZone);
+			((IModifyNow)target).SetNow(date);
 
-		[Test]
-		public void MustSetUsingUtc()
-		{
-			Assert.Throws<ArgumentException>(() =>
-			     ((IModifyNow) target).SetNow(new DateTime(2000, 1, 1)));
+			target.DateOnly().Should().Be.EqualTo(new DateOnly(date));
+			target.LocalDateTime().Should().Be.EqualTo(date);
+			target.UtcDateTime().Should().Be.EqualTo(TimeZoneHelper.ConvertToUtc(date, cccTimeZone));
 		}
 
 		[Test]
 		public void CanResetUsingRealTime()
 		{
+			var target = new Now(null);
 			var nu = DateTime.UtcNow;
-			((IModifyNow) target).SetNow(null);
+			((IModifyNow)target).SetNow(nu.AddYears(2));
+			((IModifyNow)target).SetNow(null);
+
 			target.UtcDateTime().Should().Be.IncludedIn(nu.AddMinutes(-1), nu.AddMinutes(1));
 		}
 
 		[Test]
 		public void ShouldBeExplicitlySet()
 		{
+			var target = new Now(null);
+			((IModifyNow)target).SetNow(DateTime.Now);
 			target.IsExplicitlySet().Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldNotBeExplicitlySet()
 		{
-			((IModifyNow)target).SetNow(null);
+			var target = new Now(null);
 			target.IsExplicitlySet().Should().Be.False();
 		}
 	}

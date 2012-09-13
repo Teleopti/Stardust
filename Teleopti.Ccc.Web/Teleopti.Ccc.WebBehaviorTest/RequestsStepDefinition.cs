@@ -32,7 +32,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[When(@"I navigate to the requests page")]
-		public void WhenINavigateToTheRequestsPage() { Navigation.GotoRequests(); }
+		public void WhenINavigateToTheRequestsPage()
+		{
+			Navigation.GotoRequests();
+		}
 
 		[When(@"I scroll down to the bottom of the page")]
 		public void WhenIScrollDownToTheBottomOfThePage()

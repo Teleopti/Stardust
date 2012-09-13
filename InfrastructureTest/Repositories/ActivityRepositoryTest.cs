@@ -84,12 +84,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             activity.InPaidTime = true;
             activity.InWorkTime = true;
         	activity.PayrollCode = "payrollcode007";
+            activity.AllowOverwrite = true;
 
             PersistAndRemoveFromUnitOfWork(activity);
             IActivity loadedAbctivity = new ActivityRepository(UnitOfWork).Load(activity.Id.Value);
             Assert.AreEqual(true, loadedAbctivity.InPaidTime);
             Assert.AreEqual(true, loadedAbctivity.InWorkTime);
 			Assert.AreEqual("payrollcode007", loadedAbctivity.PayrollCode);
+            Assert.AreEqual(true, loadedAbctivity.AllowOverwrite );
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

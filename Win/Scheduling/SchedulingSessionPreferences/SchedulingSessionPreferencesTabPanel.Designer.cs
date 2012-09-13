@@ -26,7 +26,7 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameEndTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseTeamScheduling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseShiftCategoryRestrictions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseShiftCategory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseRestriction"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUsePreferencesMustHavesOnly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUsePreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMinStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxSeats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseBlockScheduling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTagChangesWithColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxShiftSelection"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSchedulePeriod"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOrSchedules"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyRotationDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyPreferenceDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyAvailabilityDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameStartTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameShiftCategory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxResourceCalculateEveryColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRefreshScreenEveryColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGeneral"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxIncludeTroubleshootingInformation"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxFairness"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExtra"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxDoNotBreakMaxSeats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxCompareWith"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBusiness"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBetweenDayOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAdvanced"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxShiftCategoryLimitations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyPreferenceMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameEndTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseTeamScheduling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseShiftCategoryRestrictions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseShiftCategory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseRestriction"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUsePreferencesMustHavesOnly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUsePreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMinStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxSeats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseBlockScheduling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTagChangesWithColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxShiftSelection"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSchedulePeriod"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOrSchedules"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyRotationDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyPreferenceDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyAvailabilityDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameStartTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameShiftCategory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxResourceCalculateEveryColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRefreshScreenEveryColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGeneral"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxIncludeTroubleshootingInformation"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxFairness"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExtra"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxDoNotBreakMaxSeats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxCompareWith"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBusiness"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBetweenDayOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAdvanced"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
         private void InitializeComponent()
         {
 			this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -205,9 +205,9 @@
 			this.tableLayoutPanelRestrictions.SetColumnSpan(this.checkBoxUseShiftCategoryRestrictions, 2);
 			this.checkBoxUseShiftCategoryRestrictions.Location = new System.Drawing.Point(3, 189);
 			this.checkBoxUseShiftCategoryRestrictions.Name = "checkBoxUseShiftCategoryRestrictions";
-			this.checkBoxUseShiftCategoryRestrictions.Size = new System.Drawing.Size(173, 17);
+			this.checkBoxUseShiftCategoryRestrictions.Size = new System.Drawing.Size(148, 17);
 			this.checkBoxUseShiftCategoryRestrictions.TabIndex = 20;
-			this.checkBoxUseShiftCategoryRestrictions.Text = "xxUseShiftCategoryRestrictions";
+			this.checkBoxUseShiftCategoryRestrictions.Text = "xxShiftCategoryLimitations";
 			this.checkBoxUseShiftCategoryRestrictions.UseVisualStyleBackColor = true;
 			this.checkBoxUseShiftCategoryRestrictions.CheckedChanged += new System.EventHandler(this.checkBoxUseShiftCategoryRestrictionsCheckedChanged);
 			// 
@@ -228,9 +228,9 @@
 			this.tableLayoutPanelRestrictions.SetColumnSpan(this.checkBoxUsePreferences, 2);
 			this.checkBoxUsePreferences.Location = new System.Drawing.Point(3, 3);
 			this.checkBoxUsePreferences.Name = "checkBoxUsePreferences";
-			this.checkBoxUsePreferences.Size = new System.Drawing.Size(112, 17);
+			this.checkBoxUsePreferences.Size = new System.Drawing.Size(93, 17);
 			this.checkBoxUsePreferences.TabIndex = 12;
-			this.checkBoxUsePreferences.Text = "xxUsePreferences";
+			this.checkBoxUsePreferences.Text = "xxPreferences";
 			this.checkBoxUsePreferences.UseVisualStyleBackColor = true;
 			this.checkBoxUsePreferences.CheckedChanged += new System.EventHandler(this.checkBoxUsePreferencesCheckedChanged);
 			// 
@@ -240,9 +240,9 @@
 			this.tableLayoutPanelRestrictions.SetColumnSpan(this.checkBoxUseStudentAvailability, 2);
 			this.checkBoxUseStudentAvailability.Location = new System.Drawing.Point(3, 164);
 			this.checkBoxUseStudentAvailability.Name = "checkBoxUseStudentAvailability";
-			this.checkBoxUseStudentAvailability.Size = new System.Drawing.Size(141, 17);
+			this.checkBoxUseStudentAvailability.Size = new System.Drawing.Size(122, 17);
 			this.checkBoxUseStudentAvailability.TabIndex = 19;
-			this.checkBoxUseStudentAvailability.Text = "xxUseStudentAvailability";
+			this.checkBoxUseStudentAvailability.Text = "xxStudentAvailability";
 			this.checkBoxUseStudentAvailability.UseVisualStyleBackColor = true;
 			this.checkBoxUseStudentAvailability.CheckedChanged += new System.EventHandler(this.checkBoxUseStudentAvailabilityCheckedChanged);
 			// 
@@ -263,9 +263,9 @@
 			this.tableLayoutPanelRestrictions.SetColumnSpan(this.checkBoxUseAvailability, 2);
 			this.checkBoxUseAvailability.Location = new System.Drawing.Point(3, 118);
 			this.checkBoxUseAvailability.Name = "checkBoxUseAvailability";
-			this.checkBoxUseAvailability.Size = new System.Drawing.Size(104, 17);
+			this.checkBoxUseAvailability.Size = new System.Drawing.Size(85, 17);
 			this.checkBoxUseAvailability.TabIndex = 17;
-			this.checkBoxUseAvailability.Text = "xxUseAvailability";
+			this.checkBoxUseAvailability.Text = "xxAvailability";
 			this.checkBoxUseAvailability.UseVisualStyleBackColor = true;
 			this.checkBoxUseAvailability.CheckedChanged += new System.EventHandler(this.checkBoxUseAvailabilityCheckedChanged);
 			// 
@@ -275,9 +275,9 @@
 			this.tableLayoutPanelRestrictions.SetColumnSpan(this.checkBoxUseRotations, 2);
 			this.checkBoxUseRotations.Location = new System.Drawing.Point(3, 72);
 			this.checkBoxUseRotations.Name = "checkBoxUseRotations";
-			this.checkBoxUseRotations.Size = new System.Drawing.Size(100, 17);
+			this.checkBoxUseRotations.Size = new System.Drawing.Size(81, 17);
 			this.checkBoxUseRotations.TabIndex = 15;
-			this.checkBoxUseRotations.Text = "xxUseRotations";
+			this.checkBoxUseRotations.Text = "xxRotations";
 			this.checkBoxUseRotations.UseVisualStyleBackColor = true;
 			this.checkBoxUseRotations.CheckedChanged += new System.EventHandler(this.checkBoxUseRotationsCheckedChanged);
 			// 
@@ -300,7 +300,7 @@
 			this.checkBoxMustHaves.Name = "checkBoxMustHaves";
 			this.checkBoxMustHaves.Size = new System.Drawing.Size(390, 17);
 			this.checkBoxMustHaves.TabIndex = 14;
-			this.checkBoxMustHaves.Text = "xxUsePreferencesMustHavesOnly";
+			this.checkBoxMustHaves.Text = "xxScheduleOnlyPreferenceMustHave";
 			this.checkBoxMustHaves.UseVisualStyleBackColor = true;
 			this.checkBoxMustHaves.CheckedChanged += new System.EventHandler(this.checkBoxMustHavesCheckedChanged);
 			// 
@@ -335,7 +335,7 @@
 			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvTag.Location = new System.Drawing.Point(136, 3);
 			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
-			this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 19);
+			this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 21);
 			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvTag.TabIndex = 11;
 			// 
@@ -471,7 +471,7 @@
 			this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(165, 94);
 			this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 21);
+			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 19);
 			this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxGroupingFairness.TabIndex = 40;
 			this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingFairnessSelectedIndexChanged);
@@ -573,7 +573,7 @@
 			this.comboBoxGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxGrouping.Location = new System.Drawing.Point(165, 78);
 			this.comboBoxGrouping.Name = "comboBoxGrouping";
-			this.comboBoxGrouping.Size = new System.Drawing.Size(173, 21);
+			this.comboBoxGrouping.Size = new System.Drawing.Size(173, 19);
 			this.comboBoxGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxGrouping.TabIndex = 35;
 			this.comboBoxGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);

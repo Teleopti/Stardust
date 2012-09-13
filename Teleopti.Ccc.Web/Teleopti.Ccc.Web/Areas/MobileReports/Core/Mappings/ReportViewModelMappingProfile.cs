@@ -34,15 +34,16 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 		{
 			base.Configure();
 
-			CreateMap<DateOnly, ReportViewModel>().ForMember(
-				d => d.Reports, o => o.MapFrom(s => _definedReportProvider.Invoke().GetDefinedReports())).ForMember(
-					d => d.Skills, o => o.MapFrom(s => _skillProvider.Invoke().GetAvailableSkills())).ForMember(
-						d => d.DateBoxGlobalization,
-						o => o.MapFrom(s => _dateBoxGlobalizationViewModelFactory.Invoke().CreateDateBoxGlobalizationViewModel()));
+			CreateMap<DateOnly, ReportViewModel>()
+				.ForMember(d => d.Reports, o => o.MapFrom(s => _definedReportProvider.Invoke().GetDefinedReports()))
+				.ForMember(d => d.Skills, o => o.MapFrom(s => _skillProvider.Invoke().GetAvailableSkills()))
+				.ForMember(d => d.DateBoxGlobalization,
+				           o => o.MapFrom(s => _dateBoxGlobalizationViewModelFactory.Invoke().CreateDateBoxGlobalizationViewModel()));
 
-			CreateMap<DefinedReportInformation, ReportSelectionViewModel>().ForMember(
-				d => d.ReportId, a => a.MapFrom(s => s.ReportId)).ForMember(
-					d => d.ReportName, a => a.MapFrom(s => _userTextTranslator.Invoke().TranslateText(s.ReportNameResourceKey)));
+			CreateMap<DefinedReportInformation, ReportSelectionViewModel>()
+				.ForMember(d => d.ReportId, a => a.MapFrom(s => s.ReportId))
+				.ForMember(d => d.ReportName,
+				           a => a.MapFrom(s => _userTextTranslator.Invoke().TranslateText(s.ReportNameResourceKey)));
 
 			// -2 for all special all skill from Mart
 			CreateMap<ReportControlSkillGet, SkillSelectionViewModel>()

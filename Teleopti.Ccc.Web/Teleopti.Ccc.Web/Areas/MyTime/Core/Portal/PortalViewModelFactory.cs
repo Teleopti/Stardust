@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			{
 				navigationItems.Add(createStudentAvailabilityNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences))
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) || 
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
 				navigationItems.Add(createPreferenceNavigationItem());
 			}
@@ -53,7 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			       	{
 			       		NavigationItems = navigationItems,
 			       		CustomerName = _licenseActivator.CustomerName,
-			       		ShowChangePassword = showChangePassword()
+			       		ShowChangePassword = showChangePassword(),
+							ShowAsm =  _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OpenAsm)
 			       	};
 		}
 
@@ -84,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			       		               		new ToolBarSelectBox
 			       		               			{
 			       		               				Type = "TeamPicker",
-			       		               				Options = new SelectBoxOption[] {}
+			       		               				Options = new Option[] {}
 			       		               			}
 			       		               	}
 			       	};
@@ -109,79 +112,111 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 					};
 		}
 
-		private SectionNavigationItem createPreferenceNavigationItem()
+		private PreferenceNavigationItem createPreferenceNavigationItem()
 		{
-			return new SectionNavigationItem
+			var preferenceOptions = PreferenceOptions();
+			var toolbarItems = new List<ToolBarItemBase>
+			                   	{
+			                   		new ToolBarDatePicker
+			                   			{
+			                   				NextTitle = Resources.NextPeriod,
+			                   				PrevTitle = Resources.PreviousPeriod
+			                   			}
+			                   	};
+			if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
+			{
+				toolbarItems.AddRange(
+					new ToolBarItemBase[]
+						{
+							new ToolBarSeparatorItem(),
+							new ToolBarSplitButton
+								{
+									Title = Resources.Preference,
+									Options = preferenceOptions
+								}
+						});
+			}
+
+			toolbarItems.AddRange(
+				new ToolBarItemBase[]
 					{
-						Action = "Index",
-						Controller = "Preference",
-						Title = Resources.Preference,
-						NavigationItems = new NavigationItem[0],
-						ToolBarItems = new ToolBarItemBase[]
-			       		               	{
-			       		               		new ToolBarDatePicker
-			       		               			{
-			       		               				NextTitle = Resources.NextPeriod,
-			       		               				PrevTitle = Resources.PreviousPeriod
-			       		               			},
-											new ToolBarSeparatorItem(),
-											new ToolBarSplitButton 
-												{
-													Title = Resources.Preference, 
-													Options = PreferenceOptions()
-												},
-											new ToolBarSeparatorItem(),
-					       					new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
-			       		               	}
-					};
+						new ToolBarSeparatorItem(),
+						new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"}
+					});
+
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
+			{
+				toolbarItems.Add(new ToolBarButtonItem {Title = Resources.AddExtendedPreference, ButtonType = "add-extended"});
+			}
+			return new PreferenceNavigationItem
+			       	{
+			       		Action = "Index",
+			       		Controller = "Preference",
+			       		Title = Resources.Preference,
+			       		NavigationItems = new NavigationItem[0],
+						ToolBarItems = toolbarItems,
+						PreferenceOptions = preferenceOptions,
+						ActivityOptions = ActivityOptions()
+			       	};
 		}
 
-		private IEnumerable<ISplitButtonOption> PreferenceOptions()
+		private IEnumerable<IOption> ActivityOptions()
 		{
-			var shiftCategories = (from s in _preferenceOptionsProvider.RetrieveShiftCategoryOptions().MakeSureNotNull()
-			                       select new SplitButtonOption
-			                              	{
-			                              		Value = s.Id.ToString(),
-			                              		Text = s.Description.Name,
-			                              		Style = new StyleClassViewModel
-			                              		        	{
-			                              		        		Name = s.DisplayColor.ToStyleClass(),
-			                              		        		ColorHex = s.DisplayColor.ToHtml(),
-			                              		        	}
-			                              	})
-				.ToArray();
-			var dayOffs = (from s in _preferenceOptionsProvider.RetrieveDayOffOptions().MakeSureNotNull()
-			               select new SplitButtonOption
-			                      	{
-			                      		Value = s.Id.ToString(),
-			                      		Text = s.Description.Name,
-			                      		Style = new StyleClassViewModel
-			                      		        	{
-			                      		        		Name = s.DisplayColor.ToStyleClass(),
-			                      		        		ColorHex = s.DisplayColor.ToHtml(),
-			                      		        	}
-			                      	})
-				.ToArray();
-			var absences = (from s in _preferenceOptionsProvider.RetrieveAbsenceOptions().MakeSureNotNull()
-			                select new SplitButtonOption
-			                       	{
-			                       		Value = s.Id.ToString(),
-			                       		Text = s.Description.Name,
-			                       		Style = new StyleClassViewModel
-			                       		        	{
-			                       		        		Name = s.DisplayColor.ToStyleClass(),
-			                       		        		ColorHex = s.DisplayColor.ToHtml(),
-			                       		        	}
-			                       	})
+			return from a in _preferenceOptionsProvider.RetrieveActivityOptions().MakeSureNotNull()
+			       select new Option
+			              	{
+			              		Value = a.Id.ToString(),
+			              		Text = a.Description.Name,
+			              		Color = a.DisplayColor.ToHtml()
+			              	};
+		}
+
+		private IEnumerable<IPreferenceOption> PreferenceOptions()
+		{
+			var shiftCategories =
+				_preferenceOptionsProvider
+					.RetrieveShiftCategoryOptions()
+					.MakeSureNotNull()
+					.Select(s => new PreferenceOption
+					             	{
+					             		Value = s.Id.ToString(),
+					             		Text = s.Description.Name,
+					             		Color = s.DisplayColor.ToHtml(),
+					             		Extended = true
+					             	})
+					.ToArray();
+
+			var dayOffs = _preferenceOptionsProvider
+				.RetrieveDayOffOptions()
+				.MakeSureNotNull()
+				.Select(s => new PreferenceOption
+				             	{
+				             		Value = s.Id.ToString(),
+				             		Text = s.Description.Name,
+				             		Color = s.DisplayColor.ToHtml(),
+				             		Extended = false
+				             	})
 				.ToArray();
 
-			var options = new List<ISplitButtonOption>();
+			var absences = _preferenceOptionsProvider
+				.RetrieveAbsenceOptions()
+				.MakeSureNotNull()
+				.Select(s => new PreferenceOption
+				             	{
+				             		Value = s.Id.ToString(),
+				             		Text = s.Description.Name,
+				             		Color = s.DisplayColor.ToHtml(),
+				             		Extended = false
+				             	})
+				.ToArray();
+
+			var options = new List<IPreferenceOption>();
 			options.AddRange(shiftCategories);
 			if (options.Count > 0 && dayOffs.Any())
-				options.Add(new SplitButtonSplitter());
+				options.Add(new PreferenceOptionSplit());
 			options.AddRange(dayOffs);
 			if (options.Count > 0 && absences.Any())
-				options.Add(new SplitButtonSplitter());
+				options.Add(new PreferenceOptionSplit());
 			options.AddRange(absences);
 
 			return options;

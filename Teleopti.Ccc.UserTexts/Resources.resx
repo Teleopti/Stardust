@@ -8186,7 +8186,7 @@ Period</value>
     <comment>Header in people</comment>
   </data>
   <data name="ShiftCategoryLimitations" xml:space="preserve">
-    <value>Shift category limitations</value>
+    <value>Shift Category Limitations</value>
     <comment>Header in People</comment>
   </data>
   <data name="ResetLayout" xml:space="preserve">
@@ -10997,7 +10997,7 @@ These options are activated:
     <comment>Caption 2 in SMS settings page</comment>
   </data>
   <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
-    <value>Your working hours have changed</value>
+    <value>Your working hours have changed :</value>
     <comment>text in sms message (later - Your working hours have changed these days:)</comment>
   </data>
   <data name="GraphLOC" xml:space="preserve">
@@ -11017,7 +11017,7 @@ These options are activated:
     <comment>Type used in anywhere report</comment>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Service Level and Employee Ready</value>
+    <value>Service Level  and Agents Ready</value>
     <comment>Service Level and Agents Ready</comment>
   </data>
   <data name="FromContract" xml:space="preserve">
@@ -11031,9 +11031,21 @@ These options are activated:
   <data name="FullDayAbsence" xml:space="preserve">
     <value>Full Day Absence</value>
   </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>You don't have permission to access the web portal.</value>
+    <comment>no permission for mytimeweb or anywhere report</comment>
+  </data>
+  <data name="NotWorking" xml:space="preserve">
+    <value>Not Working.</value>
+    <comment>Not Working.</comment>
+  </data>
   <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
     <value>Month 7-8</value>
     <comment>To specify schedule period type Chinese Month (7-8 days off)</comment>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Mobile Reports</value>
+    <comment>Mobile Reports title used in anywhere report</comment>
   </data>
   <data name="SchedulePeriodTypeDay" xml:space="preserve">
     <value>Day</value>
@@ -11046,5 +11058,39 @@ These options are activated:
   <data name="SchedulePeriodTypeWeek" xml:space="preserve">
     <value>Week</value>
     <comment>To specify schedule period type Week</comment>
+  </data>
+  <data name="PleaseChooseAReportType" xml:space="preserve">
+    <value>Please choose a report type.</value>
+    <comment>Used in mobile report, prompt user to select a report type.</comment>
+  </data>
+  <data name="SameDaysOff" xml:space="preserve">
+    <value>Same days off</value>
+    <comment>Use same days off when optimizing teams</comment>
+  </data>
+  <data name="PleaseChooseSkillSet" xml:space="preserve">
+    <value>Please choose skill set.</value>
+    <comment>Used in mobile report, prompt user to select skill set.</comment>
+  </data>
+  <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
+    <value>Schedule Only Preference Must Have</value>
+    <comment>Schedule only must have preferences</comment>
+  </data>
+  <data name="AllowOverwrite" xml:space="preserve">
+    <value>Allow Overwrite</value>
+    <comment>Column Allow overwrite</comment>
+  </data>
+  <data name="ShiftCategories" xml:space="preserve">
+    <value>Shift categories</value>
+    <comment>Shift categories</comment>
+  </data>
+  <data name="AfterCheckingAgainstActivities" xml:space="preserve">
+    <value>After checking against activities</value>
+  </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>Add extended preference</value>
+  </data>
+  <data name="ExtendedPreferencesWeb" xml:space="preserve">
+    <value>Extended Preferences</value>
+    <comment>Application function Extended preferences for the web</comment>
   </data>
 </root>

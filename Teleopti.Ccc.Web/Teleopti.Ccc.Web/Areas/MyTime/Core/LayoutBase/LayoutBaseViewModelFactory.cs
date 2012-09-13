@@ -25,11 +25,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 			var cultureSpecificViewModel = _cultureSpecificViewModelFactory.CreateCutureSpecificViewModel();
 			var datePickerGlobalizationViewModel =
 				_datePickerGlobalizationViewModelFactory.CreateDatePickerGlobalizationViewModel();
-			double milliseconds = 0;
+			DateTime? fixedDate=null;
 
 			if (_now.IsExplicitlySet())
 			{
-				milliseconds = _now.UtcDateTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+				fixedDate = _now.LocalDateTime();
 			}
 			return new LayoutBaseViewModel
 			       	{
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 			       		DatePickerGlobalization = datePickerGlobalizationViewModel,
 			       		Footer = string.Empty,
 			       		Title = "MyTime",
-							ExplicitlySetMilliSecondsFromYear1970 = milliseconds
+							FixedDate = fixedDate
 			       	};
 		}
 	}

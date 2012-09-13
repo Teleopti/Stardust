@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 else
                 {
                     // HACK: Do something about this code?
-                    if (dataItems.Count > 0)
+                    if (dataItems.Count > 0 && dataItems.Count > e.RowIndex - 1)
                     {
                         T dataItem = dataItems[e.RowIndex - 1];
                         e.Style.CellType = "CheckBox";

@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			}
 			catch (PermissionException)
 			{
-				var errorViewModel = new ErrorViewModel {Message = "You don't have permission to access the web portal."};
+				var errorViewModel = new ErrorViewModel { Message = Resources.InsufficientPermissionForWeb };
 				if (IsJsonRequest())
 				{
 					return PrepareAndReturnJsonError(new JsonResult {Data = errorViewModel});

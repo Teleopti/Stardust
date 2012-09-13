@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces.Domain
 	/// Represent a time of day
 	/// </summary>
 	/// 
-	//todo - jag fixar strax
+	//todo - jag fixar strax - HAHA ;)
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes")]
 	public struct TimeOfDay
 	{

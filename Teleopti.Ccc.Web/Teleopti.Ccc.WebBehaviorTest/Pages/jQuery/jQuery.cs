@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
+﻿using WatiN.Core;
+
+namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 {
 	public static class JQuery
 	{
@@ -10,6 +12,11 @@
 		public static IJQueryExpression SelectById(string Id)
 		{
 			return new JQueryExpression().SelectById(Id);
+		}
+
+		public static IJQueryExpression SelectById(string Id, DomContainer domContainer)
+		{
+			return new JQueryExpression(domContainer).SelectById(Id);
 		}
 
 		public static IJQueryExpression SelectByElementAttribute(string element, string attribute, string value)

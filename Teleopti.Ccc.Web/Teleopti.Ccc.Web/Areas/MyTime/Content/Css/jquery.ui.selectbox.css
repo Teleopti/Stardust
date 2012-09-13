@@ -16,23 +16,32 @@
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+.ui-selectbox-button .ui-button-text
+{
+    padding-top: 0.1em;
+    line-height: 1.0;
+}
 .ui-selectbox-menu .ui-autocomplete a 
 {
 	padding-left: 30px;
-	font-size: 10px;
 }
 .ui-selectbox-menu-splitter 
 {
 	text-align: left;
 	padding: 5px;
 	color: #b0b0b0;
+	clear: left;
+}
+.ui-selectbox-menu .ui-selectbox-menu-splitter div
+{
+	 height:1px; 
+	 border-top:1px solid #ccc;
 }
 .ui-selectbox .ui-button-text
 {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	font-size: 10px;
 }
 .ui-selectbox .ui-button-text .notused
 {

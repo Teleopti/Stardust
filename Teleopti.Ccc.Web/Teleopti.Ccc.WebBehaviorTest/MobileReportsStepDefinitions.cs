@@ -1,6 +1,7 @@
-﻿using Teleopti.Analytics.ReportTexts;
+﻿using System;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -53,9 +54,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the signout button")]
 		public void GivenIClickSignoutButton()
 		{
-			// this scenario doesnt work.
-			// signout from mobile reports actually makes me end up on the incorrect signin page
-			ScenarioContext.Current.Pending();
 			_page.SignoutButton.EventualClick();
 		}
 
@@ -105,6 +103,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.Exists, Is.True);
 			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 		}
+
+		[Then(@"I should see ReportSettings with default value")]
+		public void ThenIShouldSeeReportSettingsWithDefaultValue()
+		{
+			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.EqualTo(new DateOnly(DateTime.Today.AddDays(-1)).ToShortDateString(UserFactory.User().Culture)));
+			EventualAssert.That(() => _page.ReportSkillSelectionList.Text, Is.StringContaining(Resources.All));
+			EventualAssert.That(() => _page.ReportTypeGraphInput.Checked, Is.True);
+			EventualAssert.That(() => _page.ReportTypeTableInput.Checked, Is.False);
+			EventualAssert.That(() => _page.ReportIntervalWeekInput.Checked, Is.False);
+		}
+
 
 		[Then(@"I should see the selected date")]
 		public void ThenIShouldSeeTheSelectedDate()
@@ -179,6 +188,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click next date")]
 		public void WhenIClickNextDate()
 		{
+			// before click next date, make sure current is today
+			var expexted = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
+			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
 			_page.ReportViewNextDateNavigation.EventualClick();
 		}
 
@@ -192,6 +204,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click previous date")]
 		public void WhenIClickPreviousDate()
 		{
+			// before click previous date, make sure current is today
+			var expexted = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
+			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
 			_page.ReportViewPrevDateNavigation.EventualClick();
 		}
 
@@ -264,6 +279,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.SelectSkillByName(UserFactory.User().UserData<ThreeSkills>().Skill2Name);
 		}
 
+		[When(@"I select the all skills item")]
+		public void WhenISelectTheAllSkillsItem()
+		{
+			// Default operation is select all.
+		}
+
+
 		[When(@"I view ReportSettings")]
 		public void WhenIViewReportSettings()
 		{
@@ -275,8 +297,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see sunday as the first day of week in tabledata")]
 		public void ThenIShouldSeeSundayAsTheFirstDayOfWeekInTabledata()
 		{
-			EventualAssert.That(() => _page.ReportTableFirstDataCell.Text.Trim(), Is.EqualTo(Resources.ResDayOfWeekSunday));
+			EventualAssert.That(() => _page.ReportTableFirstDataCell.Text.Trim(), Is.EqualTo(Resources.DayOfWeekSunday));
 		}
+
+		[Then(@"I should see the all skill item selected")]
+		public void ThenIShouldSeeTheAllSkillItemSelected()
+		{
+			EventualAssert.That(() => _page.ReportSkillSelectionOpener.Text.Trim(), Is.StringContaining(Resources.All));
+		}
+
+
 
 	}
 }
