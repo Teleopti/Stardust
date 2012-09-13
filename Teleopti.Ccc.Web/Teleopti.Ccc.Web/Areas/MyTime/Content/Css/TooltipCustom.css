@@ -12,3 +12,7 @@
 	line-height: 18px;
     overflow: visible;
 }
+
+.rtl .ui-tooltip-content {
+	text-align: right;
+}
