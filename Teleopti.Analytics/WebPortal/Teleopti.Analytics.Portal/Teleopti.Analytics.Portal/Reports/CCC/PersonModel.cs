@@ -5,11 +5,13 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 {
 	internal class PersonModel : IEquatable<PersonModel>
 	{
+		private readonly bool _perDate;
 		private readonly int _personId;
 		public DataRow DataRow { get; set; }
 
-		public PersonModel(DataRow dataRow)
+		public PersonModel(DataRow dataRow, bool perDate)
 		{
+			_perDate = perDate;
 			_personId = (int) dataRow["person_id"];
 			DataRow = dataRow;
 		}
@@ -17,6 +19,11 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		public string PersonName
 		{
 			get { return (string)DataRow["person_name"]; }
+		}
+
+		public string Date
+		{
+			get { return ((DateTime)DataRow["date"]).ToShortDateString(); }
 		}
 
 		public decimal AdherenceTotal
@@ -95,6 +102,8 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		public override int GetHashCode()
 		{
+			if (_perDate)
+				return Date.GetHashCode();
 			return _personId;
 		}
 	}
