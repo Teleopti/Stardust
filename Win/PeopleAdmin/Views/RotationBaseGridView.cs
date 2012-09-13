@@ -815,7 +815,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				_rotationNameColumn = new DropDownColumnForPeriodGrids<TAdapterParent, IAvailabilityRotation>("CurrentRotation",
 																				 Resources.Availability,
 																				 PeopleWorksheet.StateHolder.AllAvailabilities,
-																				 "Name")
+																				 "Name", false)
 				                      	{
 				                      		ColumnComparer =
 				                      			new PersonAvailabilityCurrentRotationComparer<TAdapterParent, TBaseType, TScheduleType>()
@@ -889,7 +889,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				  new DropDownColumnForPeriodGrids<TAdapterChild, IAvailabilityRotation>("CurrentRotation",
 																			Resources.Availability,
 																			PeopleWorksheet.StateHolder.AllAvailabilities,
-																			"Name");
+																			"Name", false);
 				_childRotationNameColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 				_childRotationNameColumn.CellDisplayChanged += ChildAvailabilityNameColumn_CellDisplayChanged;
 				_childRotationNameColumn.CellChanged += ChildColumn_CellChanged;

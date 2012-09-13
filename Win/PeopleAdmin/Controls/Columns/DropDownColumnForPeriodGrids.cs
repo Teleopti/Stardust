@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
         private readonly IEnumerable<TItems> _comboItems;
         private readonly string _displayMember;
         private readonly Type _baseClass;
+    	private readonly bool _allowNullValue = true;
 
         public DropDownColumnForPeriodGrids(string bindingProperty, string headerText,
                               IEnumerable<TItems> comboItems,
@@ -48,6 +49,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 			_valueMember = valueMember;
 		}
 
+		public DropDownColumnForPeriodGrids(string bindingProperty, string headerText,
+                              IEnumerable<TItems> comboItems,
+                              string displayMember, bool allwoNullValue) : this(bindingProperty, headerText,comboItems,displayMember)
+		{
+			_allowNullValue = allwoNullValue;
+		}
+
+
     	private bool tryGetItemByDisplayMember(string displayMember, out TItems comboItem)
         {
             foreach (TItems theComboItem in _comboItems)
@@ -62,7 +71,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 }
             }
 
-			if (string.IsNullOrEmpty(displayMember))
+			if (string.IsNullOrEmpty(displayMember) && _allowNullValue)
 			{
 				comboItem = default(TItems);
 				return true;
