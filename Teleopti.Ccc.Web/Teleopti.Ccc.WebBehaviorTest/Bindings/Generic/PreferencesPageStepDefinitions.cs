@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I input extended preference fields with")]
 		public void WhenIInputExtendedPreferenceFieldsWith(Table table)
 		{
-			var fields = table.CreateInstance<ExtendedPreferenceFields>();
+			var fields = table.CreateInstance<PreferenceFields>();
 			Pages.Pages.PreferencePage.ExtendedPreferencePanel.WaitUntilDisplayed();
 			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Preference);
 
@@ -166,9 +166,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[Then(@"I should see extended preference with")]
+		[Then(@"I should see preference with")]
 		public void ThenIShouldSeeExtendedPanelWith(Table table)
 		{
-			var fields = table.CreateInstance<ExtendedPreferenceFields>();
+			var fields = table.CreateInstance<PreferenceFields>();
+
+			var preferenceText = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference-text");
+			var mustHave = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference-must-have");
+
+			if (fields.Preference != null) EventualAssert.That(() => preferenceText.Text, Is.EqualTo(fields.Preference));
+			if (fields.MustHave)
+			{
+				ScenarioContext.Current.Pending();
+				EventualAssert.That(() => mustHave.Exists, Is.True);
+				EventualAssert.That(() => mustHave.DisplayVisible(), Is.True);
+			}
+
 			var extendedPreference = Pages.Pages.PreferencePage.ExtendedPreferenceForDate(fields.Date);
 
 			if (fields.Preference != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.Preference));
@@ -217,10 +230,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Button.OuterText, Is.EqualTo(selectedText));
 		}
 
-		private class ExtendedPreferenceFields
+		private class PreferenceFields
 		{
 			public DateTime Date { get; set; }
 			public string Preference { get; set; }
+			public bool MustHave { get; set; }
 			public string StartTimeMinimum { get; set; }
 			public string StartTimeMaximum { get; set; }
 			public string EndTimeMinimum { get; set; }

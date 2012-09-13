@@ -31,7 +31,7 @@ Scenario: See must have preference
 	| Must have      | true       |
 	| Shift category | Late       |
 	When I view preferences for date '2012-08-23'
-	Then I should see preference
+	Then I should see preference with
 	| Field     | Value      |
 	| Date      | 2012-08-23 |
 	| Must have | true       |
@@ -45,7 +45,7 @@ Scenario: Set must have on preference
 	When I view preferences for date '2012-08-23'
 	And I select day '2012-08-23'
 	And I click set must have button
-	Then I should see preference
+	Then I should see preference with
 	| Field     | Value      |
 	| Date      | 2012-08-23 |
 	| Must have | true       |
@@ -54,7 +54,7 @@ Scenario: Set must have on empty day should do nothing
 	When I view preferences for date '2012-08-23'
 	And I select day '2012-08-23'
 	And I click set must have button
-	Then I should see preference
+	Then I should see preference with
 	| Field     | Value      |
 	| Date      | 2012-08-23 |
 	| Must have | false      |
@@ -68,7 +68,7 @@ Scenario: Remove must have from preference
 	When I view preferences for date '2012-08-23'
 	And I select day '2012-08-23'
 	And I click remove must have button
-	Then I should see preference
+	Then I should see preference with
 	| Field     | Value      |
 	| Date      | 2012-08-23 |
 	| Must have | false      |
