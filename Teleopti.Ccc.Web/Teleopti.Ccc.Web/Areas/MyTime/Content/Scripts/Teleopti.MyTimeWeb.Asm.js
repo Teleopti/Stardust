@@ -50,9 +50,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			data: { clientLocalAsmZero: yesterday.toJSON() }, //todo: fix!
 			success: function (data) {
 				asmViewModel.timeLines(data.Hours);
-				var newLayers = _updateLayers(data.Layers, yesterday);
-				asmViewModel.layers(newLayers);
+				var layers = _updateLayers(data.Layers, yesterday);
+				asmViewModel.layers(layers);
 				_moveTimeLineToNow(yesterday);
+				_updateInfoCanvas(asmViewModel.activityInfo, layers);
 			},
 			error: function (data, textStatus, jqXHR) {
 				alert('fucked');
@@ -73,37 +74,36 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			newLayers.push({ 'leftPx': ((layer.StartJavascriptBaseDate) * pixelPerHours / 60 + timeLineMarkerWidth) + 'px',
 				'payload': layer.Payload,
 				'backgroundColor': layer.Color,
-				'paddingLeft': (layer.LengthInMinutes * pixelPerHours) / 60 + 'px'
+				'paddingLeft': (layer.LengthInMinutes * pixelPerHours) / 60 + 'px',
+				'startTimeText': layer.StartTimeText
 			});
 		});
-		console.log(newLayers);
-
 		return newLayers;
 	}
 
-	function _updateInfoCanvas(observableInfo) {
+	function _updateInfoCanvas(observableInfo, layers) {
 		var model = new Array();
 		var timeLineFixedPos = parseFloat($('.asm-time-marker').css('width'));
 		var timelinePosition = timeLineFixedPos - parseFloat($(".asm-sliding-schedules").css('left'));
-
-		$('.asm-layer')
-			.each(function () {
-				var startPos = parseFloat($(this).css('left'));
-				var endPos = startPos + parseFloat($(this).css('padding-left'));
-				if (endPos > timelinePosition) {
-					var active = false;
-					if (startPos <= timelinePosition) {
-						active = true;
-					}
-					var startText = $(this).data('asm-start-time');
-
-					if (startPos - timelinePosition >= 24 * pxPerHour) {
-						startText += '+1';
-					}
-
-					model.push({ 'payload': $(this).data('asm-activity'), 'time': startText, 'active': active });
+		$.each(layers, function (key, layer) {
+			console.log(layer);
+			var startPos = parseInt(layer.leftPx);
+			var endPos = startPos + parseInt(layer.paddingLeft);
+			if (endPos > timelinePosition) {
+				var active = false;
+				if (startPos <= timelinePosition) {
+					active = true;
 				}
-			});
+				var startText = layer.startTimeText;
+
+				if (startPos - timelinePosition >= 24 * pxPerHour) {
+					startText += '+1';
+				}
+
+				model.push({ 'payload': layer.payload, 'time': startText, 'active': active });
+			}
+		});
+		console.log(model);
 		observableInfo(model);
 	}
 
