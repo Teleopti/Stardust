@@ -166,9 +166,9 @@ this.ScenarioSetup(scenarioInfo);
 #line 35
  testRunner.Given("I am an agent without access to any requests");
 #line 36
- testRunner.When("I sign in");
+ testRunner.And("I am signed in");
 #line 37
- testRunner.And("I navigate to the requests page");
+ testRunner.When("I navigate to the requests page");
 #line 38
  testRunner.Then("I should see an error message");
 #line hidden

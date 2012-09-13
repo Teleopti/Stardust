@@ -137,13 +137,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	public static class EventualWaits
 	{
-		public static void WaitUntilAjaxContentComplete(this WatiN.Core.Browser browser)
-		{
-			var loading = browser.Div("loading");
-			if (!loading.Exists) return;
-			loading.WaitUntilHidden();
-		}
-
 		public static void WaitUntilHidden<T>(this T element) where T : Element
 		{
 			element.WaitUntil<T>(e => e.DisplayHidden());
