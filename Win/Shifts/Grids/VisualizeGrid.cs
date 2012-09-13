@@ -109,8 +109,11 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                     GridModel gridModel = e.Style.GetGridModel();
                     if (gridModel != null)
                     {
-                        var displayTime = Presenter.ContractTimes()[e.RowIndex - 1];
-                        e.Style.CellValue = new DateTime().Add(displayTime).ToString("hh:mm", CultureInfo.CurrentCulture);
+                        if (Presenter.ContractTimes() != null)
+                        {
+                            var displayTime = Presenter.ContractTimes()[e.RowIndex - 1];
+                            e.Style.CellValue = new DateTime().Add(displayTime).ToString("hh:mm", CultureInfo.CurrentCulture);
+                        }
                     }
                 }
             }
