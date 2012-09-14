@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 		public AsmViewModel Map(DateTime asmZero, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var layers = new List<IVisualLayer>();
-			foreach (var proj in scheduleDays.Select(scheduleDay => _projectionProvider.Projection(scheduleDay)))
+			foreach (var proj in scheduleDays.Select(scheduleDay => _projectionProvider.Projection(scheduleDay)).Where(proj => proj != null))
 			{
 				layers.AddRange(proj);
 			}
