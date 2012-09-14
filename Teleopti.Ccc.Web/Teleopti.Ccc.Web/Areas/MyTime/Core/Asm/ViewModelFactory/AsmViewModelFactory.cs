@@ -8,13 +8,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory
 {
 	public class AsmViewModelFactory : IAsmViewModelFactory
 	{
-		private readonly INow _now;
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IAsmViewModelMapper _mapper;
 
-		public AsmViewModelFactory(INow now, IScheduleProvider scheduleProvider, IAsmViewModelMapper mapper)
+		public AsmViewModelFactory(IScheduleProvider scheduleProvider, IAsmViewModelMapper mapper)
 		{
-			_now = now;
 			_scheduleProvider = scheduleProvider;
 			_mapper = mapper;
 		}

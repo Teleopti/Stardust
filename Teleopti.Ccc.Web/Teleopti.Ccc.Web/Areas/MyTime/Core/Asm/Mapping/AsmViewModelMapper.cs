@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			var timeZone = _userTimeZoneInfo.TimeZone();
 			return new AsmViewModel
 			          	{
-								//StartDateTime = TimeZoneHelper.ConvertFromUtc(earliestAsUtc, timeZone),
 			          		Layers = createAsmLayers(asmZero, timeZone, layers),
 								Hours = createHours(asmZero, timeZone)
 			          	};
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			                 select new AsmLayer
 			                        	{
 			                        		Payload = visualLayer.DisplayDescription().Name,
-													//								asmZero.AddDays(1).AddHours(15).Subtract(asmZero).TotalMinutes //todo -rename
 													StartJavascriptBaseDate = startDate.Subtract(asmZeroAsUtc).TotalMinutes,//todo -rename
 			                        		LengthInMinutes = length,
 			                        		Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
