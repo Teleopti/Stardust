@@ -38,16 +38,15 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _loadViewModel(asmViewModel) {
-		var yesterdayTemp = new Date(new Date().getTime());
+		var yesterdayTemp = new Date(new Date().getTeleoptiTime());
 		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
-
 		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
 
 		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: '/MyTime/Asm/Today', //todo: fix!
 			dataType: "json",
 			type: 'GET',
-			data: { clientLocalAsmZero: yesterday.toJSON() }, //todo: fix!
+			data: { asmZero: yesterday.toJSON() }, //todo: fix!
 			success: function (data) {
 				asmViewModel.timeLines(data.Hours);
 				var layers = _updateLayers(data.Layers, yesterday);
@@ -56,7 +55,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				_updateInfoCanvas(asmViewModel.activityInfo, layers);
 			},
 			error: function (data, textStatus, jqXHR) {
-				alert('fucked');
+				alert('nope');
 			}
 		});
 	}
@@ -78,7 +77,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				'startTimeText': layer.StartTimeText,
 				'title': layer.StartTimeText + '-' + layer.EndTimeText + ' ' + layer.Payload
 			});
-			console.log(layer);
 		});
 		return newLayers;
 	}
@@ -88,7 +86,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var timeLineFixedPos = parseFloat($('.asm-time-marker').css('width'));
 		var timelinePosition = timeLineFixedPos - parseFloat($(".asm-sliding-schedules").css('left'));
 		$.each(layers, function (key, layer) {
-			console.log(layer);
 			var startPos = parseInt(layer.leftPx);
 			var endPos = startPos + parseInt(layer.paddingLeft);
 			if (endPos > timelinePosition) {
@@ -105,14 +102,13 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				model.push({ 'payload': layer.payload, 'time': startText, 'active': active });
 			}
 		});
-		console.log(model);
 		observableInfo(model);
 	}
 
 	function _moveTimeLineToNow(serverMsSince1970) {
 		var slidingSchedules = $('.asm-sliding-schedules');
 		var clientMsSince1970 = new Date().getTeleoptiTime();
-		var msSinceStart = clientMsSince1970 - serverMsSince1970;
+		var msSinceStart = clientMsSince1970 - serverMsSince1970.getTime();
 		var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
 		var startPixel = -(pxPerHour * hoursSinceStart);
 		slidingSchedules.css('left', (startPixel) + 'px');

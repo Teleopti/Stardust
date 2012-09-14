@@ -30,21 +30,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult Today(DateTime clientLocalAsmZero)
+		public JsonResult Today(DateTime asmZero)
 		{
-			var model = _asmModelFactory.CreateViewModel();
-			model.Layers = new List<AsmLayer>
-			               	{
-			               		new AsmLayer
-			               			{
-			               				Color = "red",
-			               				EndTimeText = "17:00",
-			               				LengthInMinutes = 120,
-			               				Payload = "phone",
-			               				StartTimeText = "15:00",
-			               				StartJavascriptBaseDate =clientLocalAsmZero.AddDays(1).AddHours(15).Subtract(clientLocalAsmZero).TotalMinutes //todo -rename
-			               			}
-			               	};
+			var model = _asmModelFactory.CreateViewModel(asmZero);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 	}

@@ -1,9 +1,10 @@
-﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
+﻿using System;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory
 {
 	public interface IAsmViewModelFactory
 	{
-		AsmViewModel CreateViewModel();
+		AsmViewModel CreateViewModel(DateTime asm);
 	}
 }

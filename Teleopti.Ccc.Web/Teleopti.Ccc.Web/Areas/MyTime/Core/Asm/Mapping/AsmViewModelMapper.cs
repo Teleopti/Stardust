@@ -20,47 +20,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			_userTimeZoneInfo = userTimeZoneInfo;
 		}
 
-		public AsmViewModel Map(IEnumerable<IScheduleDay> scheduleDays)
+		public AsmViewModel Map(DateTime asmZero, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var layers = new List<IVisualLayer>();
-			var earliest = DateTime.MaxValue;
-			foreach (var scheduleDay in scheduleDays)
+			foreach (var proj in scheduleDays.Select(scheduleDay => _projectionProvider.Projection(scheduleDay)))
 			{
-				var proj = _projectionProvider.Projection(scheduleDay);
-				if (proj != null)
-				{
-					layers.AddRange(proj);					
-				}
-				if (scheduleDay.DateOnlyAsPeriod.DateOnly < earliest)
-				{
-					earliest = scheduleDay.DateOnlyAsPeriod.DateOnly;
-				}
+				layers.AddRange(proj);
 			}
 			var timeZone = _userTimeZoneInfo.TimeZone();
-			var earliestAsUtc = new DateTime(earliest.Ticks, DateTimeKind.Utc);
 			return new AsmViewModel
 			          	{
-								StartDateTime = TimeZoneHelper.ConvertFromUtc(earliestAsUtc, timeZone),
-			          		Layers = createAsmLayers(timeZone, layers),
-								Hours = createHours(earliestAsUtc, timeZone)
+								//StartDateTime = TimeZoneHelper.ConvertFromUtc(earliestAsUtc, timeZone),
+			          		Layers = createAsmLayers(asmZero, timeZone, layers),
+								Hours = createHours(asmZero, timeZone)
 			          	};
 		}
 
-		private static IEnumerable<string> createHours(DateTime start, ICccTimeZoneInfo timeZone)
+		private static IEnumerable<string> createHours(DateTime asmZero, ICccTimeZoneInfo timeZone)
 		{
 			const int numberOfHoursToShow = 24*3;
 			var hoursAsInts = new List<int>();
+			var asmZeroAsUtc = new DateTime(asmZero.Ticks, DateTimeKind.Utc);
 			
 			for (var hour = 0; hour < numberOfHoursToShow; hour++)
 			{
-				var localTime = timeZone.ConvertTimeFromUtc(start.AddHours(hour));
+				var localTime = timeZone.ConvertTimeFromUtc(asmZeroAsUtc.AddHours(hour));
 				hoursAsInts.Add(localTime.Hour);
 			}
 
 			return hoursAsInts.Take(numberOfHoursToShow).Select(x => x.ToString(CultureInfo.InvariantCulture));
 		}
 
-		private static IEnumerable<AsmLayer> createAsmLayers(ICccTimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
+		private static IEnumerable<AsmLayer> createAsmLayers(DateTime asmZeroAsUtc, ICccTimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
 		{
 			var asmLayers = (from visualLayer in layers
 			                 let startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone)
@@ -69,7 +60,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			                 select new AsmLayer
 			                        	{
 			                        		Payload = visualLayer.DisplayDescription().Name,
-			                        		StartJavascriptBaseDate = startDate.SubtractJavascriptBaseDate().TotalMilliseconds,
+													//								asmZero.AddDays(1).AddHours(15).Subtract(asmZero).TotalMinutes //todo -rename
+													StartJavascriptBaseDate = startDate.Subtract(asmZeroAsUtc).TotalMinutes,//todo -rename
 			                        		LengthInMinutes = length,
 			                        		Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
 			                        		StartTimeText = startDate.ToString("HH:mm"),

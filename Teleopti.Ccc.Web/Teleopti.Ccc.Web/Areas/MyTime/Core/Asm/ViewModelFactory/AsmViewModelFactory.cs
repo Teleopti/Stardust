@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
@@ -18,12 +19,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory
 			_mapper = mapper;
 		}
 
-		public AsmViewModel CreateViewModel()
+		public AsmViewModel CreateViewModel(DateTime asmZero)
 		{
-			var today = _now.DateOnly();
-			var loadPeriod = new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1));
+			var theDate = new DateOnly(asmZero);
+			var loadPeriod = new DateOnlyPeriod(theDate, theDate.AddDays(2));
 			var schedules = _scheduleProvider.GetScheduleForPeriod(loadPeriod);
-			return _mapper.Map(schedules);
+			return _mapper.Map(asmZero, schedules);
 		}
 	}
 }
