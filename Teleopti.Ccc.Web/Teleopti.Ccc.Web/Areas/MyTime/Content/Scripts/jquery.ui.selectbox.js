@@ -24,7 +24,7 @@
 				;
 
 			container.attr('title', select.attr('title'));
-			
+
 			var button = this._button = $('<button></button>')
 				.attr("id", id + '-button')
 				.attr("disabled", "disabled")
@@ -93,10 +93,30 @@
 						.append($('<div>').text(item.label))
 						.appendTo(ul);
 				}
+
+				if (item.color) {
+					var text = $('<span>')
+						.text(item.label);
+					var secondaryIcon = $("<span>")
+						.addClass('menu-icon-secondary')
+						.addClass('ui-corner-all')
+						.css("background-color", item.color);
+					var itemButton = $("<a></a>")
+						.append(text)
+						.append(secondaryIcon);
+					return $("<li></li>")
+						.data("item.autocomplete", item)
+						.append(itemButton)
+						.appendTo(ul);
+				}
 				return $("<li></li>")
 					.data("item.autocomplete", item)
 					.append($("<a></a>").text(item.label))
 					.appendTo(ul);
+
+
+
+
 			};
 
 			this._selectOption(select.children(":selected"));
@@ -117,9 +137,11 @@
 				.map(function () {
 					var text = $(this).text();
 					var value = this.value;
+					var color = $(this).data('color');
 					return {
 						label: text,
 						value: value,
+						color: color,
 						option: this
 					};
 				});

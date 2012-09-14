@@ -53,3 +53,10 @@
 	background-image: url(../Images/button_sprite.png);
 	background-position: -150px -122px;
 }
+.ui-selectbox .menu-icon-secondary
+{
+	position: absolute;
+	right: 4px;
+	width: 18px;
+	height: 18px;
+}
