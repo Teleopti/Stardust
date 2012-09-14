@@ -9,11 +9,12 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Asm = (function () {
-	var pxPerHour;
+	var refreshSeconds = 1;
+	var pixelPerHours = 50;
+	var timeLineMarkerWidth = 100;
 
-	function _start(pixelsPerHour) {
-		var refreshSeconds = 1;
-		pxPerHour = pixelsPerHour;
+	function _start() {
+		_setFixedElementAttributes();
 
 		var yesterdayTemp = new Date(new Date().getTeleoptiTime());
 		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
@@ -27,14 +28,18 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			activityInfo: observableInfo,
 			layers: observableLayers
 		};
-
 		ko.applyBindings(vm);
-
 		_loadViewModel(vm, yesterday);
 	}
 
-	function _loadViewModel(asmViewModel, yesterday) {
+	function _setFixedElementAttributes() {
+		$('body').css('overflow', 'hidden');
+		$('.asm-time-marker').css('width', timeLineMarkerWidth);
+		$('.asm-sliding-schedules').css('width', (3 * 24 * pixelPerHours));
+		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
+	}
 
+	function _loadViewModel(asmViewModel, yesterday) {
 		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: '/MyTime/Asm/Today', //todo: fix!
 			dataType: "json",
@@ -48,9 +53,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				$('.asm-outer-canvas').show();
 				setInterval(function () {
 					_refresh(yesterday, asmViewModel, layers);
-				}, 1000); // todo: ta bort hårdkodning
+				}, 1000 * refreshSeconds);
 			},
-			error: function (data, textStatus, jqXHR) {
+			error: function () {
 				alert('nope');
 			}
 		});
@@ -62,8 +67,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _updateLayers(layers) {
-		var pixelPerHours = 50; //todo
-		var timeLineMarkerWidth = 100; //todo
 		var newLayers = new Array();
 		$.each(layers, function (key, layer) {
 			newLayers.push({ 'leftPx': ((layer.StartJavascriptBaseDate) * pixelPerHours / 60 + timeLineMarkerWidth) + 'px',
@@ -91,7 +94,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				}
 				var startText = layer.startTimeText;
 
-				if (startPos - timelinePosition >= 24 * pxPerHour) {
+				if (startPos - timelinePosition >= 24 * pixelPerHours) {
 					startText += '+1';
 				}
 
@@ -101,22 +104,18 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		observableInfo(model);
 	}
 
-	function _moveTimeLineToNow(serverMsSince1970) {
+	function _moveTimeLineToNow(yesterday) {
 		var slidingSchedules = $('.asm-sliding-schedules');
 		var clientMsSince1970 = new Date().getTeleoptiTime();
-		var msSinceStart = clientMsSince1970 - serverMsSince1970.getTime();
+		var msSinceStart = clientMsSince1970 - yesterday.getTime();
 		var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
-		var startPixel = -(pxPerHour * hoursSinceStart);
+		var startPixel = -(pixelPerHours * hoursSinceStart);
 		slidingSchedules.css('left', (startPixel) + 'px');
 	}
 
-
-
 	return {
-		Init: function (serverMsSince1970, pixelsPerHour, hours) {
-			$('body').css('overflow', 'hidden');
-			_start(serverMsSince1970, pixelsPerHour, hours);
+		Init: function () {
+			_start();
 		}
 	};
-
 })(jQuery);
