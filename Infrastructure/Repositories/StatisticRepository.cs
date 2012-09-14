@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
                 return session(uow).CreateSQLQuery(
-                    "exec mart.raptor_adherence_report_load @date_from=:date_from, @time_zone_id=:time_zone_id, @person_code=:person_code, @agent_person_code=:agent_person_code, @language_id=:language_id, @adherence_id=:adherence_id")
+					"exec mart.raptor_adherence_report_load @date_from=:date_from, @time_zone_id=:time_zone_id, @person_code=:person_code, @agent_person_code=:agent_person_code, @language_id=:language_id, @adherence_id=:adherence_id")
 
                     .SetReadOnly(true)
                     .SetDateTime("date_from", dateTime)
