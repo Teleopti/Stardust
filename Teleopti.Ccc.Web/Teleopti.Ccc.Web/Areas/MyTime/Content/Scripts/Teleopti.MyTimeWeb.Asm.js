@@ -93,11 +93,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					active = true;
 				}
 				var startText = layer.startTimeText;
-
 				if (startPos - timelinePosition >= 24 * pixelPerHours) {
 					startText += '+1';
 				}
-
 				model.push({ 'payload': layer.payload, 'time': startText, 'active': active });
 			}
 		});
@@ -112,7 +110,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var startPixel = -(pixelPerHours * hoursSinceStart);
 		slidingSchedules.css('left', (startPixel) + 'px');
 	}
-
 	return {
 		Init: function () {
 			_start();
