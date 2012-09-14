@@ -28,6 +28,7 @@ SET /A localError=0
 
 ::Switch to drive letter
 %DRIVELETTER%
+::Set folder permissions for Log4Net
 ECHO ============== >> "%BatchLogFile%"
 date /t >> "%BatchLogFile%"
 time /t >> "%BatchLogFile%"
@@ -44,5 +45,17 @@ ping 127.0.0.1 -n 6 >NUL
 ECHO Permission on Logs folder OK: "%TargetFolder%"
 ping 127.0.0.1 -n 2 >NUL
 )
+
+::Create Event Log source for all our applications
+::Note: These names are hardcoded here _and_ in BuildArtifacts
+"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiAnalyticsWebPortal"
+"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiETLService"
+"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiETLTool"
+"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiRtaWebService"
+"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiSdkWebService"
+"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiServiceBus"
+"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiWebApps"
+"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiWebBroker"
+"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiPMService"
 
 GOTO :EOF
