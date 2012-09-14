@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.ViewModelFactory
 		{
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			var mapper = MockRepository.GenerateMock<IAsmViewModelMapper>();
-			var asmZero = new DateTime(2000, 1, 1, 19, 20, 21);
+			var asmZero = new DateTime(2000, 1, 1);
 			var scheduleDays = new List<IScheduleDay>();
 			var viewModel = new AsmViewModel();
-			var expectedPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2);
+			var expectedPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 3);
 			scheduleProvider.Expect(s => s.GetScheduleForPeriod(expectedPeriod)).Return(scheduleDays);
 			mapper.Expect(m => m.Map(asmZero, scheduleDays)).Return(viewModel);
 
