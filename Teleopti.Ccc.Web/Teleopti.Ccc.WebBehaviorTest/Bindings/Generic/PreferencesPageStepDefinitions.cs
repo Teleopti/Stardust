@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -76,6 +78,40 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(preference));
 		}
+
+		[Then(@"I should see preference")]
+		public void ThenIShouldSeePreference(Table table)
+		{
+
+			ScenarioContext.Current.Pending();
+
+			var fields = table.CreateInstance<PreferenceConfigurable>();
+
+			//I should see the correct date on the cell
+			//todo: test code here
+
+			//Ishould see on heart icon on the cell accorning the the must have settings
+			//todo: test code here
+
+			//DateTime date = fields.Date;
+			//var cell = Pages.Pages.PreferencePage.PreferencePeriod.Exists, Is.True)
+
+			// should have an heart icon 
+			//var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
+			//EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(preference));
+		}
+
+		[Then(@"I should see I have '(.*)' available must haves")]
+		public void ThenIShouldSeeIHave1AvailableMustHaves(string daysOff)
+		{
+
+			// I should have a text field under the must have buttor on the menu 
+			// with the number of available must haves
+			// todo: test that that text is the number of daysOff param 
+
+			ScenarioContext.Current.Pending();
+		}
+
 
 		[Then(@"I should not see the extended preference button")]
 		public void ThenIShouldNotSeeTheExtendedPreferenceButton()
@@ -229,6 +265,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => 
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Button.OuterText, Is.EqualTo(selectedText));
 		}
+
+		[When(@"I click set must have button")]
+		[When(@"I click remove must have button")]
+		public void WhenIClickOnMustHaveButton()
+		{
+			ScenarioContext.Current.Pending();
+
+			// I have a must have button on the menu bar
+			// todo: imitate that I click on the button
+		}
+
 
 		private class PreferenceFields
 		{

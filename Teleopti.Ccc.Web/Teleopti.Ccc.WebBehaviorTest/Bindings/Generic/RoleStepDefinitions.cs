@@ -30,5 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var userRole = new RoleForUser { Name = role.Name };
 			UserFactory.User().Setup(userRole);
 		}
+
+
 	}
 }
