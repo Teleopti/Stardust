@@ -25,6 +25,11 @@
 {
 	padding-left: 30px;
 }
+.rtl .ui-selectbox-menu .ui-autocomplete a 
+{
+	padding-right: 30px;
+	padding-left: 0px;
+}
 .ui-selectbox-menu-splitter 
 {
 	text-align: left;
