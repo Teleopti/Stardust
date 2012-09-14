@@ -4,6 +4,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     {
         IGroupPagePerDate ShiftCategoryFairnessGroupPagePerDate { get; set; }
         IGroupPagePerDate GroupPersonGroupPagePerDate { get; set; }
+        IGroupPagePerDate FairnessOptimizerGroupPagePerDate { get; set; }
     }
 
     public class GroupPagePerDateHolder : IGroupPagePerDateHolder
@@ -11,5 +12,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     	public IGroupPagePerDate ShiftCategoryFairnessGroupPagePerDate { get; set; }
 
     	public IGroupPagePerDate GroupPersonGroupPagePerDate { get; set; }
+		public IGroupPagePerDate FairnessOptimizerGroupPagePerDate { get; set; }
     }
 }

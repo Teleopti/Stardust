@@ -413,8 +413,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public DateTimePeriod VisiblePeriodMinusFourWeeksPeriod()
         {
-            TimeSpan offset = TimeSpan.FromDays(-28);
-            return ((ISchedule)this).Owner.Period.VisiblePeriod.ChangeStartTime(offset);
+        	return ((ISchedule) this).Owner.Period.VisiblePeriodMinusFourWeeksPeriod();
         }
 
         public IShiftCategoryFairness CachedShiftCategoryFairness()
