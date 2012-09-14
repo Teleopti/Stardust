@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			using (var controller = new AsmController(asmModelFactory, layoutFactory))
 			{
-				var model = controller.Today(asmZero).Data as JsonResult;
+				var model = controller.Today(asmZero);
 				((AsmViewModel)model.Data).Layers.First().Payload.Should().Be.EqualTo(payload);
 			}
 		}
