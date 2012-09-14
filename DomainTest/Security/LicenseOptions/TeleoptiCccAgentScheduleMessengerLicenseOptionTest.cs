@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 
             _target.EnableApplicationFunctions(inputList);
             IList<IApplicationFunction> resultList = _target.EnabledApplicationFunctions;
-            Assert.AreEqual(2, resultList.Count);
+            Assert.AreEqual(3, resultList.Count);
         }
     }
 }

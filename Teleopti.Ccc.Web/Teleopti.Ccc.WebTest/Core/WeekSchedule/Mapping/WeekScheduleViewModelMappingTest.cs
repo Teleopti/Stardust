@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                 	{Date = DateOnly.Today, Projection = MockRepository.GenerateMock<IVisualLayerCollection>()};
 			var periodViewModels = new PeriodViewModel[] {};
 
-			periodViewModelFactory.Stub(x => x.CreatePeriodViewModels(domainData.Projection, new TimePeriod())).Return(periodViewModels);
+			periodViewModelFactory.Stub(x => x.CreatePeriodViewModels(domainData.Projection, new TimePeriod(), domainData.Date, domainData.ScheduleDay.TimeZone)).Return(periodViewModels);
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
@@ -334,6 +334,30 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			result.TimeLine.First().PositionPercentage.Should().Be.EqualTo(0.0);
 			result.TimeLine.ElementAt(1).Time.Should().Be.EqualTo("9:00");
 			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5/(17.5 - 8.5));
+		}
+
+		[Test]
+		public void ShouldMapAsmPermission()
+		{
+			var domainData = new WeekScheduleDomainData()
+			{
+				AsmPermission = true
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+			result.AsmPermission.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapIsCurrentWeek()
+		{
+			var domainData = new WeekScheduleDomainData()
+			{
+				IsCurrentWeek = true
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+			result.IsCurrentWeek.Should().Be.True();
 		}
 	}
 }

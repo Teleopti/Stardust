@@ -422,12 +422,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new ScheduleIsNotPublished());
 		}
 
-		[Given(@"I have shifts scheduled for two weeks")]
-		public void GivenIHaveAScheduleForTwoWeeks()
-		{
-			UserFactory.User().Setup(new ShiftsForTwoWeeks());
-		}
-
 		[Given(@"I have custom shifts scheduled on wednesday for two weeks:")]
 		public void GivenIHaveCustomShiftsScheduledOnWednesdayForTwoWeeks(Table table)
 		{
@@ -465,13 +459,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new AbsenceToday());
 		}
 
-
-		[Given(@"My schedule is published until wednesday")]
-		public void GivenMyScheduleIsPublishedUntilWednesday()
-		{
-			UserFactory.User().Setup(new ScheduleIsPublishedUntilWednesday());
-		}
-
 		[Given(@"I have a night shift starting on monday")]
 		public void GivenIHaveANightShiftOnStartingMonday()
 		{
@@ -500,14 +487,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIHaveAAbsenceFromTo(string from, string to)
 		{
 			UserFactory.User().Setup(new AbsenceToday());
-		}
-
-
-
-		[Given(@"I have a meeting scheduled on thursday")]
-		public void GivenIHaveAMeetingScheduledOnThursday()
-		{
-			UserFactory.User().Setup(new MeetingOnThursday());
 		}
 
 		[Given(@"I have a public note on tuesday")]
@@ -684,8 +663,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
 		}
 
+        [Given(@"I have a scheduled shift according to this:")]
+        public void GivenIHaveAScheduledShiftAccordingToThis(Table table)
+        {
+            ScenarioContext.Current.Pending();
+        }
 	}
-
 }
 
 
