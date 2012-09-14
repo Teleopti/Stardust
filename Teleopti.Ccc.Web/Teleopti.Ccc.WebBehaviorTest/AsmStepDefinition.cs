@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see last activity starttime as '(.*)'")]
 		public void ThenIShouldSeeLastActivityStarttimeAs(string startTime)
 		{
+			_popup.Element(Find.ByClass("asm-outer-canvas", false)).WaitUntilDisplayed();
 			EventualAssert.That(() =>
 									  _popup.Table("asm-current-info-table")
 										  .Elements.Filter(Find.ByClass("asm-info-time-column"))

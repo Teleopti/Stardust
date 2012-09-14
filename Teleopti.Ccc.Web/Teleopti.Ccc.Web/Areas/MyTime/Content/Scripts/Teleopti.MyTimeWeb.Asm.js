@@ -44,10 +44,11 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				asmViewModel.timeLines(data.Hours);
 				var layers = _updateLayers(data.Layers, yesterday);
 				asmViewModel.layers(layers);
-				setInterval(function() {
+				_refresh(yesterday, asmViewModel, layers);
+				$('.asm-outer-canvas').show();
+				setInterval(function () {
 					_refresh(yesterday, asmViewModel, layers);
 				}, 1000); // todo: ta bort hårdkodning
-				$('.asm-outer-canvas').show();
 			},
 			error: function (data, textStatus, jqXHR) {
 				alert('nope');
