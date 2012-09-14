@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
                 var skill = _repositoryFactory.CreateSkillRepository(uow).LoadSkill(commandModel.Skill);
                 var skillDays = _repositoryFactory.CreateSkillDayRepository(uow).FindRange(commandModel.Period, skill,
                                                                                            commandModel.Scenario);
-                var command = new ForecastToFileCommand(skill, commandModel, skillDays);
-                command.Execute();
+                var exportForecastDataToFile = new ExportForecastDataToFile(skill, commandModel, skillDays);
+                exportForecastDataToFile.ExportForecastData();
             }
             return true;
         }

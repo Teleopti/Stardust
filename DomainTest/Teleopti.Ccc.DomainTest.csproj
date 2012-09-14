@@ -161,6 +161,7 @@
     <Compile Include="Common\PersonsInOrganizationProviderTest.cs" />
     <Compile Include="Common\ScenarioProviderTest.cs" />
     <Compile Include="Forecasting\DaylightSavingTimeHelperTest.cs" />
+    <Compile Include="Forecasting\Export\ExportForecastDataToFileSerializerTest.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModelTest.cs" />
     <Compile Include="Forecasting\Export\ImportForecastToSkillCommandTest.cs" />
     <Compile Include="Forecasting\Export\MultisiteForecastToSkillCommandTest.cs" />
