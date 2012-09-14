@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_groupPersonHolder = _mocks.DynamicMock<IShiftCategoryFairnessGroupPersonHolder>();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReturnComparisonOnPersonAndTheGroup()
 		{
 			var date = new DateOnly(2012, 9, 12);
