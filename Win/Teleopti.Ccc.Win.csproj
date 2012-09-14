@@ -580,7 +580,7 @@
     <Compile Include="Forecasting\Forms\ExportPages\FileExportFinished.Designer.cs">
       <DependentUpon>FileExportFinished.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\ExportPages\ForecastToFileCommand.cs" />
+    <Compile Include="Forecasting\Forms\ExportPages\ExportForecastDataToFile.cs" />
     <Compile Include="Forecasting\Forms\ExportPages\SelectFileDestination.cs">
       <SubType>UserControl</SubType>
     </Compile>
