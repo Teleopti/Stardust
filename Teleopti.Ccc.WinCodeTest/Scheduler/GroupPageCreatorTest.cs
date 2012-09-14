@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_target.CreateGroupPagePerDate(null as List<DateOnly>, _groupPageDataProvider, grouping);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowIfViewIsNull()
 		{
 			GroupPageCreator.GetSelectedPeriod(null);
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mocks.VerifyAll();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldFactoryShouldProvideAllTypes()
 		{
 			var factory = new GroupPageFactory();
