@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
@@ -25,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public ViewResult Index()
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
-			return View(new AsmViewModel{Hours=new List<string>(), Layers = new List<AsmLayer>{}});
+			return View();
 		}
 
 		[UnitOfWorkAction]

@@ -11,7 +11,7 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Asm = (function () {
 	var pxPerHour;
 
-	function _start(serverMsSince1970, pixelsPerHour, hours) {
+	function _start(pixelsPerHour) {
 		var refreshSeconds = 1;
 		pxPerHour = pixelsPerHour;
 
@@ -42,7 +42,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			data: { asmZero: yesterday.toJSON() }, //todo: fix!
 			success: function (data) {
 				asmViewModel.timeLines(data.Hours);
-				var layers = _updateLayers(data.Layers, yesterday);
+				var layers = _updateLayers(data.Layers);
 				asmViewModel.layers(layers);
 				_refresh(yesterday, asmViewModel, layers);
 				$('.asm-outer-canvas').show();
@@ -61,7 +61,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		_updateInfoCanvas(asmViewModel.activityInfo, layers);
 	}
 
-	function _updateLayers(layers, yesterday) {
+	function _updateLayers(layers) {
 		var pixelPerHours = 50; //todo
 		var timeLineMarkerWidth = 100; //todo
 		var newLayers = new Array();
