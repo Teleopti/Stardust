@@ -172,8 +172,6 @@ Scenario: Navigate to request page by clicking request symbol
 	And I click the request symbol
 	Then I should see request page
 
-#Ignore for now since it breaks on "Then". I will fix this one soon. //JN 2012-09-14
-@ignore
 Scenario: Navigate to current week
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 07:00'
