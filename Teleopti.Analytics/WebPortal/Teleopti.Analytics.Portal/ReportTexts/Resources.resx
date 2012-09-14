@@ -480,10 +480,6 @@
     <value>Service Level Calculation:</value>
     <comment>Service Level Calculation:</comment>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Schedule Adherence</value>
-    <comment>Agent - Schedule Adherence</comment>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>Sort by:</value>
     <comment>Sort by:</comment>
@@ -1188,5 +1184,13 @@ Schedule</value>
   <data name="SessionExpiredText" xml:space="preserve">
     <value>Your session has expired due to an extended period of inactivity. You will soon be redirected to the log on page again.</value>
     <comment>Info text on a web page where session expired</comment>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Adherence per Agent</value>
+    <comment>Adherence per Agent</comment>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Adherence per Day</value>
+    <comment>Adherence per Day</comment>
   </data>
 </root>

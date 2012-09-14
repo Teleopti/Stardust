@@ -8,10 +8,10 @@
 </head>
 <body class="ReportBody">
     <form id="form1" runat="server">
-    <table border="0">
+    <table style="border: 0px">
         <tr>
             <td>
-                <table border="0" cellspacing="0" width="100%">
+                <table width="100%">
                     <tr>
                         <td id="tdTodaysDateTime" runat="server" align="right" class="ReportDateTime">xx2008-07-02 18:09</td>
                     </tr>
@@ -23,7 +23,11 @@
                     </tr>
                     <tr>
                         <td class="ReportSelectionBottom">
-                            <table class="ReportSelection" border="0">
+                            <table class="ReportSelection">
+                            	<tr id="trDates" runat="server">
+                                    <td id="tdDatesLabel" runat="server" class="ReportSelectionLabel">xxDates:</td>
+                                    <td id="tdDatesText" runat="server" colspan="3">xxDates</td>
+                                </tr>
                                 <tr id="trGroupPage" runat="server">
                                     <td id="tdGroupPageLabel" runat="server" class="ReportSelectionLabel">xxGroup Page:</td>
                                     <td id="tdGroupPageText" runat="server" colspan="3">xxContract</td>
@@ -60,12 +64,12 @@
                                     <td id="tdTimeZoneLabel" runat="server" class="ReportSelectionLabel">xxTime Zone:</td>
                                     <td id="tdTimeZoneText" runat="server" colspan="3">xx(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</td>
                                 </tr>
-                                <tr>
+                                <tr id="DayButtons"  runat="server">
                                     <td id="tdDateLabel" runat="server" class="ReportSelectionLabel">xxDate:</td>
-                                    <td align="right"><asp:ImageButton ID="imageButtonPreviousDay" runat="server" 
+                                    <td><asp:ImageButton ID="imageButtonPreviousDay" runat="server" 
                                             ImageUrl="~/images/prev.gif" onclick="imageButtonPreviousDay_Click"/></td>
                                     <td id="tdDateText" runat="server" align="center">xx2008-07-02</td>
-                                    <td align="left"><asp:ImageButton ID="imageButtonNextDay" runat="server" 
+                                    <td><asp:ImageButton ID="imageButtonNextDay" runat="server" 
                                             ImageUrl="~/images/next.gif" onclick="imageButtonNextDay_Click"/></td>
                                 </tr>
                             </table>

@@ -8,16 +8,19 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 	internal interface ITooltipContainer
 	{
 		IntervalToolTip GetToolTip(int getPersonId, int getIntervalId);
+		IntervalToolTip GetToolTip(DateTime date, int getIntervalId);
 	}
 
 	internal class DataCellModel
 	{
 		private readonly ITooltipContainer _tooltipContainer;
+		private readonly bool _perDate;
 
-		public DataCellModel(DataRow row, ITooltipContainer tooltipContainer)
+		public DataCellModel(DataRow row, ITooltipContainer tooltipContainer, bool perDate)
 		{
 			DataRow = row;
 			_tooltipContainer = tooltipContainer;
+			_perDate = perDate;
 		}
 
 		public DataRow DataRow { get; private set; }
@@ -46,7 +49,22 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		public int PersonId { get { return (int)DataRow["person_id"]; } }
 
-		public IntervalToolTip CellToolTip { get { return _tooltipContainer.GetToolTip(PersonId, IntervalId); } }
+		public DateTime Date
+		{
+			get { return (DateTime)DataRow["date"]; }
+		}
+
+		public IntervalToolTip CellToolTip 
+		{ 
+			get
+			{
+				if (_perDate)
+				{
+					return _tooltipContainer.GetToolTip(Date, IntervalId);
+				}
+				return _tooltipContainer.GetToolTip(PersonId, IntervalId);
+			} 
+		}
 
 		public bool IsLoggedIn { get { return (bool)(DataRow["is_logged_in"]); } }
 

@@ -9,6 +9,7 @@ GO
 --				2012-01-09 Pass BU to AllOwnedAgents
 -- Description:	Loads agents to report selection control. Takes one or more teams as parameter.
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
+--2012-09-05 New check for not loading "All" on new Adherence report KJ
 -- =============================================
 CREATE PROC [mart].[report_control_agent_get_multiple_teams]
 @date_from		datetime,
@@ -41,30 +42,33 @@ CREATE TABLE #periods
 INSERT #teams
 	SELECT * FROM mart.SplitStringInt(@team_set)
 
---all
-INSERT #agents(person_code,name)
-	SELECT
-		person_code		= '00000000-0000-0000-0000-000000000002',
-		name			= 'All'	
+IF @report_id<>'6A3EB69B-690E-4605-B80E-46D5710B28AF' --AGENT SCHEDULE ADHERENCE PER DAY CAN NOT TAKE ALL AND NOT DEFINED /KJ
+BEGIN
+	--all
+	INSERT #agents(person_code,name)
+		SELECT
+			person_code		= '00000000-0000-0000-0000-000000000002',
+			name			= 'All'	
 
 
---not defined
--- 2010-08-02 There can be only one (removing distinct and where clause)
-INSERT #agents(person_code,name)
-	SELECT 
-		personcode		= '00000000-0000-0000-0000-000000000001',
-		name			= d.person_name
-	FROM
-		mart.dim_person d
-	WHERE person_id=-1 --Not Defined
+	--not defined
+	-- 2010-08-02 There can be only one (removing distinct and where clause)
+	INSERT #agents(person_code,name)
+		SELECT 
+			personcode		= '00000000-0000-0000-0000-000000000001',
+			name			= d.person_name
+		FROM
+			mart.dim_person d
+		WHERE person_id=-1 --Not Defined
 
---Fix translation for "All" + "Not Defined"
-UPDATE #agents
-SET name=l.term_language
-FROM 
-	mart.language_translation l
-WHERE #agents.name=l.term_english COLLATE database_default
-AND l.language_id = @language_id
+	--Fix translation for "All" + "Not Defined"
+	UPDATE #agents
+	SET name=l.term_language
+	FROM 
+		mart.language_translation l
+	WHERE #agents.name=l.term_english COLLATE database_default
+	AND l.language_id = @language_id
+END
 
 --Get all PersonPeriods that user has permission to see.
 INSERT #rights 
