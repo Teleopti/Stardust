@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -81,11 +82,13 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapPeriodsFromLegacyFactory()
 		{
-			var domainData = new WeekScheduleDayDomainData
-			                 	{Date = DateOnly.Today, Projection = MockRepository.GenerateMock<IVisualLayerCollection>()};
+			var domainData = new WeekScheduleDayDomainData();
 			var periodViewModels = new PeriodViewModel[] {};
 
-			periodViewModelFactory.Stub(x => x.CreatePeriodViewModels(domainData.Projection, new TimePeriod(), domainData.Date, domainData.ScheduleDay.TimeZone)).Return(periodViewModels);
+			periodViewModelFactory.Stub(
+				x =>
+				x.CreatePeriodViewModels(Arg<IVisualLayerCollection>.Is.Anything, Arg<TimePeriod>.Is.Anything,
+				                         Arg<DateTime>.Is.Anything, Arg<ICccTimeZoneInfo>.Is.Anything)).Return(periodViewModels);
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
