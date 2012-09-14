@@ -27,6 +27,25 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_target = new GroupPageCreator(_groupPageFactory);
 		}
 
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowIfDatesIsNull()
+		{
+			var grouping = new GroupPageLight { Key = "Main" };
+			_target.CreateGroupPagePerDate(null as List<DateOnly>, _groupPageDataProvider, grouping);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowIfViewIsNull()
+		{
+			GroupPageCreator.GetSelectedPeriod(null);
+		}
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowIfProviderIsNull()
+		{
+			var grouping = new GroupPageLight { Key = "Main" };
+			_target.CreateGroupPagePerDate(new List<DateOnly>(), null, grouping);
+		}
+
 		[Test]
 		public void ShouldReturnMainGrouping()
 		{
@@ -37,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_groupPageDataProvider.BusinessUnitCollection).Return(new List<IBusinessUnit>());
 			Expect.Call(creator.CreateGroupPage(null, null)).IgnoreArguments().Return(new GroupPage("page"));
 			_mocks.ReplayAll();
-			_target.CreateGroupPagePerDate(new List<DateOnly> {date}, _groupPageDataProvider, grouping);
+			_target.CreateGroupPagePerDate(new List<DateOnly> {date}, _groupPageDataProvider, grouping, true);
 			_mocks.VerifyAll();
 		}
 
@@ -160,6 +179,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mocks.ReplayAll();
 			_target.CreateGroupPagePerDate(view, _groupPageDataProvider, grouping);
 			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldFactoryShouldProvideAllTypes()
+		{
+			var factory = new GroupPageFactory();
+			Assert.That(factory.GetContractSchedulesGroupPageCreator(),Is.Not.Null);
+			Assert.That(factory.GetContractsGroupPageCreator(),Is.Not.Null);
+			Assert.That(factory.GetNotesGroupPageCreator(),Is.Not.Null);
+			Assert.That(factory.GetPartTimePercentagesGroupPageCreator(),Is.Not.Null);
+			Assert.That(factory.GetPersonsGroupPageCreator(),Is.Not.Null);
+			Assert.That(factory.GetRuleSetBagsGroupPageCreator(),Is.Not.Null);
 		}
 	}
 

@@ -241,6 +241,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var person1 = PersonFactory.CreatePerson("ittan");
 			var person2 = PersonFactory.CreatePerson("tvåan");
 			var person3 = PersonFactory.CreatePerson("trean");
+			person2.TerminalDate = new DateOnly(2015,1,1);
 			person3.TerminalDate = new DateOnly(2005,1,1);
 			var persons = new List<IPerson> {person1, person2, person3,};
 			_target.SetSelectedPeriod(new DateOnlyPeriod(2012,1,1,2012,12,31));

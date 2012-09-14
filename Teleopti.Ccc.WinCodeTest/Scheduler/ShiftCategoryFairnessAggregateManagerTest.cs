@@ -69,5 +69,44 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.That(result, Is.EqualTo(fairnessResult));
 			_mocks.VerifyAll();
 		}
+
+		[Test]
+		public void ShouldReturnComparisonOnGroupAndOtherGroup()
+		{
+			var date = new DateOnly(2012, 9, 12);
+			var person = PersonFactory.CreatePerson("per");
+			var person2 = PersonFactory.CreatePerson("per");
+			person.AddPersonPeriod(new PersonPeriod(date,
+				   new PersonContract(new Contract("contract"),
+					   new PartTimePercentage("percentage"),
+					   new ContractSchedule("contractschedule")),
+					   new Team()));
+			person2.AddPersonPeriod(new PersonPeriod(date,
+				   new PersonContract(new Contract("contract"),
+					   new PartTimePercentage("percentage"),
+					   new ContractSchedule("contractschedule")),
+					   new Team()));
+			var groupPage = new GroupPageLight();
+
+			var dateTime = new DateTime(2012, 9, 12, 0, 0, 0, 0, DateTimeKind.Utc);
+			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddDays(5));
+			var groupPerson = new GroupPerson(new List<IPerson> { person }, date, "perras");
+			var groupPerson2 = new GroupPerson(new List<IPerson> { person2 }, date, "peckas");
+			var fairnessResult = new ShiftCategoryFairnessCompareResult();
+			Expect.Call(_resultStateHolder.Schedules).Return(_dic);
+			Expect.Call(_dic.Period).Return(_schedDateTimePeriod);
+			Expect.Call(_schedDateTimePeriod.VisiblePeriodMinusFourWeeksPeriod()).Return(dateTimePeriod);
+			Expect.Call(_dic.Keys).Return(new List<IPerson> { person });
+			Expect.Call(_groupPersonHolder.GroupPersons(new List<DateOnly>(), groupPage, date, new Collection<IPerson> { person })).
+				IgnoreArguments().Return(new List<IGroupPerson> { groupPerson, groupPerson2 });
+			Expect.Call(_fairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, new List<IPerson>())).IgnoreArguments().
+				Repeat.Twice();
+			Expect.Call(_fairnessComparer.Compare(null, null, null)).IgnoreArguments().Return(fairnessResult);
+			_mocks.ReplayAll();
+			_target = new ShiftCategoryFairnessAggregateManager(_resultStateHolder, _fairnessComparer, _fairnessAggregator, _groupPersonHolder);
+			var result = _target.GetPerGroupAndOtherGroup(person,groupPage,date);
+			Assert.That(result, Is.EqualTo(fairnessResult));
+			_mocks.VerifyAll();
+		}
 	}
 }

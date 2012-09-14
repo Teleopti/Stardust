@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 				_period = _dic.Period.VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
 			}
-
+			var ret = new ShiftCategoryFairnessCompareResult();
 			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(_period.DayCollection(), groupPage, dateOnly, new Collection<IPerson>(new List<IPerson>(_dic.Keys)));
 
 			foreach (var groupPerson in groups)
@@ -50,11 +50,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					var orig = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, new List<IPerson> { person });
 					var compare = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, groupPerson.GroupMembers);
 
-					return _shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories);
+					ret =  _shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories);
 				}
 			}
 
-			return new ShiftCategoryFairnessCompareResult();
+			return ret;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
