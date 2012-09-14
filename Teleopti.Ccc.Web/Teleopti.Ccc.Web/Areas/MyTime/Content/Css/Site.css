@@ -775,6 +775,9 @@ select.time-input
 	height: 16px;
 	float: left;
 }
+.rtl .request-edit-section .ui-autocomplete-input {
+	float: right;
+}
 
 .ie9 #Schedule-addTextRequest-section .edit-module:nth-child(2) > div > div
 {
