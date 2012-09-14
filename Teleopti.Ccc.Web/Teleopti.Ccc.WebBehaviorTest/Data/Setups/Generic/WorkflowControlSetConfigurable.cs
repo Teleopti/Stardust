@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
@@ -14,10 +15,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string AvailableDayOff { get; set; }
 		public string AvailableAbsence{ get; set; }
 		public string AvailableActivity { get; set; }
+		public bool PreferencePeriodIsClosed { get; set; }
+		public bool StudentAvailabilityPeriodIsClosed { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
 			var workflowControlSet = new WorkflowControlSet(Name) {SchedulePublishedToDate = DateTime.Parse(SchedulePublishedToDate)};
+
+			if (PreferencePeriodIsClosed)
+				workflowControlSet.PreferencePeriod = new DateOnlyPeriod(1900, 1, 1, 1900, 1, 1);
+			if (StudentAvailabilityPeriodIsClosed)
+				workflowControlSet.StudentAvailabilityPeriod = new DateOnlyPeriod(1900, 1, 1, 1900, 1, 1);
 
 			if (!string.IsNullOrEmpty(AvailableShiftCategory))
 			{

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			BusinessUnit = GlobalDataContext.Data().Data<CommonBusinessUnit>().BusinessUnit.Description.Name;
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
-			AccessToMobileReports = true;
+			AccessToMobileReports = false;
 			AccessToExtendedPreferences = true;
 			AccessToMytimeWeb = true;
 			AccessToAsm = true;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			if (!AccessToMytimeWeb)
 				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTimeWeb select f;
 			if (!AccessToAsm)
-				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenAsm select f;
+				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger select f;
 
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 
