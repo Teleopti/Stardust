@@ -426,18 +426,30 @@ this.FeatureBackground();
         public virtual void ViewPublicNote()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View public note", ((string[])(null)));
-#line 120
+#line 119
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
+#line 120
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 121
- testRunner.Given("I am an agent");
+ testRunner.And("I have the workflow control set \'Published schedule\'");
+#line hidden
+            TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table14.AddRow(new string[] {
+                        "Date",
+                        "2012-08-28"});
+            table14.AddRow(new string[] {
+                        "Note text",
+                        "My note"});
 #line 122
- testRunner.And("I have a public note on tuesday");
-#line 123
- testRunner.When("I view my week schedule");
-#line 124
- testRunner.Then("I should see the public note on tuesday");
+ testRunner.And("I have a public note with", ((string)(null)), table14);
+#line 126
+ testRunner.When("I view my week schedule for date \'2012-08-28\'");
+#line 127
+ testRunner.Then("I should see the public note on date \'2012-08-28\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -447,21 +459,21 @@ this.FeatureBackground();
         public virtual void SelectWeekFromWeek_Picker()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Select week from week-picker", ((string[])(null)));
-#line 126
+#line 129
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 127
- testRunner.Given("I am an agent");
-#line 128
- testRunner.And("I view my week schedule");
-#line 129
- testRunner.When("I open the week-picker");
 #line 130
- testRunner.And("I click on any day of a week");
+ testRunner.Given("I am an agent");
 #line 131
- testRunner.Then("the week-picker should close");
+ testRunner.And("I view my week schedule");
 #line 132
+ testRunner.When("I open the week-picker");
+#line 133
+ testRunner.And("I click on any day of a week");
+#line 134
+ testRunner.Then("the week-picker should close");
+#line 135
  testRunner.And("I should see the selected week");
 #line hidden
             this.ScenarioCleanup();
@@ -472,19 +484,19 @@ this.FeatureBackground();
         public virtual void Week_PickerMondayFirstDayOfWeekForSwedishCulture()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Week-picker monday first day of week for swedish culture", ((string[])(null)));
-#line 134
+#line 137
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 135
- testRunner.Given("I am an agent");
-#line 136
- testRunner.And("I am swedish");
-#line 137
- testRunner.And("I view my week schedule");
 #line 138
- testRunner.When("I open the week-picker");
+ testRunner.Given("I am an agent");
 #line 139
+ testRunner.And("I am swedish");
+#line 140
+ testRunner.And("I view my week schedule");
+#line 141
+ testRunner.When("I open the week-picker");
+#line 142
  testRunner.Then("I should see monday as the first day of week");
 #line hidden
             this.ScenarioCleanup();
@@ -495,19 +507,19 @@ this.FeatureBackground();
         public virtual void Week_PickerSundayFirstDayOfWeekForUSCulture()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Week-picker sunday first day of week for US culture", ((string[])(null)));
-#line 141
+#line 144
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 142
- testRunner.Given("I am an agent");
-#line 143
- testRunner.And("I am american");
-#line 144
- testRunner.And("I view my week schedule");
 #line 145
- testRunner.When("I open the week-picker");
+ testRunner.Given("I am an agent");
 #line 146
+ testRunner.And("I am american");
+#line 147
+ testRunner.And("I view my week schedule");
+#line 148
+ testRunner.When("I open the week-picker");
+#line 149
  testRunner.Then("I should see sunday as the first day of week");
 #line hidden
             this.ScenarioCleanup();
@@ -518,19 +530,19 @@ this.FeatureBackground();
         public virtual void ShowTextRequestSymbol()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show text request symbol", ((string[])(null)));
-#line 148
+#line 151
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 149
- testRunner.Given("I am an agent");
-#line 150
- testRunner.And("I have an existing text request");
-#line 151
- testRunner.When("I view my week schedule");
 #line 152
- testRunner.Then("I should see a symbol at the top of the schedule");
+ testRunner.Given("I am an agent");
 #line 153
+ testRunner.And("I have an existing text request");
+#line 154
+ testRunner.When("I view my week schedule");
+#line 155
+ testRunner.Then("I should see a symbol at the top of the schedule");
+#line 156
  testRunner.And("I should see a number with the request count");
 #line hidden
             this.ScenarioCleanup();
@@ -541,17 +553,17 @@ this.FeatureBackground();
         public virtual void MultipleDayTextRequestsSymbol()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Multiple day text requests symbol", ((string[])(null)));
-#line 155
+#line 158
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 156
- testRunner.Given("I am an agent");
-#line 157
- testRunner.And("I have an existing text request spanning over 2 days");
-#line 158
- testRunner.When("I view my week schedule");
 #line 159
+ testRunner.Given("I am an agent");
+#line 160
+ testRunner.And("I have an existing text request spanning over 2 days");
+#line 161
+ testRunner.When("I view my week schedule");
+#line 162
  testRunner.Then("I should see a symbol at the top of the schedule for the first day");
 #line hidden
             this.ScenarioCleanup();
@@ -562,19 +574,19 @@ this.FeatureBackground();
         public virtual void ShowBothTextAndAbsenceRequests()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show both text and absence requests", ((string[])(null)));
-#line 161
+#line 164
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 162
- testRunner.Given("I am an agent");
-#line 163
- testRunner.And("I have an existing text request");
-#line 164
- testRunner.And("I have an existing absence request");
 #line 165
- testRunner.When("I view my week schedule");
+ testRunner.Given("I am an agent");
 #line 166
+ testRunner.And("I have an existing text request");
+#line 167
+ testRunner.And("I have an existing absence request");
+#line 168
+ testRunner.When("I view my week schedule");
+#line 169
  testRunner.Then("I should see 2 with the request count");
 #line hidden
             this.ScenarioCleanup();
@@ -585,19 +597,19 @@ this.FeatureBackground();
         public virtual void NavigateToRequestPageByClickingRequestSymbol()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to request page by clicking request symbol", ((string[])(null)));
-#line 168
+#line 171
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 169
- testRunner.Given("I am an agent");
-#line 170
- testRunner.And("I have an existing text request");
-#line 171
- testRunner.When("I view my week schedule");
 #line 172
- testRunner.And("I click the request symbol");
+ testRunner.Given("I am an agent");
 #line 173
+ testRunner.And("I have an existing text request");
+#line 174
+ testRunner.When("I view my week schedule");
+#line 175
+ testRunner.And("I click the request symbol");
+#line 176
  testRunner.Then("I should see request page");
 #line hidden
             this.ScenarioCleanup();
@@ -608,19 +620,19 @@ this.FeatureBackground();
         public virtual void NavigateToCurrentWeek()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to current week", ((string[])(null)));
-#line 175
+#line 178
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 176
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line 177
- testRunner.And("Current time is \'2030-01-01 07:00\'");
-#line 178
- testRunner.And("I view my week schedule for date \'2029-12-01\'");
 #line 179
- testRunner.When("I click the current week button");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 180
+ testRunner.And("Current time is \'2030-01-01 07:00\'");
+#line 181
+ testRunner.And("I view my week schedule for date \'2029-12-01\'");
+#line 182
+ testRunner.When("I click the current week button");
+#line 183
  testRunner.Then("I should see the start and end dates of current week for date \'2030-01-01\'");
 #line hidden
             this.ScenarioCleanup();
@@ -631,29 +643,29 @@ this.FeatureBackground();
         public virtual void ShowTimelineWithNoSchedule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show timeline with no schedule", ((string[])(null)));
-#line 182
+#line 185
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 183
+#line 186
  testRunner.Given("I am an agent");
-#line 184
+#line 187
  testRunner.When("I view my week schedule");
 #line hidden
-            TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table14.AddRow(new string[] {
+            table15.AddRow(new string[] {
                         "start timeline",
                         "0:00"});
-            table14.AddRow(new string[] {
+            table15.AddRow(new string[] {
                         "end timeline",
                         "23:59"});
-            table14.AddRow(new string[] {
+            table15.AddRow(new string[] {
                         "timeline count",
                         "25"});
-#line 185
- testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table14);
+#line 188
+ testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table15);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -663,65 +675,65 @@ this.FeatureBackground();
         public virtual void ShowTimelineWithSchedule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show timeline with schedule", ((string[])(null)));
-#line 191
+#line 194
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 192
+#line 195
  testRunner.Given("I am an agent");
-#line hidden
-            TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table15.AddRow(new string[] {
-                        "StartTime",
-                        "2012-08-27 10:00"});
-            table15.AddRow(new string[] {
-                        "EndTime",
-                        "2012-08-27 20:00"});
-            table15.AddRow(new string[] {
-                        "ShiftCategoryName",
-                        "ForTest"});
-            table15.AddRow(new string[] {
-                        "Lunch3HoursAfterStart",
-                        "true"});
-#line 193
- testRunner.And("there is a shift with", ((string)(null)), table15);
 #line hidden
             TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table16.AddRow(new string[] {
                         "StartTime",
-                        "2012-08-28 08:00"});
+                        "2012-08-27 10:00"});
             table16.AddRow(new string[] {
                         "EndTime",
-                        "2012-08-28 17:00"});
+                        "2012-08-27 20:00"});
             table16.AddRow(new string[] {
                         "ShiftCategoryName",
                         "ForTest"});
             table16.AddRow(new string[] {
                         "Lunch3HoursAfterStart",
                         "true"});
-#line 199
+#line 196
  testRunner.And("there is a shift with", ((string)(null)), table16);
-#line 205
- testRunner.When("I view my week schedule for date \'2012-08-27\'");
 #line hidden
             TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table17.AddRow(new string[] {
+                        "StartTime",
+                        "2012-08-28 08:00"});
+            table17.AddRow(new string[] {
+                        "EndTime",
+                        "2012-08-28 17:00"});
+            table17.AddRow(new string[] {
+                        "ShiftCategoryName",
+                        "ForTest"});
+            table17.AddRow(new string[] {
+                        "Lunch3HoursAfterStart",
+                        "true"});
+#line 202
+ testRunner.And("there is a shift with", ((string)(null)), table17);
+#line 208
+ testRunner.When("I view my week schedule for date \'2012-08-27\'");
+#line hidden
+            TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table18.AddRow(new string[] {
                         "start timeline",
                         "8:00"});
-            table17.AddRow(new string[] {
+            table18.AddRow(new string[] {
                         "end timeline",
                         "20:00"});
-            table17.AddRow(new string[] {
+            table18.AddRow(new string[] {
                         "timeline count",
                         "13"});
-#line 206
- testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table17);
+#line 209
+ testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table18);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -731,47 +743,47 @@ this.FeatureBackground();
         public virtual void ShowTimelineWithNightShift()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show timeline with night shift", ((string[])(null)));
-#line 212
+#line 215
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 213
+#line 216
  testRunner.Given("I am an agent");
-#line hidden
-            TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table18.AddRow(new string[] {
-                        "StartTime",
-                        "2012-08-27 20:00"});
-            table18.AddRow(new string[] {
-                        "EndTime",
-                        "2012-08-28 04:00"});
-            table18.AddRow(new string[] {
-                        "ShiftCategoryName",
-                        "ForTest"});
-            table18.AddRow(new string[] {
-                        "Lunch3HoursAfterStart",
-                        "true"});
-#line 214
- testRunner.And("there is a shift with", ((string)(null)), table18);
-#line 220
- testRunner.When("I view my week schedule for date \'2012-08-27\'");
 #line hidden
             TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table19.AddRow(new string[] {
+                        "StartTime",
+                        "2012-08-27 20:00"});
+            table19.AddRow(new string[] {
+                        "EndTime",
+                        "2012-08-28 04:00"});
+            table19.AddRow(new string[] {
+                        "ShiftCategoryName",
+                        "ForTest"});
+            table19.AddRow(new string[] {
+                        "Lunch3HoursAfterStart",
+                        "true"});
+#line 217
+ testRunner.And("there is a shift with", ((string)(null)), table19);
+#line 223
+ testRunner.When("I view my week schedule for date \'2012-08-27\'");
+#line hidden
+            TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table20.AddRow(new string[] {
                         "start timeline",
                         "0:00"});
-            table19.AddRow(new string[] {
+            table20.AddRow(new string[] {
                         "end timeline",
                         "23:59"});
-            table19.AddRow(new string[] {
+            table20.AddRow(new string[] {
                         "timeline count",
                         "25"});
-#line 221
- testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table19);
+#line 224
+ testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table20);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -781,47 +793,47 @@ this.FeatureBackground();
         public virtual void ShowTimelineWithNightShiftFromTheLastDayOfThePreviousWeek()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show timeline with night shift from the last day of the previous week", ((string[])(null)));
-#line 227
+#line 230
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 228
+#line 231
  testRunner.Given("I am an agent");
-#line hidden
-            TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table20.AddRow(new string[] {
-                        "StartTime",
-                        "2012-08-26 20:00"});
-            table20.AddRow(new string[] {
-                        "EndTime",
-                        "2012-08-27 04:00"});
-            table20.AddRow(new string[] {
-                        "ShiftCategoryName",
-                        "ForTest"});
-            table20.AddRow(new string[] {
-                        "Lunch3HoursAfterStart",
-                        "true"});
-#line 229
- testRunner.And("there is a shift with", ((string)(null)), table20);
-#line 235
- testRunner.When("I view my week schedule for date \'2012-08-27\'");
 #line hidden
             TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table21.AddRow(new string[] {
+                        "StartTime",
+                        "2012-08-26 20:00"});
+            table21.AddRow(new string[] {
+                        "EndTime",
+                        "2012-08-27 04:00"});
+            table21.AddRow(new string[] {
+                        "ShiftCategoryName",
+                        "ForTest"});
+            table21.AddRow(new string[] {
+                        "Lunch3HoursAfterStart",
+                        "true"});
+#line 232
+ testRunner.And("there is a shift with", ((string)(null)), table21);
+#line 238
+ testRunner.When("I view my week schedule for date \'2012-08-27\'");
+#line hidden
+            TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table22.AddRow(new string[] {
                         "start timeline",
                         "0:00"});
-            table21.AddRow(new string[] {
+            table22.AddRow(new string[] {
                         "end timeline",
                         "4:00"});
-            table21.AddRow(new string[] {
+            table22.AddRow(new string[] {
                         "timeline count",
                         "5"});
-#line 236
- testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table21);
+#line 239
+ testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table22);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -831,47 +843,47 @@ this.FeatureBackground();
         public virtual void ShowTimelineWithNightShiftStartingOnTheLastDayOfCurrentWeek()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show timeline with night shift starting on the last day of current week", ((string[])(null)));
-#line 242
+#line 245
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 243
+#line 246
  testRunner.Given("I am an agent");
-#line hidden
-            TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table22.AddRow(new string[] {
-                        "StartTime",
-                        "2012-08-26 20:00"});
-            table22.AddRow(new string[] {
-                        "EndTime",
-                        "2012-08-27 04:00"});
-            table22.AddRow(new string[] {
-                        "ShiftCategoryName",
-                        "ForTest"});
-            table22.AddRow(new string[] {
-                        "Lunch3HoursAfterStart",
-                        "true"});
-#line 244
- testRunner.And("there is a shift with", ((string)(null)), table22);
-#line 250
- testRunner.When("I view my week schedule for date \'2012-08-26\'");
 #line hidden
             TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table23.AddRow(new string[] {
+                        "StartTime",
+                        "2012-08-26 20:00"});
+            table23.AddRow(new string[] {
+                        "EndTime",
+                        "2012-08-27 04:00"});
+            table23.AddRow(new string[] {
+                        "ShiftCategoryName",
+                        "ForTest"});
+            table23.AddRow(new string[] {
+                        "Lunch3HoursAfterStart",
+                        "true"});
+#line 247
+ testRunner.And("there is a shift with", ((string)(null)), table23);
+#line 253
+ testRunner.When("I view my week schedule for date \'2012-08-26\'");
+#line hidden
+            TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table24.AddRow(new string[] {
                         "start timeline",
                         "20:00"});
-            table23.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "end timeline",
                         "23:59"});
-            table23.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "timeline count",
                         "5"});
-#line 251
- testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table23);
+#line 254
+ testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table24);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -881,53 +893,53 @@ this.FeatureBackground();
         public virtual void ShowActivityWithCorrectPositionHeightAndColor()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show activity with correct position, height and color", ((string[])(null)));
-#line 257
+#line 260
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 258
+#line 261
  testRunner.Given("I am an agent");
 #line hidden
-            TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table24.AddRow(new string[] {
+            table25.AddRow(new string[] {
                         "Phone",
                         "09:00-10:30"});
-            table24.AddRow(new string[] {
+            table25.AddRow(new string[] {
                         "Shortbreak",
                         "10:30-11:00"});
-            table24.AddRow(new string[] {
+            table25.AddRow(new string[] {
                         "Phone",
                         "11:00-12:00"});
-            table24.AddRow(new string[] {
+            table25.AddRow(new string[] {
                         "Lunch",
                         "12:00-14:00"});
-            table24.AddRow(new string[] {
+            table25.AddRow(new string[] {
                         "Phone",
                         "14:00-18:00"});
-#line 259
- testRunner.And("I have custom shifts scheduled on wednesday for two weeks:", ((string)(null)), table24);
-#line 266
+#line 262
+ testRunner.And("I have custom shifts scheduled on wednesday for two weeks:", ((string)(null)), table25);
+#line 269
  testRunner.When("I view my week schedule");
 #line hidden
-            TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
                         "Activity",
                         "Start Position",
                         "Height",
                         "Color"});
-            table25.AddRow(new string[] {
+            table26.AddRow(new string[] {
                         "Phone",
                         "67",
                         "99px",
                         "Green"});
-            table25.AddRow(new string[] {
+            table26.AddRow(new string[] {
                         "Shortbreak",
                         "167",
                         "32px",
                         "Red"});
-#line 267
- testRunner.Then("I should see wednesday\'s activities:", ((string)(null)), table25);
+#line 270
+ testRunner.Then("I should see wednesday\'s activities:", ((string)(null)), table26);
 #line hidden
             this.ScenarioCleanup();
         }

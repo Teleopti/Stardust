@@ -105,6 +105,7 @@
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\AbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ActivityConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\PublicNoteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\MeetingConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\DayOffTemplateConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
@@ -365,7 +366,6 @@
     <Compile Include="PreferenceStepDefinition.cs" />
     <Compile Include="Core\Extensions\ScenarioContextExtensions.cs" />
     <Compile Include="Bindings\SharedStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\PublicNoteOnWednesday.cs" />
     <Compile Include="Data\Setups\Specific\ShiftForDate.cs" />
     <Compile Include="Data\Setups\Specific\ShiftOnThursday.cs" />
     <Compile Include="Requests.feature.cs">

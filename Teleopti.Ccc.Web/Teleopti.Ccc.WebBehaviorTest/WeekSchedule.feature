@@ -116,12 +116,15 @@ Scenario: View meeting
 	And I hover over the meeting on date '2012-08-28'
 	Then I should see the meeting details on date '2012-08-28'
 	
-	###
 Scenario: View public note
-	Given I am an agent
-	And I have a public note on tuesday
-	When I view my week schedule
-	Then I should see the public note on tuesday
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a public note with
+	| Field     | Value      |
+	| Date      | 2012-08-28 |
+	| Note text | My note    |
+	When I view my week schedule for date '2012-08-28'
+	Then I should see the public note on date '2012-08-28'
 	
 Scenario: Select week from week-picker
 	Given I am an agent

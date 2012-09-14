@@ -81,11 +81,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			meetingLayer.Should().Not.Be.Null();
 		}
 
-		[Then(@"I should see the public note on tuesday")]
-		public void ThenIShouldSeeThePublicNoteOnTuesday()
+		[Then(@"I should see the public note on date '(.*)'")]
+		public void ThenIShouldSeeThePublicNoteOnDate(DateTime date)
 		{
-			EventualAssert.That(() =>_page.SecondDayComment.Exists, Is.True);
+			EventualAssert.That(() => _page.DayComment(date).Exists, Is.True);
 		}
+
 
 		[Then(@"I should see the selected week")]
 		public void ThenIShouldSeeTheSelectedWeek()

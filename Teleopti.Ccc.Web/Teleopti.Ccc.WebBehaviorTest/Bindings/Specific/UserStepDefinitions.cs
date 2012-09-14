@@ -489,12 +489,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new AbsenceToday());
 		}
 
-		[Given(@"I have a public note on tuesday")]
-		public void GivenIHaveAPublicNoteOnTuesday()
-		{
-			UserFactory.User().Setup(new PublicNoteOnWednesday());
-		}
-
 		[Given(@"I am swedish")]
 		public void GivenIAmSwedish()
 		{

@@ -41,7 +41,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public List DayElementForDate(string formattedDate) { return Document.List(Find.By("data-mytime-date", v => v == formattedDate)).EventualGet(); }
 		public List DayElementForDate(DateTime date) { return DayElementForDate(date.ToString("yyyy-MM-dd")); }
 
-		public Div SecondDayComment { get { return SecondDay.Div(Find.ByClass("icon comment-day", false)); } }
+		public Div DayComment(DateTime date) 
+		{
+			return DayElementForDate(date).Div(Find.ByClass("icon comment-day", false));
+		}
 
 		public void ClickThirdDayOfOtherWeekInWeekPicker(CultureInfo culture)
 		{
