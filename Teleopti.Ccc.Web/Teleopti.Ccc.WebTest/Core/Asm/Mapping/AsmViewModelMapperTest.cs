@@ -134,10 +134,9 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		{
 			//stockholm +1 
 			var hoursAsInts = new List<int>();
-			hoursAsInts.AddRange(Enumerable.Range(1, 23));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
-			hoursAsInts.Add(0);
+			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 			var expected = hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.InvariantCulture));
 
 			var date = new DateTime(2000, 1, 1);
@@ -150,13 +149,13 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		public void ShouldSetHoursWhenWinterBecomesSummer()
 		{
 			var hoursAsInts = new List<int>();
+			hoursAsInts.Add(0);
 			hoursAsInts.Add(1);
 			//02:00 doesn't exist!
 			hoursAsInts.AddRange(Enumerable.Range(3, 21));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 			hoursAsInts.Add(0);
-			hoursAsInts.Add(1);
 			var expected = hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.InvariantCulture));
 
 			var date = new DateTime(2020, 3, 29);

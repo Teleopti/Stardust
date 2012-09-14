@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 		{
 			const int numberOfHoursToShow = 24*3;
 			var hoursAsInts = new List<int>();
-			var asmZeroAsUtc = new DateTime(asmZero.Ticks, DateTimeKind.Utc);
+			var asmZeroAsUtc = TimeZoneHelper.ConvertToUtc(asmZero, timeZone);
 			
 			for (var hour = 0; hour < numberOfHoursToShow; hour++)
 			{
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			return hoursAsInts.Take(numberOfHoursToShow).Select(x => x.ToString(CultureInfo.InvariantCulture));
 		}
 
-		private static IEnumerable<AsmLayer> createAsmLayers(DateTime asmZeroAsUtc, ICccTimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
+		private static IEnumerable<AsmLayer> createAsmLayers(DateTime asmZero, ICccTimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
 		{
 			var asmLayers = (from visualLayer in layers
 			                 let startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone)
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			                 select new AsmLayer
 			                        	{
 			                        		Payload = visualLayer.DisplayDescription().Name,
-													StartMinutesSinceAsmZero = startDate.Subtract(asmZeroAsUtc).TotalMinutes,
+													StartMinutesSinceAsmZero = startDate.Subtract(asmZero).TotalMinutes,
 			                        		LengthInMinutes = length,
 			                        		Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
 			                        		StartTimeText = startDate.ToString("HH:mm"),
