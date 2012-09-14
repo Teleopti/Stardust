@@ -7344,7 +7344,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (_scheduleView == null) return;
             _scheduleView.Presenter.AddOvertime(new List<IScheduleDay> {e.SchedulePart}, e.Period,
-                                                MultiplicatorDefinitionSet);
+                                                MultiplicatorDefinitionSet.Where(m=>m.MultiplicatorType == MultiplicatorType.Overtime).ToList());
         }
 
         private void wpfShiftEditor_AddAbsence(object sender, ShiftEditorEventArgs e)
