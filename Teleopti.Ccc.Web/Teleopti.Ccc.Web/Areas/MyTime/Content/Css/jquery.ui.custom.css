@@ -7,7 +7,9 @@
 	font-size: 12px; 
 	text-align: left;
 }
-
+.rtl .ui-autocomplete li a {
+	text-align: right;
+}
 /*jquery.ui.button.css*/
 
 .buttonset-nav .ui-button-text-only .ui-button-text { padding: .2em 0.6em; }
