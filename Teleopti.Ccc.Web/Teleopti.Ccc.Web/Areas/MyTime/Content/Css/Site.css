@@ -683,14 +683,6 @@ select.time-input
 {
 	width: 8em;
 }
-.rtl select.time-input
-{
-    width: 8em;
-}
-.rtl .time-input
-{
-    padding-right: 20px;
-}
 .edit-module-inner button.ui-button-icon-only {
 	height: 20px; 
 	width: 1.7em; 
@@ -782,6 +774,9 @@ select.time-input
 .request-edit-section .ui-autocomplete-input {
 	height: 16px;
 	float: left;
+}
+.rtl .request-edit-section .ui-autocomplete-input {
+	float: right;
 }
 
 .ie9 #Schedule-addTextRequest-section .edit-module:nth-child(2) > div > div

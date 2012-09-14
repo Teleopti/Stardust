@@ -39,8 +39,10 @@
 	<script type="text/javascript">
 	    $(function() {
 	        $("#splitbutton-sample").splitbutton();
-	        $("#selectbox-sample-list").selectbox();
-	        $("#combobox-sample-list").combobox();
+	        $("#selectbox-sample-list1").selectbox();
+	        $("#selectbox-sample-list2").selectbox();
+	        $("#combobox-sample-list1").combobox();
+	        $("#combobox-sample-list2").combobox();
 	        $("#the-input").labeledinput();
 	    });
 	</script>
@@ -65,8 +67,8 @@
     
 	<div class="floatleft">
 		<h1>Selectbox</h1>
-		<div id="selectbox-sample">
-			<select title="Sample" id="selectbox-sample-list" class="ui-selectbox-init">
+		<span id="selectbox-sample1">
+			<select title="Sample" id="selectbox-sample-list1" class="ui-selectbox-init">
 				<optgroup label="Option group"></optgroup>
 				<option value="option1" selected="selected">Option 1</option>
 				<option value="option2">Option 2</option>
@@ -75,7 +77,18 @@
 				<option value="-"></option>
 				<option value="option4">Option 4</option>
 			</select>
-		</div>
+		</span>
+		<span id="selectbox-sample2">
+			<select title="Sample" id="selectbox-sample-list2" class="ui-selectbox-init">
+				<optgroup label="Option group"></optgroup>
+				<option value="option1" selected="selected">Option 1</option>
+				<option value="option2">Option 2</option>
+				<option value="-">Separator with text</option>
+				<option value="option3">Option 3</option>
+				<option value="-"></option>
+				<option value="option4">Option 4</option>
+			</select>
+		</span>
 	</div>
 	<br />
     <div>
@@ -88,8 +101,8 @@
     <br />
 	<div class="floatleft">
 		<h1>Combobox</h1>
-		<div id="combobox-sample">
-			<select title="Sample" id="combobox-sample-list">
+		<span id="combobox-sample1">
+			<select title="Sample" id="combobox-sample-list1">
 				<optgroup label="Option group"></optgroup>
 				<option value="option1">Option 1</option>
 				<option value="option2">Option 2</option>
@@ -98,7 +111,18 @@
 				<option value="-"></option>
 				<option value="option4">Option 4</option>
 			</select>
-		</div>
+		</span>
+		<span id="combobox-sample2">
+			<select title="Sample" id="combobox-sample-list2">
+				<optgroup label="Option group"></optgroup>
+				<option value="option1">Option 1</option>
+				<option value="option2">Option 2</option>
+				<option value="-">Separator with text</option>
+				<option value="option3">Option 3</option>
+				<option value="-"></option>
+				<option value="option4">Option 4</option>
+			</select>
+		</span>
 	</div>
     
 </body>

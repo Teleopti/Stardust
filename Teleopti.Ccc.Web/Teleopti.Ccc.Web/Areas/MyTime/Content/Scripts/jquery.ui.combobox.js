@@ -7,7 +7,7 @@
 			var select = this.element.hide();
 			var selected = select.children(":selected");
 			var value = selected.val() ? selected.text() : "";
-
+			var ltr = this.element.css("direction") === "ltr";
 			var input = this.input = $('<input type="text">')
 				.insertAfter(select)
 				.attr("id", select.attr('id') + '-input')
@@ -67,7 +67,7 @@
 						}
 					}
 				})
-				.addClass("ui-widget ui-widget-content ui-corner-left")
+				.addClass(ltr ? "ui-widget ui-widget-content ui-corner-left" : "ui-widget ui-widget-content ui-corner-right")
 				.keydown(function (event) {
 					if (event.keyCode == 13) {
 						//Prevent refresh in IE
@@ -99,7 +99,7 @@
 					text: false
 				})
 				.removeClass("ui-corner-all")
-				.addClass("ui-corner-right ui-button-icon")
+				.addClass(ltr ? "ui-corner-right ui-button-icon" : "ui-corner-left ui-button-icon")
 				.click(function () {
 					// close if already visible
 					if (input.autocomplete("widget").is(":visible")) {
