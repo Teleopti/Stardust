@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -7,13 +8,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupMoveTimeOptimizationExecuter
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<MoveTimeDay, IScheduleDay>> daysToSave, IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider);
-
+        bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<DayReadyToMove, IScheduleDay>> daysToSave,
+            IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider);
         void Rollback(DateOnly dateOnly);
+        ISchedulingOptions SchedulingOptions { get; }
     }
 
-    public enum MoveTimeDay
+    public enum DayReadyToMove
     {
         FirstDay,
         SecondDay
@@ -30,12 +31,20 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IGroupSchedulingService _groupSchedulingService;
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+        private readonly IsSignificantPartFullDayAbsenceOrDayOffSpecification _isSignificantPartFullDayAbsenceOrDayOffSpecification;
+        private ISchedulingOptions _schedulingOptions;
 
-        public GroupMoveTimeOptimizationExecuter(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IDeleteSchedulePartService deleteService, 
-                                                 ISchedulingOptionsCreator schedulingOptionsCreator, IOptimizationPreferences optimizerPreferences, IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
-                                                 IGroupMatrixHelper groupMatrixHelper, IGroupSchedulingService groupSchedulingService, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, IResourceOptimizationHelper resourceOptimizationHelper)
+        public GroupMoveTimeOptimizationExecuter(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+            IDeleteSchedulePartService deleteService,
+            ISchedulingOptionsCreator schedulingOptionsCreator,
+            IOptimizationPreferences optimizerPreferences,
+            IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
+            IGroupMatrixHelper groupMatrixHelper,
+            IGroupSchedulingService groupSchedulingService,
+            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+            IResourceOptimizationHelper resourceOptimizationHelper)
         {
-           _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
+            _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _deleteService = deleteService;
             _schedulingOptionsCreator = schedulingOptionsCreator;
             _optimizerPreferences = optimizerPreferences;
@@ -44,44 +53,51 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupSchedulingService = groupSchedulingService;
             _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
             _resourceOptimizationHelper = resourceOptimizationHelper;
+            _isSignificantPartFullDayAbsenceOrDayOffSpecification = new IsSignificantPartFullDayAbsenceOrDayOffSpecification();
         }
 
-        public bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<MoveTimeDay, IScheduleDay>> daysToSave, IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
+        public bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<DayReadyToMove, IScheduleDay>> daysToSave,
+            IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
         {
             _schedulePartModifyAndRollbackService.ClearModificationCollection();
-
-            IList<IScheduleDay> cleanedList = new List<IScheduleDay>();
+            
             if (daysToDelete != null)
-                foreach (var scheduleDay in daysToDelete)
-                {
-                    SchedulePartView significant = scheduleDay.SignificantPart();
-                    if (significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff && significant != SchedulePartView.ContractDayOff)
-                        cleanedList.Add(scheduleDay);
-
-                }
-            _deleteService.Delete(cleanedList, _schedulePartModifyAndRollbackService);
-
-            var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
-
+            {
+                var cleanedList = (from scheduleDay in daysToDelete
+                                   let significant = scheduleDay.SignificantPart()
+                                   where
+                                       !_isSignificantPartFullDayAbsenceOrDayOffSpecification.IsSatisfiedBy(significant)
+                                   select scheduleDay).ToList();
+                _deleteService.Delete(cleanedList, _schedulePartModifyAndRollbackService);
+            }
             if (daysToSave != null)
             {
-                foreach(var pair in daysToSave  )
+                foreach(var pair in daysToSave)
                 {
-                    if(pair.Key == MoveTimeDay.FirstDay )
+                    switch (pair.Key)
                     {
-                        schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
-                        if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value , schedulingOptions))
-                            return false;
-                    }else if(pair.Key == MoveTimeDay.SecondDay  )
-                    {
-                        schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short;
-                        if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, schedulingOptions)) 
-                            return false;
+                        case DayReadyToMove.FirstDay:
+                            SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
+                            if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, SchedulingOptions))
+                                return false;
+                            break;
+                        case DayReadyToMove.SecondDay:
+                            SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short;
+                            if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, SchedulingOptions)) 
+                                return false;
+                            break;
                     }
                 }
             }
-
             return true;
+        }
+
+        public ISchedulingOptions SchedulingOptions
+        {
+            get {
+                return _schedulingOptions ??
+                       (_schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences));
+            }
         }
 
         private bool reSchedule(IList<IScheduleMatrixPro> allMatrixes,
@@ -92,8 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return true;
 
             var significant = scheduleDay.SignificantPart();
-            if (significant == SchedulePartView.FullDayAbsence || significant == SchedulePartView.DayOff ||
-                significant == SchedulePartView.ContractDayOff)
+            if (_isSignificantPartFullDayAbsenceOrDayOffSpecification.IsSatisfiedBy(significant))
                 return true;
 
             var shiftDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
@@ -101,23 +116,19 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                                            scheduleDay.AssignmentHighZOrder().MainShift,
                                                                            shiftDate);
 
-            var success = _groupMatrixHelper.ScheduleSinglePerson(shiftDate, scheduleDay.Person,
+            if (!_groupMatrixHelper.ScheduleSinglePerson(shiftDate, scheduleDay.Person,
                                                                   _groupSchedulingService,
                                                                   _schedulePartModifyAndRollbackService,
                                                                   schedulingOptions, _groupPersonBuilderForOptimization,
-                                                                  allMatrixes);
-            if (!success)
+                                                                  allMatrixes))
                 return false;
 
-            var yes = optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit();
-            if (yes)
+            if (optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit())
             {
                 Rollback(shiftDate);
                 return false;
             }
-
-            var result = optimizationOverLimitByRestrictionDecider.OverLimit();
-            if (result.Count > 0)
+            if (optimizationOverLimitByRestrictionDecider.OverLimit().Count > 0)
             {
                 Rollback(shiftDate);
                 return false;

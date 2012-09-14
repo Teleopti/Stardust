@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IResourceOptimizationHelper _resourceOptimizationHelper;
         private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
         private IList<IScheduleDay  > _daysToDelete;
-        private IList<KeyValuePair<MoveTimeDay, IScheduleDay>> _daysToSave;
+        private IList<KeyValuePair<DayReadyToMove, IScheduleDay>> _daysToSave;
         private IList<IScheduleMatrixPro  > _allMatrixes;
         private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
         private IScheduleDay  _scheduleDay1;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
 
             _daysToDelete = new List<IScheduleDay> { _scheduleDay1,_scheduleDay2 };
-            _daysToSave = new List<KeyValuePair<MoveTimeDay, IScheduleDay>> {new KeyValuePair<MoveTimeDay, IScheduleDay>(MoveTimeDay.FirstDay , _scheduleDay1),new KeyValuePair<MoveTimeDay, IScheduleDay>(MoveTimeDay.SecondDay , _scheduleDay2 )};
+            _daysToSave = new List<KeyValuePair<DayReadyToMove, IScheduleDay>> {new KeyValuePair<DayReadyToMove, IScheduleDay>(DayReadyToMove.FirstDay , _scheduleDay1),new KeyValuePair<DayReadyToMove, IScheduleDay>(DayReadyToMove.SecondDay , _scheduleDay2 )};
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _allMatrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
 
@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                             _groupSchedulingService, _groupPersonBuilderForOptimization,
                                                             _resourceOptimizationHelper);
         }
-
         
         [Test]
         public void ShouldReturnTrueIfSuccess()
@@ -140,6 +139,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
 
             Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ShouldGetSchedulingOptions()
+        {
+            using(_mock.Record())
+            {
+                Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(null)).IgnoreArguments().Return(
+                    _schedulingOptions);
+            }
+            using(_mock.Playback())
+            {
+                Assert.That(_target.SchedulingOptions, Is.EqualTo(_schedulingOptions));
+            }
         }
 
         private void ShouldReturnFalseIfNotSuccessExpectValues()

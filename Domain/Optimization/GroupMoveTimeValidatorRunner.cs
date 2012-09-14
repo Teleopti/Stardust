@@ -5,39 +5,37 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public class GroupMoveTimeValidatorRunner : IGroupOptimizationValidatorRunner
+    public class GroupMoveTimeValidatorRunner : IGroupMoveTimeValidatorRunner
     {
         private readonly IGroupOptimizerValidateProposedDatesInSameMatrix _groupOptimizerValidateProposedDatesInSameMatrix;
         private readonly IGroupOptimizerValidateProposedDatesInSameGroup _groupOptimizerValidateProposedDatesInSameGroup;
 
-        public GroupMoveTimeValidatorRunner(IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix, IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup)
+        public GroupMoveTimeValidatorRunner(IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix,
+            IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup)
         {
             _groupOptimizerValidateProposedDatesInSameMatrix = groupOptimizerValidateProposedDatesInSameMatrix;
             _groupOptimizerValidateProposedDatesInSameGroup = groupOptimizerValidateProposedDatesInSameGroup;
         }
 
-        private delegate ValidatorResult ValidateMoveTimeDelegate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
+        private delegate ValidatorResult ValidateMoveTimeDelegate(IPerson person, IList<DateOnly> dates, bool useSameDayOff);
 
-        public ValidatorResult Run(IPerson person, IList<DateOnly> daysMoveTimeFrom, IList<DateOnly> daysMoveTimeTo, bool moveSameDay)
+        public ValidatorResult Run(IPerson person, IList<DateOnly> daysToBeLengthen, IList<DateOnly> daysToBeShorten, bool useSameDayOff)
         {
             var runnableList = new Dictionary<ValidateMoveTimeDelegate, IAsyncResult>();
-
-            IList<DateOnly> allDays = new List<DateOnly>(daysMoveTimeFrom);
-            if (daysMoveTimeTo != null)
-                foreach (var dateOnly in daysMoveTimeTo)
-                {
-                    allDays.Add(dateOnly);
-                }
-
+            var allDays = new List<DateOnly>();
+            if (daysToBeLengthen != null)
+                allDays.AddRange(daysToBeLengthen);
+            if (daysToBeShorten != null)
+                allDays.AddRange(daysToBeShorten);
+            
             ValidateMoveTimeDelegate toRun = _groupOptimizerValidateProposedDatesInSameMatrix.Validate;
-            var result = toRun.BeginInvoke(person, allDays, moveSameDay, null, null);
+            var result = toRun.BeginInvoke(person, allDays, useSameDayOff, null, null);
             runnableList.Add(toRun, result);
 
             toRun = _groupOptimizerValidateProposedDatesInSameGroup.Validate;
-            result = toRun.BeginInvoke(person, allDays, moveSameDay, null, null);
+            result = toRun.BeginInvoke(person, allDays, useSameDayOff, null, null);
             runnableList.Add(toRun, result);
 
-            //Sync all threads
             IList<ValidatorResult> results = new List<ValidatorResult>();
             try
             {
@@ -52,8 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 throw;
             }
 
-            var myResult = new ValidatorResult();
-            myResult.Success = true;
+            var myResult = new ValidatorResult {Success = true};
             foreach (var validatorResult in results)
             {
                 if (!validatorResult.Success)
@@ -72,5 +69,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             return myResult;
         }
         
+    }
+
+    public interface IGroupMoveTimeValidatorRunner
+    {
+        ValidatorResult Run(IPerson person, IList<DateOnly> daysToBeLengthen, IList<DateOnly> daysToBeShorten, bool useSameDayOff);
     }
 }

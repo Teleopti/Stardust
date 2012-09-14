@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     public class GroupMoveTimeValidatorRunnerTest
     {
         private MockRepository _mock;
-        private IGroupOptimizationValidatorRunner _target;
+        private IGroupMoveTimeValidatorRunner _target;
         private IGroupOptimizerValidateProposedDatesInSameMatrix _groupOptimizerValidateProposedDatesInSameMatrix;
         private IGroupOptimizerValidateProposedDatesInSameGroup _groupOptimizerValidateProposedDatesInSameGroup;
         private IPerson _person;

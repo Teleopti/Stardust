@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
         private IScheduleMatrixPro _matrix2;
         private IScheduleDayPro _scheduleDayPro2;
-        private IGroupOptimizationValidatorRunner _groupMoveTimeValidatorRunner;
+        private IGroupMoveTimeValidatorRunner _groupMoveTimeValidatorRunner;
+        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -37,9 +38,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizers = new List<IGroupMoveTimeOptimizer> { _optimizer };
             _groupOptimizerFindMatrixesForGroup = _mock.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
             _groupMoveTimeOptimizerExecuter = _mock.DynamicMock<IGroupMoveTimeOptimizationExecuter>();
-            _groupMoveTimeValidatorRunner = _mock.Stub<IGroupOptimizationValidatorRunner>();
+            _groupMoveTimeValidatorRunner = _mock.Stub<IGroupMoveTimeValidatorRunner>();
             _target = new GroupMoveTimeOptimizerService(_optimizers, _groupOptimizerFindMatrixesForGroup,
                                                         _groupMoveTimeOptimizerExecuter, _groupMoveTimeValidatorRunner);
+            _schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
             _matrix = _mock.DynamicMock<IScheduleMatrixPro>();
             _matrix2 = _mock.DynamicMock<IScheduleMatrixPro>();
             _allMatrixes = new List<IScheduleMatrixPro> { _matrix, _matrix2 };
@@ -78,6 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo() )).Repeat.AtLeastOnce();
+                Expect.Call(_groupMoveTimeOptimizerExecuter.SchedulingOptions).Return(_schedulingOptions);
+                Expect.Call(_schedulingOptions.UseSameDayOffs).Return(true).Repeat.AtLeastOnce();
             }
 
             using (_mock.Playback())
@@ -118,6 +122,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo())).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.PeriodValue()).Return(2).Repeat.AtLeastOnce();
+                Expect.Call(_groupMoveTimeOptimizerExecuter.SchedulingOptions).Return(_schedulingOptions);
+                Expect.Call(_schedulingOptions.UseSameDayOffs).Return(true).Repeat.AtLeastOnce();
             }
             using (_mock.Playback())
             {

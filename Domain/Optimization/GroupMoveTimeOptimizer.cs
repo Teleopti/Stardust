@@ -38,26 +38,26 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IList<DateOnly> Execute()
         {
-            if (_lockableBitArray == null)
-            {
-                _lockableBitArray = _scheduleMatrixLockableBitArrayConverter.Convert(false, false);
-            }
-            return _moveTimeDecisionMaker.Execute(_lockableBitArray, Matrix, _dataExtractor);
+            return _moveTimeDecisionMaker.Execute(LockableBitArray, Matrix, _dataExtractor);
         }
 
         public void LockDate(DateOnly dateOnly)
         {
-            if (_lockableBitArray == null)
-            {
-                _lockableBitArray = _scheduleMatrixLockableBitArrayConverter.Convert(false, false);
-            }
-
             var index = 0;
             foreach (var fullWeeksPeriodDay in _scheduleMatrixLockableBitArrayConverter.SourceMatrix.FullWeeksPeriodDays)
             {
                 if (fullWeeksPeriodDay.Day == dateOnly)
-                    _lockableBitArray.Lock(index, true);
+                    LockableBitArray.Lock(index, true);
                 index++;
+            }
+        }
+
+        private ILockableBitArray LockableBitArray
+        {
+            get
+            {
+                return _lockableBitArray ??
+                       (_lockableBitArray = _scheduleMatrixLockableBitArrayConverter.Convert(false, false));
             }
         }
 
