@@ -22,13 +22,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IShiftCategoryFairnessCompareResult
 	{
 		IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
-		double StandarDeviation { get; set; }
+		double StandardDeviation { get; set; }
 	}
 
 	public class ShiftCategoryFairnessCompareResult : IShiftCategoryFairnessCompareResult
 	{
 		public IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
-		public double StandarDeviation { get; set; }
+		public double StandardDeviation { get; set; }
 	}
 
 	public interface IShiftCategoryFairnessComparer
@@ -58,9 +58,44 @@ namespace Teleopti.Ccc.Domain.Optimization
 						(double)compareTo.ShiftCategoryFairnessDictionary[shiftCategoryFairnessComparerResult.ShiftCategory] / totalCompare;
 				}
 			}
-			//TODO Calculate standard deviation
-			return new ShiftCategoryFairnessCompareResult { ShiftCategoryFairnessCompareValues = result }; 
+
+		    var mean = calculateMeanValue(result);
+		    var stdDev = calculateStandardDeviation(result, mean);
+
+		    var shiftCategoryFairnessCompareResult =
+		        new ShiftCategoryFairnessCompareResult
+		            {StandardDeviation = stdDev, ShiftCategoryFairnessCompareValues = result};
+                
+		    return shiftCategoryFairnessCompareResult;
 		}
 
+	    private static double calculateStandardDeviation(List<ShiftCategoryFairnessCompareValue> result, double mean)
+	    {
+	        var sumOfSquareOfDifference = 0.0;
+
+	        foreach (var shiftCategoryFairnessCompareValue in result)
+	        {
+	            var difference = (shiftCategoryFairnessCompareValue.ComparedTo - shiftCategoryFairnessCompareValue.Original);
+	            var differenceWithMean = (difference - mean);
+	            sumOfSquareOfDifference += (differenceWithMean)*(differenceWithMean);
+	        }
+
+	        var stdDev = System.Math.Sqrt(sumOfSquareOfDifference/result.Count);
+	        return stdDev;
+	    }
+
+	    private static double calculateMeanValue(List<ShiftCategoryFairnessCompareValue> result)
+	    {
+	        var sum = 0.0;
+	        
+            foreach (var shiftCategoryFairnessCompareValue in result)
+            {
+                sum = sum + (shiftCategoryFairnessCompareValue.ComparedTo - shiftCategoryFairnessCompareValue.Original);
+            }
+
+	        return sum/result.Count;
+	    }
+
+        
 	}
 }
