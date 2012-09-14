@@ -5,15 +5,12 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -119,7 +116,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        private void updateFairnessInfo(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "perPersonAndGroup"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "perGroupAndOthers"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void updateFairnessInfo(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder)
         {
 			if (_fairnessManager == null)
 				_fairnessManager = _container.Resolve<IShiftCategoryFairnessAggregateManager>();
@@ -144,10 +142,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             	var groupPage = comboBoxAgentGrouping.SelectedItem as IGroupPageLight;
             	var perPersonAndGroup = _fairnessManager.GetPerPersonAndGroup(person, groupPage, dateOnly);
 				var perGroupAndOthers = _fairnessManager.GetPerGroupAndOtherGroup(person, groupPage, dateOnly);
-                IShiftCategoryFairness shiftCategoryFairness =
+                var shiftCategoryFairness =
                     _stateHolder.Schedules[person].CachedShiftCategoryFairness();
                 createAndAddItem(listViewFairness, Resources.EqualOfEachShiftCategory, Resources.Number, 1);
-                List<IShiftCategory> categories =
+                var categories =
                     new List<IShiftCategory>(shiftCategoryFairness.ShiftCategoryFairnessDictionary.Keys);
                 categories.Sort(new ShiftCategorySorter());
                 foreach (var category in categories)
