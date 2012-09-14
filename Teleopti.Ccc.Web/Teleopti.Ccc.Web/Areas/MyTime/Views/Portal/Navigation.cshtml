@@ -69,7 +69,7 @@
 			
 	<section id="toolbar-right" class="col-main floatright">
 		<div class="toolbar-inner">
-			<dl class="dropdown floatleft">
+			<dl class="dropdown">
 				<dt><span class="icon employee icon-left" id="username">@User.Identity.Name</span></dt>
 				<dd>
 					<ul class="ui-widget-content ui-corner-all ui-menu">
@@ -78,15 +78,15 @@
 						{ 
 							<li class="ui-menu-item"><a href="#Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
 						}
+						@if (Model.ShowAsm)
+						{ 
+							<li class="ui-menu-item"><a id="asm-link" class="ui-corner-all cursorpointer" >@Resources.OpenASM</a></li>
+						}
 						<li>&nbsp;</li>
 						<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout", @class = "ui-corner-all" })</li>
 					</ul>
 				</dd>
-			</dl>
-			@if(Model.ShowAsm)
-			{
-				<span id="asm-button" title="@Resources.OpenASM" class="icon employee cursorpointer" />	
-			}		
+			</dl>		
 		</div>
 	</section>
 				

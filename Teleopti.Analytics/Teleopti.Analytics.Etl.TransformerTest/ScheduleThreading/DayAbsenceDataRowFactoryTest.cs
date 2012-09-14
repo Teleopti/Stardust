@@ -45,8 +45,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
                 _scheduleProjection.SchedulePartProjection.Period().Value;
             IVisualLayer absenceLayer = _scheduleProjection.SchedulePartProjection.First();
             var absence = (IAbsence)absenceLayer.Payload;
-            IPersonAbsence personAbsence =
-                ScheduleDataRowFactory.GetPersonAbsenceForLayer(_scheduleProjection.SchedulePart, absenceLayer);
+            IPersonAbsence personAbsence = DayAbsenceDataRowFactory.GetPersonAbsenceForLayer(_scheduleProjection.SchedulePart, absenceLayer);
             
             Assert.AreEqual(absencePeriod.StartDateTime.Date, _dayAbsenceDataRow["date"]);
             Assert.AreEqual(new IntervalBase(absencePeriod.StartDateTime, _intervalsPerDay).Id,
