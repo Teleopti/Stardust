@@ -143,10 +143,10 @@ namespace Teleopti.Ccc.Win.Common
                             break;
                         case "PositiveTimeSpanTotalSecondsCell":
                             if (list[i] >= 0)
-                                currentCell.CellModel.ApplyFormattedText(cellStyleInfo, TimeSpan.FromSeconds(CheckSecondsRange(list[i])).ToString(), -1);
+                                currentCell.CellModel.ApplyFormattedText(cellStyleInfo, CheckSecondsRange(list[i]).ToString(), -1);
                             break;
                         case "TimeSpanTotalSecondsCell":
-                            currentCell.CellModel.ApplyFormattedText(cellStyleInfo, TimeSpan.FromSeconds(CheckSecondsRange(list[i])).ToString(), -1);
+                            currentCell.CellModel.ApplyFormattedText(cellStyleInfo, CheckSecondsRange(list[i]).ToString(), -1);
                             break;
                         case "PercentWithNegativeCell":
                         case "PercentWithTwoDecimalsCell":
