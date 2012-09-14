@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -16,24 +17,19 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.ViewModelFactory
 		[Test]
 		public void ShouldCreateViewModelForGivenPeriod()
 		{
-			var today = new DateOnly(2001, 1, 1);
-			var expectedPeriod = new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1));
-			var scheduleDays = new List<IScheduleDay>();
-			var viewModel = new AsmViewModel();
-
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			var mapper = MockRepository.GenerateMock<IAsmViewModelMapper>();
-			var nowProvider = MockRepository.GenerateMock<INow>();
-
-			nowProvider.Expect(n => n.DateOnly()).Return(today);
+			var asmZero = new DateTime(2000, 1, 1, 19, 20, 21);
+			var scheduleDays = new List<IScheduleDay>();
+			var viewModel = new AsmViewModel();
+			var expectedPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2);
 			scheduleProvider.Expect(s => s.GetScheduleForPeriod(expectedPeriod)).Return(scheduleDays);
-			mapper.Expect(m => m.Map(scheduleDays)).Return(viewModel);
-			var target = new AsmViewModelFactory(nowProvider,scheduleProvider, mapper);
+			mapper.Expect(m => m.Map(asmZero, scheduleDays)).Return(viewModel);
 
-			var result = target.CreateViewModel();
+			var target = new AsmViewModelFactory(scheduleProvider, mapper);
+			var result = target.CreateViewModel(asmZero);
 
 			result.Should().Be.SameInstanceAs(viewModel);
-
 		}
 	}
 

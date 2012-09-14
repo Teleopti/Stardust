@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
@@ -49,28 +48,15 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			projectionProvider.Expect(p => p.Projection(scheduleDay3))
 				.Return(scheduleFactory.ProjectionStub(new[] { scheduleFactory.VisualLayerStub("3") }));
 
-			var result = target.Map(new[] { scheduleDay1, scheduleDay2, scheduleDay3 }).Layers;
+			var result = target.Map(new DateTime(2000,1,1), new[] { scheduleDay1, scheduleDay2, scheduleDay3 }).Layers;
 			result.Count().Should().Be.EqualTo(3);
 			result.Any(l => l.Payload.Equals("1")).Should().Be.True();
 		}
 
 		[Test]
-		public void ShouldUseEarliestScheduleDayDateAsModelDate()
-		{
-			var expected = new DateTime(1900, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-
-			var result = target.Map(new[]
-				               {
-				                  scheduleFactory.ScheduleDayStub(new DateTime(2000, 1, 1)),
-				                  scheduleFactory.ScheduleDayStub(expected),
-										scheduleFactory.ScheduleDayStub(new DateTime(2100, 1, 1))
-				               });
-			result.StartDateTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(expected, timeZone));
-		}
-
-		[Test]
 		public void ShouldSetStart()
 		{
+			var asmZero = new DateTime(1988, 1, 1);
 			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			var expected = TimeZoneHelper.ConvertFromUtc(layerPeriod.StartDateTime, userTimeZone.TimeZone());
 
@@ -82,9 +68,9 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       		scheduleFactory.VisualLayerStub(layerPeriod)
 				                                       	}));
 
-			var result = target.Map(new[] { scheduleDay });
+			var result = target.Map(asmZero, new[] { scheduleDay });
 
-			result.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(expected.SubtractJavascriptBaseDate().TotalMilliseconds);
+			result.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(expected.Subtract(asmZero).TotalMinutes);
 		}
 
 		[Test]
@@ -97,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       	{
 				                                       		scheduleFactory.VisualLayerStub(layerPeriod)
 				                                       	}));
-			var res = target.Map(new[] {scheduleDay});
+			var res = target.Map(new DateTime(2000,1,2), new[] {scheduleDay});
 			res.Layers.First().LengthInMinutes.Should().Be.EqualTo(layerPeriod.ElapsedTime().TotalMinutes);
 		}
 
@@ -110,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       	{
 				                                       		scheduleFactory.VisualLayerStub(color)
 				                                       	}));
-			var res = target.Map(new[] { scheduleDay });
+			var res = target.Map(DateTime.Now, new[] { scheduleDay });
 
 			res.Layers.First().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(color));
 		}
@@ -124,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       	{
 				                                       		scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(2)))
 				                                       	}));
-			var res = target.Map(new[] { scheduleDay });
+			var res = target.Map(DateTime.Now, new[] { scheduleDay });
 
 			res.Layers.First().StartTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(startDate, timeZone).ToString("HH:mm"));
 		}
@@ -138,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       	{
 				                                       		scheduleFactory.VisualLayerStub(new DateTimePeriod(endDate.AddHours(-5), endDate))
 				                                       	}));
-			var res = target.Map(new[] { scheduleDay });
+			var res = target.Map(DateTime.Now, new[] { scheduleDay });
 
 			res.Layers.First().EndTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(endDate, timeZone).ToString("HH:mm"));
 		}
@@ -156,7 +142,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 
 			var date = new DateTime(2000, 1, 1);
 			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
-			var res = target.Map(new[] {scheduleDay});
+			var res = target.Map(new DateTime(2000,1,1), new[] {scheduleDay});
 			res.Hours.Should().Have.SameSequenceAs(expected);
 		}
 
@@ -175,8 +161,8 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 
 			var date = new DateTime(2020, 3, 29);
 
-			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
-			var res = target.Map(new[] {scheduleDay});
+			var scheduleDay = scheduleFactory.ScheduleDayStub();
+			var res = target.Map(date, new[] {scheduleDay});
 			res.Hours.Should().Have.SameSequenceAs(expected);
 		}
 	}
