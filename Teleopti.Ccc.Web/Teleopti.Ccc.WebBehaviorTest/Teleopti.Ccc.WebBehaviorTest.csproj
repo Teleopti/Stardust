@@ -95,6 +95,7 @@
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\AbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ActivityConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\MeetingConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\DayOffTemplateConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
     <Compile Include="Bindings\Generic\PreferencesPageStepDefinitions.cs" />
@@ -315,7 +316,6 @@
     <Compile Include="Data\Setups\Specific\NoWorkflowControlSet.cs" />
     <Compile Include="Data\Setups\Specific\PreferenceOpenWithAllowedPreferencesWorkflowControlSet.cs" />
     <Compile Include="Data\Setups\Specific\ScheduleIsNotPublished.cs" />
-    <Compile Include="Data\Setups\Specific\ScheduleIsPublishedUntilWednesday.cs" />
     <Compile Include="Data\Setups\Specific\ShiftCategoryPreference.cs" />
     <Compile Include="Data\Setups\Specific\StandardPreference.cs" />
     <Compile Include="Data\Setups\Specific\StudentAvailabilityClosedWorkflowControlSet.cs" />
@@ -328,7 +328,6 @@
     <Compile Include="Data\IUserDataSetup.cs" />
     <Compile Include="Data\IUserSetup.cs" />
     <Compile Include="LicenseStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\MeetingOnThursday.cs" />
     <Compile Include="Data\Setups\Specific\NightShiftOnMonday.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
@@ -358,7 +357,6 @@
     <Compile Include="Data\Setups\Specific\PublicNoteOnWednesday.cs" />
     <Compile Include="Data\Setups\Specific\ShiftForDate.cs" />
     <Compile Include="Data\Setups\Specific\ShiftOnThursday.cs" />
-    <Compile Include="Data\Setups\Specific\ShiftsForTwoWeeks.cs" />
     <Compile Include="Requests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

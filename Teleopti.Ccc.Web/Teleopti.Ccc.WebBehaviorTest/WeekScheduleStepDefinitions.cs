@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
@@ -19,11 +18,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	{
 
 		private WeekSchedulePage _page { get { return Pages.Pages.WeekSchedulePage; } }
-
-		[When(@"I click on the meeting")]
-		public void WhenIClickOnTheMeeting()
+		
+		[When(@"I hover over the meeting on date '(.*)'")]
+		public void WhenIHoverOverTheMeetingOnDate(DateTime date)
 		{
-			// either we should click or the specs shouldnt say so.
+			Div meetingLayer = _page.DayLayers(date).Filter(Find.BySelector("[tooltip-text*=Subject:]")).First();
+			meetingLayer.FireEvent("onmouseover");
 		}
 
 		[When(@"I click on any day of a week")]
@@ -39,78 +39,46 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				Find.ByClass("text-request", false)).EventualClick();
 		}
 
-		[Then(@"I should not see any shifts")]
-		public void ThenIShouldNotSeeAnyShifts()
+		[Then(@"I should not see any shifts on date '(.*)'")]
+		public void ThenIShouldNotSeeAnyShiftsOnDate(DateTime date)
 		{
-			_page.FirstDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
-			_page.SecondDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
-			_page.ThirdDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
-			_page.FourthDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
-			_page.FifthDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
+			_page.DayLayers(date).Count.Should().Be.EqualTo(0);
 		}
 
-		[Then(@"I should not see any shifts after wednesday")]
-		public void ThenIShouldNotSeeAnyShiftsAfterWednesday()
+		[Then(@"I should see the start and end dates of current week for date '(.*)'")]
+		public void ThenIShouldSeeTheStartAndEndDatesOfCurrentWeekForDate(DateTime date)
 		{
-			_page.ThirdDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.True();
-			_page.FourthDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
-			_page.FifthDay.InnerHtml.Contains(TestData.ShiftCategory.Description.Name).Should().Be.False();
+			AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, UserFactory.User().Culture));
 		}
 
-        [Then(@"I should see the start and end dates of current week for date '(.*)'")]
-        public void ThenIShouldSeeTheStartAndEndDatesOfCurrentWeekForDate(DateTime date)
-        {
-            AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, UserFactory.User().Culture));
-        }
-
-        [Then(@"I should not see the end of the shift on date '(.*)'")]
-        public void ThenIShouldNotSeeTheEndOfTheShiftOnDate(DateTime date)
-        {
-            _page.DayLayers(date).Count.Should().Be.EqualTo(2);
-        }
-
-        [Then(@"I should see the end of the shift on date '(.*)'")]
-        public void ThenIShouldSeeTheEndOfTheShiftOnDate(DateTime date)
-        {
-            var dateString = _page.DayElementForDate(date).GetAttributeValue("data-mytime-date");
-
-            DateTime dateFromPage;
-            if (DateTime.TryParse(dateString, UserFactory.User().Culture, DateTimeStyles.None, out dateFromPage))
-            {
-                dateFromPage.Date.Should().Be.EqualTo(date.Date);
-            }
-            dateFromPage.Should().Not.Be.EqualTo(null);
-
-            var contents = _page.DayElementForDate(date).InnerHtml;
-
-            var indexForShiftEnd = contents.IndexOf(TestData.ActivityPhone.Description.Name);
-
-            indexForShiftEnd.Should().Be.GreaterThan(-1);
-        }
-
-        [Then(@"I should see the start of the shift on date '(.*)'")]
-        public void ThenIShouldSeeTheStartOfTheShiftOnDate(DateTime date)
-        {
-            var dateString = _page.DayElementForDate(date).GetAttributeValue("data-mytime-date");
-
-            DateTime dateFromPage;
-            if (DateTime.TryParse(dateString, UserFactory.User().Culture, DateTimeStyles.None, out dateFromPage))
-            {
-                dateFromPage.Date.Should().Be.EqualTo(date.Date);
-            }
-            dateFromPage.Should().Not.Be.EqualTo(null);
-
-            _page.DayElementForDate(date).ListItems[4].Divs.Count.Should().Be.EqualTo(2);
-        }
-
-
-        
-		[Then(@"I should see the meeting details")]
-		public void ThenIShouldSeeTheMeetingDetails()
+		[Then(@"I should not see the end of the shift on date '(.*)'")]
+		public void ThenIShouldNotSeeTheEndOfTheShiftOnDate(DateTime date)
 		{
-			var data = UserFactory.User().UserData<MeetingOnThursday>();
-			_page.FourthDay.InnerHtml.Contains(data.MeetingSubject).Should().Be.True();
-			_page.FourthDay.InnerHtml.Contains(data.MeetingLocation).Should().Be.True();
+			_page.DayLayers(date).Count.Should().Be.EqualTo(2);
+		}
+
+		[Then(@"I should see the end of the shift on date '(.*)'")]
+		public void ThenIShouldSeeTheEndOfTheShiftOnDate(DateTime date)
+		{
+			var contents = _page.DayElementForDate(date).InnerHtml;
+
+			var indexForShiftEnd = contents.IndexOf(TestData.ActivityPhone.Description.Name);
+
+			indexForShiftEnd.Should().Be.GreaterThan(-1);
+		}
+
+		[Then(@"I should see the start of the shift on date '(.*)'")]
+		public void ThenIShouldSeeTheStartOfTheShiftOnDate(DateTime date)
+		{
+			_page.DayLayers(date).Count.Should().Be.EqualTo(2);
+		}
+
+
+		[Then(@"I should see the meeting details on date '(.*)'")]
+		public void ThenIShouldSeeTheMeetingDetailsOnDate(DateTime date)
+		{
+			Div meetingLayer = _page.DayLayers(date).Filter(Find.BySelector("[tooltip-text*=Meeting subject]")).First();
+			meetingLayer.Should().Not.Be.Null();
 		}
 
 		[Then(@"I should see the public note on tuesday")]
@@ -198,6 +166,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIClickTheCurrentWeekButton()
 		{
 			Pages.Pages.WeekSchedulePage.TodayButton.EventualClick();
+		}
+
+		[Then(@"I should see a shift on date '(.*)'")]
+		public void ThenIShouldSeeAShiftOnDate(DateTime date)
+		{
+			_page.DayLayers(date).Count.Should().Be.EqualTo(1);
+		}
+
+		[Then(@"I should not see a shift on date '(.*)'")]
+		public void ThenIShouldNotSeeAShiftOnDate(DateTime date)
+		{
+			_page.DayLayers(date).Count.Should().Be.EqualTo(0);
 		}
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)

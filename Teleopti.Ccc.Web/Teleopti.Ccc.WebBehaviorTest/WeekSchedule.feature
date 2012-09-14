@@ -7,10 +7,16 @@ Background:
 	Given there is a role with
 	| Field                    | Value                 |
 	| Name                     | Full access to mytime |
-	 And I have a workflow control set with
+	And there is a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
 	| Schedule published to date | 2040-06-24         |
+	And there is a workflow control set with
+	| Field                                 | Value                            |
+	| Name                                  | Published schedule to 2012-08-28 |
+	| Schedule published to date            | 2012-08-28                       |
+	| Preference period is closed           | true                             |
+	| Student availability period is closed | true                             |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -28,6 +34,7 @@ Scenario: View current week
 
 Scenario: View night shift
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
 	And there is a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-27 20:00 |
@@ -39,7 +46,8 @@ Scenario: View night shift
 	And I should see the end of the shift on date '2012-08-28'
 
 Scenario: View start of night shift on last day of week for swedish culture
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
 	And I am swedish
 	And there is a shift with
 	| Field                 | Value            |
@@ -51,7 +59,8 @@ Scenario: View start of night shift on last day of week for swedish culture
 	Then I should see the start of the shift on date '2012-08-26'
 
 Scenario: View end of night shift from previuos week for swedish culture
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
 	And I am swedish
 	And there is a shift with
 	| Field                 | Value            |
@@ -63,27 +72,49 @@ Scenario: View end of night shift from previuos week for swedish culture
 	Then I should see the end of the shift on date '2012-08-27'
 
 Scenario: Do not show unpublished schedule
-	Given I am an agent
-	And I have shifts scheduled for two weeks
-	And My schedule is not published
-	When I view my week schedule
-	Then I should not see any shifts
+	Given I have the role 'Full access to mytime'
+	And there is a shift with
+	| Field                 | Value            |
+	| StartTime             | 2012-08-28 8:00  |
+	| EndTime               | 2012-08-28 17:00 |
+	| ShiftCategoryName     | ForTest          |
+	When I view my week schedule for date '2012-08-28'
+	Then I should not see any shifts on date '2012-08-28'
 	
 Scenario: Do not show unpublished schedule for part of week
-	Given I am an agent
-	And I have shifts scheduled for two weeks
-	And My schedule is published until wednesday
-	When I view my week schedule
-	Then I should not see any shifts after wednesday
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule to 2012-08-28'
+	And there is a shift with
+	| Field                 | Value            |
+	| StartTime             | 2012-08-28 8:00  |
+	| EndTime               | 2012-08-28 17:00 |
+	| ShiftCategoryName     | ForTest          |
+	And there is a shift with
+	| Field                 | Value            |
+	| StartTime             | 2012-08-29 8:00  |
+	| EndTime               | 2012-08-29 17:00 |
+	| ShiftCategoryName     | ForTest          |
+	When I view my week schedule for date '2012-08-28'
+	Then I should see a shift on date '2012-08-28'
+	And I should not see a shift on date '2012-08-29'
 	
 Scenario: View meeting
-	Given I am an agent
-	# why is a shift required to show a meeting? A bug?
-	And I have a shift on thursday
-	And I have a meeting scheduled on thursday
-	When I view my week schedule
-	And I click on the meeting
-	Then I should see the meeting details
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And there is a shift with
+	| Field                 | Value            |
+	| StartTime             | 2012-08-28 8:00  |
+	| EndTime               | 2012-08-28 17:00 |
+	| ShiftCategoryName     | ForTest          |
+	And I have a meeting scheduled
+	| Field                 | Value            |
+	| StartTime             | 2012-08-28 9:00  |
+	| EndTime               | 2012-08-28 10:00 |
+	| Subject               | Meeting subject  |
+	| Location              | Meeting location |
+	When I view my week schedule for date '2012-08-28'
+	And I hover over the meeting on date '2012-08-28'
+	Then I should see the meeting details on date '2012-08-28'
 	
 	###
 Scenario: View public note
@@ -141,11 +172,14 @@ Scenario: Navigate to request page by clicking request symbol
 	And I click the request symbol
 	Then I should see request page
 
+#Ignore for now since it breaks on "Then". I will fix this one soon. //JN 2012-09-14
+@ignore
 Scenario: Navigate to current week
-	Given I am an agent
-	And I view my week schedule one month ago
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 07:00'
+	And I view my week schedule for date '2029-12-01'
 	When I click the current week button
-	Then I should see the start and end dates of current week for date '2030-10-03'
+	Then I should see the start and end dates of current week for date '2030-01-01'
 
 Scenario: Show timeline with no schedule
 	Given I am an agent

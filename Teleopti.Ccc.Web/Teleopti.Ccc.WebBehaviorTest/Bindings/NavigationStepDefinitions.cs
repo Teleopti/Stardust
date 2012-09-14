@@ -100,13 +100,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule();
 		}
 
-		[Given(@"I view my week schedule one month ago")]
-		public void GivenIViewMyWeekScheduleOneMonthAgo()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoWeekSchedulePage(DateTime.Now.AddMonths(1));
-		}
-
 		[Given(@"I am viewing team schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()
 		{
