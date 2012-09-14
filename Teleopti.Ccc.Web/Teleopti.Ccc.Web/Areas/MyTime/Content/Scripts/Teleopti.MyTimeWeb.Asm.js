@@ -14,6 +14,11 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	function _start(serverMsSince1970, pixelsPerHour, hours) {
 		var refreshSeconds = 1;
 		pxPerHour = pixelsPerHour;
+
+		var yesterdayTemp = new Date(new Date().getTeleoptiTime());
+		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
+		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
+
 		var observableInfo = ko.observable();
 		var observableHours = ko.observableArray();
 		var observableLayers = ko.observableArray();
@@ -25,22 +30,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		ko.applyBindings(vm);
 
-		_loadViewModel(vm);
-
-		//_refresh(serverMsSince1970, observableInfo);
-		$('.asm-outer-canvas').show();
-
-		return;
-
-		setInterval(function () {
-			_refresh(serverMsSince1970, observableInfo);
-		}, refreshSeconds * 1000);
+		_loadViewModel(vm, yesterday);
 	}
 
-	function _loadViewModel(asmViewModel) {
-		var yesterdayTemp = new Date(new Date().getTeleoptiTime());
-		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
-		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
+	function _loadViewModel(asmViewModel, yesterday) {
 
 		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: '/MyTime/Asm/Today', //todo: fix!
@@ -51,8 +44,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				asmViewModel.timeLines(data.Hours);
 				var layers = _updateLayers(data.Layers, yesterday);
 				asmViewModel.layers(layers);
-				_moveTimeLineToNow(yesterday);
-				_updateInfoCanvas(asmViewModel.activityInfo, layers);
+				setInterval(function() {
+					_refresh(yesterday, asmViewModel, layers);
+				}, 1000); // todo: ta bort hårdkodning
+				$('.asm-outer-canvas').show();
 			},
 			error: function (data, textStatus, jqXHR) {
 				alert('nope');
@@ -60,9 +55,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 	}
 
-	function _refresh(serverMsSince1970, observableInfo) {
-		_moveTimeLineToNow(serverMsSince1970);
-		_updateInfoCanvas(observableInfo);
+	function _refresh(yesterday, asmViewModel, layers) {
+		_moveTimeLineToNow(yesterday);
+		_updateInfoCanvas(asmViewModel.activityInfo, layers);
 	}
 
 	function _updateLayers(layers, yesterday) {
