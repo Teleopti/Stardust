@@ -671,11 +671,9 @@ header {
 }
 .edit-module input.ui-autocomplete-input {
 	height: 16px;
-	float: left;
 }
 .ie9 .edit-module input.ui-autocomplete-input {
 	height: 15px;
-	float: left;
 }
 .date-input
 {
@@ -689,10 +687,7 @@ select.time-input
 	height: 20px; 
 	width: 1.7em; 
 	margin-left: -20px;
-	float: left;
-}
-.edit-module-inner button.ui-button-icon-only {
-	 background-position: -12px -90px;
+	background-position: -12px -90px;
 	border: 0;
 }
 .ie9 .edit-module-inner button.ui-button-icon-only {
