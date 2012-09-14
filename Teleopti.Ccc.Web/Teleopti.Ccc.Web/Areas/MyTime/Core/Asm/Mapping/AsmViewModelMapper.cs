@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			                 select new AsmLayer
 			                        	{
 			                        		Payload = visualLayer.DisplayDescription().Name,
-													StartJavascriptBaseDate = startDate.Subtract(asmZeroAsUtc).TotalMinutes,//todo -rename
+													StartMinutesSinceAsmZero = startDate.Subtract(asmZeroAsUtc).TotalMinutes,
 			                        		LengthInMinutes = length,
 			                        		Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
 			                        		StartTimeText = startDate.ToString("HH:mm"),

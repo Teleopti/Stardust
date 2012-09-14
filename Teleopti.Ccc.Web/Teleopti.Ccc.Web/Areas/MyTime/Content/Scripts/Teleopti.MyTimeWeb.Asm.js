@@ -69,7 +69,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	function _updateLayers(layers) {
 		var newLayers = new Array();
 		$.each(layers, function (key, layer) {
-			newLayers.push({ 'leftPx': ((layer.StartJavascriptBaseDate) * pixelPerHours / 60 + timeLineMarkerWidth) + 'px',
+			newLayers.push({ 'leftPx': ((layer.StartMinutesSinceAsmZero) * pixelPerHours / 60 + timeLineMarkerWidth) + 'px',
 				'payload': layer.Payload,
 				'backgroundColor': layer.Color,
 				'paddingLeft': (layer.LengthInMinutes * pixelPerHours) / 60 + 'px',

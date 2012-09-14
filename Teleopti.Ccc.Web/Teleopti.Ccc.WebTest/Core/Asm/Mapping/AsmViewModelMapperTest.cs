@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 
 			var result = target.Map(new[] { scheduleDay });
 
-			result.Layers.First().StartJavascriptBaseDate.Should().Be.EqualTo(expected.SubtractJavascriptBaseDate().TotalMilliseconds);
+			result.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(expected.SubtractJavascriptBaseDate().TotalMilliseconds);
 		}
 
 		[Test]
