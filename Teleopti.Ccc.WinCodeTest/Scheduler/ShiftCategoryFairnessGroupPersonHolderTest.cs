@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			Expect.Call(_groupPageCreator.CreateGroupPagePerDate(new List<DateOnly>(), _groupPageDataProvider, groupPage)).
 				IgnoreArguments().Return(groupPagePerDate);
-			Expect.Call(_groupPageHolder.FairnessOptimizerGroupPagePerDate = groupPagePerDate);
+			Expect.Call(_groupPageHolder.GroupPersonGroupPagePerDate = groupPagePerDate);
 			Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(date, persons, false, null)).Return(toReturn);
 			_mocks.ReplayAll();
 			var ret =_target.GroupPersons(new List<DateOnly>(), groupPage, date,persons);

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		public IList<IGroupPerson> BuildListOfGroupPersons(DateOnly dateOnly, IList<IPerson> selectedPersons, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions)
 		{
             _selectedPersons = selectedPersons;
-			var pageOnDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate.GetGroupPageByDate(dateOnly);
+			var pageOnDate = _groupPagePerDateHolder.GroupPersonGroupPagePerDate.GetGroupPageByDate(dateOnly);
 			var rootGroups = pageOnDate.RootGroupCollection;
 			var retLis = new List<IGroupPerson>();
 			var personGroups = new List<IPersonGroup>();

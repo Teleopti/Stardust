@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (_groupPage == null || !_groupPage.Equals(groupPage))
 			{
 				_groupPage = groupPage;
-				_groupPagePerDateHolder.FairnessOptimizerGroupPagePerDate =
+				_groupPagePerDateHolder.GroupPersonGroupPagePerDate =
 					_groupPageCreator.CreateGroupPagePerDate(dateOnlyList, _groupScheduleGroupPageDataProvider,
 															 groupPage,true);
 			}
