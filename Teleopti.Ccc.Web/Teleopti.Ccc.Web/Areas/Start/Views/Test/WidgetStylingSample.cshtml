@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html dir="@(Request.QueryString["dir"] ?? "ltr")">
 <head>
 	<title>WidgetStylingSample</title>
     
@@ -45,7 +45,7 @@
 	    });
 	</script>
 </head>
-<body>
+<body dir="@(Request.QueryString["dir"] ?? "ltr")">
 	<div class="floatleft">
 		<h1>Splitbutton</h1>
 		<div id="splitbutton-sample">
