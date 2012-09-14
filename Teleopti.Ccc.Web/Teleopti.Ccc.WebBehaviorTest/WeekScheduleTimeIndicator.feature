@@ -8,9 +8,9 @@ Background:
 	| Field                    | Value				   |
 	| Name                     | Full access to mytime |
 	And there is a role with
-	| Field									| Value				|
-	| Name									| No access to ASM	|
-	| Access To Agent Schedule Messenger	| false				|
+	| Field			| Value            |
+	| Name			| No access to ASM |
+	| Access To Asm	| false            |
     
 Scenario: Do not show time indicator if no permission
 	Given I have the role 'No access to ASM'
