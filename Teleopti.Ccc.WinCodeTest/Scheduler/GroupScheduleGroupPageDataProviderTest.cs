@@ -25,10 +25,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IUnitOfWork _uow;
 	    private ISchedulingResultStateHolder _resultHolder;
+		private IPerson _person1;
+		private IPerson _person2;
 
-	    [SetUp]
+		[SetUp]
 		public void Setup()
 	    {
+	    	_person1 = PersonFactory.CreatePerson();
+	    	_person2 = PersonFactory.CreatePerson();
+			_person2.TerminalDate = new DateOnly(2005,1,1);
 	        var persons = new List<IPerson>();
 			_mocks = new MockRepository();
             _resultHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
@@ -38,7 +43,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             
             Expect.Call(_resultHolder.PersonsInOrganization).Return(persons);
             _mocks.ReplayAll();
-            _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>(), _resultHolder);
+            _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), 
+				TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>{_person1,_person2}, _resultHolder);
 			_target = new GroupScheduleGroupPageDataProvider(_stateHolder, _repositoryFactory, _unitOfWorkFactory);
             _mocks.BackToRecordAll();
 		}
@@ -119,17 +125,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void VerifyPersonCollection()
 		{
-			using (_mocks.Record())
-			{
-
-			}
-
-			object expected = null;
-
-			using (_mocks.Playback())
-			{
-				Assert.AreEqual(expected, _target.PersonCollection.FirstOrDefault());
-			}
+			Assert.AreEqual(_person1, _target.PersonCollection.FirstOrDefault());
 		}
 
 		[Test]
@@ -155,7 +151,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void VerifySelectedPeriod()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2000, 1, 1), new DateOnly(2010, 1, 1));
-			((GroupScheduleGroupPageDataProvider)_target).SetSelectedPeriod(period);
+			_target.SetSelectedPeriod(period);
 			Assert.AreEqual(period, _target.SelectedPeriod);
 		}
 
@@ -230,12 +226,30 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.That(childGroup.PersonCollection.Contains(person2),Is.False);
 			_mocks.VerifyAll();
 		}
+
 		private void commonMocks()
 		{
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_uow.DisableFilter(QueryFilter.Deleted)).Return(_uow);
 
 			Expect.Call(() => _uow.Dispose()).Repeat.Twice();
+		}
+
+		[Test]
+		public void ShouldGetAllLoadedFromStateHolder()
+		{
+			var person1 = PersonFactory.CreatePerson("ittan");
+			var person2 = PersonFactory.CreatePerson("tvåan");
+			var person3 = PersonFactory.CreatePerson("trean");
+			person3.TerminalDate = new DateOnly(2005,1,1);
+			var persons = new List<IPerson> {person1, person2, person3,};
+			_target.SetSelectedPeriod(new DateOnlyPeriod(2012,1,1,2012,12,31));
+			Expect.Call(_resultHolder.PersonsInOrganization).Return(persons);
+			_mocks.ReplayAll();
+			var result = _target.AllLoadedPersons;
+			Assert.That(result.Count(),Is.EqualTo(2));
+			Assert.That(!result.Contains(person3));
+			_mocks.VerifyAll();
 		}
 	}
 }

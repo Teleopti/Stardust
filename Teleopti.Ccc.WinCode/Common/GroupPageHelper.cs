@@ -100,7 +100,12 @@ namespace Teleopti.Ccc.WinCode.Common
             }
         }
 
-        public void SetSelectedPeriod(DateOnlyPeriod dateOnlyPeriod)
+    	public IEnumerable<IPerson> AllLoadedPersons
+    	{
+    		get { throw new NotImplementedException(); }
+    	}
+
+    	public void SetSelectedPeriod(DateOnlyPeriod dateOnlyPeriod)
         {
             SelectedPeriod = dateOnlyPeriod;
         }

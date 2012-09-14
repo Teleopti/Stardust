@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IShiftCategoryFairness GetShiftCategoryFairnessForPersons(IScheduleDictionary scheduleDictionary, IList<IPerson> persons)
 		{
-			IShiftCategoryFairness result = null;
+			IShiftCategoryFairness result = new ShiftCategoryFairness();
 			foreach (var person in persons)
 			{
 				var schedule = scheduleDictionary[person];

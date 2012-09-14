@@ -71,7 +71,12 @@ namespace Teleopti.Analytics.Etl.Transformer
             }
         }
 
-        public IList<IActivity> ActivityCollection
+    	public IEnumerable<IPerson> AllLoadedPersons
+    	{
+    		get { throw new NotImplementedException(); }
+    	}
+
+    	public IList<IActivity> ActivityCollection
         {
             get
             {

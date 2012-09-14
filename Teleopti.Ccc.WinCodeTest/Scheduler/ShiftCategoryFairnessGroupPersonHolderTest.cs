@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var groupPagePerDateDic = new Dictionary<DateOnly, IGroupPage>();
 			var groupPagePerDate = new GroupPagePerDate(groupPagePerDateDic);
 			var toReturn = new List<IGroupPerson>();
-			var persons = new List<IPerson> {person};
+			var persons = new Collection<IPerson> {person};
 
 			Expect.Call(_groupPageCreator.CreateGroupPagePerDate(new List<DateOnly>(), _groupPageDataProvider, groupPage)).
 				IgnoreArguments().Return(groupPagePerDate);

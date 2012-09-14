@@ -42,8 +42,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private ISchedulerGroupPagesProvider _groupPagesProvider;
         private IList<IGroupPageLight> _groupPages;
         private bool _dataLoaded;
-        private ISchedulingOptions _localSchedulingOptions;
-        private ISchedulingOptions _schedulingOptions;
+    	private IShiftCategoryFairnessAggregateManager _fairnessManager;
 
     	public FormAgentInfo()
         {
@@ -57,13 +56,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public FormAgentInfo(IWorkShiftWorkTime workShiftWorkTime, ILifetimeScope container, ISchedulerGroupPagesProvider groupPagesProvider, ISchedulingOptions schedulingOptions)
+		public FormAgentInfo(IWorkShiftWorkTime workShiftWorkTime, ILifetimeScope container, ISchedulerGroupPagesProvider groupPagesProvider)
 			: this()
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 			_container = container;
 		    _groupPagesProvider = groupPagesProvider;
-		    _schedulingOptions = schedulingOptions;
 		}
 
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -123,6 +121,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void updateFairnessInfo(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder)
         {
+			if (_fairnessManager == null)
+				_fairnessManager = _container.Resolve<IShiftCategoryFairnessAggregateManager>();
+
             ISchedulingOptions schedulingOptions = new SchedulingOptions
             {
                 UseAvailability = true,
@@ -140,6 +141,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             listViewFairness.Items.Add("");
             if (person.WorkflowControlSet != null && person.WorkflowControlSet.UseShiftCategoryFairness)
             {
+            	var groupPage = comboBoxAgentGrouping.SelectedItem as IGroupPageLight;
+            	var perPersonAndGroup = _fairnessManager.GetPerPersonAndGroup(person, groupPage, dateOnly);
+				var perGroupAndOthers = _fairnessManager.GetPerGroupAndOtherGroup(person, groupPage, dateOnly);
                 IShiftCategoryFairness shiftCategoryFairness =
                     _stateHolder.Schedules[person].CachedShiftCategoryFairness();
                 createAndAddItem(listViewFairness, Resources.EqualOfEachShiftCategory, Resources.Number, 1);
@@ -183,51 +187,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             comboBoxAgentGrouping.DataSource = _groupPages;
             comboBoxAgentGrouping.DisplayMember = "Name";
             comboBoxAgentGrouping.ValueMember = "Key";
-            ExchangeData(ExchangeDataOption.DataSourceToControls);
             _dataLoaded = true;
-        }
-
-        public void ExchangeData(ExchangeDataOption direction)
-        {
-            if (direction == ExchangeDataOption.DataSourceToControls)
-            {
-                dataOffline();
-                InitializeGroupPage();
-                //setDataInControls();
-            }
-            else
-            {
-                getDataFromControls();
-                dataOnline();
-            }
-        }
-
-        private void dataOffline()
-        {
-            _localSchedulingOptions = (ISchedulingOptions)_schedulingOptions.Clone();
-        }
-
-        private void dataOnline()
-        {
-            _schedulingOptions.GroupOnGroupPage = _localSchedulingOptions.GroupOnGroupPage;
-        }
-
-        private void getDataFromControls()
-        {
-            _localSchedulingOptions.GroupOnGroupPage = (IGroupPageLight)comboBoxAgentGrouping.SelectedItem;
-        }
-
-        //private void setDataInControls()
-        //{
-           
-        //}
-
-        private void InitializeGroupPage()
-        {
-            if (_localSchedulingOptions.GroupOnGroupPage != null)
-            {
-                comboBoxAgentGrouping.SelectedValue = _localSchedulingOptions.GroupOnGroupPage.Key;
-            }
         }
 
         private void updateRestrictionData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
@@ -699,9 +659,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (_dataLoaded)
             {
-                getDataFromControls();
-                //setDataInControls();
-                InitializeGroupPage();
+				updateFairnessInfo(_selectedPerson, _dateOnlyList.First(), _stateHolder);
             }
         }
 

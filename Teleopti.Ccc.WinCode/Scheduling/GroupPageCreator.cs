@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		IGroupPagePerDate CreateGroupPagePerDate(IScheduleViewBase currentView, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping);
 		IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping);
+		IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping, bool useAllLoadedPersons);
 	}
 
 	public class GroupPageCreator : IGroupPageCreator
@@ -20,14 +21,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			_groupPageFactory = groupPageFactory;
 		}
-
+		
 		public IGroupPagePerDate CreateGroupPagePerDate(IScheduleViewBase currentView, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping)
 		{
 			IDictionary<DateOnly, IGroupPage> dic = new Dictionary<DateOnly, IGroupPage>();
 			var selectedPeriod = GetSelectedPeriod(currentView);
 			foreach (var dateOnly in selectedPeriod.DayCollection())
 			{
-				var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, dateOnly);
+				var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, dateOnly,false);
 				dic.Add(dateOnly, groupPage);
 			}
 			return new GroupPagePerDate(dic);
@@ -35,23 +36,31 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping)
 		{
+			return CreateGroupPagePerDate(dates, groupPageDataProvider, selectedGrouping, false);
+		}
+		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping, bool useAllLoadedPersons)
+		{
 			if (dates == null) throw new ArgumentNullException("dates");
 			if (groupPageDataProvider == null) throw new ArgumentNullException("groupPageDataProvider");
 			IDictionary<DateOnly, IGroupPage> dic = new Dictionary<DateOnly, IGroupPage>();
 
 			foreach (var dateOnly in dates)
 			{
-				var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, dateOnly);
+				var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, dateOnly, useAllLoadedPersons);
 				dic.Add(dateOnly, groupPage);
 			}
 
 			return new GroupPagePerDate(dic);
 		}
 
-		private IGroupPage createGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping, DateOnly dateOnly)
+		private IGroupPage createGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping, DateOnly dateOnly, bool useAllLoadedPersons)
 		{
 			IGroupPage groupPage;
-			IGroupPageOptions options = new GroupPageOptions(groupPageDataProvider.PersonCollection)
+			var persons = groupPageDataProvider.PersonCollection;
+			if (useAllLoadedPersons)
+				persons = groupPageDataProvider.AllLoadedPersons;
+
+			IGroupPageOptions options = new GroupPageOptions(persons)
 			{
 				SelectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly),
 				CurrentGroupPageName = selectedGrouping.Name,
@@ -134,11 +143,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 	public interface IGroupPageFactory
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IGroupPageCreator<IBusinessUnit> GetPersonsGroupPageCreator();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IGroupPageCreator<IContract> GetContractsGroupPageCreator();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IGroupPageCreator<IContractSchedule> GetContractSchedulesGroupPageCreator();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IGroupPageCreator<IPartTimePercentage> GetPartTimePercentagesGroupPageCreator();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IGroupPageCreator<IPerson> GetNotesGroupPageCreator();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IGroupPageCreator<IRuleSetBag> GetRuleSetBagsGroupPageCreator();
 	}
 

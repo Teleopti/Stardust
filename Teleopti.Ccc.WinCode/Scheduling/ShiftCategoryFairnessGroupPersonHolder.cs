@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -6,7 +7,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public interface IShiftCategoryFairnessGroupPersonHolder
 	{
-		IList<IGroupPerson> GroupPersons(IList<DateOnly> dateOnlies, IGroupPageLight groupPage, DateOnly date, List<IPerson> persons);
+		IList<IGroupPerson> GroupPersons(IList<DateOnly> dateOnlyList, IGroupPageLight groupPage, DateOnly dateOnly, Collection<IPerson> persons);
 	}
 
 	public class ShiftCategoryFairnessGroupPersonHolder : IShiftCategoryFairnessGroupPersonHolder
@@ -28,18 +29,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_groupPersonsBuilder = groupPersonsBuilder;
 		}
 
-		public IList<IGroupPerson> GroupPersons(IList<DateOnly> dateOnlies, IGroupPageLight groupPage, DateOnly date, List<IPerson> persons)
+		public IList<IGroupPerson> GroupPersons(IList<DateOnly> dateOnlyList, IGroupPageLight groupPage, DateOnly dateOnly, Collection<IPerson> persons)
 		{
 			//only if we change grouping we need to redo this
 			if (_groupPage == null || !_groupPage.Equals(groupPage))
 			{
 				_groupPage = groupPage;
 				_groupPagePerDateHolder.FairnessOptimizerGroupPagePerDate =
-					_groupPageCreator.CreateGroupPagePerDate(dateOnlies, _groupScheduleGroupPageDataProvider,
-															 groupPage);
+					_groupPageCreator.CreateGroupPagePerDate(dateOnlyList, _groupScheduleGroupPageDataProvider,
+															 groupPage,true);
 			}
 
-			var groups = _groupPersonsBuilder.BuildListOfGroupPersons(date, persons, false, null);
+			var groups = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnly, persons, false, null);
 			return groups;
 		}
 	}

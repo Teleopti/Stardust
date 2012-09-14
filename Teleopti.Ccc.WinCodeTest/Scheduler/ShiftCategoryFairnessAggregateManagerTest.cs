@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_dic.Period).Return(_schedDateTimePeriod);
 			Expect.Call(_schedDateTimePeriod.VisiblePeriodMinusFourWeeksPeriod()).Return(dateTimePeriod);
 			Expect.Call(_dic.Keys).Return(new List<IPerson> {person});
-			Expect.Call(_groupPersonHolder.GroupPersons(new List<DateOnly>(), groupPage, date, new List<IPerson> {person})).
+			Expect.Call(_groupPersonHolder.GroupPersons(new List<DateOnly>(), groupPage, date, new Collection<IPerson> {person})).
 				IgnoreArguments().Return(new List<IGroupPerson> { groupPerson });
 			Expect.Call(_fairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, new List<IPerson>())).IgnoreArguments().
 				Repeat.Twice();
