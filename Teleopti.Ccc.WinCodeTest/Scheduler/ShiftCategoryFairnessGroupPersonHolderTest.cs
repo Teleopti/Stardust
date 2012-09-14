@@ -38,14 +38,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("per", "olsson");
 			var groupPage = new GroupPageLight();
 			var date = new DateOnly(2012, 9, 12);
-			var groupPagePerDateDic = new Dictionary<DateOnly, IGroupPage>();
-			var groupPagePerDate = new GroupPagePerDate(groupPagePerDateDic);
+			//var groupPagePerDateDic = new Dictionary<DateOnly, IGroupPage>();
+			//var groupPagePerDate = new GroupPagePerDate(groupPagePerDateDic);
 			var toReturn = new List<IGroupPerson>();
 			var persons = new Collection<IPerson> {person};
 
-			Expect.Call(_groupPageCreator.CreateGroupPagePerDate(new List<DateOnly>(), _groupPageDataProvider, groupPage)).
-				IgnoreArguments().Return(groupPagePerDate);
-			Expect.Call(_groupPageHolder.GroupPersonGroupPagePerDate = groupPagePerDate);
+			//Expect.Call(_groupPageCreator.CreateGroupPagePerDate(new List<DateOnly>(), _groupPageDataProvider, groupPage)).
+			//    IgnoreArguments().Return(groupPagePerDate);
+			//Expect.Call(_groupPageHolder.GroupPersonGroupPagePerDate = groupPagePerDate);
 			Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(date, persons, false, null)).Return(toReturn);
 			_mocks.ReplayAll();
 			var ret =_target.GroupPersons(new List<DateOnly>(), groupPage, date,persons);
