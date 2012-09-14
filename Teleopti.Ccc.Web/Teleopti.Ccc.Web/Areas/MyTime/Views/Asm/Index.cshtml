@@ -32,7 +32,7 @@
 						data-asm-activity="@(layer.Payload)"
 						title="@(string.Format("{0}{1}{2} {3}",layer.StartTimeText,"-",layer.EndTimeText,layer.Payload))"></span>*@
 						
-			<span class="asm-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft }"></span>
+			<span class="asm-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
 			<!-- /ko -->
 			<!-- ko foreach: timeLines -->
 			<span class="asm-timeline-line" style="width:@(timeLineHourWidth)px;">

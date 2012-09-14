@@ -75,8 +75,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				'payload': layer.Payload,
 				'backgroundColor': layer.Color,
 				'paddingLeft': (layer.LengthInMinutes * pixelPerHours) / 60 + 'px',
-				'startTimeText': layer.StartTimeText
+				'startTimeText': layer.StartTimeText,
+				'title': layer.StartTimeText + '-' + layer.EndTimeText + ' ' + layer.Payload
 			});
+			console.log(layer);
 		});
 		return newLayers;
 	}
