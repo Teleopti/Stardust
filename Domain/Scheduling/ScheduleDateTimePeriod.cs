@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -97,6 +98,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             get { return _visiblePeriod; }
         }
+
+		public DateTimePeriod VisiblePeriodMinusFourWeeksPeriod()
+		{
+			var offset = TimeSpan.FromDays(-28);
+			return VisiblePeriod.ChangeStartTime(offset);
+		}
 
         /// <summary>
         /// Gets or sets the range to load calculator.

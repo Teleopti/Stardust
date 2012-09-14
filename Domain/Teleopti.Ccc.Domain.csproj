@@ -277,6 +277,8 @@
     <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairnessAggregator.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairnessComparer.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />

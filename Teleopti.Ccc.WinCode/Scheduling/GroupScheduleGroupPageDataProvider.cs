@@ -8,7 +8,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-    public class GroupScheduleGroupPageDataProvider : IGroupPageDataProvider
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
+	public interface IGroupScheduleGroupPageDataProvider : IGroupPageDataProvider{}
+
+	public class GroupScheduleGroupPageDataProvider : IGroupScheduleGroupPageDataProvider
     {
         private readonly ISchedulerStateHolder _stateHolder;
         private readonly IRepositoryFactory _repositoryFactory;
