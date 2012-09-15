@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(6.413, Math.Round(_calculatorService.Agents(_sla, _serviceTime, _calls, _averageHandlingTime, _periodLength), 3));
             Assert.AreEqual(32.07d, Math.Round(_calculatorService.Agents(0.7, 60, 456, 120, TimeSpan.FromMinutes(30)), 3));
             Assert.AreEqual(6333.833d, Math.Round(_calculatorService.Agents(1, 20, 380, 30000, TimeSpan.FromMinutes(30)), 3));
-            Assert.AreEqual(4004.5d, Math.Round(_calculatorService.Agents(_sla, 20, 1001, 3600, _periodLength), 3));
             Assert.AreEqual(4001.611d, Math.Round(_calculatorService.Agents(_sla, 20, 1000, 3601, _periodLength), 3));
         }
 
