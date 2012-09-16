@@ -40,19 +40,29 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(true);
                 Expect.Call(_container2.Execute())
                     .Return(true);
+				Expect.Call(_container1.Execute())
+					.Return(true);
+				Expect.Call(_container2.Execute())
+					.Return(false);
+
+                // second round
 				//Expect.Call(_container1.Execute())
 				//    .Return(false);
 				//Expect.Call(_container2.Execute())
 				//    .Return(false);
 
-                // second round
-				Expect.Call(_container1.Execute())
-					.Return(false);
-				Expect.Call(_container2.Execute())
-					.Return(false);
-
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(9);
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-                    .Return(10).Repeat.AtLeastOnce();
+                    .Return(10);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(11);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(11);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(11);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(11);
                 Expect.Call(_container1.Owner)
                     .Return(owner).Repeat.AtLeastOnce();
                 Expect.Call(_container2.Owner)
