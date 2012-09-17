@@ -165,7 +165,7 @@ this.FeatureBackground();
                         "Must have",
                         "true"});
 #line 34
- testRunner.Then("I should see preference with", ((string)(null)), table7);
+ testRunner.Then("I should see preference", ((string)(null)), table7);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -211,7 +211,7 @@ this.FeatureBackground();
                         "Must have",
                         "true"});
 #line 48
- testRunner.Then("I should see preference with", ((string)(null)), table9);
+ testRunner.Then("I should see preference", ((string)(null)), table9);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -242,7 +242,7 @@ this.FeatureBackground();
                         "Must have",
                         "false"});
 #line 57
- testRunner.Then("I should see preference with", ((string)(null)), table10);
+ testRunner.Then("I should see preference", ((string)(null)), table10);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -288,7 +288,7 @@ this.FeatureBackground();
                         "Must have",
                         "false"});
 #line 71
- testRunner.Then("I should see preference with", ((string)(null)), table12);
+ testRunner.Then("I should see preference", ((string)(null)), table12);
 #line hidden
             this.ScenarioCleanup();
         }

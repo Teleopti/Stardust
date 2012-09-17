@@ -89,16 +89,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			//I should see the correct date on the cell
 			//todo: test code here
+			DateTime date = fields.Date;
+			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
+			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(date.ToShortDateString()));
 
-			//Ishould see on heart icon on the cell accorning the the must have settings
-			//todo: test code here
+			//I should see on heart icon on the current calendar cell, accorning the the must have settings
+			//todo: add an icon and test code here
 
-			//DateTime date = fields.Date;
-			//var cell = Pages.Pages.PreferencePage.PreferencePeriod.Exists, Is.True)
-
-			// should have an heart icon 
-			//var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
-			//EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(preference));
 		}
 
 		[Then(@"I should see I have '(.*)' available must haves")]
@@ -143,8 +140,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I input extended preference fields with")]
 		public void WhenIInputExtendedPreferenceFieldsWith(Table table)
 		{
-			var fields = table.CreateInstance<PreferenceFields>();
-			Pages.Pages.PreferencePage.ExtendedPreferencePanel.WaitUntilDisplayed();
+			var fields = table.CreateInstance<ExtendedPreferenceFields>();
+			
 			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Preference);
 
 			if (fields.StartTimeMinimum != null)
@@ -202,22 +199,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[Then(@"I should see extended preference with")]
-		[Then(@"I should see preference with")]
 		public void ThenIShouldSeeExtendedPanelWith(Table table)
 		{
-			var fields = table.CreateInstance<PreferenceFields>();
-
-			var preferenceText = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference-text");
-			var mustHave = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference-must-have");
-
-			if (fields.Preference != null) EventualAssert.That(() => preferenceText.Text, Is.EqualTo(fields.Preference));
-			if (fields.MustHave)
-			{
-				ScenarioContext.Current.Pending();
-				EventualAssert.That(() => mustHave.Exists, Is.True);
-				EventualAssert.That(() => mustHave.DisplayVisible(), Is.True);
-			}
-
+			var fields = table.CreateInstance<ExtendedPreferenceFields>();
 			var extendedPreference = Pages.Pages.PreferencePage.ExtendedPreferenceForDate(fields.Date);
 
 			if (fields.Preference != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.Preference));
@@ -274,14 +258,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			// I have a must have button on the menu bar
 			// todo: imitate that I click on the button
+			Pages.Pages.PreferencePage.MustHaveButton.Focus();
+			Pages.Pages.PreferencePage.MustHaveButton.EventualClick();
 		}
 
 
-		private class PreferenceFields
+		private class ExtendedPreferenceFields
 		{
 			public DateTime Date { get; set; }
 			public string Preference { get; set; }
-			public bool MustHave { get; set; }
 			public string StartTimeMinimum { get; set; }
 			public string StartTimeMaximum { get; set; }
 			public string EndTimeMinimum { get; set; }
