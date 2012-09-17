@@ -66,12 +66,7 @@ Scenario: Can see extended preference without permission
 
 
 
-
-
-
-
-#add preference
-Scenario: Cannot see extended preference button without permission
+Scenario: Can not add extended preference without permission
 	Given I have the role 'No access to extended preferences'
 	When I am viewing preferences
 	Then I should not see the extended preference button
@@ -148,28 +143,24 @@ Scenario: Add extended preference when span to next day
 	| End time minimum | 02:00 +1  |
 	| End time maximum | 02:30 +1  |
 
-Scenario: Preference list contains available preferences when adding extended preference 
+Scenario: View available preference list when adding extended preference 
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
 	When I click the add extended preference button
+	And I click the extended preference select-box
 	Then I should see these available preferences
 	| Value   |
-	|         |
-	| -       |
 	| Late    |
-	| -       |
 	| Dayoff  |
-	| -       |
 	| Illness |
 
-Scenario: Activity list contains available activities when adding extended preference
+Scenario: View available activity list when adding extended preference
     Given I have the role 'Access to extended preferences'
     And I am viewing preferences
     When I click the add extended preference button
+	And I click the extended preference activity select-box
     Then I should see these available activities
     | Value |
-    |       |
-    | -     |
     | Lunch |
 
 Scenario: Replace extended preference
@@ -218,40 +209,8 @@ Scenario: Replace extended preference
     | Activity time minimum       | 0:15       |
     | Activity time maximum       | 0:45       |
 
-#edit preference
-@ignore
-Scenario: Cannot edit extended preference without permission
-    Given I have the role 'No access to extended preferences'
-    And I have an extended preference on '2012-06-20'
-    When I view preferences for date '2012-06-20'
-    And I click the extended preference indication on '2012-06-20'
-    Then I should not be able to edit extended preference on '2012-06-20'
 
-@ignore
-Scenario: Can only select available preferences when editing an existing extended preference 
-    Given I have the role 'Access to extended preferences'
-    And I have an extended preference on '2012-06-20'
-    When I view preferences for date '2012-06-20'
-    And I click the extended preference indication on '2012-06-20'
-    Then I should see these available preferences
-    | Value   |
-    | Late    |
-    | Dayoff  |
-    | Illness |
-@ignore
-Scenario: Can only select available activities when editing an existing extended preference 
-    Given I have the role 'Access to extended preferences'
-    And I have an extended preference on '2012-06-20'
-    When I view preferences for date '2012-06-20'
-    And I click the extended preference indication on '2012-06-20'
-    Then I should see these available activities
-    | Field    | Value |
-    | Activity | Lunch |
-
-
-
-# Validation
-Scenario: Verify time validation for preference start and end time
+Scenario: Validate preference times
     Given I have the role 'Access to extended preferences'
     And I am viewing preferences for date '2012-06-20'
     When I select day '2012-06-20'
@@ -314,8 +273,8 @@ Scenario: Enable activity time fields when activity is selected
     | Field      | Value |
     | Activity   | Lunch |
     Then I should be able to edit activity minimum and maximum fields
-	     
-Scenario: Verify activity time fields are disabled before activity is selected
+
+Scenario: Disable activity time fields when no activity selected
     Given I have the role 'Access to extended preferences'
     And I am viewing preferences
     When I click the add extended preference button

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -83,20 +84,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(()=>Pages.Pages.PreferencePage.ExtendedPreferenceButton.Exists, Is.False);
 		}
 
+		[When(@"I click the extended preference select-box")]
+		public void WhenIClickTheExtendedPreferenceSelecBox()
+		{
+			Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Open();
+		}
+
 		[Then(@"I should see these available preferences")]
 		public void ThenIShouldSeeTheseAvailablePreferences(Table table)
 		{
-			var expected = table.Rows.Select(o => o["Value"] == string.Empty ? " " : o["Value"]);
-			CollectionAssert.AreEqual(expected, Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectList.AllContents);
+			var preferences = table.CreateSet<SingleValue>();
+			preferences.ForEach(preference => EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Menu.Text, Is.StringContaining(preference.Value)));
+		}
+
+		[When(@"I click the extended preference activity select-box")]
+		public void WhenIClickTheExtendedPreferenceActivitySelecBox()
+		{
+			Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Open();
 		}
 
 		[Then(@"I should see these available activities")]
 		public void ThenIShouldSeeTheseAvailableActivities(Table table)
 		{
-			var expected = table.Rows.Select(o => o["Value"] == string.Empty ? " " : o["Value"]);
-			CollectionAssert.AreEqual(expected, Pages.Pages.PreferencePage.ExtendedPreferenceActivity.SelectList.AllContents);
+			var activities = table.CreateSet<SingleValue>();
+			activities.ForEach(activity => EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Menu.Text, Is.StringContaining(activity.Value)));
 		}
 
+		private class SingleValue
+		{
+			public string Value { get; set; }
+		}
 		[Then(@"I should see add extended preferences panel with error 'Invalid time startTime'")]
 		public void ThenIShouldSeeAddExtendedPreferencesPanelWithError()
 		{
