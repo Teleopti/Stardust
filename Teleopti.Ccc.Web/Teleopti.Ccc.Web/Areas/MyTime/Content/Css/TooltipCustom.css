@@ -7,13 +7,14 @@
 
 .ui-tooltip-custom .ui-tooltip-content
 {
+	text-align: left;
 	padding: 5px;
 	font-size: 12px;
 	line-height: 18px;
     overflow: visible;
 }
 
-.rtl .ui-tooltip-content {
+.rtl .ui-tooltip-custom .ui-tooltip-content {
 	text-align: right;
 }
 
@@ -26,7 +27,11 @@
 }
 .ui-tooltip-custom .ui-tooltip-title 
 {
+	text-align: left;
 	font-weight: normal;
 	padding-top: 5px;
 	padding-bottom: 5px;
+}
+.rtl .ui-tooltip-custom .ui-tooltip-title {
+	text-align: right;
 }
