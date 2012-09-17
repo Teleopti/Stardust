@@ -130,7 +130,8 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	}
 
 	function _initEditSection() {
-		$(".combobox").combobox();
+		$('#StudentAvailability-edit-starttime').combobox();
+		$('#StudentAvailability-edit-endtime').combobox();
 		Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 		Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 		var submitButton = $('#StudentAvailability-edit-ok-button');
