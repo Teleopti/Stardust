@@ -214,6 +214,11 @@ select.absence-input
 	min-width: 70px;
 	padding-right: 10px;
 }
+.rtl .absence-input-label {
+	min-width: 70px;
+	padding-right: 0px;
+	padding-left: 10px;
+}
 #Schedule-addRequest-subject-input {
 	width: 249px;
 }
