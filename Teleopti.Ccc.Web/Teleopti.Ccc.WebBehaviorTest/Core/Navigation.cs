@@ -18,15 +18,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GoTo(string pageUrl, params IGoToInterceptor[] interceptors)
 		{
-			var list = interceptors.ToList();
-			list.ForEach(i => i.Before(pageUrl));
+			interceptors.ToList().ForEach(i => i.Before(pageUrl));
 
 			var uri = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
 			Log.Write("Browsing to: " + uri);
 			Browser.Current.GoTo(uri);
 			Log.Write("Ended up in: " + Browser.Current.Url);
 
-			list.ForEach(i => i.After(pageUrl));
+			interceptors.Reverse().ToList().ForEach(i => i.After(pageUrl));
 		}
 
 		public static void GotoGlobalSignInPage()
