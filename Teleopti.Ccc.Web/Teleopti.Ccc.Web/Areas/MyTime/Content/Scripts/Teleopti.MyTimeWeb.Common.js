@@ -142,7 +142,6 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 
 		//Activating tooltip where available
 		ActivateTooltip: function () {
-			console.log('tooltip!');
 			$('.tooltip')
 				.add('[title]')
 				.each(function () {
