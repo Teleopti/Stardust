@@ -93,7 +93,7 @@
 					                         	};
 					<div id="Preference-add-extended-form" class="displaynone"> 
 						
-						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15">
+						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15 mt5">
 							<option value="" data-preference-extended="true">&nbsp;</option>
 							<option value="-">-</option>
 							@foreach (var option in preferenceNavigation.PreferenceOptions)
@@ -223,8 +223,11 @@
 								</select>
 							</div>
 						</div>
-						<button id="Preference-extended-apply" class="mr20 mb5 mt10">@Resources.Apply</button>
-						<div id="Preference-extended-error" class="error" data-bind="html: ValidationError"></div>
+						<div class="mt5">
+							<button id="Preference-extended-apply" class="mr25 mt10 mb5 floatright">@Resources.Apply</button>
+							<div id="Preference-extended-error" class="error" data-bind="html: ValidationError"></div>
+							<div class="clearboth"></div>
+						</div>
 					</div>
 				}
 				
