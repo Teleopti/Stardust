@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
@@ -38,13 +38,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var asmModelFactory = MockRepository.GenerateMock<IAsmViewModelFactory>();
 			var layoutFactory = MockRepository.GenerateMock<ILayoutBaseViewModelFactory>();
-			var viewBag = new LayoutBaseViewModel();
-			layoutFactory.Expect(fac => fac.CreateLayoutBaseViewModel()).Return(viewBag);
+			var viewBag = new LayoutBaseViewModel{CultureSpecific = new CultureSpecificViewModel()};
+			layoutFactory.Expect(fac => fac.CreateLayoutBaseViewModel(Resources.AgentScheduleMessenger)).Return(viewBag);
 
 			using (var controller = new AsmController(asmModelFactory, layoutFactory))
 			{
 				((object)controller.Index().ViewBag.LayoutBase)
 					.Should().Be.SameInstanceAs(viewBag);
+			}
+		}
+
+		[Test]
+		public void ShouldAlwaysShowLeftToRight()
+		{
+			var asmModelFactory = MockRepository.GenerateMock<IAsmViewModelFactory>();
+			var layoutFactory = MockRepository.GenerateMock<ILayoutBaseViewModelFactory>();
+			var viewBag = new LayoutBaseViewModel { CultureSpecific = new CultureSpecificViewModel{Rtl = true} };
+			layoutFactory.Expect(fac => fac.CreateLayoutBaseViewModel(Resources.AgentScheduleMessenger)).Return(viewBag);
+
+			using (var controller = new AsmController(asmModelFactory, layoutFactory))
+			{
+				((object)controller.Index().ViewBag.LayoutBase.CultureSpecific.Rtl)
+					.Should().Be.EqualTo(false);
 			}
 		}
 	}

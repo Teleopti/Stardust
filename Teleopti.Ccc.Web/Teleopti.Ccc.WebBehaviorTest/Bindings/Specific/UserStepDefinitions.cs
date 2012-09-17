@@ -558,12 +558,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new TwoExistingTextRequestChangedOnDifferentTimes());
 		}
 
-		[Given(@"I have an existing text request spanning over 2 days")]
-		public void GivenIHaveAnExistingTextRequestSpanningOver2Days()
-		{
-			UserFactory.User().Setup(new ExistingTextRequestOver2Days());
-		}
-
 		[Given(@"I have an existing absence request")]
 		public void GivenIHaveAnExistingAbsenceRequest()
 		{

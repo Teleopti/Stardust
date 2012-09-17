@@ -18,7 +18,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		self.loadViewModel = function () {
 			Teleopti.MyTimeWeb.Ajax.Ajax({
-				url: '/MyTime/Asm/Today',
+				url: 'Asm/Today',
 				dataType: "json",
 				type: 'GET',
 				data: { asmZero: yesterday.toJSON() },
@@ -70,22 +70,22 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		self.paddingLeft = (layer.LengthInMinutes * pixelPerHours) / 60 + 'px';
 		self.startTimeText = layer.StartTimeText;
 		self.endTimeText = layer.EndTimeText;
-		self.title = layer.startTimeText + '-' + layer.endTimeText + ' ' + layer.payload;
+		self.title = layer.StartTimeText + '-' + layer.EndTimeText + ' ' + layer.Payload;
 		self.visible = ko.computed(function () {
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
-			var startPos = parseInt(self.leftPx);
-			var endPos = startPos + parseInt(self.paddingLeft);
+			var startPos = parseFloat(self.leftPx);
+			var endPos = startPos + parseFloat(self.paddingLeft);
 			return endPos > timelinePosition;
 		});
 		self.active = ko.computed(function () {
 			if (!self.visible)
 				return false;
-			var startPos = parseInt(self.leftPx);
+			var startPos = parseFloat(self.leftPx);
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
 			return startPos <= timelinePosition;
 		});
 		self.startText = ko.computed(function () {
-			var startPos = parseInt(self.leftPx);
+			var startPos = parseFloat(self.leftPx);
 			var out = self.startTimeText;
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
 			if (startPos - timelinePosition >= 24 * pixelPerHours) {

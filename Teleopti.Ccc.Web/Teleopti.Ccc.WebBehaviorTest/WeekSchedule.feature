@@ -149,30 +149,46 @@ Scenario: Week-picker sunday first day of week for US culture
 	Then I should see sunday as the first day of week
 
 Scenario: Show text request symbol
-	Given I am an agent
-	And I have an existing text request
-	When I view my week schedule
-	Then I should see a symbol at the top of the schedule
-	And I should see a number with the request count
+	Given I have the role 'Full access to mytime'
+	And I have an existing text request with
+	| Field     | Value            |
+	| StartTime | 2013-10-03 10:00 |
+	| End Time  | 2013-10-03 14:00 |
+	When I view my week schedule for date '2013-10-03'
+	Then I should see a symbol at the top of the schedule for date '2013-10-03'
+	And I should see number '1' with the request count for date '2013-10-03'
 
 Scenario: Multiple day text requests symbol
-	Given I am an agent
-	And I have an existing text request spanning over 2 days
-	When I view my week schedule
-	Then I should see a symbol at the top of the schedule for the first day
+	Given I have the role 'Full access to mytime'
+	And I have an existing text request with
+	| Field     | Value            |
+	| StartTime | 2013-10-03 20:00 |
+	| End Time  | 2013-10-04 04:00 |
+	When I view my week schedule for date '2013-10-03'
+	Then I should see a symbol at the top of the schedule for date '2013-10-03'
+	And I should not see a symbol at the top of the schedule for date '2013-10-04'
 
 Scenario: Show both text and absence requests
-	Given I am an agent
-	And I have an existing text request
-	And I have an existing absence request
-	When I view my week schedule
-	Then I should see 2 with the request count
+	Given I have the role 'Full access to mytime'
+	And I have an existing text request with
+	| Field     | Value            |
+	| StartTime | 2013-10-03 20:00 |
+	| End Time  | 2013-10-03 22:00 |
+	And I have an existing absence request with
+	| Field     | Value            |
+	| StartTime | 2013-10-03 10:00 |
+	| End Time  | 2013-10-03 14:00 |
+	When I view my week schedule for date '2013-10-03'
+	Then I should see number '2' with the request count for date '2013-10-03'
 
 Scenario: Navigate to request page by clicking request symbol
-	Given I am an agent
-	And I have an existing text request
-	When I view my week schedule
-	And I click the request symbol
+	Given I have the role 'Full access to mytime'
+	And I have an existing text request with
+	| Field     | Value            |
+	| StartTime | 2013-10-03 10:00 |
+	| End Time  | 2013-10-03 14:00 |
+	When I view my week schedule for date '2013-10-03'
+	And I click the request symbol for date '2013-10-03'
 	Then I should see request page
 
 Scenario: Navigate to current week
@@ -183,8 +199,8 @@ Scenario: Navigate to current week
 	Then I should see the start and end dates of current week for date '2030-01-01'
 
 Scenario: Show timeline with no schedule
-	Given I am an agent
-	When I view my week schedule
+	Given I have the role 'Full access to mytime'
+	When I view my week schedule for date '2013-10-03'
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field          | Value |
 	| start timeline | 0:00  |
@@ -192,7 +208,8 @@ Scenario: Show timeline with no schedule
 	| timeline count | 25    |
 
 Scenario: Show timeline with schedule 
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
 	And there is a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-27 10:00 |
@@ -213,7 +230,8 @@ Scenario: Show timeline with schedule
 	| timeline count | 13    |
 
 Scenario: Show timeline with night shift
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
 	And there is a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-27 20:00 |
@@ -228,7 +246,8 @@ Scenario: Show timeline with night shift
 	| timeline count | 25    |
 
 Scenario: Show timeline with night shift from the last day of the previous week
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
 	And there is a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-26 20:00 |
@@ -243,7 +262,8 @@ Scenario: Show timeline with night shift from the last day of the previous week
 	| timeline count | 5     |
 
 Scenario: Show timeline with night shift starting on the last day of current week
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
 	And there is a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-26 20:00 |
@@ -257,17 +277,19 @@ Scenario: Show timeline with night shift starting on the last day of current wee
 	| end timeline   | 23:59 |
 	| timeline count | 5     |
 
-Scenario: Show activity with correct position, height and color
-	Given I am an agent
-	And I have custom shifts scheduled on wednesday for two weeks:
-	| Field      | Value       |
-	| Phone      | 09:00-10:30 |
-	| Shortbreak | 10:30-11:00 |
-	| Phone      | 11:00-12:00 |
-	| Lunch      | 12:00-14:00 |
-	| Phone      | 14:00-18:00 |
-	When I view my week schedule
-	Then I should see wednesday's activities:
-	| Activity   | Start Position | Height | Color |
-	| Phone      | 67             | 99px   | Green |
-	| Shortbreak | 167            | 32px   | Red   |
+Scenario: Show activity at correct times
+	Given I have the role 'Full access to mytime'
+	And I am swedish
+	And I have the workflow control set 'Published schedule'
+	And there is a shift with
+	| Field                 | Value            |
+	| StartTime             | 2012-08-27 08:00 |
+	| EndTime               | 2012-08-27 18:00 |
+	| ShiftCategoryName     | ForTest          |
+	| Lunch3HoursAfterStart | true             |
+	When I view my week schedule for date '2012-08-27'
+	Then I should see activities on date '2012-08-27' with:
+	| Field                 | Value         |
+	| First activity times  | 08:00 - 11:00 |
+	| Second activity times | 11:00 - 12:00 |
+	| Third activity times  | 12:00 - 18:00 |

@@ -1,6 +1,7 @@
 ﻿@using Teleopti.Ccc.UserTexts
 <script type="text/javascript">
 	$(function () {
+		Teleopti.MyTimeWeb.Ajax.Init({ baseUrl: '@Url.Content("~/MyTime/")' });
 		Teleopti.MyTimeWeb.Asm.Init();
 	});
 </script>

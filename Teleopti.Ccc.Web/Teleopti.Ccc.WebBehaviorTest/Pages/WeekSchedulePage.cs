@@ -142,12 +142,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Schedule-today-button")]
 		public Button TodayButton { get; set; }
 
-		public DivCollection DayLayers(List numberOfDayInWeek)
-		{
-			return numberOfDayInWeek.ListItems[4].Divs.Filter(Find.ByClass("week-schedule-layer", false));
-		}
-
-        public DivCollection DayLayers(DateTime date)
+		public DivCollection DayLayers(DateTime date)
         {
             return DayElementForDate(date).ListItems[4].Divs.Filter(Find.ByClass("week-schedule-layer", false));
         }

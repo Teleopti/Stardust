@@ -44,6 +44,12 @@ Scenario: Show part of agent's schedule in popup
 	And I click ASM link
 	Then I should see a schedule in popup
 
+Scenario: Show title in popup
+	Given I have the role 'Full access to mytime'
+	When I view my week schedule
+	And I click ASM link
+	Then I should see a popup with title AgentScheduleMessenger 
+
 Scenario: Write all upcoming activities
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 07:00'
