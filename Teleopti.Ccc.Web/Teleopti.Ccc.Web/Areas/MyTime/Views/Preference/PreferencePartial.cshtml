@@ -135,6 +135,12 @@
 								}
 							</div>
 						</div>
+						@if (day.InPeriod)
+						{
+							<!-- ko if: IsLoading -->
+								<img class="loading-small-gray-blue" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8-A1C7D3.gif")" alt="..." />
+							<!-- /ko -->
+						}
 					</li>
 				}
 			</ul>

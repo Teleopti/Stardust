@@ -41,21 +41,13 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 				cell.data('request', jqXHR);
 
-				$('#loading-small-gray-blue')
-					.clone()
-					.removeAttr('id')
-					.removeClass('template')
-					.addClass('loading-small-gray-blue')
-					.addClass('temporary')
-					.appendTo(cell);
-
+				self.IsLoading(true);
 			},
 			complete: function (jqXHR, textStatus) {
 
 				cell.data('request', null);
 
-				$('.temporary', cell)
-					.remove();
+				self.IsLoading(false);
 
 				if (complete)
 					complete(jqXHR, textStatus);
@@ -103,11 +95,11 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	};
 
 
-
 	this.Date = "";
 	this.ContractTimeMinutes = 0;
 	this.HasFeedback = true;
 	this.HasPreference = true;
+	this.IsLoading = ko.observable(false);
 	this.Preference = ko.observable();
 	this.Extended = ko.observable();
 	this.ExtendedTitle = ko.observable();
