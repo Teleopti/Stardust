@@ -32,9 +32,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					setInterval(function () {
 						self.now(new Date().getTeleoptiTime());
 					}, 1000 * refreshSeconds);
-				},
-				error: function () {
-					alert('nope'); //todo: wad ska hända här? (om ingen kontakt med servern)
 				}
 			});
 		};
