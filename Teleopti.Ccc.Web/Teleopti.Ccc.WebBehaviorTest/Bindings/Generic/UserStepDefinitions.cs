@@ -43,6 +43,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(publicNote);
 		}
 
+		[Given(@"I have an existing text request with")]
+		public void GivenIHaveAnExistingTextRequestWith(Table table)
+		{
+			var textRequest = table.CreateInstance<TextRequestConfigurable>();
+			UserFactory.User().Setup(textRequest);
+		}
+
+		[Given(@"I have an existing absence request with")]
+		public void GivenIHaveAnExistingAbsenceRequestWith(Table table)
+		{
+			var absenceRequest = table.CreateInstance<AbsenceRequestConfigurable>();
+			UserFactory.User().Setup(absenceRequest);
+		}
+
+
 	}
 
 }

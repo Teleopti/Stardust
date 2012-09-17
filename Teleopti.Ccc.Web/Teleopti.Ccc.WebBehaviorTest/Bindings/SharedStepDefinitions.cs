@@ -92,6 +92,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			EventualAssert.That(() => textRequestSymbol.DisplayHidden(), Is.True);
 		}
 
+		[Then(@"I should see a symbol at the top of the schedule for date '(.*)'")]
+		public void ThenIShouldSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)
+		{
+			var textRequest = Pages.Pages.WeekSchedulePage.RequestForDate(date);
+			EventualAssert.That(() => textRequest.DisplayVisible(), Is.True);
+		}
+
+		[Then(@"I should not see a symbol at the top of the schedule for date '(.*)'")]
+		public void ThenIShouldNotSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)
+		{
+			var textRequestSymbol = Pages.Pages.WeekSchedulePage.RequestForDate(date);
+			EventualAssert.That(() => textRequestSymbol.DisplayHidden(), Is.True);
+		}
+
+
 
 
 
