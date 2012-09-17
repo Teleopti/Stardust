@@ -38,13 +38,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var asmModelFactory = MockRepository.GenerateMock<IAsmViewModelFactory>();
 			var layoutFactory = MockRepository.GenerateMock<ILayoutBaseViewModelFactory>();
-			var viewBag = new LayoutBaseViewModel();
+			var viewBag = new LayoutBaseViewModel{CultureSpecific = new CultureSpecificViewModel()};
 			layoutFactory.Expect(fac => fac.CreateLayoutBaseViewModel()).Return(viewBag);
 
 			using (var controller = new AsmController(asmModelFactory, layoutFactory))
 			{
 				((object)controller.Index().ViewBag.LayoutBase)
 					.Should().Be.SameInstanceAs(viewBag);
+			}
+		}
+
+		[Test]
+		public void ShouldAlwaysShowLeftToRight()
+		{
+			var asmModelFactory = MockRepository.GenerateMock<IAsmViewModelFactory>();
+			var layoutFactory = MockRepository.GenerateMock<ILayoutBaseViewModelFactory>();
+			var viewBag = new LayoutBaseViewModel { CultureSpecific = new CultureSpecificViewModel{Rtl = true} };
+			layoutFactory.Expect(fac => fac.CreateLayoutBaseViewModel()).Return(viewBag);
+
+			using (var controller = new AsmController(asmModelFactory, layoutFactory))
+			{
+				((object)controller.Index().ViewBag.LayoutBase.CultureSpecific.Rtl)
+					.Should().Be.EqualTo(false);
 			}
 		}
 	}

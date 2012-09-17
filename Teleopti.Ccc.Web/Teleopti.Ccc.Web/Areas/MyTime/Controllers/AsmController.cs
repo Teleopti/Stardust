@@ -21,7 +21,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		public ViewResult Index()
 		{
-			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
+			var layoutViewModel = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
+			layoutViewModel.CultureSpecific.Rtl = false; //for now - asm is always displayed "western style" for now
+			ViewBag.LayoutBase = layoutViewModel;
 			return View();
 		}
 
