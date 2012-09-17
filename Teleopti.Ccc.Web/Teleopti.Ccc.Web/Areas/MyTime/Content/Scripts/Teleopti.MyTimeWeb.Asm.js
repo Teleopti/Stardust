@@ -76,19 +76,19 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		self.title = layer.startTimeText + '-' + layer.endTimeText + ' ' + layer.payload;
 		self.visible = ko.computed(function () {
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
-			var startPos = parseInt(self.leftPx);
-			var endPos = startPos + parseInt(self.paddingLeft);
+			var startPos = parseFloat(self.leftPx);
+			var endPos = startPos + parseFloat(self.paddingLeft);
 			return endPos > timelinePosition;
 		});
 		self.active = ko.computed(function () {
 			if (!self.visible)
 				return false;
-			var startPos = parseInt(self.leftPx);
+			var startPos = parseFloat(self.leftPx);
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
 			return startPos <= timelinePosition;
 		});
 		self.startText = ko.computed(function () {
-			var startPos = parseInt(self.leftPx);
+			var startPos = parseFloat(self.leftPx);
 			var out = self.startTimeText;
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
 			if (startPos - timelinePosition >= 24 * pixelPerHours) {
