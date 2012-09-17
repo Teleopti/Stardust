@@ -75,18 +75,18 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		public void ShouldShowAsmIfPermissionToShowAsm()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OpenAsm)).Return(false);
+			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
 
 			var target = CreateTarget(permissionProvider);
 
-			Assert.That(target.CreatePortalViewModel().ShowAsm, Is.False);
+			Assert.That(target.CreatePortalViewModel().ShowAsm, Is.True);
 		}
 
 		[Test]
 		public void ShouldNotShowAsmIfNoPermission()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OpenAsm)).Return(false);
+			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(false);
 
 			var target = CreateTarget(permissionProvider);
 			

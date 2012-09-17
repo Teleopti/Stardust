@@ -80,8 +80,8 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 																									 currentInterval,
 																									 intervalPeriod,
 																									 insertDateTime,
-																									 jobParameters.
-																										 IntervalsPerDay);
+																									 jobParameters.IntervalsPerDay,
+																									 new ScheduleDataRowFactory());
 
 								//Fill the bulk insert table - for schedule
 								foreach (DataRow dataRow in rows)

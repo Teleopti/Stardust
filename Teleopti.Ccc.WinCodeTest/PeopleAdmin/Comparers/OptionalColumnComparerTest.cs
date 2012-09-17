@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			// Creates the person period
 			_personPeriod = PersonPeriodFactory.CreatePersonPeriod
-				(new DateOnly(DateTime.Now),
+				(DateOnly.Today,
 				 PersonContractFactory.CreatePersonContract("testContract", "TestSchedule", "TestPartTimePercentage"),
 				 team);
 			_person.AddPersonPeriod(_personPeriod);
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 			ITeam team1 = TeamFactory.CreateSimpleTeam();
 			// Creates the person period
 			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod
-				(new DateOnly(DateTime.Now).AddDays(1),
+				(DateOnly.Today.AddDays(1),
 				 PersonContractFactory.CreatePersonContract("testContract1", "TestSchedule1", "TestPartTimePercentage1"),
 				 team1);
 			_person.AddPersonPeriod(personPeriod1);

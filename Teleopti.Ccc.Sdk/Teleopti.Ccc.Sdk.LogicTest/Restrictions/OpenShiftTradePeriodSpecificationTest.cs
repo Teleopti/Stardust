@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             {
                 Expect.Call(_checkItem.PersonFrom).Return(_personFrom).Repeat.Any();
                 Expect.Call(_checkItem.PersonTo).Return(_personTo).Repeat.Any();
-                Expect.Call(_checkItem.DateOnly).Return(new DateOnly(DateTime.Today));
+                Expect.Call(_checkItem.DateOnly).Return(DateOnly.Today);
             }
             using (_mocks.Playback())
             {
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             {
                 Expect.Call(_checkItem.PersonFrom).Return(_personFrom).Repeat.Any();
                 Expect.Call(_checkItem.PersonTo).Return(_personTo).Repeat.Any();
-                Expect.Call(_checkItem.DateOnly).Return(new DateOnly(DateTime.Today.AddDays(1))).Repeat.Any();
+                Expect.Call(_checkItem.DateOnly).Return(DateOnly.Today.AddDays(1)).Repeat.Any();
             }
             using (_mocks.Playback())
             {

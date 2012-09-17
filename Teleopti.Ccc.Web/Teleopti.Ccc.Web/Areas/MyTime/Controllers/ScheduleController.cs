@@ -9,17 +9,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class ScheduleController : Controller
 	{
 		private readonly IScheduleViewModelFactory _scheduleViewModelFactory;
+		private readonly INow _now;
 
-		public ScheduleController(IScheduleViewModelFactory scheduleViewModelFactory)
+		public ScheduleController(IScheduleViewModelFactory scheduleViewModelFactory, INow now)
 		{
 			_scheduleViewModelFactory = scheduleViewModelFactory;
+			_now = now;
 		}
 
 		[EnsureInPortal]
 		[UnitOfWorkAction]
 		public ActionResult Week(DateOnly? dateSelection)
 		{
-			var showForDate = dateSelection ?? DateOnly.Today;
+			var showForDate = dateSelection ?? _now.DateOnly();
 
 			var model = _scheduleViewModelFactory.CreateWeekViewModel(showForDate);
 

@@ -1,6 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.WinCode.Common;
+﻿using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.WinCode.Reporting;
 
 namespace Teleopti.Ccc.WinCode.Presentation
@@ -21,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Presentation
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void ShowSettings(ReportDetail reportDetail)
         {
-            switch (reportDetail.Function)
+            switch (reportDetail.FunctionPath)
             {
                 case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
                     showSettingsForScheduledTimePerActivity();
@@ -38,8 +36,8 @@ namespace Teleopti.Ccc.WinCode.Presentation
             }
 
             _view.ReportHeaderCheckRightToLeft();
-            _view.SetReportFunctionPath(reportDetail.Function);
             _view.SetHeaderText(reportDetail.DisplayName);
+            _view.SetReportFunctionCode(reportDetail.FunctionCode);
             _view.Unfold();
         }
 
@@ -68,12 +66,13 @@ namespace Teleopti.Ccc.WinCode.Presentation
 			reportSettings.InitializeSettings();
 		}
 
-        public void HideSettingsAndSetReportHeader(string functionCode, string displayName)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void HideSettingsAndSetReportHeader(ReportDetail reportDetail)
         {
-            _view.SetReportFunctionPath(functionCode);
+            _view.SetReportFunctionCode(reportDetail.FunctionCode);
             _view.DisableShowSettings();
             _view.ReportHeaderCheckRightToLeft();
-            _view.SetHeaderText(displayName);
+            _view.SetHeaderText(reportDetail.DisplayName);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]

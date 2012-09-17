@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
         private void eventSubscriptions()
         {
-            _reportSettings1.Init(_eventAggregator, _componentContext,_applicationFunction);
+            reportSettings1.Init(_eventAggregator, _componentContext,_applicationFunction);
             _eventAggregator.GetEvent<LoadReport>().Subscribe(onLoadReport);
             _eventAggregator.GetEvent<ViewerFoldingChangedEvent>().Subscribe(SetSize);
         }
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
             try
             {
-                switch (_reportDetail.Function)
+                switch (_reportDetail.FunctionPath)
                 {
                     case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
                         refreshScheduledTimePerActivity();
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Win.Reporting
         
         void _backgroundWorkerLoadReport_DoWork(object sender, DoWorkEventArgs e)
         {
-            switch (_reportDetail.Function)
+            switch (_reportDetail.FunctionPath)
             {
                 case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
                     e.Result = getReportDataForScheduleTimePerActivityReport(e.Argument as ReportSettingsScheduledTimePerActivityModel);
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.Reporting
             Cursor = Cursors.Default;
             if (rethrowBackgroundException(e)) return;
 
-            switch (_reportDetail.Function)
+            switch (_reportDetail.FunctionPath)
             {
                 case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
                     var reportDataPackage1 = e.Result as ReportDataPackage<IReportData>;
@@ -223,21 +223,21 @@ namespace Teleopti.Ccc.Win.Reporting
             _scenario = scenario;
             _reportDetail = reportDetail;
             _openFromScheduler = true;
-            _reportSettings1.Fold();
+            reportSettings1.Fold();
             
         }
 
         //from scheduler
         private void setupSettings(ReportDetail reportDetail)
         {
-            _reportSettings1.SetupFromScheduler(reportDetail);
+            reportSettings1.SetupFromScheduler(reportDetail);
         }
 
         //from tree
         public void ShowSettings(ReportDetail reportDetail)
         {
-            _reportSettings1.ShowSettings(reportDetail);
-            _reportSettings1.Width = ClientRectangle.Width;
+            reportSettings1.ShowSettings(reportDetail);
+            reportSettings1.Width = ClientRectangle.Width;
             _reportDetail = reportDetail;
         }
 
@@ -323,15 +323,15 @@ namespace Teleopti.Ccc.Win.Reporting
 
         private Object getReportSettingsModel()
         {
-            switch (_reportDetail.Function)
+            switch (_reportDetail.FunctionPath)
             {
                 case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
-                    return _reportSettings1.ScheduleTimePerActivitySettingsModel;
+                    return reportSettings1.ScheduleTimePerActivitySettingsModel;
                 case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:
                     //NEW_AUDIT
-                    return _reportSettings1.ScheduleAuditingModel;
+                    return reportSettings1.ScheduleAuditingModel;
 				case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-            		return _reportSettings1.ScheduleTimeVersusTargetSettingsModel;
+            		return reportSettings1.ScheduleTimeVersusTargetSettingsModel;
                 default:
                     break;
             }
@@ -352,9 +352,9 @@ namespace Teleopti.Ccc.Win.Reporting
 
         public void SetSize(bool arg)
         {
-            if (_reportSettings1.Unfolded()) _reportSettings1.Unfold();
-            if (_reportSettings1.Height > Height - 40)
-                _reportSettings1.Height = Height - 40;
+            if (reportSettings1.Unfolded()) reportSettings1.Unfold();
+            if (reportSettings1.Height > Height - 40)
+                reportSettings1.Height = Height - 40;
         }
     }
 }

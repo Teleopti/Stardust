@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 		public const string TextRequests = "Raptor/MyTimeWeb/TextRequests";
     	public const string TeamSchedule = "Raptor/MyTimeWeb/TeamSchedule";
     	public const string AbsenceRequestsWeb = "Raptor/MyTimeWeb/AbsenceRequests";
+		public const string AgentScheduleMessenger = "Raptor/MyTimeWeb/AgentScheduleMessenger";
 		public const string ExtendedPreferencesWeb = "Raptor/MyTimeWeb/ExtendedPreferences";
     }
 }

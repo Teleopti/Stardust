@@ -9,63 +9,117 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Asm = (function () {
-	function _start(serverMsSince1970, pixelsPerHour, hours) {
-		var refreshSeconds = 1;
-		var observableInfo = ko.observable();
+	var refreshSeconds = 1;
+	var pixelPerHours = 50;
+	var timeLineMarkerWidth = 100;
 
-		ko.applyBindings({
-			timeLines: hours,
-			activityInfo: observableInfo
-		});
+	function asmViewModel(yesterday) {
+		var self = this;
 
-		_refresh(serverMsSince1970, pixelsPerHour, observableInfo);
-		$('.asm-outer-canvas').show();
+		self.loadViewModel = function () {
+			Teleopti.MyTimeWeb.Ajax.Ajax({
+				url: '/MyTime/Asm/Today',
+				dataType: "json",
+				type: 'GET',
+				data: { asmZero: yesterday.toJSON() },
+				success: function (data) {
+					self.now(new Date().getTeleoptiTime());
+					self.hours(data.Hours);
+					self._createLayers(data.Layers);
 
-		setInterval(function () {
-			_refresh(serverMsSince1970, pixelsPerHour, observableInfo);
-		}, refreshSeconds * 1000);
-	}
+					$('.asm-outer-canvas').show();
 
-	function _refresh(serverMsSince1970, pixelsPerHour, observableInfo) {
-		_moveTimeLineToNow(serverMsSince1970, pixelsPerHour);
-		_updateInfoCanvas(observableInfo);
-	}
-
-	function _updateInfoCanvas(observableInfo) {
-		var model = new Array();
-
-		var timelinePosition = parseFloat($('.asm-time-marker').css('width')) - parseFloat($(".asm-sliding-schedules").css('left'));
-		$('.asm-layer')
-			.each(function () {
-				var startPos = parseFloat($(this).css('left'));
-				var endPos = startPos + parseFloat($(this).css('padding-left'));
-				if (endPos > timelinePosition) {
-					var active = false;
-					if (startPos <= timelinePosition) {
-						active = true;
-					}
-					model.push({ 'payload': $(this).data('asm-activity'), 'time': $(this).data('asm-start-time'), 'active': active });
+					setInterval(function () {
+						self.now(new Date().getTeleoptiTime());
+					}, 1000 * refreshSeconds);
+				},
+				error: function () {
+					alert('nope'); //todo: wad ska hända här? (om ingen kontakt med servern)
 				}
 			});
-		observableInfo(model);
+		};
+
+		self._createLayers = function (layers) {
+			var newLayers = new Array();
+			$.each(layers, function (key, layer) {
+				newLayers.push(new layerViewModel(layer, self));
+			});
+			self.layers(newLayers);
+		};
+
+		self.hours = ko.observableArray();
+		self.layers = ko.observableArray();
+		self.activeLayers = ko.computed(function () {
+			return $.grep(self.layers(), function (n, i) {
+				return n.visible();
+			});
+		});
+		self.now = ko.observable();
+		self.canvasPosition = ko.computed(function () {
+			var msSinceStart = self.now() - yesterday.getTime();
+			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
+			return -(pixelPerHours * hoursSinceStart) + 'px';
+		});
+		self.yesterday = yesterday;
 	}
 
-	function _moveTimeLineToNow(serverMsSince1970, pixelsPerHour) {
-		var slidingSchedules = $('.asm-sliding-schedules');
-		var clientMsSince1970 = new Date().getTeleoptiTime();
-		var msSinceStart = clientMsSince1970 - serverMsSince1970;
-		var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
-		var startPixel = -(pixelsPerHour * hoursSinceStart);
-		slidingSchedules.css('left', (startPixel) + 'px');
+	function layerViewModel(layer, canvas) {
+		var self = this;
+
+		self.leftPx = (layer.StartMinutesSinceAsmZero * pixelPerHours / 60 + timeLineMarkerWidth) + 'px';
+		self.payload = layer.Payload;
+		self.backgroundColor = layer.Color;
+		self.lengthInMinutes = layer.LengthInMinutes;
+		self.paddingLeft = (layer.LengthInMinutes * pixelPerHours) / 60 + 'px';
+		self.startTimeText = layer.StartTimeText;
+		self.endTimeText = layer.EndTimeText;
+		self.title = layer.startTimeText + '-' + layer.endTimeText + ' ' + layer.payload;
+		self.visible = ko.computed(function () {
+			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
+			var startPos = parseInt(self.leftPx);
+			var endPos = startPos + parseInt(self.paddingLeft);
+			return endPos > timelinePosition;
+		});
+		self.active = ko.computed(function () {
+			if (!self.visible)
+				return false;
+			var startPos = parseInt(self.leftPx);
+			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
+			return startPos <= timelinePosition;
+		});
+		self.startText = ko.computed(function () {
+			var startPos = parseInt(self.leftPx);
+			var out = self.startTimeText;
+			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
+			if (startPos - timelinePosition >= 24 * pixelPerHours) {
+				out += '+1';
+			}
+			return out;
+		});
 	}
 
+	function _start() {
+		_setFixedElementAttributes();
 
+		var yesterdayTemp = new Date(new Date().getTeleoptiTime());
+		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
+		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
+
+		var vm = new asmViewModel(yesterday);
+		vm.loadViewModel();
+		ko.applyBindings(vm);
+	}
+
+	function _setFixedElementAttributes() {
+		$('body').css('overflow', 'hidden');
+		$('.asm-time-marker').css('width', timeLineMarkerWidth);
+		$('.asm-sliding-schedules').css('width', (3 * 24 * pixelPerHours));
+		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
+	}
 
 	return {
-		Init: function (serverMsSince1970, pixelsPerHour, hours) {
-			$('body').css('overflow', 'hidden');
-			_start(serverMsSince1970, pixelsPerHour, hours);
+		Init: function () {
+			_start();
 		}
 	};
-
 })(jQuery);

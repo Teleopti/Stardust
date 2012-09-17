@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
@@ -12,7 +11,7 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
         public TimeInfoObject PaidTime { get; private set; }
         public TimeInfoObject OverTime { get; private set; }
 
-        public TimeInfo(IPayload payload, ILayer<IPayload> layer, IVisualLayerCollection projectedLayerCollection)
+        public TimeInfo(IPayload payload, ILayer<IPayload> layer, IVisualLayerCollection layerCollection)
         {
             TotalTime = new TimeInfoObject();
             ContractTime = new TimeInfoObject();
@@ -20,14 +19,11 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
             PaidTime = new TimeInfoObject();
             OverTime = new TimeInfoObject();
 
-            var payloadLayer = (VisualLayer)layer;
-
             TotalTime.Time = Convert.ToInt32(layer.Period.ElapsedTime().TotalMinutes);
-            ContractTime.Time = (int)payloadLayer.ContractTime().TotalMinutes;
-            WorkTime.Time = (int)payloadLayer.WorkTime().TotalMinutes;
-            PaidTime.Time = (int)payloadLayer.PaidTime().TotalMinutes;
-            TimeSpan ot = projectedLayerCollection.FilterLayers(layer.Period).Overtime();
-            OverTime.Time = (int)ot.TotalMinutes;
+			ContractTime.Time = (int)layerCollection.ContractTime().TotalMinutes;
+			WorkTime.Time = (int)layerCollection.WorkTime().TotalMinutes;
+			PaidTime.Time = (int)layerCollection.PaidTime().TotalMinutes;
+			OverTime.Time = (int)layerCollection.Overtime().TotalMinutes;
 
             var meetingPayload = payload as IMeetingPayload;
             var activity = payload as IActivity;

@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			var tradeWithPerson = PersonFactory.CreatePerson("First1", "Last1");
 			var period = new List<DateOnly>
 			             	{
-			             		new DateOnly(DateTime.Now.AddDays(1)),
-			             		new DateOnly(DateTime.Now.AddDays(2)),
-			             		new DateOnly(DateTime.Now.AddDays(3))
+			             		DateOnly.Today.AddDays(1),
+			             		DateOnly.Today.AddDays(2),
+			             		DateOnly.Today.AddDays(3)
 			             	};
 			IList<IShiftTradeSwapDetail> shiftTradeSwapDetails = new List<IShiftTradeSwapDetail>();
 			foreach (DateOnly dateOnly in period)

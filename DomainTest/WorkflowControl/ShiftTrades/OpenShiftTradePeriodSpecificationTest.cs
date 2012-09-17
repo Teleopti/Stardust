@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
         private IList<IShiftTradeSwapDetail> tradeDetails()
         {
             IList<IShiftTradeSwapDetail> ret = new List<IShiftTradeSwapDetail>();
-            IShiftTradeSwapDetail detail1 = new ShiftTradeSwapDetail(_personFrom, _personTo, new DateOnly(DateTime.Now.AddDays(5)), new DateOnly(DateTime.Now.AddDays(5)));
+            IShiftTradeSwapDetail detail1 = new ShiftTradeSwapDetail(_personFrom, _personTo, DateOnly.Today.AddDays(5), DateOnly.Today.AddDays(5));
 
             ret.Add(detail1);
             return ret;

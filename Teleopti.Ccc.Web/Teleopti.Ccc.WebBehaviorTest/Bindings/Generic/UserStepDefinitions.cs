@@ -29,6 +29,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(schedule);
 		}
 
+		[Given(@"I have a meeting scheduled")]
+		public void GivenIHaveAMeetingScheduled(Table table)
+		{
+			var meeting = table.CreateInstance<MeetingConfigurable>();
+			UserFactory.User().Setup(meeting);
+		}
+
+		[Given(@"I have a public note with")]
+		public void GivenIHaveAPublicNoteWith(Table table)
+		{
+			var publicNote = table.CreateInstance<PublicNoteConfigurable>();
+			UserFactory.User().Setup(publicNote);
+		}
+
 	}
 
 }

@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 
             _personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(DateTime.MinValue.AddYears(2)), new Team());
             _personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(DateTime.Now.AddYears(50)), new Team());
-            _personPeriod3 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(DateTime.Now), new Team());
+            _personPeriod3 = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, new Team());
 
             IList<IPersonPeriod> periodList = new List<IPersonPeriod>();
             periodList.Add(_personPeriod1);

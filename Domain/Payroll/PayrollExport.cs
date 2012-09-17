@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Payroll
         private string _name;
         //private ExportFormat _exportFormat;
         private IList<IPerson> _persons = new List<IPerson>();
-        private DateOnlyPeriod _period = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow), new DateOnly(DateTime.UtcNow.AddDays(1)));
+        private DateOnlyPeriod _period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
         private Guid _payrollFormatId;
         private string _payrollFormatName;
         private ExportFormat _fileFormat;

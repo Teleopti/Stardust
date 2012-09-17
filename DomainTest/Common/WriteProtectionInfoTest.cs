@@ -54,19 +54,19 @@ namespace Teleopti.Ccc.DomainTest.Common
             _person.WorkflowControlSet = workflowControlSet;
             
             Assert.IsNull(_target.PersonWriteProtectedDate);
-            Assert.AreEqual(new DateOnly(DateTime.Now.AddDays(-12)), _target.WriteProtectedUntil());
+            Assert.AreEqual(DateOnly.Today.AddDays(-12), _target.WriteProtectedUntil());
         }
 
         [Test]
         public void VerifyWriteProtectedUntilWhenNotSet()
         {
             IWorkflowControlSet workflowControlSet = new WorkflowControlSet("sö");
-            Assert.AreEqual(new DateOnly(DateTime.Now.AddDays(-10000)), _target.WriteProtectedUntil());
+            Assert.AreEqual(DateOnly.Today.AddDays(-10000), _target.WriteProtectedUntil());
 
             _person.WorkflowControlSet = workflowControlSet;
 
             Assert.IsNull(_target.PersonWriteProtectedDate);
-            Assert.AreEqual(new DateOnly(DateTime.Now.AddDays(-10000)), _target.WriteProtectedUntil());
+            Assert.AreEqual(DateOnly.Today.AddDays(-10000), _target.WriteProtectedUntil());
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             _target.PersonWriteProtectedDate = new DateOnly(1800,1,1);
 
             Assert.AreEqual(new DateOnly(1800,1,1), _target.PersonWriteProtectedDate);
-            Assert.AreEqual(new DateOnly(DateTime.Now.AddDays(-12)), _target.WriteProtectedUntil());
+            Assert.AreEqual(DateOnly.Today.AddDays(-12), _target.WriteProtectedUntil());
         }
 
         [Test]
@@ -87,9 +87,9 @@ namespace Teleopti.Ccc.DomainTest.Common
             IWorkflowControlSet workflowControlSet = new WorkflowControlSet("sö") {WriteProtection = 12};
             _person.WorkflowControlSet = workflowControlSet;
 
-            _target.PersonWriteProtectedDate = new DateOnly(DateTime.Today.AddDays(-1));
+            _target.PersonWriteProtectedDate = DateOnly.Today.AddDays(-1);
 
-            Assert.AreEqual(new DateOnly(DateTime.Today.AddDays(-1)), _target.WriteProtectedUntil());
+            Assert.AreEqual(DateOnly.Today.AddDays(-1), _target.WriteProtectedUntil());
         }
 
         [Test]

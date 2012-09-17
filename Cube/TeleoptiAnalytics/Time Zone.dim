@@ -94,7 +94,7 @@
           <ColumnID>time_zone_name</ColumnID>
         </Source>
       </NameColumn>
-      <DefaultMember>[Time Zone].[Time Zone].&amp;[1]</DefaultMember>
+      <DefaultMember></DefaultMember>
       <IsAggregatable>false</IsAggregatable>
     </Attribute>
   </Attributes>

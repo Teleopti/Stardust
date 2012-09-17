@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 personRotation.StartDate =
                     PeriodDateService.GetValidPeriodDate(
                         PeriodDateDictionaryBuilder.GetDateOnlyDictionary(FilteredStateHolder,
-                        ViewType.PersonAvailabilityView, selectedPerson), new DateOnly(DateTime.Today));
+                        ViewType.PersonAvailabilityView, selectedPerson), DateOnly.Today);
 
                 FilteredStateHolder.AddNewPersonAvailability(personRotation);
 

@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             multiSelectionSkillDtoList.Add(multiSiteSkillSelectionDto);
             
             _exportMultisiteSkillToSkillCommandDto = new ExportMultisiteSkillToSkillCommandDto { Period = _periodDto, MultisiteSkillSelection = multiSelectionSkillDtoList};
-            _jobResult = new JobResult(JobCategory.MultisiteExport, new DateOnlyPeriod(new DateOnly(DateTime.Now), new DateOnly(DateTime.Now)),
+            _jobResult = new JobResult(JobCategory.MultisiteExport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
                                             _person, DateTime.UtcNow);
         }
 

@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
             var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, null,
                                                                               _person.PermissionInformation.Culture(),
-                                                                              new DateOnly(DateTime.Now.Date));
+                                                                              DateOnly.Today);
             Assert.IsNull(message);
         }
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
             var message = _scheduleDayReadModelComparer.FindSignificantChanges(null, existingReadModel,
                                                                               _person.PermissionInformation.Culture(),
-                                                                              new DateOnly(DateTime.Now.Date));
+                                                                              DateOnly.Today);
             Assert.IsNull(message);
         }
 
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
             var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
                                                                               _person.PermissionInformation.Culture(),
-                                                                              new DateOnly(DateTime.Now.Date));
+                                                                              DateOnly.Today);
             Assert.IsNotNull(message);
         }
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
             var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
                                                                               _person.PermissionInformation.Culture(),
-                                                                              new DateOnly(DateTime.Now.Date));
+                                                                              DateOnly.Today);
             Assert.IsNotNull(message);
         }
     }

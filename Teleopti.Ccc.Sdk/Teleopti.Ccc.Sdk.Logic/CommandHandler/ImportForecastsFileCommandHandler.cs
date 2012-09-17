@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             var person = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(new DateOnly(DateTime.Now), new DateOnly(DateTime.Now)),
+                var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
                                               person, DateTime.UtcNow);
                 _jobResultRepository.Add(jobResult);
                 jobResultId = jobResult.Id.GetValueOrDefault();

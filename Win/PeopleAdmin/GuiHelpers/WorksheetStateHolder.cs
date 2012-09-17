@@ -226,14 +226,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private void updateOtherGridViewsWhenANewPersonIsAdded(IPerson newPerson, FilteredPeopleHolder filteredPeopleHolder)
         {
             //Add person period for newly add person
-            var personPeriodModel = new PersonPeriodModel(new DateOnly(DateTime.Today), 
+            var personPeriodModel = new PersonPeriodModel(DateOnly.Today, 
                 newPerson,
                 filteredPeopleHolder.PersonSkillCollection, filteredPeopleHolder.ExternalLogOnCollection,
                 filteredPeopleHolder.SiteTeamAdapterCollection,filteredPeopleHolder.CommonNameDescription);
             filteredPeopleHolder.PersonPeriodGridViewCollection.Add(personPeriodModel);
 
             //Add person period for newly add person
-            var schedulePeriodModel = new SchedulePeriodModel(new DateOnly(DateTime.Today), newPerson, filteredPeopleHolder.CommonNameDescription);
+            var schedulePeriodModel = new SchedulePeriodModel(DateOnly.Today, newPerson, filteredPeopleHolder.CommonNameDescription);
             filteredPeopleHolder.SchedulePeriodGridViewCollection.Add(schedulePeriodModel);
 
             IPersonRotation newPersonRotation = GetSamplePersonRotation(newPerson);
@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private IPersonPeriod getSamplePersonPeriod(FilteredPeopleHolder filteredHolder, IPersonPeriod currentPersonPeriod, IPerson person)
         {
             IPersonPeriod personPeriod;
-            var date = new DateOnly(DateTime.Today);
+            var date = DateOnly.Today;
             
             if(currentPersonPeriod != null)
             {

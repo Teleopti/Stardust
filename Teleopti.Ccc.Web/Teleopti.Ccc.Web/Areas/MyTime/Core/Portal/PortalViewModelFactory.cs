@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			       		NavigationItems = navigationItems,
 			       		CustomerName = _licenseActivator.CustomerName,
 			       		ShowChangePassword = showChangePassword(),
-							ShowAsm =  _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OpenAsm)
+							ShowAsm = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
 			       	};
 		}
 

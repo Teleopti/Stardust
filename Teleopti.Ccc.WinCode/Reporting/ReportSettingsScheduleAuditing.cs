@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.WinCode.Reporting
     {
         public ReportSettingsScheduleAuditing()
         {
-            ChangeStartDate = new DateOnly(DateTime.Today);
-            ChangeEndDate = new DateOnly(DateTime.Today);
-            ScheduleStartDate = new DateOnly(DateTime.Today);
-            ScheduleEndDate = new DateOnly(DateTime.Today);
+            ChangeStartDate = DateOnly.Today;
+            ChangeEndDate = DateOnly.Today;
+            ScheduleStartDate = DateOnly.Today;
+            ScheduleEndDate = DateOnly.Today;
             User = new Guid();
             GroupPage = string.Empty;
             Agents = new HashSet<Guid>();

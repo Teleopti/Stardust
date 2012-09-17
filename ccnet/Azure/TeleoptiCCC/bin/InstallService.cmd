@@ -44,7 +44,7 @@ ECHO installing Report Viewer. Done  >> Install.log
 ::Install Powershell ISE
 ::================
 ECHO --------------------- >> Install.log
-ECHO Set unrestricted Powershell scripting
+ECHO Set unrestricted Powershell scripting  >> Install.log
 powershell set-executionpolicy unrestricted >> Install.log
 ECHO Set unrestricted Powershell scripting. Done >> Install.log
 
@@ -52,6 +52,21 @@ ECHO Install Powershel ISE >> Install.log
 PowerShell .\InstallPowershell-ISE.ps1 >> Install.log
 ECHO Install Powershel ISE. Done >> Install.log
 
+::================
+::Register all service and application names
+::NOTE: Must corrrepsond to the name used in Log4Net.config => BuildArtifacts
+::================
+ECHO --------------------- >> Install.log
+ECHO Register all service and application names in Event Log  >> Install.log
+CALL "RegisterEventLogSource.exe" "TeleoptiAnalyticsWebPortal" >> Install.log
+CALL "RegisterEventLogSource.exe" "TeleoptiETLService" >> Install.log
+CALL "RegisterEventLogSource.exe" "TeleoptiETLTool" >> Install.log
+CALL "RegisterEventLogSource.exe" "TeleoptiRtaWebService" >> Install.log
+CALL "RegisterEventLogSource.exe" "TeleoptiSdkWebService" >> Install.log
+CALL "RegisterEventLogSource.exe" "TeleoptiServiceBus" >> Install.log
+CALL "RegisterEventLogSource.exe" "TeleoptiWebApps" >> Install.log
+CALL "RegisterEventLogSource.exe" "TeleoptiWebBroker" >> Install.log
+ECHO Register all service and application names in Event Log. Done >> Install.log
 
 ::================
 ::Start Services

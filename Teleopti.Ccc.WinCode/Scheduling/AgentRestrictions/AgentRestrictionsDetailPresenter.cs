@@ -12,9 +12,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
 	public class AgentRestrictionsDetailPresenter : SchedulePresenterBase
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-		private IAgentRestrictionsDetailView _view;
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly IAgentRestrictionsDetailModel _model;
 
 		public AgentRestrictionsDetailPresenter(IAgentRestrictionsDetailView view, IAgentRestrictionsDetailModel model, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
@@ -22,7 +19,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
 			: base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag)
 		{
-			_view = view;
 			_model = model;
 		}
 

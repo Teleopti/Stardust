@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var res = Session.GetNamedQuery("CheckIfWindowsUserExists")
 					.SetString("userName", userName)
 					.SetString("domainName", domainName)
-					.SetDateTime("dateNow", new DateOnly(DateTime.Now))
+					.SetDateTime("dateNow", DateOnly.Today)
 					.UniqueResult();
 
 			return res != null;
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(Restrictions.Eq("WindowsAuthenticationInfo.WindowsLogOnName", logOnName))
                 .Add(Restrictions.Disjunction()
                         .Add(Restrictions.IsNull("TerminalDate"))
-                        .Add(Restrictions.Ge("TerminalDate", new DateOnly(DateTime.Now))))
+                        .Add(Restrictions.Ge("TerminalDate", DateOnly.Today)))
                 .Add(Restrictions.Eq("WindowsAuthenticationInfo.DomainName", domainName));
         }
 
@@ -266,14 +266,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateOnlyPeriod period)
         {
-            ICollection<IPerson> retList = Session.CreateCriteria(typeof(Person), "per")
-                      .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-                      .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
-                      .Add(Subqueries.Exists(findActivePeriod(team, period)))
-                      .AddOrder(Order.Asc("Name.LastName"))
-                      .AddOrder(Order.Asc("Name.FirstName"))
-                      .SetResultTransformer(Transformers.DistinctRootEntity)
-                      .List<IPerson>();
+        	ICollection<IPerson> retList = Session.CreateCriteria(typeof (Person), "per")
+        		.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+        		.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+        		.Add(Restrictions.Or(
+        			Restrictions.IsNull("TerminalDate"),
+        			Restrictions.Ge("TerminalDate", period.StartDate)
+        		     	))
+        		.Add(Subqueries.Exists(findActivePeriod(team, period)))
+        		.AddOrder(Order.Asc("Name.LastName"))
+        		.AddOrder(Order.Asc("Name.FirstName"))
+        		.SetResultTransformer(Transformers.DistinctRootEntity)
+        		.List<IPerson>();
 
             return retList;
 
@@ -285,6 +289,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					  .SetFetchMode("OptionalColumnValueCollection",FetchMode.Join)
 					  .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
 					  .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+					  .Add(Restrictions.Or(
+						 Restrictions.IsNull("TerminalDate"),
+						 Restrictions.Ge("TerminalDate", period.StartDate)
+						 ))
 					  .Add(Subqueries.Exists(findActivePeriod(team, period)))
 					  .AddOrder(Order.Asc("Name.LastName"))
 					  .AddOrder(Order.Asc("Name.FirstName"))

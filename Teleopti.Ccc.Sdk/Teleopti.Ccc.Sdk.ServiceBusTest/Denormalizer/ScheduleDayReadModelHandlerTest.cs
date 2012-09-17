@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 			var period = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddDays(2));
-			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.Date.AddDays(1)));
+			var dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 			var models = new List<ScheduleDayReadModel>();
 
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			person.SetId(Guid.NewGuid());
 			var mess = new NotificationMessage {Subject = "ändrats!"};
 			var period = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddDays(2));
-			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.Date.AddDays(1)));
+			var dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 			var models = new List<ScheduleDayReadModel>();
 

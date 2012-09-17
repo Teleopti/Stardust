@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Controllers
 		[Test]
 		public void ReportRequestShouldReturnJsonResult()
 		{
-			var reportRequestModel = new ReportRequestModel {ReportDate = new DateOnly(new DateTime(2011, 01, 19))};
+			var reportRequestModel = new ReportRequestModel {ReportDate = new DateOnly(2011, 01, 19)};
 
 			JsonResult result = _target.Report(reportRequestModel);
 

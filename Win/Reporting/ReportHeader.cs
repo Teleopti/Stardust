@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -11,9 +12,8 @@ namespace Teleopti.Ccc.Win.Reporting
     {
         public event EventHandler ShowSettings;
         public event EventHandler HideSettings;
-        private string _reportName;
 
-        public ReportHeader()
+    	public ReportHeader()
         {
             InitializeComponent();
 
@@ -44,13 +44,7 @@ namespace Teleopti.Ccc.Win.Reporting
             }
         }
 
-        public string ReportName
-        {
-            get { return _reportName; }
-            set { _reportName = value; }
-        }
-
-        public string HeaderText
+    	public string HeaderText
         {
             get { return autoLabelHeaderText.Text; }
             set{ autoLabelHeaderText.Text = value; }
@@ -94,9 +88,8 @@ namespace Teleopti.Ccc.Win.Reporting
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-
-            var reportName = new ReportNameHelper(_reportName);
-            HelpHelper.Current.GetHelp((BaseUserControl)Parent.Parent, reportName, true);
+            var reportCode = new ReportNameHelper(ReportFunctionCode);
+            HelpHelper.Current.GetHelp((BaseUserControl)Parent.Parent, reportCode, true);
         }
 
         public override bool HasHelp
@@ -107,7 +100,10 @@ namespace Teleopti.Ccc.Win.Reporting
             }
         }
 
-        private class ReportNameHelper : IHelpContext
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Never)]
+    	public string ReportFunctionCode { get; set; }
+
+    	private class ReportNameHelper : IHelpContext
         {
             private readonly string _name;
 

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _site1 = SiteFactory.CreateSimpleSite("Site1");
             _site2 = SiteFactory.CreateSimpleSite("Site2");
             _person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2005, 1, 1), _skill1));
-            _person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(DateTime.Today), _skill1, _skill2));
+            _person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(DateOnly.Today, _skill1, _skill2));
             _person.EmploymentNumber = "001234";
             _person.Email = "barack.obama@whitehouse.gov";
             _person.PersonPeriodCollection[0].Team.Description = new Description("Team1");
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.AreEqual("Barack Obama",_target.FullName);
             Assert.AreEqual(_person.PersonPeriodCollection[1].Team,_target.TeamBelong);
             Assert.AreEqual(_person.PersonPeriodCollection[1].Team.Site, _target.SiteBelong);
-            Assert.AreEqual(_person.Period(new DateOnly(DateTime.Today)), _target.CurrentPeriod);
+            Assert.AreEqual(_person.Period(DateOnly.Today), _target.CurrentPeriod);
             Assert.AreEqual(_target.Email, _target.Email);
             Assert.AreEqual("Skill1; Skill2", _target.Skills);
         }

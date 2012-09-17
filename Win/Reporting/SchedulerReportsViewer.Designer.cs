@@ -34,7 +34,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulerReportsViewer));
             this.reportViewerControl1 = new Teleopti.Ccc.OnlineReporting.ReportViewerControl();
-            this._reportSettings1 = new Teleopti.Ccc.Win.Reporting.ReportSettingsHostView();
+            this.reportSettings1 = new Teleopti.Ccc.Win.Reporting.ReportSettingsHostView();
             this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdv();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
             this.SuspendLayout();
@@ -47,14 +47,14 @@
             this.reportViewerControl1.Size = new System.Drawing.Size(996, 590);
             this.reportViewerControl1.TabIndex = 0;
             // 
-            // _reportSettings1
+            // reportSettings1
             // 
-            this._reportSettings1.BackColor = System.Drawing.SystemColors.Window;
-            this._reportSettings1.Dock = System.Windows.Forms.DockStyle.Top;
-            this._reportSettings1.Location = new System.Drawing.Point(6, 34);
-            this._reportSettings1.Name = "_reportSettings1";
-            this._reportSettings1.Size = new System.Drawing.Size(996, 37);
-            this._reportSettings1.TabIndex = 1;
+            this.reportSettings1.BackColor = System.Drawing.SystemColors.Window;
+            this.reportSettings1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.reportSettings1.Location = new System.Drawing.Point(6, 34);
+            this.reportSettings1.Name = "reportSettings1";
+            this.reportSettings1.Size = new System.Drawing.Size(996, 37);
+            this.reportSettings1.TabIndex = 1;
             // 
             // ribbonControlAdv1
             // 
@@ -80,7 +80,7 @@
             this.ClientSize = new System.Drawing.Size(1008, 667);
             this.Controls.Add(this.ribbonControlAdv1);
             this.Controls.Add(this.reportViewerControl1);
-            this.Controls.Add(this._reportSettings1);
+            this.Controls.Add(this.reportSettings1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(252, 100);
             this.Name = "SchedulerReportsViewer";
@@ -94,7 +94,7 @@
         #endregion
 
         private Teleopti.Ccc.OnlineReporting.ReportViewerControl reportViewerControl1;
-        private ReportSettingsHostView _reportSettings1;
+        private ReportSettingsHostView reportSettings1;
         private Syncfusion.Windows.Forms.Tools.RibbonControlAdv ribbonControlAdv1;
 
     }

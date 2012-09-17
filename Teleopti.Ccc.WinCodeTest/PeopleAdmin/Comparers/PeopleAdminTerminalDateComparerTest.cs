@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		public void VerifyCompareMethodWithFirstNull()
 		{
 			// Sets the language of the object
-			_personGeneralModel.TerminalDate = new DateOnly(DateTime.Now);
+			_personGeneralModel.TerminalDate = DateOnly.Today;
 
 			// Calls the compares method
 			peopleAdminTerminalDateComparer = new PeopleAdminTerminalDateComparer();
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		public void VerifyCompareMethodWithSecondNull()
 		{
 			// Sets the null language for the target
-            _target.TerminalDate = new DateOnly(DateTime.Now);
+            _target.TerminalDate = DateOnly.Today;
 
 			// Calls the compares method
 			peopleAdminTerminalDateComparer = new PeopleAdminTerminalDateComparer();
@@ -111,10 +111,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		public void VerifyCompareMethodAscending()
 		{
 			// Sets the date erlier than the _personGeneralModel's terminal date
-            _target.TerminalDate = new DateOnly(DateTime.Now);
+            _target.TerminalDate = DateOnly.Today;
 
 			// Sets the date comes after the _target's terminal date
-			_personGeneralModel.TerminalDate = new DateOnly(DateTime.Now).AddDays(1);
+			_personGeneralModel.TerminalDate = DateOnly.Today.AddDays(1);
 
 			// Calls the compares method
 			peopleAdminTerminalDateComparer = new PeopleAdminTerminalDateComparer();
@@ -135,10 +135,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		public void VerifyCompareMethodDescending()
 		{
 			// Sets the date comes the _personGeneralModel's terminal date
-            _target.TerminalDate = new DateOnly(DateTime.Now).AddDays(1);
+            _target.TerminalDate = DateOnly.Today.AddDays(1);
 
 			// Sets the date erlier than after the_target's terminal date
-            _personGeneralModel.TerminalDate = new DateOnly(DateTime.Now);
+            _personGeneralModel.TerminalDate = DateOnly.Today;
 
 			// Calls the compares method
 			peopleAdminTerminalDateComparer = new PeopleAdminTerminalDateComparer();
@@ -159,10 +159,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		public void VerifyCompareMethodWithSecondWithSame()
 		{
 			// Sets the terminal date same as the _personGeneralModel's terminal date
-            _target.TerminalDate = new DateOnly(DateTime.Now);
+            _target.TerminalDate = DateOnly.Today;
 
 			// Sets the terminal date same as the_target's terminal date
-            _personGeneralModel.TerminalDate = new DateOnly(DateTime.Now);
+            _personGeneralModel.TerminalDate = DateOnly.Today;
 
 
 			// Calls the compares method

@@ -184,11 +184,11 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyRemoveAllSchedulePeriods()
         {
-            ISchedulePeriod schedulePeriod1 = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(DateTime.Now));
+            ISchedulePeriod schedulePeriod1 = SchedulePeriodFactory.CreateSchedulePeriod(DateOnly.Today);
             ISchedulePeriod schedulePeriod2 =
-                SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(DateTime.Now.AddDays(10)));
+                SchedulePeriodFactory.CreateSchedulePeriod(DateOnly.Today.AddDays(10));
             ISchedulePeriod schedulePeriod3 =
-                SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(DateTime.Now.AddDays(100)));
+                SchedulePeriodFactory.CreateSchedulePeriod(DateOnly.Today.AddDays(100));
 
             _target.AddSchedulePeriod(schedulePeriod1);
             _target.AddSchedulePeriod(schedulePeriod2);

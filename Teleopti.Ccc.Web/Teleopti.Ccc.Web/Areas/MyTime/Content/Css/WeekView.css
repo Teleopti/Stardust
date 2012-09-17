@@ -220,3 +220,27 @@ select.absence-input
 #Schedule-addRequest-message-input {
 	width: 245px;
 }
+
+.week-schedule-time-indicator
+{
+	width: 131px;
+	float: left;
+	z-index: 2;
+	border-bottom: 2px solid rgba(255,70,69,1);
+	display: none;
+}
+
+.week-schedule-time-indicator-small
+{
+	width: 31px;
+	float: left;
+	z-index: 2;
+	border-bottom: 2px solid rgba(255,70,69,1);
+	display: none;
+	background-color: blue;
+}
+
+.week-schedule-ASM-permission-granted .week-schedule-current-week
+{
+	display: none;
+}

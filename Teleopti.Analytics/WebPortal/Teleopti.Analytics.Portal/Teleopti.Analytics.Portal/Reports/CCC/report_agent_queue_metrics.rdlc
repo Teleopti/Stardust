@@ -1199,7 +1199,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1441,7 +1440,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Code.TimeString(Sum(Fields!handling_time_s.Value) / Sum(Fields!answered_calls.Value))</Value>
+                              <Value>=Code.TimeString(Code.DivisionWithZero(Sum(Fields!handling_time_s.Value), Sum(Fields!answered_calls.Value)))</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1651,7 +1650,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Code.TimeString(avg(Fields!average_handling_time_s.Value))</Value>
+                              <Value>=Code.TimeString(Code.DivisionWithZero(Sum(Fields!handling_time_s.Value), Sum(Fields!answered_calls.Value)))</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1688,7 +1687,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Code.TimeString(avg(Fields!average_talk_time_s.Value))</Value>
+                              <Value>=Code.TimeString(Code.DivisionWithZero(Sum(Fields!talk_time_s.Value),Sum(Fields!answered_calls.Value)))</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1725,7 +1724,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Code.TimeString(avg(Fields!average_after_call_work_s.Value))</Value>
+                              <Value>=Code.TimeString(Code.DivisionWithZero(Sum(Fields!after_call_work_s.Value),Sum(Fields!answered_calls.Value)))</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
