@@ -131,6 +131,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             };
             var helper = new AgentInfoHelper(person, dateOnly, stateHolder, schedulingOptions, _workShiftWorkTime);
             listViewFairness.Items.Clear();
+            perPersonAndGroupListView.Items.Clear();
+            perGroupAndOthersListView.Items.Clear();
 
             helper.SchedulePeriodData();
             if (!helper.Period.HasValue)
@@ -148,6 +150,63 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var categories =
                     new List<IShiftCategory>(shiftCategoryFairness.ShiftCategoryFairnessDictionary.Keys);
                 categories.Sort(new ShiftCategorySorter());
+
+                if (perPersonAndGroup.ShiftCategoryFairnessCompareValues != null)
+                {
+                    createAndAddItemInMultipleColumns(perPersonAndGroupListView, ""
+                                                          , Resources.Agent
+                                                          , Resources.Others
+                                                          , true);
+
+                    foreach (var shiftCategory in perPersonAndGroup.ShiftCategoryFairnessCompareValues)
+                    {
+                        if (shiftCategory.Original - shiftCategory.ComparedTo != 0.0)
+                        {
+                            createAndAddItemInMultipleColumns(perPersonAndGroupListView,
+                                                              shiftCategory.ShiftCategory.Description.Name,
+                                                              (shiftCategory.Original*100).ToString(
+                                                                  CultureInfo.CurrentCulture) + "%",
+                                                              (shiftCategory.ComparedTo*100).ToString(
+                                                                  CultureInfo.CurrentCulture) + "%", false);
+                        }
+                    }
+
+                    createAndAddItemInMultipleColumns(perPersonAndGroupListView, Resources.StandardDeviation + "= "
+                                                      , Math.Round(perPersonAndGroup.StandardDeviation,4).ToString(CultureInfo.CurrentCulture)
+                                                          , ""
+                                                          , true);
+                }
+
+                //perPersonAndGroupLabel.Text = Resources.StandardDeviation + "= " + perPersonAndGroup.StandardDeviation;
+              
+                if (perGroupAndOthers.ShiftCategoryFairnessCompareValues != null)
+                {
+                    createAndAddItemInMultipleColumns(perGroupAndOthersListView, ""
+                                                         , Resources.Team
+                                                         , Resources.Others
+                                                         , true);
+
+                    foreach (var shiftCategory in perGroupAndOthers.ShiftCategoryFairnessCompareValues)
+                    {
+                        if (shiftCategory.Original - shiftCategory.ComparedTo != 0.0)
+                        {
+                            createAndAddItemInMultipleColumns(perGroupAndOthersListView,
+                                                              shiftCategory.ShiftCategory.Description.Name,
+                                                              (shiftCategory.Original * 100).ToString(
+                                                                  CultureInfo.CurrentCulture) + "%",
+                                                              (shiftCategory.ComparedTo * 100).ToString(
+                                                                  CultureInfo.CurrentCulture) + "%", false);
+                        }
+                    }
+
+                    createAndAddItemInMultipleColumns(perGroupAndOthersListView, Resources.StandardDeviation + "= "
+                                                         , Math.Round(perGroupAndOthers.StandardDeviation,4).ToString(CultureInfo.CurrentCulture)
+                                                         , ""
+                                                         , true);
+                }
+
+                //perGroupAndOthersLabel.Text = Resources.StandardDeviation + "= " + perGroupAndOthers.StandardDeviation;
+
                 foreach (var category in categories)
                 {
                     var value = shiftCategoryFairness.ShiftCategoryFairnessDictionary[category];
@@ -177,6 +236,20 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 createAndAddItem(listViewFairness, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
             }
+        }
+
+        private static void createAndAddItemInMultipleColumns(ListView listView, string column1Text, string column2Text, string column3Text, bool isBold )
+        {
+            var listViewItems = new ListViewItem(column1Text);
+            listViewItems.SubItems.Add(column2Text);
+            listViewItems.SubItems.Add(column3Text);
+
+            if(isBold)
+            {
+                listViewItems.Font.ChangeToBold();
+            }
+            
+            listView.Items.Add(listViewItems);
         }
 
         private void initializeFairnessTab()
@@ -560,6 +633,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private static ListViewItem createAndAddItem(ListView listView, string itemText, string subItemText, int indent)
         {
             var item = new ListViewItem(itemText);
+            
             if (indent == 1)
                 item.Font = item.Font.ChangeToBold();
             item.IndentCount = indent;
@@ -570,6 +644,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             return item;
         }
+
+       
 
         private void tabControlAgentInfo_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -657,7 +733,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (_dataLoaded)
             {
-				updateFairnessInfo(_selectedPerson, _dateOnlyList.First(), _stateHolder);
+                updateFairnessInfo(_selectedPerson, _dateOnlyList.First(), _stateHolder);
             }
         }
 
