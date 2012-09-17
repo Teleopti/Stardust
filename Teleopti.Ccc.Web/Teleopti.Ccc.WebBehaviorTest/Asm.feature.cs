@@ -187,10 +187,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Write all upcoming activities")]
-        public virtual void WriteAllUpcomingActivities()
+        [NUnit.Framework.DescriptionAttribute("Show title in popup")]
+        public virtual void ShowTitleInPopup()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write all upcoming activities", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show title in popup", ((string[])(null)));
 #line 47
 this.ScenarioSetup(scenarioInfo);
 #line 8
@@ -198,12 +198,33 @@ this.FeatureBackground();
 #line 48
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 49
- testRunner.And("Current time is \'2030-01-01 07:00\'");
+ testRunner.When("I view my week schedule");
 #line 50
- testRunner.When("I view my regional settings");
-#line 51
  testRunner.And("I click ASM link");
-#line 52
+#line 51
+ testRunner.Then("I should see a popup with title AgentScheduleMessenger");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Write all upcoming activities")]
+        public virtual void WriteAllUpcomingActivities()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write all upcoming activities", ((string[])(null)));
+#line 53
+this.ScenarioSetup(scenarioInfo);
+#line 8
+this.FeatureBackground();
+#line 54
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 55
+ testRunner.And("Current time is \'2030-01-01 07:00\'");
+#line 56
+ testRunner.When("I view my regional settings");
+#line 57
+ testRunner.And("I click ASM link");
+#line 58
  testRunner.Then("I should see \'3\' upcoming activities");
 #line hidden
             this.ScenarioCleanup();
@@ -214,19 +235,19 @@ this.FeatureBackground();
         public virtual void CurrentActivityShouldBeShown()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Current activity should be shown", ((string[])(null)));
-#line 54
+#line 60
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 55
+#line 61
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 56
+#line 62
  testRunner.And("Current time is \'2030-01-01 16:00\'");
-#line 57
+#line 63
  testRunner.When("I view my regional settings");
-#line 58
+#line 64
  testRunner.And("I click ASM link");
-#line 59
+#line 65
  testRunner.Then("I should see Phone as current activity");
 #line hidden
             this.ScenarioCleanup();
@@ -237,19 +258,19 @@ this.FeatureBackground();
         public virtual void NoCurrentActivityToShow()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No current activity to show", ((string[])(null)));
-#line 61
+#line 67
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 62
+#line 68
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 63
+#line 69
  testRunner.And("Current time is \'2030-01-01 07:00\'");
-#line 64
+#line 70
  testRunner.When("I view my regional settings");
-#line 65
+#line 71
  testRunner.And("I click ASM link");
-#line 66
+#line 72
  testRunner.Then("I should not see as current activity");
 #line hidden
             this.ScenarioCleanup();
@@ -260,21 +281,21 @@ this.FeatureBackground();
         public virtual void CurrentActivityChanges()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Current activity changes", ((string[])(null)));
-#line 68
+#line 74
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 69
+#line 75
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 70
+#line 76
  testRunner.And("Current time is \'2030-01-01 11:59\'");
-#line 71
+#line 77
  testRunner.When("I view my regional settings");
-#line 72
+#line 78
  testRunner.And("I click ASM link");
-#line 73
+#line 79
  testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
-#line 74
+#line 80
  testRunner.Then("I should see Phone as current activity");
 #line hidden
             this.ScenarioCleanup();
@@ -285,19 +306,19 @@ this.FeatureBackground();
         public virtual void UpcomingActivityStarttimeShouldBeDisplayed()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime should be displayed", ((string[])(null)));
-#line 76
+#line 82
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 77
+#line 83
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 78
+#line 84
  testRunner.And("Current time is \'2029-12-31 12:01\'");
-#line 79
+#line 85
  testRunner.When("I view my regional settings");
-#line 80
+#line 86
  testRunner.And("I click ASM link");
-#line 81
+#line 87
  testRunner.Then("I should see last activity starttime as \'12:00\'");
 #line hidden
             this.ScenarioCleanup();
@@ -310,19 +331,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime starting after more than 24 hours should be indicated" +
                     " as next day", ((string[])(null)));
-#line 83
+#line 89
 this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
-#line 84
+#line 90
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 85
+#line 91
  testRunner.And("Current time is \'2029-12-31 12:00\'");
-#line 86
+#line 92
  testRunner.When("I view my regional settings");
-#line 87
+#line 93
  testRunner.And("I click ASM link");
-#line 88
+#line 94
  testRunner.Then("I should see last activity starttime as \'12:00+1\'");
 #line hidden
             this.ScenarioCleanup();

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 		}
 
 		// TODO: JonasN, Texts
-		public LayoutBaseViewModel CreateLayoutBaseViewModel()
+		public LayoutBaseViewModel CreateLayoutBaseViewModel(string title)
 		{
 			var cultureSpecificViewModel = _cultureSpecificViewModelFactory.CreateCutureSpecificViewModel();
 			var datePickerGlobalizationViewModel =
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 			       		CultureSpecific = cultureSpecificViewModel,
 			       		DatePickerGlobalization = datePickerGlobalizationViewModel,
 			       		Footer = string.Empty,
-			       		Title = "MyTime",
+							Title = title,
 							FixedDate = fixedDate
 			       	};
 		}

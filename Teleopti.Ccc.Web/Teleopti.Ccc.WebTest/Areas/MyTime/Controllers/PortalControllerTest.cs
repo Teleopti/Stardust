@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			using (mocks.Record())
 			{
 				Expect.Call(viewModelFactory.CreatePortalViewModel()).Return(new PortalViewModel());
-				Expect.Call(layoutBaseViewModelFactory.CreateLayoutBaseViewModel()).Return(new LayoutBaseViewModel());
+				Expect.Call(layoutBaseViewModelFactory.CreateLayoutBaseViewModel(Resources.MyTime)).Return(new LayoutBaseViewModel());
 			}
 			using (mocks.Playback())
 			{
