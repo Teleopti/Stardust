@@ -84,7 +84,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_initTodayButton();
 		},
 		PartialInit: function () {
-			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 			_initTooltip();
 			_initPeriodSelection();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();

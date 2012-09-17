@@ -219,6 +219,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		var partialInit = _partialViewInitCallback[viewId];
 		if ($.isFunction(partialInit))
 			partialInit();
+		Teleopti.MyTimeWeb.Common.PartialInit();
 	}
 
 	return {
