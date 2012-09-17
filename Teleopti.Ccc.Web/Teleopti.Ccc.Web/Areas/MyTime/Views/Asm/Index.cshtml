@@ -8,11 +8,11 @@
 	<div class="asm-schedule-canvas ui-corner-all">
 		<div class="asm-time-marker">
 		</div>
-		<div class="asm-sliding-schedules">
+		<div class="asm-sliding-schedules" data-bind="style: { left : canvasPosition }">
 			<span data-bind="foreach: layers">
 				<span class="asm-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
 			</span>
-			<span data-bind="foreach: timeLines">
+			<span data-bind="foreach: hours">
 				<span class="asm-timeline-line">
 					<span class="asm-timeline-number ui-corner-all" data-bind="text: $data"></span>
 				</span>
