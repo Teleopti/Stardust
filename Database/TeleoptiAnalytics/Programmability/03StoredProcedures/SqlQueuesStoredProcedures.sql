@@ -197,7 +197,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-			UPDATE Queue.Messages SET Processed = 1 WHERE MessageId = @MessageId
+--Debug			UPDATE Queue.Messages SET Processed = 1 WHERE MessageId = @MessageId
+				DELETE Queue.Messages WHERE MessageId = @MessageId
 END
 
 

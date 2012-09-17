@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
             //if (dateOnlyPeriod.EndDate < date)
             //    return ret;
             var lang = person.PermissionInformation.UICulture();
-            var period = new DateOnlyPeriod(new DateOnly(DateTime.Now), new DateOnly(DateTime.Now.AddDays(14)));
+            var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(14));
 		    var overlappingPeriod = dateOnlyPeriod.Intersection(period);
             
             if (overlappingPeriod==null)

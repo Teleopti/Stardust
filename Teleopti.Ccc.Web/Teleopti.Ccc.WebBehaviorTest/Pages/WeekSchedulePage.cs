@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public List SecondDay { get { return DayElements.ElementAt(1); } }
 		public List ThirdDay { get { return DayElements.ElementAt(2); } }
 		public List FourthDay { get { return DayElements.ElementAt(3); } }
-		public List Fifith { get { return DayElements.ElementAt(4); } }
+		public List FifthDay { get { return DayElements.ElementAt(4); } }
 		public List SixthDay { get { return DayElements.ElementAt(5); } }
 		public List SeventhDay { get { return DayElements.ElementAt(6); } }
 
@@ -41,7 +41,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public List DayElementForDate(string formattedDate) { return Document.List(Find.By("data-mytime-date", v => v == formattedDate)).EventualGet(); }
 		public List DayElementForDate(DateTime date) { return DayElementForDate(date.ToString("yyyy-MM-dd")); }
 
-		public Div SecondDayComment { get { return SecondDay.Div(Find.ByClass("icon comment-day", false)); } }
+		public Div DayComment(DateTime date) 
+		{
+			return DayElementForDate(date).Div(Find.ByClass("icon comment-day", false));
+		}
 
 		public void ClickThirdDayOfOtherWeekInWeekPicker(CultureInfo culture)
 		{
@@ -96,14 +99,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Schedule-addRequest-ok-button")]
 		public Button OkButton { get; set; }
 
-		public Div Timelines
-		{ 
-			get { return Document.Div(Find.ByClass("weekview-timeline", false)); }
+		public DivCollection TimelineLabels
+		{
+			get
+			{
+				var timelineDiv = Document.Div(Find.ByClass("weekview-timeline", false));
+				return timelineDiv.Divs.Filter(Find.ByClass("weekview-timeline-label", false)); 
+			}
 		}
 
 		public Element CancelButton
 		{
 			get { return Document.Element(Find.ByClass("ui-tooltip-close", false)); }
+		}
+
+		public Div TimeIndicatorForDate(DateTime date)
+		{
+			return DayElementForDate(date).ListItems[4].Div(Find.ByClass("week-schedule-time-indicator", false));
+		}
+
+		public Div TimeIndicatorInTimeLine
+		{
+			get
+			{
+				var timelineDiv = Document.Div(Find.ByClass("weekview-timeline", false));
+				return timelineDiv.Div(Find.ByClass("week-schedule-time-indicator-small", false)); 
+			}
 		}
 
 		//not yet used
@@ -120,5 +141,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Schedule-today-button")]
 		public Button TodayButton { get; set; }
+
+		public DivCollection DayLayers(List numberOfDayInWeek)
+		{
+			return numberOfDayInWeek.ListItems[4].Divs.Filter(Find.ByClass("week-schedule-layer", false));
+		}
+
+        public DivCollection DayLayers(DateTime date)
+        {
+            return DayElementForDate(date).ListItems[4].Divs.Filter(Find.ByClass("week-schedule-layer", false));
+        }
 	}
 }

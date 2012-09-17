@@ -22,9 +22,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
         private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
         private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
-        private SaveFileDialog _saveFileDialog;
         private const string dateTimeFormat = "yyyyMMdd";
-
+        
         public SelectFileDestination()
         {
             InitializeComponent();
@@ -37,24 +36,28 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         private void SaveFile()
         {
-            _saveFileDialog = new SaveFileDialog();
-            _saveFileDialog.Title = Resources.SelectFileDestination;
-            var period = _stateObj.ExportSkillToFileCommandModel.Period;
-            _saveFileDialog.FileName = _stateObj.ExportSkillToFileCommandModel.Skill.Name + " " +
-                                       period.StartDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture) +
-                                       "-" +
-                                       period.EndDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture);
-            _saveFileDialog.Filter = Resources.CSVFile;
-
-
-            if (_saveFileDialog.ShowDialog() == DialogResult.OK) textBox1.Text = _saveFileDialog.FileName;
-            _saveFileDialog.Dispose();
+            using(var saveFileDialog = new SaveFileDialog())
+            {
+            	saveFileDialog.Title = Resources.SelectFileDestination;
+            	var period = _stateObj.ExportSkillToFileCommandModel.Period;
+            	saveFileDialog.FileName = _stateObj.ExportSkillToFileCommandModel.Skill.Name + " " +
+            	                           period.StartDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture) +
+            	                           "-" +
+            	                           period.EndDate.Date.ToString(dateTimeFormat, CultureInfo.InvariantCulture);
+            	saveFileDialog.Filter = Resources.CSVFile;
+            	saveFileDialog.OverwritePrompt = true;
+                
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            	{
+            		txtFileName.Text = saveFileDialog.FileName;
+            	}
+            }
         }
 
         private void setColors()
         {
             BackColor = ColorHelper.WizardBackgroundColor();
-            textBox1.BackColor = ColorHelper.WizardPanelBackgroundColor();
+            txtFileName.BackColor = ColorHelper.WizardPanelBackgroundColor();
         }
 
         public void Populate(ExportSkillModel stateObj)
@@ -64,21 +67,28 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public bool Depopulate(ExportSkillModel stateObj)
         {
-            if (String.IsNullOrEmpty(textBox1.Text)) return false;
+            if (String.IsNullOrEmpty(txtFileName.Text)) return false;
             var commandModel = stateObj.ExportSkillToFileCommandModel;
-            commandModel.FileName = textBox1.Text;
+            var pathExists = txtFileName.Text.Contains("\\");
+            
+            if (pathExists)
+                commandModel.FileName = txtFileName.Text;
+            else
+                commandModel.FileName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + txtFileName.Text;
+
             GetSelectedCheckBox(stateObj);
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var skill = _repositoryFactory.CreateSkillRepository(uow).LoadSkill(commandModel.Skill);
                 var skillDays = _repositoryFactory.CreateSkillDayRepository(uow).FindRange(commandModel.Period, skill,
                                                                                            commandModel.Scenario);
-                var command = new ForecastToFileCommand(skill, commandModel, skillDays);
-                command.Execute();
+                var exportForecastDataToFile = new ExportForecastDataToFile(skill, commandModel, skillDays);
+                exportForecastDataToFile.ExportForecastData();
             }
             return true;
         }
 
+       
         public void SetEditMode()
         {
         }

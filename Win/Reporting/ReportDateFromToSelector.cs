@@ -183,8 +183,8 @@ namespace Teleopti.Ccc.Win.Reporting
             
             base.OnLoad(e);
 
-            WorkPeriodStart = new DateOnly(DateTime.Now);
-            WorkPeriodEnd = new DateOnly(DateTime.Now);
+            WorkPeriodStart = DateOnly.Today;
+            WorkPeriodEnd = DateOnly.Today;
             
             dateTimePickerAdvWorkAStartDate.ValueChanged += dateTimePickerAdvWorkStartDate_ValueChanged;
             dateTimePickerAdvWorkEndPeriod.ValueChanged += dateTimePickerAdvWorkEndPeriod_ValueChanged;

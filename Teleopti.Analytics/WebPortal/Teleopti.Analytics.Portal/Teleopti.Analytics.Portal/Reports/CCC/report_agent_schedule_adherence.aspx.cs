@@ -29,7 +29,9 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		private IDictionary<int, IList<IntervalToolTip>> _intervalToolTipDictionary =
 			new Dictionary<int, IList<IntervalToolTip>>();
-
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+		private IDictionary<DateTime, IList<IntervalToolTip>> _intervalDateToolTipDictionary =
+			new Dictionary<DateTime, IList<IntervalToolTip>>();
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
@@ -83,7 +85,10 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			{
 				HideTimeZoneParameter(false);
 				SetIntervalInformation();
-				SetEarliestShiftStartAndLatestShiftEnd();
+				if (ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
+					setEarliestShiftStartAndLatestShiftEndPerDay();
+				else	
+					SetEarliestShiftStartAndLatestShiftEnd();
 				CreateReportTable();
 			}
 			else
@@ -95,19 +100,40 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		private void HideDynamicParameters()
 		{
-			if (_sqlParameterList[2].Value == DBNull.Value & _sqlParameterList[3].Value == DBNull.Value)
+			if (ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
 			{
-				// Group page Business Hierarchy picked
-				trGroupPageGroup.Visible = false;
-				trGroupPageAgent.Visible = false;
+				if (_sqlParameterList[3].Value == DBNull.Value ) //& _sqlParameterList[4].Value == DBNull.Value)
+				{
+					// Group page Business Hierarchy picked
+					trGroupPageGroup.Visible = false;
+					trGroupPageAgent.Visible = false;
+				}
+				else
+				{
+					// Other group page than Business Hierarchy picked
+					trSite.Visible = false;
+					trTeam.Visible = false;
+					trAgent.Visible = false;
+				}
 			}
 			else
 			{
-				// Other group page than Business Hierarchy picked
-				trSite.Visible = false;
-				trTeam.Visible = false;
-				trAgent.Visible = false;
+				trDates.Visible = false;
+				if (_sqlParameterList[2].Value == DBNull.Value & _sqlParameterList[3].Value == DBNull.Value)
+				{
+					// Group page Business Hierarchy picked
+					trGroupPageGroup.Visible = false;
+					trGroupPageAgent.Visible = false;
+				}
+				else
+				{
+					// Other group page than Business Hierarchy picked
+					trSite.Visible = false;
+					trTeam.Visible = false;
+					trAgent.Visible = false;
+				}
 			}
+			
 		}
 
 		private void HideTimeZoneParameter(bool hide)
@@ -159,24 +185,46 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 			if (_sqlParameterList != null && _parameterTextList != null)
 			{
-				if (_sqlParameterList.Count == 10 && _parameterTextList.Count == 10)
+				if (ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
 				{
-					if (_sqlParameterList[0].ParameterName == "@date_from"
-							&& _sqlParameterList[1].ParameterName == "@group_page_code"
-							&& _sqlParameterList[2].ParameterName == "@group_page_group_set"
-							&& _sqlParameterList[3].ParameterName == "@group_page_agent_code"
-							&& _sqlParameterList[4].ParameterName == "@site_id"
-							&& _sqlParameterList[5].ParameterName == "@team_set"
-							&& _sqlParameterList[6].ParameterName == "@agent_person_code"
-							&& _sqlParameterList[7].ParameterName == "@adherence_id"
-							&& _sqlParameterList[8].ParameterName == "@sort_by")
+					if (_sqlParameterList.Count == 11 && _parameterTextList.Count == 11)
 					{
-						isParameterListsValid = true;
+						if (_sqlParameterList[0].ParameterName == "@date_from"
+						    && _sqlParameterList[1].ParameterName == "@date_to"
+						    && _sqlParameterList[2].ParameterName == "@group_page_code"
+						    && _sqlParameterList[3].ParameterName == "@group_page_group_set"
+							&& _sqlParameterList[4].ParameterName == "@group_page_agent_code"
+						    && _sqlParameterList[5].ParameterName == "@site_id"
+						    && _sqlParameterList[6].ParameterName == "@team_set"
+						    && _sqlParameterList[7].ParameterName == "@agent_person_code"
+							&& _sqlParameterList[8].ParameterName == "@adherence_id"
+						    && _sqlParameterList[9].ParameterName == "@sort_by"
+						    && _sqlParameterList[10].ParameterName == "@time_zone_id")
+						{
+							isParameterListsValid = true;
+						}
 					}
 				}
+				else
+					{
+						if (_sqlParameterList.Count == 10 && _parameterTextList.Count == 10)
+						{
+							if (_sqlParameterList[0].ParameterName == "@date_from"
+							    && _sqlParameterList[1].ParameterName == "@group_page_code"
+							    && _sqlParameterList[2].ParameterName == "@group_page_group_set"
+							    && _sqlParameterList[3].ParameterName == "@group_page_agent_code"
+							    && _sqlParameterList[4].ParameterName == "@site_id"
+							    && _sqlParameterList[5].ParameterName == "@team_set"
+							    && _sqlParameterList[6].ParameterName == "@agent_person_code"
+							    && _sqlParameterList[7].ParameterName == "@adherence_id"
+							    && _sqlParameterList[8].ParameterName == "@sort_by")
+							{
+								isParameterListsValid = true;
+							}
+						}
+					}
+
 			}
-
-
 			if (!isParameterListsValid)
 			{
 				Response.Write("xxThe report selection could not be obtained. Please try to make a new selection for the report.");
@@ -186,23 +234,47 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		private void SetReportHeaderParmaterTexts()
 		{
-			tdGroupPageText.InnerText = _parameterTextList[1];
-			tdGroupPageGroupText.InnerText = _parameterTextList[2];
-			tdGroupPageAgentText.InnerText = _parameterTextList[3];
+			if (ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
+			{
+				tdDatesText.InnerText = _parameterTextList[0] + " - " + _parameterTextList[1];
+				tdGroupPageText.InnerText = _parameterTextList[2];
+				tdGroupPageGroupText.InnerText = _parameterTextList[3];
+				tdGroupPageAgentText.InnerText = _parameterTextList[4];
+				
+				tdSiteText.InnerText = _parameterTextList[5];
+				tdTeamText.InnerText = _parameterTextList[6];
+				tdAgentText.InnerText = _parameterTextList[7];
+				
+				tdAdherenceCalculationText.InnerText = _parameterTextList[8];
+				tdSortOrderText.InnerText = _parameterTextList[9];
+				tdTimeZoneText.InnerText = _parameterTextList[10];
+				
+			}
+			else
+			{
+				tdGroupPageText.InnerText = _parameterTextList[1];
+				tdGroupPageGroupText.InnerText = _parameterTextList[2];
+				tdGroupPageAgentText.InnerText = _parameterTextList[3];
 			
-			tdSiteText.InnerText = _parameterTextList[4];
-			tdTeamText.InnerText = _parameterTextList[5];
-			tdAgentText.InnerText = _parameterTextList[6];
-			tdAdherenceCalculationText.InnerText = _parameterTextList[7];
-			tdSortOrderText.InnerText = _parameterTextList[8];
-			tdTimeZoneText.InnerText = _parameterTextList[9];
-			tdDateText.InnerText = _parameterTextList[0];
+				tdSiteText.InnerText = _parameterTextList[4];
+				tdTeamText.InnerText = _parameterTextList[5];
+				tdAgentText.InnerText = _parameterTextList[6];
+				tdAdherenceCalculationText.InnerText = _parameterTextList[7];
+				tdSortOrderText.InnerText = _parameterTextList[8];
+				tdTimeZoneText.InnerText = _parameterTextList[9];
+				tdDateText.InnerText = _parameterTextList[0];
+			}
+			
 		}
 
 		private void SetReportHeaderParmaterLabels()
 		{
-			tdReportName.InnerText = ReportTexts.Resources.ResReportAgentScheduleAdherence;
+			if (ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
+				tdReportName.InnerText = ReportTexts.Resources.ResReportAdherencePerAgent;
+			else
+				tdReportName.InnerText = ReportTexts.Resources.ResReportAdherencePerDay;
 
+			tdDatesLabel.InnerText = ReportTexts.Resources.ResDateColon;
 			tdGroupPageLabel.InnerText = ReportTexts.Resources.ResGroupPageColon;
 			tdGroupPageGroupLabel.InnerText = ReportTexts.Resources.ResGroupPageGroupColon;
 			tdGroupPageAgentLabel.InnerText = ReportTexts.Resources.ResAgentColon;
@@ -218,6 +290,10 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			tdTodaysDateTime.InnerText = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
 			imageButtonPreviousDay.ToolTip = ReportTexts.Resources.ResPrevious;
 			imageButtonNextDay.ToolTip = ReportTexts.Resources.ResNext;
+
+			// per agent
+			if (ReportId.Equals(new Guid("6A3EB69B-690E-4605-B80E-46D5710B28AF")))
+				DayButtons.Visible = false;
 		}
 
 		private TableRow[] GetIntervalTotalsRows()
@@ -323,10 +399,11 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		private TableRow[] GetReportDetailRows()
 		{
+			var perDate = ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"));
 			PrepareTeamAdherenceAndDeviantion();
 			var tableRowList = MakeTableRowList();
-			var dataRowReaders = from r in _dataTable.Rows.Cast<DataRow>() select new DataCellModel(r, this);
-			var dataPerPerson = from r in dataRowReaders group r by new PersonModel(r.DataRow);
+			var dataRowReaders = from r in _dataTable.Rows.Cast<DataRow>() select new DataCellModel(r, this, perDate);
+			var dataPerPerson = from r in dataRowReaders group r by new PersonModel(r.DataRow, perDate);
 			dataPerPerson.ForEach((a, b) => ProcessPersonData(a, b, tableRowList));
 			return tableRowList.ToArray();
 		}
@@ -452,9 +529,17 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		public IntervalToolTip GetToolTip(int personId, int interval)
 		{
-			IList<IntervalToolTip> toolTipList = _intervalToolTipDictionary[personId];
+			var toolTipList = _intervalToolTipDictionary[personId];
 			var toolTip = toolTipList.Where(t => interval >= t.StartInterval &&
 							   interval <= t.EndInterval).FirstOrDefault();
+			return toolTip;
+		}
+
+		public IntervalToolTip GetToolTip(DateTime date, int getIntervalId)
+		{
+			var toolTipList = _intervalDateToolTipDictionary[date];
+			var toolTip = toolTipList.Where(t => getIntervalId >= t.StartInterval &&
+							   getIntervalId <= t.EndInterval).FirstOrDefault();
 			return toolTip;
 		}
 
@@ -477,11 +562,15 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			return tableCellList;
 		}
 
-		private static TableCell[] GetReportDetailRowHeader(PersonModel row)
+		private TableCell[] GetReportDetailRowHeader(PersonModel row)
 		{
 			TableCell[] tableCellArray = new TableCell[3];
 
-			tableCellArray[0] = MakeTableCell(row.PersonName, HorizontalAlign.Left,
+			var header = row.PersonName;
+			if(ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
+				header = row.Date;
+
+			tableCellArray[0] = MakeTableCell(header, HorizontalAlign.Left,
 											 VerticalAlign.Middle, "");
 			tableCellArray[0].Wrap = false;
 			tableCellArray[1] = MakeTableCell((row.AdherenceTotal * 100).ToString("0.0", CultureInfo.CurrentCulture), HorizontalAlign.Center ,
@@ -532,9 +621,13 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		private TableRow GetReportDetailHeaderRowWithTimeLineHour()
 		{
-			TableRow tableRow = new TableRow { CssClass = "ReportColumnHeaders" };
-			tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResAgentName,
+			var tableRow = new TableRow { CssClass = "ReportColumnHeaders" };
+			if(ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
+				tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResDate,
 											HorizontalAlign.Left, VerticalAlign.Top, ""));
+			else
+				tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResAgentName,
+											HorizontalAlign.Left, VerticalAlign.Top, ""));	
 
 			tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResAdherencePercent,
 											HorizontalAlign.Center, VerticalAlign.Top, ""));
@@ -625,6 +718,97 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		{
 			return String.Concat(hourPart.ToString("00", CultureInfo.InvariantCulture), ":",
 								 minutePart.ToString("00", CultureInfo.InvariantCulture));
+		}
+
+		private void setEarliestShiftStartAndLatestShiftEndPerDay()
+		{
+			// Also gather information about activity/absence layer periods for Tooltip usage.
+
+			var previousDate = new DateTime();
+			int previousActivityId = -2;
+			int previousAbsenceId = -2;
+			int previousIntervalId = -2;
+			IntervalToolTip intervalToolTip = null;
+			IList<IntervalToolTip> intervalToolTipList = null;//new List<IntervalToolTip>();
+			_timeLineStartInterval = _intervalsPerDay;
+
+			foreach (DataRow row in _dataTable.Rows)
+			{
+				if ((int)row["interval_id"] < _timeLineStartInterval)
+				{
+					_timeLineStartInterval = (int)row["interval_id"];
+				}
+				if ((int)row["interval_id"] > _timeLineEndInterval)
+				{
+					_timeLineEndInterval = (int)row["interval_id"];
+				}
+
+				if (previousDate != (DateTime)row["date"])
+				{
+					// Count the nr of detail rows we will need
+					_personCount++;
+
+					// Gather tooltip for each activity/absence layer
+					//if (intervalToolTip != null && intervalToolTipList != null && intervalToolTipList.Count > 0)
+					if (intervalToolTip != null && intervalToolTipList != null)
+					{
+						intervalToolTip.EndInterval = previousIntervalId;
+						intervalToolTipList.Add(intervalToolTip);
+						_intervalDateToolTipDictionary.Add(previousDate, intervalToolTipList);
+					}
+
+					intervalToolTipList = new List<IntervalToolTip>();
+					intervalToolTip = new IntervalToolTip
+					{
+						StartInterval = ((int)row["interval_id"]),
+						AbsenceOrActivityName = ((String)row["activity_absence_name"])
+					};
+
+					previousActivityId = (int)row["activity_id"];
+					previousAbsenceId = (int)row["absence_id"];
+				}
+
+				if ((previousActivityId != (int)row["activity_id"]) || (previousAbsenceId != (int)row["absence_id"]))
+				{
+					// We´re in the start of a new layer. Save the end interval of the previous layer 
+					// and the start of the current layer into different tooltip objects.
+					if (intervalToolTip != null && intervalToolTipList != null)
+					{
+						intervalToolTip.EndInterval = previousIntervalId;
+						intervalToolTipList.Add(intervalToolTip);
+					}
+
+					intervalToolTip = new IntervalToolTip
+					{
+						StartInterval = ((int)row["interval_id"]),
+						AbsenceOrActivityName = ((String)row["activity_absence_name"])
+					};
+				}
+
+				previousDate = (DateTime)row["date"];
+				previousActivityId = (int)row["activity_id"];
+				previousAbsenceId = (int)row["absence_id"];
+				previousIntervalId = (int)row["interval_id"];
+			}
+
+			// Catch the end of the last layer. Save the end interval of the last layer into tooltip object.
+			if (intervalToolTip != null && intervalToolTipList != null)
+			{
+				intervalToolTip.EndInterval = previousIntervalId;
+				intervalToolTipList.Add(intervalToolTip);
+				_intervalDateToolTipDictionary.Add(previousDate, intervalToolTipList);
+			}
+
+			_timeLineEndInterval += 1;
+			// See to that the start and end variables begins and ends at whole hours
+			if (_timeLineStartInterval % _intervalsPerHour != 0)
+			{
+				_timeLineStartInterval -= _timeLineStartInterval % _intervalsPerHour;
+			}
+			if (_timeLineEndInterval % _intervalsPerHour != 0)
+			{
+				_timeLineEndInterval += _intervalsPerHour - (_timeLineEndInterval % _intervalsPerHour);
+			}
 		}
 
 		private void SetEarliestShiftStartAndLatestShiftEnd()

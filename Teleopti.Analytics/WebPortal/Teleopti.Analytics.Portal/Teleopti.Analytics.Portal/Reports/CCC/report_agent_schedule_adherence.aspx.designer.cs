@@ -40,6 +40,33 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc {
         protected global::System.Web.UI.HtmlControls.HtmlTableCell tdReportName;
         
         /// <summary>
+        /// trDates control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trDates;
+        
+        /// <summary>
+        /// tdDatesLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdDatesLabel;
+        
+        /// <summary>
+        /// tdDatesText control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdDatesText;
+        
+        /// <summary>
         /// trGroupPage control.
         /// </summary>
         /// <remarks>
@@ -263,6 +290,15 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTableCell tdTimeZoneText;
+        
+        /// <summary>
+        /// DayButtons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow DayButtons;
         
         /// <summary>
         /// tdDateLabel control.

@@ -735,7 +735,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private static ISchedulePeriod getSampleSchedulePeriod(ISchedulePeriod currentSchedulePeriod, IPerson person)
         {
             ISchedulePeriod period;
-            var date = new DateOnly(DateTime.Today);
+            var date = DateOnly.Today;
 
             if (currentSchedulePeriod != null)
             {

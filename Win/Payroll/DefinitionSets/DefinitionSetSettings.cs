@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             _explorerPresenter.Model.SetDefaultSegment(defaultSegment);
             _explorerPresenter.Model.SetRightToLeft(RightToLeft == RightToLeft.Yes);
 
-            _explorerPresenter.Model.SetSelectedDate(new DateOnly(DateTime.Today));
+            _explorerPresenter.Model.SetSelectedDate(DateOnly.Today);
 
             InstantiateMultiplicatorDefinitionView();
             InstantiateVisualizeView();

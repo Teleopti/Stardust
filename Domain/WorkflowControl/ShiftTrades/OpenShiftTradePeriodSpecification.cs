@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
                 if (controlSetFrom == null || controlSetTo == null)
                     return false;
 
-                DateOnly currentDate = new DateOnly(DateTime.Now);
+                DateOnly currentDate = DateOnly.Today;
 
                 DateOnlyPeriod openPeriodFrom = new DateOnlyPeriod(new DateOnly(currentDate.AddDays(controlSetFrom.ShiftTradeOpenPeriodDaysForward.Minimum)), new DateOnly(currentDate.AddDays(controlSetFrom.ShiftTradeOpenPeriodDaysForward.Maximum)));
                 DateOnlyPeriod openPeriodTo = new DateOnlyPeriod(new DateOnly(currentDate.AddDays(controlSetTo.ShiftTradeOpenPeriodDaysForward.Minimum)), new DateOnly(currentDate.AddDays(controlSetTo.ShiftTradeOpenPeriodDaysForward.Maximum)));

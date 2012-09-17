@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         [SetUp]
         public void Setup()
         {
-            _dateOnly = new DateOnly(DateTime.Now);
+            _dateOnly = DateOnly.Today;
             _target = new DateOnlyDto(_dateOnly);
         }
 

@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
 		                                           {DomainName = "domain", WindowsLogOnName = "username"};
 			
-			person.TerminalDate = new DateOnly(DateTime.Now.AddDays(-2));
+			person.TerminalDate = DateOnly.Today.AddDays(-2);
 			PersistAndRemoveFromUnitOfWork(person);
 
 			target.DoesWindowsUserExists("domain", "username").Should().Be.False();
@@ -1223,8 +1223,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyCanLoadPeopleBelongToTeam()
 		{
-			#region setup
-
 			ISite site1 = SiteFactory.CreateSimpleSite("Site1");
 			ITeam team1 = TeamFactory.CreateSimpleTeam("Team1");
 			site1.AddTeam(team1);
@@ -1233,58 +1231,43 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam team2 = TeamFactory.CreateSimpleTeam("Team2");
 			site2.AddTeam(team2);
 
-			// Person1
+			IPartTimePercentage partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("100%");
+			IContractSchedule contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			IContract contract = ContractFactory.CreateContract("Full time");
+	
 			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
 			IPersonPeriod personPeriod1 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team1);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), new PersonContract(contract,partTimePercentage,contractSchedule), team1);
 			per1.AddPersonPeriod(personPeriod1);
 			IPersonPeriod personPeriod2 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 1, 1), team2);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team2);
 			per1.AddPersonPeriod(personPeriod2);
 			per1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2000, 1, 1)));
 			//Person2
 			IPerson per2 = PersonFactory.CreatePerson("Dinesh", "Ranasinghe");
 			IPersonPeriod personPeriod3=
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team1);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team1);
 			per2.AddPersonPeriod(personPeriod3);
 
 			//Person3
 			IPerson per3 = PersonFactory.CreatePerson("Madhuranga", "Pinnagoda");
 			IPersonPeriod personPeriod4 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team2);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team2);
 			per3.AddPersonPeriod(personPeriod4);
 			
-			#endregion
-
-			#region Persist
-
 			PersistAndRemoveFromUnitOfWork(site1);
 			PersistAndRemoveFromUnitOfWork(team1);
 
 			PersistAndRemoveFromUnitOfWork(site2);
 			PersistAndRemoveFromUnitOfWork(team2);
 
-			PersistAndRemoveFromUnitOfWork(personPeriod1.PersonContract.ContractSchedule);
-			PersistAndRemoveFromUnitOfWork(personPeriod1.PersonContract.PartTimePercentage);
-			PersistAndRemoveFromUnitOfWork(personPeriod1.PersonContract.Contract);
-
-			PersistAndRemoveFromUnitOfWork(personPeriod2.PersonContract.ContractSchedule);
-			PersistAndRemoveFromUnitOfWork(personPeriod2.PersonContract.PartTimePercentage);
-			PersistAndRemoveFromUnitOfWork(personPeriod2.PersonContract.Contract);
-
-			PersistAndRemoveFromUnitOfWork(personPeriod3.PersonContract.ContractSchedule);
-			PersistAndRemoveFromUnitOfWork(personPeriod3.PersonContract.PartTimePercentage);
-			PersistAndRemoveFromUnitOfWork(personPeriod3.PersonContract.Contract);
-
-			PersistAndRemoveFromUnitOfWork(personPeriod4.PersonContract.ContractSchedule);
-			PersistAndRemoveFromUnitOfWork(personPeriod4.PersonContract.PartTimePercentage);
-			PersistAndRemoveFromUnitOfWork(personPeriod4.PersonContract.Contract);
+			PersistAndRemoveFromUnitOfWork(contractSchedule);
+			PersistAndRemoveFromUnitOfWork(partTimePercentage);
+			PersistAndRemoveFromUnitOfWork(contract);
 
 			PersistAndRemoveFromUnitOfWork(per1);
 			PersistAndRemoveFromUnitOfWork(per2);
 			PersistAndRemoveFromUnitOfWork(per3);
-
-			#endregion
 
 			//load
 			var testeriod = new DateOnlyPeriod(1999, 12, 31, 2059, 01, 01);
@@ -1302,6 +1285,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			testList = new List<IPerson>(new PersonRepository(UnitOfWork).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
 			Assert.AreEqual(2, testList.Count);
+		}
+
+		[Test]
+		public void ShouldNotLoadPeopleBelongingToTeamAfterTerminalDate()
+		{
+			ISite site1 = SiteFactory.CreateSimpleSite("Site1");
+			ITeam team1 = TeamFactory.CreateSimpleTeam("Team1");
+			site1.AddTeam(team1);
+
+			IPartTimePercentage partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("100%");
+			IContractSchedule contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			IContract contract = ContractFactory.CreateContract("Full time");
+
+			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
+			IPersonPeriod personPeriod1 =
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team1);
+			per1.AddPersonPeriod(personPeriod1);
+			per1.TerminalDate = new DateOnly(2002,1,1);
+
+			PersistAndRemoveFromUnitOfWork(site1);
+			PersistAndRemoveFromUnitOfWork(team1);
+
+			PersistAndRemoveFromUnitOfWork(contractSchedule);
+			PersistAndRemoveFromUnitOfWork(partTimePercentage);
+			PersistAndRemoveFromUnitOfWork(contract);
+
+			PersistAndRemoveFromUnitOfWork(per1);
+			
+			var testeriod = new DateOnlyPeriod(2002, 12, 31, 2059, 01, 01);
+			IList<IPerson> testList = new List<IPerson>(new PersonRepository(UnitOfWork).FindPeopleBelongTeam(team1, testeriod));
+			testList.Should().Be.Empty();
 		}
 
 		[Test]

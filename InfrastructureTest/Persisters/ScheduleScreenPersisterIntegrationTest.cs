@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			Absence.Tracker = Tracker.CreateDayTracker();
 			PersonAbsenceAccount = new PersonAbsenceAccount(Person, Absence);
 			PersonWriteProtectionInfoCollection = new List<IPersonWriteProtectionInfo>();
-			AccountDate = new DateOnly(DateTime.Now.Date);
+			AccountDate = DateOnly.Today;
 			Account = new AccountDay(AccountDate);
 			PersonAbsenceAccount.Add(Account);
 			Scenario = new Scenario("scenario");

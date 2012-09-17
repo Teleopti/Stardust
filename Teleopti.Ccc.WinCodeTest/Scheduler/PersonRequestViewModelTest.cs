@@ -135,9 +135,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 _person,
                 tradeWithPerson,
                 new List<DateOnly>{
-                    new DateOnly(DateTime.Now.AddDays(1)),
-                    new DateOnly(DateTime.Now.AddDays(2)),
-                    new DateOnly(DateTime.Now.AddDays(3))});
+                    DateOnly.Today.AddDays(1),
+                    DateOnly.Today.AddDays(2),
+                    DateOnly.Today.AddDays(3)});
 
             PersonRequestViewModel shiftTradePersonRequestViewModel =
                 new PersonRequestViewModel(shiftTradePersonRequest, _shiftTradeRequestStatusChecker, _personAccount, null, _cccTimeZoneInfo);

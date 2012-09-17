@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
             EnabledApplicationFunctions.Clear();
             EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenAsm));
             EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.SendAsm));
+            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger));
         }
 
         #endregion

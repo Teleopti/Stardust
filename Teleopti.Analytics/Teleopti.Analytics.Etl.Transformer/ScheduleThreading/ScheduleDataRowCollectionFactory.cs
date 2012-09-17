@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Teleopti.Analytics.Etl.Interfaces;
+using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -9,22 +11,28 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
     public class ScheduleDataRowCollectionFactory : IScheduleDataRowCollectionFactory
     {
         public ICollection<DataRow> CreateScheduleDataRowCollection(DataTable dataTable
-                                        , ScheduleProjection scheduleProjection
+                                        , IScheduleProjection scheduleProjection
                                         , IntervalBase interval
                                         , DateTimePeriod intervalPeriod
                                         , DateTime insertDateTime
-                                        , int intervalsPerDay)
+                                        , int intervalsPerDay
+										, IScheduleDataRowFactory scheduleDataRowFactory)
         {
 
-            List<DataRow> list = new List<DataRow>();
+            var list = new List<DataRow>();
 
             // Get list of layers inside the given interval period
-            IVisualLayerCollection intervalLayerCollection =
-                scheduleProjection.SchedulePartProjection.FilterLayers(intervalPeriod);
+            IVisualLayerCollection intervalLayerCollection = scheduleProjection.SchedulePartProjection.FilterLayers(intervalPeriod);
 
             foreach (VisualLayer layer in intervalLayerCollection)
             {
-                DataRow dataRow = ScheduleDataRowFactory.CreateScheduleDataRow(dataTable, layer, scheduleProjection, interval, insertDateTime, intervalsPerDay);
+            	var layerCollection = intervalLayerCollection.Count() == 1
+            	                      	? intervalLayerCollection
+            	                      	: scheduleProjection.SchedulePartProjection.FilterLayers(layer.Period);
+
+            	DataRow dataRow = scheduleDataRowFactory.CreateScheduleDataRow(dataTable, layer, scheduleProjection,
+            	                                                               interval, insertDateTime, intervalsPerDay,
+            	                                                               layerCollection);
                 list.Add(dataRow);
             }
             return list;

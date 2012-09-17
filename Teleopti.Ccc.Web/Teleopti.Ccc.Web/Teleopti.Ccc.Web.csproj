@@ -196,6 +196,8 @@
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\AsmViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractor.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerForWebDisplay.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\IAsmViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\ViewModelFactory\AsmViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\ViewModelFactory\IAsmViewModelFactory.cs" />

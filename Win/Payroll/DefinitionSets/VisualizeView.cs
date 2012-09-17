@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             SetTexts();
             CreateGridView();
 
-            dateNavigateControlThinLayout1.SetSelectedDate(new DateOnly(DateTime.Today));
+            dateNavigateControlThinLayout1.SetSelectedDate(DateOnly.Today);
             dateNavigateControlThinLayout1.SelectedDateChanged += DateNavigateControl_SelectedDateChanged;
 
         }

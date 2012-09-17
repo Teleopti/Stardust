@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
@@ -6,6 +7,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)]
 	public class AsmController : Controller
 	{
 		private readonly IAsmViewModelFactory _asmModelFactory;
@@ -17,12 +19,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 		}
 
-		[UnitOfWorkAction]
-		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OpenAsm)]
 		public ViewResult Index()
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
-			return View(_asmModelFactory.CreateViewModel());
+			return View();
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult Today(DateTime asmZero)
+		{
+			var model = _asmModelFactory.CreateViewModel(asmZero);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

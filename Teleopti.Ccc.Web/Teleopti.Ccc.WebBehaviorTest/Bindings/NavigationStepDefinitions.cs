@@ -54,6 +54,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoWeekSchedulePage();
 		}
 
+        [Given(@"I view my week schedule for date '(.*)'")]
+        [When(@"I view my week schedule for date '(.*)'")]
+        public void WhenIViewMyWeekScheduleForDate(DateTime date)
+        {
+            TestControllerMethods.Logon();
+            Navigation.GotoWeekSchedulePage(date);
+        }
+
+        [When(@"I navigate to week schedule page for date '(.*)'")]
+        public void WhenINavigateToWeekSchedulePageForDate(DateTime date)
+        {
+            Navigation.GotoWeekSchedulePage(date);
+        }
+
 		[Given(@"I am viewing preferences")]
 		[When(@"I am viewing preferences")]
 		[When(@"I view preferences")]
@@ -85,13 +99,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule();
-		}
-
-		[Given(@"I view my week schedule one month ago")]
-		public void GivenIViewMyWeekScheduleOneMonthAgo()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoWeekSchedulePage(DateTime.Now.AddMonths(1));
 		}
 
 		[Given(@"I am viewing team schedule for tomorrow")]

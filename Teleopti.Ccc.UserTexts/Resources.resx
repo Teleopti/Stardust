@@ -6194,10 +6194,6 @@ Meeting</value>
     <value>Agent Queue Statistics</value>
     <comment>Agent Queue Statistics</comment>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent Schedule Adherence</value>
-    <comment>Agent Schedule Adherence</comment>
-  </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Agent Metrics</value>
     <comment>Agent Schedule Result</comment>
@@ -11067,6 +11063,14 @@ These options are activated:
     <value>Same days off</value>
     <comment>Use same days off when optimizing teams</comment>
   </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Adherence per Agent</value>
+    <comment>Adherence per Agent</comment>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Adherence per Day</value>
+    <comment>Adherence per Day</comment>
+  </data>
   <data name="PleaseChooseSkillSet" xml:space="preserve">
     <value>Please choose skill set.</value>
     <comment>Used in mobile report, prompt user to select skill set.</comment>
@@ -11089,6 +11093,10 @@ These options are activated:
   <data name="AddExtendedPreference" xml:space="preserve">
     <value>Add extended preference</value>
   </data>
+  <data name="AgentScheduleMessengerPermission" xml:space="preserve">
+    <value>Agent Schedule Messenger</value>
+    <comment>Application function name for permission module</comment>
+  </data>  
   <data name="ExtendedPreferencesWeb" xml:space="preserve">
     <value>Extended Preferences</value>
     <comment>Application function Extended preferences for the web</comment>

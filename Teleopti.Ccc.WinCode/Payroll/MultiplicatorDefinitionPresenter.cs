@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.WinCode.Payroll
 
         private static DateTimeMultiplicatorDefinition getDefaultDateTimeMultiplicator(IMultiplicator multiplicator)
         {
-            DateOnly startDate = new DateOnly(DateTime.Today);
-            DateOnly endDate = new DateOnly(DateTime.Today.AddDays(1));
+            DateOnly startDate = DateOnly.Today;
+            DateOnly endDate = DateOnly.Today.AddDays(1);
             TimeSpan startTime = TimeSpan.FromHours(8);
             TimeSpan endTime = TimeSpan.FromHours(18);
 

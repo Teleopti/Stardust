@@ -14,7 +14,8 @@ GO
 --				20090812 Changed fetch of texts from the new table Ola
 --				20090818 Corrected the new fetch of texts from the new table Ola
 --				20110808 Corrected the fetch and (re)added shift start and shift end 
--- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
+--				20120215 Changed to uniqueidentifier as report_id - Ola
+--				20120905 Added column date for Agent Schedule Adherence per Day KJ
 -- Description:	<Gets sorting for report Agent Schedule Adherence>
 -- =============================================
 --exec report_control_sort_by_get 13,'C04803E2-8D6F-4936-9A90-9B2000148778',1053,'4AD43E49-B233-4D03-A813-9B2000102EBE'
@@ -115,8 +116,36 @@ SELECT
 	name = 'Shift End Time'
 
 END
-	
-SELECT id,name FROM #result ORDER BY id
-/*Sortering 1=Förnamn,2=Efternamn,3=Shift_start,4=Adherence,5=ShiftEnd*/
+
+IF @report_id='6a3eb69b-690e-4605-b80e-46d5710b28af' --Agent Schedule Adherence per Day
+BEGIN
+	DELETE FROM #result WHERE id in(1,2)
+
+	IF exists(SELECT * FROM mart.language_translation WHERE language_id = @language_id AND term_english = 'Date')
+	INSERT #result
+		SELECT
+		id		= 6,
+		name	= term_language
+	FROM
+		language_translation l
+	WHERE
+		language_id = @language_id	AND
+		term_english = 'Date'	
+	ELSE
+	INSERT #result 
+	SELECT
+		id		= 6,
+		name = 'Date'
 
 
+	SELECT id,name FROM #result ORDER BY id desc
+	/*Sortering 6 = Date , 5=ShiftEnd, 4=Adherence,3=Shift_start*/
+
+END
+ELSE
+BEGIN
+	SELECT id,name FROM #result ORDER BY id
+	/*Sortering 1=Förnamn,2=Efternamn,3=Shift_start,4=Adherence,5=ShiftEnd*/
+
+
+END

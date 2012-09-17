@@ -557,7 +557,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             {
                 _logonDataCanBeChanged =
                     _principalAuthorization.IsPermitted(
-                        DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, new DateOnly(DateTime.Today),
+                        DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today,
                         ContainedEntity);
                 _rightsHaveBeenChecked = true;
             }

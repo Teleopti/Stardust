@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						.Subtract(new TimeSpan(0, 0, startTime.Minutes, startTime.Seconds, startTime.Milliseconds))
 						.Add(new TimeSpan(1, 0, 0));
 					var lastHour = endTime
- 						.Subtract(new TimeSpan(0, 0, endTime.Minutes, endTime.Seconds, endTime.Milliseconds));
+						.Subtract(new TimeSpan(0, 0, endTime.Minutes, endTime.Seconds, endTime.Milliseconds));
 					var times = firstHour
 						.TimeRange(lastHour, TimeSpan.FromHours(1))
 						.Union(new[] { startTime })
@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						.Distinct()
 						;
 					return from t in times
-					       select new TimeLineViewModel
-					              	{
-					              		PositionPercentage = (decimal) (t - startTime).Ticks/(endTime - startTime).Ticks,
-					              		Time = t.ToString("h\\:mm")
-					              	};
+						   select new TimeLineViewModel
+									{
+										PositionPercentage = (decimal)(t - startTime).Ticks / (endTime - startTime).Ticks,
+										Time = t.ToString("h\\:mm")
+									};
 				}))
 				.ForMember(d => d.RequestPermission, c => c.MapFrom(s => new RequestPermission
 				{
@@ -78,44 +78,55 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			CreateMap<WeekScheduleDayDomainData, DayViewModel>()
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date.ToShortDateString()))
 				.ForMember(d => d.FixedDate, c => c.MapFrom(s => s.Date.ToFixedClientDateOnlyFormat()))
-				.ForMember(d => d.Periods, c => c.MapFrom(s => _periodViewModelFactory.Invoke().CreatePeriodViewModels(s.Projection, s.MinMaxTime)))
+				.ForMember(d => d.Periods, c => c.MapFrom(s =>
+															{
+																var projectionList = new List<IVisualLayer>();
+																if (s.ProjectionYesterday != null)
+																	projectionList.AddRange(s.ProjectionYesterday);
+																if (s.Projection != null)
+																	projectionList.AddRange(s.Projection);
+																return _periodViewModelFactory.Invoke().CreatePeriodViewModels(projectionList,
+																																s.MinMaxTime,
+																																s.Date,
+																																s.ScheduleDay == null ? null : s.ScheduleDay.TimeZone);
+															}))
 				.ForMember(d => d.TextRequestCount, o => o.MapFrom(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest))))
 				.ForMember(d => d.State, o => o.MapFrom(s =>
-				                                        	{
-				                                        		if (s.Date == DateOnly.Today)
-				                                        			return SpecialDateState.Today;
-				                                        		return (SpecialDateState) 0;
-				                                        	}))
+															{
+																if (s.Date == DateOnly.Today)
+																	return SpecialDateState.Today;
+																return (SpecialDateState)0;
+															}))
 				.ForMember(d => d.Header, o => o.MapFrom(s => _headerViewModelFactory.Invoke().CreateModel(s.ScheduleDay)))
 				.ForMember(d => d.Note, o => o.MapFrom(s => s.ScheduleDay.PublicNoteCollection()))
 				.ForMember(d => d.Summary, c => c.MapFrom(
 					s =>
+					{
+						var mappingEngine = _mapper();
+						var significantPart = s.ScheduleDay.SignificantPartForDisplay();
+						if (significantPart == SchedulePartView.ContractDayOff)
 						{
-							var mappingEngine = _mapper();
-							var significantPart = s.ScheduleDay.SignificantPartForDisplay();
-							if (significantPart == SchedulePartView.ContractDayOff)
-							{
-								var periodViewModel = mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
-								periodViewModel.StyleClassName += " " + StyleClasses.Striped;
-								return periodViewModel;
-							}
-							if (significantPart == SchedulePartView.DayOff)
-								return mappingEngine.Map<WeekScheduleDayDomainData, PersonDayOffPeriodViewModel>(s);
-							if (significantPart == SchedulePartView.MainShift)
-								return mappingEngine.Map<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>(s);
-							if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
-								return mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
-							return mappingEngine.Map<WeekScheduleDayDomainData, PeriodViewModel>(s);
-						}))
+							var periodViewModel = mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
+							periodViewModel.StyleClassName += " " + StyleClasses.Striped;
+							return periodViewModel;
+						}
+						if (significantPart == SchedulePartView.DayOff)
+							return mappingEngine.Map<WeekScheduleDayDomainData, PersonDayOffPeriodViewModel>(s);
+						if (significantPart == SchedulePartView.MainShift)
+							return mappingEngine.Map<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>(s);
+						if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
+							return mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
+						return mappingEngine.Map<WeekScheduleDayDomainData, PeriodViewModel>(s);
+					}))
 				;
 
 			CreateMap<IEnumerable<IPublicNote>, NoteViewModel>()
 				.ForMember(d => d.Message, c => c.MapFrom(
 					s =>
-						{
-							var publicNote = s.FirstOrDefault();
-							return publicNote != null ? publicNote.GetScheduleNote(new NoFormatting()) : string.Empty;
-						}))
+					{
+						var publicNote = s.FirstOrDefault();
+						return publicNote != null ? publicNote.GetScheduleNote(new NoFormatting()) : string.Empty;
+					}))
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PeriodViewModel>()

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _base = PersonFactory.CreatePerson();
             ITeam team = TeamFactory.CreateSimpleTeam();
             _personPeriod = PersonPeriodFactory.CreatePersonPeriod
-                (new DateOnly(DateTime.Now),
+                (DateOnly.Today,
                  PersonContractFactory.CreatePersonContract("testContract",
                                                             "TestSchedule",
                                                             "TestPartTimePercentage"),
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             const string setValue = "WinUser123";
             Expect.Call(
                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
-                                                   new DateOnly(DateTime.Today), _base)).Return(true);
+                                                   DateOnly.Today, _base)).Return(true);
             _mocks.ReplayAll();
             _target.WindowsLogOnName = setValue;
 
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             const string setValue = "toptinet";
             Expect.Call(
                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
-                                                   new DateOnly(DateTime.Today), _base)).Return(true);
+                                                   DateOnly.Today, _base)).Return(true);
             _mocks.ReplayAll();
             _target.DomainName = setValue;
 
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
                 Expect.Call(authInfo.ApplicationLogOnName).Return("AppUser123");
                 Expect.Call(
                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
-                                                   new DateOnly(DateTime.Today), _base)).Return(true);
+                                                   DateOnly.Today, _base)).Return(true);
                 Expect.Call(_base.ChangePassword("", null, userDetail)).Return(true);
             }
             using (_mocks.Playback())
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             {
                 Expect.Call(
                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
-                                                   new DateOnly(DateTime.Today), _base)).Return(true);
+                                                   DateOnly.Today, _base)).Return(true);
                 Expect.Call(() => _base.ApplicationAuthenticationInfo = null);
             }
             using (_mocks.Playback())
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
                 Expect.Call(authInfo.ApplicationLogOnName).Return("userX07");
                 Expect.Call(
                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
-                                                   new DateOnly(DateTime.Today), _base)).Return(true);
+                                                   DateOnly.Today, _base)).Return(true);
                 Expect.Call(_base.ChangePassword(setValue, null, userDetail)).Return(true);
             }
             using (_mocks.Playback())
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifySetIsAgent()
         {
-            bool expectedValue = (_base.Period(new DateOnly(DateTime.Now)) != null);
+            bool expectedValue = (_base.Period(DateOnly.Today) != null);
 
             // Test get method
             bool getValue = _target.IsAgent;
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyTerminalDate()
         {
-            var dateOnly = new DateOnly(DateTime.Now);
+            var dateOnly = DateOnly.Today;
             _target.TerminalDate = dateOnly;
             Assert.AreEqual(_target.TerminalDate, dateOnly);
 
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         {
             Expect.Call(
                 _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
-                                                    new DateOnly(DateTime.Today), _base)).Return(true);
+                                                    DateOnly.Today, _base)).Return(true);
             
             _mocks.ReplayAll();
             _target.ApplicationLogOnName = "";
@@ -433,7 +433,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
                                                   {DomainName = oldLogOnInfo, WindowsLogOnName = oldLogOnInfo};
             Expect.Call(
                 _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
-                                                    new DateOnly(DateTime.Today), _base)).Return(false);
+                                                    DateOnly.Today, _base)).Return(false);
 
             _mocks.ReplayAll();
             _target.ApplicationLogOnName = "";

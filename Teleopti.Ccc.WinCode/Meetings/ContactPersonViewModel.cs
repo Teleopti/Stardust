@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         public ContactPersonViewModel(IPerson entity, CommonNameDescriptionSetting commonNameDescriptionSetting) : base(entity)
         {
-            CurrentDate = new DateOnly(DateTime.Today);
+            CurrentDate = DateOnly.Today;
             _commonNameDescriptionSetting = commonNameDescriptionSetting;
         }
 
