@@ -7,7 +7,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OpenAsm)]
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)]
 	public class AsmController : Controller
 	{
 		private readonly IAsmViewModelFactory _asmModelFactory;
