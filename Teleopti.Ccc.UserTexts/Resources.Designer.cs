@@ -12931,6 +12931,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MyTime.
+        /// </summary>
+        public static string MyTime {
+            get {
+                return ResourceManager.GetString("MyTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MyTime app.config file is not configured properly.
         /// </summary>
         public static string MyTimeAppConfigFileError {

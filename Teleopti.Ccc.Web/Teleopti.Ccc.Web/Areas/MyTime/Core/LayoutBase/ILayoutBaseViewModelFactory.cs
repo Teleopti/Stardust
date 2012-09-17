@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 {
 	public interface ILayoutBaseViewModelFactory
 	{
-		LayoutBaseViewModel CreateLayoutBaseViewModel();
+		LayoutBaseViewModel CreateLayoutBaseViewModel(string title);
 	}
 }

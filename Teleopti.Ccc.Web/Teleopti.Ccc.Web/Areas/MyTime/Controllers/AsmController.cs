@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Filters;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		public ViewResult Index()
 		{
-			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
+			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel(Resources.AgentScheduleMessenger);
 			return View();
 		}
 
