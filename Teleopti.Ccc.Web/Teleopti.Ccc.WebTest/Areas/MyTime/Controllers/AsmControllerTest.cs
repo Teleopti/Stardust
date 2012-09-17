@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var asmModelFactory = MockRepository.GenerateMock<IAsmViewModelFactory>();
 			var layoutFactory = MockRepository.GenerateMock<ILayoutBaseViewModelFactory>();
 			var viewBag = new LayoutBaseViewModel { CultureSpecific = new CultureSpecificViewModel{Rtl = true} };
-			layoutFactory.Expect(fac => fac.CreateLayoutBaseViewModel()).Return(viewBag);
+			layoutFactory.Expect(fac => fac.CreateLayoutBaseViewModel(Resources.AgentScheduleMessenger)).Return(viewBag);
 
 			using (var controller = new AsmController(asmModelFactory, layoutFactory))
 			{
