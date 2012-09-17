@@ -53,11 +53,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				event: 'mousedown'
 			},
 			style: {
-				classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow',
-				tip: true,
-				border: {
-					radius: 2
-				}
+				def: false,
+				classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+				tip: true
 			}
 		});
 	}
