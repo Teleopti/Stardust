@@ -67,9 +67,4 @@ SET report_name = 'Adherence per Day',
 	report_name_resource_key='ResReportAdherencePerDay',
 	help_key = 'f01_Report_AdherencePerDay.html'
 WHERE report_id=13
-	
 
-	
-	
-	
-	

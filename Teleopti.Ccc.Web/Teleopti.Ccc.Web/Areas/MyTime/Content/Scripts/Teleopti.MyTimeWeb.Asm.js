@@ -13,6 +13,91 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var pixelPerHours = 50;
 	var timeLineMarkerWidth = 100;
 
+	function asmViewModel(yesterday) {
+		var self = this;
+
+		self.loadViewModel = function () {
+			Teleopti.MyTimeWeb.Ajax.Ajax({
+				url: '/MyTime/Asm/Today',
+				dataType: "json",
+				type: 'GET',
+				data: { asmZero: yesterday.toJSON() },
+				success: function (data) {
+					self.now(new Date().getTeleoptiTime());
+					self.hours(data.Hours);
+					self._createLayers(data.Layers);
+
+					$('.asm-outer-canvas').show();
+
+					setInterval(function () {
+						self.now(new Date().getTeleoptiTime());
+					}, 1000 * refreshSeconds);
+				},
+				error: function () {
+					alert('nope'); //todo: wad ska hända här? (om ingen kontakt med servern)
+				}
+			});
+		};
+
+		self._createLayers = function (layers) {
+			var newLayers = new Array();
+			$.each(layers, function (key, layer) {
+				newLayers.push(new layerViewModel(layer, self));
+			});
+			self.layers(newLayers);
+		};
+
+		self.hours = ko.observableArray();
+		self.layers = ko.observableArray();
+		self.activeLayers = ko.computed(function () {
+			return $.grep(self.layers(), function (n, i) {
+				return n.visible();
+			});
+		});
+		self.now = ko.observable();
+		self.canvasPosition = ko.computed(function () {
+			var msSinceStart = self.now() - yesterday.getTime();
+			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
+			return -(pixelPerHours * hoursSinceStart) + 'px';
+		});
+		self.yesterday = yesterday;
+	}
+
+	function layerViewModel(layer, canvas) {
+		var self = this;
+
+		self.leftPx = (layer.StartMinutesSinceAsmZero * pixelPerHours / 60 + timeLineMarkerWidth) + 'px';
+		self.payload = layer.Payload;
+		self.backgroundColor = layer.Color;
+		self.lengthInMinutes = layer.LengthInMinutes;
+		self.paddingLeft = (layer.LengthInMinutes * pixelPerHours) / 60 + 'px';
+		self.startTimeText = layer.StartTimeText;
+		self.endTimeText = layer.EndTimeText;
+		self.title = layer.startTimeText + '-' + layer.endTimeText + ' ' + layer.payload;
+		self.visible = ko.computed(function () {
+			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
+			var startPos = parseInt(self.leftPx);
+			var endPos = startPos + parseInt(self.paddingLeft);
+			return endPos > timelinePosition;
+		});
+		self.active = ko.computed(function () {
+			if (!self.visible)
+				return false;
+			var startPos = parseInt(self.leftPx);
+			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
+			return startPos <= timelinePosition;
+		});
+		self.startText = ko.computed(function () {
+			var startPos = parseInt(self.leftPx);
+			var out = self.startTimeText;
+			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
+			if (startPos - timelinePosition >= 24 * pixelPerHours) {
+				out += '+1';
+			}
+			return out;
+		});
+	}
+
 	function _start() {
 		_setFixedElementAttributes();
 
@@ -20,16 +105,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
 		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
 
-		var observableInfo = ko.observable();
-		var observableHours = ko.observableArray();
-		var observableLayers = ko.observableArray();
-		var vm = {
-			timeLines: observableHours,
-			activityInfo: observableInfo,
-			layers: observableLayers
-		};
+		var vm = new asmViewModel(yesterday);
+		vm.loadViewModel();
 		ko.applyBindings(vm);
-		_loadViewModel(vm, yesterday);
 	}
 
 	function _setFixedElementAttributes() {
@@ -39,77 +117,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
 	}
 
-	function _loadViewModel(asmViewModel, yesterday) {
-		Teleopti.MyTimeWeb.Ajax.Ajax({
-			url: '/MyTime/Asm/Today', //todo: fix!
-			dataType: "json",
-			type: 'GET',
-			data: { asmZero: yesterday.toJSON() }, //todo: fix!
-			success: function (data) {
-				asmViewModel.timeLines(data.Hours);
-				var layers = _updateLayers(data.Layers);
-				asmViewModel.layers(layers);
-				_refresh(yesterday, asmViewModel, layers);
-				$('.asm-outer-canvas').show();
-				setInterval(function () {
-					_refresh(yesterday, asmViewModel, layers);
-				}, 1000 * refreshSeconds);
-			},
-			error: function () {
-				alert('nope');
-			}
-		});
-	}
-
-	function _refresh(yesterday, asmViewModel, layers) {
-		_moveTimeLineToNow(yesterday);
-		_updateInfoCanvas(asmViewModel.activityInfo, layers);
-	}
-
-	function _updateLayers(layers) {
-		var newLayers = new Array();
-		$.each(layers, function (key, layer) {
-			newLayers.push({ 'leftPx': ((layer.StartMinutesSinceAsmZero) * pixelPerHours / 60 + timeLineMarkerWidth) + 'px',
-				'payload': layer.Payload,
-				'backgroundColor': layer.Color,
-				'paddingLeft': (layer.LengthInMinutes * pixelPerHours) / 60 + 'px',
-				'startTimeText': layer.StartTimeText,
-				'title': layer.StartTimeText + '-' + layer.EndTimeText + ' ' + layer.Payload
-			});
-		});
-		return newLayers;
-	}
-
-	function _updateInfoCanvas(observableInfo, layers) {
-		var model = new Array();
-		var timeLineFixedPos = parseFloat($('.asm-time-marker').css('width'));
-		var timelinePosition = timeLineFixedPos - parseFloat($(".asm-sliding-schedules").css('left'));
-		$.each(layers, function (key, layer) {
-			var startPos = parseInt(layer.leftPx);
-			var endPos = startPos + parseInt(layer.paddingLeft);
-			if (endPos > timelinePosition) {
-				var active = false;
-				if (startPos <= timelinePosition) {
-					active = true;
-				}
-				var startText = layer.startTimeText;
-				if (startPos - timelinePosition >= 24 * pixelPerHours) {
-					startText += '+1';
-				}
-				model.push({ 'payload': layer.payload, 'time': startText, 'active': active });
-			}
-		});
-		observableInfo(model);
-	}
-
-	function _moveTimeLineToNow(yesterday) {
-		var slidingSchedules = $('.asm-sliding-schedules');
-		var clientMsSince1970 = new Date().getTeleoptiTime();
-		var msSinceStart = clientMsSince1970 - yesterday.getTime();
-		var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
-		var startPixel = -(pixelPerHours * hoursSinceStart);
-		slidingSchedules.css('left', (startPixel) + 'px');
-	}
 	return {
 		Init: function () {
 			_start();
