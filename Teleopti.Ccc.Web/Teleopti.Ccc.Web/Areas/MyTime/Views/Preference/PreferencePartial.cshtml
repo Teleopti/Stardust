@@ -84,6 +84,12 @@
 									<div class="preference">
 										<span class="displayinline-block">
 											<div class="preference-text" data-bind="text: Preference"></div>
+                                            @if (day.MustHave)
+                                            {
+                                                <div class="preference-must-have">
+                                            	    <span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
+											    </div>
+                                            }
 											<div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
 											<div class="extended-panel" style="display: none">
 												<div class="extended-part">

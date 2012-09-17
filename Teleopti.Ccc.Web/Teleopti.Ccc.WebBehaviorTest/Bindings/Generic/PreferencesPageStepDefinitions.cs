@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
@@ -83,18 +84,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldSeePreference(Table table)
 		{
 
-			ScenarioContext.Current.Pending();
-
 			var fields = table.CreateInstance<PreferenceConfigurable>();
 
-			//I should see the correct date on the cell
-			//todo: test code here
+			//I should see the correct date on the cell header: the right day
 			DateTime date = fields.Date;
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(date.ToShortDateString()));
+			
+			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(">" + date.Day.ToString(CultureInfo.CurrentCulture) +"<"));
 
 			//I should see on heart icon on the current calendar cell, accorning the the must have settings
 			//todo: add an icon and test code here
+			EventualAssert.That(() => cell.Span(Find.ByClass("preference-warning", false)).Exists, Is.True);
 
 		}
 
