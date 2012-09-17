@@ -538,6 +538,7 @@
     <Compile Include="Scheduler\AuditHistory\PreviousPageCommandTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
+    <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\DateTimePeriodIsValidTest.cs" />
     <Compile Include="Scheduler\DayPresenterNewTest.cs" />
     <Compile Include="Scheduler\DayPresenterScaleCalculatorTest.cs" />
@@ -626,6 +627,8 @@
     <Compile Include="Scheduler\SchedulerStateLoaderTest.cs" />
     <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortingCommandsTest.cs" />
     <Compile Include="Scheduler\SetTagCommandTest.cs" />
+    <Compile Include="Scheduler\SkillMonthGridControlPresenterTest.cs" />
+    <Compile Include="Scheduler\SkillWeekGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
     <Compile Include="Scheduler\WorkShiftMasterActivityCheckerTest.cs" />
     <Compile Include="Security\PasswordPolicyServiceViewModelTest.cs" />

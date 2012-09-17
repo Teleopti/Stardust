@@ -82,6 +82,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                 case DateHeaderType.Year:
                     cellInfo.Style.CellValue = CultureInfo.CurrentCulture.Calendar.GetYear(dateTime).ToString(CultureInfo.CurrentUICulture);
                     break;
+				case DateHeaderType.Period:
+            		cellInfo.Style.CellValue = string.Concat(_dateTimes.First().ToShortDateString(CultureInfo.CurrentCulture), " - ", _dateTimes.Last().ToShortDateString(CultureInfo.CurrentCulture));
+            		break;
             }
             cellInfo.Style.MergeCell = GridMergeCellDirection.ColumnsInRow;
         }
