@@ -1394,6 +1394,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agent Schedule Messenger.
+        /// </summary>
+        public static string AgentScheduleMessengerPermission {
+            get {
+                return ResourceManager.GetString("AgentScheduleMessengerPermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agents:.
         /// </summary>
         public static string AgentsColon {
@@ -12927,6 +12936,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MyReport {
             get {
                 return ResourceManager.GetString("MyReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MyTime.
+        /// </summary>
+        public static string MyTime {
+            get {
+                return ResourceManager.GetString("MyTime", resourceCulture);
             }
         }
         

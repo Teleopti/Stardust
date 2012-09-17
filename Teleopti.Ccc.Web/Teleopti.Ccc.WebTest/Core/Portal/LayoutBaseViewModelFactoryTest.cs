@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateLayoutBaseViewModel();
+				var result = _target.CreateLayoutBaseViewModel(string.Empty);
 
 				result.Should().Not.Be.Null();
 				result.CultureSpecific.Should().Be.SameInstanceAs(cultureSpecificViewModel);
@@ -61,14 +61,21 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, nowComponent);
 			
-			target.CreateLayoutBaseViewModel().FixedDate.Should().Be.EqualTo(date);
+			target.CreateLayoutBaseViewModel(string.Empty).FixedDate.Should().Be.EqualTo(date);
+		}
+
+		[Test]
+		public void ShouldSetTitle()
+		{
+			const string title = "the title..";
+			Assert.That(_target.CreateLayoutBaseViewModel(title).Title,Is.EqualTo(title));
 		}
 
 		[Test]
 		public void ShouldReturnNullIfNotSet()
 		{
 			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null));
-			target.CreateLayoutBaseViewModel().FixedDate.HasValue.Should().Be.False();
+			target.CreateLayoutBaseViewModel(string.Empty).FixedDate.HasValue.Should().Be.False();
 		}
 	}
 }

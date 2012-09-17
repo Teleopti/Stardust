@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
@@ -79,6 +80,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 										  .Last().Text,
 										Is.EqualTo(startTime));
 		}
+
+		[Then(@"I should see a popup with title AgentScheduleMessenger")]
+		public void ThenIShouldSeeAPopupWithTitleAgentScheduleMessenger()
+		{
+			EventualAssert.That(() =>
+								_popup.Title.Contains(Resources.AgentScheduleMessenger), 
+								Is.True, 
+								string.Format("{0} does not contain {1}", _popup.Title, Resources.AgentScheduleMessenger));
+		}
+
 
 		private static int pixelLength(Element oneHourLengthLayer)
 		{

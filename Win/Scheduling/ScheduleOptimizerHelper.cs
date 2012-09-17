@@ -512,7 +512,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						OptimizerHelperHelper.SyncSmartDayOffContainerWithMatrix(
 							backToLegalStateSolverContainer,
 							dayOffTemplate,
-							optimizerPreferences.DaysOff,
+							daysOffPreferences,
 							_scheduleDayChangeCallback,
 							new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
