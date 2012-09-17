@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
@@ -32,10 +33,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.ClickThirdDayOfOtherWeekInWeekPicker(UserFactory.User().Culture);
 		}
 
-		[When(@"I click the request symbol")]
-		public void WhenIClickTheRequestSymbol()
+		[When(@"I click the request symbol for date '(.*)'")]
+		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
-			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today).ListItems.First(Find.ById("day-summary")).Div(
+			Pages.Pages.WeekSchedulePage.DayElementForDate(date).ListItems.First(Find.ById("day-summary")).Div(
 				Find.ByClass("text-request", false)).EventualClick();
 		}
 
@@ -106,32 +107,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.DatePicker.CalendarFirstDayNumbers.Should().Contain(TestDataSetup.FirstDayOfAnyWeekInCurrentMonth(UserFactory.User().Culture).Day);
 		}
 
-		[Then(@"I should see a number with the request count")]
-		public void ThenIShouldSeeANumberWithTheTextRequestCount()
+		[Then(@"I should see number '(.*)' with the request count for date '(.*)'")]
+		public void ThenIShouldSeeNumberWithTheRequestCountForDate(int requestCount, DateTime date)
 		{
-			var date = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.Request.Period.StartDateTime.Date;
-			var textRequest = _page.RequestForDate(date);
-			EventualAssert.That(() => textRequest.InnerHtml, Is.StringContaining("1"));
-		}
-
-		[Then(@"I should see (.*) with the request count")]
-		public void ThenIShouldSee2WithTheRequestCount(int count)
-		{
-			var date = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.Request.Period.StartDateTime.Date;
-			var textRequest = _page.RequestForDate(date);
-			EventualAssert.That(() => textRequest.InnerHtml, Is.StringContaining("2"));
-		}
-
-
-		[Then(@"I should see a symbol at the top of the schedule for the first day")]
-		public void ThenIShouldSeeASymbolAtTheTopOfTheScheduleForTheFirstDay()
-		{
-			var startDate = UserFactory.User().UserData<ExistingTextRequestOver2Days>().PersonRequest.Request.Period.StartDateTime.Date;
-			var endDate = UserFactory.User().UserData<ExistingTextRequestOver2Days>().PersonRequest.Request.Period.EndDateTime.Date;
-			var iconDay1 = _page.RequestForDate(startDate);
-			var iconDay2 = _page.RequestForDate(endDate);
-			EventualAssert.That(() => iconDay1.DisplayVisible(), Is.True);
-			EventualAssert.That(() => iconDay2.DisplayVisible(), Is.False);
+			var request = _page.RequestForDate(date);
+			EventualAssert.That(() => request.InnerHtml, Is.StringContaining(requestCount.ToString()));
 		}
 
 		[Then(@"I should see start timeline and end timeline according to schedule with:")]
@@ -143,19 +123,24 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => string.Format("{0}", divs.Count), Is.EqualTo(table.Rows[2][1]));
 		}
 
-		[Then(@"I should see wednesday's activities:")]
-		public void ThenIShouldSeeWednesdaySActivities(Table table)
+		[Then(@"I should see activities on date '(.*)' with:")]
+		public void ThenIShouldSeeActivitiesOnDateWith(DateTime date, Table table)
 		{
-			DivCollection layers = _page.DayLayers(_page.ThirdDay);
+			DivCollection layers = _page.DayLayers(date);
 
-			EventualAssert.That(() => string.Format("{0}", layers[0].OuterHtml), Is.StringContaining(table.Rows[0][1]));
-			EventualAssert.That(() => string.Format("{0}", layers[0].Style.Height), Is.StringContaining(table.Rows[0][2]));
-			EventualAssert.That(() => string.Format("{0}", layers[0].Style.BackgroundColor), Is.StringContaining(table.Rows[0][3]));
+			EventualAssert.That(() => layers[0].GetAttributeValue("tooltip-text"), Is.EqualTo(table.Rows[0][1]));
+			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("0px"));
+			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("199px"));
 
-			EventualAssert.That(() => string.Format("{0}", layers[1].OuterHtml), Is.StringContaining(table.Rows[1][1]));
-			EventualAssert.That(() => string.Format("{0}", layers[1].Style.Height), Is.StringContaining(table.Rows[1][2]));
-			EventualAssert.That(() => string.Format("{0}", layers[1].Style.BackgroundColor), Is.StringContaining(table.Rows[1][3]));
+			EventualAssert.That(() => layers[1].GetAttributeValue("tooltip-text"), Is.EqualTo(table.Rows[1][1]));
+			EventualAssert.That(() => layers[1].Style.GetAttributeValue("Top"), Is.EqualTo("200px"));
+			EventualAssert.That(() => layers[1].Style.GetAttributeValue("Height"), Is.EqualTo("66px"));
+
+			EventualAssert.That(() => layers[2].GetAttributeValue("tooltip-text"), Is.EqualTo(table.Rows[2][1]));
+			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Top"), Is.EqualTo("267px"));
+			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Height"), Is.EqualTo("400px"));
 		}
+
 
 		[Then(@"I should see request page")]
 		public void ThenIShouldSeeRequestPage()
