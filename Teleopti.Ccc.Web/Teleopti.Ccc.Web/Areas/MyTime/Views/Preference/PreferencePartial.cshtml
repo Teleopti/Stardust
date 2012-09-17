@@ -79,6 +79,15 @@
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
 							</div>
 							<div class="day-content pdt10" style="border-left-color: @day.BorderColor" data-bind="style: { borderLeftColor: Color() }">
+								@if (day.InPeriod)
+								{
+									<!-- ko if: IsLoading -->
+									<img class="loading-small-gray-blue" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8-A1C7D3.gif")" alt="..." />
+									<!-- /ko -->
+									<!-- ko if: AjaxError().length > 0 -->
+									<h2 class="error" data-bind="text: AjaxError"></h2>
+									<!-- /ko -->
+								}
 								@if (day.Preference)
 								{
 									<div class="preference">
@@ -135,12 +144,6 @@
 								}
 							</div>
 						</div>
-						@if (day.InPeriod)
-						{
-							<!-- ko if: IsLoading -->
-								<img class="loading-small-gray-blue" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8-A1C7D3.gif")" alt="..." />
-							<!-- /ko -->
-						}
 					</li>
 				}
 			</ul>

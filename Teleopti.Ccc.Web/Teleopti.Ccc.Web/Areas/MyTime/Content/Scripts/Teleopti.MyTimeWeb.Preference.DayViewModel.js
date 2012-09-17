@@ -33,22 +33,17 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			contentType: "application/json; charset=utf-8",
 			type: type,
 			beforeSend: function (jqXHR) {
-
 				var currentRequest = cell.data('request');
 				if (currentRequest) {
 					currentRequest.abort();
 				}
-
 				cell.data('request', jqXHR);
-
+				self.AjaxError('');
 				self.IsLoading(true);
 			},
 			complete: function (jqXHR, textStatus) {
-
 				cell.data('request', null);
-
 				self.IsLoading(false);
-
 				if (complete)
 					complete(jqXHR, textStatus);
 			},
@@ -56,40 +51,15 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			data: data,
 			statusCode404: statusCode404,
 			statusCode400: statusCode400,
-
 			error: function (jqXHR, textStatus, errorThrown) {
-				var cellHtml = $('<h2></h2>')
-					.addClass('error');
-
-				$('.preference', cell)
-					.html(cellHtml);
-
-				var error = "Error!";
+				var error = {
+					ShortMessage: "Error!"
+				};
 				try {
 					error = $.parseJSON(jqXHR.responseText);
 				} catch (e) {
-					cellHtml.append(error);
-					return;
 				}
-
-				$('<a></a>')
-					.append(error.ShortMessage + "!")
-					.click(function () {
-						errorInfo.toggle();
-					})
-					.appendTo(cellHtml);
-				var errorInfo = $('<div></div>')
-					.hide()
-					.width(300)
-					.css({
-						'position': 'absolute',
-						'border': '1px solid #ccc',
-						'background-color': 'white',
-						'padding': '10px'
-					})
-					.append(error.Message)
-					.insertAfter(cellHtml);
-
+				self.AjaxError(error.ShortMessage);
 			}
 		});
 	};
@@ -111,6 +81,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.ActivityEndTimeLimitation = ko.observable();
 	this.ActivityTimeLimitation = ko.observable();
 	this.Color = ko.observable();
+	this.AjaxError = ko.observable('');
 
 	this.ReadElement = function (element) {
 		var item = $(element);
