@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var shiftCat = new ShiftCategory("will be removed");
 			new ShiftCategoryRepository(uow).Add(shiftCat);
 
+			var endDateUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(EndTime.Date);
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(StartTime);

@@ -12,6 +12,7 @@ using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Win.Common
         public static void ModifySelectionInput(GridControl grid, IList<double> list)
         {
             GridRangeInfoList rangelist;
-
+            var culture = TeleoptiPrincipal.Current.Regional.Culture;
             if (grid.Selections.GetSelectedRanges(out rangelist, true))
             {
                 int top;
@@ -139,14 +140,14 @@ namespace Teleopti.Ccc.Win.Common
                         case "NumericWorkloadIntradayTaskLimitedCell":
                         case "NumericWithTwoDecimalsCell":
                         case "NumericTwoDecimalCell":
-                            currentCell.CellModel.ApplyFormattedText(cellStyleInfo, list[i].ToString(CultureInfo.CurrentCulture), -1);
+                            currentCell.CellModel.ApplyFormattedText(cellStyleInfo, list[i].ToString(culture), -1);
                             break;
                         case "PositiveTimeSpanTotalSecondsCell":
                             if (list[i] >= 0)
-                                currentCell.CellModel.ApplyFormattedText(cellStyleInfo, TimeSpan.FromSeconds(CheckSecondsRange(list[i])).ToString(), -1);
+                                currentCell.CellModel.ApplyFormattedText(cellStyleInfo, CheckSecondsRange(list[i]).ToString(culture), -1);
                             break;
                         case "TimeSpanTotalSecondsCell":
-                            currentCell.CellModel.ApplyFormattedText(cellStyleInfo, TimeSpan.FromSeconds(CheckSecondsRange(list[i])).ToString(), -1);
+                            currentCell.CellModel.ApplyFormattedText(cellStyleInfo, CheckSecondsRange(list[i]).ToString(culture), -1);
                             break;
                         case "PercentWithNegativeCell":
                         case "PercentWithTwoDecimalsCell":
