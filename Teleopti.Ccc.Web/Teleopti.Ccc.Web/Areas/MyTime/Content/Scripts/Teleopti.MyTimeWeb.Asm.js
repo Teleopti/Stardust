@@ -18,7 +18,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		self.loadViewModel = function () {
 			Teleopti.MyTimeWeb.Ajax.Ajax({
-				url: '/MyTime/Asm/Today',
+				url: 'Asm/Today',
 				dataType: "json",
 				type: 'GET',
 				data: { asmZero: yesterday.toJSON() },
