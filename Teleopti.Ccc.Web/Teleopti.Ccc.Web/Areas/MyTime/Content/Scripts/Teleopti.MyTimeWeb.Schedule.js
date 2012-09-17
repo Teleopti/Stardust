@@ -132,9 +132,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
             Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
             _initTimeIndicator();
         },
-	PartialDispose: function () {
-		addTextRequestTooltip.qtip('toggle', false);
-	},
+		PartialDispose: function () {
+			addTextRequestTooltip.qtip('destroy');
+		},
         SetTimeIndicator: function (date) {
             _setTimeIndicator(date);
         }
