@@ -55,7 +55,7 @@
             this.groupBoxDatabase = new System.Windows.Forms.GroupBox();
             this.textBoxDBName = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.checkBoxAgentPortalWeb = new System.Windows.Forms.CheckBox();
+            this.checkBoxDotNet4 = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -389,7 +389,7 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.checkBoxAgentPortalWeb);
+            this.groupBox5.Controls.Add(this.checkBoxDotNet4);
             this.groupBox5.Controls.Add(this.groupBoxDatabase);
             this.groupBox5.Controls.Add(this.groupBoxSQLInstance);
             this.groupBox5.Controls.Add(this.groupBox3);
@@ -402,17 +402,17 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Server hardware and software";
             // 
-            // checkBoxAgentPortalWeb
+            // checkBoxDotNet4
             // 
-            this.checkBoxAgentPortalWeb.AutoSize = true;
-            this.checkBoxAgentPortalWeb.Checked = true;
-            this.checkBoxAgentPortalWeb.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAgentPortalWeb.Location = new System.Drawing.Point(323, 42);
-            this.checkBoxAgentPortalWeb.Name = "checkBoxAgentPortalWeb";
-            this.checkBoxAgentPortalWeb.Size = new System.Drawing.Size(104, 17);
-            this.checkBoxAgentPortalWeb.TabIndex = 17;
-            this.checkBoxAgentPortalWeb.Text = "AgentPortalWeb";
-            this.checkBoxAgentPortalWeb.UseVisualStyleBackColor = true;
+            this.checkBoxDotNet4.AutoSize = true;
+            this.checkBoxDotNet4.Checked = true;
+            this.checkBoxDotNet4.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxDotNet4.Location = new System.Drawing.Point(323, 42);
+            this.checkBoxDotNet4.Name = "checkBoxDotNet4";
+            this.checkBoxDotNet4.Size = new System.Drawing.Size(104, 17);
+            this.checkBoxDotNet4.TabIndex = 17;
+            this.checkBoxDotNet4.Text = "Web Apps or Broker";
+            this.checkBoxDotNet4.UseVisualStyleBackColor = true;
             // 
             // tabControl1
             // 
@@ -904,7 +904,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader47;
         private System.Windows.Forms.ColumnHeader columnHeader48;
         private System.Windows.Forms.ColumnHeader columnHeader49;
-        private System.Windows.Forms.CheckBox checkBoxAgentPortalWeb;
+        private System.Windows.Forms.CheckBox checkBoxDotNet4;
     }
 }
 
