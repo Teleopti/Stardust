@@ -213,17 +213,17 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyIsWorkTimeFromContract()
         {
-            Assert.AreEqual(true, _testContract.IsWorkTimeFromContract );
-            _testContract.IsWorkTimeFromContract  = false;
-            Assert.AreEqual(false, _testContract.IsWorkTimeFromContract );
+            Assert.AreEqual(WorkTimeSource.FromContract, _testContract.WorkTimeSource);
+            _testContract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
+            Assert.AreNotEqual(WorkTimeSource.FromContract, _testContract.WorkTimeSource);
         }
 
         [Test]
         public void VerifyIsWorkTimeFromSchedulePeriod()
         {
-            Assert.AreEqual(false, _testContract.IsWorkTimeFromSchedulePeriod );
-            _testContract.IsWorkTimeFromSchedulePeriod = true;
-            Assert.AreEqual(true, _testContract.IsWorkTimeFromSchedulePeriod );
+            Assert.AreEqual(WorkTimeSource.FromContract, _testContract.WorkTimeSource);
+            _testContract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
+            Assert.AreEqual(WorkTimeSource.FromSchedulePeriod, _testContract.WorkTimeSource);
         }
     }
 }

@@ -147,8 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
             var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
             var personContract = PersonContractFactory.CreateFulltimePersonContractWithWorkingWeekContractSchedule();
-            personContract.Contract.IsWorkTimeFromSchedulePeriod = true;
-            personContract.Contract.IsWorkTimeFromContract = false;
+            personContract.Contract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2012, 01, 01), personContract, new Team());
             var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
             var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
