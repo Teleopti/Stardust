@@ -10709,9 +10709,9 @@ These options are activated:
     <value>Distribution between sub skills must be equal to 100%</value>
     <comment>Distribution between sub skills must be equal to 100%</comment>
   </data>
-  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgents" xml:space="preserve">
-    <value>Maximum agent occupancy must be larger than or equal to minimum agents</value>
-    <comment>Maximum agent occupancy must be larger than or equal to minimum agents</comment>
+  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
+    <value>Maximum agent occupancy must be larger than or equal to minimum agent occupancy</value>
+    <comment>Maximum agent occupancy must be larger than or equal to minimum agent occupancy</comment>
   </data>
   <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
     <value>Maximum agents must be larger than or equal to minimum agents</value>
