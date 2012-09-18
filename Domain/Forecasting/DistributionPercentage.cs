@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             IMultisiteData invalidItem = multisitePeriodList.FirstOrDefault(p => !p.IsValid);
             if (invalidItem!=null)
             {
-                throw new ValidationException(
-                    string.Format(CultureInfo.InvariantCulture, "The multisite periods contains items that are invalid.")); //TODO! Return date and time!
+                throw new ValidationException(string.Format(CultureInfo.InvariantCulture, UserTexts.Resources.DistributionBetweenSubskillsMustbeEqualToOneHundredPercent)); //TODO! Return date and time!
             }
         }
 
