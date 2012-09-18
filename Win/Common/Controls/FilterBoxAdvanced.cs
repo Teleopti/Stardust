@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
         public FilterBoxAdvanced()
         {
             InitializeComponent();
-            _defaultReqSetting = new RequestPreferencesPersonalSettings();
             SetTexts();
             SetColors();
             if (_itemsToFilter != null)
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
                 {
                     var settingRepository = new PersonalSettingDataRepository(uow);
                     _defaultReqSetting = settingRepository.FindValueByKey("RequestPreferencesPersonalSettings", new RequestPreferencesPersonalSettings());
-
+                    if (_defaultReqSetting == null) return;
                     if (_defaultReqSetting.IsSettingExtracted())
                     {
                         foreach (var reqItem in _defaultReqSetting.MapTo())
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
         private void SavePersonalSettings()
         {
-
+            if (_defaultReqSetting == null) return;
 
             try
             {

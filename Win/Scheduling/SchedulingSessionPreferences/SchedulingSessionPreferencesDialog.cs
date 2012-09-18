@@ -75,14 +75,20 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			catch (DataSourceException)
 			{
 			}
-
+            if (hasMissedloadingSettings()) return;
 			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags);
 			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories);
             _defaultExtraSettings.MapTo(_schedulingOptions,_scheduleTags,_groupPages );
 		}
 
+        private bool hasMissedloadingSettings()
+        {
+            return _defaultGeneralSettings == null || _defaultAdvancedSettings == null || _defaultExtraSettings == null;
+        }
+
 		private void savePersonalSettings()
 		{
+            if (hasMissedloadingSettings()) return;
 			_defaultGeneralSettings.MapFrom(_schedulingOptions);
 			_defaultAdvancedSettings.MapFrom(_schedulingOptions);
             _defaultExtraSettings.MapFrom(_schedulingOptions );
