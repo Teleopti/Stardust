@@ -140,7 +140,7 @@ SELECT      p.person_code,
 			sum(ISNULL(scheduled_contract_time_activity_m,0)),
 			sum(ISNULL(scheduled_work_time_activity_m,0)),
 			sum(ISNULL(scheduled_paid_time_activity_m,0)),
-			f.shift_starttime,
+			null,--f.shift_starttime,
 			sum(ISNULL(scheduled_over_time_m,0)),
 			sum(ISNULL(scheduled_time_m,0)),
 			@hide_time_zone
@@ -151,22 +151,23 @@ INNER JOIN mart.dim_person p
 INNER JOIN mart.dim_activity act
 	  ON act.activity_id = f.activity_id
 INNER JOIN mart.bridge_time_zone b
-	  ON  f.shift_startinterval_id= b.interval_id	--join on the shiftstartdate
-	  AND f.shift_startdate_id= b.date_id			--join on the shiftstartdate
+	  ON f.interval_id = b.interval_id			 -- Join on activity start date
+	  AND f.activity_startdate_id = b.date_id	-- Join on activity start date
 INNER JOIN mart.dim_date d 
 	  ON b.local_date_id = d.date_id
 INNER JOIN mart.dim_interval i
 	  ON b.local_interval_id = i.interval_id
-WHERE d.date_date BETWEEN @date_from AND @date_to
-AND i.interval_id BETWEEN @interval_from AND @interval_to
-AND b.time_zone_id = @time_zone_id
-AND f.scenario_id=@scenario_id
-AND p.team_id IN(select right_id from #rights_teams)
-AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
-AND act.activity_id IN (SELECT id FROM #activities)--only selected activities
-AND act.activity_id<>-1 --ej activity
-GROUP BY p.person_code,p.person_name,act.activity_id,act.activity_name
-,f.shift_starttime
+WHERE 
+	d.date_date BETWEEN @date_from AND @date_to
+	AND i.interval_id BETWEEN @interval_from AND @interval_to
+	AND b.time_zone_id = @time_zone_id
+	AND f.scenario_id=@scenario_id
+	AND p.team_id IN(select right_id from #rights_teams)
+	AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
+	AND act.activity_id IN (SELECT id FROM #activities)--only selected activities
+	AND act.activity_id<>-1 --ej activity
+GROUP BY 
+	p.person_code, p.person_name, act.activity_id, act.activity_name, d.date_date
 
 select * from #result
 order by person_name, activity_name, date
