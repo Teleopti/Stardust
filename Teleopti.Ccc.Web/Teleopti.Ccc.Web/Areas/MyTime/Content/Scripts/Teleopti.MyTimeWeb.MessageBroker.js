@@ -12,7 +12,8 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 				hub.addSubscription({
 					'DomainType': options.domainType,
 					'BusinessUnitId': options.businessUnitId,
-					'DataSource': options.datasource
+					'DataSource': options.datasource,
+					'DomainReferenceId': options.referenceId
 				});
 			});
 	}
@@ -22,12 +23,13 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 		AddSubscription: function (options) {
 			/// <summary>Adds an event subscription.</summary>
 			/// <param name="options">
-			/// url = url to signalr server, 
-			/// domainType = .net type to listen to, eg IPersistableScheduleData,
-			/// businessUnitId = id of business unit,
-			/// datasource = name of data source
-			/// callback = function to call when successful subscription.
-			/// errCallback (optional) = function to call if error (eg lost connection)
+			/// url = url to signalr server,
+			/// domainType = filter events on .net type, eg IPersistableScheduleData,
+			/// businessUnitId = filter events on id of business unit,
+			/// datasource = filter events based on name of data source,
+			/// callback = function to call when successful subscription,
+			/// errCallback (optional) = function to call if error (eg lost connection),
+			/// referenceId (optional) = filter events on "reference id", eg agent id for schedules.
 			/// </param>
 			_addSubscription(options);
 		}

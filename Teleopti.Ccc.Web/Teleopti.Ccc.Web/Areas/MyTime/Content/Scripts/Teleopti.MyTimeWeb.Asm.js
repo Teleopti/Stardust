@@ -132,7 +132,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				callback: onMessageBrokerEvent,
 				domainType: 'IPersistableScheduleData',
 				businessUnitId: '928dd0bc-bf40-412e-b970-9b5e015aadea',
-				datasource: 'Teleopti CCC - åhå jaja'
+				datasource: 'Teleopti CCC - åhå jaja',
+				referenceId: '11610fe4-0130-4568-97de-9b5e015b2564'
 			});
 		}
 	};
