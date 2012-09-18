@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
-			Pages.Pages.WeekSchedulePage.DayElementForDate(date).ListItems.First(Find.ById("day-summary")).Div(
+            Pages.Pages.WeekSchedulePage.DayElementForDate(date).ListItems.First(Find.ById("day-symbol")).Div(
 				Find.ByClass("text-request", false)).EventualClick();
 		}
 

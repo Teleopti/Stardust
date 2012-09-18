@@ -38,6 +38,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value, Is.StringContaining("A message. A very very very short message. Or maybe not."));
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value, Is.StringContaining(DateTime.Today.ToShortDateString(UserFactory.User().Culture)));
 		}
-		
+
+        [Then(@"I should see my existing inputs for date '(.*)'")]
+        public void ThenIShouldSeeMyExistingInputsForDate(DateTime date)
+        {
+            EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value, Is.StringContaining("The cake is a.. Cake!"));
+            EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value, Is.StringContaining("A message. A very very very short message. Or maybe not."));
+            EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value, Is.StringContaining(date.ToShortDateString(UserFactory.User().Culture)));
+		}
 	}
 }
