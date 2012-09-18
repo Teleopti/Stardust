@@ -218,8 +218,8 @@ select.absence-input
 .fourth .add-request-space {
 	height: 100%; 
 	width: 100%;
-	cursor: pointer;
 }
+
 .category 
 {
 	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00FFFFFF', endColorstr='#99FFFFFF',GradientType=0 );
@@ -248,4 +248,9 @@ select.absence-input
 .week-schedule-ASM-permission-granted .week-schedule-current-week
 {
 	display: none;
+}
+
+.show-request
+{
+    cursor: pointer;
 }

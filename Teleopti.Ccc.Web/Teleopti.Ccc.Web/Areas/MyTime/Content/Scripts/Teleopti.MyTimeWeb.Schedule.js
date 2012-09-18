@@ -18,7 +18,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
     var timeIndicatorDateTime;
 
     function _initTooltip() {
-        var addTextRequest = $('.add-request-space');
+        var addTextRequest = $('.show-request');
         $('<div/>').qtip({
 
             content: {

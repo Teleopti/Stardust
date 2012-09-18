@@ -31,6 +31,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
 		}
 
+        [When(@"I input text request values for date '(.*)'")]
+        public void WhenIInputTextRequestValuesForDate(DateTime date)
+        {
+            Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+            var time = date.AddHours(12);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
+            Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+        }
+
 		[When(@"I input new text request values")]
 		public void WhenIInputNewTextRequestValues()
 		{
@@ -159,6 +172,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = DateTime.Today.AddHours(-2).ToShortTimeString(UserFactory.User().Culture);
 		}
+
+        [When(@"I input later start time than end time for date '(.*)'")]
+        public void WhenIInputLaterStartTimeThanEndTimeForDate(DateTime date)
+        {
+            Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+            Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.AddDays(1).ToShortDateString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = date.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = date.AddHours(-2).ToShortTimeString(UserFactory.User().Culture);
+        }
+
 
 		[When(@"I click the text request's delete button")]
 		public void WhenIClickTheRequestSDeleteButton()

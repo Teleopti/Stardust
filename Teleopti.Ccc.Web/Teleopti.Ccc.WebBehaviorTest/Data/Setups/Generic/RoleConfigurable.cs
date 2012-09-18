@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool AccessToExtendedPreferences { get; set; }
 		public bool AccessToMytimeWeb { get; set; }
 		public bool AccessToAsm { get; set; }
+        public bool AccessToTextRequests { get; set; }
+        public bool AccessToAbsenceRequests { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -29,6 +31,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			AccessToExtendedPreferences = true;
 			AccessToMytimeWeb = true;
 			AccessToAsm = true;
+            AccessToTextRequests = true;
+            AccessToAbsenceRequests = true;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -52,7 +56,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			if (!AccessToMytimeWeb)
 				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTimeWeb select f;
 			if (!AccessToAsm)
-				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger select f;
+                applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger select f;
+            if (!AccessToTextRequests)
+                applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests select f;
+            if (!AccessToAbsenceRequests)
+                applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb select f;
+
 
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 

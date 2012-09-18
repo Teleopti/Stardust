@@ -3,83 +3,105 @@
 	As an agent
 	I want to be able to submit absence requests
 
-Scenario: Add absence request from week schedule view
-	Given I am an agent
-	And I have a requestable absence called Vacation
-	And I am viewing week schedule
-	When I click on today's summary
-	And I click absence request tab
-	And I input absence request values with Vacation
-	And I click the OK button
-	Then I should see a symbol at the top of the schedule
+Background:
+	Given there is a role with
+	| Field                    | Value                 |
+	| Name                     | Full access to mytime |
+	And there is a role with
+	| Field						 | Value						 |
+	| Name						 | No access to absence requests |
+	| Access to absence requests | False					     |
+	
+Scenario: Open add absence request form from day summary
+	Given I have the role 'Full access to mytime'
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day summary for date '2013-10-03'
+	Then I should see the text request form
+	And I should see the absence request tab
 
-Scenario: Can not add absence request if no permission
-	Given I am an agent without access to absence requests
-	And I am viewing week schedule
-	When I click on today's summary
+Scenario: Add absence request from week schedule view
+	Given I have the role 'Full access to mytime'
+	And I have a requestable absence called Vacation
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day symbol area for date '2013-10-03'
+	And I click absence request tab
+	And I input absence request values with 'Vacation' for date '2013-10-03'
+	And I click the OK button
+	Then I should see a symbol at the top of the schedule for date '2013-10-03'
+	
+Scenario: Can not add absence request from day symbol area if no permission
+	Given I have the role 'No access to absence requests'
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day symbol area for date '2013-10-03'
 	Then I should not see the absence request tab
 
+Scenario: Can not add absence request from day summary if no permission
+	Given I have the role 'No access to absence requests'
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day summary for date '2013-10-03'
+	Then I should not see the absence request tab
+	
 Scenario: Default absence request values from week schedule
-	Given I am an agent
-	And I am viewing week schedule
-	When I click on last day of current week's summary
+	Given I have the role 'Full access to mytime'
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day summary for date '2013-10-03'
 	And I click absence request tab
-	Then I should see the text request form with last day as default date
+	Then I should see the text request form with '2013-10-03' as default date
 	And I should see 00:00 - 23:59 as the default times
-
+	
 Scenario: Default absence request values from week schedule when unchecked Fullday
-	Given I am an agent
-	And I am viewing week schedule
-	When I click on last day of current week's summary
+	Given I have the role 'Full access to mytime'
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day summary for date '2013-10-03'
 	And I click absence request tab
 	And I unchecked the full day checkbox
-	Then I should see the text request form with last day as default date
+	Then I should see the text request form with '2013-10-03' as default date
 	And I should see 08:00 - 17:00 as the default times
-
+	
 Scenario: Default absence request values from week schedule when checked Fullday
-	Given I am an agent
-	And I am viewing week schedule
-	When I click on last day of current week's summary
+	Given I have the role 'Full access to mytime'
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day summary for date '2013-10-03'
 	And I click absence request tab
 	And I checked the full day checkbox
-	Then I should see the text request form with last day as default date
+	Then I should see the text request form with '2013-10-03' as default date
 	And I should see 00:00 - 23:59 as the default times
-
+	
 Scenario: Cancel adding absence request
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
 	And I have a requestable absence called Vacation
-	And I am viewing week schedule
-	When I click on today's summary
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day summary for date '2013-10-03'
 	And I click absence request tab
-	And I input absence request values with Vacation
+	And I input absence request values with 'Vacation' for date '2013-10-03'
 	And I click the Cancel button
-	Then I should not see a symbol at the top of the schedule
-
+	Then I should not see a symbol at the top of the schedule for date '2013-10-03'
+	
 Scenario: Adding invalid absence request values
-	Given I am an agent
-	And I am viewing week schedule
-	When I click on today's summary
+	Given I have the role 'Full access to mytime'
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day symbol area for date '2013-10-03'
 	And I click absence request tab
 	And I input empty subject
-	And I input later start time than end time
+	And I input later start time than end time for date '2013-10-03'
 	And I click the OK button
 	Then I should see texts describing my errors
-	And I should not see a symbol at the top of the schedule
-
+	And I should not see a symbol at the top of the schedule for date '2013-10-03'
+	
 Scenario: View absence types
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
 	And I have a requestable absence called Vacation
-	And I am viewing week schedule
-	When I click on today's summary
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day symbol area for date '2013-10-03'
 	And I click absence request tab
 	Then I should see an absence type called Vacation in droplist
-
+	
 Scenario: Switch request type
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
 	And I have a requestable absence called Vacation
-	And I am viewing week schedule
-	When I click on today's summary
-	And I input text request values
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day symbol area for date '2013-10-03'
+	And I input text request values for date '2013-10-03'
 	And I click absence request tab
-	Then I should see my existing inputs
+	Then I should see my existing inputs for date '2013-10-03'
 	And I should see an absence type called Vacation in droplist

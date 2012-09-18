@@ -32,20 +32,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.EventualClick();
 		}
 
-		[When(@"I input absence request values with (.*)")]
-		public void WhenIInputAbsenceRequestValuesWithVacation(string name)
-		{
-			Pages.Pages.CurrentEditRequestPage.AbsenceTypesElement.WaitUntilDisplayed();
-			var date = DateTime.Today;
-			var time = date.AddHours(12);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-			Pages.Pages.CurrentEditRequestPage.AbsenceTypesSelectList.Select(name);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
-		}
+        [When(@"I input absence request values with '(.*)' for date '(.*)'")]
+        public void WhenIInputAbsenceRequestValuesWithForDate(string name, DateTime date)
+        {
+            Pages.Pages.CurrentEditRequestPage.AbsenceTypesElement.WaitUntilDisplayed();
+            var time = date.AddHours(12);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
+            Pages.Pages.CurrentEditRequestPage.AbsenceTypesSelectList.Select(name);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+        }
 
 		[Then(@"I should see the text request in the list")]
 		public void ThenIShouldSeeTheTextRequestInTheList()
@@ -71,6 +70,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.DisplayHidden(), Is.True);
 		}
+
+        [Then(@"I should see the absence request tab")]
+        public void ThenIShouldSeeTheAbsenceRequestTab()
+        {
+            EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.Exists, Is.True);
+        }
 
 	}
 }
