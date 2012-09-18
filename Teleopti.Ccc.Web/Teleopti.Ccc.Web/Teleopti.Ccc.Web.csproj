@@ -497,8 +497,11 @@
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Css\TooltipInput.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.signalR-0.5.3.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Asm.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Init.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MessageBroker.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Signalr.Hubs.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Ajax.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.tabberiet.js" />

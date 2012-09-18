@@ -1,4 +1,5 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -120,6 +121,19 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	return {
 		Init: function () {
 			_start();
+
+			var onevent = function (notification) {
+				console.log(JSON.stringify(notification));
+			};
+
+			Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
+				url: 'http://localhost:54903/signalr',
+				callback: onevent
+			}, {
+				domainType: 'IPersistableScheduleData',
+				businessUnitId: '928dd0bc-bf40-412e-b970-9b5e015aadea',
+				datasource: 'Teleopti CCC - åhå jaja'
+			});
 		}
 	};
 })(jQuery);
