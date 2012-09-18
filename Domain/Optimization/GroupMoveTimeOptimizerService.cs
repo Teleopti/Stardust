@@ -86,11 +86,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var daysToSave = new List<KeyValuePair<DayReadyToMove, IScheduleDay>>();
                 var daysToDelete = new List<IScheduleDay>();
                 prepareDaysForRescheduling(daysToDelete, daysToSave, runnableOptimizers, dayToBeLengthen, dayToBeShorten);
-                var validateResult = daysToDelete.All(
-                    d => _groupMoveTimeValidatorRunner.Run(person, new List<DateOnly> {d.DateOnlyAsPeriod.DateOnly},
-                                                           new List<DateOnly> {d.DateOnlyAsPeriod.DateOnly},
-                                                           _groupMoveTimeOptimizerExecuter.SchedulingOptions.
-                                                               UseSameDayOffs).Success);
+                var validateResult = _groupMoveTimeValidatorRunner.Run(person, daysToDelete.Select(d => d.DateOnlyAsPeriod.DateOnly).ToList(),
+                                                      _groupMoveTimeOptimizerExecuter.SchedulingOptions.UseSameDayOffs, allMatrixes).Success;
                 if (!validateResult) continue;
 
                 var oldPeriodValue = optimizer.PeriodValue();
@@ -128,8 +125,10 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var scheduleDayToBeShorten = optimizer.Matrix.GetScheduleDayByKey(dayToBeShorten).DaySchedulePart();
                 daysToDelete.Add(scheduleDayToBeShorten);
                 optimizer.LockDate(dayToBeShorten);
+                optimizer.LockDate(dayToBeLengthen );
                 daysToSave.Add(new KeyValuePair<DayReadyToMove, IScheduleDay>(DayReadyToMove.SecondDay,
-                                                                           (IScheduleDay)scheduleDayToBeShorten.Clone()));
+                                                                          (IScheduleDay)scheduleDayToBeShorten.Clone()));
+                
             }
         }
         

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var date = new DateOnly(2012, 1, 1);
             var date2 = new DateOnly(2012, 1, 2);
 
-            _groupMoveTimeValidatorRunner.Stub(x => x.Run(_person, new List<DateOnly>(), new List<DateOnly>(), true)).IgnoreArguments() .Return(new ValidatorResult(){Success = true});
+            _groupMoveTimeValidatorRunner.Stub(x => x.Run(_person, new List<DateOnly>(), true,_allMatrixes)).IgnoreArguments() .Return(new ValidatorResult(){Success = true});
             
             using (_mock.Record())
             {
@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.PeriodValue()).Return(2).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
+                Expect.Call(() => _optimizer.LockDate(date)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo() )).Repeat.AtLeastOnce();
                 Expect.Call(_groupMoveTimeOptimizerExecuter.SchedulingOptions).Return(_schedulingOptions);
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var date = new DateOnly(2012, 1, 1);
             var date2 = new DateOnly(2012, 1, 2);
             _target.ReportProgress += targetReportProgress;
-            _groupMoveTimeValidatorRunner.Stub(x => x.Run(_person, new List<DateOnly>(), new List<DateOnly>(), true)).IgnoreArguments().Return(new ValidatorResult() { Success = true });
+            _groupMoveTimeValidatorRunner.Stub(x => x.Run(_person, new List<DateOnly>(), true, _allMatrixes)).IgnoreArguments().Return(new ValidatorResult() { Success = true });
             
             using (_mock.Record())
             {
@@ -119,6 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
+                Expect.Call(() => _optimizer.LockDate(date)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo())).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.PeriodValue()).Return(2).Repeat.AtLeastOnce();

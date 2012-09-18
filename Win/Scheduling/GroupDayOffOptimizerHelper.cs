@@ -162,6 +162,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 var lockableBitArrayConverter =
                     new ScheduleMatrixLockableBitArrayConverter(matrix);
+                
                 var optimizer = new GroupMoveTimeOptimizer(periodValueCalculator, lockableBitArrayConverter, new MoveTimeDecisionMaker2(),
                                                            personalSkillsDataExtractor,
                                                            optimizerOverLimitDecider);
