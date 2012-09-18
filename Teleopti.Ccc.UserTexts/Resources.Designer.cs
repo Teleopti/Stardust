@@ -6457,6 +6457,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Distribution between sub skills must be equal to 100%.
+        /// </summary>
+        public static string DistributionBetweenSubskillsMustbeEqualToOneHundredPercent {
+            get {
+                return ResourceManager.GetString("DistributionBetweenSubskillsMustbeEqualToOneHundredPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Windows domain.
         /// </summary>
         public static string DomainName {
@@ -11563,11 +11572,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum agent occupancy must be larger than or equal to minimum agents.
+        /// </summary>
+        public static string MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgents {
+            get {
+                return ResourceManager.GetString("MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum agents.
         /// </summary>
         public static string MaximumAgents {
             get {
                 return ResourceManager.GetString("MaximumAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum agents must be larger than or equal to minimum agents.
+        /// </summary>
+        public static string MaximumAgentsMustBeLargerOrEqualToMinimumAgents {
+            get {
+                return ResourceManager.GetString("MaximumAgentsMustBeLargerOrEqualToMinimumAgents", resourceCulture);
             }
         }
         
