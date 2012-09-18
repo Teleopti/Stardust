@@ -612,6 +612,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             	RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker,
             	                                    optimizerPreferences, schedulingOptions);
             }
+
+        	//runFairness();
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }

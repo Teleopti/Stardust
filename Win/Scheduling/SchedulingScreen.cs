@@ -4763,7 +4763,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
 
 			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
-				   .CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<GroupScheduleGroupPageDataProvider>(),
+				   .CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(),
 				   selectedGroupPage);
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);

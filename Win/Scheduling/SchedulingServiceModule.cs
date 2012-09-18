@@ -147,6 +147,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<PossibleCombinationsOfStartEndCategoryRunner>().As<IPossibleCombinationsOfStartEndCategoryRunner>().InstancePerLifetimeScope();
 
 
+			builder.RegisterType<GroupScheduleGroupPageDataProvider>().As<IGroupScheduleGroupPageDataProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPageCreator>().As<IGroupPageCreator>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPageFactory>().As<IGroupPageFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessComparer>().As<IShiftCategoryFairnessComparer>().InstancePerLifetimeScope();
