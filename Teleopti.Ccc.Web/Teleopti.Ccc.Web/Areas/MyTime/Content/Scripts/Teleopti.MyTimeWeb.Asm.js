@@ -129,8 +129,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 			Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 				url: 'http://localhost:54903/signalr',
-				callback: onMessageBrokerEvent
-			}, {
+				callback: onMessageBrokerEvent,
 				domainType: 'IPersistableScheduleData',
 				businessUnitId: '928dd0bc-bf40-412e-b970-9b5e015aadea',
 				datasource: 'Teleopti CCC - åhå jaja'

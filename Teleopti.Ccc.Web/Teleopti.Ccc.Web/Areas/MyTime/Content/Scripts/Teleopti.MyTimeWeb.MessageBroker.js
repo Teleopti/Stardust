@@ -1,37 +1,35 @@
 Teleopti.MyTimeWeb.MessageBroker = (function () {
-	function _addSubscription(conn, subscription) {
+	function _addSubscription(options) {
 		var hub = $.connection.messageBrokerHub;
-		$.connection.hub.url = conn.url;
+		$.connection.hub.url = options.url;
 
-		$.connection.hub.error(conn.errCallback);
+		$.connection.hub.error(options.errCallback);
 
-		hub.onEventMessage = conn.callback;
+		hub.onEventMessage = options.callback;
 
 		$.connection.hub.start()
 			.done(function () {
 				hub.addSubscription({
-					'DomainType': subscription.domainType,
-					'BusinessUnitId': subscription.businessUnitId,
-					'DataSource': subscription.datasource
+					'DomainType': options.domainType,
+					'BusinessUnitId': options.businessUnitId,
+					'DataSource': options.datasource
 				});
 			});
 	}
 
 
 	return {
-		AddSubscription: function (conn, subscription) {
+		AddSubscription: function (options) {
 			/// <summary>Adds an event subscription.</summary>
-			/// <param name="conn">
+			/// <param name="options">
 			/// url = url to signalr server, 
-			/// callback = function to call when successful subscription.
-			/// errCallback (optional) = function to call if error (eg lost connection)
-			/// </param>
-			/// <param name="subscription">
 			/// domainType = .net type to listen to, eg IPersistableScheduleData,
 			/// businessUnitId = id of business unit,
 			/// datasource = name of data source
+			/// callback = function to call when successful subscription.
+			/// errCallback (optional) = function to call if error (eg lost connection)
 			/// </param>
-			_addSubscription(conn, subscription);
+			_addSubscription(options);
 		}
 	};
 })(jQuery)
