@@ -118,23 +118,28 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.asm-sliding-schedules').css('width', (3 * 24 * pixelPerHours));
 		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
 	}
+	
+	function _listenForEvents() {
+		var onMessageBrokerEvent = function (notification) {
+			console.log(notification);
+			vm.loadViewModel();
+		};
+
+		Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
+			url: 'http://localhost:54903/signalr',
+			callback: onMessageBrokerEvent,
+			domainType: 'IPersistableScheduleData',
+			businessUnitId: '928dd0bc-bf40-412e-b970-9b5e015aadea',
+			datasource: 'Teleopti CCC - åhå jaja',
+			referenceId: '11610fe4-0130-4568-97de-9b5e015b2564'
+		});
+	}
 
 	return {
 		Init: function () {
 			_start();
 
-			var onMessageBrokerEvent = function (notification) {
-				vm.loadViewModel();
-			};
-
-			Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
-				url: 'http://localhost:54903/signalr',
-				callback: onMessageBrokerEvent,
-				domainType: 'IPersistableScheduleData',
-				businessUnitId: '928dd0bc-bf40-412e-b970-9b5e015aadea',
-				datasource: 'Teleopti CCC - åhå jaja',
-				referenceId: '11610fe4-0130-4568-97de-9b5e015b2564'
-			});
+			_listenForEvents();
 		}
 	};
 })(jQuery);
