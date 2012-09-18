@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             {
                 e.Style.CellValue = _headerText;
             }
-			else if (e.RowIndex >= headerRows)
+			else if (e.RowIndex >= headerRows && dataItems.Count > 0)
             {
                 TData dataItem = dataItems.ElementAt(e.RowIndex - headerRows);
 				e.Style.CellType = "ActivityDropDownCell";
