@@ -11572,11 +11572,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum agent occupancy must be larger than or equal to minimum agents.
+        ///   Looks up a localized string similar to Maximum agent occupancy must be larger than or equal to minimum agent occupancy.
         /// </summary>
-        public static string MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgents {
+        public static string MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy {
             get {
-                return ResourceManager.GetString("MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgents", resourceCulture);
+                return ResourceManager.GetString("MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy", resourceCulture);
             }
         }
         
