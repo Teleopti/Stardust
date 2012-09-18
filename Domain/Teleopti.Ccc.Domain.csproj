@@ -735,6 +735,10 @@
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfo.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculator.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplate.cs" />
+    <Compile Include="Scheduling\TeamSteadyState.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateDictionaryCreator.cs" />
+    <Compile Include="Scheduling\TeamSteadyStatePersonPeriod.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateSchedulePeriod.cs" />
     <Compile Include="Scheduling\TimeLayer\DateTimeMultiplicatorDefinition.cs" />
     <Compile Include="Scheduling\TimeLayer\DayOfWeekMultiplicatorDefinition.cs" />
     <Compile Include="Scheduling\TimeLayer\Multiplicator.cs" />
