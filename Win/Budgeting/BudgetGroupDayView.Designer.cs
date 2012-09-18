@@ -191,6 +191,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             this.gridControlDayView.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
             this.gridControlDayView.Properties.BackgroundColor = System.Drawing.Color.White;
             this.gridControlDayView.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
+            this.gridControlDayView.MinResizeColSize = 5;
             this.gridControlDayView.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
             this.gridControlDayView.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
