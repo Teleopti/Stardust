@@ -576,6 +576,7 @@
     <Compile Include="Scheduling\GridlockCommands\GridlockAllStudentAvailabilityAvailableCommand.cs" />
     <Compile Include="Scheduling\GridlockCommands\GridlockAllStudentAvailabilityFulfilledCommand.cs" />
     <Compile Include="Scheduling\GridlockCommands\GridlockAllStudentAvailabilityUnavailableCommand.cs" />
+    <Compile Include="Scheduling\GroupPageCreator.cs" />
     <Compile Include="Scheduling\IGridSchedulesExtractor.cs" />
     <Compile Include="Scheduling\IntradayOptimizerCreator.cs" />
     <Compile Include="Scheduling\IRequestDetailsView.cs" />
@@ -889,6 +890,8 @@
     <Compile Include="Scheduling\ScheduleSortingCommands\SortByStartAscendingCommand.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SortByStartDescendingCommand.cs" />
     <Compile Include="Scheduling\SetTagCommand.cs" />
+    <Compile Include="Scheduling\ShiftCategoryFairnessAggregateManager.cs" />
+    <Compile Include="Scheduling\ShiftCategoryFairnessGroupPersonHolder.cs" />
     <Compile Include="Scheduling\ViewModelIsValidRule.cs" />
     <Compile Include="Scheduling\Editor\HandleTriggerShiftEditorUpdate.cs" />
     <Compile Include="Scheduling\Editor\TriggerShiftEditorUpdate.cs" />

@@ -570,6 +570,7 @@
     <Compile Include="Scheduler\GridlockCommands\GridlockAllStudentAvailabilityAvailableCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllStudentAvailabilityFulfilledCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllStudentAvailabilityUnavailableCommandTest.cs" />
+    <Compile Include="Scheduler\GroupPageCreatorTest.cs" />
     <Compile Include="Scheduler\GroupScheduleGroupPageDataProviderTest.cs" />
     <Compile Include="Scheduler\MatrixUserLockLockerTest.cs" />
     <Compile Include="Scheduler\IntradayOptimizer2CreatorTest.cs" />
@@ -626,6 +627,8 @@
     <Compile Include="Scheduler\SchedulerStateLoaderTest.cs" />
     <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortingCommandsTest.cs" />
     <Compile Include="Scheduler\SetTagCommandTest.cs" />
+    <Compile Include="Scheduler\ShiftCategoryFairnessAggregateManagerTest.cs" />
+    <Compile Include="Scheduler\ShiftCategoryFairnessGroupPersonHolderTest.cs" />
     <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
     <Compile Include="Scheduler\WorkShiftMasterActivityCheckerTest.cs" />
     <Compile Include="Security\PasswordPolicyServiceViewModelTest.cs" />

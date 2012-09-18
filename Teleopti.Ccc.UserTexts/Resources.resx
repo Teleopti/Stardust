@@ -11093,6 +11093,10 @@ These options are activated:
   <data name="AddExtendedPreference" xml:space="preserve">
     <value>Add extended preference</value>
   </data>
+  <data name="Others" xml:space="preserve">
+    <value>Others</value>
+    <comment>Others</comment>
+  </data>
   <data name="MyTime" xml:space="preserve">
     <value>MyTime</value>
 	</data>

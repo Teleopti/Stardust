@@ -138,5 +138,11 @@ namespace Teleopti.Interfaces.Domain
 		/// Tells the domain that current state corresponds with db state
 		/// </summary>
     	void TakeSnapshot();
+
+    	/// <summary>
+    	/// The period used to calculate fairness
+    	/// </summary>
+    	/// <returns></returns>
+    	DateTimePeriod VisiblePeriodMinusFourWeeksPeriod();
     }
 }
