@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DatabaseConverter.CollectionConverter
                             catch (ValidationException validationException)
                             {
                                 //Skip this entity due to validation error
-                                Logger.Warn("This entity was skipped due to validatino error.",validationException);
+                                Logger.Warn("This entity was skipped due to validation error.",validationException);
                                 continue;
                             }
                         }

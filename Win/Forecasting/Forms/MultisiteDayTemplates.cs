@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
             catch (ValidationException validationException)
             {
-                string validationErrorMessage = string.Format(CultureInfo.CurrentUICulture,UserTexts.Resources.MultisiteDayTemplatesInvalidOneParameter, validationException.Message);
+                string validationErrorMessage = string.Format(CultureInfo.CurrentCulture, validationException.Message);
                 Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(validationErrorMessage, "  "), UserTexts.Resources.ValidationError, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 
                     (RightToLeft == RightToLeft.Yes) ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0);
             }
