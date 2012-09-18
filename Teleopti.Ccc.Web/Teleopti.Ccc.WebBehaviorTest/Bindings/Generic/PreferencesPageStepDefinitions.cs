@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			//I should see on heart icon on the current calendar cell, accorning the the must have settings
 			//todo: add an icon and test code here
-			EventualAssert.That(() => cell.Span(Find.ByClass("preference-warning", false)).Exists, Is.True);
+			EventualAssert.That(() => cell.Span(Find.ByClass("preference-must-have", false)).Exists, Is.True);
 
 		}
 
@@ -254,8 +254,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click remove must have button")]
 		public void WhenIClickOnMustHaveButton()
 		{
-			ScenarioContext.Current.Pending();
-
 			// I have a must have button on the menu bar
 			// todo: imitate that I click on the button
 			Pages.Pages.PreferencePage.MustHaveButton.Focus();
