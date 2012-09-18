@@ -100,6 +100,7 @@
             this.gridControlWeekView.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
             this.gridControlWeekView.Properties.BackgroundColor = System.Drawing.Color.White;
             this.gridControlWeekView.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
+            this.gridControlWeekView.MinResizeColSize = 5;
             this.gridControlWeekView.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.gridControlWeekView.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
