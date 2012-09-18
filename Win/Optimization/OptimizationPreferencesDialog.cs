@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			{
 				// move out silently in case of ex
 			}
-
+            if (hasMissedloadingSettings()) return;
 			_defaultGeneralPreferences.MapTo(Preferences.General, _scheduleTags);
 			_defaultDaysOffPreferences.MapTo(Preferences.DaysOff);
 			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages);
@@ -116,8 +116,15 @@ namespace Teleopti.Ccc.Win.Optimization
             
 		}
 
-		private void SavePersonalSettings()
+        private bool hasMissedloadingSettings()
+        {
+            return _defaultGeneralPreferences == null || _defaultDaysOffPreferences == null || _defaultExtraPreferences == null
+                || _defaultAdvancedPreferences == null || _defaultshiftsPreferences==null;
+        }
+
+        private void SavePersonalSettings()
 		{
+            if (hasMissedloadingSettings()) return;
 			_defaultGeneralPreferences.MapFrom(Preferences.General);
 			_defaultDaysOffPreferences.MapFrom(Preferences.DaysOff);
 			_defaultExtraPreferences.MapFrom(Preferences.Extra);

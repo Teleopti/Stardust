@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private readonly IPersonSelectorPresenter _personSelectorPresenter;
         private PersonsFilterView(){}
+        private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
 
 		public PersonsFilterView(DateOnlyPeriod selectedPeriod, IEnumerable<Guid> selectedPersonGuids, IComponentContext componentContext,
 			IApplicationFunction applicationFunction, string selectedGroupPage, IEnumerable<Guid> visiblePersonGuids)
@@ -39,8 +40,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             selectorView.ShowDateSelection = false;
             selectorView.HideMenu = true;
-            _personSelectorPresenter.LoadTabs();
-            _personSelectorPresenter.SetSelectedTab(selectedGroupPage);
+            if (_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(_personSelectorPresenter.LoadTabs))
+            {
+                _personSelectorPresenter.SetSelectedTab(selectedGroupPage);
+            }
+           
             SetTexts();
 			BackColor = Color.FromArgb(191, 219, 254);
         }

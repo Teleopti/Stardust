@@ -70,11 +70,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             comboBoxAdvPersons.ValueMember = "Id";
             comboBoxAdvPersons.DisplayMember = "Name";
             comboBoxAdvPersons.DataSource = persons;
-        	var tmp = comboBoxAdvPersons.SelectedValue;
+        	var selectedValue = comboBoxAdvPersons.SelectedValue;
             comboBoxAdvPersons.SelectedValue = preselectedPerson;
 			//if preselectedPerson is not present in list SelectedValue will be null, then  reset back
-			if (comboBoxAdvPersons.SelectedValue == null)
-				comboBoxAdvPersons.SelectedValue = tmp;
+            if (comboBoxAdvPersons.SelectedValue == null && selectedValue != null)
+				comboBoxAdvPersons.SelectedValue = selectedValue;
         }
 
         public void SetNextEnabledState(bool enabled)
