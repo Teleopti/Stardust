@@ -17,9 +17,11 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Schedule = (function ($) {
     var timeIndicatorDateTime;
 
+	var addTextRequestTooltip = null;
+
     function _initTooltip() {
         var addTextRequest = $('.show-request');
-        $('<div/>').qtip({
+		addTextRequestTooltip = $('<div />').qtip({
 
             content: {
                 text: $('#Schedule-addRequest-section'),
@@ -53,10 +55,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
             },
             style: {
 				def: false,
-                classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow',
-                border: {
-                    radius: 2
-                }
+				classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+				tip: true
             }
         });
     }
@@ -119,13 +119,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
     return {
         Init: function () {
             if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
-                Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/Week', Teleopti.MyTimeWeb.Schedule.PartialInit);
+				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/Week', Teleopti.MyTimeWeb.Schedule.PartialInit, Teleopti.MyTimeWeb.Schedule.PartialDispose);
             }
             Teleopti.MyTimeWeb.Schedule.Request.Init();
             _initTodayButton();
         },
         PartialInit: function () {
-            Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
             _initTooltip();
             _initPeriodSelection();
             Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
@@ -133,7 +132,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
             Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
             _initTimeIndicator();
         },
-
+		PartialDispose: function () {
+			addTextRequestTooltip.qtip('destroy');
+		},
         SetTimeIndicator: function (date) {
             _setTimeIndicator(date);
         }
@@ -338,7 +339,7 @@ Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 
 		ClearFormData: function (date) {
 			_clearFormData(date);
-        }
+		}
 	};
 
 })(jQuery);

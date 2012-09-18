@@ -24,6 +24,7 @@
 		-->
 		
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI19655'">true</RunWebBehaviorTests>
 		<!-- 
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'RaptorMain'">true</RunWebBehaviorTests>
 		-->

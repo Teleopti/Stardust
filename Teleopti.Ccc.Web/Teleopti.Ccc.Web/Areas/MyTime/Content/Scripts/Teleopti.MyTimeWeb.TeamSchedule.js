@@ -16,7 +16,6 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
 	var portal = Teleopti.MyTimeWeb.Portal;
-	var common = Teleopti.MyTimeWeb.Common;
 
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#TeamScheduleDateRangeSelector';
@@ -102,7 +101,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		TeamSchedulePartialInit: function () {
 			_initPeriodSelection();
 			_initTeamPickerSelection();
-			common.Layout.ActivateTooltip();
 			_initAgentNameOverflow();
 		}
 	};

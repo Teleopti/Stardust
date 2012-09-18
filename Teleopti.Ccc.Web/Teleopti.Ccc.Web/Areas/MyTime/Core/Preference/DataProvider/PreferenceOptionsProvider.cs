@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
@@ -30,13 +31,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return GetWorkflowControlSetData(w => w.AllowedPreferenceAbsences);
 		}
 
+		public IEnumerable<IActivity> RetrieveActivityOptions()
+		{
+			var activity = GetWorkflowControlSetData(w => w.AllowedPreferenceActivity, () => null);
+			if (activity == null)
+				return new IActivity[] {};
+			return new[] {activity};
+		}
+
 		private IEnumerable<T> GetWorkflowControlSetData<T>(Func<IWorkflowControlSet, IEnumerable<T>> getData)
+		{
+			return GetWorkflowControlSetData(getData, () => new T[] {});
+		}
+
+		private T GetWorkflowControlSetData<T>(Func<IWorkflowControlSet, T> getData, Func<T> @default)
 		{
 			var person = _loggedOnUser.CurrentUser();
 			if (person.WorkflowControlSet == null)
-				return new T[] {};
+				return @default.Invoke();
 			return getData.Invoke(person.WorkflowControlSet);
 		}
+
 
 	}
 }

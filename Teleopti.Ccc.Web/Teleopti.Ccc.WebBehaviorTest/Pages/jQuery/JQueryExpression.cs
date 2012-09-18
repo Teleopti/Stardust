@@ -6,7 +6,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 {
 	public class JQueryExpression : IJQueryExpression
 	{
+		private readonly DomContainer _domContainer;
 		private readonly StringBuilder _expression = new StringBuilder();
+
+		public JQueryExpression() { _domContainer = Browser.Current; }
+		public JQueryExpression(DomContainer domContainer) { _domContainer = domContainer; }
 
 		private string MakeSelector(string selector)
 		{
@@ -37,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 
 		public string Eval()
 		{
-			return EvalIn(Browser.Current);
+			return EvalIn(_domContainer);
 		}
 
 		public string EvalIn(DomContainer domContainer)
@@ -64,9 +68,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 			return this;
 		}
 
-		public IJQueryExpression Widget(string widget, string method)
+		public IJQueryExpression WidgetCall(string widget, string method)
 		{
 			_expression.Append(string.Format(".{0}('{1}')", widget, method));
+			return this;
+		}
+
+		public IJQueryExpression WidgetOptions(string widget, dynamic options)
+		{
+			var json = Newtonsoft.Json.JsonConvert.SerializeObject(options);
+			_expression.Append(string.Format(".{0}({1})", widget, json));
 			return this;
 		}
 

@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
         }
 
 		[Given(@"I am viewing preferences")]
+		[When(@"I am viewing preferences")]
 		[When(@"I view preferences")]
 		public void GivenIAmViewingPreferences()
 		{

@@ -7,3 +7,8 @@
 	cursor: text;
 	color: #ccd0d3;
 }
+.rtl .ui-labeled-input-label 
+{
+	left: auto;
+	right: 15px;
+}

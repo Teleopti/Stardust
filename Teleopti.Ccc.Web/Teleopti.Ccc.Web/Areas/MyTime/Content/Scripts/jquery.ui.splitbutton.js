@@ -74,11 +74,11 @@
 						response(select.children("option").map(function () {
 							var text = $(this).text();
 							var value = $(this).val();
-							var bgColor = $(this).attr('bg-color');
+							var color = $(this).attr('data-color');
 							return {
 								label: text,
 								value: value,
-								bgColor: bgColor,
+								color: color,
 								option: this
 							};
 						}));
@@ -102,7 +102,7 @@
 				var secondaryIcon = $("<span>")
 					.addClass('ui-splitbutton-menu-icon-secondary')
 					.addClass('ui-corner-all')
-					.css("background-color", item.bgColor)
+					.css("background-color", item.color)
 					;
 				var itemButton = $("<a></a>")
 					.append(text)

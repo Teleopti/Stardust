@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void BeforeScenario()
 		{
-			Navigation.GoTo("Test/BeforeScenario");
+			Navigation.GoTo("Test/BeforeScenario", new ApplicationStartupTimeout());
 		}
 
 		public static void LogonMobile()

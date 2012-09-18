@@ -3,7 +3,7 @@
 	As a developer
 	I want to run the javascript tests in the browser
 
-Scenario: Preferences tests
-	When I navigate to unit test url Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.Tests.html
+Scenario: All javascript unit tests
+	When I navigate to unit test url Areas/MyTime/Content/Scripts/AllTests.html
 	Then I should see the tests run
 	And I should see all tests pass

@@ -63,7 +63,6 @@ textarea { overflow: auto; } /* thnx ivannikolic! www.sitepoint.com/blogs/2010/0
 /* align checkboxes, radios, text inputs with their label
 	by: Thierry Koblentz tjkdesign.com/ez-css/css/base.css  */
 input[type="radio"] { vertical-align: text-bottom; }
-input[type="checkbox"] { vertical-align: bottom; }
 .ie7 input[type="checkbox"] { vertical-align: baseline; }
 .ie6 input { vertical-align: text-bottom; }
 
@@ -395,6 +394,8 @@ html.full-height #push{
 .icon.rightarrow{background-position: 0 -266px; width: 9px; }
 .icon.doublearrow-blue{background-position: 0 -286px; width: 9px; }
 .icon.edit{background-position: 0 -308px; height: 15px; margin-top: -3px; margin-bottom: 3px;}
+.icon.toolbar-add-extended{background-position: 0 -363px; width: 21px;}
+.icon.toolbar-add-extended[disabled]{background-position: 0 -425px;}
 .icon.toolbar-edit{background-position: 0 -363px; width: 21px;}
 .icon.toolbar-edit[disabled]{background-position: 0 -425px;}
 .icon.toolbar-delete{background-position: 0 -394px; width: 26px;}
@@ -404,7 +405,7 @@ html.full-height #push{
 .icon.validation-req{background-position: -432px 0;}
 .icon.validation-error{background-position: -575px 0;}
 .icon.toolbar-addTextRequest {background-position: 0px -511px; width: 24px}
-.icon.toolbar-today {background-position: -155px -26px; width: 24px}
+.icon.toolbar-today {background-position: -155px -26px;width: 24px;margin-left: 19px;}
 .icon.preference-warning {	background-position: -159px -54px; width: 16px;	height: 16px; }
 
 .text-request {
@@ -591,7 +592,6 @@ header {
 #toolbar-right{width: 253px;}
 .toolbar-inner{background-position: right -35px; font-size: 9px; height: 21px; padding: 7px;}
 
-.date-range-selector{padding-right: 19px;}
 .date-range-selector .datepicker{
 	 background: #fff url(../Images/button_sprite.png) right -120px no-repeat; 
 	 border: 0px;
@@ -603,6 +603,7 @@ header {
 	 text-indent: -9999px;
 	 margin-left: -5px; 
 	 width: 180px;
+    vertical-align: baseline;
 }
 .ie9 .date-range-selector .datepicker, .ie8 .date-range-selector .datepicker{margin-top: -4px;}
 .ie7 .date-range-selector .datepicker{margin-top: -8px;}
@@ -671,11 +672,9 @@ header {
 }
 .edit-module input.ui-autocomplete-input {
 	height: 16px;
-	float: left;
 }
 .ie9 .edit-module input.ui-autocomplete-input {
 	height: 15px;
-	float: left;
 }
 .date-input
 {
@@ -683,24 +682,13 @@ header {
 }
 select.time-input
 {
-	width: 8.5em;
-}
-.rtl select.time-input
-{
-    width: 8.5em;
-}
-.rtl .time-input
-{
-    padding-right: 20px;
+	width: 8em;
 }
 .edit-module-inner button.ui-button-icon-only {
 	height: 20px; 
 	width: 1.7em; 
 	margin-left: -20px;
-	float: left;
-}
-.edit-module-inner button.ui-button-icon-only {
-	 background-position: -12px -90px;
+	background-position: -12px -90px;
 	border: 0;
 }
 .ie9 .edit-module-inner button.ui-button-icon-only {
@@ -784,6 +772,9 @@ select.time-input
 .request-edit-section .ui-autocomplete-input {
 	height: 16px;
 	float: left;
+}
+.rtl .request-edit-section .ui-autocomplete-input {
+	float: right;
 }
 
 .ie9 #Schedule-addTextRequest-section .edit-module:nth-child(2) > div > div
@@ -981,6 +972,25 @@ footer p
 	display: none;
 }
 
+
+.rtl .ui-corner-left {
+	-moz-border-radius-topright: 4px/*{cornerRadius}*/; -webkit-border-top-right-radius: 4px/*{cornerRadius}*/; -khtml-border-top-right-radius: 4px/*{cornerRadius}*/; border-top-right-radius: 4px/*{cornerRadius}*/;
+	-moz-border-radius-bottomright: 4px/*{cornerRadius}*/; -webkit-border-bottom-right-radius: 4px/*{cornerRadius}*/; -khtml-border-bottom-right-radius: 4px/*{cornerRadius}*/; border-bottom-right-radius: 4px/*{cornerRadius}*/;
+	-moz-border-radius-bottomleft: 0px/*{cornerRadius}*/; -webkit-border-bottom-left-radius: 0px/*{cornerRadius}*/; -khtml-border-bottom-left-radius: 0px/*{cornerRadius}*/; border-bottom-left-radius: 0px/*{cornerRadius}*/;
+	-moz-border-radius-topleft: 0px/*{cornerRadius}*/; -webkit-border-top-left-radius: 0px/*{cornerRadius}*/; -khtml-border-top-left-radius: 0px/*{cornerRadius}*/; border-top-left-radius: 0px/*{cornerRadius}*/;
+}
+.rtl .ui-corner-right {
+	-moz-border-radius-bottomleft: 4px/*{cornerRadius}*/; -webkit-border-bottom-left-radius: 4px/*{cornerRadius}*/; -khtml-border-bottom-left-radius: 4px/*{cornerRadius}*/; border-bottom-left-radius: 4px/*{cornerRadius}*/;
+	-moz-border-radius-topleft: 4px/*{cornerRadius}*/; -webkit-border-top-left-radius: 4px/*{cornerRadius}*/; -khtml-border-top-left-radius: 4px/*{cornerRadius}*/; border-top-left-radius: 4px/*{cornerRadius}*/;
+	-moz-border-radius-topright: 0px/*{cornerRadius}*/; -webkit-border-top-right-radius: 0px/*{cornerRadius}*/; -khtml-border-top-right-radius: 0px/*{cornerRadius}*/; border-top-right-radius: 0px/*{cornerRadius}*/;
+	-moz-border-radius-bottomright: 0px/*{cornerRadius}*/; -webkit-border-bottom-right-radius: 0px/*{cornerRadius}*/; -khtml-border-bottom-right-radius: 0px/*{cornerRadius}*/; border-bottom-right-radius: 0px/*{cornerRadius}*/;
+}
+.ie9 .rtl .ui-corner-right {
+	border-bottom-left-radius: 0px/*{cornerRadius}*/;
+	border-top-left-radius: 0px/*{cornerRadius}*/;
+	border-top-right-radius: 4px/*{cornerRadius}*/;
+	border-bottom-right-radius: 4px/*{cornerRadius}*/;
+}
 
 /*
 Personal drop down menu

@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Interfaces.Domain;
 

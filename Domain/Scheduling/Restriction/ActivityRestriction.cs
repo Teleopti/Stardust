@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
         {
             _activity = activity;
         }
-        
-        protected ActivityRestriction()
+
+		public ActivityRestriction()
         {}
 
         public virtual IActivity Activity

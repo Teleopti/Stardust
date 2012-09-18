@@ -312,6 +312,12 @@ namespace Teleopti.Interfaces.Domain
 			  }
 			  return timeSpan < OneAndHalfDay;
 		  }
+
+		/// <summary>
+		/// To's the string
+		/// </summary>
+		public override string ToString() { return StartTimeString + "-" + EndTimeString; }
+
     }
 }
 

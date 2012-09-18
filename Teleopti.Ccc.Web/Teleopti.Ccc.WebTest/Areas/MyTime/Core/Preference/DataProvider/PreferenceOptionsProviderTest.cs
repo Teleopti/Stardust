@@ -112,5 +112,61 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			result.Should().Be.Empty();
 		}
 
+
+
+		[Test]
+		public void ShouldRetrieveActivityFromWorkflowControlSet()
+		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var activity = new Activity(" ");
+			var person = new Person
+			{
+				WorkflowControlSet = new WorkflowControlSet
+				{
+					AllowedPreferenceActivity = activity
+				}
+			};
+			var target = new PreferenceOptionsProvider(loggedOnUser);
+
+			loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
+
+			var result = target.RetrieveActivityOptions();
+
+			result.Single().Should().Be(activity);
+		}
+
+		[Test]
+		public void ShouldReturnEmptyActivityIfNotWorkflowControlSet()
+		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(u => u.CurrentUser()).Return(new Person());
+			var target = new PreferenceOptionsProvider(loggedOnUser);
+
+			var result = target.RetrieveActivityOptions();
+
+			result.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldReturnEmptyActivityIfNotActivity()
+		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = new Person
+			             	{
+			             		WorkflowControlSet = new WorkflowControlSet
+			             		                     	{
+			             		                     		AllowedPreferenceActivity = null
+			             		                     	}
+			             	};
+			loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
+			var target = new PreferenceOptionsProvider(loggedOnUser);
+
+			var result = target.RetrieveActivityOptions();
+
+			result.Should().Have.Count.EqualTo(0);
+		}
+
+
+
 	}
 }

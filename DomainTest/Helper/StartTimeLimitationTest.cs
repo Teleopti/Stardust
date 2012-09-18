@@ -162,5 +162,12 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			 target = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(10));
 			 target.IsValidFor(TimeSpan.FromHours(11)).Should().Be.False();
 		 }
+
+		 [Test]
+		 public void ShouldToString()
+		 {
+			 target = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(10));
+			 target.ToString().Should().Be.EqualTo(target.StartTimeString + "-" + target.EndTimeString);
+		 }
     }
 }

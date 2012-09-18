@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             bool hasInValidItems = skillDataPeriodList.Any(p => p.ServiceAgreement.MinOccupancy > p.ServiceAgreement.MaxOccupancy);
             if (hasInValidItems)
             {
-                throw new ValidationException(string.Format(CultureInfo.InvariantCulture, "The skill data periods contains items that are invalid."));
+                throw new ValidationException(string.Format(CultureInfo.InvariantCulture, UserTexts.Resources.MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy));
             }
         }
 

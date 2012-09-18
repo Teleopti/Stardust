@@ -33,8 +33,8 @@ Scenario: No access to requests tab
 
 Scenario: No access to requests page
 	Given I am an agent without access to any requests
-	When I sign in
-	And I navigate to the requests page
+	And I am signed in
+	When I navigate to the requests page
 	Then I should see an error message
 
 Scenario: No requests

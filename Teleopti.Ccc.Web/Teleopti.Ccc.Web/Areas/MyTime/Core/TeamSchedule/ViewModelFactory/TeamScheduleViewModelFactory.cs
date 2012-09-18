@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			return _mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(domainData);
 		}
 
-		public IEnumerable<SelectBoxOption> CreateTeamOptionsViewModel(DateOnly date)
+		public IEnumerable<IOption> CreateTeamOptionsViewModel(DateOnly date)
 		{
 			var teams = _teamProvider.GetPermittedTeams(date);
 			var sites = teams
@@ -36,17 +36,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				.Distinct()
 				.OrderBy(s => s.Description.Name);
 
-			var options = new List<SelectBoxOption>();
+			var options = new List<IOption>();
 			sites.ForEach(s =>
 			              	{
-			              		options.Add(new SelectBoxOption
+			              		options.Add(new Option
 			              		            	{
 			              		            		Value = "-",
 			              		            		Text = s.Description.Name
 			              		            	});
 			              		var teamOptions = from t in teams
 			              		                  where t.Site == s
-			              		                  select new SelectBoxOption
+			              		                  select new Option
 			              		                         	{
 			              		                         		Value = t.Id.Value.ToString(),
 			              		                         		Text = t.Description.Name

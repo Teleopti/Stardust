@@ -66,15 +66,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Preferences tests")]
-        public virtual void PreferencesTests()
+        [NUnit.Framework.DescriptionAttribute("All javascript unit tests")]
+        public virtual void AllJavascriptUnitTests()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Preferences tests", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("All javascript unit tests", ((string[])(null)));
 #line 6
 this.ScenarioSetup(scenarioInfo);
 #line 7
- testRunner.When("I navigate to unit test url Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Prefe" +
-                    "rence.Tests.html");
+ testRunner.When("I navigate to unit test url Areas/MyTime/Content/Scripts/AllTests.html");
 #line 8
  testRunner.Then("I should see the tests run");
 #line 9

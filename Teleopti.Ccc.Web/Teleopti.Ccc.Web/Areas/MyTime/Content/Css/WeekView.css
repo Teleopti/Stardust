@@ -152,30 +152,10 @@
 	font-weight: bold;
 	font-size: 115%;
 }
-.absence-input-label 
-{
-	padding-top: 4px;
-	padding-left: 2px;
-	padding-right: 2px;
-	height: 16px;
-	width: 8em;
-}
-.en .absence-input-label 
-{
-	font-size: 12px;
-	width: 80px;
-}
-.rtl .absence-input-label 
-{
-	text-align: right;
-}
+
 select.absence-input 
 {
-	width: 8.5em;
-}
-.rtl input.absence-input
-{
-    padding-right: 20px;
+	width: 8em;
 }
 .week-schedule-layer {
 	width: 131px;
@@ -224,6 +204,26 @@ select.absence-input
 {
 	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00FFFFFF', endColorstr='#99FFFFFF',GradientType=0 );
 	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);*/
+}
+
+
+
+
+
+.absence-input-label {
+	min-width: 70px;
+	padding-right: 10px;
+}
+.rtl .absence-input-label {
+	min-width: 70px;
+	padding-right: 0px;
+	padding-left: 10px;
+}
+#Schedule-addRequest-subject-input {
+	width: 249px;
+}
+#Schedule-addRequest-message-input {
+	width: 245px;
 }
 
 .week-schedule-time-indicator

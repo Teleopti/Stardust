@@ -27,7 +27,7 @@ Scenario: Signed out when cookie expires while I have the browser open
 	Then I should be signed out
 
 Scenario: Signed out when saving preference when cookie is expired
-	Given I am an agent
+	Given I am an agent without access to extended preferences
 	And I have an open workflow control set with an allowed standard preference
 	And I am viewing preferences
 	When my cookie expires

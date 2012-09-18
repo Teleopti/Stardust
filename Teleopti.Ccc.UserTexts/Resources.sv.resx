@@ -10577,7 +10577,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Från kontrakt</value>
   </data>
   <data name="FromSchedulePeriod" xml:space="preserve">
-    <value>Fråm schemaperiod</value>
+    <value>Från schemaperiod</value>
   </data>
   <data name="FullDayAbsence" xml:space="preserve">
     <value>Heldagsfrånvaro</value>
@@ -10687,5 +10687,32 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="AfterCheckingAgainstActivities" xml:space="preserve">
     <value>Efter aktivitetskontroll</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Följsamhet per agent</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Följsamhet per dag</value>
+  </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>Lägg till utökat önskemål</value>
+  </data>
+  <data name="MyTime" xml:space="preserve">
+    <value>MyTime</value>
+  </data>
+  <data name="AgentScheduleMessengerPermission" xml:space="preserve">
+    <value>Agent Schedule Messenger</value>
+  </data>
+  <data name="ExtendedPreferencesWeb" xml:space="preserve">
+    <value>Utökade önskemål</value>
+  </data>
+  <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
+    <value>Fördelningen mellan subskills måste tillsammans bli 100%.</value>
+  </data>
+  <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
+    <value>Max agenter måste vara större eller lika med min agenter.</value>
+  </data>
+  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
+    <value>Max nyttjandegraden måste vara större eller lika med min nyttjandegrad</value>
   </data>
 </root>

@@ -1,3 +1,5 @@
+using System;
+using System.Net;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -5,6 +7,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Filters;
@@ -12,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.StandardPreferences)]
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.StandardPreferences,DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)]
 	[Aspects]
 	public class PreferenceController : Controller
 	{
@@ -46,13 +49,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[ActionName("Preference")]
 		public virtual JsonResult GetPreference(DateOnly date)
 		{
-			return Json(_viewModelFactory.CreateDayViewModel(date), JsonRequestBehavior.AllowGet);
+			var model = _viewModelFactory.CreateDayViewModel(date);
+			if (model==null)
+			{
+				Response.StatusCode = (int) HttpStatusCode.NoContent;
+				return null;
+			}
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]
 		[HttpPostOrPut]
 		public virtual JsonResult Preference(PreferenceDayInput input)
 		{
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
 			return Json(_preferencePersister.Persist(input));
 		}
 

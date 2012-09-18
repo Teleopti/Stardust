@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -188,7 +187,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			preferenceDay.Restriction.EndTimeLimitation.EndTime.HasValue.Should().Be.False();
 			preferenceDay.Restriction.WorkTimeLimitation.StartTime.HasValue.Should().Be.False();
 			preferenceDay.Restriction.WorkTimeLimitation.EndTime.HasValue.Should().Be.False();
-			preferenceDay.Restriction.ActivityRestrictionCollection.Should().Be.Empty();
 		}
 
 		[Test]

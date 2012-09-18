@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void Set(TimeSpan timeout)
 		{
 			Timeout = timeout;
-			Poll = TimeSpan.FromMilliseconds(10);
+			Poll = TimeSpan.FromMilliseconds(25);
 			Settings.WaitForCompleteTimeOut = Convert.ToInt32(timeout.TotalSeconds);
 			Settings.WaitUntilExistsTimeOut = Convert.ToInt32(timeout.TotalSeconds);
 		}
@@ -137,13 +137,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	public static class EventualWaits
 	{
-		public static void WaitUntilAjaxContentComplete(this WatiN.Core.Browser browser)
-		{
-			var loading = browser.Div("loading");
-			if (!loading.Exists) return;
-			loading.WaitUntilHidden();
-		}
-
 		public static void WaitUntilHidden<T>(this T element) where T : Element
 		{
 			element.WaitUntil<T>(e => e.DisplayHidden());
