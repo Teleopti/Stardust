@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
             catch (ValidationException validationException)
             {
-                string validationErrorMessage = string.Format(CultureInfo.CurrentUICulture,UserTexts.Resources.MultisiteDayTemplatesInvalidOneParameter, validationException.Message);
+                string validationErrorMessage = string.Format(CultureInfo.CurrentCulture, validationException.Message);
                 ShowErrorMessage(validationErrorMessage, UserTexts.Resources.ValidationError);
             }
         }
