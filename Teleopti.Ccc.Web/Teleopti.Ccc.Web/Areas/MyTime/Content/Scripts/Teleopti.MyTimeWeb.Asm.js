@@ -36,7 +36,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					}, 1000 * refreshSeconds);
 				},
 				error: function () {
-					alert('nope'); //todo: wad ska hända här? (om ingen kontakt med servern)
+					console.error('no connection with signalr server!') //todo: wad ska hända här? (om ingen kontakt med servern)
 				}
 			});
 		};
@@ -138,7 +138,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	return {
 		Init: function () {
 			_start();
-
 			_listenForEvents();
 		}
 	};
