@@ -114,8 +114,17 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		}
 
 		$('#asm-link').click(function (ev) {
-			window.open(_settings.baseUrl + 'Asm', 'AsmWindow', 'width=850,height=100;channelmode=1,directories=0,left=0,location=0,menubar=0,resizable=0,scrollbars=0,status=0,titlebar=0,toolbar=0,top=0');
 			$(".dropdown dd ul").hide();
+			var asmWindow = window.open(_settings.baseUrl + 'Asm', 'AsmWindow', 'width=850,height=100;channelmode=1,directories=0,left=0,location=0,menubar=0,resizable=0,scrollbars=0,status=0,titlebar=0,toolbar=0,top=0');
+
+			if (asmWindow.focus) {
+				asmWindow.focus();
+			}
+
+			if (!asmWindow.closed) {
+				asmWindow.focus();
+			}
+
 			ev.preventDefault();
 			return false;
 		});
