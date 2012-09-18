@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -118,7 +119,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "perPersonAndGroup"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "perGroupAndOthers"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void updateFairnessInfo(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder)
-        {
+		{
+			agentGroupPageLabel.Text = Resources.GroupPage;
+
 			if (_fairnessManager == null)
 				_fairnessManager = _container.Resolve<IShiftCategoryFairnessAggregateManager>();
 
@@ -138,41 +141,48 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (!helper.Period.HasValue)
                 return;
 
-            listViewFairness.Items.Add("");
+            //listViewFairness.Items.Add("");
             if (person.WorkflowControlSet != null && person.WorkflowControlSet.UseShiftCategoryFairness)
             {
             	var groupPage = comboBoxAgentGrouping.SelectedItem as IGroupPageLight;
             	var perPersonAndGroup = _fairnessManager.GetPerPersonAndGroup(person, groupPage, dateOnly);
 				var perGroupAndOthers = _fairnessManager.GetPerGroupAndOtherGroup(person, groupPage, dateOnly);
-                var shiftCategoryFairness =
-                    _stateHolder.Schedules[person].CachedShiftCategoryFairness();
-                createAndAddItem(listViewFairness, Resources.EqualOfEachShiftCategory, Resources.Number, 1);
+                var shiftCategoryFairness = _stateHolder.Schedules[person].CachedShiftCategoryFairness();
+                //createAndAddItem(listViewFairness, Resources.EqualOfEachShiftCategory, Resources.Number, 1);
                 var categories =
                     new List<IShiftCategory>(shiftCategoryFairness.ShiftCategoryFairnessDictionary.Keys);
                 categories.Sort(new ShiftCategorySorter());
 
                 if (perPersonAndGroup.ShiftCategoryFairnessCompareValues != null)
                 {
-                    createAndAddItemInMultipleColumns(perPersonAndGroupListView, ""
+                    var displayHeaders =
+                        shouldHeadersBeDisplayedOrNot(perPersonAndGroup.ShiftCategoryFairnessCompareValues);
+
+                    if(displayHeaders)
+                        createAndAddItemInMultipleColumns(perPersonAndGroupListView, ""
                                                           , Resources.Agent
                                                           , Resources.Others
                                                           , true);
 
                     foreach (var shiftCategory in perPersonAndGroup.ShiftCategoryFairnessCompareValues)
                     {
-                        if (shiftCategory.Original - shiftCategory.ComparedTo != 0.0)
+                        if (!(shiftCategory.Original == 0.0 && shiftCategory.ComparedTo == 0.0))
                         {
-                            createAndAddItemInMultipleColumns(perPersonAndGroupListView,
+
+							var originalFairness = Math.Round((shiftCategory.Original * 100),2).ToString(CultureInfo.CurrentCulture) + "%";
+                        	var othersFairness = Math.Round((shiftCategory.ComparedTo*100),2).ToString(CultureInfo.CurrentCulture) + "%";
+
+							createAndAddItemInMultipleColumns(perPersonAndGroupListView,
                                                               shiftCategory.ShiftCategory.Description.Name,
-                                                              (shiftCategory.Original*100).ToString(
-                                                                  CultureInfo.CurrentCulture) + "%",
-                                                              (shiftCategory.ComparedTo*100).ToString(
-                                                                  CultureInfo.CurrentCulture) + "%", false);
+                                                              originalFairness,
+                                                              othersFairness, 
+															  false);
                         }
                     }
 
-                    createAndAddItemInMultipleColumns(perPersonAndGroupListView, Resources.StandardDeviation + "= "
-                                                      , Math.Round(perPersonAndGroup.StandardDeviation,4).ToString(CultureInfo.CurrentCulture)
+                    if(displayHeaders)
+                        createAndAddItemInMultipleColumns(perPersonAndGroupListView, Resources.StandardDeviation 
+														  ,	Math.Round(perPersonAndGroup.StandardDeviation,4).ToString(CultureInfo.CurrentCulture)
                                                           , ""
                                                           , true);
                 }
@@ -181,50 +191,44 @@ namespace Teleopti.Ccc.Win.Scheduling
               
                 if (perGroupAndOthers.ShiftCategoryFairnessCompareValues != null)
                 {
-                    createAndAddItemInMultipleColumns(perGroupAndOthersListView, ""
-                                                         , Resources.Team
-                                                         , Resources.Others
-                                                         , true);
+					
+                    var displayHeaders =
+                        shouldHeadersBeDisplayedOrNot(perGroupAndOthers.ShiftCategoryFairnessCompareValues);
+
+                    if(displayHeaders)
+                        createAndAddItemInMultipleColumns(perGroupAndOthersListView, ""
+                                                             , Resources.Team
+                                                             , Resources.Others
+                                                             , true);
 
                     foreach (var shiftCategory in perGroupAndOthers.ShiftCategoryFairnessCompareValues)
                     {
-                        if (shiftCategory.Original - shiftCategory.ComparedTo != 0.0)
+                        if (!(shiftCategory.Original == 0.0 && shiftCategory.ComparedTo == 0.0))
                         {
-                            createAndAddItemInMultipleColumns(perGroupAndOthersListView,
+
+							var originalFairness = Math.Round((shiftCategory.Original * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
+							var othersFairness = Math.Round((shiftCategory.ComparedTo * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
+
+							createAndAddItemInMultipleColumns(perGroupAndOthersListView,
                                                               shiftCategory.ShiftCategory.Description.Name,
-                                                              (shiftCategory.Original * 100).ToString(
-                                                                  CultureInfo.CurrentCulture) + "%",
-                                                              (shiftCategory.ComparedTo * 100).ToString(
-                                                                  CultureInfo.CurrentCulture) + "%", false);
+                                                              originalFairness,
+                                                              othersFairness,
+															  false);
                         }
                     }
 
-                    createAndAddItemInMultipleColumns(perGroupAndOthersListView, Resources.StandardDeviation + "= "
-                                                         , Math.Round(perGroupAndOthers.StandardDeviation,4).ToString(CultureInfo.CurrentCulture)
-                                                         , ""
-                                                         , true);
+                    if(displayHeaders)
+                        createAndAddItemInMultipleColumns(perGroupAndOthersListView, Resources.StandardDeviation 
+                                                             , Math.Round(perGroupAndOthers.StandardDeviation,4).ToString(CultureInfo.CurrentCulture)
+                                                             , ""
+                                                             , true);
                 }
 
                 //perGroupAndOthersLabel.Text = Resources.StandardDeviation + "= " + perGroupAndOthers.StandardDeviation;
-
-                foreach (var category in categories)
-                {
-                    var value = shiftCategoryFairness.ShiftCategoryFairnessDictionary[category];
-                    createAndAddItem(listViewFairness, category.Description.Name,
-                                     value.ToString("0", CultureInfo.CurrentCulture), 2);
-                }
             }
-            else
-            {
-                createAndAddItem(listViewFairness, Resources.FairnessValue,
-                                 ((int)
-                                  stateHolder.Schedules[person].CachedShiftCategoryFairness().FairnessValueResult.
-                                      FairnessPoints).ToString(CultureInfo.CurrentCulture), 2);
 
-            }
-            
             EmploymentType employmentType = person.Period(helper.SelectedDate).PersonContract.Contract.EmploymentType;
-            listViewFairness.Items.Add("");
+            //listViewFairness1.Items.Add("");
             if (employmentType != EmploymentType.HourlyStaff)
             {
                 createAndAddItem(listViewFairness, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
@@ -238,6 +242,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
+        private static bool shouldHeadersBeDisplayedOrNot(IList<ShiftCategoryFairnessCompareValue> shiftCategoryFairnessCompareValues)
+        {
+            foreach (var shiftCategory in shiftCategoryFairnessCompareValues)
+            {
+                if (!(shiftCategory.Original == 0.0 && shiftCategory.ComparedTo == 0.0))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private static void createAndAddItemInMultipleColumns(ListView listView, string column1Text, string column2Text, string column3Text, bool isBold )
         {
             var listViewItems = new ListViewItem(column1Text);
@@ -246,7 +262,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if(isBold)
             {
-                listViewItems.Font.ChangeToBold();
+                listViewItems.Font = listViewItems.Font.ChangeToBold();
             }
             
             listView.Items.Add(listViewItems);
