@@ -1214,7 +1214,9 @@
     <EmbeddedResource Include="Forecasting\Skill.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forecasting\SkillType.hbm.xml" />
+    <EmbeddedResource Include="Forecasting\SkillType.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\Workload.hbm.xml" />

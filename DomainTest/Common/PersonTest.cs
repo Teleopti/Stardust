@@ -745,7 +745,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsTrue(_target.IsOkToAddPersonPeriod(dateOnly));
             var team = TeamFactory.CreateSimpleTeam("Team");
             var personContract =
-                new PersonContract(new Contract("contract") {IsWorkTimeFromContract = true, IsWorkTimeFromSchedulePeriod = false},
+                new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromSchedulePeriod },
                     new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
             _target.AddPersonPeriod(personPeriod);
@@ -760,7 +760,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsTrue(_target.IsOkToAddSchedulePeriod(dateOnly));
             var team = TeamFactory.CreateSimpleTeam("Team");
             var personContract =
-                new PersonContract(new Contract("contract") { IsWorkTimeFromContract = false, IsWorkTimeFromSchedulePeriod = true },
+                new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromSchedulePeriod },
                     new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
             _target.AddPersonPeriod(personPeriod);
@@ -778,7 +778,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsTrue(_target.IsOkToAddSchedulePeriod(dateOnly));
             var team = TeamFactory.CreateSimpleTeam("Team");
             var personContract =
-                new PersonContract(new Contract("contract") { IsWorkTimeFromContract = false, IsWorkTimeFromSchedulePeriod = true },
+                new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromSchedulePeriod },
                     new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
             _target.AddPersonPeriod(personPeriod);

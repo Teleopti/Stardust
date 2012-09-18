@@ -5,8 +5,7 @@
 --Desc: Add options for whether contract time should come from contract of schedule period
 ----------------  	
 ALTER TABLE dbo.Contract ADD
-	IsWorkTimeFromContract int NOT NULL CONSTRAINT DF_Contract_IsWorkTimeFromContract DEFAULT 1,
-	IsWorkTimeFromSchedulePeriod int NOT NULL CONSTRAINT DF_Contract_IsWorkTimeFromSchedulePeriod DEFAULT 0
+	WorkTimeSource int NOT NULL CONSTRAINT DF_Contract_WorkTimeSource DEFAULT 0
 GO
 
 ----------------  

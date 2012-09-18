@@ -135,15 +135,10 @@ namespace Teleopti.Interfaces.Domain
         /// The negative day off tolerance.
         /// </value>
         int NegativeDayOffTolerance { get; set; }
-
-        /// <summary>
-        /// Gets or sets the from contract
-        /// </summary>
-        bool IsWorkTimeFromContract { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the from schedule period
         /// </summary>
-        bool IsWorkTimeFromSchedulePeriod { get; set; }
+        WorkTimeSource WorkTimeSource { get; set; }
     }
 }

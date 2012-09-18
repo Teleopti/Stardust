@@ -648,7 +648,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var dateOnly = new DateOnly(2012, 12, 1);
             var person = PersonFactory.CreatePerson();
             var team = TeamFactory.CreateSimpleTeam("Team");
-            var personContract = new PersonContract(new Contract("contract") { IsWorkTimeFromContract = false, IsWorkTimeFromSchedulePeriod = true },
+            var personContract = new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromSchedulePeriod},
                     new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
             person.AddPersonPeriod(personPeriod);
