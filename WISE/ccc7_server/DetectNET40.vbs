@@ -20,7 +20,7 @@ If Err.Number = 0 Then
 		End If
 Else
 	On Error GOTO 0
-	dummy=Msgbox("AgentPortalWeb needs .NET 4.0 on this server, please download and install!",48,"Can't find .NET 4.0")
+	dummy=Msgbox("AgentPortalWeb and MessageBroker needs .NET 4.0 on this server, please download and install!",48,"Can't find .NET 4.0")
 End If
 
 Set oShell = Nothing
