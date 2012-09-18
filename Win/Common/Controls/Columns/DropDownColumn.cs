@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             {
                 e.Style.CellValue = _headerText;
             }
-            else
+            else if (dataItems.Count > 0)
             {
                 TData dataItem = dataItems.ElementAt(e.RowIndex - 1);
                 e.Style.CellType = "ComboBox";
