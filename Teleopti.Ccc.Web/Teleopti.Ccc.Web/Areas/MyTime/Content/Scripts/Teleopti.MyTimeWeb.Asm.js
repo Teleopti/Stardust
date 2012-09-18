@@ -13,6 +13,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var refreshSeconds = 1;
 	var pixelPerHours = 50;
 	var timeLineMarkerWidth = 100;
+	var vm;
 
 	function asmViewModel(yesterday) {
 		var self = this;
@@ -106,7 +107,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
 		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
 
-		var vm = new asmViewModel(yesterday);
+		vm = new asmViewModel(yesterday);
 		vm.loadViewModel();
 		ko.applyBindings(vm);
 	}
@@ -122,13 +123,13 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		Init: function () {
 			_start();
 
-			var onevent = function (notification) {
-				console.log(JSON.stringify(notification));
+			var onMessageBrokerEvent = function (notification) {
+				vm.loadViewModel();
 			};
 
 			Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 				url: 'http://localhost:54903/signalr',
-				callback: onevent
+				callback: onMessageBrokerEvent
 			}, {
 				domainType: 'IPersistableScheduleData',
 				businessUnitId: '928dd0bc-bf40-412e-b970-9b5e015aadea',
