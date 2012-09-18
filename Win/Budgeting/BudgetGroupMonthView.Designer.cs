@@ -94,6 +94,7 @@
             this.gridControlMonthView.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
             this.gridControlMonthView.Properties.BackgroundColor = System.Drawing.Color.White;
             this.gridControlMonthView.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
+            this.gridControlMonthView.MinResizeColSize = 5;
             this.gridControlMonthView.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
             this.gridControlMonthView.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
