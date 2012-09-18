@@ -832,7 +832,7 @@ namespace CheckPreRequisites
             else
                 printFeatureStatus(false);
 
-            if (checkBoxAgentPortalWeb.Checked)
+            if (checkBoxDotNet4.Checked)
             {
                 printNewFeature(".NET framework", ".NET Framework", "version 4.0 required", FrameworkVersionDetection.GetExactVersion(FrameworkVersion.Fx40).ToString());
                 if (FrameworkVersionDetection.IsInstalled(FrameworkVersion.Fx40))
@@ -933,7 +933,7 @@ namespace CheckPreRequisites
                         printFeatureStatus(false);
                     }
 
-                    if (checkBoxAgentPortalWeb.Checked)
+                    if (checkBoxDotNet4.Checked)
                     {
                         try
                         {
