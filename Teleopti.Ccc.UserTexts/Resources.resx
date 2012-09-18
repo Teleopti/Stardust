@@ -11058,7 +11058,7 @@ These options are activated:
   <data name="PleaseChooseAReportType" xml:space="preserve">
     <value>Please choose a report type.</value>
     <comment>Used in mobile report, prompt user to select a report type.</comment>
-  </data>  
+  </data>
   <data name="SameDaysOff" xml:space="preserve">
     <value>Same days off</value>
     <comment>Use same days off when optimizing teams</comment>
@@ -11074,7 +11074,7 @@ These options are activated:
   <data name="PleaseChooseSkillSet" xml:space="preserve">
     <value>Please choose skill set.</value>
     <comment>Used in mobile report, prompt user to select skill set.</comment>
-  </data>  
+  </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Schedule Only Preference Must Have</value>
     <comment>Schedule only must have preferences</comment>
@@ -11082,12 +11082,20 @@ These options are activated:
   <data name="AllowOverwrite" xml:space="preserve">
     <value>Allow Overwrite</value>
     <comment>Column Allow overwrite</comment>
-  </data>  
+  </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Shift categories</value>
     <comment>Shift categories</comment>
   </data>
   <data name="AfterCheckingAgainstActivities" xml:space="preserve">
-    <value>After checking against activities</value>  
+    <value>After checking against activities</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Scheduled Agents per Activity</value>
+    <comment>Scheduled Agents per Activity</comment>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totals</value>
+    <comment>Totals</comment>
   </data>
 </root>
