@@ -26,7 +26,7 @@
 			<table id="asm-current-info-table">
 				<tbody data-bind="foreach: activeLayers">
 					<tr data-bind="css: { 'asm-info-current-activity' : active }">
-						<td class="asm-info-time-column" data-bind="text: startText"></td>
+						<td class="asm-info-time-column" data-bind="text: startText()"></td>
 						<td data-bind="text: payload"></td>
 					</tr>
 				</tbody>

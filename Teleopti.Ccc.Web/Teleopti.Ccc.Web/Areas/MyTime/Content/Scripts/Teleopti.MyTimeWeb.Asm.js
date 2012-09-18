@@ -84,15 +84,14 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
 			return startPos <= timelinePosition;
 		});
-		self.startText = ko.computed(function () {
-			var startPos = parseFloat(self.leftPx);
+		self.startText = function () {
 			var out = self.startTimeText;
-			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
-			if (startPos - timelinePosition >= 24 * pixelPerHours) {
+
+			if (layer.StartMinutesSinceAsmZero > 2 * 24 * 60) {
 				out += '+1';
 			}
 			return out;
-		});
+		};
 	}
 
 	function _start() {
