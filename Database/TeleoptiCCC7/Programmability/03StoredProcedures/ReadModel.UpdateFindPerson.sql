@@ -128,4 +128,10 @@ INNER JOIN Site s ON s.Id = t.Site
 WHERE pp.StartDate < GETDATE() AND pp.EndDate > GETDATE()
 AND t.IsDeleted = 0 AND s.IsDeleted = 0
 
+GO
 
+--=================
+--Finally, when DBManager applies this SP also flush data and reload
+--=================
+TRUNCATE TABLE [ReadModel].[FindPerson]
+exec [ReadModel].[UpdateFindPerson] '00000000-0000-0000-0000-000000000000'
