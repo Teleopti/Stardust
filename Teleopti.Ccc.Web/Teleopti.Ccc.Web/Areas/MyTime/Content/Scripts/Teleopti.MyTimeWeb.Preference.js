@@ -57,11 +57,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 		addExtendedPreferenceFormViewModel.ValidationError('');
 
-		var validationErrorCallback = function(data) {
+		var validationErrorCallback = function (data) {
 			var message = data.Errors.join('</br>');
 			addExtendedPreferenceFormViewModel.ValidationError(message);
 		};
-		
+
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
@@ -77,63 +77,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
-//		var template = $('#Preference-add-extended-form');
-//		addExtendedPreferenceFormViewModel = new AddExtendedPreferenceFormViewModel();
-
-//		addExtendedTooltip = $('<div/>')
-//			.qtip({
-//				id: "add-extended",
-//				content: {
-//					text: template
-//				},
-//				position: {
-//					target: button,
-//					my: "left top",
-//					at: "left bottom",
-//					adjust: {
-//						x: 5,
-//						y: -5
-//					}
-//				},
-//				show: {
-//					target: button,
-//					event: 'click'
-//				},
-//				hide: {
-//					target: button,
-//					event: 'click'
-//				},
-//				style: {
-//					def: false,
-//					classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-//					tip: {
-//						corner: "top left"
-//					}
-//				},
-//				events: {
-//					render: function () {
-
-//						$('#Preference-extended-apply')
-//							.button()
-//							.click(function () {
-//								_setPreference(ko.toJS(addExtendedPreferenceFormViewModel));
-//							});
-
-//						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
-
-//					}
-//				}
-			});
-	}
-
-    	function _initMustHaveButton() {
-		var button = $('#Preference-must-have-button');
+		var template = $('#Preference-add-extended-form');
+		addExtendedPreferenceFormViewModel = new AddExtendedPreferenceFormViewModel();
 
 		addExtendedTooltip = $('<div/>')
 			.qtip({
-				id: "mustHave",
+				id: "add-extended",
 				content: {
-					text: "Must have"
+					text: template
 				},
 				position: {
 					target: button,
@@ -158,8 +109,29 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					tip: {
 						corner: "top left"
 					}
+				},
+				events: {
+					render: function () {
+
+						$('#Preference-extended-apply')
+							.button()
+							.click(function () {
+								_setPreference(ko.toJS(addExtendedPreferenceFormViewModel));
+							});
+
+						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
+
+					}
 				}
 			});
+	}
+
+	function _initMustHaveButton() {
+		$('#Preference-must-have-button')
+			.click(function () {
+				alert('test');
+			});
+	}
 
 	function _hideAddExtendedTooltip() {
 		addExtendedTooltip.qtip('toggle', false);
@@ -256,7 +228,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initSplitButton();
 			_initDeleteButton();
 			_initAddExtendedButton();
-		    _initMustHaveButton();
+			_initMustHaveButton();
 		},
 		InitViewModels: function () {
 			_initViewModels();
