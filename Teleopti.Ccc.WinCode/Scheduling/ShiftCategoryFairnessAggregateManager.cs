@@ -55,7 +55,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (groupPerson.GroupMembers.Contains(person))
 				{
 					var orig = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, new List<IPerson> { person });
-					var compare = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, groupPerson.GroupMembers);
+					var membersWithoutPerson = new List<IPerson>(groupPerson.GroupMembers);
+					membersWithoutPerson.Remove(person);
+					var compare = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, membersWithoutPerson);
 
 					ret =  _shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories);
 				}
