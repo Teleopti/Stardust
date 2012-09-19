@@ -195,6 +195,7 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\AsmViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractor.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerForWebDisplay.cs" />
@@ -203,6 +204,8 @@
     <Compile Include="Areas\MyTime\Core\Asm\ViewModelFactory\IAsmViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Asm\AsmLayer.cs" />
     <Compile Include="Areas\MyTime\Models\Asm\AsmViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\MessageBroker\IUserDataFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\MessageBroker\UserData.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferencePeriodFeedbackViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePeriodFeedbackProvider.cs" />
