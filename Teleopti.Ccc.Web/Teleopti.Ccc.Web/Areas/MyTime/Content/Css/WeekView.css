@@ -231,8 +231,9 @@ select.absence-input
 	width: 131px;
 	float: left;
 	z-index: 2;
-	border-bottom: 2px solid rgba(255,70,69,1);
+	border-bottom: 2px black;
 	display: none;
+    border-style: dashed;
 }
 
 .week-schedule-time-indicator-small
@@ -240,9 +241,8 @@ select.absence-input
 	width: 31px;
 	float: left;
 	z-index: 2;
-	border-bottom: 2px solid rgba(255,70,69,1);
+	border-bottom: 2px dashed black;
 	display: none;
-	background-color: blue;
 }
 
 .week-schedule-ASM-permission-granted .week-schedule-current-week
