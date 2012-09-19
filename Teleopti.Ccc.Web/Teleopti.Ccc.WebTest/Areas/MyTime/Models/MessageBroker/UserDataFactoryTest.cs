@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -6,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 {
@@ -15,13 +17,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		private ICurrentBusinessUnitProvider buProvider;
 		private IDataSource dataSource;
 		private IUserDataFactory target;
+		private IConfigReader configReader;
 
 		[SetUp]
 		public void Setup()
 		{
 			buProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
 			dataSource = MockRepository.GenerateMock<IDataSource>();
-			target = new UserDataFactory(buProvider, dataSource);			
+			configReader = MockRepository.GenerateMock<IConfigReader>();
+			target = new UserDataFactory(buProvider, dataSource, configReader);
 		}
 
 		[Test]
@@ -38,12 +42,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		[Test]
 		public void ShouldSetDataSourceName()
 		{
-			var expected = "stoj och lek";
-
+			const string expected = "stoj och lek";
 			dataSource.Expect(mock => mock.DataSourceName).Return(expected);
 
 			var result = target.CreateViewModel();
 			result.DataSourceName.Should().Be.EqualTo(expected);
+		}
+
+		[Test]
+		public void ShouldSetMessageBrokerUrl()
+		{
+			const string expected = "http://donkeyXXX.com";
+			var nameValue = new NameValueCollection();
+			nameValue.Add(UserDataFactory.MessageBrokerUrlKey, expected);
+			configReader.Expect(mock => mock.AppSettings).Return(nameValue);
+
+			var result = target.CreateViewModel();
+			result.Url.Should().Be.EqualTo(expected);
 		}
 	}
 }
