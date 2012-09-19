@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		private IDataSource dataSource;
 		private IUserDataFactory target;
 		private IConfigReader configReader;
+		private ILoggedOnUser loggedOnUser;
 
 		[SetUp]
 		public void Setup()
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			buProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
 			dataSource = MockRepository.GenerateMock<IDataSource>();
 			configReader = MockRepository.GenerateMock<IConfigReader>();
-			target = new UserDataFactory(buProvider, dataSource, configReader);
+			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			target = new UserDataFactory(buProvider, dataSource, configReader, loggedOnUser);
 		}
 
 		[Test]
@@ -59,6 +61,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 
 			var result = target.CreateViewModel();
 			result.Url.Should().Be.EqualTo(expected);
+		}
+
+		[Test]
+		public void ShouldSetAgentId()
+		{
+			var expected = Guid.NewGuid();
+			var person = new Person();
+			person.SetId(expected);
+			loggedOnUser.Expect(mock => mock.CurrentUser()).Return(person);
+
+			var result = target.CreateViewModel();
+			result.AgentId.Should().Be.EqualTo(expected);
 		}
 	}
 }
