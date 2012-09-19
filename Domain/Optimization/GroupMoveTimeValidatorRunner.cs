@@ -20,14 +20,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private delegate ValidatorResult ValidateMoveTimeDelegate(IPerson person, IList<DateOnly> dates, bool useSameDayOff);
 
-        public ValidatorResult Run(IPerson person, IList<DateOnly> daysToBeValidated, bool useSameDayOff, IList<IScheduleMatrixPro> allMatrixes)
+        public ValidatorResult Run(IPerson person, IList<DateOnly> daysToBeValidated, bool useSameDayOff, IList<IScheduleMatrixPro> groupMatrixes)
         {
             foreach (var dateOnly in daysToBeValidated)
             {
-                foreach (var matrix in allMatrixes)
+                foreach (var matrix in groupMatrixes)
                 {
                     var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
-                    if (scheduleDayPro!=null && matrix.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly) && !matrix.UnlockedDays.Contains(scheduleDayPro))
+                    if (scheduleDayPro!=null && !matrix.UnlockedDays.Contains(scheduleDayPro))
                         return new ValidatorResult();
                 }
             }
@@ -82,6 +82,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public interface IGroupMoveTimeValidatorRunner
     {
-        ValidatorResult Run(IPerson person, IList<DateOnly> daysToBeValidated, bool useSameDayOff, IList<IScheduleMatrixPro> allMatrixes);
+        ValidatorResult Run(IPerson person, IList<DateOnly> daysToBeValidated, bool useSameDayOff, IList<IScheduleMatrixPro> groupMatrixes);
     }
 }

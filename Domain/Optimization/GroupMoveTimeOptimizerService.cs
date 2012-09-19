@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var dayToBeLengthen = decidedDays[0];
                 var dayToBeShorten = decidedDays[1];
 
-                var matrixes = _groupOptimizerFindMatrixesForGroup.Find(person, dayToBeLengthen).Intersect(_groupOptimizerFindMatrixesForGroup.Find(person, dayToBeShorten));
+                var matrixes = _groupOptimizerFindMatrixesForGroup.Find(person, dayToBeLengthen).Intersect(_groupOptimizerFindMatrixesForGroup.Find(person, dayToBeShorten)).ToList();
                 var runnableOptimizers = (from matrix in matrixes
                                                              from groupMoveTimeOptimizer in pendingOptimizers
                                                              where
@@ -87,11 +87,11 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var daysToDelete = new List<IScheduleDay>();
                 prepareDaysForRescheduling(daysToDelete, daysToSave, runnableOptimizers, dayToBeLengthen, dayToBeShorten);
                 var validateResult = _groupMoveTimeValidatorRunner.Run(person, daysToDelete.Select(d => d.DateOnlyAsPeriod.DateOnly).ToList(),
-                                                      _groupMoveTimeOptimizerExecuter.SchedulingOptions.UseSameDayOffs, allMatrixes).Success;
+                                                      _groupMoveTimeOptimizerExecuter.SchedulingOptions.UseSameDayOffs, matrixes).Success;
                 if (!validateResult) continue;
 
                 var oldPeriodValue = optimizer.PeriodValue();
-                var success = _groupMoveTimeOptimizerExecuter.Execute(daysToDelete, daysToSave, allMatrixes, optimizer.OptimizationOverLimitByRestrictionDecider);
+                var success = _groupMoveTimeOptimizerExecuter.Execute(daysToDelete, daysToSave, matrixes, optimizer.OptimizationOverLimitByRestrictionDecider);
                 if(success)
                 {
                     var newPeriodValue = optimizer.PeriodValue();

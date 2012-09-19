@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private DateOnly _dayMoveTo;
         private IScheduleMatrixPro _scheduleMatrixPro;
         private List<IScheduleMatrixPro> _allMatrixes;
+        private IScheduleDayPro _scheduleDayPro;
 
         [SetUp]
         public void Setup()
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _dayMoveFrom = DateOnly.MinValue;
             _dayMoveTo = DateOnly.MaxValue;
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
+            _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
             _allMatrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
         }
 
@@ -64,13 +66,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using(_mock.Record())
             {
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>( )));
-
+                Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(new DateOnly())).IgnoreArguments().Return(_scheduleDayPro);
             }
 
-            ValidatorResult result;
             using(_mock.Playback())
             {
-                result = _target.Run(_person, new List<DateOnly> { _dayMoveFrom }, true, _allMatrixes);
+                var result = _target.Run(_person, new List<DateOnly> { _dayMoveFrom }, true, _allMatrixes);
                 Assert.IsFalse(result.Success );
             }
         }
