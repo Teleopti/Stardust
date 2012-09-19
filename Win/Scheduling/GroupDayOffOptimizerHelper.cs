@@ -101,7 +101,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             var groupMatrixHelper = new GroupMatrixHelper(_container.Resolve<IGroupMatrixContainerCreator>(),
                                                                          _container.Resolve<IGroupPersonConsistentChecker>(),
                                                                          OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container),
-                                                                         _container.Resolve<IResourceOptimizationHelper>());
+                                                                         _container.Resolve<IResourceOptimizationHelper>(),
+                                                                         mainShiftOptimizeActivitySpecificationSetter);
             var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
             var groupMoveTimeOptimizerExecuter = new GroupMoveTimeOptimizationExecuter(rollbackService,
                                                             deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
