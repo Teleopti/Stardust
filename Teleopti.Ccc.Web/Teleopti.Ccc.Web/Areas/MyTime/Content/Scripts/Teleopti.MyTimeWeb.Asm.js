@@ -23,7 +23,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				type: 'GET',
 				data: { asmZero: yesterday.toJSON() },
 				success: function (data) {
-					self.now(new Date().getTeleoptiTime());
 					self.hours(data.Hours);
 					self._createLayers(data.Layers);
 
@@ -51,7 +50,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				return n.visible();
 			});
 		});
-		self.now = ko.observable();
+		self.now = ko.observable(new Date().getTeleoptiTime());
 		self.canvasPosition = ko.computed(function () {
 			var msSinceStart = self.now() - yesterday.getTime();
 			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
