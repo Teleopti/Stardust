@@ -41,7 +41,14 @@
 					if (toolbarItem is ToolBarButtonItem)
 					{
 						var button = toolbarItem as ToolBarButtonItem;
-						<button title="@Html.AttributeEncode(button.Title)" id="@string.Format("{0}-{1}-button", navSection.Controller, button.ButtonType)" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon ir floatleft@((index>1) ? " ml10" : "")">@button.Title</button>
+						var id = string.Format("{0}-{1}", navSection.Controller, button.ButtonType);
+						var buttonId = id + "-button";
+						var textId = id + "-text";
+						<button title="@Html.AttributeEncode(button.Title)" id="@buttonId" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon @button.Icon ir floatleft@((index>1) ? " ml10" : "")">@button.Title</button>
+						if (!string.IsNullOrEmpty(button.Text))
+						{
+							<span id="@textId"></span>
+						}
 					}
 					if (toolbarItem is ToolBarSplitButton)
 					{

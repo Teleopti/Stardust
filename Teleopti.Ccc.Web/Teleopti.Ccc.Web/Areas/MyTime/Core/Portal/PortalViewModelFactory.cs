@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
 				toolbarItems.Add(new ToolBarButtonItem {Title = Resources.AddExtendedPreference, ButtonType = "add-extended"});
-				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.MustHave, ButtonType = "must-have" });
+				//toolbarItems.Add(new ToolBarButtonItem { Title = Resources.MustHave, ButtonType = "must-have" });
 			}
 			return new PreferenceNavigationItem
 			       	{

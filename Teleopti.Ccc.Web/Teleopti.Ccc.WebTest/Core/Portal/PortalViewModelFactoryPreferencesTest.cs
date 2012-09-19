@@ -311,6 +311,20 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 		}
 
+		[Test]
+		public void ShouldHaveMustHaveButton()
+		{
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			var button = result.ControllerItems<ToolBarButtonItem>("Preference").FirstOrDefault(i => i.ButtonType == "must-have");
+
+			button.Should().Not.Be.Null();
+			button.Title.Should().Be(Resources.MustHave);
+			button.Icon.Should().Be("heart");
+			button.Text.Should().Be("0");
+		}
 
 	}
 

@@ -5,8 +5,9 @@
 
 Background:
 	Given I have a role with
-	| Field | Value                 |
-	| Name  | Full access to mytime |
+	| Field                          | Value                 |
+	| Name                           | Full access to mytime |
+	| Access to extended preferences | false                 |
     And there is a shift category with
     | Field | Value |
     | Name  | Late  |
