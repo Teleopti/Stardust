@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Core.RequestContext;
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 {
 	[TestFixture]
-	public class UserDataTest
+	public class UserDataFactoryTest
 	{
 		[Test]
 		public void ShouldSetBusinessUnitId()
