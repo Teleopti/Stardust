@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -237,7 +238,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             using (PerformanceOutput.ForOperation("Loading schedule data"))
             {
                 var service = 
-                    new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, false);
+                    new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, new SingleSkillLoadedDecider(), new SingleSkillCalculator(), false);
                 service.SchedulingResult(_schedulerState.RequestedPeriod.Period());
             }
         }
