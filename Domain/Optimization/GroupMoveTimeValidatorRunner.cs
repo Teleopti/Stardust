@@ -22,9 +22,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public ValidatorResult Run(IPerson person, IList<DateOnly> daysToBeValidated, bool useSameDayOff, IList<IScheduleMatrixPro> allMatrixes)
         {
-
-            if (allMatrixes.Any(m => daysToBeValidated.Any(d => m.UnlockedDays.All(u => u.Day != d))))
-                return new ValidatorResult();
+            foreach (var dateOnly in daysToBeValidated)
+            {
+                foreach (var matrix in allMatrixes)
+                {
+                    var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
+                    if (scheduleDayPro!=null && matrix.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly) && !matrix.UnlockedDays.Contains(scheduleDayPro))
+                        return new ValidatorResult();
+                }
+            }
+            
             var runnableList = new Dictionary<ValidateMoveTimeDelegate, IAsyncResult>();
             var allDays = new List<DateOnly>();
             if (daysToBeValidated != null)
