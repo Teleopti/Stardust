@@ -89,7 +89,30 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var compare = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, otherPersons);
 
 			return _shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories);
+		}
 
+		public IList<ShiftCategoryFairnessCompareResult> GetForGroups(IList<IPerson> persons, IGroupPageLight groupPage, DateOnly dateOnly, IList<DateOnly> selectedDates )
+		{
+			//TODO?? shall we check here on the fairness system??
+
+			var ret = new List<ShiftCategoryFairnessCompareResult>();
+			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(selectedDates, groupPage, dateOnly, persons);
+
+			foreach (var groupPerson in groups)
+			{
+				var otherPersons = new List<IPerson>();
+				var orig = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, groupPerson.GroupMembers);
+				foreach (var groupPerson2 in groups)
+				{
+					if(!groupPerson2.Equals(groupPerson))
+						otherPersons.AddRange(groupPerson2.GroupMembers);
+				}
+					var compare = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, otherPersons);
+
+					ret.Add(_shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories));
+			}
+
+			return ret;
 		}
 	}
 }
