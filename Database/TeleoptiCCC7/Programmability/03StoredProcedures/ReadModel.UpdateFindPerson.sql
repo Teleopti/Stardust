@@ -26,9 +26,19 @@ AS
 -- exec [ReadModel].[UpdateFindPerson] 'B0C67CB1-1C4F-4047-8DC1-9EF500DC79A6, 2AE730A0-5AF7-49B7-9498-9EF500DC79A6'
  SET NOCOUNT ON
 CREATE TABLE #ids(person uniqueidentifier)
-INSERT INTO #ids SELECT * FROM SplitStringString(@persons) 
 
-DELETE FROM [ReadModel].[FindPerson] WHERE PersonId in(SELECT * FROM #ids)
+IF @persons = '00000000-0000-0000-0000-000000000000'
+--Flush and re-load everybody
+BEGIN
+	DELETE FROM [ReadModel].[FindPerson]
+	INSERT INTO #ids SELECT Id FROM Person WHERE IsDeleted = 0
+END
+ELSE
+--Flush and re-load only PersonIds in string
+BEGIN
+	INSERT INTO #ids SELECT * FROM SplitStringString(@persons)
+	DELETE FROM [ReadModel].[FindPerson] WHERE PersonId in(SELECT * FROM #ids)
+END
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, FirstName, 'FirstName', NULL, NULL, NULL,NULL
@@ -131,7 +141,8 @@ AND t.IsDeleted = 0 AND s.IsDeleted = 0
 GO
 
 --=================
---Finally, when DBManager applies this SP also flush data and reload
+--Finally, when DBManager applies this SP also execute the SP
 --=================
-TRUNCATE TABLE [ReadModel].[FindPerson]
-exec [ReadModel].[UpdateFindPerson] '00000000-0000-0000-0000-000000000000'
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[UpdateFindPerson]') AND type in (N'P', N'PC')) 
+EXEC [ReadModel].[UpdateFindPerson] '00000000-0000-0000-0000-000000000000'
+GO
