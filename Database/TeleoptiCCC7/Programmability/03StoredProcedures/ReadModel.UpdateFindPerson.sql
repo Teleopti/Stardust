@@ -118,3 +118,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].
 AND (SELECT COUNT(*) FROM [ReadModel].[FindPerson]) = 0
 exec [ReadModel].[UpdateFindPerson]
 GO
+--=================
+--Finally, when DBManager applies this SP also flush data and reload
+--=================
+exec [ReadModel].[UpdateFindPerson]
