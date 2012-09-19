@@ -22,17 +22,22 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if(personPeriod == null) throw new ArgumentNullException("personPeriod");
 
-			if (!SkillEquals(personPeriod)) return false;
-			if (!_personPeriod.PersonContract.Contract.Equals(personPeriod.PersonContract.Contract)) return false;
-			if (!_personPeriod.PersonContract.PartTimePercentage.Equals(personPeriod.PersonContract.PartTimePercentage)) return false;
-			if (!_personPeriod.RuleSetBag.Equals(personPeriod.RuleSetBag)) return false;
+			if (!SkillEquals(personPeriod)) 
+				return false;
+			if (!_personPeriod.PersonContract.Contract.Equals(personPeriod.PersonContract.Contract)) 
+				return false;
+			if (!_personPeriod.PersonContract.PartTimePercentage.Equals(personPeriod.PersonContract.PartTimePercentage)) 
+				return false;
+			if (!_personPeriod.RuleSetBag.Equals(personPeriod.RuleSetBag)) 
+				return false;
 
 			return true;
 		}
 
 		private bool SkillEquals(IPersonPeriod personPeriod)
 		{
-			if (!_personPeriod.PersonSkillCollection.Count.Equals(personPeriod.PersonSkillCollection.Count)) return false;
+			if (!_personPeriod.PersonSkillCollection.Count.Equals(personPeriod.PersonSkillCollection.Count)) 
+				return false;
 
 			return _personPeriod.PersonSkillCollection.All(personSkill => personPeriod.PersonSkillCollection.Contains(personSkill));
 		}

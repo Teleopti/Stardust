@@ -31,7 +31,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (!_schedulePeriod.DaysOff().Equals(schedulePeriod.DaysOff())) return false;
 			if (!_schedulePeriod.PeriodTarget().Equals(schedulePeriod.PeriodTarget())) return false;
 			if (!_schedulePeriod.AverageWorkTimePerDay.Equals(schedulePeriod.AverageWorkTimePerDay)) return false;
-			if(!_targetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro).Equals(_targetTimeCalculator.TargetWithTolerance(scheduleMatrixPro))) return false;
+			var firstTargetTime = _targetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro);
+			var secondTargetTime = _targetTimeCalculator.TargetWithTolerance(scheduleMatrixPro);
+			if (!firstTargetTime.Equals(secondTargetTime))
+				return false;
 
 			return true;
 		}
