@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Converters.DateTimeConverter
     /// <remarks>
     /// This class will not do anything regarding Utc/Local
     /// Created by: henrika
-    /// Created date: 2009-09-08
+    /// Created dateOnly: 2009-09-08
     /// </remarks>
     public class DateTimeParser : IDateTimeParser
     {
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCode.Converters.DateTimeConverter
         public  DateTime BuildDateTimeFromTime(string time, DateTime dateTime)
         {
             //If we can parse the string to a time of day
-            //Return the date plus that time, otherwise return the datetime:
+            //Return the dateOnly plus that time, otherwise return the datetime:
             TimeSpan timeOfDay;
             if (TimeHelper.TryParse(time, out timeOfDay))
             {

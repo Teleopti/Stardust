@@ -100,7 +100,13 @@ namespace Teleopti.Ccc.WinCode.Common
             }
         }
 
-        public void SetSelectedPeriod(DateOnlyPeriod dateOnlyPeriod)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		public IEnumerable<IPerson> AllLoadedPersons
+    	{
+    		get { throw new NotImplementedException(); }
+    	}
+
+    	public void SetSelectedPeriod(DateOnlyPeriod dateOnlyPeriod)
         {
             SelectedPeriod = dateOnlyPeriod;
         }
