@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public bool Editable { get; set; }
 		public bool Feedback { get; set; }
 		public bool Preference { get; set; }
-		public bool MustHave { get; set; }
 
 		public HeaderViewModel Header { get; set; }
 		public string StyleClassName { get; set; }

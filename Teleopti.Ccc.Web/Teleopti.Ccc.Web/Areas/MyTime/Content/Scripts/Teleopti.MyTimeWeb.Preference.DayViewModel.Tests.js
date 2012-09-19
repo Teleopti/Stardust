@@ -11,6 +11,7 @@ $(document).ready(function () {
 				equal(options.data.Date, "2012-06-11");
 				options.success({
 					Preference: "a shift category",
+					MustHave: true,
 					Color: "black",
 					Extended: true,
 					ExtendedTitle: "ExtendedTitle",
@@ -28,11 +29,12 @@ $(document).ready(function () {
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 		viewModelDay.Date = "2012-06-11";
 
-		expect(13);
+		expect(14);
 
 		viewModelDay.LoadPreference();
 
 		equal(viewModelDay.Preference(), "a shift category");
+		equal(viewModelDay.MustHave(), true);
 		equal(viewModelDay.Color(), "black");
 		equal(viewModelDay.Extended(), true);
 		equal(viewModelDay.ExtendedTitle(), "ExtendedTitle");

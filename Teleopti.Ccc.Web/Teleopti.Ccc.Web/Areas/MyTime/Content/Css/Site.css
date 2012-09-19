@@ -405,8 +405,8 @@ html.full-height #push{
 .icon.toolbar-addTextRequest {background-position: 0px -511px; width: 24px}
 .icon.toolbar-today {background-position: -155px -26px;width: 24px;margin-left: 19px;}
 .icon.preference-warning {background-position: -159px -54px; width: 16px;	height: 16px; }
-.icon.preference-must-have {background-position: -160px -86px; width: 8px;	height: 8px; }
-.icon.toolbar-preference-must-have {background-position: -160px -100px; width: 8px;	height: 8px; }
+.icon.heart {background-position: -160px -100px; width: 8px;	height: 8px; }
+.icon.heart-small {background-position: -160px -86px; width: 8px;	height: 8px; }
 
 .text-request {
 	right: 0px;

@@ -11,7 +11,12 @@
     max-width: 97px;
     overflow: hidden;
 }
-.extended-indication 
+.preference-must-have {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.extended-indication
 {
     float: left;
     position: relative;

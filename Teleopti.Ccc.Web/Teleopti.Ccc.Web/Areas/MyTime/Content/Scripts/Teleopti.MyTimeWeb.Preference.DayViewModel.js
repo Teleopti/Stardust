@@ -109,6 +109,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.HasFeedback = true;
 	this.HasPreference = true;
 	this.Preference = ko.observable();
+	this.MustHave = ko.observable();
 	this.Extended = ko.observable();
 	this.ExtendedTitle = ko.observable();
 	this.StartTimeLimitation = ko.observable();
@@ -135,6 +136,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		self.Color(data.Color);
 		self.Preference(data.Preference);
 		self.Extended(data.Extended);
+		self.MustHave(data.MustHave);
 		self.ExtendedTitle(data.ExtendedTitle);
 		self.StartTimeLimitation(data.StartTimeLimitation);
 		self.EndTimeLimitation(data.EndTimeLimitation);
