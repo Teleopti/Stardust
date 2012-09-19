@@ -18,7 +18,6 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 			});
 	}
 
-
 	return {
 		AddSubscription: function (options) {
 			/// <summary>Adds an event subscription.</summary>

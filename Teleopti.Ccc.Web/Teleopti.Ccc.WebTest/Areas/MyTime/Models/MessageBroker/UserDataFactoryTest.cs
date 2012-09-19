@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			dataSource = MockRepository.GenerateMock<IDataSource>();
 			configReader = MockRepository.GenerateMock<IConfigReader>();
 			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			target = new UserDataFactory(buProvider, dataSource, configReader, loggedOnUser);
+			target = new UserDataFactory(buProvider, () => dataSource, configReader, loggedOnUser);
 		}
 
 		[Test]
