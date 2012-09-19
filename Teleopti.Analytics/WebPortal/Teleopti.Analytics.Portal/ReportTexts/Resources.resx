@@ -1193,4 +1193,12 @@ Schedule</value>
     <value>Adherence per Day</value>
     <comment>Adherence per Day</comment>
   </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Scheduled Agents per Activity</value>
+    <comment>Scheduled Agents per Activity</comment>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totals</value>
+    <comment>Totals</comment>
+  </data>
 </root>

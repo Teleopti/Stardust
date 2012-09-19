@@ -128,15 +128,18 @@ namespace Teleopti.Ccc.WinCode.Matrix
 //26
 //"8DE1AB0F-32C2-4619-A2B2-97385BE4C49C"
 //27
+//29 
+//"C052796F-1C8A-4905-9246-FF1FF8BD30E5"
         private static IEnumerable<string> analysisReports()
         {
-            // old "21", "18", "17", "19", "26"
+            // old "21", "18", "17", "19", "26", "29"
             return    new []{
                 "132E3AF2-3557-4EA7-813E-05CD4869D5DB",
                 "63243F7F-016E-41D1-9432-0787D26F9ED5",
                 "009BCDD2-3561-4B59-A719-142CD9216727",
                 "BAA446C2-C060-4F39-83EA-B836B1669331",
-                "2F222F0A-4571-4462-8FBE-0C747035994A"};
+                "2F222F0A-4571-4462-8FBE-0C747035994A",
+                "C052796F-1C8A-4905-9246-FF1FF8BD30E5"};
         }
 
         private static IEnumerable<string> preferencesReports()

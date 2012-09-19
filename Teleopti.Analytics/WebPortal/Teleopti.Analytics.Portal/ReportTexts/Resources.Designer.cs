@@ -1925,6 +1925,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduled Agents per Activity.
+        /// </summary>
+        public static string ResReportScheduledAgentsPerActivity {
+            get {
+                return ResourceManager.GetString("ResReportScheduledAgentsPerActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scheduled Agents per Interval and Team.
         /// </summary>
         public static string ResReportScheduledAgentsPerIntervalAndTeam {
@@ -2434,6 +2443,15 @@ namespace Teleopti.Analytics.ReportTexts {
         public static string ResTimeZoneColon {
             get {
                 return ResourceManager.GetString("ResTimeZoneColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Totals.
+        /// </summary>
+        public static string ResTotals {
+            get {
+                return ResourceManager.GetString("ResTotals", resourceCulture);
             }
         }
         
