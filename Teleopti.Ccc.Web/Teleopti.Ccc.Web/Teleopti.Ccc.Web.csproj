@@ -206,6 +206,7 @@
     <Compile Include="Areas\MyTime\Models\Asm\AsmViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\IUserDataFactory.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\UserData.cs" />
+    <Compile Include="Areas\MyTime\Models\MessageBroker\UserDataFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferencePeriodFeedbackViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePeriodFeedbackProvider.cs" />
