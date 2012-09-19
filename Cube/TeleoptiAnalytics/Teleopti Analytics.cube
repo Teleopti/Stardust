@@ -8495,7 +8495,7 @@ CREATE MEMBER CURRENTCUBE.[MEASURES].[Ready Time m]
  AS [Measures].[Ready Time s]/60, 
 FORMAT_STRING = "#,##0.00", 
 VISIBLE = 1;                                                   
-CREATE MEMBER CURRENTCUBE.[MEASURES].[xxActual]
+CREATE MEMBER CURRENTCUBE.[MEASURES].[Actual]
  AS CASE 
 
 WHEN 
@@ -8580,7 +8580,7 @@ FORMAT_STRING = "#,##0.00",
 NON_EMPTY_BEHAVIOR = { [Forecasted Calls] }, 
 VISIBLE = 1;                                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[KPI Actual]
- AS [xxActual], 
+ AS [Actual], 
 FORMAT_STRING = "#", 
 VISIBLE = 1;                                                          
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Average Handle Time s]
@@ -8988,7 +8988,7 @@ VISIBLE = 1; </Text>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
         <CalculationProperty dwd:design-time-name="f8e0b00b-627f-457e-b9e1-8eba19dfa2b9">
-          <CalculationReference>[MEASURES].[xxActual]</CalculationReference>
+          <CalculationReference>[MEASURES].[Actual]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>

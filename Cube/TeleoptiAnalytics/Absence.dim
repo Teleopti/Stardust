@@ -155,7 +155,7 @@
   <Hierarchies>
     <Hierarchy dwd:design-time-name="2bb6550a-9ce8-4c67-b413-cba7b6ca40ec">
       <ID>Hierarchy</ID>
-      <Name>Abscense</Name>
+      <Name>Absence</Name>
       <Levels>
         <Level dwd:design-time-name="571d3a7d-eaad-408a-92b2-66eed943335e">
           <ID>Absence Name</ID>
