@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (optimizerPreferences.General.OptimizationStepDaysOff)
                     runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod);
                 if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
-					runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
+					runMoveTimeOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
                 if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
-                    runMoveTimeOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
+                    runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
             }
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }

@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var culture = TeleoptiPrincipal.Current.Regional.Culture;
             var lengthenDay = dayToBeLengthen.ToShortDateString(culture);
             var shortenDay = dayToBeShorten.ToShortDateString(culture);
-            var who = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers + ")" + executes + " " +
+            var who = Resources.OptimizingShiftLengths  + Resources.Colon + "(" + activeOptimizers + ")" + executes + " " +
                          lengthenDay + " : " + shortenDay + " " + owner.Name.ToString(NameOrderOption.FirstNameLastName);
             var success = !result ? " " + Resources.wasNotSuccessful : " " + Resources.wasSuccessful;
             var progreeString = who + success;
