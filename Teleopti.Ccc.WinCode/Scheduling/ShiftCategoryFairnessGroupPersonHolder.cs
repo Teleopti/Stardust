@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -7,7 +6,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public interface IShiftCategoryFairnessGroupPersonHolder
 	{
-		IList<IGroupPerson> GroupPersons(IList<DateOnly> dateOnlyList, IGroupPageLight groupPage, DateOnly dateOnly, Collection<IPerson> persons);
+		IList<IGroupPerson> GroupPersons(IList<DateOnly> dateOnlyList, IGroupPageLight groupPage, DateOnly dateOnly, IList<IPerson> persons);
 	}
 
 	public class ShiftCategoryFairnessGroupPersonHolder : IShiftCategoryFairnessGroupPersonHolder
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_groupPersonsBuilder = groupPersonsBuilder;
 		}
 
-		public IList<IGroupPerson> GroupPersons(IList<DateOnly> dateOnlyList, IGroupPageLight groupPage, DateOnly dateOnly, Collection<IPerson> persons)
+		public IList<IGroupPerson> GroupPersons(IList<DateOnly> dateOnlyList, IGroupPageLight groupPage, DateOnly dateOnly, IList<IPerson> persons)
 		{
 			//only if we change grouping we need to redo this
 			if (_groupPage == null || !_groupPage.Equals(groupPage))

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IShiftCategoryFairnessGroupPersonHolder _shiftCategoryFairnessGroupPersonHolder;
 		private readonly IScheduleDictionary _dic;
 		private DateOnlyPeriod _period;
+		private readonly IList<IPerson> _personsWithShiftCategoryFairness = new List<IPerson>();
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ShiftCategoryFairnessAggregateManager(ISchedulingResultStateHolder resultStateHolder, IShiftCategoryFairnessComparer shiftCategoryFairnessComparer,
@@ -30,6 +32,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_shiftCategoryFairnessComparer = shiftCategoryFairnessComparer;
 			_shiftCategoryFairnessAggregator = shiftCategoryFairnessAggregator;
 			_shiftCategoryFairnessGroupPersonHolder = shiftCategoryFairnessGroupPersonHolder;
+			foreach (var person in _dic.Keys.Where(person => person.WorkflowControlSet != null && person.WorkflowControlSet.UseShiftCategoryFairness))
+			{
+				_personsWithShiftCategoryFairness.Add(person);
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -40,8 +46,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 				_period = _dic.Period.VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
 			}
+			
 			var ret = new ShiftCategoryFairnessCompareResult();
-			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(_period.DayCollection(), groupPage, dateOnly, new Collection<IPerson>(new List<IPerson>(_dic.Keys)));
+			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(_period.DayCollection(), groupPage, dateOnly, _personsWithShiftCategoryFairness);
 
 			foreach (var groupPerson in groups)
 			{
@@ -66,7 +73,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_period = _dic.Period.VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
 			}
 
-			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(_period.DayCollection(), groupPage, dateOnly, new Collection<IPerson>(new List<IPerson>(_dic.Keys)));
+			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(_period.DayCollection(), groupPage, dateOnly, _personsWithShiftCategoryFairness);
 			IShiftCategoryFairness orig = new ShiftCategoryFairness();
 			var otherPersons = new List<IPerson>();
 			foreach (var groupPerson in groups)

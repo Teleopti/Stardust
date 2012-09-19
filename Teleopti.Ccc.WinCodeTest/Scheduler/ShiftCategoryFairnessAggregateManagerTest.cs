@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -99,6 +100,50 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_dic.Keys).Return(new List<IPerson> { person });
 			Expect.Call(_groupPersonHolder.GroupPersons(new List<DateOnly>(), groupPage, date, new Collection<IPerson> { person })).
 				IgnoreArguments().Return(new List<IGroupPerson> { groupPerson, groupPerson2 });
+			Expect.Call(_fairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, new List<IPerson>())).IgnoreArguments().
+				Repeat.Twice();
+			Expect.Call(_fairnessComparer.Compare(null, null, null)).IgnoreArguments().Return(fairnessResult);
+			_mocks.ReplayAll();
+			_target = new ShiftCategoryFairnessAggregateManager(_resultStateHolder, _fairnessComparer, _fairnessAggregator, _groupPersonHolder);
+			var result = _target.GetPerGroupAndOtherGroup(person,groupPage,date);
+			Assert.That(result, Is.EqualTo(fairnessResult));
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldNotCheckOnPersonWithAnotherFairness()
+		{
+			var date = new DateOnly(2012, 9, 12);
+			var wcs = new WorkflowControlSet("wcs") { UseShiftCategoryFairness = true };
+			var person = PersonFactory.CreatePerson("per");
+			person.WorkflowControlSet = wcs;
+			person.AddPersonPeriod(new PersonPeriod(date,
+				   new PersonContract(new Contract("contract"),
+					   new PartTimePercentage("percentage"),
+					   new ContractSchedule("contractschedule")),
+					   new Team()));
+			var person2 = PersonFactory.CreatePerson("per");
+			person2.AddPersonPeriod(new PersonPeriod(date,
+				   new PersonContract(new Contract("contract"),
+					   new PartTimePercentage("percentage"),
+					   new ContractSchedule("contractschedule")),
+					   new Team()));
+			
+			var groupPage = new GroupPageLight();
+
+			var dateTime = new DateTime(2012, 9, 12, 0, 0, 0, 0, DateTimeKind.Utc);
+			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddDays(5));
+			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+			var period = dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo);
+			var groupPerson = new GroupPerson(new List<IPerson> { person }, date, "perras");
+			var groupPerson2 = new GroupPerson(new List<IPerson> { person2 }, date, "peckas");
+			var fairnessResult = new ShiftCategoryFairnessCompareResult();
+			Expect.Call(_resultStateHolder.Schedules).Return(_dic);
+			Expect.Call(_dic.Period).Return(_schedDateTimePeriod);
+			Expect.Call(_schedDateTimePeriod.VisiblePeriodMinusFourWeeksPeriod()).Return(dateTimePeriod);
+			Expect.Call(_dic.Keys).Return(new List<IPerson> { person, person2 });
+			Expect.Call(_groupPersonHolder.GroupPersons(period.DayCollection(), groupPage, date, new List<IPerson> { person })).
+				Return(new List<IGroupPerson> { groupPerson, groupPerson2 });
 			Expect.Call(_fairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, new List<IPerson>())).IgnoreArguments().
 				Repeat.Twice();
 			Expect.Call(_fairnessComparer.Compare(null, null, null)).IgnoreArguments().Return(fairnessResult);
