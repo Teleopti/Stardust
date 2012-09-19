@@ -121,7 +121,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function _listenForEvents() {
 		var onMessageBrokerEvent = function (notification) {
-			console.log(notification);
 			vm.loadViewModel();
 		};
 
