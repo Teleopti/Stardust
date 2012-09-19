@@ -118,7 +118,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.asm-sliding-schedules').css('width', (3 * 24 * pixelPerHours));
 		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
 	}
-	
+
 	function _listenForEvents() {
 		var onMessageBrokerEvent = function (notification) {
 			console.log(notification);
@@ -129,7 +129,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			url: '/MyTime/MessageBroker/FetchUserData',
 			dataType: "json",
 			type: 'GET',
-			success: function(data) {
+			success: function (data) {
 				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 					url: data.Url,
 					callback: onMessageBrokerEvent,
@@ -137,7 +137,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					businessUnitId: data.BusinessUnitId,
 					datasource: data.DataSourceName,
 					referenceId: data.AgentId
-				});	
+				});
 			}
 		});
 	}

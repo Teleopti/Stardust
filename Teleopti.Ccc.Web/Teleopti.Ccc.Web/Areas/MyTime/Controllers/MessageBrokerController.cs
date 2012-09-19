@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_userDataFactory = userDataFactory;
 		}
 
+		[UnitOfWorkAction]
 		[HttpGet]
 		public JsonResult FetchUserData()
 		{
