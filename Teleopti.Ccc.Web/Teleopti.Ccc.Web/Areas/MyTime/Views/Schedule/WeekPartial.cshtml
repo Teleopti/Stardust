@@ -85,7 +85,7 @@
 
 						 const int pixelToDisplayAll = 33;
 						 const int pixelToDisplayTitle = 16;
-						 var tooltipText = period.Meeting == null ? period.TimeSpan : string.Format("<div>{0}</div><div><dl><dt>Subject: </dt><dd> {1} </dd><dt>Location: </dt><dd> {2} </dd></dl></div>", period.TimeSpan, period.Meeting.Title, period.Meeting.Location);
+						 var tooltipText = period.Meeting == null ? period.TimeSpan : string.Format("<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>", period.TimeSpan, Resources.SubjectColon, period.Meeting.Title, Resources.LocationColon, period.Meeting.Location);
 
 						<div class="week-schedule-layer absolute tooltip" tooltip-title="@period.Title" tooltip-text="@tooltipText" 
 								style="background-color: @string.Format("rgb({0})", period.Color); height: @(heightPixel)px; top: @(topPixel)px; width: 131px">
