@@ -396,12 +396,19 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Ccc\report_absence_time_per_agent.rdlc" />
     <EmbeddedResource Include="Reports\Ccc\report_IMPROVE.rdlc" />
-    <EmbeddedResource Include="Reports\Ccc\report_scheduled_agents_per_interval_and_team.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_scheduled_agents_per_activity.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Ccc\report_scheduled_agents_per_interval_and_team.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Ccc\report_scheduled_overtime_per_agent.rdlc" />
     <EmbeddedResource Include="Reports\Ccc\report_schedule_preferences_per_agent.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Ccc\report_scheduled_time_per_activity.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_scheduled_time_per_activity.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Ccc\report_schedule_preferences_per_day.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -11116,4 +11116,12 @@ These options are activated:
     <value>Maximum agents must be larger than or equal to minimum agents</value>
     <comment>Maximum agents must be larger than or equal to minimum agents</comment>
   </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Scheduled Agents per Activity</value>
+    <comment>Scheduled Agents per Activity</comment>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totals</value>
+    <comment>Totals</comment>
+  </data>
 </root>
