@@ -50,7 +50,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests))
 			{
 				navigationItems.Add(createRequestsNavigationItem());
-			}
+            }
+            if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
+            {
+                navigationItems.Add(createMessageNavigationItem());
+            }
 			return new PortalViewModel
 			       	{
 			       		NavigationItems = navigationItems,
@@ -111,6 +115,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 						}
 					};
 		}
+
+        private SectionNavigationItem createMessageNavigationItem()
+        {
+            return new SectionNavigationItem
+            {
+                Action = "Index",
+                Controller = "Message",
+                Title = Resources.Message,
+                NavigationItems = new NavigationItem[0],
+                ToolBarItems = new List<ToolBarItemBase>()
+            };
+        }
 
 		private PreferenceNavigationItem createPreferenceNavigationItem()
 		{

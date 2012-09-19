@@ -123,6 +123,7 @@
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
+    <Compile Include="Core\Portal\Copy of PortalViewModelFactoryRequestsTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryScheduleTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
@@ -154,7 +155,7 @@
     <Compile Include="Core\Portal\PortalViewModelFactoryPreferencesTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryStudentAvailabilityTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryTeamScheduleTest.cs" />
-    <Compile Include="Core\Portal\PortalViewModelFactoryRequestsTest.cs" />
+    <Compile Include="Core\Portal\PortalViewModelFactoryMessageTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingTest.cs" />
     <Compile Include="Core\RequestContext\DataSourceProviderTest.cs" />
