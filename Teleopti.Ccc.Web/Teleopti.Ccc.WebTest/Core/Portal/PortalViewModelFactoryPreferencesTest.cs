@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		public void ShouldNotHavePreferencesNavigationItemIfNotPermission()
 		{
 			var permissionProvider = NoPermissionToPreferences();
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		public void ShouldHavePreferencesNavigationItemIfOnlyPermissionToExtendedPreferences()
 		{
 			var permissionProvider = NoPermissionToStandardPreferences();
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		public void ShouldHavePreferencesNavigationItemIfOnlyPermissionToStandardPreferences()
 		{
 			var permissionProvider = NoPermissionToExtendedPreferences();
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void PreferenceShouldHaveDatePicker()
 		{
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void PreferenceShouldNotHaveSplitButtonWhenExtendedPreferencesIsPermitted()
 		{
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void PreferenceShouldHaveSplitButton()
 		{
-			var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			shiftCategory.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveShiftCategoryOptions()).Return(new[] { shiftCategory });
 
-			var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			absence.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveAbsenceOptions()).Return(new[] { absence });
 
-			var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			dayOff.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { dayOff });
 
-			var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			preferenceOptionsProvider.Stub(x => x.RetrieveShiftCategoryOptions()).Return(new[] { new ShiftCategory(" ") });
 			preferenceOptionsProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { new DayOffTemplate(new Description()) });
 
-			var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(NoPermissionToExtendedPreferences(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void PreferenceShouldHaveDeleteButton()
 		{
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldHaveAddExtendedPreferenceButton()
 		{
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			var shiftCategory = new ShiftCategory("Test") {DisplayColor = Color.Pink};
 			shiftCategory.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveShiftCategoryOptions()).Return(new[] { shiftCategory });
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			absence.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveAbsenceOptions()).Return(new[] { absence });
 
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			dayOff.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { dayOff });
 
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			activity.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveActivityOptions()).Return(new[] { activity });
 
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		{
 			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
 
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			target.CreatePortalViewModel();
 

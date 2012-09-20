@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldHaveDatePicker()
 		{
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = ToolBarItemOfType<ToolBarDatePicker>(target.CreatePortalViewModel());
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldHaveTodayButton()
 		{
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+            var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = ToolBarItemOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
 

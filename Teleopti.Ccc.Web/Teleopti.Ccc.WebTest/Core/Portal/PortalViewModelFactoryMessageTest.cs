@@ -18,12 +18,23 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))).Return(true);
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(false);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), MockRepository.GenerateMock<IPushMessageProvider>());
 
 			var result = target.CreatePortalViewModel();
 
 			var message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
             message.Should().Be.Null();
 		}
+
+        [Test]
+        public void ShouldHaveOneUnreadMessage()
+        {
+            var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
+            pushMessageProvider.Stub(x => x.UnreadMessageCount).Return(1);
+            var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), pushMessageProvider);
+
+            var result = target.CreatePortalViewModel();
+            result.UnreadMessageCount.Should().Be.EqualTo(1);
+        }
 	}
 }

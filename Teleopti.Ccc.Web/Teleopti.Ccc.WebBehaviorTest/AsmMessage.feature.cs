@@ -131,10 +131,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Indicate when new message")]
-        public virtual void IndicateWhenNewMessage()
+        [NUnit.Framework.DescriptionAttribute("Indicate when new message while logged on")]
+        public virtual void IndicateWhenNewMessageWhileLoggedOn()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Indicate when new message", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Indicate when new message while logged on", ((string[])(null)));
 #line 25
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -146,6 +146,34 @@ this.FeatureBackground();
 #line 28
  testRunner.And("I receive a new message");
 #line 29
+ testRunner.Then("I should be notified that I have a new message");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Indicate new message at logon")]
+        public virtual void IndicateNewMessageAtLogon()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Indicate new message at logon", ((string[])(null)));
+#line 31
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 32
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table3.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+#line 33
+ testRunner.And("I have an unread message with", ((string)(null)), table3);
+#line 36
+ testRunner.When("I am viewing week schedule");
+#line 37
  testRunner.Then("I should be notified that I have a new message");
 #line hidden
             this.ScenarioCleanup();

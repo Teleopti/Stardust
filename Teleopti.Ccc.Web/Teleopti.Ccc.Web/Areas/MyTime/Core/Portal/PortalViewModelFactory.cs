@@ -18,17 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 		private readonly IPreferenceOptionsProvider _preferenceOptionsProvider;
 		private readonly ILicenseActivator _licenseActivator;
 		private readonly IIdentityProvider _identityProvider;
+	    private readonly IPushMessageProvider _pushMessageProvider;
 
-		public PortalViewModelFactory(
-			IPermissionProvider permissionProvider,
-												IPreferenceOptionsProvider preferenceOptionsProvider,
-												ILicenseActivator licenseActivator,
-			IIdentityProvider identityProvider)
+	    public PortalViewModelFactory(IPermissionProvider permissionProvider, IPreferenceOptionsProvider preferenceOptionsProvider, ILicenseActivator licenseActivator, IIdentityProvider identityProvider, IPushMessageProvider pushMessageProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_preferenceOptionsProvider = preferenceOptionsProvider;
 			_licenseActivator = licenseActivator;
 			_identityProvider = identityProvider;
+		    _pushMessageProvider = pushMessageProvider;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -60,7 +58,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			       		NavigationItems = navigationItems,
 			       		CustomerName = _licenseActivator.CustomerName,
 			       		ShowChangePassword = showChangePassword(),
-							ShowAsm = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
+						ShowAsm = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
+                        UnreadMessageCount = _pushMessageProvider.UnreadMessageCount
 			       	};
 		}
 

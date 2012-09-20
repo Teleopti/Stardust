@@ -115,6 +115,7 @@
     <Compile Include="Data\Setups\Generic\AbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ActivityConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\AbsenceRequestConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\MessageConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TextRequestConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PublicNoteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\MeetingConfigurable.cs" />
