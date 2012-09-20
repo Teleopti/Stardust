@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var pendingOptimizers = new List<IGroupMoveTimeOptimizer>(_optimizers);
             while (pendingOptimizers.Count > 0)
             {
-                var removedOptimizers = runOptimizers(pendingOptimizers, allMatrixes);
+                var removedOptimizers = runOptimizers(pendingOptimizers);
                 foreach (var optimizer in removedOptimizers)
                 {
                     pendingOptimizers.Remove(optimizer);
@@ -47,8 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
         
-        private IEnumerable<IGroupMoveTimeOptimizer> runOptimizers(ICollection<IGroupMoveTimeOptimizer> pendingOptimizers,
-                                                          IList<IScheduleMatrixPro> allMatrixes)
+        private IEnumerable<IGroupMoveTimeOptimizer> runOptimizers(ICollection<IGroupMoveTimeOptimizer> pendingOptimizers)
         {
             var skippedOptimizers = new List<IGroupMoveTimeOptimizer>();
             var removedOptimizers = new List<IGroupMoveTimeOptimizer>();
