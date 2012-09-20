@@ -155,8 +155,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
 					shiftCategoryFairnessFactors = extractShiftCategoryFairnessFactor(person, dateOnly);
 				}
-
-				shiftList = _groupShiftLengthDecider.FilterList(shiftList, persons, schedulingOptions, ScheduleDictionary, dateOnly);
+                if(schedulingOptions.WorkShiftLengthHintOption.Equals(WorkShiftLengthHintOption.AverageWorkTime))
+				    shiftList = _groupShiftLengthDecider.FilterList(shiftList, persons, schedulingOptions, ScheduleDictionary, dateOnly);
 
 				var totalFairness = ScheduleDictionary.FairnessPoints();
 				_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person,
