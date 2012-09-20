@@ -242,10 +242,10 @@
 				<dt><span class="icon employee icon-left" id="username">@User.Identity.Name</span></dt>
 				<dd>
 					<ul class="ui-widget-content ui-corner-all ui-menu">
-						<li class="ui-menu-item"><a href="#Settings/Index" class="ui-corner-all">@Resources.Settings</a></li>
+						<li class="ui-menu-item"><a data-mytime-action="Settings/Index" class="ui-corner-all">@Resources.Settings</a></li>
 						@if (Model.ShowChangePassword)
 						{
-							<li class="ui-menu-item"><a href="#Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
+							<li class="ui-menu-item"><a data-mytime-action="Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
 						}
 						@if (Model.ShowAsm)
 						{ 
