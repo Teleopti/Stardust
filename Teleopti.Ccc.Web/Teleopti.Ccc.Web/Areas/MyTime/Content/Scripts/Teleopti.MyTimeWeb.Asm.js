@@ -108,8 +108,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
 
 		vm = new asmViewModel(yesterday);
-		vm.loadViewModel();
 		ko.applyBindings(vm);
+		vm.loadViewModel();
 	}
 
 	function _setFixedElementAttributes() {
