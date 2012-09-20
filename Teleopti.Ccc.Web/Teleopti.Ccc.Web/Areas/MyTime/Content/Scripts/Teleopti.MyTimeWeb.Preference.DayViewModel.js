@@ -187,6 +187,11 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 				Date: self.Date,
 				PreferenceId: value
 			};
+		} if (typeof (value) == 'boolean') {
+			value = {
+				Date: self.Date,
+				MustHave: value
+			};
 		} else {
 			value.Date = self.Date;
 		}

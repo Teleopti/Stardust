@@ -234,5 +234,32 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			preferenceDay.TemplateName.Should().Be.Null();
 		}
+
+		[Test]
+		public void ShouldUpdateMustHaveWithoutClearPreference()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
+			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
+			var input = new PreferenceDayInput { Date = DateOnly.Today, MustHave = true};
+			var person = new Person();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+			var preferenceRestriction = new PreferenceRestriction
+				{
+					ShiftCategory = new ShiftCategory("Late")
+				};
+			preferenceDay.Stub(x => x.Restriction).Return(preferenceRestriction);
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			preferenceDayRepository.Stub(x => x.Find(input.Date, person)).Return(new List<IPreferenceDay> { preferenceDay });
+			preferenceDay.Restriction.MustHave = true;
+			mapper.Stub(x => x.Map(input, preferenceDay)).Return(preferenceDay);
+
+			target.Persist(input);
+
+			preferenceDay.Restriction.MustHave.Should().Be.True();
+			preferenceDay.Restriction.ShiftCategory.Description.Name.Should().Be.EqualTo("Late");
+		}
 	}
 }

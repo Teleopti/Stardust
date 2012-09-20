@@ -124,12 +124,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					}
 				}
 			});
-	}
+		}
 
 	function _initMustHaveButton() {
 		$('#Preference-must-have-button')
 			.click(function () {
-				alert('test');
+				_setPreference(true);
 			});
 	}
 

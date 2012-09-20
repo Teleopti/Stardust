@@ -36,8 +36,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 			else
 			{
-				ClearExtendedAndMustHaveData(preferenceDay);
-				_mapper.Map(input, preferenceDay);
+				if (input.MustHave == null)
+				{
+					ClearExtendedAndMustHaveData(preferenceDay);
+					_mapper.Map(input, preferenceDay);
+				}
+				else
+				{
+					preferenceDay.Restriction.MustHave = input.MustHave.Value;
+				}
+
 			}
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 		}
