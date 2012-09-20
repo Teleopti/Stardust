@@ -149,6 +149,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 				toolbarItems.Add(new ToolBarButtonItem {Title = Resources.AddExtendedPreference, ButtonType = "add-extended"});
 				//toolbarItems.Add(new ToolBarButtonItem { Title = Resources.MustHave, ButtonType = "must-have" });
 			}
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences))
+			{
+				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.MustHave, ButtonType = "must-have", Icon = "heart"});
+			}
 			return new PreferenceNavigationItem
 			       	{
 			       		Action = "Index",
