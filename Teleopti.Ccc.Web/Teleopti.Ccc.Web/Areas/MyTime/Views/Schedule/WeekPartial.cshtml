@@ -56,7 +56,7 @@
 						<span class="floatright mr5">@day.Header.DayNumber</span>
 					</div>
 				</li>
-				<li id="day-summary" class="@Html.AttributeEncode(day.Summary.StyleClassName) third category show-request">
+				<li id="day-summary" class="@Html.AttributeEncode(day.Summary.StyleClassName) third category @(Model.RequestPermission.TextRequestPermission ? @Html.Raw("show-request") : @Html.Raw(""))">
 					
 					<strong class="fullwidth displayblock">@day.Summary.Title</strong>
 					<span class="fullwidth displayblock">@day.Summary.TimeSpan</span>

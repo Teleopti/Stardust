@@ -32,8 +32,28 @@ AddExtendedPreferenceFormViewModel = function () {
 	});
 
 	this.IsTimeInputEnabled.subscribe(function (newValue) {
-		if (!newValue)
+		if (!newValue) {
 			self.ActivityPreferenceId('');
+			self.EarliestStartTime(undefined);
+			self.LatestStartTime(undefined);
+			self.EarliestEndTime(undefined);
+			self.LatestEndTime(undefined);
+			self.EarliestEndTimeNextDay(false);
+			self.LatestEndTimeNextDay(false);
+			self.MinimumWorkTime(undefined);
+			self.MaximumWorkTime(undefined);
+		}
+	});
+
+	this.EnableActivityTimeEditing.subscribe(function (newValue) {
+		if (!newValue) {
+			self.ActivityEarliestStartTime(undefined);
+			self.ActivityLatestStartTime(undefined);
+			self.ActivityEarliestEndTime(undefined);
+			self.ActivityLatestEndTime(undefined);
+			self.ActivityMinimumTime(undefined);
+			self.ActivityMaximumTime(undefined);
+		}
 	});
 
 	this.ValidationError = ko.observable();

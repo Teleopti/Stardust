@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IGroupOptimizationValidatorRunner
 	{
-		ValidatorResult Run(IPerson person, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd, bool useSameDaysOff);
+		ValidatorResult Run(IPerson person, IList<DateOnly> daysMoveTimeFrom, IList<DateOnly> daysMoveTimeTo, bool moveSameDay);
 	}
 
 	public class GroupOptimizationValidatorRunner : IGroupOptimizationValidatorRunner
@@ -28,33 +28,33 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupOptimizerValidateProposedDatesInSameGroup = groupOptimizerValidateProposedDatesInSameGroup;
 		}
 
-		private delegate ValidatorResult ValidateDaysOffMoveDelegate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
+	    private delegate ValidatorResult ValidateDaysOffMoveDelegate(IPerson person, IList<DateOnly> dates, bool useSameDaysOff);
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public ValidatorResult Run(IPerson person, IList<DateOnly> daysOffToRemove, IList<DateOnly> daysOffToAdd, bool useSameDaysOff)
+		public ValidatorResult Run(IPerson person, IList<DateOnly> daysMoveTimeFrom, IList<DateOnly> daysMoveTimeTo, bool moveSameDay)
 		{
 			IDictionary<ValidateDaysOffMoveDelegate, IAsyncResult> runnableList = new Dictionary<ValidateDaysOffMoveDelegate, IAsyncResult>();
 
 			ValidateDaysOffMoveDelegate toRun = _groupDayOffOptimizerValidateDayOffToRemove.Validate;
-			IAsyncResult result = toRun.BeginInvoke(person, daysOffToRemove, useSameDaysOff, null, null);
+			IAsyncResult result = toRun.BeginInvoke(person, daysMoveTimeFrom, moveSameDay, null, null);
 			runnableList.Add(toRun, result);
 
 			toRun = _groupDayOffOptimizerValidateDayOffToAdd.Validate;
-			result = toRun.BeginInvoke(person, daysOffToAdd, useSameDaysOff, null, null);
+			result = toRun.BeginInvoke(person, daysMoveTimeTo, moveSameDay, null, null);
 			runnableList.Add(toRun, result);
 
-			IList<DateOnly> allDays = new List<DateOnly>(daysOffToRemove);
-			foreach (var dateOnly in daysOffToAdd)
+			IList<DateOnly> allDays = new List<DateOnly>(daysMoveTimeFrom);
+			foreach (var dateOnly in daysMoveTimeTo)
 			{
 				allDays.Add(dateOnly);
 			}
 				
 			toRun = _groupOptimizerValidateProposedDatesInSameMatrix.Validate;
-			result = toRun.BeginInvoke(person, allDays, useSameDaysOff, null, null);
+			result = toRun.BeginInvoke(person, allDays, moveSameDay, null, null);
 			runnableList.Add(toRun, result);
 
 			toRun = _groupOptimizerValidateProposedDatesInSameGroup.Validate;
-			result = toRun.BeginInvoke(person, allDays, useSameDaysOff, null, null);
+			result = toRun.BeginInvoke(person, allDays, moveSameDay, null, null);
 			runnableList.Add(toRun, result);
 
 			//Sync all threads

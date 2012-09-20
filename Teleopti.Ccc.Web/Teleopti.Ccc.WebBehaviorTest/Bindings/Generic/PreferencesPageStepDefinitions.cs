@@ -182,6 +182,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Enabled, Is.False);
 		}
 
+		[Then(@"all the time fields should be reset")]
+		public void ThenAllTheTimeFieldsShouldBeReset()
+		{
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMinimum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximumNextDay.Checked, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimumNextDay.Checked, Is.False);
+
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.TextField.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.TextField.Value, Is.Null);
+		}
+
 		[Then(@"I should see extended preference with")]
 		public void ThenIShouldSeeExtendedPanelWith(Table table)
 		{
