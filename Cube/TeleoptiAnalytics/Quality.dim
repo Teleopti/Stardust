@@ -1,6 +1,6 @@
 ﻿<Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="4cdd9983-054f-48f3-86ac-32b495d03a4d" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
-  <ID>Quality Quest</ID>
-  <Name>Quality Quest</Name>
+  <ID>Quality</ID>
+  <Name>Quality</Name>
   <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
   <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
   <Annotations>
@@ -8,7 +8,7 @@
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
       <Value>
         <dds xmlns="">
-          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="3" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-3155" scrolltop="-4802" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="10980" y="24500" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="0" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="3" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-3155" scrolltop="-4802" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="8361" y="18574" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="0" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
             <font>
               <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
             </font>
@@ -70,15 +70,15 @@
       <Value>
         <DiagramLayout ZoomPercent="100" ViewPortX="0" ViewPortY="0" xmlns="">
           <Shapes NodeWidth="122">
-            <Shape Id="Quality Quest Id" Expanded="false">
+            <Shape Id="Quality Id" Expanded="false">
               <Attributes>
-                <Attribute Id="Quality Quest Id" />
+                <Attribute Id="Quality Id" />
               </Attributes>
               <Position x="20" y="20" />
             </Shape>
-            <Shape Id="Quality Quest Name" Expanded="false">
+            <Shape Id="Quality Name" Expanded="false">
               <Attributes>
-                <Attribute Id="Quality Quest Name" />
+                <Attribute Id="Quality Name" />
               </Attributes>
               <Position x="177" y="20" />
             </Shape>
@@ -100,8 +100,8 @@
   <CurrentStorageMode>Molap</CurrentStorageMode>
   <Attributes>
     <Attribute dwd:design-time-name="8cfb71a7-317d-4d09-afab-231d40de1fe7">
-      <ID>Quality Quest Id</ID>
-      <Name>Quality Quest Id</Name>
+      <ID>Quality Id</ID>
+      <Name>Quality Id</Name>
       <Usage>Key</Usage>
       <KeyColumns>
         <KeyColumn dwd:design-time-name="f5b2b61f-5d3c-42bc-a8e1-3b6f8e83f439">
@@ -114,8 +114,8 @@
       </KeyColumns>
       <AttributeRelationships>
         <AttributeRelationship dwd:design-time-name="231d2793-6943-4939-bab5-c24376519d35">
-          <AttributeID>Quality Quest Name</AttributeID>
-          <Name>Quality Quest Name</Name>
+          <AttributeID>Quality Name</AttributeID>
+          <Name>Quality Name</Name>
         </AttributeRelationship>
       </AttributeRelationships>
       <OrderBy>Key</OrderBy>
@@ -123,7 +123,7 @@
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
     </Attribute>
     <Attribute dwd:design-time-name="5c8c4c7c-8e35-4d0a-a546-1dc0636d0753">
-      <ID>Quality Quest Name</ID>
+      <ID>Quality Name</ID>
       <Name>Name</Name>
       <KeyColumns>
         <KeyColumn dwd:design-time-name="a481e1b3-f145-4037-9fae-a0afb2c02b51">
@@ -149,12 +149,12 @@
   <Hierarchies>
     <Hierarchy dwd:design-time-name="d511e836-d476-4f8b-9d03-5d09a6cff53b">
       <ID>Hierarchy</ID>
-      <Name>Quality Quest</Name>
+      <Name>Questionary</Name>
       <Levels>
         <Level dwd:design-time-name="054988d8-df66-4d22-aa7d-5b20c68557cb">
           <ID>Name</ID>
           <Name>Name</Name>
-          <SourceAttributeID>Quality Quest Name</SourceAttributeID>
+          <SourceAttributeID>Quality Name</SourceAttributeID>
         </Level>
       </Levels>
     </Hierarchy>
