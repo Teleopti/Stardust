@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
@@ -10,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.StandardPreferences)]
+	[PreferencePermission]
 	[Aspects]
 	public class PreferenceFeedbackController : AsyncController
 	{

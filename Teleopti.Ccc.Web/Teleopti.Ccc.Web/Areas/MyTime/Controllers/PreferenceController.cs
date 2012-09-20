@@ -1,7 +1,5 @@
-using System;
 using System.Net;
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
@@ -15,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.StandardPreferences,DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)]
+	[PreferencePermission]
 	[Aspects]
 	public class PreferenceController : Controller
 	{
