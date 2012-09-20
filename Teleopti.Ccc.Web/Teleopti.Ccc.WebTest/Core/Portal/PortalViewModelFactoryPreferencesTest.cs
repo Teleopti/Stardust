@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			var button = result.ControllerItems<ToolBarButtonItem>("Preference").FirstOrDefault(i => i.ButtonType == "add-extended");
 
 			button.Should().Not.Be.Null();
-			button.Title.Should().Be(Resources.AddExtendedPreference);
+			button.Title.Should().Be(Resources.Preference);
 		}
 
 		[Test]
