@@ -121,9 +121,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function _listenForEvents() {
 		var onMessageBrokerEvent = function (notification) {
-			var messageStartDate = _convertMbDate(notification.StartDate);
+			var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
 			messageStartDate.setDate(messageStartDate.getDate() - 1);
-			var messageEndDate = _convertMbDate(notification.EndDate);
+			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
 			messageEndDate.setDate(messageEndDate.getDate() + 1);
 			var visibleStartDate = vm.yesterday;
 			var visibleEndDate = new Date(visibleStartDate.getTime());
@@ -142,20 +142,13 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 					url: data.Url,
 					callback: onMessageBrokerEvent,
-					domainType: 'IPersistableScheduleData',
+					domainType: 'IScheduleChangedInDefaultScenario',
 					businessUnitId: data.BusinessUnitId,
 					datasource: data.DataSourceName,
 					referenceId: data.AgentId
 				});
 			}
 		});
-	}
-
-	function _convertMbDate(mbDate) {
-		//expects a string like this "D2010-11-11T13:00"
-		var splitDatetime = mbDate.split('T');
-		var splitDate = splitDatetime[0].split('-');
-		return new Date(splitDate[0].substr(1), splitDate[1] - 1, splitDate[2]);
 	}
 
 	return {

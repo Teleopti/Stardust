@@ -31,6 +31,11 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 			/// referenceId (optional) = filter events on "reference id", eg agent id for schedules.
 			/// </param>
 			_addSubscription(options);
+		},
+		ConvertMbDateTimeToJsDate: function (mbDateTime) {
+			var splitDatetime = mbDateTime.split('T');
+			var splitDate = splitDatetime[0].split('-');
+			return new Date(splitDate[0].substr(1), splitDate[1] - 1, splitDate[2]);
 		}
 	};
 })(jQuery)
