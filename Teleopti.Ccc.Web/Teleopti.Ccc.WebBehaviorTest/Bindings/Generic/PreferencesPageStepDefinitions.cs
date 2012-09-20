@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			//I should see on heart icon on the current calendar cell, accorning the the must have settings
 			//todo: add an icon and test code here
-			EventualAssert.That(() => mustHave.Exists, Is.True);
+			EventualAssert.That(() => mustHave.Exists, Is.EqualTo(fields.MustHave));
 
 		}
 

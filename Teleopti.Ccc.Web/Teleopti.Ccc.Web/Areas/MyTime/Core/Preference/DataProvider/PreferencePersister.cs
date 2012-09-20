@@ -31,8 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
 			if (preferenceDay == null)
 			{
-				preferenceDay = _mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
-				_preferenceDayRepository.Add(preferenceDay);
+				if (input.MustHave == null)
+				{
+					preferenceDay = _mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+					_preferenceDayRepository.Add(preferenceDay);
+				}
 			}
 			else
 			{
