@@ -252,6 +252,56 @@ Scenario: Reset activity field when day off is selected
     | Field      | Value  |
     | Preference | Dayoff |
     Then I should see activity dropdown list selected to " "
+	
+Scenario: Reset time input fields when day off is selected
+    Given I have the role 'Access to extended preferences'
+    And I am viewing preferences
+    When I click the add extended preference button
+    And I input extended preference fields with
+    | Field                       | Value |
+    | Preference                  | Late  |
+    | Start time minimum          | 10:30 |
+    | Start time maximum          | 11:00 |
+    | End time minimum            | 19:00 |
+    | End time maximum            | 20:30 |
+    | Work time minimum           | 08:00 |
+    | Work time maximum           | 08:30 |
+    | Activity                    | Lunch |
+    | Activity Start time minimum | 12:00 |
+    | Activity Start time maximum | 12:15 |
+    | Activity End time minimum   | 12:30 |
+    | Activity End time maximum   | 12:45 |
+    | Activity time minimum       | 00:15 |
+    | Activity time maximum       | 00:45 |
+    And I input extended preference fields with
+    | Field      | Value  |
+    | Preference | Dayoff |
+    Then all the time fields should be reset
+	
+Scenario: Reset time input fields when absence is selected
+    Given I have the role 'Access to extended preferences'
+    And I am viewing preferences
+    When I click the add extended preference button
+    And I input extended preference fields with
+    | Field                       | Value |
+    | Preference                  | Late  |
+    | Start time minimum          | 10:30 |
+    | Start time maximum          | 11:00 |
+    | End time minimum            | 19:00 |
+    | End time maximum            | 20:30 |
+    | Work time minimum           | 08:00 |
+    | Work time maximum           | 08:30 |
+    | Activity                    | Lunch |
+    | Activity Start time minimum | 12:00 |
+    | Activity Start time maximum | 12:15 |
+    | Activity End time minimum   | 12:30 |
+    | Activity End time maximum   | 12:45 |
+    | Activity time minimum       | 00:15 |
+    | Activity time maximum       | 00:45 |
+    And I input extended preference fields with
+    | Field      | Value  |
+    | Preference | Illness |
+    Then all the time fields should be reset
 
 Scenario: Reset activity field when absence is selected
     Given I have the role 'Access to extended preferences'
