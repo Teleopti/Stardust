@@ -88,12 +88,12 @@
 									<h2 class="error" data-bind="text: AjaxError"></h2>
 									<!-- /ko -->
 								}
-								@if (day.Preference)
-								{
+								@if (day.Preference && day.InPeriod)
+								{  // todo: why is preference true if not in period?
 									<div class="preference">
 										<span class="displayinline-block">
 											<div class="preference-text" data-bind="text: Preference"></div>
-											<!-- ko if: MustHave() -->
+											<!-- ko if: MustHave -->
 											<div class="icon heart-small preference-must-have"/>
 											<!-- /ko -->
 											<div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
