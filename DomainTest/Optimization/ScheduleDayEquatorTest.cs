@@ -316,6 +316,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		#endregion
 
+		#region "Bug 20756"
+		[Test]
+		public void ShouldReturnFalseIfCurrentIsNoneAndOriginalIsMainShift()
+		{
+			var schedulePartFactory = CreateSchedulePartFactory();
+
+			var original = schedulePartFactory.CreatePartWithMainShift();
+			var current = schedulePartFactory.CreatePartWithoutMainShift();
+			
+			Assert.IsFalse(_target.MainShiftEquals(original, current));
+		}
+		
+		#endregion
+		
 		private static void SetIdOnShiftCategories(IScheduleDay scheduleDay1, IScheduleDay scheduleDay2, Guid shiftCategoryId)
         {
             foreach (IPersonAssignment assignment in scheduleDay1.PersonAssignmentCollection())
