@@ -71,9 +71,10 @@ Scenario: Remove must have from preference
 	And I select day '2012-08-23'
 	And I click remove must have button
 	Then I should see preference
-	| Field     | Value      |
-	| Date      | 2012-08-23 |
-	| Must have | false      |
+	| Field          | Value      |
+	| Date           | 2012-08-23 |
+	| Must have      | false      |
+	| Shift category | Late       |
 
 Scenario: See available must haves
 	When I view preferences for date '2012-08-23'
