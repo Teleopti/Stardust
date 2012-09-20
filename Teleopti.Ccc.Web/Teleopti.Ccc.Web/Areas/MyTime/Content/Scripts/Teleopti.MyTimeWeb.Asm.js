@@ -121,7 +121,17 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function _listenForEvents() {
 		var onMessageBrokerEvent = function (notification) {
-			vm.loadViewModel();
+			var messageStartDate = _convertMbDate(notification.StartDate);
+			messageStartDate.setDate(messageStartDate.getDate() - 1);
+			var messageEndDate = _convertMbDate(notification.EndDate);
+			messageEndDate.setDate(messageEndDate.getDate() + 1);
+			var visibleStartDate = vm.yesterday;
+			var visibleEndDate = new Date(visibleStartDate.getTime());
+			visibleEndDate.setDate(visibleEndDate.getDate() + 2);
+
+			if (messageStartDate < visibleEndDate && messageEndDate > visibleStartDate) {
+				vm.loadViewModel();
+			}
 		};
 
 		Teleopti.MyTimeWeb.Ajax.Ajax({
@@ -139,6 +149,13 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				});
 			}
 		});
+	}
+
+	function _convertMbDate(mbDate) {
+		//expects a string like this "D2010-11-11T13:00"
+		var splitDatetime = mbDate.split('T');
+		var splitDate = splitDatetime[0].split('-');
+		return new Date(splitDate[0].substr(1), splitDate[1] - 1, splitDate[2]);
 	}
 
 	return {
