@@ -498,6 +498,7 @@
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Images\icon_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.combobox.ko.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Asm.js" />
@@ -566,7 +567,6 @@
     <Content Include="Areas\MyTime\Content\Images\edit_section_bg_top.png" />
     <Content Include="Areas\MyTime\Content\Images\error_icon.png" />
     <Content Include="Areas\MyTime\Content\Images\header_bg.png" />
-    <Content Include="Areas\MyTime\Content\Images\icon_sprite.png" />
     <Content Include="Areas\Start\Content\Images\login_logo.png" />
     <Content Include="Areas\Start\Content\Images\login_page_bg.png" />
     <Content Include="Areas\MyTime\Content\Images\main_content_bg.jpg" />

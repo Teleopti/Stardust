@@ -93,6 +93,9 @@
 									<div class="preference">
 										<span class="displayinline-block">
 											<div class="preference-text" data-bind="text: Preference"></div>
+											<!-- ko if: MustHave() -->
+											<div class="icon heart-small preference-must-have"/>
+											<!-- /ko -->
 											<div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
 											<div class="extended-panel" style="display: none">
 												<div class="extended-part">
@@ -112,7 +115,7 @@
 									</div>
 								}
 								@if (day.Feedback)
-								{
+		{
 									<!-- ko if: DisplayFeedbackError -->
 									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
 									<!-- /ko -->
@@ -121,27 +124,27 @@
 									<div class="possible-end-times time-limitation icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
 									<div class="possible-contract-times time-limitation icon doublearrow-blue truncate" data-bind="text: PossibleContractTimes"></div>
 									<!-- /ko -->
-								}
+		}
 								@if (personAssignment != null)
-								{
+		{
 									<div class="scheduled">
 										<span class="displayblock fullwidth">@personAssignment.ShiftCategory</span>
 										<strong class="displayblock fullwidth">@personAssignment.TimeSpan</strong>
 										<span class="displayblock fullwidth" data-mytime-contract-time="@personAssignment.ContractTimeMinutes">@personAssignment.ContractTime</span>
 									</div>
-								}
+		}
 								@if (dayOff != null)
-								{
+		{
 									<div class="dayoff">
 										@dayOff.DayOff
 									</div>
-								}
+		}
 								@if (absence != null)
-								{
+		{
 									<div class="absence">
 										@absence.Absence
 									</div>
-								}
+		}
 							</div>
 						</div>
 					</li>

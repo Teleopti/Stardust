@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public DateTime StartDate { get; set; }
 		public SchedulePeriodType Type { get; set; }
 		public int Length { get; set; }
+		public int MustHavePreference { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				Type,
 				Length);
 			user.AddSchedulePeriod(schedulePeriod);
+			schedulePeriod.MustHavePreference = MustHavePreference;
 		}
 
 	}

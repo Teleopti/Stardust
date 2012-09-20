@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public TimeOfDay? ActivityEarliestEndTime { get; set; }
 		public TimeOfDay? ActivityLatestEndTime { get; set; }
 
+		public bool? MustHave { get; set; }
+
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
