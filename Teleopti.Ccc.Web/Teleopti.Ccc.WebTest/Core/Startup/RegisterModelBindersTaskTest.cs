@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.Startup;
@@ -33,5 +34,11 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			modelBinderDictionary.ContainsKey(typeof(TimeOfDay?)).Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldRegisterTimeSpanModelBinder()
+		{
+			modelBinderDictionary.ContainsKey(typeof(TimeSpan)).Should().Be.True();
+			modelBinderDictionary.ContainsKey(typeof(TimeSpan?)).Should().Be.True();
+		}
 	}
 }

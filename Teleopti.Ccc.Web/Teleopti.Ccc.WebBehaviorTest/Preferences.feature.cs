@@ -286,7 +286,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 79
 this.ScenarioSetup(scenarioInfo);
 #line 80
- testRunner.Given("I am an agent");
+ testRunner.Given("I am an agent without access to extended preferences");
 #line 81
  testRunner.And("I have an open workflow control set with an allowed standard preference");
 #line 82
@@ -307,7 +307,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 86
 this.ScenarioSetup(scenarioInfo);
 #line 87
- testRunner.Given("I am an agent");
+ testRunner.Given("I am an agent without access to extended preferences");
 #line 88
  testRunner.And("I have an open workflow control set with an allowed standard preference");
 #line 89
@@ -330,7 +330,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 94
 this.ScenarioSetup(scenarioInfo);
 #line 95
- testRunner.Given("I am an agent");
+ testRunner.Given("I am an agent without access to extended preferences");
 #line 96
  testRunner.And("I have an open workflow control set with an allowed standard preference");
 #line 97
@@ -353,7 +353,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 102
 this.ScenarioSetup(scenarioInfo);
 #line 103
- testRunner.Given("I am an agent");
+ testRunner.Given("I am an agent without access to extended preferences");
 #line 104
  testRunner.And("I have an open workflow control set with an allowed standard preference");
 #line 105
@@ -380,7 +380,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 112
 this.ScenarioSetup(scenarioInfo);
 #line 113
- testRunner.Given("I am an agent");
+ testRunner.Given("I am an agent without access to extended preferences");
 #line 114
  testRunner.And("I have an open workflow control set with an allowed standard preference");
 #line 115
@@ -407,7 +407,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 122
 this.ScenarioSetup(scenarioInfo);
 #line 123
- testRunner.Given("I am an agent");
+ testRunner.Given("I am an agent without access to extended preferences");
 #line 124
  testRunner.And("I have a workflow control set with open standard preference period");
 #line 125

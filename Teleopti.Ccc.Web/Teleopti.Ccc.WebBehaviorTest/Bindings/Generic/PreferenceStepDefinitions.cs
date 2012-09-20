@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class PreferenceStepDefinitions
 	{
+		[Given(@"I have an extended preference with")]
 		[Given(@"I have a preference with")]
 		public void GivenIHaveAPreferenceWith(Table table)
 		{
@@ -21,5 +22,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			UserFactory.User().Setup(new PreferenceConfigurable { Date = date, IsExtended = true });
 		}
+
 	}
 }

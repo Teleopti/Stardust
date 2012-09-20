@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -12,7 +11,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.TextRequests)]
+	[RequestPermission]
 	public class RequestsController : Controller
 	{
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;

@@ -1,18 +1,34 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Filters
 {
+	public class RequestPermissionAttribute : ApplicationFunctionAttribute
+	{
+		public RequestPermissionAttribute()
+			: base(DefinedRaptorApplicationFunctionPaths.TextRequests, DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)
+		{
+		}
+	}
+
+	public class PreferencePermissionAttribute : ApplicationFunctionAttribute
+	{
+		public PreferencePermissionAttribute() : base(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb,DefinedRaptorApplicationFunctionPaths.StandardPreferences)
+		{
+		}
+	}
+
 	public class ApplicationFunctionAttribute : AuthorizeAttribute
 	{
-		private readonly string _applicationFunctionPath;
+		private readonly string[] _applicationFunctionPaths;
 
 		public ApplicationFunctionAttribute() : this(null) { }
 
-		public ApplicationFunctionAttribute(string applicationFunctionPath)
+		public ApplicationFunctionAttribute(params string[] applicationFunctionPathses)
 		{
-			_applicationFunctionPath = applicationFunctionPath;
+			_applicationFunctionPaths = applicationFunctionPathses;
 			Order = 3;
 		}
 
@@ -20,20 +36,29 @@ namespace Teleopti.Ccc.Web.Filters
 
 		public override void OnAuthorization(AuthorizationContext filterContext)
 		{
-			if (_applicationFunctionPath != null)
+			if (_applicationFunctionPaths != null && _applicationFunctionPaths.Length>0)
 			{
-				var havePermission = PermissionProvider.HasApplicationFunctionPermission(_applicationFunctionPath);
+				var havePermission = false;
+				foreach (var applicationFunctionPath in _applicationFunctionPaths)
+				{
+					if (PermissionProvider.HasApplicationFunctionPermission(applicationFunctionPath))
+					{
+						havePermission = true;
+						break;
+					}
+				}
+				
 				if (!havePermission)
 				{
 					var isAjaxRequest = filterContext.HttpContext.Request.IsAjaxRequest();
 					var viewResult = new ViewResult
-					                 	{
-					                 		ViewData = new ViewDataDictionary<ErrorViewModel>(new ErrorViewModel
-					                 		                                                  	{
-					                 		                                                  		Message = "No access"
-					                 		                                                  	}),
-											ViewName = isAjaxRequest ? "ErrorPartial" : "Error"
-					                 	};
+					{
+						ViewData = new ViewDataDictionary<ErrorViewModel>(new ErrorViewModel
+						{
+							Message = "No access"
+						}),
+						ViewName = isAjaxRequest ? "ErrorPartial" : "Error"
+					};
 					filterContext.Result = viewResult;
 				}
 			}

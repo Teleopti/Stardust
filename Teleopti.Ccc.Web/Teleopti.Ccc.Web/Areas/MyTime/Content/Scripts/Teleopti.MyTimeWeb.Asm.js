@@ -20,12 +20,11 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		self.loadViewModel = function () {
 			Teleopti.MyTimeWeb.Ajax.Ajax({
-				url: '/MyTime/Asm/Today',
+				url: 'Asm/Today',
 				dataType: "json",
 				type: 'GET',
 				data: { asmZero: yesterday.toJSON() },
 				success: function (data) {
-					self.now(new Date().getTeleoptiTime());
 					self.hours(data.Hours);
 					self._createLayers(data.Layers);
 
@@ -34,9 +33,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					setInterval(function () {
 						self.now(new Date().getTeleoptiTime());
 					}, 1000 * refreshSeconds);
-				},
-				error: function () {
-					console.error('no connection with signalr server!') //todo: wad ska hända här? (om ingen kontakt med servern)
 				}
 			});
 		};
@@ -56,7 +52,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				return n.visible();
 			});
 		});
-		self.now = ko.observable();
+		self.now = ko.observable(new Date().getTeleoptiTime());
 		self.canvasPosition = ko.computed(function () {
 			var msSinceStart = self.now() - yesterday.getTime();
 			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
@@ -89,15 +85,14 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
 			return startPos <= timelinePosition;
 		});
-		self.startText = ko.computed(function () {
-			var startPos = parseFloat(self.leftPx);
+		self.startText = function () {
 			var out = self.startTimeText;
-			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
-			if (startPos - timelinePosition >= 24 * pixelPerHours) {
+
+			if (layer.StartMinutesSinceAsmZero > 2 * 24 * 60) {
 				out += '+1';
 			}
 			return out;
-		});
+		};
 	}
 
 	function _start() {

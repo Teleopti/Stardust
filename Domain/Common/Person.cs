@@ -801,14 +801,17 @@ namespace Teleopti.Ccc.Domain.Common
             var personPeriod = Period(dateOnly);
             if (personPeriod == null) return TimeSpan.Zero;
             var contract = personPeriod.PersonContract.Contract;
-            if (contract.IsWorkTimeFromContract)
-                return contract.WorkTime.AvgWorkTimePerDay;
-            if (contract.IsWorkTimeFromSchedulePeriod)
+            switch (contract.WorkTimeSource)
             {
-                var schedulePeriod = SchedulePeriod(dateOnly);
-                return schedulePeriod == null
-                           ? WorkTime.DefaultWorkTime.AvgWorkTimePerDay
-                           : schedulePeriod.AverageWorkTimePerDay;
+                case WorkTimeSource.FromContract:
+                    return contract.WorkTime.AvgWorkTimePerDay;
+                case WorkTimeSource.FromSchedulePeriod:
+                    {
+                        var schedulePeriod = SchedulePeriod(dateOnly);
+                        return schedulePeriod == null
+                                   ? WorkTime.DefaultWorkTime.AvgWorkTimePerDay
+                                   : schedulePeriod.AverageWorkTimePerDay;
+                    }
             }
             return TimeSpan.Zero;
         }

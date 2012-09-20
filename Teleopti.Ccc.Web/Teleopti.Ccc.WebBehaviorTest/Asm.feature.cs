@@ -313,7 +313,7 @@ this.FeatureBackground();
 #line 83
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 84
- testRunner.And("Current time is \'2029-12-31 12:01\'");
+ testRunner.And("Current time is \'2030-01-01 00:01\'");
 #line 85
  testRunner.When("I view my regional settings");
 #line 86
@@ -325,12 +325,12 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Upcoming activity starttime starting after more than 24 hours should be indicated" +
-            " as next day")]
-        public virtual void UpcomingActivityStarttimeStartingAfterMoreThan24HoursShouldBeIndicatedAsNextDay()
+        [NUnit.Framework.DescriptionAttribute("Upcoming activity starttime starting after midnight should be indicated as next d" +
+            "ay")]
+        public virtual void UpcomingActivityStarttimeStartingAfterMidnightShouldBeIndicatedAsNextDay()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime starting after more than 24 hours should be indicated" +
-                    " as next day", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime starting after midnight should be indicated as next d" +
+                    "ay", ((string[])(null)));
 #line 89
 this.ScenarioSetup(scenarioInfo);
 #line 8
@@ -338,7 +338,7 @@ this.FeatureBackground();
 #line 90
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 91
- testRunner.And("Current time is \'2029-12-31 12:00\'");
+ testRunner.And("Current time is \'2029-12-31 23:59\'");
 #line 92
  testRunner.When("I view my regional settings");
 #line 93

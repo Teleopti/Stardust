@@ -3,6 +3,7 @@ using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I hover over the meeting on date '(.*)'")]
 		public void WhenIHoverOverTheMeetingOnDate(DateTime date)
 		{
-			Div meetingLayer = _page.DayLayers(date).Filter(Find.BySelector("[tooltip-text*=Subject:]")).First();
+			Div meetingLayer =
+				_page.DayLayers(date).Filter(Find.BySelector("[tooltip-text*=" + Resources.SubjectColon + "]")).First();
 			meetingLayer.FireEvent("onmouseover");
 		}
 
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
-			Pages.Pages.WeekSchedulePage.DayElementForDate(date).ListItems.First(Find.ById("day-summary")).Div(
+            Pages.Pages.WeekSchedulePage.DayElementForDate(date).ListItems.First(Find.ById("day-symbol")).Div(
 				Find.ByClass("text-request", false)).EventualClick();
 		}
 

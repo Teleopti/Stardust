@@ -121,9 +121,11 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\UserDataFactoryTest.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputTest.cs" />
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
+    <Compile Include="Core\TimeSpanModelBinderTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryScheduleTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
     <Compile Include="Core\Settings\PersonPersisterTest.cs" />
@@ -135,7 +137,7 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculatorTest.cs" />
-    <Compile Include="Areas\MyTime\Models\LayoutBase\SplitButtonSplitterTest.cs" />
+    <Compile Include="Areas\MyTime\Models\LayoutBase\OptionSplitTest.cs" />
     <Compile Include="Areas\MyTime\Models\Portal\CultureSpecificViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerMobileSignInTest.cs" />
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />

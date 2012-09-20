@@ -264,6 +264,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapMustHave()
+		{
+			var preferenceDay = new PreferenceDay(
+				new Person(), DateOnly.Today,
+				new PreferenceRestriction
+				{
+					MustHave = true
+				});
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.MustHave.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapStartTimeLimitation()
 		{
 			var preferenceDay = new PreferenceDay(

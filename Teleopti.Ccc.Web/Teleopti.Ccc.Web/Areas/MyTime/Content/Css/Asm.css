@@ -1,6 +1,6 @@
 ﻿.asm-sliding-schedules
 {
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: 1px solid rgb(216, 216, 216);	
 	position: relative;
 	top: 20px;
 	height: 40px;
@@ -18,7 +18,7 @@
 	overflow: hidden;
 	background: #F8F8F8;
 	height: 70px;
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: 1px solid rgb(216, 216, 216);	
 }
 
 .asm-outer-canvas
@@ -26,15 +26,18 @@
 	width: 815px;
 	background: white;
 	padding: 6px;
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: 1px solid rgb(216, 216, 216);	
 	margin: 5px;
 	height: 72px;
 	display: none; /*hide when loaded, before moved to correct place*/
 }
+
 .asm-layer
 {
 	position: absolute;
-	opacity: 0.8;
+	zoom: 1;
+	filter: alpha(opacity=80);
+	opacity: 0.80;
 	height: 30px;
 	top: 5px;
 }
@@ -43,8 +46,17 @@
 {
 	height: 70px;
 	float: left;
-	border-right: 1px solid rgba(0, 0, 0, 0.15);
+	border-right: 1px solid rgb(216, 216, 216);	
 }
+
+.asm-time-marker-inner 
+	{	
+		background-color: black;
+		height: 70px;	
+		zoom: 1;
+		filter: alpha(opacity=15);
+		opacity: 0.15;
+	}
 
 .asm-timeline-number
 {
@@ -52,7 +64,7 @@
 	padding-left: 4px;
 	padding-right: 5px;
 	position: relative;
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: 1px solid rgb(216, 216, 216);
 	background: white;
 	top: -20px;
 	left: -25px;
@@ -65,12 +77,11 @@
 	overflow: hidden;
 	background: #F8F8F8;
 	height: 70px;
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: 1px solid rgb(216, 216, 216);	
 }
 
 .asm-time-marker
 {
-	background-color: rgba(0,0,0,0.15);
 	height: 72px;
 	float: left;
 	position: relative;

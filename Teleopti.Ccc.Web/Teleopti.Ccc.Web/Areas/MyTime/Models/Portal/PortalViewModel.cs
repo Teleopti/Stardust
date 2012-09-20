@@ -24,6 +24,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public IEnumerable<ToolBarItemBase> ToolBarItems { get; set; }
 	}
 
+	public class PreferenceNavigationItem : SectionNavigationItem
+	{
+		public IEnumerable<IPreferenceOption> PreferenceOptions { get; set; }
+		public IEnumerable<IOption> ActivityOptions { get; set; }
+	}
+
 	public abstract class ToolBarItemBase
 	{
 		public string Title { get; set; }
@@ -36,44 +42,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	public class ToolBarButtonItem : ToolBarItemBase
 	{
 		public string ButtonType { get; set; }
+		public string Icon { get; set; }
+		public string Text { get; set; }
 	}
 
 	public class ToolBarSelectBox : ToolBarItemBase
 	{
 		public string Type { get; set; }
-		public IEnumerable<SelectBoxOption> Options { get; set; }
-	}
-
-	public class SelectBoxOption
-	{
-		public string Value { get; set; }
-		public string Text { get; set; }
+		public IEnumerable<IOption> Options { get; set; }
 	}
 
 	public class ToolBarSplitButton : ToolBarItemBase
 	{
-		public IEnumerable<ISplitButtonOption> Options { get; set; }
-	}
-
-	public interface ISplitButtonOption
-	{
-		string Value { get; }
-		string Text { get; }
-		StyleClassViewModel Style { get; }
-	}
-
-	public class SplitButtonSplitter : ISplitButtonOption
-	{
-		public string Value { get { return "-"; } }
-		public string Text { get { return "-"; } }
-		public StyleClassViewModel Style { get; set; }
-	}
-
-	public class SplitButtonOption : ISplitButtonOption
-	{
-		public string Value { get; set; }
-		public string Text { get; set; }
-		public StyleClassViewModel Style { get; set; }
+		public IEnumerable<IOption> Options { get; set; }
 	}
 
 	public class ToolBarDatePicker : ToolBarItemBase
@@ -81,4 +62,46 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public string NextTitle { get; set; }
 		public string PrevTitle { get; set; }
 	}
+
+
+
+	public class PreferenceOption : Option, IPreferenceOption
+	{
+		public bool Extended { get; set; }
+	}
+
+	public class PreferenceOptionSplit : OptionSplit, IPreferenceOption
+	{
+		public bool Extended { get { return false; } }
+	}
+
+	public interface IPreferenceOption : IOption
+	{
+		bool Extended { get; }
+	}
+
+
+
+
+	public class Option : IOption
+	{
+		public string Value { get; set; }
+		public string Text { get; set; }
+		public string Color { get; set; }
+	}
+
+	public class OptionSplit : IOption
+	{
+		public string Value { get { return "-"; } }
+		public string Text { get { return "-"; } }
+		public string Color { get { return null; } }
+	}
+
+	public interface IOption
+	{
+		string Value { get; }
+		string Text { get; }
+		string Color { get; }
+	}
+
 }

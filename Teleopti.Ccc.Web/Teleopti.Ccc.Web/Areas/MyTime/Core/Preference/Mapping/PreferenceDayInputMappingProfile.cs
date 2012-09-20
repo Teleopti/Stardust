@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
@@ -13,12 +17,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly Func<IShiftCategoryRepository> _shiftCategoryRepository;
 		private readonly Func<IDayOffRepository> _dayOffRepository;
 		private readonly Func<IAbsenceRepository> _absenceRepository;
+		private readonly Func<IActivityRepository> _activityRespository;
+		private readonly IResolve<IMappingEngine> _mapper;
 
-		public PreferenceDayInputMappingProfile(Func<IShiftCategoryRepository> shiftCategoryRepository, Func<IDayOffRepository> dayOffRepository, Func<IAbsenceRepository> absenceRepository)
+		public PreferenceDayInputMappingProfile(Func<IShiftCategoryRepository> shiftCategoryRepository, Func<IDayOffRepository> dayOffRepository, Func<IAbsenceRepository> absenceRepository, Func<IActivityRepository> activityRespository, IResolve<IMappingEngine> mapper)
 		{
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_dayOffRepository = dayOffRepository;
 			_absenceRepository = absenceRepository;
+			_activityRespository = activityRespository;
+			_mapper = mapper;
 		}
 
 		protected override void Configure()
@@ -29,18 +37,57 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ConvertUsing<PreferenceDayInputToPreferenceDay>()
 				;
 
-			CreateMap<PreferenceDayInput, IPreferenceRestriction>()
-				.ConstructUsing(s => new PreferenceRestriction())
-				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => _shiftCategoryRepository.Invoke().Get(s.Id)))
-				.ForMember(d => d.Absence, o => o.MapFrom(s => _absenceRepository.Invoke().Get(s.Id)))
-				.ForMember(d => d.DayOffTemplate, o => o.MapFrom(s => _dayOffRepository.Invoke().Get(s.Id)))
-				.ForMember(d => d.ActivityRestrictionCollection, o => o.Ignore())
-				.ForMember(d => d.MustHave, o => o.Ignore())
-				.ForMember(d => d.StartTimeLimitation, o => o.Ignore())
-				.ForMember(d => d.EndTimeLimitation, o => o.Ignore())
-				.ForMember(d => d.WorkTimeLimitation, o => o.Ignore())
+			CreateMap<PreferenceDayInput, ActivityRestriction>()
+				.ForMember(d => d.Activity, o => o.MapFrom(s => _activityRespository.Invoke().Get(s.ActivityPreferenceId.Value)))
+				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s =>
+							   new StartTimeLimitation(s.ActivityEarliestStartTime.ToTimeSpan(), s.ActivityLatestStartTime.ToTimeSpan())
+							   ))
+				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s =>
+							   new EndTimeLimitation(s.ActivityEarliestEndTime.ToTimeSpan(), s.ActivityLatestEndTime.ToTimeSpan())
+							   ))
+				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(
+							   s => new WorkTimeLimitation(s.ActivityMinimumTime, s.ActivityMaximumTime)
+							   ))
 				;
 
+			CreateMap<PreferenceDayInput, IPreferenceRestriction>()
+				.ConstructUsing(s => new PreferenceRestriction())
+				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PreferenceId != null ? _shiftCategoryRepository.Invoke().Get(s.PreferenceId.Value) : null))
+				.ForMember(d => d.Absence, o => o.MapFrom(s => s.PreferenceId != null ? _absenceRepository.Invoke().Get(s.PreferenceId.Value) : null))
+				.ForMember(d => d.DayOffTemplate, o => o.MapFrom(s => s.PreferenceId != null ? _dayOffRepository.Invoke().Get(s.PreferenceId.Value) : null))
+				.ForMember(d => d.MustHave, o => o.MapFrom(s => s.MustHave))
+				.ForMember(d => d.ActivityRestrictionCollection, o => o.Ignore())
+				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s =>
+							   new StartTimeLimitation(s.EarliestStartTime.ToTimeSpan(), s.LatestStartTime.ToTimeSpan())
+							   ))
+				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s =>
+							   new EndTimeLimitation(s.EarliestEndTime.ToTimeSpan(s.EarliestEndTimeNextDay), s.LatestEndTime.ToTimeSpan(s.LatestEndTimeNextDay))
+							   ))
+				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(
+							   s => new WorkTimeLimitation(s.MinimumWorkTime, s.MaximumWorkTime)
+							   ))
+				.AfterMap((s, d) =>
+					{
+						if (s.ActivityPreferenceId.HasValue)
+						{
+							if (d.ActivityRestrictionCollection.Any())
+							{
+								var activityRestriction = d.ActivityRestrictionCollection.Cast<ActivityRestriction>().Single();
+								_mapper.Invoke().Map(s, activityRestriction);
+							}
+							else
+							{
+								var activityRestriction = _mapper.Invoke().Map<PreferenceDayInput, ActivityRestriction>(s);
+								d.AddActivityRestriction(activityRestriction);
+							}
+						}
+						else
+						{
+							var currentItems = new List<IActivityRestriction>(d.ActivityRestrictionCollection);
+							currentItems.ForEach(d.RemoveActivityRestriction);
+						}
+					})
+				;
 		}
 
 		public class PreferenceDayInputToPreferenceDay : ITypeConverter<PreferenceDayInput, IPreferenceDay>
@@ -71,5 +118,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				return destination;
 			}
 		}
+	}
+
+	public static class Extensions
+	{
+		public static TimeSpan? ToTimeSpan(this TimeOfDay? value)
+		{
+			if (!value.HasValue) return null;
+			return value.Value.Time;
+		}
+
+		public static TimeSpan? ToTimeSpan(this TimeOfDay? value, bool nextDay)
+		{
+			if (!value.HasValue) return null;
+			return nextDay ? value.Value.Time.Add(TimeSpan.FromDays(1)) : value.Value.Time;
+		}
+
 	}
 }

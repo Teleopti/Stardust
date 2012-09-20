@@ -77,6 +77,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		Init: function (settings) {
 			_settings = settings;
 		},
+		PartialInit: function () {
+			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
+		},
 		AjaxFailed: function (jqXHR, noIdea, title) {
 			var msg = $.parseJSON(jqXHR.responseText);
 			$('#dialog-modal').attr('title', 'Error: ' + msg.ShortMessage);
@@ -139,25 +142,24 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 
 		//Activating tooltip where available
 		ActivateTooltip: function () {
-
 			$('.tooltip')
 				.add('[title]')
 				.each(function () {
-
+					
 					var content = {
 						title: $(this).attr('tooltip-title'),
 						text: $(this).attr('tooltip-text')
 					};
-					
+
 					var attr = $(this).attr('title');
 					if (typeof attr !== 'undefined' && attr !== false) {
 						content = {
-							text: function() {
+							text: function () {
 								return $(this).attr('title');
 							}
 						};
 					}
-					
+
 					$(this).qtip({
 						content: content,
 						style: {

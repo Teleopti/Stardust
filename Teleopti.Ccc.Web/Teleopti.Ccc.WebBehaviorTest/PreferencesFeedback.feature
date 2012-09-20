@@ -132,7 +132,7 @@ Scenario: Feedback from conflicting preferences and availability
 	Then I should see that there are no available shifts
 
 Scenario: Feedback from an added preference
-	Given I am an agent
+	Given I am an agent without access to extended preferences
 	And I have an open workflow control set with an allowed standard preference
 	And I have a shift bag
 	And I am viewing preferences

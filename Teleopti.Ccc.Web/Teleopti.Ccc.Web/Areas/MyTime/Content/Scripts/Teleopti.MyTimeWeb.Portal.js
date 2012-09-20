@@ -16,6 +16,8 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Portal = (function ($) {
 	var _settings = {};
 	var _partialViewInitCallback = {};
+	var _partialViewDisposeCallback = {};
+	var currentViewId = null;
 	var tabs = null;
 	var currentFixedDate = null;
 
@@ -29,8 +31,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateSettingsMenu();
 	}
 
-	function _registerPartialCallback(viewId, callBack) {
+	function _registerPartialCallback(viewId, callBack, disposeCallback) {
 		_partialViewInitCallback[viewId] = callBack;
+		_partialViewDisposeCallback[viewId] = disposeCallback;
 	}
 
 
@@ -103,7 +106,13 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				emptyContentSelector: '#EmptyTab'
 			})
 			;
-
+		
+		$('#toolbar-right .ui-menu-item [data-mytime-action]')
+			.click(function () {
+				_navigateTo($(this).data('mytime-action'));
+			})
+			;
+		
 		if (location.hash.length <= 1) {
 			location.hash = '#' + _settings.defaultNavigation;
 		} else {
@@ -111,11 +120,21 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		}
 
 		$('#asm-link').click(function (ev) {
-			window.open(_settings.baseUrl + 'Asm', 'AsmWindow', 'width=850,height=100;channelmode=1,directories=0,left=0,location=0,menubar=0,resizable=0,scrollbars=0,status=0,titlebar=0,toolbar=0,top=0');
 			$(".dropdown dd ul").hide();
+			var asmWindow = window.open(_settings.baseUrl + 'Asm', 'AsmWindow', 'width=850,height=100;channelmode=1,directories=0,left=0,location=0,menubar=0,resizable=0,scrollbars=0,status=0,titlebar=0,toolbar=0,top=0');
+
+			if (asmWindow.focus) {
+				asmWindow.focus();
+			}
+
+			if (!asmWindow.closed) {
+				asmWindow.focus();
+			}
+
 			ev.preventDefault();
 			return false;
 		});
+
 	}
 
 	// Bind an event to window.onhashchange that, when the history state changes,
@@ -128,7 +147,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		});
 
 	function _navigateTo(action, date, id) {
-		Teleopti.MyTimeWeb.Portal.Layout.HideSettingsMenu(); //needed due to stopPropagation in tabberiet
+
+		//needed due to stopPropagation in tabberiet
+		// ^^^ replace with a callback?
+		Teleopti.MyTimeWeb.Portal.Layout.HideSettingsMenu();
+		_invokeDisposeCallback(currentViewId);
+
 		var hash = action;
 		if (date) {
 			if (Teleopti.MyTimeWeb.Common.IsFixedDate(date)) {
@@ -141,10 +165,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		}
 		_pushHash(hash);
 	}
+
 	function _pushHash(hash) {
 		// this will trigger the hashchange event, which we listen for
 		location.hash = hash;
 	}
+
 	function _parseHash() {
 		var hash = location.hash || '';
 		if (hash.length > 0) { hash = hash.substring(1); }
@@ -188,17 +214,29 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		_disablePortalControls();
 
 		Teleopti.MyTimeWeb.Ajax.AjaxAbortAll();
-		$(".qtip").remove();
 		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: hashInfo.hash,
 			global: true,
 			success: function (html) {
+				var viewId = hashInfo.actionHash; //gröt
 				$('#body-inner').html(html);
-				var partialFn = _partialViewInitCallback[hashInfo.actionHash];
-				if ($.isFunction(partialFn))
-					partialFn();
+				_invokeInitCallback(viewId);
+				currentViewId = viewId;
 			}
 		});
+	}
+
+	function _invokeDisposeCallback(viewId) {
+		var partialDispose = _partialViewDisposeCallback[viewId];
+		if ($.isFunction(partialDispose))
+			partialDispose();
+	}
+
+	function _invokeInitCallback(viewId) {
+		var partialInit = _partialViewInitCallback[viewId];
+		if ($.isFunction(partialInit))
+			partialInit();
+		Teleopti.MyTimeWeb.Common.PartialInit();
 	}
 
 	return {
@@ -218,8 +256,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		ParseHash: function () {
 			return _parseHash();
 		},
-		RegisterPartialCallBack: function (viewId, callBack) {
-			_registerPartialCallback(viewId, callBack);
+		RegisterPartialCallBack: function (viewId, callBack, disposeCallback) {
+			_registerPartialCallback(viewId, callBack, disposeCallback);
 		},
 		CurrentFixedDate: function () {
 			return currentFixedDate;

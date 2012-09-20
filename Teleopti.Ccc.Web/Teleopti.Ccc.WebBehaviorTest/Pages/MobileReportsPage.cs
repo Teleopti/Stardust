@@ -149,6 +149,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public void SetReportSettingsDate(DateOnly date, CultureInfo culture)
 		{
 			var dateString = date.Date.ToShortDateString(culture);
+			// this cant be correct. trigger an avent named datebox?!
 			new JQueryExpression()
 				.SelectById("sel-date")
 				.Trigger("datebox",

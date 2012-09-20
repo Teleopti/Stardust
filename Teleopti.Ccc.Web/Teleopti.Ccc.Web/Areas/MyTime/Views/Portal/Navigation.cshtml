@@ -1,31 +1,35 @@
-﻿@using Teleopti.Ccc.UserTexts
+﻿@using System.Globalization
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
+@using Teleopti.Interfaces.Domain
 @model PortalViewModel
 <nav id="tabs" class="main-nav">
 	<ul>
 		@foreach (var navSection in Model.NavigationItems)
-  {
+		{
 			<li><a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title</a></li>
-  }
+		}
 	</ul>
-		<section id="EmptyTab" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-			<div class="toolbar-inner">
-			</div>
-		</section>
+	<section id="EmptyTab" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+		<div class="toolbar-inner">
+		</div>
+	</section>
 	@foreach (var navSection in Model.NavigationItems)
- {
+	{
 		<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
 			<div class="toolbar-inner">
+				@{ int index = 0; }
 				@foreach (var toolbarItem in navSection.ToolBarItems)
-	 {
-		 if (toolbarItem is ToolBarSeparatorItem)
-		 {
+				{
+					if (toolbarItem is ToolBarSeparatorItem)
+					{
+						{ index = 0;}
 						<div class="seperator"></div>
-		 }
-		 if (toolbarItem is ToolBarDatePicker)
-		 {
-			 var dpicker = toolbarItem as ToolBarDatePicker;
+					}
+					if (toolbarItem is ToolBarDatePicker)
+					{
+						var dpicker = toolbarItem as ToolBarDatePicker;
 						<div id="@string.Format("{0}DateRangeSelector", navSection.Controller)" class="date-range-selector floatleft ml10">
 							<button data-mytime-action="#" class="first">@dpicker.PrevTitle</button>
 							<input id="@string.Format("{0}DatePicker", navSection.Controller)" type="text" class="datepicker" />
@@ -33,39 +37,211 @@
 							<span class="selected-date-period displayblock"></span>
 							<a class="displaynone" data-mytime-action="#"></a>
 						</div>
-		 }
-		 if (toolbarItem is ToolBarButtonItem)
-		 {
-			 var button = toolbarItem as ToolBarButtonItem;
-						<button title="@Html.AttributeEncode(button.Title)" id="@string.Format("{0}-{1}-button", navSection.Controller, button.ButtonType)" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon ir floatleft mr10">@button.Title</button>
-		 }
-		 if (toolbarItem is ToolBarSplitButton)
-		 {
-			 var splitButton = toolbarItem as ToolBarSplitButton;
+					}
+					if (toolbarItem is ToolBarButtonItem)
+					{
+						var button = toolbarItem as ToolBarButtonItem;
+						var id = string.Format("{0}-{1}", navSection.Controller, button.ButtonType);
+						var buttonId = id + "-button";
+						var textId = id + "-text";
+						<button title="@Html.AttributeEncode(button.Title)" id="@buttonId" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon @button.Icon ir floatleft@((index>1) ? " ml10" : "")">@button.Title</button>
+						if (!string.IsNullOrEmpty(button.Text))
+						{
+							<span id="@textId"></span>
+						}
+					}
+					if (toolbarItem is ToolBarSplitButton)
+					{
+						var splitButton = toolbarItem as ToolBarSplitButton;
 						<div class="floatleft" id="@string.Format("{0}", navSection.Controller)">
 							<button title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-set-button", navSection.Controller)"></button>
 							<select title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-list", navSection.Controller)">
 								@foreach (var option in splitButton.Options)
-		  {
-									<option value="@option.Value" bg-color="@(option.Style != null ? option.Style.ColorHex : "")">@option.Text</option>
-		  }
+								{
+									<option value="@option.Value" data-color="@option.Color">@option.Text</option>
+								}
 							</select>
 						</div>
-		 }
-		 if (toolbarItem is ToolBarSelectBox)
-		 {
-			 var selectBox = toolbarItem as ToolBarSelectBox;
+					}
+					if (toolbarItem is ToolBarSelectBox)
+					{
+						var selectBox = toolbarItem as ToolBarSelectBox;
 						<select title="@Html.AttributeEncode(selectBox.Title)" class="ui-selectbox-init floatleft" id="@string.Format("{0}-{1}-select", navSection.Controller, selectBox.Type)">
 							@foreach (var option in selectBox.Options)
-		 {
-								<option value="@option.Value">@option.Text</option>
-		 }
+							{
+								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
+							}
 						</select>
-		 }
-	 }
+					}
+					{
+						index++;
+					}
+				}
+				
+
+				@if (navSection is PreferenceNavigationItem)
+				{
+					var preferenceNavigation = navSection as PreferenceNavigationItem;
+					var times = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0))
+					            let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
+					            let text = TimeHelper.TimeOfDayFromTimeSpan(t)
+					            select new Option
+					                   	{
+					                   		Value = value,
+					                   		Text = text
+					                   	};
+					var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
+					                  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t,CultureInfo.CurrentCulture))
+					                  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
+					                  select new Option
+					                         	{
+					                         		Value = value,
+					                         		Text = text
+					                         	};
+					<div id="Preference-add-extended-form" class="displaynone"> 
+						
+						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15 mt5">
+							<option value="" data-preference-extended="true">&nbsp;</option>
+							<option value="-">-</option>
+							@foreach (var option in preferenceNavigation.PreferenceOptions)
+							{
+								<option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@option.Text</option>
+							}
+						</select>
+						<div id="Preference-extended-time-input-fields" data-bind="visible: IsTimeInputEnabled">
+							<div class="mt5">
+								<div class="time-limitation-label icon leftarrow"></div>
+								<select id="Preference-extended-start-time-minimum" class="time-input" data-bind="combobox: EarliestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestStartTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<span class="ml20"></span>
+								<select id="Preference-extended-start-time-maximum" class="time-input" data-bind="combobox: LatestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestStartTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+							</div>
+							<div>
+								<div class="time-limitation-label icon rightarrow"></div>
+								<select id="Preference-extended-end-time-minimum" class="time-input" data-bind="combobox: EarliestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestEndTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<input type="checkbox" id="Preference-extended-end-time-minimum-next-day" class="preference-next-day-checkbox" data-bind="checked: EarliestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
+								<select id="Preference-extended-end-time-maximum" class="time-input" data-bind="combobox: LatestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestEndTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<input type="checkbox" id="Preference-extended-end-time-maximum-next-day" class="preference-next-day-checkbox" data-bind="checked: LatestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
+							</div>
+							<div>
+								<div class="time-limitation-label icon doublearrow-blue"></div>
+								<select id="Preference-extended-work-time-minimum" class="time-input" data-bind="combobox: MinimumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MinWorkTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in timeLengths)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<span class="ml20"></span> 
+								<select id="Preference-extended-work-time-maximum" class="time-input" data-bind="combobox: MaximumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MaxWorkTime">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in timeLengths)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+							</div>
+							<hr/>
+							<select id="Preference-extended-activity" data-bind="selectbox: ActivityPreferenceId, selectbox-enabled: IsTimeInputEnabled" title="@Resources.Activity" class="ml15">
+								<option value="">&nbsp;</option>
+								<option value="-">-</option>
+								@foreach (var option in preferenceNavigation.ActivityOptions)
+								{
+									<option value="@option.Value" data-color="@option.Color">@option.Text</option>
+								}
+							</select>
+						</div>
+						<div id="activity-preference-fields" data-bind="visible: EnableActivityTimeEditing" class="mt5">
+							<div>
+								<div class="time-limitation-label icon leftarrow"></div>
+								<select id="Preference-extended-activity-start-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestStartTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<span class="ml20"></span>
+								<select id="Preference-extended-activity-start-time-maximum" class="time-input" data-bind="combobox: ActivityLatestStartTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+							</div>
+							<div>
+								<div class="time-limitation-label icon rightarrow"></div>
+								<select id="Preference-extended-activity-end-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestEndTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<span class="ml20"></span>
+								<select id="Preference-extended-activity-end-time-maximum" class="time-input" data-bind="combobox: ActivityLatestEndTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in times)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+							</div>
+							<div>
+								<div class="time-limitation-label icon doublearrow-blue"></div>
+								<select id="Preference-extended-activity-time-minimum" class="time-input" data-bind="combobox: ActivityMinimumTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in timeLengths)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+								<span class="ml20"></span>
+								<select id="Preference-extended-activity-time-maximum" class="time-input" data-bind="combobox: ActivityMaximumTime, combobox-enabled: EnableActivityTimeEditing">
+									<option value="">&nbsp;</option>
+									@foreach (var timeSpan in timeLengths)
+									{
+										<option value="@timeSpan.Value">@timeSpan.Text</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="mt5">
+							<button id="Preference-extended-apply" class="mr25 mt10 mb5 floatright">@Resources.Apply</button>
+							<div id="Preference-extended-error" class="error" data-bind="html: ValidationError"></div>
+							<div class="clearboth"></div>
+						</div>
+					</div>
+				}
+				
+
 			</div>
 		</section>
- }
+	}
 			
 	<section id="toolbar-right" class="col-main floatright">
 		<div class="toolbar-inner">
@@ -73,17 +249,17 @@
 				<dt><span class="icon employee icon-left" id="username">@User.Identity.Name</span></dt>
 				<dd>
 					<ul class="ui-widget-content ui-corner-all ui-menu">
-						<li class="ui-menu-item"><a href="#Settings/Index" class="ui-corner-all">@Resources.Settings</a></li>
+						<li class="ui-menu-item"><a data-mytime-action="Settings/Index" class="ui-corner-all">@Resources.Settings</a></li>
 						@if (Model.ShowChangePassword)
-						{ 
-							<li class="ui-menu-item"><a href="#Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
+						{
+							<li class="ui-menu-item"><a data-mytime-action="Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
 						}
 						@if (Model.ShowAsm)
 						{ 
 							<li class="ui-menu-item"><a id="asm-link" class="ui-corner-all cursorpointer" >@Resources.OpenASM</a></li>
 						}
 						<li>&nbsp;</li>
-						<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout", @class = "ui-corner-all" })</li>
+						<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout", @class = "ui-corner-all"})</li>
 					</ul>
 				</dd>
 			</dl>		

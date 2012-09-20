@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                        		return "";
 				                                        	}))
 				.ForMember(d => d.Extended, o => o.MapFrom(s => _extendedPreferencePredicate.Invoke().IsExtended(s)))
+				.ForMember(d => d.MustHave, o => o.MapFrom(s => s.Restriction.MustHave))
 				.ForMember(d => d.ExtendedTitle, o => o.MapFrom(s =>
 				                                                	{
 				                                                		if (s.Restriction.DayOffTemplate != null)
@@ -56,16 +58,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                                			return s.Restriction.ShiftCategory.Description.Name;
 				                                                		return Resources.Extended;
 				                                                	}))
-				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.StartTimeString + "-" + s.Restriction.StartTimeLimitation.EndTimeString))
-				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.StartTimeString + "-" + s.Restriction.EndTimeLimitation.EndTimeString))
+				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.StartTimeString.ToLower() + "-" + s.Restriction.StartTimeLimitation.EndTimeString.ToLower()))
+				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.StartTimeString.ToLower() + "-" + s.Restriction.EndTimeLimitation.EndTimeString.ToLower()))
 				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(s => s.Restriction.WorkTimeLimitation.StartTimeString + "-" + s.Restriction.WorkTimeLimitation.EndTimeString))
 				.ForMember(d => d.Activity, o => o.MapFrom(s =>
 				                                           	{
 				                                           		var activityName = GetActivityRestrictionValue(s, r => r.Activity.Name);
 				                                           		return string.IsNullOrEmpty(activityName) ? "(" + Resources.NoActivity + ")" : activityName;
 				                                           	}))
-				.ForMember(d => d.ActivityStartTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.StartTimeLimitation.StartTimeString + "-" + r.StartTimeLimitation.EndTimeString)))
-				.ForMember(d => d.ActivityEndTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.EndTimeLimitation.StartTimeString + "-" + r.EndTimeLimitation.EndTimeString)))
+				.ForMember(d => d.ActivityStartTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.StartTimeLimitation.StartTimeString.ToLower() + "-" + r.StartTimeLimitation.EndTimeString.ToLower())))
+				.ForMember(d => d.ActivityEndTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.EndTimeLimitation.StartTimeString.ToLower() + "-" + r.EndTimeLimitation.EndTimeString.ToLower())))
 				.ForMember(d => d.ActivityTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.WorkTimeLimitation.StartTimeString + "-" + r.WorkTimeLimitation.EndTimeString)))
 				;
 

@@ -112,6 +112,25 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         }
 
         [Test]
+        public void VerifyDecisionMakerNeverGiveMeTwoSameDates()
+        {
+            var bitArray = createBitArray();
+            var values = new List<double?> { -20, -20, -20, -20 };
+            using (_mocks.Record())
+            {
+                simpleMatrixExpectations();
+                Expect.Call(_matrixConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Any();
+                Expect.Call(_matrixConverter.Convert(false, false)).Return(bitArray).Repeat.Any();
+                Expect.Call(_dataExtractor.Values()).Return(values).Repeat.Any();
+            }
+
+            // day counterparts are > febr 9, 10, 11, 12
+            var result = _target.Execute(_matrixConverter, _dataExtractor);
+            Assert.AreEqual(2, result.Count);
+            Assert.AreNotEqual(result[0], result[1]);
+        }
+
+        [Test]
         public void SimpleLockedTest()
         {
 

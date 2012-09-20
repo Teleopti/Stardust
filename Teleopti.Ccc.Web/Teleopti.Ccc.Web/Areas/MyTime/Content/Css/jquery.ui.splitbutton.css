@@ -1,8 +1,6 @@
 ﻿.ui-splitbutton button.ui-button-icon-only {
-	float: left;
 }
 .ui-splitbutton-button {
-	 float: left;
 }
 .ie7 .ui-splitbutton-button .ui-button-text {
 	 padding-top: 0;
@@ -27,6 +25,9 @@
 	white-space: nowrap;
 }
 
+.ui-splitbutton-button .ui-button-text
+{
+}
 .ui-splitbutton-menu li
 {
 	position: relative;
@@ -36,6 +37,12 @@
 {
 	padding-right: 23px;
 }
+
+.rtl .ui-splitbutton-menu-text
+{
+	padding-left: 23px;
+}
+
 .ui-splitbutton-menu-icon-secondary
 {
 	position: absolute;
@@ -55,3 +62,7 @@
 	 border-top:1px solid #ccc;
 }
 
+.ui-button .ui-button-text 
+{
+    line-height: 1.0;
+}

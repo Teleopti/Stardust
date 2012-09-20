@@ -483,8 +483,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             timeSpanTextBoxPlanningMax.SetInitialResolution(SelectedContract.PlanningTimeBankMax);
             checkBoxAdjustTimeBankWithSeasonality.Checked = SelectedContract.AdjustTimeBankWithSeasonality;
             checkBoxAdjustTimeBankWithPartTimePercentage.Checked = SelectedContract.AdjustTimeBankWithPartTimePercentage;
-            radioButtonFromContract.Checked = SelectedContract.IsWorkTimeFromContract;
-            radioButtonFromSchedule.Checked = SelectedContract.IsWorkTimeFromSchedulePeriod;
+            radioButtonFromContract.Checked = SelectedContract.WorkTimeSource == WorkTimeSource.FromContract;
+            radioButtonFromSchedule.Checked = SelectedContract.WorkTimeSource == WorkTimeSource.FromSchedulePeriod;
             loadMultiplicatorCheckbox();
         }
 
@@ -525,8 +525,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void addNewContract()
 		{
 		    var newContract = createContract();
-		    newContract.IsWorkTimeFromContract = false;
-		    newContract.IsWorkTimeFromSchedulePeriod = true;
+		    newContract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
             _contractList.Add(newContract);
 
 			loadContracts();
@@ -678,17 +677,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             if (radioButtonFromContract.Checked)
             {
-                SelectedContract.IsWorkTimeFromContract  = true;
-                SelectedContract.IsWorkTimeFromSchedulePeriod = false;
+                SelectedContract.WorkTimeSource  = WorkTimeSource.FromContract;
             }
         }
 
         private void radioButtonFromSchedule_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButtonFromSchedule .Checked)
+            if (radioButtonFromSchedule.Checked)
             {
-                SelectedContract.IsWorkTimeFromContract = false;
-                SelectedContract.IsWorkTimeFromSchedulePeriod = true;
+                SelectedContract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
             }
         }
     }

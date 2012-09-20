@@ -1176,4 +1176,10 @@
   <data name="SessionExpiredText" xml:space="preserve">
     <value>Din session löpte ut på grund av en längre period av inaktivitet. Du kommer snart att omdirigeras till inloggningssidan.</value>
   </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Följsamhet per agent</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Följsamhet per dag</value>
+  </data>
 </root>

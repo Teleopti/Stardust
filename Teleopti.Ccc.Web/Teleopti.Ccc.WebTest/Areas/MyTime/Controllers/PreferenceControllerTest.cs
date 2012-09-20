@@ -1,3 +1,6 @@
+using System.Web.Mvc;
+using System.Web.Routing;
+using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -85,6 +88,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var model = result.Data as PreferenceDayViewModel;
 
 			model.Should().Not.Be.Null();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldGetNoContentInResponseWhenNoPreferenceExists()
+		{
+			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
+			var target = new PreferenceController(viewModelFactory, null, null);
+			target.ControllerContext = new ControllerContext(new FakeHttpContext("/"), new RouteData(), target);
+
+			viewModelFactory.Stub(x => x.CreateDayViewModel(DateOnly.Today)).Return(null);
+
+			target.GetPreference(DateOnly.Today).Should().Be.Null();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]

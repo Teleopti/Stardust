@@ -61,6 +61,26 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldHandleNullableTimeOfDay()
+		{
+			var dict = new NameValueCollection
+			           	{
+			           		{"time", ""}
+			           	};
+
+			var bindingContext = new ModelBindingContext
+			{
+				ModelName = "time",
+				ValueProvider = new NameValueCollectionValueProvider(dict, CultureInfo.CurrentCulture)
+			};
+
+			var binder = new TimeOfDayModelBinder(nullable:true);
+
+			var result = (TimeOfDay?)binder.BindModel(null, bindingContext);
+			result.HasValue.Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldSetModelErrorIfUnrecognizedInput()
 		{
 			var dict = new NameValueCollection

@@ -5,8 +5,7 @@
 --Desc: Add options for whether contract time should come from contract of schedule period
 ----------------  	
 ALTER TABLE dbo.Contract ADD
-	IsWorkTimeFromContract int NOT NULL CONSTRAINT DF_Contract_IsWorkTimeFromContract DEFAULT 1,
-	IsWorkTimeFromSchedulePeriod int NOT NULL CONSTRAINT DF_Contract_IsWorkTimeFromSchedulePeriod DEFAULT 0
+	WorkTimeSource int NOT NULL CONSTRAINT DF_Contract_WorkTimeSource DEFAULT 0
 GO
 
 ----------------  
@@ -121,6 +120,50 @@ SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND 
 SELECT @ForeignId = '0078' --Foreign id of the function > hardcoded	
 SELECT @FunctionCode = 'AgentScheduleMessenger' --Name of the function > hardcoded
 SELECT @FunctionDescription = 'xxAgentScheduleMessenger' --Description of the function > hardcoded
+SELECT @ParentId = @ParentId
+
+IF  (NOT EXISTS (SELECT Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')))
+INSERT [dbo].[ApplicationFunction]([Id], [Version], [CreatedBy], [UpdatedBy], [CreatedOn], [UpdatedOn], [Parent], [FunctionCode], [FunctionDescription], [ForeignId], [ForeignSource], [IsDeleted])
+VALUES (newid(),1, @SuperUserId, @SuperUserId, getdate(), getdate(), @ParentId, @FunctionCode, @FunctionDescription, @ForeignId, 'Raptor', 0) 
+SELECT @FunctionId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+
+SET NOCOUNT OFF
+GO
+
+----------------  
+--Name: Kunning Mao
+--Date: 2012-09-11  
+--Desc: Add the following new application function> ExtendedPreferencesWeb
+----------------  
+SET NOCOUNT ON
+	
+--declarations
+DECLARE @SuperUserId as uniqueidentifier
+DECLARE @FunctionId as uniqueidentifier
+DECLARE @ParentFunctionId as uniqueidentifier
+DECLARE @ForeignId as varchar(255)
+DECLARE @ParentForeignId as varchar(255)
+DECLARE @FunctionCode as varchar(255)
+DECLARE @FunctionDescription as varchar(255)
+DECLARE @ParentId as uniqueidentifier
+
+--insert to super user if not exist
+SELECT	@SuperUserId = '3f0886ab-7b25-4e95-856a-0d726edc2a67'
+
+-- check for the existence of super user role
+IF  (NOT EXISTS (SELECT id FROM [dbo].[Person] WHERE Id = @SuperUserId)) 
+INSERT [dbo].[Person]([Id], [Version], [CreatedBy], [UpdatedBy], [CreatedOn], [UpdatedOn], [Email], [Note], [EmploymentNumber], [TerminalDate], [FirstName], [LastName], [DefaultTimeZone], [IsDeleted], [BuiltIn], [FirstDayOfWeek])
+VALUES (@SuperUserId,1,@SuperUserId, @SuperUserId, getdate(), getdate(), '', '', '', NULL, '_Super User', '_Super User', 'UTC', 0, 1, 1) 
+
+--get parent level
+SELECT @ParentForeignId = '0065'	--Parent Foreign id that is hardcoded
+SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
+	
+--insert/modify application function
+SELECT @ForeignId = '0079' --Foreign id of the function > hardcoded	
+SELECT @FunctionCode = 'ExtendedPreferencesWeb' --Name of the function > hardcoded
+SELECT @FunctionDescription = 'xxExtendedPreferencesWeb' --Description of the function > hardcoded
 SELECT @ParentId = @ParentId
 
 IF  (NOT EXISTS (SELECT Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')))

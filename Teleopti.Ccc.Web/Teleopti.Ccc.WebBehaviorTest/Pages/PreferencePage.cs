@@ -15,8 +15,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference")]
 		public SplitButton PreferenceButton { get; set; }
 
-		[FindBy(Id = "Preference-extended")]
+		[FindBy(Id = "Preference-add-extended-button")]
 		public Button ExtendedPreferenceButton { get; set; }
+
+		[FindBy(Id = "Preference-must-have-button")]
+		public Button MustHaveButton { get; set; }
 
 		[FindBy(Id = "Preference-delete-button")]
 		public Button DeleteButton { get; set; }
@@ -24,14 +27,49 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference-period")]
 		public Div PreferencePeriod;
 
-		[FindBy(Id = "Preference-extended-preference")]
+		[FindBy(Id = "ui-tooltip-add-extended")]
+		public Div ExtendedPreferencePanel;
+		[FindBy(Id = "Preference-extended-preference-container")]
 		public SelectBox ExtendedPreferenceSelectBox;
+		[FindBy(Id = "Preference-extended-start-time-minimum")]
+		public ComboBox ExtendedPreferenceStartTimeMinimum;
+		[FindBy(Id = "Preference-extended-start-time-maximum")]
+		public ComboBox ExtendedPreferenceStartTimeMaximum;
+		[FindBy(Id = "Preference-extended-end-time-minimum")]
+		public ComboBox ExtendedPreferenceEndTimeMinimum;
+		[FindBy(Id = "Preference-extended-end-time-minimum-next-day")]
+		public CheckBox ExtendedPreferenceEndTimeMinimumNextDay;
+		[FindBy(Id = "Preference-extended-end-time-maximum")]
+		public ComboBox ExtendedPreferenceEndTimeMaximum;
+		[FindBy(Id = "Preference-extended-end-time-maximum-next-day")]
+		public CheckBox ExtendedPreferenceEndTimeMaximumNextDay;
+		[FindBy(Id = "Preference-extended-work-time-minimum")]
+		public ComboBox ExtendedPreferenceWorkTimeMinimum;
+		[FindBy(Id = "Preference-extended-work-time-maximum")]
+		public ComboBox ExtendedPreferenceWorkTimeMaximum;
+		[FindBy(Id = "Preference-extended-activity-container")]
+		public SelectBox ExtendedPreferenceActivity;
+		[FindBy(Id = "Preference-extended-activity-start-time-minimum")]
+		public ComboBox ExtendedPreferenceActivityStartTimeMinimum;
+		[FindBy(Id = "Preference-extended-activity-start-time-maximum")]
+		public ComboBox ExtendedPreferenceActivityStartTimeMaximum;
+		[FindBy(Id = "Preference-extended-activity-end-time-minimum")]
+		public ComboBox ExtendedPreferenceActivityEndTimeMinimum;
+		[FindBy(Id = "Preference-extended-activity-end-time-maximum")]
+		public ComboBox ExtendedPreferenceActivityEndTimeMaximum;
+		[FindBy(Id = "Preference-extended-activity-time-minimum")]
+		public ComboBox ExtendedPreferenceActivityTimeMinimum;
+		[FindBy(Id = "Preference-extended-activity-time-maximum")]
+		public ComboBox ExtendedPreferenceActivityTimeMaximum;
+
+		[FindBy(Id = "Preference-extended-error")]
+		public Div ExtendedPreferencePanelError { get; set; }
 
 		[FindBy(Id = "Preference-period-feedback-view")]
 		public Div PreferencePeriodFeedbackView { get; set; }
 
-		[FindBy(Id = "Preference-extended-save")]
-		public Button ExtendedPreferenceSaveButton { get; set; }
+		[FindBy(Id = "Preference-extended-apply")]
+		public Button ExtendedPreferenceApplyButton { get; set; }
 
 		public void SelectPreferenceItemByText(string text, bool wait)
 		{

@@ -50,12 +50,12 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 	function _xhr(type, successCallback, addressSuffix, reqData) {
 		Teleopti.MyTimeWeb.Ajax.Ajax({
-				url: "StudentAvailability/StudentAvailability" + addressSuffix,
-				type: type,
-				data: reqData,
-				success: successCallback,
-				statusCode404: function() { }
-			});
+			url: "StudentAvailability/StudentAvailability" + addressSuffix,
+			type: type,
+			data: reqData,
+			success: successCallback,
+			statusCode404: function () { }
+		});
 	}
 
 	function _updateDayAndCloseEditSection(data) {
@@ -82,8 +82,8 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	};
 
 	function _bindDataToForm(data) {
-		$('#StudentAvailability-edit-starttime').combobox('set', data.StartTime);
-		$('#StudentAvailability-edit-endtime').combobox('set', data.EndTime);
+		$('#StudentAvailability-edit-starttime').combobox({ value: data.StartTime });
+		$('#StudentAvailability-edit-endtime').combobox({ value: data.EndTime });
 		var nextDayCb = $('#StudentAvailability-edit-nextday-cb');
 		if (data.NextDay) {
 			nextDayCb.attr('checked', 'checked');
@@ -130,7 +130,8 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	}
 
 	function _initEditSection() {
-		$(".combobox").combobox();
+		$('#StudentAvailability-edit-starttime').combobox();
+		$('#StudentAvailability-edit-endtime').combobox();
 		Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 		Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 		var submitButton = $('#StudentAvailability-edit-ok-button');
