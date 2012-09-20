@@ -35,8 +35,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (original.SignificantPart() == SchedulePartView.MainShift && current.SignificantPart() == SchedulePartView.DayOff)
                 return true;
 
-            if (original.SignificantPart() == SchedulePartView.None && current.SignificantPart() == SchedulePartView.MainShift)
-                return false;
+			if (original.SignificantPart() == SchedulePartView.None && current.SignificantPart() == SchedulePartView.MainShift)
+				return false;
+
+			if (current.SignificantPart() == SchedulePartView.None && original.SignificantPart() == SchedulePartView.MainShift)
+				return false;
 
             for (int assignmentIndex = 0; assignmentIndex < original.PersonAssignmentCollection().Count; assignmentIndex++)
             {
