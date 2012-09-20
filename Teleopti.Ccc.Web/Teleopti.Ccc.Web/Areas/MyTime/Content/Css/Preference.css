@@ -12,9 +12,7 @@
     overflow: hidden;
 }
 .preference-must-have {
-	position: absolute;
-	left: 0;
-	top: 0;
+	margin-left: 10px;
 }
 .extended-indication
 {
