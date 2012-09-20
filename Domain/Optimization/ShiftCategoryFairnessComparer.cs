@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
 		double StandardDeviation { get; set; }
+		IList<IPerson> OriginalMembers { get; set; } 
 	}
 
 	public class ShiftCategoryFairnessCompareResult : IShiftCategoryFairnessCompareResult
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
 		public double StandardDeviation { get; set; }
+		public IList<IPerson> OriginalMembers { get; set; } 
 	}
 
 	public interface IShiftCategoryFairnessComparer

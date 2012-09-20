@@ -107,9 +107,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if(!groupPerson2.Equals(groupPerson))
 						otherPersons.AddRange(groupPerson2.GroupMembers);
 				}
-					var compare = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, otherPersons);
-
-					ret.Add(_shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories));
+						
+				var compare = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, otherPersons);
+				var result = _shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories);
+				result.OriginalMembers = groupPerson.GroupMembers;
+				ret.Add(result);
 			}
 
 			return ret;
