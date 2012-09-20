@@ -409,6 +409,7 @@ html.full-height #push{
 .icon.preference-warning {background-position: -159px -54px; width: 16px;	height: 16px; }
 .icon.heart {background-position: -159px -96px; width: 21px;height: 21px;}
 .icon.heart-small {background-position: -164px -81px; width: 8px;	height: 8px; }
+.icon.heart-delete {background-position: -159px -121px; width: 22px;	height: 22px; }
 
 .text-request {
 	right: 0px;

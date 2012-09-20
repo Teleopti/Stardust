@@ -131,6 +131,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			.click(function () {
 				_setPreference(true);
 			});
+		$('#Preference-must-have-delete-button')
+			.click(function () {
+				_setPreference(false);
+			});
 	}
 
 	function _hideAddExtendedTooltip() {

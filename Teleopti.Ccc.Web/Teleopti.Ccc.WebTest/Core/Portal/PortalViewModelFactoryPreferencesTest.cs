@@ -326,6 +326,20 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			//button.Text.Should().Be("0");
 		}
 
+		[Test]
+		public void ShouldHaveMustHaveDeleteButton()
+		{
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
+
+			var result = target.CreatePortalViewModel();
+
+			var button = result.ControllerItems<ToolBarButtonItem>("Preference").FirstOrDefault(i => i.ButtonType == "must-have-delete");
+
+			button.Should().Not.Be.Null();
+			button.Title.Should().Be(Resources.MustHave);
+			button.Icon.Should().Be("heart-delete");
+		}
+
 	}
 
 	public static class Ext

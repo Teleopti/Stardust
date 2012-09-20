@@ -290,13 +290,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[When(@"I click set must have button")]
-		[When(@"I click remove must have button")]
 		public void WhenIClickOnMustHaveButton()
 		{
 			// I have a must have button on the menu bar
 			// todo: imitate that I click on the button
 			Pages.Pages.PreferencePage.MustHaveButton.Focus();
 			Pages.Pages.PreferencePage.MustHaveButton.EventualClick();
+		}
+
+		[When(@"I click remove must have button")]
+		public void WhenIClickOnRemoveMustHaveButton()
+		{
+			Pages.Pages.PreferencePage.MustHaveDeleteButton.Focus();
+			Pages.Pages.PreferencePage.MustHaveDeleteButton.EventualClick();
 		}
 
 
