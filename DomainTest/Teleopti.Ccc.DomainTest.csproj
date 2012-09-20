@@ -258,7 +258,6 @@
     <Compile Include="Optimization\ShiftCategoryFairnessComparerTest.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\SwapFairnessTest.cs" />
-    <Compile Include="Optimization\SwapShiftCategoryTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />

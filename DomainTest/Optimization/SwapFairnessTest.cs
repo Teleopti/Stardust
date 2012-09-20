@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -14,151 +12,185 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	{
 		private SwapFariness _target;
 		private IList<ShiftCategoryFairnessCompareResult> _groupList;
-		
-		[SetUp]
-		public void Setup()
-		{
-			_groupList = new List<ShiftCategoryFairnessCompareResult>();
+        private IList<SwapFairnessGroupAndCategory> _blackList;
 
-			//for (var i = 1; i > 3; i++)
-			//{
-			//    var grp = new ShiftCategoryFairnessCompareResult
-			//                {
-			//                    ShiftCategoryFairnessCompareValues = new List<ShiftCategoryFairnessCompareValue>()
-			//                }
-			//}
+        [SetUp]
+        public void Setup()
+        {
+            var group1 = new ShiftCategoryFairnessCompareResult
+                             {
+                                 ShiftCategoryFairnessCompareValues =
+                                     new List<ShiftCategoryFairnessCompareValue>
+                                         {
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.9, ComparedTo = 0.3, ShiftCategory = new ShiftCategory("Day") },
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.1, ComparedTo = 0.5, ShiftCategory = new ShiftCategory("Noon") },
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.0, ComparedTo = 0.2, ShiftCategory = new ShiftCategory("Night") }
+                                         },
+                                 StandardDeviation = 0.1
+                             };
 
-			// Creating Group1
-			var group1 = new ShiftCategoryFairnessCompareResult
-			             	{ShiftCategoryFairnessCompareValues = new List<ShiftCategoryFairnessCompareValue>()};
+            var group2 = new ShiftCategoryFairnessCompareResult
+                             {
+                                 ShiftCategoryFairnessCompareValues =
+                                     new List<ShiftCategoryFairnessCompareValue>
+                                         {
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.0, ComparedTo = 0.3, ShiftCategory = new ShiftCategory("Day") },
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.4, ComparedTo = 0.5, ShiftCategory = new ShiftCategory("Noon") },
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.6, ComparedTo = 0.2, ShiftCategory = new ShiftCategory("Night") }
+                                         },
+                                 StandardDeviation = 0.02
+                             };
 
-			var shiftCat1 = new ShiftCategoryFairnessCompareValue();
-			shiftCat1.Original = 0.90;
-			shiftCat1.ComparedTo = 0.1;
-			shiftCat1.ShiftCategory = new ShiftCategory("Day");
+            var group3 = new ShiftCategoryFairnessCompareResult
+                             {
+                                 ShiftCategoryFairnessCompareValues =
+                                     new List<ShiftCategoryFairnessCompareValue>
+                                         {
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.1, ComparedTo = 0.3, ShiftCategory = new ShiftCategory("Day") },
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.1, ComparedTo = 0.5, ShiftCategory = new ShiftCategory("Noon") },
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.8, ComparedTo = 0.2, ShiftCategory = new ShiftCategory("Night") }
+                                         },
+                                 StandardDeviation = 0.03
+                             };
 
-			var shiftCat2 = new ShiftCategoryFairnessCompareValue();
-			shiftCat2.Original = 0.10;
-			shiftCat2.ComparedTo = 0.9;
-			shiftCat2.ShiftCategory = new ShiftCategory("Noon");
+            var group4 = new ShiftCategoryFairnessCompareResult
+                             {
+                                 ShiftCategoryFairnessCompareValues =
+                                     new List<ShiftCategoryFairnessCompareValue>
+                                         {
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.0, ComparedTo = 0.3, ShiftCategory = new ShiftCategory("Day") },
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.5, ComparedTo = 0.5, ShiftCategory = new ShiftCategory("Noon") },
+                                             new ShiftCategoryFairnessCompareValue
+                                                 { Original = 0.5, ComparedTo = 0.2, ShiftCategory = new ShiftCategory("Night") } 
+                                         },
+                                 StandardDeviation = 0.04
+                             };
 
-			var shiftCat3 = new ShiftCategoryFairnessCompareValue();
-			shiftCat3.Original = 0.0;
-			shiftCat3.ComparedTo = 0.0;
-			shiftCat3.ShiftCategory = new ShiftCategory("Night");
 
-			group1.ShiftCategoryFairnessCompareValues.Add(shiftCat1);
-			group1.ShiftCategoryFairnessCompareValues.Add(shiftCat2);
-			group1.ShiftCategoryFairnessCompareValues.Add(shiftCat3);
-			group1.StandardDeviation = 0.01;
+            _groupList = new List<ShiftCategoryFairnessCompareResult>
+                             {
+                                 group1,
+                                 group2,
+                                 group3,
+                                 group4
+                             };
 
+            _blackList = new List<SwapFairnessGroupAndCategory>
+                             {
+                                 new SwapFairnessGroupAndCategory
+                                     {
+                                         Group1 = group1,
+                                         Group2 = group2,
+                                         ShiftCategoryFromGroup1 = new ShiftCategory("Day"),
+                                         ShiftCategoryFromGroup2 = new ShiftCategory("Night")
+                                     }
+                             };
 
-			// Creating Group2
-			var group2 = new ShiftCategoryFairnessCompareResult { ShiftCategoryFairnessCompareValues = new List<ShiftCategoryFairnessCompareValue>() };
+            _target = new SwapFariness();
+        }
 
-			var shiftCat1Grp2 = new ShiftCategoryFairnessCompareValue();
-			shiftCat1Grp2.Original = 0.0;
-			shiftCat1Grp2.ComparedTo = 0.0;
-			shiftCat1Grp2.ShiftCategory = new ShiftCategory("Day");
-
-			var shiftCat2Grp2 = new ShiftCategoryFairnessCompareValue();
-			shiftCat2Grp2.Original = 0.5;
-			shiftCat2Grp2.ComparedTo = 0.5;
-			shiftCat2Grp2.ShiftCategory = new ShiftCategory("Noon");
-
-			var shiftCat3Grp2 = new ShiftCategoryFairnessCompareValue();
-			shiftCat3Grp2.Original = 0.5;
-			shiftCat3Grp2.ComparedTo = 0.5;
-			shiftCat3Grp2.ShiftCategory = new ShiftCategory("Night");
-
-			group2.ShiftCategoryFairnessCompareValues.Add(shiftCat1Grp2);
-			group2.ShiftCategoryFairnessCompareValues.Add(shiftCat2Grp2);
-			group2.ShiftCategoryFairnessCompareValues.Add(shiftCat3Grp2);
-			group2.StandardDeviation = 0.05;
-
-			// Creating Group3
-			var group3 = new ShiftCategoryFairnessCompareResult { ShiftCategoryFairnessCompareValues = new List<ShiftCategoryFairnessCompareValue>() };
-
-			var shiftCat1Grp3 = new ShiftCategoryFairnessCompareValue();
-			shiftCat1Grp3.Original = 0.1;
-			shiftCat1Grp3.ComparedTo = 0.9;
-			shiftCat1Grp3.ShiftCategory = new ShiftCategory("Day");
-
-			var shiftCat2Grp3 = new ShiftCategoryFairnessCompareValue();
-			shiftCat2Grp3.Original = 0.10;
-			shiftCat2Grp3.ComparedTo = 0.9;
-			shiftCat2Grp3.ShiftCategory = new ShiftCategory("Noon");
-
-			var shiftCat3Grp3 = new ShiftCategoryFairnessCompareValue();
-			shiftCat3Grp3.Original = 0.0;
-			shiftCat3Grp3.ComparedTo = 0.0;
-			shiftCat3Grp3.ShiftCategory = new ShiftCategory("Night");
-
-			group3.ShiftCategoryFairnessCompareValues.Add(shiftCat1Grp3);
-			group3.ShiftCategoryFairnessCompareValues.Add(shiftCat2Grp3);
-			group3.ShiftCategoryFairnessCompareValues.Add(shiftCat3Grp3);
-			group3.StandardDeviation = 0.09;
-
-			_groupList.Add(group1);
-			_groupList.Add(group2);
-			_groupList.Add(group3);
-
-			_target = new SwapFariness();
-
-		}
-
-		[Test]
+	    [Test]
 		public void ShouldReturnTwoGroupsForSwapping()
 		{
-			var result = _target.GetGroupsToSwap(_groupList);
-			Assert.Equals(result.Count, Is.EqualTo(2));
-			Assert.Equals(result[0].StandardDeviation, Is.EqualTo(0.01));
-			Assert.Equals(result[1].StandardDeviation, Is.EqualTo(0.09));
+            var result = _target.GetGroupsToSwap(_groupList, new List<SwapFairnessGroupAndCategory>());
+            Assert.AreEqual(0.1, result.Group1.StandardDeviation);
+            Assert.AreEqual("Day",result.ShiftCategoryFromGroup1.Description.Name);
+            Assert.AreEqual(0.02, result.Group2.StandardDeviation);
+            Assert.AreEqual("Night", result.ShiftCategoryFromGroup2.Description.Name);
 		}
 
+	    [Test]
+	    public void ShouldReturnEmptyListIfGroupListHasOnlyOneItem()
+	    {
+	        var result = _target.GetGroupsToSwap(
+	            new List<ShiftCategoryFairnessCompareResult>
+	                {
+	                    new ShiftCategoryFairnessCompareResult()
+	                }, new List<SwapFairnessGroupAndCategory>());
+            Assert.AreEqual(null, result.Group1);
+	    }
+
+        [Test]
+        public void ShouldNotReturnBlacklistedGroupSwap()
+        {
+            var result = _target.GetGroupsToSwap(_groupList, _blackList);
+            Assert.AreEqual(0.1,result.Group1.StandardDeviation);
+            Assert.AreEqual(0.04,result.Group2.StandardDeviation);
+        }
+
+        [Test]
+        public void ShouldReturnTwoBestGroupToSwapWith()
+        {
+            
+        }
 	}
 
-	public class SwapFariness
+    public class SwapFairnessGroupAndCategory
+    {
+        public ShiftCategoryFairnessCompareResult Group1;
+        public ShiftCategoryFairnessCompareResult Group2;
+        public IShiftCategory ShiftCategoryFromGroup1;
+        public IShiftCategory ShiftCategoryFromGroup2;
+    }
+
+    public class SwapFariness
 	{
-		public IList<ShiftCategoryFairnessCompareResult> GetGroupsToSwap(IList<ShiftCategoryFairnessCompareResult> groupList)
-		{
-			var group = from shiftCategoryFairnessCompareResult in groupList
-			            orderby shiftCategoryFairnessCompareResult.StandardDeviation ascending 
-			            select shiftCategoryFairnessCompareResult;
-			
-			var firstGroup = group.First();
+        public SwapFairnessGroupAndCategory GetGroupsToSwap(IList<ShiftCategoryFairnessCompareResult> inList, IList<SwapFairnessGroupAndCategory> blackList)
+        {
+            if (inList.Count < 2) return new SwapFairnessGroupAndCategory();
 
-			//STEP 2: Find shift category having highest value
-			var highShiftCatList = from currentGroup in firstGroup.ShiftCategoryFairnessCompareValues
-			                   orderby currentGroup.Original descending
-			                   select currentGroup.ShiftCategory;
-			
-			var highShiftCat = highShiftCatList.First();
+            var orderedList = inList.OrderByDescending(g => g.StandardDeviation);
+            var selectedGroup = orderedList.First();
+            var returnGroup = orderedList.Skip(1).First();
 
-			// STEP 3: Find Shift category having lowest value
-			var lowShiftCat = highShiftCatList.Last();
-			
-			double currentHighShiftCat=0.0;
-			double currentLowShiftCat = 0.0;
-			double maxHighShiftCatDiff = 0.0;
-			double maxLowShiftCatDiff = 0.0;
-			
-			// STEP 4: Iterate other groups other than the one having best Std Dev value
-			foreach (var grp in group.Skip(1))
-			{
-				var tempHighShiftCat = grp.ShiftCategoryFairnessCompareValues.Where(x=>x.ShiftCategory==highShiftCat);
-				currentHighShiftCat = tempHighShiftCat.First().Original;
+            var selectedGroupCategories =
+                selectedGroup.ShiftCategoryFairnessCompareValues.OrderByDescending(g => g.Original);
+            var selectedGroupHighestCategory = selectedGroupCategories.First().ShiftCategory;
+            var selectedGroupLowestCategory = selectedGroupCategories.Last().ShiftCategory;
 
-				var tempLowShiftCat = grp.ShiftCategoryFairnessCompareValues.Where(x => x.ShiftCategory == lowShiftCat);
-				currentLowShiftCat = tempLowShiftCat.First().Original;
+            foreach (var currentGroup in orderedList.Skip(1))
+            {
+                var currentGroupHighestCategoryOriginal =
+                    currentGroup.ShiftCategoryFairnessCompareValues.First(
+                        s => s.ShiftCategory.Description.Name == selectedGroupHighestCategory.Description.Name).Original;
 
-				
+                var currentGroupLowestCategoryOrignial =
+                    currentGroup.ShiftCategoryFairnessCompareValues.First(
+                        s => s.ShiftCategory.Description.Name == selectedGroupLowestCategory.Description.Name).Original;
 
 
-			}
+                var returnGroupHighestCategoryOriginal =
+                    returnGroup.ShiftCategoryFairnessCompareValues.First(
+                        s => s.ShiftCategory.Description.Name == selectedGroupHighestCategory.Description.Name).Original;
 
+                var returnGroupLowestCategoryOrignial =
+                    returnGroup.ShiftCategoryFairnessCompareValues.First(
+                        s => s.ShiftCategory.Description.Name == selectedGroupLowestCategory.Description.Name).Original;
 
-			return new List<ShiftCategoryFairnessCompareResult>();
-		}
+                returnGroup = currentGroupHighestCategoryOriginal <= returnGroupHighestCategoryOriginal
+                              && currentGroupLowestCategoryOrignial > returnGroupLowestCategoryOrignial
+                                  ? currentGroup
+                                  : returnGroup;
+            }
+
+            return new SwapFairnessGroupAndCategory
+                       {
+                           Group1 = selectedGroup,
+                           Group2 = returnGroup,
+                           ShiftCategoryFromGroup1 = selectedGroupHighestCategory,
+                           ShiftCategoryFromGroup2 = selectedGroupLowestCategory
+                       };
+        }
 	}
 }
