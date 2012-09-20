@@ -87,9 +87,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var daysToDelete = new List<IScheduleDay>();
                 prepareDaysForRescheduling(daysToDelete, daysToSave, runnableOptimizers, dayToBeLengthen, dayToBeShorten);
                 var validateResult = _groupMoveTimeValidatorRunner.Run(person, daysToDelete.Select(d => d.DateOnlyAsPeriod.DateOnly).ToList(),
-                                                      _groupMoveTimeOptimizerExecuter.SchedulingOptions.UseSameDayOffs, matrixes).Success;
-                if (!validateResult) continue;
-
+                                                      _groupMoveTimeOptimizerExecuter.SchedulingOptions.UseSameDayOffs, matrixes);
+                if (!validateResult.Success || validateResult.DaysToLock.HasValue) continue; 
+                
                 var oldPeriodValue = optimizer.PeriodValue();
                 var success = _groupMoveTimeOptimizerExecuter.Execute(daysToDelete, daysToSave, matrixes, optimizer.OptimizationOverLimitByRestrictionDecider);
                 if(success)
