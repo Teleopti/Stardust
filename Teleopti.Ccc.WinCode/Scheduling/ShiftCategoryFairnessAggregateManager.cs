@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -9,8 +8,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public interface IShiftCategoryFairnessAggregateManager
 	{
-		ShiftCategoryFairnessCompareResult GetPerPersonAndGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly);
-		ShiftCategoryFairnessCompareResult GetPerGroupAndOtherGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly);
+		IShiftCategoryFairnessCompareResult GetPerPersonAndGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly);
+		IShiftCategoryFairnessCompareResult GetPerGroupAndOtherGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly);
+		IList<IShiftCategoryFairnessCompareResult> GetForGroups(IList<IPerson> persons, IGroupPageLight groupPage,
+		                                                       DateOnly dateOnly, IList<DateOnly> selectedDates);
 	}
 
 	public class ShiftCategoryFairnessAggregateManager : IShiftCategoryFairnessAggregateManager
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public ShiftCategoryFairnessCompareResult GetPerPersonAndGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly)
+		public IShiftCategoryFairnessCompareResult GetPerPersonAndGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly)
 		{
 			if (_period.Equals(new DateOnlyPeriod()))
 			{
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public ShiftCategoryFairnessCompareResult GetPerGroupAndOtherGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly)
+		public IShiftCategoryFairnessCompareResult GetPerGroupAndOtherGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly)
 		{
 			if (_period.Equals(new DateOnlyPeriod()))
 			{
@@ -89,7 +90,32 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var compare = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, otherPersons);
 
 			return _shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories);
+		}
 
+		public IList<IShiftCategoryFairnessCompareResult> GetForGroups(IList<IPerson> persons, IGroupPageLight groupPage, DateOnly dateOnly, IList<DateOnly> selectedDates )
+		{
+			//TODO?? shall we check here on the fairness system??
+
+			var ret = new List<IShiftCategoryFairnessCompareResult>();
+			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(selectedDates, groupPage, dateOnly, persons);
+
+			foreach (var groupPerson in groups)
+			{
+				var otherPersons = new List<IPerson>();
+				var orig = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, groupPerson.GroupMembers);
+				foreach (var groupPerson2 in groups)
+				{
+					if(!groupPerson2.Equals(groupPerson))
+						otherPersons.AddRange(groupPerson2.GroupMembers);
+				}
+						
+				var compare = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, otherPersons);
+				var result = _shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories);
+				result.OriginalMembers = groupPerson.GroupMembers;
+				ret.Add(result);
+			}
+
+			return ret;
 		}
 	}
 }
