@@ -87,13 +87,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 								string.Format("{0} does not contain {1}", Browser.Current.Title, Resources.AgentScheduleMessenger));
 		}
 
-		[Then(@"I should see a popup saying '(.*)' is new activity")]
-		public void ThenIShouldSeeAPopupSayingPhoneIsNewActivity(string activity)
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-
 		private static int pixelLength(Element oneHourLengthLayer)
 		{
 			return Convert.ToInt32(oneHourLengthLayer.Style.GetAttributeValue(attributeUsedForWidth).TrimEnd('p', 'x'));

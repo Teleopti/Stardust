@@ -367,7 +367,7 @@ this.FeatureBackground();
 #line 100
  testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
 #line 101
- testRunner.Then("I should see a popup saying \'Phone\' is new activity");
+ testRunner.Then("I should see a alert containing \'Phone\'");
 #line hidden
             this.ScenarioCleanup();
         }

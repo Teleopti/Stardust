@@ -98,4 +98,4 @@ Scenario: Agent should be notified when activity changes
 	When I view my regional settings
 	And I click ASM link
 	And Current browser time has changed to '2030-01-01 12:00'
-	Then I should see a popup saying 'Phone' is new activity
+	Then I should see a alert containing 'Phone'

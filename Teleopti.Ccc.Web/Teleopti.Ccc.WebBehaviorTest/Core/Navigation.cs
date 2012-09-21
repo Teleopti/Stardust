@@ -26,6 +26,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Log.Write("Ended up in: " + Browser.Current.Url);
 
 			interceptors.Reverse().ToList().ForEach(i => i.After(pageUrl));
+			mockWindowAlert();
+		}
+
+		private static void mockWindowAlert()
+		{
+			const string jsCode = "window.alert = function (value) {$('<span/>', {text: value, 'class': 'alertLoggerItem'}).appendTo('#alertLogger');};";
+			Browser.Current.Eval(jsCode);
 		}
 
 		public static void GotoAsm()
