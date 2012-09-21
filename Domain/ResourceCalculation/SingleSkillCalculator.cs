@@ -16,8 +16,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			foreach (KeyValuePair<ISkill, ISkillStaffPeriodDictionary> pair in relevantSkillStaffPeriods)
 			{
 				var skill = pair.Key;
-				if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)
-					continue;
 
 				ISkillStaffPeriodDictionary skillStaffPeriodDictionary = pair.Value;
 
