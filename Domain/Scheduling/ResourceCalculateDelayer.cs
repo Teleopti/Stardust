@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -52,6 +53,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			_counter++;
 			return false;
+		}
+
+		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, IList<IScheduleDay> addedSchedules)
+		{
+			//Move this to another place
+			IList<IVisualLayerCollection> addedVisualLayerCollections = new List<IVisualLayerCollection>();
+			foreach (var addedSchedule in addedSchedules)
+			{
+				IVisualLayerCollection collection = addedSchedule.AssignmentHighZOrder().ProjectionService().CreateProjection();
+				addedVisualLayerCollections.Add(collection);
+			}
+			_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly, _useOccupancyAdjustment, _considerShortBreaks, new List<IVisualLayerCollection>(), addedVisualLayerCollections);
+			DateTimePeriod? dateTimePeriod = workShiftProjectionPeriod;
+			if (dateTimePeriod.HasValue)
+			{
+				DateTimePeriod period = dateTimePeriod.Value;
+				if (period.StartDateTime.Date != period.EndDateTime.Date)
+					_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _useOccupancyAdjustment, _considerShortBreaks, new List<IVisualLayerCollection>(), addedVisualLayerCollections);
+			}
+			return true;
 		}
 	}
 }

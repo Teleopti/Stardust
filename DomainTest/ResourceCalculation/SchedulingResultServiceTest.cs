@@ -104,15 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                             0.001);
         }
 
-        [Test]
-        public void VerifySchedulingResultWithPeriod()
-        {
-
-            ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
-            Assert.AreEqual(0.83,
-                            outDic[_personAssignmentListContainer.ContainedSkills["PhoneA"]].First(s => s.Key.StartDateTime == _inPeriod.StartDateTime).Value.Payload.CalculatedResource, 0.01);
-        }
-
+        
         [Test]
         public void VerifySchedulingPeriodDoNotIntersectSkillStaffPeriod()
         {
@@ -127,33 +119,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult();
             Assert.AreEqual(outDic, _skillStaffPeriods);
-        }
-
-        [Test]
-        public void VerifyInjectedSkillSkillDayDictionaryIsCalculated()
-        {
-			_target = new SchedulingResultService(_skillStaffPeriods,
-				_personAssignmentListContainer.AllSkills,
-				_personAssignmentListContainer.TestVisualLayerCollection(),
-				new SingleSkillLoadedDecider(),
-				new SingleSkillCalculator(),
-				false);
-            _target.SchedulingResult(_inPeriod);
-            Assert.AreEqual(0.83,
-                            _skillStaffPeriods[_personAssignmentListContainer.ContainedSkills["PhoneA"]].First(s => s.Key.StartDateTime == _inPeriod.StartDateTime).Value.Payload.CalculatedResource, 0.01);
-        }
-
-        [Test]
-        public void VerifyInjectedSkillSkillDayDictionaryIsTheSameAsOut()
-        {
-			_target = new SchedulingResultService(_skillStaffPeriods,
-				_personAssignmentListContainer.AllSkills,
-				_personAssignmentListContainer.TestVisualLayerCollection(),
-				new SingleSkillLoadedDecider(),
-				new SingleSkillCalculator(),
-				false);
-            ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
-            Assert.AreEqual(_skillStaffPeriods, outDic);
         }
     }
 }

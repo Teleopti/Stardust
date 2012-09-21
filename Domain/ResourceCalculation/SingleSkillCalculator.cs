@@ -6,12 +6,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public interface ISingleSkillCalculator
 	{
-		void Calculate(IList<IVisualLayerCollection> relevantProjections, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods);
+		void Calculate(IList<IVisualLayerCollection> relevantProjections,
+		               ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
+		               IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd);
 	}
 
 	public class SingleSkillCalculator : ISingleSkillCalculator
 	{
-		public void Calculate(IList<IVisualLayerCollection> relevantProjections, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods)
+		public void Calculate(IList<IVisualLayerCollection> relevantProjections, 
+			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, 
+			IList<IVisualLayerCollection> toRemove, 
+			IList<IVisualLayerCollection> toAdd)
 		{
 			foreach (KeyValuePair<ISkill, ISkillStaffPeriodDictionary> pair in relevantSkillStaffPeriods)
 			{
@@ -21,11 +26,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriodDictionary.Values)
 				{
-					//skillStaffPeriod.Payload.CalculatedLoggedOn = 0;
-					//skillStaffPeriod.SetCalculatedResource65(0);
-					double result = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, relevantProjections, skill);
-					//if (addToEarlierResult)
-					//    result += skillStaffPeriod.Payload.CalculatedLoggedOn;
+					double result;
+					if(toRemove.Count > 0 || toAdd.Count > 0)
+					{
+						double resultToRemove = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toRemove, skill);
+						double resultToAdd = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toAdd, skill);
+						result = skillStaffPeriod.Payload.CalculatedLoggedOn - resultToRemove + resultToAdd;
+					}
+					else
+					{
+						result = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, relevantProjections, skill);
+					}
+
 					skillStaffPeriod.Payload.CalculatedLoggedOn = result;
 					skillStaffPeriod.SetCalculatedResource65(result);
 				}
