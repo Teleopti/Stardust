@@ -28,11 +28,17 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
         {
-            ResourceCalculateDate(localDate, useOccupancyAdjustment, true, considerShortBreaks);
+            resourceCalculateDate(localDate, useOccupancyAdjustment, true, considerShortBreaks, new List<IVisualLayerCollection>(), new List<IVisualLayerCollection>());
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.DateOnly.ToShortDateString")]
-        private void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks)
+    	public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
+    	{
+			resourceCalculateDate(localDate, useOccupancyAdjustment, true, considerShortBreaks, toRemove, toAdd);
+    	}
+
+    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.DateOnly.ToShortDateString")]
+        private void resourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks
+			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
         {
             if (_stateHolder.TeamLeaderMode)
                 return;
@@ -43,12 +49,14 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
             {
                 var extractor = new ScheduleProjectionExtractor();
-                IList<IVisualLayerCollection> relevantProjections;
+                IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
 
-                relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
+            	var singleSkillDecider = new SingleSkillLoadedDecider();
+				if(!singleSkillDecider.IsSingleSkill(_stateHolder.Skills) || (toRemove.Count == 0 && toAdd.Count == 0))
+					relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
                                                                                          TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
 
-                resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks);
+                resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, toRemove, toAdd);
             }
             
         }
@@ -60,7 +68,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentStart, currentEnd);
         }
 
-        private void resourceCalculateDate(IList<IVisualLayerCollection> relevantProjections, DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks)
+        private void resourceCalculateDate(IList<IVisualLayerCollection> relevantProjections, 
+			DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks
+			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
         {
             var timePeriod = GetPeriod(localDate);
             var ordinarySkills = new List<ISkill>();
@@ -73,9 +83,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
             relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
 
-            var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, useOccupancyAdjustment);
+			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, new SingleSkillLoadedDecider(), new SingleSkillCalculator(), useOccupancyAdjustment);
 
-            schedulingResultService.SchedulingResult(timePeriod);
+            schedulingResultService.SchedulingResult(timePeriod, toRemove, toAdd);
 
             if(considerShortBreaks)
             {
