@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		ShiftCategoryFairnessCompareResult GetPerPersonAndGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly);
 		ShiftCategoryFairnessCompareResult GetPerGroupAndOtherGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly);
+		IList<ShiftCategoryFairnessCompareResult> GetForGroups(IList<IPerson> persons, IGroupPageLight groupPage,
+		                                                       DateOnly dateOnly, IList<DateOnly> selectedDates);
 	}
 
 	public class ShiftCategoryFairnessAggregateManager : IShiftCategoryFairnessAggregateManager
