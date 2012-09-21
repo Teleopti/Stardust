@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public interface IShiftCategoryFairnessCompareResult
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]      
 		IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
 		Guid Id { get; }
 		double StandardDeviation { get; set; }
