@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			var button = result.ControllerItems<ToolBarButtonItem>("Preference").FirstOrDefault(i => i.ButtonType == "must-have-delete");
 
 			button.Should().Not.Be.Null();
-			button.Title.Should().Be(Resources.MustHave);
+			button.Title.Should().Be(Resources.Delete);
 			button.Icon.Should().Be("heart-delete");
 		}
 
