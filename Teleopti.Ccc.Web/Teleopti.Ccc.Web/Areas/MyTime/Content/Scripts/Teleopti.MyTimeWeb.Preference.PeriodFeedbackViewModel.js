@@ -63,7 +63,10 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
 	});
 
-	this.MaxMustHave = ko.observable();
+
+
+	this.MaxMustHave = ko.observable(0);
+
 	this.CurrentMustHave = ko.computed(function () {
 		var total = 0;
 		$.each(dayViewModels, function (index, day) {
@@ -72,7 +75,16 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 				total += 1;
 		});
 
-		$('#Preference-must-have-numbers').text(total + "(" + self.MaxMustHave() + ")");
-		return total + "(" + self.MaxMustHave() + ")";
+		return total;
+	});
+
+	this.MustHaveText = ko.computed(function () {
+		$('#Preference-must-have-numbers').text(self.CurrentMustHave() + "(" + self.MaxMustHave() + ")");
+		if (self.CurrentMustHave() >= self.MaxMustHave()) {
+			$('#Preference-must-have-button').attr("disabled", true);
+		} else {
+			$('#Preference-must-have-button').attr("disabled", false);
+		}
+		return self.CurrentMustHave() + "(" + self.MaxMustHave() + ")";
 	});
 };
