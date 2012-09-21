@@ -2,6 +2,6 @@
 {
 	public interface IPushMessageProvider
 	{
-	    int UnreadMessageCount { get; set; }
+	    int UnreadMessageCount { get; }
 	}
 }

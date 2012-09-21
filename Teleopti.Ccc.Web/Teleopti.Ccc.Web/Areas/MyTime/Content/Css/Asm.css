@@ -113,7 +113,7 @@
 	font-size: 10px;
 }
 
-.asm-new-message-indicator
+.ui-state-default a.asm-new-message-indicator
 {
     color: red;
     font-weight: bold;

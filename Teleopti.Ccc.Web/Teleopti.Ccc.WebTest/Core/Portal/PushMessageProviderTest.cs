@@ -1,0 +1,32 @@
+﻿using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WebTest.Core.Portal
+{
+	[TestFixture]
+	public class PushMessageProviderTest
+	{
+		private PushMessageProvider _target;
+
+		[Test]
+		public void ShouldGetUnreadMessagesForUser()
+		{
+			var repository = MockRepository.GenerateMock<IPushMessageRepository>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			IPerson person = new Person();
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			repository.Stub(x => x.CountUnread(person)).Return(2);
+
+			_target = new PushMessageProvider(loggedOnUser, repository);
+
+			_target.UnreadMessageCount.Should().Be.EqualTo(2);
+		}
+	}
+}

@@ -51,15 +51,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
             }
             if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
             {
-                navigationItems.Add(createMessageNavigationItem());
+				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
             }
 			return new PortalViewModel
 			       	{
 			       		NavigationItems = navigationItems,
 			       		CustomerName = _licenseActivator.CustomerName,
 			       		ShowChangePassword = showChangePassword(),
-						ShowAsm = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
-                        UnreadMessageCount = _pushMessageProvider.UnreadMessageCount
+						ShowAsm = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
 			       	};
 		}
 
@@ -115,15 +114,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 					};
 		}
 
-        private SectionNavigationItem createMessageNavigationItem()
+        private SectionNavigationItem createMessageNavigationItem(int unreadMessageCount)
         {
-            return new SectionNavigationItem
+            return new SectionNavigationItem	
             {
                 Action = "Index",
                 Controller = "Message",
                 Title = Resources.Message,
                 NavigationItems = new NavigationItem[0],
-                ToolBarItems = new List<ToolBarItemBase>()
+                ToolBarItems = new List<ToolBarItemBase>(),
+				PayAttention = unreadMessageCount != 0
             };
         }
 

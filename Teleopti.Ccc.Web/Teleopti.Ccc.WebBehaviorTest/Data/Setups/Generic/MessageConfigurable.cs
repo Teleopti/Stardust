@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		                      };
 
 			var repository = new PushMessageRepository(uow);
-			repository.Add(message);
+			repository.Add(message, new List<IPerson> {user});
 		}
 	}
 }

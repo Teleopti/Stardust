@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal
@@ -27,14 +28,19 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		}
 
         [Test]
-        public void ShouldHaveOneUnreadMessage()
+        public void ShouldPayAttentionToMessageTabDueToUnreadMessages()
         {
-            var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
-            pushMessageProvider.Stub(x => x.UnreadMessageCount).Return(1);
-            var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), pushMessageProvider);
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
+
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
+			pushMessageProvider.Stub(x => x.UnreadMessageCount).Return(1);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), pushMessageProvider);
 
             var result = target.CreatePortalViewModel();
-            result.UnreadMessageCount.Should().Be.EqualTo(1);
+			SectionNavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
+			message.PayAttention.Should().Be.True();
         }
 	}
 }
