@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class SingleSkillCalculator : ISingleSkillCalculator
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Calculate(IList<IVisualLayerCollection> relevantProjections, 
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, 
 			IList<IVisualLayerCollection> toRemove, 
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		private double nonBlendSkillImpactOnPeriodForProjection(ISkillStaffPeriod skillStaffPeriod, IList<IVisualLayerCollection> shiftList, ISkill skill)
+		private static double nonBlendSkillImpactOnPeriodForProjection(ISkillStaffPeriod skillStaffPeriod, IList<IVisualLayerCollection> shiftList, ISkill skill)
 		{
 			double result = 0;
 			foreach (var layercollection in shiftList)
@@ -81,14 +82,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return result;
 		}
 
-		private DateOnly skillStaffPeriodDate(ISkillStaffPeriod skillStaffPeriod, IPerson person)
+		private static DateOnly skillStaffPeriodDate(ISkillStaffPeriod skillStaffPeriod, IPerson person)
 		{
 			DateTime localStartDateTime =
 				skillStaffPeriod.Period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone());
 			return new DateOnly(localStartDateTime.Date);
 		}
 
-		private bool checkPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate)
+		private static bool checkPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate)
 		{
 			IPersonPeriod personPeriod = person.Period(skillStaffPeriodDate);
 			if (personPeriod == null)

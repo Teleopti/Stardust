@@ -96,9 +96,13 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			{
 				_singleSkillCalculator.Calculate(_relevantProjections, _relevantSkillStaffPeriods, toRemove, toAdd);
 			}
-            var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods,
-                                                                         personSkillService, emptyCache, new ActivityDivider());
-            rc.Optimize(periodToRecalculate, _useOccupancyAdjustment);
+			else
+			{
+				var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods,
+																		 personSkillService, emptyCache, new ActivityDivider());
+				rc.Optimize(periodToRecalculate, _useOccupancyAdjustment);
+			}
+            
 
             return _relevantSkillStaffPeriods;
         }

@@ -51,7 +51,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 var extractor = new ScheduleProjectionExtractor();
                 IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
 
-				if(toRemove.Count == 0 && toAdd.Count == 0)
+            	var singleSkillDecider = new SingleSkillLoadedDecider();
+				if(!singleSkillDecider.IsSingleSkill(_stateHolder.Skills) || (toRemove.Count == 0 && toAdd.Count == 0))
 					relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
                                                                                          TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
 
