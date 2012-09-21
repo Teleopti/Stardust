@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			var result = target.CreatePortalViewModel();
 
-			result.NavigationItems.Should().Have.Count.EqualTo(5);
+			result.NavigationItems.Should().Have.Count.EqualTo(6);
 			result.NavigationItems.ElementAt(0).Action.Should().Be("Week");
 			result.NavigationItems.ElementAt(0).Controller.Should().Be("Schedule");
 			result.NavigationItems.ElementAt(1).Action.Should().Be("Index");
@@ -34,6 +34,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			result.NavigationItems.ElementAt(3).Controller.Should().Be("Preference");
 			result.NavigationItems.ElementAt(4).Action.Should().Be("Index");
 			result.NavigationItems.ElementAt(4).Controller.Should().Be("Requests");
+			result.NavigationItems.ElementAt(5).Action.Should().Be("Index");
+			result.NavigationItems.ElementAt(5).Controller.Should().Be("Message");
 		}
 
 		[Test]
