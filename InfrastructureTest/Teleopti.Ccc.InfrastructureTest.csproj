@@ -139,6 +139,7 @@
     <Compile Include="Config\XmlDefaultsTest.cs" />
     <Compile Include="Foundation\ApplicationDataTest.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSourcesTest.cs" />
+    <Compile Include="Foundation\ConfigReaderTest.cs" />
     <Compile Include="Foundation\ConstraintViolationExceptionTest.cs" />
     <Compile Include="Foundation\CannotConnectToDatabaseExceptionTest.cs" />
     <Compile Include="Foundation\PurgeApplicationDataTest.cs" />

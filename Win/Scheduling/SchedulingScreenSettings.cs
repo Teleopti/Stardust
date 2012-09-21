@@ -5,6 +5,14 @@ using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
+	public enum SkillResultViewSetting
+	{
+		Period,
+		Month,
+		Week,
+		Day,
+		Intraday
+	}
     
     [Serializable]
     public class SchedulingScreenSettings : SettingValue, ISchedulingScreenSettings
@@ -17,6 +25,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _hideResult;
         private bool _hideRibbonTexts;
         private Guid? _defaultScheduleTag;
+		private SkillResultViewSetting _skillResultViewSetting = SkillResultViewSetting.Day;
         
 
         private IList<Guid> _pinnedSkills;
@@ -77,5 +86,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                 return _pinnedSkills;
             }
         }
+
+    	public SkillResultViewSetting SkillResultViewSetting
+    	{
+			get { return _skillResultViewSetting; }
+			set { _skillResultViewSetting = value; }
+    	}
     }
 }
