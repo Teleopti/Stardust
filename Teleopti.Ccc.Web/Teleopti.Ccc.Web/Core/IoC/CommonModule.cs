@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>();
 			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>();
 			builder.RegisterType<CurrentBusinessUnitProvider>().As<ICurrentBusinessUnitProvider>();
+			builder.RegisterType<PushMessageProvider>().As<IPushMessageProvider>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)

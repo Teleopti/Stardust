@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see the text request form")]
 		public void ThenIShouldNotSeeTheTextRequestForm()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.DisplayVisible(), Is.False);
+            EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.DisplayVisible(), Is.False);
 		}
 	}
 }

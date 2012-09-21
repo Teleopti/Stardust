@@ -123,3 +123,9 @@
 	font-family: verdana;
 	font-size: 10px;
 }
+
+.ui-state-default a.asm-new-message-indicator
+{
+    color: red;
+    font-weight: bold;
+}

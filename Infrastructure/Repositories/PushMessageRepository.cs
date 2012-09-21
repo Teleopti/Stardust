@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public class PushMessageRepository :Repository<IPushMessage>,IPushMessageRepository
+    public class PushMessageRepository :Repository<IPushMessage>, IPushMessageRepository
     {
         private IPushMessageDialogueRepository _pushMessageDialogueRepository;
 
@@ -108,5 +108,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         	return results.ToList();
         }
+
+    	public int CountUnread(IPerson receiver)
+    	{
+    		ICriteria crit = Session.CreateCriteria(typeof (PushMessageDialogue))
+    			.Add(Restrictions.Eq("Receiver", receiver))
+    			.Add(Restrictions.Eq("IsReplied", false));
+
+			return crit.List<IPushMessageDialogue>().Count;
+    	}
     }
 }

@@ -18,17 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 		private readonly IPreferenceOptionsProvider _preferenceOptionsProvider;
 		private readonly ILicenseActivator _licenseActivator;
 		private readonly IIdentityProvider _identityProvider;
+	    private readonly IPushMessageProvider _pushMessageProvider;
 
-		public PortalViewModelFactory(
-			IPermissionProvider permissionProvider,
-												IPreferenceOptionsProvider preferenceOptionsProvider,
-												ILicenseActivator licenseActivator,
-			IIdentityProvider identityProvider)
+	    public PortalViewModelFactory(IPermissionProvider permissionProvider, IPreferenceOptionsProvider preferenceOptionsProvider, ILicenseActivator licenseActivator, IIdentityProvider identityProvider, IPushMessageProvider pushMessageProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_preferenceOptionsProvider = preferenceOptionsProvider;
 			_licenseActivator = licenseActivator;
 			_identityProvider = identityProvider;
+		    _pushMessageProvider = pushMessageProvider;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -50,13 +48,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests))
 			{
 				navigationItems.Add(createRequestsNavigationItem());
-			}
+            }
+            if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
+            {
+				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
+            }
 			return new PortalViewModel
 			       	{
 			       		NavigationItems = navigationItems,
 			       		CustomerName = _licenseActivator.CustomerName,
 			       		ShowChangePassword = showChangePassword(),
-							ShowAsm = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
+						ShowAsm = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
 			       	};
 		}
 
@@ -111,6 +113,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 						}
 					};
 		}
+
+        private SectionNavigationItem createMessageNavigationItem(int unreadMessageCount)
+        {
+            return new SectionNavigationItem	
+            {
+                Action = "Index",
+                Controller = "Message",
+                Title = Resources.Message,
+                NavigationItems = new NavigationItem[0],
+                ToolBarItems = new List<ToolBarItemBase>(),
+				PayAttention = unreadMessageCount != 0
+            };
+        }
 
 		private PreferenceNavigationItem createPreferenceNavigationItem()
 		{

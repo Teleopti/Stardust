@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 {
@@ -22,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	{
 		public IEnumerable<NavigationItem> NavigationItems { get; set; }
 		public IEnumerable<ToolBarItemBase> ToolBarItems { get; set; }
+		public bool PayAttention { get; set; }
 	}
 
 	public class PreferenceNavigationItem : SectionNavigationItem

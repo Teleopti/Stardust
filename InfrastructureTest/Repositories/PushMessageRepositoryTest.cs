@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -172,5 +173,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
 			Assert.AreEqual(1, repository.Find(_sender, new PagingDetail { Take = 10 }).Count);
         }
+
+		[Test]
+		public void ShouldGetCorrectCountOfUnreadMessages()
+		{
+			IPerson receiver = PersonFactory.CreatePerson("vsd");
+			IPushMessage message = new PushMessage { Sender = _sender, Title = "title", Message = "message" };
+			IPushMessageDialogue dialogue = new PushMessageDialogue(message, receiver);
+
+			PersistAndRemoveFromUnitOfWork(_sender);
+			PersistAndRemoveFromUnitOfWork(message);
+			PersistAndRemoveFromUnitOfWork(receiver);
+			PersistAndRemoveFromUnitOfWork(dialogue);
+
+			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
+			repository.CountUnread(receiver).Should().Be.EqualTo(1);
+		}
     }
 }
