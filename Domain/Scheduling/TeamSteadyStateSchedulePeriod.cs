@@ -26,14 +26,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if(schedulePeriod == null) throw new ArgumentNullException("schedulePeriod");
 			if(scheduleMatrixPro == null) throw new ArgumentNullException("scheduleMatrixPro");
 
-			if (!_schedulePeriod.DateOnlyPeriod.Equals(schedulePeriod.DateOnlyPeriod)) return false;
-			if (!_schedulePeriod.PeriodType.Equals(schedulePeriod.PeriodType)) return false;
-			if (!_schedulePeriod.DaysOff().Equals(schedulePeriod.DaysOff())) return false;
-			if (!_schedulePeriod.PeriodTarget().Equals(schedulePeriod.PeriodTarget())) return false;
-			if (!_schedulePeriod.AverageWorkTimePerDay.Equals(schedulePeriod.AverageWorkTimePerDay)) return false;
+			if (!_schedulePeriod.DateOnlyPeriod.Equals(schedulePeriod.DateOnlyPeriod)) 
+				return false;
+			if (!_schedulePeriod.PeriodType.Equals(schedulePeriod.PeriodType)) 
+				return false;
+			if (!_schedulePeriod.DaysOff().Equals(schedulePeriod.DaysOff())) 
+				return false;
+			if (!_schedulePeriod.PeriodTarget().Equals(schedulePeriod.PeriodTarget())) 
+				return false;
+			if (!_schedulePeriod.AverageWorkTimePerDay.Equals(schedulePeriod.AverageWorkTimePerDay)) 
+				return false;
 			var firstTargetTime = _targetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro);
 			var secondTargetTime = _targetTimeCalculator.TargetWithTolerance(scheduleMatrixPro);
-			if (!firstTargetTime.Equals(secondTargetTime))
+			if (!firstTargetTime.Equals(secondTargetTime)) 
 				return false;
 
 			return true;

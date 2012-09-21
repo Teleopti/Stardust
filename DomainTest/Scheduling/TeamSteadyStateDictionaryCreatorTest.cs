@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -12,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
-	[TestFixture]
 	public class TeamSteadyStateDictionaryCreatorTest
 	{
 		private TeamSteadyStateDictionaryCreator _target;
@@ -67,6 +67,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_groupPerson2 = new GroupPerson(new List<IPerson> { _person3, _person4 }, _dateOnly, "groupPerson2");
 			_groupPersons = new List<IGroupPerson> { _groupPerson1, _groupPerson2 };
 
+			SetupStateHolder();
+
+			_scheduleMatrixPro1 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person1, _person1.VirtualSchedulePeriod(_dateOnly));
+			_scheduleMatrixPro2 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person2, _person2.VirtualSchedulePeriod(_dateOnly));
+			_scheduleMatrixPro3 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person3, _person3.VirtualSchedulePeriod(_dateOnly));
+			_scheduleMatrixPro4 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person4, _person4.VirtualSchedulePeriod(_dateOnly));
+
+			_schedulePeriodTargetTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
+			_matrixes = new List<IScheduleMatrixPro>{_scheduleMatrixPro1, _scheduleMatrixPro2, _scheduleMatrixPro3, _scheduleMatrixPro4};
+			
+			_target = new TeamSteadyStateDictionaryCreator(_groupPersons, _schedulePeriodTargetTimeCalculator, _matrixes );	
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private void SetupStateHolder()
+		{
 			var wholePeriod = new DateTimePeriod(2012, 1, 1, 2012, 1, 31);
 			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(wholePeriod);
 			IScenario scenario = new Scenario("Scenario");
@@ -87,19 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			scheduleDictionary.AddTestItem(_person3, range3);
 			scheduleDictionary.AddTestItem(_person4, range4);
 
-			_stateHolder = new SchedulingResultStateHolder();
-
-			_stateHolder.Schedules = scheduleDictionary;
-
-			_scheduleMatrixPro1 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person1, _person1.VirtualSchedulePeriod(_dateOnly));
-			_scheduleMatrixPro2 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person2, _person2.VirtualSchedulePeriod(_dateOnly));
-			_scheduleMatrixPro3 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person3, _person3.VirtualSchedulePeriod(_dateOnly));
-			_scheduleMatrixPro4 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person4, _person4.VirtualSchedulePeriod(_dateOnly));
-
-			_schedulePeriodTargetTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
-			_matrixes = new List<IScheduleMatrixPro>{_scheduleMatrixPro1, _scheduleMatrixPro2, _scheduleMatrixPro3, _scheduleMatrixPro4};
-			
-			_target = new TeamSteadyStateDictionaryCreator(_groupPersons, _schedulePeriodTargetTimeCalculator, _matrixes );	
+			_stateHolder = new SchedulingResultStateHolder { Schedules = scheduleDictionary };
 		}
 
 		[Test]
@@ -122,7 +126,58 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Assert.AreEqual(2, result.Count);
 				Assert.IsTrue(result["groupPerson1"]);
 				Assert.IsTrue(result["groupPerson2"]);
+			}		
+		}
+
+		[Test]
+		public void ShouldSetTeamSteadyStateToFalseWhenPersonPeriodValueDiffers()
+		{
+			var timePeriod = new TimePeriod();
+			var personPeriod = _person1.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0];
+			var partTimePercentage = new PartTimePercentage("partTimePercentage");
+			partTimePercentage.SetId(Guid.NewGuid());
+			personPeriod.PersonContract.PartTimePercentage = partTimePercentage;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro1)).Return(timePeriod);
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro2)).Return(timePeriod);
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro3)).Return(timePeriod);
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro4)).Return(timePeriod);
 			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Create(_dateOnly);
+				Assert.IsNotNull(result);
+				Assert.AreEqual(2, result.Count);
+				Assert.IsFalse(result["groupPerson1"]);
+				Assert.IsTrue(result["groupPerson2"]);
+			}	
+		}
+
+		[Test]
+		public void ShouldSetTeamSteadyStateToFalseWhenSchedulePeriodValueDiffers()
+		{
+			var timePeriod1 = new TimePeriod();
+			var timePeriod2 = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(2));
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro1)).Return(timePeriod1);
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro2)).Return(timePeriod1);
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro3)).Return(timePeriod1);
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro4)).Return(timePeriod2);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Create(_dateOnly);
+				Assert.IsNotNull(result);
+				Assert.AreEqual(2, result.Count);
+				Assert.IsTrue(result["groupPerson1"]);
+				Assert.IsFalse(result["groupPerson2"]);
+			}		
 		}
 	}
 }
