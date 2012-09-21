@@ -66,12 +66,15 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var maxMust = periodFeedbackViewModel.MaxMustHave();
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
+				var date = $(cell).data('mytime-date');
 				if (preference == true) {
 					if (currentMust >= maxMust) {
 						return;
 					}
-				} 
-				var date = $(cell).data('mytime-date');
+					if (!dayViewModels[date].Preference() && !dayViewModels[date].Extended()) {
+						return;
+					}
+				}
 				var promise = dayViewModels[date].SetPreference(preference, validationErrorCallback);
 				promises.push(promise);
 				if (preference == true && !dayViewModels[date].MustHave()) {
