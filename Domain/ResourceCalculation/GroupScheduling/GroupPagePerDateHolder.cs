@@ -10,6 +10,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     {
     	public IGroupPagePerDate ShiftCategoryFairnessGroupPagePerDate { get; set; }
 
-    	public IGroupPagePerDate GroupPersonGroupPagePerDate { get; set; }
+    	public IGroupPagePerDate GroupPersonGroupPagePerDate { get; set; }		
     }
 }
