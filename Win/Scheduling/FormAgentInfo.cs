@@ -120,6 +120,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "perPersonAndGroup"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "perGroupAndOthers"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void updateFairnessInfo(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder)
 		{
+			var pointPerShiftCategoryOption = false;
+
 			agentGroupPageLabel.Text = Resources.GroupPage;
 
 			if (_fairnessManager == null)
@@ -226,9 +228,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 //perGroupAndOthersLabel.Text = Resources.StandardDeviation + "= " + perGroupAndOthers.StandardDeviation;
             }
+            else
+            {
+            	pointPerShiftCategoryOption = true;
+		    }
 
             EmploymentType employmentType = person.Period(helper.SelectedDate).PersonContract.Contract.EmploymentType;
-            //listViewFairness1.Items.Add("");
             if (employmentType != EmploymentType.HourlyStaff)
             {
                 createAndAddItem(listViewFairness, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
@@ -240,6 +245,15 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 createAndAddItem(listViewFairness, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
             }
+
+			if(pointPerShiftCategoryOption)
+			{
+				listViewFairness.Items.Add("");
+				createAndAddItem(listViewFairness, Resources.FairnessValue,
+								 ((int)
+								  stateHolder.Schedules[person].CachedShiftCategoryFairness().FairnessValueResult.
+									  FairnessPoints).ToString(CultureInfo.CurrentCulture), 2);
+			}
         }
 
         private static bool shouldHeadersBeDisplayedOrNot(IList<ShiftCategoryFairnessCompareValue> shiftCategoryFairnessCompareValues)

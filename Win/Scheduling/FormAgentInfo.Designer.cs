@@ -313,9 +313,9 @@
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 4;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 62F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(504, 472);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
@@ -364,14 +364,14 @@
 			this.tableLayoutPanel3.Controls.Add(this.perGroupAndOthersListView, 0, 2);
 			this.tableLayoutPanel3.Controls.Add(this.perGroupAndOthersLabel, 0, 3);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 134);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 148);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 4;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(498, 286);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(498, 277);
 			this.tableLayoutPanel3.TabIndex = 6;
 			// 
 			// perPersonAndGroupListView
@@ -386,7 +386,7 @@
 			this.perPersonAndGroupListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.perPersonAndGroupListView.Location = new System.Drawing.Point(3, 3);
 			this.perPersonAndGroupListView.Name = "perPersonAndGroupListView";
-			this.perPersonAndGroupListView.Size = new System.Drawing.Size(492, 122);
+			this.perPersonAndGroupListView.Size = new System.Drawing.Size(492, 118);
 			this.perPersonAndGroupListView.StateImageList = this.imageList1;
 			this.perPersonAndGroupListView.TabIndex = 0;
 			this.perPersonAndGroupListView.UseCompatibleStateImageBehavior = false;
@@ -409,7 +409,7 @@
 			// 
 			// perPersonAndGroupLabel
 			// 
-			this.perPersonAndGroupLabel.Location = new System.Drawing.Point(3, 128);
+			this.perPersonAndGroupLabel.Location = new System.Drawing.Point(3, 124);
 			this.perPersonAndGroupLabel.Name = "perPersonAndGroupLabel";
 			this.perPersonAndGroupLabel.Size = new System.Drawing.Size(0, 13);
 			this.perPersonAndGroupLabel.TabIndex = 1;
@@ -425,9 +425,9 @@
             this.columnHeader16});
 			this.perGroupAndOthersListView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.perGroupAndOthersListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.perGroupAndOthersListView.Location = new System.Drawing.Point(3, 145);
+			this.perGroupAndOthersListView.Location = new System.Drawing.Point(3, 140);
 			this.perGroupAndOthersListView.Name = "perGroupAndOthersListView";
-			this.perGroupAndOthersListView.Size = new System.Drawing.Size(492, 122);
+			this.perGroupAndOthersListView.Size = new System.Drawing.Size(492, 118);
 			this.perGroupAndOthersListView.StateImageList = this.imageList1;
 			this.perGroupAndOthersListView.TabIndex = 2;
 			this.perGroupAndOthersListView.UseCompatibleStateImageBehavior = false;
@@ -450,7 +450,7 @@
 			// 
 			// perGroupAndOthersLabel
 			// 
-			this.perGroupAndOthersLabel.Location = new System.Drawing.Point(3, 270);
+			this.perGroupAndOthersLabel.Location = new System.Drawing.Point(3, 261);
 			this.perGroupAndOthersLabel.Name = "perGroupAndOthersLabel";
 			this.perGroupAndOthersLabel.Size = new System.Drawing.Size(0, 13);
 			this.perGroupAndOthersLabel.TabIndex = 3;
@@ -468,7 +468,7 @@
 			this.listViewFairness.Location = new System.Drawing.Point(3, 40);
 			this.listViewFairness.Name = "listViewFairness";
 			this.listViewFairness.Scrollable = false;
-			this.listViewFairness.Size = new System.Drawing.Size(498, 88);
+			this.listViewFairness.Size = new System.Drawing.Size(498, 102);
 			this.listViewFairness.StateImageList = this.imageList1;
 			this.listViewFairness.TabIndex = 7;
 			this.listViewFairness.UseCompatibleStateImageBehavior = false;
