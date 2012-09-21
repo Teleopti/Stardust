@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
 		Guid Id { get; }
 		double StandardDeviation { get; set; }
+		IList<IPerson> OriginalMembers { get; set; } 
 	}
 
 	public class ShiftCategoryFairnessCompareResult : IShiftCategoryFairnessCompareResult
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		public double StandardDeviation { get; set; }
+		public IList<IPerson> OriginalMembers { get; set; } 
 	}
 
 	public interface IShiftCategoryFairnessComparer

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_resultStateHolder = _mocks.DynamicMock<ISchedulingResultStateHolder>();
 			_dic = _mocks.DynamicMock<IScheduleDictionary>();
 			_schedDateTimePeriod = _mocks.DynamicMock<IScheduleDateTimePeriod>();
-			_fairnessComparer = _mocks.DynamicMock<IShiftCategoryFairnessComparer>();
+			_fairnessComparer = _mocks.StrictMock<IShiftCategoryFairnessComparer>();
 			_fairnessAggregator = _mocks.DynamicMock<IShiftCategoryFairnessAggregator>();
 			_groupPersonHolder = _mocks.DynamicMock<IShiftCategoryFairnessGroupPersonHolder>();
 		}
@@ -163,6 +163,49 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_target = new ShiftCategoryFairnessAggregateManager(_resultStateHolder, _fairnessComparer, _fairnessAggregator, _groupPersonHolder);
 			var result = _target.GetPerGroupAndOtherGroup(person,groupPage,date);
 			Assert.That(result, Is.EqualTo(fairnessResult));
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReturnComparisonSelectedPersons()
+		{
+			var date = new DateOnly(2012, 9, 12);
+			var person = PersonFactory.CreatePerson("per");
+			var person2 = PersonFactory.CreatePerson("olsson");
+			person.AddPersonPeriod(new PersonPeriod(date,
+				   new PersonContract(new Contract("contract"),
+					   new PartTimePercentage("percentage"),
+					   new ContractSchedule("contractschedule")),
+					   new Team()));
+			person2.AddPersonPeriod(new PersonPeriod(date,
+				   new PersonContract(new Contract("contract"),
+					   new PartTimePercentage("percentage"),
+					   new ContractSchedule("contractschedule")),
+					   new Team()));
+			var groupPage = new GroupPageLight();
+
+			var dateTime = new DateTime(2012, 9, 12, 0, 0, 0, 0, DateTimeKind.Utc);
+			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddDays(5));
+			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+			var period = dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo);
+			var groupPerson = new GroupPerson(new List<IPerson> { person }, date, "perras");
+			var groupPerson2 = new GroupPerson(new List<IPerson> { person2 }, date, "peckas");
+			var fairnessResult = new ShiftCategoryFairnessCompareResult();
+			var fairnessResult2 = new ShiftCategoryFairnessCompareResult();
+			Expect.Call(_resultStateHolder.Schedules).Return(_dic);
+			Expect.Call(_dic.Keys).Return(new List<IPerson> { person });
+
+			Expect.Call(_groupPersonHolder.GroupPersons(new List<DateOnly>(), groupPage, date, new Collection<IPerson> { person })).
+				IgnoreArguments().Return(new List<IGroupPerson> { groupPerson, groupPerson2 });
+			Expect.Call(_fairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, new List<IPerson> {person})).Return(null);
+			Expect.Call(_fairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, new List<IPerson> {person2})).Return(null);
+			Expect.Call(_fairnessComparer.Compare(null, null, null)).IgnoreArguments().Return(fairnessResult);
+			Expect.Call(_fairnessComparer.Compare(null, null, null)).IgnoreArguments().Return(fairnessResult2);
+			_mocks.ReplayAll();
+			_target = new ShiftCategoryFairnessAggregateManager(_resultStateHolder, _fairnessComparer, _fairnessAggregator, _groupPersonHolder);
+			var result = _target.GetForGroups(new List<IPerson> { person, person2 }, groupPage, date, period.DayCollection());
+			Assert.That(result[0], Is.EqualTo(fairnessResult));
+			Assert.That(result[0].OriginalMembers[0], Is.EqualTo(person));
 			_mocks.VerifyAll();
 		}
 	}
