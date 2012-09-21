@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.8.1.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Preferences must-haves")]
-    public partial class PreferencesMust_HavesFeature
+    [NUnit.Framework.DescriptionAttribute("Preferences must haves")]
+    public partial class PreferencesMustHavesFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Preferences must-haves", "In order to get scheduled according specific preferences\r\nAs an agent\r\nI want to " +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Preferences must haves", "In order to get scheduled according specific preferences\r\nAs an agent\r\nI want to " +
                     "stress which of my preferences are most important", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -314,7 +314,7 @@ this.FeatureBackground();
 #line 80
  testRunner.When("I view preferences for date \'2012-08-23\'");
 #line 81
- testRunner.Then("I should see I have \'1\' available must haves");
+ testRunner.Then("I should see I have 1 available must haves");
 #line hidden
             this.ScenarioCleanup();
         }

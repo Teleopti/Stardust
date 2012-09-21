@@ -3,6 +3,8 @@
 /// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 
 Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewModels, date) {
 	var self = this;
@@ -19,6 +21,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 				self.PossibleResultDaysOff(data.PossibleResultDaysOff);
 				self.TargetContractTimeLower(data.TargetContractTime.Lower);
 				self.TargetContractTimeUpper(data.TargetContractTime.Upper);
+				self.MaxMustHave(data.MaxMustHave);
 			}
 		});
 	};
@@ -60,4 +63,16 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
 	});
 
+	this.MaxMustHave = ko.observable();
+	this.CurrentMustHave = ko.computed(function () {
+		var total = 0;
+		$.each(dayViewModels, function (index, day) {
+			var value = day.MustHave();
+			if (value)
+				total += 1;
+		});
+
+		$('#Preference-must-have-numbers').text(total + "(" + self.MaxMustHave() + ")");
+		return total + "(" + self.MaxMustHave() + ")";
+	});
 };

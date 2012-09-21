@@ -101,15 +101,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 		}
 
-		[Then(@"I should see I have '(.*)' available must haves")]
-		public void ThenIShouldSeeIHave1AvailableMustHaves(string daysOff)
+		[Then(@"I should see I have (.*) available must haves")]
+		public void ThenIShouldSeeIHave1AvailableMustHaves(int mustHave)
 		{
-
-			// I should have a text field under the must have buttor on the menu 
-			// with the number of available must haves
-			// todo: test that that text is the number of daysOff param 
-
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText, Is.StringContaining("(" + mustHave + ")"));
 		}
 
 

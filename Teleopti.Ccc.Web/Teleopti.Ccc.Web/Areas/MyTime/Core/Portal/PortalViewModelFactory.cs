@@ -146,6 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			{
 				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.MustHave, ButtonType = "must-have", Icon = "heart"});
 				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.MustHave, ButtonType = "must-have-delete", Icon = "heart-delete" });
+				toolbarItems.Add(new ToolBarTextItem { Id = "must-have-numbers", Text = "0(0)" });
 			}
 			toolbarItems.Add(new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"});
 			

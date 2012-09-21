@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public int PossibleResultDaysOff { get; set; }
 		public TargetDaysOffViewModel TargetDaysOff { get; set; }
 		public TargetContractTimeViewModel TargetContractTime { get; set; }
+		public int MaxMustHave { get; set; }
 	}
 
 	public class TargetContractTimeViewModel

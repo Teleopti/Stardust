@@ -1,4 +1,4 @@
-﻿Feature: Preferences must-haves
+﻿Feature: Preferences must haves
 	In order to get scheduled according specific preferences
 	As an agent
 	I want to stress which of my preferences are most important
@@ -78,7 +78,7 @@ Scenario: Remove must have from preference
 
 Scenario: See available must haves
 	When I view preferences for date '2012-08-23'
-	Then I should see I have '1' available must haves
+	Then I should see I have 1 available must haves
 
 Scenario: Decrement available must haves on set
 	Given I have a preference with
