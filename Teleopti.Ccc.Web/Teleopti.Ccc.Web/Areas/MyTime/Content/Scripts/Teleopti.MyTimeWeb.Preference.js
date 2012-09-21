@@ -74,7 +74,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				var date = $(cell).data('mytime-date');
 				var promise = dayViewModels[date].SetPreference(preference, validationErrorCallback);
 				promises.push(promise);
-				if (preference == true) {
+				if (preference == true && !dayViewModels[date].MustHave()) {
 					currentMust++;
 				}
 			});
