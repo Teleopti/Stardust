@@ -91,3 +91,11 @@ Scenario: Upcoming activity starttime starting after midnight should be indicate
 	When I view my regional settings
 	And I click ASM link
 	Then I should see last activity starttime as '12:00+1'
+
+Scenario: Agent should be notified when activity changes
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 11:59'
+	When I view my regional settings
+	And I click ASM link
+	And Current browser time has changed to '2030-01-01 12:00'
+	Then I should see a popup saying 'Phone' is new activity

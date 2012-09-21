@@ -28,6 +28,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			interceptors.Reverse().ToList().ForEach(i => i.After(pageUrl));
 		}
 
+		public static void GotoAsm()
+		{
+			GoTo("MyTime/Asm");
+		}
+
 		public static void GotoGlobalSignInPage()
 		{
 			GoTo("Start/Authentication/SignIn", new ApplicationStartupTimeout());

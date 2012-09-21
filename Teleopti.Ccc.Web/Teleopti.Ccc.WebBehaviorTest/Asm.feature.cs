@@ -346,6 +346,31 @@ this.FeatureBackground();
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Agent should be notified when activity changes")]
+        public virtual void AgentShouldBeNotifiedWhenActivityChanges()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when activity changes", ((string[])(null)));
+#line 95
+this.ScenarioSetup(scenarioInfo);
+#line 7
+this.FeatureBackground();
+#line 96
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 97
+ testRunner.And("Current time is \'2030-01-01 11:59\'");
+#line 98
+ testRunner.When("I view my regional settings");
+#line 99
+ testRunner.And("I click ASM link");
+#line 100
+ testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
+#line 101
+ testRunner.Then("I should see a popup saying \'Phone\' is new activity");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
