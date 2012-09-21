@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriodDictionary.Values)
 				{
+					//skillStaffPeriod.Payload.CalculatedLoggedOn = 0;
+					//skillStaffPeriod.SetCalculatedResource65(0);
 					double result = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, relevantProjections, skill);
 					//if (addToEarlierResult)
 					//    result += skillStaffPeriod.Payload.CalculatedLoggedOn;
