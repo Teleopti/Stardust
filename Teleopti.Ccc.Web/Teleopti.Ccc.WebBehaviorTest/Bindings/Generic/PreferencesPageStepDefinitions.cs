@@ -101,15 +101,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 		}
 
-		[Then(@"I should see I have '(.*)' available must haves")]
-		public void ThenIShouldSeeIHave1AvailableMustHaves(string daysOff)
+		[Then(@"I should see I have (\d) available must haves")]
+		public void ThenIShouldSeeIHave1AvailableMustHaves(int mustHave)
 		{
+			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining("(" + mustHave.ToString(CultureInfo.CurrentCulture) + ")"));
+		}
 
-			// I should have a text field under the must have buttor on the menu 
-			// with the number of available must haves
-			// todo: test that that text is the number of daysOff param 
-
-			ScenarioContext.Current.Pending();
+		[Then(@"I should see I have (\d) must haves")]
+		public void ThenIShouldSeeIHave1MustHaves(int mustHave)
+		{
+			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining(mustHave.ToString(CultureInfo.CurrentCulture) + "("));
 		}
 
 
@@ -290,13 +291,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[When(@"I click set must have button")]
-		[When(@"I click remove must have button")]
 		public void WhenIClickOnMustHaveButton()
 		{
 			// I have a must have button on the menu bar
 			// todo: imitate that I click on the button
 			Pages.Pages.PreferencePage.MustHaveButton.Focus();
 			Pages.Pages.PreferencePage.MustHaveButton.EventualClick();
+		}
+
+		[When(@"I click remove must have button")]
+		public void WhenIClickOnRemoveMustHaveButton()
+		{
+			Pages.Pages.PreferencePage.MustHaveDeleteButton.Focus();
+			Pages.Pages.PreferencePage.MustHaveDeleteButton.EventualClick();
 		}
 
 

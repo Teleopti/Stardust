@@ -4,6 +4,7 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -61,12 +62,24 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			var message = data.Errors.join('</br>');
 			addExtendedPreferenceFormViewModel.ValidationError(message);
 		};
-
+		var currentMust = periodFeedbackViewModel.CurrentMustHave();
+		var maxMust = periodFeedbackViewModel.MaxMustHave();
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
+				if (preference == true) {
+					if (currentMust >= maxMust) {
+						return;
+					}
+					if (!dayViewModels[date].Preference() && !dayViewModels[date].Extended()) {
+						return;
+					}
+				}
 				var promise = dayViewModels[date].SetPreference(preference, validationErrorCallback);
 				promises.push(promise);
+				if (preference == true && !dayViewModels[date].MustHave()) {
+					currentMust++;
+				}
 			});
 		if (promises.length != 0) {
 			$.when.apply(null, promises)
@@ -130,6 +143,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		$('#Preference-must-have-button')
 			.click(function () {
 				_setPreference(true);
+			});
+		$('#Preference-must-have-delete-button')
+			.click(function () {
+				_setPreference(false);
 			});
 	}
 
