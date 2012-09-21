@@ -81,10 +81,8 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	this.MustHaveText = ko.computed(function () {
 		$('#Preference-must-have-numbers').text(self.CurrentMustHave() + "(" + self.MaxMustHave() + ")");
 		if (self.CurrentMustHave() >= self.MaxMustHave()) {
-			$('#Preference-must-have-button').attr("disabled", true);
 			$('#Preference-must-have-button').addClass("grey-out");
 		} else {
-			$('#Preference-must-have-button').attr("disabled", false);
 			$('#Preference-must-have-button').removeClass("grey-out");
 		}
 		return self.CurrentMustHave() + "(" + self.MaxMustHave() + ")";
