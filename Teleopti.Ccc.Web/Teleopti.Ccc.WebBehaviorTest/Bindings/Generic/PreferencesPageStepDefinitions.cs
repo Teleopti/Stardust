@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +12,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -78,6 +81,38 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(preference));
 		}
 
+		[Then(@"I should see preference")]
+		public void ThenIShouldSeePreference(Table table)
+		{
+
+			var fields = table.CreateInstance<PreferenceConfigurable>();
+
+			//I should see the correct date on the cell header: the right day
+			DateTime date = fields.Date;
+			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
+			//var mustHave = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference-must-have");
+			var mustHave = cell.Div(Find.ByClass("preference-must-have", false));
+
+			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(">" + date.Day.ToString(CultureInfo.CurrentCulture) +"<"));
+
+			//I should see on heart icon on the current calendar cell, accorning the the must have settings
+			//todo: add an icon and test code here
+			EventualAssert.That(() => mustHave.Exists, Is.EqualTo(fields.MustHave));
+
+		}
+
+		[Then(@"I should see I have '(.*)' available must haves")]
+		public void ThenIShouldSeeIHave1AvailableMustHaves(string daysOff)
+		{
+
+			// I should have a text field under the must have buttor on the menu 
+			// with the number of available must haves
+			// todo: test that that text is the number of daysOff param 
+
+			ScenarioContext.Current.Pending();
+		}
+
+
 		[Then(@"I should not see the extended preference button")]
 		public void ThenIShouldNotSeeTheExtendedPreferenceButton()
 		{
@@ -125,7 +160,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIInputExtendedPreferenceFieldsWith(Table table)
 		{
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
-			Pages.Pages.PreferencePage.ExtendedPreferencePanel.WaitUntilDisplayed();
+			
 			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Preference);
 
 			if (fields.StartTimeMinimum != null)
@@ -253,6 +288,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => 
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Button.OuterText, Is.EqualTo(selectedText));
 		}
+
+		[When(@"I click set must have button")]
+		[When(@"I click remove must have button")]
+		public void WhenIClickOnMustHaveButton()
+		{
+			// I have a must have button on the menu bar
+			// todo: imitate that I click on the button
+			Pages.Pages.PreferencePage.MustHaveButton.Focus();
+			Pages.Pages.PreferencePage.MustHaveButton.EventualClick();
+		}
+
 
 		private class ExtendedPreferenceFields
 		{

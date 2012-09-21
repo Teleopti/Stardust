@@ -6,13 +6,16 @@
 			var width = this.element.getWidth();
 			var select = this.element.hide();
 			var selected = select.children(":selected");
-			var value = selected.val() ? selected.text() : "";
+			var value = this.value = selected.val() ? selected.text() : "";
 			var input = this.input = $('<input type="text">')
 				.insertAfter(select)
 				.attr("id", select.attr('id') + '-input')
 				.val(value)
 				.width(width)
 				.addClass(select.attr('class'))
+				.blur(function () {
+					self._setValue(self.input.val());
+				})
 				.autocomplete({
 					delay: 0,
 					minLength: 0,
@@ -48,10 +51,10 @@
 					},
 					select: function (event, ui) {
 						ui.item.option.selected = true;
-						self._triggerChanged(ui.item.value);
+						self._setValue(ui.item.value);
 					},
 					change: function (event, ui) {
-						self._triggerChanged();
+						self._setValue(self.input.val());
 						if (!ui.item) {
 							var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex($(this).val()) + "$", "i"),
 							    valid = false;
@@ -116,16 +119,13 @@
 
 		},
 
-		_triggerChanged: function (value) {
-			if (!value)
-				value = this.input.val();
-			this._trigger("changed", event, { value: value });
-		},
-
 		_setValue: function (value) {
+			if (this.value == value)
+				return;
+			this.value = value;
 			this.element.val(value);
 			this.input.val(value);
-			this._triggerChanged();
+			this._trigger("changed", event, { value: value });
 		},
 
 		_setEnabled: function (value) {

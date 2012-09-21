@@ -42,7 +42,11 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// <summary>
         /// the datenumber for the day in month: ie 21 june -> 21
         /// </summary>
-        MonthDayNumber
+        MonthDayNumber,
+		/// <summary>
+		/// Period
+		/// </summary>
+		Period
 
     }
 }

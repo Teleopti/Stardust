@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                        		return "";
 				                                        	}))
 				.ForMember(d => d.Extended, o => o.MapFrom(s => _extendedPreferencePredicate.Invoke().IsExtended(s)))
+				.ForMember(d => d.MustHave, o => o.MapFrom(s => s.Restriction.MustHave))
 				.ForMember(d => d.ExtendedTitle, o => o.MapFrom(s =>
 				                                                	{
 				                                                		if (s.Restriction.DayOffTemplate != null)

@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -49,6 +50,16 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				container.Resolve<IDataSourceConfigurationSetter>()
 					.Should().Be.SameInstanceAs(dataSourceConfigurationSetter);
+			}
+		}
+
+		[Test]
+		public void ConfigReaderIsWired()
+		{
+			using (var container = containerBuilder.Build())
+			{
+				container.Resolve<IConfigReader>()
+					.Should().Not.Be.Null();
 			}
 		}
 	}

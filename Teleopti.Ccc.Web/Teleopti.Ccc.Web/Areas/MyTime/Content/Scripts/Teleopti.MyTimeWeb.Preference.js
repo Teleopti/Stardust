@@ -57,11 +57,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 		addExtendedPreferenceFormViewModel.ValidationError('');
 
-		var validationErrorCallback = function(data) {
+		var validationErrorCallback = function (data) {
 			var message = data.Errors.join('</br>');
 			addExtendedPreferenceFormViewModel.ValidationError(message);
 		};
-		
+
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
@@ -123,6 +123,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 					}
 				}
+			});
+	}
+
+	function _initMustHaveButton() {
+		$('#Preference-must-have-button')
+			.click(function () {
+				_setPreference(true);
 			});
 	}
 
@@ -221,6 +228,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initSplitButton();
 			_initDeleteButton();
 			_initAddExtendedButton();
+			_initMustHaveButton();
 		},
 		InitViewModels: function () {
 			_initViewModels();

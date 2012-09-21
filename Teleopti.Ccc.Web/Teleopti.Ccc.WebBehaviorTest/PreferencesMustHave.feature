@@ -5,8 +5,9 @@
 
 Background:
 	Given I have a role with
-	| Field | Value                 |
-	| Name  | Full access to mytime |
+	| Field                          | Value                 |
+	| Name                           | Full access to mytime |
+	| Access to extended preferences | false                 |
     And there is a shift category with
     | Field | Value |
     | Name  | Late  |
@@ -46,9 +47,10 @@ Scenario: Set must have on preference
 	And I select day '2012-08-23'
 	And I click set must have button
 	Then I should see preference
-	| Field     | Value      |
-	| Date      | 2012-08-23 |
-	| Must have | true       |
+	| Field          | Value      |
+	| Date           | 2012-08-23 |
+	| Must have      | true       |
+	| Shift category | Late       |
 
 Scenario: Set must have on empty day should do nothing
 	When I view preferences for date '2012-08-23'
@@ -69,9 +71,10 @@ Scenario: Remove must have from preference
 	And I select day '2012-08-23'
 	And I click remove must have button
 	Then I should see preference
-	| Field     | Value      |
-	| Date      | 2012-08-23 |
-	| Must have | false      |
+	| Field          | Value      |
+	| Date           | 2012-08-23 |
+	| Must have      | false      |
+	| Shift category | Late       |
 
 Scenario: See available must haves
 	When I view preferences for date '2012-08-23'
@@ -122,3 +125,6 @@ Scenario: Disallow setting too many must haves
 	| Field     | Value      |
 	| Date      | 2012-08-24 |
 	| Must have | false      |
+
+
+	# we need a scenario for visibility and enability of must have button
