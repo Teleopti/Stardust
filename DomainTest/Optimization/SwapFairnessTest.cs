@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	{
 		private SwapFariness _target;
 		private IList<ShiftCategoryFairnessCompareResult> _groupList;
-        private IList<SwapFairnessGroupAndCategory> _blackList;
+		private Dictionary<Guid, IList<IShiftCategory>> _blackList;
 
         [SetUp]
         public void Setup()
@@ -86,24 +87,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                  group4
                              };
 
-            _blackList = new List<SwapFairnessGroupAndCategory>
-                             {
-                                 new SwapFairnessGroupAndCategory
-                                     {
-                                         Group1 = group1,
-                                         Group2 = group2,
-                                         ShiftCategoryFromGroup1 = new ShiftCategory("Day"),
-                                         ShiftCategoryFromGroup2 = new ShiftCategory("Night")
-                                     }
-                             };
+			_blackList = new Dictionary<Guid, IList<IShiftCategory>>
+			             	{
+			             		{group1.Id, new List<IShiftCategory>() {new ShiftCategory("Day")}},
+			             		{group2.Id, new List<IShiftCategory>() {new ShiftCategory("Night")}}
+			             	};
 
-            _target = new SwapFariness();
+
+        	_target = new SwapFariness();
         }
 
 	    [Test]
 		public void ShouldReturnTwoGroupsForSwapping()
 		{
-            var result = _target.GetGroupsToSwap(_groupList, new List<SwapFairnessGroupAndCategory>());
+            var result = _target.GetGroupsToSwap(_groupList, new Dictionary<Guid, IList<IShiftCategory>>());
             Assert.AreEqual(0.1, result.Group1.StandardDeviation);
             Assert.AreEqual("Day",result.ShiftCategoryFromGroup1.Description.Name);
             Assert.AreEqual(0.02, result.Group2.StandardDeviation);
@@ -117,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	            new List<ShiftCategoryFairnessCompareResult>
 	                {
 	                    new ShiftCategoryFairnessCompareResult()
-	                }, new List<SwapFairnessGroupAndCategory>());
+	                }, new Dictionary<Guid, IList<IShiftCategory>>());
             Assert.AreEqual(null, result.Group1);
 	    }
 
@@ -146,7 +143,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
     public class SwapFariness
 	{
-        public SwapFairnessGroupAndCategory GetGroupsToSwap(IList<ShiftCategoryFairnessCompareResult> inList, IList<SwapFairnessGroupAndCategory> blackList)
+		private bool IsEligibleForSwap(Guid groupId, IShiftCategory shiftCategory ,Dictionary<Guid, IList<IShiftCategory>> blackList)
+		{
+			if(blackList.ContainsKey(groupId))
+			{
+				var categoriesList = blackList[groupId];
+				return !categoriesList.Contains(shiftCategory);
+			}
+
+			return true;
+		}
+
+        public SwapFairnessGroupAndCategory GetGroupsToSwap(IList<ShiftCategoryFairnessCompareResult> inList, Dictionary<Guid, IList<IShiftCategory>> blackList)
         {
             if (inList.Count < 2) return new SwapFairnessGroupAndCategory();
 
@@ -154,8 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var selectedGroup = orderedList.First();
             var returnGroup = orderedList.Skip(1).First();
 
-            var selectedGroupCategories =
-                selectedGroup.ShiftCategoryFairnessCompareValues.OrderByDescending(g => g.Original);
+            var selectedGroupCategories = selectedGroup.ShiftCategoryFairnessCompareValues.OrderByDescending(g => g.Original);
             var selectedGroupHighestCategory = selectedGroupCategories.First().ShiftCategory;
             var selectedGroupLowestCategory = selectedGroupCategories.Last().ShiftCategory;
 
