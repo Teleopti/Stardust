@@ -281,6 +281,7 @@
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\ShiftCategoryFairnessAggregator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairnessComparer.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairnessSwapper.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />
