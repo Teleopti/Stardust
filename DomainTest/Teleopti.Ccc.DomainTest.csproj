@@ -654,6 +654,7 @@
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplateTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStatePersonPeriodTest.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateRunnerTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateSchedulePeriodTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateTest.cs" />
     <Compile Include="Scheduling\TimeLayer\DateTimeMultiplicatorDefinitionTest.cs" />
