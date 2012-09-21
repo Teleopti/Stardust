@@ -1,5 +1,4 @@
-﻿@ASM
-Feature: ASM
+﻿Feature: ASM
 	In order to improve adherence
 	As an agent
 	I want to see my current activities
