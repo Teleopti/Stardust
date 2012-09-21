@@ -52,5 +52,7 @@ namespace Teleopti.Interfaces.Domain
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,
             ISchedulingOptions schedulingOptions);
+
+        IWorkShiftMinMaxCalculator WorkShiftMinMaxCalculator { get; }
     }
 }

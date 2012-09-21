@@ -1,3 +1,5 @@
+using System;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -20,6 +22,9 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets the scheduling result state holder.
 		/// </summary>
 		/// <value>The scheduling result state holder.</value>
-		IScheduleDictionary ScheduleDictionary { get; } 
+		IScheduleDictionary ScheduleDictionary { get; }
+
+        IBestShiftCategoryResult BestShiftCategoryForDaysTest(IBlockFinderResult result, IPerson person, ISchedulingOptions schedulingOptions, IFairnessValueResult agentFairness,MinMax<TimeSpan >? allowedMinMax 
+            );
     }
 }

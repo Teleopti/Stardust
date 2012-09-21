@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces;
@@ -167,8 +168,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			if (best == null)
 			{
 				IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
-
-				var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions, agentAverageFairness);
+			    var matrix = matrixList.First(d => d.Person == person);
+                MinMax<TimeSpan>? minmax = _scheduleService.WorkShiftFinderService.WorkShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix,
+			                                                                                                     schedulingOptions);
+                var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDaysTest(result, groupPerson, schedulingOptions, agentAverageFairness, minmax);
 				best = bestCategoryResult.BestPossible;
 
 				if (best == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)

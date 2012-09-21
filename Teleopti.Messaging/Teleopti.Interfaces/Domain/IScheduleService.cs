@@ -65,5 +65,7 @@ namespace Teleopti.Interfaces.Domain
             bool useOccupancyAdjustment,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IPossibleStartEndCategory possibleStartEndCategory);
+
+	    IWorkShiftFinderService WorkShiftFinderService { get; }
 	}
 }
