@@ -101,10 +101,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 		}
 
-		[Then(@"I should see I have (.*) available must haves")]
+		[Then(@"I should see I have (\d) available must haves")]
 		public void ThenIShouldSeeIHave1AvailableMustHaves(int mustHave)
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText, Is.StringContaining("(" + mustHave + ")"));
+			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining("(" + mustHave.ToString(CultureInfo.CurrentCulture) + ")"));
+		}
+
+		[Then(@"I should see I have (\d) must haves")]
+		public void ThenIShouldSeeIHave1MustHaves(int mustHave)
+		{
+			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining(mustHave.ToString(CultureInfo.CurrentCulture) + "("));
 		}
 
 

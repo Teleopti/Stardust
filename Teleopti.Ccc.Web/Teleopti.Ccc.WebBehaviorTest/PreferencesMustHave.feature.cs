@@ -320,10 +320,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Decrement available must haves on set")]
-        public virtual void DecrementAvailableMustHavesOnSet()
+        [NUnit.Framework.DescriptionAttribute("Increment must haves on set")]
+        public virtual void IncrementMustHavesOnSet()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Decrement available must haves on set", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Increment must haves on set", ((string[])(null)));
 #line 83
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -350,16 +350,16 @@ this.FeatureBackground();
 #line 91
  testRunner.And("I click set must have button");
 #line 92
- testRunner.Then("I should see I have \'0\' available must haves");
+ testRunner.Then("I should see I have 1 must haves");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Increment available must haves on remove")]
-        public virtual void IncrementAvailableMustHavesOnRemove()
+        [NUnit.Framework.DescriptionAttribute("Decrement must haves on remove")]
+        public virtual void DecrementMustHavesOnRemove()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Increment available must haves on remove", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Decrement must haves on remove", ((string[])(null)));
 #line 94
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -386,7 +386,7 @@ this.FeatureBackground();
 #line 102
  testRunner.And("I click remove must have button");
 #line 103
- testRunner.Then("I should see I have \'1\' available must haves");
+ testRunner.Then("I should see I have 0 must haves");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -437,7 +437,7 @@ this.FeatureBackground();
 #line 118
  testRunner.And("I click set must have button");
 #line 119
- testRunner.Then("I should see I have \'0\' available must haves");
+ testRunner.Then("I should see I have 1 must haves");
 #line hidden
             TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
