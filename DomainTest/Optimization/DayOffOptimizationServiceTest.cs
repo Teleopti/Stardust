@@ -28,35 +28,40 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifySuccessfulOptimization()
+        public void ContainerShouldBeRemovedIfFailedOrPeriodValueSmaeOrHigher()
         {
-            _optimizers = new List<IDayOffOptimizerContainer> { _container1, _container2 };
+            _optimizers = new List<IDayOffOptimizerContainer> { _container1 };
             IPerson owner = PersonFactory.CreatePerson();
             
             using (_mocks.Record())
             {
-                // first round 
+				// first round first executes
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(10);
                 Expect.Call(_container1.Execute())
                     .Return(true);
-                Expect.Call(_container2.Execute())
-                    .Return(true);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+				  .Return(9);
+				// second executes
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+				  .Return(9);
                 Expect.Call(_container1.Execute())
-                    .Return(false);
-                Expect.Call(_container2.Execute())
-                    .Return(false);
+                    .Return(true);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+				  .Return(9);
 
-                // second round
-				//Expect.Call(_container1.Execute())
-				//    .Return(false);
-				//Expect.Call(_container2.Execute())
-				//    .Return(false);
+				// second round first executes
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(9);
+				Expect.Call(_container1.Execute())
+					.Return(false);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+				  .Return(9);
+				
 
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-                    .Return(10).Repeat.AtLeastOnce();
                 Expect.Call(_container1.Owner)
                     .Return(owner).Repeat.AtLeastOnce();
-                Expect.Call(_container2.Owner)
-                    .Return(owner).Repeat.AtLeastOnce();
+               
             }
 
             using (_mocks.Playback())
