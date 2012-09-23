@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void ContainerShouldBeRemovedIfFailedOrPeriodValueSameOrHigher()
+        public void ContainerShouldBeRemovedIfPeriodValueSameOrHigher()
         {
             _optimizers = new List<IDayOffOptimizerContainer> { _container1 };
             IPerson owner = PersonFactory.CreatePerson();
@@ -50,25 +50,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
 				  .Return(9);
 
-				// second round first executes
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(9);
-				Expect.Call(_container1.Execute())
-					.Return(false);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-				  .Return(9);
-				
-
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-                    .Return(10);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(11);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(11);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(11);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(11);
                 Expect.Call(_container1.Owner)
                     .Return(owner).Repeat.AtLeastOnce();
                
@@ -79,6 +60,33 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target.Execute(_optimizers);
             }
         }
+
+		[Test]
+		public void ContainerShouldBeRemovedIfFailed()
+		{
+			_optimizers = new List<IDayOffOptimizerContainer> { _container1 };
+			IPerson owner = PersonFactory.CreatePerson();
+
+			using (_mocks.Record())
+			{
+				// first round first executes
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(10);
+				Expect.Call(_container1.Execute())
+					.Return(false);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+
+
+				Expect.Call(_container1.Owner)
+					.Return(owner).Repeat.AtLeastOnce();
+
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.Execute(_optimizers);
+			}
+		}
 
         [Test]
         public void VerifyCancel()
