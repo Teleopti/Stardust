@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IPeriodValueCalculator _periodValueCalculator;
         private IEnumerable<IDayOffOptimizerContainer> _optimizers;
         private IDayOffOptimizerContainer _container1;
-        private IDayOffOptimizerContainer _container2;
 
         [SetUp]
         public void Setup()
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mocks = new MockRepository();
             _periodValueCalculator = _mocks.StrictMock<IPeriodValueCalculator>();
             _container1 = _mocks.StrictMock<IDayOffOptimizerContainer>();
-            _container2 = _mocks.StrictMock<IDayOffOptimizerContainer>();
             _target = new DayOffOptimizationService(_periodValueCalculator);
         }
 
