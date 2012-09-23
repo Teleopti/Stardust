@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					retList.Add(optimizer);
 
 				newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-				if (lastPeriodValue >= newPeriodValue)
+				if (lastPeriodValue <= newPeriodValue)
 					retList.Add(optimizer);
 
                 string who = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
