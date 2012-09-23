@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void ContainerShouldBeRemovedIfFailedOrPeriodValueSmaeOrHigher()
+        public void ContainerShouldBeRemovedIfFailedOrPeriodValueSameOrHigher()
         {
             _optimizers = new List<IDayOffOptimizerContainer> { _container1 };
             IPerson owner = PersonFactory.CreatePerson();
