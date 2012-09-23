@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_container1.Execute())
 					.Return(false);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(10);
 
 
 				Expect.Call(_container1.Owner)
