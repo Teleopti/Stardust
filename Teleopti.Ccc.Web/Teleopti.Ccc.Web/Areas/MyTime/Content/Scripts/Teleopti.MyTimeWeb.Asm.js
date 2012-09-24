@@ -59,6 +59,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			return -(pixelPerHours * hoursSinceStart) + 'px';
 		});
 		self.yesterday = yesterday;
+		self.activePayload = ko.observable();
+		self.activePayload.subscribe(function (newValue) {
+			window.alert(newValue);
+		})
 	}
 
 	function layerViewModel(layer, canvas) {
@@ -83,7 +87,11 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				return false;
 			var startPos = parseFloat(self.leftPx);
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
-			return startPos <= timelinePosition;
+			var isActive = startPos <= timelinePosition;
+			if(isActive) {
+				canvas.activePayload(self.payload);				
+			}
+			return isActive;
 		});
 		self.startText = function () {
 			var out = self.startTimeText;
