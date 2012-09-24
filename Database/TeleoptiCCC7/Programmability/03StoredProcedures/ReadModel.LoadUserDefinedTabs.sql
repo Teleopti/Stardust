@@ -73,15 +73,23 @@ SELECT @dynamicSQL=''
   EmploymentNumber nvarchar(200), Level int, Show bit)
   
   INSERT INTO #endResult
-  SELECT NodeId, Person PersonId, null TeamId, Null SiteId, BusinessUnitId,
+  SELECT NodeId, Person PersonId, null TeamId, null SiteId, BusinessUnitId,
   Node, ParentId, FirstName, LastName, EmploymentNumber, Level,
   case when ISNULL(TerminalDate, '2100-01-01') > @ondate then 1 else 0 end Show
   FROM #result
   left join PersonGroup on NodeId = PersonGroup
-  left JOIN Person ON Person = Person.Id
+  left JOIN Person ON Person = Person.Id WHERE Person.IsDeleted = 0 OR Person.IsDeleted is null
   ORDER BY level
 	
-  --SELECT * FROM #endResult ORDER BY Level, Node, LastName, FirstName
+	UPDATE #endResult
+	SET TeamId = Team.Id, SiteId = Site.Id
+	FROM #endResult
+	INNER  JOIN PersonPeriodWithEndDate pp ON PersonId = pp.Parent AND StartDate <= @ondate AND EndDate >= @ondate
+	INNER JOIN Team ON Team.Id = pp.Team
+	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
+	
+  --SELECT * FROM #endResult where firstname = 'mikko' ORDER BY Level, Node, LastName, FirstName 
+  
 SELECT @dynamicSQL =	'SELECT * FROM #endResult ORDER BY Level, Node collate ' + @collation +
 							', NodeId, LastName collate ' + @collation +
 							', FirstName collate ' + @collation 
