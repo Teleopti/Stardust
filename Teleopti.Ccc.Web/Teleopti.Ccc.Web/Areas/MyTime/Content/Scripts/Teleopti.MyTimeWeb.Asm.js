@@ -60,7 +60,17 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 		self.yesterday = yesterday;
 		self.activePayload = ko.observable();
-		self.activePayload.subscribe(function(newValue) {
+
+		self.now.subscribe(function () {
+			$.each(self.visibleLayers(), function (index, value) {
+				if (value.active()) {
+					self.activePayload(value.payload);
+					return false;
+				}
+			});
+		});
+
+		self.activePayload.subscribe(function (newValue) {
 			window.alert('xxxDin nya aktivitet bambambam' + newValue);
 		});
 	}
@@ -88,9 +98,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			var startPos = parseFloat(self.leftPx);
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
 			var isActive = startPos <= timelinePosition;
-			if (isActive) {
-				canvas.activePayload(self.payload);
-			}
 			return isActive;
 		});
 		self.startText = function () {

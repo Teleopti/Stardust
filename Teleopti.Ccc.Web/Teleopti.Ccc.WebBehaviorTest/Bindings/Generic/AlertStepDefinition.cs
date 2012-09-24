@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using WatiN.Core;
@@ -9,12 +10,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class AlertStepDefinition
 	{
-		[Then(@"I should see a alert containing '(.*)'")]
-		public void ThenIShouldSeeAPopupSayingPhoneIsNewActivity(string activity)
+		[Then(@"I should see only one alert containing '(.*)'")]
+		public void ThenIShouldSeeOnlyOneAlertContaining(string activity)
 		{
 			EventualAssert.That(() =>
 					 Browser.Current.Elements.Filter(Find.ByClass("alertLoggerItem")).Exists(Find.ByText(t => t.Contains(activity))),
-			       Is.True);
+					 Is.True);
+			Browser.Current.Elements.Filter(Find.ByClass("alertLoggerItem")).Count.Should().Be.EqualTo(1);
 		}
 	}
 }
