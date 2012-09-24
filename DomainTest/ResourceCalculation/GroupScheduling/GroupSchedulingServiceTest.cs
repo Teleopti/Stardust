@@ -45,8 +45,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     	private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
     	private IEffectiveRestriction _effectiveRestriction;
     	private IVirtualSchedulePeriod _schedulePeriod;
+        private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 
-    	[SetUp]
+        [SetUp]
         public void Setup()
     	{
 			_mock = new MockRepository();
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     		_effectiveRestrictionCreator = _mock.StrictMock<IEffectiveRestrictionCreator>();
     		_effectiveRestriction = _mock.DynamicMock<IEffectiveRestriction>();
     		_schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
+    	    _workShiftMinMaxCalculator = _mock.StrictMock<IWorkShiftMinMaxCalculator>();
 
     	    _target = new GroupSchedulingService(_groupPersonsBuilder,
 													_bestBlockShiftCategoryFinder,
@@ -81,7 +83,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 													_rollbackService, 
 													_resourceOptimizationHelper,
 													_schedulingResults,
-													_effectiveRestrictionCreator);
+													_effectiveRestrictionCreator,
+                                                    _workShiftMinMaxCalculator);
 
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
