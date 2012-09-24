@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Preferences must haves
+﻿Feature: Preferences must haves
 	In order to get scheduled according specific preferences
 	As an agent
 	I want to stress which of my preferences are most important

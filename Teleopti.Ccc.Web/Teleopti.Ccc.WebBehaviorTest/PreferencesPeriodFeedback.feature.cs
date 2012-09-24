@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Preferences period feedback")]
-    [NUnit.Framework.IgnoreAttribute()]
     public partial class PreferencesPeriodFeedbackFeature
     {
         
@@ -34,8 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Preferences period feedback", "In order to know if my preferences are viable\r\nAs an agent\r\nI want feedback of my" +
-                    " preferences compared to my contract for the period", ProgrammingLanguage.CSharp, new string[] {
-                        "ignore"});
+                    " preferences compared to my contract for the period", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -72,17 +70,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void PeriodFeedbackOfContractDayOff()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of contract day off", ((string[])(null)));
-#line 9
+#line 8
 this.ScenarioSetup(scenarioInfo);
-#line 10
+#line 9
  testRunner.Given("I am an agent");
-#line 11
+#line 10
  testRunner.And("I have a scheduling period of 1 week");
-#line 12
+#line 11
  testRunner.And("I have a contract schedule with 2 days off");
-#line 13
+#line 12
  testRunner.When("I view preferences");
-#line 14
+#line 13
  testRunner.Then("I should see a message that I should have 2 days off");
 #line hidden
             this.ScenarioCleanup();
@@ -93,21 +91,21 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfDayOffPreferences()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of day off preferences", ((string[])(null)));
-#line 18
+#line 17
 this.ScenarioSetup(scenarioInfo);
-#line 19
+#line 18
  testRunner.Given("I am an agent");
-#line 20
+#line 19
  testRunner.And("I have a scheduling period of 1 week");
-#line 21
+#line 20
  testRunner.And("I have a day off preference on weekday 3");
-#line 22
+#line 21
  testRunner.And("I have a day off preference on weekday 5");
-#line 23
+#line 22
  testRunner.When("I view preferences");
-#line 24
+#line 23
  testRunner.Then("I should see a message that my preferences can result 2 days off");
-#line 25
+#line 24
  testRunner.And("I should not see a warning for my dayoff preferences outside the target");
 #line hidden
             this.ScenarioCleanup();
@@ -118,19 +116,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfDayOffScheduled()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of day off scheduled", ((string[])(null)));
-#line 27
+#line 26
 this.ScenarioSetup(scenarioInfo);
-#line 28
+#line 27
  testRunner.Given("I am an agent");
-#line 29
+#line 28
  testRunner.And("I have a scheduling period of 1 week");
-#line 30
+#line 29
  testRunner.And("I have a day off scheduled on weekday 3");
-#line 31
+#line 30
  testRunner.And("I have a day off scheduled on weekday 5");
-#line 32
+#line 31
  testRunner.When("I view preferences");
-#line 33
+#line 32
  testRunner.Then("I should see a message that my preferences can result 2 days off");
 #line hidden
             this.ScenarioCleanup();
@@ -141,19 +139,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfDayOffPreferencesAndScheduled()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of day off preferences and scheduled", ((string[])(null)));
-#line 35
+#line 34
 this.ScenarioSetup(scenarioInfo);
-#line 36
+#line 35
  testRunner.Given("I am an agent");
-#line 37
+#line 36
  testRunner.And("I have a scheduling period of 1 week");
-#line 38
+#line 37
  testRunner.And("I have a day off preference on weekday 3");
-#line 39
+#line 38
  testRunner.And("I have a day off scheduled on weekday 5");
-#line 40
+#line 39
  testRunner.When("I view preferences");
-#line 41
+#line 40
  testRunner.Then("I should see a message that my preferences can result 2 days off");
 #line hidden
             this.ScenarioCleanup();
@@ -164,13 +162,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfContractDayOffTolerance()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of contract day off tolerance", ((string[])(null)));
-#line 45
+#line 44
 this.ScenarioSetup(scenarioInfo);
-#line 46
+#line 45
  testRunner.Given("I am an agent");
-#line 47
+#line 46
  testRunner.And("I have a scheduling period of 1 week");
-#line 48
+#line 47
  testRunner.And("I have a contract schedule with 2 days off");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
@@ -182,11 +180,11 @@ this.ScenarioSetup(scenarioInfo);
             table1.AddRow(new string[] {
                         "Negative day off tolerance",
                         "1"});
-#line 49
+#line 48
  testRunner.And("I have a contract with:", ((string)(null)), table1);
-#line 53
+#line 52
  testRunner.When("I view preferences");
-#line 54
+#line 53
  testRunner.Then("I should see a message that I should have between 1 and 3 days off");
 #line hidden
             this.ScenarioCleanup();
@@ -197,13 +195,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfAbsenceOnContractScheduleDayOff()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of absence on contract schedule day off", ((string[])(null)));
-#line 58
+#line 57
 this.ScenarioSetup(scenarioInfo);
-#line 59
+#line 58
  testRunner.Given("I am an agent");
-#line 60
+#line 59
  testRunner.And("I am swedish");
-#line 61
+#line 60
  testRunner.And("I have a scheduling period of 1 week");
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
@@ -230,15 +228,15 @@ this.ScenarioSetup(scenarioInfo);
             table2.AddRow(new string[] {
                         "Sunday work day",
                         "false"});
-#line 62
+#line 61
  testRunner.And("I have a contract schedule with:", ((string)(null)), table2);
-#line 71
+#line 70
  testRunner.And("I have a absence preference on weekday 5");
-#line 72
+#line 71
  testRunner.And("I have a absence preference on weekday 6");
-#line 73
+#line 72
  testRunner.When("I view preferences");
-#line 74
+#line 73
  testRunner.Then("I should see a message that my preferences can result 1 days off");
 #line hidden
             this.ScenarioCleanup();
@@ -251,11 +249,11 @@ this.ScenarioSetup(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of contract time for employment type Fixed staff normal work time" +
                     "", ((string[])(null)));
-#line 78
+#line 77
 this.ScenarioSetup(scenarioInfo);
-#line 79
+#line 78
  testRunner.Given("I am an agent");
-#line 80
+#line 79
  testRunner.And("I have a scheduling period of 1 week");
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -267,13 +265,13 @@ this.ScenarioSetup(scenarioInfo);
             table3.AddRow(new string[] {
                         "Average work time per day",
                         "8"});
-#line 81
+#line 80
  testRunner.And("I have a contract with:", ((string)(null)), table3);
-#line 85
+#line 84
  testRunner.And("I have a contract schedule with 2 days off");
-#line 86
+#line 85
  testRunner.When("I view preferences");
-#line 87
+#line 86
  testRunner.Then("I should see a message that I should work 40 hours");
 #line hidden
             this.ScenarioCleanup();
@@ -284,11 +282,11 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfContractTimeForEmploymentTypeFixedStaffDayWorkTime()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of contract time for employment type Fixed staff day work time", ((string[])(null)));
-#line 89
+#line 88
 this.ScenarioSetup(scenarioInfo);
-#line 90
+#line 89
  testRunner.Given("I am an agent");
-#line 91
+#line 90
  testRunner.And("I have a scheduling period of 1 week");
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
@@ -300,15 +298,15 @@ this.ScenarioSetup(scenarioInfo);
             table4.AddRow(new string[] {
                         "Average work time per day",
                         "8"});
-#line 92
+#line 91
  testRunner.And("I have a contract with:", ((string)(null)), table4);
-#line 96
+#line 95
  testRunner.And("I have a day off preference on weekday 6");
-#line 97
+#line 96
  testRunner.And("I have a day off preference on weekday 7");
-#line 98
+#line 97
  testRunner.When("I view preferences");
-#line 99
+#line 98
  testRunner.Then("I should see a message that I should work 40 hours");
 #line hidden
             this.ScenarioCleanup();
@@ -319,11 +317,11 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfContractTimeWithTargetTolerance()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of contract time with target tolerance", ((string[])(null)));
-#line 101
+#line 100
 this.ScenarioSetup(scenarioInfo);
-#line 102
+#line 101
  testRunner.Given("I am an agent");
-#line 103
+#line 102
  testRunner.And("I have a scheduling period of 1 week");
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
@@ -341,13 +339,13 @@ this.ScenarioSetup(scenarioInfo);
             table5.AddRow(new string[] {
                         "Positive target tolerance hours",
                         "5"});
-#line 104
+#line 103
  testRunner.And("I have a contract with:", ((string)(null)), table5);
-#line 110
+#line 109
  testRunner.And("I have a contract schedule with 2 days off");
-#line 111
+#line 110
  testRunner.When("I view preferences");
-#line 112
+#line 111
  testRunner.Then("I should see a message that I should work 35 to 45 hours");
 #line hidden
             this.ScenarioCleanup();
@@ -358,17 +356,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfNothing()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of nothing", ((string[])(null)));
-#line 116
+#line 115
 this.ScenarioSetup(scenarioInfo);
-#line 117
+#line 116
  testRunner.Given("I am an agent");
-#line 118
+#line 117
  testRunner.And("I have a scheduling period of 1 week");
-#line 119
+#line 118
  testRunner.And("I have a shift bag with start times 7 to 9 and end times 15 to 17");
-#line 120
+#line 119
  testRunner.When("I view preferences");
-#line 121
+#line 120
  testRunner.Then("I should see a message that my preferences can result in 42 to 70 hours");
 #line hidden
             this.ScenarioCleanup();
@@ -379,33 +377,33 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfPreferences()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of preferences", ((string[])(null)));
-#line 123
+#line 122
 this.ScenarioSetup(scenarioInfo);
-#line 124
+#line 123
  testRunner.Given("I am an agent");
-#line 125
+#line 124
  testRunner.And("I have a scheduling period of 1 week");
-#line 126
+#line 125
  testRunner.And("I have a shift bag with start times 7 to 9 and end times 15 to 17");
-#line 127
+#line 126
  testRunner.And("I have a shift category preference on weekday 1");
-#line 128
+#line 127
  testRunner.And("I have a shift category preference on weekday 2");
-#line 129
+#line 128
  testRunner.And("I have a shift category preference on weekday 3");
-#line 130
+#line 129
  testRunner.And("I have a shift category preference on weekday 4");
-#line 131
+#line 130
  testRunner.And("I have a shift category preference on weekday 5");
-#line 132
+#line 131
  testRunner.And("I have a day off preference on weekday 6");
-#line 133
+#line 132
  testRunner.And("I have a day off preference on weekday 7");
-#line 134
+#line 133
  testRunner.When("I view preferences");
-#line 135
+#line 134
  testRunner.Then("I should see a message that my preferences can result in 30 to 50 hours");
-#line 136
+#line 135
  testRunner.And("I should not see a warning for my time preferences outside the target");
 #line hidden
             this.ScenarioCleanup();
@@ -416,29 +414,29 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfSchedules()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of schedules", ((string[])(null)));
-#line 138
+#line 137
 this.ScenarioSetup(scenarioInfo);
-#line 139
+#line 138
  testRunner.Given("I am an agent");
-#line 140
+#line 139
  testRunner.And("I have a scheduling period of 1 week");
-#line 141
+#line 140
  testRunner.And("I have a scheduled shift of 8 hours on weekday 1");
-#line 142
+#line 141
  testRunner.And("I have a scheduled shift of 8 hours on weekday 2");
-#line 143
+#line 142
  testRunner.And("I have a scheduled shift of 8 hours on weekday 3");
-#line 144
+#line 143
  testRunner.And("I have a scheduled shift of 8 hours on weekday 4");
-#line 145
+#line 144
  testRunner.And("I have a scheduled shift of 8 hours on weekday 5");
-#line 146
+#line 145
  testRunner.And("I have a scheduled day off on weekday 6");
-#line 147
+#line 146
  testRunner.And("I have a scheduled day off on weekday 7");
-#line 148
+#line 147
  testRunner.When("I view preferences");
-#line 149
+#line 148
  testRunner.Then("I should see a message that my preferences can result in 40 hours");
 #line hidden
             this.ScenarioCleanup();
@@ -449,31 +447,31 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfSchedulesAndPreferences()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of schedules and preferences", ((string[])(null)));
-#line 151
+#line 150
 this.ScenarioSetup(scenarioInfo);
-#line 152
+#line 151
  testRunner.Given("I am an agent");
-#line 153
+#line 152
  testRunner.And("I have a scheduling period of 1 week");
-#line 154
+#line 153
  testRunner.And("I have a shift bag with start times 7 to 9 and end times 15 to 17");
-#line 155
+#line 154
  testRunner.And("I have a scheduled shift of 8 hours on weekday 1");
-#line 156
+#line 155
  testRunner.And("I have a scheduled shift of 8 hours on weekday 2");
-#line 157
+#line 156
  testRunner.And("I have a shift category preference on weekday 3");
-#line 158
+#line 157
  testRunner.And("I have a shift category preference on weekday 4");
-#line 159
+#line 158
  testRunner.And("I have a shift category preference on weekday 5");
-#line 160
+#line 159
  testRunner.And("I have a scheduled day off on weekday 6");
-#line 161
+#line 160
  testRunner.And("I have a day off preference on weekday 7");
-#line 162
+#line 161
  testRunner.When("I view preferences");
-#line 163
+#line 162
  testRunner.Then("I should see a message that my preferences can result in 34 to 46 hours");
 #line hidden
             this.ScenarioCleanup();
@@ -484,11 +482,11 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfContractTimeAbsence()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of contract time absence", ((string[])(null)));
-#line 167
+#line 166
 this.ScenarioSetup(scenarioInfo);
-#line 168
+#line 167
  testRunner.Given("I am an agent");
-#line 169
+#line 168
  testRunner.And("I have a scheduling period of 1 week");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -497,29 +495,29 @@ this.ScenarioSetup(scenarioInfo);
             table6.AddRow(new string[] {
                         "Average work time per day",
                         "8"});
-#line 170
+#line 169
  testRunner.And("I have a contract with:", ((string)(null)), table6);
-#line 173
+#line 172
  testRunner.And("I have a shift bag with start times 7 to 9 and end times 15 to 17");
-#line 174
+#line 173
  testRunner.And("I have a contract schedule with 2 days off");
-#line 175
+#line 174
  testRunner.And("I have a contract time absence preference on weekday 1");
-#line 176
+#line 175
  testRunner.And("I have a contract time absence preference on weekday 2");
-#line 177
+#line 176
  testRunner.And("I have a contract time absence preference on weekday 3");
-#line 178
+#line 177
  testRunner.And("I have a contract time absence preference on weekday 4");
-#line 179
+#line 178
  testRunner.And("I have a contract time absence preference on weekday 5");
-#line 180
+#line 179
  testRunner.And("I have a contract time absence preference on weekday 6");
-#line 181
+#line 180
  testRunner.And("I have a contract time absence preference on weekday 7");
-#line 182
+#line 181
  testRunner.When("I view preferences");
-#line 183
+#line 182
  testRunner.Then("I should see a message that my preferences can result in 40 hours");
 #line hidden
             this.ScenarioCleanup();
@@ -530,11 +528,11 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfNon_ContractTimeAbsence()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of non-contract time absence", ((string[])(null)));
-#line 185
+#line 184
 this.ScenarioSetup(scenarioInfo);
-#line 186
+#line 185
  testRunner.Given("I am an agent");
-#line 187
+#line 186
  testRunner.And("I have a scheduling period of 1 week");
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -543,29 +541,29 @@ this.ScenarioSetup(scenarioInfo);
             table7.AddRow(new string[] {
                         "Average work time per day",
                         "8"});
-#line 188
+#line 187
  testRunner.And("I have a contract with:", ((string)(null)), table7);
-#line 191
+#line 190
  testRunner.And("I have a shift bag with start times 7 to 9 and end times 15 to 17");
-#line 192
+#line 191
  testRunner.And("I have a contract schedule with 2 days off");
-#line 193
+#line 192
  testRunner.And("I have a non-contract time absence preference on weekday 1");
-#line 194
+#line 193
  testRunner.And("I have a non-contract time absence preference on weekday 2");
-#line 195
+#line 194
  testRunner.And("I have a non-contract time absence preference on weekday 3");
-#line 196
+#line 195
  testRunner.And("I have a non-contract time absence preference on weekday 4");
-#line 197
+#line 196
  testRunner.And("I have a non-contract time absence preference on weekday 5");
-#line 198
+#line 197
  testRunner.And("I have a non-contract time absence preference on weekday 6");
-#line 199
+#line 198
  testRunner.And("I have a non-contract time absence preference on weekday 7");
-#line 200
+#line 199
  testRunner.When("I view preferences");
-#line 201
+#line 200
  testRunner.Then("I should see a message that my preferences can result in 0 hours");
 #line hidden
             this.ScenarioCleanup();
@@ -576,25 +574,25 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfDayOffPreferencesWithWarning()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of day off preferences with warning", ((string[])(null)));
-#line 205
+#line 204
 this.ScenarioSetup(scenarioInfo);
-#line 206
+#line 205
  testRunner.Given("I am an agent");
-#line 207
+#line 206
  testRunner.And("I have a scheduling period of 1 week");
-#line 208
+#line 207
  testRunner.And("I have a day off preference on weekday 3");
-#line 209
+#line 208
  testRunner.And("I have a day off preference on weekday 4");
-#line 210
+#line 209
  testRunner.And("I have a day off preference on weekday 5");
-#line 211
+#line 210
  testRunner.When("I view preferences");
-#line 212
+#line 211
  testRunner.Then("I should see a message that I should have 2 days off");
-#line 213
+#line 212
  testRunner.And("I should see a message that my preferences can result 3 days off");
-#line 214
+#line 213
  testRunner.And("I should see a warning for my dayoff preferences outside the target");
 #line hidden
             this.ScenarioCleanup();
@@ -605,35 +603,35 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void PeriodFeedbackOfPreferencesWithWarning()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Period feedback of preferences with warning", ((string[])(null)));
-#line 216
+#line 215
 this.ScenarioSetup(scenarioInfo);
-#line 217
+#line 216
  testRunner.Given("I am an agent");
-#line 218
+#line 217
  testRunner.And("I have a scheduling period of 1 week");
-#line 219
+#line 218
  testRunner.And("I have a shift bag with start times 7 to 9 and end times 15 to 17");
-#line 220
+#line 219
  testRunner.And("I have a shift category preference on weekday 1");
-#line 221
+#line 220
  testRunner.And("I have a shift category preference on weekday 2");
-#line 222
+#line 221
  testRunner.And("I have a shift category preference on weekday 3");
-#line 223
+#line 222
  testRunner.And("I have a shift category preference on weekday 4");
-#line 224
+#line 223
  testRunner.And("I have a shift category preference on weekday 5");
-#line 225
+#line 224
  testRunner.And("I have a shift category preference on weekday 6");
-#line 226
+#line 225
  testRunner.And("I have a shift category preference on weekday 7");
-#line 227
+#line 226
  testRunner.When("I view preferences");
-#line 228
+#line 227
  testRunner.Then("I should see a message that I should work 40 hours");
-#line 229
+#line 228
  testRunner.And("I should see a message that my preferences can result in 42 to 70 hours");
-#line 230
+#line 229
  testRunner.And("I should see a warning for my time preferences outside the target");
 #line hidden
             this.ScenarioCleanup();
