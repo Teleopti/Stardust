@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -10,28 +11,31 @@ using System.Linq;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
-	[TestFixture]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
 	public class ShiftCategoryFairnessOptimizerTest
 	{
 		private MockRepository _mocks;
 		private IShiftCategoryFairnessAggregateManager _shiftCategoryFairnessAggregateManager;
 		private IShiftCategoryFairnessSwapper _shiftCategoryFairnessSwapper;
+		private IShiftCategoryFairnessSwapFinder _shiftCategoryFairnessSwapFinder;
 		private ShiftCategoryFairnessOptimizer _target;
+		private BackgroundWorker _bgWorker;
 
 		[SetUp]
 		public void Setup()
 		{
+			_bgWorker = new BackgroundWorker();
 			_mocks = new MockRepository();
-			_shiftCategoryFairnessAggregateManager = _mocks.DynamicMock<IShiftCategoryFairnessAggregateManager>();
+			_shiftCategoryFairnessAggregateManager = _mocks.StrictMock<IShiftCategoryFairnessAggregateManager>();
 			_shiftCategoryFairnessSwapper = _mocks.DynamicMock<IShiftCategoryFairnessSwapper>();
-			_target = new ShiftCategoryFairnessOptimizer(_shiftCategoryFairnessAggregateManager, _shiftCategoryFairnessSwapper);
+			_shiftCategoryFairnessSwapFinder = _mocks.StrictMock<IShiftCategoryFairnessSwapFinder>();
+			_target = new ShiftCategoryFairnessOptimizer(_shiftCategoryFairnessAggregateManager, _shiftCategoryFairnessSwapper, _shiftCategoryFairnessSwapFinder);
 
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldSkipOutIfFair()
 		{
-			var bgWorker = new BackgroundWorker();
 			var persons = new List<IPerson>();
 			var dateOnly = new DateOnly(2012, 9, 21);
 			var days = new List<DateOnly>{dateOnly};
@@ -43,7 +47,97 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(
 				new List<IShiftCategoryFairnessCompareResult> {compare1, compare2});
 			_mocks.ReplayAll();
-			_target.Execute(bgWorker, persons, days, matrixes, gropPage);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldSkipOutIfNoSuggestion()
+		{
+			var persons = new List<IPerson>();
+			var dateOnly = new DateOnly(2012, 9, 21);
+			var days = new List<DateOnly> { dateOnly };
+			var matrixes = new List<IScheduleMatrixPro>();
+			var gropPage = new GroupPageLight();
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3 };
+			var list = new List<IShiftCategoryFairnessCompareResult> {compare1, compare2};
+			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
+			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(null);
+			_mocks.ReplayAll();
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldTrySwapSuggestion()
+		{
+			var persons = new List<IPerson>();
+			var dateOnly = new DateOnly(2012, 9, 21);
+			var days = new List<DateOnly> { dateOnly };
+			var matrixes = new List<IScheduleMatrixPro>();
+			var gropPage = new GroupPageLight();
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3 };
+			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
+			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
+			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
+			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(toSwap);
+			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes)).Return(false);
+			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap> { toSwap })).Return(null);
+			_mocks.ReplayAll();
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldTryAgainToAnotherSwapSuggestion()
+		{
+			var persons = new List<IPerson>();
+			var dateOnly = new DateOnly(2012, 9, 21);
+			var days = new List<DateOnly> { dateOnly };
+			var matrixes = new List<IScheduleMatrixPro>();
+			var gropPage = new GroupPageLight();
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3 };
+			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 2 };
+			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
+			var list2 = new List<IShiftCategoryFairnessCompareResult> { compare1, compare3 };
+			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
+			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
+			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(toSwap);
+			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes)).Return(true);
+			//second
+			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list2);
+			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list2, new List<IShiftCategoryFairnessSwap>())).Return(null);
+			_mocks.ReplayAll();
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldAddToBlackListIfWorse()
+		{
+			var persons = new List<IPerson>();
+			var dateOnly = new DateOnly(2012, 9, 21);
+			var days = new List<DateOnly> { dateOnly };
+			var matrixes = new List<IScheduleMatrixPro>();
+			var gropPage = new GroupPageLight();
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3 };
+			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 4 };
+			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
+			var list2 = new List<IShiftCategoryFairnessCompareResult> { compare1, compare3 };
+			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
+			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
+			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(toSwap);
+			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes)).Return(true);
+			//second
+			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list2);
+			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list2, new List<IShiftCategoryFairnessSwap>{toSwap})).Return(null);
+			_mocks.ReplayAll();
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage);
+			_mocks.VerifyAll();
 		}
 	}
 
@@ -51,12 +145,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	{
 		private readonly IShiftCategoryFairnessAggregateManager _shiftCategoryFairnessAggregateManager;
 		private readonly IShiftCategoryFairnessSwapper _shiftCategoryFairnessSwapper;
+		private readonly IShiftCategoryFairnessSwapFinder _shiftCategoryFairnessSwapFinder;
 
 		public ShiftCategoryFairnessOptimizer(IShiftCategoryFairnessAggregateManager shiftCategoryFairnessAggregateManager,
-			IShiftCategoryFairnessSwapper shiftCategoryFairnessSwapper)
+			IShiftCategoryFairnessSwapper shiftCategoryFairnessSwapper, IShiftCategoryFairnessSwapFinder shiftCategoryFairnessSwapFinder)
 		{
 			_shiftCategoryFairnessAggregateManager = shiftCategoryFairnessAggregateManager;
 			_shiftCategoryFairnessSwapper = shiftCategoryFairnessSwapper;
+			_shiftCategoryFairnessSwapFinder = shiftCategoryFairnessSwapFinder;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -71,7 +167,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				// run that day
 				runDay(backgroundWorker,persons,selectedDays,selectedDay,matrixListForFairnessOptimization,groupPage);
 			}
-			return false;
+			return true;
 		}
 
 		private void runDay(BackgroundWorker backgroundWorker, IList<IPerson> persons,  IList<DateOnly> selectedDays, DateOnly dateOnly,
@@ -79,7 +175,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 
 			// we need a rollback service somewhere too
-			var blackList = new List<object>();
+			var blackList = new List<IShiftCategoryFairnessSwap>();
 			var fairnessResults =
 				_shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
 					x => x.StandardDeviation).ToList();
@@ -89,44 +185,58 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			if(diff.Equals(0))
 				return;
 
-			object suggestion = new object();
-			
 			// get a suggestion (do until no more suggestions, what is returned then????)
-			// var suggestion = _theNewSuggestionFinder.GetSuggstion(fairnessResults, blackList)
-			if (backgroundWorker.CancellationPending)
+			var swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
+			if(swapSuggestion == null)
 				return;
+			do
+			{
+				if (backgroundWorker.CancellationPending)
+					return;
 
-			//try to swap, in this we will have another class that schedule those that can't be swapped (if the number of members differ)
-			// it will keep track off the business rules too, if we brake some with the swap
-			var success = _shiftCategoryFairnessSwapper.TrySwap(suggestion,dateOnly, matrixListForFairnessOptimization);
-			if(!success)
-			{
-				blackList.Add(suggestion);
-				//get another one
-				// var suggestion = _theNewSuggestionFinder.GetSuggstion(fairnessResults, blackList)
-			}
-			else
-			{
-				// success but did it get better
-				fairnessResults =
-				_shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
-					x => x.StandardDeviation).ToList();
-				
-				var newdiff = fairnessResults[0].StandardDeviation - fairnessResults[fairnessResults.Count - 1].StandardDeviation;
-				if(newdiff > diff) // not better
+				//try to swap, in this we will have another class that schedule those that can't be swapped (if the number of members differ)
+				// it will keep track off the business rules too, if we brake some with the swap
+				var success = _shiftCategoryFairnessSwapper.TrySwap(swapSuggestion, dateOnly, matrixListForFairnessOptimization);
+				if (!success)
 				{
-					blackList.Add(suggestion);
-					// do a rollback (if scheduled we need to resourcecalculate again??)
+					blackList.Add(swapSuggestion);
 				}
 				else
 				{
-					// if we did swap start all over again and we do this day until no more suggestions
-					// could we get stucked here with new suggestions all the time?
-					blackList = new List<object>();
-					//airnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays);
+					// success but did it get better
+					fairnessResults =
+					_shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
+						x => x.StandardDeviation).ToList();
+
+					var newdiff = fairnessResults[fairnessResults.Count - 1].StandardDeviation - fairnessResults[0].StandardDeviation;
+					if (newdiff > diff) // not better
+					{
+						blackList.Add(swapSuggestion);
+						// do a rollback (if scheduled we need to resourcecalculate again??)
+					}
+					else
+					{
+						// if we did swap start all over again and we do this day until no more suggestions
+						blackList = new List<IShiftCategoryFairnessSwap>();	
+					}
 				}
-				
-			}
+				//get another one could we get stucked here with new suggestions all the time?
+				swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
+			} while (swapSuggestion != null);
+			
 		}
+	}
+
+	public interface IShiftCategoryFairnessSwap
+	{
+		 ShiftCategoryFairnessCompareResult Group1 { get; set; }
+		 ShiftCategoryFairnessCompareResult Group2 { get; set; }
+		 IShiftCategory ShiftCategoryFromGroup1 { get; set; }
+		 IShiftCategory ShiftCategoryFromGroup2 { get; set; }
+	}
+
+	public interface IShiftCategoryFairnessSwapFinder
+	{
+		IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> inList, IList<IShiftCategoryFairnessSwap> blacklist);
 	}
 }
