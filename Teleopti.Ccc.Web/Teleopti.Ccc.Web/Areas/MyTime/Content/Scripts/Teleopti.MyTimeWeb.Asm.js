@@ -60,9 +60,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 		self.yesterday = yesterday;
 		self.activePayload = ko.observable();
-		self.activePayload.subscribe(function (newValue) {
-			window.alert(newValue);
-		})
+		self.activePayload.subscribe(function(newValue) {
+			window.alert('xxxDin nya aktivitet bambambam' + newValue);
+		});
 	}
 
 	function layerViewModel(layer, canvas) {
@@ -88,8 +88,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			var startPos = parseFloat(self.leftPx);
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvas.canvasPosition());
 			var isActive = startPos <= timelinePosition;
-			if(isActive) {
-				canvas.activePayload(self.payload);				
+			if (isActive) {
+				canvas.activePayload(self.payload);
 			}
 			return isActive;
 		});
