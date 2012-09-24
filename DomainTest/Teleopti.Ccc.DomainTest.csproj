@@ -653,6 +653,7 @@
     <Compile Include="Scheduling\ShiftTradeChecksumCalculatorTest.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplateTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateDictionaryCreatorTest.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateMainShiftSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStatePersonPeriodTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateRunnerTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateSchedulePeriodTest.cs" />

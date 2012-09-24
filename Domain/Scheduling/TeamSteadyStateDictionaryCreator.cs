@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -23,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public IDictionary<string, bool> Create(DateOnly dateOnly)
 		{
+			var dictionary = new Dictionary<string, bool>();
 			var runnableList = new Dictionary<TeamSteadyStateDelegate, IAsyncResult>();
 
 			foreach (var groupPerson in _groupPersons)
@@ -48,7 +48,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				throw;
 			}
 
-			return results.ToDictionary(keyValuePair => keyValuePair.Key, keyValuePair => keyValuePair.Value);
+			foreach (var keyValuePair in results)
+			{
+				dictionary.Add(keyValuePair.Key, keyValuePair.Value);
+			}
+
+			return dictionary;
 		}
 	}
 }
