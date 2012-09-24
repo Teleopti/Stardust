@@ -1,18 +1,70 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IShiftCategoryFairnessSwapper
 	{
-		bool TrySwap(object suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization);
+		bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization);
 	}
 
 	public class ShiftCategoryFairnessSwapper: IShiftCategoryFairnessSwapper
 	{
-		public bool TrySwap(object suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization)
+		private readonly ISwapServiceNew _swapService;
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IScheduleDictionary _dic;
+
+		public ShiftCategoryFairnessSwapper(ISwapServiceNew swapService, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			throw new System.NotImplementedException();
+			_swapService = swapService;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_dic = _schedulingResultStateHolder.Schedules;
 		}
+
+		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization)
+		{
+			var rules = _schedulingResultStateHolder.GetRulesToRun();
+			//smäller om färre i tvåan
+			for (var i = 0; i < suggestion.Group1.OriginalMembers.Count; i++)
+			{
+				var day1 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, suggestion.Group1.OriginalMembers[i]);
+				var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, suggestion.Group2.OriginalMembers[i]);
+
+				var modifiedParts = _swapService.Swap(new List<IScheduleDay> { day1, day2 }, _dic);
+				var responses = _dic.Modify(ScheduleModifier.AutomaticScheduling, modifiedParts, rules,
+				                            new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+				//TODO
+			}
+			
+			return true;
+		}
+
+		private IScheduleDay getScheduleForPersonOnDay(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixListForFairnessOptimization, IPerson person)
+		{
+			IScheduleDay day = null;
+			foreach (var scheduleMatrixPro in matrixListForFairnessOptimization)
+			{
+				if(scheduleMatrixPro.Person.Equals(person))
+				{
+					var tmpDay = scheduleMatrixPro.GetScheduleDayByKey(dateOnly);
+					if(tmpDay != null && scheduleMatrixPro.UnlockedDays.Contains(tmpDay))
+					{
+						day = tmpDay.DaySchedulePart();
+						break;
+					}
+				}
+			}
+			return day;
+		}
+	}
+
+	public interface IShiftCategoryFairnessSwap
+	{
+		ShiftCategoryFairnessCompareResult Group1 { get; set; }
+		ShiftCategoryFairnessCompareResult Group2 { get; set; }
+		IShiftCategory ShiftCategoryFromGroup1 { get; set; }
+		IShiftCategory ShiftCategoryFromGroup2 { get; set; }
 	}
 }
