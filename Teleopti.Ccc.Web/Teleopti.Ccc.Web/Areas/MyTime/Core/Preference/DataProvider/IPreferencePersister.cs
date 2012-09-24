@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	{
 		PreferenceDayViewModel Persist(PreferenceDayInput input);
 		PreferenceDayViewModel Delete(DateOnly date);
-		PreferenceDayViewModel MustHave(MustHaveInput input);
+		PreferenceDayViewModel MustHave(DateOnlyPeriod schedulePeriod, MustHaveInput input);
 	}
 }

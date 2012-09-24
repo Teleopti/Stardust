@@ -283,6 +283,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.Restriction.ActivityRestrictionCollection.Single().WorkTimeLimitation
 				.Should().Be.EqualTo(new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(3)));
 		}
-
 	}
 }
