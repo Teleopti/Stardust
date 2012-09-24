@@ -3,3 +3,7 @@ henke & roger-stuff
 * Ändra "+1" till egen kolumn 
 * ta bort "canvas"-bajs som inparamutter till lagervyn. använd root eller vad det nu heter.
 * kolla upp en bra hook för mockar i js ska ske tidigare än idag.
+* när man går hem ska man inte få alert
+* när schemat laddas om ska man inte få alert om samma aktivitet
+* när schemat laddas om ska man få alert om ny aktiviet
+* lägga till "fejk"-scenario för mb-event (anropa ladda-js direkt från scenario)
