@@ -62,12 +62,27 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			var message = data.Errors.join('</br>');
 			addExtendedPreferenceFormViewModel.ValidationError(message);
 		};
-		var currentMust = periodFeedbackViewModel.CurrentMustHave();
-		var maxMust = periodFeedbackViewModel.MaxMustHave();
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
-				if (preference == true) {
+				var promise = dayViewModels[date].SetPreference(preference, validationErrorCallback);
+				promises.push(promise);
+			});
+		if (promises.length != 0) {
+			$.when.apply(null, promises)
+				.done(function () { periodFeedbackViewModel.LoadFeedback(); });
+		}
+
+	}
+
+	function _setMustHave(mustHave) {
+		var promises = [];
+		var currentMust = periodFeedbackViewModel.CurrentMustHave();
+		var maxMust = periodFeedbackViewModel.MaxMustHave();
+		$('#Preference-body-inner .ui-selected')
+			.each(function(index, cell) {
+				var date = $(cell).data('mytime-date');
+				if (mustHave == true) {
 					if (currentMust >= maxMust) {
 						return;
 					}
@@ -75,9 +90,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						return;
 					}
 				}
-				var promise = dayViewModels[date].SetPreference(preference, validationErrorCallback);
+				var promise = dayViewModels[date].SetMustHave(mustHave);
 				promises.push(promise);
-				if (preference == true && !dayViewModels[date].MustHave()) {
+				if (mustHave == true && !dayViewModels[date].MustHave()) {
 					currentMust++;
 				}
 			});
@@ -85,7 +100,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			$.when.apply(null, promises)
 				.done(function () { periodFeedbackViewModel.LoadFeedback(); });
 		}
-
 	}
 
 	function _initAddExtendedButton() {
@@ -142,11 +156,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _initMustHaveButton() {
 		$('#Preference-must-have-button')
 			.click(function () {
-				_setPreference(true);
+				_setMustHave(true);
 			});
 		$('#Preference-must-have-delete-button')
 			.click(function () {
-				_setPreference(false);
+				_setMustHave(false);
 			});
 	}
 

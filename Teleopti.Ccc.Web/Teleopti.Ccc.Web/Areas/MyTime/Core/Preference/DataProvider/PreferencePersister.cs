@@ -4,6 +4,7 @@ using System.Web;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -31,24 +32,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
 			if (preferenceDay == null)
 			{
-				if (input.MustHave == null)
-				{
-					preferenceDay = _mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
-					_preferenceDayRepository.Add(preferenceDay);
-				}
+				preferenceDay = _mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+				_preferenceDayRepository.Add(preferenceDay);
 			}
 			else
 			{
-				if (input.MustHave == null)
-				{
-					ClearExtendedAndMustHaveData(preferenceDay);
-					_mapper.Map(input, preferenceDay);
-				}
-				else
-				{
-					preferenceDay.Restriction.MustHave = input.MustHave.Value;
-				}
+				ClearExtendedAndMustHaveData(preferenceDay);
+				_mapper.Map(input, preferenceDay);
+			}
+			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+		}
 
+		public PreferenceDayViewModel MustHave(MustHaveInput input)
+		{
+			var preferenceDays = _preferenceDayRepository.Find(input.Date, _loggedOnUser.CurrentUser());
+			preferenceDays = DeleteOrphanPreferenceDays(preferenceDays);
+			var preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
+			if (preferenceDay != null)
+			{
+				preferenceDay.Restriction.MustHave = input.MustHave;
 			}
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 		}
@@ -90,5 +92,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 			return new PreferenceDayViewModel { Color = ""};
 		}
+
 	}
 }
