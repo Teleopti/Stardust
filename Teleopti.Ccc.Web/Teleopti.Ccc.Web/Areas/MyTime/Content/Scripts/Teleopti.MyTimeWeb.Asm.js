@@ -47,7 +47,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		self.hours = ko.observableArray();
 		self.layers = ko.observableArray();
-		self.activeLayers = ko.computed(function () {
+		self.visibleLayers = ko.computed(function () {
 			return $.grep(self.layers(), function (n, i) {
 				return n.visible();
 			});
