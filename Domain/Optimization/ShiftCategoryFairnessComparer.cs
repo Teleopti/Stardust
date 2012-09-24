@@ -18,13 +18,37 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IShiftCategory ShiftCategory { get; set; }
 		public double Original { get; set; }
 		public double ComparedTo { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == typeof (ShiftCategoryFairnessCompareValue) && Equals((ShiftCategoryFairnessCompareValue) obj);
+        }
+
+	    public bool Equals(ShiftCategoryFairnessCompareValue other)
+	    {
+	        if (ReferenceEquals(null, other)) return false;
+	        if (ReferenceEquals(this, other)) return true;
+	        return other.ShiftCategory.Description.Name == ShiftCategory.Description.Name && other.Original.Equals(Original) && other.ComparedTo.Equals(ComparedTo);
+	    }
+
+	    public override int GetHashCode()
+	    {
+	        unchecked
+	        {
+	            var result = (ShiftCategory != null ? ShiftCategory.GetHashCode() : 0);
+	            result = (result*397) ^ Original.GetHashCode();
+	            result = (result*397) ^ ComparedTo.GetHashCode();
+	            return result;
+	        }
+	    }
 	}
 
 	public interface IShiftCategoryFairnessCompareResult
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]      
 		IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
-		Guid Id { get; }
 		double StandardDeviation { get; set; }
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		IList<IPerson> OriginalMembers { get; set; } 
@@ -32,22 +56,37 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class ShiftCategoryFairnessCompareResult : IShiftCategoryFairnessCompareResult
 	{
-		private readonly Guid _groupId;
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
-
-		public ShiftCategoryFairnessCompareResult()
-		{
-			_groupId = Guid.NewGuid();
-		}
-		public Guid Id
-		{
-			get { return _groupId; }
-		}
-
+        
 		public double StandardDeviation { get; set; }
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public IList<IPerson> OriginalMembers { get; set; } 
+		public IList<IPerson> OriginalMembers { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == typeof (ShiftCategoryFairnessCompareResult) && Equals((ShiftCategoryFairnessCompareResult) obj);
+        }
+
+	    public bool Equals(ShiftCategoryFairnessCompareResult other)
+	    {
+	        if (ReferenceEquals(null, other)) return false;
+	        if (ReferenceEquals(this, other)) return true;
+	        return Equals(other.ShiftCategoryFairnessCompareValues, ShiftCategoryFairnessCompareValues) && other.StandardDeviation.Equals(StandardDeviation) && Equals(other.OriginalMembers, OriginalMembers);
+	    }
+
+	    public override int GetHashCode()
+	    {
+	        unchecked
+	        {
+	            var result = (ShiftCategoryFairnessCompareValues != null ? ShiftCategoryFairnessCompareValues.GetHashCode() : 0);
+	            result = (result*397) ^ StandardDeviation.GetHashCode();
+	            result = (result*397) ^ (OriginalMembers != null ? OriginalMembers.GetHashCode() : 0);
+	            return result;
+	        }
+	    }
 	}
 
 	public interface IShiftCategoryFairnessComparer
