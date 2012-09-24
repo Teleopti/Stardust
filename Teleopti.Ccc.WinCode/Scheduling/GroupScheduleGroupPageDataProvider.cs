@@ -8,7 +8,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-    public class GroupScheduleGroupPageDataProvider : IGroupPageDataProvider
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
+	public interface IGroupScheduleGroupPageDataProvider : IGroupPageDataProvider{}
+
+	public class GroupScheduleGroupPageDataProvider : IGroupScheduleGroupPageDataProvider
     {
         private readonly ISchedulerStateHolder _stateHolder;
         private readonly IRepositoryFactory _repositoryFactory;
@@ -22,8 +25,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private IList<IGroupPage> _groupPageCollection;
         private IList<ISkill> _skillCollection;
         private IList<IPerson> _personCollection;
+		private IList<IPerson> _allPersons;
 
-        public GroupScheduleGroupPageDataProvider(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
+		public GroupScheduleGroupPageDataProvider(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _stateHolder = stateHolder;
             _repositoryFactory = repositoryFactory;
@@ -219,7 +223,32 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
         }
 
-        public void SetSelectedPeriod(DateOnlyPeriod selectedPeriod)
+		public IEnumerable<IPerson> AllLoadedPersons
+		{
+			get { 
+				if(_allPersons == null)
+                {
+                    IList<IPerson> validPersons = new List<IPerson>();
+                    foreach (var person in _stateHolder.SchedulingResultState.PersonsInOrganization)
+                    {
+                        if(person.TerminalDate.HasValue)
+                        {
+                            if(person.TerminalDate.Value >= SelectedPeriod.StartDate)
+                                validPersons.Add(person);
+                        }
+                        else
+                        {
+                            validPersons.Add(person);
+                        }
+                    }
+                    _allPersons = validPersons;
+                }
+
+                return _allPersons;
+            }
+		}
+
+		public void SetSelectedPeriod(DateOnlyPeriod selectedPeriod)
         {
             _selectedPeriod = selectedPeriod;
         }
