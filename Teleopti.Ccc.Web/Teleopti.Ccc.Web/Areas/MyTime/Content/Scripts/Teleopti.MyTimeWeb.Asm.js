@@ -130,7 +130,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		};
 
 		Teleopti.MyTimeWeb.Ajax.Ajax({
-			url: '/MyTime/MessageBroker/FetchUserData',
+			url: 'MessageBroker/FetchUserData',
 			dataType: "json",
 			type: 'GET',
 			success: function (data) {
