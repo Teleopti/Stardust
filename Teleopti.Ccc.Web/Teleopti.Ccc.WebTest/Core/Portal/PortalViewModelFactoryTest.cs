@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			var target = CreateTarget(permissionProvider);
 
-			Assert.That(target.CreatePortalViewModel().ShowAsm, Is.True);
+			Assert.That(target.CreatePortalViewModel().HasAsmPermission, Is.True);
 		}
 
 		[Test]
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			var target = CreateTarget(permissionProvider);
 			
-			Assert.That(target.CreatePortalViewModel().ShowAsm, Is.False);
+			Assert.That(target.CreatePortalViewModel().HasAsmPermission, Is.False);
 		}
 
 		private static PortalViewModelFactory CreateTarget(IPermissionProvider permissionProvider)
