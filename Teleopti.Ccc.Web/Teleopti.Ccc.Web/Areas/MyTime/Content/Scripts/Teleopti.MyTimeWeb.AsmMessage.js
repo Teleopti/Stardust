@@ -11,8 +11,16 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.AsmMessage = (function () {
 
 	function _onMessageBrokerEvent(notification) {
-		$('a[href*="#MessageTab"]')
-			.addClass("asm-new-message-indicator");
+		var messageTab = $('a[href*="#MessageTab"]');
+		messageTab.addClass("asm-new-message-indicator");
+		var firstParenthesis = messageTab.text().indexOf('(');
+		if (firstParenthesis > -1) {
+			var messageCount = messageTab.text().substring(firstParenthesis + 1, messageTab.text().length - 1);
+			messageTab.text(messageTab.text().replace(messageCount, parseInt(messageCount) + 1));
+			return;
+		}
+
+		messageTab.text(messageTab.text() + ' (1)');
 	};
 
 	function _listenForEvents() {

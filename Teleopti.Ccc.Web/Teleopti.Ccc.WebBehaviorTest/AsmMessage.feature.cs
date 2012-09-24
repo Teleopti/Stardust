@@ -131,10 +131,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Indicate when new message while logged on")]
-        public virtual void IndicateWhenNewMessageWhileLoggedOn()
+        [NUnit.Framework.DescriptionAttribute("Indicate new message while logged on")]
+        public virtual void IndicateNewMessageWhileLoggedOn()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Indicate when new message while logged on", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Indicate new message while logged on", ((string[])(null)));
 #line 25
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -146,16 +146,16 @@ this.FeatureBackground();
 #line 28
  testRunner.And("I receive a new message");
 #line 29
- testRunner.Then("I should be notified that I have a new message");
+ testRunner.Then("I should be notified that I have \'1\' new message(s)");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Indicate new message at logon")]
-        public virtual void IndicateNewMessageAtLogon()
+        [NUnit.Framework.DescriptionAttribute("Indicate another new message while logged on")]
+        public virtual void IndicateAnotherNewMessageWhileLoggedOn()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Indicate new message at logon", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Indicate another new message while logged on", ((string[])(null)));
 #line 31
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -172,9 +172,41 @@ this.FeatureBackground();
 #line 33
  testRunner.And("I have an unread message with", ((string)(null)), table3);
 #line 36
- testRunner.When("I am viewing week schedule");
+ testRunner.And("I am viewing week schedule");
 #line 37
- testRunner.Then("I should be notified that I have a new message");
+ testRunner.And("I should be notified that I have \'1\' new message(s)");
+#line 38
+ testRunner.When("I receive a new message");
+#line 39
+ testRunner.Then("I should be notified that I have \'2\' new message(s)");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Indicate new message at logon")]
+        public virtual void IndicateNewMessageAtLogon()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Indicate new message at logon", ((string[])(null)));
+#line 41
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 42
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table4.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+#line 43
+ testRunner.And("I have an unread message with", ((string)(null)), table4);
+#line 46
+ testRunner.When("I am viewing week schedule");
+#line 47
+ testRunner.Then("I should be notified that I have \'1\' new message(s)");
 #line hidden
             this.ScenarioCleanup();
         }

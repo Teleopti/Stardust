@@ -22,11 +22,21 @@ Scenario: Show message tab
 	When I am viewing week schedule
 	Then Message tab should be visible
 
-Scenario: Indicate when new message while logged on
+Scenario: Indicate new message while logged on
 	Given I have the role 'Full access to mytime'
 	When I am viewing week schedule
 	And I receive a new message
-	Then I should be notified that I have a new message
+	Then I should be notified that I have '1' new message(s)
+
+Scenario: Indicate another new message while logged on
+	Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field         | Value          |
+	| Title         | New message	 |
+	And I am viewing week schedule
+	And I should be notified that I have '1' new message(s)
+	When I receive a new message
+	Then I should be notified that I have '2' new message(s)
 
 Scenario: Indicate new message at logon
 	Given I have the role 'Full access to mytime'
@@ -34,4 +44,4 @@ Scenario: Indicate new message at logon
 	| Field         | Value          |
 	| Title         | New message	 |
 	When I am viewing week schedule
-	Then I should be notified that I have a new message
+	Then I should be notified that I have '1' new message(s)

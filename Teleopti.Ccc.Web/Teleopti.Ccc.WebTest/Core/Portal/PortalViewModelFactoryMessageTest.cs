@@ -42,5 +42,21 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			SectionNavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
 			message.PayAttention.Should().Be.True();
         }
+
+		[Test]
+		public void ShouldShowNumberOFUnreadMessages()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
+
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
+			pushMessageProvider.Stub(x => x.UnreadMessageCount).Return(1);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>(), pushMessageProvider);
+
+			var result = target.CreatePortalViewModel();
+			SectionNavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
+			message.UnreadMessageCount.Should().Be.EqualTo(1);
+		}
 	}
 }

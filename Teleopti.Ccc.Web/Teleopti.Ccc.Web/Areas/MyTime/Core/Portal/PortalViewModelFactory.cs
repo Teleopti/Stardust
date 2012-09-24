@@ -123,7 +123,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
                 Title = Resources.Message,
                 NavigationItems = new NavigationItem[0],
                 ToolBarItems = new List<ToolBarItemBase>(),
-				PayAttention = unreadMessageCount != 0
+				PayAttention = unreadMessageCount != 0,
+				UnreadMessageCount = unreadMessageCount
             };
         }
 

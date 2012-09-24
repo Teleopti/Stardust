@@ -27,18 +27,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => page.MessageLink.Exists, Is.False);
 		}
 
-		[Then(@"I should be notified that I have a new message")]
-		public void ThenIShouldBeNotifiedThatIHaveANewMessage()
-		{
-			var page = Browser.Current.Page<PortalPage>();
-			EventualAssert.That(() => page.MessageLink.ClassName.Contains("asm-new-message-indicator"), Is.True);
-		}
-
 		[Given(@"I have an unread message with")]
 		public void GivenIHaveAnUnreadMessageWith(Table table)
 		{
 			var message = table.CreateInstance<MessageConfigurable>();
 			UserFactory.User().Setup(message);
+		}
+
+		[Given(@"I should be notified that I have '(.*)' new message\(s\)")]
+		[Then(@"I should be notified that I have '(.*)' new message\(s\)")]
+		public void ThenIShouldBeNotifiedThatIHaveNewMessageS(int messageCount)
+		{
+			var page = Browser.Current.Page<PortalPage>();
+			EventualAssert.That(() => page.MessageLink.ClassName.Contains("asm-new-message-indicator"), Is.True);
+			EventualAssert.That(() => page.MessageLink.InnerHtml.Contains("(" + messageCount + ")"), Is.True);
 		}
 
 		[When(@"I receive a new message")]
