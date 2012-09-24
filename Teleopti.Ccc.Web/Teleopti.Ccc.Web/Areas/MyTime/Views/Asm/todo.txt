@@ -1,3 +1,4 @@
 henke & roger-stuff
 
 * Ändra "+1" till egen kolumn 
+* ta bort "canvas"-bajs som inparamutter till lagervyn. använd root eller vad det nu heter.
