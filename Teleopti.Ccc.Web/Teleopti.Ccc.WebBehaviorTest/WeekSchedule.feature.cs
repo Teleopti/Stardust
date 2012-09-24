@@ -714,7 +714,7 @@ this.FeatureBackground();
                         "end timeline",
                         "23:59"});
             table20.AddRow(new string[] {
-                        "timeline count",
+                        "number of timeline labels",
                         "25"});
 #line 204
  testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table20);
@@ -784,7 +784,7 @@ this.FeatureBackground();
                         "end timeline",
                         "20:00"});
             table23.AddRow(new string[] {
-                        "timeline count",
+                        "number of timeline labels",
                         "13"});
 #line 226
  testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table23);
@@ -836,7 +836,7 @@ this.FeatureBackground();
                         "end timeline",
                         "23:59"});
             table25.AddRow(new string[] {
-                        "timeline count",
+                        "number of timeline labels",
                         "25"});
 #line 242
  testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table25);
@@ -888,7 +888,7 @@ this.FeatureBackground();
                         "end timeline",
                         "4:00"});
             table27.AddRow(new string[] {
-                        "timeline count",
+                        "number of timeline labels",
                         "5"});
 #line 258
  testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table27);
@@ -940,7 +940,7 @@ this.FeatureBackground();
                         "end timeline",
                         "23:59"});
             table29.AddRow(new string[] {
-                        "timeline count",
+                        "number of timeline labels",
                         "5"});
 #line 274
  testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table29);
