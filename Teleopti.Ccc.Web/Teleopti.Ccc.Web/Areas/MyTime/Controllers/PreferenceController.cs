@@ -73,7 +73,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPostOrPut]
 		public virtual JsonResult MustHave(MustHaveInput input)
 		{
-			return Json(_preferencePersister.MustHave(input));
+			var selectedDay = input.Date;
+			var period = _virtualSchedulePeriodProvider.GetCurrentOrNextVirtualPeriodForDate(selectedDay);
+			return Json(_preferencePersister.MustHave(period, input));
 		}
 
 		[UnitOfWork]
@@ -82,14 +84,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult PreferenceDelete(DateOnly date)
 		{
 			return Json(_preferencePersister.Delete(date));
-		}
-
-		[UnitOfWork]
-		[HttpPostOrPut]
-		public bool ToggleMustHave(DateOnly selectedDay, bool mustHave)
-		{
-			var period = _virtualSchedulePeriodProvider.GetCurrentOrNextVirtualPeriodForDate(selectedDay);
-			return _preferencePersister.TryToggleMustHave(selectedDay, mustHave, period);
 		}
 	}
 }

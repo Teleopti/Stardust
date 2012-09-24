@@ -45,52 +45,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 		}
 
-		/// <summary>
-		/// Tries the toggle must have.
-		/// </summary>
-		/// <param name="selectedDay">The selected day.</param>
-		/// <param name="mustHaveSet">if set to <c>true</c> [must have set].</param>
-		/// <param name="schedulePeriod">The schedule period.</param>
-		/// <returns><c>True</c> if the persist process can be continued, <c>True</c> if the persist should be stopped</returns>
-		public bool TryToggleMustHave(DateOnly selectedDay, bool mustHaveSet, DateOnlyPeriod schedulePeriod)
+		public PreferenceDayViewModel MustHave(DateOnlyPeriod schedulePeriod, MustHaveInput input)
 		{
-			IPreferenceDay preferenceDay;
-			if (mustHaveSet)
-			{
-				var preferenceDays = _preferenceDayRepository.Find(schedulePeriod, new [] {_loggedOnUser.CurrentUser()});
-				var nbrOfDaysWithMustHave = preferenceDays.Count(p => p.Restriction.MustHave);
-				var currentSchedulePeriod = _loggedOnUser.CurrentUser().SchedulePeriod(selectedDay);
-				if (nbrOfDaysWithMustHave >= currentSchedulePeriod.MustHavePreference)
-				{
-					return false;
-				}
-				preferenceDay = preferenceDays.SingleOrDefault(d => d.RestrictionDate == selectedDay);
-			}
-			else
-			{
-				var preferenceDays = _preferenceDayRepository.Find(selectedDay, _loggedOnUser.CurrentUser());
-				preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
-			}
-			if (preferenceDay != null)
-			{
-				preferenceDay.Restriction.MustHave = mustHaveSet;
-			}
-
-			return true;		}
-		}
-
-		public PreferenceDayViewModel MustHave(MustHaveInput input)
-		{
-			var preferenceDays = _preferenceDayRepository.Find(input.Date, _loggedOnUser.CurrentUser());
-			preferenceDays = DeleteOrphanPreferenceDays(preferenceDays);
-			var preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
-			if (preferenceDay != null)
-			{
-				preferenceDay.Restriction.MustHave = input.MustHave;
-			}
-
+			var preferenceDay = TryToggleMustHave(schedulePeriod, input);
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
-
 		}
 
 		private static void ClearExtendedData(IPreferenceDay preferenceDay)
@@ -104,6 +62,40 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 		}
 
+		/// <summary>
+		/// Tries to toggle the must have property if it is found or is NOT over the limit.
+		/// </summary>
+		/// <param name="schedulePeriod">The schedule period.</param>
+		/// <param name="input">The input.</param>
+		private IPreferenceDay TryToggleMustHave(DateOnlyPeriod schedulePeriod, MustHaveInput input)
+		{
+			var mustHave = input.MustHave;
+			var selectedDay = input.Date;
+			IPreferenceDay preferenceDay;
+			if (mustHave)
+			{
+				var preferenceDays = _preferenceDayRepository.Find(schedulePeriod, new[] { _loggedOnUser.CurrentUser() });
+				preferenceDays = DeleteOrphanPreferenceDays(preferenceDays);
+				var nbrOfDaysWithMustHave = preferenceDays.Count(p => p.Restriction.MustHave);
+				var currentSchedulePeriod = _loggedOnUser.CurrentUser().SchedulePeriod(selectedDay);
+				if (nbrOfDaysWithMustHave >= currentSchedulePeriod.MustHavePreference)
+					return null;
+				preferenceDay = preferenceDays.SingleOrDefault(d => d.RestrictionDate == selectedDay);
+			}
+			else
+			{
+				var preferenceDays = _preferenceDayRepository.Find(selectedDay, _loggedOnUser.CurrentUser());
+				preferenceDays = DeleteOrphanPreferenceDays(preferenceDays);
+				preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
+			}
+
+			if (preferenceDay != null)
+			{
+				preferenceDay.Restriction.MustHave = mustHave;
+			}
+
+			return preferenceDay;
+		}
 		private IList<IPreferenceDay> DeleteOrphanPreferenceDays(IList<IPreferenceDay> preferenceDays)
 		{
 			preferenceDays = preferenceDays != null
