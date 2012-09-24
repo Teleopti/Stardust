@@ -39,6 +39,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _initDeleteButton() {
 		$('#Preference-delete-button')
 			.click(function () {
+				_hideExtendedPanels();
 				var promises = [];
 				$('#Preference-body-inner .ui-selected')
 					.each(function (index, cell) {
@@ -217,6 +218,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						});
 			});
 
+	}
+
+	function _hideExtendedPanels() {
+		$('.preference .extended-indication')
+			.qtip('toggle', false);
 	}
 
 	return {
