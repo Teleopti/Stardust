@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Web;
 using AutoMapper;
 using NUnit.Framework;
@@ -190,7 +191,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		}
 
 		[Test]
-		public void ShouldClearMustHaves()
+		public void ShouldNotClearMustHaves()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
@@ -211,7 +212,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			target.Persist(input);
 
-			preferenceDay.Restriction.MustHave.Should().Be.False();
+			preferenceDay.Restriction.MustHave.Should().Be.True();
 		}
 
 		[Test]
@@ -234,7 +235,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			preferenceDay.TemplateName.Should().Be.Null();
 		}
-
+		
 		[Test]
 		public void ShouldUpdateMustHaveWithoutClearPreference()
 		{
@@ -282,3 +283,118 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		}
 	}
 }
+
+	[Test]
+		public void ShouldAddMustHaveGivenUnderLimit()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(7));
+			var restriction =  MockRepository.GenerateMock<IPreferenceRestriction>();
+			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
+			var schedulePeriod = MockRepository.GenerateMock<ISchedulePeriod>();
+			
+			const int limit = 2;
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			preferenceDayRepository.Stub(x => x.Find(period, new [] {person})).Return(new List<IPreferenceDay> { preferenceDay });
+			preferenceDay.Stub(x => x.Restriction).Return(restriction);
+			restriction.Stub(x => x.MustHave).Return(true);
+			person.Stub(x => x.SchedulePeriod(DateOnly.Today)).Return(schedulePeriod);
+			schedulePeriod.Stub(x => x.MustHavePreference).Return(limit);
+
+			var result = target.TryToggleMustHave(DateOnly.Today, true, period);
+
+			result.Should().Be.True();
+		}
+
+
+		[Test]
+		public void ShouldNotAddMustHaveGivenOverLimit()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(7));
+			var restriction = MockRepository.GenerateMock<IPreferenceRestriction>();
+			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
+			var schedulePeriod = MockRepository.GenerateMock<ISchedulePeriod>();
+
+			const int limit = 1;
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			preferenceDayRepository.Stub(x => x.Find(period, new[] { person })).Return(new List<IPreferenceDay> { preferenceDay, preferenceDay });
+			preferenceDay.Stub(x => x.Restriction).Return(restriction);
+			restriction.Stub(x => x.MustHave).Return(true);
+			person.Stub(x => x.SchedulePeriod(DateOnly.Today)).Return(schedulePeriod);
+			schedulePeriod.Stub(x => x.MustHavePreference).Return(limit);
+
+			var result = target.TryToggleMustHave(DateOnly.Today, true, period);
+
+			result.Should().Be.False();
+		}
+
+
+		[Test]
+		public void ShouldNotAddMustHaveGivenEqualToLimit()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(7));
+			var restriction = MockRepository.GenerateMock<IPreferenceRestriction>();
+			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
+			var schedulePeriod = MockRepository.GenerateMock<ISchedulePeriod>();
+
+			const int limit = 2;
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			preferenceDayRepository.Stub(x => x.Find(period, new[] { person })).Return(new List<IPreferenceDay> { preferenceDay, preferenceDay });
+			preferenceDay.Stub(x => x.Restriction).Return(restriction);
+			restriction.Stub(x => x.MustHave).Return(true);
+			person.Stub(x => x.SchedulePeriod(DateOnly.Today)).Return(schedulePeriod);
+			schedulePeriod.Stub(x => x.MustHavePreference).Return(limit);
+
+			var result = target.TryToggleMustHave(DateOnly.Today, true, period);
+
+			result.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldRemoveMustHaveGivenEqualToLimit()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(7));
+			var restriction = MockRepository.GenerateMock<IPreferenceRestriction>();
+			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
+			var schedulePeriod = MockRepository.GenerateMock<ISchedulePeriod>();
+
+			const int limit = 1;
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			preferenceDayRepository.Stub(x => x.Find(DateOnly.Today, person)).Return(new List<IPreferenceDay> { preferenceDay });
+			preferenceDay.Stub(x => x.Restriction).Return(restriction);
+			restriction.Stub(x => x.MustHave).Return(true);
+			person.Stub(x => x.SchedulePeriod(DateOnly.Today)).Return(schedulePeriod);
+			schedulePeriod.Stub(x => x.MustHavePreference).Return(limit);
+
+			var result = target.TryToggleMustHave(DateOnly.Today, false, period);
+
+			result.Should().Be.True();
+		}
+	}
+}
+
+
+
