@@ -7,3 +7,4 @@ henke & roger-stuff
 * när schemat laddas om ska man inte få alert om samma aktivitet
 * när schemat laddas om ska man få alert om ny aktiviet
 * lägga till "fejk"-scenario för mb-event (anropa ladda-js direkt från scenario)
+* Vi ska ladda om bajset när det blir en ny dag
