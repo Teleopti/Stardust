@@ -71,11 +71,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			                           resourceCalculateDelayer, null);
 		}
 
-        public IWorkShiftFinderService WorkShiftFinderService
-        {
-            get { return _finderService; }
-        }
-
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool SchedulePersonOnDay(
             IScheduleDay schedulePart,

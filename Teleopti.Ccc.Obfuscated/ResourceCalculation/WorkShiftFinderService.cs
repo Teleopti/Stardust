@@ -47,11 +47,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             get { return _resultStateHolder.Schedules; }
         }
 
-        public IWorkShiftMinMaxCalculator WorkShiftMinMaxCalculator
-        {
-            get { return _workShiftMinMaxCalculator; }
-        }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction, IPossibleStartEndCategory possibleStartEndCategory)
         {

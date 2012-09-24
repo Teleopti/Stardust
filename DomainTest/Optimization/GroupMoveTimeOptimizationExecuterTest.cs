@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 ShouldReturnTrueIfSuccessExpectValues();
                 
                 Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, new DateOnly(2012, 1, 1))).Repeat.Twice() ;
-                Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1)).Repeat.Twice();
+                Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
                 Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(new DateOnly(2012, 1, 1), _person, _groupSchedulingService,
                                                                     _schedulePartModifyAndRollbackService, _schedulingOptions,
                                                                     _groupPersonBuilderForOptimization, _allMatrixes)).Return(true).Repeat.Twice();
@@ -103,16 +103,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private void ShouldReturnTrueIfSuccessExpectValues()
         {
             Expect.Call(_scheduleDay1.IsScheduled()).Return(true);
-            Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+            Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay1.Person).Return(_person);
             Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment);
             Expect.Call(_scheduleDay2.IsScheduled()).Return(true);
-            Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+            Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay2.Person).Return(_person);
             Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(_personAssignment);
             Expect.Call(_personAssignment.MainShift).Return(_mainShift).Repeat.Twice();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true)).Repeat.AtLeastOnce();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true)).Repeat.AtLeastOnce();
         }
 
         [Test]
@@ -157,12 +159,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void ShouldReturnFalseIfNotSuccessExpectValues()
         {
+            var date = new DateOnly(2012, 1, 1);
             Expect.Call(_scheduleDay1.IsScheduled()).Return(true);
-            Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+            Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment);
             Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-            Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1));
+            Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+            Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date).Repeat.AtLeastOnce();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date, true, true)).Repeat.AtLeastOnce();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true)).Repeat.AtLeastOnce();
         }
 
         [Test]
@@ -174,8 +180,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 ShouldRollbackIfMovedToManyDaysExpectValues();
                 Expect.Call(_optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit()).Return(true);
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true));
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true));
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true)).Repeat.AtLeastOnce();
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true)).Repeat.AtLeastOnce();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long);
             }
 
@@ -192,11 +198,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private void ShouldRollbackIfMovedToManyDaysExpectValues()
         {
             Expect.Call(_scheduleDay1.IsScheduled()).Return(true);
-            Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+            Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment);
+            Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-            Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1));
+            Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
             Expect.Call(_personAssignment.MainShift).Return(_mainShift);
             Expect.Call(
                 () =>
@@ -216,11 +223,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks();
                 Expect.Call(_scheduleDay1.IsScheduled()).Return(true);
-                Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+                Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment);
                 Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1));
+                Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+                Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.MainShift).Return(_mainShift);
                 Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, date));
                 Expect.Call(_scheduleDay1.Person).Return(_person);
@@ -230,8 +238,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit()).Return(false);
                 Expect.Call(_optimizationOverLimitByRestrictionDecider.OverLimit()).Return(new List<DateOnly> { new DateOnly() });
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date, true, true));
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true));
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date, true, true)).Repeat.AtLeastOnce();
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true)).Repeat.AtLeastOnce();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long);
             }
 
