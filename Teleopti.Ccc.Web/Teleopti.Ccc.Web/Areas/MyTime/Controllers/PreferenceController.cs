@@ -77,5 +77,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_preferencePersister.Delete(date));
 		}
 
+		[UnitOfWork]
+		[HttpPostOrPut]
+		public bool ToggleMustHave(DateOnly selectedDay, bool mustHave)
+		{
+			var period = _virtualSchedulePeriodProvider.GetCurrentOrNextVirtualPeriodForDate(selectedDay);
+			return _preferencePersister.TryToggleMustHave(selectedDay, mustHave, period);
+		}
 	}
 }

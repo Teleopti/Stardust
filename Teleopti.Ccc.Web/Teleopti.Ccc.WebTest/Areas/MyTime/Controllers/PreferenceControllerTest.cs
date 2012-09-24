@@ -133,5 +133,44 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			data.Should().Be.SameInstanceAs(resultData);
 		}
+
+		[Test]
+		public void ShouldNotPersistDayWithMustHaveOverLimit()
+		{
+
+			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
+			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
+			var target = new PreferenceController(null, virtualSchedulePeriodProvider, preferencePersister);
+			var period = new DateOnlyPeriod();
+
+			virtualSchedulePeriodProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			preferencePersister.Expect(x => x.TryToggleMustHave(DateOnly.Today, true, period)).Return(false);
+
+			var result = target.ToggleMustHave(DateOnly.Today, true);
+
+			result.Should().Be.False();
+
+			preferencePersister.VerifyAllExpectations();
+			
+		}
+
+		[Test]
+		public void ShouldPersistDayWithMustHaveUnderLimit()
+		{
+
+			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
+			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
+			var target = new PreferenceController(null, virtualSchedulePeriodProvider, preferencePersister);
+			var period = new DateOnlyPeriod();
+
+			virtualSchedulePeriodProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			preferencePersister.Expect(x => x.TryToggleMustHave(DateOnly.Today, true, period)).Return(true);
+
+			var result = target.ToggleMustHave(DateOnly.Today, true);
+
+			result.Should().Be.True();
+
+			preferencePersister.VerifyAllExpectations();
+		}
 	}
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 using AutoMapper;
@@ -31,36 +32,60 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
 			if (preferenceDay == null)
 			{
-				if (input.MustHave == null)
-				{
 					preferenceDay = _mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
 					_preferenceDayRepository.Add(preferenceDay);
-				}
 			}
 			else
 			{
-				if (input.MustHave == null)
-				{
-					ClearExtendedAndMustHaveData(preferenceDay);
+					ClearExtendedData(preferenceDay);
 					_mapper.Map(input, preferenceDay);
-				}
-				else
-				{
-					preferenceDay.Restriction.MustHave = input.MustHave.Value;
-				}
 
 			}
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 		}
 
-		private static void ClearExtendedAndMustHaveData(IPreferenceDay preferenceDay)
+		/// <summary>
+		/// Tries the toggle must have.
+		/// </summary>
+		/// <param name="selectedDay">The selected day.</param>
+		/// <param name="mustHaveSet">if set to <c>true</c> [must have set].</param>
+		/// <param name="schedulePeriod">The schedule period.</param>
+		/// <returns><c>True</c> if the persist process can be continued, <c>True</c> if the persist should be stopped</returns>
+		public bool TryToggleMustHave(DateOnly selectedDay, bool mustHaveSet, DateOnlyPeriod schedulePeriod)
+		{
+			IPreferenceDay preferenceDay;
+			if (mustHaveSet)
+			{
+				var preferenceDays = _preferenceDayRepository.Find(schedulePeriod, new [] {_loggedOnUser.CurrentUser()});
+				var nbrOfDaysWithMustHave = preferenceDays.Count(p => p.Restriction.MustHave);
+				var currentSchedulePeriod = _loggedOnUser.CurrentUser().SchedulePeriod(selectedDay);
+				if (nbrOfDaysWithMustHave >= currentSchedulePeriod.MustHavePreference)
+				{
+					return false;
+				}
+				preferenceDay = preferenceDays.SingleOrDefault(d => d.RestrictionDate == selectedDay);
+			}
+			else
+			{
+				var preferenceDays = _preferenceDayRepository.Find(selectedDay, _loggedOnUser.CurrentUser());
+				preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
+			}
+
+			if (preferenceDay != null)
+			{
+				preferenceDay.Restriction.MustHave = mustHaveSet;
+			}
+
+			return true;
+		}
+
+		private static void ClearExtendedData(IPreferenceDay preferenceDay)
 		{
 			if (preferenceDay.Restriction != null)
 			{
 				preferenceDay.Restriction.StartTimeLimitation = new StartTimeLimitation();
 				preferenceDay.Restriction.EndTimeLimitation = new EndTimeLimitation();
 				preferenceDay.Restriction.WorkTimeLimitation = new WorkTimeLimitation();
-				preferenceDay.Restriction.MustHave = false;
 				preferenceDay.TemplateName = null;
 			}
 		}
