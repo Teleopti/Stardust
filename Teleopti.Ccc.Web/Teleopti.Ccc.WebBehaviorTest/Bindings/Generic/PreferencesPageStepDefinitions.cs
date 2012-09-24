@@ -161,6 +161,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIInputExtendedPreferenceFieldsWith(Table table)
 		{
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
+			Pages.Pages.PreferencePage.ExtendedPreferencePanel.WaitUntilDisplayed(); //needed
 			
 			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Preference);
 
