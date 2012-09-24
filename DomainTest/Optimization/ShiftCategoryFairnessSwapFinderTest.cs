@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldSelectNewShiftCategoriesForGroup1()
         {
-            SetupBlacklistForCompleteExhaustOfGropup1ShiftCategoryDayOptions();
+            SetupBlacklistForCompleteExhaustOfGroup1ShiftCategoryDayOptions();
             var result = _target.GetGroupsToSwap(_groupList, _blackList);
             Assert.AreEqual(0.1, result.Group1.StandardDeviation);
             Assert.AreEqual(0.03, result.Group2.StandardDeviation);
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreNotEqual(result.Group1.StandardDeviation, result.Group2.StandardDeviation);
             Assert.AreNotEqual(result.ShiftCategoryFromGroup1, result.ShiftCategoryFromGroup2);
 
-            SetupBlacklistForCompleteExhaustOfGropup1ShiftCategoryDayOptions();
+            SetupBlacklistForCompleteExhaustOfGroup1ShiftCategoryDayOptions();
             result = _target.GetGroupsToSwap(_groupList, _blackList);
             Assert.AreNotEqual(result.Group1.StandardDeviation, result.Group2.StandardDeviation);
             Assert.AreNotEqual(result.ShiftCategoryFromGroup1, result.ShiftCategoryFromGroup2);
@@ -191,6 +191,70 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             result = _target.GetGroupsToSwap(_groupList, _blackList);
             Assert.AreNotEqual(result.Group1.StandardDeviation, result.Group2.StandardDeviation);
             Assert.AreNotEqual(result.ShiftCategoryFromGroup1, result.ShiftCategoryFromGroup2);
+        }
+
+        [Test]
+        public void ShouldReturnNullIfNoSwapIsLeft()
+        {
+            group1 = new ShiftCategoryFairnessCompareResult
+                         {
+                             ShiftCategoryFairnessCompareValues =
+                                 new List<ShiftCategoryFairnessCompareValue>
+                                     {
+                                         new ShiftCategoryFairnessCompareValue
+                                             {Original = 0.9, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
+                                         new ShiftCategoryFairnessCompareValue
+                                             {Original = 0.1, ComparedTo = 0.5, ShiftCategory = shiftCategoryNoon},
+                                         new ShiftCategoryFairnessCompareValue
+                                             {Original = 0.1, ComparedTo = 0.5, ShiftCategory = shiftCategoryNight}
+                                     },
+                             StandardDeviation = 0.1
+                         };
+
+            group2 = new ShiftCategoryFairnessCompareResult
+                    {
+                        ShiftCategoryFairnessCompareValues =
+                            new List<ShiftCategoryFairnessCompareValue>
+                                {
+                                    new ShiftCategoryFairnessCompareValue
+                                        {Original = 0.5, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
+                                    new ShiftCategoryFairnessCompareValue
+                                        {Original = 0.5, ComparedTo = 0.5, ShiftCategory = shiftCategoryNoon},
+                                    new ShiftCategoryFairnessCompareValue
+                                        {Original = 0.1, ComparedTo = 0.5, ShiftCategory = shiftCategoryNight}
+                                },
+                        StandardDeviation = 0.02
+                    };
+
+            _groupList = new List<ShiftCategoryFairnessCompareResult> {group1, group2};
+
+            _blackList = new List<ShiftCategoryFairnessSwap>
+                             {
+                                 new ShiftCategoryFairnessSwap
+                                     {
+                                         Group1 = group1,
+                                         Group2 = group2,
+                                         ShiftCategoryFromGroup1 = shiftCategoryDay,
+                                         ShiftCategoryFromGroup2 = shiftCategoryNoon
+                                     },
+                                 new ShiftCategoryFairnessSwap
+                                     {
+                                         Group1 = group1,
+                                         Group2 = group2,
+                                         ShiftCategoryFromGroup1 = shiftCategoryDay,
+                                         ShiftCategoryFromGroup2 = shiftCategoryNight
+                                     },
+                                 new ShiftCategoryFairnessSwap
+                                     {
+                                         Group1 = group1,
+                                         Group2 = group2,
+                                         ShiftCategoryFromGroup1 = shiftCategoryNoon,
+                                         ShiftCategoryFromGroup2 = shiftCategoryNight
+                                     }
+                             };
+
+            var result = _target.GetGroupsToSwap(_groupList, _blackList);
+            Assert.AreEqual(null, result);
         }
 
         private void SetupSmallListForBlacklistTests()
@@ -248,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                              };
         }
 
-        private void SetupBlacklistForCompleteExhaustOfGropup1ShiftCategoryDayOptions()
+        private void SetupBlacklistForCompleteExhaustOfGroup1ShiftCategoryDayOptions()
         {
             SetupSmallListForBlacklistTests();
 

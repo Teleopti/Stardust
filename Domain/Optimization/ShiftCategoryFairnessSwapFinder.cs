@@ -64,11 +64,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class ShiftCategoryFairnessSwapFinder : IShiftCategoryFairnessSwapFinder
     {
-        public static IOrderedEnumerable<ShiftCategoryFairnessCompareValue> GetGroupCategories(
+        private static IOrderedEnumerable<ShiftCategoryFairnessCompareValue> GetGroupCategories(
             ShiftCategoryFairnessCompareResult selectedGroup,
             IOrderedEnumerable<ShiftCategoryFairnessCompareValue> selectedGroupCategories,
             int orderedListCount,
-            IList<ShiftCategoryFairnessSwap> blacklist)
+            IEnumerable<ShiftCategoryFairnessSwap> blacklist)
         {
             if (orderedListCount == int.MaxValue || orderedListCount == int.MinValue) throw new ArgumentOutOfRangeException("orderedListCount");
             return blacklist.Count(g => g.Group1 == selectedGroup || g.Group2 == selectedGroup)
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public ShiftCategoryFairnessSwap GetGroupsToSwap(IList<ShiftCategoryFairnessCompareResult> inList,
                                                          IList<ShiftCategoryFairnessSwap> blacklist)
         {
-            if (inList.Count < 2) return new ShiftCategoryFairnessSwap();
+            if (inList.Count < 2) return null;
 
             var orderedList = inList.OrderByDescending(g => g.StandardDeviation);
             var selectedGroup = orderedList.First();
@@ -142,6 +142,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                                   ? currentGroup
                                   : returnGroup;
             }
+
+
 
             return new ShiftCategoryFairnessSwap
                        {
