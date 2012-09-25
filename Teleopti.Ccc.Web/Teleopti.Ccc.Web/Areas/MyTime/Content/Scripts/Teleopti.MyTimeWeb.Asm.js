@@ -100,14 +100,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			var isActive = startPos <= timelinePosition;
 			return isActive;
 		});
-		self.startText = function () {
-			var out = self.startTimeText;
 
-			if (layer.StartMinutesSinceAsmZero > 2 * 24 * 60) {
-				out += '+1';
-			}
-			return out;
-		};
+		self.isNextday = ko.computed(function () {
+			return layer.StartMinutesSinceAsmZero > 2 * 24 * 60;
+		});
 	}
 
 	function _start() {
