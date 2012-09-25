@@ -960,4 +960,16 @@
   <data name="ResShiftEndTime" xml:space="preserve">
     <value>Hora de Fin de Turno</value>
   </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Adherencia por Agente</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Adherencia por Día</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Agentes Planificados por Actividad</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totales</value>
+  </data>
 </root>
