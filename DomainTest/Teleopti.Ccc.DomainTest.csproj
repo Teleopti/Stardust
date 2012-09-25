@@ -262,6 +262,7 @@
     <Compile Include="Optimization\ShiftCategoryFairnessComparerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairnessSwapCategorySorterTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairnessSwapFinderTest.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairnessSwapTest.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\IsSignificantPartFullDayAbsenceOrDayOffSpecificationTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairnessSwapperTest.cs" />

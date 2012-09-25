@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IOrderedEnumerable<IShiftCategoryFairnessCompareValue> _selectedGroupCategories;
         private int _numberOfGroups;
         private IEnumerable<IShiftCategoryFairnessSwap> _blacklist;
+        private readonly ShiftCategoryFairnessCategorySorter _target = new ShiftCategoryFairnessCategorySorter();
 
         private ShiftCategory _shiftCategoryMorning = new ShiftCategory("Morning");
         private ShiftCategory _shiftCategoryDay = new ShiftCategory("Day");
@@ -75,8 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldNotReturnBlacklistedCategory()
         {
-            var result = ShiftCategoryFairnessCategorySorter.GetGroupCategories(_selectedGroup, _selectedGroupCategories,
-                                                                                _numberOfGroups, _blacklist);
+            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroupCategories,_numberOfGroups, _blacklist);
             Assert.AreNotEqual(_shiftCategoryDay, result.First());
         }
 

@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                      }
 
                              };
-            _target = new ShiftCategoryFairnessSwapFinder();
+            _target = new ShiftCategoryFairnessSwapFinder(new ShiftCategoryFairnessCategorySorter());
         }
 
         [Test]

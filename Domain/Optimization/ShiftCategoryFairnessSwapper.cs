@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return true;
 		}
 
-		private bool dayHasShiftCategory(IScheduleDay day, IShiftCategory shiftCategory)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+        private bool dayHasShiftCategory(IScheduleDay day, IShiftCategory shiftCategory)
 		{
 			if (!day.SignificantPart().Equals(SchedulePartView.MainShift))
 				return false;
