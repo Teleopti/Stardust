@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period,IBudgetGroup budgetGroup,IScenario scenario);
 		void ClearPeriodForPerson(DateOnlyPeriod period, IScenario scenario, Guid personId);
-		void AddProjectedLayer(DateOnly belongsToDate,IScenario scenario,Guid personId, IVisualLayer visualLayer);
+		void AddProjectedLayer(DateOnly belongsToDate, IScenario scenario, Guid personId, IVisualLayer visualLayer, IVisualLayerCollection collectionLayerBelongsTo);
 		bool IsInitialized();
 	}
 }

@@ -274,6 +274,35 @@ namespace Teleopti.Ccc.DomainTest.Collection
             Assert.AreEqual(new TimeSpan(1,0,0,0), target.ContractTime());
         }
 
+		[Test]
+		public void ShouldCalculateContractTimeForPartOfDay()
+		{
+			var absence1Period = new DateTimePeriod(new DateTime(2000, 1, 1, 5, 0, 0, DateTimeKind.Utc),
+			                                       new DateTime(2000, 1, 1, 6, 0, 0, DateTimeKind.Utc));
+			var absence2Period = new DateTimePeriod(new DateTime(2000, 1, 1, 6, 0, 0, DateTimeKind.Utc),
+												   new DateTime(2000, 1, 1, 6, 30, 0, DateTimeKind.Utc));
+			var absence3Period = new DateTimePeriod(new DateTime(2000, 1, 1, 6, 30, 0, DateTimeKind.Utc),
+												   new DateTime(2000, 1, 1, 7, 0, 0, DateTimeKind.Utc));
+			var afterAbsencePeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 7, 0, 0, DateTimeKind.Utc),
+												   new DateTime(2000, 1, 1, 9, 0, 0, DateTimeKind.Utc));
+			var activity1Period = new DateTimePeriod(new DateTime(2000, 1, 1, 4, 0, 0, DateTimeKind.Utc),
+												   new DateTime(2000, 1, 1, 6, 0, 0, DateTimeKind.Utc));
+			var activity2Period = new DateTimePeriod(new DateTime(2000, 1, 1, 6, 30, 0, DateTimeKind.Utc),
+												   new DateTime(2000, 1, 1, 9, 0, 0, DateTimeKind.Utc));
+			var activityNotInContractTimePeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 6, 0, 0, DateTimeKind.Utc),
+												   new DateTime(2000, 1, 1, 6, 30, 0, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			absence.InContractTime = true;
+
+			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activity1Period, true), absence1Period));
+			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activityNotInContractTimePeriod, false), absence2Period));
+			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activity2Period, true), absence3Period));
+			internalCollection.Add(createLayer(afterAbsencePeriod, true));
+			
+			Assert.AreEqual(TimeSpan.FromMinutes(30), target.ContractTime(absence1Period.MovePeriod(TimeSpan.FromMinutes(30))));
+		}
+
         #endregion
 
         #region ReadyTime tests

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				Expect.Call(
 					() =>
 					scheduleProjectionReadOnlyRepository.AddProjectedLayer(dateOnlyPeriod.StartDate, scenario,
-					                                                       person.Id.GetValueOrDefault(), null)).IgnoreArguments();
+					                                                       person.Id.GetValueOrDefault(), null, null)).IgnoreArguments();
 				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, period, scenario)).IgnoreArguments().
 					Return(dictionary);
 				Expect.Call(scheduleRange.ScheduledDayCollection(dateOnlyPeriod)).Return(new[] {scheduleDay});
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				Expect.Call(
 					() =>
 					scheduleProjectionReadOnlyRepository.AddProjectedLayer(dateOnlyPeriod.StartDate, scenario,
-																		   person.Id.GetValueOrDefault(), null)).IgnoreArguments();
+																		   person.Id.GetValueOrDefault(), null, null)).IgnoreArguments();
 				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, period, scenario)).IgnoreArguments().
 					Return(dictionary);
 				Expect.Call(scheduleRange.ScheduledDayCollection(dateOnlyPeriod)).Return(new[] { scheduleDay });
