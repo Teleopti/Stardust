@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             return blacklist.Count(g => g.Group1 == selectedGroup || g.Group2 == selectedGroup)
                    == ((numberOfGroups - 1) * (selectedGroupCategories.Count() - 1))
+                // ES: if all swaps for a category is already blacklisted
                        ? GetGroupCategories(selectedGroup,
                                             selectedGroupCategories.Skip(1).OrderByDescending(c => c.Original),
                                             numberOfGroups, blacklist)

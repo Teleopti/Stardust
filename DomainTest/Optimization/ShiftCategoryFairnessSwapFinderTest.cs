@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     {
         private ShiftCategoryFairnessSwapFinder _target;
         private IList<IShiftCategoryFairnessCompareResult> _groupList;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         private IList<IShiftCategoryFairnessSwap> _blackList;
 
 // ReSharper disable InconsistentNaming
@@ -177,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var result = _target.GetGroupsToSwap(_groupList, _blackList);
             Assert.AreNotEqual(result.Group1, result.Group2);
             Assert.AreNotEqual(result.ShiftCategoryFromGroup1, result.ShiftCategoryFromGroup2);
-
+            
             SetupBlacklistForCompleteExhaustOfGroup1ShiftCategoryDayOptions();
             result = _target.GetGroupsToSwap(_groupList, _blackList);
             Assert.AreNotEqual(result.Group1, result.Group2);

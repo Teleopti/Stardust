@@ -5,48 +5,50 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IShiftCategoryFairnessSwapFinder
     {
-        IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> inList,
+        IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> grouplist,
                                                    IList<IShiftCategoryFairnessSwap> blacklist);
     }
 
     public class ShiftCategoryFairnessSwapFinder : IShiftCategoryFairnessSwapFinder
     {
-    	private readonly IShiftCategoryFairnessCategorySorter _shiftCategoryFairnessCategorySorter;
+        private readonly IShiftCategoryFairnessCategorySorter _shiftCategoryFairnessCategorySorter;
 
-    	public ShiftCategoryFairnessSwapFinder(IShiftCategoryFairnessCategorySorter shiftCategoryFairnessCategorySorter)
-		{
-			_shiftCategoryFairnessCategorySorter = shiftCategoryFairnessCategorySorter;
-		}
+        public ShiftCategoryFairnessSwapFinder(IShiftCategoryFairnessCategorySorter shiftCategoryFairnessCategorySorter)
+        {
+            _shiftCategoryFairnessCategorySorter = shiftCategoryFairnessCategorySorter;
+        }
 
-    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")
+        , System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
             "CA1062:Validate arguments of public methods", MessageId = "1"),
          System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
              "CA1062:Validate arguments of public methods", MessageId = "0"),
          System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> inList,
+        public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> grouplist,
                                                           IList<IShiftCategoryFairnessSwap> blacklist)
         {
-            if (inList.Count < 2) return null;
+            if (grouplist.Count < 2) return null;
 
-            var orderedList = inList.OrderByDescending(g => g.StandardDeviation);
+            var orderedList = grouplist.OrderByDescending(g => g.StandardDeviation);
             var selectedGroup = orderedList.First();
 
             var selectedGroupBlacklistedSwapCount = blacklist.Count(b => b.Group1 == selectedGroup);
             var categoryCount = selectedGroup.ShiftCategoryFairnessCompareValues.Count() - 1;
 
-            // if all swaps for selectedGroup have been blacklisted
-            if (selectedGroupBlacklistedSwapCount >= (categoryCount*(categoryCount + 1)/2)*(inList.Count - 1))
-                return GetGroupsToSwap(inList.Skip(1).ToList(), blacklist);
+            // ES: if all swaps for selectedGroup have been blacklisted
+            if (selectedGroupBlacklistedSwapCount >= (categoryCount*(categoryCount + 1)/2)*(grouplist.Count - 1))
+                return GetGroupsToSwap(grouplist.Skip(1).ToList(), blacklist);
 
-            // get ordered list, check categories against blacklist
+            // ES: get ordered list, check categories against blacklist
             var selectedGroupCategories =
-				_shiftCategoryFairnessCategorySorter.GetGroupCategories(selectedGroup,
-                                                                       selectedGroup.
-                                                                           ShiftCategoryFairnessCompareValues.
-                                                                           OrderByDescending(
-                                                                               g => g.Original),
-                                                                       orderedList.Count(),
-                                                                       blacklist).ToList();
+                _shiftCategoryFairnessCategorySorter.GetGroupCategories(selectedGroup,
+                                                                        selectedGroup.
+                                                                            ShiftCategoryFairnessCompareValues.Where(
+                                                                                g => g.ComparedTo > 0 || g.Original > 0)
+                                                                                .OrderByDescending(
+                                                                                g => g.Original),
+                                                                        orderedList.Count(),
+                                                                        blacklist).ToList();
 
             var selectedGroupHighestCategory = selectedGroupCategories.First().ShiftCategory;
             var selectedGroupLowestCategory = selectedGroupCategories.Last().ShiftCategory;
@@ -55,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Optimization
                 orderedList.Except(new List<IShiftCategoryFairnessCompareResult> {selectedGroup}).SkipWhile(
                     b => (blacklist.Contains(new ShiftCategoryFairnessSwap
                                                  {
-
                                                      Group1 = selectedGroup,
                                                      Group2 = b,
                                                      ShiftCategoryFromGroup1 =
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                          selectedGroupLowestCategory
                                                  }))).First();
 
-            // I cannot see how this would ever happend, worstcase is that we get a bad swap but returnGroup should never be null
+            // ES: I cannot see how this would ever happend, worstcase is that we get a bad swap but returnGroup should never be null
             if (returnGroup == null) return null;
 
             foreach (var currentGroup in orderedList.Skip(1))

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -42,13 +40,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                  new ShiftCategoryFairnessCompareValue
                                                      {
                                                          Original = 0.1,
-                                                         ComparedTo = 0.7,
+                                                         ComparedTo = 0.6,
                                                          ShiftCategory = _shiftCategoryDay
                                                      },
                                                  new ShiftCategoryFairnessCompareValue
                                                      {
                                                          Original = 0.0,
-                                                         ComparedTo = 0.0,
+                                                         ComparedTo = 0.1,
                                                          ShiftCategory = _shiftCategoryNight
                                                      }
                                              },
@@ -79,6 +77,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var result = _target.GetGroupCategories(_selectedGroup, _selectedGroupCategories,_numberOfGroups, _blacklist);
             Assert.AreNotEqual(_shiftCategoryDay, result.First());
         }
-
     }
 }
