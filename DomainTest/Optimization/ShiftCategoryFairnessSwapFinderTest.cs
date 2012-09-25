@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void ShouldReturnNullIfGroupListHasOnlyOneItem()
+        public void  ShouldReturnNullIfGroupListHasOnlyOneItem()
         {
             var result = _target.GetGroupsToSwap(
                 new List<IShiftCategoryFairnessCompareResult>
@@ -175,17 +175,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void ShouldNeverReturnIdenticalGroupOrShiftInSwap()
         {
             var result = _target.GetGroupsToSwap(_groupList, _blackList);
-            Assert.AreNotEqual(result.Group1.StandardDeviation, result.Group2.StandardDeviation);
+            Assert.AreNotEqual(result.Group1, result.Group2);
             Assert.AreNotEqual(result.ShiftCategoryFromGroup1, result.ShiftCategoryFromGroup2);
 
             SetupBlacklistForCompleteExhaustOfGroup1ShiftCategoryDayOptions();
             result = _target.GetGroupsToSwap(_groupList, _blackList);
-            Assert.AreNotEqual(result.Group1.StandardDeviation, result.Group2.StandardDeviation);
+            Assert.AreNotEqual(result.Group1, result.Group2);
             Assert.AreNotEqual(result.ShiftCategoryFromGroup1, result.ShiftCategoryFromGroup2);
 
             SetupBlacklistForCompleteExhaustOfGroup1Options();
             result = _target.GetGroupsToSwap(_groupList, _blackList);
-            Assert.AreNotEqual(result.Group1.StandardDeviation, result.Group2.StandardDeviation);
+            Assert.AreNotEqual(result.Group1, result.Group2);
             Assert.AreNotEqual(result.ShiftCategoryFromGroup1, result.ShiftCategoryFromGroup2);
         }
 
@@ -251,6 +251,103 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             var result = _target.GetGroupsToSwap(_groupList, _blackList);
             Assert.AreEqual(null, result);
+        }
+
+        [Test]
+        public void ShouldNotReturnASecondGroupThatHas0InCat2()
+        {
+            SetupSmallListForBlacklistTests();
+            _groupList.Remove(group3);
+            _groupList.Add(
+                new ShiftCategoryFairnessCompareResult
+                    {
+                        ShiftCategoryFairnessCompareValues =
+                            new List<IShiftCategoryFairnessCompareValue>
+                                {
+                                    new ShiftCategoryFairnessCompareValue
+                                        {Original = 0.1, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
+                                    new ShiftCategoryFairnessCompareValue
+                                        {Original = 0.9, ComparedTo = 0.5, ShiftCategory = shiftCategoryNoon},
+                                    new ShiftCategoryFairnessCompareValue
+                                        {Original = 0.0, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
+                                },
+                        StandardDeviation = 0.03
+                    });
+
+            _blackList = new List<IShiftCategoryFairnessSwap>
+                             {
+                                 new ShiftCategoryFairnessSwap
+                                     {
+                                         Group1 = group1,
+                                         Group2 = group2,
+                                         ShiftCategoryFromGroup1 = shiftCategoryDay,
+                                         ShiftCategoryFromGroup2 = shiftCategoryNight
+                                     }
+                             };
+
+            var result = _target.GetGroupsToSwap(_groupList, _blackList);
+            Assert.AreNotEqual(0, result.ShiftCategoryFromGroup2);
+        }
+
+        [Test]
+        public void WhatsGoingToHappend()
+        {
+            _groupList = new List<IShiftCategoryFairnessCompareResult>
+                             {
+                                 new ShiftCategoryFairnessCompareResult
+                                     {
+                                         ShiftCategoryFairnessCompareValues =
+                                             new List<IShiftCategoryFairnessCompareValue>
+                                                 {
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.9,
+                                                             ComparedTo = 0.3,
+                                                             ShiftCategory = shiftCategoryDay
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.1,
+                                                             ComparedTo = 0.5,
+                                                             ShiftCategory = shiftCategoryNoon
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.0,
+                                                             ComparedTo = 0.2,
+                                                             ShiftCategory = shiftCategoryNight
+                                                         }
+                                                 },
+                                         StandardDeviation = 0.1
+                                     },
+                                 new ShiftCategoryFairnessCompareResult
+                                     {
+                                         ShiftCategoryFairnessCompareValues =
+                                             new List<IShiftCategoryFairnessCompareValue>
+                                                 {
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.6,
+                                                             ComparedTo = 0.3,
+                                                             ShiftCategory = shiftCategoryDay
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.4,
+                                                             ComparedTo = 0.5,
+                                                             ShiftCategory = shiftCategoryNoon
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.0,
+                                                             ComparedTo = 0.2,
+                                                             ShiftCategory = shiftCategoryNight
+                                                         }
+                                                 },
+                                         StandardDeviation = 0.02
+                                     }
+                             };
+            var result = _target.GetGroupsToSwap(_groupList, _blackList);
         }
 
         private void SetupSmallListForBlacklistTests()
