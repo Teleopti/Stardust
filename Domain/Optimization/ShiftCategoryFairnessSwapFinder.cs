@@ -39,13 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return (Equals(other.Group1, Group1) || Equals(other.Group1, Group2)) &&
-                   (Equals(other.Group2, Group2) || Equals(other.Group2, Group1)) &&
-                   (other.ShiftCategoryFromGroup1.Description.Name == ShiftCategoryFromGroup1.Description.Name
-                    || other.ShiftCategoryFromGroup1.Description.Name == ShiftCategoryFromGroup2.Description.Name)
-                   &&
-                   (other.ShiftCategoryFromGroup2.Description.Name == ShiftCategoryFromGroup2.Description.Name
-                    || other.ShiftCategoryFromGroup2.Description.Name == ShiftCategoryFromGroup1.Description.Name);
+            return other.GetHashCode().Equals(GetHashCode());
         }
 
         public override int GetHashCode()
@@ -95,9 +89,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             var selectedGroupCategories =
 				_shiftCategoryFairnessCategorySorter.GetGroupCategories(selectedGroup,
                                                                        selectedGroup.
-                                                                           ShiftCategoryFairnessCompareValues.
-                                                                           OrderByDescending(
-                                                                               g => g.Original),
+                                                                           ShiftCategoryFairnessCompareValues.Where(
+																				g => g.ComparedTo > 0 || g.Original > 0).OrderByDescending(g => g.Original),
                                                                        orderedList.Count(),
                                                                        blacklist).ToList();
 
@@ -115,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                          selectedGroupHighestCategory,
                                                      ShiftCategoryFromGroup2 =
                                                          selectedGroupLowestCategory
-                                                 }))).First();
+                                                 }))).FirstOrDefault();
 
             // I cannot see how this would ever happend, worstcase is that we get a bad swap but returnGroup should never be null
             if (returnGroup == null) return null;

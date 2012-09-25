@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    {
 	        if (ReferenceEquals(null, other)) return false;
 	        if (ReferenceEquals(this, other)) return true;
-	        return other.ShiftCategory.Description.Name == ShiftCategory.Description.Name && other.Original.Equals(Original) && other.ComparedTo.Equals(ComparedTo);
+	        return other.ShiftCategory.Equals(ShiftCategory) && other.Original.Equals(Original) && other.ComparedTo.Equals(ComparedTo);
 	    }
 
 	    public override int GetHashCode()
