@@ -335,6 +335,7 @@
     <Compile Include="ResourceCalculation\SwapServiceNewTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManagerTest.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecificationTest.cs" />
+    <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreatorTest.cs" />
     <Compile Include="Scheduling\Assignment\HasDayOffDefinitionTest.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculatorTest.cs" />

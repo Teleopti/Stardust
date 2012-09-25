@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -14,6 +13,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, BackgroundWorker backgroundWorker,
                                    IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter tagSetter, INewBusinessRuleCollection businessRuleCollection);
+
+    	
     }
 
     /// <summary>
@@ -59,8 +60,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         }
 
-        
-
         public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService)
         {
             var deleteOption = new DeleteOption {Default = true};
@@ -91,8 +90,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 if (backgroundWorker.CancellationPending)
                     return returnList;
             }
-
-            //modify the original schedules
             _scheduleResultStateHolder.Schedules.Modify(ScheduleModifier.Scheduler, cloneList,
                                                         businessRuleCollection, scheduleDayChangeCallback,
                                                         tagSetter);
@@ -105,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return returnList;
         }
 
-        private IScheduleDay preparePart(DeleteOption options, IScheduleDay part)
+    	private IScheduleDay preparePart(DeleteOption options, IScheduleDay part)
         {
             IScheduleDay clonePart = _scheduleResultStateHolder.Schedules[part.Person].ReFetch(part);
 
@@ -117,8 +114,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 clonePart.DeleteDayOff();
             if (options.Absence)
             {
-                clonePart.DeleteFullDayAbsence(clonePart);
-                //clonePart.DeleteAbsence(!options.Default);
+            	clonePart.DeleteFullDayAbsence(clonePart);
             }
 
             if (options.Overtime)
@@ -167,6 +163,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 if (view == SchedulePartView.Overtime)
                     clonePart.DeleteOvertime();
             }
+
             return clonePart;
         }
     }

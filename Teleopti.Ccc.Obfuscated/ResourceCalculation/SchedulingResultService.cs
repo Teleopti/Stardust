@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     	private readonly ISingleSkillCalculator _singleSkillCalculator;
     	private readonly bool _useOccupancyAdjustment;
 
-        public SchedulingResultService(ISchedulingResultStateHolder stateHolder, 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public SchedulingResultService(ISchedulingResultStateHolder stateHolder, 
 			IList<ISkill> allSkills,
 			ISingleSkillLoadedDecider singleSkillLoadedDecider,
 			ISingleSkillCalculator singleSkillCalculator,

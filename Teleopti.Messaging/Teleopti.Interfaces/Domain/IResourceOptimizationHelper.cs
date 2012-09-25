@@ -33,7 +33,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="toRemove">To remove.</param>
 		/// <param name="toAdd">To add.</param>
     	void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks,
-    	                           IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd);
+								   IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd);
 
     	/// <summary>
     	/// Creates the skill skill staff dictionary on skills.

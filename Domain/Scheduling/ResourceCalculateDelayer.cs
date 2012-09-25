@@ -58,20 +58,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, IList<IScheduleDay> addedSchedules)
 		{
-			//Move this to another place
-			IList<IVisualLayerCollection> addedVisualLayerCollections = new List<IVisualLayerCollection>();
-			foreach (var addedSchedule in addedSchedules)
-			{
-				IVisualLayerCollection collection = addedSchedule.AssignmentHighZOrder().ProjectionService().CreateProjection();
-				addedVisualLayerCollections.Add(collection);
-			}
-			_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly, _useOccupancyAdjustment, _considerShortBreaks, new List<IVisualLayerCollection>(), addedVisualLayerCollections);
+			_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly, _useOccupancyAdjustment, _considerShortBreaks, new List<IScheduleDay>(), addedSchedules);
 			DateTimePeriod? dateTimePeriod = workShiftProjectionPeriod;
 			if (dateTimePeriod.HasValue)
 			{
 				DateTimePeriod period = dateTimePeriod.Value;
 				if (period.StartDateTime.Date != period.EndDateTime.Date)
-					_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _useOccupancyAdjustment, _considerShortBreaks, new List<IVisualLayerCollection>(), addedVisualLayerCollections);
+					_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _useOccupancyAdjustment, _considerShortBreaks, new List<IScheduleDay>(), addedSchedules);
 			}
 			return true;
 		}

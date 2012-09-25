@@ -382,6 +382,7 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecification.cs" />
+    <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateService.cs" />
     <Compile Include="Scheduling\Assignment\IValidateScheduleRange.cs" />
     <Compile Include="Scheduling\Assignment\PeriodOffsetCalculator.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionIntersectingPeriodMerger.cs" />
