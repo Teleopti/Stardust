@@ -308,7 +308,7 @@ namespace Teleopti.Interfaces.Domain
 			  }
 			  if (endTimeHasValue)
 			  {
-				  return timeSpan < EndTime.Value;
+				  return timeSpan <= EndTime.Value;
 			  }
 			  return timeSpan < OneAndHalfDay;
 		  }
