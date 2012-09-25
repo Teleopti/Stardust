@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -16,10 +17,26 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [SetUp]
         public void Setup()
         {
-            _group1 = new ShiftCategoryFairnessCompareResult();
-            _group2 = new ShiftCategoryFairnessCompareResult();
             _shiftCategory1 = new ShiftCategory("Day");
             _shiftCategory2 = new ShiftCategory("Night");
+
+            _group1 = new ShiftCategoryFairnessCompareResult
+                          {
+                              OriginalMembers = new List<IPerson>
+                                                    {
+                                                        new Person(),
+                                                        new Person()
+                                                    }
+                          };
+
+            _group2 = new ShiftCategoryFairnessCompareResult
+                          {
+                              OriginalMembers = new List<IPerson>
+                                                    {
+                                                        new Person()
+                                                    }
+                          };
+
             _target1 = new ShiftCategoryFairnessSwap
                            {
                                Group1 = _group1,
@@ -56,6 +73,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             var result = _target1.Equals(_target2);
             Assert.AreEqual(true, result);
+        }
+
+        [Test]
+        public void ShouldNotReturnTrueWhenItemsAreNotEqual()
+        {
+            _target2 = new ShiftCategoryFairnessSwap
+                           {
+                               Group1 = _group1,
+                               Group2 = _group2,
+                               ShiftCategoryFromGroup1 = _shiftCategory2,
+                               ShiftCategoryFromGroup2 = _shiftCategory1
+                           };
+            var result = _target1.Equals(_target2);
+            Assert.AreNotEqual(true, result);
         }
 
         [Test]
