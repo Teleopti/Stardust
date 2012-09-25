@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IScheduleRange _scheduleRange1;
     	private ISchedulePartModifyAndRollbackService _rollbackService;
         private BackgroundWorker _backgroundWorker;
-    	private IResourceOptimizationHelper _resourceOptimizationHelper;
         
         [SetUp]
         public void Setup()
@@ -48,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_person = _mocks.StrictMock<IPerson>();
 			_scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
             _backgroundWorker = new BackgroundWorker();
-        	_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
         }
 
         [TearDown]

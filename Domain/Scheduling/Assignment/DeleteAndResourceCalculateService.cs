@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IScheduleDay> DeleteWithResourceCalculation(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 
