@@ -143,11 +143,19 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		 }
 
 		 [Test]
+		 public void ShouldBeValidForTimeSpanAtEndTime()
+		 {
+			 target = new StartTimeLimitation(null, TimeSpan.FromHours(8));
+			 target.IsValidFor(TimeSpan.FromHours(8)).Should().Be.True();
+		 }
+
+		 [Test]
 		 public void ShouldBeInvalidForTimeSpanAfterEndTime()
 		 {
 			 target = new StartTimeLimitation(null, TimeSpan.FromHours(8));
 			 target.IsValidFor(TimeSpan.FromHours(9)).Should().Be.False();
 		 }
+
 
 		 [Test]
 		 public void ShouldBeInvalidForTimeSpanBeforePeriod()
