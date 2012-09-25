@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldAddToBlackListIfWorse()
+		public void ShouldAddToBlacklistIfWorse()
 		{
 			var persons = new List<IPerson>();
 			var dateOnly = new DateOnly(2012, 9, 21);

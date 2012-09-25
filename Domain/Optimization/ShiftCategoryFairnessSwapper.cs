@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IScheduleDictionary _dic;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public ShiftCategoryFairnessSwapper(ISwapServiceNew swapService, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_swapService = swapService;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dic = _schedulingResultStateHolder.Schedules;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "responses")]
 		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization)
 		{
 			var rules = _schedulingResultStateHolder.GetRulesToRun();
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return true;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		private IScheduleDay getScheduleForPersonOnDay(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixListForFairnessOptimization, IPerson person)
 		{
 			IScheduleDay day = null;
