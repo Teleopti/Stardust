@@ -179,6 +179,24 @@ namespace Teleopti.Ccc.TestCommon
 			return personAssignment;
 		}
 
+		public IPersonAssignment PersonAssignmentPersonalShiftStub()
+		{
+			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
+			var personalShift = MockRepository.GenerateStub<IPersonalShift>();
+			personAssignment.Stub(x => x.PersonalShiftCollection).Return(
+				new ReadOnlyCollection<IPersonalShift>(new[] {personalShift}));
+			return personAssignment;
+		}
+
+		public IPersonAssignment PersonAssignmentOvertimeStub()
+		{
+			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
+			var overtimeShift = MockRepository.GenerateStub<IOvertimeShift>();
+			personAssignment.Stub(x => x.OvertimeShiftCollection).Return(
+				new ReadOnlyCollection<IOvertimeShift>(new[] { overtimeShift }));
+			return personAssignment;
+		}
+
 		public IMainShift MainShiftStub() { return MainShiftStub(ShiftCategoryStub()); }
 
 		public IMainShift MainShiftStub(IShiftCategory shiftCategory)
