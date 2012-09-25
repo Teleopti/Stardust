@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    {
 	        if (ReferenceEquals(null, other)) return false;
 	        if (ReferenceEquals(this, other)) return true;
-	        return Equals(other.ShiftCategoryFairnessCompareValues, ShiftCategoryFairnessCompareValues) && other.StandardDeviation.Equals(StandardDeviation) && Equals(other.OriginalMembers, OriginalMembers);
+	        return Equals(other.OriginalMembers, OriginalMembers);
 	    }
 
 	    public override int GetHashCode()
