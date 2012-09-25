@@ -68,8 +68,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             "CA1062:Validate arguments of public methods", MessageId = "1"),
          System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
              "CA1062:Validate arguments of public methods", MessageId = "0"),
-         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters",
-             MessageId = "blacklist"),
          System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> inList,
                                                           IList<IShiftCategoryFairnessSwap> blacklist)
@@ -87,28 +85,30 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return GetGroupsToSwap(inList.Skip(1).ToList(), blacklist);
 
             // get ordered list, check categories against blacklist
-            var selectedGroupCategories = ShiftCategoryFairnessCategorySorter.GetGroupCategories(selectedGroup,
-                                                                                                 selectedGroup.
-                                                                                                     ShiftCategoryFairnessCompareValues
-                                                                                                     .
-                                                                                                     OrderByDescending(
-                                                                                                         g => g.Original),
-                                                                                                 orderedList.Count(),
-                                                                                                 blacklist).ToList();
+            var selectedGroupCategories =
+                ShiftCategoryFairnessCategorySorter.GetGroupCategories(selectedGroup,
+                                                                       selectedGroup.
+                                                                           ShiftCategoryFairnessCompareValues.
+                                                                           OrderByDescending(
+                                                                               g => g.Original),
+                                                                       orderedList.Count(),
+                                                                       blacklist).ToList();
 
             var selectedGroupHighestCategory = selectedGroupCategories.First().ShiftCategory;
             var selectedGroupLowestCategory = selectedGroupCategories.Last().ShiftCategory;
 
-            var returnGroup = orderedList.Except(new List<IShiftCategoryFairnessCompareResult>{selectedGroup}).SkipWhile(b => (blacklist.Contains(new ShiftCategoryFairnessSwap
-                                                                                 {
+            var returnGroup =
+                orderedList.Except(new List<IShiftCategoryFairnessCompareResult> {selectedGroup}).SkipWhile(
+                    b => (blacklist.Contains(new ShiftCategoryFairnessSwap
+                                                 {
 
-                                                                                     Group1 = selectedGroup,
-                                                                                     Group2 = b,
-                                                                                     ShiftCategoryFromGroup1 =
-                                                                                         selectedGroupHighestCategory,
-                                                                                     ShiftCategoryFromGroup2 =
-                                                                                         selectedGroupLowestCategory
-                                                                                 }))).First();
+                                                     Group1 = selectedGroup,
+                                                     Group2 = b,
+                                                     ShiftCategoryFromGroup1 =
+                                                         selectedGroupHighestCategory,
+                                                     ShiftCategoryFromGroup2 =
+                                                         selectedGroupLowestCategory
+                                                 }))).First();
 
             // I cannot see how this would ever happend, worstcase is that we get a bad swap but returnGroup should never be null
             if (returnGroup == null) return null;

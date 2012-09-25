@@ -289,67 +289,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreNotEqual(0, result.ShiftCategoryFromGroup2);
         }
 
-        [Test]
-        public void WhatsGoingToHappend()
-        {
-            _groupList = new List<IShiftCategoryFairnessCompareResult>
-                             {
-                                 new ShiftCategoryFairnessCompareResult
-                                     {
-                                         ShiftCategoryFairnessCompareValues =
-                                             new List<IShiftCategoryFairnessCompareValue>
-                                                 {
-                                                     new ShiftCategoryFairnessCompareValue
-                                                         {
-                                                             Original = 0.9,
-                                                             ComparedTo = 0.3,
-                                                             ShiftCategory = shiftCategoryDay
-                                                         },
-                                                     new ShiftCategoryFairnessCompareValue
-                                                         {
-                                                             Original = 0.1,
-                                                             ComparedTo = 0.5,
-                                                             ShiftCategory = shiftCategoryNoon
-                                                         },
-                                                     new ShiftCategoryFairnessCompareValue
-                                                         {
-                                                             Original = 0.0,
-                                                             ComparedTo = 0.2,
-                                                             ShiftCategory = shiftCategoryNight
-                                                         }
-                                                 },
-                                         StandardDeviation = 0.1
-                                     },
-                                 new ShiftCategoryFairnessCompareResult
-                                     {
-                                         ShiftCategoryFairnessCompareValues =
-                                             new List<IShiftCategoryFairnessCompareValue>
-                                                 {
-                                                     new ShiftCategoryFairnessCompareValue
-                                                         {
-                                                             Original = 0.6,
-                                                             ComparedTo = 0.3,
-                                                             ShiftCategory = shiftCategoryDay
-                                                         },
-                                                     new ShiftCategoryFairnessCompareValue
-                                                         {
-                                                             Original = 0.4,
-                                                             ComparedTo = 0.5,
-                                                             ShiftCategory = shiftCategoryNoon
-                                                         },
-                                                     new ShiftCategoryFairnessCompareValue
-                                                         {
-                                                             Original = 0.0,
-                                                             ComparedTo = 0.2,
-                                                             ShiftCategory = shiftCategoryNight
-                                                         }
-                                                 },
-                                         StandardDeviation = 0.02
-                                     }
-                             };
-            var result = _target.GetGroupsToSwap(_groupList, _blackList);
-        }
-
         private void SetupSmallListForBlacklistTests()
         {
             group1 = new ShiftCategoryFairnessCompareResult
