@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                          selectedGroupHighestCategory,
                                                      ShiftCategoryFromGroup2 =
                                                          selectedGroupLowestCategory
-                                                 }))).First();
+                                                 }))).FirstOrDefault();
 
             // ES: I cannot see how this would ever happend, worstcase is that we get a bad swap but returnGroup should never be null
             if (returnGroup == null) return null;

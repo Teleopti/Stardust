@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "responses")]
 		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization)
 		{
+			_schedulingResultStateHolder.UseValidation = false;
 			var rules = _schedulingResultStateHolder.GetRulesToRun();
 			//smäller om färre i tvåan
 			for (var i = 0; i < suggestion.Group1.OriginalMembers.Count; i++)
