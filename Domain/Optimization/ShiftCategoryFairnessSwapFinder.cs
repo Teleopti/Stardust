@@ -64,7 +64,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class ShiftCategoryFairnessSwapFinder : IShiftCategoryFairnessSwapFinder
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
+    	private readonly IShiftCategoryFairnessCategorySorter _shiftCategoryFairnessCategorySorter;
+
+    	public ShiftCategoryFairnessSwapFinder(IShiftCategoryFairnessCategorySorter shiftCategoryFairnessCategorySorter)
+		{
+			_shiftCategoryFairnessCategorySorter = shiftCategoryFairnessCategorySorter;
+		}
+
+    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
             "CA1062:Validate arguments of public methods", MessageId = "1"),
          System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
              "CA1062:Validate arguments of public methods", MessageId = "0"),
@@ -86,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             // get ordered list, check categories against blacklist
             var selectedGroupCategories =
-                ShiftCategoryFairnessCategorySorter.GetGroupCategories(selectedGroup,
+				_shiftCategoryFairnessCategorySorter.GetGroupCategories(selectedGroup,
                                                                        selectedGroup.
                                                                            ShiftCategoryFairnessCompareValues.
                                                                            OrderByDescending(

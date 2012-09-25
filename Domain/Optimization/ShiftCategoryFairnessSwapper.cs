@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				var day1 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, suggestion.Group1.OriginalMembers[i]);
 				var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, suggestion.Group2.OriginalMembers[i]);
+				if (!dayHasShiftCategory(day1, suggestion.ShiftCategoryFromGroup1) || !dayHasShiftCategory(day2, suggestion.ShiftCategoryFromGroup2))
+					return false;
 
 				var modifiedParts = _swapService.Swap(new List<IScheduleDay> { day1, day2 }, _dic);
 				var responses = _dic.Modify(ScheduleModifier.AutomaticScheduling, modifiedParts, rules,
@@ -41,6 +43,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			
 			return true;
+		}
+
+		private bool dayHasShiftCategory(IScheduleDay day, IShiftCategory shiftCategory)
+		{
+			if (!day.SignificantPart().Equals(SchedulePartView.MainShift))
+				return false;
+			return day.PersonAssignmentCollection()[0].MainShift.ShiftCategory.Equals(shiftCategory);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]

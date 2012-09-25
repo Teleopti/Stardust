@@ -4,9 +4,18 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public static class ShiftCategoryFairnessCategorySorter
-    {
-        public static IOrderedEnumerable<IShiftCategoryFairnessCompareValue> GetGroupCategories(
+	public interface IShiftCategoryFairnessCategorySorter
+	{
+		IOrderedEnumerable<IShiftCategoryFairnessCompareValue> GetGroupCategories(
+			IShiftCategoryFairnessCompareResult selectedGroup,
+			IOrderedEnumerable<IShiftCategoryFairnessCompareValue> selectedGroupCategories,
+			int numberOfGroups,
+			IEnumerable<IShiftCategoryFairnessSwap> blacklist);
+	}
+
+	public class ShiftCategoryFairnessCategorySorter : IShiftCategoryFairnessCategorySorter
+	{
+        public IOrderedEnumerable<IShiftCategoryFairnessCompareValue> GetGroupCategories(
                IShiftCategoryFairnessCompareResult selectedGroup,
                IOrderedEnumerable<IShiftCategoryFairnessCompareValue> selectedGroupCategories,
                int numberOfGroups,
