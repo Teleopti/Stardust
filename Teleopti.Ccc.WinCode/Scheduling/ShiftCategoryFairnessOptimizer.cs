@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					x => x.StandardDeviation).ToList();
 
 			// if no diff it should be fair
-			var diff = fairnessResults[fairnessResults.Count - 1].StandardDeviation - fairnessResults[0].StandardDeviation;
+			var diff = fairnessResults[fairnessResults.Count - 1].StandardDeviation; // -fairnessResults[0].StandardDeviation;
 			if (diff.Equals(0))
 				return;
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
 						x => x.StandardDeviation).ToList();
 
-					var newdiff = fairnessResults[fairnessResults.Count - 1].StandardDeviation - fairnessResults[0].StandardDeviation;
+					var newdiff = fairnessResults[fairnessResults.Count - 1].StandardDeviation; // -fairnessResults[0].StandardDeviation;
 					if (newdiff > diff) // not better
 					{
 						blackList.Add(swapSuggestion);
