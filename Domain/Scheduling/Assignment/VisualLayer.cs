@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return Payload.ConfidentialDescription(Person, new DateOnly(Period.StartDateTimeLocal(TeleoptiPrincipal.Current.Regional.TimeZone)));
         }
 
-        public TimeSpan ContractTime()
+        internal TimeSpan ThisLayerContractTime()
         {
             return hasContractTime() ? Period.ElapsedTime() : TimeSpan.Zero;
         }
