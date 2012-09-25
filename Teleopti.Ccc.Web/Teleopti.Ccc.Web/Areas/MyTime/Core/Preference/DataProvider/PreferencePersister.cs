@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			if (mustHave)
 			{
 				var preferenceDays = _preferenceDayRepository.Find(schedulePeriod, new[] { _loggedOnUser.CurrentUser() });
-				preferenceDays = DeleteOrphanPreferenceDays(preferenceDays);
 				var nbrOfDaysWithMustHave = preferenceDays.Count(p => p.Restriction.MustHave);
 				var currentSchedulePeriod = _loggedOnUser.CurrentUser().SchedulePeriod(selectedDay);
 				if (nbrOfDaysWithMustHave >= currentSchedulePeriod.MustHavePreference)
@@ -85,7 +84,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			else
 			{
 				var preferenceDays = _preferenceDayRepository.Find(selectedDay, _loggedOnUser.CurrentUser());
-				preferenceDays = DeleteOrphanPreferenceDays(preferenceDays);
 				preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
 			}
 
