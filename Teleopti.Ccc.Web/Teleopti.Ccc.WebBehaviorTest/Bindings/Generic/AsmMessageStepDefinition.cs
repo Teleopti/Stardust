@@ -11,20 +11,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class AsmMessageStepDefinition
 	{
-		//private MessagePage _page { get { return Pages.Pages.MessagePage; } }
+		private MessagePage _page { get { return Pages.Pages.MessagePage; } }
 
 		[Then(@"Message tab should be visible")]
 		public void ThenMessageTabShouldBeVisible()
 		{
-			var page = Browser.Current.Page<PortalPage>();
-			EventualAssert.That(() => page.MessageLink.Exists, Is.True);
+			EventualAssert.That(() => _page.MessageLink.Exists, Is.True);
 		}
 
 		[Then(@"Message tab should not be visible")]
 		public void ThenMessageTabShouldNotBeVisible()
 		{
-			var page = Browser.Current.Page<PortalPage>();
-			EventualAssert.That(() => page.MessageLink.Exists, Is.False);
+			EventualAssert.That(() => _page.MessageLink.Exists, Is.False);
 		}
 
 		[Given(@"I have an unread message with")]
@@ -38,9 +36,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should be notified that I have '(.*)' new message\(s\)")]
 		public void ThenIShouldBeNotifiedThatIHaveNewMessageS(int messageCount)
 		{
-			var page = Browser.Current.Page<PortalPage>();
-			EventualAssert.That(() => page.MessageLink.ClassName.Contains("asm-new-message-indicator"), Is.True);
-			EventualAssert.That(() => page.MessageLink.InnerHtml.Contains("(" + messageCount + ")"), Is.True);
+			EventualAssert.That(() => _page.MessageLink.ClassName.Contains("asm-new-message-indicator"), Is.True);
+			EventualAssert.That(() => _page.MessageLink.InnerHtml.Contains("(" + messageCount + ")"), Is.True);
 		}
 
 		[When(@"I receive a new message")]
@@ -48,5 +45,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.OnMessageBrokerEvent(null);");
 		}
+
+        [Given(@"I have no unread messages")]
+        public void GivenIHaveNoUnreadMessages()
+        {
+            //For helping system tester to understand
+        }
+
+        [When(@"I am viewing messages")]
+        public void WhenIAmViewingMessages()
+        {
+            TestControllerMethods.Logon();
+            Navigation.GotoMessagePage();
+        }
+
+        [Then(@"I should not see any messages")]
+        public void ThenIShouldNotSeeAnyMessages()
+        {
+            EventualAssert.That(() => _page.MessageList.Count.Equals(0), Is.True);
+        }
 	}
 }
