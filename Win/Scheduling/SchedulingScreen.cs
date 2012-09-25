@@ -6050,7 +6050,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var selectedSchedules = _scheduleView.SelectedSchedules();
             var uowFactory = UnitOfWorkFactory.Current;
             var scheduleRepository = new ScheduleRepository(uowFactory);
-            var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository,
+            using(var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository,
                                                             new MoveDataBetweenSchedules(allNewRules,
                                                                                          new SchedulerStateScheduleDayChangedCallback
                                                                                              (new ResourceCalculateDaysDecider
@@ -6067,9 +6067,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                     <IPersistableScheduleData>(),
                                                                 _schedulerMessageBrokerHandler,
                                                                 null,
-                                                                null));
-            exportForm.ShowDialog(this);
-            return;
+                                                                null)))
+            {
+					exportForm.ShowDialog(this);            	
+            }
         }
 
         private void loadTagsMenu()
