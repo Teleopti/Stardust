@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -13,9 +9,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     public class SwapFairnessTest
     {
         private ShiftCategoryFairnessSwapFinder _target;
-        private IList<ShiftCategoryFairnessCompareResult> _groupList;
+        private IList<IShiftCategoryFairnessCompareResult> _groupList;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private IList<ShiftCategoryFairnessSwap> _blackList;
+        private IList<IShiftCategoryFairnessSwap> _blackList;
 
 // ReSharper disable InconsistentNaming
         private ShiftCategoryFairnessCompareResult group1, group2, group3, group4, group5;
@@ -32,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             group1 = new ShiftCategoryFairnessCompareResult
                          {
                              ShiftCategoryFairnessCompareValues =
-                                 new List<ShiftCategoryFairnessCompareValue>
+                                 new List<IShiftCategoryFairnessCompareValue>
                                      {
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.9, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
@@ -47,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             group2 = new ShiftCategoryFairnessCompareResult
                          {
                              ShiftCategoryFairnessCompareValues =
-                                 new List<ShiftCategoryFairnessCompareValue>
+                                 new List<IShiftCategoryFairnessCompareValue>
                                      {
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.0, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
@@ -62,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             group3 = new ShiftCategoryFairnessCompareResult
                          {
                              ShiftCategoryFairnessCompareValues =
-                                 new List<ShiftCategoryFairnessCompareValue>
+                                 new List<IShiftCategoryFairnessCompareValue>
                                      {
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.1, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
@@ -77,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             group4 = new ShiftCategoryFairnessCompareResult
                          {
                              ShiftCategoryFairnessCompareValues =
-                                 new List<ShiftCategoryFairnessCompareValue>
+                                 new List<IShiftCategoryFairnessCompareValue>
                                      {
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.0, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
@@ -92,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             group5 = new ShiftCategoryFairnessCompareResult
                          {
                              ShiftCategoryFairnessCompareValues =
-                                 new List<ShiftCategoryFairnessCompareValue>
+                                 new List<IShiftCategoryFairnessCompareValue>
                                      {
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.1, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
@@ -104,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                              StandardDeviation = 0.05
                          };
 
-            _groupList = new List<ShiftCategoryFairnessCompareResult>
+            _groupList = new List<IShiftCategoryFairnessCompareResult>
                              {
                                  group1,
                                  group2,
@@ -112,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                  group4,
                                  group5
                              };
-            _blackList = new List<ShiftCategoryFairnessSwap>
+            _blackList = new List<IShiftCategoryFairnessSwap>
                              {
                                  new ShiftCategoryFairnessSwap
                                      {
@@ -129,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldReturnTwoGroupsForSwapping()
         {
-            var result = _target.GetGroupsToSwap(_groupList, new List<ShiftCategoryFairnessSwap>());
+            var result = _target.GetGroupsToSwap(_groupList, new List<IShiftCategoryFairnessSwap>());
             Assert.AreEqual(0.1, result.Group1.StandardDeviation);
             Assert.AreEqual("Day", result.ShiftCategoryFromGroup1.Description.Name);
             Assert.AreEqual(0.04, result.Group2.StandardDeviation);
@@ -140,11 +136,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void ShouldReturnNullIfGroupListHasOnlyOneItem()
         {
             var result = _target.GetGroupsToSwap(
-                new List<ShiftCategoryFairnessCompareResult>
+                new List<IShiftCategoryFairnessCompareResult>
 	                {
 	                    new ShiftCategoryFairnessCompareResult()
-	                }, new List<ShiftCategoryFairnessSwap>());
-            Assert.AreEqual(null, result.Group1);
+	                }, new List<IShiftCategoryFairnessSwap>());
+            Assert.That(result, Is.Null);
         }
 
         [Test]
@@ -199,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             group1 = new ShiftCategoryFairnessCompareResult
                          {
                              ShiftCategoryFairnessCompareValues =
-                                 new List<ShiftCategoryFairnessCompareValue>
+                                 new List<IShiftCategoryFairnessCompareValue>
                                      {
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.9, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
@@ -214,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             group2 = new ShiftCategoryFairnessCompareResult
                     {
                         ShiftCategoryFairnessCompareValues =
-                            new List<ShiftCategoryFairnessCompareValue>
+                            new List<IShiftCategoryFairnessCompareValue>
                                 {
                                     new ShiftCategoryFairnessCompareValue
                                         {Original = 0.5, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
@@ -226,9 +222,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                         StandardDeviation = 0.02
                     };
 
-            _groupList = new List<ShiftCategoryFairnessCompareResult> {group1, group2};
+            _groupList = new List<IShiftCategoryFairnessCompareResult> {group1, group2};
 
-            _blackList = new List<ShiftCategoryFairnessSwap>
+            _blackList = new List<IShiftCategoryFairnessSwap>
                              {
                                  new ShiftCategoryFairnessSwap
                                      {
@@ -262,7 +258,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             group1 = new ShiftCategoryFairnessCompareResult
             {
                 ShiftCategoryFairnessCompareValues =
-                    new List<ShiftCategoryFairnessCompareValue>
+                    new List<IShiftCategoryFairnessCompareValue>
                                          {
                                              new ShiftCategoryFairnessCompareValue
                                                  {Original = 0.9, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
@@ -277,7 +273,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             group2 = new ShiftCategoryFairnessCompareResult
             {
                 ShiftCategoryFairnessCompareValues =
-                    new List<ShiftCategoryFairnessCompareValue>
+                    new List<IShiftCategoryFairnessCompareValue>
                                          {
                                              new ShiftCategoryFairnessCompareValue
                                                  {Original = 0.5, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
@@ -292,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             group3 = new ShiftCategoryFairnessCompareResult
             {
                 ShiftCategoryFairnessCompareValues =
-                    new List<ShiftCategoryFairnessCompareValue>
+                    new List<IShiftCategoryFairnessCompareValue>
                                          {
                                              new ShiftCategoryFairnessCompareValue
                                                  {Original = 0.6, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
@@ -304,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 StandardDeviation = 0.03
             };
 
-            _groupList = new List<ShiftCategoryFairnessCompareResult>
+            _groupList = new List<IShiftCategoryFairnessCompareResult>
                              {
                                  group1,
                                  group2,
@@ -344,7 +340,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                          ShiftCategoryFromGroup1 = shiftCategoryDay,
                                          ShiftCategoryFromGroup2 = shiftCategoryNight
                                      };
-            _blackList = new List<ShiftCategoryFairnessSwap>
+            _blackList = new List<IShiftCategoryFairnessSwap>
                              {
                                  blackListItem1,
                                  blackListItem2,
@@ -400,7 +396,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                          ShiftCategoryFromGroup2 = shiftCategoryNight
                                      };
 
-            _blackList = new List<ShiftCategoryFairnessSwap>
+            _blackList = new List<IShiftCategoryFairnessSwap>
                              {
                                  blackListItem1,
                                  blackListItem2,

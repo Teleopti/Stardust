@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IShiftCategoryFairnessSwap
     {
-        ShiftCategoryFairnessCompareResult Group1 { get; set; }
-        ShiftCategoryFairnessCompareResult Group2 { get; set; }
+        IShiftCategoryFairnessCompareResult Group1 { get; set; }
+        IShiftCategoryFairnessCompareResult Group2 { get; set; }
         IShiftCategory ShiftCategoryFromGroup1 { get; set; }
         IShiftCategory ShiftCategoryFromGroup2 { get; set; }
     }
@@ -16,15 +16,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public interface IShiftCategoryFairnessSwapFinder
     {
-        ShiftCategoryFairnessSwap GetGroupsToSwap(IList<ShiftCategoryFairnessCompareResult> inList,
-                                                  IList<ShiftCategoryFairnessSwap> blacklist);
+        IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> inList,
+                                                  IList<IShiftCategoryFairnessSwap> blacklist);
     }
 
 
     public class ShiftCategoryFairnessSwap : IShiftCategoryFairnessSwap
     {
-        public ShiftCategoryFairnessCompareResult Group1 { get; set; }
-        public ShiftCategoryFairnessCompareResult Group2 { get; set; }
+        public IShiftCategoryFairnessCompareResult Group1 { get; set; }
+        public IShiftCategoryFairnessCompareResult Group2 { get; set; }
         public IShiftCategory ShiftCategoryFromGroup1 { get; set; }
         public IShiftCategory ShiftCategoryFromGroup2 { get; set; }
 
@@ -64,11 +64,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class ShiftCategoryFairnessSwapFinder : IShiftCategoryFairnessSwapFinder
     {
-        private static IOrderedEnumerable<ShiftCategoryFairnessCompareValue> GetGroupCategories(
-            ShiftCategoryFairnessCompareResult selectedGroup,
-            IOrderedEnumerable<ShiftCategoryFairnessCompareValue> selectedGroupCategories,
+        private static IOrderedEnumerable<IShiftCategoryFairnessCompareValue> GetGroupCategories(
+            IShiftCategoryFairnessCompareResult selectedGroup,
+            IOrderedEnumerable<IShiftCategoryFairnessCompareValue> selectedGroupCategories,
             int orderedListCount,
-            IEnumerable<ShiftCategoryFairnessSwap> blacklist)
+            IEnumerable<IShiftCategoryFairnessSwap> blacklist)
         {
             if (orderedListCount == int.MaxValue || orderedListCount == int.MinValue) throw new ArgumentOutOfRangeException("orderedListCount");
             return blacklist.Count(g => g.Group1 == selectedGroup || g.Group2 == selectedGroup)
@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"),
          System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "blacklist"),
          System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public ShiftCategoryFairnessSwap GetGroupsToSwap(IList<ShiftCategoryFairnessCompareResult> inList,
-                                                         IList<ShiftCategoryFairnessSwap> blacklist)
+        public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> inList,
+                                                         IList<IShiftCategoryFairnessSwap> blacklist)
         {
             if (inList.Count < 2) return null;
 

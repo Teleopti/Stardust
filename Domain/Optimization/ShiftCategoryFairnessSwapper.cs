@@ -60,11 +60,4 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 	}
 
-	public interface IShiftCategoryFairnessSwap
-	{
-		ShiftCategoryFairnessCompareResult Group1 { get; set; }
-		ShiftCategoryFairnessCompareResult Group2 { get; set; }
-		IShiftCategory ShiftCategoryFromGroup1 { get; set; }
-		IShiftCategory ShiftCategoryFromGroup2 { get; set; }
-	}
 }

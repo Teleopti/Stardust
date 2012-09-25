@@ -99,10 +99,4 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 	}
 
-	
-
-	public interface IShiftCategoryFairnessSwapFinder
-	{
-		IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> inList, IList<IShiftCategoryFairnessSwap> blacklist);
-	}
 }

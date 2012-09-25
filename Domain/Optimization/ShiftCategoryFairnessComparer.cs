@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IShiftCategoryFairnessCompareResult
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]      
-		IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
+		IList<IShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
 		double StandardDeviation { get; set; }
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		IList<IPerson> OriginalMembers { get; set; } 
@@ -57,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class ShiftCategoryFairnessCompareResult : IShiftCategoryFairnessCompareResult
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
+		public IList<IShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
         
 		public double StandardDeviation { get; set; }
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -102,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var totalOriginal = original.ShiftCategoryFairnessDictionary.Values.Sum();
 			var totalCompare = compareTo.ShiftCategoryFairnessDictionary.Values.Sum();
 
-			var result = shiftCategories.Select(shiftCategory => new ShiftCategoryFairnessCompareValue { ShiftCategory = shiftCategory }).ToList();
+			var result = shiftCategories.Select(shiftCategory => new ShiftCategoryFairnessCompareValue { ShiftCategory = shiftCategory }).OfType<IShiftCategoryFairnessCompareValue>().ToList();
 			foreach (var shiftCategoryFairnessComparerResult in result)
 			{
 				if (original.ShiftCategoryFairnessDictionary.ContainsKey(shiftCategoryFairnessComparerResult.ShiftCategory))
@@ -127,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    return shiftCategoryFairnessCompareResult;
 		}
 
-	    private static double calculateStandardDeviation(List<ShiftCategoryFairnessCompareValue> result, double mean)
+	    private static double calculateStandardDeviation(List<IShiftCategoryFairnessCompareValue> result, double mean)
 	    {
 	        var sumOfSquareOfDifference = 0.0;
 
@@ -142,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	        return stdDev;
 	    }
 
-	    private static double calculateMeanValue(List<ShiftCategoryFairnessCompareValue> result)
+	    private static double calculateMeanValue(List<IShiftCategoryFairnessCompareValue> result)
 	    {
 	        var sum = 0.0;
 	        
