@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			var ret = TimeSpan.Zero;
 			foreach (VisualLayer layer in UnMergedCollection)
 			{
-				ret = ret.Add(layer.ContractTime());
+				ret = ret.Add(layer.ThisLayerContractTime());
 			}
 			return ret;
 		}
@@ -131,6 +131,23 @@ namespace Teleopti.Ccc.Domain.Collection
 		public IFilteredVisualLayerCollection FilterLayers<TPayload>() where TPayload : IPayload
 		{
 			return new FilteredVisualLayerCollection(Person, UnMergedCollection.Where(l => l.Payload is TPayload).ToList(), (IProjectionMerger)_merger.Clone(),this);
+		}
+
+		public TimeSpan ContractTime(DateTimePeriod filterPeriod)
+		{
+			var ret = TimeSpan.Zero;
+			foreach (VisualLayer layer in UnMergedCollection)
+			{
+				var sharedPeriod = layer.Period.Intersection(filterPeriod);
+				if (!sharedPeriod.HasValue) continue;
+
+				var layerContractTime = layer.ThisLayerContractTime();
+				if (layerContractTime>TimeSpan.Zero)
+				{
+					ret = ret.Add(sharedPeriod.Value.ElapsedTime());
+				}
+			}
+			return ret;
 		}
 
 		//borde göras om till en IProjectionMerger

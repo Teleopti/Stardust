@@ -10715,4 +10715,10 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
     <value>Max nyttjandegraden måste vara större eller lika med min nyttjandegrad</value>
   </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Schemalagda agenter per aktivitet</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totalt</value>
+  </data>
 </root>

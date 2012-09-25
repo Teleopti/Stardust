@@ -4164,7 +4164,7 @@ standard</value>
     <value>Ugyldig preferansedato(er). Skjema allerede definert for valgt(e) dato(er).</value>
   </data>
   <data name="AllDayEvent" xml:space="preserve">
-    <value>Alle dager</value>
+    <value>Hele dagen</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
     <value>Opprett dato</value>

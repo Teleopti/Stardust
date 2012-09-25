@@ -2,6 +2,7 @@
 /// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
 /// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -137,8 +138,20 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		// this will trigger the hashchange event, which we listen for
 		location.hash = hash;
 	}
+
+	function _endsWith(str, suffix) {
+		return str.indexOf(suffix, str.length - suffix.length) !== -1;
+	}
+	
 	function _parseHash() {
 		var hash = location.hash || '';
+		if (_endsWith(hash, 'Tab')) {
+			if (hash.indexOf('#Schedule') == 0) {
+				hash = hash.substring(0, hash.length - 'Tab'.length) + '/Week';
+			}else {
+				hash = hash.substring(0, hash.length - 'Tab'.length) + '/Index';
+			}
+		}
 		if (hash.length > 0) { hash = hash.substring(1); }
 		var parts = $.merge(hash.split('/'), [null, null, null, null, null, null, null, null]);
 		parts.length = 8;
