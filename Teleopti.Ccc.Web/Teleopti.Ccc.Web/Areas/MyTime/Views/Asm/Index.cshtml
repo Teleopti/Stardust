@@ -25,9 +25,10 @@
 		<div class="asm-info-canvas ui-corner-all">
 			<div>@(Resources.Activities)</div>
 			<table id="asm-current-info-table">
-				<tbody data-bind="foreach: activeLayers">
+				<tbody data-bind="foreach: visibleLayers">
 					<tr data-bind="css: { 'asm-info-current-activity' : active }">
-						<td class="asm-info-time-column" data-bind="text: startText()"></td>
+						<td class="asm-info-time-column" data-bind="text: startTimeText"></td>
+						<td class="asm-info-next-day-column" data-bind="visible: isNextday">+1</td>
 						<td data-bind="text: payload"></td>
 					</tr>
 				</tbody>
