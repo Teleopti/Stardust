@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -51,6 +52,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             InitializePreferenceDays(result);
             return result;
         }
+
+		public int MustHavesInPeriod(DateOnlyPeriod period, IPerson person)
+		{
+			return Session.CreateCriteria<PreferenceDay>()
+				.Add(Restrictions.Between("RestrictionDate", period.StartDate, period.EndDate))
+				.Add(Restrictions.Eq("Person", person))
+				.CreateAlias("Restriction","r",JoinType.InnerJoin)
+				.Add(Restrictions.Eq("r.MustHave", true))
+				.SetProjection(Projections.RowCount()).List<int>()[0];
+		}
 
         public IList<IPreferenceDay> Find(DateOnly dateOnly, IPerson person)
         {

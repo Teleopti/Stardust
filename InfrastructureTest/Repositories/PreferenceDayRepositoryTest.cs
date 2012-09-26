@@ -88,6 +88,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.Person));
         }
 
+		[Test]
+		public void ShouldCountMustHaves()
+		{
+			IPreferenceDay preferenceDay = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(preferenceDay);
+
+			var count = new PreferenceDayRepository(UnitOfWork).MustHavesInPeriod(new DateOnlyPeriod(preferenceDay.RestrictionDate,preferenceDay.RestrictionDate), _person);
+			count.Should().Be.EqualTo(1);
+		}
+
         protected override IPreferenceDay CreateAggregateWithCorrectBusinessUnit()
         {
             PreferenceDay preferenceDay = CreatePreferenceDay(_dateOnly,_person,_activity);

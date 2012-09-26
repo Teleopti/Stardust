@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 			else
 			{
-					ClearExtendedData(preferenceDay);
+				ClearExtendedData(preferenceDay);
 				_mapper.Map(input, preferenceDay);
 
 			}
@@ -71,21 +71,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		{
 			var mustHave = input.MustHave;
 			var selectedDay = input.Date;
-			IPreferenceDay preferenceDay;
+
 			if (mustHave)
 			{
-				var preferenceDays = _preferenceDayRepository.Find(schedulePeriod, new[] { _loggedOnUser.CurrentUser() });
-				var nbrOfDaysWithMustHave = preferenceDays.Count(p => p.Restriction.MustHave);
+				var nbrOfDaysWithMustHave = _preferenceDayRepository.MustHavesInPeriod(schedulePeriod, _loggedOnUser.CurrentUser());
 				var currentSchedulePeriod = _loggedOnUser.CurrentUser().SchedulePeriod(selectedDay);
 				if (nbrOfDaysWithMustHave >= currentSchedulePeriod.MustHavePreference)
 					return null;
-				preferenceDay = preferenceDays.SingleOrDefault(d => d.RestrictionDate == selectedDay);
 			}
-			else
-			{
-				var preferenceDays = _preferenceDayRepository.Find(selectedDay, _loggedOnUser.CurrentUser());
-				preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
-			}
+
+			var preferenceDays = _preferenceDayRepository.Find(selectedDay, _loggedOnUser.CurrentUser());
+			var preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
 
 			if (preferenceDay != null)
 			{
@@ -97,8 +93,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		private IList<IPreferenceDay> DeleteOrphanPreferenceDays(IList<IPreferenceDay> preferenceDays)
 		{
 			preferenceDays = preferenceDays != null
-			                 	? preferenceDays.OrderBy(k => k.UpdatedOn).ToList()
-			                 	: new List<IPreferenceDay>();
+								? preferenceDays.OrderBy(k => k.UpdatedOn).ToList()
+								: new List<IPreferenceDay>();
 			while (preferenceDays.Count > 1)
 			{
 				_preferenceDayRepository.Remove(preferenceDays.First());
@@ -117,7 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			{
 				_preferenceDayRepository.Remove(preferenceDay);
 			}
-			return new PreferenceDayViewModel { Color = ""};
+			return new PreferenceDayViewModel { Color = "" };
 		}
 
 	}
