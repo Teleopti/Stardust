@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             if(_shiftList.Count > 0)
 				result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions);
 
-			if (result == null && schedulingOptions.UsePreferences)
+			if (result == null && (schedulingOptions.UsePreferences || schedulingOptions.UseAvailability || schedulingOptions.UseRotations || schedulingOptions.UseStudentAvailability))
 			{
 				_shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_scheduleDateOnly, timeZone, bag, true);
 				if (_shiftList.Count > 0)
