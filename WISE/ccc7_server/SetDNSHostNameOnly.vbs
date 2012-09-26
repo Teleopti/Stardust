@@ -1,7 +1,7 @@
 option explicit
 On Error Goto 0
 
-Dim SearchHttp, SearchHttps, MyPos, http, https,msgBoxOK,strURL,dmz_hostname,strIsDmz
+Dim SearchHttp, SearchHttps, MyPos, http, https,msgBoxOK,strURL,SetDNSHostNameOnly,strIsDmz
 
 'Read from windows installer property.
 strURL = Session.Property("DNS_ALIAS")
@@ -16,14 +16,14 @@ https = CBool(Instr(strURL, SearchHttps))
 
 If strIsDmz="YES" Then
 	if http Then
-		dmz_hostname = Mid(strURL, 8, Len(strURL)-8)
+		SetDNSHostNameOnly = Mid(strURL, 8, Len(strURL)-8)
 	End If
 
 	if https Then
-		dmz_hostname = Mid(strURL, 9, Len(strURL)-9)
+		SetDNSHostNameOnly = Mid(strURL, 9, Len(strURL)-9)
 	End If
 Else
-	dmz_hostname="localhost"
+	SetDNSHostNameOnly="localhost"
 End if
 
-Session.Property("DMZ_HOSTNAME") = dmz_hostname
+Session.Property("DNSHOSTNAMEONLY") = SetDNSHostNameOnly
