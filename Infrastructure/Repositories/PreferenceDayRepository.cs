@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
-using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -41,41 +40,47 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             foreach (var personList in persons.Batch(400))
             {
-                ICriteria crit = FilterByPeriod(period)
-                .Add(personCriterion(personList.ToArray()))
-                .SetFetchMode("Restriction", FetchMode.Join)
-                .SetFetchMode("Restriction.ActivityRestrictionCollection", FetchMode.Join)
-                .SetResultTransformer(Transformers.DistinctRootEntity);
-                result.AddRange(crit.List<IPreferenceDay>());
+	            ICriteria crit = FilterByPeriod(period)
+		            .Add(personCriterion(personList.ToArray()))
+		            .SetFetchMode("Restriction", FetchMode.Join)
+		            .SetFetchMode("Restriction.ActivityRestrictionCollection", FetchMode.Join)
+		            .SetResultTransformer(Transformers.DistinctRootEntity);
+	            result.AddRange(crit.List<IPreferenceDay>());
             }
             
             InitializePreferenceDays(result);
             return result;
         }
 
-		public int MustHavesInPeriod(DateOnlyPeriod period, IPerson person)
-		{
-			return Session.CreateCriteria<PreferenceDay>()
-				.Add(Restrictions.Between("RestrictionDate", period.StartDate, period.EndDate))
-				.Add(Restrictions.Eq("Person", person))
-				.CreateAlias("Restriction","r",JoinType.InnerJoin)
-				.Add(Restrictions.Eq("r.MustHave", true))
-				.SetProjection(Projections.RowCount()).List<int>()[0];
-		}
-
         public IList<IPreferenceDay> Find(DateOnly dateOnly, IPerson person)
         {
-            ICriteria crit = Session.CreateCriteria(typeof(PreferenceDay))
-                .Add(Restrictions.Eq("RestrictionDate",dateOnly))
-                .Add(Restrictions.Eq("Person",person))
-                .SetFetchMode("Restriction", FetchMode.Join);
-            IList<IPreferenceDay> retList = crit.List<IPreferenceDay>();
+			ICriteria crit = Session.CreateCriteria(typeof(PreferenceDay))
+				.Add(Restrictions.Eq("RestrictionDate", dateOnly))
+				.Add(Restrictions.Eq("Person", person))
+				.SetFetchMode("Restriction", FetchMode.Join);
+			IList<IPreferenceDay> retList = crit.List<IPreferenceDay>();
 
-            InitializePreferenceDays(retList);
-            return retList;
+			InitializePreferenceDays(retList);
+			return retList;
         }
 
-        private ICriteria FilterByPeriod(DateOnlyPeriod period)
+	    public IList<IPreferenceDay> Find(DateOnlyPeriod period, IPerson person)
+	    {
+			// lock mode set to upgrade
+			var result = new List<IPreferenceDay>();
+			ICriteria crit = FilterByPeriod(period)
+				.Add(Restrictions.Eq("Person", person))
+				.SetLockMode(LockMode.Upgrade)
+				.SetFetchMode("Restriction", FetchMode.Join)
+				.SetFetchMode("Restriction.ActivityRestrictionCollection", FetchMode.Join)
+				.SetResultTransformer(Transformers.DistinctRootEntity);
+			result.AddRange(crit.List<IPreferenceDay>());
+
+			InitializePreferenceDays(result);
+			return result;
+	    }
+
+	    private ICriteria FilterByPeriod(DateOnlyPeriod period)
         {
             return Session.CreateCriteria(typeof(PreferenceDay))
                 .Add(Restrictions.Between("RestrictionDate", period.StartDate, period.EndDate))

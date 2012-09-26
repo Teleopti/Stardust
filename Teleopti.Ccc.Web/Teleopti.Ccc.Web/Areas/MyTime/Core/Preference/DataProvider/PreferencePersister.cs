@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public PreferenceDayViewModel MustHave(DateOnlyPeriod schedulePeriod, MustHaveInput input)
 		{
-			var preferenceDay = TryToggleMustHave(schedulePeriod, input);
+			var preferenceDay = SetMustHave(schedulePeriod, input);
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 		}
 
@@ -67,21 +67,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		/// </summary>
 		/// <param name="schedulePeriod">The schedule period.</param>
 		/// <param name="input">The input.</param>
-		private IPreferenceDay TryToggleMustHave(DateOnlyPeriod schedulePeriod, MustHaveInput input)
+		private IPreferenceDay SetMustHave(DateOnlyPeriod schedulePeriod, MustHaveInput input)
 		{
 			var mustHave = input.MustHave;
 			var selectedDay = input.Date;
+			IPreferenceDay preferenceDay = null;
 
 			if (mustHave)
 			{
-				var nbrOfDaysWithMustHave = _preferenceDayRepository.MustHavesInPeriod(schedulePeriod, _loggedOnUser.CurrentUser());
+				var preferenceDays = _preferenceDayRepository.Find(schedulePeriod, _loggedOnUser.CurrentUser());
+				var nbrOfDaysWithMustHave = preferenceDays.Count(p => p.Restriction.MustHave);
 				var currentSchedulePeriod = _loggedOnUser.CurrentUser().SchedulePeriod(selectedDay);
-				if (nbrOfDaysWithMustHave >= currentSchedulePeriod.MustHavePreference)
-					return null;
+				if (nbrOfDaysWithMustHave < currentSchedulePeriod.MustHavePreference)
+					preferenceDay = preferenceDays.SingleOrDefault(d => d.RestrictionDate == selectedDay);
 			}
-
-			var preferenceDays = _preferenceDayRepository.Find(selectedDay, _loggedOnUser.CurrentUser());
-			var preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
+			else
+			{
+				var preferenceDays = _preferenceDayRepository.Find(selectedDay, _loggedOnUser.CurrentUser());
+				preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
+			}
 
 			if (preferenceDay != null)
 			{
@@ -93,8 +97,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		private IList<IPreferenceDay> DeleteOrphanPreferenceDays(IList<IPreferenceDay> preferenceDays)
 		{
 			preferenceDays = preferenceDays != null
-								? preferenceDays.OrderBy(k => k.UpdatedOn).ToList()
-								: new List<IPreferenceDay>();
+				                 ? preferenceDays.OrderBy(k => k.UpdatedOn).ToList()
+				                 : new List<IPreferenceDay>();
 			while (preferenceDays.Count > 1)
 			{
 				_preferenceDayRepository.Remove(preferenceDays.First());

@@ -49,6 +49,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             LazyLoadingManager.IsInitialized(days[0].Restriction.ActivityRestrictionCollection).Should().Be.True();
         }
 
+		[Test]
+		public void CanFindPreferenceDaysBetweenDatesAndOnPerson()
+		{
+			DateOnlyPeriod period = new DateOnlyPeriod(2009, 2, 1, 2009, 3, 1);
+			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2009, 2, 2), _person, _activity));
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2009, 3, 2), _person, _activity));
+
+			IList<IPreferenceDay> days = new PreferenceDayRepository(UnitOfWork).Find(period, _person);
+			Assert.AreEqual(2, days.Count);
+			LazyLoadingManager.IsInitialized(days[0].Restriction.ActivityRestrictionCollection).Should().Be.True();
+		}
+
         [Test]
         public void CannotFindPreferenceDaysWhenEmptyPersonCollection()
         {
@@ -87,16 +100,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(preferenceDay.Id, loaded.Id);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.Person));
         }
-
-		[Test]
-		public void ShouldCountMustHaves()
-		{
-			IPreferenceDay preferenceDay = CreateAggregateWithCorrectBusinessUnit();
-			PersistAndRemoveFromUnitOfWork(preferenceDay);
-
-			var count = new PreferenceDayRepository(UnitOfWork).MustHavesInPeriod(new DateOnlyPeriod(preferenceDay.RestrictionDate,preferenceDay.RestrictionDate), _person);
-			count.Should().Be.EqualTo(1);
-		}
 
         protected override IPreferenceDay CreateAggregateWithCorrectBusinessUnit()
         {
