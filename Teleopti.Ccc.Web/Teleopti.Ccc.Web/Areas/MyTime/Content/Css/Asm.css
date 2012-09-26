@@ -101,7 +101,13 @@
 
 .asm-info-canvas td.asm-info-time-column
 {
-	width: 47px;
+	width: 34px;
+}
+
+.asm-info-canvas td.asm-info-next-day-column 
+{
+	width: 18px;
+	text-align: left;	
 }
 
 .asm-info-canvas tr
