@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Meetings
@@ -56,20 +57,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
                     foreach (var visualLayer in proj)
                     {
                         var activity = visualLayer.Payload as IActivity;
+                        if(!(((VisualLayer) visualLayer).HighestPriorityActivity.AllowOverwrite  ))
+                            AddNotAllowedPeriods(notAllowedPeriods, visualLayer);
                         if (activity == null || activity.InWorkTime) continue;
-                        var period = visualLayer.Period;
-                        var startPeriod = period.LocalStartDateTime.TimeOfDay;
-                        var endPeriod = period.LocalEndDateTime.TimeOfDay;
-                        if (endPeriod < startPeriod) endPeriod = endPeriod.Add(TimeSpan.FromHours(24));
-                        notAllowedPeriods.Add(new TimePeriod(startPeriod, endPeriod));
+                        AddNotAllowedPeriods(notAllowedPeriods, visualLayer);
                     }
-                }
+               }
 
                 localStartDateTime = GetLocalStartDateTime(part, localStartDateTime, ref localEndDateTime);
             }
 
             GetTimeList(notAllowedPeriods, localStartDateTime, localEndDateTime, allAvailable, endTime, startTime, duration, timeList);
             return timeList;
+        }
+
+        private static void AddNotAllowedPeriods(IList<TimePeriod> notAllowedPeriods, IVisualLayer visualLayer)
+        {
+            var period = visualLayer.Period;
+            var startPeriod = period.LocalStartDateTime.TimeOfDay;
+            var endPeriod = period.LocalEndDateTime.TimeOfDay;
+            if (endPeriod < startPeriod) endPeriod = endPeriod.Add(TimeSpan.FromHours(24));
+            notAllowedPeriods.Add(new TimePeriod(startPeriod, endPeriod));
         }
 
         private static void GetTimeList(IList<TimePeriod> absencePeriods, TimeSpan localStartDateTime, TimeSpan localEndDateTime, bool allAvailable, TimeSpan endTime, TimeSpan startTime, TimeSpan duration, IList<TimePeriod> timeList)
