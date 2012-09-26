@@ -76,7 +76,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	}
 
 	function _setMustHave(mustHave) {
-		var promises = [];
 		var currentMust = periodFeedbackViewModel.CurrentMustHave();
 		var maxMust = periodFeedbackViewModel.MaxMustHave();
 		$('#Preference-body-inner .ui-selected')
@@ -95,16 +94,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						return;
 					}
 				}
-				var promise = dayViewModels[date].SetMustHave(mustHave);
-				promises.push(promise);
-				if (mustHave == true && !dayViewModels[date].MustHave()) {
+				dayViewModels[date].SetMustHave(mustHave);
+				if (mustHave && !dayViewModels[date].MustHave()) {
 					currentMust++;
 				}
 			});
-		if (promises.length != 0) {
-			$.when.apply(null, promises)
-				.done(function () { periodFeedbackViewModel.LoadFeedback(); });
-		}
 	}
 
 	function _initAddExtendedButton() {

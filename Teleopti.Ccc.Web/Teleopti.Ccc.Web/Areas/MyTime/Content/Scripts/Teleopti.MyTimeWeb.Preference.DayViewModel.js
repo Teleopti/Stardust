@@ -184,7 +184,10 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			type: 'POST',
 			data: JSON.stringify(value),
 			date: self.Date,
-			success: this.ReadPreference,
+			success: function (data) {
+				if (data)
+					self.MustHave(data.MustHave);
+			},
 			complete: function () {
 				deferred.resolve();
 			}
