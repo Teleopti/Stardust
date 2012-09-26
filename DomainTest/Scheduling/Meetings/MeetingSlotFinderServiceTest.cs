@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             IShiftCategory category = ShiftCategoryFactory.CreateShiftCategory("hej");
             IActivity activity = ActivityFactory.CreateActivity("hej");
             activity.InWorkTime = true;
+            activity.AllowOverwrite = true;
             var absencePeriod1 = new DateTimePeriod(_d1.StartDateTime.AddHours(1), _d1.EndDateTime.Subtract(TimeSpan.FromHours(1)));
             var absencePeriod2 = new DateTimePeriod(_d2.StartDateTime.AddHours(10), _d2.EndDateTime.Subtract(TimeSpan.FromHours(10)));
             var absencePeriod3 = new DateTimePeriod(_d3.StartDateTime.AddHours(12), _d3.EndDateTime.Subtract(TimeSpan.FromHours(10)));
@@ -141,6 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             _dates.Add(new DateOnly(2009, 02, 01));
             _persons.Add(_person1);
             _persons.Add(_person2);
+            
             using (_mocks.Record())
             {
                 Expect.Call(_dictionary[_persons[0]]).Return(_range1).Repeat.Times(1);
@@ -281,14 +283,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             var dateOnly = new DateOnly(2011, 3, 9);
             var day = _mocks.StrictMock<IScheduleDay>();
             var projService = _mocks.StrictMock<IProjectionService>();
-            var layerBefore = _mocks.StrictMock<IVisualLayer>();
-            var layerLunch = _mocks.StrictMock<IVisualLayer>();
-            var layerAfter = _mocks.StrictMock<IVisualLayer>();
+
+            var lunchActivity = ActivityFactory.CreateActivity("lunch");
+            lunchActivity.AllowOverwrite = true;
 
             var activity = ActivityFactory.CreateActivity("hej");
             activity.InWorkTime = true;
-            var lunchActivity = ActivityFactory.CreateActivity("lunch");
-            
+            activity.AllowOverwrite = true;
+            var layerBefore = new VisualLayer(activity, wholePeriod,
+                                activity, null);
+            var layerLunch =
+                new VisualLayer(lunchActivity, lunch,
+                                lunchActivity, null);
+            var layerAfter = new VisualLayer(activity , wholePeriod ,
+                                activity , null); 
+
             var layers = new List<IVisualLayer> { layerBefore , layerLunch, layerAfter};
             var layerCollection = _mocks.StrictMock<IVisualLayerCollection>();
             var filteredLayerCollection = _mocks.StrictMock<IFilteredVisualLayerCollection>();
@@ -304,19 +313,60 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
         	Expect.Call(layerCollection.FilterLayers<IAbsence>()).Return(filteredLayerCollection);
         	Expect.Call(filteredLayerCollection.GetEnumerator()).Return(new List<IVisualLayer>{layerLunch}.GetEnumerator());
         	Expect.Call(layerCollection.GetEnumerator()).Return(layers.GetEnumerator());
-        	Expect.Call(layerBefore.Payload).Return(activity);
-        	Expect.Call(layerLunch.Payload).Return(lunchActivity);
-            Expect.Call(layerAfter.Payload).Return(activity);
             Expect.Call(personAss.Period).Return(wholePeriod);
            
-            Expect.Call(layerLunch.Period).Return(lunch).Repeat.AtLeastOnce();
-            
             _mocks.ReplayAll();
             var result = _target.FindSlots(dateOnly, _duration, _startTime, _endTime, _dictionary, new List<IPerson>{_person1});
             Assert.That(result.Count, Is.EqualTo(12));
             _mocks.VerifyAll();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void ShouldNotReturnSlotOutsideWorkTimeNotAllowMeeting()
+        {
+            var wholePeriod = new DateTimePeriod(new DateTime(2009, 2, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 1, 17, 0, 0, DateTimeKind.Utc));
+            var lunch = new DateTimePeriod(new DateTime(2009, 2, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 1, 14, 0, 0, DateTimeKind.Utc));
+
+            var dateOnly = new DateOnly(2009, 2, 1);
+            var day = _mocks.StrictMock<IScheduleDay>();
+            var projService = _mocks.StrictMock<IProjectionService>();
+
+            var lunchActivity = ActivityFactory.CreateActivity("lunch");
+            lunchActivity.AllowOverwrite = false  ;
+
+            var activity = ActivityFactory.CreateActivity("hej");
+            activity.InWorkTime = true;
+            activity.AllowOverwrite = true ;
+            var layerBefore = new VisualLayer(activity, wholePeriod,
+                                activity, null);
+            var layerLunch =
+                new VisualLayer(lunchActivity, lunch,
+                                lunchActivity, null);
+            var layerAfter = new VisualLayer(activity, wholePeriod,
+                                activity, null);
+
+            var layers = new List<IVisualLayer> { layerBefore, layerLunch, layerAfter };
+            var layerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+            var filteredLayerCollection = _mocks.StrictMock<IFilteredVisualLayerCollection>();
+            var personAss = _mocks.StrictMock<IPersonAssignment>();
+            Expect.Call(_dictionary[_person1]).Return(_range1);
+            Expect.Call(_range1.ScheduledDay(dateOnly)).Return(day);
+            Expect.Call(day.PersonDayOffCollection()).Return(
+                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+            Expect.Call(day.PersonAssignmentCollection()).Return(
+                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss })).Repeat.Twice();
+            Expect.Call(day.ProjectionService()).Return(projService);
+            Expect.Call(projService.CreateProjection()).Return(layerCollection);
+            Expect.Call(layerCollection.FilterLayers<IAbsence>()).Return(filteredLayerCollection);
+            Expect.Call(filteredLayerCollection.GetEnumerator()).Return(new List<IVisualLayer> {  }.GetEnumerator());
+            Expect.Call(layerCollection.GetEnumerator()).Return(layers.GetEnumerator());
+            Expect.Call(personAss.Period).Return(wholePeriod);
+
+            _mocks.ReplayAll();
+            var result = _target.FindSlots(dateOnly, _duration, _startTime, _endTime, _dictionary, new List<IPerson> { _person1 });
+            Assert.That(result.Count, Is.EqualTo(10));
+            _mocks.VerifyAll();
+        }
        
     }
 }
