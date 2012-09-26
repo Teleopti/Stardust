@@ -509,6 +509,15 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}		
     	}
 
+    	public ICollection<DefinitionSetDto> GetMultiplicatorDefinitionSetByQuery(QueryDto queryDto)
+    	{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var invoker = inner.Resolve<IInvokeQuery<ICollection<DefinitionSetDto>>>();
+				return invoker.Invoke(queryDto);
+			}	
+    	}
+
     	public IAsyncResult BeginCreateServerScheduleDistribution(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId, AsyncCallback callback, object asyncState)
 		{
 			CreateScheduleDistributionAsyncResult asyncResult = new CreateScheduleDistributionAsyncResult(callback, asyncState);
