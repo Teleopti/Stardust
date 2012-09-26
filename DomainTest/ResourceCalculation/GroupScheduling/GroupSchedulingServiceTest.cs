@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     	private IEffectiveRestriction _effectiveRestriction;
     	private IVirtualSchedulePeriod _schedulePeriod;
         private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
+        private IDeleteSchedulePartService _deleteSchedulePartService;
 
         [SetUp]
         public void Setup()
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     		_effectiveRestriction = _mock.DynamicMock<IEffectiveRestriction>();
     		_schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
     	    _workShiftMinMaxCalculator = _mock.StrictMock<IWorkShiftMinMaxCalculator>();
-
+            _deleteSchedulePartService = _mock.StrictMock<IDeleteSchedulePartService>();
     	    _target = new GroupSchedulingService(_groupPersonsBuilder,
 													_bestBlockShiftCategoryFinder,
                                                     _stateHolder,
@@ -84,7 +86,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 													_resourceOptimizationHelper,
 													_schedulingResults,
 													_effectiveRestrictionCreator,
-                                                    _workShiftMinMaxCalculator);
+                                                    _workShiftMinMaxCalculator,
+                                                    _deleteSchedulePartService);
 
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();

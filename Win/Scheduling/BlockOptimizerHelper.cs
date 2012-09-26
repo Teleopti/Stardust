@@ -349,13 +349,26 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
             using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
             {
-                var backToLegalStateServicePro =
+                if (schedulingOptions.UseGroupScheduling)
+                {
+                    var backToLegalStateServicePro =
+                    _container.Resolve<IGroupListShiftCategoryBackToLegalStateService>();
+
+                    if (backgroundWorker.CancellationPending)
+                        return;
+
+                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+                }
+                else
+                {
+                    var backToLegalStateServicePro =
                     _container.Resolve<ISchedulePeriodListShiftCategoryBackToLegalStateService>();
 
-                if (backgroundWorker.CancellationPending)
-                    return;
+                    if (backgroundWorker.CancellationPending)
+                        return;
 
-                backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+                }
             }
         }
 
