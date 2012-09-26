@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						x => x.StandardDeviation).ToList();
 
 					var newdiff = fairnessResults[fairnessResults.Count - 1].StandardDeviation; // -fairnessResults[0].StandardDeviation;
-					if (newdiff > diff) // not better
+					if (newdiff >= diff) // not better
 					{
 						blackList.Add(swapSuggestion);
 						// do a rollback (if scheduled we need to resourcecalculate again??)
