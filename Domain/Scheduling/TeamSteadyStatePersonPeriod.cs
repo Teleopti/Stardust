@@ -39,7 +39,27 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (!_personPeriod.PersonSkillCollection.Count.Equals(personPeriod.PersonSkillCollection.Count)) 
 				return false;
 
-			return _personPeriod.PersonSkillCollection.All(personSkill => personPeriod.PersonSkillCollection.Contains(personSkill));
+			foreach (var firstPersonSkill in _personPeriod.PersonSkillCollection)
+			{
+				var exists = false;
+
+				foreach (var secondPersonSkill in personPeriod.PersonSkillCollection)
+				{
+					var skill1 = firstPersonSkill.Skill;
+					var skill2 = secondPersonSkill.Skill;
+
+					if (skill1.Equals(skill2))
+					{
+						exists = true;
+						break;
+					}
+				}
+
+				if (!exists)
+					return false;
+			}
+
+			return true;
 		}
 	}
 }

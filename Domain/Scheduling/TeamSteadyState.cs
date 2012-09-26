@@ -20,8 +20,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public bool SteadyState(IVirtualSchedulePeriod virtualSchedulePeriod, IScheduleMatrixPro scheduleMatrixPro, IPersonPeriod personPeriod)	
 		{
-			if (!_teamSteadyStateSchedulePeriod.SchedulePeriodEquals(virtualSchedulePeriod, scheduleMatrixPro)) return false;
-			if (!_teamSteadyStatePersonPeriod.PersonPeriodEquals(personPeriod)) return false;
+			if (!_teamSteadyStateSchedulePeriod.SchedulePeriodEquals(virtualSchedulePeriod, scheduleMatrixPro)) 
+				return false;
+			if (!_teamSteadyStatePersonPeriod.PersonPeriodEquals(personPeriod)) 
+				return false;
 
 			return true;
 		}

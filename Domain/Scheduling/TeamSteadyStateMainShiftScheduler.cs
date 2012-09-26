@@ -6,44 +6,104 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class TeamSteadyStateMainShiftScheduler
+	public interface ITeamSteadyStateMainShiftScheduler
+	{
+		bool ScheduleTeam(DateOnly dateOnly, IGroupPerson groupPerson, IGroupSchedulingService groupSchedulingService,
+		                  ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+		                  IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+		                  IList<IScheduleMatrixPro> matrixes, IScheduleDictionary scheduleDictionary);
+	}
+
+	public class TeamSteadyStateMainShiftScheduler : ITeamSteadyStateMainShiftScheduler
 	{
 		private readonly IGroupMatrixHelper _groupMatrixHelper;
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly IScheduleTagSetter _scheduleTagSetter;
+		private DateOnly _dateOnly;
 
-		public TeamSteadyStateMainShiftScheduler(IGroupMatrixHelper groupMatrixHelper, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter)
+		public TeamSteadyStateMainShiftScheduler(IGroupMatrixHelper groupMatrixHelper)
 		{
 			_groupMatrixHelper = groupMatrixHelper;
-			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_scheduleTagSetter = scheduleTagSetter;
 		}
 
-		public bool ScheduleTeam(DateOnly dateOnly, IPerson person, IGroupSchedulingService groupSchedulingService, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, IList<IScheduleMatrixPro> matrixes, IScheduleDictionary scheduleDictionary)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public bool ScheduleTeam(DateOnly dateOnly, IGroupPerson groupPerson, IGroupSchedulingService groupSchedulingService, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, IList<IScheduleMatrixPro> matrixes, IScheduleDictionary scheduleDictionary)	
 		{
 			if(groupPersonBuilderForOptimization == null) throw new ArgumentNullException("groupPersonBuilderForOptimization");
 			if(scheduleDictionary == null) throw new ArgumentNullException("scheduleDictionary");
 
-			if (!_groupMatrixHelper.ScheduleSinglePerson(dateOnly, person, groupSchedulingService, rollbackService, schedulingOptions, groupPersonBuilderForOptimization, matrixes))
-				return false;
+			_dateOnly = dateOnly;
 
-			var scheduleRangeFirstPerson = scheduleDictionary[person];
-			var scheduleDayFirstPerson = scheduleRangeFirstPerson.ScheduledDay(dateOnly);
-			var personAssignmentFirstPerson = scheduleDayFirstPerson.AssignmentHighZOrder();
-			var mainShift = personAssignmentFirstPerson.MainShift;
-			var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(person, dateOnly);
+			var assignedPersons = new List<IPerson>();
+			IPersonAssignment personAssignmentSource = null;
 
 			foreach (var groupMember in groupPerson.GroupMembers)
 			{
-				if (groupMember.Equals(person)) continue;
+				var person = groupMember;
+
+				var scheduleRangeSource = scheduleDictionary[person];
+				var scheduleDaySource = scheduleRangeSource.ScheduledDay(dateOnly);
+				var schedulePartViewSource = scheduleDaySource.SignificantPart();
+				var locked = IsLocked(matrixes, scheduleDaySource);
+				
+				if (schedulePartViewSource == SchedulePartView.FullDayAbsence || schedulePartViewSource == SchedulePartView.DayOff || schedulePartViewSource == SchedulePartView.ContractDayOff || locked)
+				{
+					assignedPersons.Add(person);
+					continue;
+				}
+
+				if (!_groupMatrixHelper.ScheduleSinglePerson(dateOnly, groupMember, groupSchedulingService, schedulingOptions, groupPersonBuilderForOptimization, matrixes))
+				{
+					return false;
+				}
+
+				scheduleRangeSource = scheduleDictionary[person];
+				scheduleDaySource = scheduleRangeSource.ScheduledDay(dateOnly);
+				personAssignmentSource = scheduleDaySource.AssignmentHighZOrder();
+				assignedPersons.Add(person);
+				break;
+			}
+			
+			foreach (var groupMember in groupPerson.GroupMembers)
+			{
+				if (assignedPersons.Contains(groupMember)) 
+					continue;
+
+				if (personAssignmentSource == null) 
+					return false;
+
+				var mainShift = personAssignmentSource.MainShift;
 				var scheduleRange = scheduleDictionary[groupMember];
 				var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
+				var significantPart = scheduleDay.SignificantPart();
 				var cloneMainShift = mainShift.NoneEntityClone() as IMainShift;
+
+				if (significantPart == SchedulePartView.MainShift)
+					return false;
+
+				if (significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.FullDayAbsence) 
+					continue;
+
+				var locked = IsLocked(matrixes, scheduleDay);
+
+				if (locked) continue;
 				scheduleDay.AddMainShift(cloneMainShift);
-				scheduleDictionary.Modify(ScheduleModifier.AutomaticScheduling, new List<IScheduleDay> {scheduleDay}, null, _scheduleDayChangeCallback, _scheduleTagSetter);
+				rollbackService.Modify(scheduleDay);
 			}
 
 			return true;
+		}
+
+		private bool IsLocked(IEnumerable<IScheduleMatrixPro> matrixes, IScheduleDay scheduleDay)
+		{
+			var locked = false;
+			foreach (var scheduleMatrixPro in matrixes)
+			{
+				if (scheduleMatrixPro.Person != scheduleDay.Person) continue;
+				if (!scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(_dateOnly)) continue;
+				if (!scheduleMatrixPro.UnlockedDays.Contains(scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)))
+					locked = true;
+			}
+
+			return locked;
 		}
 	}
 }

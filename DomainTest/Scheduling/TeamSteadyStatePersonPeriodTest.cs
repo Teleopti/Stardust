@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private IPartTimePercentage _partTimePercentage2;
 		private IRuleSetBag _ruleSetBag1;
 		private IRuleSetBag _ruleSetBag2;
+		private ISkill _skill1;
+		private ISkill _skill2;
 
 
 		[SetUp]
@@ -42,6 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_ruleSetBag1 = _mocks.StrictMock<IRuleSetBag>();
 			_ruleSetBag2 = _mocks.StrictMock<IRuleSetBag>();
 			_target = new TeamSteadyStatePersonPeriod(_personPeriodTarget);
+			_skill1 = _mocks.StrictMock<ISkill>();
+			_skill2 = _mocks.StrictMock<ISkill>();
 		}
 
 		[Test]
@@ -66,6 +70,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				Expect.Call(_personPeriodTarget.PersonSkillCollection).Return(new List<IPersonSkill> { _personSkill1 }).Repeat.AtLeastOnce();
 				Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill> { _personSkill2 }).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill1.Skill).Return(_skill1);
+				Expect.Call(_personSkill2.Skill).Return(_skill2);
+				Expect.Call(_skill1.Equals(_skill2)).Return(false);
 			}
 
 			using (_mocks.Playback())
@@ -86,6 +93,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_personContract1.Contract).Return(_contract1);
 				Expect.Call(_personContract2.Contract).Return(_contract2);
 				Expect.Call(_contract1.Equals(_contract2)).Return(false);
+				Expect.Call(_personSkill1.Skill).Return(_skill1).Repeat.AtLeastOnce();
+				Expect.Call(_skill1.Equals(_skill1)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -109,6 +118,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_personContract1.PartTimePercentage).Return(_partTimePercentage1);
 				Expect.Call(_personContract2.PartTimePercentage).Return(_partTimePercentage2);
 				Expect.Call(_partTimePercentage1.Equals(_partTimePercentage2)).Return(false);
+				Expect.Call(_personSkill1.Skill).Return(_skill1).Repeat.AtLeastOnce();
+				Expect.Call(_skill1.Equals(_skill1)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -135,6 +146,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_personPeriodTarget.RuleSetBag).Return(_ruleSetBag1);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag2);
 				Expect.Call(_ruleSetBag1.Equals(_ruleSetBag2)).Return(false);
+				Expect.Call(_personSkill1.Skill).Return(_skill1).Repeat.AtLeastOnce();
+				Expect.Call(_skill1.Equals(_skill1)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -161,6 +174,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_personPeriodTarget.RuleSetBag).Return(_ruleSetBag1);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag1);
 				Expect.Call(_ruleSetBag1.Equals(_ruleSetBag1)).Return(true);
+				Expect.Call(_personSkill1.Skill).Return(_skill1).Repeat.AtLeastOnce();
+				Expect.Call(_skill1.Equals(_skill1)).Return(true);
 			}
 
 			using (_mocks.Playback())
