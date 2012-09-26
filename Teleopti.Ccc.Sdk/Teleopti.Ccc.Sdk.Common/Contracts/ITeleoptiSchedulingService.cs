@@ -405,6 +405,6 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// </summary>
 		/// <param name="queryDto">The query.</param>
 		[OperationContract]
-		ICollection<DefinitionSetDto> GetMultiplicatorsDefinitionSetByQuery(QueryDto queryDto);
+		ICollection<DefinitionSetDto> GetMultiplicatorDefinitionSetByQuery(QueryDto queryDto);
     }
 }
