@@ -59,11 +59,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
 
 
-            IGroupPageDataProvider groupPageDataProvider = _container.Resolve<GroupScheduleGroupPageDataProvider>();
+            IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
             var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
-            groupPagePerDateHolder.GroupPersonGroupPagePerDate = ScheduleOptimizerHelper.CreateGroupPagePerDate(selectedPeriod.DayCollection(),
-                                                                                          groupPageDataProvider,
-                                                                                          optimizerPreferences.Extra.GroupPageOnTeam);
+
+			groupPagePerDateHolder.GroupPersonGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
+					.CreateGroupPagePerDate(selectedPeriod.DayCollection(), groupPageDataProvider,
+					optimizerPreferences.Extra.GroupPageOnTeam);
+
 
             OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container);
             var tagSetter = _container.Resolve<IScheduleTagSetter>();

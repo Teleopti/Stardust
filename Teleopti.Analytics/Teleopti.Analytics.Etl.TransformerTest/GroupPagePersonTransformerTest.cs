@@ -480,5 +480,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
                 return new List<ISkill> { skill1, skill2} ;
             }
         }
+
+    	public IEnumerable<IPerson> AllLoadedPersons
+    	{
+    		get { throw new NotImplementedException(); }
+    	}
     }
 }

@@ -106,7 +106,13 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				emptyContentSelector: '#EmptyTab'
 			})
 			;
-
+		
+		$('#toolbar-right .ui-menu-item [data-mytime-action]')
+			.click(function () {
+				_navigateTo($(this).data('mytime-action'));
+			})
+			;
+		
 		if (location.hash.length <= 1) {
 			location.hash = '#' + _settings.defaultNavigation;
 		} else {
@@ -128,6 +134,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			ev.preventDefault();
 			return false;
 		});
+
 	}
 
 	// Bind an event to window.onhashchange that, when the history state changes,

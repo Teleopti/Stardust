@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces;
@@ -29,13 +30,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IWorkShiftFinderResultHolder _finderResultHolder;
     	private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-    	private bool _cancelMe;
+        private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
+        private bool _cancelMe;
         
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public GroupSchedulingService(IGroupPersonsBuilder groupPersonsBuilder, IBestBlockShiftCategoryFinder bestBlockShiftCategoryFinder, 
             ISchedulingResultStateHolder resultStateHolder, IScheduleService scheduleService, ISchedulePartModifyAndRollbackService rollbackService,
-			IResourceOptimizationHelper resourceOptimizationHelper, IWorkShiftFinderResultHolder finderResultHolder, IEffectiveRestrictionCreator effectiveRestrictionCreator)
+			IResourceOptimizationHelper resourceOptimizationHelper, IWorkShiftFinderResultHolder finderResultHolder, IEffectiveRestrictionCreator effectiveRestrictionCreator, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator)
 		{
 			_groupPersonsBuilder = groupPersonsBuilder;
 			_bestBlockShiftCategoryFinder = bestBlockShiftCategoryFinder;
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_finderResultHolder = finderResultHolder;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
+		    _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -167,8 +170,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			if (best == null)
 			{
 				IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
-
-				var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions, agentAverageFairness);
+			    var matrix = matrixList.First(d => d.Person == person);
+                _workShiftMinMaxCalculator.ResetCache();
+                var minmax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
+                var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions, agentAverageFairness, minmax);
 				best = bestCategoryResult.BestPossible;
 
 				if (best == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)

@@ -202,10 +202,10 @@ Scenario: Show timeline with no schedule
 	Given I have the role 'Full access to mytime'
 	When I view my week schedule for date '2013-10-03'
 	Then I should see start timeline and end timeline according to schedule with:
-	| Field          | Value |
-	| start timeline | 0:00  |
-	| end timeline   | 23:59 |
-	| timeline count | 25    |
+	| Field						| Value |
+	| start timeline			| 0:00  |
+	| end timeline				| 23:59 |
+	| number of timeline labels	| 25    |
 
 Scenario: Show timeline with schedule 
 	Given I have the role 'Full access to mytime'
@@ -224,10 +224,10 @@ Scenario: Show timeline with schedule
 	| Lunch3HoursAfterStart | true             |
 	When I view my week schedule for date '2012-08-27'
 	Then I should see start timeline and end timeline according to schedule with:
-	| Field          | Value |
-	| start timeline | 8:00  |
-	| end timeline   | 20:00 |
-	| timeline count | 13    |
+	| Field						| Value |
+	| start timeline			| 8:00  |
+	| end timeline				| 20:00 |
+	| number of timeline labels	| 13    |
 
 Scenario: Show timeline with night shift
 	Given I have the role 'Full access to mytime'
@@ -240,10 +240,10 @@ Scenario: Show timeline with night shift
 	| Lunch3HoursAfterStart | true             |
 	When I view my week schedule for date '2012-08-27'
 	Then I should see start timeline and end timeline according to schedule with:
-	| Field          | Value |
-	| start timeline | 0:00  |
-	| end timeline   | 23:59 |
-	| timeline count | 25    |
+	| Field						| Value |
+	| start timeline			| 0:00  |
+	| end timeline				| 23:59 |
+	| number of timeline labels	| 25    |
 
 Scenario: Show timeline with night shift from the last day of the previous week
 	Given I have the role 'Full access to mytime'
@@ -256,10 +256,10 @@ Scenario: Show timeline with night shift from the last day of the previous week
 	| Lunch3HoursAfterStart | true             |
 	When I view my week schedule for date '2012-08-27'
 	Then I should see start timeline and end timeline according to schedule with:
-	| Field          | Value |
-	| start timeline | 0:00  |
-	| end timeline   | 4:00  |
-	| timeline count | 5     |
+	| Field						| Value |
+	| start timeline			| 0:00  |
+	| end timeline				| 4:00	|
+	| number of timeline labels	| 5		|
 
 Scenario: Show timeline with night shift starting on the last day of current week
 	Given I have the role 'Full access to mytime'
@@ -272,10 +272,10 @@ Scenario: Show timeline with night shift starting on the last day of current wee
 	| Lunch3HoursAfterStart | true             |
 	When I view my week schedule for date '2012-08-26'
 	Then I should see start timeline and end timeline according to schedule with:
-	| Field          | Value |
-	| start timeline | 20:00 |
-	| end timeline   | 23:59 |
-	| timeline count | 5     |
+	| Field						| Value	|
+	| start timeline			| 20:00	|
+	| end timeline				| 23:59 |
+	| number of timeline labels	| 5		|
 
 Scenario: Show activity at correct times
 	Given I have the role 'Full access to mytime'

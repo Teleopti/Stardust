@@ -284,5 +284,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				.Should().Be.EqualTo(new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(3)));
 		}
 
+		[Test]
+		public void ShouldMapMustHave()
+		{
+			var input = new PreferenceDayInput
+				{
+					MustHave = true
+				};
+
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+
+			result.Restriction.MustHave.Should().Be.EqualTo(true);
+		}
+
 	}
 }

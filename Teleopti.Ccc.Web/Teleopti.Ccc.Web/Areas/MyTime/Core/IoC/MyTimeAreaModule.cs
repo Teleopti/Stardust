@@ -28,6 +28,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.ServiceBus;
@@ -50,9 +51,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			registerRequestsType(builder);
 			registerSettingsTypes(builder);
 			registerAsmTypes(builder);
+			registerMessageBrokerTypes(builder);
 		}
 
-		private void registerAsmTypes(ContainerBuilder builder)
+		private static void registerMessageBrokerTypes(ContainerBuilder builder)
+		{
+			builder.RegisterType<UserDataFactory>().As<IUserDataFactory>();
+		}
+
+		private static void registerAsmTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<AsmViewModelFactory>().As<IAsmViewModelFactory>();
 			builder.RegisterType<AsmViewModelMapper>().As<IAsmViewModelMapper>();

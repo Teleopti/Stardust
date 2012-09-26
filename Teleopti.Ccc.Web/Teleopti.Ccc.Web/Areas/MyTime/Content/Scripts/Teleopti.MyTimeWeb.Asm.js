@@ -1,4 +1,5 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -12,6 +13,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var refreshSeconds = 1;
 	var pixelPerHours = 50;
 	var timeLineMarkerWidth = 100;
+	var vm;
 
 	function asmViewModel(yesterday) {
 		var self = this;
@@ -100,9 +102,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
 		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
 
-		var vm = new asmViewModel(yesterday);
-		vm.loadViewModel();
+		vm = new asmViewModel(yesterday);
 		ko.applyBindings(vm);
+		vm.loadViewModel();
 	}
 
 	function _setFixedElementAttributes() {
@@ -112,9 +114,42 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
 	}
 
+	function _listenForEvents() {
+		var onMessageBrokerEvent = function (notification) {
+			var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
+			messageStartDate.setDate(messageStartDate.getDate() - 1);
+			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
+			messageEndDate.setDate(messageEndDate.getDate() + 1);
+			var visibleStartDate = vm.yesterday;
+			var visibleEndDate = new Date(visibleStartDate.getTime());
+			visibleEndDate.setDate(visibleEndDate.getDate() + 2);
+
+			if (messageStartDate < visibleEndDate && messageEndDate > visibleStartDate) {
+				vm.loadViewModel();
+			}
+		};
+
+		Teleopti.MyTimeWeb.Ajax.Ajax({
+			url: 'MessageBroker/FetchUserData',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
+					url: data.Url,
+					callback: onMessageBrokerEvent,
+					domainType: 'IScheduleChangedInDefaultScenario',
+					businessUnitId: data.BusinessUnitId,
+					datasource: data.DataSourceName,
+					referenceId: data.AgentId
+				});
+			}
+		});
+	}
+
 	return {
 		Init: function () {
 			_start();
+			_listenForEvents();
 		}
 	};
 })(jQuery);

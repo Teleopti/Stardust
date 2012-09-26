@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Composites;
 
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterInstance(MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
+			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();
 		}
 	}
 }

@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string ActivityStartTimeLimitation { get; set; }
 		public string ActivityEndTimeLimitation { get; set; }
 		public string ActivityTimeLimitation { get; set; }
+		public bool MustHave { get; set; }
 	}
 
 }
