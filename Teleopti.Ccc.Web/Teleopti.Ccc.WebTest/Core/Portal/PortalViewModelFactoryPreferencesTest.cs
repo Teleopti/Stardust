@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldHaveMustHaveButton()
 		{
 			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());

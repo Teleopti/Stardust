@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                        !_isSignificantPartFullDayAbsenceOrDayOffSpecification.IsSatisfiedBy(significant)
                                    select scheduleDay).ToList();
                 _deleteService.Delete(cleanedList, _schedulePartModifyAndRollbackService);
+                cleanedList.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct().ForEach(recalculateDay);
             }
             if (daysToSave != null)
             {
@@ -139,6 +141,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         public void Rollback(DateOnly dateOnly)
         {
             _schedulePartModifyAndRollbackService.Rollback();
+            recalculateDay(dateOnly);
+        }
+
+        private void recalculateDay(DateOnly dateOnly)
+        {
             _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
             _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, true);
         }

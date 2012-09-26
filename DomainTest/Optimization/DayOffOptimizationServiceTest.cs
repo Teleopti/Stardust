@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IPeriodValueCalculator _periodValueCalculator;
         private IEnumerable<IDayOffOptimizerContainer> _optimizers;
         private IDayOffOptimizerContainer _container1;
-        private IDayOffOptimizerContainer _container2;
 
         [SetUp]
         public void Setup()
@@ -23,50 +22,35 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mocks = new MockRepository();
             _periodValueCalculator = _mocks.StrictMock<IPeriodValueCalculator>();
             _container1 = _mocks.StrictMock<IDayOffOptimizerContainer>();
-            _container2 = _mocks.StrictMock<IDayOffOptimizerContainer>();
             _target = new DayOffOptimizationService(_periodValueCalculator);
         }
 
         [Test]
-        public void VerifySuccessfulOptimization()
+        public void ContainerShouldBeRemovedIfPeriodValueSameOrHigher()
         {
-            _optimizers = new List<IDayOffOptimizerContainer> { _container1, _container2 };
+            _optimizers = new List<IDayOffOptimizerContainer> { _container1 };
             IPerson owner = PersonFactory.CreatePerson();
             
             using (_mocks.Record())
             {
-                // first round 
+				// first round first executes
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(10);
                 Expect.Call(_container1.Execute())
                     .Return(true);
-                Expect.Call(_container2.Execute())
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+				  .Return(9);
+				// second executes
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+				  .Return(9);
+                Expect.Call(_container1.Execute())
                     .Return(true);
-				Expect.Call(_container1.Execute())
-					.Return(true);
-				Expect.Call(_container2.Execute())
-					.Return(false);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+				  .Return(9);
 
-                // second round
-				//Expect.Call(_container1.Execute())
-				//    .Return(false);
-				//Expect.Call(_container2.Execute())
-				//    .Return(false);
-
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(9);
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-                    .Return(10);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(11);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(11);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(11);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(11);
                 Expect.Call(_container1.Owner)
                     .Return(owner).Repeat.AtLeastOnce();
-                Expect.Call(_container2.Owner)
-                    .Return(owner).Repeat.AtLeastOnce();
+               
             }
 
             using (_mocks.Playback())
@@ -74,6 +58,34 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target.Execute(_optimizers);
             }
         }
+
+		[Test]
+		public void ContainerShouldBeRemovedIfFailed()
+		{
+			_optimizers = new List<IDayOffOptimizerContainer> { _container1 };
+			IPerson owner = PersonFactory.CreatePerson();
+
+			using (_mocks.Record())
+			{
+				// first round first executes
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(10);
+				Expect.Call(_container1.Execute())
+					.Return(false);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(10);
+
+
+				Expect.Call(_container1.Owner)
+					.Return(owner).Repeat.AtLeastOnce();
+
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.Execute(_optimizers);
+			}
+		}
 
         [Test]
         public void VerifyCancel()

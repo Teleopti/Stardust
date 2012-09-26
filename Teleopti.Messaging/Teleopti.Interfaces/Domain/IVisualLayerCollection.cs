@@ -169,6 +169,13 @@ namespace Teleopti.Interfaces.Domain
 		/// Created date: 2008-11-20
 		/// </remarks>
 		IFilteredVisualLayerCollection FilterLayers<TPayload>() where TPayload : IPayload;
+
+		/// <summary>
+		/// Gets the contract time for the visual layers intersecting the given date time period.
+		/// </summary>
+		/// <param name="filterPeriod">The period of interest.</param>
+		/// <returns></returns>
+		TimeSpan ContractTime(DateTimePeriod filterPeriod);
 	}
 
 	///<summary>

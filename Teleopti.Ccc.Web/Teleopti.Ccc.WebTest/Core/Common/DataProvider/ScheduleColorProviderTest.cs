@@ -209,5 +209,42 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			result.Single().Should().Be(Color.MediumSeaGreen);
 		}
 
+		[Test]
+		public void ShouldGetDisplayColorFromPersonalShift()
+		{
+			var stubs = new StubFactory();
+			var projection = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.LawnGreen) });
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.PersonalShift, stubs.PersonAssignmentPersonalShiftStub());
+			var source = new ScheduleColorSource
+							{
+								ScheduleDays = new[] { scheduleDay },
+								Projections = new[] { projection }
+							};
+
+			var target = new ScheduleColorProvider();
+
+			var result = target.GetColors(source);
+
+			result.Single().Should().Be(Color.LawnGreen);
+		}
+
+		[Test]
+		public void ShouldGetDisplayColorFromOvertimeShift()
+		{
+			var stubs = new StubFactory();
+			var projection = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.LawnGreen) });
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.Overtime, stubs.PersonAssignmentPersonalShiftStub());
+			var source = new ScheduleColorSource
+			{
+				ScheduleDays = new[] { scheduleDay },
+				Projections = new[] { projection }
+			};
+
+			var target = new ScheduleColorProvider();
+
+			var result = target.GetColors(source);
+
+			result.Single().Should().Be(Color.LawnGreen);
+		}
 	}
 }
