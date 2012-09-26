@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var selectedGroup = orderedList.First();
 
             var selectedGroupBlacklistedSwapCount = blacklist.Count(b => b.Group1 == selectedGroup);
-            var categoryCount = selectedGroup.ShiftCategoryFairnessCompareValues.Count() - 1;
+            var categoryCount = selectedGroup.ShiftCategoryFairnessCompareValues.Count(g => g.ComparedTo > 0 || g.Original > 0) - 1;
 
             // ES: if all swaps for selectedGroup have been blacklisted
             if (selectedGroupBlacklistedSwapCount >= (categoryCount*(categoryCount + 1)/2)*(grouplist.Count - 1))
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var selectedGroupHighestCategory = selectedGroupCategories.First().ShiftCategory;
             var selectedGroupLowestCategory = selectedGroupCategories.Last().ShiftCategory;
-
+            
             var returnGroup =
                 orderedList.Except(new List<IShiftCategoryFairnessCompareResult> {selectedGroup}).SkipWhile(
                     b => (blacklist.Contains(new ShiftCategoryFairnessSwap

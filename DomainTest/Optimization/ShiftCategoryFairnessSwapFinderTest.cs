@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -15,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 // ReSharper disable InconsistentNaming
         private ShiftCategoryFairnessCompareResult group1, group2, group3, group4, group5;
         private ShiftCategory shiftCategoryDay, shiftCategoryNoon, shiftCategoryNight;
+        private readonly Person person = new Person();
 // ReSharper restore InconsistentNaming
 
         [SetUp]
@@ -23,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             shiftCategoryDay = new ShiftCategory("Day");
             shiftCategoryNoon = new ShiftCategory("Noon");
             shiftCategoryNight = new ShiftCategory("Night");
-
+            
             group1 = new ShiftCategoryFairnessCompareResult
                          {
                              ShiftCategoryFairnessCompareValues =
@@ -36,7 +39,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.0, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
                                      },
-                             StandardDeviation = 0.1
+                             StandardDeviation = 0.1,
+                             OriginalMembers = new List<IPerson> { person }
                          };
 
             group2 = new ShiftCategoryFairnessCompareResult
@@ -51,7 +55,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.6, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
                                      },
-                             StandardDeviation = 0.02
+                             StandardDeviation = 0.02,
+                             OriginalMembers = new List<IPerson> { person, person }
                          };
 
             group3 = new ShiftCategoryFairnessCompareResult
@@ -66,7 +71,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.8, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
                                      },
-                             StandardDeviation = 0.03
+                             StandardDeviation = 0.03,
+                             OriginalMembers = new List<IPerson> { person, person, person }
                          };
 
             group4 = new ShiftCategoryFairnessCompareResult
@@ -81,7 +87,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.7, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
                                      },
-                             StandardDeviation = 0.04
+                             StandardDeviation = 0.04,
+                             OriginalMembers = new List<IPerson> { person, person, person, person }
                          };
 
             group5 = new ShiftCategoryFairnessCompareResult
@@ -96,7 +103,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.7, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
                                      },
-                             StandardDeviation = 0.05
+                             StandardDeviation = 0.05,
+                             OriginalMembers = new List<IPerson> { person, person, person, person, person }
                          };
 
             _groupList = new List<IShiftCategoryFairnessCompareResult>
@@ -203,7 +211,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.1, ComparedTo = 0.5, ShiftCategory = shiftCategoryNight}
                                      },
-                             StandardDeviation = 0.1
+                             StandardDeviation = 0.1,
+                             OriginalMembers = new List<IPerson> { person }
                          };
 
             group2 = new ShiftCategoryFairnessCompareResult
@@ -218,7 +227,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                     new ShiftCategoryFairnessCompareValue
                                         {Original = 0.1, ComparedTo = 0.5, ShiftCategory = shiftCategoryNight}
                                 },
-                        StandardDeviation = 0.02
+                        StandardDeviation = 0.02,
+                        OriginalMembers = new List<IPerson> { person, person }
                     };
 
             _groupList = new List<IShiftCategoryFairnessCompareResult> {group1, group2};
@@ -270,7 +280,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                     new ShiftCategoryFairnessCompareValue
                                         {Original = 0.0, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
                                 },
-                        StandardDeviation = 0.03
+                        StandardDeviation = 0.03,
+                        OriginalMembers = new List<IPerson> { person, person, person }
                     });
 
             _blackList = new List<IShiftCategoryFairnessSwap>
@@ -302,7 +313,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                              new ShiftCategoryFairnessCompareValue
                                                  {Original = 0.0, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
                                          },
-                StandardDeviation = 0.1
+                StandardDeviation = 0.1,
+                OriginalMembers = new List<IPerson> { person }
             };
 
             group2 = new ShiftCategoryFairnessCompareResult
@@ -317,7 +329,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                              new ShiftCategoryFairnessCompareValue
                                                  {Original = 0.1, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
                                          },
-                StandardDeviation = 0.02
+                StandardDeviation = 0.02,
+                OriginalMembers = new List<IPerson> { person, person }
             };
 
             group3 = new ShiftCategoryFairnessCompareResult
@@ -332,7 +345,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                              new ShiftCategoryFairnessCompareValue
                                                  {Original = 0.1, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
                                          },
-                StandardDeviation = 0.03
+                StandardDeviation = 0.03,
+                OriginalMembers = new List<IPerson> { person, person, person }
             };
 
             _groupList = new List<IShiftCategoryFairnessCompareResult>

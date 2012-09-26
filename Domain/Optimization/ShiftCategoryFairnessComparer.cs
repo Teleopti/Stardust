@@ -79,9 +79,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    {
 	        unchecked
 	        {
-	            var result = (ShiftCategoryFairnessCompareValues != null ? ShiftCategoryFairnessCompareValues.GetHashCode() : 0);
-	            result = (result*397) ^ StandardDeviation.GetHashCode();
-	            result = (result*397) ^ (OriginalMembers != null ? OriginalMembers.GetHashCode() : 0);
+	            var result = (OriginalMembers != null ? OriginalMembers.GetHashCode() : 0);
 	            return result;
 	        }
 	    }
