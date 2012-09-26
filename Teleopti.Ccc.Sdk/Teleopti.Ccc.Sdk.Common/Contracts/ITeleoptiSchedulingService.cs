@@ -392,5 +392,12 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <param name="queryDto">The query.</param>
 		[OperationContract]
     	ICollection<SchedulePartDto> GetSchedulesByQuery(QueryDto queryDto);
+
+		/// <summary>
+		/// Get the multiplicators for the given query.
+		/// </summary>
+		/// <param name="queryDto">The query.</param>
+		[OperationContract]
+		ICollection<MultiplicatorDto> GetMultiplicatorsByQuery(QueryDto queryDto);
     }
 }

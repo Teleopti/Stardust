@@ -27,6 +27,16 @@ namespace Teleopti.Interfaces.Infrastructure
         /// </remarks>
         IList<IMultiplicatorDefinitionSet> FindAllOvertimeDefinitions();
 
+		/// <summary>
+		/// Finds all shift allowance definitions.
+		/// </summary>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: talham
+		/// Created date: 2012-09-25
+		/// </remarks>
+		IList<IMultiplicatorDefinitionSet> FindAllShiftAllowanceDefinitions();
+
         /// <summary>
         /// Finds all definitions.
         /// </summary>

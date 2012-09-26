@@ -492,15 +492,24 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		}
 
     	public ICollection<SchedulePartDto> GetSchedulesByQuery(QueryDto queryDto)
-			{
+		{
 			using (var inner = _lifetimeScope.BeginLifetimeScope())
 			{
 				var invoker = inner.Resolve<IInvokeQuery<ICollection<SchedulePartDto>>>();
 				return invoker.Invoke(queryDto);
 			}
-			}
+		}
 
-		public IAsyncResult BeginCreateServerScheduleDistribution(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId, AsyncCallback callback, object asyncState)
+    	public ICollection<MultiplicatorDto> GetMultiplicatorsByQuery(QueryDto queryDto)
+    	{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var invoker = inner.Resolve<IInvokeQuery<ICollection<MultiplicatorDto>>>();
+				return invoker.Invoke(queryDto);
+			}		
+    	}
+
+    	public IAsyncResult BeginCreateServerScheduleDistribution(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId, AsyncCallback callback, object asyncState)
 		{
 			CreateScheduleDistributionAsyncResult asyncResult = new CreateScheduleDistributionAsyncResult(callback, asyncState);
 			asyncResult.PersonList = personList;
