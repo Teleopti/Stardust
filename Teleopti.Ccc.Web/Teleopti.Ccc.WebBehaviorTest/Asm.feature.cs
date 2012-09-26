@@ -349,24 +349,26 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Agent should be notified when activity changes")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void AgentShouldBeNotifiedWhenActivityChanges()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when activity changes", ((string[])(null)));
-#line 95
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when activity changes", new string[] {
+                        "ignore"});
+#line 97
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 96
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line 97
- testRunner.And("Current time is \'2030-01-01 11:59\'");
 #line 98
- testRunner.When("I view my regional settings");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 99
- testRunner.And("I click ASM link");
+ testRunner.And("Current time is \'2030-01-01 11:59\'");
 #line 100
- testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
+ testRunner.When("I view my regional settings");
 #line 101
+ testRunner.And("I click ASM link");
+#line 102
+ testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
+#line 103
  testRunner.Then("I should see only one alert containing \'Phone\'");
 #line hidden
             this.ScenarioCleanup();

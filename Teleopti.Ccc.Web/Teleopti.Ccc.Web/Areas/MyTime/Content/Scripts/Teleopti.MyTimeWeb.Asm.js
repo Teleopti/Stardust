@@ -70,9 +70,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			});
 		});
 
-		self.activePayload.subscribe(function (newValue) {
-			window.alert('xxxDin nya aktivitet bambambam' + newValue);
-		});
+		//very expansive feature - not visible until version 8 - behavior feature 'Agent should be notified when activity changes'
+//		self.activePayload.subscribe(function (newValue) {
+//			window.alert('xxxDin nya aktivitet bambambam' + newValue);
+//		});
 	}
 
 	function layerViewModel(layer, canvasPosition) {

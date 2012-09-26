@@ -92,6 +92,8 @@ Scenario: Upcoming activity starttime starting after midnight should be indicate
 	And I click ASM link
 	Then I should see last activity starttime as '12:00+1'
 
+#Not in use until version 8
+@ignore
 Scenario: Agent should be notified when activity changes
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 11:59'
