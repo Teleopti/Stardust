@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.PayrollTest
             
             projectedLayerDto.Period = dateTimePeriodDto;
             projectedLayerDto.ContractTime = TimeSpan.FromHours(7.5);
-            MultiplicatorDto multiplicator = new MultiplicatorDto(null) { PayrollCode = "371" };
+            MultiplicatorDto multiplicator = new MultiplicatorDto() { PayrollCode = "371" };
             SchedulePartDto schedulePartDto1 = new SchedulePartDto();
             SchedulePartDto schedulePartDto2 = new SchedulePartDto();
             SchedulePartDto schedulePartDto3 = new SchedulePartDto{Date = new DateOnlyDto(2009, 2, 1)};

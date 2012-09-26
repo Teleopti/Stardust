@@ -138,8 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             _target.AddDefinition(_d1);
             _target.AddDefinition(_d2);
             _target.AddDefinition(_d3);
-            IList<IMultiplicatorLayer> result = _target.CreateProjectionForPeriod(new DateOnly(2008, 12, 1),
-                                                                                  new DateOnly(2008, 12, 8), tzInfo);
+            IList<IMultiplicatorLayer> result = _target.CreateProjectionForPeriod(new DateOnlyPeriod(2008, 12, 1, 2008, 12, 8), tzInfo);
             Assert.AreEqual(4, result.Count);
         }
 
@@ -154,8 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             _target.AddDefinition(d1);
             _target.AddDefinition(d2);
             _target.AddDefinition(d3);
-            IList<IMultiplicatorLayer> result = _target.CreateProjectionForPeriod(new DateOnly(2008, 12, 1),
-                                                                                  new DateOnly(2008, 12, 8), tzInfo);
+            IList<IMultiplicatorLayer> result = _target.CreateProjectionForPeriod(new DateOnlyPeriod(2008, 12, 1, 2008, 12, 8), tzInfo);
             Assert.AreEqual(3, result.Count);
         }
 
@@ -170,8 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             _target.AddDefinition(d1);
             _target.AddDefinition(d2);
             _target.AddDefinition(d3);
-            IList<IMultiplicatorLayer> result = _target.CreateProjectionForPeriod(new DateOnly(2008, 12, 1),
-                                                                                  new DateOnly(2008, 12, 8), tzInfo);
+            IList<IMultiplicatorLayer> result = _target.CreateProjectionForPeriod(new DateOnlyPeriod(2008, 12, 1, 2008, 12, 8), tzInfo);
             Assert.AreEqual(2, result.Count);
         }
 
@@ -186,8 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             _target.AddDefinition(d1);
             _target.AddDefinition(d2);
             _target.AddDefinition(d3);
-            IList<IMultiplicatorLayer> result = _target.CreateProjectionForPeriod(new DateOnly(2008, 12, 1),
-                                                                                  new DateOnly(2008, 12, 8), tzInfo);
+            IList<IMultiplicatorLayer> result = _target.CreateProjectionForPeriod(new DateOnlyPeriod(2008, 12, 1, 2008, 12, 8), tzInfo);
             Assert.AreEqual(2, result.Count);
         }
 
@@ -206,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             _target.AddDefinition(definition2);
 
             CccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            var layers = _target.CreateProjectionForPeriod(new DateOnly(2009, 9, 1), new DateOnly(2009, 9, 30), tzInfo);
+            var layers = _target.CreateProjectionForPeriod(new DateOnlyPeriod(2009, 9, 1, 2009, 9, 30), tzInfo);
 
             Assert.AreEqual(8,layers.Count);
             Assert.AreEqual(

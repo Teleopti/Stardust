@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 		/// </summary>
 		/// <value>The description.</value>
 		[DataMember]
-		public string Description { get; set; }
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the deleted flag.

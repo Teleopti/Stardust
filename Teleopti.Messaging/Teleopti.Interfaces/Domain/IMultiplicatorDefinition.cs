@@ -30,15 +30,13 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Gets the layers for period.
         /// </summary>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date. (Including)</param>
+        /// <param name="period">The period.</param>
         /// <param name="timeZoneInfo">The time zone info.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: micke
         /// Created date: 2008-12-10
         /// </remarks>
-        IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnly startDate, DateOnly endDate,
-                                                      ICccTimeZoneInfo timeZoneInfo);
+        IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, ICccTimeZoneInfo timeZoneInfo);
     }
 }

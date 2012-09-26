@@ -71,13 +71,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
         /// <summary>
         /// Gets the layers for period.
         /// </summary>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date. (Including)</param>
+        /// <param name="period">The period.</param>
         /// <param name="timeZoneInfo">The time zone info.</param>
         /// <returns></returns>
-        public abstract IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnly startDate,
-                                                                              DateOnly endDate,
-                                                                              ICccTimeZoneInfo timeZoneInfo);
+        public abstract IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, ICccTimeZoneInfo timeZoneInfo);
 
         public virtual IMultiplicatorDefinition NoneEntityClone()
         {

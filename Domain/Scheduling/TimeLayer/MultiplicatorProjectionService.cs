@@ -128,8 +128,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             {
                 DateOnly start = _dateOnly.AddDays(-1);
                 DateOnly end = _dateOnly.AddDays(1);
-                var projectionsForPeriod = definitionSet.CreateProjectionForPeriod(start,
-                                                                                   end,
+                var projectionsForPeriod = definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start,end),
                                                                                    _schedulePart.TimeZone);
                 retList.AddRange(projectionsForPeriod);
             }
