@@ -399,5 +399,12 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <param name="queryDto">The query.</param>
 		[OperationContract]
 		ICollection<MultiplicatorDto> GetMultiplicatorsByQuery(QueryDto queryDto);
+
+		/// <summary>
+		/// Get the multiplicator definition set for the given query.
+		/// </summary>
+		/// <param name="queryDto">The query.</param>
+		[OperationContract]
+		ICollection<DefinitionSetDto> GetMultiplicatorsDefinitionSetByQuery(QueryDto queryDto);
     }
 }
