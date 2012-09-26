@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			const int limit = 2;
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			preferenceDayRepository.Stub(x => x.Find(period, new [] {person})).Return(new List<IPreferenceDay> { preferenceDay });
+			preferenceDayRepository.Stub(x => x.Find(period, person)).Return(new List<IPreferenceDay> { preferenceDay });
 			preferenceDay.Stub(x => x.Restriction).Return(restriction);
 			preferenceDay.Stub(x => x.RestrictionDate).Return(DateOnly.Today);
 			person.Stub(x => x.SchedulePeriod(DateOnly.Today)).Return(schedulePeriod);
@@ -329,7 +329,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			const int limit = 1;
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			preferenceDayRepository.Stub(x => x.Find(period, new[] { person })).Return(new List<IPreferenceDay> { preferenceDay, preferenceDay });
+			preferenceDayRepository.Stub(x => x.Find(period, person)).Return(new List<IPreferenceDay>
+				{preferenceDay, preferenceDay});
 			preferenceDay.Stub(x => x.Restriction).Return(restriction);
 			restriction.Stub(x => x.MustHave).Return(true);
 			person.Stub(x => x.SchedulePeriod(DateOnly.Today)).Return(schedulePeriod);
@@ -357,7 +358,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			const int limit = 2;
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			preferenceDayRepository.Stub(x => x.Find(period, new[] { person })).Return(new List<IPreferenceDay> { preferenceDay, preferenceDay });
+			preferenceDayRepository.Stub(x => x.Find(period, person)).Return(new List<IPreferenceDay>
+				{preferenceDay, preferenceDay});
 			preferenceDay.Stub(x => x.Restriction).Return(restriction);
 			restriction.Stub(x => x.MustHave).Return(true);
 			person.Stub(x => x.SchedulePeriod(DateOnly.Today)).Return(schedulePeriod);

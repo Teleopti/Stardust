@@ -45,10 +45,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 		}
 
-		public PreferenceDayViewModel MustHave(DateOnlyPeriod schedulePeriod, MustHaveInput input)
+		public bool MustHave(DateOnlyPeriod schedulePeriod, MustHaveInput input)
 		{
-			var preferenceDay = SetMustHave(schedulePeriod, input);
-			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			return SetMustHave(schedulePeriod, input);
 		}
 
 		private static void ClearExtendedData(IPreferenceDay preferenceDay)
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		/// </summary>
 		/// <param name="schedulePeriod">The schedule period.</param>
 		/// <param name="input">The input.</param>
-		private IPreferenceDay SetMustHave(DateOnlyPeriod schedulePeriod, MustHaveInput input)
+		private bool SetMustHave(DateOnlyPeriod schedulePeriod, MustHaveInput input)
 		{
 			var mustHave = input.MustHave;
 			var selectedDay = input.Date;
@@ -90,10 +89,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			if (preferenceDay != null)
 			{
 				preferenceDay.Restriction.MustHave = mustHave;
+				return true;
 			}
-
-			return preferenceDay;
+			return false;
 		}
+
 		private IList<IPreferenceDay> DeleteOrphanPreferenceDays(IList<IPreferenceDay> preferenceDays)
 		{
 			preferenceDays = preferenceDays != null
