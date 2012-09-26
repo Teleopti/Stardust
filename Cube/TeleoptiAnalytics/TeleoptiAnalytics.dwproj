@@ -120,8 +120,8 @@
       <FullPath>Request Type.dim</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>Quality.dim</Name>
-      <FullPath>Quality.dim</FullPath>
+      <Name>Quality Questionnaire.dim</Name>
+      <FullPath>Quality Questionnaire.dim</FullPath>
     </ProjectItem>
   </Dimensions>
   <DataSources>
