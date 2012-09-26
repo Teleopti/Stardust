@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Xml;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click ASM link")]
 		public void WhenIClickASMLink()
 		{
+			TestControllerMethods.Logon();
 			Navigation.GotoAsm();
 		}
 
@@ -91,6 +93,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 								Browser.Current.Title.Contains(Resources.AgentScheduleMessenger), 
 								Is.True,
 								string.Format("{0} does not contain {1}", Browser.Current.Title, Resources.AgentScheduleMessenger));
+		}
+
+		[When(@"My schedule between '(.*)' to '(.*)' change")]
+		public void WhenMyScheduleBetweenToChange(DateTime start, DateTime end)
+		{
+			var xmlStartDate = "D" + XmlConvert.ToString(start, XmlDateTimeSerializationMode.Unspecified);
+			var xmlEndDate = "D" + XmlConvert.ToString(end, XmlDateTimeSerializationMode.Unspecified);
+
+			const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}'}};Teleopti.MyTimeWeb.Asm.CallMessageBrokerEvent(notification);";
+
+			var formattedJs = string.Format(js, xmlStartDate, xmlEndDate);
+			Browser.Current.Eval(formattedJs);
 		}
 
 		private static int pixelLength(Element oneHourLengthLayer)

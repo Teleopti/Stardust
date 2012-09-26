@@ -18,5 +18,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 					 Is.True);
 			Browser.Current.Elements.Filter(Find.ByClass("alertLoggerItem")).Count.Should().Be.EqualTo(1);
 		}
+
+		[Then(@"I should see one alert")]
+		public void ThenIShouldSeeAnAlert()
+		{
+			Browser.Current.Elements.Filter(Find.ByClass("alertLoggerItem")).Count.Should().Be.EqualTo(1);
+		}
 	}
 }

@@ -111,21 +111,22 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
 	}
 
+	var onMessageBrokerEvent = function (notification) {
+		var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
+		messageStartDate.setDate(messageStartDate.getDate() - 1);
+		var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
+		messageEndDate.setDate(messageEndDate.getDate() + 1);
+		var visibleStartDate = vm.yesterday;
+		var visibleEndDate = new Date(visibleStartDate.getTime());
+		visibleEndDate.setDate(visibleEndDate.getDate() + 2);
+
+		if (messageStartDate < visibleEndDate && messageEndDate > visibleStartDate) {
+			vm.loadViewModel();
+			window.alert('xxxYour schedule has changed!');
+		}
+	};
+
 	function _listenForEvents() {
-		var onMessageBrokerEvent = function (notification) {
-			var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
-			messageStartDate.setDate(messageStartDate.getDate() - 1);
-			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
-			messageEndDate.setDate(messageEndDate.getDate() + 1);
-			var visibleStartDate = vm.yesterday;
-			var visibleEndDate = new Date(visibleStartDate.getTime());
-			visibleEndDate.setDate(visibleEndDate.getDate() + 2);
-
-			if (messageStartDate < visibleEndDate && messageEndDate > visibleStartDate) {
-				vm.loadViewModel();
-			}
-		};
-
 		Teleopti.MyTimeWeb.Ajax.Ajax({
 			url: 'MessageBroker/FetchUserData',
 			dataType: "json",
@@ -147,6 +148,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		Init: function () {
 			_start();
 			_listenForEvents();
-		}
+		},
+		//for testing purposes
+		CallMessageBrokerEvent: onMessageBrokerEvent
 	};
 })(jQuery);
