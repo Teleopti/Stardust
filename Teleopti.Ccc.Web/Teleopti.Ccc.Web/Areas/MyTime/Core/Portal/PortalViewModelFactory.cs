@@ -137,16 +137,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 						});
 			}
 
-			toolbarItems.Add(new ToolBarSeparatorItem());
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
+				toolbarItems.Add(new ToolBarSeparatorItem());
 				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.Preference, ButtonType = "add-extended" });
 			}
+			toolbarItems.Add(new ToolBarButtonItem { Title = Resources.Delete, ButtonType = "delete" });
+			toolbarItems.Add(new ToolBarSeparatorItem());
+
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences))
 			{
 				//toolbarItems.Add(new ToolBarButtonItem { Title = Resources.MustHave, ButtonType = "must-have", Icon = "heart"});
+				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.Delete, ButtonType = "must-have-delete", Icon = "heart-delete" });
+				toolbarItems.Add(new ToolBarTextItem { Id = "must-have-numbers", Text = "0(0)" });
 			}
-			toolbarItems.Add(new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"});
 			
 			return new PreferenceNavigationItem
 			       	{

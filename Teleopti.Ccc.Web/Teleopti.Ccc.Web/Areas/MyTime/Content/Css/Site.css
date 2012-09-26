@@ -407,9 +407,9 @@ html.full-height #push{
 .icon.toolbar-addTextRequest {background-position: 0px -511px; width: 24px}
 .icon.toolbar-today {background-position: -155px -26px;width: 24px;margin-left: 19px;}
 .icon.preference-warning {background-position: -159px -54px; width: 16px;	height: 16px; }
-.icon.heart {background-position: -307px -44px; width: 21px;height: 21px;}
-.icon.heart-small {background-position: -313px -28px; width: 8px;	height: 8px; }
-.icon.heart-delete {background-position: -307px -69px; width: 22px;	height: 22px; }
+.icon.heart {background-position: -307px -43px; width: 21px;height: 21px;}
+.icon.heart-small {background-position: -313px -29px; width: 8px;	height: 8px; }
+.icon.heart-delete {background-position: -307px -68px; width: 22px;	height: 22px; }
 
 .text-request {
 	right: 0px;
