@@ -449,6 +449,7 @@ namespace Teleopti.Ccc.Win.Meetings
             this.gridControlSuggestions.GridLineColor = System.Drawing.SystemColors.GrayText;
             this.gridControlSuggestions.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
             this.gridControlSuggestions.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
+            this.gridControlSuggestions.AllowSelection = GridSelectionFlags.Row;
             this.gridControlSuggestions.Location = new System.Drawing.Point(0, 238);
             this.gridControlSuggestions.Margin = new System.Windows.Forms.Padding(0);
             this.gridControlSuggestions.Name = "gridControlSuggestions";
@@ -475,7 +476,8 @@ namespace Teleopti.Ccc.Win.Meetings
             this.gridControlSuggestions.SelectionChanged += new Syncfusion.Windows.Forms.Grid.GridSelectionChangedEventHandler(this.GridControlSuggestionsSelectionChanged);
             this.gridControlSuggestions.HScrollPixelPosChanged += new Syncfusion.Windows.Forms.Grid.GridScrollPositionChangedEventHandler(this.GridControlSchedulesScrollPixelPosChanged);
             this.gridControlSuggestions.VScrollPixelPosChanged += new Syncfusion.Windows.Forms.Grid.GridScrollPositionChangedEventHandler(this.GridControlSchedulesScrollPixelPosChanged);
-            this.gridControlSuggestions.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridControlSchedulesMouseMove);
+            //this.gridControlSuggestions.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridControlSchedulesMouseMove);
+            this.gridControlSuggestions.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridControlSuggestionsMouseUp);
             // 
             // tableLayoutPanel2
             // 

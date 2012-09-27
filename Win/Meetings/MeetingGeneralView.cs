@@ -192,8 +192,8 @@ namespace Teleopti.Ccc.Win.Meetings
             //outlookTimePickerEndTime.TextChanged -= outlookTimePickerEndTime_TextChanged;
             outlookTimePickerStartTime.SetTimeValue(_presenter.Model.StartTime);
             outlookTimePickerEndTime.SetTimeValue(_presenter.Model.EndTime);
-			//outlookTimePickerStartTime.TextChanged += outlookTimePickerStartTime_TextChanged;
             dateTimePickerAdvEndDate.Value = _presenter.Model.EndDate;
+            //outlookTimePickerStartTime.TextChanged += outlookTimePickerStartTime_TextChanged;
             //outlookTimePickerEndTime.TextChanged += outlookTimePickerEndTime_TextChanged;
         }
 
