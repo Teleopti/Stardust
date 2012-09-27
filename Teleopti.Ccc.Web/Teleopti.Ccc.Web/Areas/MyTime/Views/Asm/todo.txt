@@ -1,7 +1,4 @@
 henke & roger-stuff
 
 *   kolla upp en bra hook för mockar i js ska ske tidigare än idag.
-*   när schemat laddas om ska man inte få alert om samma aktivitet. edit: eller skall man få det nu? 
-*   när schemat laddas om ska man få alert om ny aktiviet
-*   lägga till "fejk"-scenario för mb-event (anropa ladda-js direkt från scenario)
 * Vi ska ladda om bajset när det blir en ny dag
