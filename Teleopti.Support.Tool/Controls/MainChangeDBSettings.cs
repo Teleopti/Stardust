@@ -473,7 +473,7 @@ namespace Teleopti.Support.Tool.Controls
             dbConnect.Connected = "Connecting...";
             dbConnect.RefreshConnected();
             if (dbConnect.WindowsAuth)
-                _db = new DBHelper(dbConnect.Server);
+                _db = new DBHelper(dbConnect.Server,"master");
             else
                 _db = new DBHelper(dbConnect.Server, dbConnect.User, dbConnect.Password);
             List<string> databases = new List<string>();

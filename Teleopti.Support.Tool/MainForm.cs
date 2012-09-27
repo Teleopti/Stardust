@@ -68,6 +68,19 @@ namespace Teleopti.Support.Tool
             Close();
         }
 
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LLUpdateDatabses_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            this.Controls.Remove(activeControl);
+            activeControl = new MainUpadateDabases(this);
+            this.PTracks.Hide();
+            this.Controls.Add(activeControl);
+        }
+
        
 
      

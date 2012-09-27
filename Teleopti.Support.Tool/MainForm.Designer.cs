@@ -34,11 +34,15 @@
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.LLChangeDBConn = new System.Windows.Forms.LinkLabel();
             this.BClose = new System.Windows.Forms.Button();
+            this.LLUpdateDatabses = new System.Windows.Forms.LinkLabel();
+            this.label3 = new System.Windows.Forms.Label();
             this.PTracks.SuspendLayout();
             this.SuspendLayout();
             // 
             // PTracks
             // 
+            this.PTracks.Controls.Add(this.label3);
+            this.PTracks.Controls.Add(this.LLUpdateDatabses);
             this.PTracks.Controls.Add(this.label2);
             this.PTracks.Controls.Add(this.label1);
             this.PTracks.Controls.Add(this.linkLabel2);
@@ -99,6 +103,28 @@
             this.BClose.UseVisualStyleBackColor = true;
             this.BClose.Click += new System.EventHandler(this.BClose_Click);
             // 
+            // LLUpdateDatabses
+            // 
+            this.LLUpdateDatabses.AutoSize = true;
+            this.LLUpdateDatabses.Location = new System.Drawing.Point(26, 83);
+            this.LLUpdateDatabses.Name = "LLUpdateDatabses";
+            this.LLUpdateDatabses.Size = new System.Drawing.Size(214, 13);
+            this.LLUpdateDatabses.TabIndex = 9;
+            this.LLUpdateDatabses.TabStop = true;
+            this.LLUpdateDatabses.Text = "3. Update databases according to Nhib files";
+            this.LLUpdateDatabses.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LLUpdateDatabses_LinkClicked);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(38, 96);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(393, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Give you the possibility to update databases depending on the Nhib files you have" +
+    "";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -124,6 +150,8 @@
         private System.Windows.Forms.LinkLabel LLChangeDBConn;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button BClose;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.LinkLabel LLUpdateDatabses;
 
 
     }

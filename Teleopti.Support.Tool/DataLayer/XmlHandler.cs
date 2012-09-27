@@ -2,13 +2,78 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.IO;
-//using LogHandeler;
+
 
 namespace Teleopti.Support.Tool.DataLayer
 {
     public sealed class XmlHandler
     {
         private XmlHandler() { }
+
+
+        /// <summary>
+        /// Reads all nhib files in dir and creates a list of Nhib objects that contains information about all databases in this Nhib file
+        /// </summary>
+        /// <param name="dir">The directory to look in for all Nhib files</param>
+        /// <returns>A IEnumerable lsit with Nhib objects</returns>
+        public static IEnumerable<Nhib> GetNihibSettings(string dir)
+        {
+            IList<Nhib> nhibList = new List<Nhib>();
+            XmlDocument xmlDocument = new XmlDocument();
+            XmlNamespaceManager manager = new XmlNamespaceManager(xmlDocument.NameTable);
+            manager.AddNamespace("Nhib", "urn:nhibernate-configuration-2.2");
+
+            string[] filePaths = Directory.GetFiles(dir, "*.nhib.xml");
+            //Loop throw all files in the file dir
+            foreach (var file in filePaths)
+            {
+                xmlDocument.Load(file);
+                string sessionfactory = xmlDocument.SelectSingleNode("//Nhib:session-factory", manager).Attributes["name"].Value;
+                string cccConnection = xmlDocument.SelectSingleNode("//Nhib:property", manager).InnerText;
+                string analyticConnection = xmlDocument.SelectSingleNode("//connectionString").InnerText;
+                string[] connectionProperties = cccConnection.Split(';');
+                string analyticDatabase = null, CCCDatabase = null, cccDatasource = null, analyticDatasource=null,aggregationDatabase=null;
+
+                foreach (var value in connectionProperties)
+                {
+                    if (value.ToUpper().Contains("INITIAL CATALOG"))
+                        CCCDatabase = value.Substring(value.IndexOf('=') + 1);
+                    else if (value.ToUpper().Contains("DATA SOURCE"))
+                        cccDatasource = value.Substring(value.IndexOf('=') + 1);
+                }
+
+                connectionProperties = analyticConnection.Split(';');
+                foreach (var value in connectionProperties)
+                {
+                    if (value.ToUpper().Contains("INITIAL CATALOG"))
+                        analyticDatabase = value.Substring(value.IndexOf('=') + 1);
+                    else if (value.ToUpper().Contains("DATA SOURCE"))
+                        analyticDatasource = value.Substring(value.IndexOf('=') + 1);
+                }
+
+                //Get the agg database
+                DBHelper analyticDBhelper = new DBHelper(analyticConnection);
+                DBHelper cccDBhelper = new DBHelper(cccConnection);
+                aggregationDatabase = analyticDBhelper.getAggdatabaseName(analyticDatabase);
+                nhibList.Add(new Nhib(  analyticDatabase, 
+                                        CCCDatabase, 
+                                        aggregationDatabase, 
+                                        cccConnection, 
+                                        analyticConnection, 
+                                        cccDatasource, 
+                                        analyticDatasource, 
+                                        sessionfactory,
+                                        file.Substring(file.LastIndexOf("\\")+1),
+                                        cccDBhelper.getDatabaseVersion(CCCDatabase),
+                                        cccDBhelper.getDatabaseVersion(aggregationDatabase),
+                                        analyticDBhelper.getDatabaseVersion(analyticDatabase)));
+            }
+
+            return nhibList;
+        }
+
+
+
 
         /// <summary>
         /// This method will return the text for an Element, for example a connection string
