@@ -42,7 +42,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var scheduleRangeSource = scheduleDictionary[person];
 				var scheduleDaySource = scheduleRangeSource.ScheduledDay(dateOnly);
 				var schedulePartViewSource = scheduleDaySource.SignificantPart();
-				var locked = IsLocked(matrixes, scheduleDaySource);
+
+				var theMatrix = MatrixPro(matrixes, scheduleDaySource);
+				if (theMatrix == null) return false;
+				var locked = !theMatrix.UnlockedDays.Contains(theMatrix.GetScheduleDayByKey(_dateOnly));
 				
 				if (schedulePartViewSource == SchedulePartView.FullDayAbsence || schedulePartViewSource == SchedulePartView.DayOff || schedulePartViewSource == SchedulePartView.ContractDayOff || locked)
 				{
@@ -50,7 +53,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					continue;
 				}
 
-				if (!_groupMatrixHelper.ScheduleSinglePerson(dateOnly, groupMember, groupSchedulingService, schedulingOptions, groupPersonBuilderForOptimization, matrixes))
+				var matrixList = new List<IScheduleMatrixPro> {theMatrix};
+
+				if (!_groupMatrixHelper.ScheduleSinglePerson(dateOnly, groupMember, groupSchedulingService, schedulingOptions, groupPersonBuilderForOptimization, matrixList))
 				{
 					return false;
 				}
@@ -82,8 +87,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				if (significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.FullDayAbsence) 
 					continue;
 
-				var locked = IsLocked(matrixes, scheduleDay);
-
+				var theMatrix = MatrixPro(matrixes, scheduleDay);
+				if (theMatrix == null) return false;
+				var locked = !theMatrix.UnlockedDays.Contains(theMatrix.GetScheduleDayByKey(_dateOnly));
+				
 				if (locked) continue;
 				scheduleDay.AddMainShift(cloneMainShift);
 				rollbackService.Modify(scheduleDay);
@@ -92,18 +99,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return true;
 		}
 
-		private bool IsLocked(IEnumerable<IScheduleMatrixPro> matrixes, IScheduleDay scheduleDay)
+		private IScheduleMatrixPro MatrixPro(IEnumerable<IScheduleMatrixPro> matrixes, IScheduleDay scheduleDay)
 		{
-			var locked = false;
+			
 			foreach (var scheduleMatrixPro in matrixes)
 			{
 				if (scheduleMatrixPro.Person != scheduleDay.Person) continue;
-				if (!scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(_dateOnly)) continue;
-				if (!scheduleMatrixPro.UnlockedDays.Contains(scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)))
-					locked = true;
+				if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(_dateOnly))
+					return scheduleMatrixPro;
 			}
 
-			return locked;
+			return null;
 		}
 	}
 }

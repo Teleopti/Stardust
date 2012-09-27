@@ -83,7 +83,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_groupPersonsBuilder = _mocks.StrictMock<IGroupPersonsBuilder>();
 			_schedulingOptions = new SchedulingOptions();
 			_persons = new List<IPerson>();
-			//_target = new TeamSteadyStateDictionaryCreator(_groupPersons, _schedulePeriodTargetTimeCalculator, _matrixes, _groupPersonsBuilder, _schedulingOptions);
 			_target = new TeamSteadyStateDictionaryCreator(_persons, _schedulePeriodTargetTimeCalculator, _matrixes, _groupPersonsBuilder, _schedulingOptions);
 		}
 
