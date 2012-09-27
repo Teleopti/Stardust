@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IShiftCategoryFairnessSwapFinder
     {
-        IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> grouplist,
+        IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList,
                                                    IList<IShiftCategoryFairnessSwap> blacklist);
     }
 
@@ -24,20 +24,20 @@ namespace Teleopti.Ccc.Domain.Optimization
          System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
              "CA1062:Validate arguments of public methods", MessageId = "0"),
          System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> grouplist,
+        public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList,
                                                           IList<IShiftCategoryFairnessSwap> blacklist)
         {
-            if (grouplist.Count < 2) return null;
+            if (groupList.Count < 2) return null;
 
-            var orderedList = grouplist.OrderByDescending(g => g.StandardDeviation);
+            var orderedList = groupList.OrderByDescending(g => g.StandardDeviation);
             var selectedGroup = orderedList.First();
 
             var selectedGroupBlacklistedSwapCount = blacklist.Count(b => b.Group1 == selectedGroup);
             var categoryCount = selectedGroup.ShiftCategoryFairnessCompareValues.Count(g => g.ComparedTo > 0 || g.Original > 0) - 1;
 
             // ES: if all swaps for selectedGroup have been blacklisted
-            if (selectedGroupBlacklistedSwapCount >= (categoryCount*(categoryCount + 1)/2)*(grouplist.Count - 1))
-                return GetGroupsToSwap(grouplist.Skip(1).ToList(), blacklist);
+            if (selectedGroupBlacklistedSwapCount >= (categoryCount*(categoryCount + 1)/2)*(groupList.Count - 1))
+                return GetGroupsToSwap(groupList.Skip(1).ToList(), blacklist);
 
             // ES: get ordered list, check categories against blacklist
             var selectedGroupCategories =

@@ -299,6 +299,78 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreNotEqual(0, result.ShiftCategoryFromGroup2);
         }
 
+        [Test]
+        public void SameItemsDifferentListsShouldBeEqual()
+        {
+            var firstName = new Name("First", "Person");
+            var secondName = new Name("Second", "Person");
+            var list1 = new List<IPerson>
+                            {
+                                new Person
+                                    {
+                                        Name = firstName
+                                    },
+                                new Person
+                                    {
+                                        Name = secondName
+                                    }
+                            };
+
+            var list2 = new List<IPerson>
+                            {
+                                new Person
+                                    {
+                                        Name = firstName
+                                    },
+                                new Person
+                                    {
+                                        Name = secondName
+                                    }
+                            };
+
+            group1.OriginalMembers = list1;
+            group2.OriginalMembers = list2;
+
+            var result = group1.Equals(group2);
+            Assert.AreEqual(true, result);
+        }
+
+        [Test]
+        public void SameItemsDifferentOrderShouldStillBeEqual()
+        {
+            var firstName = new Name("First", "Person");
+            var secondName = new Name("Second", "Person");
+            var list1 = new List<IPerson>
+                            {
+                                new Person
+                                    {
+                                        Name = firstName
+                                    },
+                                new Person
+                                    {
+                                        Name = secondName
+                                    }
+                            };
+
+            var list2 = new List<IPerson>
+                            {
+                                new Person
+                                    {
+                                        Name = secondName
+                                    },
+                                new Person
+                                    {
+                                        Name = firstName
+                                    }
+                            };
+
+            group1.OriginalMembers = list1;
+            group2.OriginalMembers = list2;
+
+            var result = group1.Equals(group2);
+            Assert.AreEqual(true, result);
+        }
+
         private void SetupSmallListForBlacklistTests()
         {
             group1 = new ShiftCategoryFairnessCompareResult

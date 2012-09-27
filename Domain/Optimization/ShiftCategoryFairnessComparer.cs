@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -72,7 +73,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    {
 	        if (ReferenceEquals(null, other)) return false;
 	        if (ReferenceEquals(this, other)) return true;
-	        return Equals(other.OriginalMembers, OriginalMembers);
+	        return OriginalMembers.Count == other.OriginalMembers.Count &&
+                   OriginalMembers.SequenceEqual(other.OriginalMembers, new PersonEqualityComparer());
 	    }
 
 	    public override int GetHashCode()
