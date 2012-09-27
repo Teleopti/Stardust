@@ -1004,10 +1004,36 @@ namespace Teleopti.Ccc.Win.Scheduling
             //fixedStaffSchedulingService.DayOffScheduling(scheduleDays, schedulePartModifyAndRollbackServiceforContractDaysOff);
             fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceforContractDaysOff, schedulingOptions);
 
+			var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+			var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+			var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(selectedPersons, targetTimeCalculator, matrixList, groupPersonsBuilder, schedulingOptions);
+			var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+
+
+			IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
+			  OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(schedulePartModifyAndRollbackServiceforContractDaysOff, _container);
+			IGroupMatrixContainerCreator groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+			IGroupPersonConsistentChecker groupPersonConsistentChecker =
+				_container.Resolve<IGroupPersonConsistentChecker>();
+			IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+			IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
+																		 groupPersonConsistentChecker,
+																		 workShiftBackToLegalStateService,
+																		 resourceOptimizationHelper,
+																		 mainShiftOptimizeActivitySpecificationSetter);
+
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+				new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState,
+													  _container.Resolve<IGroupPersonFactory>(),
+													  _container.Resolve<IGroupPagePerDateHolder>());
+
+			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper);
+
 
             fixedStaffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
             groupSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-            groupSchedulingService.Execute(selectedPeriod, matrixList, schedulingOptions, selectedPersons, backgroundWorker);
+			groupSchedulingService.Execute(selectedPeriod, matrixList, schedulingOptions, selectedPersons, backgroundWorker, teamSteadyStateDictionary, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
             groupSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
             _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
