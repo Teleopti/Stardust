@@ -153,6 +153,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<ShiftCategoryFairnessAggregator>().As<IShiftCategoryFairnessAggregator>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessGroupPersonHolder>().As<IShiftCategoryFairnessGroupPersonHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessAggregateManager>().As<IShiftCategoryFairnessAggregateManager>().InstancePerLifetimeScope();
+
+            builder.RegisterType<GroupPersonBuilderForOptimization>().As<IGroupPersonBuilderForOptimization>().InstancePerLifetimeScope();
         }
 
     }

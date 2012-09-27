@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingResultStateHolder _stateHolder;
         private IGroupSchedulingService _scheduleService;
         private IScheduleDayChangeCallback _scheduleDayChangeCallback;
+        private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
         [SetUp]
         public void Setup()
@@ -33,12 +34,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayChangeCallback = _mockRepository.DynamicMock<IScheduleDayChangeCallback>();
             _scheduleMatrixValueCalculatorFactory = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorProFactory>();
             _scheduleService = _mockRepository.StrictMock<IGroupSchedulingService>();
+            _groupPersonBuilderForOptimization = _mockRepository.StrictMock<IGroupPersonBuilderForOptimization>();
             _target = new GroupListShiftCategoryBackToLegalStateService(
                 _stateHolder,
                 _scheduleMatrixValueCalculatorFactory,
                 _scheduleFairnessCalculator,
                 _scheduleService,
-                _scheduleDayChangeCallback);
+                _scheduleDayChangeCallback,_groupPersonBuilderForOptimization);
         }
 
         [Test]
@@ -73,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _stateHolder,
                 _scheduleMatrixValueCalculatorFactory,
                 _scheduleFairnessCalculator,
-                _scheduleService, _scheduleDayChangeCallback);
+                _scheduleService, _scheduleDayChangeCallback,_groupPersonBuilderForOptimization);
 
             using (_mockRepository.Record())
             {
@@ -101,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var scheduleMatrixValueCalculator = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorPro>();
 
             var result =
-                _target.CreateSchedulePeriodBackToLegalStateServiceBuilder(scheduleMatrixValueCalculator);
+                _target.CreateGroupBackToLegalStateServiceBuilder(scheduleMatrixValueCalculator);
 
             Assert.IsNotNull(result);
         }

@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IResourceOptimizationHelper _resourceOptimizationHelper;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private IGroupSchedulingService _scheduleService;
+        private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
         [SetUp]
         public void Setup()
@@ -31,9 +32,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleMatrixValueCalculator = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorPro>();
             _effectiveRestrictionCreator = _mockRepository.DynamicMock<IEffectiveRestrictionCreator>();
             _scheduleService = _mockRepository.StrictMock<IGroupSchedulingService>();
+            _groupPersonBuilderForOptimization = _mockRepository.StrictMock<IGroupPersonBuilderForOptimization>();
             _target = new GroupShiftCategoryBackToLegalStateServiceBuilder(
                 _scheduleMatrixValueCalculator,
-                _scheduleService);
+                _scheduleService,_groupPersonBuilderForOptimization);
         }
 
         [Test]

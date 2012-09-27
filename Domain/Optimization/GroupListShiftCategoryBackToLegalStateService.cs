@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -16,31 +18,55 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleFairnessCalculator _fairnessCalculator;
         private readonly IGroupSchedulingService _scheduleService;
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
         public GroupListShiftCategoryBackToLegalStateService(
             ISchedulingResultStateHolder stateHolder,
             IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory, 
             IScheduleFairnessCalculator fairnessCalculator, 
             IGroupSchedulingService scheduleService,
-            IScheduleDayChangeCallback scheduleDayChangeCallback)
+            IScheduleDayChangeCallback scheduleDayChangeCallback,
+            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
             _stateHolder = stateHolder;
             _scheduleMatrixValueCalculatorProFactory = scheduleMatrixValueCalculatorProFactory;
             _fairnessCalculator = fairnessCalculator;
             _scheduleService = scheduleService;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
+            _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
         }
 
         public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
         {
+            var scheduleMatrixValueCalculator =
+                BuildScheduleMatrixValueCalculator(
+                    _scheduleMatrixValueCalculatorProFactory,
+                    scheduleMatrixList,
+                    optimizationPreferences,
+                    _stateHolder,
+                    _fairnessCalculator);
+
+            var groupackToLegalStateServiceBuilder =
+                CreateGroupBackToLegalStateServiceBuilder(
+                    scheduleMatrixValueCalculator);
+
+            foreach (var matrix in scheduleMatrixList)
+            {
+                var schedulePartModifyAndRollbackService =
+                    new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+                var groupBackToLegalStateService =
+                    groupackToLegalStateServiceBuilder.Build(matrix, schedulePartModifyAndRollbackService);
+                groupBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions, scheduleMatrixList);
+            }
         }
 
-        public virtual IGroupShiftCategoryBackToLegalStateServiceBuilder CreateSchedulePeriodBackToLegalStateServiceBuilder(
+        public virtual IGroupShiftCategoryBackToLegalStateServiceBuilder CreateGroupBackToLegalStateServiceBuilder(
             IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator)
         {
             return new GroupShiftCategoryBackToLegalStateServiceBuilder(
                 scheduleMatrixValueCalculator,
-                _scheduleService
+                _scheduleService,
+                _groupPersonBuilderForOptimization
                 );
         }
 

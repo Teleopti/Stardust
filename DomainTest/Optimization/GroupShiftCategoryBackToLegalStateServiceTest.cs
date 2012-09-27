@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayPro _scheduleDayPro;
         private IScheduleDay _schedulePart;
         private ISchedulingOptions _schedulingOptions;
+        private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
         [SetUp]
         public void Setup()
@@ -24,7 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _shiftCategoryBackToLegalService =
                 _mockRepository.StrictMock<IRemoveShiftCategoryBackToLegalService>();
             _scheduleService = _mockRepository.StrictMock<IGroupSchedulingService>();
-            _target = new GroupShiftCategoryBackToLegalStateService(_shiftCategoryBackToLegalService, _scheduleService);
+            _groupPersonBuilderForOptimization = _mockRepository.StrictMock<IGroupPersonBuilderForOptimization>();
+            _target = new GroupShiftCategoryBackToLegalStateService(_shiftCategoryBackToLegalService, _scheduleService, _groupPersonBuilderForOptimization);
             _scheduleDayPro = _mockRepository.StrictMock<IScheduleDayPro>();
             _schedulePart = _mockRepository.StrictMock<IScheduleDay>();
             _schedulingOptions = new SchedulingOptions();
