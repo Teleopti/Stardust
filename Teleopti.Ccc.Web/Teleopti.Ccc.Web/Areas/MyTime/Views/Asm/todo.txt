@@ -1,9 +1,6 @@
 henke & roger-stuff
 
-* X Ändra "+1" till egen kolumn 
-* X ta bort "canvas"-bajs som inparamutter till lagervyn. använd root eller vad det nu heter. edit: henke fattade nada: parent funkar ju bara i bindningen, vi behöver "canvas-bajset" i vymodellen = måste nog skicka ner det vi behöver (typ canvas)
 *   kolla upp en bra hook för mockar i js ska ske tidigare än idag.
-* X när man går hem ska man inte få alert 
 *   när schemat laddas om ska man inte få alert om samma aktivitet. edit: eller skall man få det nu? 
 *   när schemat laddas om ska man få alert om ny aktiviet
 *   lägga till "fejk"-scenario för mb-event (anropa ladda-js direkt från scenario)
