@@ -62,8 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() =>
 										{
 											var allLayers = Browser.Current.Elements.Filter(Find.ByClass("asm-layer", false));
-											var oneHourLayer = allLayers.First();
-											var pxPerHour = pixelLength(oneHourLayer);
+											var pxPerHour = pixelsPerHour();
 											var theLayerToCheck = allLayers.Last();
 											return pixelLength(theLayerToCheck) / pxPerHour;
 										}, Is.EqualTo(hours));
@@ -118,7 +117,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				return holeHours;
 			}, Is.EqualTo(hour));
 		}
-
 
 		private static int pixelLength(Element oneHourLengthLayer)
 		{
