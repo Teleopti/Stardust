@@ -145,32 +145,6 @@ $(document).ready(function () {
 		equal(viewModelDay.Extended(), true);
 	});
 
-	test("should set must have", function () {
-
-		var ajax = {
-			Ajax: function (options) {
-				equal(options.url, "Preference/Preference");
-
-				var result = jQuery.parseJSON(options.data);
-
-				equal(result.Date, "2012-06-11");
-				equal(result.MustHave, true);
-				options.success({
-					MustHave: true
-				});
-			}
-		};
-
-		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
-		viewModelDay.Date = "2012-06-11";
-
-		expect(4);
-
-		viewModelDay.SetPreference(true);
-
-		equal(viewModelDay.MustHave(), true);
-	});
-
 	test("should delete preference", function () {
 
 		var ajax = {
@@ -290,6 +264,32 @@ $(document).ready(function () {
 		viewModelDay.PossibleContractTimeMinutesUpper("a value");
 		equal(viewModelDay.DisplayFeedback(), true, "compute with PossibleContractTimeMinutesUpper");
 
+	});
+
+	test("should set must have", function () {
+
+		var ajax = {
+			Ajax: function (options) {
+				equal(options.url, "Preference/MustHave");
+
+				var result = jQuery.parseJSON(options.data);
+
+				equal(result.Date, "2012-06-11");
+				equal(result.MustHave, true);
+				options.success({
+					MustHave: true
+				});
+			}
+		};
+
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+		viewModelDay.Date = "2012-06-11";
+
+		expect(4);
+
+		viewModelDay.SetMustHave(true);
+
+		equal(viewModelDay.MustHave(), true);
 	});
 
 });

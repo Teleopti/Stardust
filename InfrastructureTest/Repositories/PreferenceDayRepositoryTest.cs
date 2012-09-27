@@ -49,6 +49,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             LazyLoadingManager.IsInitialized(days[0].Restriction.ActivityRestrictionCollection).Should().Be.True();
         }
 
+		[Test]
+		public void CanFindPreferenceDaysBetweenDatesAndOnPerson()
+		{
+			DateOnlyPeriod period = new DateOnlyPeriod(2009, 2, 1, 2009, 3, 1);
+			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2009, 2, 2), _person, _activity));
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2009, 3, 2), _person, _activity));
+
+			IList<IPreferenceDay> days = new PreferenceDayRepository(UnitOfWork).Find(period, _person);
+			Assert.AreEqual(2, days.Count);
+			LazyLoadingManager.IsInitialized(days[0].Restriction.ActivityRestrictionCollection).Should().Be.True();
+		}
+
         [Test]
         public void CannotFindPreferenceDaysWhenEmptyPersonCollection()
         {

@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.Repositories
     {
         IList<IPreferenceDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons);
         IList<IPreferenceDay> Find(DateOnly dateOnly, IPerson person);
+	    IList<IPreferenceDay> Find(DateOnlyPeriod period, IPerson person);
     }
 }

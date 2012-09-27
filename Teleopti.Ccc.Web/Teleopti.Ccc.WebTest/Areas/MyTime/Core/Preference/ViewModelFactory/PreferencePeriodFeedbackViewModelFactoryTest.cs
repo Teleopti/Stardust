@@ -78,5 +78,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 			result.TargetContractTime.Upper.Should().Be.EqualTo("60:00");
 		}
 
+		[Test]
+		public void ShouldGetViewModelWithMaxMustHave()
+		{
+			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
+			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today))
+				.Return(new PeriodFeedback { TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2), TimeSpan.FromDays(5)) });
+			preferencePeriodFeedbackProvider.Stub(x => x.MaxMustHave(DateOnly.Today)).Return(1);
+			var timeFormatter = MockRepository.GenerateMock<ITimeFormatter>();
+			timeFormatter.Stub(x => x.GetLongHourMinuteTimeString(TimeSpan.FromDays(5))).Return("60:00");
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider, timeFormatter);
+
+			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
+
+			result.MaxMustHave.Should().Be.EqualTo(1);
+		}
+
 	}
 }
