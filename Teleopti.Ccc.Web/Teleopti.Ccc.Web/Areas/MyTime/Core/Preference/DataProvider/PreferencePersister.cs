@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 			else
 			{
-				ClearExtendedData(preferenceDay);
+				ClearExtendedAndMustHave(preferenceDay);
 				_mapper.Map(input, preferenceDay);
 
 			}
@@ -50,13 +50,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return SetMustHave(schedulePeriod, input);
 		}
 
-		private static void ClearExtendedData(IPreferenceDay preferenceDay)
+		private static void ClearExtendedAndMustHave(IPreferenceDay preferenceDay)
 		{
 			if (preferenceDay.Restriction != null)
 			{
 				preferenceDay.Restriction.StartTimeLimitation = new StartTimeLimitation();
 				preferenceDay.Restriction.EndTimeLimitation = new EndTimeLimitation();
 				preferenceDay.Restriction.WorkTimeLimitation = new WorkTimeLimitation();
+				preferenceDay.Restriction.MustHave = false;
 				preferenceDay.TemplateName = null;
 			}
 		}
