@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	$(function () {
 		Teleopti.MyTimeWeb.Ajax.Init({ baseUrl: '@Url.Content("~/MyTime/")' });
-		Teleopti.MyTimeWeb.Asm.Init();
+		Teleopti.MyTimeWeb.Asm.Init({ yourScheduleHasChanged: '@Resources.YourScheduleHasChanged' });
 	});
 </script>
 <div class="asm-outer-canvas ui-corner-all">

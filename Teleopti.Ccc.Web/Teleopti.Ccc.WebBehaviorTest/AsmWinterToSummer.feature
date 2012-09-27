@@ -33,6 +33,5 @@ Background:
 Scenario: Shift crossing winter to summer daylight should have correct length
 	Given I have the role 'Full access to mytime'
 	And Current time is '2020-03-28 20:00'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then The last layer should be '5' hours long

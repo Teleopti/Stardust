@@ -155,10 +155,8 @@ this.FeatureBackground();
 #line 35
  testRunner.And("Current time is \'2020-03-28 20:00\'");
 #line 36
- testRunner.When("I view my regional settings");
+ testRunner.When("I click ASM link");
 #line 37
- testRunner.And("I click ASM link");
-#line 38
  testRunner.Then("The last layer should be \'5\' hours long");
 #line hidden
             this.ScenarioCleanup();

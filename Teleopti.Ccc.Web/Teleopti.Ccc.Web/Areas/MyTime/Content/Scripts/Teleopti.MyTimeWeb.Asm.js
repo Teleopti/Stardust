@@ -14,6 +14,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var pixelPerHours = 50;
 	var timeLineMarkerWidth = 100;
 	var vm;
+	var texts;
 
 	function asmViewModel(yesterday) {
 		var self = this;
@@ -92,7 +93,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 	}
 
-	function _start() {
+	function _start(userTexts) {
+		texts = userTexts;
 		_setFixedElementAttributes();
 
 		var yesterdayTemp = new Date(new Date().getTeleoptiTime());
@@ -122,7 +124,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		if (messageStartDate < visibleEndDate && messageEndDate > visibleStartDate) {
 			vm.loadViewModel();
-			window.alert('xxxYour schedule has changed!');
+			window.alert(texts.yourScheduleHasChanged);
 		}
 	};
 
@@ -145,8 +147,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	return {
-		Init: function () {
-			_start();
+		Init: function (userTexts) {
+			_start(userTexts);
 			_listenForEvents();
 		},
 		//for testing purposes

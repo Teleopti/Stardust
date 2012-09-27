@@ -39,57 +39,49 @@ Scenario: No permission to ASM module
 Scenario: Show part of agent's schedule in popup
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'	
-	When I view my week schedule
-	And I click ASM link
+	When I click ASM link
 	Then I should see a schedule in popup
 
 Scenario: Show title in popup
 	Given I have the role 'Full access to mytime'
-	When I view my week schedule
-	And I click ASM link
+	When I click ASM link
 	Then I should see a popup with title AgentScheduleMessenger 
 
 Scenario: Write all upcoming activities
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 07:00'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then I should see '3' upcoming activities
 
 Scenario: Current activity should be shown
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 16:00'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then I should see Phone as current activity
 
 Scenario: No current activity to show
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 07:00'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then I should not see as current activity
 
 Scenario: Current activity changes
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 11:59'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	And Current browser time has changed to '2030-01-01 12:00'
 	Then I should see Phone as current activity
 
 Scenario: Upcoming activity starttime should be displayed
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 00:01'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then I should see last activity starttime as '12:00'
 
 Scenario: Upcoming activity starttime starting after midnight should be indicated as next day
 	Given I have the role 'Full access to mytime'
 	And Current time is '2029-12-31 23:59'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then I should see last activity starttime as '12:00+1'
 
 Scenario: Agent should be notified when current shift has changed
@@ -104,7 +96,6 @@ Scenario: Agent should be notified when current shift has changed
 Scenario: Agent should be notified when activity changes
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 11:59'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	And Current browser time has changed to '2030-01-01 12:00'
 	Then I should see only one alert containing 'Phone'

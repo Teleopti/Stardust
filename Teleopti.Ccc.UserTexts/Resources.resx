@@ -11128,4 +11128,7 @@ These options are activated:
     <value>Totals</value>
     <comment>Totals</comment>
   </data>
+  <data name="YourScheduleHasChanged" xml:space="preserve">
+    <value>Your schedule has changed!</value>
+  </data>
 </root>
