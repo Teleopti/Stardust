@@ -12,7 +12,7 @@
 		</div>
 		<div class="asm-sliding-schedules" data-bind="style: { left : canvasPosition }">
 			<span data-bind="foreach: layers">
-				<span class="asm-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
+				<span class="asm-layer" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
 			</span>
 			<span data-bind="foreach: hours">
 				<span class="asm-timeline-line">
@@ -23,7 +23,6 @@
 	</div>
 	<div class="asm-current-info">
 		<div class="asm-info-canvas ui-corner-all">
-			<div>@(Resources.Activities)</div>
 			<table id="asm-current-info-table">
 				<tbody data-bind="foreach: visibleLayers">
 					<tr data-bind="css: { 'asm-info-current-activity' : active }">
