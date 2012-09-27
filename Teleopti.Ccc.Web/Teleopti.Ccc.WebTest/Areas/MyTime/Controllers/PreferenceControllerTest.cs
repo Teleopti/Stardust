@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.Should().Be.SameInstanceAs(resultData);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPersistPreferenceMustHave()
 		{
 			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
