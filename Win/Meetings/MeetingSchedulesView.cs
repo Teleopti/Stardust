@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
@@ -49,10 +48,8 @@ namespace Teleopti.Ccc.Win.Meetings
 
 			outlookTimePickerStartTime.Leave += OutlookTimePickerStartTimeLeave;
 			outlookTimePickerEndTime.Leave += OutlookTimePickerEndTimeLeave;
-
 			outlookTimePickerStartTime.KeyDown += OutlookTimePickerStartTimeKeyDown;
 			outlookTimePickerEndTime.KeyDown += OutlookTimePickerEndTimeKeyDown;
-
 			outlookTimePickerStartTime.SelectedIndexChanged += OutlookTimePickerStartTimeSelectedIndexChanged;
 			outlookTimePickerEndTime.SelectedIndexChanged += OutlookTimePickerEndTimeSelectedIndexChanged;
             
@@ -267,9 +264,9 @@ namespace Teleopti.Ccc.Win.Meetings
         public void OnMeetingTimeChanged()
         {
             if (!_presenter.IsInitialized) return;
-			SetStartTime(_presenter.Model.StartTime);
+            SetStartTime(_presenter.Model.StartTime);
 			SetEndTime(_presenter.Model.EndTime);
-        	SetEndDate(_presenter.Model.EndDate);
+            SetEndDate(_presenter.Model.EndDate);
         }
 
     	public IMeetingDetailPresenter Presenter
@@ -290,11 +287,13 @@ namespace Teleopti.Ccc.Win.Meetings
         public void SetStartTime(TimeSpan startTime)
         {
             outlookTimePickerStartTime.SetTimeValue(startTime);
+            ScrollMeetingIntoView();
         }
 
         public void SetEndTime(TimeSpan endTime)
         {
             outlookTimePickerEndTime.SetTimeValue(endTime);
+            ScrollMeetingIntoView();
         }
 
         public TimeSpan SetSuggestListStartTime
@@ -420,7 +419,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void GridControlSuggestionsQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
         {
-            if (_presenter == null) return;
+            if (_presenter == null || gridControlSuggestions.IsMousePressed) return;
 
             _suggestionRows = _presenter.SuggestionsRowCount;
 
@@ -455,6 +454,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void GridControlSuggestionsSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
+            if (gridControlSuggestions.IsMousePressed) return;
             string t = gridControlSuggestions[e.Range.Top, 0].CellValue.ToString();
             TimePeriod result;
             if (!TimePeriod.TryParse(t, out result)) return;
@@ -462,8 +462,12 @@ namespace Teleopti.Ccc.Win.Meetings
             var startTime = result.StartTime;
         	var endTime = result.EndTime;
 
-			_presenter.SetTimesFromEditor(startTime, endTime);
-			RefreshGrid();
+            outlookTimePickerStartTime.SelectedIndexChanged -= OutlookTimePickerStartTimeSelectedIndexChanged;
+            outlookTimePickerEndTime.SelectedIndexChanged -= OutlookTimePickerEndTimeSelectedIndexChanged;
+            _presenter.SetTimesFromEditor(startTime, endTime);
+            RefreshGrid();
+            outlookTimePickerStartTime.SelectedIndexChanged += OutlookTimePickerStartTimeSelectedIndexChanged;
+            outlookTimePickerEndTime.SelectedIndexChanged += OutlookTimePickerEndTimeSelectedIndexChanged;
         }
 
         private void FindAvailableDays()
@@ -473,7 +477,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void GridControlSuggestionsQueryRowCount(object sender, GridRowColCountEventArgs e)
         {
-            if (_presenter == null) return;
+            if (_presenter == null || gridControlSuggestions.IsMousePressed) return;
             _suggestionRows = _presenter.SuggestionsRowCount;
             e.Count = _suggestionRows;
             e.Handled = true;
@@ -540,12 +544,15 @@ namespace Teleopti.Ccc.Win.Meetings
 		{
 			_presenter.OnOutlookTimePickerStartTimeSelectedIndexChanged(outlookTimePickerStartTime.Text);
             gridControlSchedules.Refresh();
+            gridControlSuggestions.Refresh();
+            
 		}
 
 		void OutlookTimePickerEndTimeSelectedIndexChanged(object sender, EventArgs e)
 		{
 			_presenter.OnOutlookTimePickerEndTimeSelectedIndexChanged(outlookTimePickerEndTime.Text);
             gridControlSchedules.Refresh();
+            gridControlSuggestions.Refresh();
 		}
 
     	public void NotifyMeetingDatesChanged()
@@ -566,6 +573,11 @@ namespace Teleopti.Ccc.Win.Meetings
         private void MeetingSchedulesView_Resize(object sender, EventArgs e)
         {
             gridControlSchedules.Refresh();
+        }
+
+        private void gridControlSuggestionsMouseUp(object sender, MouseEventArgs e)
+        {
+            gridControlSuggestions.Refresh();
         }
     }
 }

@@ -130,20 +130,20 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanSetStartTime()
         {
-            _view.SetEndDate(_model.EndDate);
+            _target.SetStartTime(TimeSpan.FromHours(7));
 
             _mocks.ReplayAll();
-            _target.SetStartTime(TimeSpan.FromHours(7));
+            _view.SetStartTime(_model.StartTime);
             _mocks.VerifyAll();
         }
 
         [Test]
         public void VerifyCanSetEndTime()
         {
-            _view.SetEndDate(_model.EndDate.AddDays(1));
+            _target.SetEndTime(TimeSpan.FromHours(7));
 
             _mocks.ReplayAll();
-            _target.SetEndTime(TimeSpan.FromHours(7));
+            _view.SetEndTime(_model.EndTime);
             _mocks.VerifyAll();
         }
 
@@ -300,9 +300,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using(_mocks.Record())
 			{
-				Expect.Call(() => _view.OnMeetingTimeChanged());
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetEndDate(new DateOnly(2000, 1, 1))).IgnoreArguments();
+				Expect.Call(() => _view.SetStartTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
 			}
 
 			using(_mocks.Playback())
@@ -330,9 +329,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.OnMeetingTimeChanged());
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetEndDate(new DateOnly(2000, 1, 1))).IgnoreArguments();
+				Expect.Call(() => _view.SetEndTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())
@@ -360,9 +358,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.OnMeetingTimeChanged());
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetEndDate(new DateOnly(2000, 1, 1))).IgnoreArguments();
+				Expect.Call(() => _view.SetStartTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())
@@ -390,9 +387,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.OnMeetingTimeChanged());
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetEndDate(new DateOnly(2000, 1, 1))).IgnoreArguments();
+				Expect.Call(() => _view.SetEndTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())
@@ -420,9 +416,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.OnMeetingTimeChanged());
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetEndDate(new DateOnly(2000, 1, 1))).IgnoreArguments();
+				Expect.Call(() => _view.SetStartTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())
@@ -436,9 +431,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.OnMeetingTimeChanged());
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetEndDate(new DateOnly(2000, 1, 1))).IgnoreArguments();
+				Expect.Call(() => _view.SetEndTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())
