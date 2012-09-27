@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				                                                            schedulingOptions.ConsiderShortBreaks);
 
 				bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, effectiveRestriction,
-				                                                   resourceCalculateDelayer, best);
+				                                                   resourceCalculateDelayer, best,groupPerson );
 				if (!sucess)
 				{
 					return false;
