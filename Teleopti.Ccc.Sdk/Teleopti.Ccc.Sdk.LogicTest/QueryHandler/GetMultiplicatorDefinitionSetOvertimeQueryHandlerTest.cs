@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			using (mocks.Record())
 			{
-				Expect.Call(multiplicatorDefinitionSetRepository.FindAllShiftAllowanceDefinitions()).Return(
+				Expect.Call(multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions()).Return(
 					multiplicatorDefinitionSetList);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			}
