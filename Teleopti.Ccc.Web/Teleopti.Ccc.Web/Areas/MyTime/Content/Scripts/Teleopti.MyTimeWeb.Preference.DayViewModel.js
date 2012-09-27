@@ -150,11 +150,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 				Date: self.Date,
 				PreferenceId: value
 			};
-		} if (typeof (value) == 'boolean') {
-			value = {
-				Date: self.Date,
-				MustHave: value
-			};
 		} else {
 			value.Date = self.Date;
 		}
@@ -172,6 +167,29 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			complete: function () {
 				deferred.resolve();
 				self.LoadFeedback();
+			}
+		});
+		return deferred.promise();
+	};
+
+	this.SetMustHave = function (value) {
+		value = {
+			Date: self.Date,
+			MustHave: value
+		};
+
+		var deferred = $.Deferred();
+		ajaxForDate({
+			url: 'Preference/MustHave',
+			type: 'POST',
+			data: JSON.stringify(value),
+			date: self.Date,
+			success: function (data) {
+				if (data)
+					self.MustHave(value.MustHave);
+			},
+			complete: function () {
+				deferred.resolve();
 			}
 		});
 		return deferred.promise();

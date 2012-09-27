@@ -12,7 +12,7 @@
     overflow: hidden;
 }
 .preference-must-have {
-	margin-left: 10px;
+	margin-left: 4px;
 }
 .extended-indication
 {
@@ -117,4 +117,13 @@
     width: 17px;
     padding: 0 0 0 0;
     vertical-align: baseline;
+}
+#Preference-must-have-numbers {
+	float: left;
+	font-size: medium;
+}
+
+.grey-out {
+	opacity : 0.4;
+    filter: alpha(opacity=40); 
 }
