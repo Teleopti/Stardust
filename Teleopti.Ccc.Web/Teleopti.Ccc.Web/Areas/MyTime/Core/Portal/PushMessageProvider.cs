@@ -1,5 +1,7 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 {
@@ -17,6 +19,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
     	public int UnreadMessageCount
         {
             get { return _repository.CountUnread(_loggedOnUser.CurrentUser()); }
+        }
+
+        public IList<IPushMessageDialogue> GetMessages()
+        {
+            throw new System.NotImplementedException();
         }
 	}
 }

@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
             {
                 Action = "Index",
                 Controller = "Message",
-                Title = Resources.Message,
+                Title = Resources.Messages,
                 NavigationItems = new NavigationItem[0],
                 ToolBarItems = new List<ToolBarItemBase>(),
 				PayAttention = unreadMessageCount != 0,

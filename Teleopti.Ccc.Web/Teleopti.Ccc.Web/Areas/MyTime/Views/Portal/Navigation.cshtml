@@ -5,15 +5,6 @@
 @using Teleopti.Interfaces.Domain
 @model PortalViewModel
 
-@if (Model.HasAsmPermission)
-{
-	<script type="text/javascript">
-		$(function () {
-			Teleopti.MyTimeWeb.AsmMessage.Init();
-		});
-	</script>
-}
-
 <nav id="tabs" class="main-nav">
 	<ul>
 		@foreach (var navSection in Model.NavigationItems)

@@ -10,8 +10,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	public class MessageConfigurable : IUserDataSetup
 	{
 		public string Title { get; set; }
+        public string Message { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+	    public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 		    var message = new PushMessage()
 		                      {

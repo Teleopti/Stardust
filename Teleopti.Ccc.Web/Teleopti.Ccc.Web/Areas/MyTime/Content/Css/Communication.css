@@ -1,0 +1,103 @@
+﻿
+.communication-body-inner ol
+{
+	list-style: none;
+	margin-left: 0em;
+	margin-right: 0em;
+}
+.communication-list 
+{
+	width: 483px;
+}
+.rtl .communication-list
+{
+    margin-right: 483px;
+}
+.communication-body-inner .communication-item
+{
+	padding-top: 0.5em;
+	padding-bottom: 0.8em;
+	padding-left: 1.8em;
+	padding-right: 1.8em;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	background: #f8f8f8;
+	margin-top: 0.1em;
+	margin-bottom: 0.1em;
+}
+.communication-body-inner .friendly-message {
+	width: 433px;
+}
+.communication-body-inner .loading
+{
+	height: 5em;
+}
+.communication-body-inner .arrow-down
+{
+	height: 5em;
+}
+
+.no-rgba .communication-body-inner li {
+	 border: 1px solid #dfdfdf;
+}
+.communication-body-inner .communication-subject 
+{
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.communication-body-inner .communication-details 
+{
+	font-size: smaller;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.communication-body-inner .communication-caption 
+{
+	color: #B0B0B0;
+	font-style: italic;
+	font-size: xx-small;
+}
+.communication-body-inner .communication-data-type {
+	padding-right: 20px;
+	padding-left: 0px;
+}
+.rtl .communication-body-inner .communication-data-type {
+	padding-right: 0px;
+	padding-left: 20px;
+}
+.communication-body-inner .communication-data-date {
+	padding-right: 20px;
+	padding-left: 0px;
+}
+.rtl .communication-body-inner .communication-data-date {
+	padding-right: 0px;
+	padding-left: 20px;
+}
+.communication-body-inner .communication-text 
+{
+	padding-top: 0.3em;
+}
+.communication-edit-section .edit-module-element {
+	position: relative;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+}
+.communication-edit-section .date-input
+{
+	width: 8em;
+}
+.communication-data-subject {
+	word-wrap: break-word;	
+}
+.communication-data-text {
+	word-wrap: break-word;	
+}
+.communication-type-input-label 
+{
+	width: 8em;
+	padding-top: 4px;
+	padding-right: 2px;
+	height: 16px;
+}
+.rtl .communication-type-input-label 
+{
+	text-align: right;
+}

@@ -196,7 +196,11 @@
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
     <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\MessageController.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\AsmViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\Mapping\MessageViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\ViewModelFactory\IMessageViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\ViewModelFactory\MessageViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\IPushMessageProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\PushMessageProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractor.cs" />
@@ -209,6 +213,7 @@
     <Compile Include="Areas\MyTime\Models\MessageBroker\IUserDataFactory.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\UserData.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\UserDataFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\Message\MessageViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferencePeriodFeedbackViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePeriodFeedbackProvider.cs" />
@@ -499,11 +504,13 @@
     <Content Include="Areas\MyTime\Content\Css\Asm.css" />
     <Content Include="Areas\MyTime\Content\Css\CalendarView.css" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
+    <Content Include="Areas\MyTime\Content\Css\Communication.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.combobox.css" />
     <Content Include="Areas\MyTime\Content\Css\TooltipCustom.css" />
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Communication.List.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessage.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.signalR-0.5.3.min.js" />
     <Content Include="Areas\MyTime\Content\Images\icon_sprite.png" />
@@ -559,6 +566,7 @@
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\WeekRequestPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
+    <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
     <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

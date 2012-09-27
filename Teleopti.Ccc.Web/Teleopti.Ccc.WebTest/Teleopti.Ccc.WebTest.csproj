@@ -117,6 +117,7 @@
     <Compile Include="Areas\MobileReports\TestData\DefinedReportProviderForTest.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportsApplicationFunctionsFactory.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\MessageControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MessageBrokerControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactoryTest.cs" />
@@ -125,6 +126,8 @@
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
+    <Compile Include="Core\Message\Mapping\MessageViewModelMappingProfileTest.cs" />
+    <Compile Include="Core\Message\ViewModelFactory\MessageViewModelFactoryTest.cs" />
     <Compile Include="Core\Portal\PushMessageProviderTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryScheduleTest.cs" />
