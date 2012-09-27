@@ -355,25 +355,50 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Asm should be automatically reloaded when time passes")]
+        public virtual void AsmShouldBeAutomaticallyReloadedWhenTimePasses()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Asm should be automatically reloaded when time passes", ((string[])(null)));
+#line 94
+this.ScenarioSetup(scenarioInfo);
+#line 7
+this.FeatureBackground();
+#line 95
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 96
+ testRunner.And("Current time is \'2030-01-01 23:59\'");
+#line 97
+ testRunner.When("I click ASM link");
+#line 98
+ testRunner.Then("Now indicator should be at hour \'47\'");
+#line 99
+ testRunner.When("Current browser time has changed to \'2030-01-02 00:01\'");
+#line 100
+ testRunner.Then("Now indicator should be at hour \'24\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Agent should be notified when activity changes")]
         [NUnit.Framework.IgnoreAttribute()]
         public virtual void AgentShouldBeNotifiedWhenActivityChanges()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when activity changes", new string[] {
                         "ignore"});
-#line 96
+#line 105
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 97
+#line 106
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 98
+#line 107
  testRunner.And("Current time is \'2030-01-01 11:59\'");
-#line 99
+#line 108
  testRunner.When("I click ASM link");
-#line 100
+#line 109
  testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
-#line 101
+#line 110
  testRunner.Then("I should see only one alert containing \'Phone\'");
 #line hidden
             this.ScenarioCleanup();
