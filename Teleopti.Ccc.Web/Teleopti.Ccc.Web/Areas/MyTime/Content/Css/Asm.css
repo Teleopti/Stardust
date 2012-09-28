@@ -2,36 +2,33 @@
 {
 	border: 1px solid rgb(216, 216, 216);	
 	position: relative;
-	top: 15px;
+	top: 20px;
 	height: 40px;
 }
-
 .asm-current-info
 {
 	float: left;
-	width: 180px;
-	margin-left: 3px;
+	width: 200px;
+	margin-left: 10px;
 }
-
 .asm-schedule-canvas
 {
 	float: left;
 	width: 600px;
 	overflow: hidden;
 	background: #F8F8F8;
-	height: 34px;
-	margin: 0px;
+	height: 70px;
 	border: 1px solid rgb(216, 216, 216);	
 }
 
 .asm-outer-canvas
 {
-	width: 785px;
+	width: 815px;
 	background: white;
-	padding: 2px;
+	padding: 6px;
 	border: 1px solid rgb(216, 216, 216);	
-	margin: 3px;
-	height: 36px;
+	margin: 5px;
+	height: 72px;
 	display: none; /*hide when loaded, before moved to correct place*/
 }
 
@@ -41,26 +38,25 @@
 	zoom: 1;
 	filter: alpha(opacity=80);
 	opacity: 0.80;
-	height: 14px;
-	margin-top: 2px;
+	height: 30px;
+	top: 5px;
 }
 
 .asm-timeline-line
 {
-	height: 35px;
+	height: 70px;
 	float: left;
-	border-right: 1px solid rgb(216, 216, 216);
-	margin-top: -4px;
+	border-right: 1px solid rgb(216, 216, 216);	
 }
 
 .asm-time-marker-inner 
-{	
-	background-color: black;
-	height: 70px;	
-	zoom: 1;
-	filter: alpha(opacity=15);
-	opacity: 0.15;
-}
+	{	
+		background-color: black;
+		height: 70px;	
+		zoom: 1;
+		filter: alpha(opacity=15);
+		opacity: 0.15;
+	}
 
 .asm-timeline-number
 {
@@ -68,7 +64,9 @@
 	padding-left: 4px;
 	padding-right: 5px;
 	position: relative;
-	top: -15px;
+	border: 1px solid rgb(216, 216, 216);
+	background: white;
+	top: -20px;
 	left: -25px;
 	font-family: verdana;
 	font-size: 8px;
@@ -78,7 +76,7 @@
 {
 	overflow: hidden;
 	background: #F8F8F8;
-	height: 34px;
+	height: 70px;
 	border: 1px solid rgb(216, 216, 216);	
 }
 
@@ -98,7 +96,7 @@
 	white-space: nowrap;
 	text-align: left;
 	font-family: verdana;
-	font-size: 9px;
+	font-size: 10px;
 }
 
 .asm-info-canvas td.asm-info-time-column
@@ -122,6 +120,7 @@
 	opacity: 1 !important;
 }
 
+
 .asm-info-canvas div 
 {
 	padding-bottom: 3px;
@@ -130,4 +129,3 @@
 	font-family: verdana;
 	font-size: 10px;
 }
-
