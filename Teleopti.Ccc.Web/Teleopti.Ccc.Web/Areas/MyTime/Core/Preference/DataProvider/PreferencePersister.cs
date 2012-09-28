@@ -5,6 +5,7 @@ using System.Web;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core;
@@ -17,12 +18,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	{
 		private readonly IPreferenceDayRepository _preferenceDayRepository;
 		private readonly IMappingEngine _mapper;
+		private readonly IMustHaveRestrictionSetter _mustHaveRestrictionSetter;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public PreferencePersister(IPreferenceDayRepository preferenceDayRepository, IMappingEngine mapper, ILoggedOnUser loggedOnUser)
+		public PreferencePersister(
+			IPreferenceDayRepository preferenceDayRepository, 
+			IMappingEngine mapper,  
+			IMustHaveRestrictionSetter mustHaveRestrictionSetter,
+			ILoggedOnUser loggedOnUser)
 		{
 			_preferenceDayRepository = preferenceDayRepository;
 			_mapper = mapper;
+			_mustHaveRestrictionSetter = mustHaveRestrictionSetter;
 			_loggedOnUser = loggedOnUser;
 		}
 
@@ -47,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public bool MustHave(MustHaveInput input)
 		{
-			return _preferenceDayRepository.SetMustHave(input.Date, _loggedOnUser.CurrentUser(), input.MustHave);
+			return _mustHaveRestrictionSetter.SetMustHave(input.Date, _loggedOnUser.CurrentUser(), input.MustHave);
 		}
 
 		private static void ClearExtendedAndMustHave(IPreferenceDay preferenceDay)
