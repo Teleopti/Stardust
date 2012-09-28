@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
@@ -53,6 +54,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				multiplicatorDefinitionSetShiftAllowanceDto.TimeZoneId = TimeZoneInfo.Local.Id;
 				var result = target.Handle(multiplicatorDefinitionSetShiftAllowanceDto);
 				Assert.IsTrue(result.Count > 0);
+				var first = result.ToList().ElementAt(0);
+				Assert.AreEqual(first.Name, "Shift Allowance");
+				Assert.IsFalse(first.IsDeleted);
+				Assert.AreEqual(first.LayerCollection.Count, 0);
 			}
 		}
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		}
 
 		[Test]
-		public void ShouldGetMultiplicatorDefinitionSetForShiftAllowance()
+		public void ShouldGetMultiplicatorDefinitionSetForOvertime()
 		{
 			var unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 
@@ -41,8 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			using (mocks.Record())
 			{
-				Expect.Call(multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions()).Return(
-					multiplicatorDefinitionSetList);
+				Expect.Call(multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions()).Return(multiplicatorDefinitionSetList);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			}
 			using (mocks.Playback())
@@ -52,6 +52,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				multiplicatorDefinitionSetOvertimeDto.TimeZoneId = TimeZoneInfo.Local.Id;
 				var result = target.Handle(multiplicatorDefinitionSetOvertimeDto);
 				Assert.IsTrue(result.Count > 0);
+				var first = result.ToList().ElementAt(0);
+				Assert.AreEqual(first.Name, "Overtime");
+				Assert.IsFalse(first.IsDeleted);
+				Assert.AreEqual(first.LayerCollection.Count, 0);
 			}
 		}
 	}

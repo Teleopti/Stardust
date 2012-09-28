@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			mocks = new MockRepository();
 			multiplicatorRepository = mocks.DynamicMock<IMultiplicatorRepository>();
 			multiplicator = new Multiplicator(MultiplicatorType.Overtime);
+			multiplicator.Description = new Description("Overtime", "OV");
 			multiplicatorList = new List<IMultiplicator>();
 			multiplicatorList.Add(multiplicator);
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
@@ -47,7 +49,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Playback())
 			{
 				var result = target.Handle(new GetMultiplicatorOvertimeQueryDto());
+				var first = result.ToList().ElementAt(0);
 				Assert.IsTrue(result.Count > 0);
+				Assert.AreEqual(first.ShortName, "OV");
+				Assert.AreEqual(first.Name, "Overtime");
+				Assert.AreEqual(first.MultiplicatorType, (MultiplicatorTypeDto)MultiplicatorType.Overtime);
 			}
 		} 
 	}
