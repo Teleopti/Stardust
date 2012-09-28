@@ -531,7 +531,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			             						{
 			             							new ShiftCategoryFairnessCompareValue
 			             								{Original = 0.35, ComparedTo = 0.1, ShiftCategory = shiftCategoryDay},
-			             							new ShiftCategoryFairnessCompareValue
+			             							new ShiftCategoryFairnessCompareValue 
 			             								{Original = 0.15, ComparedTo = 0.15, ShiftCategory = shiftCategoryNoon},
 			             							new ShiftCategoryFairnessCompareValue
 			             								{Original = 0.50, ComparedTo = 0.75, ShiftCategory = shiftCategoryNight}
@@ -560,8 +560,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var result = _target.GetGroupsToSwap(_groupList, _blackList);
 
-            Assert.That(result.ShiftCategoryFromGroup1.Description.Name, Is.EqualTo(shiftCategoryDay.Description.Name)); //HERE IT SUGGESTS NIGHT
-            Assert.That(result.ShiftCategoryFromGroup2.Description.Name, Is.EqualTo(shiftCategoryNight)); //HERE IT SUGGESTS NOON WHICH IS PERFECTLY FAIR SHOULD NEVER BE SWAPPED
+            Assert.That(result.ShiftCategoryFromGroup1, Is.EqualTo(shiftCategoryDay)); //HERE IT SUGGESTS NIGHT
+            Assert.That(result.ShiftCategoryFromGroup2, Is.EqualTo(shiftCategoryNight)); //HERE IT SUGGESTS NOON WHICH IS PERFECTLY FAIR SHOULD NEVER BE SWAPPED
 			
 			Assert.That(result.Group1,Is.EqualTo(_groupList[0]));
 			Assert.That(result.Group2,Is.EqualTo(_groupList[1]));
