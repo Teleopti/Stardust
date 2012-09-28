@@ -74,15 +74,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    public bool SetMustHave(DateOnly dateOnly, IPerson person, bool mustHave)
 	    {
 			if (person == null) throw new ArgumentNullException("person");
-			IPreferenceDay preferenceDay = null;
+			IPreferenceDay preferenceDay;
 			if (mustHave)
 			{
 				var schedulePeriod = person.VirtualSchedulePeriodOrNext(dateOnly).DateOnlyPeriod;
 				var preferenceDays = Find(schedulePeriod, person);
 				var nbrOfDaysWithMustHave = preferenceDays.Count(p => p.Restriction.MustHave);
 				var currentSchedulePeriod = person.SchedulePeriod(dateOnly);
-				if (nbrOfDaysWithMustHave < currentSchedulePeriod.MustHavePreference)
-					preferenceDay = preferenceDays.SingleOrDefault(d => d.RestrictionDate == dateOnly);
+				preferenceDay = preferenceDays.SingleOrDefault(d => d.RestrictionDate == dateOnly);
+				if (nbrOfDaysWithMustHave >= currentSchedulePeriod.MustHavePreference)
+					return preferenceDay != null && preferenceDay.Restriction.MustHave;
 			}
 			else
 			{
