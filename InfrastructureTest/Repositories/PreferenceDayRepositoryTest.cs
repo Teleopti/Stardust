@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var repository = new PreferenceDayRepository(UnitOfWork);
 			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date, person2, false);
-			Assert.AreEqual(false, result);
+			Assert.AreEqual(true, result);
 		}
 
         [Test]
