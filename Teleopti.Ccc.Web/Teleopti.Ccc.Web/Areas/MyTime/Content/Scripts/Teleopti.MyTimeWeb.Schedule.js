@@ -15,130 +15,136 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
-    var timeIndicatorDateTime;
+	var timeIndicatorDateTime;
 
 	var addTextRequestTooltip = null;
 
-    function _initTooltip() {
-        var addTextRequest = $('.show-request');
+	function _initTooltip() {
+		var addTextRequest = $('.show-request');
 		addTextRequestTooltip = $('<div />').qtip({
 
-            content: {
-                text: $('#Schedule-addRequest-section'),
-                title: {
-                    text: $('#Schedule-addRequest-title'),
-                    button: $('#Schedule-addRequest-cancel-button').text()
-                }
-            },
-            position: {
-                target: 'event',
-                my: 'middle left',
-                at: 'middle right',
-                viewport: $(window),
-                adjust: {
-			x: 5
-                }
-            },
-            events: {
-                show: function (event, api) {
-                    var date = $(event.originalEvent.target).closest('ul').attr('data-request-default-date');
-                    Teleopti.MyTimeWeb.Schedule.Request.ClearFormData(date);
-                }
-            },
-            show: {
-                target: addTextRequest,
-                event: 'click'
-            },
-            hide: {
-                target: $("#page"),
-                event: 'mousedown'
-            },
-            style: {
+			content: {
+				text: $('#Schedule-addRequest-section'),
+				title: {
+					text: $('#Schedule-addRequest-title'),
+					button: $('#Schedule-addRequest-cancel-button').text()
+				}
+			},
+			position: {
+				target: 'event',
+				my: 'middle left',
+				at: 'middle right',
+				viewport: $(window),
+				adjust: {
+					x: 5
+				}
+			},
+			events: {
+				show: function (event, api) {
+					var date = $(event.originalEvent.target).closest('ul').attr('data-request-default-date');
+					Teleopti.MyTimeWeb.Schedule.Request.ClearFormData(date);
+				}
+			},
+			show: {
+				target: addTextRequest,
+				event: 'click'
+			},
+			hide: {
+				target: $("#page"),
+				event: 'mousedown'
+			},
+			style: {
 				def: false,
 				classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
 				tip: true
-            }
-        });
-    }
-
-    function _initPeriodSelection() {
-        var rangeSelectorId = '#ScheduleDateRangeSelector';
-        var periodData = $('#ScheduleWeek-body').data('mytime-periodselection');
-        Teleopti.MyTimeWeb.Portal.InitPeriodSelection(rangeSelectorId, periodData);
-    }
-
-    function _initTodayButton() {
-        $('#Schedule-today-button')
-			.click(function () {
-		    Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
+			}
 		});
-    }
+	}
 
-    function _initTimeIndicator() {
-        setInterval(function () {
-            var currentDateTime = new Date(new Date().getTeleoptiTime());
-            if (timeIndicatorDateTime == undefined || currentDateTime.getMinutes() != timeIndicatorDateTime.getMinutes()) {
-                timeIndicatorDateTime = currentDateTime;
-                _setTimeIndicator(timeIndicatorDateTime);
-            }
-        }, 1000);
-    }
+	function _initPeriodSelection() {
+		var rangeSelectorId = '#ScheduleDateRangeSelector';
+		var periodData = $('#ScheduleWeek-body').data('mytime-periodselection');
+		Teleopti.MyTimeWeb.Portal.InitPeriodSelection(rangeSelectorId, periodData);
+	}
 
-    function _setTimeIndicator(theDate) {
-        if ($('.week-schedule-ASM-permission-granted').length == 0 | $('.week-schedule-current-week').length == 0)
-            return;
+	function _initTodayButton() {
+		$('#Schedule-today-button')
+			.click(function () {
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
+			});
+	}
 
-        var timelineHeight = 668;
-        var timelineOffset = 203;
-        var timeindicatorHeight = 2;
+	function _initTimeIndicator() {
+		setInterval(function () {
+			var currentDateTime = new Date(new Date().getTeleoptiTime());
+			if (timeIndicatorDateTime == undefined || currentDateTime.getMinutes() != timeIndicatorDateTime.getMinutes()) {
+				timeIndicatorDateTime = currentDateTime;
+				_setTimeIndicator(timeIndicatorDateTime);
+			}
+		}, 1000);
+	}
 
-        var hours = theDate.getHours();
-        var minutes = theDate.getMinutes();
-        var clientNowMinutes = (hours * 60) + (minutes * 1);
+	function _setTimeIndicator(theDate) {
+		if ($('.week-schedule-ASM-permission-granted').length == 0 | $('.week-schedule-current-week').length == 0)
+			return;
 
-        var timelineStartMinutes = getMinutes("div[data-timeline-start]");
-        var timelineEndMinutes = getMinutes("div[data-timeline-end]");
+		var timelineHeight = 668;
+		var timelineOffset = 203;
+		var timeindicatorHeight = 2;
 
-        var division = (clientNowMinutes - timelineStartMinutes) / (timelineEndMinutes - timelineStartMinutes);
-        var position = Math.round(timelineHeight * division) - Math.round(timeindicatorHeight / 2);
+		var hours = theDate.getHours();
+		var minutes = theDate.getMinutes();
+		var clientNowMinutes = (hours * 60) + (minutes * 1);
 
-        var formattedDate = $.datepicker.formatDate('yy-mm-dd', theDate);
-        var timeIndicator = $('ul[data-mytime-date="' + formattedDate + '"] .week-schedule-time-indicator');
-        var timeIndicatorTimeLine = $('.week-schedule-time-indicator-small');
+		var timelineStartMinutes = getMinutes("div[data-timeline-start]");
+		var timelineEndMinutes = getMinutes("div[data-timeline-end]");
 
-        timeIndicator.css("top", position).show();
-        timeIndicatorTimeLine.css("top", position + timelineOffset).show();
-    }
+		var division = (clientNowMinutes - timelineStartMinutes) / (timelineEndMinutes - timelineStartMinutes);
+		var position = Math.round(timelineHeight * division) - Math.round(timeindicatorHeight / 2);
 
-    function getMinutes(elementSelector) {
-        var timeString = $(elementSelector).text();
-        var timeParts = timeString.split(":");
-        return (timeParts[0] * 60) + (timeParts[1] * 1);
-    }
+		var formattedDate = $.datepicker.formatDate('yy-mm-dd', theDate);
+		var timeIndicator = $('ul[data-mytime-date="' + formattedDate + '"] .week-schedule-time-indicator');
+		var timeIndicatorTimeLine = $('.week-schedule-time-indicator-small');
 
-    return {
-        Init: function () {
-            if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
+		timeIndicator.css("top", position).show();
+		timeIndicatorTimeLine.css("top", position + timelineOffset).show();
+	}
+
+	function getMinutes(elementSelector) {
+		var timeString = $(elementSelector).text();
+		var timeParts = timeString.split(":");
+		return (timeParts[0] * 60) + (timeParts[1] * 1);
+	}
+
+	function _setTimeIndicatorFirstTime() {
+		var currentDateTime = new Date(new Date().getTeleoptiTime());
+		_setTimeIndicator(currentDateTime);
+	}
+
+	return {
+		Init: function () {
+			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
 				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/Week', Teleopti.MyTimeWeb.Schedule.PartialInit, Teleopti.MyTimeWeb.Schedule.PartialDispose);
-            }
-            Teleopti.MyTimeWeb.Schedule.Request.Init();
-            _initTodayButton();
-        },
-        PartialInit: function () {
-            _initTooltip();
-            _initPeriodSelection();
-            Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
-            Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
-            Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
-            _initTimeIndicator();
-        },
+			}
+			Teleopti.MyTimeWeb.Schedule.Request.Init();
+			_initTodayButton();
+		},
+		PartialInit: function () {
+			_initTooltip();
+			_initPeriodSelection();
+			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
+			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
+			Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
+			_initTimeIndicator();
+			_setTimeIndicatorFirstTime();
+		},
 		PartialDispose: function () {
 			addTextRequestTooltip.qtip('destroy');
 		},
-        SetTimeIndicator: function (date) {
-            _setTimeIndicator(date);
-        }
-    };
+		SetTimeIndicator: function (date) {
+			_setTimeIndicator(date);
+		}
+	};
 
 })(jQuery);
 
