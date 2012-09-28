@@ -7,7 +7,7 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 
 		hub.onEventMessage = options.callback;
 
-		$.connection.hub.start()
+		$.connection.hub.start({ transport: 'longPolling', xdomain: true })
 			.done(function () {
 				hub.addSubscription({
 					'DomainType': options.domainType,
