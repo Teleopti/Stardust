@@ -62,13 +62,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			return -(pixelPerHours * hoursSinceStart) + 'px';
 		});
 		self.now.subscribe(function (currentMs) {
-			var yesterdayPlus2Days = new Date(self.yesterday().getTime());
-			yesterdayPlus2Days.setDate(yesterdayPlus2Days.getDate() + 2);
+			var yesterdayPlus2Days = new Date(self.yesterday().getTime()).addDays(2);
 			if (currentMs > yesterdayPlus2Days.getTime()) {
-				var todayFull = new Date(currentMs);
-				var today = new Date(todayFull.getFullYear(), todayFull.getMonth(), todayFull.getDate());
-				var todayMinus1 = today;
-				todayMinus1.setDate(today.getDate() - 1);
+				var todayMinus1 = new Date(currentMs).addDays(-1).clearTime();
 				self.yesterday(todayMinus1);
 			}
 		});
@@ -115,11 +111,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		texts = userTexts;
 		_setFixedElementAttributes();
 
-		var yesterdayTemp = new Date(new Date().getTeleoptiTime());
-		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
-		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
-
-		vm = new asmViewModel(yesterday);
+		var yesterDayFromNow = new Date(new Date().getTeleoptiTime()).addDays(-1).clearTime();
+		vm = new asmViewModel(yesterDayFromNow);
 		ko.applyBindings(vm);
 		vm.loadViewModel();
 	}
@@ -132,13 +125,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	var onMessageBrokerEvent = function (notification) {
-		var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
-		messageStartDate.setDate(messageStartDate.getDate() - 1);
-		var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
-		messageEndDate.setDate(messageEndDate.getDate() + 1);
+		var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate).addDays(-1);
+		var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate).addDays(1);
 		var visibleStartDate = vm.yesterday();
-		var visibleEndDate = new Date(visibleStartDate.getTime());
-		visibleEndDate.setDate(visibleEndDate.getDate() + 2);
+		var visibleEndDate = new Date(visibleStartDate.getTime()).addDays(2);
 
 		if (messageStartDate < visibleEndDate && messageEndDate > visibleStartDate) {
 			vm.loadViewModel();
