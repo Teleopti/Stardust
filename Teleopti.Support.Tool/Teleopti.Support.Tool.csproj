@@ -98,6 +98,18 @@
     <Compile Include="Controls\ConnectionString\Summary.Designer.cs">
       <DependentUpon>Summary.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\General\SmoothLink.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\General\SmoothLink.Designer.cs">
+      <DependentUpon>SmoothLink.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\General\SmoothLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\General\SmoothLabel.Designer.cs">
+      <DependentUpon>SmoothLabel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\General\DBSelect.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -203,6 +215,7 @@
     <Content Include="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\ccc_Menu.png" />
     <None Include="Resources\warning.png" />
     <None Include="Resources\PlayHS.png" />
     <None Include="Resources\info1.png" />
