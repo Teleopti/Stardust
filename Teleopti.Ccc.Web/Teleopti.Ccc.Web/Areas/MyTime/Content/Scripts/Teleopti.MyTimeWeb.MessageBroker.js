@@ -1,7 +1,7 @@
 Teleopti.MyTimeWeb.MessageBroker = (function () {
 	function _addSubscription(options) {
 		var hub = $.connection.messageBrokerHub;
-		$.connection.hub.url = options.url + 'signalr';
+		$.connection.hub.url = options.url + '/signalr';
 
 		$.connection.hub.error(options.errCallback);
 
