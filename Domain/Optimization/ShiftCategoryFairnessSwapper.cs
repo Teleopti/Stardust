@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
@@ -27,10 +28,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "originalMember"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "responses")]
-		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, SchedulePartModifyAndRollbackService rollbackService)
+		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
+			SchedulePartModifyAndRollbackService rollbackService)
 		{
 			//_schedulingResultStateHolder.UseValidation = false;
-			var rules = _schedulingResultStateHolder.GetRulesToRun();
+			//var rules = _schedulingResultStateHolder.GetRulesToRun();
+        	var rules = NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder);
+
 			//smäller om färre i tvåan
 			for (var i = 0; i < suggestion.Group1.OriginalMembers.Count; i++)
 			{
@@ -40,13 +44,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var swapSucces = false;
 				foreach (var originalMember in suggestion.Group2.OriginalMembers)
 				{
-					var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, suggestion.Group2.OriginalMembers[i]);
+					var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, originalMember);
 					if (dayHasShiftCategory(day2, suggestion.ShiftCategoryFromGroup2))
 					{
 						var modifiedParts = _swapService.Swap(new List<IScheduleDay> { day1, day2 }, _dic);
-						var responses = _dic.Modify(ScheduleModifier.AutomaticScheduling, modifiedParts, rules,
-												new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
-						if(!responses.Any())
+						//var responses = _dic.Modify(ScheduleModifier.AutomaticScheduling, modifiedParts, rules,
+						//                        new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+						var responses = rollbackService.ModifyParts(modifiedParts);
+						if (!responses.Any())
 						{
 							swapSucces = true;
 							break;

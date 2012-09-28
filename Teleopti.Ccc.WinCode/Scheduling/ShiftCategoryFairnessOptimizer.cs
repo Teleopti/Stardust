@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public interface IShiftCategoryFairnessOptimizer
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, SchedulePartModifyAndRollbackService rollbackService);
+		bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
+			IGroupPageLight groupPage, SchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class ShiftCategoryFairnessOptimizer : IShiftCategoryFairnessOptimizer
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (!success)
 				{
 					blackList.Add(swapSuggestion);
+					rollbackService.Rollback();
 				}
 				else
 				{
@@ -85,11 +87,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					{
 						blackList.Add(swapSuggestion);
 						// do a rollback (if scheduled we need to resourcecalculate again??)
+						rollbackService.Rollback();
 					}
 					else
 					{
 						// if we did swap start all over again and we do this day until no more suggestions
 						blackList = new List<IShiftCategoryFairnessSwap>();
+						rollbackService.ClearModificationCollection();
 					}
 				}
 				//get another one could we get stucked here with new suggestions all the time?
