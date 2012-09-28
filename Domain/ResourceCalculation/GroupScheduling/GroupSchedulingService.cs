@@ -71,18 +71,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 					var teamSteadyStateSuccess = false;
 
-					if (teamSteadyStates[groupPerson.Name.FirstName])
+					//to hide pbi on default, remove when done
+					if (teamSteadyStates != null) 
 					{
-						if (!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, this, _rollbackService,
-																	   schedulingOptions, groupPersonBuilderForOptimization, matrixList,
-																	   _resultStateHolder.Schedules))
+						if (teamSteadyStates[groupPerson.Name.FirstName])
 						{
-							teamSteadyStates.Remove(groupPerson.Name.FirstName);
-							teamSteadyStates.Add(groupPerson.Name.FirstName, false);
-						}
+							if (!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, this, _rollbackService,schedulingOptions, groupPersonBuilderForOptimization, matrixList, _resultStateHolder.Schedules))
+							{
+								teamSteadyStates.Remove(groupPerson.Name.FirstName);
+								teamSteadyStates.Add(groupPerson.Name.FirstName, false);
+							}
 
-						else
-							teamSteadyStateSuccess = true;
+							else teamSteadyStateSuccess = true;
+						}
 					}
 
 					if(!teamSteadyStateSuccess)
@@ -90,8 +91,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 						_rollbackService.ClearModificationCollection();
 						if (!ScheduleOneDay(dateOnly, schedulingOptions, groupPerson, matrixList))
 						{
-							// add some information probably already added when trying to schedule
-							//AddResult(groupPerson, dateOnly, "XXCan't Schedule Team");
 							_rollbackService.Rollback();
 							_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
 						}
