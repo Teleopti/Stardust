@@ -48,7 +48,8 @@ namespace Teleopti.Support.Tool
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             panelContent.Controls.Remove(activeControl);
-            activeControl = new ManageDatabaseVersions(this);
+            Version version = new Version(7, 2, 368);
+            activeControl = new ManageDatabaseVersions(this, version);
             activeControl.Dock = DockStyle.Fill;
             this.PTracks.Hide();
             panelContent.Controls.Add(activeControl);
