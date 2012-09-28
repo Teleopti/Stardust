@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(
 				new List<IShiftCategoryFairnessCompareResult> {compare1, compare2});
 			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, gropPage);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, TODO);
 			_mocks.VerifyAll();
 		}
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(null);
 			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, gropPage);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, TODO);
 			_mocks.VerifyAll();
 		}
 
@@ -83,10 +83,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(toSwap);
-			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes)).Return(false);
+			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, TODO)).Return(false);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap> { toSwap })).Return(null);
 			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, gropPage);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, TODO);
 			_mocks.VerifyAll();
 		}
 
@@ -106,12 +106,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(toSwap);
-			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes)).Return(true);
+			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, TODO)).Return(true);
 			//second
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list2);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list2, new List<IShiftCategoryFairnessSwap>())).Return(null);
 			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, gropPage);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, TODO);
 			_mocks.VerifyAll();
 		}
 
@@ -131,12 +131,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(toSwap);
-			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes)).Return(true);
+			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, TODO)).Return(true);
 			//second
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list2);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list2, new List<IShiftCategoryFairnessSwap>{toSwap})).Return(null);
 			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, gropPage);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, TODO);
 			_mocks.VerifyAll();
 		}
 	}
