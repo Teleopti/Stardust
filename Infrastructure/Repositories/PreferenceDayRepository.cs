@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <param name="dateOnly">the date</param>
 		/// <param name="person">the person</param>
 		/// <param name="mustHave">must have</param>
-		/// <returns>true if successfully updated, false otherwise or no preference on that day</returns>
+		/// <returns>true if must have is true, otherwise false or no preference on that day</returns>
 	    public bool SetMustHave(DateOnly dateOnly, IPerson person, bool mustHave)
 	    {
 			if (person == null) throw new ArgumentNullException("person");
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (preferenceDay != null)
 			{
 				preferenceDay.Restriction.MustHave = mustHave;
-				return true;
+				return mustHave;
 			}
 			return false;
 	    }
