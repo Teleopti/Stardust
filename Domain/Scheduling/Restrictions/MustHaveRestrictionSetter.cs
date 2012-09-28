@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		/// <param name="dateOnly">the date</param>
 		/// <param name="person">the person</param>
 		/// <param name="mustHave">must have</param>
-		/// <returns>true if successfully updated, false otherwise or no preference on that day</returns>
+		/// <returns>true if must have is true, false otherwise or no preference on that day</returns>
 		bool SetMustHave(DateOnly dateOnly, IPerson person, bool mustHave);
 	}
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (preferenceDay != null)
 			{
 				preferenceDay.Restriction.MustHave = mustHave;
-				return true;
+				return mustHave;
 			}
 			return false;
 		}
