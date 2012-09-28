@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Teleopti.Support.Tool.DataLayer;
 
 namespace Teleopti.Support.Tool.Controls
 {
@@ -47,7 +48,20 @@ namespace Teleopti.Support.Tool.Controls
 
         private void RefreshDatabaseList()
         {
-            // TODO: Ladda prylar från Andreas metod....
+            listViewDatabases.BeginUpdate();
+            listViewDatabases.Items.Clear();
+            IList<Nhib> nhibs = XmlHandler.GetNihibSettings(textBoxNHibFolder.Text).ToList();
+            foreach (Nhib nhib in nhibs)
+            {
+                ListViewItem listViewItem = new ListViewItem(nhib.CCCDatabase);
+                listViewItem.ImageIndex = 0;
+                ListViewItem.ListViewSubItem listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, "Application");
+                listViewItem.SubItems.Add(listViewSubItem);
+                listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, nhib.CCCVersion);
+                listViewItem.SubItems.Add(listViewSubItem);
+                listViewDatabases.Items.Add(listViewItem);
+            }
+            listViewDatabases.EndUpdate();
         }
 
         private void buttonRefresh_Click(object sender, EventArgs e)
