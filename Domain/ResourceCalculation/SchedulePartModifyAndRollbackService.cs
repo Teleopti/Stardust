@@ -28,13 +28,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter)
+		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter)
         {
             IScheduleRange range = _stateHolder.Schedules[schedulePart.Person];
             IScheduleDay partToSave = range.ReFetch(schedulePart);
-            modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter);
+            var responses = modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter);
             _rollbackStack.Push(partToSave);
             _modificationStack.Push(schedulePart);
+        	return responses;
         }
 
         public void Rollback()
@@ -72,9 +73,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _modificationStack.Clear();
         }
 
-        private void modifyWithNoValidation(IScheduleDay schedulePart, ScheduleModifier modifier, IScheduleTagSetter scheduleTagSetter)
+    	public IEnumerable<IBusinessRuleResponse> ModifyParts(IEnumerable<IScheduleDay> scheduleParts)
+    	{
+    		var ret = new List<IBusinessRuleResponse>();
+    		foreach (var schedulePart in scheduleParts)
+    		{
+				ret.AddRange(Modify(schedulePart, _scheduleTagSetter));
+    		}
+    		return ret;
+    	}
+
+		private IEnumerable<IBusinessRuleResponse> modifyWithNoValidation(IScheduleDay schedulePart, ScheduleModifier modifier, IScheduleTagSetter scheduleTagSetter)
         {
-            _stateHolder.Schedules.Modify(modifier, schedulePart, NewBusinessRuleCollection.AllForScheduling(_stateHolder), _scheduleDayChangeCallback, scheduleTagSetter);
+           return _stateHolder.Schedules.Modify(modifier, schedulePart, NewBusinessRuleCollection.AllForScheduling(_stateHolder), _scheduleDayChangeCallback, scheduleTagSetter);
         }
     }
 }
