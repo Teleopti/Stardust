@@ -33,21 +33,17 @@ namespace Teleopti.Support.Tool
             this.PTracks = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.BClose = new System.Windows.Forms.Button();
-            this.LLUpdateDatabses = new System.Windows.Forms.LinkLabel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.pictureBoxBathingBall = new System.Windows.Forms.PictureBox();
-            this.labelHeader = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.linkManageDBVersions = new Teleopti.Support.Tool.Controls.General.SmoothLink();
             this.LLChangeDBConn = new Teleopti.Support.Tool.Controls.General.SmoothLink();
+            this.BClose = new System.Windows.Forms.Button();
+            this.pictureBoxBathingBall = new System.Windows.Forms.PictureBox();
+            this.labelHeader = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.PTracks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBathingBall)).BeginInit();
             this.SuspendLayout();
             // 
             // PTracks
             // 
-            this.PTracks.Controls.Add(this.label3);
-            this.PTracks.Controls.Add(this.LLUpdateDatabses);
             this.PTracks.Controls.Add(this.label2);
             this.PTracks.Controls.Add(this.label1);
             this.PTracks.Controls.Add(this.linkManageDBVersions);
@@ -75,6 +71,32 @@ namespace Teleopti.Support.Tool
             this.label1.TabIndex = 7;
             this.label1.Text = "Update database names and users in all connections and updates database reference" +
     "s in databases";
+            // 
+            // linkManageDBVersions
+            // 
+            this.linkManageDBVersions.AutoSize = true;
+            this.linkManageDBVersions.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkManageDBVersions.Location = new System.Drawing.Point(13, 67);
+            this.linkManageDBVersions.Name = "linkManageDBVersions";
+            this.linkManageDBVersions.Size = new System.Drawing.Size(323, 21);
+            this.linkManageDBVersions.TabIndex = 1;
+            this.linkManageDBVersions.TabStop = true;
+            this.linkManageDBVersions.Text = "Manage your Teleopti CCC database versions";
+            this.linkManageDBVersions.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            this.linkManageDBVersions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
+            // 
+            // LLChangeDBConn
+            // 
+            this.LLChangeDBConn.AutoSize = true;
+            this.LLChangeDBConn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LLChangeDBConn.Location = new System.Drawing.Point(13, 11);
+            this.LLChangeDBConn.Name = "LLChangeDBConn";
+            this.LLChangeDBConn.Size = new System.Drawing.Size(221, 21);
+            this.LLChangeDBConn.TabIndex = 0;
+            this.LLChangeDBConn.TabStop = true;
+            this.LLChangeDBConn.Text = "Change Database Connections";
+            this.LLChangeDBConn.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            this.LLChangeDBConn.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LLChangeDBConn_LinkClicked);
             // 
             // BClose
             // 
@@ -107,54 +129,6 @@ namespace Teleopti.Support.Tool
             this.labelHeader.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             this.labelHeader.UseCompatibleTextRendering = true;
             // 
-            // linkManageDBVersions
-            // 
-            this.linkManageDBVersions.AutoSize = true;
-            this.linkManageDBVersions.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkManageDBVersions.Location = new System.Drawing.Point(13, 67);
-            this.linkManageDBVersions.Name = "linkManageDBVersions";
-            this.linkManageDBVersions.Size = new System.Drawing.Size(323, 21);
-            this.linkManageDBVersions.TabIndex = 1;
-            this.linkManageDBVersions.TabStop = true;
-            this.linkManageDBVersions.Text = "Manage your Teleopti CCC database versions";
-            this.linkManageDBVersions.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            this.linkManageDBVersions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
-            // 
-            // LLChangeDBConn
-            // 
-            this.LLChangeDBConn.AutoSize = true;
-            this.LLChangeDBConn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LLChangeDBConn.Location = new System.Drawing.Point(13, 11);
-            this.LLChangeDBConn.Name = "LLChangeDBConn";
-            this.LLChangeDBConn.Size = new System.Drawing.Size(221, 21);
-            this.LLChangeDBConn.TabIndex = 0;
-            this.LLChangeDBConn.TabStop = true;
-            this.LLChangeDBConn.Text = "Change Database Connections";
-            this.LLChangeDBConn.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            this.LLChangeDBConn.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LLChangeDBConn_LinkClicked);
-            // 
-            // LLUpdateDatabses
-            // 
-            this.LLUpdateDatabses.AutoSize = true;
-            this.LLUpdateDatabses.Location = new System.Drawing.Point(26, 83);
-            this.LLUpdateDatabses.Name = "LLUpdateDatabses";
-            this.LLUpdateDatabses.Size = new System.Drawing.Size(214, 13);
-            this.LLUpdateDatabses.TabIndex = 9;
-            this.LLUpdateDatabses.TabStop = true;
-            this.LLUpdateDatabses.Text = "3. Update databases according to Nhib files";
-            this.LLUpdateDatabses.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LLUpdateDatabses_LinkClicked);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(38, 96);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(393, 13);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "Give you the possibility to update databases depending on the Nhib files you have" +
-    "";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -184,8 +158,6 @@ namespace Teleopti.Support.Tool
         SmoothLink LLChangeDBConn;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button BClose;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.LinkLabel LLUpdateDatabses;
         private SmoothLabel labelHeader;
         private System.Windows.Forms.PictureBox pictureBoxBathingBall;
 

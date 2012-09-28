@@ -100,11 +100,13 @@
     </Compile>
     <Compile Include="Controls\MainUpdateDatabases.cs">
       <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\General\SmoothLink.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\MainUpdateDatabases.Designer.cs">
       <DependentUpon>MainUpdateDatabases.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\General\SmoothLink.Designer.cs">
       <DependentUpon>SmoothLink.cs</DependentUpon>
     </Compile>
