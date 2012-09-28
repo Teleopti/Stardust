@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
     [TestFixture]
-    public class SwapFairnessTest
+    public class ShiftCategoryFairnessSwapFinderTest
     {
         private ShiftCategoryFairnessSwapFinder _target;
         private IList<IShiftCategoryFairnessCompareResult> _groupList;
@@ -528,5 +528,59 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                              };
 
         }
+
+		[Test]
+		public void ShouldReturnWhatIWant()
+		{
+			// In this test Group1 has to few Night and to many Day compared to others
+			// Group2 has to many Nights and too few days, we want a suggestion back that we should swap so it gets better
+			// to extend this test:
+			// if I can't use this for some reason this suggestion will come in the blacklist and the next suggestion should be
+			// swap night from group2 with noon in group1
+			var person2 = new Person();
+			_groupList = new List<IShiftCategoryFairnessCompareResult>
+			             	{
+			             		new ShiftCategoryFairnessCompareResult
+			             			{
+			             				ShiftCategoryFairnessCompareValues =
+			             					new List<IShiftCategoryFairnessCompareValue>
+			             						{
+			             							new ShiftCategoryFairnessCompareValue
+			             								{Original = 0.35, ComparedTo = 0.1, ShiftCategory = shiftCategoryDay},
+			             							new ShiftCategoryFairnessCompareValue
+			             								{Original = 0.15, ComparedTo = 0.15, ShiftCategory = shiftCategoryNoon},
+			             							new ShiftCategoryFairnessCompareValue
+			             								{Original = 0.50, ComparedTo = 0.75, ShiftCategory = shiftCategoryNight}
+			             						},
+			             				StandardDeviation = 0.14,
+			             				OriginalMembers = new List<IPerson> {person2, person2, person2}
+			             			},
+			             		new ShiftCategoryFairnessCompareResult
+			             			{
+			             				ShiftCategoryFairnessCompareValues =
+			             					new List<IShiftCategoryFairnessCompareValue>
+			             						{
+			             							new ShiftCategoryFairnessCompareValue
+			             								{Original = 0.1, ComparedTo = 0.35, ShiftCategory = shiftCategoryDay},
+			             							new ShiftCategoryFairnessCompareValue
+			             								{Original = 0.15, ComparedTo = 0.15, ShiftCategory = shiftCategoryNoon},
+			             							new ShiftCategoryFairnessCompareValue
+			             								{Original = 0.75, ComparedTo = 0.50, ShiftCategory = shiftCategoryNight}
+			             						},
+			             				StandardDeviation = 0.14,
+			             				OriginalMembers = new List<IPerson> {person, person, person}
+			             			}
+			             	};
+
+			_blackList = new List<IShiftCategoryFairnessSwap>();
+
+			var result = _target.GetGroupsToSwap(_groupList, _blackList);
+
+			Assert.That(result.ShiftCategoryFromGroup1, Is.EqualTo(shiftCategoryDay)); //HERE IT SUGGESTS NIGHT
+			Assert.That(result.ShiftCategoryFromGroup2, Is.EqualTo(shiftCategoryNight)); //HERE IT SUGGESTS NOON WHICH IS PERFECTLY FAIR SHOULD NEVER BE SWAPPED
+			
+			Assert.That(result.Group1,Is.EqualTo(_groupList[0]));
+			Assert.That(result.Group2,Is.EqualTo(_groupList[1]));
+		}
     }
 }

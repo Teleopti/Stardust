@@ -18,12 +18,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             _shiftCategoryFairnessCategorySorter = shiftCategoryFairnessCategorySorter;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")
-        , System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-            "CA1062:Validate arguments of public methods", MessageId = "1"),
-         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-             "CA1062:Validate arguments of public methods", MessageId = "0"),
-         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), 
+		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design","CA1062:Validate arguments of public methods", MessageId = "1"),
+         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design","CA1062:Validate arguments of public methods", MessageId = "0")]
         public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList,
                                                           IList<IShiftCategoryFairnessSwap> blacklist)
         {
