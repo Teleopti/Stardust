@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -9,8 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public interface IShiftCategoryFairnessOptimizer
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays,
-		                             IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage);
+		bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, SchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class ShiftCategoryFairnessOptimizer : IShiftCategoryFairnessOptimizer
@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays,
-			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage)
+		public bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, 
+			IGroupPageLight groupPage, SchedulePartModifyAndRollbackService rollbackService)
 		{
 			// as we do this from left to right we don't need a list of days that we should not try again
 			foreach (var selectedDay in selectedDays)
@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (backgroundWorker.CancellationPending)
 					return true;
 				// run that day
-				runDay(backgroundWorker, persons, selectedDays, selectedDay, matrixListForFairnessOptimization, groupPage);
+				runDay(backgroundWorker, persons, selectedDays, selectedDay, matrixListForFairnessOptimization, groupPage, rollbackService);
 			}
 			return true;
 		}
 
 		private void runDay(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, DateOnly dateOnly,
-			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage)
+			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, SchedulePartModifyAndRollbackService rollbackService)
 		{
 
 			// we need a rollback service somewhere too
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				//try to swap, in this we will have another class that schedule those that can't be swapped (if the number of members differ)
 				// it will keep track off the business rules too, if we brake some with the swap
-				var success = _shiftCategoryFairnessSwapper.TrySwap(swapSuggestion, dateOnly, matrixListForFairnessOptimization);
+				var success = _shiftCategoryFairnessSwapper.TrySwap(swapSuggestion, dateOnly, matrixListForFairnessOptimization, rollbackService);
 				if (!success)
 				{
 					blackList.Add(swapSuggestion);

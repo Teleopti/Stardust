@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IShiftCategoryFairnessSwapper
 	{
-		bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization);
+		bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, SchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class ShiftCategoryFairnessSwapper: IShiftCategoryFairnessSwapper
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "responses")]
-		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization)
+		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, SchedulePartModifyAndRollbackService rollbackService1)
 		{
 			//_schedulingResultStateHolder.UseValidation = false;
 			var rules = _schedulingResultStateHolder.GetRulesToRun();
