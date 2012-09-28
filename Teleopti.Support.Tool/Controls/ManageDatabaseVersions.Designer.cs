@@ -34,11 +34,19 @@
             System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCCAgg", 1);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageDatabaseVersions));
             this.listViewDatabases = new System.Windows.Forms.ListView();
-            this.labelManageDatabaseVersions = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.imageListIconsForListview = new System.Windows.Forms.ImageList(this.components);
+            this.labelNHibFolder = new System.Windows.Forms.Label();
+            this.textBoxNHibFolder = new System.Windows.Forms.TextBox();
+            this.buttonBrowse = new System.Windows.Forms.Button();
+            this.smoothLabelCurrentVersionIs = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
+            this.smoothLabelCurrentVersion = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
+            this.labelManageDatabaseVersions = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
+            this.buttonBack = new System.Windows.Forms.Button();
+            this.buttonUpdate = new System.Windows.Forms.Button();
+            this.buttonRefresh = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listViewDatabases
@@ -54,27 +62,15 @@
             listViewItem1,
             listViewItem2,
             listViewItem3});
-            this.listViewDatabases.Location = new System.Drawing.Point(5, 83);
+            this.listViewDatabases.Location = new System.Drawing.Point(14, 83);
             this.listViewDatabases.Margin = new System.Windows.Forms.Padding(5);
             this.listViewDatabases.Name = "listViewDatabases";
-            this.listViewDatabases.Size = new System.Drawing.Size(660, 131);
+            this.listViewDatabases.Size = new System.Drawing.Size(651, 199);
             this.listViewDatabases.SmallImageList = this.imageListIconsForListview;
             this.listViewDatabases.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewDatabases.TabIndex = 0;
             this.listViewDatabases.UseCompatibleStateImageBehavior = false;
             this.listViewDatabases.View = System.Windows.Forms.View.Details;
-            // 
-            // labelManageDatabaseVersions
-            // 
-            this.labelManageDatabaseVersions.AutoSize = true;
-            this.labelManageDatabaseVersions.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelManageDatabaseVersions.Location = new System.Drawing.Point(10, 10);
-            this.labelManageDatabaseVersions.Margin = new System.Windows.Forms.Padding(10);
-            this.labelManageDatabaseVersions.Name = "labelManageDatabaseVersions";
-            this.labelManageDatabaseVersions.Size = new System.Drawing.Size(198, 21);
-            this.labelManageDatabaseVersions.TabIndex = 28;
-            this.labelManageDatabaseVersions.Text = "Manage Database Versions";
-            this.labelManageDatabaseVersions.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             // 
             // columnHeaderName
             // 
@@ -96,14 +92,125 @@
             this.imageListIconsForListview.Images.SetKeyName(0, "database.png");
             this.imageListIconsForListview.Images.SetKeyName(1, "database_error.png");
             // 
+            // labelNHibFolder
+            // 
+            this.labelNHibFolder.AutoSize = true;
+            this.labelNHibFolder.Location = new System.Drawing.Point(11, 46);
+            this.labelNHibFolder.Margin = new System.Windows.Forms.Padding(5);
+            this.labelNHibFolder.Name = "labelNHibFolder";
+            this.labelNHibFolder.Size = new System.Drawing.Size(61, 13);
+            this.labelNHibFolder.TabIndex = 29;
+            this.labelNHibFolder.Text = "Nhib Folder";
+            // 
+            // textBoxNHibFolder
+            // 
+            this.textBoxNHibFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxNHibFolder.Location = new System.Drawing.Point(82, 43);
+            this.textBoxNHibFolder.Margin = new System.Windows.Forms.Padding(5);
+            this.textBoxNHibFolder.Name = "textBoxNHibFolder";
+            this.textBoxNHibFolder.Size = new System.Drawing.Size(548, 20);
+            this.textBoxNHibFolder.TabIndex = 30;
+            // 
+            // buttonBrowse
+            // 
+            this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonBrowse.Location = new System.Drawing.Point(638, 40);
+            this.buttonBrowse.Name = "buttonBrowse";
+            this.buttonBrowse.Size = new System.Drawing.Size(27, 23);
+            this.buttonBrowse.TabIndex = 31;
+            this.buttonBrowse.Text = "...";
+            this.buttonBrowse.UseVisualStyleBackColor = true;
+            // 
+            // smoothLabelCurrentVersionIs
+            // 
+            this.smoothLabelCurrentVersionIs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.smoothLabelCurrentVersionIs.AutoSize = true;
+            this.smoothLabelCurrentVersionIs.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.smoothLabelCurrentVersionIs.Location = new System.Drawing.Point(475, 10);
+            this.smoothLabelCurrentVersionIs.Name = "smoothLabelCurrentVersionIs";
+            this.smoothLabelCurrentVersionIs.Size = new System.Drawing.Size(123, 21);
+            this.smoothLabelCurrentVersionIs.TabIndex = 33;
+            this.smoothLabelCurrentVersionIs.Text = "Current Version:";
+            this.smoothLabelCurrentVersionIs.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.smoothLabelCurrentVersionIs.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            // 
+            // smoothLabelCurrentVersion
+            // 
+            this.smoothLabelCurrentVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.smoothLabelCurrentVersion.AutoSize = true;
+            this.smoothLabelCurrentVersion.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.smoothLabelCurrentVersion.ForeColor = System.Drawing.Color.Blue;
+            this.smoothLabelCurrentVersion.Location = new System.Drawing.Point(604, 10);
+            this.smoothLabelCurrentVersion.Name = "smoothLabelCurrentVersion";
+            this.smoothLabelCurrentVersion.Size = new System.Drawing.Size(61, 21);
+            this.smoothLabelCurrentVersion.TabIndex = 32;
+            this.smoothLabelCurrentVersion.Text = "7.2.368";
+            this.smoothLabelCurrentVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.smoothLabelCurrentVersion.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            // 
+            // labelManageDatabaseVersions
+            // 
+            this.labelManageDatabaseVersions.AutoSize = true;
+            this.labelManageDatabaseVersions.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelManageDatabaseVersions.Location = new System.Drawing.Point(10, 7);
+            this.labelManageDatabaseVersions.Margin = new System.Windows.Forms.Padding(10);
+            this.labelManageDatabaseVersions.Name = "labelManageDatabaseVersions";
+            this.labelManageDatabaseVersions.Size = new System.Drawing.Size(198, 21);
+            this.labelManageDatabaseVersions.TabIndex = 28;
+            this.labelManageDatabaseVersions.Text = "Manage Database Versions";
+            this.labelManageDatabaseVersions.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            // 
+            // buttonBack
+            // 
+            this.buttonBack.Location = new System.Drawing.Point(14, 292);
+            this.buttonBack.Margin = new System.Windows.Forms.Padding(5);
+            this.buttonBack.Name = "buttonBack";
+            this.buttonBack.Size = new System.Drawing.Size(84, 23);
+            this.buttonBack.TabIndex = 34;
+            this.buttonBack.Text = "< Back";
+            this.buttonBack.UseVisualStyleBackColor = true;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
+            // 
+            // buttonUpdate
+            // 
+            this.buttonUpdate.Location = new System.Drawing.Point(487, 292);
+            this.buttonUpdate.Margin = new System.Windows.Forms.Padding(5);
+            this.buttonUpdate.Name = "buttonUpdate";
+            this.buttonUpdate.Size = new System.Drawing.Size(84, 23);
+            this.buttonUpdate.TabIndex = 35;
+            this.buttonUpdate.Text = "Update";
+            this.buttonUpdate.UseVisualStyleBackColor = true;
+            // 
+            // buttonRefresh
+            // 
+            this.buttonRefresh.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.buttonRefresh.Location = new System.Drawing.Point(581, 292);
+            this.buttonRefresh.Margin = new System.Windows.Forms.Padding(5);
+            this.buttonRefresh.Name = "buttonRefresh";
+            this.buttonRefresh.Size = new System.Drawing.Size(84, 23);
+            this.buttonRefresh.TabIndex = 36;
+            this.buttonRefresh.Text = "Refresh";
+            this.buttonRefresh.UseVisualStyleBackColor = true;
+            // 
             // ManageDatabaseVersions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
+            this.Controls.Add(this.buttonRefresh);
+            this.Controls.Add(this.buttonUpdate);
+            this.Controls.Add(this.buttonBack);
+            this.Controls.Add(this.smoothLabelCurrentVersionIs);
+            this.Controls.Add(this.smoothLabelCurrentVersion);
+            this.Controls.Add(this.buttonBrowse);
+            this.Controls.Add(this.textBoxNHibFolder);
+            this.Controls.Add(this.labelNHibFolder);
             this.Controls.Add(this.labelManageDatabaseVersions);
             this.Controls.Add(this.listViewDatabases);
             this.Name = "ManageDatabaseVersions";
             this.Size = new System.Drawing.Size(670, 320);
+            this.Load += new System.EventHandler(this.ManageDatabaseVersions_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -117,5 +224,13 @@
         private System.Windows.Forms.ColumnHeader columnHeaderVersion;
         private General.SmoothLabel labelManageDatabaseVersions;
         private System.Windows.Forms.ImageList imageListIconsForListview;
+        private System.Windows.Forms.Label labelNHibFolder;
+        private System.Windows.Forms.TextBox textBoxNHibFolder;
+        private System.Windows.Forms.Button buttonBrowse;
+        private General.SmoothLabel smoothLabelCurrentVersion;
+        private General.SmoothLabel smoothLabelCurrentVersionIs;
+        private System.Windows.Forms.Button buttonBack;
+        private System.Windows.Forms.Button buttonUpdate;
+        private System.Windows.Forms.Button buttonRefresh;
     }
 }

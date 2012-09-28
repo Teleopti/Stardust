@@ -156,6 +156,7 @@ namespace Teleopti.Support.Tool
             this.Controls.Add(this.BClose);
             this.Controls.Add(this.panelContent);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.PTracks.ResumeLayout(false);

@@ -11,9 +11,23 @@ namespace Teleopti.Support.Tool.Controls
 {
     public partial class ManageDatabaseVersions : UserControl
     {
-        public ManageDatabaseVersions()
+        private readonly MainForm _mainForm;
+
+        public ManageDatabaseVersions(MainForm mainForm)
         {
+            _mainForm = mainForm;
             InitializeComponent();
+        }
+
+        private void ManageDatabaseVersions_Load(object sender, EventArgs e)
+        {
+            textBoxNHibFolder.Text = @"C:\";
+        }
+
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
+            _mainForm.ShowPTracks();
+            Hide();
         }
     }
 }
