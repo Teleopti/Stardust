@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var input = new MustHaveInput();
 
 			virtualSchedulePeriodProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
-			preferencePersister.Expect(x => x.MustHave(period, input)).Return(true);
+			preferencePersister.Stub(x => x.MustHave(input)).Return(true);
 
 			var result = target.MustHave(input);
 			result.Data.Should().Be.EqualTo(true);

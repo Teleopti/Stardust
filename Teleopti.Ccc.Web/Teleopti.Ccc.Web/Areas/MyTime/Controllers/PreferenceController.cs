@@ -73,9 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPostOrPut]
 		public virtual JsonResult MustHave(MustHaveInput input)
 		{
-			var selectedDay = input.Date;
-			var period = _virtualSchedulePeriodProvider.GetCurrentOrNextVirtualPeriodForDate(selectedDay);
-			return Json(_preferencePersister.MustHave(period, input));
+			return Json(_preferencePersister.MustHave(input));
 		}
 
 		[UnitOfWork]
