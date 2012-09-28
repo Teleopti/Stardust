@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -105,10 +101,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				Expect.Call(schedulePeriod.MustHavePreference)
 					.Return(maxHaveLimit);
 
+				Expect.Call(preferenceDay.RestrictionDate)
+					.Return(_dateOnly);
 				Expect.Call(preferenceDay.Restriction)
 					.Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(restriction.MustHave)
-					.Return(true);
+					.Return(true).Repeat.AtLeastOnce();
 
 				// currentHaveLimit = 1
 
@@ -148,10 +146,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				Expect.Call(schedulePeriod.MustHavePreference)
 					.Return(maxHaveLimit);
 
+				Expect.Call(preferenceDay.RestrictionDate)
+					.Return(_dateOnly);
 				Expect.Call(preferenceDay.Restriction)
 					.Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(restriction.MustHave)
-					.Return(true);
+					.Return(true).Repeat.AtLeastOnce();
 
 				// currentHaveLimit = 1
 

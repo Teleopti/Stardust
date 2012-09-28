@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date.AddDays(1), person2, _activity));
 
 			var repository = new PreferenceDayRepository(UnitOfWork);
-			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date.AddDays(2), person2, true);
+			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date.AddDays(3), person2, true);
 			Assert.AreEqual(false, result);
 		}
 
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var repository = new PreferenceDayRepository(UnitOfWork);
 			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date, person2, false);
-			Assert.AreEqual(true, result);
+			Assert.AreEqual(false, result);
 		}
 
         [Test]
