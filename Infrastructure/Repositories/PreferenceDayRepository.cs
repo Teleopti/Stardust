@@ -64,41 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
         }
 
-		/// <summary>
-		/// update must have for the specific preference day and specific person
-		/// </summary>
-		/// <param name="dateOnly">the date</param>
-		/// <param name="person">the person</param>
-		/// <param name="mustHave">must have</param>
-		/// <returns>true if successfully updated, false otherwise or no preference on that day</returns>
-	    public bool SetMustHave(DateOnly dateOnly, IPerson person, bool mustHave)
-	    {
-			if (person == null) throw new ArgumentNullException("person");
-			IPreferenceDay preferenceDay = null;
-			if (mustHave)
-			{
-				var schedulePeriod = person.VirtualSchedulePeriodOrNext(dateOnly).DateOnlyPeriod;
-				var preferenceDays = Find(schedulePeriod, person);
-				var nbrOfDaysWithMustHave = preferenceDays.Count(p => p.Restriction.MustHave);
-				var currentSchedulePeriod = person.SchedulePeriod(dateOnly);
-				if (nbrOfDaysWithMustHave < currentSchedulePeriod.MustHavePreference)
-					preferenceDay = preferenceDays.SingleOrDefault(d => d.RestrictionDate == dateOnly);
-			}
-			else
-			{
-				var preferenceDays = Find(dateOnly, person);
-				preferenceDay = preferenceDays.SingleOrDefault();
-			}
-
-			if (preferenceDay != null)
-			{
-				preferenceDay.Restriction.MustHave = mustHave;
-				return true;
-			}
-			return false;
-	    }
-
-		private IList<IPreferenceDay> Find(DateOnlyPeriod period, IPerson person)
+		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IPerson person)
 		{
 			// lock mode set to upgrade
 			var result = new List<IPreferenceDay>();

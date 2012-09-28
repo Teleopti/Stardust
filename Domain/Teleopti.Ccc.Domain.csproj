@@ -675,6 +675,7 @@
     <Compile Include="Scheduling\Restriction\AvailabilityDay.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityRotation.cs" />
     <Compile Include="Scheduling\Restriction\ActivityRestrictionTemplate.cs" />
+    <Compile Include="Scheduling\Restrictions\MustHaveRestrictionSetter.cs" />
     <Compile Include="Scheduling\Restriction\PreferenceRestrictionTemplate.cs" />
     <Compile Include="Scheduling\Restriction\RestrictionMustBe.cs" />
     <Compile Include="Scheduling\Restriction\RotationDay.cs" />

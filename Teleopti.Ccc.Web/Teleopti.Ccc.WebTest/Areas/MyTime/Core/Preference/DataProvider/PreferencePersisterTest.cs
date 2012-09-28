@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -26,7 +27,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
 			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
-			var target = new PreferencePersister(preferenceDayRepository, mapper, MockRepository.GenerateMock<ILoggedOnUser>());
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper,  mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
 			var input = new PreferenceDayInput();
 
 			mapper.Stub(x => x.Map<PreferenceDayInput, IPreferenceDay>(input)).Return(preferenceDay);
@@ -42,7 +44,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
-			var target = new PreferencePersister(MockRepository.GenerateMock<IPreferenceDayRepository>(), mapper, MockRepository.GenerateMock<ILoggedOnUser>());
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(MockRepository.GenerateMock<IPreferenceDayRepository>(), mapper, mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
 			var input = new PreferenceDayInput();
 			var inputResult = new PreferenceDayViewModel();
 
@@ -63,7 +66,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var input = new PreferenceDayInput { Date = DateOnly.Today };
 			var person = new Person();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, mustHaveRestrictionSetter, loggedOnUser);
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			preferenceDayRepository.Stub(x => x.Find(input.Date, person)).Return(new List<IPreferenceDay> { preferenceDay });
@@ -83,7 +87,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDay1 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction()) {UpdatedOn = DateTime.Now.AddHours(-1)};
 			var preferenceDay2 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction()) { UpdatedOn = DateTime.Now };
 			var preferenceDay3 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction()) {UpdatedOn = DateTime.Now.AddHours(-2)};
-			var target = new PreferencePersister(preferenceDayRepository, MockRepository.GenerateMock<IMappingEngine>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, MockRepository.GenerateMock<IMappingEngine>(), mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			preferenceDayRepository.Stub(x => x.Find(input.Date, null)).Return(new List<IPreferenceDay> { preferenceDay1, preferenceDay2, preferenceDay3 });
 
@@ -100,7 +105,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
 			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
 			var input = new PreferenceDayInput { Date = DateOnly.Today };
-			var target = new PreferencePersister(preferenceDayRepository, mapper, MockRepository.GenerateMock<ILoggedOnUser>());
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
 			var viewModel = new PreferenceDayViewModel();
 
 			preferenceDayRepository.Stub(x => x.Find(input.Date, null)).Return(new List<IPreferenceDay> { preferenceDay });
@@ -118,7 +124,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
 			var preferenceDay1 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
 			var preferenceDay2 = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
-			var target = new PreferencePersister(preferenceDayRepository, null, MockRepository.GenerateMock<ILoggedOnUser>());
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, null, mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			preferenceDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IPreferenceDay> { preferenceDay1, preferenceDay2 });
 
@@ -133,7 +140,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		{
 			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
 			var preferenceDay = MockRepository.GenerateMock<IPreferenceDay>();
-			var target = new PreferencePersister(preferenceDayRepository, null, MockRepository.GenerateMock<ILoggedOnUser>());
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, null, mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			preferenceDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IPreferenceDay> { preferenceDay });
 
@@ -146,7 +154,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldThrowHttp404OIfPreferenceDoesNotExists()
 		{
 			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
-			var target = new PreferencePersister(preferenceDayRepository, null, MockRepository.GenerateMock<ILoggedOnUser>());
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, null, mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			preferenceDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IPreferenceDay>());
 
@@ -163,7 +172,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var input = new PreferenceDayInput { Date = DateOnly.Today };
 			var person = new Person();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, mustHaveRestrictionSetter, loggedOnUser);
 			var preferenceRestriction = new PreferenceRestriction
 			                            	{
 			                            		StartTimeLimitation =
@@ -199,7 +209,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var input = new PreferenceDayInput { Date = DateOnly.Today };
 			var person = new Person();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, mustHaveRestrictionSetter, loggedOnUser);
 			var preferenceRestriction = new PreferenceRestriction
 			                            	{
 				MustHave = true
@@ -225,7 +236,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDay = new PreferenceDay(person, DateOnly.Today, preferenceRestriction) {TemplateName = "Extended"};
 			var input = new PreferenceDayInput { Date = DateOnly.Today };
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, mustHaveRestrictionSetter, loggedOnUser);
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			preferenceDayRepository.Stub(x => x.Find(input.Date, person)).Return(new List<IPreferenceDay> { preferenceDay });
@@ -243,13 +255,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
 			var person = MockRepository.GenerateMock<IPerson>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, mustHaveRestrictionSetter, loggedOnUser);
 			var input = new MustHaveInput { Date = DateOnly.Today, MustHave = true };
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			target.MustHave(input);
-			preferenceDayRepository.AssertWasCalled(x => x.SetMustHave(input.Date, person, input.MustHave));
+			mustHaveRestrictionSetter.AssertWasCalled(x => x.SetMustHave(input.Date, person, input.MustHave));
 		}
 	}
 }
