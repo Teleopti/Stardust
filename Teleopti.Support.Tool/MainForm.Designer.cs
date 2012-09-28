@@ -61,9 +61,9 @@ namespace Teleopti.Support.Tool
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(25, 108);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(163, 13);
+            this.label2.Size = new System.Drawing.Size(225, 13);
             this.label2.TabIndex = 8;
-            this.label2.Text = "List your Teleopti CCC databases";
+            this.label2.Text = "List and manage your Teleopti CCC databases";
             // 
             // label1
             // 
@@ -82,10 +82,10 @@ namespace Teleopti.Support.Tool
             this.linkManageDBVersions.Location = new System.Drawing.Point(5, 82);
             this.linkManageDBVersions.Margin = new System.Windows.Forms.Padding(5);
             this.linkManageDBVersions.Name = "linkManageDBVersions";
-            this.linkManageDBVersions.Size = new System.Drawing.Size(323, 21);
+            this.linkManageDBVersions.Size = new System.Drawing.Size(231, 21);
             this.linkManageDBVersions.TabIndex = 1;
             this.linkManageDBVersions.TabStop = true;
-            this.linkManageDBVersions.Text = "Manage your Teleopti CCC database versions";
+            this.linkManageDBVersions.Text = "Teleopti CCC Database Versions";
             this.linkManageDBVersions.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             this.linkManageDBVersions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 

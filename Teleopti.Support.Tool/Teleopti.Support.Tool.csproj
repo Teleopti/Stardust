@@ -152,6 +152,12 @@
     <Compile Include="Controls\MainPatch.Designer.cs">
       <DependentUpon>MainPatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ManageDatabaseVersions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ManageDatabaseVersions.Designer.cs">
+      <DependentUpon>ManageDatabaseVersions.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataLayer\DBHelper.cs" />
     <Compile Include="DataLayer\IOHelper.cs" />
     <Compile Include="DataLayer\Nhib.cs" />
@@ -193,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\MainPatch.resx">
       <DependentUpon>MainPatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ManageDatabaseVersions.resx">
+      <DependentUpon>ManageDatabaseVersions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

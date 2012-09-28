@@ -47,14 +47,11 @@ namespace Teleopti.Support.Tool
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            //MessageBox.Show("Not Implemeted");
-
-            /*
-            this.Controls.Remove(activeControl);
+            panelContent.Controls.Remove(activeControl);
+            activeControl = new ManageDatabaseVersions();
+            activeControl.Dock = DockStyle.Fill;
             this.PTracks.Hide();
-            activeControl = new MainPatch(this);
-            this.Controls.Add(activeControl);
-            */
+            panelContent.Controls.Add(activeControl);
         }
 
         

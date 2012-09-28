@@ -41,7 +41,7 @@ namespace Teleopti.Support.Tool.Controls
             this.BNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.BNext.BackColor = System.Drawing.SystemColors.Control;
             this.BNext.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.BNext.Location = new System.Drawing.Point(438, 340);
+            this.BNext.Location = new System.Drawing.Point(505, 292);
             this.BNext.Margin = new System.Windows.Forms.Padding(5);
             this.BNext.Name = "BNext";
             this.BNext.Size = new System.Drawing.Size(75, 23);
@@ -53,7 +53,7 @@ namespace Teleopti.Support.Tool.Controls
             // BBack
             // 
             this.BBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BBack.Location = new System.Drawing.Point(353, 340);
+            this.BBack.Location = new System.Drawing.Point(420, 292);
             this.BBack.Margin = new System.Windows.Forms.Padding(5);
             this.BBack.Name = "BBack";
             this.BBack.Size = new System.Drawing.Size(75, 23);
@@ -65,7 +65,7 @@ namespace Teleopti.Support.Tool.Controls
             // BInstall
             // 
             this.BInstall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BInstall.Location = new System.Drawing.Point(523, 340);
+            this.BInstall.Location = new System.Drawing.Point(590, 292);
             this.BInstall.Margin = new System.Windows.Forms.Padding(5);
             this.BInstall.Name = "BInstall";
             this.BInstall.Size = new System.Drawing.Size(75, 23);
@@ -84,7 +84,7 @@ namespace Teleopti.Support.Tool.Controls
             this.Controls.Add(this.BNext);
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "MainChangeDBSettings";
-            this.Size = new System.Drawing.Size(603, 368);
+            this.Size = new System.Drawing.Size(670, 320);
             this.ResumeLayout(false);
 
         }
