@@ -29,67 +29,52 @@ namespace Teleopti.Support.Tool.Controls.ConnectionString
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.dbSelect = new Teleopti.Support.Tool.Controls.General.DBSelect();
+            this.labelConnectionStringSettings = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.sqlAccount = new Teleopti.Support.Tool.Controls.General.SqlAccount();
-            this.CBRunInDevEnv = new System.Windows.Forms.CheckBox();
-            this.groupBox1.SuspendLayout();
+            this.dbSelect = new Teleopti.Support.Tool.Controls.General.DBSelect();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // labelConnectionStringSettings
             // 
-            this.groupBox1.AutoSize = true;
-            this.groupBox1.BackColor = System.Drawing.SystemColors.Window;
-            this.groupBox1.Controls.Add(this.dbSelect);
-            this.groupBox1.Controls.Add(this.sqlAccount);
-            this.groupBox1.Controls.Add(this.CBRunInDevEnv);
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(627, 237);
-            this.groupBox1.TabIndex = 23;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Connection String Settings";
-            // 
-            // dbSelect
-            // 
-            this.dbSelect.BackColor = System.Drawing.SystemColors.Window;
-            this.dbSelect.Location = new System.Drawing.Point(13, 43);
-            this.dbSelect.Name = "dbSelect";
-            this.dbSelect.Size = new System.Drawing.Size(285, 158);
-            this.dbSelect.TabIndex = 0;
+            this.labelConnectionStringSettings.AutoSize = true;
+            this.labelConnectionStringSettings.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelConnectionStringSettings.Location = new System.Drawing.Point(10, 10);
+            this.labelConnectionStringSettings.Margin = new System.Windows.Forms.Padding(10);
+            this.labelConnectionStringSettings.Name = "labelConnectionStringSettings";
+            this.labelConnectionStringSettings.Size = new System.Drawing.Size(195, 21);
+            this.labelConnectionStringSettings.TabIndex = 27;
+            this.labelConnectionStringSettings.Text = "Connection String Settings";
+            this.labelConnectionStringSettings.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             // 
             // sqlAccount
             // 
             this.sqlAccount.BackColor = System.Drawing.SystemColors.Window;
             this.sqlAccount.ConnectedColor = System.Drawing.SystemColors.ControlText;
-            this.sqlAccount.Location = new System.Drawing.Point(305, 40);
+            this.sqlAccount.Location = new System.Drawing.Point(320, 44);
             this.sqlAccount.Name = "sqlAccount";
-            this.sqlAccount.Size = new System.Drawing.Size(304, 143);
+            this.sqlAccount.Size = new System.Drawing.Size(300, 160);
             this.sqlAccount.SqlUserPassword = "";
             this.sqlAccount.TabIndex = 1;
             this.sqlAccount.TestConnection = "";
             // 
-            // CBRunInDevEnv
+            // dbSelect
             // 
-            this.CBRunInDevEnv.AutoSize = true;
-            this.CBRunInDevEnv.Location = new System.Drawing.Point(70, -20);
-            this.CBRunInDevEnv.Name = "CBRunInDevEnv";
-            this.CBRunInDevEnv.Size = new System.Drawing.Size(142, 17);
-            this.CBRunInDevEnv.TabIndex = 34;
-            this.CBRunInDevEnv.Text = "Run in Dev Environment";
-            this.CBRunInDevEnv.UseVisualStyleBackColor = true;
-            this.CBRunInDevEnv.Visible = false;
+            this.dbSelect.BackColor = System.Drawing.SystemColors.Window;
+            this.dbSelect.Location = new System.Drawing.Point(14, 44);
+            this.dbSelect.Name = "dbSelect";
+            this.dbSelect.Size = new System.Drawing.Size(300, 160);
+            this.dbSelect.TabIndex = 0;
             // 
             // ConnectionSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.labelConnectionStringSettings);
+            this.Controls.Add(this.sqlAccount);
+            this.Controls.Add(this.dbSelect);
             this.Name = "ConnectionSettings";
             this.Size = new System.Drawing.Size(634, 246);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -97,10 +82,9 @@ namespace Teleopti.Support.Tool.Controls.ConnectionString
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox CBRunInDevEnv;
         private SqlAccount sqlAccount;
-       
         private DBSelect dbSelect;
+        private SmoothLabel labelConnectionStringSettings;
+
     }
 }

@@ -35,10 +35,13 @@ namespace Teleopti.Support.Tool
 
         private void LLChangeDBConn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            this.Controls.Remove(activeControl);
+            //this.Controls.Remove(activeControl);
+            panelContent.Controls.Remove(activeControl);
             activeControl = new MainChangeDBSettings(this);
+            activeControl.Dock = DockStyle.Fill;
             this.PTracks.Hide();
-            this.Controls.Add(activeControl);
+            panelContent.Controls.Add(activeControl);
+            //this.Controls.Add(activeControl);
     
         }
 

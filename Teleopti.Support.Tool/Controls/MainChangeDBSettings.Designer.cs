@@ -38,28 +38,35 @@ namespace Teleopti.Support.Tool.Controls
             // 
             // BNext
             // 
-            this.BNext.BackColor = System.Drawing.SystemColors.Window;
-            this.BNext.Location = new System.Drawing.Point(515, 386);
+            this.BNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BNext.BackColor = System.Drawing.SystemColors.Control;
+            this.BNext.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.BNext.Location = new System.Drawing.Point(438, 340);
+            this.BNext.Margin = new System.Windows.Forms.Padding(5);
             this.BNext.Name = "BNext";
             this.BNext.Size = new System.Drawing.Size(75, 23);
             this.BNext.TabIndex = 0;
-            this.BNext.Text = "Next";
+            this.BNext.Text = "Next >";
             this.BNext.UseVisualStyleBackColor = false;
             this.BNext.Click += new System.EventHandler(this.BNext_Click);
             // 
             // BBack
             // 
-            this.BBack.Location = new System.Drawing.Point(418, 385);
+            this.BBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BBack.Location = new System.Drawing.Point(353, 340);
+            this.BBack.Margin = new System.Windows.Forms.Padding(5);
             this.BBack.Name = "BBack";
             this.BBack.Size = new System.Drawing.Size(75, 23);
             this.BBack.TabIndex = 1;
-            this.BBack.Text = "Back";
+            this.BBack.Text = "< Back";
             this.BBack.UseVisualStyleBackColor = true;
             this.BBack.Click += new System.EventHandler(this.BBack_Click);
             // 
             // BInstall
             // 
-            this.BInstall.Location = new System.Drawing.Point(515, 386);
+            this.BInstall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BInstall.Location = new System.Drawing.Point(523, 340);
+            this.BInstall.Margin = new System.Windows.Forms.Padding(5);
             this.BInstall.Name = "BInstall";
             this.BInstall.Size = new System.Drawing.Size(75, 23);
             this.BInstall.TabIndex = 2;
@@ -68,15 +75,16 @@ namespace Teleopti.Support.Tool.Controls
             this.BInstall.Visible = false;
             this.BInstall.Click += new System.EventHandler(this.BInstall_Click);
             // 
-            // MainChangeDBConn
+            // MainChangeDBSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.BInstall);
             this.Controls.Add(this.BBack);
             this.Controls.Add(this.BNext);
-            this.Name = "MainChangeDBConn";
-            this.Size = new System.Drawing.Size(700, 450);
+            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Name = "MainChangeDBSettings";
+            this.Size = new System.Drawing.Size(603, 368);
             this.ResumeLayout(false);
 
         }
