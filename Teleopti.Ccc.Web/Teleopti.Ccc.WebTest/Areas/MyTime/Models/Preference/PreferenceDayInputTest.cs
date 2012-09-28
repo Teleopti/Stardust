@@ -114,5 +114,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.Preference
 			result.Count().Should().Be(2);
 			result.First().ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.WorkTime));
 		}
+
+		[Test]
+		public void ShouldNotAcceptEmptyForm()
+		{
+			var input = new PreferenceDayInput();
+
+			var result = input.Validate(null).ToArray();
+
+			result.Count().Should().Be(1);
+			result.First().ErrorMessage.Should().Be(string.Format(Resources.EmptyRequest, Resources.ExtendedPreferences));
+		}
 	}
 }
