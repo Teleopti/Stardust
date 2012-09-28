@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Assert.AreEqual(first.Name, "Shift Allowance");
 				Assert.IsFalse(first.IsDeleted);
 				Assert.AreEqual(first.LayerCollection.Count, 0);
+
 			}
 		}
 
