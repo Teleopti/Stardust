@@ -5,7 +5,7 @@
 update dbo.applicationFunction
 set
 	FunctionCode='ResReportAdherencePerDay',
-	FunctionDescription='xxResReportAgentScheduleAdherance'
+	FunctionDescription='xxResReportAdherencePerDay'
 where ForeignId='D1ADE4AC-284C-4925-AEDD-A193676DBD2F'
 
 ----------------  
