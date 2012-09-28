@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
-			IGroupPageLight groupPage, SchedulePartModifyAndRollbackService rollbackService);
+			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class ShiftCategoryFairnessOptimizer : IShiftCategoryFairnessOptimizer
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, 
-			IGroupPageLight groupPage, SchedulePartModifyAndRollbackService rollbackService)
+			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			// as we do this from left to right we don't need a list of days that we should not try again
 			foreach (var selectedDay in selectedDays)
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		private void runDay(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, DateOnly dateOnly,
-			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, SchedulePartModifyAndRollbackService rollbackService)
+			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 
 			// we need a rollback service somewhere too

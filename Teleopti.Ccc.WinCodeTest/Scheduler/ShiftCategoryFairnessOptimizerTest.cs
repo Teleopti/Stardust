@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -7,7 +6,6 @@ using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
-using System.Linq;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -20,6 +18,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IShiftCategoryFairnessSwapFinder _shiftCategoryFairnessSwapFinder;
 		private ShiftCategoryFairnessOptimizer _target;
 		private BackgroundWorker _bgWorker;
+		private ISchedulePartModifyAndRollbackService _rollbackService;
+
 
 		[SetUp]
 		public void Setup()
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_shiftCategoryFairnessSwapper = _mocks.DynamicMock<IShiftCategoryFairnessSwapper>();
 			_shiftCategoryFairnessSwapFinder = _mocks.StrictMock<IShiftCategoryFairnessSwapFinder>();
 			_target = new ShiftCategoryFairnessOptimizer(_shiftCategoryFairnessAggregateManager, _shiftCategoryFairnessSwapper, _shiftCategoryFairnessSwapFinder);
-
+			_rollbackService = _mocks.DynamicMock<ISchedulePartModifyAndRollbackService>();
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(
 				new List<IShiftCategoryFairnessCompareResult> {compare1, compare2});
 			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, TODO);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, _rollbackService);
 			_mocks.VerifyAll();
 		}
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(null);
 			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, TODO);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, _rollbackService);
 			_mocks.VerifyAll();
 		}
 
@@ -83,10 +83,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(toSwap);
-			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, TODO, TODO)).Return(false);
+			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, _rollbackService)).Return(false);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap> { toSwap })).Return(null);
 			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, TODO);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, _rollbackService);
 			_mocks.VerifyAll();
 		}
 
@@ -106,12 +106,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(toSwap);
-			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, TODO, TODO)).Return(true);
+			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, _rollbackService)).Return(true);
 			//second
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list2);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list2, new List<IShiftCategoryFairnessSwap>())).Return(null);
 			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, TODO);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, _rollbackService);
 			_mocks.VerifyAll();
 		}
 
@@ -131,12 +131,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(toSwap);
-			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, TODO, TODO)).Return(true);
+			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, _rollbackService)).Return(true);
 			//second
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list2);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list2, new List<IShiftCategoryFairnessSwap>{toSwap})).Return(null);
 			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, TODO);
+			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, _rollbackService);
 			_mocks.VerifyAll();
 		}
 	}

@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_stateHolder.UseValidation).Return(true).Repeat.AtLeastOnce();
 			_mocks.ReplayAll();
 
-			var result = _target.ModifyParts(new List<IScheduleDay>{schedulePart, schedulePart2}, _tagSetter );
+			var result = _target.ModifyParts(new List<IScheduleDay>{schedulePart, schedulePart2} );
 			
 			Assert.AreEqual(2, _target.StackLength);
 			Assert.AreEqual(2, _target.ModificationCollection.Count());

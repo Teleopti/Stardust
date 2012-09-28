@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IShiftCategoryFairnessSwapper
 	{
-		bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, SchedulePartModifyAndRollbackService rollbackService);
+		bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly,
+		             IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
+		             ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class ShiftCategoryFairnessSwapper: IShiftCategoryFairnessSwapper
@@ -29,27 +28,33 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "originalMember"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "responses")]
 		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
-			SchedulePartModifyAndRollbackService rollbackService)
+			ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			//_schedulingResultStateHolder.UseValidation = false;
-			//var rules = _schedulingResultStateHolder.GetRulesToRun();
-        	var rules = NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder);
+			// start with group with less members and if there are more in the other reschedule them
+        	var groupOne = suggestion.Group1;
+        	var catOne = suggestion.ShiftCategoryFromGroup1;
+			var groupTwo = suggestion.Group2;
+			var catTwo = suggestion.ShiftCategoryFromGroup2;
 
-			//smäller om färre i tvåan
-			for (var i = 0; i < suggestion.Group1.OriginalMembers.Count; i++)
+			if(groupOne.OriginalMembers.Count > groupTwo.OriginalMembers.Count)
 			{
-				var day1 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, suggestion.Group1.OriginalMembers[i]);
-				if (!dayHasShiftCategory(day1, suggestion.ShiftCategoryFromGroup1))
+				groupOne = suggestion.Group2;
+				catOne = suggestion.ShiftCategoryFromGroup2;
+				groupTwo = suggestion.Group1;
+				catTwo = suggestion.ShiftCategoryFromGroup1;
+			}
+			foreach (var groupOneMember in groupOne.OriginalMembers)
+			{
+				var day1 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, groupOneMember);
+				if (!dayHasShiftCategory(day1, catOne))
 					return false;
 				var swapSucces = false;
-				foreach (var originalMember in suggestion.Group2.OriginalMembers)
+				foreach (var originalMember in groupTwo.OriginalMembers)
 				{
 					var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, originalMember);
-					if (dayHasShiftCategory(day2, suggestion.ShiftCategoryFromGroup2))
+					if (dayHasShiftCategory(day2, catTwo))
 					{
 						var modifiedParts = _swapService.Swap(new List<IScheduleDay> { day1, day2 }, _dic);
-						//var responses = _dic.Modify(ScheduleModifier.AutomaticScheduling, modifiedParts, rules,
-						//                        new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 						var responses = rollbackService.ModifyParts(modifiedParts);
 						if (!responses.Any())
 						{

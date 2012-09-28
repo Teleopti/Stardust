@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
                     runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
 
-				var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, tagSetter);
+				var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
 				runFairness(selectedPersons, selectedDays, optimizerPreferences.Extra.GroupPageOnTeam, rollbackService);
             }
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
