@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Common;
+﻿using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -14,7 +15,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// <returns></returns>
         public static IPartTimePercentage CreatePartTimePercentage(string name)
         {
-            return new PartTimePercentage(name);
+        	var partTimePercentage = new PartTimePercentage(name);
+			partTimePercentage.SetId(Guid.Empty);
+        	return partTimePercentage;
         }
     }
 }

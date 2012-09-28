@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Common;
+﻿using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -14,7 +15,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// <returns></returns>
         public static IContract CreateContract(string name)
         {
-            return new Contract(name);
+        	var contract = new Contract(name);
+			contract.SetId(Guid.Empty);
+        	return contract;
         }
     }
 }
