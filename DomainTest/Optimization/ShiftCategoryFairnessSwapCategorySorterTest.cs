@@ -74,7 +74,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldNotReturnBlacklistedCategory()
         {
-            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroupCategories,_numberOfGroups, _blacklist);
+            var list = new List<IShiftCategoryFairnessCompareResult>();
+            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroupCategories,_numberOfGroups, _blacklist, ref list);
             Assert.AreNotEqual(_shiftCategoryDay, result.First());
         }
     }

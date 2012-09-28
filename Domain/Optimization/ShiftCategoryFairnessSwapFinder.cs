@@ -11,6 +11,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class ShiftCategoryFairnessSwapFinder : IShiftCategoryFairnessSwapFinder
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
+        public static List<IShiftCategoryFairnessCompareResult> BlacklistedGroups = new List<IShiftCategoryFairnessCompareResult>(); 
         private readonly IShiftCategoryFairnessCategorySorter _shiftCategoryFairnessCategorySorter;
 
         public ShiftCategoryFairnessSwapFinder(IShiftCategoryFairnessCategorySorter shiftCategoryFairnessCategorySorter)
@@ -24,18 +27,21 @@ namespace Teleopti.Ccc.Domain.Optimization
         public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList,
                                                           IList<IShiftCategoryFairnessSwap> blacklist)
         {
+            var orderedList = groupList.Except(BlacklistedGroups).OrderByDescending(g => g.StandardDeviation);
             if (groupList.Count < 2) return null;
 
-            var orderedList = groupList.OrderByDescending(g => g.StandardDeviation);
             var selectedGroup = orderedList.First();
-
             var selectedGroupBlacklistedSwapCount = blacklist.Count(b => b.Group1 == selectedGroup);
             var categoryCount = selectedGroup.ShiftCategoryFairnessCompareValues.Count(g => g.ComparedTo > 0 || g.Original > 0) - 1;
 
             // ES: if all swaps for selectedGroup have been blacklisted
             if (selectedGroupBlacklistedSwapCount >= (categoryCount*(categoryCount + 1)/2)*(groupList.Count - 1))
+            {
+                if (!BlacklistedGroups.Contains(selectedGroup)) BlacklistedGroups.Add(selectedGroup);
                 return GetGroupsToSwap(groupList.Skip(1).ToList(), blacklist);
+            }
 
+		    var firstCount = BlacklistedGroups.Count;
             // ES: get ordered list, check categories against blacklist
             var selectedGroupCategories =
                 _shiftCategoryFairnessCategorySorter.GetGroupCategories(selectedGroup,
@@ -45,11 +51,15 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                                                 .OrderByDescending(
                                                                                 g => g.Original),
                                                                         orderedList.Count(),
-                                                                        blacklist).ToList();
+                                                                        blacklist, ref BlacklistedGroups).ToList();
+            if (firstCount < BlacklistedGroups.Count)
+                return GetGroupsToSwap(groupList, blacklist);
 
             var selectedGroupHighestCategory = selectedGroupCategories.First().ShiftCategory;
             var selectedGroupLowestCategory = selectedGroupCategories.Last().ShiftCategory;
-            
+		    var selectedGroupHighestCategoryOriginal = selectedGroupCategories.First().Original;
+		    var selectedGroupLowestCategoryOriginal = selectedGroupCategories.Last().Original;
+
             var returnGroup =
                 orderedList.Except(new List<IShiftCategoryFairnessCompareResult> {selectedGroup}).SkipWhile(
                     b => (blacklist.Contains(new ShiftCategoryFairnessSwap
@@ -97,6 +107,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                               >= returnGroupLowestCategoryOrignial - currentGroupLowestCategoryOrignial
                               && returnGroupHighestCategoryOriginal >= currentGroupHighestCategoryOriginal
                               && returnGroupLowestCategoryOrignial <= currentGroupLowestCategoryOrignial
+                              && currentGroupHighestCategoryOriginal < selectedGroupHighestCategoryOriginal
+                              && currentGroupLowestCategoryOrignial > selectedGroupLowestCategoryOriginal
                                   ? currentGroup
                                   : returnGroup;
             }
