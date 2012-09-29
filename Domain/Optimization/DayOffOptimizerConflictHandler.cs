@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -27,23 +28,18 @@ namespace Teleopti.Ccc.Domain.Optimization
         public bool HandleConflict(ISchedulingOptions schedulingOptions, DateOnly dateOnly)
         {
             var result = false;
-
             var scheduleDayBefore = _scheduleMatrixPro.GetScheduleDayByKey(dateOnly.AddDays(-1));
             
             if(_scheduleMatrixPro.UnlockedDays.Contains(scheduleDayBefore))
             {
                 _rollbackService.ClearModificationCollection();
-
-                scheduleDayBefore.DaySchedulePart().DeleteMainShift(scheduleDayBefore.DaySchedulePart());
-
-                _rollbackService.Modify(scheduleDayBefore.DaySchedulePart());
-
-                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayBefore.DaySchedulePart(), schedulingOptions);
-				result = _scheduleService.SchedulePersonOnDay(scheduleDayBefore.DaySchedulePart(), schedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer, null);
-
-                if (result) return true;
+            	IScheduleDay scheduleDay = scheduleDayBefore.DaySchedulePart();
+				result = tryFix(dateOnly, scheduleDay, schedulingOptions);
+                if (result) 
+					return true;
 
                 _rollbackService.Rollback();
+            	_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
             }
 
             var scheduleDayAfter = _scheduleMatrixPro.GetScheduleDayByKey(dateOnly.AddDays(1));
@@ -51,19 +47,29 @@ namespace Teleopti.Ccc.Domain.Optimization
             if(_scheduleMatrixPro.UnlockedDays.Contains(scheduleDayAfter))
             {
                 _rollbackService.ClearModificationCollection();
-
-                scheduleDayAfter.DaySchedulePart().DeleteMainShift(scheduleDayAfter.DaySchedulePart());
-
-                _rollbackService.Modify(scheduleDayAfter.DaySchedulePart());
-
-                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayAfter.DaySchedulePart(), schedulingOptions);
-				result = _scheduleService.SchedulePersonOnDay(scheduleDayAfter.DaySchedulePart(), schedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer,null);
-
+				IScheduleDay scheduleDay = scheduleDayAfter.DaySchedulePart();
+				result = tryFix(dateOnly, scheduleDay, schedulingOptions);
                 if (!result)
-                    _rollbackService.Rollback();
+                {
+					_rollbackService.Rollback();
+					_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+                }    
             }
 
             return result;
         }
+
+		private bool tryFix(DateOnly dateOnly, IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions)
+		{
+			var originalDay = (IScheduleDay)scheduleDay.Clone();
+			scheduleDay.DeleteMainShift(scheduleDay);
+			_rollbackService.Modify(scheduleDay);
+			_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null,
+														new List<IScheduleDay>(), new List<IScheduleDay> { originalDay });
+			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
+			bool result = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer, null);
+
+			return result;
+		}
     }
 }
