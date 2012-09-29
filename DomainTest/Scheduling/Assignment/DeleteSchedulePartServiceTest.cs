@@ -108,9 +108,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.Any();
                 Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
-
-				//Expect.Call(() => _rollbackService.Modify(_part1)).Repeat.AtLeastOnce();
-				//Expect.Call(() => _rollbackService.Modify(_part2)).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
 
             }
@@ -362,5 +359,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             Assert.AreEqual(1, ret.Count);
         }
+		
     }
 }

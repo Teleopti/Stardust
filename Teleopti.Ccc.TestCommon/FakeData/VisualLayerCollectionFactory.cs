@@ -18,6 +18,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return retColl;
 		}
 
+		public static IVisualLayerCollection CreateForWorkShift(IPerson person, TimeSpan start, TimeSpan end, IActivity activity)
+		{
+			IList<IVisualLayer> coll = createVisualLayerCollection(person, start, end, activity);
+			IVisualLayerCollection retColl = new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
+			return retColl;
+		}
+
 		public static IVisualLayerCollection CreateForWorkShift(IPerson person, TimeSpan start, TimeSpan end, TimePeriod lunch)
 		{
 			VisualLayerProjectionService projSvc = new VisualLayerProjectionService(person);
@@ -45,6 +52,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			IList<IVisualLayer> coll = new List<IVisualLayer>();
 			coll.Add(factory.CreateShiftSetupLayer(new Activity("for test"), new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)),person));
+			return coll;
+		}
+
+		private static IList<IVisualLayer> createVisualLayerCollection(IPerson person, TimeSpan start, TimeSpan end, IActivity activity)
+		{
+			IList<IVisualLayer> coll = new List<IVisualLayer>();
+			coll.Add(factory.CreateShiftSetupLayer(activity, new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)), person));
 			return coll;
 		}
 
