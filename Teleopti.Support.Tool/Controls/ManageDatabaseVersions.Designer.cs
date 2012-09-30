@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiAnalytics", 0);
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCC7", 0);
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCCAgg", 1);
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiAnalytics", 0);
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCC7", 0);
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCCAgg", 1);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageDatabaseVersions));
             this.listViewDatabases = new System.Windows.Forms.ListView();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -59,12 +59,14 @@
             this.columnHeaderType,
             this.columnHeaderVersion});
             this.listViewDatabases.FullRowSelect = true;
+            this.listViewDatabases.HideSelection = false;
             this.listViewDatabases.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem4,
-            listViewItem5,
-            listViewItem6});
+            listViewItem1,
+            listViewItem2,
+            listViewItem3});
             this.listViewDatabases.Location = new System.Drawing.Point(14, 83);
             this.listViewDatabases.Margin = new System.Windows.Forms.Padding(5);
+            this.listViewDatabases.MultiSelect = false;
             this.listViewDatabases.Name = "listViewDatabases";
             this.listViewDatabases.Size = new System.Drawing.Size(651, 199);
             this.listViewDatabases.SmallImageList = this.imageListIconsForListview;
@@ -72,19 +74,22 @@
             this.listViewDatabases.TabIndex = 0;
             this.listViewDatabases.UseCompatibleStateImageBehavior = false;
             this.listViewDatabases.View = System.Windows.Forms.View.Details;
+            this.listViewDatabases.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewDatabases_ItemSelectionChanged);
             // 
             // columnHeaderName
             // 
             this.columnHeaderName.Text = "Name";
-            this.columnHeaderName.Width = 300;
+            this.columnHeaderName.Width = 400;
             // 
             // columnHeaderType
             // 
             this.columnHeaderType.Text = "Type";
+            this.columnHeaderType.Width = 120;
             // 
             // columnHeaderVersion
             // 
             this.columnHeaderVersion.Text = "Version";
+            this.columnHeaderVersion.Width = 110;
             // 
             // imageListIconsForListview
             // 
@@ -137,13 +142,16 @@
             // 
             // buttonUpdate
             // 
+            this.buttonUpdate.BackColor = System.Drawing.SystemColors.Window;
+            this.buttonUpdate.Enabled = false;
+            this.buttonUpdate.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.buttonUpdate.Location = new System.Drawing.Point(487, 292);
             this.buttonUpdate.Margin = new System.Windows.Forms.Padding(5);
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.Size = new System.Drawing.Size(84, 23);
             this.buttonUpdate.TabIndex = 35;
             this.buttonUpdate.Text = "Update";
-            this.buttonUpdate.UseVisualStyleBackColor = true;
+            this.buttonUpdate.UseVisualStyleBackColor = false;
             this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
             // 
             // buttonRefresh
