@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -14,14 +15,17 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixValueCalculatorPro _scheduleMatrixValueCalculator;
         private readonly IGroupSchedulingService _scheduleService;
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private readonly IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
 
         public GroupShiftCategoryBackToLegalStateServiceBuilder(IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator,
             IGroupSchedulingService scheduleService,
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
         {
             _scheduleMatrixValueCalculator = scheduleMatrixValueCalculator;
             _scheduleService = scheduleService;
             _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
+            _groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
         }
 
         public IGroupShiftCategoryBackToLegalStateService Build(IScheduleMatrixPro scheduleMatrix,
@@ -44,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             return new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix,
                                                                  scheduleMatrixValueCalculatorPro,
-                                                                 scheduleService);
+                                                                 scheduleService, _groupOptimizerFindMatrixesForGroup);
         }
 
         public virtual IGroupShiftCategoryBackToLegalStateService BuildSchedulePeriodBackToLegalStateService(

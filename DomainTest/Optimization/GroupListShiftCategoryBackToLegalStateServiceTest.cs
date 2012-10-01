@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IGroupSchedulingService _scheduleService;
         private IScheduleDayChangeCallback _scheduleDayChangeCallback;
         private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
 
         [SetUp]
         public void Setup()
@@ -35,12 +36,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleMatrixValueCalculatorFactory = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorProFactory>();
             _scheduleService = _mockRepository.StrictMock<IGroupSchedulingService>();
             _groupPersonBuilderForOptimization = _mockRepository.StrictMock<IGroupPersonBuilderForOptimization>();
+            _groupOptimizerFindMatrixesForGroup = _mockRepository.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
             _target = new GroupListShiftCategoryBackToLegalStateService(
                 _stateHolder,
                 _scheduleMatrixValueCalculatorFactory,
                 _scheduleFairnessCalculator,
                 _scheduleService,
-                _scheduleDayChangeCallback,_groupPersonBuilderForOptimization);
+                _scheduleDayChangeCallback,
+                _groupPersonBuilderForOptimization);
         }
 
         [Test]
@@ -103,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var scheduleMatrixValueCalculator = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorPro>();
 
             var result =
-                _target.CreateGroupBackToLegalStateServiceBuilder(scheduleMatrixValueCalculator);
+                _target.CreateGroupBackToLegalStateServiceBuilder(scheduleMatrixValueCalculator, _groupOptimizerFindMatrixesForGroup);
 
             Assert.IsNotNull(result);
         }

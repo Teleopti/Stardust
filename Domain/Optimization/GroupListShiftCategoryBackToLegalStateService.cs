@@ -8,7 +8,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupListShiftCategoryBackToLegalStateService
     {
-        void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences);
+        void Execute(IList<IScheduleMatrixPro> scheduleMatrixList,
+            ISchedulingOptions schedulingOptions,
+            IOptimizationPreferences optimizationPreferences, 
+            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup);
     }
 
     public class GroupListShiftCategoryBackToLegalStateService : IGroupListShiftCategoryBackToLegalStateService
@@ -25,8 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory, 
             IScheduleFairnessCalculator fairnessCalculator, 
             IGroupSchedulingService scheduleService,
-            IScheduleDayChangeCallback scheduleDayChangeCallback,
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+            IScheduleDayChangeCallback scheduleDayChangeCallback,IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
             _stateHolder = stateHolder;
             _scheduleMatrixValueCalculatorProFactory = scheduleMatrixValueCalculatorProFactory;
@@ -36,7 +38,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
         }
 
-        public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
+        public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList,
+            ISchedulingOptions schedulingOptions,
+            IOptimizationPreferences optimizationPreferences,
+            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
         {
             var scheduleMatrixValueCalculator =
                 BuildScheduleMatrixValueCalculator(
@@ -48,25 +53,42 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var groupackToLegalStateServiceBuilder =
                 CreateGroupBackToLegalStateServiceBuilder(
-                    scheduleMatrixValueCalculator);
+                    scheduleMatrixValueCalculator, groupOptimizerFindMatrixesForGroup);
 
-            foreach (var matrix in scheduleMatrixList)
+            var runningList = new List<IScheduleMatrixPro>();
+            runningList.AddRange(scheduleMatrixList);
+
+            while(runningList.Count> 0)
             {
-                var schedulePartModifyAndRollbackService =
-                    new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-                var groupBackToLegalStateService =
-                    groupackToLegalStateServiceBuilder.Build(matrix, schedulePartModifyAndRollbackService);
-                groupBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions, scheduleMatrixList);
+                var removeList = new List<IScheduleMatrixPro>();
+                foreach (var matrix in runningList)
+                {
+                    var schedulePartModifyAndRollbackService =
+                   new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
+                                                            new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+                    var groupBackToLegalStateService =
+                        groupackToLegalStateServiceBuilder.Build(matrix, schedulePartModifyAndRollbackService);
+                    var toRemove = groupBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions, scheduleMatrixList, groupOptimizerFindMatrixesForGroup);
+                    foreach (var matrixPro in toRemove)
+                    {
+                        if (!removeList.Contains(matrixPro))
+                            removeList.Add(matrixPro);
+                    }
+                }
+                foreach (var matrixPro in removeList)
+                {
+                    runningList.Remove(matrixPro);
+                }
             }
         }
 
         public virtual IGroupShiftCategoryBackToLegalStateServiceBuilder CreateGroupBackToLegalStateServiceBuilder(
-            IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator)
+            IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
         {
             return new GroupShiftCategoryBackToLegalStateServiceBuilder(
                 scheduleMatrixValueCalculator,
                 _scheduleService,
-                _groupPersonBuilderForOptimization
+                _groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup
                 );
         }
 

@@ -9,14 +9,17 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixPro _scheduleMatrix;
         private readonly IScheduleMatrixValueCalculatorPro _scheduleMatrixValueCalculatorPro;
         private readonly IGroupSchedulingService _scheduleService;
+        private readonly IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
 
         public RemoveGroupShiftCategoryOnBestDateService(IScheduleMatrixPro scheduleMatrix,
                                                          IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculatorPro,
-                                                         IGroupSchedulingService scheduleService)
+                                                         IGroupSchedulingService scheduleService,
+                                                         IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
         {
             _scheduleMatrix = scheduleMatrix;
             _scheduleMatrixValueCalculatorPro = scheduleMatrixValueCalculatorPro;
             _scheduleService = scheduleService;
+            _groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
         }
 
         public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions)
@@ -35,8 +38,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleDayPro dayToRemove = FindDayToRemove(daysToWorkWith);
             if (dayToRemove == null)
                 return null;
-
-            _scheduleService.DeleteMainShift(new List<IScheduleDay> { dayToRemove.DaySchedulePart() }, schedulingOptions);
+            var groupMatrixes = _groupOptimizerFindMatrixesForGroup.Find(dayToRemove.DaySchedulePart().Person, dayToRemove.Day);
+            foreach (var matrix in groupMatrixes)
+            {
+                var scheduleDay = matrix.GetScheduleDayByKey(dayToRemove.Day).DaySchedulePart();
+                _scheduleService.DeleteMainShift(new List<IScheduleDay> { scheduleDay }, schedulingOptions);
+            }
             return dayToRemove;
         }
 

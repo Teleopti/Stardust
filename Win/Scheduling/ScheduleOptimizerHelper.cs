@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
+        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
         public ScheduleOptimizerHelper(ILifetimeScope container)
         {
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _allResults = _container.Resolve<IWorkShiftFinderResultHolder>();
             _resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
             _scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
+            _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
         }
 
         #region Interface
@@ -822,8 +824,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                     if (backgroundWorker.CancellationPending)
                         return;
-
-                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+                    var groupOptimizerFindMatrixesForGroup =
+                        new GroupOptimizerFindMatrixesForGroup(_groupPersonBuilderForOptimization, matrixList);
+                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences, groupOptimizerFindMatrixesForGroup);
                 }else
                 {
                     var backToLegalStateServicePro =

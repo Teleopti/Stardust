@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _schedulePart;
         private IGroupSchedulingService _scheduleService;
         private ISchedulingOptions _schedulingOptions;
+        private List<IScheduleMatrixPro> _scheduleMatrixList;
+        private IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
 
         [SetUp]
         public void Setup()
@@ -36,8 +38,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleMatrix = ScheduleMatrixProFactory.Create(_period, _person);
             _shiftCategory = ShiftCategoryFactory.CreateShiftCategory("xx");
             _scheduleService = _mocks.StrictMock<IGroupSchedulingService>();
-            _interface = new RemoveGroupShiftCategoryOnBestDateService(_scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService);
-            _target = new RemoveGroupShiftCategoryOnBestDateService(_scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService);
+            _scheduleMatrixList = new List<IScheduleMatrixPro>();
+            _groupOptimizerFindMatrixesForGroup = _mocks.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
+            _interface = new RemoveGroupShiftCategoryOnBestDateService(_scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService, _groupOptimizerFindMatrixesForGroup);
+            _target = new RemoveGroupShiftCategoryOnBestDateService(_scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService, _groupOptimizerFindMatrixesForGroup);
 
             _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
             _schedulePart = _mocks.StrictMock<IScheduleDay>();
@@ -58,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             DateOnly firstDate = new DateOnly(2010, 1, 1);
             _person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(firstDate, skill));
             IScheduleMatrixPro scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _interface = new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService);
+            _interface = new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService, _groupOptimizerFindMatrixesForGroup);
             IList<IScheduleDayPro> unlockedDays = new List<IScheduleDayPro> { _scheduleDayPro };
 
             IScheduleDayPro result;
@@ -92,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             DateOnly firstDate = new DateOnly(2010, 1, 1);
             _person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(firstDate, skill));
             IScheduleMatrixPro scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _interface = new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService);
+            _interface = new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService, _groupOptimizerFindMatrixesForGroup);
             IList<IScheduleDayPro> unlockedDays = new List<IScheduleDayPro> { _scheduleDayPro };
 
             IScheduleDayPro result;
@@ -186,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyDaysToWorkWithUsesUnlockedDays()
         {
             IScheduleMatrixPro scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _target = new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService);
+            _target = new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService, _groupOptimizerFindMatrixesForGroup);
             IList<IScheduleDayPro> unlockedDays = new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro };
 
             IList<IScheduleDayPro> daysToWorkWith;
@@ -211,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyDaysToWorkWithUsesPeriod()
         {
             IScheduleMatrixPro scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _target = new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService);
+            _target = new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService, _groupOptimizerFindMatrixesForGroup);
             IList<IScheduleDayPro> unlockedDays = new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro };
 
             IList<IScheduleDayPro> daysToWorkWith;
