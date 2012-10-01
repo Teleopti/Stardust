@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
         }
 
-        private static bool shouldHeadersBeDisplayedOrNot(IList<ShiftCategoryFairnessCompareValue> shiftCategoryFairnessCompareValues)
+        private static bool shouldHeadersBeDisplayedOrNot(IList<IShiftCategoryFairnessCompareValue> shiftCategoryFairnessCompareValues)
         {
             foreach (var shiftCategory in shiftCategoryFairnessCompareValues)
             {

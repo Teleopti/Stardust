@@ -260,10 +260,12 @@
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSettingTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairnessAggregatorTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairnessComparerTest.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairnessSwapCategorySorterTest.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairnessSwapFinderTest.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairnessSwapTest.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\IsSignificantPartFullDayAbsenceOrDayOffSpecificationTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairnessSwapperTest.cs" />
-    <Compile Include="Optimization\SwapFairnessTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />

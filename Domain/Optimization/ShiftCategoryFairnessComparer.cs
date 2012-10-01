@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -18,13 +17,37 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IShiftCategory ShiftCategory { get; set; }
 		public double Original { get; set; }
 		public double ComparedTo { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == typeof (ShiftCategoryFairnessCompareValue) && Equals((ShiftCategoryFairnessCompareValue) obj);
+        }
+
+	    public bool Equals(ShiftCategoryFairnessCompareValue other)
+	    {
+	        if (ReferenceEquals(null, other)) return false;
+	        if (ReferenceEquals(this, other)) return true;
+	        return other.ShiftCategory.Equals(ShiftCategory) && other.Original.Equals(Original) && other.ComparedTo.Equals(ComparedTo);
+	    }
+
+	    public override int GetHashCode()
+	    {
+	        unchecked
+	        {
+	            var result = (ShiftCategory != null ? ShiftCategory.GetHashCode() : 0);
+	            result = (result*397) ^ Original.GetHashCode();
+	            result = (result*397) ^ ComparedTo.GetHashCode();
+	            return result;
+	        }
+	    }
 	}
 
 	public interface IShiftCategoryFairnessCompareResult
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]      
-		IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
-		Guid Id { get; }
+		IList<IShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
 		double StandardDeviation { get; set; }
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		IList<IPerson> OriginalMembers { get; set; } 
@@ -32,22 +55,36 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class ShiftCategoryFairnessCompareResult : IShiftCategoryFairnessCompareResult
 	{
-		private readonly Guid _groupId;
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public IList<ShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
-
-		public ShiftCategoryFairnessCompareResult()
-		{
-			_groupId = Guid.NewGuid();
-		}
-		public Guid Id
-		{
-			get { return _groupId; }
-		}
-
+		public IList<IShiftCategoryFairnessCompareValue> ShiftCategoryFairnessCompareValues { get; set; }
+        
 		public double StandardDeviation { get; set; }
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public IList<IPerson> OriginalMembers { get; set; } 
+		public IList<IPerson> OriginalMembers { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == typeof (ShiftCategoryFairnessCompareResult) && Equals((ShiftCategoryFairnessCompareResult) obj);
+        }
+
+	    public bool Equals(ShiftCategoryFairnessCompareResult other)
+	    {
+	        if (ReferenceEquals(null, other)) return false;
+	        if (ReferenceEquals(this, other)) return true;
+	        return OriginalMembers.Count == other.OriginalMembers.Count &&
+                   OriginalMembers.SequenceEqual(other.OriginalMembers, new PersonEqualityComparer());
+	    }
+
+	    public override int GetHashCode()
+	    {
+	        unchecked
+	        {
+	            var result = (OriginalMembers != null ? OriginalMembers.GetHashCode() : 0);
+	            return result;
+	        }
+	    }
 	}
 
 	public interface IShiftCategoryFairnessComparer
@@ -63,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var totalOriginal = original.ShiftCategoryFairnessDictionary.Values.Sum();
 			var totalCompare = compareTo.ShiftCategoryFairnessDictionary.Values.Sum();
 
-			var result = shiftCategories.Select(shiftCategory => new ShiftCategoryFairnessCompareValue { ShiftCategory = shiftCategory }).ToList();
+			var result = shiftCategories.Select(shiftCategory => new ShiftCategoryFairnessCompareValue { ShiftCategory = shiftCategory }).OfType<IShiftCategoryFairnessCompareValue>().ToList();
 			foreach (var shiftCategoryFairnessComparerResult in result)
 			{
 				if (original.ShiftCategoryFairnessDictionary.ContainsKey(shiftCategoryFairnessComparerResult.ShiftCategory))
@@ -88,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    return shiftCategoryFairnessCompareResult;
 		}
 
-	    private static double calculateStandardDeviation(List<ShiftCategoryFairnessCompareValue> result, double mean)
+	    private static double calculateStandardDeviation(List<IShiftCategoryFairnessCompareValue> result, double mean)
 	    {
 	        var sumOfSquareOfDifference = 0.0;
 
@@ -103,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	        return stdDev;
 	    }
 
-	    private static double calculateMeanValue(List<ShiftCategoryFairnessCompareValue> result)
+	    private static double calculateMeanValue(List<IShiftCategoryFairnessCompareValue> result)
 	    {
 	        var sum = 0.0;
 	        
