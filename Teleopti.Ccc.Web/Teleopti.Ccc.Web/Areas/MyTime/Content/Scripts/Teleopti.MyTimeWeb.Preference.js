@@ -117,7 +117,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				},
 				events: {
 					render: function () {
-
+						$('#Preference-extended-reset')
+							.button()
+							.click(function () {
+								addExtendedPreferenceFormViewModel.reset();
+							});
 						$('#Preference-extended-apply')
 							.button()
 							.click(function () {

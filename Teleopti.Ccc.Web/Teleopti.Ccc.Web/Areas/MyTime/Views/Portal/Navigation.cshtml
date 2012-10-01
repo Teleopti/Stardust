@@ -174,7 +174,7 @@
 								}
 							</select>
 						</div>
-						<div id="activity-preference-fields" data-bind="visible: EnableActivityTimeEditing" class="mt5">
+						<div id="Activity-preference-fields" data-bind="visible: EnableActivityTimeEditing" class="mt5">
 							<div>
 								<div class="time-limitation-label icon leftarrow"></div>
 								<select id="Preference-extended-activity-start-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestStartTime, combobox-enabled: EnableActivityTimeEditing">
@@ -231,8 +231,11 @@
 							</div>
 						</div>
 						<div class="mt5">
+							<button id="Preference-extended-reset" class="ml15 mt10 mb5 floatleft">@Resources.Reset</button>
 							<button id="Preference-extended-apply" class="mr25 mt10 mb5 floatright">@Resources.Apply</button>
-							<div id="Preference-extended-error" class="error" data-bind="html: ValidationError"></div>
+						</div>
+						<div>
+							<div id="Preference-extended-error" class="error floatleft" data-bind="html: ValidationError"></div>
 							<div class="clearboth"></div>
 						</div>
 					</div>
