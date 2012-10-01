@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Drawing.Imaging;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Properties;
 using Teleopti.Interfaces.Domain;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (permissionState != PermissionState.None)
             {
-                if(!isMustHave)
+                //if(!isMustHave)
                 {
                     Brush brush = getBrush(permissionState);
                     Point x = new Point(_gridDrawCellEventArgs.Bounds.Right - 45, _gridDrawCellEventArgs.Bounds.Top + 5);
@@ -49,10 +50,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                     _gridDrawCellEventArgs.Graphics.FillPolygon(brush, new[] { x, z, y });
                 }
-                else
+				if (isMustHave)
                 {
                     Image mustHaveImage = Resources.heart_8x8;
-                    Point x = new Point(_gridDrawCellEventArgs.Bounds.Right - 45, _gridDrawCellEventArgs.Bounds.Top + 5);
+                    //var x = new Point(_gridDrawCellEventArgs.Bounds.Right - 45, _gridDrawCellEventArgs.Bounds.Top + 5);
+					var x = new Point(_gridDrawCellEventArgs.Bounds.Right - 45, _gridDrawCellEventArgs.Bounds.Top + 16);
                     _gridDrawCellEventArgs.Graphics.DrawImage( mustHaveImage,x.X,x.Y );
                 }
                
