@@ -38,6 +38,15 @@ namespace Teleopti.Messaging.SignalR
 			return emptyTask();
 		}
 
+		public Task<object> NotifyClients(IEnumerable<Notification> notifications)
+		{
+			if (verifyStillConnected())
+			{
+				return _hubProxy.Invoke("NotifyClientsMultiple", notifications);
+			}
+			return emptyTask();
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private bool verifyStillConnected()
 		{
