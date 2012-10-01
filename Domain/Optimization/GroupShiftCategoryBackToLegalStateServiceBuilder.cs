@@ -14,14 +14,17 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixValueCalculatorPro _scheduleMatrixValueCalculator;
         private readonly IGroupSchedulingService _scheduleService;
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private readonly IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
 
         public GroupShiftCategoryBackToLegalStateServiceBuilder(IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator,
             IGroupSchedulingService scheduleService,
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
         {
             _scheduleMatrixValueCalculator = scheduleMatrixValueCalculator;
             _scheduleService = scheduleService;
             _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
+            _groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
         }
 
         public IGroupShiftCategoryBackToLegalStateService Build(IScheduleMatrixPro scheduleMatrix,
@@ -44,21 +47,21 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             return new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix,
                                                                  scheduleMatrixValueCalculatorPro,
-                                                                 scheduleService, _groupPersonBuilderForOptimization);
+                                                                 scheduleService, _groupOptimizerFindMatrixesForGroup);
         }
 
         public virtual IGroupShiftCategoryBackToLegalStateService BuildSchedulePeriodBackToLegalStateService(
-            IGroupRemoveShiftCategoryBackToLegalService removeShiftCategoryBackToLegalService,
+            IRemoveShiftCategoryBackToLegalService removeShiftCategoryBackToLegalService,
             IGroupSchedulingService scheduleService)
         {
             return new GroupShiftCategoryBackToLegalStateService(removeShiftCategoryBackToLegalService, scheduleService, _groupPersonBuilderForOptimization);
         }
 
-        public virtual IGroupRemoveShiftCategoryBackToLegalService BuildRemoveShiftCategoryBackToLegalService(
+        public virtual IRemoveShiftCategoryBackToLegalService BuildRemoveShiftCategoryBackToLegalService(
             IRemoveShiftCategoryOnBestDateService removeShiftCategoryBackToLegalService,
             IScheduleMatrixPro scheduleMatrix)
         {
-            return new GroupRemoveShiftCategoryBackToLegalService(removeShiftCategoryBackToLegalService, scheduleMatrix, _groupPersonBuilderForOptimization);
+            return new RemoveShiftCategoryBackToLegalService(removeShiftCategoryBackToLegalService, scheduleMatrix);
         }
     }
 }
