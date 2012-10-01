@@ -42,6 +42,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Pages.Pages.PreferencePage.ExtendedPreferenceApplyButton.EventualClick();
 		}
 
+		[When(@"I click the reset extended preference button")]
+		public void WhenIClickTheResetExtendedPreferenceButton()
+		{
+			Pages.Pages.PreferencePage.ExtendedPreferenceResetButton.EventualClick();
+		}
+
+
 		[When(@"I click the extended preference indication on '(.*)'")]
 		public void WhenIClickTheExtendedPreferenceIndicationOn(DateTime date)
 		{
@@ -281,7 +288,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Enabled, Is.False);
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Enabled, Is.False);
 		}
-		
+
+		[Then(@"I should see preference dropdown list selected to ""(.*)""")]
+		public void ThenIShouldSeePreferenceDropdownListSelectedTo(string selectedText)
+		{
+			EventualAssert.That(() =>
+				Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Button.OuterText, Is.EqualTo(selectedText));
+		}
+
+
 		[Then(@"I should see activity dropdown list selected to ""(.*)""")]
 		public void ThenIShouldSeeActivityDropdownListSelected(string selectedText)
 		{

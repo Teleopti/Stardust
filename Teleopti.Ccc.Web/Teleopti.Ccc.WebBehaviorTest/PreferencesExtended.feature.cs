@@ -1066,6 +1066,83 @@ this.FeatureBackground();
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Reset extended preference form")]
+        public virtual void ResetExtendedPreferenceForm()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Reset extended preference form", ((string[])(null)));
+#line 333
+this.ScenarioSetup(scenarioInfo);
+#line 8
+this.FeatureBackground();
+#line 334
+ testRunner.Given("I have the role \'Access to extended preferences\'");
+#line 335
+ testRunner.And("I am viewing preferences");
+#line 336
+ testRunner.When("I click the add extended preference button");
+#line hidden
+            TechTalk.SpecFlow.Table table32 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table32.AddRow(new string[] {
+                        "Preference",
+                        "Late"});
+            table32.AddRow(new string[] {
+                        "Start time minimum",
+                        "10:30"});
+            table32.AddRow(new string[] {
+                        "Start time maximum",
+                        "11:00"});
+            table32.AddRow(new string[] {
+                        "End time minimum",
+                        "19:00"});
+            table32.AddRow(new string[] {
+                        "End time maximum",
+                        "20:30"});
+            table32.AddRow(new string[] {
+                        "Work time minimum",
+                        "08:00"});
+            table32.AddRow(new string[] {
+                        "Work time maximum",
+                        "08:30"});
+            table32.AddRow(new string[] {
+                        "Activity",
+                        "Lunch"});
+            table32.AddRow(new string[] {
+                        "Activity Start time minimum",
+                        "12:00"});
+            table32.AddRow(new string[] {
+                        "Activity Start time maximum",
+                        "12:15"});
+            table32.AddRow(new string[] {
+                        "Activity End time minimum",
+                        "12:30"});
+            table32.AddRow(new string[] {
+                        "Activity End time maximum",
+                        "12:45"});
+            table32.AddRow(new string[] {
+                        "Activity time minimum",
+                        "00:15"});
+            table32.AddRow(new string[] {
+                        "Activity time maximum",
+                        "00:45"});
+#line 337
+ testRunner.And("I input extended preference fields with", ((string)(null)), table32);
+#line 353
+ testRunner.And("I click the reset extended preference button");
+#line 354
+ testRunner.Then("I should see preference dropdown list selected to \" \"");
+#line 355
+ testRunner.And("all the time fields should be reset");
+#line 356
+ testRunner.And("I should see activity dropdown list selected to \" \"");
+#line 357
+ testRunner.And("I should not be able to edit activity minimum and maximum fields");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

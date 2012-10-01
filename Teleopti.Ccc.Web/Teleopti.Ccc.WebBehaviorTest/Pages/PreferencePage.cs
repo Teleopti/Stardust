@@ -70,6 +70,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Preference-extended-apply")]
 		public Button ExtendedPreferenceApplyButton { get; set; }
+		[FindBy(Id = "Preference-extended-reset")]
+		public Button ExtendedPreferenceResetButton { get; set; }
 
 		public void SelectPreferenceItemByText(string text, bool wait)
 		{
