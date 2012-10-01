@@ -112,9 +112,9 @@ namespace Teleopti.Support.Tool
             this.labelHeader.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelHeader.Location = new System.Drawing.Point(58, 14);
             this.labelHeader.Name = "labelHeader";
-            this.labelHeader.Size = new System.Drawing.Size(410, 38);
+            this.labelHeader.Size = new System.Drawing.Size(298, 38);
             this.labelHeader.TabIndex = 5;
-            this.labelHeader.Text = "Teleopti CCC Configuration Manager";
+            this.labelHeader.Text = "Teleopti CCC Support Tool";
             this.labelHeader.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             this.labelHeader.UseCompatibleTextRendering = true;
             // 
@@ -160,7 +160,7 @@ namespace Teleopti.Support.Tool
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Teleopti CCC Configuration Manager";
+            this.Text = "Teleopti CCC Support Tool";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.PTracks.ResumeLayout(false);
             this.PTracks.PerformLayout();
