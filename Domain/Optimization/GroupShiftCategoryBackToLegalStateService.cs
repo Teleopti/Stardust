@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class GroupShiftCategoryBackToLegalStateService : IGroupShiftCategoryBackToLegalStateService
     {
-        private readonly IRemoveShiftCategoryBackToLegalService _shiftCategoryBackToLegalService;
+        private readonly IGroupRemoveShiftCategoryBackToLegalService _shiftCategoryBackToLegalService;
         private readonly IGroupSchedulingService _scheduleService;
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
-        public GroupShiftCategoryBackToLegalStateService(IRemoveShiftCategoryBackToLegalService shiftCategoryBackToLegalService,
+        public GroupShiftCategoryBackToLegalStateService(IGroupRemoveShiftCategoryBackToLegalService shiftCategoryBackToLegalService,
             IGroupSchedulingService scheduleService,
             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var schedulePart = scheduleDayPro.DaySchedulePart();
                 var scheduleDate = schedulePart.DateOnlyAsPeriod.DateOnly;
                 var person = schedulePart.Person;
-                 var groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person,scheduleDate);
+                var groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person,scheduleDate);
                 result = result & _scheduleService.ScheduleOneDayOnOnePerson(scheduleDate, person, schedulingOptions, groupPerson,
                                                                     allMatrixes);
             }

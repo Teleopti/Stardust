@@ -44,21 +44,21 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             return new RemoveGroupShiftCategoryOnBestDateService(scheduleMatrix,
                                                                  scheduleMatrixValueCalculatorPro,
-                                                                 scheduleService);
+                                                                 scheduleService, _groupPersonBuilderForOptimization);
         }
 
         public virtual IGroupShiftCategoryBackToLegalStateService BuildSchedulePeriodBackToLegalStateService(
-            IRemoveShiftCategoryBackToLegalService removeShiftCategoryBackToLegalService,
+            IGroupRemoveShiftCategoryBackToLegalService removeShiftCategoryBackToLegalService,
             IGroupSchedulingService scheduleService)
         {
             return new GroupShiftCategoryBackToLegalStateService(removeShiftCategoryBackToLegalService, scheduleService, _groupPersonBuilderForOptimization);
         }
 
-        public virtual IRemoveShiftCategoryBackToLegalService BuildRemoveShiftCategoryBackToLegalService(
+        public virtual IGroupRemoveShiftCategoryBackToLegalService BuildRemoveShiftCategoryBackToLegalService(
             IRemoveShiftCategoryOnBestDateService removeShiftCategoryBackToLegalService,
             IScheduleMatrixPro scheduleMatrix)
         {
-            return new RemoveShiftCategoryBackToLegalService(removeShiftCategoryBackToLegalService, scheduleMatrix);
+            return new GroupRemoveShiftCategoryBackToLegalService(removeShiftCategoryBackToLegalService, scheduleMatrix, _groupPersonBuilderForOptimization);
         }
     }
 }

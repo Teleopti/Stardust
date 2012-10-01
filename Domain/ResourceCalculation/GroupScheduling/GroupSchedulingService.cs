@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     	bool ScheduleOneDayOnOnePerson(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions,
     	                               IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
 
-        IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions);
+        IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions,IGroupPerson groupPerson);
     }
 
     public class GroupSchedulingService : IGroupSchedulingService
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     		return true;
     	}
 
-        public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions)
+        public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions,IGroupPerson groupPerson)
         {
             //Delete old current shift
             //TODO use a new Delete method with a rollbackservice
@@ -256,7 +256,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             IList<IScheduleDay> retList;
             using (var bgWorker = new BackgroundWorker())
             {
+                var members = groupPerson.GroupMembers ;
+
                 retList = _deleteSchedulePartService.Delete(schedulePartList, options, _rollbackService, bgWorker);
+                
             }
 
             //recalc resources
