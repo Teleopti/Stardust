@@ -93,15 +93,19 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			.qtip({
 				id: "add-extended",
 				content: {
-					text: template
+					text: template,
+					title: {
+						text: '&nbsp;',
+						button: 'Close'
+					}
 				},
 				position: {
 					target: button,
 					my: "left top",
 					at: "left bottom",
 					adjust: {
-						x: 5,
-						y: -5
+						x: 11,
+						y: 0
 					}
 				},
 				show: {
