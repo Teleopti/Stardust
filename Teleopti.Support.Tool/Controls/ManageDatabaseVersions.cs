@@ -61,14 +61,15 @@ namespace Teleopti.Support.Tool.Controls
             IList<Nhib> nhibs = XmlHandler.GetNihibSettings(textBoxNHibFolder.Text).ToList();
             foreach (Nhib nhib in nhibs)
             {
-                ListViewItem[] listViewItems = CreateDatabaseListViewItems(nhib);
+                ListViewGroup listViewGroup = listViewDatabases.Groups.Add(nhib.Factoryname, nhib.Factoryname);
+                ListViewItem[] listViewItems = CreateDatabaseListViewItems(nhib, listViewGroup);
                 listViewDatabases.Items.AddRange(listViewItems);
             }
             listViewDatabases.EndUpdate();
             _mainForm.Cursor = Cursors.Default;
         }
 
-        private ListViewItem[] CreateDatabaseListViewItems(Nhib nhib)
+        private ListViewItem[] CreateDatabaseListViewItems(Nhib nhib, ListViewGroup listViewGroup)
         {
             Collection<ListViewItem> items = new Collection<ListViewItem>();
             ListViewItem listViewItem;
@@ -76,18 +77,21 @@ namespace Teleopti.Support.Tool.Controls
             {
                 listViewItem = CreateDatabaseListViewItem(nhib.CCCDatabase, ApplicationDatabaseTextConstant, nhib.CCCVersion);
                 listViewItem.Tag = nhib;
+                listViewItem.Group = listViewGroup;
                 items.Add(listViewItem);
             }
             if (!listViewDatabases.Items.ContainsKey(nhib.AnalyticDatabase))
             {
                 listViewItem = CreateDatabaseListViewItem(nhib.AnalyticDatabase, AnalyticsDatabaseTextConstant, nhib.AnalyticVersion);
                 listViewItem.Tag = nhib;
+                listViewItem.Group = listViewGroup;
                 items.Add(listViewItem);
             }
             if (!listViewDatabases.Items.ContainsKey(nhib.AggregationDatabase))
             {
                 listViewItem = CreateDatabaseListViewItem(nhib.AggregationDatabase, AggregationDatabaseTextConstant, nhib.AggVersion);
                 listViewItem.Tag = nhib;
+                listViewItem.Group = listViewGroup;
                 items.Add(listViewItem);
             }
             return items.ToArray();
@@ -105,7 +109,8 @@ namespace Teleopti.Support.Tool.Controls
             {
                 listViewItem.ImageIndex = 1;
             }
-            ListViewItem.ListViewSubItem listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, type);
+            ListViewItem.ListViewSubItem listViewSubItem;
+            listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, type);
             listViewItem.SubItems.Add(listViewSubItem);
             listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, version);
             listViewItem.SubItems.Add(listViewSubItem);

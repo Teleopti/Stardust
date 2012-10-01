@@ -78,7 +78,7 @@
             // 
             // columnHeaderName
             // 
-            this.columnHeaderName.Text = "Name";
+            this.columnHeaderName.Text = "Database Name";
             this.columnHeaderName.Width = 400;
             // 
             // columnHeaderType
