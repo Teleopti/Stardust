@@ -21,21 +21,19 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == typeof(ShiftCategoryFairnessSwap) && Equals((ShiftCategoryFairnessSwap)obj);
+            return obj.GetType() == typeof(ShiftCategoryFairnessSwap) && equals((ShiftCategoryFairnessSwap)obj);
         }
 
-        public bool Equals(ShiftCategoryFairnessSwap other)
+        private bool equals(ShiftCategoryFairnessSwap other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-
-            return (Equals(other.Group1, Group1) && Equals(other.Group2, Group2) &&
-                   other.ShiftCategoryFromGroup1.Description.Name == ShiftCategoryFromGroup1.Description.Name &&
-                   other.ShiftCategoryFromGroup2.Description.Name == ShiftCategoryFromGroup2.Description.Name)
-                   || 
-                   (Equals(other.Group1, Group2) && Equals(other.Group2, Group1) &&
-                   other.ShiftCategoryFromGroup1.Description.Name == ShiftCategoryFromGroup2.Description.Name &&
-                   other.ShiftCategoryFromGroup2.Description.Name == ShiftCategoryFromGroup1.Description.Name);
+        	//return GetHashCode().Equals(other.GetHashCode());
+			return (Equals(other.Group1, Group1) && Equals(other.Group2, Group2) &&
+				   other.ShiftCategoryFromGroup1.Description.Name == ShiftCategoryFromGroup1.Description.Name &&
+				   other.ShiftCategoryFromGroup2.Description.Name == ShiftCategoryFromGroup2.Description.Name)
+				   ||
+				   (Equals(other.Group1, Group2) && Equals(other.Group2, Group1) &&
+				   other.ShiftCategoryFromGroup1.Description.Name == ShiftCategoryFromGroup2.Description.Name &&
+				   other.ShiftCategoryFromGroup2.Description.Name == ShiftCategoryFromGroup1.Description.Name);
         }
 
         public override int GetHashCode()

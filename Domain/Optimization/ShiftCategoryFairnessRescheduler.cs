@@ -3,11 +3,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IShiftCategoryFairnessRescheduler
+	public interface IShiftCategoryFairnessReScheduler
 	{
 		bool Execute(IList<IPerson> persons);
 	}
-	public class ShiftCategoryFairnessRescheduler : IShiftCategoryFairnessRescheduler
+	public class ShiftCategoryFairnessReScheduler : IShiftCategoryFairnessReScheduler
 	{
 		public bool Execute(IList<IPerson> persons)
 		{

@@ -60,6 +60,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(true, result);
         }
 
+		[Test]
+		public void ShouldBeFalseIfNull()
+		{
+			Assert.That(_target1.Equals(null), Is.False);
+		}
+
+		[Test]
+		public void ShouldBeTrueIfSame()
+		{
+			Assert.That(_target1.Equals(_target1), Is.True);
+		}
+
         [Test]
         public void SwappedGroupsAndShiftsShouldBeEqual()
         {

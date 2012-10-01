@@ -15,22 +15,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly ISwapServiceNew _swapService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private readonly IShiftCategoryFairnessRescheduler _shiftCategoryFairnessRescheduler;
+		private readonly IShiftCategoryFairnessReScheduler _shiftCategoryFairnessReScheduler;
 		private readonly IShiftCategoryChecker _shiftCategoryChecker;
 		private readonly IScheduleDictionary _dic;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public ShiftCategoryFairnessSwapper(ISwapServiceNew swapService, ISchedulingResultStateHolder schedulingResultStateHolder, 
-			IShiftCategoryFairnessRescheduler shiftCategoryFairnessRescheduler, IShiftCategoryChecker shiftCategoryChecker)
+			IShiftCategoryFairnessReScheduler shiftCategoryFairnessReScheduler, IShiftCategoryChecker shiftCategoryChecker)
 		{
 			_swapService = swapService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-			_shiftCategoryFairnessRescheduler = shiftCategoryFairnessRescheduler;
+			_shiftCategoryFairnessReScheduler = shiftCategoryFairnessReScheduler;
 			_shiftCategoryChecker = shiftCategoryChecker;
 			_dic = _schedulingResultStateHolder.Schedules;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "originalMember"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "responses")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "originalMember"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "responses")]
 		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
 			ISchedulePartModifyAndRollbackService rollbackService)
 		{
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var groupTwo = suggestion.Group2;
 			var catTwo = suggestion.ShiftCategoryFromGroup2;
         	var swappedInGroupTwo = new List<IPerson>();
-
+			var result = true;
 			if(groupOne.OriginalMembers.Count > groupTwo.OriginalMembers.Count)
 			{
 				groupOne = suggestion.Group2;
@@ -74,8 +74,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return false;
 			}
 			if (swappedInGroupTwo.Count < groupTwo.OriginalMembers.Count)
-				_shiftCategoryFairnessRescheduler.Execute(groupTwo.OriginalMembers);
-			return true;
+				result  = _shiftCategoryFairnessReScheduler.Execute(groupTwo.OriginalMembers);
+
+			return result;
 		}
 
 		private static  IScheduleDay getScheduleForPersonOnDay(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixListForFairnessOptimization, IPerson person)
@@ -106,6 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class ShiftCategoryChecker : IShiftCategoryChecker
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool DayHasShiftCategory(IScheduleDay day, IShiftCategory shiftCategory)
 		{
 			if (!day.SignificantPart().Equals(SchedulePartView.MainShift))
