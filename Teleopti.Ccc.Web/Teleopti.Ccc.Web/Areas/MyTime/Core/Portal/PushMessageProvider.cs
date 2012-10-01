@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 
         public IList<IPushMessageDialogue> GetMessages()
         {
-            throw new System.NotImplementedException();
+        	return new List<IPushMessageDialogue>(_repository.FindUnreadMessage(_loggedOnUser.CurrentUser()));
         }
 	}
 }

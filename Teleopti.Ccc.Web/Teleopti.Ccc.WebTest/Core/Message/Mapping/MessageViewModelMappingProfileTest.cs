@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,6 +11,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Interfaces.Domain;
@@ -22,24 +24,27 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
         private IList<IPushMessageDialogue> _domainMessages;
         private PushMessage _pushMessage;
         private IList<MessageViewModel> _result;
+    	private IPerson _person;
+    	private PushMessageDialogue _pushMessageDialogue;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
-            var person = new Person {Name = new Name("ashley", "andeen")};
+            _person = new Person {Name = new Name("ashley", "andeen")};
+			_person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
             _pushMessage = new PushMessage()
                                   {
                                       Title = "my title",
                                       Message = "message text",
                                       //AllowDialogueReply = true,
                                       //TranslateMessage = true,
-                                      Sender = person,
+                                      Sender = _person,
                                       
                                   };
-            SetCreatedOn(_pushMessage, DateTime.Now);
-            var pushMessageDialogue = new PushMessageDialogue(_pushMessage, new Person());
+            _pushMessageDialogue = new PushMessageDialogue(_pushMessage, _person);
+			SetDate(_pushMessageDialogue, DateTime.Now, "_updatedOn");
 
-            _domainMessages = new[] {pushMessageDialogue};
+            _domainMessages = new[] {_pushMessageDialogue};
 
             Mapper.Reset();
             Mapper.Initialize(c => c.AddProfile(new MessageViewModelMappingProfile()));
@@ -93,17 +98,18 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
         [Test]
         public void ShouldMapDate()
         {
-            _result.First().Date.Should().Be.EqualTo(_pushMessage.CreatedOn);
+        	var dateTimeString = _pushMessageDialogue.UpdatedOn.Value.ToShortDateTimeString();
+			_result.First().Date.Should().Be.EqualTo(dateTimeString);
         }
 
-        public static void SetCreatedOn(IAggregateRoot root, DateTime? createdOn)
+        public static void SetDate(IAggregateRoot root, DateTime? dateTime, string property)
         {
             IChangeInfo rootCheck = root as IChangeInfo;
             if (rootCheck != null)
             {
                 Type rootType = typeof(AggregateRoot);
-                if (createdOn.HasValue)
-                    rootType.GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(root, createdOn);
+                if (dateTime.HasValue)
+                    rootType.GetField(property, BindingFlags.NonPublic | BindingFlags.Instance).SetValue(root, dateTime);
             }
         }
     }

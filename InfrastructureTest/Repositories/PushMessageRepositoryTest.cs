@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -188,6 +189,58 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
 			repository.CountUnread(receiver).Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldGetUnreadMessages()
+		{
+			IPerson receiver = PersonFactory.CreatePerson("vsd");
+			IPushMessage message = new PushMessage { Sender = _sender, Title = "title", Message = "message" };
+			IPushMessageDialogue dialogue = new PushMessageDialogue(message, receiver);
+
+			PersistAndRemoveFromUnitOfWork(_sender);
+			PersistAndRemoveFromUnitOfWork(message);
+			PersistAndRemoveFromUnitOfWork(receiver);
+			PersistAndRemoveFromUnitOfWork(dialogue);
+
+			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
+			var unreadMessages = repository.FindUnreadMessage(receiver);
+			unreadMessages.First().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
+				message.GetTitle(new NoFormatting()));
+		}
+
+		[Test]
+		public void ShouldGetUnreadMessagesInCorrectOrder()
+		{
+			IPerson receiver = PersonFactory.CreatePerson("vsd");
+
+			IPushMessage messageOrderFirst = new PushMessage { Sender = _sender, Title = "title first", Message = "first message" };
+			IPushMessageDialogue dialogueOrderFirst = new PushMessageDialogue(messageOrderFirst, receiver);
+
+			IPushMessage messageOrderLast = new PushMessage { Sender = _sender, Title = "title last", Message = "last message" };
+			IPushMessageDialogue dialogueOrderLast = new PushMessageDialogue(messageOrderLast, receiver);
+
+			PersistAndRemoveFromUnitOfWork(_sender);
+			PersistAndRemoveFromUnitOfWork(receiver);
+			PersistAndRemoveFromUnitOfWork(messageOrderLast);
+			PersistAndRemoveFromUnitOfWork(dialogueOrderLast);
+			PersistAndRemoveFromUnitOfWork(messageOrderFirst);
+			PersistAndRemoveFromUnitOfWork(dialogueOrderFirst);
+
+			SetUpdatedOnForMessageDialogue(dialogueOrderLast, -1);
+
+			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
+			var unreadMessages = repository.FindUnreadMessage(receiver);
+			unreadMessages.First().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
+				messageOrderFirst.GetTitle(new NoFormatting()));
+			unreadMessages.Last().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
+				messageOrderLast.GetTitle(new NoFormatting()));
+		}
+
+		private void SetUpdatedOnForMessageDialogue(IPushMessageDialogue messageDialogue, int minutes)
+		{
+			Session.CreateSQLQuery("UPDATE dbo.PushMessageDialogue SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;").SetGuid(
+				"Id", messageDialogue.Id.GetValueOrDefault()).SetInt32("Minutes", minutes).ExecuteUpdate();
 		}
     }
 }

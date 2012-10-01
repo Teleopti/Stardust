@@ -13,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
@@ -63,6 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		{
 			builder.RegisterType<AsmViewModelFactory>().As<IAsmViewModelFactory>();
 			builder.RegisterType<AsmViewModelMapper>().As<IAsmViewModelMapper>();
+			builder.RegisterType<MessageViewModelFactory>().As<IMessageViewModelFactory>();
 		}
 
 		private void registerSettingsTypes(ContainerBuilder builder)

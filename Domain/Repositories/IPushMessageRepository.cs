@@ -55,5 +55,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created date: 2012-09-21
 		/// </remarks>
 		int CountUnread(IPerson receiver);
+
+		ICollection<IPushMessageDialogue> FindUnreadMessage(IPerson receiver);	
 	}
 }

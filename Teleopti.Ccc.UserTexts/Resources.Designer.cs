@@ -13951,6 +13951,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No messages could be found.
+        /// </summary>
+        public static string NoMessagesFound {
+            get {
+                return ResourceManager.GetString("NoMessagesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no Multiplicators of type {0}..
         /// </summary>
         public static string NoMultiplicators {

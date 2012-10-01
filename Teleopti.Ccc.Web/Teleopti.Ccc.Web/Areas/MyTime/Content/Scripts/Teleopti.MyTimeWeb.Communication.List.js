@@ -1,13 +1,7 @@
-﻿/// <reference path="~/Scripts/jquery-1.5.1.js" />
-/// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
-/// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
-/// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Scripts/date.js" />
-/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
+﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="jquery.ui.connector.js"/>
 
-Teleopti.MyTimeWeb.Communication.List = (function ($) {
+Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 
 	function _initScrollPaging() {
 		_loadAPage();
@@ -35,14 +29,14 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 		var skip = $('#Communications-list li:not(.template)').length;
 		var take = 20;
 		Teleopti.MyTimeWeb.Ajax.Ajax({
-			url: "Messages/Messages",
+			url: "Message/Messages",
 			dataType: "json",
 			type: 'GET',
 			beforeSend: _loading,
-			data: {
-				Take: take,
-				Skip: skip
-			},
+			//data: {
+			//	Take: take,
+			//	Skip: skip
+			//},
 			success: function (data, textStatus, jqXHR) {
 				_drawCommunications(data);
 				if (data.length == 0 || data.length < take) {
@@ -60,22 +54,22 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 	}
 
 	function _loading() {
-	    $('.communication-list .arrow-down').hide();
-	    $('.communication-list .loading-gradient').show();
+		$('.communication-list .arrow-down').hide();
+		$('.communication-list .loading-gradient').show();
 	}
 
 	function _noMoreToLoad() {
-	    $('.communication-list .arrow-down').hide();
-	    $('.communication-list .loading-gradient').hide();
+		$('.communication-list .arrow-down').hide();
+		$('.communication-list .loading-gradient').hide();
 	}
 
 	function _moreToLoad() {
-	    $('.communication-list .arrow-down').show();
-	    $('.communication-list .loading-gradient').hide();
+		$('.communication-list .arrow-down').show();
+		$('.communication-list .loading-gradient').hide();
 	}
 
 	function _showMessageIfNoCommunications() {
-	    if ($('.communication-item').not('.template').is(':visible')) {
+		if ($('.communication-item').not('.template').is(':visible')) {
 			$('.friendly-message').hide();
 		} else {
 			$('.friendly-message').show();
@@ -85,9 +79,9 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 	function _removeCommunication(communicationOrListItem) {
 		var listItem;
 		if (communicationOrListItem.Id)
-		    listItem = $('#Communications-list li[data-mytime-communicationid="' + communicationOrListItem.Id + '"]');
+			listItem = $('#Communications-list li[data-mytime-communicationid="' + communicationOrListItem.Id + '"]');
 		else
-		    listItem = communicationOrListItem;
+			listItem = communicationOrListItem;
 		listItem
 			.animate({
 				'height': '0',
@@ -100,18 +94,18 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 	}
 
 	function _drawCommunications(communications) {
-	    for (var i = 0; i < communications.length; i++) {
-	        var communication = communications[i];
-	        _drawCommunication(communication);
+		for (var i = 0; i < communications.length; i++) {
+			var communication = communications[i];
+			_drawCommunication(communication);
 		}
 	}
 
-	function _drawCommunications(communication) {
-	    $('#Communications-list').append(_createCommunicationListItem(communication));
+	function _drawCommunication(communication) {
+		$('#Communications-list').append(_createCommunicationListItem(communication));
 	}
 
 	function _drawCommunicationAtTop(communication) {
-	    var communication = _createCommunicationListItem(communication)
+		var communication = _createCommunicationListItem(communication)
 			.hide()
 			;
 		$('#Communications-list')
@@ -126,42 +120,36 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 			.removeClass('template')
 			;
 		listItem.attr('data-mytime-communicationid', communication.Id);
-		listItem.attr('data-mytime-link', communication.Link.href);
-		listItem.find('.communication-data-subject').text(communication.Subject);
-		listItem.find('.communication-data-date').text(communication.Dates);
-		listItem.find('.communication-data-updatedon').text(communication.UpdatedOn);
-		listItem.find('.communication-data-status').text(communication.Status);
-		listItem.find('.communication-data-text').text(communication.Text);
+//		listItem.attr('data-mytime-link', communication.Link.href);
+		listItem.find('.communication-data-subject').text(communication.Title);
+		//listItem.find('.communication-data-subject').text('_asjkldfh kasjdfh');
+		listItem.find('.communication-data-sender').text(communication.Sender);
+		listItem.find('.communication-data-updatedon').text(communication.Date);
 
 		var connector = listItem.find('.communication-connector');
-		var deleteButton = listItem.find('.communication-delete-button');
+		//var deleteButton = listItem.find('.communication-delete-button');
 
-		if (communication.Payload != '') {
-		    listItem.find('.communication-data-type').text(communication.Type + ' \u2013 ' + communication.Payload);
-		} else {
-		    listItem.find('.communication-data-type').text(communication.Type);
-		}
 		connector.connector();
 
-		if (communication.Link.Methods.indexOf("DELETE") != -1) {
-			deleteButton
-				.click(function (event) {
-					$(this).prop('disabled', true);
-					event.stopPropagation();
-					_disconnectAll();
-					Teleopti.MyTimeWeb.Communication.CommunicationDetail.HideEditSection();
-					_deleteCommunication(listItem);
-				})
-				.removeAttr('disabled', 'disabled')
-				;
-			listItem.hover(function () {
-				deleteButton
-					.stop(true, true)
-					.fadeToggle();
-			});
-		} else {
-			deleteButton.remove();
-		}
+//		if (communication.Link.Methods.indexOf("DELETE") != -1) {
+//			deleteButton
+//				.click(function (event) {
+//					$(this).prop('disabled', true);
+//					event.stopPropagation();
+//					_disconnectAll();
+//					Teleopti.MyTimeWeb.Communication.CommunicationDetail.HideEditSection();
+//					_deleteCommunication(listItem);
+//				})
+//				.removeAttr('disabled', 'disabled')
+//				;
+//			listItem.hover(function () {
+//				deleteButton
+//					.stop(true, true)
+//					.fadeToggle();
+//			});
+//		} else {
+//			deleteButton.remove();
+//		}
 		return listItem;
 	}
 
@@ -180,7 +168,7 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 				Teleopti.MyTimeWeb.Common.LoadingOverlay.Remove(listItem);
 			},
 			success: function (data, textStatus, jqXHR) {
-			    _removeCommunication(listItem);
+				_removeCommunication(listItem);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
@@ -191,7 +179,7 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 	function _initListClick() {
 		$('#Communications-list li')
 			.click(function () {
-			    _showCommunication($(this));
+				_showCommunication($(this));
 			}
 		);
 	}
@@ -203,7 +191,7 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 			;
 		var bindListItemClick = function _bindClick() {
 			listItem.bind('click', function () {
-			    _showCommunication($(this));
+				_showCommunication($(this));
 			});
 		};
 		Teleopti.MyTimeWeb.Ajax.Ajax({
@@ -217,7 +205,7 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 				connector.connector("connecting");
 			},
 			success: function (data, textStatus, jqXHR) {
-			    Teleopti.MyTimeWeb.Communication.CommunicationDetail.ShowCommunication(data, listItem.position().top - 30);
+				Teleopti.MyTimeWeb.Communication.CommunicationDetail.ShowCommunication(data, listItem.position().top - 30);
 				connector.connector("connect");
 			}
 		});
@@ -225,7 +213,7 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 	}
 
 	function _disconnectAll() {
-	    $('#Communications-list li:not(.template) .communication-connector')
+		$('#Communications-list li:not(.template) .communication-connector')
 			.connector('disconnect')
 		;
 	}
@@ -244,12 +232,12 @@ Teleopti.MyTimeWeb.Communication.List = (function ($) {
 			_initScrollPaging();
 			_initListClick();
 		},
-        AddItemAtTop: function (communication) {
-            _drawCommunicationAtTop(communication);
-		    _showMessageIfNoCommunications();
+		AddItemAtTop: function (communication) {
+			_drawCommunicationAtTop(communication);
+			_showMessageIfNoCommunications();
 		},
 		RemoveItem: function (communication) {
-		    _removeCommunication(communication);
+			_removeCommunication(communication);
 		},
 		DisconnectAll: function () {
 			_disconnectAll();

@@ -77,13 +77,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
         [Then(@"I should not see any messages")]
         public void ThenIShouldNotSeeAnyMessages()
         {
-            EventualAssert.That(() => _page.MessageList.Exists, Is.False);
+            EventualAssert.That(() => _page.MessageListItems.Count , Is.EqualTo(0));
         }
 
         [Then(@"I should see a message in the list")]
         public void ThenIShouldSeeAMessageInTheList()
         {
-            EventualAssert.That(() => _page.MessageList.Exists, Is.True);
+			EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(1));
         }
 
         [Given(@"message tab indicates '(.*)' new message\(s\)")]
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
         [Then(@"I should see a user-friendly message explaining I dont have any messages")]
         public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnyMessages()
         {
-            EventualAssert.That(() => _page.FriendlyMessage.Exists, Is.True);
+			EventualAssert.That(() => _page.FriendlyMessage.Style.GetAttributeValue("display"), Is.Not.EqualTo("none"));
         }
 	}
 }

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
         public List MessageList { get; set; }
 
         private Constraint MessageConstraint = Find.ByClass("message-item", false) && !Find.ByClass("template", false);
-        private ListItemCollection MessageListItems { get { return Document.ListItems.Filter(MessageConstraint); } }
+		public ListItemCollection MessageListItems { get { return Document.ListItems.Filter(MessageConstraint); } }
         public IEnumerable<ListItem> Messages { get { return MessageListItems; } }
 
         public ListItem FirstMessage { get { return Document.ListItem(MessageConstraint).EventualGet(); } }

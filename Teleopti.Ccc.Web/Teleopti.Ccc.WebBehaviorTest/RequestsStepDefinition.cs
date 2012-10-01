@@ -37,6 +37,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Navigation.GotoRequests();
 		}
 
+		[When(@"I navigate to messages")]
+		public void WhenINavigateToMessages()
+		{
+			Navigation.GotoMessagePage();
+		}
+
+
 		[When(@"I scroll down to the bottom of the page")]
 		public void WhenIScrollDownToTheBottomOfThePage()
 		{

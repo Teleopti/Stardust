@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
         //public bool AllowDialogueReply { get; set; }
         //public bool TranslateMessage { get; set; }
         public string Sender { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
     }
 }

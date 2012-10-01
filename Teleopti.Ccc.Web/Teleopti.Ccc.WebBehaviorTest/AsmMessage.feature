@@ -51,7 +51,8 @@ Scenario: Indicate new message at logon
 Scenario: Navigate to message tab
 	Given I have the role 'Full access to mytime'
 	And I have no unread messages
-	When I am viewing messages
+	And I am viewing week schedule
+	When I navigate to messages
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 

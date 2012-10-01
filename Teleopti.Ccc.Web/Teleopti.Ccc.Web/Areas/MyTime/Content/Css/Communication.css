@@ -70,6 +70,14 @@
 	padding-right: 0px;
 	padding-left: 20px;
 }
+.communication-body-inner .communication-data-sender {
+	padding-right: 20px;
+	padding-left: 0px;
+}
+.rtl .communication-body-inner .communication-data-sender {
+	padding-right: 0px;
+	padding-left: 20px;
+}
 .communication-body-inner .communication-text 
 {
 	padding-top: 0.3em;
