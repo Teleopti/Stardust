@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(0, _target.ModificationCollection.Count());
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "hej"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Scheduling.Rules.BusinessRuleResponse.#ctor(System.Type,System.String,System.Boolean,System.Boolean,Teleopti.Interfaces.Domain.DateTimePeriod,Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnlyPeriod)"), Test]
 		public void ShouldModifyBoth()
 		{
 			var schedulePart = _mocks.StrictMock<IScheduleDay>();

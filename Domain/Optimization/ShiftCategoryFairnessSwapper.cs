@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -16,13 +15,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly ISwapServiceNew _swapService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IShiftCategoryFairnessRescheduler _shiftCategoryFairnessRescheduler;
+		private readonly IShiftCategoryChecker _shiftCategoryChecker;
 		private readonly IScheduleDictionary _dic;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public ShiftCategoryFairnessSwapper(ISwapServiceNew swapService, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public ShiftCategoryFairnessSwapper(ISwapServiceNew swapService, ISchedulingResultStateHolder schedulingResultStateHolder, 
+			IShiftCategoryFairnessRescheduler shiftCategoryFairnessRescheduler, IShiftCategoryChecker shiftCategoryChecker)
 		{
 			_swapService = swapService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_shiftCategoryFairnessRescheduler = shiftCategoryFairnessRescheduler;
+			_shiftCategoryChecker = shiftCategoryChecker;
 			_dic = _schedulingResultStateHolder.Schedules;
 		}
 
@@ -35,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         	var catOne = suggestion.ShiftCategoryFromGroup1;
 			var groupTwo = suggestion.Group2;
 			var catTwo = suggestion.ShiftCategoryFromGroup2;
+        	var swappedInGroupTwo = new List<IPerson>();
 
 			if(groupOne.OriginalMembers.Count > groupTwo.OriginalMembers.Count)
 			{
@@ -46,19 +51,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var groupOneMember in groupOne.OriginalMembers)
 			{
 				var day1 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, groupOneMember);
-				if (!dayHasShiftCategory(day1, catOne))
+				if (!_shiftCategoryChecker.DayHasShiftCategory(day1, catOne))
 					return false;
 				var swapSucces = false;
 				foreach (var originalMember in groupTwo.OriginalMembers)
 				{
 					var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, originalMember);
-					if (dayHasShiftCategory(day2, catTwo))
+					if (_shiftCategoryChecker.DayHasShiftCategory(day2, catTwo))
 					{
 						var modifiedParts = _swapService.Swap(new List<IScheduleDay> { day1, day2 }, _dic);
 						var responses = rollbackService.ModifyParts(modifiedParts);
 						if (!responses.Any())
 						{
 							swapSucces = true;
+							swappedInGroupTwo.Add(day2.Person);
 							break;
 						}
 					}
@@ -67,20 +73,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 				if (!swapSucces)
 					return false;
 			}
-			
+			if (swappedInGroupTwo.Count < groupTwo.OriginalMembers.Count)
+				_shiftCategoryFairnessRescheduler.Execute(groupTwo.OriginalMembers);
 			return true;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        private bool dayHasShiftCategory(IScheduleDay day, IShiftCategory shiftCategory)
-		{
-			if (!day.SignificantPart().Equals(SchedulePartView.MainShift))
-				return false;
-			return day.PersonAssignmentCollection()[0].MainShift.ShiftCategory.Equals(shiftCategory);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		private IScheduleDay getScheduleForPersonOnDay(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixListForFairnessOptimization, IPerson person)
+		private static  IScheduleDay getScheduleForPersonOnDay(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixListForFairnessOptimization, IPerson person)
 		{
 			IScheduleDay day = null;
 			foreach (var scheduleMatrixPro in matrixListForFairnessOptimization)
@@ -97,6 +95,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			return day;
 		}
+
+
 	}
 
+	public interface IShiftCategoryChecker
+	{
+		bool DayHasShiftCategory(IScheduleDay day, IShiftCategory shiftCategory);
+	}
+
+	public class ShiftCategoryChecker : IShiftCategoryChecker
+	{
+		public bool DayHasShiftCategory(IScheduleDay day, IShiftCategory shiftCategory)
+		{
+			if (!day.SignificantPart().Equals(SchedulePartView.MainShift))
+				return false;
+			return day.PersonAssignmentCollection()[0].MainShift.ShiftCategory.Equals(shiftCategory);
+		}
+	}
 }

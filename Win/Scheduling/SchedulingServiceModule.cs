@@ -158,6 +158,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<ShiftCategoryFairnessSwapper>().As<IShiftCategoryFairnessSwapper>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessSwapFinder>().As<IShiftCategoryFairnessSwapFinder>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessCategorySorter>().As<IShiftCategoryFairnessCategorySorter>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftCategoryFairnessRescheduler>().As<IShiftCategoryFairnessRescheduler>().InstancePerLifetimeScope();
         }
 
     }
