@@ -1464,7 +1464,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                            };
 
                 _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
-					.CreateGroupPagePerDate(_scheduleView, _container.Resolve<GroupScheduleGroupPageDataProvider>(), 
+					.CreateGroupPagePerDate(_scheduleView, _container.Resolve<IGroupScheduleGroupPageDataProvider>(), 
 					schedulingOptions.GroupPageForShiftCategoryFairness);
 
                 var finderService = _container.Resolve<IWorkShiftFinderService>();
