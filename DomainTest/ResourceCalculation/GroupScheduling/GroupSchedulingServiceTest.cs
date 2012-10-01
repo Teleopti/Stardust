@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -46,8 +47,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     	private IEffectiveRestriction _effectiveRestriction;
     	private IVirtualSchedulePeriod _schedulePeriod;
         private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
-
-        [SetUp]
+    	private Dictionary<string, bool> _teamSteadyStates;
+    	private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
+    	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+    	private IFairnessValueResult _fairnessValueResult;
+			
+		[SetUp]
         public void Setup()
     	{
 			_mock = new MockRepository();
@@ -89,6 +94,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 
+			_teamSteadyStates = new Dictionary<string, bool> {{"name", false}};
+			_teamSteadyStateMainShiftScheduler = _mock.StrictMock<ITeamSteadyStateMainShiftScheduler>();
+			_groupPersonBuilderForOptimization = _mock.StrictMock<IGroupPersonBuilderForOptimization>();
+			_fairnessValueResult = _mock.StrictMock<IFairnessValueResult>();
     	}
 
         [TearDown]
@@ -102,7 +111,70 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Assert.IsNotNull(_target);
         }
 
-        [Test]
+		[Test]
+		public void ShouldUseSteadyStateMainShiftSchedulerWhenInSteadyState()
+		{
+			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			_teamSteadyStates = new Dictionary<string, bool> { { "name", true } };
+
+			using(_mock.Record())
+			{
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_date1, _selectedPersons, true, _schedulingOptions)).Return(_groupPersons);
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_date2, _selectedPersons, true, _schedulingOptions)).Return(_groupPersons);
+				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(_date1, _groupPerson, _target, null, null,
+				                                                            _groupPersonBuilderForOptimization, matrixProList,
+				                                                            _scheduleDictionary)).IgnoreArguments().Return(true);
+
+				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(_date2, _groupPerson, _target, null, null,
+																			_groupPersonBuilderForOptimization, matrixProList,
+																			_scheduleDictionary)).IgnoreArguments().Return(true);
+
+				Expect.Call(_stateHolder.Schedules).Return(null).Repeat.Twice();
+				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.Twice();
+			}
+
+			using(_mock.Playback())
+			{
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);	
+			}	
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldTryToScheduleWithoutSteadyStateWhenSteadyStateFails()
+		{
+			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			_teamSteadyStates = new Dictionary<string, bool> { { "name", true } };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_date1, _selectedPersons, true, _schedulingOptions)).Return(_groupPersons);
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_date2, _selectedPersons, true, _schedulingOptions)).Return(_groupPersons);
+				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(_date1, _groupPerson, _target, null, null,
+																			_groupPersonBuilderForOptimization, matrixProList,
+																			_scheduleDictionary)).IgnoreArguments().Return(true);
+
+				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(_date2, _groupPerson, _target, null, null,
+																			_groupPersonBuilderForOptimization, matrixProList,
+																			_scheduleDictionary)).IgnoreArguments().Return(false);
+
+				Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
+				//Expect.Call(() => _rollbackService.Rollback());
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>()));
+				Expect.Call(_scheduleDictionary.AverageFairnessPoints(null)).IgnoreArguments().Return(_fairnessValueResult);
+				Expect.Call(_groupPerson.CommonPossibleStartEndCategory).Return(new PossibleStartEndCategory());
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, new DateOnly(), null, null)).IgnoreArguments().Return(null);
+			}
+
+			using (_mock.Playback())
+			{
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
+			}	Assert.IsFalse(_teamSteadyStates["name"]);
+		}
+
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldDoSomethingIfSuccess()
         {
             var range1 = _mock.StrictMock<IScheduleRange>();
@@ -146,11 +218,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date1, _date1)).Repeat.
             		AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
+
+				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
             }
 
             using (_mock.Playback())
             {
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);	
             }
         }
 
@@ -202,11 +276,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date1, _date1)).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
+
+				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
             }
 
             using (_mock.Playback())
             {
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }
         }
 
@@ -243,15 +319,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             	Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date1, _date2)).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
 
+				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
+
             }
 
             using (_mock.Playback())
             {
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldNotScheduleAlreadyAssignedAgent()
         {
             var range1 = _mock.StrictMock<IScheduleRange>();
@@ -278,11 +356,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.Any();
                 //Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.Any();
+
+				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
             }
 
             using (_mock.Playback())
             {
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }
         }
 
@@ -306,12 +386,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(_scheduleDictionary[_person2]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
             	Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.AtLeastOnce();
+
+				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
             	
             }
 
             using (_mock.Playback())
             {
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }   
         }
 
@@ -346,14 +428,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowIfMatrixIsNull()
 		{
-			_target.Execute(new DateOnlyPeriod(new DateOnly(),new DateOnly()),null, _schedulingOptions, _persons ,_bgWorker);
+			_target.Execute(new DateOnlyPeriod(new DateOnly(), new DateOnly()), null, _schedulingOptions, _persons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowIfWorkerIsNull()
 		{
 			var matrixProList = new List<IScheduleMatrixPro>();
-			_target.Execute(new DateOnlyPeriod(new DateOnly(), new DateOnly()), matrixProList, _schedulingOptions, _persons, null);
+			_target.Execute(new DateOnlyPeriod(new DateOnly(), new DateOnly()), matrixProList, _schedulingOptions, _persons, null, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]

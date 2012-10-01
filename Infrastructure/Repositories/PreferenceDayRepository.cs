@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
         }
 
-	    public IList<IPreferenceDay> Find(DateOnlyPeriod period, IPerson person)
-	    {
+		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IPerson person)
+		{
 			// lock mode set to upgrade
 			var result = new List<IPreferenceDay>();
 			ICriteria crit = FilterByPeriod(period)
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			InitializePreferenceDays(result);
 			return result;
-	    }
+		}
 
 	    private ICriteria FilterByPeriod(DateOnlyPeriod period)
         {

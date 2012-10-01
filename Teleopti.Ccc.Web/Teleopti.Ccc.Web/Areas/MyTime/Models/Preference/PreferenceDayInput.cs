@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
 			var result = new List<ValidationResult>();
+			if (IsEmptyForm())
+				result.Add(new ValidationResult(string.Format(Resources.EmptyRequest, Resources.ExtendedPreferences)));
 			if (ValidateTimeOfDay(EarliestStartTime, LatestStartTime))
 				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
 			if (EarliestEndTime.HasValue && LatestEndTime.HasValue)
@@ -58,6 +60,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 			if (ValidateTimeSpan(ActivityMinimumTime, ActivityMaximumTime))
 				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.ActivityLength)));
 			return result;
+		}
+
+		private bool IsEmptyForm()
+		{
+			return !PreferenceId.HasValue &&
+			       !EarliestStartTime.HasValue &&
+			       !LatestStartTime.HasValue &&
+			       !EarliestEndTime.HasValue &&
+			       !LatestEndTime.HasValue &&
+			       !MinimumWorkTime.HasValue &&
+			       !MaximumWorkTime.HasValue &&
+			       !ActivityPreferenceId.HasValue &&
+			       !ActivityMinimumTime.HasValue &&
+			       !ActivityMaximumTime.HasValue &&
+			       !ActivityEarliestStartTime.HasValue &&
+			       !ActivityLatestStartTime.HasValue &&
+			       !ActivityEarliestEndTime.HasValue &&
+			       !ActivityLatestEndTime.HasValue;
 		}
 
 		private static bool ValidateTimeSpan(TimeSpan? min, TimeSpan? max)

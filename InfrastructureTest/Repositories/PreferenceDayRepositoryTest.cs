@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -49,19 +50,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             LazyLoadingManager.IsInitialized(days[0].Restriction.ActivityRestrictionCollection).Should().Be.True();
         }
 
-		[Test]
-		public void CanFindPreferenceDaysBetweenDatesAndOnPerson()
-		{
-			DateOnlyPeriod period = new DateOnlyPeriod(2009, 2, 1, 2009, 3, 1);
-			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
-			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2009, 2, 2), _person, _activity));
-			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2009, 3, 2), _person, _activity));
-
-			IList<IPreferenceDay> days = new PreferenceDayRepository(UnitOfWork).Find(period, _person);
-			Assert.AreEqual(2, days.Count);
-			LazyLoadingManager.IsInitialized(days[0].Restriction.ActivityRestrictionCollection).Should().Be.True();
-		}
-
         [Test]
         public void CannotFindPreferenceDaysWhenEmptyPersonCollection()
         {
@@ -90,6 +78,62 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(TimeSpan.FromHours(11), ((RestrictionBase)days[0].Restriction.ActivityRestrictionCollection[0]).StartTimeLimitation.StartTime);
         }
 
+		[Test]
+		public void ShouldAddMustHaveWhenUnderLimit()
+		{
+			var date = new DateOnly(2009, 2, 1);
+			var person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriodAndMustHave(_person, date);
+			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDayWithoutMustHave(date, person2, _activity));
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDayWithoutMustHave(date.AddDays(1), person2, _activity));
+
+			var repository = new PreferenceDayRepository(UnitOfWork);
+			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date, person2, true);
+			Assert.AreEqual(true, result);
+		}
+
+		[Test]
+		public void ShouldNotAddMustHaveWhenOverLimit()
+		{
+			var date = new DateOnly(2009, 2, 1);
+			var person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriodAndMustHave(_person, date);
+			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDayWithoutMustHave(date, person2, _activity));
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date.AddDays(1), person2, _activity));
+
+			var repository = new PreferenceDayRepository(UnitOfWork);
+			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date, person2, true);
+			Assert.AreEqual(false, result);
+		}
+
+		[Test]
+		public void ShouldNotAddMustHaveWhenPreferenceEmpty()
+		{
+			var date = new DateOnly(2009, 2, 1);
+			var person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriodAndMustHave(_person, date);
+			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDayWithoutMustHave(date, person2, _activity));
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date.AddDays(1), person2, _activity));
+
+			var repository = new PreferenceDayRepository(UnitOfWork);
+			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date.AddDays(3), person2, true);
+			Assert.AreEqual(false, result);
+		}
+
+		[Test]
+		public void ShouldRemoveMustHave()
+		{
+			var date = new DateOnly(2009, 2, 1);
+			var person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriodAndMustHave(_person, date);
+			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date, person2, _activity));
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date.AddDays(1), person2, _activity));
+
+			var repository = new PreferenceDayRepository(UnitOfWork);
+			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date, person2, false);
+			Assert.AreEqual(false, result);
+		}
+
         [Test]
         public void VerifyLoadGraphById()
         {
@@ -110,16 +154,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         private static PreferenceDay CreatePreferenceDay( DateOnly date, IPerson person, IActivity activity  )
         {
-            PreferenceRestriction preferenceRestrictionNew = new PreferenceRestriction();
-            PreferenceDay preferenceDay = new PreferenceDay(person, date, preferenceRestrictionNew);
-            ActivityRestriction activityRestriction = new ActivityRestriction(activity);
-            activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(11,0,0), new TimeSpan(12,0,0) );
-            preferenceDay.Restriction.AddActivityRestriction(activityRestriction);
-            preferenceDay.Restriction.MustHave = true;
-            preferenceDay.TemplateName = "My template";
-
+	        var preferenceDay = CreatePreferenceDayWithoutMustHave(date, person, activity);
+			preferenceDay.Restriction.MustHave = true;
             return preferenceDay;
         }
+
+		private static PreferenceDay CreatePreferenceDayWithoutMustHave(DateOnly date, IPerson person, IActivity activity)
+		{
+			PreferenceRestriction preferenceRestrictionNew = new PreferenceRestriction();
+			PreferenceDay preferenceDay = new PreferenceDay(person, date, preferenceRestrictionNew);
+			ActivityRestriction activityRestriction = new ActivityRestriction(activity);
+			activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(11, 0, 0), new TimeSpan(12, 0, 0));
+			preferenceDay.Restriction.AddActivityRestriction(activityRestriction);
+			preferenceDay.TemplateName = "My template";
+
+			return preferenceDay;
+		}
 
         [Test]
         public void ShouldCreateRepositoryWithUnitOfWorkFactory()

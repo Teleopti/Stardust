@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
                     }
                 }
             }
-            if(cellData.StudentAvailabilityRestrictions == null)
+            if(cellData != null && cellData.StudentAvailabilityRestrictions == null)
             {
                 _parent.ToggleButtonEnabled("clipboardControlStudentAvailability", false);
                 _view.ToggleStateContextMenuItemPaste(false);
