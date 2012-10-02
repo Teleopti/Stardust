@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public interface ITeamSteadyStateDictionaryCreator
 	{
-		IDictionary<string, bool> Create(DateOnlyPeriod dateOnlyPeriod);
+		IDictionary<Guid, bool> Create(DateOnlyPeriod dateOnlyPeriod);
 	}
 
 	public class TeamSteadyStateDictionaryCreator : ITeamSteadyStateDictionaryCreator
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IList<IPerson> _persons;
 		private readonly ISchedulingOptions _schedulingOptions;
 
-		private delegate KeyValuePair<string, bool> TeamSteadyStateDelegate(IGroupPerson groupPerson, DateOnly dateOnly);
+		private delegate KeyValuePair<Guid, bool> TeamSteadyStateDelegate(IGroupPerson groupPerson, DateOnly dateOnly);
 
 		public TeamSteadyStateDictionaryCreator(IList<IPerson> persons, ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator, IList<IScheduleMatrixPro> matrixList, IGroupPersonsBuilder groupPersonsBuilder, ISchedulingOptions schedulingOptions)
 		{
@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingOptions = schedulingOptions;
 		}
 
-		public IDictionary<string, bool> Create(DateOnlyPeriod dateOnlyPeriod)	
+		public IDictionary<Guid, bool> Create(DateOnlyPeriod dateOnlyPeriod)	
 		{
-			var dictionary = new Dictionary<string, bool>();
+			var dictionary = new Dictionary<Guid, bool>();
 			
 			foreach (var dateOnly in dateOnlyPeriod.DayCollection())
 			{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				}
 
 				//Sync all threads
-				IList<KeyValuePair<string, bool>> results = new List<KeyValuePair<string, bool>>();
+				IList<KeyValuePair<Guid, bool>> results = new List<KeyValuePair<Guid, bool>>();
 				try
 				{
 					foreach (var thread in runnableList)

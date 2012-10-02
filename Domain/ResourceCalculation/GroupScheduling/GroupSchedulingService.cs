@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     public interface IGroupSchedulingService
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, IDictionary<string, bool> teamSteadyStates, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
+		void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, IDictionary<Guid, bool> teamSteadyStates, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
         bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
 
     	bool ScheduleOneDayOnOnePerson(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions,
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5")]
 		public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, 
-			IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, IDictionary<string, bool> teamSteadyStates, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+			IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, IDictionary<Guid, bool> teamSteadyStates, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
             if(matrixList == null) throw new ArgumentNullException("matrixList");
             if(backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -74,15 +74,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 					//to hide pbi on default, remove when done
 					if (teamSteadyStates != null) 
 					{
-						if (teamSteadyStates[groupPerson.Name.FirstName])
+						if (groupPerson.Id.HasValue)
 						{
-							if (!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, this, _rollbackService,schedulingOptions, groupPersonBuilderForOptimization, matrixList, _resultStateHolder.Schedules))
+							if (teamSteadyStates[groupPerson.Id.Value])
 							{
-								teamSteadyStates.Remove(groupPerson.Name.FirstName);
-								teamSteadyStates.Add(groupPerson.Name.FirstName, false);
-							}
+								if (
+									!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, this, _rollbackService,
+									                                                schedulingOptions, groupPersonBuilderForOptimization,
+									                                                matrixList, _resultStateHolder.Schedules))
+								{
+									teamSteadyStates.Remove(groupPerson.Id.Value);
+									teamSteadyStates.Add(groupPerson.Id.Value, false);
+								}
 
-							else teamSteadyStateSuccess = true;
+								else teamSteadyStateSuccess = true;
+							}
 						}
 					}
 

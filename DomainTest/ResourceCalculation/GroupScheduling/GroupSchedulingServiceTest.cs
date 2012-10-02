@@ -47,15 +47,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     	private IEffectiveRestriction _effectiveRestriction;
     	private IVirtualSchedulePeriod _schedulePeriod;
         private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
-    	private Dictionary<string, bool> _teamSteadyStates;
+    	private Dictionary<Guid, bool> _teamSteadyStates;
     	private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
     	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
     	private IFairnessValueResult _fairnessValueResult;
+    	private Guid _guid;
 			
 		[SetUp]
         public void Setup()
     	{
 			_mock = new MockRepository();
+			_guid = Guid.NewGuid();
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_shiftCategory = new ShiftCategory("kat");
     		_person1 = _mock.StrictMock<IPerson>();
@@ -94,10 +96,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 
-			_teamSteadyStates = new Dictionary<string, bool> {{"name", false}};
+			_teamSteadyStates = new Dictionary<Guid, bool> {{_guid, false}};
 			_teamSteadyStateMainShiftScheduler = _mock.StrictMock<ITeamSteadyStateMainShiftScheduler>();
 			_groupPersonBuilderForOptimization = _mock.StrictMock<IGroupPersonBuilderForOptimization>();
-			_fairnessValueResult = _mock.StrictMock<IFairnessValueResult>();
+			_fairnessValueResult = _mock.StrictMock<IFairnessValueResult>();	
     	}
 
         [TearDown]
@@ -115,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		public void ShouldUseSteadyStateMainShiftSchedulerWhenInSteadyState()
 		{
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			_teamSteadyStates = new Dictionary<string, bool> { { "name", true } };
+			_teamSteadyStates = new Dictionary<Guid, bool> { {_guid, true } };
 
 			using(_mock.Record())
 			{
@@ -130,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 																			_scheduleDictionary)).IgnoreArguments().Return(true);
 
 				Expect.Call(_stateHolder.Schedules).Return(null).Repeat.Twice();
-				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.Twice();
+				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
 			}
 
 			using(_mock.Playback())
@@ -143,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		public void ShouldTryToScheduleWithoutSteadyStateWhenSteadyStateFails()
 		{
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			_teamSteadyStates = new Dictionary<string, bool> { { "name", true } };
+			_teamSteadyStates = new Dictionary<Guid, bool> { {_guid, true } };
 
 			using (_mock.Record())
 			{
@@ -158,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 																			_scheduleDictionary)).IgnoreArguments().Return(false);
 
 				Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
+				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
 				//Expect.Call(() => _rollbackService.Rollback());
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>()));
@@ -170,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			using (_mock.Playback())
 			{
 				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
-			}	Assert.IsFalse(_teamSteadyStates["name"]);
+			}	Assert.IsFalse(_teamSteadyStates[_guid]);
 		}
 
 
@@ -219,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             		AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
 
-				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
+				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
             }
 
             using (_mock.Playback())
@@ -277,7 +279,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date1, _date1)).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
 
-				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
+				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
             }
 
             using (_mock.Playback())
@@ -319,7 +321,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             	Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date1, _date2)).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
 
-				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
+				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
 
             }
 
@@ -357,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 //Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.Any();
 
-				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
+				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
             }
 
             using (_mock.Playback())
@@ -366,7 +368,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldNotScheduleLockedDay()
         {
             var range1 = _mock.StrictMock<IScheduleRange>();
@@ -387,7 +389,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
             	Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.AtLeastOnce();
 
-				Expect.Call(_groupPerson.Name).Return(new Name("name", "")).Repeat.AtLeastOnce();
+				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
             	
             }
 

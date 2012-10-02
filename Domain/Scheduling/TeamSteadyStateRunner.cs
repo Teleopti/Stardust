@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -16,8 +17,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public KeyValuePair<string, bool> Run(IGroupPerson groupPerson, DateOnly dateOnly)
+		public KeyValuePair<Guid, bool> Run(IGroupPerson groupPerson, DateOnly dateOnly)
 		{
+				if(!groupPerson.Id.HasValue) throw new ArgumentNullException("groupPerson");
 				var steadyState = true;
 				var firstPerson = groupPerson.GroupMembers[0];
 				var teamSteadyState = CreateTeamSteadyState(firstPerson, dateOnly);
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					}
 				}
 
-			return new KeyValuePair<string, bool>(groupPerson.Name.FirstName, steadyState);
+			return new KeyValuePair<Guid, bool>(groupPerson.Id.Value, steadyState);
 		}
 
 		private ITeamSteadyState CreateTeamSteadyState(IPerson firstPerson, DateOnly dateOnly)

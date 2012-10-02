@@ -40,12 +40,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private ISchedulingOptions _schedulingOptions;
 		private IList<IPerson> _persons;
 		private DateOnlyPeriod _dates;
-		private Guid _guid;
+		private Guid _guid1;
+		private Guid _guid2;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
+			_guid1 = Guid.NewGuid();
+			_guid2 = Guid.NewGuid();
 
 			_dateOnly = new DateOnly(2012, 1, 1);
 			_dates = new DateOnlyPeriod(_dateOnly, _dateOnly);
@@ -67,8 +70,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_person3.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
 			_person4.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
 
-			_groupPerson1 = new GroupPerson(new List<IPerson>{_person1, _person2}, _dateOnly, "groupPerson1", _guid);
-			_groupPerson2 = new GroupPerson(new List<IPerson> { _person3, _person4 }, _dateOnly, "groupPerson2", _guid);
+			_groupPerson1 = new GroupPerson(new List<IPerson>{_person1, _person2}, _dateOnly, "groupPerson1", _guid1);
+			_groupPerson2 = new GroupPerson(new List<IPerson> { _person3, _person4 }, _dateOnly, "groupPerson2", _guid2);
 			_groupPersons = new List<IGroupPerson> { _groupPerson1, _groupPerson2 };
 
 			SetupStateHolder();
@@ -85,7 +88,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_schedulingOptions = new SchedulingOptions();
 			_persons = new List<IPerson>();
 			_target = new TeamSteadyStateDictionaryCreator(_persons, _schedulePeriodTargetTimeCalculator, _matrixes, _groupPersonsBuilder, _schedulingOptions);
-			_guid = Guid.NewGuid();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -133,8 +135,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				var result = _target.Create(_dates);
 				Assert.IsNotNull(result);
 				Assert.AreEqual(2, result.Count);
-				Assert.IsTrue(result["groupPerson1"]);
-				Assert.IsTrue(result["groupPerson2"]);
+				Assert.IsTrue(result[_guid1]);
+				Assert.IsTrue(result[_guid2]);
 			}		
 		}
 
@@ -161,8 +163,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				var result = _target.Create(_dates);
 				Assert.IsNotNull(result);
 				Assert.AreEqual(2, result.Count);
-				Assert.IsFalse(result["groupPerson1"]);
-				Assert.IsTrue(result["groupPerson2"]);
+				Assert.IsFalse(result[_guid1]);
+				Assert.IsTrue(result[_guid2]);
 			}	
 		}
 
@@ -186,8 +188,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				var result = _target.Create(_dates);
 				Assert.IsNotNull(result);
 				Assert.AreEqual(2, result.Count);
-				Assert.IsTrue(result["groupPerson1"]);
-				Assert.IsFalse(result["groupPerson2"]);
+				Assert.IsTrue(result[_guid1]);
+				Assert.IsFalse(result[_guid2]);
 			}		
 		}
 
@@ -215,8 +217,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				var result = _target.Create(_dates);
 				Assert.IsNotNull(result);
 				Assert.AreEqual(2, result.Count);
-				Assert.IsTrue(result["groupPerson1"]);
-				Assert.IsFalse(result["groupPerson2"]);
+				Assert.IsTrue(result[_guid1]);
+				Assert.IsFalse(result[_guid2]);
 			}
 		}
 	}
