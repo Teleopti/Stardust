@@ -2,10 +2,12 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _schedulePart;
         private ISchedulingOptions _schedulingOptions;
         private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private IGroupOptimizerFindMatrixesForGroup _groupOptimerFindMatrixesForGroup;
 
         [SetUp]
         public void Setup()
@@ -34,15 +37,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayPro = _mockRepository.StrictMock<IScheduleDayPro>();
             _schedulePart = _mockRepository.StrictMock<IScheduleDay>();
             _schedulingOptions = new SchedulingOptions();
+            _groupOptimerFindMatrixesForGroup = _mockRepository.DynamicMock<IGroupOptimizerFindMatrixesForGroup>();
         }
 
         [Test]
         public void VerifyExecute()
         {
-            //ISchedulePeriod schedulePeriod = AddTestShiftCategoryLimitationToSchedulePeriod();
-            IVirtualSchedulePeriod virtualSchedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
+            var virtualSchedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
             var scheduleMatrix = _mockRepository.DynamicMock<IScheduleMatrixPro>();
             var scheduleMatrixList = new List<IScheduleMatrixPro>();
+            scheduleMatrixList.Add((scheduleMatrix));
+            var person = new Person() ;
+            var dateOnly = new DateOnly();
+            var groupPerson = _mockRepository.DynamicMock<IGroupPerson>();
+            var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, new CccTimeZoneInfo());
 
             using (_mockRepository.Record())
             {
@@ -50,14 +58,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro, _scheduleDayPro })
                     .IgnoreArguments()
                     .Repeat.Times(2);
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.Times(6);
-                //Expect.Call(_scheduleDayService.ScheduleDay(_schedulePart, _schedulingOptions)).Return(true).Repeat.Times(6);
                 Expect.Call(virtualSchedulePeriod.ShiftCategoryLimitationCollection()).Return(Limitations());
+                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.AtLeastOnce();
+                Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(dateTimePeriod).Repeat.AtLeastOnce();
+                Expect.Call(_schedulePart.Person).Return(person).Repeat.AtLeastOnce();
+                Expect.Call(_groupOptimerFindMatrixesForGroup.Find(person, dateOnly)).IgnoreArguments().Return(scheduleMatrixList).Repeat.AtLeastOnce();
+                Expect.Call(scheduleMatrix.Person).Return(person);
+                Expect.Call(scheduleMatrix.SchedulePeriod).Return(virtualSchedulePeriod);
+                Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1))).Repeat.AtLeastOnce() ;
+                Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, dateOnly)).Return(groupPerson ).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleService.ScheduleOneDay(dateOnly, _schedulingOptions,groupPerson,scheduleMatrixList )).Return(true).Repeat.Times(6);
+
             }
             using (_mockRepository.Playback())
             {
-                //AddTestShiftCategoryLimitationToSchedulePeriod();
-                //Assert.IsTrue(_target.Execute(virtualSchedulePeriod,_schedulingOptions,));
+                Assert.AreEqual( 1, _target.Execute(virtualSchedulePeriod, _schedulingOptions, scheduleMatrixList, _groupOptimerFindMatrixesForGroup).Count );
             }
         }
 
