@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 	    private ISchedulingResultStateHolder _stateHolder;
 		private ISchedulingOptions _schedulingOptions;
 		private Guid _guid;
-		private IAggregateRoot _root;
+//		private IAggregateRoot _root;
 
 		[SetUp]
 		public void Setup()
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			_groupPersonConsistentChecker = _mocks.StrictMock<IGroupPersonConsistentChecker>();
 			_schedulingResults = new WorkShiftFinderResultHolder();
 			_guid = Guid.NewGuid();
-			_root = _mocks.StrictMock<IAggregateRoot>();
+	//		_root = _mocks.StrictMock<IAggregateRoot>();
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]

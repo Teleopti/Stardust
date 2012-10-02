@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupPersonConsistentChecker = groupPersonConsistentChecker;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool Execute(IList<IPerson> persons, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixes )
 		{
 			var schedulingOptionsSynchronizer = new SchedulingOptionsCreator();
