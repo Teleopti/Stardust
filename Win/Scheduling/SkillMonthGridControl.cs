@@ -126,8 +126,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
 			if (skill == null || dates == null) return;
 
-			((PercentReadOnlyCellModel)CellModels["ReadOnlyPercentCell"]).NumberOfDecimals = 0;
-			((PercentFromPercentReadOnlyCellModel)CellModels["PercentCellModel"]).NumberOfDecimals = 0;
             ((NumericReadOnlyCellModel)CellModels["NumericReadOnlyCell"]).NumberOfDecimals = 2;
             DateOnly baseDate;
 
