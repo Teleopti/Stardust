@@ -54,6 +54,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
+        public void VerifyExecute()
+        {
             var scheduleMatrixValueCalculator = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorPro>();
             var scheduleMatrixPro = _mockRepository.StrictMock<IScheduleMatrixPro>();
             var schedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
@@ -76,12 +78,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>())).Repeat.Times(iteration);
                 Expect.Call(schedulePeriod.ShiftCategoryLimitationCollection()).Return(
                     new ReadOnlyCollection<IShiftCategoryLimitation>(new List<IShiftCategoryLimitation>())).Repeat.AtLeastOnce();
-                Expect.Call(scheduleMatrixPro.SchedulePeriod).Return(schedulePeriod).Repeat.Times(2*iteration);
+                Expect.Call(scheduleMatrixPro.SchedulePeriod).Return(schedulePeriod).Repeat.Times(2 * iteration);
             }
             using (_mockRepository.Playback())
             {
                 _target.Execute(_scheduleMatrixList, new SchedulingOptions(), _optimizerPreferences, _groupOptimizerFindMatrixesForGroup);
             }
+        }
+
         public void VerifyBuildScheduleMatrixValueCalculator()
         {
             _scheduleMatrixValueCalculatorFactory = new ScheduleMatrixValueCalculatorProFactory();
