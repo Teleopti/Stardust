@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 
 			var personsInGroup = curentPersonsInGroup(personGroup);
-			var groupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name);
+			var guid = ((IEntity) personGroup).Id;
+			var groupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name, guid);
 			
 			return groupPerson;
 		}

@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IShiftCategoryFairnessGroupPersonHolder _groupPersonHolder;
 		private IScheduleDictionary _dic;
 		private IScheduleDateTimePeriod _schedDateTimePeriod;
+		private Guid _guid;
 
 		[SetUp]
 		public void Setup()
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_fairnessComparer = _mocks.StrictMock<IShiftCategoryFairnessComparer>();
 			_fairnessAggregator = _mocks.DynamicMock<IShiftCategoryFairnessAggregator>();
 			_groupPersonHolder = _mocks.DynamicMock<IShiftCategoryFairnessGroupPersonHolder>();
+			_guid = Guid.NewGuid();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -65,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddDays(5));
 			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 			var period = dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo);
-			var groupPerson = new GroupPerson(new List<IPerson>{person, person2}, date, "perras");
+			var groupPerson = new GroupPerson(new List<IPerson>{person, person2}, date, "perras", _guid);
 			var fairnessResult = new ShiftCategoryFairnessCompareResult();
 			Expect.Call(_resultStateHolder.Schedules).Return(_dic);
 			Expect.Call(_dic.Period).Return(_schedDateTimePeriod);
@@ -103,8 +105,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			var dateTime = new DateTime(2012, 9, 12, 0, 0, 0, 0, DateTimeKind.Utc);
 			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddDays(5));
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, date, "perras");
-			var groupPerson2 = new GroupPerson(new List<IPerson> { person2 }, date, "peckas");
+			var groupPerson = new GroupPerson(new List<IPerson> { person }, date, "perras", _guid);
+			var groupPerson2 = new GroupPerson(new List<IPerson> { person2 }, date, "peckas", _guid);
 			var fairnessResult = new ShiftCategoryFairnessCompareResult();
 			Expect.Call(_resultStateHolder.Schedules).Return(_dic);
 			Expect.Call(_dic.Period).Return(_schedDateTimePeriod);
@@ -147,8 +149,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddDays(5));
 			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 			var period = dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo);
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, date, "perras");
-			var groupPerson2 = new GroupPerson(new List<IPerson> { person2 }, date, "peckas");
+			var groupPerson = new GroupPerson(new List<IPerson> { person }, date, "perras", _guid);
+			var groupPerson2 = new GroupPerson(new List<IPerson> { person2 }, date, "peckas", _guid);
 			var fairnessResult = new ShiftCategoryFairnessCompareResult();
 			Expect.Call(_resultStateHolder.Schedules).Return(_dic);
 			Expect.Call(_dic.Period).Return(_schedDateTimePeriod);
@@ -188,8 +190,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddDays(5));
 			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 			var period = dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo);
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, date, "perras");
-			var groupPerson2 = new GroupPerson(new List<IPerson> { person2 }, date, "peckas");
+			var groupPerson = new GroupPerson(new List<IPerson> { person }, date, "perras", _guid);
+			var groupPerson2 = new GroupPerson(new List<IPerson> { person2 }, date, "peckas", _guid);
 			var fairnessResult = new ShiftCategoryFairnessCompareResult();
 			var fairnessResult2 = new ShiftCategoryFairnessCompareResult();
 			Expect.Call(_resultStateHolder.Schedules).Return(_dic);

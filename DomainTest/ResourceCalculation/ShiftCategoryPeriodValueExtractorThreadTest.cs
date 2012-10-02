@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IShiftProjectionCache _cashe2;
         private IShiftProjectionCache _cashe3;
         private IShiftProjectionCache _cashe4;
+    	private Guid _guid;
 
         [SetUp]
         public void Setup()
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _effectiveRestrictionCreator = _mocks.DynamicMock<IEffectiveRestrictionCreator>();
             _possibleStartEndCategory = new PossibleStartEndCategory();
             _effectiveRestriction = _mocks.DynamicMock<IEffectiveRestriction>();
+        	_guid = Guid.NewGuid();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -131,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             IPerson person = new Person();
             var personList = new List<IPerson> { person };
-            _groupPerson = new GroupPerson(personList,_dateOnly,"Grp");
+            _groupPerson = new GroupPerson(personList,_dateOnly,"Grp", _guid);
 
             IDictionary<IShiftCategory, int> shiftDictionary = new Dictionary<IShiftCategory, int>();
             _possibleStartEndCategory.ShiftCategory = new ShiftCategory("newshiftcat");
