@@ -121,9 +121,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Available shift category",
                         "Late"});
             table5.AddRow(new string[] {
-                        "Available shift category",
-                        "Night"});
-            table5.AddRow(new string[] {
                         "Available dayoff",
                         "Dayoff"});
             table5.AddRow(new string[] {
@@ -144,7 +141,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table6.AddRow(new string[] {
                         "Length",
                         "1"});
-#line 29
+#line 28
  testRunner.And("I have a schedule period with", ((string)(null)), table6);
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -153,7 +150,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table7.AddRow(new string[] {
                         "Start date",
                         "2012-10-01"});
-#line 34
+#line 33
  testRunner.And("I have a person period with", ((string)(null)), table7);
 #line hidden
         }
@@ -163,7 +160,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void SeeThatPreferenceIsFulfilled()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See that preference is fulfilled", ((string[])(null)));
-#line 39
+#line 38
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -177,7 +174,7 @@ this.FeatureBackground();
             table8.AddRow(new string[] {
                         "Preference",
                         "Late"});
-#line 40
+#line 39
  testRunner.Given("I have a preference with", ((string)(null)), table8);
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
@@ -187,13 +184,11 @@ this.FeatureBackground();
                         "Date",
                         "2012-10-02"});
             table9.AddRow(new string[] {
-                        "Shift category",
+                        "Shift Category",
                         "Late"});
-#line 44
+#line 43
  testRunner.And("I have a shift with", ((string)(null)), table9);
-#line 48
- testRunner.And("My schedule is published");
-#line 49
+#line 47
  testRunner.When("I view preferences for date \'2012-10-02\'");
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -211,7 +206,7 @@ this.FeatureBackground();
             table10.AddRow(new string[] {
                         "Fulfilled",
                         "true"});
-#line 50
+#line 48
  testRunner.Then("I should see the day cell with", ((string)(null)), table10);
 #line hidden
             this.ScenarioCleanup();
@@ -222,7 +217,7 @@ this.FeatureBackground();
         public virtual void SeeThatPreferenceNotFulfilled()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See that preference not fulfilled", ((string[])(null)));
-#line 57
+#line 55
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -236,7 +231,7 @@ this.FeatureBackground();
             table11.AddRow(new string[] {
                         "Preference",
                         "Late"});
-#line 58
+#line 56
  testRunner.Given("I have a preference with", ((string)(null)), table11);
 #line hidden
             TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
@@ -246,13 +241,11 @@ this.FeatureBackground();
                         "Date",
                         "2012-10-02"});
             table12.AddRow(new string[] {
-                        "Shift category",
+                        "Shift Category",
                         "Night"});
-#line 62
+#line 60
  testRunner.And("I have a shift with", ((string)(null)), table12);
-#line 66
- testRunner.And("My schedule is published");
-#line 67
+#line 64
  testRunner.When("I view preferences for date \'2012-10-02\'");
 #line hidden
             TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
@@ -270,7 +263,7 @@ this.FeatureBackground();
             table13.AddRow(new string[] {
                         "Fulfilled",
                         "false"});
-#line 68
+#line 65
  testRunner.Then("I should see the day cell with", ((string)(null)), table13);
 #line hidden
             this.ScenarioCleanup();
@@ -281,7 +274,7 @@ this.FeatureBackground();
         public virtual void SeeExtendedIndicationOnPreferenceOnScheduledDay()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See extended indication on preference on scheduled day", ((string[])(null)));
-#line 75
+#line 72
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -295,26 +288,27 @@ this.FeatureBackground();
             table14.AddRow(new string[] {
                         "End time maximum",
                         "20:30"});
-#line 76
+#line 73
  testRunner.Given("I have an extended preference with", ((string)(null)), table14);
 #line hidden
             TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table15.AddRow(new string[] {
+                        "Date",
+                        "2012-10-02"});
+            table15.AddRow(new string[] {
+                        "ShiftCategoryName",
+                        "Late"});
+            table15.AddRow(new string[] {
                         "StartTime",
                         "2012-10-02 10:00"});
             table15.AddRow(new string[] {
                         "EndTime",
                         "2012-10-02 20:00"});
-            table15.AddRow(new string[] {
-                        "ShiftCategoryName",
-                        "Late"});
-#line 80
+#line 77
  testRunner.And("I have a shift with", ((string)(null)), table15);
-#line 85
- testRunner.And("My schedule is published");
-#line 86
+#line 83
  testRunner.When("I view preferences for date \'2012-10-02\'");
 #line hidden
             TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
@@ -335,7 +329,7 @@ this.FeatureBackground();
             table16.AddRow(new string[] {
                         "Extended Indication",
                         "true"});
-#line 87
+#line 84
  testRunner.Then("I should see the day cell with", ((string)(null)), table16);
 #line hidden
             this.ScenarioCleanup();
@@ -346,7 +340,7 @@ this.FeatureBackground();
         public virtual void DisplayExtendedPreferencePanelForPreferenceOnScheduledDay()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Display extended preference panel for preference on scheduled day", ((string[])(null)));
-#line 95
+#line 92
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -360,28 +354,23 @@ this.FeatureBackground();
             table17.AddRow(new string[] {
                         "End time maximum",
                         "20:30"});
-#line 96
+#line 93
  testRunner.Given("I have an extended preference with", ((string)(null)), table17);
 #line hidden
             TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table18.AddRow(new string[] {
-                        "StartTime",
-                        "2012-10-02 20:00"});
-            table18.AddRow(new string[] {
-                        "EndTime",
-                        "2012-10-03 04:00"});
+                        "Date",
+                        "2012-10-02"});
             table18.AddRow(new string[] {
                         "ShiftCategoryName",
-                        "Night"});
-#line 100
+                        "Late"});
+#line 97
  testRunner.And("I have a shift with", ((string)(null)), table18);
-#line 105
- testRunner.And("My schedule is published");
-#line 106
+#line 101
  testRunner.When("I view preferences for date \'2012-10-02\'");
-#line 107
+#line 102
  testRunner.And("I click the extended preference indication on \'2012-10-02\'");
 #line hidden
             TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
@@ -393,7 +382,7 @@ this.FeatureBackground();
             table19.AddRow(new string[] {
                         "End time maximum",
                         "20:30"});
-#line 108
+#line 103
  testRunner.Then("I should see extended preference with", ((string)(null)), table19);
 #line hidden
             this.ScenarioCleanup();
@@ -404,7 +393,7 @@ this.FeatureBackground();
         public virtual void DisplayMustHaveForPreferenceOnScheduledDay()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Display must have for preference on scheduled day", ((string[])(null)));
-#line 113
+#line 108
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -418,7 +407,10 @@ this.FeatureBackground();
             table20.AddRow(new string[] {
                         "Shift category",
                         "Late"});
-#line 114
+            table20.AddRow(new string[] {
+                        "Must have",
+                        "true"});
+#line 109
  testRunner.Given("I have a preference with", ((string)(null)), table20);
 #line hidden
             TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
@@ -430,11 +422,9 @@ this.FeatureBackground();
             table21.AddRow(new string[] {
                         "Shift category",
                         "Late"});
-#line 118
+#line 114
  testRunner.And("I have a shift with", ((string)(null)), table21);
-#line 122
- testRunner.And("My schedule is published");
-#line 123
+#line 118
  testRunner.When("I view preferences for date \'2012-10-02\'");
 #line hidden
             TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
@@ -446,244 +436,8 @@ this.FeatureBackground();
             table22.AddRow(new string[] {
                         "Must have",
                         "true"});
-#line 124
+#line 119
  testRunner.Then("I should see the day cell with", ((string)(null)), table22);
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Dayoff preference fulfilled")]
-        public virtual void DayoffPreferenceFulfilled()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Dayoff preference fulfilled", ((string[])(null)));
-#line 133
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
-#line hidden
-            TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table23.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table23.AddRow(new string[] {
-                        "Preference",
-                        "Dayoff"});
-#line 134
- testRunner.Given("I have a preference with", ((string)(null)), table23);
-#line hidden
-            TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table24.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table24.AddRow(new string[] {
-                        "Shift category",
-                        "Dayoff"});
-#line 138
- testRunner.And("I have a shift with", ((string)(null)), table24);
-#line 142
- testRunner.And("My schedule is published");
-#line 143
- testRunner.When("I view preferences for date \'2012-10-02\'");
-#line hidden
-            TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table25.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table25.AddRow(new string[] {
-                        "Shift category",
-                        "Dayoff"});
-            table25.AddRow(new string[] {
-                        "Preference",
-                        "Dayoff"});
-            table25.AddRow(new string[] {
-                        "Preference Color",
-                        "Green"});
-#line 144
- testRunner.Then("I should see the day cell with", ((string)(null)), table25);
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Dayoff preference not fulfilled")]
-        public virtual void DayoffPreferenceNotFulfilled()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Dayoff preference not fulfilled", ((string[])(null)));
-#line 151
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
-#line hidden
-            TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table26.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table26.AddRow(new string[] {
-                        "Preference",
-                        "Dayoff"});
-#line 152
- testRunner.Given("I have a preference with", ((string)(null)), table26);
-#line hidden
-            TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table27.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table27.AddRow(new string[] {
-                        "Shift category",
-                        "Late"});
-#line 156
- testRunner.And("I have a shift with", ((string)(null)), table27);
-#line 160
- testRunner.And("My schedule is published");
-#line 161
- testRunner.When("I view preferences for date \'2012-10-02\'");
-#line hidden
-            TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table28.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table28.AddRow(new string[] {
-                        "Shift category",
-                        "Late"});
-            table28.AddRow(new string[] {
-                        "Preference",
-                        "Dayoff"});
-            table28.AddRow(new string[] {
-                        "Preference Color",
-                        "Red"});
-#line 162
- testRunner.Then("I should see the day cell with", ((string)(null)), table28);
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Absence preference fulfilled")]
-        public virtual void AbsencePreferenceFulfilled()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Absence preference fulfilled", ((string[])(null)));
-#line 169
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
-#line hidden
-            TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table29.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table29.AddRow(new string[] {
-                        "Preference",
-                        "Absence"});
-#line 170
- testRunner.Given("I have a preference with", ((string)(null)), table29);
-#line hidden
-            TechTalk.SpecFlow.Table table30 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table30.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table30.AddRow(new string[] {
-                        "Shift category",
-                        "Absence"});
-#line 174
- testRunner.And("I have a shift with", ((string)(null)), table30);
-#line 178
- testRunner.And("My schedule is published");
-#line 179
- testRunner.When("I view preferences for date \'2012-10-02\'");
-#line hidden
-            TechTalk.SpecFlow.Table table31 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table31.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table31.AddRow(new string[] {
-                        "Shift category",
-                        "Absence"});
-            table31.AddRow(new string[] {
-                        "Preference",
-                        "Absence"});
-            table31.AddRow(new string[] {
-                        "Preference Color",
-                        "Green"});
-#line 180
- testRunner.Then("I should see the day cell with", ((string)(null)), table31);
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Absence preference not fulfilled")]
-        public virtual void AbsencePreferenceNotFulfilled()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Absence preference not fulfilled", ((string[])(null)));
-#line 187
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
-#line hidden
-            TechTalk.SpecFlow.Table table32 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table32.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table32.AddRow(new string[] {
-                        "Preference",
-                        "Absence"});
-#line 188
- testRunner.Given("I have a preference with", ((string)(null)), table32);
-#line hidden
-            TechTalk.SpecFlow.Table table33 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table33.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table33.AddRow(new string[] {
-                        "Shift category",
-                        "Late"});
-#line 192
- testRunner.And("I have a shift with", ((string)(null)), table33);
-#line 196
- testRunner.And("My schedule is published");
-#line 197
- testRunner.When("I view preferences for date \'2012-10-02\'");
-#line hidden
-            TechTalk.SpecFlow.Table table34 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table34.AddRow(new string[] {
-                        "Date",
-                        "2012-10-02"});
-            table34.AddRow(new string[] {
-                        "Shift category",
-                        "Late"});
-            table34.AddRow(new string[] {
-                        "Preference",
-                        "Absence"});
-            table34.AddRow(new string[] {
-                        "Preference Color",
-                        "Red"});
-#line 198
- testRunner.Then("I should see the day cell with", ((string)(null)), table34);
 #line hidden
             this.ScenarioCleanup();
         }
