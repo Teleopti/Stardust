@@ -10,6 +10,7 @@ Scenario: See scheduled shift
 	When I view preferences
 	Then I should see my shift
 
+	#need remove
 Scenario: Not see preference when scheduled
 	Given I am an agent
 	And I have existing preference today
