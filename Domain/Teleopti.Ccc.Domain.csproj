@@ -248,7 +248,6 @@
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroup.cs" />
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameMatrix.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimization.cs" />
-    <Compile Include="Optimization\GroupRemoveShiftCategoryBackToLegalService.cs" />
     <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Optimization\IsSignificantPartFullDayAbsenceOrDayOffSpecification.cs" />

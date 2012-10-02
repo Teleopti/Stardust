@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
         public List<IScheduleMatrixPro> Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
         {
             var resultList = new List<IScheduleDayPro>();
