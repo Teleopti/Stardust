@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                         !auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, today,
                                          personFinderDisplayRow);
                 }
-				if(personFinderDisplayRow.BusinessUnitId != new Guid() )
+				if (!personFinderDisplayRow.Grayed && personFinderDisplayRow.BusinessUnitId != new Guid())
 				{
 					personFinderDisplayRow.Grayed = personFinderDisplayRow.BusinessUnitId != bu;
 				}
