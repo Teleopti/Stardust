@@ -16,6 +16,9 @@ namespace Teleopti.Interfaces.Domain
 		/// <returns></returns>
         IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions);
 
+        /// <summary>
+        /// Schedule matrix for a single person
+        /// </summary>
         IScheduleMatrixPro ScheduleMatrixPro { get; }
     }
 }
