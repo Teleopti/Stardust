@@ -54,8 +54,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifyExecute()
-        {
             var scheduleMatrixValueCalculator = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorPro>();
             var scheduleMatrixPro = _mockRepository.StrictMock<IScheduleMatrixPro>();
             var schedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
@@ -84,9 +82,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 _target.Execute(_scheduleMatrixList, new SchedulingOptions(), _optimizerPreferences, _groupOptimizerFindMatrixesForGroup);
             }
-        }
-
-        [Test]
         public void VerifyBuildScheduleMatrixValueCalculator()
         {
             _scheduleMatrixValueCalculatorFactory = new ScheduleMatrixValueCalculatorProFactory();

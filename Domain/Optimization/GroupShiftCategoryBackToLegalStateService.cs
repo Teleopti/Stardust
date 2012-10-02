@@ -26,10 +26,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         public List<IScheduleMatrixPro> Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
         {
             var resultList = new List<IScheduleDayPro>();
-            foreach (IShiftCategoryLimitation limitation in schedulePeriod.ShiftCategoryLimitationCollection())
-            {
-                resultList.AddRange(_shiftCategoryBackToLegalService.Execute(limitation, schedulingOptions));
-            }
+            if (schedulePeriod != null)
+                foreach (IShiftCategoryLimitation limitation in schedulePeriod.ShiftCategoryLimitationCollection())
+                {
+                    resultList.AddRange(_shiftCategoryBackToLegalService.Execute(limitation, schedulingOptions));
+                }
             var removeList = new List<IScheduleMatrixPro>();
             if(resultList.Count ==0)
                 removeList.Add(_shiftCategoryBackToLegalService.ScheduleMatrixPro );
@@ -38,19 +39,23 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var schedulePart = scheduleDayPro.DaySchedulePart();
                 var scheduleDate = schedulePart.DateOnlyAsPeriod.DateOnly;
                 var person = schedulePart.Person;
-                var matrixs = groupOptimizerFindMatrixesForGroup.Find(person, scheduleDate);
-                
-                var memberList = new List<IScheduleMatrixPro>();
-                foreach (var scheduleMatrixPro in matrixs)
+                if (groupOptimizerFindMatrixesForGroup != null)
                 {
-                    foreach (var matrix in allMatrixes)
+                    var matrixs = groupOptimizerFindMatrixesForGroup.Find(person, scheduleDate);
+                
+                    var memberList = new List<IScheduleMatrixPro>();
+                    foreach (var scheduleMatrixPro in matrixs)
                     {
-                        if (matrix.Person == scheduleMatrixPro.Person && matrix.SchedulePeriod.DateOnlyPeriod.Contains(scheduleDate))
-                        {
-                            if (!removeList.Contains(matrix))
-                                removeList.Add(matrix);
-                            memberList.Add(matrix);
-                        }
+                        if (allMatrixes != null)
+                            foreach (var matrix in allMatrixes)
+                            {
+                                if (matrix.Person == scheduleMatrixPro.Person && matrix.SchedulePeriod.DateOnlyPeriod.Contains(scheduleDate))
+                                {
+                                    if (!removeList.Contains(matrix))
+                                        removeList.Add(matrix);
+                                    memberList.Add(matrix);
+                                }
+                            }
                     }
                 }
                 var groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person,scheduleDate);

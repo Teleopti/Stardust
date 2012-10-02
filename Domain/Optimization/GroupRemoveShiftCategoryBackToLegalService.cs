@@ -15,14 +15,11 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IRemoveShiftCategoryOnBestDateService _removeShiftCategoryOnBestDateService;
         private readonly IScheduleMatrixPro _scheduleMatrix;
-        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
-
         public GroupRemoveShiftCategoryBackToLegalService(IRemoveShiftCategoryOnBestDateService removeShiftCategoryOnBestDateService,
                                                      IScheduleMatrixPro scheduleMatrix, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
             _removeShiftCategoryOnBestDateService = removeShiftCategoryOnBestDateService;
             _scheduleMatrix = scheduleMatrix;
-            _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -97,14 +94,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool IsShiftCategoryOverPeriodLimit(IShiftCategoryLimitation shiftCategoryLimitation)
         {
-            if (shiftCategoryLimitation.Weekly)
+            if (shiftCategoryLimitation != null && shiftCategoryLimitation.Weekly)
                 throw new ArgumentException("shiftCategoryLimitation.Weekly must be true");
 
             int categoryCounter = 0;
 
             foreach (var scheduleDay in _scheduleMatrix.EffectivePeriodDays)
             {
-                if (_removeShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(scheduleDay, shiftCategoryLimitation.ShiftCategory))
+                if (shiftCategoryLimitation != null && _removeShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(scheduleDay, shiftCategoryLimitation.ShiftCategory))
                     categoryCounter++;
             }
 
@@ -113,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool IsShiftCategoryOverWeekLimit(IShiftCategoryLimitation shiftCategoryLimitation)
         {
-            if (!shiftCategoryLimitation.Weekly)
+            if (shiftCategoryLimitation != null && !shiftCategoryLimitation.Weekly)
                 throw new ArgumentException("shiftCategoryLimitation.Weekly must not be true");
 
             IList<IScheduleDayPro> days = _scheduleMatrix.FullWeeksPeriodDays;
@@ -123,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 int categoryCounter = 0;
                 for (int i = 0; i < 7; i++)
                 {
-                    if (_removeShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(days[o + i], shiftCategoryLimitation.ShiftCategory))
+                    if (shiftCategoryLimitation != null && _removeShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(days[o + i], shiftCategoryLimitation.ShiftCategory))
                         categoryCounter++;
                 }
                 if (categoryCounter > shiftCategoryLimitation.MaxNumberOf)

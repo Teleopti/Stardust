@@ -92,6 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 );
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public virtual IScheduleMatrixValueCalculatorPro BuildScheduleMatrixValueCalculator
             (IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
              IList<IScheduleMatrixPro> scheduleMatrixList,
@@ -100,13 +101,14 @@ namespace Teleopti.Ccc.Domain.Optimization
              IScheduleFairnessCalculator fairnessCalculator)
         {
             IList<DateOnly> days = new List<DateOnly>();
-            foreach (IScheduleMatrixPro matrix in scheduleMatrixList)
-            {
-                foreach (IScheduleDayPro day in matrix.EffectivePeriodDays)
+            if (scheduleMatrixList != null)
+                foreach (IScheduleMatrixPro matrix in scheduleMatrixList)
                 {
-                    days.Add(day.Day);
+                    foreach (IScheduleDayPro day in matrix.EffectivePeriodDays)
+                    {
+                        days.Add(day.Day);
+                    }
                 }
-            }
             return scheduleMatrixValueCalculatorProFactory.CreateScheduleMatrixValueCalculatorPro
                 (days, optimizerPreferences, stateHolder, fairnessCalculator);
         }
