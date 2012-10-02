@@ -246,6 +246,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     		return true;
     	}
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions)
         {
             //Delete old current shift
@@ -260,12 +261,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
             //recalc resources
             ICollection<DateOnly> daysToRecalculate = new HashSet<DateOnly>();
-            foreach (var part in schedulePartList)
-            {
-                var date = new DateOnly(part.Period.LocalStartDateTime);
-                daysToRecalculate.Add(date);
-                daysToRecalculate.Add(date.AddDays(1));
-            }
+            if (schedulePartList != null)
+                foreach (var part in schedulePartList)
+                {
+                    var date = new DateOnly(part.Period.LocalStartDateTime);
+                    daysToRecalculate.Add(date);
+                    daysToRecalculate.Add(date.AddDays(1));
+                }
 
             foreach (var date in daysToRecalculate)
             {

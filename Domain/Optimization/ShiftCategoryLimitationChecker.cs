@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private IScheduleDictionary ScheduleDictionary { get { return _resultStateHolder.Schedules; } }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         public void SetBlockedShiftCategories(ISchedulingOptions optimizerPreferences, IPerson person, DateOnly dateOnly)
         {
             optimizerPreferences.NotAllowedShiftCategories.Clear();

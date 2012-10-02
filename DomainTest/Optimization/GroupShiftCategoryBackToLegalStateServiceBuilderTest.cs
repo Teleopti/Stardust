@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -17,25 +12,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private GroupShiftCategoryBackToLegalStateServiceBuilder _target;
         private MockRepository _mockRepository;
         private IScheduleMatrixValueCalculatorPro _scheduleMatrixValueCalculator;
-        private IDeleteSchedulePartService _deleteSchedulePartService;
-        private IResourceOptimizationHelper _resourceOptimizationHelper;
-        private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private IGroupSchedulingService _scheduleService;
         private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
-        private List<IScheduleMatrixPro> _scheduleMatrixList;
         private IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
 
         [SetUp]
         public void Setup()
         {
             _mockRepository = new MockRepository();
-            _deleteSchedulePartService = _mockRepository.StrictMock<IDeleteSchedulePartService>();
-            _resourceOptimizationHelper = _mockRepository.StrictMock<IResourceOptimizationHelper>();
             _scheduleMatrixValueCalculator = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorPro>();
-            _effectiveRestrictionCreator = _mockRepository.DynamicMock<IEffectiveRestrictionCreator>();
             _scheduleService = _mockRepository.StrictMock<IGroupSchedulingService>();
             _groupPersonBuilderForOptimization = _mockRepository.StrictMock<IGroupPersonBuilderForOptimization>();
-            _scheduleMatrixList = new List<IScheduleMatrixPro>();
             _groupOptimizerFindMatrixesForGroup = _mockRepository.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
             _target = new GroupShiftCategoryBackToLegalStateServiceBuilder(
                 _scheduleMatrixValueCalculator,

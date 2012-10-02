@@ -53,11 +53,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifyExecute()
-        {
-        }
-
-        [Test]
         public void VerifyBuildScheduleMatrixValueCalculator()
         {
             _scheduleMatrixValueCalculatorFactory = new ScheduleMatrixValueCalculatorProFactory();

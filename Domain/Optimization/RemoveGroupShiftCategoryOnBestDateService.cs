@@ -49,11 +49,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool IsThisDayCorrectShiftCategory(IScheduleDayPro scheduleDayPro, IShiftCategory shiftCategory)
         {
-            IScheduleDay part = scheduleDayPro.DaySchedulePart();
-            if (part.SignificantPart() == SchedulePartView.MainShift)
+            if (scheduleDayPro != null)
             {
-                if (part.AssignmentHighZOrder().MainShift.ShiftCategory.Equals(shiftCategory))
-                    return true;
+                IScheduleDay part = scheduleDayPro.DaySchedulePart();
+                if (part.SignificantPart() == SchedulePartView.MainShift)
+                {
+                    if (part.AssignmentHighZOrder().MainShift.ShiftCategory.Equals(shiftCategory))
+                        return true;
+                }
             }
 
             return false;
@@ -76,24 +79,25 @@ namespace Teleopti.Ccc.Domain.Optimization
             double min = double.MaxValue;
             IScheduleDayPro currentDay = null;
 
-            foreach (var scheduleDayPro in daysToWorkWith)
-            {
-                IList<ISkill> skillList = new List<ISkill>();
-                foreach (var personSkill in _scheduleMatrix.Person.Period(scheduleDayPro.Day).PersonSkillCollection)
+            if (daysToWorkWith != null)
+                foreach (var scheduleDayPro in daysToWorkWith)
                 {
-                    skillList.Add(personSkill.Skill);
-                }
-
-                double? current = _scheduleMatrixValueCalculatorPro.DayValueForSkills(scheduleDayPro.Day, skillList);
-                if (current.HasValue)
-                {
-                    if (current.Value < min)
+                    IList<ISkill> skillList = new List<ISkill>();
+                    foreach (var personSkill in _scheduleMatrix.Person.Period(scheduleDayPro.Day).PersonSkillCollection)
                     {
-                        min = current.Value;
-                        currentDay = scheduleDayPro;
+                        skillList.Add(personSkill.Skill);
+                    }
+
+                    double? current = _scheduleMatrixValueCalculatorPro.DayValueForSkills(scheduleDayPro.Day, skillList);
+                    if (current.HasValue)
+                    {
+                        if (current.Value < min)
+                        {
+                            min = current.Value;
+                            currentDay = scheduleDayPro;
+                        }
                     }
                 }
-            }
 
             return currentDay;
         }
