@@ -39,16 +39,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private IScheduleDayPro _scheduleDayPro;
 		private IVirtualSchedulePeriod _virtualSchedulePeriod;
 		private DateOnlyPeriod _dateOnlyPeriod;
+		private Guid _guid;
 
 		[SetUp]
 		public void Setup()
 		{
+			_guid = Guid.NewGuid();
 			_mocks = new MockRepository();
 			_groupMatrixHelper = _mocks.StrictMock<IGroupMatrixHelper>();
 			_dateOnly = new DateOnly(2012, 1, 1);
 			_person1 = PersonFactory.CreatePersonWithPersonPeriod(_dateOnly, new List<ISkill>());
 			_person2 = PersonFactory.CreatePersonWithPersonPeriod(_dateOnly, new List<ISkill>());
-			_groupPerson = new GroupPerson(new List<IPerson> { _person1, _person2 }, _dateOnly, "groupPerson1");
+			_groupPerson = new GroupPerson(new List<IPerson> { _person1, _person2 }, _dateOnly, "groupPerson1", _guid);
 			_groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_schedulingOptions = new SchedulingOptions();
@@ -66,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_mainShift2 = _mocks.StrictMock<IMainShift>();
 			_target = new TeamSteadyStateMainShiftScheduler(_groupMatrixHelper);
 			_virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-			_dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1));
+			_dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1));	
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]

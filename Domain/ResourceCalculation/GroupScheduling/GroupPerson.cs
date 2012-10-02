@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
         private readonly IList<IPerson> _groupMembers = new List<IPerson>();
         private readonly DateOnly _dateOnly;
 
-        public GroupPerson(IList<IPerson> persons, DateOnly dateOnly, string name)
+        public GroupPerson(IList<IPerson> persons, DateOnly dateOnly, string name, Guid? guid)
         {
             _dateOnly = dateOnly;
             setGroupMembers(persons);
             setPersonSkillsOnDate();
             SetCommonRuleSetBagOnDate();
-			SetId(Guid.NewGuid());
+			SetId(guid);
 			Name = new Name(name,"");
         }
 

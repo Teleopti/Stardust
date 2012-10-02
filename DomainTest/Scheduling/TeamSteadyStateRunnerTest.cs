@@ -31,10 +31,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private IWorkShiftTemplateGenerator _workShiftTemplateGenerator;
 		private IWorkShiftRuleSet _workShiftRuleSet;
 		private IList<IScheduleMatrixPro> _matrixes;
+		private Guid _guid;
 
 		[SetUp]
 		public void Setup()
 		{
+			_guid = Guid.NewGuid();
 			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2012, 1, 1);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("person1"), _dateOnly);
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			_person1.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
 			_person2.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
-			_groupPerson1 = new GroupPerson(new List<IPerson> { _person1, _person2 }, _dateOnly, "groupPerson1");	
+			_groupPerson1 = new GroupPerson(new List<IPerson> { _person1, _person2 }, _dateOnly, "groupPerson1", _guid);	
 			var dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(30));
 			
 			SetupStateHolder();
