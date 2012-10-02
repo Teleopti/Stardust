@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-	public partial class AgentRestrictionGrid : GridControl, IAgentRestrictionsView
+	public partial class AgentRestrictionGrid : GridControl, IAgentRestrictionsView, IHelpContext
 	{
 		private AgentRestrictionsPresenter _presenter;
 		private IAgentRestrictionsModel _model;
@@ -419,6 +419,16 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		void GridCellDrawn(object sender, GridDrawCellEventArgs e)
 		{
 			_presenter.GridCellDrawn(e);
+		}
+
+		public bool HasHelp
+		{
+			get { return true; }
+		}
+
+		public string HelpId
+		{
+			get { return Name; }
 		}
 	}
 }
