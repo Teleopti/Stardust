@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -436,6 +438,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             Assert.AreEqual(null, result);
             Assert.AreNotEqual(count, _list.Count);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ShouldThrowException()
+        {
+            
+            var maxInt = int.MaxValue;
+            maxInt++;
+            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
+                                                    maxInt,
+                                                    _blacklist, ref _list);
+            
         }
     }
 }

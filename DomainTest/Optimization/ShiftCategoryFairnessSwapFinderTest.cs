@@ -413,47 +413,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                              };
         }
 
-        //private void SetupBlacklistForCompleteExhaustOfGroup1ShiftCategoryDayOptions()
-        //{
-        //    SetupSmallListForBlacklistTests();
-
-        //    var blackListItem1 = new ShiftCategoryFairnessSwap
-        //                             {
-        //                                 Group1 = group1,
-        //                                 Group2 = group2,
-        //                                 ShiftCategoryFromGroup1 = shiftCategoryDay,
-        //                                 ShiftCategoryFromGroup2 = shiftCategoryNoon
-        //                             };
-        //    var blackListItem2 = new ShiftCategoryFairnessSwap
-        //                             {
-        //                                 Group1 = group1,
-        //                                 Group2 = group2,
-        //                                 ShiftCategoryFromGroup1 = shiftCategoryDay,
-        //                                 ShiftCategoryFromGroup2 = shiftCategoryNight
-        //                             };
-        //    var blackListItem3 = new ShiftCategoryFairnessSwap
-        //                             {
-        //                                 Group1 = group1,
-        //                                 Group2 = group3,
-        //                                 ShiftCategoryFromGroup1 = shiftCategoryDay,
-        //                                 ShiftCategoryFromGroup2 = shiftCategoryNoon
-        //                             };
-        //    var blackListItem4 = new ShiftCategoryFairnessSwap
-        //                             {
-        //                                 Group1 = group1,
-        //                                 Group2 = group3,
-        //                                 ShiftCategoryFromGroup1 = shiftCategoryDay,
-        //                                 ShiftCategoryFromGroup2 = shiftCategoryNight
-        //                             };
-        //    _blackList = new List<IShiftCategoryFairnessSwap>
-        //                     {
-        //                         blackListItem1,
-        //                         blackListItem2,
-        //                         blackListItem3,
-        //                         blackListItem4
-        //                     };
-        //}
-
         private void SetupBlacklistForCompleteExhaustOfGroup1Options()
         {
             SetupSmallListForBlacklistTests();

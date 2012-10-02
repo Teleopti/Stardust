@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -13,11 +14,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     public class ShiftCategoryFairnessComparerTest
     {
         private ShiftCategoryFairnessComparer _target;
+        private ShiftCategoryFairnessCompareValue _compareValueTarget;
 
         [SetUp]
         public void Setup()
         {
             _target = new ShiftCategoryFairnessComparer();
+            _compareValueTarget = new ShiftCategoryFairnessCompareValue
+                                      {
+                                          ComparedTo = 0,
+                                          Original = 0,
+                                          ShiftCategory = new ShiftCategory("Day")
+                                      };
         }
 
         [Test]
@@ -139,5 +147,52 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             Assert.That(System.Math.Round(result.StandardDeviation, 6), Is.EqualTo(0.616441));
         }
+
+        [Test]
+        public void ShouldReturnFalseWhenNull()
+        {
+            Assert.That(_compareValueTarget.Equals(null), Is.False);
+        }
+
+        [Test]
+        public void ShouldReturnSameWithSameItems()
+        {
+            var compareValueTarget2 = new ShiftCategoryFairnessCompareValue
+                         {
+                             ComparedTo = 0,
+                             Original = 0,
+                             ShiftCategory = new ShiftCategory("Day")
+                         };
+
+            var result = _compareValueTarget.Equals(compareValueTarget2);
+            Assert.AreEqual(true, result);
+        }
+
+        [Test]
+        public void ShouldReturnTrueIfSame()
+        {
+            Assert.That(_compareValueTarget.Equals(_compareValueTarget), Is.True);
+        }
+
+        [Test]
+        public void CastingToObjectShouldStillBeEqual()
+        {
+            var compareValueTarget2 = new ShiftCategoryFairnessCompareValue
+                         {
+                             ComparedTo = 0,
+                             Original = 0,
+                             ShiftCategory = new ShiftCategory("Day")
+                         };
+            var objectTarget2 = (object) compareValueTarget2;
+            Assert.That(_compareValueTarget.Equals(objectTarget2), Is.True);
+        }
+
+        [Test]
+        public void CastingToObjectShouldNotBeEqualForDiffrentItems()
+        {
+            object variable = null;
+            Assert.That(_compareValueTarget.Equals(variable), Is.False);
+        }
+        
     }
 }

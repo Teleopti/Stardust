@@ -25,12 +25,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             return obj.GetType() == typeof (ShiftCategoryFairnessCompareValue) && Equals((ShiftCategoryFairnessCompareValue) obj);
         }
 
-	    public bool Equals(ShiftCategoryFairnessCompareValue other)
-	    {
-	        if (ReferenceEquals(null, other)) return false;
-	        if (ReferenceEquals(this, other)) return true;
-	        return other.ShiftCategory.Equals(ShiftCategory) && other.Original.Equals(Original) && other.ComparedTo.Equals(ComparedTo);
-	    }
+        public bool Equals(ShiftCategoryFairnessCompareValue other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return other.ShiftCategory.Description.Name.Equals(ShiftCategory.Description.Name) &&
+                   other.Original.Equals(Original) && other.ComparedTo.Equals(ComparedTo);
+        }
 
 	    public override int GetHashCode()
 	    {
