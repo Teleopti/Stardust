@@ -89,12 +89,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private GridCellModelBase initializeCallPercentReadOnlyCell()
         {
-        	return new PercentReadOnlyCellModel(Model);
+        	return new PercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
         }
 
         private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
         {
-        	return new PercentFromPercentReadOnlyCellModel(Model);
+			return new PercentFromPercentReadOnlyCellModel(Model) { NumberOfDecimals = 1 };
         }
 
         private void gridSkillDataQueryColWidth(object sender, GridRowColSizeEventArgs e)

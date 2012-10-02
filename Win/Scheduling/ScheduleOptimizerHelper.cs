@@ -107,6 +107,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
 
             IMoveTimeDecisionMaker decisionMaker = new MoveTimeDecisionMaker2();
+
             var scheduleService = _container.Resolve<IScheduleService>();
 
             IMoveTimeOptimizerCreator creator =

@@ -63,22 +63,35 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public bool SchedulePersonOnDay(
 			IScheduleDay schedulePart,
 			ISchedulingOptions schedulingOptions,
-			bool useOccupancyAdjustment,
 			IEffectiveRestriction effectiveRestriction,
-			IResourceCalculateDelayer resourceCalculateDelayer)
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			return SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction,
-			                           resourceCalculateDelayer, null);
+			return schedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction,
+			                           resourceCalculateDelayer, null, rollbackService);
 		}
 
-    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public bool SchedulePersonOnDay(
-            IScheduleDay schedulePart,
-            ISchedulingOptions schedulingOptions,
-            bool useOccupancyAdjustment, 
-            IEffectiveRestriction effectiveRestriction,
+		public bool SchedulePersonOnDay(
+			IScheduleDay schedulePart,
+			ISchedulingOptions schedulingOptions,
+			bool useOccupancyAdjustment,
+			IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IPossibleStartEndCategory possibleStartEndCategory)
+		{
+			return schedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer,
+			                           possibleStartEndCategory, _rollbackService);
+		}
+
+
+    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        private bool schedulePersonOnDay(
+            IScheduleDay schedulePart,
+            ISchedulingOptions schedulingOptions,
+            IEffectiveRestriction effectiveRestriction,
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			IPossibleStartEndCategory possibleStartEndCategory,
+			ISchedulePartModifyAndRollbackService rollbackService)
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
             {
@@ -131,7 +144,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					 	res.Successful = true;
 					 }
                 schedulePart.AddMainShift((IMainShift)cache.ShiftProjection.TheMainShift.EntityClone());
-                _rollbackService.Modify(schedulePart);
+                rollbackService.Modify(schedulePart);
 
             	resourceCalculateDelayer.CalculateIfNeeded(scheduleDateOnly,
             	                                           cache.ShiftProjection.WorkShiftProjectionPeriod, new List<IScheduleDay>{schedulePart});

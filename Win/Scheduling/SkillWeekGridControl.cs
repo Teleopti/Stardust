@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 	public class SkillWeekGridControl : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext, ISkillWeekGridControl
     {
         private AbstractDetailView _owner;
-        private const int RowHeaderWidth = 200;
-        private const string SettingName = "SchedulerSkillDayGridAndChart";
+        private const int rowHeaderWidth = 200;
+        private const string settingName = "SchedulerSkillDayGridAndChart";
 		private RowManagerScheduler<SkillWeekGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
         private IList<IGridRow> _gridRows;
         private GridRow _currentSelectedGridRow;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling
            
             using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(SettingName, _defaultChartSettings);
+                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(settingName, _defaultChartSettings);
             }
 
 			_presenter = new SkillWeekGridControlPresenter(this);
@@ -89,17 +89,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private GridCellModelBase initializeCallPercentReadOnlyCell()
         {
-        	return new PercentReadOnlyCellModel(Model);
+			return new PercentReadOnlyCellModel(Model) { NumberOfDecimals = 1 };
         }
 
         private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
         {
-        	return new PercentFromPercentReadOnlyCellModel(Model);
+        	var cellModel = new PercentFromPercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
+        	return cellModel;
         }
 
         private void gridSkillDataQueryColWidth(object sender, GridRowColSizeEventArgs e)
         {	
-			e.Size = RowHeaderWidth;
+			e.Size = rowHeaderWidth;
             e.Handled = true;   
         }
 
@@ -220,7 +221,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			ColCount = colCount;
 			RowCount = _gridRows.Count - 1;
-			ColWidths[0] = RowHeaderWidth;
+			ColWidths[0] = rowHeaderWidth;
 		}
 
         public void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
