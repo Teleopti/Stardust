@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         public ContractDto()
         {
             AvailableOvertimeDefinitionSets = new List<Guid>();
+			AvailableShiftAllowanceDefinitionSets = new List<Guid>();
         }
 
         /// <summary>
@@ -36,6 +37,13 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// </summary>
         [DataMember]
         public ICollection<Guid> AvailableOvertimeDefinitionSets { get; private set; }
+
+
+		/// <summary>
+		/// Gets the id's of the available shift allowance definition sets.
+		/// </summary>
+		[DataMember(IsRequired = false, Order = 2)]
+		public ICollection<Guid> AvailableShiftAllowanceDefinitionSets { get; private set; }
 
         /// <summary>
         /// Gets or sets the deleted flag.

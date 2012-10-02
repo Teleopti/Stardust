@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                                  };
             _contractDomain.AddMultiplicatorDefinitionSetCollection(new MultiplicatorDefinitionSet("My overtime",
                                                                                                    MultiplicatorType.Overtime));
+			_contractDomain.AddMultiplicatorDefinitionSetCollection(new MultiplicatorDefinitionSet("Shift Allowance", MultiplicatorType.OBTime));
             _contractDomain.SetId(Guid.NewGuid());
 
             // Create Dto object
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(_contractDomain.Description.Name, contractDto.Description);
             Assert.AreEqual(EmploymentType.HourlyStaff, contractDto.EmploymentType);
             Assert.AreEqual(1,contractDto.AvailableOvertimeDefinitionSets.Count);
+			Assert.AreEqual(1, contractDto.AvailableShiftAllowanceDefinitionSets.Count);
             Assert.IsFalse(contractDto.IsDeleted);
         }
 

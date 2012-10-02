@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
             target.Amount = TimeSpan.FromHours(1.5d);
             target.Date = DateTime.Today;
             target.ActualDate = DateTime.Today.AddDays(1);
-            target.Multiplicator =
-                new MultiplicatorDto(MultiplicatorFactory.CreateMultiplicator("test", "", Color.FloralWhite,
-                                                                              MultiplicatorType.Overtime, 1));
-
+			//target.Multiplicator =
+			//    new MultiplicatorDto(MultiplicatorFactory.CreateMultiplicator("test", "", Color.FloralWhite,
+			//                                                                  MultiplicatorType.Overtime, 1));
+			target.Multiplicator = new MultiplicatorDto();
             Assert.AreEqual(DateTime.Today, target.Date);
             Assert.AreEqual(DateTime.Today.AddDays(1), target.ActualDate);
             Assert.AreEqual(TimeSpan.FromHours(1.5d), target.Amount);
