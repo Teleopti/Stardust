@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Linq;
@@ -37,8 +38,18 @@ namespace Teleopti.Support.Tool.Controls
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            _mainForm.ShowPTracks();
-            Hide();
+            SetButtonStates(true);
+            if (listViewDatabases.Visible)
+            {
+                _mainForm.ShowPTracks();
+                Hide();
+            }
+            else
+            {
+                listViewDatabases.Visible = true;
+                textBoxOutput.Visible = false;
+                RefreshDatabaseList();
+            }
         }
 
         private void buttonBrowse_Click(object sender, EventArgs e)
@@ -124,7 +135,89 @@ namespace Teleopti.Support.Tool.Controls
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            // TODO: Köra bat-fil eller något annat
+            SetButtonStates(false);
+            listViewDatabases.Visible = false;
+            textBoxOutput.Visible = true;
+            execute(@"C:\Temp\");
+        }
+
+        private void SetButtonStates(bool state)
+        {
+            buttonBack.Enabled = state;
+            buttonRefresh.Enabled = state;
+            buttonUpdate.Enabled = state;
+        }
+
+        delegate void EnableBackDelegate();
+
+        private void EnableBack()
+        {
+            buttonBack.Enabled = true;
+        }
+
+        private void execute(string workingDirectory)
+        {
+            string command = @"cmd";
+            // create the ProcessStartInfo using "cmd" as the program to be run, and "/c " as the parameters.
+            // Incidentally, /c tells cmd that we want it to execute the command that follows, and then exit.
+            ProcessStartInfo procStartInfo = new ProcessStartInfo(command, @" /c " + workingDirectory + @"DirWin.bat");
+
+            procStartInfo.WorkingDirectory = workingDirectory;
+            //This means that it will be redirected to the Process.StandardOutput StreamReader.
+            procStartInfo.RedirectStandardOutput = true;
+            //This means that it will be redirected to the Process.StandardError StreamReader. (same as StdOutput)
+            procStartInfo.RedirectStandardError = true;
+
+            procStartInfo.UseShellExecute = false;
+            // Do not create the black window.
+            procStartInfo.CreateNoWindow = true;
+            // Now we create a process, assign its ProcessStartInfo and start it
+            Process proc = new Process();
+
+            //This is importend, else some Events will not fire!
+            proc.EnableRaisingEvents = true;
+
+            // The given Funktion will be raised if the Process wants to print an output to consol                    
+            proc.OutputDataReceived += new DataReceivedEventHandler(ProcOnOutputDataReceived);
+            // Std Error
+            proc.ErrorDataReceived += new DataReceivedEventHandler(ProcOnErrorDataReceived);
+            // If Batch File is finished this Event will be raised
+            proc.Exited += new EventHandler(ProcOnExited);
+            // passing the Startinfo to the process
+            proc.StartInfo = procStartInfo;
+            proc.Start();
+            proc.BeginOutputReadLine();
+            //textBoxOutput.Text = proc.StandardOutput.ReadToEnd();
+            proc.WaitForExit();
+        }
+
+        private void AppendText(string text)
+        {
+            if (InvokeRequired)
+            {
+                this.BeginInvoke(new Action<string>(AppendText), new object[] { text });
+                return;
+            }
+            
+            textBoxOutput.Text += text;
+            textBoxOutput.Text += Environment.NewLine;
+            textBoxOutput.ScrollToCaret();
+            //textBoxOutput.AppendText(@"\n");
+        }
+
+        private void ProcOnExited(object sender, EventArgs eventArgs)
+        {
+            buttonBack.Invoke(new EnableBackDelegate(EnableBack));
+        }
+
+        private void ProcOnErrorDataReceived(object sender, DataReceivedEventArgs dataReceivedEventArgs)
+        {
+            AppendText(dataReceivedEventArgs.Data);
+        }
+
+        private void ProcOnOutputDataReceived(object sender, DataReceivedEventArgs dataReceivedEventArgs)
+        {
+            AppendText(dataReceivedEventArgs.Data);
         }
 
         private void listViewDatabases_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)

@@ -45,6 +45,7 @@
             this.buttonUpdate = new System.Windows.Forms.Button();
             this.buttonRefresh = new System.Windows.Forms.Button();
             this.folderBrowserDialogNHib = new System.Windows.Forms.FolderBrowserDialog();
+            this.textBoxOutput = new System.Windows.Forms.TextBox();
             this.smoothLabelCurrentVersionIs = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.smoothLabelCurrentVersion = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.labelManageDatabaseVersions = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
@@ -170,6 +171,21 @@
             // 
             this.folderBrowserDialogNHib.ShowNewFolderButton = false;
             // 
+            // textBoxOutput
+            // 
+            this.textBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutput.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.textBoxOutput.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxOutput.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.textBoxOutput.Location = new System.Drawing.Point(14, 83);
+            this.textBoxOutput.Multiline = true;
+            this.textBoxOutput.Name = "textBoxOutput";
+            this.textBoxOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxOutput.Size = new System.Drawing.Size(651, 199);
+            this.textBoxOutput.TabIndex = 37;
+            this.textBoxOutput.Visible = false;
+            // 
             // smoothLabelCurrentVersionIs
             // 
             this.smoothLabelCurrentVersionIs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -224,6 +240,7 @@
             this.Controls.Add(this.labelNHibFolder);
             this.Controls.Add(this.labelManageDatabaseVersions);
             this.Controls.Add(this.listViewDatabases);
+            this.Controls.Add(this.textBoxOutput);
             this.Name = "ManageDatabaseVersions";
             this.Size = new System.Drawing.Size(670, 320);
             this.Load += new System.EventHandler(this.ManageDatabaseVersions_Load);
@@ -249,5 +266,6 @@
         private System.Windows.Forms.Button buttonUpdate;
         private System.Windows.Forms.Button buttonRefresh;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialogNHib;
+        private System.Windows.Forms.TextBox textBoxOutput;
     }
 }
