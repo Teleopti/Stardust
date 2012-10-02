@@ -18,20 +18,21 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function asmViewModel(yesterday) {
 		var self = this;
+		self.intervalPointer = null;
 
 		self.loadViewModel = function () {
 			Teleopti.MyTimeWeb.Ajax.Ajax({
 				url: 'Asm/Today',
 				dataType: "json",
 				type: 'GET',
-				data: { asmZero: yesterday.toJSON() },
+				data: { asmZero: self.yesterday().toJSON() },
 				success: function (data) {
 					self.hours(data.Hours);
 					self._createLayers(data.Layers);
 
 					$('.asm-outer-canvas').show();
 
-					setInterval(function () {
+					self.intervalPointer = setInterval(function () {
 						self.now(new Date().getTeleoptiTime());
 					}, 1000 * refreshSeconds);
 				}
@@ -54,12 +55,25 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			});
 		});
 		self.now = ko.observable(new Date().getTeleoptiTime());
+		self.yesterday = ko.observable(yesterday);
 		self.canvasPosition = ko.computed(function () {
-			var msSinceStart = self.now() - yesterday.getTime();
+			var msSinceStart = self.now() - self.yesterday().getTime();
 			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
 			return -(pixelPerHours * hoursSinceStart) + 'px';
 		});
-		self.yesterday = yesterday;
+		self.now.subscribe(function (currentMs) {
+			var yesterdayPlus2Days = new Date(self.yesterday().getTime()).addDays(2);
+			if (currentMs > yesterdayPlus2Days.getTime()) {
+				var todayMinus1 = new Date(currentMs).addDays(-1).clearTime();
+				self.yesterday(todayMinus1);
+			}
+		});
+		self.yesterday.subscribe(function () {
+			if (self.intervalPointer != null) {
+				clearInterval(self.intervalPointer);
+			}
+			self.loadViewModel();
+		});
 	}
 
 	function layerViewModel(layer, canvasPosition) {
@@ -97,11 +111,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		texts = userTexts;
 		_setFixedElementAttributes();
 
-		var yesterdayTemp = new Date(new Date().getTeleoptiTime());
-		yesterdayTemp.setDate(yesterdayTemp.getDate() - 1);
-		var yesterday = new Date(yesterdayTemp.getFullYear(), yesterdayTemp.getMonth(), yesterdayTemp.getDate());
-
-		vm = new asmViewModel(yesterday);
+		var yesterDayFromNow = new Date(new Date().getTeleoptiTime()).addDays(-1).clearTime();
+		vm = new asmViewModel(yesterDayFromNow);
 		ko.applyBindings(vm);
 		vm.loadViewModel();
 	}
@@ -114,13 +125,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	var onMessageBrokerEvent = function (notification) {
-		var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
-		messageStartDate.setDate(messageStartDate.getDate() - 1);
-		var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
-		messageEndDate.setDate(messageEndDate.getDate() + 1);
-		var visibleStartDate = vm.yesterday;
-		var visibleEndDate = new Date(visibleStartDate.getTime());
-		visibleEndDate.setDate(visibleEndDate.getDate() + 2);
+		var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate).addDays(-1);
+		var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate).addDays(1);
+		var visibleStartDate = vm.yesterday();
+		var visibleEndDate = new Date(visibleStartDate.getTime()).addDays(2);
 
 		if (messageStartDate < visibleEndDate && messageEndDate > visibleStartDate) {
 			vm.loadViewModel();

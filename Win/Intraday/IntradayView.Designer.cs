@@ -16,7 +16,9 @@ namespace Teleopti.Ccc.Win.Intraday
             if (disposing)
             {
                 if (components != null)
-                    components.Dispose();
+                {
+                	components.Dispose();
+                }
 
                 if (_intradayViewContent != null)
                 {
@@ -29,6 +31,11 @@ namespace Teleopti.Ccc.Win.Intraday
                     Presenter.Dispose();
                     Presenter = null;
                 }
+				if (_gridrowInChartSetting!=null)
+				{
+					_gridrowInChartSetting.LineInChartEnabledChanged -= gridrowInChartSetting_LineInChartEnabledChanged;
+					_gridrowInChartSetting.LineInChartSettingsChanged -= gridlinesInChartSettings_LineInChartSettingsChanged;
+				}
             }
             base.Dispose(disposing);
         }

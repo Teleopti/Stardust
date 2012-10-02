@@ -84,10 +84,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 										Func<T> robustValue = () => Robustness.SafeIEOperation(value.Invoke, failingValue);
 
-										if (string.IsNullOrEmpty(message))
-											Assert.That(() => robustValue.Invoke(), reusableConstraint);
-										else
-											Assert.That(() => robustValue.Invoke(), reusableConstraint, message);
+										Assert.That(() => robustValue.Invoke(), reusableConstraint,
+										            string.IsNullOrEmpty(message) ? string.Empty : message);
 										return true;
 									}
 									catch (AssertionException ex)

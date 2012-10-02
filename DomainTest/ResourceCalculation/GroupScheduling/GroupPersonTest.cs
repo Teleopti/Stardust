@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		private IPersonPeriod _personPeriod2;
     	private IRuleSetBag _bag1;
 		private IRuleSetBag _bag2;
+    	private Guid _guid;
 
         [SetUp]
         public void Setup()
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			_personPeriod2 = _mock.StrictMock<IPersonPeriod>();
 			_bag1 = new RuleSetBag();
 			_bag2 = new RuleSetBag();
+        	_guid = Guid.NewGuid();
         }
 
         private void SetExpectations()
@@ -115,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         	SetRuleSetBagExpectations();
 			SetExpectations();
 			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME");
+			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
             var person = _groupPerson as Person;
             Assert.IsNotNull(person);
@@ -133,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         	SetRuleSetBagExpectations();
 			SetExpectations();
 			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME");
+			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
             Assert.AreEqual(2, _groupPerson.GroupMembers.Count);
             _mock.VerifyAll();
@@ -146,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         	SetRuleSetBagExpectations();
 			SetExpectations();
 			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME");
+			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
             var personalSkills = ((Person)_groupPerson).PersonPeriodCollection[0].PersonSkillCollection;
             Assert.IsNotNull(personalSkills);
@@ -163,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             var persons = new List<IPerson> { person1, person2 };
             Assert.AreEqual(new Percent(1), person1.PersonPeriodCollection[0].PersonSkillCollection[0].SkillPercentage);
             var factory = new GroupPersonFactory();
-            _groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME");
+			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
             var personalSkills = ((Person)_groupPerson).PersonPeriodCollection[0].PersonSkillCollection;
             Assert.IsNotNull(personalSkills);
             Assert.AreEqual(1, personalSkills.Count);
@@ -177,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         	SetRuleSetBagExpectations();
 			SetExpectations();
 			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME");
+			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
             var bag = ((Person)_groupPerson).PersonPeriodCollection[0].RuleSetBag;
             Assert.AreEqual(2, bag.RuleSetCollection.Count);
@@ -195,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         	SetRuleSetBagExpectations();
 			SetExpectations();
 			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME");
+			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
             var bag = ((Person)_groupPerson).PersonPeriodCollection[0].RuleSetBag;
             //Assert.That(bag.Equals(_groupPerson.VirtualSchedulePeriod(_dateOnly).PersonPeriod.RuleSetBag));
@@ -209,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			SetRuleSetBagExpectationsNoBag();
 			SetExpectations();
 			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME");
+			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
 			//Assert.AreEqual(0,_groupPerson.VirtualSchedulePeriod(_dateOnly).PersonPeriod.RuleSetBag.RuleSetCollection.Count);
             Assert.AreEqual(0, ((Person)_groupPerson).Period(_dateOnly).RuleSetBag.RuleSetCollection.Count);
@@ -219,8 +221,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         public void ShouldThrowAnExceptionIfListOfPersonsIsEmpty()
         {
             var persons = new List<IPerson> ();
-            
-            _groupPerson = new GroupPerson(persons, _dateOnly, "");
+
+			_groupPerson = new GroupPerson(persons, _dateOnly, "", _guid);
         }
 
 		[Test]
@@ -257,9 +259,21 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			using (_mock.Playback())
 			{
 				var factory = new GroupPersonFactory();
-				_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME");
+				_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 				Assert.AreEqual(1, _groupPerson.GroupMembers.Count);
 			}
+		}
+
+		[Test]
+		public void ShouldSetIdFromConstructorParameter()
+		{
+			var persons = new List<IPerson> { _person1, _person2 };
+			var factory = new GroupPersonFactory();
+			SetRuleSetBagExpectations();
+			SetExpectations();
+			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "Name", _guid);
+
+			Assert.AreEqual(_guid, _groupPerson.Id);
 		}
     }
 

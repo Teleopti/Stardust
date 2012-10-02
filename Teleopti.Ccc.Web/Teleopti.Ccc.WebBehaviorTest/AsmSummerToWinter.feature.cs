@@ -127,18 +127,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 #line 23
  testRunner.And("there is a shift with", ((string)(null)), table5);
 #line hidden
-            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table6.AddRow(new string[] {
-                        "StartTime",
-                        "2020-10-24 05:00"});
-            table6.AddRow(new string[] {
-                        "EndTime",
-                        "2020-10-24 06:00"});
-#line 28
- testRunner.And("there is a shift with", ((string)(null)), table6);
-#line hidden
         }
         
         [NUnit.Framework.TestAttribute()]
@@ -146,17 +134,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void ShiftCrossingWinterToSummerDaylightShouldHaveCorrectLength()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Shift crossing winter to summer daylight should have correct length", ((string[])(null)));
-#line 33
+#line 28
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 34
+#line 29
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 35
+#line 30
  testRunner.And("Current time is \'2020-10-24 20:00\'");
-#line 36
+#line 31
  testRunner.When("I click ASM link");
-#line 37
+#line 32
  testRunner.Then("The last layer should be \'7\' hours long");
 #line hidden
             this.ScenarioCleanup();

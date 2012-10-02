@@ -57,37 +57,43 @@ namespace Teleopti.Messaging.SignalR
 			SendEventMessage(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, null);
 		}
 
+private IEnumerable<Notification> CreateNotifications(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+{
+	IList<Type> types;
+	if (FilterManager.FilterDictionary.TryGetValue(domainObjectType, out types))
+	{
+		foreach (var type in types)
+		{
+			yield return new Notification
+			             	{
+			             		StartDate = Subscription.DateToString(eventStartDate),
+			             		EndDate = Subscription.DateToString(eventEndDate),
+			             		DomainId = Subscription.IdToString(domainObjectId),
+			             		DomainType = type.Name,
+			             		DomainQualifiedType = types[0].AssemblyQualifiedName,
+			             		DomainReferenceId = Subscription.IdToString(referenceObjectId),
+			             		DomainReferenceType =
+			             			(referenceObjectType == null)
+			             				? null
+			             				: FilterManager.LookupType(referenceObjectType),
+			             		ModuleId = Subscription.IdToString(moduleId),
+			             		DomainUpdateType = (int) updateType,
+			             		DataSource = dataSource,
+			             		BusinessUnitId = Subscription.IdToString(businessUnitId),
+			             		BinaryData =
+			             			(domainObject != null) ? Encoding.UTF8.GetString(domainObject) : null
+			             	};
+		}
+}
+}
+
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
-			IList<Type> types;
-			if (FilterManager.FilterDictionary.TryGetValue(domainObjectType, out types))
-			{
-				foreach (var type in types)
-				{
-					callProxy(new Notification
-					{
-						StartDate = Subscription.DateToString(eventStartDate),
-						EndDate = Subscription.DateToString(eventEndDate),
-						DomainId = Subscription.IdToString(domainObjectId),
-						DomainType = type.Name,
-						DomainQualifiedType =  types[0].AssemblyQualifiedName,
-						DomainReferenceId = Subscription.IdToString(referenceObjectId),
-						DomainReferenceType =
-							(referenceObjectType == null)
-								? null
-								: FilterManager.LookupType(referenceObjectType),
-						ModuleId = Subscription.IdToString(moduleId),
-						DomainUpdateType = (int)updateType,
-						DataSource = dataSource,
-						BusinessUnitId = Subscription.IdToString(businessUnitId),
-						BinaryData =
-							(domainObject != null) ? Encoding.UTF8.GetString(domainObject) : null
-					});
-				}
-			}
+			callProxy(CreateNotifications(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, referenceObjectId,
+			                              referenceObjectType, domainObjectId, domainObjectType, updateType, domainObject));
 		}
 
-		private void callProxy(Notification state)
+		private void callProxy(IEnumerable<Notification> state)
 		{
 			lock (WrapperLock)
 			{
@@ -105,11 +111,22 @@ namespace Teleopti.Messaging.SignalR
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void SendEventMessages(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
 		{
+			var notificationList = new List<Notification>();
 			foreach (var eventMessage in eventMessages)
 			{
-				SendEventMessage(dataSource,businessUnitId, eventMessage.EventStartDate, eventMessage.EventEndDate, eventMessage.ModuleId,
+				notificationList.AddRange(CreateNotifications(dataSource,businessUnitId, eventMessage.EventStartDate, eventMessage.EventEndDate, eventMessage.ModuleId,
 								 eventMessage.ReferenceObjectId, eventMessage.ReferenceObjectTypeCache, eventMessage.DomainObjectId,
-								 eventMessage.DomainObjectTypeCache, eventMessage.DomainUpdateType, eventMessage.DomainObject);
+								 eventMessage.DomainObjectTypeCache, eventMessage.DomainUpdateType, eventMessage.DomainObject));
+
+				if (notificationList.Count>200)
+					{
+					callProxy(notificationList);
+					notificationList.Clear();
+					}
+			}
+			if (notificationList.Count > 0)
+			{
+				callProxy(notificationList);
 			}
 		}
 

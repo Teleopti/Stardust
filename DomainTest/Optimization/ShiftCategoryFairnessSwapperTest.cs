@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private ISchedulingResultStateHolder _resultState;
 		private IShiftCategoryFairnessReScheduler _fairnessReScheduler;
 		private IShiftCategoryChecker _shiftCatChecker;
+		private IDeleteSchedulePartService _deleteService;
 
 		[SetUp]
 		public void Setup()
@@ -29,10 +31,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_resultState = _mocks.DynamicMock<ISchedulingResultStateHolder>();
 			_fairnessReScheduler = _mocks.DynamicMock<IShiftCategoryFairnessReScheduler>();
 			_shiftCatChecker = _mocks.DynamicMock<IShiftCategoryChecker>();
-			
+			_deleteService = _mocks.DynamicMock<IDeleteSchedulePartService>();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnFalseIfWrongCategory()
 		{
 			var dateOnly = new DateOnly(2012, 10, 1);
@@ -60,12 +62,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			
 			
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService), Is.False);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.False);
 			_mocks.VerifyAll();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnFalseIfDayTwoWrongCategory()
 		{
 			var dateOnly = new DateOnly(2012, 10, 1);
@@ -99,12 +101,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(false);
 			
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService), Is.False);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService,new BackgroundWorker()), Is.False);
 			_mocks.VerifyAll();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldCallRescheduleIfMoreMembers()
 		{
 			var dateOnly = new DateOnly(2012, 10, 1);
@@ -138,13 +140,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(true);
 			Expect.Call(rollbackService.ModifyParts(null)).Return(new BindingList<IBusinessRuleResponse>());
-			Expect.Call(_fairnessReScheduler.Execute(group1.OriginalMembers)).Return(true);
+			Expect.Call(_fairnessReScheduler.Execute(new List<IPerson>(),dateOnly,matrixes )).IgnoreArguments().Return(true);
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService), Is.True);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.True);
 			_mocks.VerifyAll();
 		}
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnTrueIfAllGoWell()
 		{
 			var dateOnly = new DateOnly(2012,10,1);
@@ -179,8 +181,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(true);
 			Expect.Call(rollbackService.ModifyParts(null)).Return(new BindingList<IBusinessRuleResponse>());
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService), Is.True);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.True);
 			_mocks.VerifyAll();
 		}
 	}

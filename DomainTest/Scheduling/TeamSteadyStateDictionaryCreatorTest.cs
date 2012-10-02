@@ -40,8 +40,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private ISchedulingOptions _schedulingOptions;
 		private IList<IPerson> _persons;
 		private DateOnlyPeriod _dates;
+		private Guid _guid;
 
-		[SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -66,8 +67,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_person3.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
 			_person4.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
 
-			_groupPerson1 = new GroupPerson(new List<IPerson>{_person1, _person2}, _dateOnly, "groupPerson1");
-			_groupPerson2 = new GroupPerson(new List<IPerson> { _person3, _person4 }, _dateOnly, "groupPerson2");
+			_groupPerson1 = new GroupPerson(new List<IPerson>{_person1, _person2}, _dateOnly, "groupPerson1", _guid);
+			_groupPerson2 = new GroupPerson(new List<IPerson> { _person3, _person4 }, _dateOnly, "groupPerson2", _guid);
 			_groupPersons = new List<IGroupPerson> { _groupPerson1, _groupPerson2 };
 
 			SetupStateHolder();
@@ -84,6 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_schedulingOptions = new SchedulingOptions();
 			_persons = new List<IPerson>();
 			_target = new TeamSteadyStateDictionaryCreator(_persons, _schedulePeriodTargetTimeCalculator, _matrixes, _groupPersonsBuilder, _schedulingOptions);
+			_guid = Guid.NewGuid();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

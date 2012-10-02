@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	public class AsmStepDefinition
 	{
 		private const string attributeUsedForWidth = "padding-left";
-		
+
 		[When(@"I click ASM link")]
 		public void WhenIClickASMLink()
 		{
@@ -62,8 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() =>
 										{
 											var allLayers = Browser.Current.Elements.Filter(Find.ByClass("asm-layer", false));
-											var oneHourLayer = allLayers.First();
-											var pxPerHour = pixelLength(oneHourLayer);
+											var pxPerHour = pixelsPerHour();
 											var theLayerToCheck = allLayers.Last();
 											return pixelLength(theLayerToCheck) / pxPerHour;
 										}, Is.EqualTo(hours));
@@ -107,9 +106,31 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Current.Eval(formattedJs);
 		}
 
+		[Then(@"Now indicator should be at hour '(.*)'")]
+		public void ThenNowIndicatorShouldBeAtHour(int hour)
+		{
+			EventualAssert.That(() =>
+			{
+				var slidingSchedules = Browser.Current.Div(Find.ByClass("asm-sliding-schedules"));
+				var pixelPos = -Convert.ToDouble(slidingSchedules.Style.GetAttributeValue("left").TrimEnd('p', 'x'));
+				var holeHours = Math.Floor(pixelPos / pixelsPerHour());
+				return holeHours;
+			}, Is.EqualTo(hour));
+		}
+
 		private static int pixelLength(Element oneHourLengthLayer)
 		{
 			return Convert.ToInt32(oneHourLengthLayer.Style.GetAttributeValue(attributeUsedForWidth).TrimEnd('p', 'x'));
+		}
+
+		private static int pixelsPerHour()
+		{
+			const int hackExtra = 1; //due to borde width of hours
+			var allHours = Browser.Current.Elements.Filter(Find.ByClass("asm-timeline-line", false));
+			var firstHour = allHours.First();
+			if (!firstHour.Exists)
+				throw new NotSupportedException("Missing hour to read from");
+			return Convert.ToInt32(firstHour.Style.GetAttributeValue("width").TrimEnd('p', 'x')) + hackExtra;
 		}
 
 		private static bool isDisplayed(Element element)

@@ -46,19 +46,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private void runDay(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, DateOnly dateOnly,
 			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService)
 		{
-
-			// we need a rollback service somewhere too
 			var blackList = new List<IShiftCategoryFairnessSwap>();
 			var fairnessResults =
 				_shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
 					x => x.StandardDeviation).ToList();
 
-			// if no diff it should be fair
-			var diff = fairnessResults[fairnessResults.Count - 1].StandardDeviation; // -fairnessResults[0].StandardDeviation;
+			// if zero it should be fair
+			var diff = fairnessResults[fairnessResults.Count - 1].StandardDeviation;
 			if (diff.Equals(0))
 				return;
 
-			// get a suggestion (do until no more suggestions, what is returned then????)
 			var swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
 			if (swapSuggestion == null)
 				return;
@@ -67,9 +64,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (backgroundWorker.CancellationPending)
 					return;
 
-				//try to swap, in this we will have another class that schedule those that can't be swapped (if the number of members differ)
-				// it will keep track off the business rules too, if we brake some with the swap
-				var success = _shiftCategoryFairnessSwapper.TrySwap(swapSuggestion, dateOnly, matrixListForFairnessOptimization, rollbackService);
+				var success = _shiftCategoryFairnessSwapper.TrySwap(swapSuggestion, dateOnly, matrixListForFairnessOptimization, rollbackService, backgroundWorker);
 				if (!success)
 				{
 					blackList.Add(swapSuggestion);
@@ -82,7 +77,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
 						x => x.StandardDeviation).ToList();
 
-					var newdiff = fairnessResults[fairnessResults.Count - 1].StandardDeviation; // -fairnessResults[0].StandardDeviation;
+					var newdiff = fairnessResults[fairnessResults.Count - 1].StandardDeviation; 
 					if (newdiff >= diff) // not better
 					{
 						blackList.Add(swapSuggestion);
@@ -96,7 +91,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						rollbackService.ClearModificationCollection();
 					}
 				}
-				//get another one could we get stucked here with new suggestions all the time?
+				//get another one, could we get stucked here with new suggestions all the time?
 				swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
 			} while (swapSuggestion != null);
 
