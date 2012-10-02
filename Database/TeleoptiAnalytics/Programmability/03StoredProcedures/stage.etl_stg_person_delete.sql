@@ -4,6 +4,7 @@ GO
 
 
 CREATE PROCEDURE [stage].[etl_stg_person_delete]
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;

@@ -15,6 +15,7 @@ GO
 -- Description:	Truncate table mart.pm_user
 -- =============================================
 CREATE PROCEDURE [mart].[pm_user_delete] 
+WITH EXECUTE AS OWNER
 AS
 BEGIN
     DELETE FROM mart.pm_user

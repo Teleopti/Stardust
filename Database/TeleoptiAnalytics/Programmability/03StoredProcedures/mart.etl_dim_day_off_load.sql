@@ -19,6 +19,7 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_day_off_load]
 @business_unit_code uniqueidentifier	
+WITH EXECUTE AS OWNER
 AS
 -----------------------------------------------------
 -- Not Defined

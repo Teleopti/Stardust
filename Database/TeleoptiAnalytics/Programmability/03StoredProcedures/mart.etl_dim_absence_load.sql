@@ -22,6 +22,7 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_absence_load] 
 @business_unit_code uniqueidentifier	
+WITH EXECUTE AS OWNER
 AS
 --------------------------------------------------------------------------
 -- Not Defined Absence
