@@ -79,9 +79,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 					runMoveTimeOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
                 if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
                     runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
+
+				var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
+				runFairness(selectedPersons, selectedDays, optimizerPreferences.Extra.GroupPageOnTeam, rollbackService);
             }
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
+
+		private void runFairness(IList<IPerson> selectedPersons, IList<IScheduleDay> selectedDays, IGroupPageLight groupPage, SchedulePartModifyAndRollbackService rollbackService)
+		{
+			var matrixListForFairness = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
+			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
+			var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
+
+			fairnessOpt.Execute(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness, groupPage, rollbackService);
+		}
 
         private void runMoveTimeOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
         {

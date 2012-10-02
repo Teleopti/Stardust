@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -15,15 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IShiftCategoryFairness GetShiftCategoryFairnessForPersons(IScheduleDictionary scheduleDictionary, IList<IPerson> persons)
 		{
 			IShiftCategoryFairness result = new ShiftCategoryFairness();
-			foreach (var person in persons)
-			{
-				var schedule = scheduleDictionary[person];
-				if (result == null)
-					result = schedule.CachedShiftCategoryFairness();
-				else
-					result = result.Add(schedule.CachedShiftCategoryFairness());
-			}
-			return result;
+			return persons.Select(person => scheduleDictionary[person]).Aggregate(result, (current, schedule) => current.Add(schedule.CachedShiftCategoryFairness()));
 		}
 	}
 }

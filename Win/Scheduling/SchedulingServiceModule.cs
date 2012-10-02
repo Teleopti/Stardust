@@ -152,6 +152,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<ShiftCategoryFairnessAggregator>().As<IShiftCategoryFairnessAggregator>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessGroupPersonHolder>().As<IShiftCategoryFairnessGroupPersonHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessAggregateManager>().As<IShiftCategoryFairnessAggregateManager>().InstancePerLifetimeScope();
+			
+			builder.RegisterType<SwapServiceNew>().As<ISwapServiceNew>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftCategoryFairnessOptimizer>().As<IShiftCategoryFairnessOptimizer>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftCategoryFairnessSwapper>().As<IShiftCategoryFairnessSwapper>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftCategoryFairnessSwapFinder>().As<IShiftCategoryFairnessSwapFinder>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftCategoryFairnessCategorySorter>().As<IShiftCategoryFairnessCategorySorter>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftCategoryFairnessReScheduler>().As<IShiftCategoryFairnessReScheduler>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftCategoryChecker>().As<IShiftCategoryChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupPersonBuilderForOptimization>().As<IGroupPersonBuilderForOptimization>().InstancePerLifetimeScope();
+			builder.RegisterType<WorkShiftBackToLegalStateServicePro>().As<IWorkShiftBackToLegalStateServicePro>().InstancePerLifetimeScope();
+			builder.RegisterType<MainShiftOptimizeActivitySpecificationSetter>().As<IMainShiftOptimizeActivitySpecificationSetter>().InstancePerLifetimeScope();
         }
 
     }

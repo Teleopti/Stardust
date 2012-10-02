@@ -69,6 +69,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return retList;
 		}
 
+		public IList<IScheduleDay> Swap(IList<IScheduleDay> selectedSchedules, IScheduleDictionary schedules)
+		{
+			Init(selectedSchedules);
+			return Swap(schedules);
+		}
+
 		private bool CheckBasicRules()
 		{
 			if (_selectedSchedules.Count != 2)
