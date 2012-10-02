@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                 resultList.AddRange(_shiftCategoryBackToLegalService.Execute(limitation, schedulingOptions));
             }
             var removeList = new List<IScheduleMatrixPro>();
+            if(resultList.Count ==0)
+                removeList.Add(_shiftCategoryBackToLegalService.ScheduleMatrixPro );
             foreach (var scheduleDayPro in resultList)
             {
                 var schedulePart = scheduleDayPro.DaySchedulePart();

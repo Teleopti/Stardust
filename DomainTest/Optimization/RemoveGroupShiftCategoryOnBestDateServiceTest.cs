@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _schedulePart;
         private IGroupSchedulingService _scheduleService;
         private ISchedulingOptions _schedulingOptions;
-        private List<IScheduleMatrixPro> _scheduleMatrixList;
         private IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
 
         [SetUp]
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleMatrix = ScheduleMatrixProFactory.Create(_period, _person);
             _shiftCategory = ShiftCategoryFactory.CreateShiftCategory("xx");
             _scheduleService = _mocks.StrictMock<IGroupSchedulingService>();
-            _scheduleMatrixList = new List<IScheduleMatrixPro>();
             _groupOptimizerFindMatrixesForGroup = _mocks.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
             _interface = new RemoveGroupShiftCategoryOnBestDateService(_scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService, _groupOptimizerFindMatrixesForGroup);
             _target = new RemoveGroupShiftCategoryOnBestDateService(_scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleService, _groupOptimizerFindMatrixesForGroup);
@@ -67,17 +65,24 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             IScheduleDayPro result;
 
+
+
             using (_mocks.Record())
             {
                 Expect.Call(scheduleMatrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedDays));
                 matchingShiftCategoryMock();
                 Expect.Call(scheduleMatrix.Person).Return(_person).Repeat.Any();
                 Expect.Call(_scheduleDayPro.Day).Return(firstDate).Repeat.Any();
+                Expect.Call(_schedulePart.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleService.DeleteMainShift(new List<IScheduleDay> { _schedulePart }, _schedulingOptions)).Return(new List<IScheduleDay> { _schedulePart }).Repeat.Once();
                 Expect.Call(_scheduleMatrixValueCalculatorPro.DayValueForSkills(firstDate, new List<ISkill> { skill }))
                     .Repeat.Once()
                     .Return(2);
                 Expect.Call(scheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedDays)).Repeat.Once();
+                Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, new DateOnly())).IgnoreArguments().Return(
+                    new List<IScheduleMatrixPro>(){scheduleMatrix } );
+                Expect.Call(scheduleMatrix.GetScheduleDayByKey(firstDate)).IgnoreArguments().Return(_scheduleDayPro);
+
             }
 
             using (_mocks.Playback())
