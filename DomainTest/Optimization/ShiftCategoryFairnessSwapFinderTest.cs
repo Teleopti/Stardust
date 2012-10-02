@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                          new ShiftCategoryFairnessCompareValue
                                              {Original = 0.9, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
                                          new ShiftCategoryFairnessCompareValue
-                                             {Original = 0.1, ComparedTo = 0.5, ShiftCategory = shiftCategoryNoon},
+                                             {Original = 0.1, ComparedTo = 0.1, ShiftCategory = shiftCategoryNoon},
                                          new ShiftCategoryFairnessCompareValue
-                                             {Original = 0.0, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
+                                             {Original = 0.0, ComparedTo = 0.6, ShiftCategory = shiftCategoryNight}
                                      },
                              StandardDeviation = 0.1,
                              OriginalMembers = new List<IPerson> { person }

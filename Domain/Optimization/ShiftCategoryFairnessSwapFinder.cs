@@ -47,9 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _shiftCategoryFairnessCategorySorter.GetGroupCategories(selectedGroup,
                                                                         selectedGroup.
                                                                             ShiftCategoryFairnessCompareValues.Where(
-                                                                                g => g.ComparedTo > 0 || g.Original > 0)
-                                                                                .OrderByDescending(
-                                                                                g => g.Original),
+                                                                                g => g.ComparedTo > 0 || g.Original > 0),
                                                                         orderedList.Count(),
                                                                         blacklist, ref BlacklistedGroups).ToList();
             if (firstCount < BlacklistedGroups.Count)
@@ -72,7 +70,6 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                          selectedGroupLowestCategory
                                                  }))).FirstOrDefault();
 
-            // ES: I cannot see how this would ever happend, worstcase is that we get a bad swap but returnGroup should never be null
             if (returnGroup == null) return null;
 
             foreach (var currentGroup in orderedList.Skip(1))
