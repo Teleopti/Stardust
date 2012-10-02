@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -8,7 +10,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly,
 		             IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
-		             ISchedulePartModifyAndRollbackService rollbackService);
+		             ISchedulePartModifyAndRollbackService rollbackService,
+					 BackgroundWorker backgroundWorker);
 	}
 
 	public class ShiftCategoryFairnessSwapper: IShiftCategoryFairnessSwapper
@@ -17,22 +20,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IShiftCategoryFairnessReScheduler _shiftCategoryFairnessReScheduler;
 		private readonly IShiftCategoryChecker _shiftCategoryChecker;
+		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IScheduleDictionary _dic;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public ShiftCategoryFairnessSwapper(ISwapServiceNew swapService, ISchedulingResultStateHolder schedulingResultStateHolder, 
-			IShiftCategoryFairnessReScheduler shiftCategoryFairnessReScheduler, IShiftCategoryChecker shiftCategoryChecker)
+			IShiftCategoryFairnessReScheduler shiftCategoryFairnessReScheduler, IShiftCategoryChecker shiftCategoryChecker, IDeleteSchedulePartService deleteSchedulePartService)
 		{
 			_swapService = swapService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_shiftCategoryFairnessReScheduler = shiftCategoryFairnessReScheduler;
 			_shiftCategoryChecker = shiftCategoryChecker;
+			_deleteSchedulePartService = deleteSchedulePartService;
 			_dic = _schedulingResultStateHolder.Schedules;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "originalMember"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "responses")]
 		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
-			ISchedulePartModifyAndRollbackService rollbackService)
+			ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker)
 		{
 			// start with group with less members and if there are more in the other reschedule them
         	var groupOne = suggestion.Group1;
@@ -56,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var swapSucces = false;
 				foreach (var originalMember in groupTwo.OriginalMembers)
 				{
+					if(swappedInGroupTwo.Contains(originalMember)) continue;
 					var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, originalMember);
 					if (_shiftCategoryChecker.DayHasShiftCategory(day2, catTwo))
 					{
@@ -64,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						if (!responses.Any())
 						{
 							swapSucces = true;
-							swappedInGroupTwo.Add(day2.Person);
+							swappedInGroupTwo.Add(originalMember);
 							break;
 						}
 					}
@@ -74,7 +80,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return false;
 			}
 			if (swappedInGroupTwo.Count < groupTwo.OriginalMembers.Count)
-				result  = _shiftCategoryFairnessReScheduler.Execute(groupTwo.OriginalMembers);
+			{
+				var toBeDeleted = new List<IScheduleDay>();
+				var toBeRescheduled = new List<IPerson>();
+				foreach (var person in groupTwo.OriginalMembers)
+				{
+					if(!swappedInGroupTwo.Contains(person))
+					{
+						toBeDeleted.Add(getScheduleForPersonOnDay(dateOnly,matrixListForFairnessOptimization,person));
+						toBeRescheduled.Add(person);
+					}
+				}
+				_deleteSchedulePartService.Delete(toBeDeleted, new DeleteOption {MainShift = true}, rollbackService,
+				                                  backgroundWorker);
+				result = _shiftCategoryFairnessReScheduler.Execute(toBeRescheduled, dateOnly, matrixListForFairnessOptimization);
+			}
 
 			return result;
 		}
