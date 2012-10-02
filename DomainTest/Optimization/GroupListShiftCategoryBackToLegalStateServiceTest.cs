@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -55,6 +56,34 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyExecute()
         {
+            var scheduleMatrixValueCalculator = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorPro>();
+            var scheduleMatrixPro = _mockRepository.StrictMock<IScheduleMatrixPro>();
+            var schedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
+
+            _scheduleMatrixList.Add(scheduleMatrixPro);
+            _scheduleMatrixList.Add(scheduleMatrixPro);
+            _scheduleMatrixList.Add(scheduleMatrixPro);
+
+            var iteration = _scheduleMatrixList.Count;
+
+            using (_mockRepository.Record())
+            {
+                Expect.Call(
+                    _scheduleMatrixValueCalculatorFactory.CreateScheduleMatrixValueCalculatorPro(new List<DateOnly>(),
+                                                                                                 null,
+                                                                                                 null, null)).
+                    IgnoreArguments().Return(scheduleMatrixValueCalculator);
+
+                Expect.Call(scheduleMatrixPro.EffectivePeriodDays).Return(
+                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>())).Repeat.Times(iteration);
+                Expect.Call(schedulePeriod.ShiftCategoryLimitationCollection()).Return(
+                    new ReadOnlyCollection<IShiftCategoryLimitation>(new List<IShiftCategoryLimitation>())).Repeat.AtLeastOnce();
+                Expect.Call(scheduleMatrixPro.SchedulePeriod).Return(schedulePeriod).Repeat.Times(2*iteration);
+            }
+            using (_mockRepository.Playback())
+            {
+                _target.Execute(_scheduleMatrixList, new SchedulingOptions(), _optimizerPreferences, _groupOptimizerFindMatrixesForGroup);
+            }
         }
 
         [Test]
