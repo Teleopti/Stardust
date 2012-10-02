@@ -121,19 +121,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return rowCount.Value;
 		}
 
-		public ICollection<IPushMessageDialogue> FindUnreadMessage(IPerson receiver)
+		public ICollection<IPushMessageDialogue> FindUnreadMessage(Paging paging, IPerson receiver)
 		{
-			//ICriteria crit = Session.CreateCriteria(typeof(PushMessageDialogue))
-			//    .Add(Restrictions.Eq("Receiver", receiver))
-			//    .Add(Restrictions.Eq("IsReplied", false));
-
-			IList<IPushMessageDialogue> messages = Session.CreateCriteria(typeof(PushMessageDialogue))
+			var criteria = Session.CreateCriteria(typeof (PushMessageDialogue))
 				.Add(Restrictions.Eq("Receiver", receiver))
 				.Add(Restrictions.Eq("IsReplied", false))
-				.AddOrder(Order.Desc("UpdatedOn"))
-				.List<IPushMessageDialogue>();
+				.AddOrder(Order.Desc("UpdatedOn"));
 
-			return new Collection<IPushMessageDialogue>(messages);
+			if (paging != null)
+			{
+				criteria
+					.SetFirstResult(paging.Skip)
+					.SetMaxResults(paging.Take);
+			}
+
+			return new Collection<IPushMessageDialogue>(criteria.List<IPushMessageDialogue>());
 		}
 	}
 }

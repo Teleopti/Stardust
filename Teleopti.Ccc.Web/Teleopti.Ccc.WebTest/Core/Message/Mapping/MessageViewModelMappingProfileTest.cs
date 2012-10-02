@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using AutoMapper;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
@@ -26,12 +26,14 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
         private IList<MessageViewModel> _result;
     	private IPerson _person;
     	private PushMessageDialogue _pushMessageDialogue;
+    	private ICccTimeZoneInfo _cccTimeZone;
 
     	[SetUp]
         public void Setup()
-        {
-            _person = new Person {Name = new Name("ashley", "andeen")};
-			_person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+    	{
+			var timeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			
+			_person = new Person {Name = new Name("ashley", "andeen")};
             _pushMessage = new PushMessage()
                                   {
                                       Title = "my title",
@@ -42,12 +44,17 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
                                       
                                   };
             _pushMessageDialogue = new PushMessageDialogue(_pushMessage, _person);
-			SetDate(_pushMessageDialogue, DateTime.Now, "_updatedOn");
+			SetDate(_pushMessageDialogue, DateTime.UtcNow, "_updatedOn");
 
             _domainMessages = new[] {_pushMessageDialogue};
 
-            Mapper.Reset();
-            Mapper.Initialize(c => c.AddProfile(new MessageViewModelMappingProfile()));
+			Mapper.Reset();
+			Mapper.Initialize(c => c.AddProfile(new MessageViewModelMappingProfile(
+				() => timeZone
+				)));
+
+			_cccTimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			timeZone.Stub(x => x.TimeZone()).Return(_cccTimeZone);
 
             _result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
         }
@@ -72,10 +79,21 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
         }
 
         [Test]
-        public void ShouldMapMessage()
+        public void ShouldMapMessageToShowOnlyThirtyCharacters()
         {
-            _result.First().Message.Should().Be.EqualTo(_pushMessage.GetMessage(new NoFormatting()));
+        	_pushMessage.Message = "this is the long message text that should be truncated";
+			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+
+        	const int length = 50;
+        	var shortMessage = _pushMessage.GetMessage(new NoFormatting()).Substring(0, length) + "...";
+            _result.First().Message.Should().Be.EqualTo(shortMessage);
         }
+
+		[Test]
+		public void ShouldMapMessageToShowShortMessage()
+		{
+			_result.First().Message.Should().Be.EqualTo(_pushMessage.GetMessage(new NoFormatting()));
+		}
 
         //[Test]
         //public void ShouldMapAllowDialogueReply()
@@ -98,18 +116,17 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
         [Test]
         public void ShouldMapDate()
         {
-        	var dateTimeString = _pushMessageDialogue.UpdatedOn.Value.ToShortDateTimeString();
-			_result.First().Date.Should().Be.EqualTo(dateTimeString);
+        	var localDateTimeString = _cccTimeZone.ConvertTimeFromUtc(_pushMessageDialogue.UpdatedOn.Value).ToShortDateTimeString();
+			_result.First().Date.Should().Be.EqualTo(localDateTimeString);
         }
 
-        public static void SetDate(IAggregateRoot root, DateTime? dateTime, string property)
+        public static void SetDate(IAggregateRoot root, DateTime dateTime, string property)
         {
-            IChangeInfo rootCheck = root as IChangeInfo;
+            var rootCheck = root as IChangeInfo;
             if (rootCheck != null)
             {
                 Type rootType = typeof(AggregateRoot);
-                if (dateTime.HasValue)
-                    rootType.GetField(property, BindingFlags.NonPublic | BindingFlags.Instance).SetValue(root, dateTime);
+                rootType.GetField(property, BindingFlags.NonPublic | BindingFlags.Instance).SetValue(root, dateTime);
             }
         }
     }

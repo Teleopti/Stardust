@@ -61,7 +61,8 @@ Scenario: Navigate to message tab with an unread message
 	And I have an unread message with
 	| Field         | Value          |
 	| Title         | New message	 |
-	When I am viewing messages
+	And I am viewing week schedule
+	When I navigate to messages
 	Then I should see a message in the list
 
 Scenario: Open unread message

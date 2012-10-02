@@ -33,10 +33,10 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 			dataType: "json",
 			type: 'GET',
 			beforeSend: _loading,
-			//data: {
-			//	Take: take,
-			//	Skip: skip
-			//},
+			data: {
+				Take: take,
+				Skip: skip
+			},
 			success: function (data, textStatus, jqXHR) {
 				_drawCommunications(data);
 				if (data.length == 0 || data.length < take) {
@@ -120,36 +120,37 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 			.removeClass('template')
 			;
 		listItem.attr('data-mytime-communicationid', communication.Id);
-//		listItem.attr('data-mytime-link', communication.Link.href);
+		//		listItem.attr('data-mytime-link', communication.Link.href);
 		listItem.find('.communication-data-subject').text(communication.Title);
 		//listItem.find('.communication-data-subject').text('_asjkldfh kasjdfh');
 		listItem.find('.communication-data-sender').text(communication.Sender);
 		listItem.find('.communication-data-updatedon').text(communication.Date);
+		listItem.find('.communication-data-text').text(communication.Message);
 
 		var connector = listItem.find('.communication-connector');
 		//var deleteButton = listItem.find('.communication-delete-button');
 
 		connector.connector();
 
-//		if (communication.Link.Methods.indexOf("DELETE") != -1) {
-//			deleteButton
-//				.click(function (event) {
-//					$(this).prop('disabled', true);
-//					event.stopPropagation();
-//					_disconnectAll();
-//					Teleopti.MyTimeWeb.Communication.CommunicationDetail.HideEditSection();
-//					_deleteCommunication(listItem);
-//				})
-//				.removeAttr('disabled', 'disabled')
-//				;
-//			listItem.hover(function () {
-//				deleteButton
-//					.stop(true, true)
-//					.fadeToggle();
-//			});
-//		} else {
-//			deleteButton.remove();
-//		}
+		//		if (communication.Link.Methods.indexOf("DELETE") != -1) {
+		//			deleteButton
+		//				.click(function (event) {
+		//					$(this).prop('disabled', true);
+		//					event.stopPropagation();
+		//					_disconnectAll();
+		//					Teleopti.MyTimeWeb.Communication.CommunicationDetail.HideEditSection();
+		//					_deleteCommunication(listItem);
+		//				})
+		//				.removeAttr('disabled', 'disabled')
+		//				;
+		//			listItem.hover(function () {
+		//				deleteButton
+		//					.stop(true, true)
+		//					.fadeToggle();
+		//			});
+		//		} else {
+		//			deleteButton.remove();
+		//		}
 		return listItem;
 	}
 

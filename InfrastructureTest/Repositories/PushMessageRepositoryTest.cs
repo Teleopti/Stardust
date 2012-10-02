@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(dialogue);
 
 			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
-			var unreadMessages = repository.FindUnreadMessage(receiver);
+			var unreadMessages = repository.FindUnreadMessage(null, receiver);
 			unreadMessages.First().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
 				message.GetTitle(new NoFormatting()));
 		}
@@ -230,11 +230,56 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			SetUpdatedOnForMessageDialogue(dialogueOrderLast, -1);
 
 			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
-			var unreadMessages = repository.FindUnreadMessage(receiver);
+			var unreadMessages = repository.FindUnreadMessage(null, receiver);
 			unreadMessages.First().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
 				messageOrderFirst.GetTitle(new NoFormatting()));
 			unreadMessages.Last().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
 				messageOrderLast.GetTitle(new NoFormatting()));
+		}
+
+
+		[Test]
+		public void ShouldGetUnreadMessagesWithPaging()
+		{
+			IPerson receiver = PersonFactory.CreatePerson("vsd");
+
+			IPushMessage message1 = new PushMessage { Sender = _sender, Title = "title first", Message = "first message" };
+			IPushMessageDialogue dialogue1 = new PushMessageDialogue(message1, receiver);
+
+			IPushMessage message2 = new PushMessage { Sender = _sender, Title = "title last", Message = "last message" };
+			IPushMessageDialogue dialogue2 = new PushMessageDialogue(message2, receiver);
+
+			IPushMessage message3 = new PushMessage { Sender = _sender, Title = "title first", Message = "first message" };
+			IPushMessageDialogue dialogue3 = new PushMessageDialogue(message3, receiver);
+
+			IPushMessage message4 = new PushMessage { Sender = _sender, Title = "title last", Message = "last message" };
+			IPushMessageDialogue dialogue4 = new PushMessageDialogue(message4, receiver);
+
+			var paging = new Paging{Skip = 1, Take = 3};
+
+			PersistAndRemoveFromUnitOfWork(_sender);
+			PersistAndRemoveFromUnitOfWork(receiver);
+			PersistAndRemoveFromUnitOfWork(message1);
+			PersistAndRemoveFromUnitOfWork(dialogue1);
+			SetUpdatedOnForMessageDialogue(dialogue1, -1);
+			PersistAndRemoveFromUnitOfWork(message2);
+			PersistAndRemoveFromUnitOfWork(dialogue2);
+			SetUpdatedOnForMessageDialogue(dialogue2, -2);
+			PersistAndRemoveFromUnitOfWork(message3);
+			PersistAndRemoveFromUnitOfWork(dialogue3);
+			SetUpdatedOnForMessageDialogue(dialogue3, -3);
+			PersistAndRemoveFromUnitOfWork(message4);
+			PersistAndRemoveFromUnitOfWork(dialogue4);
+			SetUpdatedOnForMessageDialogue(dialogue4, -4);
+
+			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
+			var unreadMessages = repository.FindUnreadMessage(paging, receiver);
+
+			unreadMessages.Should().Have.SameSequenceAs(new[] {dialogue2, dialogue3, dialogue4});
+
+			unreadMessages = repository.FindUnreadMessage(null, receiver);
+
+			unreadMessages.Should().Have.SameSequenceAs(new[] { dialogue1 ,dialogue2, dialogue3, dialogue4 });
 		}
 
 		private void SetUpdatedOnForMessageDialogue(IPushMessageDialogue messageDialogue, int minutes)

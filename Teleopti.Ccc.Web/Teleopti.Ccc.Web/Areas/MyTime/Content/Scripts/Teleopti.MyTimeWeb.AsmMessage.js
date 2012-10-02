@@ -50,10 +50,6 @@ Teleopti.MyTimeWeb.AsmMessage = (function () {
 	return {
 		Init: function () {
 			_listenForEvents();
-			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Message/Index', Teleopti.MyTimeWeb.AsmMessage.MessagePartialInit);
-		},
-		MessagePartialInit: function () {
-			Teleopti.MyTimeWeb.CommunicationList.Init();
 		},
 		OnMessageBrokerEvent: function () {
 			_onMessageBrokerEvent();

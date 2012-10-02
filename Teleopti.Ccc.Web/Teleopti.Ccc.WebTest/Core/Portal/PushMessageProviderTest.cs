@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.ObjectModel;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		private PushMessageProvider _target;
 
 		[Test]
-		public void ShouldGetUnreadMessagesForUser()
+		public void ShouldGetUnreadMessageCountForUser()
 		{
 			var repository = MockRepository.GenerateMock<IPushMessageRepository>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
@@ -27,6 +28,22 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			_target = new PushMessageProvider(loggedOnUser, repository);
 
 			_target.UnreadMessageCount.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldGetUnreadMessagesForUser()
+		{
+			var paging = new Paging();
+			var repository = MockRepository.GenerateMock<IPushMessageRepository>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			IPerson person = new Person();
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			repository.Stub(x => x.FindUnreadMessage(paging, person)).Return(new Collection<IPushMessageDialogue>());
+
+			_target = new PushMessageProvider(loggedOnUser, repository);
+
+			_target.GetMessages(paging).Count.Should().Be.EqualTo(0);
 		}
 	}
 }

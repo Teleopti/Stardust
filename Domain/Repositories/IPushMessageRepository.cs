@@ -56,6 +56,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// </remarks>
 		int CountUnread(IPerson receiver);
 
-		ICollection<IPushMessageDialogue> FindUnreadMessage(IPerson receiver);	
+		ICollection<IPushMessageDialogue> FindUnreadMessage(Paging paging, IPerson receiver);	
 	}
 }

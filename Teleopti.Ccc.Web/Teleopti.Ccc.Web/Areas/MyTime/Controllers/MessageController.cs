@@ -1,4 +1,5 @@
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
 using Teleopti.Ccc.Web.Filters;
 
@@ -21,9 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
         
         [UnitOfWorkAction]
         [HttpGet]
-        public JsonResult Messages()
+        public JsonResult Messages(Paging paging)
         {
-            return Json(_messageViewModelFactory.CreatePageViewModel(), JsonRequestBehavior.AllowGet);
+            return Json(_messageViewModelFactory.CreatePageViewModel(paging), JsonRequestBehavior.AllowGet);
         }
     }
 }

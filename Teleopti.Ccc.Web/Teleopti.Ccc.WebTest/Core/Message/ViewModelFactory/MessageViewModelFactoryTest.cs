@@ -3,6 +3,7 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
@@ -18,15 +19,16 @@ namespace Teleopti.Ccc.WebTest.Core.Message.ViewModelFactory
         {
             var messageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
             var mapper = MockRepository.GenerateMock<IMappingEngine>();
+        	var paging = new Paging();
 
             var target = new MessageViewModelFactory(messageProvider, mapper);
 
             IList<IPushMessageDialogue> domainMessages = new List<IPushMessageDialogue>();
-            messageProvider.Stub(x => x.GetMessages()).Return(domainMessages);
+            messageProvider.Stub(x => x.GetMessages(paging)).Return(domainMessages);
             mapper.Stub(x => x.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(domainMessages)).Return(
                 new List<MessageViewModel>());
 
-            IList<MessageViewModel> result = target.CreatePageViewModel();
+            IList<MessageViewModel> result = target.CreatePageViewModel(paging);
 
             result.Should().Not.Be.Null();
             result.Count.Should().Be.EqualTo(0);

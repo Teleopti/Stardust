@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
             get { return _repository.CountUnread(_loggedOnUser.CurrentUser()); }
         }
 
-        public IList<IPushMessageDialogue> GetMessages()
+    	public IList<IPushMessageDialogue> GetMessages(Paging paging)
         {
-        	return new List<IPushMessageDialogue>(_repository.FindUnreadMessage(_loggedOnUser.CurrentUser()));
+        	return new List<IPushMessageDialogue>(_repository.FindUnreadMessage(paging, _loggedOnUser.CurrentUser()));
         }
 	}
 }
