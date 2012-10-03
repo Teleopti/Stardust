@@ -88,8 +88,16 @@
 									<h2 class="error" data-bind="text: AjaxError"></h2>
 									<!-- /ko -->
 								}
-								@if (day.Preference && day.InPeriod)
-								{  // todo: why is preference true if not in period?
+								@if (personAssignment != null)
+								{
+									<div class="scheduled">
+										<span class="displayblock fullwidth">@personAssignment.ShiftCategory</span>
+										<strong class="displayblock fullwidth">@personAssignment.TimeSpan</strong>
+										<span class="displayblock fullwidth" data-mytime-contract-time="@personAssignment.ContractTimeMinutes">@personAssignment.ContractTime</span>
+									</div>
+								}
+								@if (day.InPeriod)
+								{
 									<div class="preference">
 										<span class="displayinline-block">
 											<div class="preference-text" data-bind="text: Preference"></div>
@@ -124,37 +132,6 @@
 									<div class="possible-end-times time-limitation icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
 									<div class="possible-contract-times time-limitation icon doublearrow-blue truncate" data-bind="text: PossibleContractTimes"></div>
 									<!-- /ko -->
-								}
-								@if (personAssignment != null)
-								{
-									<div class="scheduled">
-										<span class="displayblock fullwidth">@personAssignment.ShiftCategory</span>
-										<strong class="displayblock fullwidth">@personAssignment.TimeSpan</strong>
-										<span class="displayblock fullwidth" data-mytime-contract-time="@personAssignment.ContractTimeMinutes">@personAssignment.ContractTime</span>
-									</div>
-									<div class="preference floatright">
-										<span class="displayinline-block">
-											<div class="preference-text" data-bind="text: Preference"></div>
-											<div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
-											<!-- ko if: MustHave -->
-											<div class="icon heart-small preference-must-have"/>
-											<!-- /ko -->
-											<div class="extended-panel" style="display: none">
-												<div class="extended-part">
-													<div class="extended-part-title" data-bind="text: ExtendedTitle"></div>
-													<div class="time-limitation icon leftarrow truncate" data-bind="text: StartTimeLimitation"></div>
-													<div class="time-limitation icon rightarrow truncate" data-bind="text: EndTimeLimitation"></div>
-													<div class="time-limitation icon doublearrow-blue truncate" data-bind="text: WorkTimeLimitation"></div>
-												</div>
-												<div class="extended-part">
-													<div class="extended-part-title" data-bind="text: Activity"></div>
-													<div class="time-limitation icon leftarrow truncate" data-bind="text: ActivityStartTimeLimitation"></div>
-													<div class="time-limitation icon rightarrow truncate" data-bind="text: ActivityEndTimeLimitation"></div>
-													<div class="time-limitation icon doublearrow-blue truncate" data-bind="text: ActivityTimeLimitation"></div>
-												</div>
-											</div>
-										</span>
-									</div>
 								}
 								@if (dayOff != null)
 								{
