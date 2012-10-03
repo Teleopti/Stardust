@@ -13,7 +13,15 @@ namespace Teleopti.Interfaces.MessageBroker
 	{
 		private static readonly StringCollection TypesWithException = new StringCollection {typeof (IExternalAgentState).Name};
 		private static readonly StringCollection TypesWithBusinessUnitException = new StringCollection {typeof(IStatisticTask).Name};
+
+		/// <summary>
+		/// Separator used for message broker subscriptions
+		/// </summary>
 		public const string Separator = "/";
+
+		/// <summary>
+		/// Route name for changes in near time from now (+/- 3 days)
+		/// </summary>
 		public const string ShortTerm = "ShortTerm";
 
 		/// <summary>
