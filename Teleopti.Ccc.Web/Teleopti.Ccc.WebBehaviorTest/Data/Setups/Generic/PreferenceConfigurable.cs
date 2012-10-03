@@ -17,15 +17,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string Preference { get; set; } //same as the ShiftCategory
 		public string Dayoff { get; set; }
 		public string Absence { get; set; }
+		public DateTime? EndTimeMaximum { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			ShiftCategory = Preference;
+			if (Preference != null)
+				ShiftCategory = Preference;
 			var restriction = new PreferenceRestriction();
 
-			if (Absence == null && Dayoff == null && IsExtended)
+			if (Absence == null && Dayoff == null && IsExtended && EndTimeMaximum == null)
 				restriction.WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(8));
 
+			if (EndTimeMaximum.HasValue)
+			{
+				restriction.EndTimeLimitation=new EndTimeLimitation(null, EndTimeMaximum.Value.TimeOfDay);
+			}
 
 			if (ShiftCategory != null)
 			{

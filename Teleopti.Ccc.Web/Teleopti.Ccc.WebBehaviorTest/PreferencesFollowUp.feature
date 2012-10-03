@@ -78,9 +78,11 @@ Scenario: See that preference not fulfilled
 	| Date       | 2012-10-02 |
 	| Preference | Late       |
 	And I have a shift with
-	| Field          | Value      |
-	| Date           | 2012-10-02 |
-	| Shift Category | Night      |
+	| Field          | Value            |
+	| Date           | 2012-10-02       |
+	| Shift Category | Night            |
+	| StartTime      | 2012-10-02 20:00 |
+	| EndTime        | 2012-10-03 04:00 |
 	When I view preferences for date '2012-10-02'
 	Then I should see the day cell with
 	| Field          | Value      |
@@ -115,9 +117,11 @@ Scenario: Display extended preference panel for preference on scheduled day
 	| Date             | 2012-10-02 |
 	| End time maximum | 20:30      |
 	And I have a shift with
-	| Field          | Value      |
-	| Date           | 2012-10-02 |
-	| Shift Category | Late       |
+	| Field          | Value            |
+	| Date           | 2012-10-02       |
+	| Shift Category | Late             |
+	| StartTime      | 2012-10-02 10:00 |
+	| EndTime        | 2012-10-02 20:00 |
 	When I view preferences for date '2012-10-02'
 	And I click the extended preference indication on '2012-10-02'
 	Then I should see extended preference with
@@ -127,14 +131,16 @@ Scenario: Display extended preference panel for preference on scheduled day
 
 Scenario: Display must have for preference on scheduled day
 	Given I have a preference with
-	| Field          | Value      |
-	| Date           | 2012-10-02 |
-	| Shift category | Late       |
-	| Must have      | true       |
+	| Field      | Value      |
+	| Date       | 2012-10-02 |
+	| Preference | Late       |
+	| Must have  | true       |
 	And I have a shift with
-	| Field          | Value      |
-	| Date           | 2012-10-02 |
-	| Shift category | Late       |
+	| Field          | Value            |
+	| Date           | 2012-10-02       |
+	| Shift category | Late             |
+	| StartTime      | 2012-10-02 10:00 |
+	| EndTime        | 2012-10-02 20:00 |
 	When I view preferences for date '2012-10-02'
 	Then I should see the day cell with
 	| Field     | Value      |
