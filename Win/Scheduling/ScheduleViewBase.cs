@@ -888,8 +888,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                     if (splitDayAbsence.Period.EndDateTime > splitDay.Period.EndDateTime) end = splitDay.Period.EndDateTime;
                     else end = splitDayAbsence.Period.EndDateTime;
 
-                    splitDayAbsence.Layer.Period = new DateTimePeriod(start, end);
-                    dayAbsences.Add(splitDayAbsence);
+					if(end > start)
+					{
+						splitDayAbsence.Layer.Period = new DateTimePeriod(start, end);
+						dayAbsences.Add(splitDayAbsence);
+					}
+                    
                 }
             }
 
