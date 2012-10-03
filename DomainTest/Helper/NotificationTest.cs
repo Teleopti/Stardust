@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			domainReferenceId = Guid.NewGuid();
 			moduleId = Guid.NewGuid();
 			businessUnitId = Guid.NewGuid();
-			startDate = DateTime.Today;
+			startDate = DateTime.Today.AddDays(-5);
 			endDate = startDate.AddDays(1);
 			target = new Notification
 			         	{
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			domainId = Guid.NewGuid();
 			domainReferenceId = Guid.NewGuid();
 			businessUnitId = Guid.NewGuid();
-			startDate = DateTime.Today;
+			startDate = DateTime.Today.AddDays(-5);
 			endDate = startDate.AddDays(1);
 			target = new Subscription
 			{
