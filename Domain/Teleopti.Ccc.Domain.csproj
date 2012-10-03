@@ -287,6 +287,8 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessAggregator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCategorySorter.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessComparer.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSkillChecker.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSwappableChecker.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessRescheduler.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessRuleSetChecker.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwap.cs" />
@@ -413,7 +415,7 @@
     <Compile Include="Scheduling\Meetings\MeetingChangeTracker.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorter.cs" />
     <Compile Include="Scheduling\PublicNote.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairness.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessHolder.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCalculator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCreator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessFactors.cs" />

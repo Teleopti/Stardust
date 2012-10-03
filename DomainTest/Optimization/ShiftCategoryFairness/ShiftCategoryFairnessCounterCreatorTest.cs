@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
     [TestFixture]
     public class ShiftCategoryFairnessTest
     {
-		private IShiftCategoryFairness _target;
+		private IShiftCategoryFairnessHolder _target;
 
         [SetUp]
         public void Setup()
         {
-            _target = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness();
+            _target = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder();
         }
 
         [Test]
@@ -35,14 +35,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             shiftDic1.Add(fm, 5);
             shiftDic1.Add(da, 7);
 
-			IShiftCategoryFairness holder1 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(shiftDic1, new FairnessValueResult());
+			IShiftCategoryFairnessHolder holder1 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(shiftDic1, new FairnessValueResult());
 
             Dictionary<IShiftCategory, int> shiftDic2 = new Dictionary<IShiftCategory, int>();
             shiftDic2.Add(da, 3);
             shiftDic2.Add(kv, 5);
-			IShiftCategoryFairness holder2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(shiftDic2, new FairnessValueResult());
+			IShiftCategoryFairnessHolder holder2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(shiftDic2, new FairnessValueResult());
 
-            IShiftCategoryFairness result = _target.Add(holder1);
+            IShiftCategoryFairnessHolder result = _target.Add(holder1);
             Assert.AreEqual(2, result.ShiftCategoryFairnessDictionary.Keys.Count);
             Assert.AreEqual(5, result.ShiftCategoryFairnessDictionary[fm]);
             Assert.AreEqual(7, result.ShiftCategoryFairnessDictionary[da]);
@@ -64,21 +64,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             shiftDic1.Add(fm, 5);
             shiftDic1.Add(da, 7);
 
-            _target = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(shiftDic1, new FairnessValueResult());
+            _target = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(shiftDic1, new FairnessValueResult());
 
             Dictionary<IShiftCategory, int> shiftDic2 = new Dictionary<IShiftCategory, int>();
             shiftDic2.Add(fm, 5);
             shiftDic2.Add(da, 7);
 
-			IShiftCategoryFairness holder2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(shiftDic2, new FairnessValueResult());
+			IShiftCategoryFairnessHolder holder2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(shiftDic2, new FairnessValueResult());
 
             Assert.AreEqual(_target, holder2);
-            Assert.AreNotEqual(_target, new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness());
+            Assert.AreNotEqual(_target, new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder());
 
 
-			HashSet<IShiftCategoryFairness> hashSet = new HashSet<IShiftCategoryFairness>();
+			HashSet<IShiftCategoryFairnessHolder> hashSet = new HashSet<IShiftCategoryFairnessHolder>();
             hashSet.Add(holder2);
-            hashSet.Add(new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness());
+            hashSet.Add(new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder());
             hashSet.Add(holder2);
 
             Assert.AreEqual(2, hashSet.Count);

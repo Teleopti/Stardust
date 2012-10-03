@@ -21,17 +21,20 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 		private readonly IShiftCategoryFairnessReScheduler _shiftCategoryFairnessReScheduler;
 		private readonly IShiftCategoryChecker _shiftCategoryChecker;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
+		private readonly IShiftCategoryFairnessPersonsSwappableChecker _swappableChecker;
 		private readonly IScheduleDictionary _dic;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public ShiftCategoryFairnessSwapper(ISwapServiceNew swapService, ISchedulingResultStateHolder schedulingResultStateHolder, 
-			IShiftCategoryFairnessReScheduler shiftCategoryFairnessReScheduler, IShiftCategoryChecker shiftCategoryChecker, IDeleteSchedulePartService deleteSchedulePartService)
+			IShiftCategoryFairnessReScheduler shiftCategoryFairnessReScheduler, IShiftCategoryChecker shiftCategoryChecker, 
+			IDeleteSchedulePartService deleteSchedulePartService, IShiftCategoryFairnessPersonsSwappableChecker swappableChecker)
 		{
 			_swapService = swapService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_shiftCategoryFairnessReScheduler = shiftCategoryFairnessReScheduler;
 			_shiftCategoryChecker = shiftCategoryChecker;
 			_deleteSchedulePartService = deleteSchedulePartService;
+			_swappableChecker = swappableChecker;
 			_dic = _schedulingResultStateHolder.Schedules;
 		}
 
@@ -62,6 +65,8 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 				foreach (var originalMember in groupTwo.OriginalMembers)
 				{
 					if(swappedInGroupTwo.Contains(originalMember)) continue;
+					if(!_swappableChecker.PersonsAreSwappable(groupOneMember, originalMember, dateOnly)) continue;
+					
 					var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, originalMember);
 					if (_shiftCategoryChecker.DayHasShiftCategory(day2, catTwo))
 					{
