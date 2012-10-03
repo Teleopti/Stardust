@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
             XmlConfigurator.Configure(new FileInfo("log4net.config"));
 
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
+			ServicePointManager.DefaultConnectionLimit = 50;
 
             _requestBus = new ConfigFileDefaultHost();
 			_requestBus.UseFileBasedBusConfiguration("RequestQueue.config");
