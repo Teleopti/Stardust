@@ -288,6 +288,7 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCategorySorter.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessComparer.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessRescheduler.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessRuleSetChecker.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwap.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapFinder.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapper.cs" />
