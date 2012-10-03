@@ -46,8 +46,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IShiftCategoryFairnessCalculator _shiftCategoryFairnessCalculator;
 		private readonly IGroupShiftLengthDecider _groupShiftLengthDecider;
 		private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
+	    private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
 
-		public BestBlockShiftCategoryFinder(IWorkShiftWorkTime workShiftWorkTime,
+	    public BestBlockShiftCategoryFinder(IWorkShiftWorkTime workShiftWorkTime,
 		                                    IShiftProjectionCacheManager shiftProjectionCacheManager,
 		                                    ISchedulingResultStateHolder schedulingResultStateHolder,
 		                                    IEffectiveRestrictionCreator effectiveRestrictionCreator,
@@ -57,7 +58,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		                                    	possibleCombinationsOfStartEndCategoryCreator,
 		                                    IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator,
 		                                    IShiftCategoryFairnessCalculator shiftCategoryFairnessCalculator,
-		                                    IGroupShiftLengthDecider groupShiftLengthDecider)
+		                                    IGroupShiftLengthDecider groupShiftLengthDecider,
+                                            IShiftCategoryLimitationChecker shiftCategoryLimitationChecker)
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
@@ -69,6 +71,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_groupShiftCategoryFairnessCreator = groupShiftCategoryFairnessCreator;
 			_shiftCategoryFairnessCalculator = shiftCategoryFairnessCalculator;
 			_groupShiftLengthDecider = groupShiftLengthDecider;
+	        _shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -145,7 +148,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 // CONTINUE TO NEXT IF EMPTY, WE SHOULD SKIP OUT MAYBE, THIS DAY CAN'T BE SCHEDULED 
                 if (combinations.IsEmpty())
                     continue;
-
+                if (schedulingOptions.UseShiftCategoryLimitations)
+                {
+                    _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, person, dateOnly);
+                    combinations.RemoveWhere(x => schedulingOptions.NotAllowedShiftCategories.Contains(x.ShiftCategory));
+                }
                 var useShiftCategoryFairness = false;
                 IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = null;
                 if (person.WorkflowControlSet != null)
@@ -200,7 +207,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             IPossibleStartEndCategory best = null;
             if (bestPossible.Count > 0)
+            {
                 best = bestPossible.OrderBy(c => c.ShiftValue).Last();
+            }
 
             return new BestShiftCategoryResult(best, FailureCause.NoFailure);
         }

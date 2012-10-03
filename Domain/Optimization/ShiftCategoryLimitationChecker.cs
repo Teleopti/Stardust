@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -30,9 +31,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        private void setBlockedShiftCategoriesForGroupPerson(ISchedulingOptions optimizerPreferences, IGroupPerson grouPerson, DateOnly dateOnly)
+        private void setBlockedShiftCategoriesForGroupPerson(ISchedulingOptions optimizerPreferences, IGroupPerson groupPerson, DateOnly dateOnly)
         {
-            foreach(var person in grouPerson.GroupMembers  )
+            var groupSchedules = groupPerson.GroupMembers.Select(person => ScheduleDictionary[person]).ToList();
+            foreach(var person in groupPerson.GroupMembers  )
             {
                 IVirtualSchedulePeriod schedulePeriod = person.VirtualSchedulePeriod(dateOnly);
                 if (!schedulePeriod.IsValid)
@@ -44,8 +46,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                     {
                         var firstDateInPeriodLocal = new DateOnly(DateHelper.GetFirstDateInWeek(dateOnly, person.FirstDayOfWeek));
                         var dateOnlyWeek = new DateOnlyPeriod(firstDateInPeriodLocal, firstDateInPeriodLocal.AddDays(6));
-                        if (IsShiftCategoryOverOrAtWeekLimit(shiftCategoryLimitation, ScheduleDictionary[person], dateOnlyWeek,
-                                                             out datesWithCategory) && !optimizerPreferences.NotAllowedShiftCategories.Contains(shiftCategoryLimitation.ShiftCategory))
+                        
+                        if (groupSchedules.All(s=>IsShiftCategoryOverOrAtWeekLimit(shiftCategoryLimitation,s,dateOnlyWeek,out datesWithCategory))
+                            && !optimizerPreferences.NotAllowedShiftCategories.Contains(shiftCategoryLimitation.ShiftCategory))
                             optimizerPreferences.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
                     }
                     else
