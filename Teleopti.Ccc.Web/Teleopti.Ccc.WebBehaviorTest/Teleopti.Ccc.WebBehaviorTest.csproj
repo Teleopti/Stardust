@@ -107,6 +107,8 @@
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\ScheduledShiftConfigurable.cs" />
+    <Compile Include="PreferencesFollowUpStepDefinition.cs" />
     <Compile Include="PreferencesFollowUp.feature.cs">
       <DependentUpon>PreferencesFollowUp.feature</DependentUpon>
       <AutoGen>True</AutoGen>
