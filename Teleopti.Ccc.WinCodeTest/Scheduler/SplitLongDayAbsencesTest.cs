@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IPerson _person;
 		private IScenario _scenario;
 		private IAbsence _absence;
+		private ICccTimeZoneInfo _originalTimeZone;
 
 		[SetUp]
 		public void Setup()
@@ -32,6 +33,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_person = PersonFactory.CreatePerson();
 			_scenario = new Scenario("blää");
 			_absence = new Absence();
+			_originalTimeZone = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone = _originalTimeZone;
 		}
 
 		[Test]
