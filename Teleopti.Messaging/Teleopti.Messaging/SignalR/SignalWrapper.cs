@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using SignalR.Client;
 using SignalR.Client.Hubs;
 using SignalR.Client.Net20.Infrastructure;
+using SignalR.Client.Transports;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
@@ -92,7 +93,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				var resetEvent = new ManualResetEvent(false);
 				Exception startException = null;
-				_hubConnection.Start().ContinueWith(t =>
+				_hubConnection.Start(new LongPollingTransport()).ContinueWith(t =>
 				{
 					if (t.IsFaulted)
 					{
@@ -121,8 +122,13 @@ namespace Teleopti.Messaging.SignalR
 			if (handler!=null)
 			{
 				var d = ((JObject)obj[0]).ToObject<Notification>();
-				handler.Invoke(d);
+				handler.BeginInvoke(d,onNotificationCallback,handler);
 			}
+		}
+
+		private void onNotificationCallback(IAsyncResult ar)
+		{
+			((Action<Notification>)ar.AsyncState).EndInvoke(ar);
 		}
 
 		public Task<object> AddSubscription(Subscription subscription)

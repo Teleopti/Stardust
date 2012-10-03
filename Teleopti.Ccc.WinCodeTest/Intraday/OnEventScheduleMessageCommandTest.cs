@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +23,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private MockRepository mocks;
 		private IIntradayView _view;
 		private IScenario _scenario;
-		private IEnumerable<IPerson> _persons;
 		private ISchedulingResultLoader _schedulingResultLoader;
 		private IRtaStateHolder _rtaStateHolder;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private ISchedulerStateHolder _schedulerStateHolder;
 		private OnEventScheduleMessageCommand target;
 		private readonly DateOnlyPeriod _period = new DateOnlyPeriod(2008, 10, 20, 2008, 10, 20);
+		private IPerson _person;
 
 		[SetUp]
 		public void Setup()
@@ -37,12 +38,14 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			mocks = new MockRepository();
 			_view = mocks.StrictMock<IIntradayView>();
 			_scenario = mocks.StrictMock<IScenario>();
-			_persons = new List<IPerson>{mocks.StrictMock<IPerson>()};
+			_person = PersonFactory.CreatePerson();
+			_person.SetId(Guid.NewGuid());
 			_schedulingResultLoader = mocks.DynamicMock<ISchedulingResultLoader>();
 			_rtaStateHolder = mocks.StrictMock<IRtaStateHolder>();
 			_unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
 			_repositoryFactory = mocks.StrictMock<IRepositoryFactory>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), _persons);
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), new[]{_person});
+			_schedulerStateHolder.SchedulingResultState.PersonsInOrganization = _schedulerStateHolder.AllPermittedPersons;
 			
 	        target = new OnEventScheduleMessageCommand(_view,_schedulingResultLoader,_rtaStateHolder,_unitOfWorkFactory,_repositoryFactory);
 		}
@@ -66,11 +69,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(() => unitOfWork.Reassociate(commonStateHolder.Absences));
 			Expect.Call(_schedulingResultLoader.Contracts).Return(new List<IContract>());
 			Expect.Call(_schedulingResultLoader.ContractSchedules).Return(new List<IContractSchedule>());
-			Expect.Call(() => _view.ReloadScheduleDayInEditor(null));
+			Expect.Call(() => _view.ReloadScheduleDayInEditor(_person));
 
 			mocks.ReplayAll();
 
-			target.Execute(new EventMessage { InterfaceType = typeof(IPersonAbsence), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert });
+			target.Execute(new EventMessage { InterfaceType = typeof(IPersonAbsence), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert, ReferenceObjectId = _person.Id.GetValueOrDefault()});
 
 			mocks.VerifyAll();
 		}
@@ -95,11 +98,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(() => unitOfWork.Reassociate(commonStateHolder.ShiftCategories));
 			Expect.Call(_schedulingResultLoader.Contracts).Return(new List<IContract>());
 			Expect.Call(_schedulingResultLoader.ContractSchedules).Return(new List<IContractSchedule>());
-			Expect.Call(() => _view.ReloadScheduleDayInEditor(null));
+			Expect.Call(() => _view.ReloadScheduleDayInEditor(_person));
 
 			mocks.ReplayAll();
 
-			target.Execute(new EventMessage { InterfaceType = typeof(IPersonAssignment), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert });
+			target.Execute(new EventMessage { InterfaceType = typeof(IPersonAssignment), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert, ReferenceObjectId = _person.Id.GetValueOrDefault()});
 
 			mocks.VerifyAll();
 		}
@@ -119,7 +122,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			mocks.ReplayAll();
 
-			target.Execute(new EventMessage { InterfaceType = typeof(IPersonAssignment), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Delete });
+			target.Execute(new EventMessage { InterfaceType = typeof(IPersonAssignment), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Delete, ReferenceObjectId = _person.Id.GetValueOrDefault()});
 
 			mocks.VerifyAll();
 		}
@@ -139,7 +142,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			mocks.ReplayAll();
 
-			target.Execute(new EventMessage { InterfaceType = typeof(IMeeting), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Delete });
+			target.Execute(new EventMessage { InterfaceType = typeof(IMeeting), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Delete, ReferenceObjectId = _person.Id.GetValueOrDefault() });
 
 			mocks.VerifyAll();
 		}
@@ -165,11 +168,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(() => unitOfWork.Reassociate(commonStateHolder.ShiftCategories));
 			Expect.Call(_schedulingResultLoader.Contracts).Return(new List<IContract>());
 			Expect.Call(_schedulingResultLoader.ContractSchedules).Return(new List<IContractSchedule>());
-			Expect.Call(() => _view.ReloadScheduleDayInEditor(null));
+			Expect.Call(() => _view.ReloadScheduleDayInEditor(_person));
 
 			mocks.ReplayAll();
 
-			target.Execute(new EventMessage { InterfaceType = typeof(IMeeting), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Update });
+			target.Execute(new EventMessage { InterfaceType = typeof(IMeeting), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Update, ReferenceObjectId = _person.Id.GetValueOrDefault() });
 
 			mocks.VerifyAll();
 		}
@@ -177,7 +180,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private void setupCommonStuffForUpdatesFromBroker(IUnitOfWork unitOfWork, IScheduleDictionary scheduleDictionary)
 		{
-			IList<IPerson> personsInOrganisation = new List<IPerson>();
+			IList<IPerson> personsInOrganisation = new List<IPerson>{_person};
 			_schedulerStateHolder = mocks.StrictMock<ISchedulerStateHolder>();
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			Expect.Call(unitOfWork.Dispose);
@@ -219,11 +222,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(() => unitOfWork.Reassociate(commonStateHolder.DayOffs));
 			Expect.Call(_schedulingResultLoader.Contracts).Return(new List<IContract>());
 			Expect.Call(_schedulingResultLoader.ContractSchedules).Return(new List<IContractSchedule>());
-			Expect.Call(() => _view.ReloadScheduleDayInEditor(null));
+			Expect.Call(() => _view.ReloadScheduleDayInEditor(_person));
 
 			mocks.ReplayAll();
 
-			target.Execute(new EventMessage { InterfaceType = typeof(IPersonDayOff), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert });
+			target.Execute(new EventMessage { InterfaceType = typeof(IPersonDayOff), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert, ReferenceObjectId = _person.Id.GetValueOrDefault() });
 
 			mocks.VerifyAll();
 		}
@@ -248,11 +251,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(() => unitOfWork.Reassociate(commonStateHolder.Absences));
 			Expect.Call(_schedulingResultLoader.Contracts).Return(new List<IContract>());
 			Expect.Call(_schedulingResultLoader.ContractSchedules).Return(new List<IContractSchedule>());
-			Expect.Call(() => _view.ReloadScheduleDayInEditor(null));
+			Expect.Call(() => _view.ReloadScheduleDayInEditor(_person));
 
 			mocks.ReplayAll();
 
-			target.Execute(new EventMessage { InterfaceType = typeof(IPersonAbsence), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert });
+			target.Execute(new EventMessage { InterfaceType = typeof(IPersonAbsence), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert, ReferenceObjectId = _person.Id.GetValueOrDefault() });
 
 			mocks.VerifyAll();
 		}
