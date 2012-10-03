@@ -131,6 +131,10 @@ namespace Teleopti.Support.Tool.Controls
         private void buttonRefresh_Click(object sender, EventArgs e)
         {
             RefreshDatabaseList();
+            SetButtonStates(false);
+            listViewDatabases.Visible = false;
+            textBoxOutput.Visible = true;
+            execute(@"C:\Program Files (x86)\Teleopti\DatabaseInstaller\");
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
@@ -160,11 +164,14 @@ namespace Teleopti.Support.Tool.Controls
             string command = @"cmd";
             // create the ProcessStartInfo using "cmd" as the program to be run, and "/c " as the parameters.
             // Incidentally, /c tells cmd that we want it to execute the command that follows, and then exit.
-            ProcessStartInfo procStartInfo = new ProcessStartInfo(command, @" /c " + workingDirectory + @"DirWin.bat");
-
+            ProcessStartInfo procStartInfo = new ProcessStartInfo(command);
+            //System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder(cccConnection);
+            procStartInfo.Arguments = @" /c "+"\"" + workingDirectory + @"PatchDatabaseSupport.bat" + "\"" + @" teleopti722 teleopticcc7_demo TeleoptiCCC7 Teleopticcc7agg_demo sa cadadi";
             procStartInfo.WorkingDirectory = workingDirectory;
             //This means that it will be redirected to the Process.StandardOutput StreamReader.
             procStartInfo.RedirectStandardOutput = true;
+           
+
             //This means that it will be redirected to the Process.StandardError StreamReader. (same as StdOutput)
             procStartInfo.RedirectStandardError = true;
 
@@ -185,10 +192,13 @@ namespace Teleopti.Support.Tool.Controls
             proc.Exited += new EventHandler(ProcOnExited);
             // passing the Startinfo to the process
             proc.StartInfo = procStartInfo;
+         
             proc.Start();
             proc.BeginOutputReadLine();
+          
             //textBoxOutput.Text = proc.StandardOutput.ReadToEnd();
             proc.WaitForExit();
+          
         }
 
         private void AppendText(string text)
@@ -198,7 +208,8 @@ namespace Teleopti.Support.Tool.Controls
                 this.BeginInvoke(new Action<string>(AppendText), new object[] { text });
                 return;
             }
-            
+
+           
             textBoxOutput.Text += text;
             textBoxOutput.Text += Environment.NewLine;
             textBoxOutput.ScrollToCaret();

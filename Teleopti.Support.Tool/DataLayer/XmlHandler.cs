@@ -31,6 +31,7 @@ namespace Teleopti.Support.Tool.DataLayer
                 string sessionfactory = xmlDocument.SelectSingleNode("//Nhib:session-factory", manager).Attributes["name"].Value;
                 XmlNode xmlNode = xmlDocument.SelectSingleNode("//Nhib:property[@name='connection.connection_string']", manager);
                 string cccConnection = xmlNode.InnerText;
+                
                 // connection.connection_string
                 string analyticConnection = xmlDocument.SelectSingleNode("//connectionString").InnerText;
                 string[] connectionProperties = cccConnection.Split(';');
