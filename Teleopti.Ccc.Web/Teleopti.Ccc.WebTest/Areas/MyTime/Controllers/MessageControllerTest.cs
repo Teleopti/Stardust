@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
     [TestFixture]
     public class MessageControllerTest
     {
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
         public void ShouldReturnMessagePartialView()
         {
             var target = new MessageController(MockRepository.GenerateMock<IMessageViewModelFactory>());
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
             result.ViewName.Should().Be.EqualTo("MessagePartial");
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
         public void ShouldReturnViewModelForMessages()
         {
             var viewModelFactory = MockRepository.GenerateMock<IMessageViewModelFactory>();
