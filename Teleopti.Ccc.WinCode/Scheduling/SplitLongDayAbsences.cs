@@ -41,11 +41,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					else
 						end = personAbsencePeriodEnd;
 
-					//if(end > start)
-					//{
-					splitDayAbsence.Layer.Period = new DateTimePeriod(start, end);
-					dayAbsences.Add(splitDayAbsence);
-					//}
+					if (end > start)
+					{
+						splitDayAbsence.Layer.Period = new DateTimePeriod(start, end);
+						dayAbsences.Add(splitDayAbsence);
+					}
 				}
 			}
 			return dayAbsences;

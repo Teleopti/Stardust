@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldNotAddLayerIfStarTimeIsLessThanEndTime()
 		{
 			StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
-			DateTime absenceStart = new DateTime(2012, 1, 1, 23, 15, 0, DateTimeKind.Utc);
-			DateTime absenceEnd = new DateTime(2012, 1, 2, 0, 15, 0, DateTimeKind.Utc);
+			DateTime absenceStart = new DateTime(2012, 1, 2, 0, 15, 0, DateTimeKind.Utc);
+			DateTime absenceEnd = new DateTime(2012, 1, 2, 1, 15, 0, DateTimeKind.Utc);
 			DateTimePeriod absencePeriod = new DateTimePeriod(absenceStart, absenceEnd);
 			DateTime shiftStart = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			DateTime shiftEnd = new DateTime(2012, 1, 2, 0, 0, 0, DateTimeKind.Utc);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				result = _target.SplitAbsences(_scheduleDay);
 			}
 
-			Assert.AreEqual(1, result.Count);
+			Assert.AreEqual(0, result.Count);
 		}
 	}
 }
