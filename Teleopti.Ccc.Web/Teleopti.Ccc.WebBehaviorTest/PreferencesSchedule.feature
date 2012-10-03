@@ -10,15 +10,6 @@ Scenario: See scheduled shift
 	When I view preferences
 	Then I should see my shift
 
-	#need remove
-Scenario: Not see preference when scheduled
-	Given I am an agent
-	And I have existing preference today
-	And I have a shift today
-	And My schedule is published
-	When I view preferences
-	Then I should not see my existing preference
-
 Scenario: Can not add preference on scheduled day
 	Given I am an agent
 	And I have a shift today

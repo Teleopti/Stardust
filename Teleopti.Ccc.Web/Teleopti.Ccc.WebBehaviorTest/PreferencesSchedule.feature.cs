@@ -87,46 +87,23 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Not see preference when scheduled")]
-        public virtual void NotSeePreferenceWhenScheduled()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Not see preference when scheduled", ((string[])(null)));
-#line 14
-this.ScenarioSetup(scenarioInfo);
-#line 15
- testRunner.Given("I am an agent");
-#line 16
- testRunner.And("I have existing preference today");
-#line 17
- testRunner.And("I have a shift today");
-#line 18
- testRunner.And("My schedule is published");
-#line 19
- testRunner.When("I view preferences");
-#line 20
- testRunner.Then("I should not see my existing preference");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Can not add preference on scheduled day")]
         public virtual void CanNotAddPreferenceOnScheduledDay()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not add preference on scheduled day", ((string[])(null)));
-#line 22
+#line 13
 this.ScenarioSetup(scenarioInfo);
-#line 23
+#line 14
  testRunner.Given("I am an agent");
-#line 24
+#line 15
  testRunner.And("I have a shift today");
-#line 25
+#line 16
  testRunner.And("My schedule is published");
-#line 26
+#line 17
  testRunner.When("I view preferences");
-#line 27
+#line 18
  testRunner.Then("I should see my shift");
-#line 28
+#line 19
  testRunner.And("I should not be able to add preference today");
 #line hidden
             this.ScenarioCleanup();
@@ -137,17 +114,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SeeScheduledDayoff()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See scheduled dayoff", ((string[])(null)));
-#line 30
+#line 21
 this.ScenarioSetup(scenarioInfo);
-#line 31
+#line 22
  testRunner.Given("I am an agent");
-#line 32
+#line 23
  testRunner.And("I have a dayoff today");
-#line 33
+#line 24
  testRunner.And("My schedule is published");
-#line 34
+#line 25
  testRunner.When("I view preferences");
-#line 35
+#line 26
  testRunner.Then("I should see the dayoff");
 #line hidden
             this.ScenarioCleanup();
@@ -158,19 +135,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SeeScheduledAbsence()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See scheduled absence", ((string[])(null)));
-#line 37
+#line 28
 this.ScenarioSetup(scenarioInfo);
-#line 38
+#line 29
  testRunner.Given("I am an agent");
-#line 39
+#line 30
  testRunner.And("I have a shift today");
-#line 40
+#line 31
  testRunner.And("I have a full-day absence today");
-#line 41
+#line 32
  testRunner.And("My schedule is published");
-#line 42
+#line 33
  testRunner.When("I view preferences");
-#line 43
+#line 34
  testRunner.Then("I should see the absence");
 #line hidden
             this.ScenarioCleanup();
@@ -181,17 +158,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SeeScheduledAbsenceWhenNoUnderlyingShift()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See scheduled absence when no underlying shift", ((string[])(null)));
-#line 45
+#line 36
 this.ScenarioSetup(scenarioInfo);
-#line 46
+#line 37
  testRunner.Given("I am an agent");
-#line 47
+#line 38
  testRunner.And("I have a full-day absence today");
-#line 48
+#line 39
  testRunner.And("My schedule is published");
-#line 49
+#line 40
  testRunner.When("I view preferences");
-#line 50
+#line 41
  testRunner.Then("I should see the absence");
 #line hidden
             this.ScenarioCleanup();
@@ -202,19 +179,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SeeScheduledAbsenceOnScheduleDayoff()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See scheduled absence on schedule dayoff", ((string[])(null)));
-#line 52
+#line 43
 this.ScenarioSetup(scenarioInfo);
-#line 53
+#line 44
  testRunner.Given("I am an agent");
-#line 54
+#line 45
  testRunner.And("I have a dayoff today");
-#line 55
+#line 46
  testRunner.And("I have a full-day absence today");
-#line 56
+#line 47
  testRunner.And("My schedule is published");
-#line 57
+#line 48
  testRunner.When("I view preferences");
-#line 58
+#line 49
  testRunner.Then("I should see the absence");
 #line hidden
             this.ScenarioCleanup();
@@ -225,17 +202,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SeeScheduledAbsenceOnContractDayoff()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See scheduled absence on contract dayoff", ((string[])(null)));
-#line 60
+#line 51
 this.ScenarioSetup(scenarioInfo);
-#line 61
+#line 52
  testRunner.Given("I am an agent that has a dayoff today according to my contract");
-#line 62
+#line 53
  testRunner.And("I have a full-day absence today");
-#line 63
+#line 54
  testRunner.And("My schedule is published");
-#line 64
+#line 55
  testRunner.When("I view preferences");
-#line 65
+#line 56
  testRunner.Then("I should see the absence");
 #line hidden
             this.ScenarioCleanup();
