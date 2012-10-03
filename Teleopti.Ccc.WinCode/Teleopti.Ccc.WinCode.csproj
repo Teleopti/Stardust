@@ -893,6 +893,7 @@
     <Compile Include="Scheduling\ScheduleSortingCommands\SortByStartDescendingCommand.cs" />
     <Compile Include="Scheduling\SetTagCommand.cs" />
     <Compile Include="Scheduling\SkillWeekGridControlPresenter.cs" />
+    <Compile Include="Scheduling\SplitLongDayAbsences.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessAggregateManager.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessGroupPersonHolder.cs" />
     <Compile Include="Scheduling\ViewModelIsValidRule.cs" />

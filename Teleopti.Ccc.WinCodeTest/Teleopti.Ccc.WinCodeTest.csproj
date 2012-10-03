@@ -634,6 +634,7 @@
     <Compile Include="Scheduler\ShiftCategoryFairnessGroupPersonHolderTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessOptimizerTest.cs" />
     <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
+    <Compile Include="Scheduler\SplitLongDayAbsencesTest.cs" />
     <Compile Include="Scheduler\WorkShiftMasterActivityCheckerTest.cs" />
     <Compile Include="Security\PasswordPolicyServiceViewModelTest.cs" />
     <Compile Include="Settings\AbsenceViewTest.cs" />
