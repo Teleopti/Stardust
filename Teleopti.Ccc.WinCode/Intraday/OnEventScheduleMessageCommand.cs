@@ -38,14 +38,23 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		}
 
         public virtual void Execute(IEventMessage eventMessage)
-        {
+		{
+			var person =
+				_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization.FirstOrDefault(
+					p => p.Id == eventMessage.ReferenceObjectId);
+			if (person == null)
+			{
+				Logger.Info("Person with id " + eventMessage.ReferenceObjectId + " was not found in memory.");
+				return;
+			}
+
             if (eventMessage.DomainUpdateType == DomainUpdateType.Delete)
             {
                 deleteOnEvent(eventMessage);
             }
             else
             {
-                updateInsertOnEvent(eventMessage);
+                updateInsertOnEvent(eventMessage,person);
             }
 
             _schedulingResultLoader.InitializeScheduleData();
@@ -70,7 +79,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			}
         }
 
-        private void updateInsertOnEvent(IEventMessage message)
+        private void updateInsertOnEvent(IEventMessage message, IPerson person)
         {
             using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -81,10 +90,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 uow.Reassociate(_schedulingResultLoader.ContractSchedules);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.RequestedScenario);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization);
-
-                var person =
-                    _schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization.FirstOrDefault(
-                        p => p.Id == message.ReferenceObjectId);
 
                 if (message.InterfaceType.IsAssignableFrom(typeof(IPersonAssignment)))
                 {

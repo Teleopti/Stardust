@@ -13,6 +13,8 @@ namespace Teleopti.Interfaces.MessageBroker
 	{
 		private static readonly StringCollection TypesWithException = new StringCollection {typeof (IExternalAgentState).Name};
 		private static readonly StringCollection TypesWithBusinessUnitException = new StringCollection {typeof(IStatisticTask).Name};
+		public const string Separator = "/";
+		public const string ShortTerm = "ShortTerm";
 
 		/// <summary>
 		/// Creates a new instance of <see cref="Subscription"/>
@@ -33,8 +35,13 @@ namespace Teleopti.Interfaces.MessageBroker
 		public string Route()
 		{
 			var stringArray = new[] { excludeDatasourceForCertainTypes(), excludeBusinessUnitForCertainTypes(), DomainType };
-			var basicRoute = String.Join("/", stringArray);
+			var basicRoute = String.Join(Separator, stringArray);
 			
+			if (DateTime.UtcNow.AddDays(-3) < UpperBoundaryAsDateTime() && DateTime.UtcNow.AddDays(3) > LowerBoundaryAsDateTime())
+			{
+				basicRoute = String.Join(Separator, new[] {basicRoute, ShortTerm});
+			}
+
 			if (!string.IsNullOrEmpty(DomainId))
 			{
 				return String.Join("/", new[] {basicRoute, "id", DomainId});

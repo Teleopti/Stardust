@@ -30,12 +30,25 @@ namespace Teleopti.Interfaces.MessageBroker
 		public string[] Routes()
 		{
 			var stringArray = new[] { DataSource, BusinessUnitId, DomainType };
-			var basicRoute = String.Join("/", stringArray);
-			
-			var idRoute = String.Join("/", new []{basicRoute, "id", DomainId ?? string.Empty});
-			var referenceRoute = String.Join("/", new []{basicRoute, "ref", DomainReferenceId ?? string.Empty});
+			var basicRoute = String.Join(Subscription.Separator, stringArray);
 
-			return new[] { basicRoute, idRoute, referenceRoute};
+			var idRoute = String.Join(Subscription.Separator, new[] { basicRoute, "id", DomainId ?? string.Empty });
+			var referenceRoute = String.Join(Subscription.Separator, new[] { basicRoute, "ref", DomainReferenceId ?? string.Empty });
+
+			string[] routes;
+			if (StartDateAsDateTime() < DateTime.UtcNow.AddDays(3) && EndDateAsDateTime() > DateTime.UtcNow.AddDays(-3))
+			{
+				var basicShortTermRoute = String.Join(Subscription.Separator, new[] {basicRoute, Subscription.ShortTerm});
+				var idShortTermRoute = String.Join(Subscription.Separator, new[] { basicShortTermRoute, "id", DomainId ?? string.Empty });
+				var referenceShortTermRoute = String.Join(Subscription.Separator, new[] { basicShortTermRoute, "ref", DomainReferenceId ?? string.Empty });
+				routes = new[] { basicRoute, idRoute, referenceRoute, basicShortTermRoute, idShortTermRoute, referenceShortTermRoute };
+			}
+			else
+			{
+				routes = new[] {basicRoute, idRoute, referenceRoute};
+			}
+
+			return routes;
 		}
 
 		/// <summary>

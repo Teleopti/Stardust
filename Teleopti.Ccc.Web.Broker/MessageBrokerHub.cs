@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using SignalR.Hubs;
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Web.Broker
 	public class MessageBrokerHub : Hub
 	{
 		private readonly static ILog Logger = LogManager.GetLogger(typeof (MessageBrokerHub));
+		//private readonly ConcurrentDictionary<string,IList<Subscription>> SubscriptionStorage 
 
 		public void AddSubscription(Subscription subscription)
 		{
