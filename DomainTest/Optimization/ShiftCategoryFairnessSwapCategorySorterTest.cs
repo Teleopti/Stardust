@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                                        Name = new Name("Ashlee", "Andeen")
                                                                    }
                                                            }
-                                     
+
                                  };
 
             _numberOfGroups = 2;
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                      }
                              };
         }
-        
+
         [Test]
         public void ShouldReturnBestSwap()
         {
@@ -381,7 +381,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void ShouldNotReturnBlacklistedCategory()
         {
             _list = new List<IShiftCategoryFairnessCompareResult>();
-            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues, _numberOfGroups,
+            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
+                                                    _numberOfGroups,
                                                     _blacklist, ref _list);
             Assert.AreNotEqual(_shiftCategoryMorning, result.First());
         }
@@ -399,7 +400,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     });
             var count = _list.Count;
 
-            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues, _numberOfGroups,
+            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
+                                                    _numberOfGroups,
                                                     _blacklist, ref _list);
             Assert.AreEqual(null, result);
             Assert.AreNotEqual(count, _list.Count);
@@ -433,24 +435,77 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     };
             _list = new List<IShiftCategoryFairnessCompareResult>();
             var count = _list.Count;
-            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues, _numberOfGroups,
+            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
+                                                    _numberOfGroups,
                                                     _blacklist, ref _list);
 
             Assert.AreEqual(null, result);
             Assert.AreNotEqual(count, _list.Count);
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "result"), Test]
+        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void ShouldThrowException()
         {
-            
+
             var maxInt = int.MaxValue;
             maxInt++;
+            // ReSharper disable UnusedVariable
             var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
+                                                    // ReSharper restore UnusedVariable
                                                     maxInt,
                                                     _blacklist, ref _list);
-            
+
+        }
+
+        [Test]
+        public void ShouldReturnNullWhenNoGoodSwapsLeft()
+        {
+            _selectedGroup.ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue>
+                                                                    {
+                                                                        new ShiftCategoryFairnessCompareValue
+                                                                            {
+                                                                                Original = 0.8,
+                                                                                ComparedTo = 0.0,
+                                                                                ShiftCategory = _shiftCategoryMorning
+                                                                            },
+                                                                        new ShiftCategoryFairnessCompareValue
+                                                                            {
+                                                                                Original = 0.2,
+                                                                                ComparedTo = 0.2,
+                                                                                ShiftCategory = _shiftCategoryDay
+                                                                            },
+                                                                        new ShiftCategoryFairnessCompareValue
+                                                                            {
+                                                                                Original = 0.0,
+                                                                                ComparedTo = 0.8,
+                                                                                ShiftCategory = _shiftCategoryNight
+                                                                            }
+
+                                                                    };
+            _blacklist = new List<IShiftCategoryFairnessSwap>
+                             {
+                                 new ShiftCategoryFairnessSwap
+                                     {
+                                         Group1 = _selectedGroup,
+                                         Group2 = new ShiftCategoryFairnessCompareResult(),
+                                         ShiftCategoryFromGroup1 = _shiftCategoryMorning,
+                                         ShiftCategoryFromGroup2 = _shiftCategoryNight
+                                     },
+                                 new ShiftCategoryFairnessSwap
+                                     {
+                                         Group1 = _selectedGroup,
+                                         Group2 = new ShiftCategoryFairnessCompareResult(),
+                                         ShiftCategoryFromGroup1 = _shiftCategoryDay,
+                                         ShiftCategoryFromGroup2 = _shiftCategoryNight
+                                     }
+                             };
+            _list = new List<IShiftCategoryFairnessCompareResult>();
+            var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
+                                                    _numberOfGroups,
+                                                    _blacklist, ref _list);
+            Assert.That(_list.Contains(_selectedGroup), Is.True);
+            Assert.That(result, Is.Null);
         }
     }
 }

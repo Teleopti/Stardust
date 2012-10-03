@@ -54,12 +54,11 @@ namespace Teleopti.Ccc.Domain.Optimization
                     g => (g.Group1 == selectedGroup && g.ShiftCategoryFromGroup1 == firstCategory.ShiftCategory)
                          || (g.Group2 == selectedGroup && g.ShiftCategoryFromGroup2 == firstCategory.ShiftCategory)).
                     ToList();
-            var debugTemp1 = selectedGroupBlackListItems.Count();
 
             List<IShiftCategoryFairnessCompareValue> exceptList;
 
             // ES: if all swaps for selected group highest category is blacklisted
-            if (debugTemp1 == availableSwaps)
+            if (selectedGroupBlackListItems.Count() == availableSwaps)
             {
                 exceptList = new List<IShiftCategoryFairnessCompareValue> {firstCategory};
                 if (selectedGroupCategoriesOrdered.Except(exceptList).Any(b => b.Original > b.ComparedTo))
@@ -76,9 +75,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 g => (g.Group1 == selectedGroup && g.ShiftCategoryFromGroup2 == category.ShiftCategory)
                      || (g.Group2 == selectedGroup && g.ShiftCategoryFromGroup1 == category.ShiftCategory)).ToList();
 
-            var debugTemp2 = selectedGroupBlackListItems.Count();
+            
             // ES: if all swaps for selected group lowest category is blacklisted
-            if (debugTemp2 == availableSwaps)
+            if (selectedGroupBlackListItems.Count() == availableSwaps)
             {
                 exceptList = new List<IShiftCategoryFairnessCompareValue> {secondCategory};
                 if (selectedGroupCategoriesOrdered.Except(exceptList).Any(b => b.Original < b.ComparedTo))

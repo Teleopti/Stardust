@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     {
         private ShiftCategoryFairnessComparer _target;
         private ShiftCategoryFairnessCompareValue _compareValueTarget;
+        private ShiftCategoryFairnessCompareResult _resultTarget;
 
         [SetUp]
         public void Setup()
@@ -26,6 +27,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                           Original = 0,
                                           ShiftCategory = new ShiftCategory("Day")
                                       };
+            _resultTarget = new ShiftCategoryFairnessCompareResult
+                                {
+                                    OriginalMembers = new List<IPerson> { new Person() },
+                                    ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { _compareValueTarget },
+                                    StandardDeviation = 0.1
+                                };
         }
 
         [Test]
@@ -148,6 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.That(System.Math.Round(result.StandardDeviation, 6), Is.EqualTo(0.616441));
         }
 
+        #region ShiftCategoryFairnessCompareValue
         [Test]
         public void ShouldReturnFalseWhenNull()
         {
@@ -175,6 +183,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
+        public void ShouldReturnTrueIfCopy()
+        {
+            var compareValue = _compareValueTarget;
+            Assert.That(_compareValueTarget.Equals(compareValue), Is.True);
+        }
+
+        [Test]
         public void CastingToObjectShouldStillBeEqual()
         {
             var compareValueTarget2 = new ShiftCategoryFairnessCompareValue
@@ -188,11 +203,52 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void CastingToObjectShouldNotBeEqualForDiffrentItems()
+        public void CastingToObjectShouldNotBeEqualForDifferentItems()
         {
             object variable = null;
             Assert.That(_compareValueTarget.Equals(variable), Is.False);
         }
-        
+
+        [Test]
+        public void CastingSameItemToObjectShouldReturnFalse()
+        {
+            var objectValue = (object) _compareValueTarget;
+            Assert.That(_compareValueTarget.Equals(objectValue), Is.True);
+        }
+
+        [Test]
+        public void GetHashCodeTest()
+        {
+            var result = _compareValueTarget.GetHashCode();
+            Assert.AreNotEqual(null, result);
+        }
+
+        #endregion
+
+        # region ShiftCategoryFairnessCompareResult
+        [Test]
+        public void EqualsNullRefForObjectShouldBeFalse()
+        {
+            ShiftCategoryFairnessCompareResult compare = null;
+            var nullCompare = (object) compare;
+            Assert.That(_resultTarget.Equals(nullCompare), Is.False);
+        }
+
+        [Test]
+        public void EqualsNullRefShouldBeFalse()
+        {
+            ShiftCategoryFairnessCompareResult compare = null;
+            Assert.That(_resultTarget.Equals(compare), Is.False);
+        }
+
+        [Test]
+        public void SameRefShouldBeTrue()
+        {
+            var compare = _resultTarget;
+            Assert.That(_resultTarget.Equals(compare), Is.True);
+        }
+
+        #endregion
+
     }
 }

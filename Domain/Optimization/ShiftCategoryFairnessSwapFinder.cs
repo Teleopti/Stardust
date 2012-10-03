@@ -85,9 +85,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var currentGroupLowestCategoryOrignial =
                     currentGroup.ShiftCategoryFairnessCompareValues.First(
                         s => s.ShiftCategory.Description.Name == selectedGroupLowestCategory.Description.Name).Original;
-
-                if (currentGroupLowestCategoryOrignial.Equals(0)) continue;
-
+                
                 var currentGroupHighestCategoryOriginal =
                     currentGroup.ShiftCategoryFairnessCompareValues.First(
                         s => s.ShiftCategory.Description.Name == selectedGroupHighestCategory.Description.Name).Original;
