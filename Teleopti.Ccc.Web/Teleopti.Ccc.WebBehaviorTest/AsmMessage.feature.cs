@@ -423,10 +423,12 @@ this.FeatureBackground();
 #line 116
  testRunner.And("I should be notified that I have \'2\' unread message(s)");
 #line 117
- testRunner.When("I am viewing messages");
+ testRunner.And("I am viewing week schedule");
 #line 118
- testRunner.And("I confirm reading the message at position \'1\' in the list");
+ testRunner.When("I navigate to messages");
 #line 119
+ testRunner.And("I confirm reading the message at position \'1\' in the list");
+#line 120
  testRunner.Then("I should be notified that I have \'1\' unread message(s)");
 #line hidden
             this.ScenarioCleanup();

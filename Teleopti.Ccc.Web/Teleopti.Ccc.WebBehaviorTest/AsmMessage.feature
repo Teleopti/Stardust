@@ -114,7 +114,8 @@ Scenario: Reduce number of unread messages in message tab title
 	| Field         | Value					|
 	| Title         | Another new message	|
 	And I should be notified that I have '2' unread message(s)
-	When I am viewing messages
+	And I am viewing week schedule
+	When I navigate to messages
 	And I confirm reading the message at position '1' in the list
 	Then I should be notified that I have '1' unread message(s)
 	

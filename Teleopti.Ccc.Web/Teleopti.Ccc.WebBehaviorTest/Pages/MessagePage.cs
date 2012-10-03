@@ -19,9 +19,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public ListItemCollection MessageListItems { get { return Document.ListItems.Filter(_messageConstraint); } }
         public IEnumerable<ListItem> Messages { get { return MessageListItems; } }
 
-        public ListItem FirstMessage { get { return Document.ListItem(_messageConstraint).EventualGet(); } }
-        public ListItem LastMessage { get { return MessageListItems.Last(); } }
-
         [FindBy(Id = "Message-detail-section")]
         public Div MessageDetailSection { get; set; }
 
