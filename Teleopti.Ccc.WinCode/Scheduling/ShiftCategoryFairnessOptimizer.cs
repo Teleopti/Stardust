@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
 			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService);
+		bool ExecutePersonal(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
+			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class ShiftCategoryFairnessOptimizer : IShiftCategoryFairnessOptimizer
@@ -19,40 +21,67 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IShiftCategoryFairnessAggregateManager _shiftCategoryFairnessAggregateManager;
 		private readonly IShiftCategoryFairnessSwapper _shiftCategoryFairnessSwapper;
 		private readonly IShiftCategoryFairnessSwapFinder _shiftCategoryFairnessSwapFinder;
+		private readonly IGroupPersonsBuilder _groupPersonsBuilder;
 
 		public ShiftCategoryFairnessOptimizer(IShiftCategoryFairnessAggregateManager shiftCategoryFairnessAggregateManager,
-			IShiftCategoryFairnessSwapper shiftCategoryFairnessSwapper, IShiftCategoryFairnessSwapFinder shiftCategoryFairnessSwapFinder)
+			IShiftCategoryFairnessSwapper shiftCategoryFairnessSwapper, IShiftCategoryFairnessSwapFinder shiftCategoryFairnessSwapFinder,
+			IGroupPersonsBuilder groupPersonsBuilder)
 		{
 			_shiftCategoryFairnessAggregateManager = shiftCategoryFairnessAggregateManager;
 			_shiftCategoryFairnessSwapper = shiftCategoryFairnessSwapper;
 			_shiftCategoryFairnessSwapFinder = shiftCategoryFairnessSwapFinder;
+			_groupPersonsBuilder = groupPersonsBuilder;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, 
+		public bool ExecutePersonal(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, 
 			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			// as we do this from left to right we don't need a list of days that we should not try again
 			foreach (var selectedDay in selectedDays)
 			{
-				if (backgroundWorker.CancellationPending)
-					return true;
+				var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(selectedDay, persons, false, null);
+				foreach (var groupPerson in groupPersons)
+				{
+					// run that day
+					runDay(backgroundWorker, groupPerson.GroupMembers, selectedDays, selectedDay, matrixListForFairnessOptimization, groupPage, rollbackService, true);	
+				}
+				
+			}
+			return true;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
+			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService)
+		{
+			foreach (var selectedDay in selectedDays)
+			{
 				// run that day
-				runDay(backgroundWorker, persons, selectedDays, selectedDay, matrixListForFairnessOptimization, groupPage, rollbackService);
+				runDay(backgroundWorker, persons, selectedDays, selectedDay, matrixListForFairnessOptimization, groupPage, rollbackService,false);
 			}
 			return true;
 		}
 
 		private void runDay(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, DateOnly dateOnly,
-			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService)
+			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService,
+			bool runPersonal)
 		{
+			if (backgroundWorker.CancellationPending)
+				return;
 			var blackList = new List<IShiftCategoryFairnessSwap>();
-			var fairnessResults =
-				_shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
+			IList<IShiftCategoryFairnessCompareResult> fairnessResults;
+			if(runPersonal)
+				// if we run per person (in the team,group), not between teams 
+				fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, groupPage, dateOnly).OrderBy(
+						x => x.StandardDeviation).ToList();
+			else
+				fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
 					x => x.StandardDeviation).ToList();
-
+			
+			
 			// if zero it should be fair
-			var diff = fairnessResults[fairnessResults.Count - 1].StandardDeviation;
+			var diff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
 			if (diff.Equals(0))
 				return;
 
@@ -73,11 +102,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				else
 				{
 					// success but did it get better
-					fairnessResults =
-					_shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
-						x => x.StandardDeviation).ToList();
+					if (runPersonal)
+						fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, groupPage, dateOnly).OrderBy(
+								x => x.StandardDeviation).ToList();
+					else
+						fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
+							x => x.StandardDeviation).ToList();
+					
 
-					var newdiff = fairnessResults[fairnessResults.Count - 1].StandardDeviation; 
+					var newdiff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
 					if (newdiff >= diff) // not better
 					{
 						blackList.Add(swapSuggestion);
