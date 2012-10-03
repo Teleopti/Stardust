@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldGetUnreadMessagesInCorrectOrder()
+		public void ShouldGetUnreadMessagesInExpectedOrder()
 		{
 			IPerson receiver = PersonFactory.CreatePerson("vsd");
 
