@@ -71,7 +71,8 @@ Scenario: Open unread message
 	| Field		| Value				|
 	| Title		| New message		|
 	| Message	| Text in message	|
-	And I am viewing messages
+	And I am viewing week schedule
+	When I navigate to messages
 	And I click on the message at position '1' in the list
 	Then I should see the message details form with
 	| Field		| Value				|
@@ -83,21 +84,24 @@ Scenario: Confirm message is read
 	And I have an unread message with
 	| Field         | Value          |
 	| Title         | New message	 |
-	And I am viewing messages
+	And I am viewing week schedule
+	And I navigate to messages
 	And I click on the message at position '1' in the list
 	When I click the confirm button
 	Then I should not see any messages
 	And I should be notified that I have 'no' unread message(s)
 
-Scenario: Order messages in list by created date
+Scenario: Sort messages in list by latest message
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field         | Value			|
-	| Title         | Message		|
+	| Field				| Value			|
+	| Title				| Message		|
+	| Is oldest message	| True			|
 	And I have an unread message with
 	| Field         | Value				|
 	| Title         | Latest message	|
-	When I am viewing messages
+	And I am viewing week schedule
+	When I navigate to messages
 	Then I should see the message with title 'Latest message' at position '1' in the list
 	And I should see the message with title 'Message' at position '2' in the list
 

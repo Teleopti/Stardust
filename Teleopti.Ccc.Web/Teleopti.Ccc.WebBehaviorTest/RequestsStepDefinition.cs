@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Navigation.GotoRequests();
 		}
 
+		[Given(@"I navigate to messages")]
 		[When(@"I navigate to messages")]
 		public void WhenINavigateToMessages()
 		{
