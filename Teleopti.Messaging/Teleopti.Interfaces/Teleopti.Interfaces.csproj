@@ -284,7 +284,7 @@
     <Compile Include="Domain\ISchedulingResultService.cs" />
     <Compile Include="Domain\IScorecard.cs" />
     <Compile Include="Domain\IScorecardPeriod.cs" />
-    <Compile Include="Domain\IShiftCategoryFairness.cs" />
+    <Compile Include="Domain\IShiftCategoryFairnessHolder.cs" />
     <Compile Include="Domain\IShiftCategoryFairnessFactors.cs" />
     <Compile Include="Domain\IShiftCategoryFairnessShiftValueCalculator.cs" />
     <Compile Include="Domain\IShiftCategoryLimitation.cs" />

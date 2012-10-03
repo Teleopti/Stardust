@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			var person2 = PersonFactory.CreatePerson("herr person");
 			var catDic = new Dictionary<IShiftCategory, int> {{cat, 2}};
 
-			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic,new FairnessValueResult() );
+			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(catDic,new FairnessValueResult() );
 
 			Expect.Call(_dic[person1]).Return(_range1);
 			Expect.Call(_range1.CachedShiftCategoryFairness()).Return(fairness);
@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			var catDic = new Dictionary<IShiftCategory, int> { { cat, 2 } };
 			var catDic2 = new Dictionary<IShiftCategory, int> { { cat2, 2 } };
 
-			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic, new FairnessValueResult());
-			var fairness2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic2, new FairnessValueResult());
+			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(catDic, new FairnessValueResult());
+			var fairness2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(catDic2, new FairnessValueResult());
 
 			Expect.Call(_dic[person1]).Return(_range1);
 			Expect.Call(_range1.CachedShiftCategoryFairness()).Return(fairness);

@@ -1,22 +1,21 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
-    public class ShiftCategoryFairness : IShiftCategoryFairness
+    public class ShiftCategoryFairnessHolder : IShiftCategoryFairnessHolder
     {
         private IDictionary<IShiftCategory, int> _shiftDictionary;
     	private readonly IFairnessValueResult _fairnessValueResult;
 
-    	public ShiftCategoryFairness()
+    	public ShiftCategoryFairnessHolder()
         {
             _shiftDictionary = new Dictionary<IShiftCategory, int>();
     		_fairnessValueResult = new FairnessValueResult();
         }
 
-        public ShiftCategoryFairness(IDictionary<IShiftCategory, int> shiftDictionary, IFairnessValueResult fairnessValueResult)
+        public ShiftCategoryFairnessHolder(IDictionary<IShiftCategory, int> shiftDictionary, IFairnessValueResult fairnessValueResult)
         {
         	_shiftDictionary = shiftDictionary;
         	_fairnessValueResult = fairnessValueResult;
@@ -37,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
             }
         }
 
-        public IShiftCategoryFairness Add(IShiftCategoryFairness holder)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IShiftCategoryFairnessHolder Add(IShiftCategoryFairnessHolder holder)
         {
             Dictionary<IShiftCategory, int> result = new Dictionary<IShiftCategory, int>();
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
         	fairnessValueResult.TotalNumberOfShifts = _fairnessValueResult.TotalNumberOfShifts +
         	                                          holder.FairnessValueResult.TotalNumberOfShifts;
 
-            return new ShiftCategoryFairness(result, fairnessValueResult);
+            return new ShiftCategoryFairnessHolder(result, fairnessValueResult);
         }
 
         #region Equals stuff
@@ -71,7 +71,8 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
         /// <returns>
         /// true if the current object is equal to the other parameter; otherwise, false.
         /// </returns>
-        public bool Equals(IShiftCategoryFairness other)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool Equals(IShiftCategoryFairnessHolder other)
         {
             if (ShiftCategoryFairnessDictionary.Keys.Count != other.ShiftCategoryFairnessDictionary.Keys.Count)
                 return false;
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
         /// </returns>
         public override bool Equals(object obj)
         {
-			var ent = obj as IShiftCategoryFairness;
+			var ent = obj as IShiftCategoryFairnessHolder;
 			if (ent == null)
 				return false;
 			return Equals(ent);

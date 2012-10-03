@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private ICccTimeZoneInfo _timeZone;
         private ICollection<DateOnly> _availableDates;
         private IEnumerable<DateOnlyPeriod> _availablePeriods;
-        private IShiftCategoryFairness _shiftCategoryFairness;
+        private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
 
         public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters)
             : base(owner, parameters)
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _calculatedTargettTimeHolder = null;
             _calculatedTargetScheduleDaysOff = null;
             _calculatedScheduleDaysOff = null;
-            _shiftCategoryFairness = null;
+            _shiftCategoryFairnessHolder = null;
         }
 
         private class PersistableScheduleDataForAuthorization
@@ -417,16 +417,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         	return ((ISchedule) this).Owner.Period.VisiblePeriodMinusFourWeeksPeriod();
         }
 
-        public IShiftCategoryFairness CachedShiftCategoryFairness()
+        public IShiftCategoryFairnessHolder CachedShiftCategoryFairness()
         {
-            if (_shiftCategoryFairness == null)
+            if (_shiftCategoryFairnessHolder == null)
             {
                 ShiftCategoryFairnessCreator creator = new ShiftCategoryFairnessCreator();
                 ICccTimeZoneInfo timeZoneInfo = this.Person.PermissionInformation.DefaultTimeZone();
                 DateOnlyPeriod period = VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
-                _shiftCategoryFairness = creator.CreatePersonShiftCategoryFairness(this, period);
+                _shiftCategoryFairnessHolder = creator.CreatePersonShiftCategoryFairness(this, period);
             }
-            return _shiftCategoryFairness;
+            return _shiftCategoryFairnessHolder;
         }
     }
 }

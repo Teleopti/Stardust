@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 
 			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(_period.DayCollection(), groupPage, dateOnly, _personsWithShiftCategoryFairness);
-			IShiftCategoryFairness orig = new ShiftCategoryFairness();
+			IShiftCategoryFairnessHolder orig = new ShiftCategoryFairnessHolder();
 			var otherPersons = new List<IPerson>();
 			foreach (var groupPerson in groups)
 			{
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public IList<IShiftCategoryFairnessCompareResult> GetForGroups(IList<IPerson> persons, IGroupPageLight groupPage, DateOnly dateOnly, IList<DateOnly> selectedDates )
 		{
-			//TODO?? shall we check here on the fairness system??
+			//TODO?? shall we check here on the fairnessHolder system??
 
 			var ret = new List<IShiftCategoryFairnessCompareResult>();
 			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(selectedDates, groupPage, dateOnly, persons);

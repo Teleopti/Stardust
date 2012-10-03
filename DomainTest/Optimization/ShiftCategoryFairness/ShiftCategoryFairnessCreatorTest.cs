@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                     .Repeat.AtLeastOnce();
 
             }
-            IShiftCategoryFairness holder = _target.CreatePersonShiftCategoryFairness(_scheduleRange, _period);
+            IShiftCategoryFairnessHolder holder = _target.CreatePersonShiftCategoryFairness(_scheduleRange, _period);
             IDictionary<IShiftCategory, int> result = holder.ShiftCategoryFairnessDictionary;
 
             Assert.AreEqual(2, result.Keys.Count);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                     .Return(new FairnessValueResult());
 
             }
-            IShiftCategoryFairness holder = _target.CreatePersonShiftCategoryFairness(_scheduleRange, _period);
+            IShiftCategoryFairnessHolder holder = _target.CreatePersonShiftCategoryFairness(_scheduleRange, _period);
             IDictionary<IShiftCategory, int> result = holder.ShiftCategoryFairnessDictionary;
 
             Assert.AreEqual(0, result.Keys.Count);

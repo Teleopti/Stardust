@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IScheduleRange _rangeAnotherPerson;
         private IShiftCategory _personShiftCategory;
         private IShiftCategory _anotherPersonShiftCategory;
-        private IShiftCategoryFairness _shiftCategoryFairness;
-        private IShiftCategoryFairness _anotherShiftCategoryFairness;
+        private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
+        private IShiftCategoryFairnessHolder _anotherShiftCategoryFairnessHolder;
         private ISchedulingResultStateHolder _stateHolder;
         private IVirtualSchedulePeriod _virtualSchedulePeriod;
 
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                                                                    {{_personShiftCategory, 1}};
             IDictionary<IShiftCategory, int> anotherShiftDictionary = new Dictionary<IShiftCategory, int>
                                                                           {{_anotherPersonShiftCategory, 1}};
-            _shiftCategoryFairness = new ShiftCategoryFairness(shiftDictionary, new FairnessValueResult());
-            _anotherShiftCategoryFairness = new ShiftCategoryFairness(anotherShiftDictionary, new FairnessValueResult());
+            _shiftCategoryFairnessHolder = new ShiftCategoryFairnessHolder(shiftDictionary, new FairnessValueResult());
+            _anotherShiftCategoryFairnessHolder = new ShiftCategoryFairnessHolder(anotherShiftDictionary, new FairnessValueResult());
 
             _target = new GroupShiftCategoryFairnessCreator(new GroupPagePerDateHolder { ShiftCategoryFairnessGroupPagePerDate = _groupPagePerDate }, _stateHolder);
         }
@@ -84,13 +84,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(_scheduleDictionary[_person]).Return(_rangePerson);
                 Expect.Call(_scheduleDictionary[_anotherPerson]).Return(_rangeAnotherPerson);
 
-                Expect.Call(_rangePerson.CachedShiftCategoryFairness()).Return(_shiftCategoryFairness);
-                Expect.Call(_rangeAnotherPerson.CachedShiftCategoryFairness()).Return(_anotherShiftCategoryFairness);
+                Expect.Call(_rangePerson.CachedShiftCategoryFairness()).Return(_shiftCategoryFairnessHolder);
+                Expect.Call(_rangeAnotherPerson.CachedShiftCategoryFairness()).Return(_anotherShiftCategoryFairnessHolder);
 
             }
             using (_mockRepository.Playback())
             {
-                IShiftCategoryFairness result =
+                IShiftCategoryFairnessHolder result =
                     _target.CalculateGroupShiftCategoryFairness(_person, _dateOnly);
                 Assert.IsTrue(result.ShiftCategoryFairnessDictionary.ContainsKey(_personShiftCategory));
                 Assert.IsTrue(result.ShiftCategoryFairnessDictionary.ContainsKey(_anotherPersonShiftCategory));
@@ -111,11 +111,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(_virtualSchedulePeriod.IsValid).Return(true);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_rangePerson);            
-                Expect.Call(_rangePerson.CachedShiftCategoryFairness()).Return(_shiftCategoryFairness);
+                Expect.Call(_rangePerson.CachedShiftCategoryFairness()).Return(_shiftCategoryFairnessHolder);
             }
             using (_mockRepository.Playback())
             {
-                IShiftCategoryFairness result =
+                IShiftCategoryFairnessHolder result =
                     _target.CalculateGroupShiftCategoryFairness(_person, new DateOnly(2011, 5, 1));
                 Assert.IsTrue(result.ShiftCategoryFairnessDictionary.ContainsKey(_personShiftCategory));
                 Assert.IsFalse(result.ShiftCategoryFairnessDictionary.ContainsKey(_anotherPersonShiftCategory));
