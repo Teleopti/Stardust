@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
             if (firstCategory == null || secondCategory == null)
             {
                 if (!blacklistedGroups.Contains(selectedGroup)) blacklistedGroups.Add(selectedGroup);
-                return null;
+                return new List<IShiftCategoryFairnessCompareValue>();
             }
 
             var availableSwaps = ((numberOfGroups - 1)*(categoryCount - 1));
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
                                               numberOfGroups, blacklist.Except(selectedGroupBlackListItems),
                                               ref blacklistedGroups);
                 if (!blacklistedGroups.Contains(selectedGroup)) blacklistedGroups.Add(selectedGroup);
-                return null;
+                return new List<IShiftCategoryFairnessCompareValue>();
 
             }
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
                                               ref blacklistedGroups);
 
                 if (!blacklistedGroups.Contains(selectedGroup)) blacklistedGroups.Add(selectedGroup);
-                return null;
+                return new List<IShiftCategoryFairnessCompareValue>();
 
             }
             return new List<IShiftCategoryFairnessCompareValue> {firstCategory, secondCategory};

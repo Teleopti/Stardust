@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
                                                     _numberOfGroups,
                                                     _blacklist, ref _list);
-            Assert.AreEqual(null, result);
+            Assert.That(result, Is.Empty);
             Assert.AreNotEqual(count, _list.Count);
             Assert.AreEqual(_selectedGroup, _list.First());
         }
@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                                                     _numberOfGroups,
                                                     _blacklist, ref _list);
 
-            Assert.AreEqual(null, result);
+            Assert.That(result, Is.Empty);
             Assert.AreNotEqual(count, _list.Count);
         }
 
@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                                                     _numberOfGroups,
                                                     _blacklist, ref _list);
             Assert.That(_list.Contains(_selectedGroup), Is.True);
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
                                                                                 g => g.ComparedTo > 0 || g.Original > 0),
                                                                         orderedList.Count(),
                                                                         blacklist, ref BlacklistedGroups).ToList();
-            if (firstCount < BlacklistedGroups.Count)
+            if (firstCount < BlacklistedGroups.Count || !selectedGroupCategories.Any())
                 return GetGroupsToSwap(groupList, blacklist);
 
             var selectedGroupHighestCategory = selectedGroupCategories.First().ShiftCategory;
