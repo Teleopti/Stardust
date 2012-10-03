@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization
+namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
 	public interface IShiftCategoryFairnessReScheduler
 	{

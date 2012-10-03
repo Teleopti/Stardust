@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Teleopti.Ccc.Domain.Optimization
+namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
     public interface IShiftCategoryFairnessSwapFinder
     {

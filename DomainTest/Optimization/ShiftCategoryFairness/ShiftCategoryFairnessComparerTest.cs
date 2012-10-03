@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Optimization
+namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 {
     [TestFixture]
     public class ShiftCategoryFairnessComparerTest
@@ -45,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var catDic = new Dictionary<IShiftCategory, int> {{cat, 2}, {cat2, 2}};
             var catDic2 = new Dictionary<IShiftCategory, int> {{cat2, 2}, {cat3, 2}};
 
-            var fairness = new ShiftCategoryFairness(catDic, new FairnessValueResult());
-            var fairness2 = new ShiftCategoryFairness(catDic2, new FairnessValueResult());
+			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic, new FairnessValueResult());
+			var fairness2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic2, new FairnessValueResult());
 
             var result = _target.Compare(fairness, fairness2, new List<IShiftCategory> {cat, cat2, cat3});
             Assert.That(result.ShiftCategoryFairnessCompareValues.Count, Is.EqualTo(3));
@@ -79,8 +77,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var catDic = new Dictionary<IShiftCategory, int> {{cat, 30}, {cat2, 40}, {cat3, 30}, {cat4, 0}};
             var catDic2 = new Dictionary<IShiftCategory, int> {{cat, 28}, {cat2, 50}, {cat3, 20}, {cat4, 2}};
 
-            var fairness = new ShiftCategoryFairness(catDic, new FairnessValueResult());
-            var fairness2 = new ShiftCategoryFairness(catDic2, new FairnessValueResult());
+			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic, new FairnessValueResult());
+			var fairness2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic2, new FairnessValueResult());
 
             var result = _target.Compare(fairness, fairness2, new List<IShiftCategory> {cat, cat2, cat3, cat4});
             Assert.That(result.ShiftCategoryFairnessCompareValues.Count, Is.EqualTo(4));
@@ -108,8 +106,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var catDic = new Dictionary<IShiftCategory, int> {{cat, 100}, {cat2, 0}, {cat3, 0}, {cat4, 0}};
             var catDic2 = new Dictionary<IShiftCategory, int> {{cat, 28}, {cat2, 50}, {cat3, 20}, {cat4, 2}};
 
-            var fairness = new ShiftCategoryFairness(catDic, new FairnessValueResult());
-            var fairness2 = new ShiftCategoryFairness(catDic2, new FairnessValueResult());
+			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic, new FairnessValueResult());
+			var fairness2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic2, new FairnessValueResult());
 
             var result = _target.Compare(fairness, fairness2, new List<IShiftCategory> {cat, cat2, cat3, cat4});
             Assert.That(result.ShiftCategoryFairnessCompareValues.Count, Is.EqualTo(4));
@@ -137,8 +135,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var catDic = new Dictionary<IShiftCategory, int> {{cat, 100}, {cat2, 0}};
             var catDic2 = new Dictionary<IShiftCategory, int> {{cat3, 60}, {cat4, 40}};
 
-            var fairness = new ShiftCategoryFairness(catDic, new FairnessValueResult());
-            var fairness2 = new ShiftCategoryFairness(catDic2, new FairnessValueResult());
+			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic, new FairnessValueResult());
+			var fairness2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(catDic2, new FairnessValueResult());
 
             var result = _target.Compare(fairness, fairness2, new List<IShiftCategory> {cat, cat2, cat3, cat4});
             Assert.That(result.ShiftCategoryFairnessCompareValues.Count, Is.EqualTo(4));

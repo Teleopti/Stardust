@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
+namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 {
 	[TestFixture]
 	public class ShiftCategoryFairnessCalculatorTest
 	{
 		private ShiftCategoryFairnessCalculator _target;
-		private ShiftCategoryFairness _groupCategoryFairness;
-		private ShiftCategoryFairness _personCategoryFairness;
+		private Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness _groupCategoryFairness;
+		private Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness _personCategoryFairness;
 		private ShiftCategory _m;
 		private ShiftCategory _d;
 		private ShiftCategory _l;
@@ -49,8 +46,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			Dictionary<IShiftCategory, int> shiftDictionary = new Dictionary<IShiftCategory, int>();
 			shiftDictionary.Add(_m, 1);
-			_groupCategoryFairness = new ShiftCategoryFairness(shiftDictionary, new FairnessValueResult());
-			_personCategoryFairness = new ShiftCategoryFairness();
+			_groupCategoryFairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(shiftDictionary, new FairnessValueResult());
+			_personCategoryFairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness();
 			IShiftCategoryFairnessFactors result = _target.ShiftCategoryFairnessFactors(_groupCategoryFairness, _personCategoryFairness);
 			Assert.AreEqual(1d, result.FairnessFactor(_m));
 		}
@@ -60,29 +57,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			Dictionary<IShiftCategory, int> shiftDictionary = new Dictionary<IShiftCategory, int>();
 			shiftDictionary.Add(_m, 1);
-			_groupCategoryFairness = new ShiftCategoryFairness(shiftDictionary, new FairnessValueResult());
-			_personCategoryFairness = new ShiftCategoryFairness();
+			_groupCategoryFairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(shiftDictionary, new FairnessValueResult());
+			_personCategoryFairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness();
 			IShiftCategoryFairnessFactors result = _target.ShiftCategoryFairnessFactors(_groupCategoryFairness, _personCategoryFairness);
 			Assert.AreEqual(0, result.FairnessFactor(_d));
 		}
 
-		private ShiftCategoryFairness CreateGroupCategoryFairness()
+		private Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness CreateGroupCategoryFairness()
 		{
 			Dictionary<IShiftCategory, int> shiftDictionary = new Dictionary<IShiftCategory, int>();
 			shiftDictionary.Add(_m, 28);
 			shiftDictionary.Add(_d, 50);
 			shiftDictionary.Add(_l, 20);
 			shiftDictionary.Add(_n, 2);
-			return new ShiftCategoryFairness(shiftDictionary, new FairnessValueResult());
+			return new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(shiftDictionary, new FairnessValueResult());
 		}
 
-		private ShiftCategoryFairness CreatePersonCategoryFairness()
+		private Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness CreatePersonCategoryFairness()
 		{
 			Dictionary<IShiftCategory, int> shiftDictionary = new Dictionary<IShiftCategory, int>();
 			shiftDictionary.Add(_m, 3);
 			shiftDictionary.Add(_d, 4);
 			shiftDictionary.Add(_l, 3);
-			return new ShiftCategoryFairness(shiftDictionary, new FairnessValueResult());
+			return new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness(shiftDictionary, new FairnessValueResult());
 		}
 	}
 }

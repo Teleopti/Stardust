@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.Assignment
+namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
     public class ShiftCategoryFairnessFactors : IShiftCategoryFairnessFactors
     {

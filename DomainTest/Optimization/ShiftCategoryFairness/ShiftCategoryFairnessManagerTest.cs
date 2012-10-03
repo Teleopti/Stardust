@@ -1,10 +1,10 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
+namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 {
     [TestFixture]
     public class ShiftCategoryFairnessManagerTest
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
 			var range = _mocks.StrictMock<IScheduleRange>();
 			var dateOnly = new DateOnly(2011, 4, 19);
-			var fairness = new ShiftCategoryFairness();
+			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairness();
 			var factors = _mocks.StrictMock<IShiftCategoryFairnessFactors>();
 			Expect.Call(_stateHolder.Schedules).Return(_dic);
 			Expect.Call(_dic[_person]).Return(range);

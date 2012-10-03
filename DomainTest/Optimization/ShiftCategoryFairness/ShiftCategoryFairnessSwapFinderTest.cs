@@ -2,10 +2,11 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Optimization
+namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 {
     [TestFixture]
     public class ShiftCategoryFairnessSwapFinderTest
