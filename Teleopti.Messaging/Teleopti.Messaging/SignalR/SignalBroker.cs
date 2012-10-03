@@ -30,7 +30,8 @@ namespace Teleopti.Messaging.SignalR
 			FilterManager.InitializeTypeFilter(typeFilter);
 			IsTypeFilterApplied = true;
 
-			ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ignoreInvalidCertificate);
+			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
+			ServicePointManager.DefaultConnectionLimit = 50;
 		}
 
 		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
