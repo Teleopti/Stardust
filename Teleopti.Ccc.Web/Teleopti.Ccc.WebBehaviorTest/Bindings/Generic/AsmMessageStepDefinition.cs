@@ -4,6 +4,7 @@ using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -107,7 +108,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
         [Then(@"I should see the message details form with")]
         public void ThenIShouldSeeTheMessageDetailsFormWith(Table table)
         {
-            ScenarioContext.Current.Pending();
+            EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.MessageDetailSection.DisplayVisible(), Is.True);
+
         }
 
         [Then(@"I should see the message with title '(.*)' at position '(.*)' in the list")]
@@ -120,7 +122,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
         [When(@"I click on the message at position '(.*)' in the list")]
         public void GivenIClickOnTheMessageAtPositionInTheList(int position)
         {
-            _page.FirstMessage.Click();
+            _page.FirstMessage.EventualClick();
         }
 
         [When(@"I click the confirm button")]

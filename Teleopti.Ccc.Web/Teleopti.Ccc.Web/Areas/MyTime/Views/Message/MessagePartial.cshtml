@@ -9,8 +9,8 @@
 <div class="displaynone" id="Communication-detail-default-end-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
 
 <div id="Communication-body-inner" class="communication-body-inner relative">
-	@*<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all">
-		<input type="hidden" id="Request-detail-entityid"/>
+	<div id="Message-detail-section" class="displaynone request-edit-section ui-corner-all">
+		@*<input type="hidden" id="Request-detail-entityid"/>
 		<div id="Schedule-addRequest-title" class="pdb5">
 			<span id="Text-request-tab" class="selectable-tab selected-tab" data-bind="visible:TextRequestTabVisible">@Resources.TextRequest</span>
 			@if (Model.RequestPermission.AbsenceRequestPermission)
@@ -82,8 +82,8 @@
 			@Resources.FullDay
 		</label>
 		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
-		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat"></div>
-	</div>*@
+		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat"></div>*@
+	</div>
 	<div class="communication-list">
 		<div id="friendly-message" class="friendly-message ui-corner-all floatleft" style="display: none;">
 			@Resources.NoMessagesFound
