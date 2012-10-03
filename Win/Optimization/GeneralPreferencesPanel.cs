@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Win.Optimization
                 checkBoxShiftsForFlexibleWorkTime.Checked = _generalPreferences.OptimizationStepShiftsForFlexibleWorkTime;
                 checkBoxDaysOffFromFlexibleWorkTime.Checked = _generalPreferences.OptimizationStepDaysOffForFlexibleWorkTime;
 				checkBoxShiftsWithinDay.Checked = _generalPreferences.OptimizationStepShiftsWithinDay;
+				checkBoxFairness.Checked = _generalPreferences.OptimizationStepFairness;
 
                 checkBoxPreferences.Checked = _generalPreferences.UsePreferences;
                 checkBoxMustHaves.Checked = _generalPreferences.UseMustHaves;
@@ -90,6 +91,7 @@ namespace Teleopti.Ccc.Win.Optimization
                 _generalPreferences.OptimizationStepShiftsForFlexibleWorkTime = checkBoxShiftsForFlexibleWorkTime.Checked;
                 _generalPreferences.OptimizationStepDaysOffForFlexibleWorkTime = checkBoxDaysOffFromFlexibleWorkTime.Checked;
 				_generalPreferences.OptimizationStepTimeBetweenDays = checkBoxTimeBetweenDays.Checked;
+				_generalPreferences.OptimizationStepFairness = checkBoxFairness.Checked;
 
                 _generalPreferences.UsePreferences = checkBoxPreferences.Checked;
                 _generalPreferences.UseMustHaves = checkBoxMustHaves.Checked;
