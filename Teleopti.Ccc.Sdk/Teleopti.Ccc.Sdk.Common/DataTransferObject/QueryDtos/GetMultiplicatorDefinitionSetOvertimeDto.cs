@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 	/// Query for Multiplicator definition set for shift allowance.
 	/// </summary>
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/09/")]
-	public class GetMultiplicatorDefinitionSetOvertimeDto
+    public class GetMultiplicatorDefinitionSetOvertimeDto : QueryDto
 	{
 		/// <summary>
 		/// Gets or sets date time period.

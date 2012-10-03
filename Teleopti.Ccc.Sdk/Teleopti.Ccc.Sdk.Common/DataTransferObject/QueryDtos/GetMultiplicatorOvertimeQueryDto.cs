@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 	/// Query for Multiplicator overtime.
 	/// </summary>
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/09/")]
-	public class GetMultiplicatorOvertimeQueryDto
+    public class GetMultiplicatorOvertimeQueryDto : QueryDto
 	{
 		/// <summary>
 		/// Gets or sets include deleted.
