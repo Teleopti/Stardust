@@ -600,6 +600,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                         matrixOriginalStateContainerListForIntradayOptimization,
                         workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization, 
                         backgroundWorker);
+
+				if (optimizerPreferences.General.OptimizationStepFairness)
+					runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences);
             }
 
 
@@ -611,16 +614,23 @@ namespace Teleopti.Ccc.Win.Scheduling
             	                                    optimizerPreferences, schedulingOptions);
             }
 
-        	//if runFairness();
+			if (optimizerPreferences.General.OptimizationStepFairness)
+        		runFairness(selectedDays,tagSetter,selectedPersons,optimizerPreferences);
+
+            //set back
+            optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
+        }
+
+		private void runFairness(IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
+			IOptimizationPreferences optimizerPreferences)
+		{
 			var matrixListForFairness = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
 			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
 			var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
-				fairnessOpt.ExecutePersonal(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness,
-											optimizerPreferences.Extra.GroupPageOnCompareWith, rollbackService);
-            //set back
-            optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
-        }
+			fairnessOpt.ExecutePersonal(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness,
+										optimizerPreferences.Extra.GroupPageOnCompareWith, rollbackService);
+		}
 
         private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IList<IScheduleMatrixPro> matrixList)
         {
