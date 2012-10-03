@@ -23,5 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		{
 			Assert.IsNotNull(_target);
 		}
+
 	}
 }
