@@ -113,11 +113,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
         [Then(@"I should see the message with title '(.*)' at position '(.*)' in the list")]
         public void ThenIShouldSeeTheMessageWithTitleAtPositionInTheList(string title, int listPosition)
         {
-            _page.MessageList.Elements.Count.Should().Be.EqualTo(listPosition);
-            EventualAssert.That(() => _page.FirstMessage.InnerHtml.Contains(title), Is.True);
+            EventualAssert.That(() => _page.MessageListItems[listPosition-1].InnerHtml.Contains(title), Is.True);
         }
 
         [Given(@"I click on the message at position '(.*)' in the list")]
+        [When(@"I click on the message at position '(.*)' in the list")]
         public void GivenIClickOnTheMessageAtPositionInTheList(int position)
         {
             _page.FirstMessage.Click();

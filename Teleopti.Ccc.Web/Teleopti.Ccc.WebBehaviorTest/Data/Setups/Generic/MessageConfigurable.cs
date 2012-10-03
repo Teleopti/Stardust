@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public string Title { get; set; }
         public string Message { get; set; }
+        public bool IsOldestMessage { get; set; }
 
 	    public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -23,6 +25,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			var repository = new PushMessageRepository(uow);
 			repository.Add(message, new List<IPerson> {user});
+
+            if (IsOldestMessage)
+                Thread.Sleep(1010);
 		}
 	}
 }
