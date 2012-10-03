@@ -46,16 +46,16 @@ namespace Teleopti.Ccc.Domain.Optimization
                     {
                         var firstDateInPeriodLocal = new DateOnly(DateHelper.GetFirstDateInWeek(dateOnly, person.FirstDayOfWeek));
                         var dateOnlyWeek = new DateOnlyPeriod(firstDateInPeriodLocal, firstDateInPeriodLocal.AddDays(6));
-                        
-                        if (groupSchedules.All(s=>IsShiftCategoryOverOrAtWeekLimit(shiftCategoryLimitation,s,dateOnlyWeek,out datesWithCategory))
+
+                        if (groupSchedules.All(s => IsShiftCategoryOverOrAtWeekLimit(shiftCategoryLimitation, s, dateOnlyWeek, out datesWithCategory))
                             && !optimizerPreferences.NotAllowedShiftCategories.Contains(shiftCategoryLimitation.ShiftCategory))
                             optimizerPreferences.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
                     }
                     else
                     {
                         DateOnlyPeriod period = schedulePeriod.DateOnlyPeriod;
-                        if (IsShiftCategoryOverOrAtPeriodLimit(shiftCategoryLimitation, period, ScheduleDictionary[person], out datesWithCategory) && !optimizerPreferences.NotAllowedShiftCategories.Contains(shiftCategoryLimitation.ShiftCategory))
-
+                        if (groupSchedules.All(s => IsShiftCategoryOverOrAtPeriodLimit(shiftCategoryLimitation, period, s, out datesWithCategory))
+                            && !optimizerPreferences.NotAllowedShiftCategories.Contains(shiftCategoryLimitation.ShiftCategory))
                             optimizerPreferences.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
                     }
                 }

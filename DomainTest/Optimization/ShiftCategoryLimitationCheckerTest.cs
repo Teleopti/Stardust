@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target.SetBlockedShiftCategories(preferences.SchedulingOptions, groupPerson, dateOnly);
-                Assert.AreEqual(2, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
+                Assert.AreEqual(0, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
             }
         }
         
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target.SetBlockedShiftCategories(preferences.SchedulingOptions, groupPerson, dateOnly);
-                Assert.AreEqual(1, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
+                Assert.AreEqual(0, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
             }
 
         }
