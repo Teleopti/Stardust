@@ -15,24 +15,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
         [FindBy(Id = "Communications-list")]
         public List MessageList { get; set; }
 
-        private Constraint MessageConstraint = Find.ByClass("communication-item", false) && !Find.ByClass("template", false);
-		public ListItemCollection MessageListItems { get { return Document.ListItems.Filter(MessageConstraint); } }
+        private readonly Constraint _messageConstraint = Find.ByClass("communication-item", false) && !Find.ByClass("template", false);
+		public ListItemCollection MessageListItems { get { return Document.ListItems.Filter(_messageConstraint); } }
         public IEnumerable<ListItem> Messages { get { return MessageListItems; } }
 
-        public ListItem FirstMessage { get { return Document.ListItem(MessageConstraint).EventualGet(); } }
+        public ListItem FirstMessage { get { return Document.ListItem(_messageConstraint).EventualGet(); } }
         public ListItem LastMessage { get { return MessageListItems.Last(); } }
 
         [FindBy(Id = "Message-detail-section")]
         public Div MessageDetailSection { get; set; }
 
-	    public Label Title
-	    {
-	        get { throw new System.NotImplementedException(); }
-	    }
+		[FindBy(Id = "Message-detail-title")]
+		public Label Title { get; set; }
 
-	    public Label Message
-	    {
-	        get { throw new System.NotImplementedException(); }
-	    }
+		[FindBy(Id = "Message-detail-message")]
+		public Label Message { get; set; }
 	}
 }

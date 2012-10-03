@@ -125,6 +125,7 @@
     <Compile Include="Data\Setups\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="Data\Setups\Specific\StockholmTimeZone.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
+    <Compile Include="Pages\Common\IMessageReplyPage.cs" />
     <Compile Include="Pages\MessagePage.cs" />
     <Compile Include="Pages\GlobalMenuPage.cs" />
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
