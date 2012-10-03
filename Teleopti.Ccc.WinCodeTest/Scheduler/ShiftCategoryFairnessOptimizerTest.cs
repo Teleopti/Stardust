@@ -2,8 +2,10 @@
 using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -19,6 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private ShiftCategoryFairnessOptimizer _target;
 		private BackgroundWorker _bgWorker;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
+		private IGroupPersonsBuilder _groupPersonBuilder;
 
 
 		[SetUp]
@@ -29,7 +32,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_shiftCategoryFairnessAggregateManager = _mocks.StrictMock<IShiftCategoryFairnessAggregateManager>();
 			_shiftCategoryFairnessSwapper = _mocks.DynamicMock<IShiftCategoryFairnessSwapper>();
 			_shiftCategoryFairnessSwapFinder = _mocks.StrictMock<IShiftCategoryFairnessSwapFinder>();
-			_target = new ShiftCategoryFairnessOptimizer(_shiftCategoryFairnessAggregateManager, _shiftCategoryFairnessSwapper, _shiftCategoryFairnessSwapFinder);
+			_groupPersonBuilder = _mocks.DynamicMock<IGroupPersonsBuilder>();
+			_target = new ShiftCategoryFairnessOptimizer(_shiftCategoryFairnessAggregateManager, _shiftCategoryFairnessSwapper, _shiftCategoryFairnessSwapFinder,_groupPersonBuilder);
 			_rollbackService = _mocks.DynamicMock<ISchedulePartModifyAndRollbackService>();
 		}
 
@@ -137,6 +141,31 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list2, new List<IShiftCategoryFairnessSwap>{toSwap})).Return(null);
 			_mocks.ReplayAll();
 			_target.Execute(_bgWorker, persons, days, matrixes, gropPage, _rollbackService);
+			_mocks.VerifyAll();
+		}
+		[Test]
+		public void ShouldRunForEachGroupPersonWhenPersonal()
+		{
+			var persons = new List<IPerson>{new Person()};
+			var dateOnly = new DateOnly(2012, 9, 21);
+			var days = new List<DateOnly> { dateOnly };
+			var matrixes = new List<IScheduleMatrixPro>();
+			var gropPage = new GroupPageLight();
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3 };
+			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 4 };
+			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
+			var list2 = new List<IShiftCategoryFairnessCompareResult> { compare1, compare3 };
+			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
+			var groupPerson = new GroupPerson(persons, dateOnly, "name", null);
+			Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(dateOnly,persons,false,null)).Return(new List<IGroupPerson>{groupPerson});
+			Expect.Call(_shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, gropPage, dateOnly)).Return(list).IgnoreArguments();
+			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(toSwap);
+			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, _rollbackService, _bgWorker)).Return(true);
+			Expect.Call(_shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, gropPage, dateOnly)).Return(list2).IgnoreArguments();
+			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list2, new List<IShiftCategoryFairnessSwap> { toSwap })).Return(null);
+			_mocks.ReplayAll();
+			_target.ExecutePersonal(_bgWorker, persons, days, matrixes, gropPage, _rollbackService);
 			_mocks.VerifyAll();
 		}
 	}
