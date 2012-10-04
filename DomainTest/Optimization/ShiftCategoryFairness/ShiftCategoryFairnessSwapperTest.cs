@@ -101,6 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
 			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
+			Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly)).Return(true);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(false);
 			
 			_mocks.ReplayAll();
@@ -141,6 +142,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
 			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
+			Expect.Call(_swappableChecker.PersonsAreSwappable(person2, person1, dateOnly)).Return(true);
+			
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(true);
 			Expect.Call(rollbackService.ModifyParts(null)).Return(new BindingList<IBusinessRuleResponse>());
 			Expect.Call(_fairnessReScheduler.Execute(new List<IPerson>(),dateOnly,matrixes )).IgnoreArguments().Return(true);
@@ -181,6 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
 			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
+			Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly)).Return(true);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(true);
 			Expect.Call(rollbackService.ModifyParts(null)).Return(new BindingList<IBusinessRuleResponse>());
 			_mocks.ReplayAll();
