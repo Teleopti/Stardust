@@ -109,7 +109,7 @@
 											}
 											<div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
 											<!-- ko if: MustHave -->
-											<div class="icon heart-small preference-must-have"/>
+											<div @(day.Preference ? Html.Raw("class=\"icon heart-small preference-must-have\"") : Html.Raw("class=\"icon heart-small preference-must-have grey-out\"")) />
 											<!-- /ko -->
 											<div class="extended-panel" style="display: none">
 												<div class="extended-part">
