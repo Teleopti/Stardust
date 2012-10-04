@@ -92,7 +92,21 @@
 								{
 									<div class="preference">
 										<span class="displayinline-block">
-											<div @(day.Fulfilled.HasValue && !day.Fulfilled.Value ? Html.Raw("class=\"preference-text preference-not-fulfilled\"") : Html.Raw("class=\"preference-text\"")) data-bind="text: Preference"></div>
+											@if (!day.Fulfilled.HasValue)
+											{
+												<div class="preference-text" data-bind="text: Preference" />
+											}
+											else
+											{
+												if (day.Fulfilled.Value)
+												{
+													<div class="preference-text preference-fulfilled" data-bind="text: Preference" />
+												}
+												else
+												{
+													<div class="preference-text preference-not-fulfilled" data-bind="text: Preference" />
+												}
+											}
 											<div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
 											<!-- ko if: MustHave -->
 											<div class="icon heart-small preference-must-have"/>

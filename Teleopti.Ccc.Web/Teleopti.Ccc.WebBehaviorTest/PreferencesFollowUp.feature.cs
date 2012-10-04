@@ -184,7 +184,7 @@ this.FeatureBackground();
                         "Date",
                         "2012-10-02"});
             table9.AddRow(new string[] {
-                        "Shift Category",
+                        "Shift category",
                         "Late"});
             table9.AddRow(new string[] {
                         "StartTime",
@@ -244,7 +244,7 @@ this.FeatureBackground();
                         "Date",
                         "2012-10-02"});
             table12.AddRow(new string[] {
-                        "Shift Category",
+                        "Shift category",
                         "Late"});
             table12.AddRow(new string[] {
                         "StartTime",
@@ -307,7 +307,7 @@ this.FeatureBackground();
                         "Date",
                         "2012-10-02"});
             table15.AddRow(new string[] {
-                        "Shift Category",
+                        "Shift category",
                         "Night"});
             table15.AddRow(new string[] {
                         "StartTime",
@@ -328,10 +328,10 @@ this.FeatureBackground();
                         "2012-10-02"});
             table16.AddRow(new string[] {
                         "Shift category",
-                        "Late"});
+                        "Night"});
             table16.AddRow(new string[] {
                         "Preference",
-                        "Night"});
+                        "Late"});
             table16.AddRow(new string[] {
                         "Fulfilled",
                         "false"});
@@ -370,7 +370,7 @@ this.FeatureBackground();
                         "Date",
                         "2012-10-02"});
             table18.AddRow(new string[] {
-                        "Shift Category",
+                        "Shift category",
                         "Late"});
             table18.AddRow(new string[] {
                         "StartTime",
@@ -436,7 +436,7 @@ this.FeatureBackground();
                         "Date",
                         "2012-10-02"});
             table21.AddRow(new string[] {
-                        "Shift Category",
+                        "Shift category",
                         "Late"});
             table21.AddRow(new string[] {
                         "StartTime",

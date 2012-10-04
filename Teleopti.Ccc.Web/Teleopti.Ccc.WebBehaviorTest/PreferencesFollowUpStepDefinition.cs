@@ -1,13 +1,10 @@
 using System;
 using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -24,7 +21,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var preference = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference");
 			if (fields.Preference != null) EventualAssert.That(() => preference.InnerHtml, Is.StringContaining(fields.Preference));
 
-			//if (fields.Fulfilled != null) EventualAssert.That(() => preference.InnerHtml, Is.StringContaining(fields.Fulfilled));
+			if (fields.Fulfilled != null)
+			{
+				EventualAssert.That(() => preference.InnerHtml,
+				                    fields.Fulfilled.Value
+					                    ? Is.StringContaining("preference-fulfilled")
+					                    : Is.StringContaining("preference-not-fulfilled"));
+			}
 		}
 
 
