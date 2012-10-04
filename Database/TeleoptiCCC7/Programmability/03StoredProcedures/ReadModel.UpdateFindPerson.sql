@@ -127,6 +127,8 @@ INNER JOIN PersonSkill ps ON pp.Id = ps.Parent
 INNER JOIN Skill s ON ps.Skill = s.Id
 WHERE p.IsDeleted = 0 AND Active = 1 AND  s.IsDeleted = 0
 AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'Skill')
+DECLARE @date DATETIME
+SELECT @date = CONVERT(DATETIME, CONVERT(varchar(10), GETDATE(), 101))
 
 UPDATE [ReadModel].[FindPerson] SET [TeamId] = t.Id,
 	[SiteId] = s.Id,[BusinessUnitId] = s.BusinessUnit 
@@ -135,7 +137,27 @@ LEFT JOIN [PersonPeriodWithEndDate] pp ON p.PersonId = pp.Parent and pp.Parent i
 INNER JOIN Team t ON pp.Team = t.Id
 INNER JOIN Site s ON s.Id = t.Site
 -- the 
-WHERE pp.StartDate < GETDATE() AND pp.EndDate > GETDATE()
+WHERE pp.StartDate < @date AND pp.EndDate >= @date
+AND t.IsDeleted = 0 AND s.IsDeleted = 0
+
+/*last if terminal*/
+CREATE TABLE #last
+(
+[Parent] [uniqueidentifier] NOT NULL,
+[Team] [uniqueidentifier] NULL,
+[EndDate] [DateTime] NOT NULL
+)
+INSERT INTO #last
+SELECT Parent, Team, MAX(enddate) from PersonPeriodWithEndDate
+group by Parent, Team
+
+UPDATE [ReadModel].[FindPerson] SET [TeamId] = t.Id,
+	[SiteId] = s.Id,[BusinessUnitId] = s.BusinessUnit 
+FROM [ReadModel].[FindPerson] p
+LEFT JOIN #last pp ON p.PersonId = pp.Parent and pp.Parent in (SELECT * FROM #ids)
+INNER JOIN Team t ON pp.Team = t.Id
+INNER JOIN Site s ON s.Id = t.Site
+WHERE p.TeamId is null
 AND t.IsDeleted = 0 AND s.IsDeleted = 0
 
 GO
