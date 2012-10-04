@@ -78,7 +78,9 @@ namespace Teleopti.Support.Tool.Controls
             IList<Nhib> nhibs = XmlHandler.GetNihibSettings(textBoxNHibFolder.Text).ToList();
             foreach (Nhib nhib in nhibs)
             {
-                ListViewGroup listViewGroup = listViewDatabases.Groups.Add(nhib.Factoryname, nhib.Factoryname);
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(nhib.CCCConnectionString);
+                string groupCaption = nhib.Factoryname + " ("+ builder.DataSource + ")";
+                ListViewGroup listViewGroup = listViewDatabases.Groups.Add(nhib.Factoryname, groupCaption);
                 ListViewItem[] listViewItems = CreateDatabaseListViewItems(nhib, listViewGroup);
                 listViewDatabases.Items.AddRange(listViewItems);
             }
