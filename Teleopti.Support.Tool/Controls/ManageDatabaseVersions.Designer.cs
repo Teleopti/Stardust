@@ -149,7 +149,7 @@
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.Size = new System.Drawing.Size(84, 23);
             this.buttonUpdate.TabIndex = 35;
-            this.buttonUpdate.Text = "Update";
+            this.buttonUpdate.Text = "Upgrade";
             this.buttonUpdate.UseVisualStyleBackColor = false;
             this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
             // 
