@@ -90,7 +90,7 @@ FETCH NEXT FROM SearchWordCursor INTO @cursorString, @cursorCount
 WHILE @@FETCH_STATUS = 0
  BEGIN
 	
-	SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson WHERE ISNULL(TerminalDate, ''2100-01-01'') > '''+ @leave_after_ISO + ''' AND SearchValue like N''%' + @cursorString + '%'''
+	SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson WHERE ISNULL(TerminalDate, ''2100-01-01'') >= '''+ @leave_after_ISO + ''' AND SearchValue like N''%' + @cursorString + '%'''
 
 	--If 'All' set searchtype as a separate AND condition
 	IF @search_type <> 'All'
