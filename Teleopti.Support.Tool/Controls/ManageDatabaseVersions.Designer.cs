@@ -74,6 +74,7 @@
             this.listViewDatabases.UseCompatibleStateImageBehavior = false;
             this.listViewDatabases.View = System.Windows.Forms.View.Details;
             this.listViewDatabases.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewDatabases_ItemSelectionChanged);
+            this.listViewDatabases.SelectedIndexChanged += new System.EventHandler(this.listViewDatabases_SelectedIndexChanged);
             // 
             // columnHeaderName
             // 
@@ -142,7 +143,6 @@
             // buttonUpdate
             // 
             this.buttonUpdate.BackColor = System.Drawing.SystemColors.Window;
-            this.buttonUpdate.Enabled = false;
             this.buttonUpdate.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.buttonUpdate.Location = new System.Drawing.Point(487, 292);
             this.buttonUpdate.Margin = new System.Windows.Forms.Padding(5);
@@ -174,7 +174,7 @@
             this.textBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutput.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.textBoxOutput.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxOutput.Font = new System.Drawing.Font("Lucida Console", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxOutput.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.textBoxOutput.Location = new System.Drawing.Point(14, 83);
             this.textBoxOutput.Multiline = true;

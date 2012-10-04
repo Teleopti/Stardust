@@ -71,7 +71,7 @@ namespace Teleopti.Support.Tool.Controls
 
         private void RefreshDatabaseList()
         {
-            buttonUpdate.Enabled = false;
+            //buttonUpdate.Enabled = false;
             _mainForm.Cursor = Cursors.WaitCursor;
             listViewDatabases.BeginUpdate();
             listViewDatabases.Items.Clear();
@@ -152,6 +152,8 @@ namespace Teleopti.Support.Tool.Controls
 
         private void SetButtonStates(bool state)
         {
+            textBoxNHibFolder.Enabled = state;
+            buttonBrowse.Enabled = state;
             buttonBack.Enabled = state;
             buttonRefresh.Enabled = state;
             buttonUpdate.Enabled = state;
@@ -184,6 +186,12 @@ namespace Teleopti.Support.Tool.Controls
                         processStartInfo = CreateProcessStartInfoForApplicationSecurity(nhib, listViewItem, databaseTypeString);
                         RunProcess(processStartInfo);
                     }
+
+                    if (databaseTypeString == AnalyticsDatabaseTextConstant)
+                    {
+                        processStartInfo = CreateProcessStartInfoForAnalyticsSecurity(nhib, listViewItem, databaseTypeString);
+                        RunProcess(processStartInfo);
+                    }
                 }
 
                 AppendText("Database update finished successfully to version " + _currentVersion);
@@ -193,6 +201,36 @@ namespace Teleopti.Support.Tool.Controls
                 AppendText(e.Message);
             }
           
+        }
+
+
+//                  3 – If TeleoptiAnalytics DbType
+//                  Teleopti.Support.Security.exe -DS%MyServerInstance% -DD%DATABASE% -CD%TeleoptiCCCAgg% -EE    
+        private ProcessStartInfo CreateProcessStartInfoForAnalyticsSecurity(Nhib nhib, ListViewItem listViewItem, string databaseTypeString)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CCCConnectionString);
+            string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\Enrypted\";
+
+            string command = workingDirectory + @"Teleopti.Support.Security.exe";
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(command);
+            stringBuilder.Append(SPACE);
+            stringBuilder.Append(@"-DS");
+            stringBuilder.Append(sqlConnectionStringBuilder.DataSource + SPACE);
+            stringBuilder.Append(GetLogonString(sqlConnectionStringBuilder));
+            stringBuilder.Append(@"-DD");
+            stringBuilder.Append(listViewItem.Name + SPACE);
+            stringBuilder.Append(@"-CD");
+            stringBuilder.Append(nhib.AggregationDatabase + SPACE);
+            processStartInfo.Arguments = stringBuilder.ToString();
+
+            processStartInfo.WorkingDirectory = workingDirectory;
+
+            processStartInfo.RedirectStandardOutput = true;
+            processStartInfo.RedirectStandardError = true;
+            processStartInfo.UseShellExecute = false;
+            processStartInfo.CreateNoWindow = true;
+            return processStartInfo;
         }
 
 
@@ -359,7 +397,12 @@ namespace Teleopti.Support.Tool.Controls
 
         private void listViewDatabases_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            buttonUpdate.Enabled = !e.Item.SubItems[2].Text.Equals(_currentVersion.ToString());
+            //buttonUpdate.Enabled = !e.Item.SubItems[2].Text.Equals(_currentVersion.ToString());
+        }
+
+        private void listViewDatabases_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
