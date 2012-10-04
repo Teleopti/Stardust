@@ -17,11 +17,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class TeamSteadyStateMainShiftScheduler : ITeamSteadyStateMainShiftScheduler
 	{
 		private readonly IGroupMatrixHelper _groupMatrixHelper;
-		private DateOnly _dateOnly;
+		private readonly ITeamSteadyStateCoherentChecker _coherentChecker;
+		private readonly ITeamSteadyStateScheduleMatrixProFinder _teamSteadyStateScheduleMatrixProFinder;
 
-		public TeamSteadyStateMainShiftScheduler(IGroupMatrixHelper groupMatrixHelper)
+		public TeamSteadyStateMainShiftScheduler(IGroupMatrixHelper groupMatrixHelper, ITeamSteadyStateCoherentChecker coherentChecker, ITeamSteadyStateScheduleMatrixProFinder teamSteadyStateScheduleMatrixProFinder)
 		{
 			_groupMatrixHelper = groupMatrixHelper;
+			_coherentChecker = coherentChecker;
+			_teamSteadyStateScheduleMatrixProFinder = teamSteadyStateScheduleMatrixProFinder;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -30,11 +33,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if(groupPersonBuilderForOptimization == null) throw new ArgumentNullException("groupPersonBuilderForOptimization");
 			if(scheduleDictionary == null) throw new ArgumentNullException("scheduleDictionary");
 
-			_dateOnly = dateOnly;
-
 			var assignedPersons = new List<IPerson>();
 			IPersonAssignment personAssignmentSource = null;
 
+			//schedule first group member or use existing main shift as source, return false if there are non coherent mainshifts
 			foreach (var groupMember in groupPerson.GroupMembers)
 			{
 				var person = groupMember;
@@ -43,9 +45,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var scheduleDaySource = scheduleRangeSource.ScheduledDay(dateOnly);
 				var schedulePartViewSource = scheduleDaySource.SignificantPart();
 
-				var theMatrix = MatrixPro(matrixes, scheduleDaySource);
-				if (theMatrix == null) return false;
-				var locked = !theMatrix.UnlockedDays.Contains(theMatrix.GetScheduleDayByKey(_dateOnly));
+				var theMatrix = _teamSteadyStateScheduleMatrixProFinder.MatrixPro(matrixes, scheduleDaySource);
+				if (theMatrix == null) continue;
+
+				scheduleDaySource = _coherentChecker.CheckCoherent(matrixes, dateOnly, scheduleDictionary, scheduleDaySource);
+
+				if (scheduleDaySource == null)
+					return false;
+
+				var locked = !theMatrix.UnlockedDays.Contains(theMatrix.GetScheduleDayByKey(dateOnly));
 				
 				if (schedulePartViewSource == SchedulePartView.FullDayAbsence || schedulePartViewSource == SchedulePartView.DayOff || schedulePartViewSource == SchedulePartView.ContractDayOff || locked)
 				{
@@ -55,18 +63,24 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				var matrixList = new List<IScheduleMatrixPro> {theMatrix};
 
-				if (!_groupMatrixHelper.ScheduleSinglePerson(dateOnly, groupMember, groupSchedulingService, schedulingOptions, groupPersonBuilderForOptimization, matrixList))
+				if (scheduleDaySource.SignificantPart() != SchedulePartView.MainShift)
 				{
-					return false;
-				}
+					if (!_groupMatrixHelper.ScheduleSinglePerson(dateOnly, groupMember, groupSchedulingService, schedulingOptions, groupPersonBuilderForOptimization, matrixList))
+					{
+						return false;
+					}
 
-				scheduleRangeSource = scheduleDictionary[person];
-				scheduleDaySource = scheduleRangeSource.ScheduledDay(dateOnly);
+					scheduleRangeSource = scheduleDictionary[person];
+					scheduleDaySource = scheduleRangeSource.ScheduledDay(dateOnly);
+					assignedPersons.Add(person);
+				}
+				
+
 				personAssignmentSource = scheduleDaySource.AssignmentHighZOrder();
-				assignedPersons.Add(person);
 				break;
 			}
 			
+			//add the shift to other group memembers
 			foreach (var groupMember in groupPerson.GroupMembers)
 			{
 				if (assignedPersons.Contains(groupMember)) 
@@ -81,15 +95,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var significantPart = scheduleDay.SignificantPart();
 				var cloneMainShift = mainShift.NoneEntityClone() as IMainShift;
 
-				if (significantPart == SchedulePartView.MainShift)
-					return false;
+				if (significantPart == SchedulePartView.MainShift) continue;
+					
+				if (significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.FullDayAbsence) continue;
 
-				if (significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.FullDayAbsence) 
-					continue;
+				var theMatrix = _teamSteadyStateScheduleMatrixProFinder.MatrixPro(matrixes, scheduleDay);
+				if (theMatrix == null) continue;
 
-				var theMatrix = MatrixPro(matrixes, scheduleDay);
-				if (theMatrix == null) return false;
-				var locked = !theMatrix.UnlockedDays.Contains(theMatrix.GetScheduleDayByKey(_dateOnly));
+				var locked = !theMatrix.UnlockedDays.Contains(theMatrix.GetScheduleDayByKey(dateOnly));
 				
 				if (locked) continue;
 				scheduleDay.AddMainShift(cloneMainShift);
@@ -97,19 +110,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 
 			return true;
-		}
-
-		private IScheduleMatrixPro MatrixPro(IEnumerable<IScheduleMatrixPro> matrixes, IScheduleDay scheduleDay)
-		{
-			
-			foreach (var scheduleMatrixPro in matrixes)
-			{
-				if (scheduleMatrixPro.Person != scheduleDay.Person) continue;
-				if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(_dateOnly))
-					return scheduleMatrixPro;
-			}
-
-			return null;
 		}
 	}
 }
