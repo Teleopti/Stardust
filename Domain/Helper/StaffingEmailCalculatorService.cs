@@ -17,7 +17,12 @@ namespace Teleopti.Ccc.Domain.Helper
             return calls/workPerAgent;
         }
 
-        public double AgentsFromUtilization(double theUtilization, double theCallsPerHour, double averageHandlingTime, TimeSpan periodLength)
+    	public double TeleoptiAgents(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength)
+    	{
+    		return Agents(sla, serviceTime, calls, averageHandlingTime, periodLength);
+    	}
+
+    	public double AgentsFromUtilization(double theUtilization, double theCallsPerHour, double averageHandlingTime, TimeSpan periodLength)
         {
             return 0;
         }

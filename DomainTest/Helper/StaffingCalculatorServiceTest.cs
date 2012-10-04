@@ -136,6 +136,12 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(0.768,
                          Math.Round(_calculatorService.Utilization(_agents, _calls, _averageHandlingTime, _periodLength), 3));
         }
+
+		[Test]
+		public void TeleoptiAgentsShouldCalculateAlmostTheSameValueAsAgents()
+		{
+			_calculatorService.Agents(_sla, _serviceTime, _calls, _averageHandlingTime, _periodLength);
+		}
        
     }
 }
