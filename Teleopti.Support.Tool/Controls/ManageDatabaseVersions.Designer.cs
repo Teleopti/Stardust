@@ -67,11 +67,9 @@
             listViewItem3});
             this.listViewDatabases.Location = new System.Drawing.Point(14, 83);
             this.listViewDatabases.Margin = new System.Windows.Forms.Padding(5);
-            this.listViewDatabases.MultiSelect = false;
             this.listViewDatabases.Name = "listViewDatabases";
             this.listViewDatabases.Size = new System.Drawing.Size(651, 199);
             this.listViewDatabases.SmallImageList = this.imageListIconsForListview;
-            this.listViewDatabases.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewDatabases.TabIndex = 0;
             this.listViewDatabases.UseCompatibleStateImageBehavior = false;
             this.listViewDatabases.View = System.Windows.Forms.View.Details;

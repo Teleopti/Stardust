@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -18,8 +20,12 @@ namespace Teleopti.Support.Tool.Controls
         private const string ApplicationDatabaseTextConstant = "Application DB";
         private const string AnalyticsDatabaseTextConstant = "Analytics DB";
         private const string AggregationDatabaseTextConstant = "Aggregation DB";
+        private const string DOUBLEQUOTE = @"""";
+        private const String SPACE = " ";
         private readonly MainForm _mainForm;
         private readonly Version _currentVersion;
+        private string _teleoptiCccBaseInstallFolder;
+
 
         public ManageDatabaseVersions(MainForm mainForm, Version currentVersion)
         {
@@ -31,8 +37,8 @@ namespace Teleopti.Support.Tool.Controls
         private void ManageDatabaseVersions_Load(object sender, EventArgs e)
         {
             smoothLabelCurrentVersion.Text = _currentVersion.ToString();
-            string installFolder = (string) Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings", "INSTALLDIR", @"C:\");
-            textBoxNHibFolder.Text = installFolder + @"TeleoptiCCC\SDK\";
+            _teleoptiCccBaseInstallFolder = (string) Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings", "INSTALLDIR", @"C:\");
+            textBoxNHibFolder.Text = _teleoptiCccBaseInstallFolder + @"TeleoptiCCC\SDK\";
             RefreshDatabaseList();
         }
 
@@ -131,18 +137,17 @@ namespace Teleopti.Support.Tool.Controls
         private void buttonRefresh_Click(object sender, EventArgs e)
         {
             RefreshDatabaseList();
-            SetButtonStates(false);
-            listViewDatabases.Visible = false;
-            textBoxOutput.Visible = true;
-            execute(@"C:\Program Files (x86)\Teleopti\DatabaseInstaller\");
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
+            _mainForm.Cursor = Cursors.WaitCursor;
             SetButtonStates(false);
             listViewDatabases.Visible = false;
             textBoxOutput.Visible = true;
-            execute(@"C:\Temp\");
+            execute();
+            buttonBack.Enabled = true;
+            _mainForm.Cursor = Cursors.Default;
         }
 
         private void SetButtonStates(bool state)
@@ -159,46 +164,166 @@ namespace Teleopti.Support.Tool.Controls
             buttonBack.Enabled = true;
         }
 
-        private void execute(string workingDirectory)
+
+
+        private void execute()
         {
-            string command = @"cmd";
-            // create the ProcessStartInfo using "cmd" as the program to be run, and "/c " as the parameters.
-            // Incidentally, /c tells cmd that we want it to execute the command that follows, and then exit.
-            ProcessStartInfo procStartInfo = new ProcessStartInfo(command);
-            //System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder(cccConnection);
-            procStartInfo.Arguments = @" /c "+"\"" + workingDirectory + @"PatchDatabaseSupport.bat" + "\"" + @" teleopti722 teleopticcc7_demo TeleoptiCCC7 Teleopticcc7agg_demo sa cadadi";
-            procStartInfo.WorkingDirectory = workingDirectory;
+            try
+            {
+                foreach (ListViewItem listViewItem in listViewDatabases.SelectedItems)
+                {
+                    Nhib nhib = (Nhib)listViewItem.Tag;
+                    string databaseTypeString = listViewItem.SubItems[1].Text;
+
+                    ProcessStartInfo processStartInfo;
+                    processStartInfo = CreateProcessStartInfoForDBManager(nhib, listViewItem, databaseTypeString);
+                    RunProcess(processStartInfo);
+
+                    if (databaseTypeString == ApplicationDatabaseTextConstant)
+                    {
+                        processStartInfo = CreateProcessStartInfoForApplicationSecurity(nhib, listViewItem, databaseTypeString);
+                        RunProcess(processStartInfo);
+                    }
+                }
+
+                AppendText("Database update finished successfully to version " + _currentVersion);
+            }
+            catch (ApplicationException e)
+            {
+                AppendText(e.Message);
+            }
+          
+        }
+
+
+        //          2- If TeleoptiCCC7 DbType
+        //          Teleopti.Support.Security.exe -DS%MyServerInstance% -DD%DATABASE% -EE
+        private ProcessStartInfo CreateProcessStartInfoForApplicationSecurity(Nhib nhib, ListViewItem listViewItem, string databaseTypeString)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CCCConnectionString);
+            string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\Enrypted\";
+
+            string command = workingDirectory + @"Teleopti.Support.Security.exe";
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(command);
+            stringBuilder.Append(SPACE);
+            stringBuilder.Append(@"-DS");
+            stringBuilder.Append(sqlConnectionStringBuilder.DataSource + SPACE);
+            stringBuilder.Append(GetLogonString(sqlConnectionStringBuilder));
+            stringBuilder.Append(@"-DD");
+            stringBuilder.Append(listViewItem.Name + SPACE);
+            processStartInfo.Arguments = stringBuilder.ToString();
+
+            processStartInfo.WorkingDirectory = workingDirectory;
+
+            processStartInfo.RedirectStandardOutput = true;
+            processStartInfo.RedirectStandardError = true;
+            processStartInfo.UseShellExecute = false;
+            processStartInfo.CreateNoWindow = true;
+            return processStartInfo;
+        }
+
+        private string GetLogonString(SqlConnectionStringBuilder sqlConnectionStringBuilder)
+        {
+            if (sqlConnectionStringBuilder.IntegratedSecurity)
+            {
+                return "-EE ";
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(@"-DU");
+            stringBuilder.Append(sqlConnectionStringBuilder.UserID + SPACE);
+            stringBuilder.Append(@"-DP");
+            stringBuilder.Append(sqlConnectionStringBuilder.Password + SPACE);
+            return stringBuilder.ToString();
+        }
+
+
+        private void RunProcess(ProcessStartInfo processStartInfo)
+        {
+            Process process = new Process();
+            process.EnableRaisingEvents = true;
+            process.OutputDataReceived += new DataReceivedEventHandler(ProcOnOutputDataReceived);
+            process.ErrorDataReceived += new DataReceivedEventHandler(ProcOnErrorDataReceived);
+            process.Exited += new EventHandler(ProcOnExited);
+            process.StartInfo = processStartInfo;
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            while (!process.HasExited)
+            {
+                Application.DoEvents();
+            }
+            int exitCode = process.ExitCode;
+            process.Dispose();
+
+            if (exitCode != 0)
+            {
+                throw new ApplicationException(processStartInfo.FileName + " returned exit code: " + exitCode);
+            }
+        }
+
+        //          1 - alltid
+        //          DBManager.exe -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E -T
+        private ProcessStartInfo CreateProcessStartInfoForDBManager(Nhib nhib, ListViewItem listViewItem, string databaseTypeString)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CCCConnectionString);
+            string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\";
+
+            string command = workingDirectory + @"DBManager.exe";
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(command);
+            stringBuilder.Append(SPACE);
+            stringBuilder.Append(@"-S");
+            stringBuilder.Append(sqlConnectionStringBuilder.DataSource + SPACE);
+            stringBuilder.Append(GetLogonStringForDBManager(sqlConnectionStringBuilder));
+            stringBuilder.Append(@"-D");
+            stringBuilder.Append(listViewItem.Name + SPACE);
+            stringBuilder.Append(@"-O");
+            stringBuilder.Append(GetCccDbType(databaseTypeString) + SPACE);
+            processStartInfo.Arguments = stringBuilder.ToString();
+
+            processStartInfo.WorkingDirectory = workingDirectory;
             //This means that it will be redirected to the Process.StandardOutput StreamReader.
-            procStartInfo.RedirectStandardOutput = true;
-           
+            processStartInfo.RedirectStandardOutput = true;
+
 
             //This means that it will be redirected to the Process.StandardError StreamReader. (same as StdOutput)
-            procStartInfo.RedirectStandardError = true;
+            processStartInfo.RedirectStandardError = true;
 
-            procStartInfo.UseShellExecute = false;
+            processStartInfo.UseShellExecute = false;
             // Do not create the black window.
-            procStartInfo.CreateNoWindow = true;
-            // Now we create a process, assign its ProcessStartInfo and start it
-            Process proc = new Process();
+            processStartInfo.CreateNoWindow = true;
 
-            //This is importend, else some Events will not fire!
-            proc.EnableRaisingEvents = true;
+            return processStartInfo;
+        }
 
-            // The given Funktion will be raised if the Process wants to print an output to consol                    
-            proc.OutputDataReceived += new DataReceivedEventHandler(ProcOnOutputDataReceived);
-            // Std Error
-            proc.ErrorDataReceived += new DataReceivedEventHandler(ProcOnErrorDataReceived);
-            // If Batch File is finished this Event will be raised
-            proc.Exited += new EventHandler(ProcOnExited);
-            // passing the Startinfo to the process
-            proc.StartInfo = procStartInfo;
-         
-            proc.Start();
-            proc.BeginOutputReadLine();
-          
-            //textBoxOutput.Text = proc.StandardOutput.ReadToEnd();
-            proc.WaitForExit();
-          
+        private string GetLogonStringForDBManager(SqlConnectionStringBuilder sqlConnectionStringBuilder)
+        {
+            if (sqlConnectionStringBuilder.IntegratedSecurity)
+            {
+                return "-E ";
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(@"-U");
+            stringBuilder.Append(sqlConnectionStringBuilder.UserID + SPACE);
+            stringBuilder.Append(@"-P");
+            stringBuilder.Append(sqlConnectionStringBuilder.Password + SPACE);
+            return stringBuilder.ToString();
+        }
+
+        private string GetCccDbType(string databaseTypeString)
+        {
+
+            switch (databaseTypeString)
+            {
+                case ApplicationDatabaseTextConstant :
+                    return "TeleoptiCCC7";
+                case AnalyticsDatabaseTextConstant :
+                    return "TeleoptiAnalytics";
+                case AggregationDatabaseTextConstant:
+                    return "TeleoptiCCCAgg";
+            }
+            return "";
         }
 
         private void AppendText(string text)
@@ -212,13 +337,14 @@ namespace Teleopti.Support.Tool.Controls
            
             textBoxOutput.Text += text;
             textBoxOutput.Text += Environment.NewLine;
+            textBoxOutput.Select(textBoxOutput.Text.Length - 1, 0);
             textBoxOutput.ScrollToCaret();
             //textBoxOutput.AppendText(@"\n");
         }
 
         private void ProcOnExited(object sender, EventArgs eventArgs)
         {
-            buttonBack.Invoke(new EnableBackDelegate(EnableBack));
+            //buttonBack.Invoke(new EnableBackDelegate(EnableBack));
         }
 
         private void ProcOnErrorDataReceived(object sender, DataReceivedEventArgs dataReceivedEventArgs)
