@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// Interface for shift category fairness
     /// </summary>
-    public interface IShiftCategoryFairness
+    public interface IShiftCategoryFairnessHolder
     {
         /// <summary>
         /// Gets the shift category fairness dictionary.
@@ -24,7 +24,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="holder">The holder.</param>
         /// <returns></returns>
-        IShiftCategoryFairness Add(IShiftCategoryFairness holder);
+        IShiftCategoryFairnessHolder Add(IShiftCategoryFairnessHolder holder);
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -33,6 +33,6 @@ namespace Teleopti.Interfaces.Domain
         /// <returns>
         /// true if the current object is equal to the other parameter; otherwise, false.
         /// </returns>
-        bool Equals(IShiftCategoryFairness other);
+        bool Equals(IShiftCategoryFairnessHolder other);
     }
 }

@@ -65,8 +65,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			groupPagePerDateHolder.GroupPersonGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
 					.CreateGroupPagePerDate(selectedPeriod.DayCollection(), groupPageDataProvider,
 					optimizerPreferences.Extra.GroupPageOnTeam);
-
-
+			
             OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container);
             var tagSetter = _container.Resolve<IScheduleTagSetter>();
             tagSetter.ChangeTagToSet(optimizerPreferences.General.ScheduleTag);
@@ -79,9 +78,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 					runMoveTimeOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
                 if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
                     runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
+
+				var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
+				if (optimizerPreferences.General.OptimizationStepFairness)
+					runFairness(selectedPersons, selectedDays, rollbackService, optimizerPreferences);
             }
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
+
+		private void runFairness(IList<IPerson> selectedPersons, IList<IScheduleDay> selectedDays, 
+			SchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
+		{
+			var matrixListForFairness = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
+			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
+			var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
+			
+			fairnessOpt.Execute(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness, optimizationPreferences.Extra.GroupPageOnTeam, rollbackService);
+			
+		}
 
         private void runMoveTimeOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
         {

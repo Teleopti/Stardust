@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
+namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 {
     [TestFixture]
     public class ShiftCategoryFairnessCreatorTest
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     .Repeat.AtLeastOnce();
 
             }
-            IShiftCategoryFairness holder = _target.CreatePersonShiftCategoryFairness(_scheduleRange, _period);
+            IShiftCategoryFairnessHolder holder = _target.CreatePersonShiftCategoryFairness(_scheduleRange, _period);
             IDictionary<IShiftCategory, int> result = holder.ShiftCategoryFairnessDictionary;
 
             Assert.AreEqual(2, result.Keys.Count);
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     .Return(new FairnessValueResult());
 
             }
-            IShiftCategoryFairness holder = _target.CreatePersonShiftCategoryFairness(_scheduleRange, _period);
+            IShiftCategoryFairnessHolder holder = _target.CreatePersonShiftCategoryFairness(_scheduleRange, _period);
             IDictionary<IShiftCategory, int> result = holder.ShiftCategoryFairnessDictionary;
 
             Assert.AreEqual(0, result.Keys.Count);

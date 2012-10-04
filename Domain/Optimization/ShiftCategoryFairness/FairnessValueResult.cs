@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourceCalculation
+namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
     
 

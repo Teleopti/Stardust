@@ -88,6 +88,11 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool OptimizationStepDaysOffForFlexibleWorkTime { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether to run the fairness step.
+		/// </summary>
+		bool OptimizationStepFairness { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether  to use time between days optimization step.
         /// </summary>

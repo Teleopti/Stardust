@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -256,7 +257,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
         }
 
-        private static bool shouldHeadersBeDisplayedOrNot(IList<ShiftCategoryFairnessCompareValue> shiftCategoryFairnessCompareValues)
+        private static bool shouldHeadersBeDisplayedOrNot(IList<IShiftCategoryFairnessCompareValue> shiftCategoryFairnessCompareValues)
         {
             foreach (var shiftCategory in shiftCategoryFairnessCompareValues)
             {

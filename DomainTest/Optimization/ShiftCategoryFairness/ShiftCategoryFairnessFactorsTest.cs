@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
+namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 {
     [TestFixture]
     public class ShiftCategoryFairnessFactorsTest
