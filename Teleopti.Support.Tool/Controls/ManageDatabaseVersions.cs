@@ -117,14 +117,19 @@ namespace Teleopti.Support.Tool.Controls
         private ListViewItem CreateDatabaseListViewItem(string databaseName, string type, string version)
         {
             ListViewItem listViewItem = new ListViewItem(databaseName);
+            Version dbVersion = new Version(version);
             listViewItem.Name = databaseName;
-            if (version.Equals(_currentVersion.ToString()))
+            if (
+                dbVersion.Major < _currentVersion.Major ||
+                dbVersion.Minor < _currentVersion.Minor ||
+                dbVersion.Build < _currentVersion.Build
+                )
             {
-                listViewItem.ImageIndex = 0;
+                listViewItem.ImageIndex = 1;
             }
             else
             {
-                listViewItem.ImageIndex = 1;
+                listViewItem.ImageIndex = 0;
             }
             ListViewItem.ListViewSubItem listViewSubItem;
             listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, type);
