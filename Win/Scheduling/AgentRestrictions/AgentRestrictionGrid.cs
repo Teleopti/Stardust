@@ -298,7 +298,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				if (agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson))
 				{
-					ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+					//ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+					DoWork(agentRestrictionsDisplayRow);
+					Thread.Sleep(1000);
 				}
 			}
 
@@ -333,6 +335,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		void DoWork(object workObject)
 		{
+			Thread.Sleep(100);
 			var displayRow = workObject as AgentRestrictionsDisplayRow;
 			if (displayRow == null) return;
 			displayRow.State = AgentRestrictionDisplayRowState.Loading;
