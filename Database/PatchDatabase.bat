@@ -7,17 +7,23 @@
 SET ROOTDIR=%~dp0
 SET ERRORLEVEL=0
 SET CROSSDB=0
+SET /A Silent=0
+SET MyServerInstance=%1
+SET DATABASE=%2
+SET DATABASETYPE=%3
+SET TeleoptiCCCAgg=%4
+
+IF NOT "%MyServerInstance%"=="" SET /A IsSilent=1
 
 ::Remove trailer slash
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
-SET /P MyServerInstance=Your SQL Server instance: 
-SET /P DATABASE=Database name to patch: 
-
-SET /P DATABASETYPE=Database type [TeleoptiCCC7,TeleoptiCCCAgg,TeleoptiAnalytics]: 
+IF "%MyServerInstance%"=="" SET /P MyServerInstance=Your SQL Server instance:
+IF "%DATABASE%"=="" SET /P DATABASE=Database name to patch: 
+IF "%DATABASETYPE%"=="" SET /P DATABASETYPE=Database type [TeleoptiCCC7,TeleoptiCCCAgg,TeleoptiAnalytics]: 
 
 IF "%DATABASETYPE%"=="TeleoptiAnalytics" (
-SET /P TeleoptiCCCAgg=Analytics is linked to which Agg-database?: 
+IF "%TeleoptiCCCAgg%"=="" SET /P TeleoptiCCCAgg=Analytics is linked to which Agg-database?:
 SET CROSSDB=1
 )
 
@@ -63,4 +69,6 @@ SET ERRORLEVEL=3
 GOTO Finish
 
 :Finish
+IF %IsSilent% NEQ 1 (
 PAUSE
+)
