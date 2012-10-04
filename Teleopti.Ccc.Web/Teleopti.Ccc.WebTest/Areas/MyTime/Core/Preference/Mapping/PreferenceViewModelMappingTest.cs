@@ -10,11 +10,9 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -586,13 +584,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
 			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
 			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+			preferenceFulfilledChecker.Stub(x => x.IsPreferenceFulfilled(scheduleDay)).Return(true);
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			var fulfilled = result.DayViewModel(data.SelectedDate).Fulfilled;
+			(fulfilled != null && fulfilled.Value).Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldMapFulfilledForScheduledDay()
+		{
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
 			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
 			preferenceFulfilledChecker.Stub(x => x.IsPreferenceFulfilled(scheduleDay)).Return(true);
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.DayViewModel(data.SelectedDate)
-				.Fulfilled.Should().Be(true);
+				.Fulfilled.Should().Be(null);
 		}
 
 

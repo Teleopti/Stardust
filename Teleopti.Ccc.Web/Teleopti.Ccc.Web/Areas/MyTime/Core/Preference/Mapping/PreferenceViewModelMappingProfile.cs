@@ -186,7 +186,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
 				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))
 				.ForMember(d => d.Absence, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.FullDayAbsence || s.SignificantPart == SchedulePartView.ContractDayOff ? s : null))
-				.ForMember(d => d.Fulfilled, o => o.MapFrom(s => _preferenceFulfilledChecker.Invoke().IsPreferenceFulfilled(s.ScheduleDay)))
+				.ForMember(d => d.Fulfilled, o => o.MapFrom(s =>
+					{
+						if (s.ScheduleDay != null && s.ScheduleDay.IsScheduled())
+							return _preferenceFulfilledChecker.Invoke().IsPreferenceFulfilled(s.ScheduleDay);
+						return null;
+					}))
 				;
 			
 			CreateMap<DayMappingData, PersonAssignmentDayViewModel>()
