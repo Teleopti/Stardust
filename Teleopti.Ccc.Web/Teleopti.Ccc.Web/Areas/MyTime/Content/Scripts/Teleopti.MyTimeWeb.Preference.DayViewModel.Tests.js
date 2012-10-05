@@ -276,9 +276,7 @@ $(document).ready(function () {
 
 				equal(result.Date, "2012-06-11");
 				equal(result.MustHave, true);
-				options.success({
-					MustHave: true
-				});
+				options.success(true);
 			}
 		};
 

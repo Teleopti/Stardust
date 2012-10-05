@@ -24,3 +24,35 @@ begin
 	TRUNCATE TABLE readModel.ScheduleProjectionReadOnly
 	INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (@bugId,@systemVersion)
 end
+
+----------------  
+--Name: David J
+--Date: 2012-10-05
+--Desc: #20953
+----------------  
+--This delete any wrong indexes/constrataint added to [dbo].[MainShiftActivityLayer]
+DECLARE @wrongIndexName sysname
+DECLARE @DynamicSQL nvarchar(4000)
+DECLARE @is_unique_constraint bit
+
+DECLARE cur CURSOR FOR
+select name,CAST(is_unique_constraint as bit) from sys.indexes where object_name(object_id) ='MainShiftActivityLayer' and is_primary_key=0 and (is_unique=1 or is_unique_constraint=1)
+OPEN cur;
+	FETCH NEXT FROM cur INTO @wrongIndexName,@is_unique_constraint;
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+
+	IF @is_unique_constraint=1
+		SELECT @DynamicSQL = 'ALTER TABLE [dbo].[MainShiftActivityLayer] DROP CONSTRAINT ' + @wrongIndexName
+	ELSE
+		SELECT @DynamicSQL = 'DROP INDEX '+ @wrongIndexName +' ON [dbo].[MainShiftActivityLayer]'
+	
+	PRINT @DynamicSQL 
+	EXEC sp_executesql @DynamicSQL 
+
+
+FETCH NEXT FROM cur INTO @wrongIndexName,@is_unique_constraint;
+END
+CLOSE cur;
+DEALLOCATE cur;
+GO
