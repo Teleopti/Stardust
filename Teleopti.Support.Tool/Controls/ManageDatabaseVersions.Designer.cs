@@ -143,6 +143,7 @@
             // buttonUpdate
             // 
             this.buttonUpdate.BackColor = System.Drawing.SystemColors.Window;
+            this.buttonUpdate.Enabled = false;
             this.buttonUpdate.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.buttonUpdate.Location = new System.Drawing.Point(487, 292);
             this.buttonUpdate.Margin = new System.Windows.Forms.Padding(5);

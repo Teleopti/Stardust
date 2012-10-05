@@ -25,6 +25,7 @@ namespace Teleopti.Support.Tool.Controls
         private readonly MainForm _mainForm;
         private readonly Version _currentVersion;
         private string _teleoptiCccBaseInstallFolder;
+        private string _lastSelectedItemText;
 
 
         public ManageDatabaseVersions(MainForm mainForm, Version currentVersion)
@@ -85,6 +86,15 @@ namespace Teleopti.Support.Tool.Controls
                 listViewDatabases.Items.AddRange(listViewItems);
             }
             listViewDatabases.EndUpdate();
+            if (!string.IsNullOrEmpty(_lastSelectedItemText))
+            {
+                ListViewItem preselectedListViewItem = listViewDatabases.FindItemWithText(_lastSelectedItemText);
+                if (preselectedListViewItem != null)
+                {
+                    preselectedListViewItem.EnsureVisible();
+                    preselectedListViewItem.Selected = true;
+                }
+            }
             _mainForm.Cursor = Cursors.Default;
         }
 
@@ -404,7 +414,15 @@ namespace Teleopti.Support.Tool.Controls
 
         private void listViewDatabases_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            //buttonUpdate.Enabled = !e.Item.SubItems[2].Text.Equals(_currentVersion.ToString());
+            if (listViewDatabases.SelectedItems.Count > 0)
+            {
+                buttonUpdate.Enabled = true;
+            }
+            else
+            {
+                buttonBack.Enabled = false;
+            }
+            _lastSelectedItemText = e.Item.Text;
         }
 
         private void listViewDatabases_SelectedIndexChanged(object sender, EventArgs e)
