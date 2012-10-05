@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 new ShiftCategoryLimitation(personAssignment2.MainShift.ShiftCategory) { MaxNumberOf = 1, Weekly = isWeekPerdiod };
             if (!withSameShiftCategory)
                 person2.SchedulePeriod(dateOnly).AddShiftCategoryLimitation(shiftCategoryLimitation2);
-            groupPerson = new GroupPersonFactory().CreateGroupPerson(new List<IPerson> { person1, person2 }, dateOnly, "gp1");
+            groupPerson = new GroupPersonFactory().CreateGroupPerson(new List<IPerson> { person1, person2 }, dateOnly, "gp1", null);
             return dateOnly;
         }
 

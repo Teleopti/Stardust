@@ -67,12 +67,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(scheduleMatrix.Person).Return(person);
                 Expect.Call(scheduleMatrix.SchedulePeriod).Return(virtualSchedulePeriod);
                 Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1))).Repeat.AtLeastOnce() ;
-                Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(dateOnly,
-                                                                         scheduleMatrixList.Select(x => x.Person).ToList
-                                                                             (), true, _schedulingOptions)).
-                    IgnoreArguments().Repeat.AtLeastOnce();
-                Expect.Call(_scheduleService.ScheduleOneDay(dateOnly, _schedulingOptions,groupPerson,scheduleMatrixList )).Return(true).Repeat.Times(6);
-
+                Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(dateOnly,new List<IPerson>{person}, true, _schedulingOptions)).IgnoreArguments().Repeat.AtLeastOnce();
+                Expect.Call(_scheduleService.ScheduleOneDay(dateOnly, _schedulingOptions,groupPerson,scheduleMatrixList )).IgnoreArguments().Return(true).Repeat.Times(6);
             }
             using (_mockRepository.Playback())
             {

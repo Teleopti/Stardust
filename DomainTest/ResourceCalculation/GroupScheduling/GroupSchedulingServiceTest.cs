@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -172,6 +173,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleDictionary.AverageFairnessPoints(null)).IgnoreArguments().Return(_fairnessValueResult);
 				Expect.Call(_groupPerson.CommonPossibleStartEndCategory).Return(new PossibleStartEndCategory());
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, new DateOnly(), null, null)).IgnoreArguments().Return(null);
+                Expect.Call(
+                   () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
+            
 			}
 
 			using (_mock.Playback())
