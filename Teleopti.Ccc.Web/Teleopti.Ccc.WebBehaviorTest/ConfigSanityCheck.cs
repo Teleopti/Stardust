@@ -8,7 +8,6 @@ using NUnit.Framework;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
-
 	[TestFixture]
 	public class ConfigSanityCheck
 	{
