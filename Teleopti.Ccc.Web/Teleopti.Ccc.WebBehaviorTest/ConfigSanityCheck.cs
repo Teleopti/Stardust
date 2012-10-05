@@ -21,15 +21,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Test]
-		public void ShouldRunThreadApartmentStateSTAWithoutAttribute()
+		public void ShouldHaveThreadApartmentStateSTAWithoutAttribute()
 		{
-			Assert.AreEqual(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+			Assert.That(Thread.CurrentThread.GetApartmentState(), Is.EqualTo(ApartmentState.STA));
 		}
 
 		[Test, RequiresSTA]
-		public void ShouldRunThreadApartmentStateSTAWith()
+		public void ShouldHaveThreadApartmentStateSTAWith()
 		{
-			Assert.AreEqual(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+			Assert.That(Thread.CurrentThread.GetApartmentState(), Is.EqualTo(ApartmentState.STA));
 		}
 	}
 }
