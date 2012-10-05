@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using NUnit.Framework;
 
 namespace Teleopti.Ccc.WebBehaviorTest
@@ -17,6 +18,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Assert.That(ConfigurationManager.AppSettings["configSanityCheck"], 
 				Is.EqualTo("Yes, configuration is loaded!"), 
 				"No! Configuration is not loaded!!!");
+		}
+
+		[Test]
+		public void ShouldRunThreadApartmentStateSTAWithoutAttribute()
+		{
+			Assert.AreEqual(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+		}
+
+		[Test, RequiresSTA]
+		public void ShouldRunThreadApartmentStateSTAWith()
+		{
+			Assert.AreEqual(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
 		}
 	}
 }
