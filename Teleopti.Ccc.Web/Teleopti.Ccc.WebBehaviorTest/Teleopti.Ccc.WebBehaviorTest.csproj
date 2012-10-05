@@ -58,6 +58,7 @@
       <HintPath>..\..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -107,6 +108,7 @@
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
+    <Compile Include="ConfigSanityCheck.cs" />
     <Compile Include="Data\Setups\Generic\AbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ActivityConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\AbsenceRequestConfigurable.cs" />
