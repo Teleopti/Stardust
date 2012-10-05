@@ -16,6 +16,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleMatrix = scheduleMatrix;
         }
 
+        public  IScheduleMatrixPro ScheduleMatrixPro
+        {
+            get { return _scheduleMatrix; }
+        }
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions)
         {

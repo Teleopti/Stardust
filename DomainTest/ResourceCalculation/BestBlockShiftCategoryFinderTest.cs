@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IShiftCategoryFairnessCalculator _fairnessCalculator;
 		private IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 		private IGroupShiftLengthDecider _groupShiftLengthDecider;
-    	
 
-    	[SetUp]
+
+        [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -144,12 +144,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
-
-				//Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(getCashes(),
-				//                                                                                         new Domain.
-				//                                                                                            Specification.All
-				//                                                                                            <IMainShift>())).
-				//    IgnoreArguments().Return(getCashes());
             }
             using (_mocks.Playback())
             {

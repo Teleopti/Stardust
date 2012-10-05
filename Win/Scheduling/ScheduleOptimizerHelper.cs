@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
+        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
         public ScheduleOptimizerHelper(ILifetimeScope container)
         {
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _allResults = _container.Resolve<IWorkShiftFinderResultHolder>();
             _resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
             _scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
+            _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
         }
 
         #region Interface
@@ -815,13 +817,26 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
             using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
             {
-                var backToLegalStateServicePro =
+                if(schedulingOptions.UseGroupScheduling)
+                {
+                    var backToLegalStateServicePro =
+                    _container.Resolve<IGroupListShiftCategoryBackToLegalStateService>();
+
+                    if (backgroundWorker.CancellationPending)
+                        return;
+                    var groupOptimizerFindMatrixesForGroup =
+                        new GroupOptimizerFindMatrixesForGroup(_groupPersonBuilderForOptimization, matrixList);
+                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences, groupOptimizerFindMatrixesForGroup);
+                }else
+                {
+                    var backToLegalStateServicePro =
                     _container.Resolve<ISchedulePeriodListShiftCategoryBackToLegalStateService>();
 
-                if (backgroundWorker.CancellationPending)
-                    return;
+                    if (backgroundWorker.CancellationPending)
+                        return;
 
-                backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+                }
             }
         }
 

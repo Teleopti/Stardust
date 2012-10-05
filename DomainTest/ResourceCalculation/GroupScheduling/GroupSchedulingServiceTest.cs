@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     	private IEffectiveRestriction _effectiveRestriction;
     	private IVirtualSchedulePeriod _schedulePeriod;
         private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
+  		private IDeleteSchedulePartService _deleteSchedulePartService;
+        private IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
     	private Dictionary<Guid, bool> _teamSteadyStates;
     	private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
     	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
@@ -82,7 +84,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     		_effectiveRestriction = _mock.DynamicMock<IEffectiveRestriction>();
     		_schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
     	    _workShiftMinMaxCalculator = _mock.StrictMock<IWorkShiftMinMaxCalculator>();
-
+            _deleteSchedulePartService = _mock.StrictMock<IDeleteSchedulePartService>();
+            _shiftCategoryLimitationChecker = _mock.StrictMock<IShiftCategoryLimitationChecker>();
     	    _target = new GroupSchedulingService(_groupPersonsBuilder,
 													_bestBlockShiftCategoryFinder,
                                                     _stateHolder,
@@ -91,7 +94,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 													_resourceOptimizationHelper,
 													_schedulingResults,
 													_effectiveRestrictionCreator,
-                                                    _workShiftMinMaxCalculator);
+                                                    _workShiftMinMaxCalculator,
+                                                    _deleteSchedulePartService,
+                                                    _shiftCategoryLimitationChecker);
 
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
@@ -220,7 +225,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date1, _date1)).Repeat.
             		AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-
+ 				Expect.Call(
+                   () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
+            
 				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
             }
 
@@ -278,7 +285,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date1, _date1)).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-
+ 				Expect.Call(
+                    () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
 				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
             }
 
@@ -320,8 +328,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
             	Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date1, _date2)).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-
-				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+  				Expect.Call(
+                   () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
+            	Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
 
             }
 
@@ -358,8 +367,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.Any();
                 //Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.Any();
-
-				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+   				Expect.Call(
+                   () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
+            	Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
             }
 
             using (_mock.Playback())
@@ -388,8 +398,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(_scheduleDictionary[_person2]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
             	Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.AtLeastOnce();
-
-				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+ 				Expect.Call(
+                   () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
+           		Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
             	
             }
 
