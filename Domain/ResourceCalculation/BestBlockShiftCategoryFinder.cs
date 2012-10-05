@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IShiftCategoryFairnessCalculator _shiftCategoryFairnessCalculator;
 		private readonly IGroupShiftLengthDecider _groupShiftLengthDecider;
 		private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
-	    private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
 
 	    public BestBlockShiftCategoryFinder(IWorkShiftWorkTime workShiftWorkTime,
 		                                    IShiftProjectionCacheManager shiftProjectionCacheManager,
@@ -58,8 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		                                    	possibleCombinationsOfStartEndCategoryCreator,
 		                                    IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator,
 		                                    IShiftCategoryFairnessCalculator shiftCategoryFairnessCalculator,
-		                                    IGroupShiftLengthDecider groupShiftLengthDecider,
-                                            IShiftCategoryLimitationChecker shiftCategoryLimitationChecker)
+		                                    IGroupShiftLengthDecider groupShiftLengthDecider)
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
@@ -71,7 +69,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_groupShiftCategoryFairnessCreator = groupShiftCategoryFairnessCreator;
 			_shiftCategoryFairnessCalculator = shiftCategoryFairnessCalculator;
 			_groupShiftLengthDecider = groupShiftLengthDecider;
-	        _shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -150,7 +147,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     continue;
                 if (schedulingOptions.UseShiftCategoryLimitations)
                 {
-                    _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, person, dateOnly);
                     combinations.RemoveWhere(x => schedulingOptions.NotAllowedShiftCategories.Contains(x.ShiftCategory));
                 }
                 var useShiftCategoryFairness = false;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayPro _scheduleDayPro;
         private IScheduleDay _schedulePart;
         private ISchedulingOptions _schedulingOptions;
-        private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private IGroupPersonsBuilder _groupPersonsBuilder;
         private IGroupOptimizerFindMatrixesForGroup _groupOptimerFindMatrixesForGroup;
 
         [SetUp]
@@ -32,15 +33,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _shiftCategoryBackToLegalService =
                 _mockRepository.StrictMock<IRemoveShiftCategoryBackToLegalService>();
             _scheduleService = _mockRepository.StrictMock<IGroupSchedulingService>();
-            _groupPersonBuilderForOptimization = _mockRepository.StrictMock<IGroupPersonBuilderForOptimization>();
-            _target = new GroupShiftCategoryBackToLegalStateService(_shiftCategoryBackToLegalService, _scheduleService, _groupPersonBuilderForOptimization);
+            _groupPersonsBuilder = _mockRepository.StrictMock<IGroupPersonsBuilder>();
+            _target = new GroupShiftCategoryBackToLegalStateService(_shiftCategoryBackToLegalService, _scheduleService, _groupPersonsBuilder);
             _scheduleDayPro = _mockRepository.StrictMock<IScheduleDayPro>();
             _schedulePart = _mockRepository.StrictMock<IScheduleDay>();
             _schedulingOptions = new SchedulingOptions();
             _groupOptimerFindMatrixesForGroup = _mockRepository.DynamicMock<IGroupOptimizerFindMatrixesForGroup>();
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyExecute()
         {
             var virtualSchedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
@@ -66,7 +67,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(scheduleMatrix.Person).Return(person);
                 Expect.Call(scheduleMatrix.SchedulePeriod).Return(virtualSchedulePeriod);
                 Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1))).Repeat.AtLeastOnce() ;
-                Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, dateOnly)).Return(groupPerson ).Repeat.AtLeastOnce();
+                Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(dateOnly,
+                                                                         scheduleMatrixList.Select(x => x.Person).ToList
+                                                                             (), true, _schedulingOptions)).
+                    IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_scheduleService.ScheduleOneDay(dateOnly, _schedulingOptions,groupPerson,scheduleMatrixList )).Return(true).Repeat.Times(6);
 
             }

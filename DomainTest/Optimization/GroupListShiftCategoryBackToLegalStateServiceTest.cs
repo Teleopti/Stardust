@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingResultStateHolder _stateHolder;
         private IGroupSchedulingService _scheduleService;
         private IScheduleDayChangeCallback _scheduleDayChangeCallback;
-        private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
         private IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
+        private IGroupPersonsBuilder _groupPersonsBuilder;
 
         [SetUp]
         public void Setup()
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayChangeCallback = _mockRepository.DynamicMock<IScheduleDayChangeCallback>();
             _scheduleMatrixValueCalculatorFactory = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorProFactory>();
             _scheduleService = _mockRepository.StrictMock<IGroupSchedulingService>();
-            _groupPersonBuilderForOptimization = _mockRepository.StrictMock<IGroupPersonBuilderForOptimization>();
+            _groupPersonsBuilder = _mockRepository.StrictMock<IGroupPersonsBuilder>();
             _groupOptimizerFindMatrixesForGroup = _mockRepository.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
             _target = new GroupListShiftCategoryBackToLegalStateService(
                 _stateHolder,
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _scheduleFairnessCalculator,
                 _scheduleService,
                 _scheduleDayChangeCallback,
-                _groupPersonBuilderForOptimization);
+                _groupPersonsBuilder);
         }
 
         [Test]
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _stateHolder,
                 _scheduleMatrixValueCalculatorFactory,
                 _scheduleFairnessCalculator,
-                _scheduleService, _scheduleDayChangeCallback,_groupPersonBuilderForOptimization);
+                _scheduleService, _scheduleDayChangeCallback, _groupPersonsBuilder);
 
             using (_mockRepository.Record())
             {

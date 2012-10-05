@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -13,14 +14,14 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IRemoveShiftCategoryBackToLegalService _shiftCategoryBackToLegalService;
         private readonly IGroupSchedulingService _scheduleService;
-        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private readonly IGroupPersonsBuilder _groupPersonsBuilder;
         public GroupShiftCategoryBackToLegalStateService(IRemoveShiftCategoryBackToLegalService shiftCategoryBackToLegalService,
             IGroupSchedulingService scheduleService,
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+            IGroupPersonsBuilder groupPersonsBuilder)
         {
             _shiftCategoryBackToLegalService = shiftCategoryBackToLegalService;
             _scheduleService = scheduleService;
-            _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
+            _groupPersonsBuilder = groupPersonsBuilder;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
@@ -33,8 +34,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                     resultList.AddRange(_shiftCategoryBackToLegalService.Execute(limitation, schedulingOptions));
                 }
             var removeList = new List<IScheduleMatrixPro>();
-            if(resultList.Count ==0)
-                removeList.Add(_shiftCategoryBackToLegalService.ScheduleMatrixPro );
+            if (resultList.Count == 0)
+                removeList.Add(_shiftCategoryBackToLegalService.ScheduleMatrixPro);
+            var groupMatrixs = new List<IScheduleMatrixPro>();
             foreach (var scheduleDayPro in resultList)
             {
                 var schedulePart = scheduleDayPro.DaySchedulePart();
@@ -42,10 +44,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 var person = schedulePart.Person;
                 if (groupOptimizerFindMatrixesForGroup != null)
                 {
-                    var matrixs = groupOptimizerFindMatrixesForGroup.Find(person, scheduleDate);
-                
-                    var memberList = new List<IScheduleMatrixPro>();
-                    foreach (var scheduleMatrixPro in matrixs)
+                    groupMatrixs = groupOptimizerFindMatrixesForGroup.Find(person, scheduleDate).ToList();
+
+                    foreach (var scheduleMatrixPro in groupMatrixs)
                     {
                         if (allMatrixes != null)
                             foreach (var matrix in allMatrixes)
@@ -54,13 +55,12 @@ namespace Teleopti.Ccc.Domain.Optimization
                                 {
                                     if (!removeList.Contains(matrix))
                                         removeList.Add(matrix);
-                                    memberList.Add(matrix);
                                 }
                             }
                     }
                 }
-                var groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person,scheduleDate);
-                
+                var groupPerson = _groupPersonsBuilder.BuildListOfGroupPersons(scheduleDate, groupMatrixs.Select(x => x.Person).ToList(), true, schedulingOptions).FirstOrDefault();
+
                 _scheduleService.ScheduleOneDay(scheduleDate, schedulingOptions, groupPerson, allMatrixes);
             }
             return removeList;

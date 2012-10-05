@@ -21,21 +21,21 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleFairnessCalculator _fairnessCalculator;
         private readonly IGroupSchedulingService _scheduleService;
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private readonly IGroupPersonsBuilder _groupPersonsBuilder;
 
         public GroupListShiftCategoryBackToLegalStateService(
             ISchedulingResultStateHolder stateHolder,
             IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory, 
             IScheduleFairnessCalculator fairnessCalculator, 
             IGroupSchedulingService scheduleService,
-            IScheduleDayChangeCallback scheduleDayChangeCallback,IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+            IScheduleDayChangeCallback scheduleDayChangeCallback,IGroupPersonsBuilder groupPersonsBuilder)
         {
             _stateHolder = stateHolder;
             _scheduleMatrixValueCalculatorProFactory = scheduleMatrixValueCalculatorProFactory;
             _fairnessCalculator = fairnessCalculator;
             _scheduleService = scheduleService;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
-            _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
+            _groupPersonsBuilder = groupPersonsBuilder;
         }
 
         public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList,
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return new GroupShiftCategoryBackToLegalStateServiceBuilder(
                 scheduleMatrixValueCalculator,
                 _scheduleService,
-                _groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup
+                _groupPersonsBuilder, groupOptimizerFindMatrixesForGroup
                 );
         }
 

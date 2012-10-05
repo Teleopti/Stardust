@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IShiftCategoryFairnessCalculator _fairnessCalculator;
 		private IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 		private IGroupShiftLengthDecider _groupShiftLengthDecider;
-        private IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
 
 
         [SetUp]
@@ -84,13 +83,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     		_fairnessCalculator = _mocks.StrictMock<IShiftCategoryFairnessCalculator>();
     		_groupShiftCategoryFairnessCreator = _mocks.StrictMock<IGroupShiftCategoryFairnessCreator>();
     		_groupShiftLengthDecider = _mocks.DynamicMock<IGroupShiftLengthDecider>();
-            _shiftCategoryLimitationChecker = _mocks.StrictMock<IShiftCategoryLimitationChecker>();
     		_target = new BestBlockShiftCategoryFinder(_workShiftWorkTime, _shiftProjectionCacheManager, _stateHolder,
     		                                           _effectiveRestrictionCreator,
     		                                           _possibleCombinationsOfStartEndCategoryRunner,
     		                                           _possibleCombinationsOfStartEndCategoryCreator, 
 													   _groupShiftCategoryFairnessCreator,
-													   _fairnessCalculator, _groupShiftLengthDecider, _shiftCategoryLimitationChecker);
+													   _fairnessCalculator, _groupShiftLengthDecider);
     		
 
         }
@@ -146,9 +144,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[0], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dates[1], _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
-                Expect.Call(() =>_shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person, _dateOnly1)).
-                    IgnoreArguments().Repeat.AtLeastOnce();
-
             }
             using (_mocks.Playback())
             {

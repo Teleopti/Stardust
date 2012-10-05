@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     	private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly IDeleteSchedulePartService _deleteSchedulePartService;
+        private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
         private bool _cancelMe;
         
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -47,7 +48,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             IWorkShiftFinderResultHolder finderResultHolder,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
-            IDeleteSchedulePartService deleteSchedulePartService)
+            IDeleteSchedulePartService deleteSchedulePartService,
+            IShiftCategoryLimitationChecker shiftCategoryLimitationChecker)
 		{
 			_groupPersonsBuilder = groupPersonsBuilder;
 			_bestBlockShiftCategoryFinder = bestBlockShiftCategoryFinder;
@@ -59,6 +61,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		    _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 		    _deleteSchedulePartService = deleteSchedulePartService;
+		    _shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -100,7 +103,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			var members = groupPerson.GroupMembers;
 			var agentAverageFairness = scheduleDictionary.AverageFairnessPoints(members);
 			var best = groupPerson.CommonPossibleStartEndCategory;
-			if(best == null)
+            if (schedulingOptions.UseShiftCategoryLimitations)
+            {
+                _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, groupPerson, dateOnly);
+                if (best != null && schedulingOptions.NotAllowedShiftCategories.Contains(best.ShiftCategory))
+                    best = null;
+            }
+
+		    if(best == null)
 			{
 				IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
 
@@ -154,7 +164,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				if (!sucess)
 				{
 					return false;
-
 				}
 				OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
 				if (_cancelMe)

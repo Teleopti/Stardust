@@ -13,17 +13,17 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IScheduleMatrixValueCalculatorPro _scheduleMatrixValueCalculator;
         private readonly IGroupSchedulingService _scheduleService;
-        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private readonly IGroupPersonsBuilder _groupPersonsBuilder;
         private readonly IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
 
         public GroupShiftCategoryBackToLegalStateServiceBuilder(IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator,
             IGroupSchedulingService scheduleService,
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+           IGroupPersonsBuilder groupPersonsBuilder,
             IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
         {
             _scheduleMatrixValueCalculator = scheduleMatrixValueCalculator;
             _scheduleService = scheduleService;
-            _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
+            _groupPersonsBuilder = groupPersonsBuilder;
             _groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
         }
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IRemoveShiftCategoryBackToLegalService removeShiftCategoryBackToLegalService,
             IGroupSchedulingService scheduleService)
         {
-            return new GroupShiftCategoryBackToLegalStateService(removeShiftCategoryBackToLegalService, scheduleService, _groupPersonBuilderForOptimization);
+            return new GroupShiftCategoryBackToLegalStateService(removeShiftCategoryBackToLegalService, scheduleService, _groupPersonsBuilder);
         }
 
         public virtual IRemoveShiftCategoryBackToLegalService BuildRemoveShiftCategoryBackToLegalService(
