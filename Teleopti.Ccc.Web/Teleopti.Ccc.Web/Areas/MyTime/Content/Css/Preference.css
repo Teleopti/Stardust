@@ -12,11 +12,18 @@
     overflow: hidden;
 }
 .preference-must-have {
-	margin-left: 4px;
+	margin-left: 3px;
+	margin-top: 5px;
+	margin-bottom: 3px;
+}
+.preference-indicator 
+{
+	float: left;
+	width: 17px;
+	height: 14px;
 }
 .extended-indication
 {
-    float: left;
     position: relative;
     top: -2px;
     margin-left: 4px;
@@ -126,4 +133,8 @@
 .grey-out {
 	opacity : 0.4;
     filter: alpha(opacity=40); 
+}
+
+.preference-not-fulfilled {
+	color: red;
 }
