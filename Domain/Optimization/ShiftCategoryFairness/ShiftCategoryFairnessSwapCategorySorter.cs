@@ -16,11 +16,10 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
             ref List<IShiftCategoryFairnessCompareResult> blacklistedGroups);
     }
 
-    public class ShiftCategoryFairnessCategorySorter : IShiftCategoryFairnessCategorySorter
+    public class ShiftCategoryFairnessSwapCategorySorter : IShiftCategoryFairnessCategorySorter
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")
-        , System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-            "CA1062:Validate arguments of public methods", MessageId = "4")]
+        , System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
         public IEnumerable<IShiftCategoryFairnessCompareValue> GetGroupCategories(
             IShiftCategoryFairnessCompareResult selectedGroup,
             IEnumerable<IShiftCategoryFairnessCompareValue> selectedGroupCategories,
@@ -65,6 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
                     return GetGroupCategories(selectedGroup, selectedGroupCategoriesOrdered.Except(exceptList),
                                               numberOfGroups, blacklist.Except(selectedGroupBlackListItems),
                                               ref blacklistedGroups);
+
                 if (!blacklistedGroups.Contains(selectedGroup)) blacklistedGroups.Add(selectedGroup);
                 return new List<IShiftCategoryFairnessCompareValue>();
 

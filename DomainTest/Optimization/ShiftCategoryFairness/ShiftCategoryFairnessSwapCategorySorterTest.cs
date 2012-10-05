@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -16,13 +15,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
         private ShiftCategoryFairnessCompareResult _selectedGroup;
         private int _numberOfGroups;
         private IList<IShiftCategoryFairnessSwap> _blacklist;
-        private readonly ShiftCategoryFairnessCategorySorter _target = new ShiftCategoryFairnessCategorySorter();
+        private readonly ShiftCategoryFairnessSwapCategorySorter _target = new ShiftCategoryFairnessSwapCategorySorter();
         private List<IShiftCategoryFairnessCompareResult> _list = new List<IShiftCategoryFairnessCompareResult>();
 
         private ShiftCategory _shiftCategoryMorning = new ShiftCategory("Morning");
         private ShiftCategory _shiftCategoryDay = new ShiftCategory("Day");
         private ShiftCategory _shiftCategoryNight = new ShiftCategory("Night");
-        private ShiftCategory _shiftCategoryEvening = new ShiftCategory("Evening");
+        private readonly ShiftCategory _shiftCategoryEvening = new ShiftCategory("Evening");
 
         [SetUp]
         public void Setup()
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                     };
             var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
                                                     _numberOfGroups,
-                                                    _blacklist, ref _list);
+                                                    _blacklist, ref _list).ToList();
 
             Assert.AreEqual(_shiftCategoryDay, result.First().ShiftCategory);
             Assert.AreEqual(_shiftCategoryNight, result.Last().ShiftCategory);
@@ -159,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 
             var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
                                                     _numberOfGroups,
-                                                    _blacklist, ref _list);
+                                                    _blacklist, ref _list).ToList();
 
             Assert.AreEqual(_shiftCategoryMorning.Description.Name, result.First().ShiftCategory.Description.Name);
             Assert.AreEqual(_shiftCategoryNight.Description.Name, result.Last().ShiftCategory.Description.Name);
@@ -239,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                              };
             var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
                                                     _numberOfGroups,
-                                                    _blacklist, ref _list);
+                                                    _blacklist, ref _list).ToList();
 
             Assert.AreEqual(_shiftCategoryEvening.Description.Name, result.First().ShiftCategory.Description.Name);
             Assert.AreEqual(_shiftCategoryNight.Description.Name, result.Last().ShiftCategory.Description.Name);
@@ -291,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 
             var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
                                                     _numberOfGroups,
-                                                    _blacklist, ref _list);
+                                                    _blacklist, ref _list).ToList();
 
             Assert.AreEqual(_shiftCategoryMorning.Description.Name, result.First().ShiftCategory.Description.Name);
             Assert.AreEqual(_shiftCategoryDay.Description.Name, result.Last().ShiftCategory.Description.Name);
@@ -371,7 +370,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                              };
             var result = _target.GetGroupCategories(_selectedGroup, _selectedGroup.ShiftCategoryFairnessCompareValues,
                                                     _numberOfGroups,
-                                                    _blacklist, ref _list);
+                                                    _blacklist, ref _list).ToList();
 
             Assert.AreEqual(_shiftCategoryMorning.Description.Name, result.First().ShiftCategory.Description.Name);
             Assert.AreEqual(_shiftCategoryNight.Description.Name, result.Last().ShiftCategory.Description.Name);

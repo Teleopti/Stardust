@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -98,11 +97,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                                  new List<IShiftCategoryFairnessCompareValue>
                                      {
                                          new ShiftCategoryFairnessCompareValue
-                                             {Original = 0.1, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
+                                             {Original = 0.3, ComparedTo = 0.3, ShiftCategory = shiftCategoryDay},
                                          new ShiftCategoryFairnessCompareValue
-                                             {Original = 0.2, ComparedTo = 0.5, ShiftCategory = shiftCategoryNoon},
+                                             {Original = 0.4, ComparedTo = 0.5, ShiftCategory = shiftCategoryNoon},
                                          new ShiftCategoryFairnessCompareValue
-                                             {Original = 0.7, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
+                                             {Original = 0.3, ComparedTo = 0.2, ShiftCategory = shiftCategoryNight}
                                      },
                              StandardDeviation = 0.05,
                              OriginalMembers = new List<IPerson> {person, person, person, person, person}
@@ -127,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                                      }
 
                              };
-            _target = new ShiftCategoryFairnessSwapFinder(new ShiftCategoryFairnessCategorySorter());
+            _target = new ShiftCategoryFairnessSwapFinder(new ShiftCategoryFairnessSwapCategorySorter());
         }
 
         [Test]
@@ -546,7 +545,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 
             Assert.That(result.ShiftCategoryFromGroup1, Is.EqualTo(shiftCategoryDay)); //HERE IT SUGGESTS NIGHT
             Assert.That(result.ShiftCategoryFromGroup2, Is.EqualTo(shiftCategoryNight));
-                //HERE IT SUGGESTS NOON WHICH IS PERFECTLY FAIR SHOULD NEVER BE SWAPPED
+            //HERE IT SUGGESTS NOON WHICH IS PERFECTLY FAIR SHOULD NEVER BE SWAPPED
 
             Assert.That(result.Group1, Is.EqualTo(_groupList[0]));
             Assert.That(result.Group2, Is.EqualTo(_groupList[1]));
@@ -584,63 +583,63 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                              OriginalMembers = new List<IPerson> {person2, person2, person2}
                          };
             group2 = new ShiftCategoryFairnessCompareResult
-                    {
-                        ShiftCategoryFairnessCompareValues =
-                            new List<IShiftCategoryFairnessCompareValue>
-                                {
-                                    new ShiftCategoryFairnessCompareValue
-                                        {
-                                            Original = 0.8,
-                                            ComparedTo = 0.8,
-                                            ShiftCategory = shiftCategoryDay
-                                        },
-                                    new ShiftCategoryFairnessCompareValue
-                                        {
-                                            Original = 0,
-                                            ComparedTo = 0.9,
-                                            ShiftCategory = shiftCategoryNoon
-                                        },
-                                    new ShiftCategoryFairnessCompareValue
-                                        {
-                                            Original = 0.9,
-                                            ComparedTo = 0.0,
-                                            ShiftCategory = shiftCategoryNight
-                                        }
-                                },
-                        StandardDeviation = 0.02,
-                        OriginalMembers = new List<IPerson> {person, person, person}
-                    };
+                         {
+                             ShiftCategoryFairnessCompareValues =
+                                 new List<IShiftCategoryFairnessCompareValue>
+                                     {
+                                         new ShiftCategoryFairnessCompareValue
+                                             {
+                                                 Original = 0.8,
+                                                 ComparedTo = 0.8,
+                                                 ShiftCategory = shiftCategoryDay
+                                             },
+                                         new ShiftCategoryFairnessCompareValue
+                                             {
+                                                 Original = 0,
+                                                 ComparedTo = 0.9,
+                                                 ShiftCategory = shiftCategoryNoon
+                                             },
+                                         new ShiftCategoryFairnessCompareValue
+                                             {
+                                                 Original = 0.9,
+                                                 ComparedTo = 0.0,
+                                                 ShiftCategory = shiftCategoryNight
+                                             }
+                                     },
+                             StandardDeviation = 0.02,
+                             OriginalMembers = new List<IPerson> {person, person, person}
+                         };
             group3 = new ShiftCategoryFairnessCompareResult
-                    {
+                         {
 
-                        ShiftCategoryFairnessCompareValues =
-                            new List<IShiftCategoryFairnessCompareValue>
-                                {
-                                    new ShiftCategoryFairnessCompareValue
-                                        {
-                                            Original = 0.8,
-                                            ComparedTo = 0.8,
-                                            ShiftCategory = shiftCategoryDay
-                                        },
-                                    new ShiftCategoryFairnessCompareValue
-                                        {
-                                            Original = 0.9,
-                                            ComparedTo = 0.0,
-                                            ShiftCategory = shiftCategoryNoon
-                                        },
-                                    new ShiftCategoryFairnessCompareValue
-                                        {
-                                            Original = 0.0,
-                                            ComparedTo = 0.9,
-                                            ShiftCategory = shiftCategoryNight
-                                        }
-                                },
-                        StandardDeviation = 0.003,
-                        OriginalMembers = new List<IPerson> {person, person2}
-                    };
+                             ShiftCategoryFairnessCompareValues =
+                                 new List<IShiftCategoryFairnessCompareValue>
+                                     {
+                                         new ShiftCategoryFairnessCompareValue
+                                             {
+                                                 Original = 0.8,
+                                                 ComparedTo = 0.8,
+                                                 ShiftCategory = shiftCategoryDay
+                                             },
+                                         new ShiftCategoryFairnessCompareValue
+                                             {
+                                                 Original = 0.9,
+                                                 ComparedTo = 0.0,
+                                                 ShiftCategory = shiftCategoryNoon
+                                             },
+                                         new ShiftCategoryFairnessCompareValue
+                                             {
+                                                 Original = 0.0,
+                                                 ComparedTo = 0.9,
+                                                 ShiftCategory = shiftCategoryNight
+                                             }
+                                     },
+                             StandardDeviation = 0.003,
+                             OriginalMembers = new List<IPerson> {person, person2}
+                         };
 
 
-            _groupList = new List<IShiftCategoryFairnessCompareResult>{group1, group2, group3};
+            _groupList = new List<IShiftCategoryFairnessCompareResult> {group1, group2, group3};
             var result = _target.GetGroupsToSwap(_groupList, new List<IShiftCategoryFairnessSwap>());
 
             Assert.That(result.Group1, Is.EqualTo(group2));
@@ -681,7 +680,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                          };
             group2 = new ShiftCategoryFairnessCompareResult
                          {
-                             OriginalMembers = new List<IPerson> { new Person() },
+                             OriginalMembers = new List<IPerson> {new Person()},
                              ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue>
                                                                       {
                                                                           new ShiftCategoryFairnessCompareValue

@@ -285,7 +285,7 @@
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessAggregator.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCategorySorter.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapCategorySorter.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessComparer.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSkillChecker.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSwappableChecker.cs" />
