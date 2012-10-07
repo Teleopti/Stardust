@@ -928,7 +928,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             int column = GetColumnForDate(dateOnly);
             if(TheGrid.CurrentCell.ColIndex != column)
-                TheGrid.CurrentCell.MoveTo(TheGrid.CurrentCell.RowIndex, column);
+            {
+				TheGrid.CurrentCell.MoveTo(TheGrid.CurrentCell.RowIndex, column);
+            	TheGrid.CurrentCell.ScrollInView(GridScrollCurrentCellReason.MoveTo);
+            }
+                
         }
 
         //get the local selected date

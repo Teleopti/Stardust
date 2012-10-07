@@ -106,6 +106,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     	private readonly SkillWeekGridControl _skillWeekGridControl;
     	private readonly SkillMonthGridControl _skillMonthGridControl;
     	private readonly SkillFullPeriodGridControl _skillFullPeriodGridControl;
+    	private readonly SkillResultHighlightGridControl _skillResultHighlightGridControl;
         //private bool _intradayMode;
         private DateOnly _currentIntraDayDate;
         private DockingManager _dockingManager;
@@ -426,6 +427,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_skillWeekGridControl = new SkillWeekGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
         	_skillMonthGridControl = new SkillMonthGridControl {ContextMenu = contextMenuStripResultView.ContextMenu };
 			_skillFullPeriodGridControl = new SkillFullPeriodGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
+			_skillResultHighlightGridControl = new SkillResultHighlightGridControl();
 
             setUpZomMenu();
             var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
@@ -809,10 +811,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             if (e.KeyCode == Keys.M && e.Modifiers == Keys.Alt)
             {
-                StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode = true;
-                toolStripMenuItemFindMatching.Visible = true;
-                toolStripMenuItemFindMatching2.Visible = true;
+				StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode = !StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
+				toolStripMenuItemFindMatching.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
+				toolStripMenuItemFindMatching2.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
                 Refresh();
+				drawSkillGrid();
             }
             if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
             {
@@ -3810,12 +3813,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             IList<ITeam> teams = new List<ITeam>();
             foreach (IMeetingPerson meetingPerson in meeting.MeetingPersons)
             {
-                bool quit = false;
+            	bool quit = !SchedulerState.AllPermittedPersons.Contains(meetingPerson.Person);
 
-                if (!SchedulerState.AllPermittedPersons.Contains(meetingPerson.Person))
-                    quit = true;
-
-                if (!quit)
+            	if (!quit)
                 {
                     ITeam team = meetingPerson.Person.MyTeam(meeting.StartDate);
                     if (!teams.Contains(team))
@@ -6792,7 +6792,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
 					{
 						_chartDescription = skill.Name;
-						positionControl(_skillFullPeriodGridControl, SkillFullPeriodGridControl.PreferredGridWidth);
+						if(StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+						{
+							positionControl(_skillFullPeriodGridControl, SkillFullPeriodGridControl.PreferredGridWidth);
+							TabPageAdv thisTab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
+							thisTab.Controls.Add(_skillResultHighlightGridControl);
+							_skillResultHighlightGridControl.DrawGridContents(_schedulerState, skill);
+
+							//position _grid
+							//_skillResultHighlightGridControl.Dock = DockStyle.Right;
+							_skillResultHighlightGridControl.Left = SkillFullPeriodGridControl.PreferredGridWidth + 5;
+							_skillResultHighlightGridControl.Top = 0;
+							_skillResultHighlightGridControl.Width = thisTab.Width - _skillResultHighlightGridControl.Left;
+							_skillResultHighlightGridControl.Height = thisTab.Height;
+							_skillResultHighlightGridControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Left;
+						}
+						else
+						{
+							positionControl(_skillFullPeriodGridControl);
+						}
+						
 						ActiveControl = _skillFullPeriodGridControl;
 						_skillFullPeriodGridControl.DrawDayGrid(_schedulerState, skill);
 						_skillFullPeriodGridControl.DrawDayGrid(_schedulerState, skill);
@@ -7128,7 +7147,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             _chartControlSkillData.Visible = true;
         }
 
-        private void setEventHandlers()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void setEventHandlers()
         {
 
             schedulerSplitters1.TabSkillData.SelectedIndexChanged += tabSkillData_SelectedIndexChanged;
@@ -7168,6 +7188,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_skillWeekGridControl.SelectionChanged += skillWeekGridControlSelectionChanged;
 			_skillMonthGridControl.SelectionChanged += skillMonthGridControlSelectionChanged;
         	_skillFullPeriodGridControl.SelectionChanged += skillFullPeriodGridControlSelectionChanged;
+			_skillResultHighlightGridControl.GoToDate += _skillResultHighlightGridControl_GoToDate;
 
             _gridrowInChartSettingButtons.LineInChartSettingsChanged +=
                 gridlinesInChartSettings_LineInChartSettingsChanged;
@@ -7197,6 +7218,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             #endregion
         }
+
+		void _skillResultHighlightGridControl_GoToDate(object sender, GoToDateEventArgs e)
+		{
+			_scheduleView.SetSelectedDateLocal(e.Date);
+		}
 
         private void _grid_StartAutoScrolling(object sender, StartAutoScrollingEventArgs e)
         {
@@ -7356,6 +7382,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 _requestView.PropertyChanged -= _requestView_PropertyChanged;
             }
+
+			if (_skillResultHighlightGridControl != null) _skillResultHighlightGridControl.GoToDate -= _skillResultHighlightGridControl_GoToDate;
 
             if (_skillDayGridControl != null) _skillDayGridControl.GotFocus -= skillDayGridControl_GotFocus;
             if (_skillIntradayGridControl != null)

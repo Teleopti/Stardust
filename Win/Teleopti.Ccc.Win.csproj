@@ -337,6 +337,12 @@
     <Compile Include="Common\Controls\Rows\SkillWeekGridRowMinMaxIssuesSummary.cs" />
     <Compile Include="Common\Controls\Rows\SkillWeekGridRowMinMaxIssues.cs" />
     <Compile Include="Common\Controls\Rows\SkillWeekGridRow.cs" />
+    <Compile Include="Common\Controls\SkillResultHighlightGridControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Controls\SkillResultHighlightGridControl.Designer.cs">
+      <DependentUpon>SkillResultHighlightGridControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\ExternalExceptionHandler.cs" />
     <Compile Include="Common\Configuration\AuditingPage.cs">
       <SubType>UserControl</SubType>
@@ -2451,6 +2457,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\MaskedTimeSpanTextBox.resx">
       <DependentUpon>MaskedTimeSpanTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Controls\SkillResultHighlightGridControl.resx">
+      <DependentUpon>SkillResultHighlightGridControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\TransparentMeetingMeetingControl.resx">
       <DependentUpon>TransparentMeetingMeetingControl.cs</DependentUpon>
