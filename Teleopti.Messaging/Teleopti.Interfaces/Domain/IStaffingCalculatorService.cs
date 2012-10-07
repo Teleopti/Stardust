@@ -22,6 +22,17 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         double Agents(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength);
 
+		/// <summary>
+		/// Under construction, do not use.
+		/// </summary>
+		/// <param name="sla">The sla.</param>
+		/// <param name="serviceTime">The service time.</param>
+		/// <param name="calls">The calls.</param>
+		/// <param name="averageHandlingTime">The average handling time.</param>
+		/// <param name="periodLength">Length of the period.</param>
+		/// <returns></returns>
+    	double TeleoptiAgents(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength);
+
         /// <summary>
         /// Agentses from utilisation.
         /// </summary>
