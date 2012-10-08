@@ -628,8 +628,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
 			var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
+			fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
 			fairnessOpt.ExecutePersonal(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness,
 										optimizerPreferences.Extra.GroupPageOnCompareWith, rollbackService);
+			fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
         private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IList<IScheduleMatrixPro> matrixList)
