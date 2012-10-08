@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 					{
 						_resetEvents[j] = new ManualResetEvent(false);
 						var agentRestrictionsDisplayRow = _model.DisplayRows[i - j];
-						agentRestrictionsDisplayRow.Test = j;
+						agentRestrictionsDisplayRow.ThreadIndex = j;
 						ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
 					}
 
@@ -369,6 +369,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		void DoWork(object workObject)
 		{
+			if (IsDisposed || IsDisposing) return;
 			Thread.Sleep(100);
 			var displayRow = workObject as AgentRestrictionsDisplayRow;
 			if (displayRow == null) return;
@@ -388,7 +389,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			if (!IsHandleCreated) return;
 
-			
+			if (IsDisposed || IsDisposing) return;
 			//if (displayRow.Matrix.Person.Equals(_selectedPerson))
 			if(displayRow.Equals(_showInDetailView))
 			{
@@ -403,7 +404,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (_loadedCounter % 25 == 0 || _loadedCounter >= _model.DisplayRows.Count - 1) Invoke(new GridDelegate(InvalidateGrid));
 
 			if(_resetEvents != null)
-			_resetEvents[displayRow.Test].Set();
+			_resetEvents[displayRow.ThreadIndex].Set();
 		}
 
 		private void InvalidateGrid()

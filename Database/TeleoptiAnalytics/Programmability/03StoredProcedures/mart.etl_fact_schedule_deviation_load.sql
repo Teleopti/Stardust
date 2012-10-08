@@ -18,6 +18,7 @@ GO
 --				2010-06-10 Added detection of is_logged_in, used when ready_time_m = 0 to show zero, else empty string in report
 --				2010-09-20 Fix calculation: Ready Time vs. Scheduled Ready Time. Set 100% as soon a mixed interval is fullfilled. e.g Readytime >= ScheduleReadytime
 --				2010-11-01 #11055 Refact of mart.fact_schedule_deviation, measures in seconds instead of minutes. KJ
+--				2012-10-08 #20924 Fix Contract Deviation
 --
 --ToDo: --More robust calc of Adherance 
 --		ALTER TABLE mart.fact_schedule_deviation ADD
@@ -270,21 +271,22 @@ WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_
 AND scheduled_ready_time_s>0
 AND scheduled_ready_time_s<ready_time_s
 
---3 Deviation_contract, only time where agents are contracted to be working are included
--- a + b) Under performance and Over Performance calculated in same way
-UPDATE	mart.fact_schedule_deviation
-SET
-	deviation_contract_s = 0
-WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
-AND contract_time_s=0
-
+--3 Calculated as 2) i.e punish for over performance. But only time where agents are contracted to be working are included
 UPDATE mart.fact_schedule_deviation
-SET deviation_contract_s =
+SET 	deviation_contract_s = ABS(
+	(
 	CASE
-		WHEN ready_time_s > contract_time_s THEN ABS(contract_time_s-scheduled_ready_time_s) --This one is a bit odd, check Excel to understand/see it working!
-		ELSE ABS(scheduled_ready_time_s-ready_time_s) --same way as 1)
+		WHEN scheduled_ready_time_s>contract_time_s then contract_time_s
+		ELSE scheduled_ready_time_s
 	END
+	)
+-
+	(
+	CASE
+		WHEN ready_time_s>contract_time_s then contract_time_s
+		ELSE ready_time_s
+	END
+	)
+)
 WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
-AND contract_time_s>0
-
 GO
