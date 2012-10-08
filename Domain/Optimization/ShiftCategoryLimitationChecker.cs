@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private void setBlockedShiftCategoriesForGroupPerson(ISchedulingOptions optimizerPreferences, IGroupPerson groupPerson, DateOnly dateOnly)
         {
-            var groupSchedules = groupPerson.GroupMembers.Select(person => ScheduleDictionary[person]).ToList();
             foreach(var person in groupPerson.GroupMembers  )
             {
                 IVirtualSchedulePeriod schedulePeriod = person.VirtualSchedulePeriod(dateOnly);
