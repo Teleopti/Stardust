@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 	{
 		bool PersonsAreSwappable(IPerson personOne, IPerson personTwo, DateOnly onDate);
 	}
-	public class ShiftCategoryFairnessPersonsSwappableChecker
+	public class ShiftCategoryFairnessPersonsSwappableChecker : IShiftCategoryFairnessPersonsSwappableChecker
 	{
 		private readonly IShiftCategoryFairnessPersonsSkillChecker _personsSkillChecker;
 	    private readonly IShiftCategoryFairnessRuleSetChecker _ruleSetChecker;
