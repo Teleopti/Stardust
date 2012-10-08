@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-	public partial class AgentRestrictionGrid : GridControl, IAgentRestrictionsView
+	public partial class AgentRestrictionGrid : GridControl, IAgentRestrictionsView, IHelpContext
 	{
 		private AgentRestrictionsPresenter _presenter;
 		private IAgentRestrictionsModel _model;
@@ -298,7 +298,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				if (agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson))
 				{
-					ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+					//ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+					DoWork(agentRestrictionsDisplayRow);
+					Thread.Sleep(1000);
 				}
 			}
 
@@ -333,6 +335,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		void DoWork(object workObject)
 		{
+			Thread.Sleep(100);
 			var displayRow = workObject as AgentRestrictionsDisplayRow;
 			if (displayRow == null) return;
 			displayRow.State = AgentRestrictionDisplayRowState.Loading;
@@ -419,6 +422,16 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		void GridCellDrawn(object sender, GridDrawCellEventArgs e)
 		{
 			_presenter.GridCellDrawn(e);
+		}
+
+		public bool HasHelp
+		{
+			get { return true; }
+		}
+
+		public string HelpId
+		{
+			get { return Name; }
 		}
 	}
 }

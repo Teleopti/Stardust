@@ -4,6 +4,7 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -62,7 +63,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			var message = data.Errors.join('</br>');
 			addExtendedPreferenceFormViewModel.ValidationError(message);
 		};
-
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
@@ -76,6 +76,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	}
 
+	function _setMustHave(mustHave) {
+		$('#Preference-body-inner .ui-selected')
+			.each(function (index, cell) {
+				var date = $(cell).data('mytime-date');
+				dayViewModels[date].SetMustHave(mustHave);
+			});
+	}
+
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
 		var template = $('#Preference-add-extended-form');
@@ -85,15 +93,19 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			.qtip({
 				id: "add-extended",
 				content: {
-					text: template
+					text: template,
+					title: {
+						text: '&nbsp;',
+						button: 'Close'
+					}
 				},
 				position: {
 					target: button,
 					my: "left top",
 					at: "left bottom",
 					adjust: {
-						x: 5,
-						y: -5
+						x: 11,
+						y: 0
 					}
 				},
 				show: {
@@ -113,7 +125,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				},
 				events: {
 					render: function () {
-
+						$('#Preference-extended-reset')
+							.button()
+							.click(function () {
+								addExtendedPreferenceFormViewModel.reset();
+							});
 						$('#Preference-extended-apply')
 							.button()
 							.click(function () {
@@ -130,7 +146,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _initMustHaveButton() {
 		$('#Preference-must-have-button')
 			.click(function () {
-				_setPreference(true);
+				_setMustHave(true);
+			});
+		$('#Preference-must-have-delete-button')
+			.click(function () {
+				_setMustHave(false);
 			});
 	}
 

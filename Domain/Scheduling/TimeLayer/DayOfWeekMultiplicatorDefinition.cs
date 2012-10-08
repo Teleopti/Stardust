@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             return new MultiplicatorLayer((IMultiplicatorDefinitionSet) Parent, Multiplicator,ConvertToDateTimePeriod(givenDate, timeZoneInfo));
         }
 
-        public override IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnly startDate, DateOnly endDate, ICccTimeZoneInfo timeZoneInfo)
+        public override IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, ICccTimeZoneInfo timeZoneInfo)
         {
-        	var dayCollection = new DateOnlyPeriod(startDate, endDate).DayCollection();
+        	var dayCollection = period.DayCollection();
 
         	return (from dateOnly in dayCollection
         	        where dateOnly.DayOfWeek == DayOfWeek

@@ -49,6 +49,12 @@ namespace Teleopti.Ccc.Domain.Optimization
     	                          IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
     	                          IList<IScheduleMatrixPro> allMatrixes);
 
+		bool ScheduleSinglePerson(DateOnly dayToReschedule, IPerson person,
+								  IGroupSchedulingService groupSchedulingService,
+								  ISchedulingOptions schedulingOptions,
+								  IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+								  IList<IScheduleMatrixPro> allMatrixes);
+
         /// <summary>
         /// Creates the group matrix containers.
         /// </summary>
@@ -233,6 +239,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (!groupSchedulingService.ScheduleOneDayOnOnePerson(dayToReschedule, person, schedulingOptions, groupPersonToRun, allMatrixes))
 			{
 				schedulePartModifyAndRollbackService.Rollback();
+				return false;
+			}
+			return true;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public bool ScheduleSinglePerson(DateOnly dayToReschedule, IPerson person, IGroupSchedulingService groupSchedulingService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, IList<IScheduleMatrixPro> allMatrixes)
+		{
+			IGroupPerson groupPersonToRun = groupPersonBuilderForOptimization.BuildGroupPerson(person,
+																								   dayToReschedule);
+			if (!_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPersonToRun, dayToReschedule, schedulingOptions))
+				return false;
+			if (!groupSchedulingService.ScheduleOneDayOnOnePerson(dayToReschedule, person, schedulingOptions, groupPersonToRun, allMatrixes))
+			{
 				return false;
 			}
 			return true;

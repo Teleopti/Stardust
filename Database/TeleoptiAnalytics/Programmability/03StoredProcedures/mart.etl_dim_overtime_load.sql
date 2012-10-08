@@ -10,6 +10,7 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_overtime_load] 
 	
+WITH EXECUTE AS OWNER
 AS
 ----------------------------------------------------------------------------
 -- Not Defined overtime

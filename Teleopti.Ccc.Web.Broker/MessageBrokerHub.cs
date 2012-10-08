@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using SignalR.Hubs;
 using Teleopti.Interfaces.MessageBroker;
@@ -9,6 +11,7 @@ namespace Teleopti.Ccc.Web.Broker
 	public class MessageBrokerHub : Hub
 	{
 		private readonly static ILog Logger = LogManager.GetLogger(typeof (MessageBrokerHub));
+		//private readonly ConcurrentDictionary<string,IList<Subscription>> SubscriptionStorage 
 
 		public void AddSubscription(Subscription subscription)
 		{
@@ -40,6 +43,14 @@ namespace Teleopti.Ccc.Web.Broker
 			foreach (var route in routes)
 			{
 				Clients[route.GetHashCode().ToString()].onEventMessage(notification);
+			}
+		}
+
+		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
+		{
+			foreach (var notification in notifications)
+			{
+				NotifyClients(notification);
 			}
 		}
 	}

@@ -19,6 +19,7 @@ exec p_log_solidus_insert_realtime 1, 'EVENTID=4;RECID=40;'
 
 */
 
+WITH EXECUTE AS OWNER
 AS
 
 DECLARE @event_type_id int

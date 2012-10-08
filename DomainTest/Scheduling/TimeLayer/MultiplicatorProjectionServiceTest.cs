@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
                 Expect.Call(_projectionService.CreateProjection()).Return(projection);
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.OBTime).Repeat.AtLeastOnce();
             }
             using (_mocker.Playback())
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
                 Expect.Call(_projectionService.CreateProjection()).Return(projection);
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.OBTime).Repeat.AtLeastOnce();
             }
             using (_mocker.Playback())
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
 
                 // see the previous test, this is the extra
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.OBTime).Repeat.AtLeastOnce();
 
             }
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
                 Expect.Call(_projectionService.CreateProjection()).Return(projection);
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.OBTime).Repeat.AtLeastOnce();
             }
             using (_mocker.Playback())
@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
                 Expect.Call(_projectionService.CreateProjection()).Return(projection);
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.OBTime).Repeat.AtLeastOnce();
             }
             using (_mocker.Playback())
@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, overtimeShift.ToList(), new ProjectionPayloadMerger()));
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
                 Expect.Call(_definitionSet.Equals(_definitionSet)).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.Overtime).Repeat.AtLeastOnce();
             }
@@ -385,7 +385,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, overtimeShift.ToList(), new ProjectionPayloadMerger()));
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
                 Expect.Call(_definitionSet.Equals(_definitionSet)).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.Overtime).Repeat.AtLeastOnce();
             }
@@ -413,7 +413,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, overtimeShift.ToList(), new ProjectionPayloadMerger()));
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
                 Expect.Call(_definitionSet.Equals(_definitionSet)).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.Overtime).Repeat.AtLeastOnce();
             }
@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             
             using (_mocker.Record())
             {
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers).IgnoreArguments();
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers).IgnoreArguments();
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.Overtime).Repeat.AtLeastOnce();
             }
             using (_mocker.Playback())
@@ -483,7 +483,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
 
             using (_mocker.Record())
             {
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers).IgnoreArguments();
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers).IgnoreArguments();
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.Overtime).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.Equals(_definitionSet)).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.Equals(null)).Return(false).Repeat.AtLeastOnce();
@@ -534,7 +534,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
                 Expect.Call(_definitionSet.Equals(_definitionSet)).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.Overtime).Repeat.AtLeastOnce();
             }
@@ -585,8 +585,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
                 Expect.Call(_projectionService.CreateProjection()).Return(projection);
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
-                Expect.Call(definitionSet2.CreateProjectionForPeriod(start, end, _timeZone)).Return(multiplicatorLayers2);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(definitionSet2.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(multiplicatorLayers2);
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.OBTime).Repeat.AtLeastOnce();
                 Expect.Call(definitionSet2.MultiplicatorType).Return(MultiplicatorType.OBTime).Repeat.AtLeastOnce();
 
@@ -632,8 +632,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, overtimeShift1.Concat(overtimeShift2).ToList(), new ProjectionPayloadMerger()));
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone).Repeat.AtLeastOnce();
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
-                Expect.Call(definitionSet2.CreateProjectionForPeriod(start, end, _timeZone)).Return(multiplicatorLayers2);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(definitionSet2.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(multiplicatorLayers2);
                 Expect.Call(definitionSet2.Equals(_definitionSet)).Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.Equals(_definitionSet)).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.Overtime).Repeat.AtLeastOnce();
@@ -685,8 +685,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_projectionService.CreateProjection()).Return(projection);
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone).Repeat.AtLeastOnce();
-                Expect.Call(_definitionSet.CreateProjectionForPeriod(start, end, _timeZone)).Return(_multiplicatorLayers);
-                Expect.Call(definitionSet2.CreateProjectionForPeriod(start, end, _timeZone)).Return(multiplicatorLayers2);
+                Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
+                Expect.Call(definitionSet2.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(multiplicatorLayers2);
                 Expect.Call(definitionSet2.Equals(definitionSet2)).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.Equals(definitionSet2)).Return(false).Repeat.AtLeastOnce();
                 Expect.Call(definitionSet2.Equals(_definitionSet)).Return(false).Repeat.AtLeastOnce();

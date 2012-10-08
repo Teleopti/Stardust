@@ -17,6 +17,7 @@ GO
 CREATE PROCEDURE [mart].[pm_user_check] 
 @user_name nvarchar(256),
 @is_windows_logon bit
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	DECLARE @user_found bit

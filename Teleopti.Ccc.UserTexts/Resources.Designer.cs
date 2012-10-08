@@ -1664,11 +1664,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow Overwrite.
+        ///   Looks up a localized string similar to Allow Meetings.
         /// </summary>
-        public static string AllowOverwrite {
+        public static string AllowMeetings {
             get {
-                return ResourceManager.GetString("AllowOverwrite", resourceCulture);
+                return ResourceManager.GetString("AllowMeetings", resourceCulture);
             }
         }
         
@@ -25122,6 +25122,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YourScheduleForDateParameters {
             get {
                 return ResourceManager.GetString("YourScheduleForDateParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your schedule has changed!.
+        /// </summary>
+        public static string YourScheduleHasChanged {
+            get {
+                return ResourceManager.GetString("YourScheduleHasChanged", resourceCulture);
             }
         }
         

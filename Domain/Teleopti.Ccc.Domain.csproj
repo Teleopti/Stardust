@@ -675,6 +675,7 @@
     <Compile Include="Scheduling\Restriction\AvailabilityDay.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityRotation.cs" />
     <Compile Include="Scheduling\Restriction\ActivityRestrictionTemplate.cs" />
+    <Compile Include="Scheduling\Restrictions\MustHaveRestrictionSetter.cs" />
     <Compile Include="Scheduling\Restriction\PreferenceRestrictionTemplate.cs" />
     <Compile Include="Scheduling\Restriction\RestrictionMustBe.cs" />
     <Compile Include="Scheduling\Restriction\RotationDay.cs" />
@@ -743,6 +744,12 @@
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfo.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculator.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplate.cs" />
+    <Compile Include="Scheduling\TeamSteadyState.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateDictionaryCreator.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateMainShiftScheduler.cs" />
+    <Compile Include="Scheduling\TeamSteadyStatePersonPeriod.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateRunner.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateSchedulePeriod.cs" />
     <Compile Include="Scheduling\TimeLayer\DateTimeMultiplicatorDefinition.cs" />
     <Compile Include="Scheduling\TimeLayer\DayOfWeekMultiplicatorDefinition.cs" />
     <Compile Include="Scheduling\TimeLayer\Multiplicator.cs" />

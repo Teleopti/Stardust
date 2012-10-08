@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("ASM Summer to Winter")]
-    [NUnit.Framework.CategoryAttribute("ASMSummerWinter")]
     public partial class ASMSummerToWinterFeature
     {
         
@@ -33,8 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "ASM Summer to Winter", "In order to improve adherence\r\nAs an agent\r\nI want to see my current activities", ProgrammingLanguage.CSharp, new string[] {
-                        "ASMSummerWinter"});
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "ASM Summer to Winter", "In order to improve adherence\r\nAs an agent\r\nI want to see my current activities", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -68,8 +66,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
         
         public virtual void FeatureBackground()
         {
+#line 6
 #line 7
-#line 8
  testRunner.Given("I am located in Stockholm");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table1.AddRow(new string[] {
                         "Name",
                         "Full access to mytime"});
-#line 9
+#line 8
  testRunner.And("there is a role with", ((string)(null)), table1);
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
@@ -90,7 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table2.AddRow(new string[] {
                         "Schedule published to date",
                         "2040-06-24"});
-#line 12
+#line 11
   testRunner.And("I have a workflow control set with", ((string)(null)), table2);
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -105,7 +103,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table3.AddRow(new string[] {
                         "Length",
                         "1"});
-#line 16
+#line 15
  testRunner.And("I have a schedule period with", ((string)(null)), table3);
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
@@ -114,7 +112,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table4.AddRow(new string[] {
                         "Start date",
                         "2012-06-18"});
-#line 21
+#line 20
  testRunner.And("I have a person period with", ((string)(null)), table4);
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
@@ -126,20 +124,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table5.AddRow(new string[] {
                         "EndTime",
                         "2020-10-25 05:00"});
-#line 24
+#line 23
  testRunner.And("there is a shift with", ((string)(null)), table5);
-#line hidden
-            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table6.AddRow(new string[] {
-                        "StartTime",
-                        "2020-10-24 05:00"});
-            table6.AddRow(new string[] {
-                        "EndTime",
-                        "2020-10-24 06:00"});
-#line 29
- testRunner.And("there is a shift with", ((string)(null)), table6);
 #line hidden
         }
         
@@ -148,19 +134,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void ShiftCrossingWinterToSummerDaylightShouldHaveCorrectLength()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Shift crossing winter to summer daylight should have correct length", ((string[])(null)));
-#line 34
+#line 28
 this.ScenarioSetup(scenarioInfo);
-#line 7
+#line 6
 this.FeatureBackground();
-#line 35
+#line 29
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 36
+#line 30
  testRunner.And("Current time is \'2020-10-24 20:00\'");
-#line 37
- testRunner.When("I view my regional settings");
-#line 38
- testRunner.And("I click ASM link");
-#line 39
+#line 31
+ testRunner.When("I click ASM link");
+#line 32
  testRunner.Then("The last layer should be \'7\' hours long");
 #line hidden
             this.ScenarioCleanup();

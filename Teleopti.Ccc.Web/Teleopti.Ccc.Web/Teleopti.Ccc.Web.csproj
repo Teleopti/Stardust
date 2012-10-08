@@ -196,6 +196,7 @@
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
     <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\MustHaveInput.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\AsmViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractor.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerForWebDisplay.cs" />
@@ -525,6 +526,7 @@
     <Content Include="Areas\MyTime\Content\Css\ScheduleStyles.css" />
     <Content Include="Areas\MyTime\Content\Css\WeekView.css" />
     <Content Include="Areas\MyTime\Content\Scripts\AllTests.html" />
+    <Content Include="Areas\MyTime\Views\Asm\todo.txt" />
     <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />

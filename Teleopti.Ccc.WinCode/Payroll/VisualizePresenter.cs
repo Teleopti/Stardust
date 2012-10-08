@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Payroll
                 for (int i = 0; i <= (definitionSetCount - 1); i++)
                 {
                     IMultiplicatorDefinitionSet definitionSet = ExplorerPresenter.Model.FilteredDefinitionSetCollection[i];
-                    IList<IMultiplicatorLayer> layers = definitionSet.CreateProjectionForPeriod(selectedDate.AddDays(-1), selectedDate.AddDays(1), timeZoneInfo);
+                    IList<IMultiplicatorLayer> layers = definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(selectedDate.AddDays(-1), selectedDate.AddDays(1)), timeZoneInfo);
 
                     for (int j = 0; j <= (layers.Count - 1); j++)
                     {

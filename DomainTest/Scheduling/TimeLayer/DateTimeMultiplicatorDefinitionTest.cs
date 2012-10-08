@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
 			ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
 
 			Assert.Throws<ArgumentOutOfRangeException>(() =>_target.ConvertToLayer(tzInfo));
-			Assert.Throws<ArgumentOutOfRangeException>(() =>_target.GetLayersForPeriod(startDate, endDate, tzInfo));
+			Assert.Throws<ArgumentOutOfRangeException>(() =>_target.GetLayersForPeriod(new DateOnlyPeriod(startDate, endDate), tzInfo));
 		}
 
         [Test]
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
 
             _target.ConvertToLayer(tzInfo).Should().Not.Be.Null();
-            _target.GetLayersForPeriod(_startDate, _endDate, tzInfo).Count.Should().Be.EqualTo(1);
+            _target.GetLayersForPeriod(new DateOnlyPeriod(_startDate, _endDate), tzInfo).Count.Should().Be.EqualTo(1);
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             DateTime agentLocalEnd = new DateTime(2008, 1, 3, 0, 0, 0, DateTimeKind.Unspecified);
             DateTimePeriod periodUtc = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(agentLocalStart, agentLocalEnd, tzInfo);
             _target = new DateTimeMultiplicatorDefinition(_multiplicator, new DateOnly(2008, 1, 1), new DateOnly(2008, 1, 4), _startTime, _endTime);
-            IList<IMultiplicatorLayer> layers = _target.GetLayersForPeriod(new DateOnly(2008, 1, 2), new DateOnly(2008, 1, 2), tzInfo);
+            IList<IMultiplicatorLayer> layers = _target.GetLayersForPeriod(new DateOnlyPeriod(2008, 1, 2, 2008, 1, 2), tzInfo);
             Assert.AreEqual(1, layers.Count);
             Assert.AreEqual(periodUtc, layers[0].Period);
         }
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             DateTime agentLocalEnd = new DateTime(2008, 1, 3, 0, 0, 0, DateTimeKind.Unspecified);
             DateTimePeriod periodUtc = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(agentLocalStart, agentLocalEnd, tzInfo);
             _target = new DateTimeMultiplicatorDefinition(_multiplicator, new DateOnly(2008, 1, 2), new DateOnly(2008, 1, 3), TimeSpan.Zero, TimeSpan.Zero);
-            IList<IMultiplicatorLayer> layers = _target.GetLayersForPeriod(new DateOnly(2008, 1, 1), new DateOnly(2008, 1, 4), tzInfo);
+            IList<IMultiplicatorLayer> layers = _target.GetLayersForPeriod(new DateOnlyPeriod(2008, 1, 1,2008, 1, 4), tzInfo);
             Assert.AreEqual(1, layers.Count);
             Assert.AreEqual(periodUtc, layers[0].Period);
         }
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             _target.StartDate = new DateOnly(2007,12,1);
             _target.EndDate = new DateOnly(2007, 12, 2);
 
-            IList<IMultiplicatorLayer> layers = _target.GetLayersForPeriod(new DateOnly(2008, 1, 1), new DateOnly(2008, 1, 4), tzInfo);
+            IList<IMultiplicatorLayer> layers = _target.GetLayersForPeriod(new DateOnlyPeriod(2008, 1, 1,2008, 1, 4), tzInfo);
             Assert.AreEqual(0, layers.Count);
         }
 
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
 			DateTime agentLocalEnd = new DateTime(2008, 1, 2, 6, 0, 0, DateTimeKind.Unspecified);
 			DateTimePeriod periodUtc = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(agentLocalStart, agentLocalEnd, tzInfo);
 			_target = new DateTimeMultiplicatorDefinition(_multiplicator, new DateOnly(2008, 1, 2), new DateOnly(2008, 1, 2), TimeSpan.Zero, TimeSpan.FromHours(6));
-			IList<IMultiplicatorLayer> layers = _target.GetLayersForPeriod(new DateOnly(2007, 12, 31), new DateOnly(2008, 1, 2), tzInfo);
+			IList<IMultiplicatorLayer> layers = _target.GetLayersForPeriod(new DateOnlyPeriod(2007, 12, 31,2008, 1, 2), tzInfo);
 			Assert.AreEqual(1, layers.Count);
 			Assert.AreEqual(periodUtc, layers[0].Period);
 		}

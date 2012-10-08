@@ -107,6 +107,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return retPerson;
         }
 
+		public static IPerson CreatePersonWithValidVirtualSchedulePeriodAndMustHave(IPerson person, DateOnly periodStart)
+		{
+			IPerson retPerson = CreatePersonWithPersonPeriod(person, periodStart, new List<ISkill>());
+			ISchedulePeriod schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(periodStart);
+			schedulePeriod.MustHavePreference = 2;
+			retPerson.AddSchedulePeriod(schedulePeriod);
+			return retPerson;
+		}
+
         public static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
         {
             

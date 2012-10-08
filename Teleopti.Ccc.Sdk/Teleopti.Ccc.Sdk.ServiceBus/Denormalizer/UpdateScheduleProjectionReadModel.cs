@@ -52,10 +52,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
                 {
                     _scheduleChangedNotification.Notify(scenario,person,date);
                 }
-				
-				foreach (var layer in scheduleDay.ProjectionService().CreateProjection())
+
+				var projection = scheduleDay.ProjectionService().CreateProjection();
+				foreach (var layer in projection)
 				{
-					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, scenario, personId, layer);
+					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, scenario, personId, layer, projection);
 				}
 			}
 		}

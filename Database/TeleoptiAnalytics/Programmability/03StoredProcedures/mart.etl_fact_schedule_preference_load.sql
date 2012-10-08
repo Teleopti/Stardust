@@ -22,7 +22,7 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_preference_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
 @business_unit_code uniqueidentifier
-	
+WITH EXECUTE AS OWNER	
 AS
 
 -----------------------------------------------------

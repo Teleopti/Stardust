@@ -30,7 +30,8 @@ namespace Teleopti.Messaging.SignalR
 			FilterManager.InitializeTypeFilter(typeFilter);
 			IsTypeFilterApplied = true;
 
-			ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ignoreInvalidCertificate);
+			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
+			ServicePointManager.DefaultConnectionLimit = 50;
 		}
 
 		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
@@ -57,37 +58,53 @@ namespace Teleopti.Messaging.SignalR
 			SendEventMessage(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, null);
 		}
 
+private IEnumerable<Notification> CreateNotifications(string dataSource, string businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+{
+	IList<Type> types;
+	if (FilterManager.FilterDictionary.TryGetValue(domainObjectType, out types))
+	{
+		var referenceObjectTypeString = (referenceObjectType == null)
+		                                	? null
+		                                	: FilterManager.LookupType(referenceObjectType);
+		var eventStartDateString = Subscription.DateToString(eventStartDate);
+		var eventEndDateString = Subscription.DateToString(eventEndDate);
+		var moduleIdString = Subscription.IdToString(moduleId);
+		var domainObjectIdString = Subscription.IdToString(domainObjectId);
+		var domainQualifiedTypeString = types[0].AssemblyQualifiedName;
+		var domainReferenceIdString = Subscription.IdToString(referenceObjectId);
+		var domainObjectString = (domainObject != null) ? Encoding.UTF8.GetString(domainObject) : null;
+		foreach (var type in types)
+		{
+			yield return new Notification
+			             	{
+			             		StartDate = eventStartDateString,
+			             		EndDate = eventEndDateString,
+			             		DomainId = domainObjectIdString,
+			             		DomainType = type.Name,
+			             		DomainQualifiedType = domainQualifiedTypeString,
+			             		DomainReferenceId = domainReferenceIdString,
+			             		DomainReferenceType = referenceObjectTypeString,
+			             		ModuleId = moduleIdString,
+			             		DomainUpdateType = (int) updateType,
+			             		DataSource = dataSource,
+			             		BusinessUnitId = businessUnitId,
+			             		BinaryData = domainObjectString
+			             	};
+		}
+}
+}
+
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
-			IList<Type> types;
-			if (FilterManager.FilterDictionary.TryGetValue(domainObjectType, out types))
-			{
-				foreach (var type in types)
-				{
-					callProxy(new Notification
-					{
-						StartDate = Subscription.DateToString(eventStartDate),
-						EndDate = Subscription.DateToString(eventEndDate),
-						DomainId = Subscription.IdToString(domainObjectId),
-						DomainType = type.Name,
-						DomainQualifiedType =  types[0].AssemblyQualifiedName,
-						DomainReferenceId = Subscription.IdToString(referenceObjectId),
-						DomainReferenceType =
-							(referenceObjectType == null)
-								? null
-								: FilterManager.LookupType(referenceObjectType),
-						ModuleId = Subscription.IdToString(moduleId),
-						DomainUpdateType = (int)updateType,
-						DataSource = dataSource,
-						BusinessUnitId = Subscription.IdToString(businessUnitId),
-						BinaryData =
-							(domainObject != null) ? Encoding.UTF8.GetString(domainObject) : null
-					});
-				}
-			}
+			var notificationList = CreateNotifications(dataSource, Subscription.IdToString(businessUnitId), eventStartDate,
+			                                           eventEndDate, moduleId, referenceObjectId,
+			                                           referenceObjectType, domainObjectId, domainObjectType, updateType,
+			                                           domainObject);
+			var invoker = new HubProxyInvoker(callProxy);
+			invoker.BeginInvoke(notificationList, callProxyCallback, invoker);
 		}
 
-		private void callProxy(Notification state)
+		private void callProxy(IEnumerable<Notification> state)
 		{
 			lock (WrapperLock)
 			{
@@ -105,13 +122,33 @@ namespace Teleopti.Messaging.SignalR
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void SendEventMessages(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
 		{
+			var notificationList = new List<Notification>();
+			var businessUnitIdString = Subscription.IdToString(businessUnitId);
 			foreach (var eventMessage in eventMessages)
 			{
-				SendEventMessage(dataSource,businessUnitId, eventMessage.EventStartDate, eventMessage.EventEndDate, eventMessage.ModuleId,
+				notificationList.AddRange(CreateNotifications(dataSource,businessUnitIdString, eventMessage.EventStartDate, eventMessage.EventEndDate, eventMessage.ModuleId,
 								 eventMessage.ReferenceObjectId, eventMessage.ReferenceObjectTypeCache, eventMessage.DomainObjectId,
-								 eventMessage.DomainObjectTypeCache, eventMessage.DomainUpdateType, eventMessage.DomainObject);
+								 eventMessage.DomainObjectTypeCache, eventMessage.DomainUpdateType, eventMessage.DomainObject));
+
+				if (notificationList.Count>200)
+					{
+					callProxy(notificationList);
+					notificationList.Clear();
+					}
+			}
+			if (notificationList.Count > 0)
+			{
+				var invoker = new HubProxyInvoker(callProxy);
+				invoker.BeginInvoke(notificationList, callProxyCallback, invoker);
 			}
 		}
+
+		private void callProxyCallback(IAsyncResult ar)
+		{
+			((HubProxyInvoker)ar.AsyncState).EndInvoke(ar);
+		}
+
+		private delegate void HubProxyInvoker(IEnumerable<Notification> notifications);
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{

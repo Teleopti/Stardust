@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IShiftLengthDecider _shiftLengthDecider;
 
         private ISchedulingOptions _schedulingOptions;
+    	private IPossibleStartEndCategory _possibleStartEndCategory;
 
         [SetUp]
 		public void Setup()
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                _shiftProjectionCacheFilter, _personSkillPeriodsDataHolderManager,
                _shiftProjectionCacheManager, _calculatorManager, _workShiftMinMaxCalculator, _fairnessAndMaxSeatCalculatorsManager,
 			   _shiftLengthDecider);
+			_possibleStartEndCategory =new PossibleStartEndCategory();
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -170,12 +173,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 effectiveRestriction.ShiftCategory = _category;
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(new DateOnly(), null, null, null, null, null)).
                     IgnoreArguments().Return(new List<IShiftProjectionCache>());
+				
                 Expect.Call(_shiftProjectionCacheFilter.CheckRestrictions(null, null, null)).IgnoreArguments().Return(true);
                 Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
             }
             _schedulingOptions.ShiftCategory = _category;
-			_schedulingOptions.UsePreferences = false; // the default is True and we want to run ShiftProjectionCachesFromRuleSetBag only once
+			_schedulingOptions.UseAvailability = false;
+			_schedulingOptions.UsePreferences = false;
+			_schedulingOptions.UseRotations = false;
+			_schedulingOptions.UseStudentAvailability = false;
             using (_mocks.Playback())
             {
 				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
@@ -259,6 +266,149 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
+		private void commonMocksForBlackListTests(IRuleSetBag bag, DateOnly dateOnly)
+		{
+			
+			
+
+			Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
+			Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
+			Expect.Call(_part.DateOnlyAsPeriod).Return(_scheduleDateOnlyPeriod).Repeat.AtLeastOnce();
+			Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(_schedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
+			Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
+			Expect.Call(_preSchedulingStatusChecker.CheckStatus(null, null, _schedulingOptions)).Return(true).IgnoreArguments();
+			Expect.Call(_shiftProjectionCacheFilter.CheckRestrictions(null, null, null)).IgnoreArguments().Return(true);
+			Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
+			Expect.Call(_person.Period(dateOnly)).Return(_personPeriod);
+			Expect.Call(_personPeriod.RuleSetBag).Return(bag);
+			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false)).Return(new List<IShiftProjectionCache>());
+		}
+
+		[Test]
+		public void ShouldNotUseBlacklistIfNoRestriction()
+		{
+			var bag = _mocks.StrictMock<IRuleSetBag>();
+			var dateOnly = new DateOnly(2009, 2, 2);
+			_scheduleDateOnlyPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZoneInfo);
+			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+			_schedulingOptions.UseAvailability = false;
+			_schedulingOptions.UsePreferences = false;
+			_schedulingOptions.UseRotations = false;
+			_schedulingOptions.UseStudentAvailability = false;
+
+			using (_mocks.Record())
+			{
+				commonMocksForBlackListTests(bag, dateOnly);
+				//Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true)).Return(new List<IShiftProjectionCache>());
+			}
+
+			using (_mocks.Playback())
+			{
+				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, _possibleStartEndCategory);
+				Assert.That(retShift, Is.Null);
+			}
+		}
+
+		[Test]
+		public void ShouldUseBlacklistIfUseStudentAvailability()
+		{
+			var bag = _mocks.StrictMock<IRuleSetBag>();
+			var dateOnly = new DateOnly(2009, 2, 2);
+			_scheduleDateOnlyPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZoneInfo);
+			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+			_schedulingOptions.UseAvailability = false;
+			_schedulingOptions.UsePreferences = false;
+			_schedulingOptions.UseRotations = false;
+			_schedulingOptions.UseStudentAvailability = true;
+
+			using (_mocks.Record())
+			{
+				commonMocksForBlackListTests(bag, dateOnly);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true)).Return(new List<IShiftProjectionCache>());
+			}
+
+			using (_mocks.Playback())
+			{
+				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, _possibleStartEndCategory);
+				Assert.That(retShift, Is.Null);
+			}
+		}
+
+		[Test]
+		public void ShouldUseBlacklistIfUseRotations()
+		{
+			var bag = _mocks.StrictMock<IRuleSetBag>();
+			var dateOnly = new DateOnly(2009, 2, 2);
+			_scheduleDateOnlyPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZoneInfo);
+			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+			_schedulingOptions.UseAvailability = false;
+			_schedulingOptions.UsePreferences = false;
+			_schedulingOptions.UseRotations = true;
+			_schedulingOptions.UseStudentAvailability = false;
+
+			using (_mocks.Record())
+			{
+				commonMocksForBlackListTests(bag, dateOnly);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true)).Return(new List<IShiftProjectionCache>());
+			}
+
+			using (_mocks.Playback())
+			{
+				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, _possibleStartEndCategory);
+				Assert.That(retShift, Is.Null);
+			}
+		}
+
+		[Test]
+		public void ShouldUseBlacklistIfUsePreferences()
+		{
+			var bag = _mocks.StrictMock<IRuleSetBag>();
+			var dateOnly = new DateOnly(2009, 2, 2);
+			_scheduleDateOnlyPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZoneInfo);
+			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+			_schedulingOptions.UseAvailability = false;
+			_schedulingOptions.UsePreferences = true;
+			_schedulingOptions.UseRotations = false;
+			_schedulingOptions.UseStudentAvailability = false;
+
+			using (_mocks.Record())
+			{
+				commonMocksForBlackListTests(bag, dateOnly);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true)).Return(new List<IShiftProjectionCache>());
+			}
+
+			using (_mocks.Playback())
+			{
+				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, _possibleStartEndCategory);
+				Assert.That(retShift, Is.Null);
+			}
+		}
+
+		[Test]
+		public void ShouldUseBlacklistIfUseAvailability()
+		{
+			var bag = _mocks.StrictMock<IRuleSetBag>();
+			var dateOnly = new DateOnly(2009, 2, 2);
+			_scheduleDateOnlyPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZoneInfo);
+			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+			_schedulingOptions.UseAvailability = true;
+			_schedulingOptions.UsePreferences = false;
+			_schedulingOptions.UseRotations = false;
+			_schedulingOptions.UseStudentAvailability = false;
+
+			using (_mocks.Record())
+			{
+				commonMocksForBlackListTests(bag, dateOnly);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true)).Return(new List<IShiftProjectionCache>());
+			}
+
+			using (_mocks.Playback())
+			{
+				IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, _possibleStartEndCategory);
+				Assert.That(retShift, Is.Null);
+			}
+		}
+
         [Test]
     	public void ShouldReturnNullWhenNoShiftBags()
 		{
@@ -276,10 +426,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_person.Period(dateOnly)).Return(_personPeriod);
 			Expect.Call(_personPeriod.RuleSetBag).Return(null);
 			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, null, false)).Return(new List<IShiftProjectionCache>()).IgnoreArguments();
+			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, null, false)).Return(new List<IShiftProjectionCache>()).IgnoreArguments();
                     
 			_mocks.ReplayAll();
             _schedulingOptions.ShiftCategory = _category;
-        	_schedulingOptions.UsePreferences = false;
+
             IWorkShiftCalculationResultHolder retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
 			Assert.That(retShift, Is.Null);
 

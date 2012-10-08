@@ -306,16 +306,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         }
 
         [Test]
-        public void VerifyCalculateStaff()
-        {
-            _skillDay.RecalculateStaff();
-            Assert.AreEqual(60, _skillDay.SkillStaffPeriodCollection.Count);
-            Assert.AreEqual(new TimeSpan(2, 15, 3),
-                            _skillDay.SkillStaffPeriodCollection.First(s => s.Period.StartDateTime == _dt.Date.Add(new TimeSpan(14, 45, 0))).ForecastedIncomingDemand());
-
-        }
-
-        [Test]
         public void VerifyCalculateStaffWithShrinkage()
         {
             _skillDay.SkillDataPeriodCollection[0].Shrinkage = new Percent(0.1);

@@ -30,7 +30,12 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 {
                     contract.AvailableOvertimeDefinitionSets.Add(multiplicatorDefinitionSet.Id.GetValueOrDefault(Guid.Empty));
                 }
+                else
+                {
+					contract.AvailableShiftAllowanceDefinitionSets.Add(multiplicatorDefinitionSet.Id.GetValueOrDefault(Guid.Empty));
+                }
             }
+
             return contract;
         }
 

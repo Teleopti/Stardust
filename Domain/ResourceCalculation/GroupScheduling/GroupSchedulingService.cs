@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     public interface IGroupSchedulingService
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker);
+		void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, IDictionary<Guid, bool> teamSteadyStates, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
         bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
 
     	bool ScheduleOneDayOnOnePerson(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions,
@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
         
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
+    
 		public GroupSchedulingService(IGroupPersonsBuilder groupPersonsBuilder, IBestBlockShiftCategoryFinder bestBlockShiftCategoryFinder, 
             ISchedulingResultStateHolder resultStateHolder, IScheduleService scheduleService, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceOptimizationHelper resourceOptimizationHelper, IWorkShiftFinderResultHolder finderResultHolder, IEffectiveRestrictionCreator effectiveRestrictionCreator, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator)
@@ -50,9 +51,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		    _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, 
-			IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker)
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5")]
+		public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, 
+			IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, IDictionary<Guid, bool> teamSteadyStates, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
             if(matrixList == null) throw new ArgumentNullException("matrixList");
             if(backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -61,18 +63,44 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			foreach (var dateOnly in selectedDays.DayCollection())
 			{
                 var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnly, selectedPersons, true, schedulingOptions);
+
 				foreach (var groupPerson in groupPersons.GetRandom(groupPersons.Count, true))
 				{
                     if (backgroundWorker.CancellationPending)
                         return;
-                    _rollbackService.ClearModificationCollection();
-                    if (!ScheduleOneDay(dateOnly, schedulingOptions, groupPerson, matrixList))
-				    {
-                        // add some information probably already added when trying to schedule
-                        //AddResult(groupPerson, dateOnly, "XXCan't Schedule Team");
-                        _rollbackService.Rollback();
-                        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
-				    }
+
+					var teamSteadyStateSuccess = false;
+
+					//to hide pbi on default, remove when done
+					if (teamSteadyStates != null) 
+					{
+						if (groupPerson.Id.HasValue)
+						{
+							if (teamSteadyStates[groupPerson.Id.Value])
+							{
+								if (
+									!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, this, _rollbackService,
+									                                                schedulingOptions, groupPersonBuilderForOptimization,
+									                                                matrixList, _resultStateHolder.Schedules))
+								{
+									teamSteadyStates.Remove(groupPerson.Id.Value);
+									teamSteadyStates.Add(groupPerson.Id.Value, false);
+								}
+
+								else teamSteadyStateSuccess = true;
+							}
+						}
+					}
+
+					if(!teamSteadyStateSuccess)
+					{
+						_rollbackService.ClearModificationCollection();
+						if (!ScheduleOneDay(dateOnly, schedulingOptions, groupPerson, matrixList))
+						{
+							_rollbackService.Rollback();
+							_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+						}
+					}
 				}
 			}
 		}
@@ -171,6 +199,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			{
 				IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
 			    var matrix = matrixList.First(d => d.Person == person);
+
                 _workShiftMinMaxCalculator.ResetCache();
                 var minmax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
                 var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions, agentAverageFairness, minmax);

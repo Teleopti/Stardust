@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IRootPersonGroup _rootPersonGroup;
 		private IChildPersonGroup _childPersonGroup;
 		private IScheduleDictionary _scheduleDictionary;
+		private Guid _guid;
 
 		[SetUp]
 		public void Setup()
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_rootPersonGroup = _mock.StrictMock<IRootPersonGroup>();
 			_childPersonGroup = _mock.StrictMock<IChildPersonGroup>();
 			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
+			_guid = Guid.NewGuid();
 		}
 
 		[Test]
@@ -77,7 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_scheduleDictionary.Keys).Return(new Collection<IPerson> {_person});
 				Expect.Call(_rootPersonGroup.Description).Return(new Description("hoj"));
-				Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> {_person}, _dateToTest, "hoj"));
+				Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> {_person}, _dateToTest, "hoj", _guid));
+				Expect.Call(_rootPersonGroup.Id).Return(_guid);
 			}
 
 			IGroupPerson groupPerson;

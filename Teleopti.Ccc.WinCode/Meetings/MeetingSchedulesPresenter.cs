@@ -346,13 +346,13 @@ namespace Teleopti.Ccc.WinCode.Meetings
         public void SetStartTime(TimeSpan startTime)
         {
             _meetingViewModel.StartTime = startTime;
-            _view.SetEndDate(_meetingViewModel.EndDate);
+            _view.SetStartTime(_meetingViewModel.StartTime);
         }
 
         public void SetEndTime(TimeSpan endTime)
         {
             _meetingViewModel.EndTime = endTime;
-            _view.SetEndDate(_meetingViewModel.EndDate);
+            _view.SetEndTime(_meetingViewModel.EndTime);
         }
 
         public void SetStartDate(DateOnly startDate)
@@ -447,10 +447,11 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
             if (TimeHelper.TryParse(inputText, out timeSpan))
             {
-                if (timeSpan.HasValue && timeSpan.Value >= TimeSpan.Zero)
+                if (timeSpan.HasValue && timeSpan.Value >= TimeSpan.Zero && timeSpan != GetStartTime)
+                {
                     SetStartTime(timeSpan.Value);
-                _view.OnMeetingTimeChanged();
-                _view.NotifyMeetingTimeChanged();
+                    _view.NotifyMeetingTimeChanged();
+                }
             }
             else
                 _view.SetStartTime(GetStartTime);	
@@ -462,10 +463,11 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
 			if (TimeHelper.TryParse(inputText, out timeSpan))
 			{
-				if (timeSpan.HasValue)
-					SetEndTime(timeSpan.Value);
-				_view.OnMeetingTimeChanged();
-				_view.NotifyMeetingTimeChanged();
+                if (timeSpan.HasValue && timeSpan.Value >= TimeSpan.Zero && timeSpan != GetStartTime)
+                {
+                    SetEndTime(timeSpan.Value);
+                    _view.NotifyMeetingTimeChanged();
+                }
 			}
 			else
 				_view.SetEndTime(GetEndTime);

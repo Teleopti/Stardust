@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 {
 	public interface IGroupPersonFactory
 	{
-		IGroupPerson CreateGroupPerson(IList<IPerson> persons, DateOnly dateOnly, string name);
+		IGroupPerson CreateGroupPerson(IList<IPerson> persons, DateOnly dateOnly, string name, Guid? guid);
 	}
 }

@@ -873,26 +873,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static IList<IPersonAbsence> getSplitDayLongAbsences(IScheduleDay splitDay)
         {
-            IList<IPersonAbsence> dayAbsences = new List<IPersonAbsence>();
-
-            foreach (IPersonAbsence personAbsence in splitDay.PersonAbsenceCollection())
-            {
-                if (personAbsence.Layer.Period.StartDateTime < splitDay.Period.StartDateTime || personAbsence.Layer.Period.EndDateTime > splitDay.Period.EndDateTime)
-                {
-                    DateTime start, end;
-                    IPersonAbsence splitDayAbsence = personAbsence.NoneEntityClone();
-
-                    if (splitDayAbsence.Period.StartDateTime < splitDay.Period.StartDateTime) start = splitDay.Period.StartDateTime;
-                    else start = splitDayAbsence.Period.StartDateTime;
-
-                    if (splitDayAbsence.Period.EndDateTime > splitDay.Period.EndDateTime) end = splitDay.Period.EndDateTime;
-                    else end = splitDayAbsence.Period.EndDateTime;
-
-                    splitDayAbsence.Layer.Period = new DateTimePeriod(start, end);
-                    dayAbsences.Add(splitDayAbsence);
-                }
-            }
-
+        	IList<IPersonAbsence> dayAbsences = new SplitLongDayAbsences().SplitAbsences(splitDay);
             return dayAbsences;
         }
 
@@ -947,7 +928,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             int column = GetColumnForDate(dateOnly);
             if(TheGrid.CurrentCell.ColIndex != column)
-                TheGrid.CurrentCell.MoveTo(TheGrid.CurrentCell.RowIndex, column);
+            {
+				TheGrid.CurrentCell.MoveTo(TheGrid.CurrentCell.RowIndex, column);
+            	TheGrid.CurrentCell.ScrollInView(GridScrollCurrentCellReason.MoveTo);
+            }
+                
         }
 
         //get the local selected date

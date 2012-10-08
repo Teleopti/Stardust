@@ -59,6 +59,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			success: function (data, textStatus, jqXHR) {
 				var updatedLabel = $("label#updated");
 				updatedLabel.show();
+				$("#incorrectOldPassword").hide();
 				$("#passwordDiv input").reset();
 				setTimeout(function () { updatedLabel.hide(); }, 2000);
 			},

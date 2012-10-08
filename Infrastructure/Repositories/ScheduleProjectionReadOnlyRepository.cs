@@ -48,13 +48,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		public void AddProjectedLayer(DateOnly belongsToDate,IScenario scenario,Guid personId, IVisualLayer visualLayer)
+		public void AddProjectedLayer(DateOnly belongsToDate,IScenario scenario,Guid personId, IVisualLayer visualLayer, IVisualLayerCollection collectionLayerBelongsTo)
 		{
 			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
 			var description = visualLayer.DisplayDescription();
 
-			var visualLayerImp = visualLayer as VisualLayer;
-			var contractTime = visualLayerImp==null ? 0 : visualLayerImp.ContractTime().Ticks;
+			var contractTime = collectionLayerBelongsTo.ContractTime(visualLayer.Period);
 
 			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
 				"INSERT INTO ReadModel.ScheduleProjectionReadOnly (ScenarioId,PersonId,BelongsToDate,PayloadId,StartDateTime,EndDateTime,WorkTime,ContractTime,Name,ShortName,DisplayColor,PayrollCode,InsertedOn) VALUES (:ScenarioId,:PersonId,:Date,:PayloadId,:StartDateTime,:EndDateTime,:WorkTime,:ContractTime,:Name,:ShortName,:DisplayColor,:PayrollCode,:InsertedOn)")
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetDateTime("StartDateTime", visualLayer.Period.StartDateTime)
 				.SetDateTime("EndDateTime", visualLayer.Period.EndDateTime)
 				.SetInt64("WorkTime", visualLayer.WorkTime().Ticks)
-				.SetInt64("ContractTime", contractTime)
+				.SetInt64("ContractTime", contractTime.Ticks)
 				.SetString("Name", description.Name)
 				.SetString("ShortName", description.ShortName)
 				.SetString("PayrollCode", string.Empty)

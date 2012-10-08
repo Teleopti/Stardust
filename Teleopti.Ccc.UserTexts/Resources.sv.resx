@@ -10715,4 +10715,19 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
     <value>Max nyttjandegraden måste vara större eller lika med min nyttjandegrad</value>
   </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Schemalagda agenter per aktivitet</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totalt</value>
+  </data>
+  <data name="AllowMeetings" xml:space="preserve">
+    <value>Tillåt möten</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Övriga</value>
+  </data>
+  <data name="YourScheduleHasChanged" xml:space="preserve">
+    <value>Ditt schema har ändrats!</value>
+  </data>
 </root>

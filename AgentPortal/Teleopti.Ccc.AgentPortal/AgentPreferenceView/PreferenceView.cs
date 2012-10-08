@@ -238,13 +238,13 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
                 {
                     e.Style.CellTipText = UserTexts.Resources.NotValidated;
                 }
-                else if (cellData.EffectiveRestriction != null && cellData.EffectiveRestriction.Invalid)
-                {
-                    e.Style.CellTipText = UserTexts.Resources.NoShiftsAvailableForThisPreference;
-                }
                 else if (cellData.HasPersonalAssignmentOnly)
                 {
                     e.Style.CellTipText = cellData.TipText;
+                }
+                else if (cellData.EffectiveRestriction != null && cellData.EffectiveRestriction.Invalid)
+                {
+                    e.Style.CellTipText = UserTexts.Resources.NoShiftsAvailableForThisPreference;
                 }
                 else if(cellData.ViolatesNightlyRest)
                 {
@@ -552,12 +552,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
 
         private bool CheckPermission(Preference preference)
         {
-            var x = false;
-            if (_presenter.OnCheckPermission(preference))
-            {
-                x = true;
-            }
-            return x;
+            return _presenter.OnCheckPermission(preference);
         }
     }
 }

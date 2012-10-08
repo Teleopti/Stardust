@@ -1,0 +1,4 @@
+henke & roger-stuff
+
+*   kolla upp en bra hook för mockar i js ska ske tidigare än idag.
+* Vi ska ladda om bajset när det blir en ny dag

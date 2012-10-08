@@ -1,9 +1,9 @@
 ﻿
-$(document).ready(function() {
+$(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Preference period feedback view model");
 
-	test("should summarize possible contract time", function() {
+	test("should summarize possible contract time", function () {
 		var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var viewModelDay2 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay1, viewModelDay2]);
@@ -17,7 +17,17 @@ $(document).ready(function() {
 		equal(viewModel.PossibleResultContractTimeMinutesUpper(), 20 * 60);
 	});
 
-	test("should format possible contract time", function() {
+	test("should summarize must have", function () {
+		var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+		var viewModelDay2 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay1, viewModelDay2]);
+		viewModelDay1.MustHave(true);
+		viewModelDay2.MustHave(true);
+		expect(1);
+		equal(viewModel.CurrentMustHave(), 2);
+	});
+
+	test("should format possible contract time", function () {
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay]);
 		viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
@@ -28,10 +38,10 @@ $(document).ready(function() {
 		equal(viewModel.PossibleResultContractTimeUpper(), "160:05");
 	});
 
-	test("should load feedback", function() {
+	test("should load feedback", function () {
 
 		var ajax = {
-			Ajax: function(options) {
+			Ajax: function (options) {
 				equal(options.data.Date, "2012-06-11");
 				options.success({
 					TargetDaysOff: {
@@ -42,7 +52,8 @@ $(document).ready(function() {
 					TargetContractTime: {
 						Lower: "35:00",
 						Upper: "45:00"
-					}
+					},
+					MaxMustHave: 2
 				});
 			}
 		};
@@ -56,6 +67,7 @@ $(document).ready(function() {
 		equal(viewModel.PossibleResultDaysOff(), 1);
 		equal(viewModel.TargetContractTimeLower(), "35:00");
 		equal(viewModel.TargetContractTimeUpper(), "45:00");
+		equal(viewModel.MaxMustHave(), 2);
 	});
 
 });
