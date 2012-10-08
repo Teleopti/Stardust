@@ -76,12 +76,12 @@ namespace Teleopti.Support.Tool.Controls
             _mainForm.Cursor = Cursors.WaitCursor;
             listViewDatabases.BeginUpdate();
             listViewDatabases.Items.Clear();
-            IList<Nhib> nhibs = XmlHandler.GetNihibSettings(textBoxNHibFolder.Text).ToList();
+            IList<Nhib> nhibs = XmlHandler.GetNhibSettings(textBoxNHibFolder.Text).ToList();
             foreach (Nhib nhib in nhibs)
             {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(nhib.CCCConnectionString);
-                string groupCaption = nhib.Factoryname + " ("+ builder.DataSource + ")";
-                ListViewGroup listViewGroup = listViewDatabases.Groups.Add(nhib.Factoryname, groupCaption);
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(nhib.CccConnectionString);
+                string groupCaption = nhib.FactoryName + " ("+ builder.DataSource + ")";
+                ListViewGroup listViewGroup = listViewDatabases.Groups.Add(nhib.FactoryName, groupCaption);
                 ListViewItem[] listViewItems = CreateDatabaseListViewItems(nhib, listViewGroup);
                 listViewDatabases.Items.AddRange(listViewItems);
             }
@@ -102,9 +102,9 @@ namespace Teleopti.Support.Tool.Controls
         {
             Collection<ListViewItem> items = new Collection<ListViewItem>();
             ListViewItem listViewItem;
-            if (!listViewDatabases.Items.ContainsKey(nhib.CCCDatabase))
+            if (!listViewDatabases.Items.ContainsKey(nhib.CccDatabase))
             {
-                listViewItem = CreateDatabaseListViewItem(nhib.CCCDatabase, ApplicationDatabaseTextConstant, nhib.CCCVersion);
+                listViewItem = CreateDatabaseListViewItem(nhib.CccDatabase, ApplicationDatabaseTextConstant, nhib.CccVersion);
                 listViewItem.Tag = nhib;
                 listViewItem.Group = listViewGroup;
                 items.Add(listViewItem);
@@ -200,13 +200,13 @@ namespace Teleopti.Support.Tool.Controls
 
                     if (databaseTypeString == ApplicationDatabaseTextConstant)
                     {
-                        processStartInfo = CreateProcessStartInfoForApplicationSecurity(nhib, listViewItem, databaseTypeString);
+                        processStartInfo = createProcessStartInfoForApplicationSecurity(nhib, listViewItem);
                         RunProcess(processStartInfo);
                     }
 
                     if (databaseTypeString == AnalyticsDatabaseTextConstant)
                     {
-                        processStartInfo = CreateProcessStartInfoForAnalyticsSecurity(nhib, listViewItem, databaseTypeString);
+                        processStartInfo = CreateProcessStartInfoForAnalyticsSecurity(nhib, listViewItem);
                         RunProcess(processStartInfo);
                     }
                 }
@@ -223,10 +223,10 @@ namespace Teleopti.Support.Tool.Controls
 
 //                  3 – If TeleoptiAnalytics DbType
 //                  Teleopti.Support.Security.exe -DS%MyServerInstance% -DD%DATABASE% -CD%TeleoptiCCCAgg% -EE    
-        private ProcessStartInfo CreateProcessStartInfoForAnalyticsSecurity(Nhib nhib, ListViewItem listViewItem, string databaseTypeString)
+        private ProcessStartInfo CreateProcessStartInfoForAnalyticsSecurity(Nhib nhib, ListViewItem listViewItem)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CCCConnectionString);
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CccConnectionString);
             string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\Enrypted\";
 
             string command = workingDirectory + @"Teleopti.Support.Security.exe";
@@ -234,7 +234,7 @@ namespace Teleopti.Support.Tool.Controls
             stringBuilder.Append(SPACE);
             stringBuilder.Append(@"-DS");
             stringBuilder.Append(sqlConnectionStringBuilder.DataSource + SPACE);
-            stringBuilder.Append(GetLogonString(sqlConnectionStringBuilder));
+            stringBuilder.Append(getLogonString(sqlConnectionStringBuilder));
             stringBuilder.Append(@"-DD");
             stringBuilder.Append(listViewItem.Name + SPACE);
             stringBuilder.Append(@"-CD");
@@ -253,10 +253,10 @@ namespace Teleopti.Support.Tool.Controls
 
         //          2- If TeleoptiCCC7 DbType
         //          Teleopti.Support.Security.exe -DS%MyServerInstance% -DD%DATABASE% -EE
-        private ProcessStartInfo CreateProcessStartInfoForApplicationSecurity(Nhib nhib, ListViewItem listViewItem, string databaseTypeString)
+        private ProcessStartInfo createProcessStartInfoForApplicationSecurity(Nhib nhib, ListViewItem listViewItem)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CCCConnectionString);
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CccConnectionString);
             string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\Enrypted\";
 
             string command = workingDirectory + @"Teleopti.Support.Security.exe";
@@ -264,7 +264,7 @@ namespace Teleopti.Support.Tool.Controls
             stringBuilder.Append(SPACE);
             stringBuilder.Append(@"-DS");
             stringBuilder.Append(sqlConnectionStringBuilder.DataSource + SPACE);
-            stringBuilder.Append(GetLogonString(sqlConnectionStringBuilder));
+            stringBuilder.Append(getLogonString(sqlConnectionStringBuilder));
             stringBuilder.Append(@"-DD");
             stringBuilder.Append(listViewItem.Name + SPACE);
             processStartInfo.Arguments = stringBuilder.ToString();
@@ -278,7 +278,7 @@ namespace Teleopti.Support.Tool.Controls
             return processStartInfo;
         }
 
-        private string GetLogonString(SqlConnectionStringBuilder sqlConnectionStringBuilder)
+        private static string getLogonString(SqlConnectionStringBuilder sqlConnectionStringBuilder)
         {
             if (sqlConnectionStringBuilder.IntegratedSecurity)
             {
@@ -322,7 +322,7 @@ namespace Teleopti.Support.Tool.Controls
         private ProcessStartInfo CreateProcessStartInfoForDBManager(Nhib nhib, ListViewItem listViewItem, string databaseTypeString)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CCCConnectionString);
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CccConnectionString);
             string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\";
 
             string command = workingDirectory + @"DBManager.exe";
@@ -330,11 +330,11 @@ namespace Teleopti.Support.Tool.Controls
             stringBuilder.Append(SPACE);
             stringBuilder.Append(@"-S");
             stringBuilder.Append(sqlConnectionStringBuilder.DataSource + SPACE);
-            stringBuilder.Append(GetLogonStringForDBManager(sqlConnectionStringBuilder));
+            stringBuilder.Append(getLogonStringForDBManager(sqlConnectionStringBuilder));
             stringBuilder.Append(@"-D");
             stringBuilder.Append(listViewItem.Name + SPACE);
             stringBuilder.Append(@"-O");
-            stringBuilder.Append(GetCccDbType(databaseTypeString) + SPACE);
+            stringBuilder.Append(getCccDbType(databaseTypeString) + SPACE);
             processStartInfo.Arguments = stringBuilder.ToString();
 
             processStartInfo.WorkingDirectory = workingDirectory;
@@ -352,7 +352,7 @@ namespace Teleopti.Support.Tool.Controls
             return processStartInfo;
         }
 
-        private string GetLogonStringForDBManager(SqlConnectionStringBuilder sqlConnectionStringBuilder)
+        private static string getLogonStringForDBManager(SqlConnectionStringBuilder sqlConnectionStringBuilder)
         {
             if (sqlConnectionStringBuilder.IntegratedSecurity)
             {
@@ -366,7 +366,7 @@ namespace Teleopti.Support.Tool.Controls
             return stringBuilder.ToString();
         }
 
-        private string GetCccDbType(string databaseTypeString)
+        private static string getCccDbType(string databaseTypeString)
         {
 
             switch (databaseTypeString)

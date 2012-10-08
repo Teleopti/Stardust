@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using System.IO;
 
@@ -16,7 +17,7 @@ namespace Teleopti.Support.Tool.DataLayer
         /// </summary>
         /// <param name="dir">The directory to look in for all Nhib files</param>
         /// <returns>A IEnumerable lsit with Nhib objects</returns>
-        public static IEnumerable<Nhib> GetNihibSettings(string dir)
+        public static IEnumerable<Nhib> GetNhibSettings(string dir)
         {
             IList<Nhib> nhibList = new List<Nhib>();
             XmlDocument xmlDocument = new XmlDocument();
@@ -39,25 +40,25 @@ namespace Teleopti.Support.Tool.DataLayer
 
                 foreach (var value in connectionProperties)
                 {
-                    if (value.ToUpper().Contains("INITIAL CATALOG"))
+                    if (value.ToUpper(CultureInfo.InvariantCulture).Contains("INITIAL CATALOG"))
                         CCCDatabase = value.Substring(value.IndexOf('=') + 1);
-                    else if (value.ToUpper().Contains("DATA SOURCE"))
+                    else if (value.ToUpper(CultureInfo.InvariantCulture).Contains("DATA SOURCE"))
                         cccDatasource = value.Substring(value.IndexOf('=') + 1);
                 }
 
                 connectionProperties = analyticConnection.Split(';');
                 foreach (var value in connectionProperties)
                 {
-                    if (value.ToUpper().Contains("INITIAL CATALOG"))
+                    if (value.ToUpper(CultureInfo.InvariantCulture).Contains("INITIAL CATALOG"))
                         analyticDatabase = value.Substring(value.IndexOf('=') + 1);
-                    else if (value.ToUpper().Contains("DATA SOURCE"))
+                    else if (value.ToUpper(CultureInfo.InvariantCulture).Contains("DATA SOURCE"))
                         analyticDatasource = value.Substring(value.IndexOf('=') + 1);
                 }
 
                 //Get the agg database
                 DBHelper analyticDBhelper = new DBHelper(analyticConnection);
                 DBHelper cccDBhelper = new DBHelper(cccConnection);
-                aggregationDatabase = analyticDBhelper.getAggdatabaseName(analyticDatabase);
+                aggregationDatabase = analyticDBhelper.GetAggDatabaseName(analyticDatabase);
                 nhibList.Add(new Nhib(  analyticDatabase, 
                                         CCCDatabase, 
                                         aggregationDatabase, 
@@ -66,10 +67,10 @@ namespace Teleopti.Support.Tool.DataLayer
                                         cccDatasource, 
                                         analyticDatasource, 
                                         sessionfactory,
-                                        file.Substring(file.LastIndexOf("\\")+1),
-                                        cccDBhelper.getDatabaseVersion(CCCDatabase),
-                                        cccDBhelper.getDatabaseVersion(aggregationDatabase),
-                                        analyticDBhelper.getDatabaseVersion(analyticDatabase)));
+                                        file.Substring(file.LastIndexOf("\\", StringComparison.OrdinalIgnoreCase)+1),
+                                        cccDBhelper.GetDatabaseVersion(CCCDatabase),
+                                        cccDBhelper.GetDatabaseVersion(aggregationDatabase),
+                                        analyticDBhelper.GetDatabaseVersion(analyticDatabase)));
             }
 
             return nhibList;

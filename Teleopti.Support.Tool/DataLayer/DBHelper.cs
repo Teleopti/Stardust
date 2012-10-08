@@ -51,7 +51,7 @@ namespace  Teleopti.Support.Tool.DataLayer
         /// </summary>
         /// <param name="database">The databse name</param>
         /// <returns>The databse version</returns>
-        public string getDatabaseVersion(String database)
+        public string GetDatabaseVersion(String database)
         {
            
 
@@ -66,7 +66,7 @@ namespace  Teleopti.Support.Tool.DataLayer
        /// </summary>
        /// <param name="analyticDatabase"></param>
        /// <returns></returns>
-        public string getAggdatabaseName(String analyticDatabase)
+        public string GetAggDatabaseName(String analyticDatabase)
         {
             using (DataSet ds = Execute("SELECT target_customname from mart.sys_crossdatabaseview_target", analyticDatabase))
             {
