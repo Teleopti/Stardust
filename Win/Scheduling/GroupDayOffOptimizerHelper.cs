@@ -92,8 +92,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var matrixListForFairness = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
 			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
 			var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
-			
+
+			fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
 			fairnessOpt.Execute(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness, optimizationPreferences.Extra.GroupPageOnTeam, rollbackService);
+			fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
 			
 		}
 
