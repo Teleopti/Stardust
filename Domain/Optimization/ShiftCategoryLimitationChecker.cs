@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -17,31 +20,98 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private IScheduleDictionary ScheduleDictionary { get { return _resultStateHolder.Schedules; } }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         public void SetBlockedShiftCategories(ISchedulingOptions optimizerPreferences, IPerson person, DateOnly dateOnly)
         {
             optimizerPreferences.NotAllowedShiftCategories.Clear();
             if (optimizerPreferences.UseShiftCategoryLimitations)
             {
+                if(person is IGroupPerson )
+                    setBlockedShiftCategoriesForGroupPerson(optimizerPreferences,(IGroupPerson ) person, dateOnly);
+                else
+                    setBlockedShiftCategoriesForPerson(optimizerPreferences, person, dateOnly);
+            }
+        }
+
+        private void setBlockedShiftCategoriesForGroupPerson(ISchedulingOptions optimizerPreferences, IGroupPerson groupPerson, DateOnly dateOnly)
+        {
+            var groupSchedules = groupPerson.GroupMembers.Select(person => ScheduleDictionary[person]).ToList();
+            foreach(var person in groupPerson.GroupMembers  )
+            {
                 IVirtualSchedulePeriod schedulePeriod = person.VirtualSchedulePeriod(dateOnly);
                 if (!schedulePeriod.IsValid)
                     return;
-
                 foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
                 {
                     IList<DateOnly> datesWithCategory;
-                    if(shiftCategoryLimitation.Weekly)
+                    if (shiftCategoryLimitation.Weekly)
                     {
-						var firstDateInPeriodLocal = new DateOnly(DateHelper.GetFirstDateInWeek(dateOnly, person.FirstDayOfWeek));
-						var dateOnlyWeek = new DateOnlyPeriod(firstDateInPeriodLocal, firstDateInPeriodLocal.AddDays(6));
+                        var firstDateInPeriodLocal = new DateOnly(DateHelper.GetFirstDateInWeek(dateOnly, person.FirstDayOfWeek));
+                        var dateOnlyWeek = new DateOnlyPeriod(firstDateInPeriodLocal, firstDateInPeriodLocal.AddDays(6));
+
                         if (IsShiftCategoryOverOrAtWeekLimit(shiftCategoryLimitation, ScheduleDictionary[person], dateOnlyWeek, out datesWithCategory))
-                            optimizerPreferences.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
+                        {
+                            fillNotAllowedShiftCategories(optimizerPreferences, groupPerson, dateOnly, shiftCategoryLimitation, person);
+                        }
                     }
                     else
                     {
-						DateOnlyPeriod period = schedulePeriod.DateOnlyPeriod;
+                        DateOnlyPeriod period = schedulePeriod.DateOnlyPeriod;
                         if (IsShiftCategoryOverOrAtPeriodLimit(shiftCategoryLimitation, period, ScheduleDictionary[person], out datesWithCategory))
-                            optimizerPreferences.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
+                        {
+                            fillNotAllowedShiftCategories(optimizerPreferences, groupPerson, dateOnly, shiftCategoryLimitation, person);
+                        }
                     }
+                }
+            }
+            
+           
+        }
+
+        private void fillNotAllowedShiftCategories(ISchedulingOptions optimizerPreferences, IGroupPerson groupPerson,
+                                                   DateOnly dateOnly, IShiftCategoryLimitation shiftCategoryLimitation,
+                                                   IPerson person)
+        {
+            var currentPerson = person;
+            var restMemebers = groupPerson.GroupMembers.Where(x => x != currentPerson);
+            if ((restMemebers.All(
+                x => ScheduleDictionary[x].ScheduledDay(dateOnly).IsScheduled())
+                 ||
+                 groupPerson.GroupMembers.All(
+                     x => !ScheduleDictionary[x].ScheduledDay(dateOnly).IsScheduled())
+                ) &&
+                !optimizerPreferences.NotAllowedShiftCategories.Contains(
+                    shiftCategoryLimitation.ShiftCategory))
+            {
+                optimizerPreferences.NotAllowedShiftCategories.Add(
+                    shiftCategoryLimitation.ShiftCategory);
+            }
+        }
+
+        private void setBlockedShiftCategoriesForPerson(ISchedulingOptions optimizerPreferences, IPerson person,
+                                                        DateOnly dateOnly)
+        {
+            IVirtualSchedulePeriod schedulePeriod = person.VirtualSchedulePeriod(dateOnly);
+            if (!schedulePeriod.IsValid)
+                return;
+
+            foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
+            {
+                IList<DateOnly> datesWithCategory;
+                if (shiftCategoryLimitation.Weekly)
+                {
+                    var firstDateInPeriodLocal = new DateOnly(DateHelper.GetFirstDateInWeek(dateOnly, person.FirstDayOfWeek));
+                    var dateOnlyWeek = new DateOnlyPeriod(firstDateInPeriodLocal, firstDateInPeriodLocal.AddDays(6));
+                    if (IsShiftCategoryOverOrAtWeekLimit(shiftCategoryLimitation, ScheduleDictionary[person], dateOnlyWeek,
+                                                         out datesWithCategory))
+                        optimizerPreferences.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
+                }
+                else
+                {
+                    DateOnlyPeriod period = schedulePeriod.DateOnlyPeriod;
+                    if (IsShiftCategoryOverOrAtPeriodLimit(shiftCategoryLimitation, period, ScheduleDictionary[person],
+                                                           out datesWithCategory))
+                        optimizerPreferences.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
                 }
             }
         }
