@@ -98,14 +98,8 @@
     <Compile Include="Controls\ConnectionString\Summary.Designer.cs">
       <DependentUpon>Summary.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MainUpdateDatabases.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Controls\General\SmoothLink.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\MainUpdateDatabases.Designer.cs">
-      <DependentUpon>MainUpdateDatabases.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\General\SmoothLink.Designer.cs">
       <DependentUpon>SmoothLink.cs</DependentUpon>
@@ -178,9 +172,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ConnectionString\Summary.resx">
       <DependentUpon>Summary.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\MainUpdateDatabases.resx">
-      <DependentUpon>MainUpdateDatabases.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\General\DBSelect.resx">
       <DependentUpon>DBSelect.cs</DependentUpon>
