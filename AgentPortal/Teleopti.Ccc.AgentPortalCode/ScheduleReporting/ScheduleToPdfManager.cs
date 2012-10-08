@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
@@ -124,8 +125,13 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             bool success = false;
             try
             {
+				// bug 20966 some bug in syncfusion doc.DocumentInformation.CreationDate crashes when user runs on italic culture
+	            var culture = Thread.CurrentThread.CurrentCulture;
+	            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
+	            doc.DocumentInformation.CreationDate = DateTime.Now;
                 doc.Save(fullPath);
                 success = true;
+	            Thread.CurrentThread.CurrentCulture = culture;
             }
             catch (IOException ex)
             {
