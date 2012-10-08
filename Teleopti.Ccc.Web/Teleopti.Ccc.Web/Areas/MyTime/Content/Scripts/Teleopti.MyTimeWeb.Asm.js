@@ -125,7 +125,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _listenForEvents(listeners) {
-		$(listeners).each(function () {
+		$.each(listeners, function (index, item) {
 			Teleopti.MyTimeWeb.Ajax.Ajax({
 				url: 'MessageBroker/FetchUserData',
 				dataType: "json",
@@ -133,7 +133,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				success: function (data) {
 					Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 						url: data.Url,
-						callback: $(this),
+						callback: item,
 						domainType: 'IScheduleChangedInDefaultScenario',
 						businessUnitId: data.BusinessUnitId,
 						datasource: data.DataSourceName,
