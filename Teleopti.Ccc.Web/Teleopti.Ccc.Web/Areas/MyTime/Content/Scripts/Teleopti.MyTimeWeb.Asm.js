@@ -1,5 +1,6 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -132,7 +133,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		if (messageStartDate < visibleEndDate && messageEndDate > visibleStartDate) {
 			vm.loadViewModel();
-			window.alert(texts.yourScheduleHasChanged);
+			Teleopti.MyTimeWeb.Notifier.Notify({ text: texts.yourScheduleHasChanged });
 		}
 	};
 
