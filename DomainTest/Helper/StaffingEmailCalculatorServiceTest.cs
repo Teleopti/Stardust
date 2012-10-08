@@ -32,14 +32,14 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [Test]
         public void VerifyAgents()
         {
-            Assert.AreEqual(16.667, Math.Round(_calculatorService.Agents(_sla, _serviceTime, _tasks, _averageHandlingTime, _periodLength), 3));
-            Assert.AreEqual(0, Math.Round(_calculatorService.Agents(_sla, 0, _tasks, _averageHandlingTime, _periodLength), 3));
+			Assert.AreEqual(16.667, Math.Round(_calculatorService.TeleoptiAgents(_sla, _serviceTime, _tasks, _averageHandlingTime, _periodLength), 3));
+			Assert.AreEqual(0, Math.Round(_calculatorService.TeleoptiAgents(_sla, 0, _tasks, _averageHandlingTime, _periodLength), 3));
         }
         [Test]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyAgentsReturnsErrorWhenSlaGreaterThanOne()
         {
-            _calculatorService.Agents(2, _serviceTime, _tasks, _averageHandlingTime, _periodLength);
+			_calculatorService.TeleoptiAgents(2, _serviceTime, _tasks, _averageHandlingTime, _periodLength);
         }
         [Test]
         public void VerifyAgentsFromUtilization()
