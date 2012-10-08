@@ -16,6 +16,7 @@
 			if (disposing && (components != null))
 			{
 				components.Dispose();
+				if (_waitClick != null) _waitClick.Close();
 			}
 			base.Dispose(disposing);
 		}
