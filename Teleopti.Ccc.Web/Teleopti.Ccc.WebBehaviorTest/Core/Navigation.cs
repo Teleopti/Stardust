@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoPreference()
 		{
-			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new OverrideNotifyBehavior());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 

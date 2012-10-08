@@ -13,6 +13,7 @@
 					baseUrl: '@Url.Content("~/MyTime/")',
 					startBaseUrl: '@Url.Content("~/Start/")'
 				});
+			Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({ yourScheduleHasChanged: '@Resources.YourScheduleHasChanged' }, [Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener]);
 		});
 	</script>
 }

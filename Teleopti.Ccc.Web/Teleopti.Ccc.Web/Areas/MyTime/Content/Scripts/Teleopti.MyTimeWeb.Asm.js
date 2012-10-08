@@ -108,8 +108,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 	}
 
-	function _start(userTexts) {
-		texts = userTexts;
+	function _showAsm() {
 		_setFixedElementAttributes();
 
 		var yesterDayFromNow = new Date(new Date().getTeleoptiTime()).addDays(-1).clearTime();
@@ -125,42 +124,55 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
 	}
 
-	var onMessageBrokerEvent = function (notification) {
-		var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate).addDays(-1);
-		var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate).addDays(1);
-		var visibleStartDate = vm.yesterday();
-		var visibleEndDate = new Date(visibleStartDate.getTime()).addDays(2);
-
-		if (messageStartDate < visibleEndDate && messageEndDate > visibleStartDate) {
-			vm.loadViewModel();
-			Teleopti.MyTimeWeb.Notifier.Notify({ text: texts.yourScheduleHasChanged });
-		}
-	};
-
-	function _listenForEvents() {
-		Teleopti.MyTimeWeb.Ajax.Ajax({
-			url: 'MessageBroker/FetchUserData',
-			dataType: "json",
-			type: 'GET',
-			success: function (data) {
-				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
-					url: data.Url,
-					callback: onMessageBrokerEvent,
-					domainType: 'IScheduleChangedInDefaultScenario',
-					businessUnitId: data.BusinessUnitId,
-					datasource: data.DataSourceName,
-					referenceId: data.AgentId
-				});
-			}
+	function _listenForEvents(listeners) {
+		$(listeners).each(function () {
+			Teleopti.MyTimeWeb.Ajax.Ajax({
+				url: 'MessageBroker/FetchUserData',
+				dataType: "json",
+				type: 'GET',
+				success: function (data) {
+					Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
+						url: data.Url,
+						callback: $(this),
+						domainType: 'IScheduleChangedInDefaultScenario',
+						businessUnitId: data.BusinessUnitId,
+						datasource: data.DataSourceName,
+						referenceId: data.AgentId
+					});
+				}
+			});
 		});
 	}
 
+	function _validSchedulePeriod(notification) {
+		var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate).addDays(-1);
+		var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate).addDays(1);
+		var listeningStartDate = new Date(new Date().getTeleoptiTime()).addHours(-1);
+		var listeningEndDate = new Date(listeningStartDate.getTime()).addDays(1);
+
+		if (messageStartDate < listeningEndDate && messageEndDate > listeningStartDate) {
+			return true;
+		}
+		return false;
+	}
+
 	return {
-		Init: function (userTexts) {
-			_start(userTexts);
-			_listenForEvents();
+		ShowAsm: function () {
+			_showAsm();
 		},
-		//for testing purposes
-		CallMessageBrokerEvent: onMessageBrokerEvent
+		ListenForScheduleChanges: function (userTexts, eventListeners) {
+			texts = userTexts;
+			_listenForEvents(eventListeners);
+		},
+		NotifyWhenScheduleChangedListener: function (notification) {
+			if (_validSchedulePeriod(notification)) {
+				Teleopti.MyTimeWeb.Notifier.Notify({ text: texts.yourScheduleHasChanged });
+			}
+		},
+		ReloadAsmViewModelListener: function (notification) {
+			if (_validSchedulePeriod(notification)) {
+				vm.loadViewModel();
+			}
+		}
 	};
 })(jQuery);
