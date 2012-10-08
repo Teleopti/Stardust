@@ -56,3 +56,5 @@ symbolmodule.xml
 Database/Tools/Restore/output
 *log.*
 Packages.dgml
+RaptorHgOla.gpState
+CruiseControl.gpState
