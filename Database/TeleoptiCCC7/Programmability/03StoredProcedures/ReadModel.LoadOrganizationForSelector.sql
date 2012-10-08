@@ -166,20 +166,17 @@ BEGIN
 	END
 		
 	IF @type = 'Note'
-	BEGIN
-		INSERT INTO #otherBUpersons
-		SELECT DISTINCT Parent
-		FROM PersonPeriod pp INNER JOIN Team ON Team.Id = pp.Team
-		INNER JOIN Site ON Site.id = Site  WHERE BusinessUnit <> @bu
-			
+	BEGIN	
 		INSERT #otherResult
-		SELECT DISTINCT p.Id, null, null, null ,Note,  
+		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,p.Note,  
 		FirstName, LastName, EmploymentNumber  
 		FROM Person p
-	WHERE ISNULL(TerminalDate, '2100-01-01') >= @ondate
-		AND Id NOT IN (SELECT * FROM #otherBUpersons) -- om folk byter BU blir detta problem
+		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
+		AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+		INNER JOIN Team ON Team.Id = pp.Team
+		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 		AND p.IsDeleted = 0
-		AND Note <> ''
+		AND p.Note <> ''
 	END
 		
 	IF @type = 'ShiftBag'
