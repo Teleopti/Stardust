@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _mostOverStaffSchedulePart;
         private IDictionary<DateOnly, IScheduleDayPro> _fullWeeksPeriodDictionary;
         private ISchedulePartModifyAndRollbackService _rollbackService;
-        private IDeleteSchedulePartService _deleteService;
+        private IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
         private IResourceOptimizationHelper _resourceOptimizationHelper;
         private ISchedulingOptions _schedulingOptions;
         private IEffectiveRestriction _effectiveRestriction;
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                  {_mostOverStaffDate, _mostOverStaffDay}
                                              };
             _rollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
-            _deleteService = _mockRepository.StrictMock<IDeleteSchedulePartService>();
+			_deleteAndResourceCalculateService = _mockRepository.StrictMock<IDeleteAndResourceCalculateService>();
             _resourceOptimizationHelper = _mockRepository.StrictMock<IResourceOptimizationHelper>();
             _effectiveRestrictionCreator = _mockRepository.StrictMock<IEffectiveRestrictionCreator>();
             _effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         		_scheduleService,
         		_optimizerPreferences,
         		_rollbackService,
-        		_deleteService,
+				_deleteAndResourceCalculateService,
         		_resourceOptimizationHelper,
         		_effectiveRestrictionCreator,
         		_resourceCalculateDaysDecider,

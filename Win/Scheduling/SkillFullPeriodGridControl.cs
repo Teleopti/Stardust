@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 	public class SkillFullPeriodGridControl : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext, ISkillFullPeriodGridControl
     {
         private AbstractDetailView _owner;
-        private const int RowHeaderWidth = 200;
-        private const string SettingName = "SchedulerSkillDayGridAndChart";
+        private const int rowHeaderWidth = 200;
+        private const string settingName = "SchedulerSkillDayGridAndChart";
 		private RowManagerScheduler<SkillFullPeriodGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
         private IList<IGridRow> _gridRows;
         private GridRow _currentSelectedGridRow;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling
            
             using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(SettingName, _defaultChartSettings);
+                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(settingName, _defaultChartSettings);
             }
 
 			_presenter = new SkillFullPeriodGridControlPresenter(this);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public static int PreferredGridWidth
 		{
-			get { return RowHeaderWidth * 2 + System.Windows.Forms.SystemInformation.VerticalScrollBarWidth; }
+			get { return rowHeaderWidth * 2 + System.Windows.Forms.SystemInformation.VerticalScrollBarWidth; }
 		}
 
         private void Model_ClipboardCanCopy(object sender, GridCutPasteEventArgs e)
@@ -94,17 +94,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private GridCellModelBase initializeCallPercentReadOnlyCell()
         {
-        	return new PercentReadOnlyCellModel(Model);
+			var model = new PercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
+        	return model;
         }
 
         private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
         {
-        	return new PercentFromPercentReadOnlyCellModel(Model);
+			var model = new PercentFromPercentReadOnlyCellModel(Model) { NumberOfDecimals = 1 };
+        	return model;
         }
 
         private void gridSkillDataQueryColWidth(object sender, GridRowColSizeEventArgs e)
         {	
-			e.Size = RowHeaderWidth;
+			e.Size = rowHeaderWidth;
             e.Handled = true;   
         }
 
@@ -131,8 +133,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
 			if (skill == null || dates == null) return;
 
-			((PercentReadOnlyCellModel)CellModels["ReadOnlyPercentCell"]).NumberOfDecimals = 0;
-			((PercentFromPercentReadOnlyCellModel)CellModels["PercentCellModel"]).NumberOfDecimals = 0;
             ((NumericReadOnlyCellModel)CellModels["NumericReadOnlyCell"]).NumberOfDecimals = 2;
             DateOnly baseDate;
 
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			ColCount = colCount;
 			RowCount = _gridRows.Count - 1;
-			ColWidths[0] = RowHeaderWidth;
+			ColWidths[0] = rowHeaderWidth;
 		}
 
         public void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
