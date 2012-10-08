@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		public int CurrentDaysOff { get; set; }
 		private readonly IList<AgentRestrictionDisplayRowColumn> _warnings; 
 		public TimePeriod MinMaxTime { get; set; }
+		public int ThreadIndex { get; set; }
 
 		public AgentRestrictionsDisplayRow(IScheduleMatrixPro matrix)
 		{
