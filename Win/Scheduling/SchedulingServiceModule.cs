@@ -164,7 +164,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<GroupPersonBuilderForOptimization>().As<IGroupPersonBuilderForOptimization>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessPersonsSwappableChecker>().As<IShiftCategoryFairnessPersonsSwappableChecker>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessPersonsSkillChecker>().As<IShiftCategoryFairnessPersonsSkillChecker>().InstancePerLifetimeScope();
-			
+            builder.RegisterType<ShiftCategoryFairnessRuleSetChecker>().As<IShiftCategoryFairnessRuleSetChecker>().InstancePerLifetimeScope();
+            builder.RegisterType<ShiftCategoryFairnessContractTimeChecker>().As<IShiftCategoryFairnessContractTimeChecker>().InstancePerLifetimeScope();
+
         }
 
     }

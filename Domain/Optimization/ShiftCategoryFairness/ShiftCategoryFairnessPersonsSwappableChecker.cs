@@ -9,10 +9,16 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 	public class ShiftCategoryFairnessPersonsSwappableChecker
 	{
 		private readonly IShiftCategoryFairnessPersonsSkillChecker _personsSkillChecker;
+	    private readonly IShiftCategoryFairnessRuleSetChecker _ruleSetChecker;
+	    private readonly IShiftCategoryFairnessContractTimeChecker _contractTimeChecker;
 
-		public ShiftCategoryFairnessPersonsSwappableChecker(IShiftCategoryFairnessPersonsSkillChecker personsSkillChecker)
+		public ShiftCategoryFairnessPersonsSwappableChecker(IShiftCategoryFairnessPersonsSkillChecker personsSkillChecker,
+            IShiftCategoryFairnessRuleSetChecker ruleSetChecker,
+            IShiftCategoryFairnessContractTimeChecker contractTimeChecker)
 		{
 			_personsSkillChecker = personsSkillChecker;
+		    _ruleSetChecker = ruleSetChecker;
+		    _contractTimeChecker = contractTimeChecker;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -25,6 +31,11 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 				return false;
 			if (!_personsSkillChecker.PersonsHaveSameSkills(personPeriodOne, personPeriodTwo))
 				return false;
+            if (!_ruleSetChecker.Check(personPeriodOne, personPeriodTwo))
+                return false;
+            if (!_contractTimeChecker.Check(personPeriodOne, personPeriodTwo))
+                return false;
+            
 
 			return true;
 		}
