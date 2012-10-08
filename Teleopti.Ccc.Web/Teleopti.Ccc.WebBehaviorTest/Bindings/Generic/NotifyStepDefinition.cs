@@ -8,7 +8,7 @@ using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
 	[Binding]
-	public class AlertStepDefinition
+	public class NotifyStepDefinition
 	{
 		[Then(@"I should see only one alert containing '(.*)'")]
 		public void ThenIShouldSeeOnlyOneAlertContaining(string activity)
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Current.Elements.Filter(Find.ByClass("alertLoggerItem")).Count.Should().Be.EqualTo(1);
 		}
 
-		[Then(@"I should see one alert")]
+		[Then(@"I should see one notify message")]
 		public void ThenIShouldSeeAnAlert()
 		{
 			Browser.Current.Elements.Filter(Find.ByClass("alertLoggerItem")).Count.Should().Be.EqualTo(1);

@@ -523,6 +523,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\noty\promise.js" />
     <Content Include="Areas\MyTime\Content\Scripts\noty\themes\default.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Asm.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Notifier.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.selectbox.ko.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />

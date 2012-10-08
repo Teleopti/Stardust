@@ -349,7 +349,7 @@ this.FeatureBackground();
 #line 91
  testRunner.And("My schedule between \'2030-01-01 08:00\' to \'2030-01-01 17:00\' change");
 #line 92
- testRunner.Then("I should see one alert");
+ testRunner.Then("I should see one notify message");
 #line hidden
             this.ScenarioCleanup();
         }

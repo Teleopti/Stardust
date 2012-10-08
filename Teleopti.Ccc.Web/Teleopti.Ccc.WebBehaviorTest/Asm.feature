@@ -89,7 +89,7 @@ Scenario: Agent should be notified when current shift has changed
 	And Current time is '2030-01-01 00:00'
 	When I click ASM link
 	And My schedule between '2030-01-01 08:00' to '2030-01-01 17:00' change
-	Then I should see one alert 
+	Then I should see one notify message
 
 Scenario: Asm should be automatically reloaded when time passes
 	Given I have the role 'Full access to mytime'
