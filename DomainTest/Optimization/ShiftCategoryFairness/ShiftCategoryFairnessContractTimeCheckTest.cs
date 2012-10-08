@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.AgentInfo;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
@@ -13,39 +13,60 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
     [TestFixture]
     public class ShiftCategoryFairnessContractTimeCheckTest
     {
+        private MockRepository _mocks;
         private IShiftCategoryFairnessContractTimeChecker _target;
-        private IPersonPeriod _personPeriod1, _personPeriod2;
+        private IScheduleDay _scheduleDay1, _scheduleDay2;
 
         [SetUp]
         public void Setup()
         {
+            _mocks = new MockRepository();
             _target = new ShiftCategoryFairnessContractTimeChecker();
-            
-            var contract1 = new Contract("contract1");
-            var contract2 = new Contract("contract2");
-
-            var partTimePercent1 = new PartTimePercentage("partTimePercentage1");
-            var partTimePercent2 = new PartTimePercentage("partTimePercentage2");
-
-            var contractSchedule1 = new ContractSchedule("contractSchedule1");
-            var contractSchedule2 = new ContractSchedule("contractSchedule2");
-
-            var personContract1 = new PersonContract(contract1, partTimePercent1, contractSchedule1);
-            var personContract2 = new PersonContract(contract2, partTimePercent2, contractSchedule2);
-            _personPeriod1 = new PersonPeriod(new DateOnly(2012, 10, 08), personContract1, new Team());
-            _personPeriod2 = new PersonPeriod(new DateOnly(2012, 10, 08), personContract2, new Team());
+            _scheduleDay1 = _mocks.DynamicMock<IScheduleDay>();
+            _scheduleDay2 = _mocks.DynamicMock<IScheduleDay>();
         }
 
         [Test]
         public void SameShouldReturnTrue()
         {
-            Assert.That(_target.Check(_personPeriod1, _personPeriod1), Is.True);
+            var projectionService = _mocks.DynamicMock<IProjectionService>();
+            var projection = _mocks.DynamicMock<IVisualLayerCollection>();
+            var contractTime = new TimeSpan(14, 59, 39);
+
+            Expect.Call(_scheduleDay1.ProjectionService()).Return(projectionService);
+            Expect.Call(projectionService.CreateProjection()).Return(projection);
+            Expect.Call(projection.ContractTime()).Return(contractTime); 
+            
+            Expect.Call(contractTime.Equals(contractTime));
+            
+            _mocks.ReplayAll();
+            Assert.That(_target.Check(_scheduleDay1, _scheduleDay1), Is.True);
+            _mocks.VerifyAll();
         }
 
         [Test]
         public void DifferentShouldReturnFalse()
         {
-            Assert.That(_target.Check(_personPeriod1, _personPeriod2), Is.False);
+            var projectionService = _mocks.DynamicMock<IProjectionService>();
+            var projection = _mocks.DynamicMock<IVisualLayerCollection>();
+            var projectionServiceTwo = _mocks.DynamicMock<IProjectionService>();
+            var projectionTwo = _mocks.DynamicMock<IVisualLayerCollection>(); 
+            var contractTime = new TimeSpan(14, 59, 39);
+            var contractTimeTwo = new TimeSpan(23, 59, 59);
+
+            Expect.Call(_scheduleDay1.ProjectionService()).Return(projectionService);
+            Expect.Call(projectionService.CreateProjection()).Return(projection);
+            Expect.Call(projection.ContractTime()).Return(contractTime);
+
+            Expect.Call(_scheduleDay2.ProjectionService()).Return(projectionServiceTwo);
+            Expect.Call(projectionServiceTwo.CreateProjection()).Return(projectionTwo);
+            Expect.Call(projectionTwo.ContractTime()).Return(contractTimeTwo);
+
+            Expect.Call(contractTime.Equals(contractTimeTwo));
+
+            _mocks.ReplayAll();
+            Assert.That(_target.Check(_scheduleDay1, _scheduleDay2), Is.False);
+            _mocks.VerifyAll();
         }
 
     }

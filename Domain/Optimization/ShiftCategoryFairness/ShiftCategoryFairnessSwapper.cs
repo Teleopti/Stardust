@@ -61,13 +61,15 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 				var day1 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, groupOneMember);
 				if (!_shiftCategoryChecker.DayHasShiftCategory(day1, catOne))
 					return false;
-				var swapSucces = false;
+			    var swapSucces = false;
 				foreach (var originalMember in groupTwo.OriginalMembers)
 				{
 					if(swappedInGroupTwo.Contains(originalMember)) continue;
-					if(!_swappableChecker.PersonsAreSwappable(groupOneMember, originalMember, dateOnly)) continue;
+                    var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, originalMember);
+                    var scheduleDays = new List<IScheduleDay>{day1, day2};
+                    if(!_swappableChecker.PersonsAreSwappable(groupOneMember, originalMember, dateOnly, scheduleDays)) 
+                        continue;
 					
-					var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, originalMember);
 					if (_shiftCategoryChecker.DayHasShiftCategory(day2, catTwo))
 					{
 						var modifiedParts = _swapService.Swap(new List<IScheduleDay> { day1, day2 }, _dic);

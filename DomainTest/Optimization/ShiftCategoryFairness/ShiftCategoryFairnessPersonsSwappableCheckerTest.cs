@@ -34,10 +34,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			var person1 = _mocks.DynamicMock<IPerson>();
 			var person2 = _mocks.DynamicMock<IPerson>();
 			var period = _mocks.DynamicMock<IPersonPeriod>();
+		    var scheduleDays = _mocks.DynamicMock<List<IScheduleDay>>();
 			Expect.Call(person1.Period(onDate)).Return(period);
 			Expect.Call(person2.Period(onDate)).Return(null);
 			_mocks.ReplayAll();
-			Assert.That(_target.PersonsAreSwappable(person1, person2, onDate), Is.False);
+			Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays), Is.False);
 			_mocks.VerifyAll();
 		}
 
@@ -47,12 +48,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			var onDate = new DateOnly(2012, 10, 3);
 			var person1 = _mocks.DynamicMock<IPerson>();
 			var person2 = _mocks.DynamicMock<IPerson>();
-			var period = _mocks.DynamicMock<IPersonPeriod>();
+            var period = _mocks.DynamicMock<IPersonPeriod>();
+            var scheduleDays = _mocks.DynamicMock<List<IScheduleDay>>();
 			Expect.Call(person1.Period(onDate)).Return(period);
 			Expect.Call(person2.Period(onDate)).Return(period);
 			Expect.Call(_sameSkillChecker.PersonsHaveSameSkills(period, period)).Return(false);
 			_mocks.ReplayAll();
-			Assert.That(_target.PersonsAreSwappable(person1, person2, onDate), Is.False);
+			Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays), Is.False);
 			_mocks.VerifyAll();
 		}
 
@@ -63,30 +65,34 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             var person1 = _mocks.DynamicMock<IPerson>();
             var person2 = _mocks.DynamicMock<IPerson>();
             var period = _mocks.DynamicMock<IPersonPeriod>();
+            var scheduleDays = _mocks.DynamicMock<List<IScheduleDay>>();
             Expect.Call(person1.Period(onDate)).Return(period);
             Expect.Call(person2.Period(onDate)).Return(period);
             Expect.Call(_sameSkillChecker.PersonsHaveSameSkills(period, period)).Return(true);
             Expect.Call(_ruleSetChecker.Check(period, period)).Return(false);
             _mocks.ReplayAll();
-            Assert.That(_target.PersonsAreSwappable(person1, person2, onDate), Is.False);
+            Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays), Is.False);
             _mocks.VerifyAll();
         }
 
         [Test]
         public void ShouldReturnFalseIfNotSameContractTime()
         {
-
             var onDate = new DateOnly(2012, 10, 3);
             var person1 = _mocks.DynamicMock<IPerson>();
             var person2 = _mocks.DynamicMock<IPerson>();
             var period = _mocks.DynamicMock<IPersonPeriod>();
+            var scheduleDayOne = _mocks.DynamicMock<IScheduleDay>();
+            var scheduleDayTwo = _mocks.DynamicMock<IScheduleDay>();
+            var scheduleDays = new List<IScheduleDay>{scheduleDayOne, scheduleDayTwo};
+
             Expect.Call(person1.Period(onDate)).Return(period);
             Expect.Call(person2.Period(onDate)).Return(period);
             Expect.Call(_sameSkillChecker.PersonsHaveSameSkills(period, period)).Return(true);
             Expect.Call(_ruleSetChecker.Check(period, period)).Return(true);
-            Expect.Call(_contractTimeChecker.Check(period, period)).Return(false);
+            Expect.Call(_contractTimeChecker.Check(scheduleDays.First(), scheduleDays.Last())).Return(false);
             _mocks.ReplayAll();
-            Assert.That(_target.PersonsAreSwappable(person1, person2, onDate), Is.False);
+            Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays), Is.False);
             _mocks.VerifyAll();
         }
 	}

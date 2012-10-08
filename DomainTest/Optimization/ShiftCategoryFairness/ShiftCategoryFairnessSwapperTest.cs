@@ -91,6 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDayPro>();
 			var part1 = _mocks.DynamicMock<IScheduleDay>();
 			var part2 = _mocks.DynamicMock<IScheduleDay>();
+		    var scheduleDays = new List<IScheduleDay> {part1, part2};
 
 			Expect.Call(matrix1.Person).Return(person1);
 			Expect.Call(matrix2.Person).Return(person2);
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
 			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
-			Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly)).Return(true);
+            Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly, scheduleDays)).Return(true);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(false);
 			
 			_mocks.ReplayAll();
@@ -116,9 +117,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			var dateOnly = new DateOnly(2012, 10, 1);
 			var cat1 = _mocks.DynamicMock<IShiftCategory>();
 			var cat2 = _mocks.DynamicMock<IShiftCategory>();
-			var person1 = new Person();
-			var person2 = new Person();
-			var person3 = new Person();
+			var person1 = new Person() {Name = new Name("First", "")};
+		    var person2 = new Person() {Name = new Name("Second", "")};
+		    var person3 = new Person() {Name = new Name("Third", "")};
 
 			var group1 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson> { person1, person3 } };
 			var group2 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson> { person2 } };
@@ -131,7 +132,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDayPro>();
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDayPro>();
 			var part1 = _mocks.DynamicMock<IScheduleDay>();
-			var part2 = _mocks.DynamicMock<IScheduleDay>();
+            var part2 = _mocks.DynamicMock<IScheduleDay>();
+            var scheduleDays = new List<IScheduleDay> { part1, part1 };
 
 			Expect.Call(matrix1.Person).Return(person1);
 			Expect.Call(matrix2.Person).Return(person2);
@@ -142,15 +144,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
 			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
-			Expect.Call(_swappableChecker.PersonsAreSwappable(person2, person1, dateOnly)).Return(true);
+            // När man debuggar verkar det som att .Return(true) inte fastnar, den tycker det blir false
+            // och kör continue av någon anledning.
+			Expect.Call(_swappableChecker.PersonsAreSwappable(person2, person1, dateOnly, scheduleDays)).Return(true);
 			
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(true);
 			Expect.Call(rollbackService.ModifyParts(null)).Return(new BindingList<IBusinessRuleResponse>());
 			Expect.Call(_fairnessReScheduler.Execute(new List<IPerson>(),dateOnly,matrixes )).IgnoreArguments().Return(true);
 			_mocks.ReplayAll();
 			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.True);
-			_mocks.VerifyAll();
+            Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.True);
+            _mocks.VerifyAll();
+			
 		}
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnTrueIfAllGoWell()
@@ -173,7 +178,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDayPro>();
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDayPro>();
 			var part1 = _mocks.DynamicMock<IScheduleDay>();
-			var part2 = _mocks.DynamicMock<IScheduleDay>();
+            var part2 = _mocks.DynamicMock<IScheduleDay>();
+            var scheduleDays = new List<IScheduleDay> { part1, part2 };
 
 			Expect.Call(matrix1.Person).Return(person1);
 			Expect.Call(matrix2.Person).Return(person2);
@@ -184,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
 			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
-			Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly)).Return(true);
+			Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly, scheduleDays)).Return(true);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(true);
 			Expect.Call(rollbackService.ModifyParts(null)).Return(new BindingList<IBusinessRuleResponse>());
 			_mocks.ReplayAll();

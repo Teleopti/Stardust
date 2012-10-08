@@ -1,10 +1,12 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
 	public interface IShiftCategoryFairnessPersonsSwappableChecker
 	{
-		bool PersonsAreSwappable(IPerson personOne, IPerson personTwo, DateOnly onDate);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
+        bool PersonsAreSwappable(IPerson personOne, IPerson personTwo, DateOnly onDate, List<IScheduleDay> scheduleDays);
 	}
 	public class ShiftCategoryFairnessPersonsSwappableChecker : IShiftCategoryFairnessPersonsSwappableChecker
 	{
@@ -21,8 +23,8 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 		    _contractTimeChecker = contractTimeChecker;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public bool PersonsAreSwappable(IPerson personOne, IPerson personTwo, DateOnly onDate)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public bool PersonsAreSwappable(IPerson personOne, IPerson personTwo, DateOnly onDate, List<IScheduleDay> scheduleDays)
 		{
 			//check Skills (each check in own class later)
 			var personPeriodOne = personOne.Period(onDate);
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 				return false;
             if (!_ruleSetChecker.Check(personPeriodOne, personPeriodTwo))
                 return false;
-            if (!_contractTimeChecker.Check(personPeriodOne, personPeriodTwo))
+            if (!_contractTimeChecker.Check(scheduleDays[0], scheduleDays[1]))
                 return false;
             
 
