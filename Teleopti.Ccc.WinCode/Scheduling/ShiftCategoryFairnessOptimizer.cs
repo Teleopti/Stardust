@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
@@ -15,6 +17,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService);
 		bool ExecutePersonal(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
 			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService);
+		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
 	public class ShiftCategoryFairnessOptimizer : IShiftCategoryFairnessOptimizer
@@ -23,6 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IShiftCategoryFairnessSwapper _shiftCategoryFairnessSwapper;
 		private readonly IShiftCategoryFairnessSwapFinder _shiftCategoryFairnessSwapFinder;
 		private readonly IGroupPersonsBuilder _groupPersonsBuilder;
+		private bool _cancelMe;
 
 		public ShiftCategoryFairnessOptimizer(IShiftCategoryFairnessAggregateManager shiftCategoryFairnessAggregateManager,
 			IShiftCategoryFairnessSwapper shiftCategoryFairnessSwapper, IShiftCategoryFairnessSwapFinder shiftCategoryFairnessSwapFinder,
@@ -32,6 +36,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_shiftCategoryFairnessSwapper = shiftCategoryFairnessSwapper;
 			_shiftCategoryFairnessSwapFinder = shiftCategoryFairnessSwapFinder;
 			_groupPersonsBuilder = groupPersonsBuilder;
+		}
+
+		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+
+		public void OnReportProgress(string message)
+		{
+			var handler = ReportProgress;
+			if (handler != null)
+			{
+				var args = new ResourceOptimizerProgressEventArgs(null, 0, 0, message);
+				handler(this, args);
+				if (args.Cancel)
+					_cancelMe = true;
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -70,6 +88,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			if (backgroundWorker.CancellationPending)
 				return;
+			if (_cancelMe)
+				return;
 			var blackList = new List<IShiftCategoryFairnessSwap>();
 			IList<IShiftCategoryFairnessCompareResult> fairnessResults;
 			if(runPersonal)
@@ -79,12 +99,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			else
 				fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
 					x => x.StandardDeviation).ToList();
-			
-			
+
 			// if zero it should be fair
 			var diff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
 			if (diff.Equals(0))
 				return;
+			var optFairnessOnDate = "xxOptimize fairness on " + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
+			OnReportProgress(optFairnessOnDate + " - value before = " + diff);
 
 			var swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
 			if (swapSuggestion == null)
@@ -114,12 +135,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					var newdiff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
 					if (newdiff >= diff) // not better
 					{
+						OnReportProgress(optFairnessOnDate + " - value after is not better, rolling back.");
 						blackList.Add(swapSuggestion);
 						// do a rollback (if scheduled we need to resourcecalculate again??)
 						rollbackService.Rollback();
 					}
 					else
 					{
+						diff = newdiff;
+						OnReportProgress(optFairnessOnDate + " - value after = " + diff);
 						// if we did swap start all over again and we do this day until no more suggestions
 						blackList = new List<IShiftCategoryFairnessSwap>();
 						rollbackService.ClearModificationCollection();

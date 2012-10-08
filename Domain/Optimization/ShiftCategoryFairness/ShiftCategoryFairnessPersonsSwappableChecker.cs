@@ -23,10 +23,9 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 		    _contractTimeChecker = contractTimeChecker;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public bool PersonsAreSwappable(IPerson personOne, IPerson personTwo, DateOnly onDate, List<IScheduleDay> scheduleDays)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), 
+		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		{
-			//check Skills (each check in own class later)
 			var personPeriodOne = personOne.Period(onDate);
 			var personPeriodTwo = personTwo.Period(onDate);
 			if (personPeriodOne == null || personPeriodTwo == null)
