@@ -3,7 +3,12 @@
 	$(function () {
 		Teleopti.MyTimeWeb.Ajax.Init({ baseUrl: '@Url.Content("~/MyTime/")' });
 		Teleopti.MyTimeWeb.Asm.ShowAsm();
-		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({ yourScheduleHasChanged: '@Resources.YourScheduleHasChanged' }, [Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener, Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener]);
+		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
+			{ yourScheduleHasChanged: '@Resources.YourScheduleHasChanged' },
+			function (notification) {
+				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
+				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
+			});
 	});
 </script>
 <div class="asm-outer-canvas ui-corner-all">

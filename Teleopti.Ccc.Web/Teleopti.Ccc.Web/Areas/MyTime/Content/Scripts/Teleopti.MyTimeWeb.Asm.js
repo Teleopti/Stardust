@@ -125,23 +125,21 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _listenForEvents(listeners) {
-		$.each(listeners, function (index, item) {
-			Teleopti.MyTimeWeb.Ajax.Ajax({
-				url: 'MessageBroker/FetchUserData',
-				dataType: "json",
-				type: 'GET',
-				success: function (data) {
-					Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
-						url: data.Url,
-						callback: item,
-						domainType: 'IScheduleChangedInDefaultScenario',
-						businessUnitId: data.BusinessUnitId,
-						datasource: data.DataSourceName,
-						referenceId: data.AgentId
-					});
-				}
-			});
-		});
+		Teleopti.MyTimeWeb.Ajax.Ajax({
+			url: 'MessageBroker/FetchUserData',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
+					url: data.Url,
+					callback: listeners,
+					domainType: 'IScheduleChangedInDefaultScenario',
+					businessUnitId: data.BusinessUnitId,
+					datasource: data.DataSourceName,
+					referenceId: data.AgentId
+				});
+			}
+		});		
 	}
 
 	function _validSchedulePeriod(notification) {
