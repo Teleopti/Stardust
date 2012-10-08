@@ -51,21 +51,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 
             Assert.That(result, Is.False);
         }
-
-        [Test]
-        public void SameRuleDifferentBagShouldReturnTrue()
-        {
-            var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("An activity"),
-                                                                              new TimePeriodWithSegment(0, 0, 1, 0, 30),
-                                                                              new TimePeriodWithSegment(12, 0, 13, 0, 30),
-                                                                              new ShiftCategory("Day")));
-            _personPeriod2.RuleSetBag = new RuleSetBag();
-            var result = _target.Check(_personPeriod1, _personPeriod2);
-            Assert.That(result, Is.False);
-            _personPeriod1.RuleSetBag.AddRuleSet(ruleSet);
-            _personPeriod2.RuleSetBag.AddRuleSet(ruleSet);
-            result = _target.Check(_personPeriod1, _personPeriod2);
-            Assert.That(result, Is.True);
-        }
     }
 }

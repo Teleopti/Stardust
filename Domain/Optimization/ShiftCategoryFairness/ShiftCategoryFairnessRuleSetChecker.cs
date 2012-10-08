@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool Check(IPersonPeriod period1, IPersonPeriod period2)
         {
-            return period1.RuleSetBag == period2.RuleSetBag ||
-                   period1.RuleSetBag.RuleSetCollection.Intersect(period2.RuleSetBag.RuleSetCollection).Any();
+            return period1.RuleSetBag == period2.RuleSetBag;
         }
     }
 }
