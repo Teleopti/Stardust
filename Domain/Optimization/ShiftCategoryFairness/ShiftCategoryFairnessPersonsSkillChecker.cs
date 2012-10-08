@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			var personSkills1 = personPeriodOne.PersonSkillCollection;
 			var personSkills2 = personPeriodTwo.PersonSkillCollection;
 
-			// ??? måste vi ta hänsyn till procenten
+			// ??? måste vi ta hänsyn till procenten, nej, Anders säger att vi skiter i det.
 			var skills1 = personSkills1.Select(personSkill => personSkill.Skill).ToList();
 			var skills2 = personSkills2.Select(personSkill => personSkill.Skill).ToList();
 			if (skills1.Any(skill => !skills2.Contains(skill)))
