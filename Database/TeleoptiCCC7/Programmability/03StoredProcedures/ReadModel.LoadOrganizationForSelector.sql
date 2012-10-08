@@ -1,17 +1,17 @@
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[LoadOrganizationForSelector]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [ReadModel].[LoadOrganizationForSelector]
 GO
-
 -- =============================================
 -- Author:		Ola Håkansson
 -- Create date: 2012-01-19
 -- Description:	Loads (fast) the people in the organization
 -- exec ReadModel.LoadOrganizationForSelector 'Organization', '2012-01-01', '3E369557-1B51-421E-8D1C-9EF300E4D921', 0, 1053
--- exec ReadModel.LoadOrganizationForSelector 'ContractSchedule', '2012-01-26', '3E369557-1B51-421E-8D1C-9EF300E4D921', 0, 1053
+-- exec ReadModel.LoadOrganizationForSelector 'Note', '2012-01-26', '2012-01-26' ,'4601AD46-D82C-4190-9540-9E2101028E3A', 0, 1053
 -- ======change log=======
 -- When			Who		Why
 -- 2012-03-13	DavidJ	Fix Azure compability => Remove unwanted SET commands, No SELECT INTO
 -- 2012-09-03	Ola		Use the #TempPersonPeriodWithEndDate everywhere for speed
+-- 2012-10-08	Ola		Bug in Notes when we did not fetch the teams and sites 
 -- =============================================
 CREATE PROCEDURE [ReadModel].[LoadOrganizationForSelector]
 @type nvarchar(200), -- Organization or for example Contract, ContractSchedule
@@ -69,11 +69,13 @@ BEGIN
 		[ContractSchedule]  [uniqueidentifier],
 		PartTimePercentage  [uniqueidentifier],
 		RuleSetBag [uniqueidentifier],
-		PeriodId [uniqueidentifier]
+		PeriodId [uniqueidentifier],
+		Note [nvarchar](1024)
 	)
 	
 	INSERT INTO #TempPersonPeriodWithEndDate 
-		SELECT Person.Id, FirstName, LastName, EmploymentNumber,Team, Parent, [Contract], [ContractSchedule], PartTimePercentage, RuleSetBag, pp.Id
+		SELECT Person.Id, FirstName, LastName, EmploymentNumber,Team, Parent, [Contract], [ContractSchedule], 
+		PartTimePercentage, RuleSetBag, pp.Id, pp.Note
 		FROM PersonPeriodWithEndDate pp
 		INNER JOIN Person ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 		and ISNULL(TerminalDate, '2100-01-01') >= @ondate
@@ -168,15 +170,12 @@ BEGIN
 	IF @type = 'Note'
 	BEGIN	
 		INSERT #otherResult
-		SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,p.Note,  
+		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit , Note,  
 		FirstName, LastName, EmploymentNumber  
-		FROM Person p
-		INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
-		AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+		FROM  #TempPersonPeriodWithEndDate pp
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-		AND p.IsDeleted = 0
-		AND p.Note <> ''
+		AND Note <> ''
 	END
 		
 	IF @type = 'ShiftBag'
