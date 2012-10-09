@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				return;
 			var optFairnessOnDate = Resources.FairnessOptimizationOn + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
 			OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationValueBefore + diff);
-
+			Thread.Sleep(300);
 			var swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
 			if (swapSuggestion == null)
 				return;

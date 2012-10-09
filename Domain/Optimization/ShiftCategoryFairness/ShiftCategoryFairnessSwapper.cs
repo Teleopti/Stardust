@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			var groupTwo = suggestion.Group2;
 			var catTwo = suggestion.ShiftCategoryFromGroup2;
         	var swappedInGroupTwo = new List<IPerson>();
+        	var swappedInGroupOne = new List<IPerson>();
 			var result = true;
 			if(groupOne.OriginalMembers.Count > groupTwo.OriginalMembers.Count)
 			{
@@ -56,36 +57,41 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 				groupTwo = suggestion.Group1;
 				catTwo = suggestion.ShiftCategoryFromGroup1;
 			}
+			
 			foreach (var groupOneMember in groupOne.OriginalMembers)
 			{
 				var day1 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, groupOneMember);
+				if(_shiftCategoryChecker.DayHasDayOff(day1)) continue;
 				if (!_shiftCategoryChecker.DayHasShiftCategory(day1, catOne))
 					return false;
-			    var swapSucces = false;
-				foreach (var originalMember in groupTwo.OriginalMembers)
+				var foundSwap = false;
+				foreach (var groupTwoMember in groupTwo.OriginalMembers)
 				{
-					if(swappedInGroupTwo.Contains(originalMember)) continue;
-                    var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, originalMember);
-                    var scheduleDays = new List<IScheduleDay>{day1, day2};
-                    if(!_swappableChecker.PersonsAreSwappable(groupOneMember, originalMember, dateOnly, scheduleDays)) 
+					if(swappedInGroupTwo.Contains(groupTwoMember)) continue;
+                    var day2 = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, groupTwoMember);
+					if (_shiftCategoryChecker.DayHasDayOff(day2)) continue;
+					var scheduleDays = new List<IScheduleDay>{day1, day2};
+                    if(!_swappableChecker.PersonsAreSwappable(groupOneMember, groupTwoMember, dateOnly, scheduleDays)) 
                         continue;
 					
 					if (_shiftCategoryChecker.DayHasShiftCategory(day2, catTwo))
 					{
 						var modifiedParts = _swapService.Swap(new List<IScheduleDay> { day1, day2 }, _dic);
 						var responses = rollbackService.ModifyParts(modifiedParts);
-						if (!responses.Any())
-						{
-							swapSucces = true;
-							swappedInGroupTwo.Add(originalMember);
-							break;
-						}
+						if (responses.Any())
+							return false;
+
+						swappedInGroupTwo.Add(groupTwoMember);
+						swappedInGroupOne.Add(groupOneMember);
+						foundSwap = true;
+						break;
 					}
-					
 				}
-				if (!swapSucces)
-					return false;
+				if (!foundSwap) return false;
 			}
+			// if all day offs for example
+			if (!swappedInGroupOne.Any()) return false;
+
 			if (swappedInGroupTwo.Count < groupTwo.OriginalMembers.Count)
 			{
 				var toBeDeleted = new List<IScheduleDay>();
@@ -94,11 +100,16 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 				{
 					if(!swappedInGroupTwo.Contains(person))
 					{
-						toBeDeleted.Add(getScheduleForPersonOnDay(dateOnly,matrixListForFairnessOptimization,person));
-						toBeRescheduled.Add(person);
+						var day = getScheduleForPersonOnDay(dateOnly, matrixListForFairnessOptimization, person);
+						if(!_shiftCategoryChecker.DayHasDayOff(day))
+						{
+							toBeDeleted.Add(day);
+							toBeRescheduled.Add(person);
+						}
 					}
 				}
-				_deleteSchedulePartService.Delete(toBeDeleted, new DeleteOption {MainShift = true}, rollbackService,
+				if(toBeDeleted.Count > 0)
+					_deleteSchedulePartService.Delete(toBeDeleted, new DeleteOption {MainShift = true}, rollbackService,
 				                                  backgroundWorker);
 				result = _shiftCategoryFairnessReScheduler.Execute(toBeRescheduled, dateOnly, matrixListForFairnessOptimization);
 			}
@@ -130,6 +141,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 	public interface IShiftCategoryChecker
 	{
 		bool DayHasShiftCategory(IScheduleDay day, IShiftCategory shiftCategory);
+		bool DayHasDayOff(IScheduleDay day);
 	}
 
 	public class ShiftCategoryChecker : IShiftCategoryChecker
@@ -140,6 +152,11 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			if (!day.SignificantPart().Equals(SchedulePartView.MainShift))
 				return false;
 			return day.PersonAssignmentCollection()[0].MainShift.ShiftCategory.Equals(shiftCategory);
+		}
+
+		public bool DayHasDayOff(IScheduleDay day)
+		{
+			return day.SignificantPart().Equals(SchedulePartView.DayOff);
 		}
 	}
 }
