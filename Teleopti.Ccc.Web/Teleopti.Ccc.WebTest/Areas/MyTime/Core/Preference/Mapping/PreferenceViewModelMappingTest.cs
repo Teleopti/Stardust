@@ -282,29 +282,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldFlagPreferenceIfNoScheduleDay()
-		{
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldFlagPreferenceIfNotScheduled()
-		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldFlagFeedbackIfInsidePeriodAndNotScheduled()
 		{
 			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);

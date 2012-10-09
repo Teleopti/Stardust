@@ -173,11 +173,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                           		return isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod;
 				                                           	}))
 				.ForMember(d => d.InPeriod, o => o.MapFrom(s => s.Period.Contains(s.Date)))
-				.ForMember(d => d.Preference, o => o.MapFrom(s =>
-				                                             	{
-				                                             		var isScheduled = s.ScheduleDay != null && s.ScheduleDay.IsScheduled();
-				                                             		return !isScheduled;
-				                                             	}))
 				.ForMember(d => d.Feedback, o => o.MapFrom(s =>
 				                                           	{
 				                                           		var isScheduled = s.ScheduleDay != null && s.ScheduleDay.IsScheduled();
