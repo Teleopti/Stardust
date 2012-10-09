@@ -11,14 +11,23 @@
 		Url = "Windows"
     }))
     { 
-
+	 	<script type="text/javascript">
+	 		$(function () {
+	 			$('#WindowsOkButton').click(function () {
+	 				window.webkitNotifications.requestPermission(function () {
+	 					$("#windows_partial_target form").submit();
+	 				});
+	 			});
+	 		});
+	 	</script>
+		 
         <div class="select-list floatleft mt10 mr10 ml10">
             @Html.HiddenFor(m => m.SignIn.DataSourceName)
             <ul id="WindowsDataSourceList">
                 @foreach (var item in Model.DataSources)
-                {
+					 {
                     <li data-mytime-value="@Html.AttributeEncode(item.Name)">@item.Name</li>
-                }
+					 }
             </ul>
         </div>
         <h1 class="floatleft mt10">
@@ -27,7 +36,7 @@
         @Html.ValidationMessageFor(m => m.SignIn.DataSourceName)<br />
         @Html.ValidationSummary(true)
 		<div class="mr10 ml10 floatright clearboth">
-			<input type="submit" value="@Html.AttributeEncode(Teleopti.Ccc.UserTexts.Resources.Ok)" class="button mt5 displayinline-block" id="WindowsOkButton" />
+			<input type="button" value="@Html.AttributeEncode(Teleopti.Ccc.UserTexts.Resources.Ok)" class="button mt5 displayinline-block" id="WindowsOkButton" />
 				
 		</div>
     }
