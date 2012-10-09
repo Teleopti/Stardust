@@ -66,6 +66,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public static ISignInPage CurrentSignInPage { get { return ScenarioContext.Current.Value<ISignInPage>(); } set { ScenarioContext.Current.Value(value); } }
 
 	    public static IMessageReplyPage CurrentMessageReplyPage {get { return Current as IMessageReplyPage; }}
-        //public static IMessagePage CurrentMessagePage {get { return Current as IMessagePage; }}
 	}
 }

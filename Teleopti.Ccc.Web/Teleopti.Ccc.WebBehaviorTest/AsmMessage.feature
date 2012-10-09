@@ -70,13 +70,14 @@ Scenario: Open unread message
 	And I have an unread message with
 	| Field		| Value				|
 	| Title		| New message		|
+	| Message	| Text in message	|	
 	And I am viewing week schedule
 	When I navigate to messages
 	And I click on the message at position '1' in the list
 	Then I should see the message details form with
 	| Field		| Value				|
 	| Title		| New message		|
-	| Message	| Hello				|	
+	| Message	| Text in message	|	
 
 Scenario: Confirm message is read
 	Given I have the role 'Full access to mytime'

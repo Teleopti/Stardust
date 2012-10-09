@@ -12,7 +12,7 @@ Teleopti.MyTimeWeb.CommunicationDetail = (function ($) {
             position = topPosition;
         if (position < topPosition)
             position = topPosition;
-        console.log('position: ' + position);
+//        console.log('position: ' + position);
         $('#Message-detail-section')
 			.css({
 			    'top': position

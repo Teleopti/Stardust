@@ -14,7 +14,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 		self.chosenMessageId = ko.observable();
 
 		self.CreateCommunicationList = function (dataList) {
-			console.log('create list before');
+			//console.log('create list before');
 			var communicationItems = new Array();
 			$.each(dataList, function (position, element) {
 				communicationItems.push(new communicationItemViewModel(element));
@@ -22,8 +22,8 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 
 			self.communicationList($.merge(self.communicationList(), communicationItems));
 
-			console.log(self.communicationList());
-			console.log('create list after');
+			//console.log(self.communicationList());
+			//console.log('create list after');
 		};
 
 		self.chosenMessageId.subscribe(function () {
@@ -33,7 +33,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 				}
 			});
 			self.chosenMessage(match);
-			console.log('Title of chosen: ' + self.chosenMessage().title());
+			//console.log('Title of chosen: ' + self.chosenMessage().title());
 		});
 
 

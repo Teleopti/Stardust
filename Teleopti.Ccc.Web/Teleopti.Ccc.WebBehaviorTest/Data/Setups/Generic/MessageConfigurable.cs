@@ -14,12 +14,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
         public string Message { get; set; }
         public bool IsOldestMessage { get; set; }
 
+		public MessageConfigurable()
+		{
+			Message = "Hello";
+		}
+
 	    public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 		    var message = new PushMessage()
 		                      {
 		                          Title = Title,
-		                          Message = "Hello",
+		                          Message = Message,
                                   AllowDialogueReply = false
 		                      };
 
