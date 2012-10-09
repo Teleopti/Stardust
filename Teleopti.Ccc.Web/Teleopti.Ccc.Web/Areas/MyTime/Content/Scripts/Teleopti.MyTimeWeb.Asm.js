@@ -15,7 +15,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var pixelPerHours = 50;
 	var timeLineMarkerWidth = 100;
 	var vm;
-	var texts;
+	var notifyOptions;
 
 	function asmViewModel(yesterday) {
 		var self = this;
@@ -158,13 +158,13 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		ShowAsm: function () {
 			_showAsm();
 		},
-		ListenForScheduleChanges: function (userTexts, eventListeners) {
-			texts = userTexts;
+		ListenForScheduleChanges: function (options, eventListeners) {
+			notifyOptions = options;
 			_listenForEvents(eventListeners);
 		},
 		NotifyWhenScheduleChangedListener: function (notification) {
 			if (_validSchedulePeriod(notification)) {
-				Teleopti.MyTimeWeb.Notifier.Notify({ text: texts.yourScheduleHasChanged });
+				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions);
 			}
 		},
 		ReloadAsmViewModelListener: function (notification) {
