@@ -93,7 +93,6 @@
     <Compile Include="CubeSourceFormat.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
