@@ -1,5 +1,6 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 @model Teleopti.Ccc.Web.Areas.MyTime.Models.Preference.PreferenceViewModel
 @{
 	Layout = null;
@@ -55,12 +56,12 @@
 		
 	<div id="Preference-body-inner" class="body-calendarview-inner clearfix">
 		<ul class="weekdays">
-			@foreach (var weekDayName in Model.WeekDayHeaders)
+			@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
 			{
 				<li>@weekDayName.Title</li>
 			}
 		</ul>
-		@foreach (var week in Model.Weeks)
+		@foreach (WeekViewModel week in Model.Weeks)
 		{
 			<ul class="calendarview-week" onselectstart="return false;">
 				<li>
@@ -68,11 +69,11 @@
 
 					</div>
 				</li>
-				@foreach (var day in week.Days)
+				@foreach (DayViewModel day in week.Days)
 				{
-					var personAssignment = day.PersonAssignment;
-					var dayOff = day.DayOff;
-					var absence = day.Absence;
+					PersonAssignmentDayViewModel personAssignment = day.PersonAssignment;
+					DayOffDayViewModel dayOff = day.DayOff;
+					AbsenceDayViewModel absence = day.Absence;
 					<li class="relative @(day.InPeriod ? "inperiod" : "") @(day.Feedback ? "feedback" : "") @(day.Editable ? "editable" : "non-editable") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)">
 						<div>
 							<div class="day-header">
@@ -87,10 +88,9 @@
 									<!-- ko if: AjaxError().length > 0 -->
 									<h2 class="error" data-bind="text: AjaxError"></h2>
 									<!-- /ko -->
-								}
-								@if (day.InPeriod)
-								{
-									var fulfilled = "";
+
+
+									string fulfilled = "";
 									if (day.Fulfilled.HasValue)
 									{
 										fulfilled = day.Fulfilled.Value ? "preference-fulfilled" : "preference-not-fulfilled";
@@ -120,6 +120,10 @@
 											</div>
 										</span>
 									</div>
+
+									<!-- ko if: DayOff() != '' -->
+									<div class="dayoff" data-bind="text: DayOff"></div>
+									<!-- /ko -->
 								}
 								@if (day.Feedback)
 								{
@@ -140,12 +144,6 @@
 										<span class="displayblock fullwidth" data-mytime-contract-time="@personAssignment.ContractTimeMinutes">@personAssignment.ContractTime</span>
 									</div>
 								}
-								@if (dayOff != null)
-								{
-									<div class="dayoff">
-										@dayOff.DayOff
-									</div>
-								}
 								@if (absence != null)
 								{
 									<div class="absence">
@@ -160,4 +158,3 @@
 		}
 	</div>
 </div>
-

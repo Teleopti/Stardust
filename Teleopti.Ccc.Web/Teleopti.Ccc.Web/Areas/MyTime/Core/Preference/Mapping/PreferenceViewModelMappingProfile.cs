@@ -197,28 +197,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 
 			CreateMap<DayMappingData, DayOffDayViewModel>()
-				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.ScheduleDay.PersonDayOffCollection().Single().DayOff.Description.Name))
+				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.ScheduleDay.PersonDayOffCollection().SingleOrDefault()))
+				;
+			CreateMap<IPersonDayOff, DayOffDayViewModel>()
+				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.DayOff.Description.Name))
 				;
 
 			CreateMap<DayMappingData, AbsenceDayViewModel>()
 				.ForMember(d => d.Absence, o => o.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.Description.Name))
 				;
-
-			//CreateMap<DayMappingData, PreferenceDayViewModel>()
-			//    .ForMember(d => d.Preference, o => o.MapFrom(s =>
-			//                                                    {
-			//                                                        if (s.DayOffTemplate != null)
-			//                                                            return s.DayOffTemplate.Description.Name;
-			//                                                        if (s.Absence != null)
-			//                                                            return s.Absence.Description.Name;
-			//                                                        if (s.ShiftCategory != null)
-			//                                                            return s.ShiftCategory.Description.Name;
-			//                                                        if (_extendedPreferencePredicate.Invoke().IsExtended(s.PreferenceDay))
-			//                                                            return Resources.Extended;
-			//                                                        return null;
-			//                                                    }))
-			//    .ForMember(d => d.Extended, o => o.MapFrom(s => _extendedPreferencePredicate.Invoke().IsExtended(s.PreferenceDay)))
-			//    ;
 
 			CreateMap<DayMappingData, HeaderViewModel>()
 				.ForMember(d => d.DayNumber, o => o.MapFrom(s => s.Date.Day))

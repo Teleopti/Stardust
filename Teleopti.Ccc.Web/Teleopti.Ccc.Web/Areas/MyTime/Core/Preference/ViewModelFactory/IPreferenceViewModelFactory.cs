@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		PreferenceViewModel CreateViewModel(DateOnly date);
 		PreferenceDayFeedbackViewModel CreateDayFeedbackViewModel(DateOnly date);
 		PreferenceDayViewModel CreateDayViewModel(DateOnly today);
-		IEnumerable<PreferenceDayViewModel> CreatePreferencesAndSchedulesViewModel(DateOnly @from, DateOnly to);
+		IEnumerable<PreferenceAndScheduleDayViewModel> CreatePreferencesAndSchedulesViewModel(DateOnly @from, DateOnly to);
 	}
 }

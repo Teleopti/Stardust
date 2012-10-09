@@ -64,11 +64,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public int ContractTimeMinutes { get; set; }
 	}
 
-	public class DayOffDayViewModel
-	{
-		public string DayOff { get; set; }
-	}
-
 	public class AbsenceDayViewModel
 	{
 		public string Absence { get; set; }

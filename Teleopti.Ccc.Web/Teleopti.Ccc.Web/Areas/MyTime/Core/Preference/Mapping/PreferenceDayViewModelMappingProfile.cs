@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			base.Configure();
 
 			CreateMap<IPreferenceDay, PreferenceDayViewModel>()
-				.ForMember(d => d.Date, o => o.MapFrom(s => s.RestrictionDate.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.Preference, o => o.MapFrom(s =>
 				                                             	{
 				                                             		if (s.Restriction.DayOffTemplate != null)

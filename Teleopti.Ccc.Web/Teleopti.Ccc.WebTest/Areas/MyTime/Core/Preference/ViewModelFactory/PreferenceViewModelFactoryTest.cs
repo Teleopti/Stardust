@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		public void ShoudCreateViewModelByTwoStepMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new PreferenceViewModelFactory(mapper, null);
+			var target = new PreferenceViewModelFactory(mapper, null, null);
 			var domainData = new PreferenceDomainData();
 			var viewModel = new PreferenceViewModel();
 
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
-			var target = new PreferenceViewModelFactory(mapper, preferenceProvider);
+			var target = new PreferenceViewModelFactory(mapper, preferenceProvider, null);
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
 			var viewModel = new PreferenceDayViewModel();
 
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		public void ShouldThrow404IfPreferenceDoesNotExist()
 		{
 			var preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
-			var target = new PreferenceViewModelFactory(null, preferenceProvider);
+			var target = new PreferenceViewModelFactory(null, preferenceProvider, null);
 
 			preferenceProvider.Stub(x => x.GetPreferencesForDate(DateOnly.Today)).Return(null);
 
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		public void ShouldCreateFeedbackDayViewModelByMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new PreferenceViewModelFactory(mapper, null);
+			var target = new PreferenceViewModelFactory(mapper, null, null);
 			var viewModel = new PreferenceDayFeedbackViewModel();
 
 			mapper.Stub(x => x.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today)).Return(viewModel);
@@ -80,14 +81,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		public void CreatePreferencesAndSchedulesViewModel()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
-			var target = new PreferenceViewModelFactory(mapper, preferenceProvider);
-			var preferenceDays = new IPreferenceDay[] {};
-			var preferenceDayViewModels = new PreferenceDayViewModel[] {};
+			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
+			var target = new PreferenceViewModelFactory(mapper, null, scheduleProvider);
+			var scheduleDays = new IScheduleDay[] {};
+			var preferenceDayViewModels = new PreferenceAndScheduleDayViewModel[] {};
 
-			preferenceProvider.Stub(x => x.GetPreferencesForPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1))))
-				.Return(preferenceDays);
-			mapper.Stub(x => x.Map<IEnumerable<IPreferenceDay>, IEnumerable<PreferenceDayViewModel>>(preferenceDays))
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1))))
+				.Return(scheduleDays);
+			mapper.Stub(x => x.Map<IEnumerable<IScheduleDay>, IEnumerable<PreferenceAndScheduleDayViewModel>>(scheduleDays))
 				.Return(preferenceDayViewModels);
 			var result = target.CreatePreferencesAndSchedulesViewModel(DateOnly.Today, DateOnly.Today.AddDays(1));
 

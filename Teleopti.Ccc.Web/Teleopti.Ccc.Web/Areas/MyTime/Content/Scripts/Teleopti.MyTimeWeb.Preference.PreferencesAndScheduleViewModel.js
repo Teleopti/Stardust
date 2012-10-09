@@ -22,7 +22,10 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 				
 				$.each(data, function (index, element) {
 					var dayViewModel = dayViewModels[element.Date];
-					dayViewModel.ReadPreference(element);
+					if (element.Preference)
+						dayViewModel.ReadPreference(element.Preference);
+					if (element.DayOff)
+						dayViewModel.ReadDayOff(element.DayOff);
 				});
 			}
 		});
