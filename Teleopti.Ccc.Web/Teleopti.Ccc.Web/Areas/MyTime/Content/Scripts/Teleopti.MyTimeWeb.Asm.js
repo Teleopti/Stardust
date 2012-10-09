@@ -104,7 +104,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 
 		self.isNextday = ko.computed(function () {
-			return layer.StartMinutesSinceAsmZero > 2 * 24 * 60;
+			return (layer.StartMinutesSinceAsmZero > 2 * 24 * 60) ?  "+1" : "  " ;
 		});
 	}
 
@@ -139,7 +139,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					referenceId: data.AgentId
 				});
 			}
-		});		
+		});
 	}
 
 	function _validSchedulePeriod(notification) {
