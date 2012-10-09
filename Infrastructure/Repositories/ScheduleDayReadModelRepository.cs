@@ -100,6 +100,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	public class ScheduleDayReadModel
 	{
+		private string _label;
+
 		public ScheduleDayReadModel()
 		{
 			StartDateTime = new DateTime(1900,1,1);
@@ -111,7 +113,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 		public bool Workday { get; set; }
-		public string Label { get; set; }
+		public string Label
+		{
+			get
+			{
+				if (_label == null)
+					return "";
+				return _label;
+			}
+			set { _label = value; }
+		}
+
 		public int ColorCode { get; set; }
 		public Color DisplayColor { get { return Color.FromArgb(ColorCode); } }
 		public long WorkTimeTicks { get; set; }
