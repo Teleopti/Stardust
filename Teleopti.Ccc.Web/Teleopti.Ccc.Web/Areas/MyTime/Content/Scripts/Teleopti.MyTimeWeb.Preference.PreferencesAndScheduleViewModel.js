@@ -26,6 +26,8 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 						dayViewModel.ReadPreference(element.Preference);
 					if (element.DayOff)
 						dayViewModel.ReadDayOff(element.DayOff);
+					if (element.Absence)
+						dayViewModel.ReadAbsence(element.Absence);
 				});
 			}
 		});

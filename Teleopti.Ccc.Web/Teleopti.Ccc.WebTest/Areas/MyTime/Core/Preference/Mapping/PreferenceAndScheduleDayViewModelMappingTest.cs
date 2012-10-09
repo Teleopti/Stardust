@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using AutoMapper;
 using NUnit.Framework;
@@ -81,6 +80,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			result.DayOff.Should().Not.Be.Null();
 			result.DayOff.DayOff.Should().Be("DO");
+		}
+
+		[Test]
+		public void ShouldMapAbsenceViewModel()
+		{
+			var stubs = new StubFactory();
+			var absence = stubs.PersonAbsenceStub("Illness");
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.FullDayAbsence, absence);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.Absence.Should().Not.Be.Null();
+			result.Absence.Absence.Should().Be("Illness");
 		}
 
 

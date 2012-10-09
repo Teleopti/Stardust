@@ -46,6 +46,17 @@ $(document).ready(function () {
 
 		equal(viewModelDay.DayOff(), "Day off");
 	});
+
+	test("should read absence", function () {
+
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+
+		viewModelDay.ReadAbsence({
+			Absence: "Illness"
+		});
+
+		equal(viewModelDay.Absence(), "Illness");
+	});
 	
 	test("should load preference", function () {
 

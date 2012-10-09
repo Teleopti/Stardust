@@ -84,6 +84,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.Color = ko.observable();
 	this.AjaxError = ko.observable('');
 	this.DayOff = ko.observable('');
+	this.Absence = ko.observable('');
 
 	this.ReadElement = function (element) {
 		var item = $(element);
@@ -113,6 +114,10 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 	this.ReadDayOff = function(data) {
 		self.DayOff(data.DayOff);
+	};
+
+	this.ReadAbsence = function (data) {
+		self.Absence(data.Absence);
 	};
 	
 	this.LoadPreference = function (complete) {

@@ -124,6 +124,10 @@
 									<!-- ko if: DayOff() != '' -->
 									<div class="dayoff" data-bind="text: DayOff"></div>
 									<!-- /ko -->
+
+									<!-- ko if: Absence() != '' -->
+									<div class="absence" data-bind="text: Absence"></div>
+									<!-- /ko -->
 								}
 								@if (day.Feedback)
 								{
@@ -142,12 +146,6 @@
 										<span class="displayblock fullwidth">@personAssignment.ShiftCategory</span>
 										<strong class="displayblock fullwidth">@personAssignment.TimeSpan</strong>
 										<span class="displayblock fullwidth" data-mytime-contract-time="@personAssignment.ContractTimeMinutes">@personAssignment.ContractTime</span>
-									</div>
-								}
-								@if (absence != null)
-								{
-									<div class="absence">
-										@absence.Absence
 									</div>
 								}
 							</div>
