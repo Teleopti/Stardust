@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var diff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
 			if (diff.Equals(0))
 				return;
-			var optFairnessOnDate = "xxOptimize fairness on " + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
+			var optFairnessOnDate = "Optimizing fairness on " + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
 			OnReportProgress(optFairnessOnDate + " - value before = " + diff);
 
 			var swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
