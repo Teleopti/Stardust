@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
                                       //AllowDialogueReply = true,
                                       //TranslateMessage = true,
                                       Sender = _person,
-                                      
                                   };
             _pushMessageDialogue = new PushMessageDialogue(_pushMessage, _person);
+            _pushMessageDialogue.SetId(Guid.NewGuid());
 			SetDate(_pushMessageDialogue, DateTime.UtcNow, "_updatedOn");
 
             _domainMessages = new[] {_pushMessageDialogue};
@@ -118,6 +118,12 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
         {
         	var localDateTimeString = _cccTimeZone.ConvertTimeFromUtc(_pushMessageDialogue.UpdatedOn.Value).ToShortDateTimeString();
 			_result.First().Date.Should().Be.EqualTo(localDateTimeString);
+        }
+
+        [Test]
+        public void ShouldMapMessageId()
+        {
+            _result.First().MessageId.Should().Be.EqualTo(_pushMessageDialogue.Id.ToString());
         }
 
         public static void SetDate(IAggregateRoot root, DateTime dateTime, string property)

@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
             base.Configure();
 
             CreateMap<IPushMessageDialogue, MessageViewModel>()
+                .ForMember(d => d.MessageId, o => o.MapFrom(m => m.Id.ToString()))
                 .ForMember(d => d.Title, o => o.MapFrom(m => m.PushMessage.GetTitle(new NoFormatting())))
                 .ForMember(d => d.Message, o => o.MapFrom(m =>
                                                           	{

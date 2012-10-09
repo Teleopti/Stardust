@@ -9,16 +9,18 @@
 <div class="displaynone" id="Communication-detail-default-end-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
 
 <div id="Communication-body-inner" class="communication-body-inner relative">
-	<div id="Message-detail-section" class="displaynone request-edit-section ui-corner-all">
+	<div id="Message-detail-section" class="displaynone request-edit-section ui-corner-all" data-bind="with : chosenMessage">
 		<input type="hidden" id="Request-detail-entityid"/>
 		<div class="edit-module-element">
 			<label class="displayblock" for="Request-detail-subject-input">@Resources.Title</label>
-			<label id="Message-detail-title"></label>
+			<label id="Message-detail-title" data-bind= "text : title"></label>
 		</div>
 		<div class="edit-module-element">
 			<label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
-			<label id="Message-detail-message"></label>
+			<label id="Message-detail-message" data-bind= "text : message"></label>
 		</div>
+        <input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
+		
 		@*
 		<div class="floatleft">
 			<span class="edit-module-element floatleft">
@@ -64,19 +66,21 @@
 		<ol id="Communications-list" data-bind="foreach: communicationList">
 			<li class="ui-corner-all communication-item relative">
 				<div class="communication-subject">
-					<h3 class="communication-data-subject" data-bind="text : Title">
+					<h3 class="communication-data-subject" data-bind="text : title">
 					</h3>
 				</div>
 				<div class="communication-details">
 					<div>
+                        <span id="mySpan" class="invisible" data-bind="text : messageId"></span>
 						<span class="communication-caption">XXSender: </span>
-						<span class="communication-data-sender" data-bind="text : Sender"></span>
+						<span class="communication-data-type" data-bind="text : sender"></span>
 						<span class="communication-caption">@Resources.UpdatedOn: </span>
-						<span class="communication-data-updatedon" data-bind="text : Date"></span>
+						<span class="communication-data-updatedon" data-bind="text : date"></span>
 					</div>
 				</div>
-				<div class="communication-text communication-data-text" data-bind="text : Message">
+				<div class="communication-text communication-data-text" data-bind="text : message">
 				</div>
+                <div class="communication-connector"></div>
 			</li>
 @*			<li class="ui-corner-all communication-item template relative">
 				<button class="communication-delete-button icon" style="display: none;" disabled="disabled" title="@Resources.Delete" />
