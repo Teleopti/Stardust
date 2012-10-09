@@ -404,7 +404,11 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (_loadedCounter % 25 == 0 || _loadedCounter >= _model.DisplayRows.Count - 1) Invoke(new GridDelegate(InvalidateGrid));
 
 			if(_resetEvents != null)
-			_resetEvents[displayRow.ThreadIndex].Set();
+			{
+				if(_resetEvents.Length > displayRow.ThreadIndex)
+					_resetEvents[displayRow.ThreadIndex].Set();
+			}
+			
 		}
 
 		private void InvalidateGrid()
