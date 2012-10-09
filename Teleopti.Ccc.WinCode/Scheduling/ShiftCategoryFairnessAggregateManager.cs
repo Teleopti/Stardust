@@ -99,8 +99,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public IList<IShiftCategoryFairnessCompareResult> GetForGroups(IList<IPerson> persons, IGroupPageLight groupPage, DateOnly dateOnly, IList<DateOnly> selectedDates )
 		{
-			//TODO?? shall we check here on the fairnessHolder system??
-
 			var ret = new List<IShiftCategoryFairnessCompareResult>();
 			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(selectedDates, groupPage, dateOnly, persons);
 
