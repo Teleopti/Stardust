@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using SharpTestsEx;
+﻿using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;

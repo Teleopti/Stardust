@@ -11,53 +11,19 @@
 <div id="Communication-body-inner" class="communication-body-inner relative">
 	<div id="Message-detail-section" class="displaynone request-edit-section ui-corner-all" data-bind="with : chosenMessage">
 		<input type="hidden" id="Request-detail-entityid"/>
-		<div class="edit-module-element">
-			<label class="displayblock" for="Request-detail-subject-input">@Resources.Title</label>
-			<label id="Message-detail-title" data-bind= "text : title"></label>
+		<div class="edit-module-element communication-detail-sender displayinline-block">
+			<label data-bind="text : sender"></label>
+		</div>
+		<div class="edit-module-element communication-detail-sent displayinline-block">
+			<label data-bind="text : date"></label>
+		</div>
+		<div class="edit-module-element communication-detail-title">
+			<label id="Message-detail-title" data-bind="text : title"></label>
 		</div>
 		<div class="edit-module-element">
-			<label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
-			<label id="Message-detail-message" data-bind= "text : message"></label>
+			<label id="Message-detail-message" data-bind="text : message"></label>
 		</div>
         <input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
-		
-		@*
-		<div class="floatleft">
-			<span class="edit-module-element floatleft">
-				<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
-			</span>
-			<span id="Request-detail-fromTime" class="edit-module-element floatleft">
-				<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
-				<select id="Request-detail-fromTime-input" class="time-input combobox">
-					@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
-					{
-						<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-					}
-				</select>
-			</span>
-		</div>
-		<div>
-			<span class="edit-module-element clearleftfloat floatleft">
-				<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
-			</span>
-			<span id="Request-detail-toTime" class="edit-module-element floatleft">
-				<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
-				<select id="Request-detail-toTime-input" class="time-input combobox">
-					@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
-					{
-						<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-					}
-				</select>
-			</span>
-		</div>
-		<span class="edit-module-element clearleftfloat floatleft">
-			<input type="checkbox" id="Fullday-check" data-bind="checked:IsFullDay"/>
-		</span>
-		<label class="floatleft" for="Fullday-check">
-			@Resources.FullDay
-		</label>
-		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
-		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat"></div>*@
 	</div>
 	<div class="communication-list">
 		<div id="friendly-message" class="friendly-message ui-corner-all floatleft" style="display: none;">
@@ -71,10 +37,10 @@
 				</div>
 				<div class="communication-details">
 					<div>
-                        <span id="mySpan" class="invisible" data-bind="text : messageId"></span>
+                        <span id="mySpan" class="displaynone" data-bind="text : messageId"></span>
 						<span class="communication-caption">XXSender: </span>
 						<span class="communication-data-type" data-bind="text : sender"></span>
-						<span class="communication-caption">@Resources.UpdatedOn: </span>
+						<span class="communication-caption">xxSent: </span>
 						<span class="communication-data-updatedon" data-bind="text : date"></span>
 					</div>
 				</div>

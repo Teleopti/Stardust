@@ -113,3 +113,20 @@
 {
 	text-align: right;
 }
+
+.communication-detail-title
+{
+	font-weight: bold;
+	font-size: 115%;
+}
+.communication-detail-sent 
+{
+	float: right;
+	font-size: 85%;
+	font-style: italic;
+}
+.communication-detail-sender 
+{
+	font-size: 85%;
+	font-style: italic;
+}
