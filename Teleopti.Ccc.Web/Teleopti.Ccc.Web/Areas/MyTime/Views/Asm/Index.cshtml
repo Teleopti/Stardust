@@ -3,8 +3,14 @@
 	$(function () {
 		Teleopti.MyTimeWeb.Ajax.Init({ baseUrl: '@Url.Content("~/MyTime/")' });
 		Teleopti.MyTimeWeb.Asm.ShowAsm();
-		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
-			{ notifyText: '@Resources.YourScheduleHasChanged', timeout: 4000, baseUrl: '@Url.Content("~/")' },
+		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({
+			notifyText: '@Resources.YourScheduleHasChanged',
+			timeout: 4000,
+			baseUrl: '@Url.Content("~/")', 
+			webNotification: function () {
+				return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
+			}
+			},
 			function (notification) {
 				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
