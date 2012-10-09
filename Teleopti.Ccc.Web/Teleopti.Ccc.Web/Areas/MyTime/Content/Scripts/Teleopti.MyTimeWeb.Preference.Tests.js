@@ -11,12 +11,10 @@ $(document).ready(function () {
 
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url != "Preference/Preference")
+				if (options.url != "Preference/PreferencesAndSchedules")
 					return;
-				if (options.data.Date == '2012-06-11')
-					equal(true, true);
-				if (options.data.Date == '2012-06-12')
-					equal(true, true);
+				equal(options.data.From, '2012-06-11');
+				equal(options.data.To, '2012-06-12');
 			}
 		};
 
@@ -26,31 +24,6 @@ $(document).ready(function () {
 
 		target.InitViewModels();
 	});
-
-	test("should only load preference for days with class preference", function () {
-
-		$("#qunit-fixture")
-			.append("<li data-mytime-date='2012-06-11' class='inperiod' ><div><div class='preference'></div></div><li>")
-			.append("<li data-mytime-date='2012-06-12' class='inperiod' />");
-
-		var ajax = {
-			Ajax: function (options) {
-				if (options.url != "Preference/Preference")
-					return;
-				if (options.data.Date == '2012-06-11')
-					return equal(true, true, "preference loaded");
-				equal(false, true, "preference loaded for " + options.data.Date);
-			}
-		};
-
-		expect(1);
-
-		var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
-
-		target.InitViewModels();
-
-	});
-
 
 	test("should load day feedback and bind", function () {
 
@@ -136,6 +109,8 @@ $(document).ready(function () {
 
 		var ajax = {
 			Ajax: function (options) {
+				if (options.url != "PreferenceFeedback/PeriodFeedback")
+					return;
 				equal(options.url, "PreferenceFeedback/PeriodFeedback", "period feedback ajax url");
 				equal(options.data.Date, "2012-06-13", "period feedback date");
 			}
@@ -181,5 +156,5 @@ $(document).ready(function () {
 
 		equal($('#Preference-period-feedback-view').text(), "6:00", "day sum after reinit same instance");
 	});
-	
+
 });
