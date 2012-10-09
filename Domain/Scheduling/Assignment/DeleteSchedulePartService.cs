@@ -38,8 +38,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
  
             foreach (IScheduleDay part in list)
             {
-                
-
                 var clonePart = preparePart(options, part);
                 IList<IScheduleDay> cloneList = new List<IScheduleDay> {clonePart};
 
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         }
 
         
-
         public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService)
         {
             var deleteOption = new DeleteOption {Default = true};

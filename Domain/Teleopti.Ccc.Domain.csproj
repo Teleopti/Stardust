@@ -238,6 +238,7 @@
     <Compile Include="Optimization\GroupIntradayOptimizer.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerExecuter.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerService.cs" />
+    <Compile Include="Optimization\GroupListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizationExecuter.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizer.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizerService.cs" />
@@ -247,11 +248,14 @@
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroup.cs" />
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameMatrix.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimization.cs" />
+    <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateService.cs" />
+    <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Optimization\IsSignificantPartFullDayAbsenceOrDayOffSpecification.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
     <Compile Include="Optimization\PersonalSettings.cs" />
+    <Compile Include="Optimization\RemoveGroupShiftCategoryOnBestDateService.cs" />
     <Compile Include="Optimization\RestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\IRestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\ExtendReduceDaysoffOptimizer.cs" />

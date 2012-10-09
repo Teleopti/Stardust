@@ -234,6 +234,7 @@
     <Compile Include="Optimization\GroupDayOffOptimizerTest.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerServiceTest.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerTest.cs" />
+    <Compile Include="Optimization\GroupListShiftCategoryBackToLegalStateServiceTest.cs" />
     <Compile Include="Optimization\GroupMatrixContainerCreatorTest.cs" />
     <Compile Include="Optimization\GroupMatrixHelperTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizationExecuterTest.cs" />
@@ -245,12 +246,15 @@
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroupTest.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationTest.cs" />
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameMatrixTest.cs" />
+    <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceBuilderTest.cs" />
+    <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderTest.cs" />
     <Compile Include="Optimization\OptimizationPreferencesTest.cs" />
     <Compile Include="Optimization\PersonListExtractorFromSchedulePartsTest.cs" />
+    <Compile Include="Optimization\RemoveGroupShiftCategoryOnBestDateServiceTest.cs" />
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoaderTest.cs" />
     <Compile Include="Optimization\ScheduleResultDataExtractorProviderTest.cs" />
     <Compile Include="Optimization\ScheduleDayEquatorTest.cs" />
