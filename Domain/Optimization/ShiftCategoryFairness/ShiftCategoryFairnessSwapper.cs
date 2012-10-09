@@ -154,6 +154,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			return day.PersonAssignmentCollection()[0].MainShift.ShiftCategory.Equals(shiftCategory);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool DayHasDayOff(IScheduleDay day)
 		{
 			return day.SignificantPart().Equals(SchedulePartView.DayOff);

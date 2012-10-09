@@ -122,8 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDayPro>();
 			var part1 = _mocks.DynamicMock<IScheduleDay>();
 			var part2 = _mocks.DynamicMock<IScheduleDay>();
-			var scheduleDays = new List<IScheduleDay> { part1, part2 };
-
+			
 			Expect.Call(matrix1.Person).Return(person1);
 			Expect.Call(matrix2.Person).Return(person2);
 			Expect.Call(matrix1.GetScheduleDayByKey(dateOnly)).Return(scheduleDay1);
