@@ -3425,7 +3425,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     _scheduleView.Presenter.UpdateFromEditor();
                     updateShiftEditor();
-
+                    var currentCell = _scheduleView.ViewGrid.CurrentCell;
+                    var selectedCols = _scheduleView.ViewGrid.Model.Selections.Ranges.ActiveRange.Width;
+                    if (!(_scheduleView is RestrictionSummaryView) && currentCell.RowIndex == 0 && selectedCols == 1 && currentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
+                    {
+                        _scheduleView.AddWholeWeekAsSelected(currentCell.RowIndex, currentCell.ColIndex);
+                    }
                     var selectedSchedules = _scheduleView.SelectedSchedules();
                     updateSelectionInfo(selectedSchedules);
                     enableSwapButtons(selectedSchedules);
