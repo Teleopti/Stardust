@@ -2,11 +2,11 @@
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 {
 	public interface IPushMessageProvider
 	{
-	    int UnreadMessageCount { get; }
-        IList<IPushMessageDialogue> GetMessages(Paging paging);
+		int UnreadMessageCount { get; }
+		IList<IPushMessageDialogue> GetMessages(Paging paging);
 	}
 }

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.WebTest.Filters

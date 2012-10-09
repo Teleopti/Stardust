@@ -25,5 +25,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Message-detail-message")]
 		public Label Message { get; set; }
+
+		[FindBy(Id = "Message-detail-ok-button")]
+		public Button OkButton{ get; set; }
 	}
 }

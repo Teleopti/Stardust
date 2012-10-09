@@ -5,11 +5,13 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Portal
+namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
 	[TestFixture]
 	public class PortalViewModelFactoryTest

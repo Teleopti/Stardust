@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;

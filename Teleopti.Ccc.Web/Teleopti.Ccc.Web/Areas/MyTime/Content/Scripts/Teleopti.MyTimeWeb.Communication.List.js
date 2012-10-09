@@ -35,8 +35,6 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 			self.chosenMessage(match);
 			//console.log('Title of chosen: ' + self.chosenMessage().title());
 		});
-
-
 	}
 
 	function communicationItemViewModel(item) {
@@ -47,13 +45,30 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 		self.sender = ko.observable(item.Sender);
 		self.messageId = ko.observable(item.MessageId);
 		//        self.IsRead = ko.observable();
+		self.confirmReadMessage = function (data, event) {
+			//alert("you clicked " + event.target.id);
+			//alert("you clicked " + self.messageId());
+			_replyToMessage(self.messageId());
+		};
 	}
 
-	function communicationDetailGrejjen() {
-		var self = this;
-
-		self.title = ko.computed(function () {
-			return vm.chosenMessage.Title;
+	function _replyToMessage(messageId) {
+		Teleopti.MyTimeWeb.Ajax.Ajax({
+			url: "Message/Reply",
+			dataType: "json",
+			type: 'POST',
+			contentType: 'application/json; charset=utf-8',
+			//beforeSend: _loading,
+			data: JSON.stringify({
+				MessageId: messageId
+			}),
+			success: function (data, textStatus, jqXHR) {
+				// Ta bort meddelandet mha messageId från vår vm
+				alert('jajajaja! : ' + data.MessageId);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				alert('felfelfel!');
+			}
 		});
 	}
 

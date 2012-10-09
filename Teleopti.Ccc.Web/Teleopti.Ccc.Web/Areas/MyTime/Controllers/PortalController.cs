@@ -2,6 +2,7 @@
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
