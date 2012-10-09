@@ -91,21 +91,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see preference")]
 		public void ThenIShouldSeePreference(Table table)
 		{
-
 			var fields = table.CreateInstance<PreferenceConfigurable>();
+			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(fields.Date);
+			var mustHave = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference-must-have");
 
-			//I should see the correct date on the cell header: the right day
-			DateTime date = fields.Date;
-			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
-			//var mustHave = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference-must-have");
-			var mustHave = cell.Div(Find.ByClass("preference-must-have", false));
+			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(">" + fields.Date.Day.ToString(CultureInfo.CurrentCulture) + "<"));
 
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(">" + date.Day.ToString(CultureInfo.CurrentCulture) +"<"));
-
-			//I should see on heart icon on the current calendar cell, accorning the the must have settings
-			//todo: add an icon and test code here
-			EventualAssert.That(() => mustHave.Exists, Is.EqualTo(fields.MustHave));
-
+			if (fields.MustHave)
+				EventualAssert.That(() => mustHave.ClassName, Is.StringContaining("icon"));
+			else
+				EventualAssert.That(() => mustHave.ClassName, Is.Not.StringContaining("icon"));
 		}
 
 		[Then(@"I should see I have (\d) available must haves")]
