@@ -54,6 +54,7 @@
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+			this.checkBoxFairness = new System.Windows.Forms.CheckBox();
 			this.checkBoxShiftsWithinDay = new System.Windows.Forms.CheckBox();
 			this.checkBoxDaysOffFromFlexibleWorkTime = new System.Windows.Forms.CheckBox();
 			this.checkBoxShiftsForFlexibleWorkTime = new System.Windows.Forms.CheckBox();
@@ -64,7 +65,6 @@
 			this.comboBoxAdvTag = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.labelTagChangesWith = new System.Windows.Forms.Label();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.checkBoxFairness = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanelTagWith.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
@@ -452,6 +452,17 @@
 			this.tableLayoutPanel6.Size = new System.Drawing.Size(414, 182);
 			this.tableLayoutPanel6.TabIndex = 22;
 			// 
+			// checkBoxFairness
+			// 
+			this.checkBoxFairness.AutoSize = true;
+			this.checkBoxFairness.Location = new System.Drawing.Point(3, 141);
+			this.checkBoxFairness.Name = "checkBoxFairness";
+			this.checkBoxFairness.Size = new System.Drawing.Size(75, 17);
+			this.checkBoxFairness.TabIndex = 12;
+			this.checkBoxFairness.Text = "xxFairness";
+			this.checkBoxFairness.UseVisualStyleBackColor = true;
+			this.checkBoxFairness.Visible = false;
+			// 
 			// checkBoxShiftsWithinDay
 			// 
 			this.checkBoxShiftsWithinDay.AutoSize = true;
@@ -566,16 +577,6 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(418, 121);
 			this.tableLayoutPanel3.TabIndex = 0;
-			// 
-			// checkBoxFairness
-			// 
-			this.checkBoxFairness.AutoSize = true;
-			this.checkBoxFairness.Location = new System.Drawing.Point(3, 141);
-			this.checkBoxFairness.Name = "checkBoxFairness";
-			this.checkBoxFairness.Size = new System.Drawing.Size(75, 17);
-			this.checkBoxFairness.TabIndex = 12;
-			this.checkBoxFairness.Text = "xxFairness";
-			this.checkBoxFairness.UseVisualStyleBackColor = true;
 			// 
 			// GeneralPreferencesPanel
 			// 
