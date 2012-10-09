@@ -6,6 +6,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -104,8 +105,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var diff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
 			if (diff.Equals(0))
 				return;
-			var optFairnessOnDate = "Optimizing fairness on " + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
-			OnReportProgress(optFairnessOnDate + " - value before = " + diff);
+			var optFairnessOnDate = Resources.FairnessOptimizationOn + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
+			OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationValueBefore + diff);
 
 			var swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
 			if (swapSuggestion == null)
@@ -135,7 +136,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					var newdiff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
 					if (newdiff >= diff) // not better
 					{
-						OnReportProgress(optFairnessOnDate + " - value after is not better, rolling back.");
+						OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationRollingBack);
 						blackList.Add(swapSuggestion);
 						// do a rollback (if scheduled we need to resourcecalculate again??)
 						rollbackService.Rollback();
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					else
 					{
 						diff = newdiff;
-						OnReportProgress(optFairnessOnDate + " - value after = " + diff);
+						OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationValueAfter + diff);
 						// if we did swap start all over again and we do this day until no more suggestions
 						blackList = new List<IShiftCategoryFairnessSwap>();
 						rollbackService.ClearModificationCollection();
