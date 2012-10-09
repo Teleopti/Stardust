@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private string _description = string.Empty;
         private Color _displayColor;
         private ISkillType _skillType;
-        private ISet<IWorkload> _workloadCollection;
+		private Iesi.Collections.Generic.ISet<IWorkload> _workloadCollection;
         private IDictionary<int, ISkillDayTemplate> _templateWeekCollection;
         private IActivity _activity;
         private string _timeZone;

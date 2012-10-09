@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Analytics.Portal</RootNamespace>
     <AssemblyName>Teleopti.Analytics.Portal</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -28,6 +28,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\RaptorRoger2\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseIISExpress>false</UseIISExpress>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,18 +74,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Web.Extensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -92,6 +86,7 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\..\..\CodeAnalysisDictionary.xml">
@@ -279,9 +274,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReportTexts\ReportTexts.csproj">
+    <ProjectReference Include="..\ReportTexts\Teleopti.Analytics.ReportTexts.csproj">
       <Project>{82A5CB58-9CBC-45A2-B13E-F8917C846B1A}</Project>
-      <Name>ReportTexts</Name>
+      <Name>Teleopti.Analytics.ReportTexts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics.Parameter\Teleopti.Analytics.Parameters.csproj">
       <Project>{8A8C2FC6-AD5A-4234-B887-21DE7E8D75CD}</Project>

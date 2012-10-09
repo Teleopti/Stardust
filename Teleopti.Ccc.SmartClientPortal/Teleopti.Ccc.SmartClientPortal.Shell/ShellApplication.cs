@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Markup;
+using System.Xaml;
 using Autofac;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Forecasting;

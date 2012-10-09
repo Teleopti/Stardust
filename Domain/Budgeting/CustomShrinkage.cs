@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
         private string _shrinkageName;
         private int _orderIndex;
         private bool _includedInAllowance;
-        private readonly ISet<IAbsence> _budgetAbsenceCollection;
+		private readonly Iesi.Collections.Generic.ISet<IAbsence> _budgetAbsenceCollection;
 
         protected CustomShrinkage()
         {

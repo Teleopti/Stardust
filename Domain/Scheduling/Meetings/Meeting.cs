@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 	public class Meeting : AggregateRootWithBusinessUnit, IMeeting, IProvideCustomChangeInfo
 	{
 		private IPerson _organizer;
-		private ISet<IMeetingPerson> _meetingPersons;
+		private Iesi.Collections.Generic.ISet<IMeetingPerson> _meetingPersons;
 		private String _subject;
 		private String _location;
 		private String _description;

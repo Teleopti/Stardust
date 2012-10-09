@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 {
     public class BudgetGroup : AggregateRootWithBusinessUnit, IBudgetGroup, IDeleteTag
     {
-        private readonly ISet<ISkill> _skillCollection;
+		private readonly Iesi.Collections.Generic.ISet<ISkill> _skillCollection;
         private string _timeZone;
         private int _daysPerYear;
         private string _name;

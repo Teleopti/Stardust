@@ -188,7 +188,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Paramete
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Portal.AnalyzerProxy", "Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal.AnalyzerProxy\Teleopti.Analytics.Portal.AnalyzerProxy.csproj", "{0B9B4EE2-0F67-401C-B6DC-8183EDEDA2E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportTexts", "Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\ReportTexts.csproj", "{82A5CB58-9CBC-45A2-B13E-F8917C846B1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.ReportTexts", "Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj", "{82A5CB58-9CBC-45A2-B13E-F8917C846B1A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DBManager.Library", "Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj", "{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}"
 EndProject
