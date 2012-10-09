@@ -269,6 +269,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		},
 		PreferencePartialDispose: function () {
 			_hideAddExtendedTooltip();
+			ajax.AbortAll();
 		},
 		CallWhenLoaded: function (callback) {
 			_callWhenLoaded(callback);

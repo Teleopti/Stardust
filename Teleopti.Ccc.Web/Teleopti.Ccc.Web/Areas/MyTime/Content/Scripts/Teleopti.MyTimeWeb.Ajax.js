@@ -111,7 +111,7 @@ Teleopti.MyTimeWeb.Ajax = function () {
 		Ajax: function (options) {
 			return _ajax(options);
 		},
-		AjaxAbortAll: function () {
+		AbortAll: function () {
 			_ajaxAbortAll();
 		},
 		IsRequesting: function () {
