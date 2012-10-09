@@ -284,16 +284,13 @@ this.FeatureBackground();
             table6.AddRow(new string[] {
                         "Title",
                         "New message"});
-            table6.AddRow(new string[] {
-                        "Message",
-                        "Text in message"});
 #line 70
  testRunner.And("I have an unread message with", ((string)(null)), table6);
-#line 74
+#line 73
  testRunner.And("I am viewing week schedule");
-#line 75
+#line 74
  testRunner.When("I navigate to messages");
-#line 76
+#line 75
  testRunner.And("I click on the message at position \'1\' in the list");
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -304,8 +301,8 @@ this.FeatureBackground();
                         "New message"});
             table7.AddRow(new string[] {
                         "Message",
-                        "Text in message"});
-#line 77
+                        "Hello"});
+#line 76
  testRunner.Then("I should see the message details form with", ((string)(null)), table7);
 #line hidden
             this.ScenarioCleanup();
@@ -316,11 +313,11 @@ this.FeatureBackground();
         public virtual void ConfirmMessageIsRead()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Confirm message is read", ((string[])(null)));
-#line 82
+#line 81
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 83
+#line 82
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
@@ -329,19 +326,19 @@ this.FeatureBackground();
             table8.AddRow(new string[] {
                         "Title",
                         "New message"});
-#line 84
+#line 83
  testRunner.And("I have an unread message with", ((string)(null)), table8);
-#line 87
+#line 86
  testRunner.And("I am viewing week schedule");
-#line 88
+#line 87
  testRunner.And("I navigate to messages");
-#line 89
+#line 88
  testRunner.And("I click on the message at position \'1\' in the list");
-#line 90
+#line 89
  testRunner.When("I click the confirm button");
-#line 91
+#line 90
  testRunner.Then("I should not see any messages");
-#line 92
+#line 91
  testRunner.And("I should be notified that I have \'no\' unread message(s)");
 #line hidden
             this.ScenarioCleanup();
@@ -352,11 +349,11 @@ this.FeatureBackground();
         public virtual void SortMessagesInListByLatestMessage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sort messages in list by latest message", ((string[])(null)));
-#line 94
+#line 93
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 95
+#line 94
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
@@ -368,7 +365,7 @@ this.FeatureBackground();
             table9.AddRow(new string[] {
                         "Is oldest message",
                         "True"});
-#line 96
+#line 95
  testRunner.And("I have an unread message with", ((string)(null)), table9);
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -377,15 +374,15 @@ this.FeatureBackground();
             table10.AddRow(new string[] {
                         "Title",
                         "Latest message"});
-#line 100
+#line 99
  testRunner.And("I have an unread message with", ((string)(null)), table10);
-#line 103
+#line 102
  testRunner.And("I am viewing week schedule");
-#line 104
+#line 103
  testRunner.When("I navigate to messages");
-#line 105
+#line 104
  testRunner.Then("I should see the message with title \'Latest message\' at position \'1\' in the list");
-#line 106
+#line 105
  testRunner.And("I should see the message with title \'Message\' at position \'2\' in the list");
 #line hidden
             this.ScenarioCleanup();
@@ -396,11 +393,11 @@ this.FeatureBackground();
         public virtual void ReduceNumberOfUnreadMessagesInMessageTabTitle()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Reduce number of unread messages in message tab title", ((string[])(null)));
-#line 108
+#line 107
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 109
+#line 108
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
@@ -409,7 +406,7 @@ this.FeatureBackground();
             table11.AddRow(new string[] {
                         "Title",
                         "New message"});
-#line 110
+#line 109
  testRunner.And("I have an unread message with", ((string)(null)), table11);
 #line hidden
             TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
@@ -418,17 +415,17 @@ this.FeatureBackground();
             table12.AddRow(new string[] {
                         "Title",
                         "Another new message"});
-#line 113
+#line 112
  testRunner.And("I have an unread message with", ((string)(null)), table12);
-#line 116
+#line 115
  testRunner.And("I should be notified that I have \'2\' unread message(s)");
-#line 117
+#line 116
  testRunner.And("I am viewing week schedule");
-#line 118
+#line 117
  testRunner.When("I navigate to messages");
-#line 119
+#line 118
  testRunner.And("I confirm reading the message at position \'1\' in the list");
-#line 120
+#line 119
  testRunner.Then("I should be notified that I have \'1\' unread message(s)");
 #line hidden
             this.ScenarioCleanup();

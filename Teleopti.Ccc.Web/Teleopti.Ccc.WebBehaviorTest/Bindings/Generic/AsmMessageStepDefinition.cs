@@ -121,7 +121,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
         [When(@"I click on the message at position '(.*)' in the list")]
         public void GivenIClickOnTheMessageAtPositionInTheList(int position)
         {
-			_page.MessageListItems[position-1].EventualClick();
+            EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(1));
+			_page.MessageListItems[position-1].Click();
         }
 
         [When(@"I click the confirm button")]
