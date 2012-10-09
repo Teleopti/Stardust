@@ -147,5 +147,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mocks.VerifyAll();
         }
 
+        [Test]
+        public void TestMatrixProperty()
+        {
+            _mocks.ReplayAll(); 
+            Assert.AreEqual( _target.Matrix, _matrix);
+            _mocks.VerifyAll();
+        }
+
     }
 }

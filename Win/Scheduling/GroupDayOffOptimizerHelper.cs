@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private BackgroundWorker _backgroundWorker;
         private readonly ISchedulerStateHolder _schedulerState;
+        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
         public GroupDayOffOptimizerHelper(ILifetimeScope container)
         {
@@ -37,6 +39,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _stateHolder = _schedulerState.SchedulingResultState;
             _resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
             _scheduleDayChangeCallback = _container.Resolve<IScheduleDayChangeCallback>();
+            _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "matrixListForIntradayOptimization"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -83,7 +86,36 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (optimizerPreferences.General.OptimizationStepFairness)
 					runFairness(selectedPersons, selectedDays, rollbackService, optimizerPreferences);
             }
+            if (optimizerPreferences.General.UseShiftCategoryLimitations)
+            {
+                var schedulingOptionsCreator = new SchedulingOptionsCreator();
+                var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
+                RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker,
+                                                    optimizerPreferences, schedulingOptions);
+            }
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
+        }
+
+
+        public void RemoveShiftCategoryBackToLegalState(
+            IList<IScheduleMatrixPro> matrixList,
+            BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions)
+        {
+            if (matrixList == null) throw new ArgumentNullException("matrixList");
+            if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
+            using (PerformanceOutput.ForOperation("GroupShiftCategoryLimitations"))
+            {
+                var backToLegalStateServicePro =
+                    _container.Resolve<IGroupListShiftCategoryBackToLegalStateService>();
+
+                if (backgroundWorker.CancellationPending)
+                    return;
+                var groupOptimizerFindMatrixesForGroup =
+                    new GroupOptimizerFindMatrixesForGroup(_groupPersonBuilderForOptimization, matrixList);
+                backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences,
+                                                   groupOptimizerFindMatrixesForGroup);
+
+            }
         }
 
 		private void runFairness(IList<IPerson> selectedPersons, IList<IScheduleDay> selectedDays, 

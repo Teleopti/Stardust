@@ -13,23 +13,25 @@ namespace Teleopti.Interfaces.Domain
 		/// <value>The finder results.</value>
 		ReadOnlyCollection<IWorkShiftFinderResult> FinderResults { get; }
 
-		/// <summary>
-		/// Schedules the person on day.
-		/// </summary>
-		/// <param name="schedulePart">The schedule part.</param>
-		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <param name="useOccupancyAdjustment">if set to <c>true</c> then use occupancy adjustment.</param>
-		/// <param name="effectiveRestriction">The effective restriction.</param>
-		/// <param name="resourceCalculateDelayer">The resource calculate delayer.</param>
-		/// <param name="possibleStartEndCategory"> </param>
-		/// <returns></returns>
-		bool SchedulePersonOnDay(
+	    /// <summary>
+	    /// Schedules the person on day.
+	    /// </summary>
+	    /// <param name="schedulePart">The schedule part.</param>
+	    /// <param name="schedulingOptions">The scheduling options.</param>
+	    /// <param name="useOccupancyAdjustment">if set to <c>true</c> then use occupancy adjustment.</param>
+	    /// <param name="effectiveRestriction">The effective restriction.</param>
+	    /// <param name="resourceCalculateDelayer">The resource calculate delayer.</param>
+	    /// <param name="possibleStartEndCategory"> </param>
+	    /// <param name="person"> </param>
+	    /// <returns></returns>
+	    bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
             ISchedulingOptions schedulingOptions,
             bool useOccupancyAdjustment,
 			IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory);
+			IPossibleStartEndCategory possibleStartEndCategory,
+            IPerson person = null);
 
 		/// <summary>
 		/// 
