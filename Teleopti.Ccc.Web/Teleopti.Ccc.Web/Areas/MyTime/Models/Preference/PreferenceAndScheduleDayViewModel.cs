@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public PreferenceDayViewModel Preference { get; set; }
 		public DayOffDayViewModel DayOff { get; set; }
 		public AbsenceDayViewModel Absence { get; set; }
+		public PersonAssignmentDayViewModel PersonAssignment { get; set; }
 	}
 }

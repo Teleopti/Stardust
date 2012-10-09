@@ -66,7 +66,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 
 	this.Date = "";
-	this.ContractTimeMinutes = 0;
 	this.HasFeedback = true;
 	this.HasPreference = true;
 	this.IsLoading = ko.observable(false);
@@ -83,13 +82,19 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.ActivityTimeLimitation = ko.observable();
 	this.Color = ko.observable();
 	this.AjaxError = ko.observable('');
+	
 	this.DayOff = ko.observable('');
 	this.Absence = ko.observable('');
+	this.PersonAssignmentShiftCategory = ko.observable('');
+	this.PersonAssignmentTimeSpan = ko.observable('');
+	this.ContractTimeMinutes = ko.observable(0);
+	this.PersonAssignmentContractTime = ko.observable('');
+//	this.PersonAssignmentContractTimeMinutes = ko.observable('');
 
 	this.ReadElement = function (element) {
 		var item = $(element);
 		self.Date = item.attr('data-mytime-date');
-		self.ContractTimeMinutes = parseInt($('[data-mytime-contract-time]', item).attr('data-mytime-contract-time')) || 0;
+//		self.ContractTimeMinutes = parseInt($('[data-mytime-contract-time]', item).attr('data-mytime-contract-time')) || 0;
 		self.HasFeedback = item.hasClass("feedback");
 		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
 		self.Color($('.day-content', element).css("border-left-color"));
@@ -118,6 +123,13 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 	this.ReadAbsence = function (data) {
 		self.Absence(data.Absence);
+	};
+
+	this.ReadPersonAssignment = function (data) {
+		self.PersonAssignmentShiftCategory(data.ShiftCategory);
+		self.PersonAssignmentTimeSpan(data.TimeSpan);
+		self.PersonAssignmentContractTime(data.ContractTime);
+		self.ContractTimeMinutes(data.ContractTimeMinutes);
 	};
 	
 	this.LoadPreference = function (complete) {

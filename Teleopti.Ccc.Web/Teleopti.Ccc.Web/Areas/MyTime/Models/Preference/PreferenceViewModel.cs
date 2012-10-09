@@ -55,18 +55,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string DayDescription { get; set; }
 		public string DayNumber { get; set; }
 	}
-
-	public class PersonAssignmentDayViewModel
-	{
-		public string ShiftCategory { get; set; }
-		public string TimeSpan { get; set; }
-		public string ContractTime { get; set; }
-		public int ContractTimeMinutes { get; set; }
-	}
-
-	public class AbsenceDayViewModel
-	{
-		public string Absence { get; set; }
-	}
-
 }

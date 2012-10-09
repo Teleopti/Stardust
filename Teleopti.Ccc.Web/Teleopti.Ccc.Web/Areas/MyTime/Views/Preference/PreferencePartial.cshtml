@@ -128,6 +128,14 @@
 									<!-- ko if: Absence() != '' -->
 									<div class="absence" data-bind="text: Absence"></div>
 									<!-- /ko -->
+
+									<!-- ko if: PersonAssignmentShiftCategory() != '' -->
+									<div class="scheduled">
+										<span class="displayblock fullwidth" data-bind="text: PersonAssignmentShiftCategory"></span>
+										<strong class="displayblock fullwidth" data-bind="text: PersonAssignmentTimeSpan"></strong>
+										<span class="displayblock fullwidth" data-bind="text: PersonAssignmentContractTime"></span>
+									</div>
+									<!-- /ko -->
 								}
 								@if (day.Feedback)
 								{
@@ -139,14 +147,6 @@
 									<div class="possible-end-times time-limitation icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
 									<div class="possible-contract-times time-limitation icon doublearrow-blue truncate" data-bind="text: PossibleContractTimes"></div>
 									<!-- /ko -->
-								}
-								@if (personAssignment != null)
-								{
-									<div class="scheduled">
-										<span class="displayblock fullwidth">@personAssignment.ShiftCategory</span>
-										<strong class="displayblock fullwidth">@personAssignment.TimeSpan</strong>
-										<span class="displayblock fullwidth" data-mytime-contract-time="@personAssignment.ContractTimeMinutes">@personAssignment.ContractTime</span>
-									</div>
 								}
 							</div>
 						</div>

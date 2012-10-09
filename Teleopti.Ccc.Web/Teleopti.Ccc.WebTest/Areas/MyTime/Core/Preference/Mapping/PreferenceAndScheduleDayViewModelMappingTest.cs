@@ -1,10 +1,13 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.TestCommon;
@@ -21,13 +24,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	[TestFixture]
 	public class PreferenceAndScheduleDayViewModelMappingTest
 	{
+		private IProjectionProvider _projectionProvider; 
+
 		[SetUp]
 		public void Setup()
 		{
+			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 				{
-					c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile());
+					c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile(
+						Depend.On(_projectionProvider
+						)));
 					c.AddProfile(new PreferenceDayViewModelMappingProfile(
 						Depend.On(MockRepository.GenerateMock<IExtendedPreferencePredicate>()
 						)));
@@ -95,6 +103,67 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.Absence.Absence.Should().Be("Illness");
 		}
 
+		[Test]
+		public void ShouldMapShiftCategoryInPersonAssignmentDayViewModel()
+		{
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.PersonAssignment.Should().Not.Be.Null();
+			result.PersonAssignment.ShiftCategory.Should().Be("shiftCategory");
+		}
+
+		[Test]
+		public void ShouldMapContractTimeInPersonAssignmentDayViewModel()
+		{
+			var contractTime = TimeSpan.FromHours(8);
+			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
+			projection.Stub(x => x.ContractTime()).Return(contractTime);
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
+			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.PersonAssignment.Should().Not.Be.Null();
+			result.PersonAssignment.ContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
+		}
+
+		[Test]
+		public void ShouldMapContractTimeMinutesInPersonAssignmentDayViewModel()
+		{
+			var contractTime = TimeSpan.FromHours(8);
+			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
+			projection.Stub(x => x.ContractTime()).Return(contractTime);
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
+			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.PersonAssignment.Should().Not.Be.Null();
+			result.PersonAssignment.ContractTimeMinutes.Should().Be(contractTime.TotalMinutes);
+		}
+
+		[Test]
+		public void ShouldMapTimeSpanInPersonAssignmentDayViewModel()
+		{
+			var stubs = new StubFactory();
+			var period = new DateTimePeriod(new DateTime(2012, 2, 21, 7, 0, 0, DateTimeKind.Utc), new DateTime(2012, 2, 21, 16, 0, 0, DateTimeKind.Utc));
+			var personAssignment = stubs.PersonAssignmentStub(period);
+			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.PersonAssignment.Should().Not.Be.Null();
+			result.PersonAssignment.TimeSpan.Should().Be(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
+		}
 
 	}
 }

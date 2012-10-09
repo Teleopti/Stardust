@@ -81,17 +81,22 @@ $(document).ready(function () {
 		equal($('li[data-mytime-date="2012-06-12"]').text(), "8:00");
 	});
 
-	test("should compute with static schedule data", function () {
+	test("should compute with schedule data", function () {
 
 		$("#qunit-fixture")
 			.html("<div id='Preference-period-feedback-view'><span data-bind='text: PossibleResultContractTimeLower' /><span data-bind='text: PossibleResultContractTimeUpper' /></div>")
-			.append("<li data-mytime-date='2012-06-13' class='inperiod'><span data-mytime-contract-time='120' /></li>")
-			.append("<li data-mytime-date='2012-06-14' class='inperiod'><span data-mytime-contract-time='60' /></li>");
+			.append("<li data-mytime-date='2012-06-13' class='inperiod'></li>")
+			.append("<li data-mytime-date='2012-06-14' class='inperiod'></li>");
 
 		var ajax = {
 			Ajax: function (options) {
 				if (options.url == "PreferenceFeedback/Feedback")
 					ok(true, "feedback should not be loaded");
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					options.success({
+						ContractTimeMinutes: 120
+					});
+				}
 			}
 		};
 
@@ -101,8 +106,8 @@ $(document).ready(function () {
 
 		target.InitViewModels();
 
-		equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeLower"]').text(), "3:00", "lower contract time");
-		equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeUpper"]').text(), "3:00", "upper contract time");
+		equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeLower"]').text(), "4:00", "lower contract time");
+		equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeUpper"]').text(), "4:00", "upper contract time");
 	});
 
 	test("should load period feedback", function () {

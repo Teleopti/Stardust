@@ -197,6 +197,8 @@
     <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
     <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\AbsenceDayViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PersonAssignmentDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceAndScheduleDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\DayOffDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\MustHaveInput.cs" />

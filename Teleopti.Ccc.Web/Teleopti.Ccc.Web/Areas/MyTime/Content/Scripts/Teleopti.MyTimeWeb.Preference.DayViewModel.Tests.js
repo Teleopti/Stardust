@@ -57,6 +57,23 @@ $(document).ready(function () {
 
 		equal(viewModelDay.Absence(), "Illness");
 	});
+
+	test("should read person assignment", function () {
+
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+
+		viewModelDay.ReadPersonAssignment({
+			ShiftCategory: "Late",
+			TimeSpan: "PersonAssignmentTimeSpan",
+			ContractTime: "PersonAssignmentContractTime",
+			ContractTimeMinutes: "PersonAssignmentContractTimeMinutes"
+		});
+
+		equal(viewModelDay.PersonAssignmentShiftCategory(), "Late");
+		equal(viewModelDay.PersonAssignmentTimeSpan(), "PersonAssignmentTimeSpan");
+		equal(viewModelDay.PersonAssignmentContractTime(), "PersonAssignmentContractTime");
+		equal(viewModelDay.ContractTimeMinutes(), "PersonAssignmentContractTimeMinutes");
+	});
 	
 	test("should load preference", function () {
 
